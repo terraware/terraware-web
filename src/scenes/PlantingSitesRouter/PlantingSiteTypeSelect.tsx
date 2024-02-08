@@ -23,9 +23,10 @@ export default function PlantingSiteTypeSelect(props: PlantingSiteTypeSelectProp
     setPlantingSiteTypeModalOpen(open);
   }, [open]);
 
-  const goTo = (appPath: string) => {
+  const goTo = (appPath: string, search?: string) => {
     const appPathLocation = {
       pathname: appPath,
+      search,
     };
     history.push(appPathLocation);
   };
@@ -35,7 +36,7 @@ export default function PlantingSiteTypeSelect(props: PlantingSiteTypeSelectProp
       <PlantingSiteSelectTypeModal2
         open={plantingSiteTypeModalOpen}
         onNext={(siteType: SiteType) =>
-          void goTo(siteType === 'simple' ? APP_PATHS.PLANTING_SITES_SIMPLE_NEW : APP_PATHS.PLANTING_SITES_DETAILED_NEW)
+          void goTo(APP_PATHS.PLANTING_SITES_DRAFT_NEW, siteType === 'detailed' ? '?detailed' : '')
         }
         onClose={() => {
           setPlantingSiteTypeModalOpen(false);
