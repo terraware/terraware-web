@@ -21,11 +21,13 @@ export default function PlantingSitesCellRenderer(props: RendererProps<TableRowT
   const { column, row, value, index } = props;
 
   const createLinkToPlantingSiteView = (iValue: React.ReactNode | unknown[]) => {
-    return (
-      <Link to={APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', row.id.toString())}>
-        {iValue as React.ReactNode}
-      </Link>
+    const isDraft = false; // TODO: lookup BE property when available
+    const to = (isDraft ? APP_PATHS.PLANTING_SITES_DRAFT_VIEW : APP_PATHS.PLANTING_SITES_VIEW).replace(
+      ':plantingSiteId',
+      row.id.toString()
     );
+
+    return <Link to={to}>{iValue as React.ReactNode}</Link>;
   };
 
   if (column.key === 'name') {

@@ -13,12 +13,13 @@ import {
 } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
 import { selectPlantingSites, selectPlantingSitesError } from 'src/redux/features/tracking/trackingSelectors';
 import PlantingSiteCreate from './PlantingSiteCreate';
-import PlantingSiteSimpleCreate from './PlantingSiteSimpleCreate';
-import PlantingSiteDetailedCreate from './PlantingSiteDetailedCreate';
 import PlantingSitesList from './PlantingSitesList';
 import PlantingSiteView from './PlantingSiteView';
 import PlantingSiteSubzoneView from './PlantingSiteSubzoneView';
 import PlantingSiteZoneView from './PlantingSiteZoneView';
+import PlantingSiteDraftCreate from './draft/PlantingSiteDraftCreate';
+import PlantingSiteDraftEdit from './draft/PlantingSiteDraftEdit';
+import PlantingSiteDraftView from './draft/PlantingSiteDraftView';
 import isEnabled from 'src/features';
 
 /**
@@ -37,17 +38,12 @@ export default function PlantingSites({ reloadTracking }: PlantingSitesProps): J
         <PlantingSiteCreate reloadPlantingSites={reloadTracking} />
       </Route>
       {userDrawnDetailedSites && (
-        <Route path={APP_PATHS.PLANTING_SITES_SIMPLE_NEW}>
-          <PlantingSiteSimpleCreate reloadPlantingSites={reloadTracking} />
-        </Route>
-      )}
-      {userDrawnDetailedSites && (
-        <Route path={APP_PATHS.PLANTING_SITES_DETAILED_NEW}>
-          <PlantingSiteDetailedCreate reloadPlantingSites={reloadTracking} />
+        <Route path={APP_PATHS.PLANTING_SITES_DRAFT_VIEW}>
+          <PlantingSitesDraftRouter reloadTracking={reloadTracking} />
         </Route>
       )}
       <Route path={APP_PATHS.PLANTING_SITES_VIEW}>
-        <PlantingSitesWrapper reloadTracking={reloadTracking} />
+        <PlantingSitesRouter reloadTracking={reloadTracking} />
       </Route>
       <Route path={'*'}>
         <PlantingSitesList />
@@ -56,7 +52,7 @@ export default function PlantingSites({ reloadTracking }: PlantingSitesProps): J
   );
 }
 
-export function PlantingSitesWrapper({ reloadTracking }: PlantingSitesProps): JSX.Element {
+export function PlantingSitesRouter({ reloadTracking }: PlantingSitesProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const dispatch = useAppDispatch();
@@ -100,6 +96,22 @@ export function PlantingSitesWrapper({ reloadTracking }: PlantingSitesProps): JS
       </Route>
       <Route path={APP_PATHS.PLANTING_SITES_VIEW}>
         <PlantingSiteView />
+      </Route>
+    </Switch>
+  );
+}
+
+export function PlantingSitesDraftRouter({ reloadTracking }: PlantingSitesProps): JSX.Element {
+  return (
+    <Switch>
+      <Route path={APP_PATHS.PLANTING_SITES_DRAFT_NEW}>
+        <PlantingSiteDraftCreate reloadPlantingSites={reloadTracking} />
+      </Route>
+      <Route path={APP_PATHS.PLANTING_SITES_DRAFT_EDIT}>
+        <PlantingSiteDraftEdit reloadPlantingSites={reloadTracking} />
+      </Route>
+      <Route path={APP_PATHS.PLANTING_SITES_DRAFT_VIEW}>
+        <PlantingSiteDraftView />
       </Route>
     </Switch>
   );
