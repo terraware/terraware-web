@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/146</span>
+                <span class='fraction'>0/150</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/75</span>
+                <span class='fraction'>0/77</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/44</span>
+                <span class='fraction'>0/47</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/138</span>
+                <span class='fraction'>0/142</span>
             </div>
         
             
@@ -515,7 +515,10 @@
 <a name='L450'></a><a href='#L450'>450</a>
 <a name='L451'></a><a href='#L451'>451</a>
 <a name='L452'></a><a href='#L452'>452</a>
-<a name='L453'></a><a href='#L453'>453</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L453'></a><a href='#L453'>453</a>
+<a name='L454'></a><a href='#L454'>454</a>
+<a name='L455'></a><a href='#L455'>455</a>
+<a name='L456'></a><a href='#L456'>456</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -717,9 +720,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -728,7 +729,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -831,6 +831,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -856,6 +857,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1165,16 +1171,13 @@ export default function <span class="fstat-no" title="function not covered" >Sub
         hasTutorial: true,
         handlePrefix: <span class="fstat-no" title="function not covered" >(p</span>refix: string) =&gt; <span class="cstat-no" title="statement not covered" >strings.formatString(prefix, &lt;MapIcon icon='slice' /&gt;) as JSX.Element[],</span>
       },
+      { text: strings.SITE_SUBZONE_BOUNDARIES_SELECT_A_ZONE },
       {
-        text:
-          selectedZone !== undefined
-            ? strings.formatString(
-                strings.SITE_SUBZONE_BOUNDARIES_SELECTED_ZONE,
-                zones?.features?.find(<span class="fstat-no" title="function not covered" >(f</span>) =&gt; <span class="cstat-no" title="statement not covered" >f.id === selectedZone)</span>?.properties?.name
-              )
-            : strings.SITE_SUBZONE_BOUNDARIES_SELECT_A_ZONE,
+        text: strings.formatString(
+          strings.SITE_SUBZONE_BOUNDARIES_SELECTED_ZONE,
+          zones?.features?.find(<span class="fstat-no" title="function not covered" >(f</span>) =&gt; <span class="cstat-no" title="statement not covered" >f.id === selectedZone)</span>?.properties?.name ?? ''
+        ),
         isBold: true,
-        isWarning: selectedZone === undefined,
       },
     ],
     [selectedZone, zones]
@@ -1281,9 +1284,10 @@ export default function <span class="fstat-no" title="function not covered" >Sub
 <span class="fstat-no" title="function not covered" >    ()</span>: MapPopupRenderer =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
       className: `${classes.tooltip} ${classes.box}`,
       render: <span class="fstat-no" title="function not covered" >(p</span>roperties: MapSourceProperties, onClose?: () =&gt; void): JSX.Element | null =&gt; {
-        const { name } = <span class="cstat-no" title="statement not covered" >properties;</span>
+        const { id, name } = <span class="cstat-no" title="statement not covered" >properties;</span>
 &nbsp;
         const close = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          setOverridePopupInfo(undefined);</span>
 <span class="cstat-no" title="statement not covered" >          onClose?.();</span>
         };
 &nbsp;
@@ -1307,7 +1311,12 @@ export default function <span class="fstat-no" title="function not covered" >Sub
 <span class="cstat-no" title="statement not covered" >          close();</span>
         };
 &nbsp;
-        const subzoneNamesInUse = <span class="cstat-no" title="statement not covered" >new Set&lt;string&gt;();</span> // TODO
+        const subzoneNamesInUse = <span class="cstat-no" title="statement not covered" >new Set&lt;string&gt;(</span>
+          Object.values(subzones || ({} as Record&lt;number, FeatureCollection&gt;))
+            .flatMap(<span class="fstat-no" title="function not covered" >(f</span>eatureCollection) =&gt; <span class="cstat-no" title="statement not covered" >featureCollection.features)</span>
+            .filter(<span class="fstat-no" title="function not covered" >(f</span>eature) =&gt; <span class="cstat-no" title="statement not covered" >feature.properties?.id !== id)</span>
+            .map(<span class="fstat-no" title="function not covered" >(f</span>eature) =&gt; <span class="cstat-no" title="statement not covered" >feature.properties?.name)</span>
+        );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        return (</span>
           &lt;TooltipContents name={name} onClose={close} onUpdate={onUpdate} subzoneNamesInUse={subzoneNamesInUse} /&gt;
@@ -1426,7 +1435,7 @@ const TooltipContents = <span class="cstat-no" title="statement not covered" ><s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-07T23:56:45.983Z
+                at 2024-02-08T17:05:15.314Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

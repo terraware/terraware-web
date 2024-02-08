@@ -297,7 +297,22 @@
 <a name='L232'></a><a href='#L232'>232</a>
 <a name='L233'></a><a href='#L233'>233</a>
 <a name='L234'></a><a href='#L234'>234</a>
-<a name='L235'></a><a href='#L235'>235</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L235'></a><a href='#L235'>235</a>
+<a name='L236'></a><a href='#L236'>236</a>
+<a name='L237'></a><a href='#L237'>237</a>
+<a name='L238'></a><a href='#L238'>238</a>
+<a name='L239'></a><a href='#L239'>239</a>
+<a name='L240'></a><a href='#L240'>240</a>
+<a name='L241'></a><a href='#L241'>241</a>
+<a name='L242'></a><a href='#L242'>242</a>
+<a name='L243'></a><a href='#L243'>243</a>
+<a name='L244'></a><a href='#L244'>244</a>
+<a name='L245'></a><a href='#L245'>245</a>
+<a name='L246'></a><a href='#L246'>246</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -361,6 +376,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -558,9 +580,13 @@ export type MapEditorMode =
   | 'NoBoundary'
   | 'ReplacingBoundary';
 &nbsp;
-type MapEditorProps = ConstructorParameters&lt;typeof MapboxDraw&gt;[0] &amp; {
+export type BoundaryCallback = (boundary?: FeatureCollection) =&gt; void;
+&nbsp;
+export type MapEditorProps = ConstructorParameters&lt;typeof MapboxDraw&gt;[0] &amp; {
   boundary?: FeatureCollection;
-  onBoundaryChanged?: (boundary?: FeatureCollection) =&gt; void;
+  onBoundaryCreated?: BoundaryCallback;
+  onBoundaryDeleted?: BoundaryCallback;
+  onBoundaryUpdated?: BoundaryCallback;
   setMode?: (mode: MapEditorMode) =&gt; void;
 };
 &nbsp;
@@ -611,7 +637,14 @@ function <span class="fstat-no" title="function not covered" >featureHasCoordina
  * @param otherProps
  *  Additional properties to pass to the MapboxDraw control.
  */
-export default function <span class="fstat-no" title="function not covered" >EditableMapDraw(</span>{ boundary, onBoundaryChanged, setMode, ...otherProps }: MapEditorProps) {
+export default function <span class="fstat-no" title="function not covered" >EditableMapDraw(</span>{
+  boundary,
+  onBoundaryCreated,
+  onBoundaryDeleted,
+  onBoundaryUpdated,
+  setMode,
+  ...otherProps
+}: MapEditorProps) {
   const [mapRef, setMapRef] = <span class="cstat-no" title="statement not covered" >useState&lt;MapRef&gt;();</span>
   const [drawMode, setDrawMode] = <span class="cstat-no" title="statement not covered" >useState&lt;DrawMode&gt;();</span>
   const [selection, setSelection] = <span class="cstat-no" title="statement not covered" >useState&lt;Feature&gt;();</span>
@@ -656,29 +689,29 @@ export default function <span class="fstat-no" title="function not covered" >Edi
     [draw]
   );
 &nbsp;
-  const updateNotification = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (f</span>eatures: Feature[]) =&gt; {
-<span class="cstat-no" title="statement not covered" >      if (!onBoundaryChanged) {</span>
+  const notify = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (f</span>eatures: Feature[], boundaryCallback?: BoundaryCallback) =&gt; {
+<span class="cstat-no" title="statement not covered" >      if (!boundaryCallback) {</span>
 <span class="cstat-no" title="statement not covered" >        return;</span>
       }
 &nbsp;
       const updatedFeatures = <span class="cstat-no" title="statement not covered" >fetchUpdatedFeatures(features);</span>
-<span class="cstat-no" title="statement not covered" >      onBoundaryChanged(updatedFeatures);</span>
+<span class="cstat-no" title="statement not covered" >      boundaryCallback(updatedFeatures);</span>
     },
-    [fetchUpdatedFeatures, onBoundaryChanged]
+    [fetchUpdatedFeatures]
   );
 &nbsp;
   const onCreate = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (e</span>vent: DrawCreateEvent) =&gt; <span class="cstat-no" title="statement not covered" >void updateNotification(event.features),</span>
-    [updateNotification]
+<span class="fstat-no" title="function not covered" >    (e</span>vent: DrawCreateEvent) =&gt; <span class="cstat-no" title="statement not covered" >void notify(event.features, onBoundaryCreated),</span>
+    [notify, onBoundaryCreated]
   );
 &nbsp;
   const onUpdate = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (e</span>vent: DrawUpdateEvent) =&gt; <span class="cstat-no" title="statement not covered" >void updateNotification(event.features),</span>
-    [updateNotification]
+<span class="fstat-no" title="function not covered" >    (e</span>vent: DrawUpdateEvent) =&gt; <span class="cstat-no" title="statement not covered" >void notify(event.features, onBoundaryUpdated),</span>
+    [notify, onBoundaryUpdated]
   );
 &nbsp;
-  const onDelete = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >onBoundaryChanged &amp;&amp; onBoundaryChanged(undefined),</span> [onBoundaryChanged]);</span>
+  const onDelete = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >onBoundaryDeleted &amp;&amp; onBoundaryDeleted(undefined),</span> [onBoundaryDeleted]);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    mapRef?.on('draw.create', onCreate);</span>
@@ -772,7 +805,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-07T23:56:45.983Z
+                at 2024-02-08T17:05:15.314Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
