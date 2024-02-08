@@ -25,9 +25,13 @@ export type MapEditorMode =
   | 'NoBoundary'
   | 'ReplacingBoundary';
 
-type MapEditorProps = ConstructorParameters<typeof MapboxDraw>[0] & {
+export type BoundaryCallback = (boundary?: FeatureCollection) => void;
+
+export type MapEditorProps = ConstructorParameters<typeof MapboxDraw>[0] & {
   boundary?: FeatureCollection;
-  onBoundaryChanged?: (boundary?: FeatureCollection) => void;
+  onBoundaryCreated?: BoundaryCallback;
+  onBoundaryDeleted?: BoundaryCallback;
+  onBoundaryUpdated?: BoundaryCallback;
   setMode?: (mode: MapEditorMode) => void;
 };
 
@@ -78,7 +82,14 @@ function featureHasCoordinates(feature: Feature | undefined): boolean {
  * @param otherProps
  *  Additional properties to pass to the MapboxDraw control.
  */
-export default function EditableMapDraw({ boundary, onBoundaryChanged, setMode, ...otherProps }: MapEditorProps) {
+export default function EditableMapDraw({
+  boundary,
+  onBoundaryCreated,
+  onBoundaryDeleted,
+  onBoundaryUpdated,
+  setMode,
+  ...otherProps
+}: MapEditorProps) {
   const [mapRef, setMapRef] = useState<MapRef>();
   const [drawMode, setDrawMode] = useState<DrawMode>();
   const [selection, setSelection] = useState<Feature>();
@@ -123,29 +134,29 @@ export default function EditableMapDraw({ boundary, onBoundaryChanged, setMode, 
     [draw]
   );
 
-  const updateNotification = useCallback(
-    (features: Feature[]) => {
-      if (!onBoundaryChanged) {
+  const notify = useCallback(
+    (features: Feature[], boundaryCallback?: BoundaryCallback) => {
+      if (!boundaryCallback) {
         return;
       }
 
       const updatedFeatures = fetchUpdatedFeatures(features);
-      onBoundaryChanged(updatedFeatures);
+      boundaryCallback(updatedFeatures);
     },
-    [fetchUpdatedFeatures, onBoundaryChanged]
+    [fetchUpdatedFeatures]
   );
 
   const onCreate = useCallback(
-    (event: DrawCreateEvent) => void updateNotification(event.features),
-    [updateNotification]
+    (event: DrawCreateEvent) => void notify(event.features, onBoundaryCreated),
+    [notify, onBoundaryCreated]
   );
 
   const onUpdate = useCallback(
-    (event: DrawUpdateEvent) => void updateNotification(event.features),
-    [updateNotification]
+    (event: DrawUpdateEvent) => void notify(event.features, onBoundaryUpdated),
+    [notify, onBoundaryUpdated]
   );
 
-  const onDelete = useCallback(() => onBoundaryChanged && onBoundaryChanged(undefined), [onBoundaryChanged]);
+  const onDelete = useCallback(() => onBoundaryDeleted && onBoundaryDeleted(undefined), [onBoundaryDeleted]);
 
   useEffect(() => {
     mapRef?.on('draw.create', onCreate);

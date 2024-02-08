@@ -92,6 +92,7 @@ export default function EditableMap({
   const [interactiveLayerIds, setInteractiveLayerIds] = useState<string[] | undefined>();
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
   const [isOverridePopupEvent, setIsOverridePopupEvent] = useState<boolean>(false);
+  const [isUpdateEvent, setIsUpdateEvent] = useState<boolean>(false);
   const [, setActiveContext] = useState<MapEntityOptions | undefined>();
   const containerRef = useRef(null);
   const mapRef = useRef<MapRef | null>(null);
@@ -230,7 +231,35 @@ export default function EditableMap({
     [featureSelectorOnClick, initializePopupInfo, isOverridePopupEvent, overridePopupInfo, readOnlyBoundary]
   );
 
-  useEffect(() => {
+  /**
+   * Call the prop function when boundary changes.
+   * Use local state to capture if this was a click or drag event.
+   */
+  const onBoundaryCallback = useCallback(
+    (data: FeatureCollection | undefined, isUpdate: boolean) => {
+      if (onEditableBoundaryChanged) {
+        setIsUpdateEvent(isUpdate);
+        onEditableBoundaryChanged(data);
+      }
+    },
+    [onEditableBoundaryChanged]
+  );
+
+  const onBoundaryCreated = useCallback(
+    (data?: FeatureCollection) => {
+      onBoundaryCallback(data, false);
+    },
+    [onBoundaryCallback]
+  );
+
+  const onBoundaryUpdated = useCallback(
+    (data?: FeatureCollection) => {
+      onBoundaryCallback(data, true);
+    },
+    [onBoundaryCallback]
+  );
+
+  const selectActiveContext = useCallback(() => {
     const markActiveContext = (data: MapEntityId[], value: boolean) => {
       data.forEach((datum) => {
         const { id, sourceId: source } = datum;
@@ -244,6 +273,8 @@ export default function EditableMap({
       return activeContext;
     });
   }, [activeContext, mapRef]);
+
+  useEffect(() => void selectActiveContext(), [selectActiveContext]);
 
   useEffect(() => {
     if (editMode) {
@@ -274,6 +305,25 @@ export default function EditableMap({
       setIsOverridePopupEvent(true);
     }
   }, [overridePopupInfo]);
+
+  /**
+   * Show popup info if boundary was moved to a valid location,
+   * capturing when user drags the polygon.
+   * On click is handled by the onMapClick function.
+   */
+  useEffect(() => {
+    if (isUpdateEvent && isOverridePopupEvent && overridePopupInfo) {
+      if (overridePopupInfo) {
+        initializePopupInfo(overridePopupInfo);
+      }
+      setIsOverridePopupEvent(false);
+      setIsUpdateEvent(false);
+    }
+  }, [initializePopupInfo, isOverridePopupEvent, isUpdateEvent, overridePopupInfo]);
+
+  // Show active context as selected once the map is loaded.
+  // This is to catch up on an already initalized active context.
+  const onLoad = useCallback(() => void selectActiveContext(), [selectActiveContext]);
 
   return (
     <Box
@@ -312,6 +362,7 @@ export default function EditableMap({
             initialViewState={initialViewState}
             interactiveLayerIds={interactiveLayerIds ?? []}
             onClick={onMapClick}
+            onLoad={onLoad}
           >
             {mapLayers}
             {errorLayer}
@@ -319,7 +370,9 @@ export default function EditableMap({
             <MapViewStyleControl mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
             <EditableMapDraw
               boundary={editableBoundary}
-              onBoundaryChanged={onEditableBoundaryChanged}
+              onBoundaryCreated={onBoundaryCreated}
+              onBoundaryDeleted={onEditableBoundaryChanged}
+              onBoundaryUpdated={onBoundaryUpdated}
               setMode={setEditMode}
             />
             <UndoRedoControl onRedo={onRedo} onUndo={onUndo} />
