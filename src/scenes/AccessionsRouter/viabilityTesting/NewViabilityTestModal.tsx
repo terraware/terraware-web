@@ -277,7 +277,6 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
 
   const hasErrors = () => {
     if (record) {
-      const seedTestedError = record.testType !== 'Cut' ? !validateSeedsTested(record.seedsTested) : false;
       const seedTestedError =
         record.testType !== 'Cut' && record?.id === -1 ? !validateSeedsTested(record.seedsTested) : false;
       const seedsGerminatedError = !validateSeedsGerminated();
