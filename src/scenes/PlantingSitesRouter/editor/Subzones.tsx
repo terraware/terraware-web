@@ -196,16 +196,13 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
         hasTutorial: true,
         handlePrefix: (prefix: string) => strings.formatString(prefix, <MapIcon icon='slice' />) as JSX.Element[],
       },
+      { text: strings.SITE_SUBZONE_BOUNDARIES_SELECT_A_ZONE },
       {
-        text:
-          selectedZone !== undefined
-            ? strings.formatString(
-                strings.SITE_SUBZONE_BOUNDARIES_SELECTED_ZONE,
-                zones?.features?.find((f) => f.id === selectedZone)?.properties?.name
-              )
-            : strings.SITE_SUBZONE_BOUNDARIES_SELECT_A_ZONE,
+        text: strings.formatString(
+          strings.SITE_SUBZONE_BOUNDARIES_SELECTED_ZONE,
+          zones?.features?.find((f) => f.id === selectedZone)?.properties?.name ?? ''
+        ),
         isBold: true,
-        isWarning: selectedZone === undefined,
       },
     ],
     [selectedZone, zones]
@@ -312,7 +309,7 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
     (): MapPopupRenderer => ({
       className: `${classes.tooltip} ${classes.box}`,
       render: (properties: MapSourceProperties, onClose?: () => void): JSX.Element | null => {
-        const { name } = properties;
+        const { id, name } = properties;
 
         const close = () => {
           onClose?.();
@@ -338,7 +335,12 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
           close();
         };
 
-        const subzoneNamesInUse = new Set<string>(); // TODO
+        const subzoneNamesInUse = new Set<string>(
+          Object.values(subzones || ({} as Record<number, FeatureCollection>))
+            .flatMap((featureCollection) => featureCollection.features)
+            .filter((feature) => feature.properties?.id !== id)
+            .map((feature) => feature.properties?.name)
+        );
 
         return (
           <TooltipContents name={name} onClose={close} onUpdate={onUpdate} subzoneNamesInUse={subzoneNamesInUse} />
