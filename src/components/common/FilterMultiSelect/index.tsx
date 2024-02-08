@@ -27,6 +27,7 @@ type FilterMultiSelectProps<T> = {
   notPresentFilterLabel?: string;
   notPresentFilterShown?: boolean;
   onBlur?: () => void;
+  onFocus?: () => void;
   onCancel: () => void;
   onConfirm: (finalSelection: (T | null)[]) => void;
   options: T[];
@@ -47,6 +48,7 @@ export default function FilterMultiSelect<T>(props: FilterMultiSelectProps<T>): 
     optionsVisible,
     renderOption,
     onBlur,
+    onFocus,
   } = props;
 
   const { isMobile } = useDeviceInfo();
@@ -126,6 +128,7 @@ export default function FilterMultiSelect<T>(props: FilterMultiSelectProps<T>): 
           disabled={isNotPresentFilterSelected}
           optionsVisible={optionsVisible}
           onBlur={onBlur}
+          onFocus={onFocus}
         />
 
         {notPresentFilterShown && (

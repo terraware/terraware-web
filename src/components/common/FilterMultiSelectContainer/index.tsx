@@ -76,16 +76,7 @@ export default function FilterMultiSelectContainer<T extends Record<string, (num
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [optionsVisible, setOptionsVisible] = useState(false);
-  /*
-    Admittedly, this is a bit confusing. Because the onBlur event within the MultiSelect bubbles up _before_ the
-    onClose event in the Popover, we need to store, within this component's state, whether or not the options _were_
-    visible before the blur event occurred. I tried many, many configurations where setOptionsVisible was passed into
-    the MultiSelect, but the onBlur would still fire before the child component could tell the parent component that
-    the options were no longer visible (using setOptionsVisible), which resulted in the options being close, the parent
-    component re-rendering, and then the onClose handler would think that the options aren't visible, so the Popover
-    should be closed, which resulted in not achieving the goal.
-   */
-  const [optionsWereVisibleBeforeBlur, setOptionsWereVisibleBeforeblur] = useState(false);
+  const [shouldClose, setShouldClose] = useState(false);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     if (!disabled) {
@@ -97,17 +88,35 @@ export default function FilterMultiSelectContainer<T extends Record<string, (num
     setAnchorEl(null);
   }, []);
 
-  const hideOptionsOrClose = useCallback(() => {
-    if (optionsWereVisibleBeforeBlur) {
-      setOptionsVisible(false);
-      setOptionsWereVisibleBeforeblur(false);
-    } else {
+  const hideOptionsOrClose = () => {
+    if (shouldClose) {
       setAnchorEl(null);
     }
-  }, [optionsWereVisibleBeforeBlur]);
+  };
 
   const onMultiSelectBlur = () => {
-    setOptionsWereVisibleBeforeblur(true);
+    /*
+      I admit this is less than ideal. I was unable to find another solution (and I spent way to long on it already).
+      Because there are two events that fire in immediate succession (and in this order), the MultiSelect onBlur
+      and the Popover onClick, we need to setOptionsVisible(false) and setShouldClose(false) _after_ the
+      Popover's onClickCapture executes. I chose 100 ms arbitrarily based on the desire to still be able to double
+      click away from the popover to close the options and subsequently close the popover. Choosing a number
+      like 1000ms, for example, makes the double click not work unless 1000ms has elapsed between the two clicks.
+     */
+    const delaySet = async () => {
+      await new Promise((resolve) => {
+        setTimeout(resolve, 100);
+      });
+      setShouldClose(false);
+      setOptionsVisible(false);
+    };
+
+    void delaySet();
+  };
+
+  const onMultiSelectFocus = () => {
+    setOptionsVisible(true);
+    setShouldClose(false);
   };
 
   const initialSelection = filters[filterKey] || [];
@@ -129,6 +138,7 @@ export default function FilterMultiSelectContainer<T extends Record<string, (num
         notPresentFilterLabel={notPresentFilterLabel}
         notPresentFilterShown={notPresentFilterShown}
         onBlur={onMultiSelectBlur}
+        onFocus={onMultiSelectFocus}
       />
     );
   };
@@ -156,6 +166,25 @@ export default function FilterMultiSelectContainer<T extends Record<string, (num
             horizontal: 'left',
           }}
           className={classes.popoverContainer}
+          onClickCapture={(event) => {
+            // If the captured event is not for the backdrop, do nothing
+            const eventIsBackdropClick = Array.from((event.target as HTMLElement).classList?.values() || []).some(
+              (targetClass: string) => targetClass.toLowerCase().includes('backdrop')
+            );
+            if (!eventIsBackdropClick) {
+              return;
+            }
+
+            // Since two events are fired when the options are opened, the MultiSelect onBlur and
+            // the Popover onClick (of the backdrop, which prompts the onClose event), we need to stop event propagation
+            // if the options are visible. Otherwise, we setShouldClose(true) so that when the onClose handler fires
+            // it knows that it should close
+            if (optionsVisible) {
+              event.stopPropagation();
+            } else {
+              setShouldClose(true);
+            }
+          }}
         >
           {renderFilterMultiSelect()}
         </Popover>
