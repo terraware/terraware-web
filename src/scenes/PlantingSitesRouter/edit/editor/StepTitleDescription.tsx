@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Box, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { useUser } from 'src/providers';
 import TextWithLink from 'src/components/common/TextWithLink';
 import VideoDialog from 'src/components/common/VideoDialog';
 import { useDocLinks, DocType } from 'src/docLinks';
@@ -43,15 +44,19 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
   const theme = useTheme();
   const classes = useStyles();
   const docLinks = useDocLinks();
+  const { userPreferences, updateUserPreferences } = useUser();
 
-  // this is a placeholder for the instructions modal trigger
-  const [showModal, setShowModal] = useState<boolean>(dontShowAgainPreferenceName !== undefined);
-  const [dontShowModalAgain, setDontShowModalAgain] = useState<boolean>(dontShowAgainPreferenceName === undefined);
+  // show the modal automatically if it is user preference controlled, and value is not set to true (dont show preference)
+  const userPreferenceControlled = useMemo<boolean>(
+    () => !!dontShowAgainPreferenceName && userPreferences[dontShowAgainPreferenceName] !== true,
+    [dontShowAgainPreferenceName, userPreferences]
+  );
+  const [showModal, setShowModal] = useState<boolean>(userPreferenceControlled);
 
   const onClose = (dontShowAgain?: boolean) => {
     setShowModal(false);
-    if (dontShowAgain) {
-      setDontShowModalAgain(true);
+    if (dontShowAgain && !!dontShowAgainPreferenceName) {
+      updateUserPreferences({ ...userPreferences, [dontShowAgainPreferenceName]: true });
     }
   };
 
@@ -62,7 +67,7 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
           description={tutorialDescription}
           link={docLinks[tutorialDocLinkKey]}
           onClose={() => onClose()}
-          onDontShowAgain={dontShowModalAgain ? undefined : () => onClose(true)}
+          onDontShowAgain={userPreferenceControlled ? () => onClose(true) : undefined}
           open={showModal}
           title={tutorialTitle}
         />
