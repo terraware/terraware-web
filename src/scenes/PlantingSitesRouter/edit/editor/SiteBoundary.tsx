@@ -9,6 +9,7 @@ import strings from 'src/strings';
 import { PlantingSite, PlantingZone } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
+import { useLocalization } from 'src/providers';
 import { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
 import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
 import EditableMap from 'src/components/Map/EditableMapV2';
@@ -38,6 +39,7 @@ export default function SiteBoundary({ isSimpleSite, onChange, onValidate, site 
   );
   const [mode, setMode] = useState<MapEditorMode>();
   const snackbar = useSnackbar();
+  const { activeLocale } = useLocalization();
 
   // construct union of multipolygons
   const boundary = useMemo<MultiPolygon | null>(
@@ -119,6 +121,9 @@ export default function SiteBoundary({ isSimpleSite, onChange, onValidate, site 
   }, [boundary, errorAnnotations, isSimpleSite, onChange, onValidate, site.id, siteBoundary, snackbar]);
 
   useEffect(() => {
+    if (!activeLocale) {
+      return;
+    }
     const data: Description[] = [
       { text: strings.SITE_BOUNDARY_DESCRIPTION_0 },
       { text: strings.SITE_BOUNDARY_DESCRIPTION_1 },
@@ -141,7 +146,17 @@ export default function SiteBoundary({ isSimpleSite, onChange, onValidate, site 
     }
 
     setDescription(data);
-  }, [mode]);
+  }, [activeLocale, mode]);
+
+  const tutorialDescription = useMemo(() => {
+    if (!activeLocale) {
+      return '';
+    }
+    return strings.formatString(
+      strings.PLANTING_SITE_CREATE_INSTRUCTIONS_DESCRIPTION,
+      <MapIcon icon='polygon' />
+    ) as JSX.Element[];
+  }, [activeLocale]);
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
@@ -150,7 +165,7 @@ export default function SiteBoundary({ isSimpleSite, onChange, onValidate, site 
         dontShowAgainPreferenceName='dont-show-site-boundary-instructions'
         minHeight='230px'
         title={strings.SITE_BOUNDARY}
-        tutorialDescription={strings.PLANTING_SITE_CREATE_INSTRUCTIONS_DESCRIPTION}
+        tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_boundary_instructions_video'
         tutorialTitle={strings.PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE}
       />
