@@ -4,7 +4,7 @@ import { TableColumnType } from '@terraware/web-components';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
 import strings from 'src/strings';
 import { SubzoneAggregation, ZoneAggregation } from 'src/types/Observations';
-import { PlantingSite } from 'src/types/Tracking';
+import { SiteDetails } from 'src/types/Tracking';
 import { APP_PATHS } from 'src/constants';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
@@ -18,7 +18,7 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type PlantingSiteDetailsTableProps = {
   data: ZoneAggregation[];
-  plantingSite: PlantingSite;
+  plantingSite: SiteDetails;
 };
 
 const useStyles = makeStyles(() => ({

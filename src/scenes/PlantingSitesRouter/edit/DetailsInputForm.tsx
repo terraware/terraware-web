@@ -3,7 +3,7 @@ import { Grid } from '@mui/material';
 import strings from 'src/strings';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
-import { PlantingZone, UpdatedPlantingSeason } from 'src/types/Tracking';
+import { SiteDetails, UpdatedPlantingSeason } from 'src/types/Tracking';
 import isEnabled from 'src/features';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -13,16 +13,7 @@ import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelecto
 import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import LocationTimeZoneSelector from 'src/components/LocationTimeZoneSelector';
-import PlantingSeasonsEdit, { ValidPlantingSeason } from './PlantingSeasonsEdit';
-
-export type SiteDetails = {
-  description?: string;
-  id: number;
-  name: string;
-  plantingSeasons: ValidPlantingSeason[];
-  plantingZones?: PlantingZone[];
-  projectId?: number;
-};
+import PlantingSeasonsEdit from './PlantingSeasonsEdit';
 
 export type DetailsInputFormProps<T extends SiteDetails> = {
   onChange: (id: string, value: unknown) => void;
