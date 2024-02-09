@@ -1,3 +1,5 @@
+658b8f1810 SW-4631 Refactor planting site view to accept a generic type (#2152)
+e9ae480557 SW-4838 Add user preference to not show video tutorial again (#2150)
 8ded87a7ee Updated translations from Phrase (#2151)
 96693d0728 SW-4638 Refactor planting site details input form to use a generic type (#2147)
 d5fe6258fd Reorg planting sites router code with view/edit subdirectories (#2146)
