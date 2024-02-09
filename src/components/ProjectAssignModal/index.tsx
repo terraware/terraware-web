@@ -89,7 +89,7 @@ function ProjectAssignModal<T extends ProjectAssignableEntity>(props: ProjectAss
           availableProjects={availableProjects}
           record={entity}
           setRecord={handleUpdateProject}
-          allowUnselect
+          allowUnselect={!!onUnAssign}
         />
       </Grid>
     </DialogBox>
