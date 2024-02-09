@@ -1,3 +1,4 @@
+8ded87a7ee Updated translations from Phrase (#2151)
 96693d0728 SW-4638 Refactor planting site details input form to use a generic type (#2147)
 d5fe6258fd Reorg planting sites router code with view/edit subdirectories (#2146)
 728ec5f60a SW-4538 Update video asset links for planting site edit tutorial videos (#2148)
