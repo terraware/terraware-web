@@ -15,6 +15,7 @@ import {
 } from 'src/types/Map';
 import MapIcon from 'src/components/Map/MapIcon';
 import useSnackbar from 'src/utils/useSnackbar';
+import { useLocalization } from 'src/providers';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import { leftMostFeature, leftOrderedFeatures, toMultiPolygon } from 'src/components/Map/utils';
 import { MapTooltipDialog } from 'src/components/Map/MapRenderUtils';
@@ -73,6 +74,7 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
   const theme = useTheme();
   const getRenderAttributes = useRenderAttributes();
   const snackbar = useSnackbar();
+  const { activeLocale } = useLocalization();
 
   // expose subzones as a constant for easier use
   const subzones = useMemo<Record<number, FeatureCollection> | undefined>(
@@ -189,24 +191,37 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
   }, [getRenderAttributes, selectedZone, site.id, subzones, theme.palette.TwClrBaseWhite, zones]);
 
   const description = useMemo<Description[]>(
-    () => [
-      { text: strings.SITE_SUBZONE_BOUNDARIES_DESCRIPTION_0 },
-      {
-        text: strings.SITE_SUBZONE_BOUNDARIES_DESCRIPTION_1,
-        hasTutorial: true,
-        handlePrefix: (prefix: string) => strings.formatString(prefix, <MapIcon icon='slice' />) as JSX.Element[],
-      },
-      { text: strings.SITE_SUBZONE_BOUNDARIES_SELECT_A_ZONE },
-      {
-        text: strings.formatString(
-          strings.SITE_SUBZONE_BOUNDARIES_SELECTED_ZONE,
-          zones?.features?.find((f) => f.id === selectedZone)?.properties?.name ?? ''
-        ),
-        isBold: true,
-      },
-    ],
-    [selectedZone, zones]
+    () =>
+      activeLocale
+        ? [
+            { text: strings.SITE_SUBZONE_BOUNDARIES_DESCRIPTION_0 },
+            {
+              text: strings.SITE_SUBZONE_BOUNDARIES_DESCRIPTION_1,
+              hasTutorial: true,
+              handlePrefix: (prefix: string) => strings.formatString(prefix, <MapIcon icon='slice' />) as JSX.Element[],
+            },
+            { text: strings.SITE_SUBZONE_BOUNDARIES_SELECT_A_ZONE },
+            {
+              text: strings.formatString(
+                strings.SITE_SUBZONE_BOUNDARIES_SELECTED_ZONE,
+                zones?.features?.find((f) => f.id === selectedZone)?.properties?.name ?? ''
+              ),
+              isBold: true,
+            },
+          ]
+        : [],
+    [activeLocale, selectedZone, zones]
   );
+
+  const tutorialDescription = useMemo(() => {
+    if (!activeLocale) {
+      return '';
+    }
+    return strings.formatString(
+      strings.ADDING_SUBZONE_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,
+      <MapIcon icon='slice' />
+    ) as JSX.Element[];
+  }, [activeLocale]);
 
   // when we have a new polygon, add it to the subzones list after carving out the overlapping region in the zone.
   const onEditableBoundaryChanged = (editableBoundary?: FeatureCollection) => {
@@ -364,7 +379,7 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
       <StepTitleDescription
         description={description}
         title={strings.SITE_SUBZONE_BOUNDARIES}
-        tutorialDescription={strings.ADDING_SUBZONE_BOUNDARIES_INSTRUCTIONS_DESCRIPTION}
+        tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_subzone_boundary_instructions_video'
         tutorialTitle={strings.ADDING_SUBZONE_BOUNDARIES}
       />
