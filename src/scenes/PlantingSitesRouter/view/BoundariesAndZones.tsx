@@ -3,7 +3,7 @@ import { makeStyles } from '@mui/styles';
 import { Box, Typography, useTheme } from '@mui/material';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
 import strings from 'src/strings';
-import { PlantingSite, PlantingZone } from 'src/types/Tracking';
+import { PlantingZone, SiteDetails } from 'src/types/Tracking';
 import { MapEntityId, MapSourceProperties } from 'src/types/Map';
 import { ZoneAggregation } from 'src/types/Observations';
 import { useAppSelector } from 'src/redux/store';
@@ -33,7 +33,7 @@ export const useMapTooltipStyles = makeStyles(() => ({
 }));
 
 type BoundariesAndZonesProps = {
-  plantingSite: PlantingSite;
+  plantingSite: SiteDetails;
   setView?: (view: View) => void;
   view?: View;
 };
@@ -80,7 +80,7 @@ export default function BoundariesAndZones({ plantingSite, setView, view }: Boun
 }
 
 type PlantingSiteMapViewProps = {
-  plantingSite: PlantingSite;
+  plantingSite: SiteDetails;
   data: ZoneAggregation[];
   search: string;
 };
@@ -160,7 +160,7 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
 }
 
 const contextRenderer =
-  (site: PlantingSite, data: ZoneAggregation[], timeZone: string) =>
+  (site: SiteDetails, data: ZoneAggregation[], timeZone: string) =>
   (entity: MapSourceProperties): JSX.Element => {
     let properties: TooltipProperty[] = [];
     let title: string | undefined;

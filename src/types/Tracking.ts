@@ -5,9 +5,12 @@ export type PlantingSite = components['schemas']['PlantingSitePayload'];
 export type PlantingZone = components['schemas']['PlantingZonePayload'];
 export type PlantingSubzone = components['schemas']['PlantingSubzonePayload'];
 
+// geometry and types of geometries
+export type MultiPolygon = components['schemas']['MultiPolygon'];
+
 // Search API always returns strings
 export type PlantingSiteSearchResult = {
-  boundary?: components['schemas']['MultiPolygon'];
+  boundary?: MultiPolygon;
   id: string;
   name: string;
   numPlantingSubzones: string;
@@ -16,9 +19,6 @@ export type PlantingSiteSearchResult = {
   project_name: string;
   'totalPlants(raw)': string;
 };
-
-// geometry and types of geometries
-export type MultiPolygon = components['schemas']['MultiPolygon'];
 
 // delivery and plantings
 export type Delivery = components['schemas']['DeliveryPayload'];
@@ -36,3 +36,22 @@ export type MonitoringPlotSearchResult = {
 // planting seasons
 export type PlantingSeason = components['schemas']['PlantingSeasonPayload'];
 export type UpdatedPlantingSeason = components['schemas']['UpdatedPlantingSeasonPayload'];
+
+export type Location = {
+  timeZone?: string;
+};
+
+export type SitePlantingZone = Omit<PlantingZone, 'areaHa' | 'plantingSubzones'> & {
+  plantingSubzones: Omit<PlantingSubzone, 'areaHa'>[];
+};
+
+export type SiteDetails = Location & {
+  boundary?: MultiPolygon;
+  description?: string;
+  id: number;
+  name: string;
+  organizationId: number;
+  plantingSeasons: PlantingSeason[];
+  plantingZones?: SitePlantingZone[];
+  projectId?: number;
+};
