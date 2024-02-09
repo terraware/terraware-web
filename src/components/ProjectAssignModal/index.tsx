@@ -18,10 +18,11 @@ interface ProjectAssignModalProps<T extends ProjectAssignableEntity> {
   reloadEntity?: () => void;
   isModalOpen?: boolean;
   onClose: () => void;
+  onUnAssign?: () => void;
 }
 
 function ProjectAssignModal<T extends ProjectAssignableEntity>(props: ProjectAssignModalProps<T>) {
-  const { onClose, isModalOpen, assignPayloadCreator, reloadEntity } = props;
+  const { onClose, isModalOpen, assignPayloadCreator, reloadEntity, onUnAssign } = props;
 
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
@@ -33,13 +34,17 @@ function ProjectAssignModal<T extends ProjectAssignableEntity>(props: ProjectAss
   const projectRequest = useAppSelector((state) => selectProjectRequest(state, requestId));
 
   const handleSave = useCallback(() => {
+    if (onUnAssign && entity.projectId === null) {
+      onUnAssign();
+    }
+
     if (entity.projectId && props.entity.projectId !== entity.projectId) {
       const request = dispatch(requestProjectAssign({ projectId: entity.projectId, entities: assignPayloadCreator() }));
       setRequestId(request.requestId);
     }
 
     onClose();
-  }, [entity.projectId, props.entity.projectId, onClose, dispatch, assignPayloadCreator]);
+  }, [entity.projectId, props.entity.projectId, onClose, dispatch, assignPayloadCreator, onUnAssign]);
 
   const handleUpdateProject = useCallback(
     (setFn: (previousEntity: T) => T) => {
@@ -80,7 +85,12 @@ function ProjectAssignModal<T extends ProjectAssignableEntity>(props: ProjectAss
       ]}
     >
       <Grid item xs={12} textAlign='left'>
-        <ProjectsDropdown availableProjects={availableProjects} record={entity} setRecord={handleUpdateProject} />
+        <ProjectsDropdown
+          availableProjects={availableProjects}
+          record={entity}
+          setRecord={handleUpdateProject}
+          allowUnselect
+        />
       </Grid>
     </DialogBox>
   );
