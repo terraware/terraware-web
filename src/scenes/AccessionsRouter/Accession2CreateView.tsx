@@ -71,9 +71,11 @@ export default function CreateAccession(): JSX.Element {
 
   const { availableProjects } = useProjects();
 
-  // If there's only 1 project, auto apply it
+  // If there's only 1 project, and the record's `projectId` is not explicitly set to `null`, auto apply it
   useEffect(() => {
-    if (!availableProjects || availableProjects.length !== 1) {
+    if (record.projectId === null) {
+      return;
+    } else if (!availableProjects || availableProjects.length !== 1) {
       return;
     }
 
@@ -227,6 +229,7 @@ export default function CreateAccession(): JSX.Element {
                 record={record}
                 setRecord={setRecord}
                 availableProjects={availableProjects}
+                allowUnselect
               />
             </Box>
           )}
