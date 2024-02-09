@@ -5,6 +5,7 @@ import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { RenderableReadOnlyBoundary } from 'src/types/Map';
+import { useLocalization } from 'src/providers';
 import EditableMap from 'src/components/Map/EditableMapV2';
 import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
@@ -20,6 +21,7 @@ export type ExclusionsProps = {
 export default function Exclusions({ onChange, onValidate, site }: ExclusionsProps): JSX.Element {
   const [exclusions, setExclusions, undo, redo] = useUndoRedoState<FeatureCollection | undefined>();
   const getRenderAttributes = useRenderAttributes();
+  const { activeLocale } = useLocalization();
 
   useEffect(() => {
     if (site.exclusion) {
@@ -55,25 +57,39 @@ export default function Exclusions({ onChange, onValidate, site }: ExclusionsPro
   }, [getRenderAttributes, site.boundary, site.id]);
 
   const description = useMemo<Description[]>(
-    () => [
-      { text: strings.SITE_EXCLUSION_AREAS_DESCRIPTION_0 },
-      {
-        text: strings.SITE_EXCLUSION_AREAS_DESCRIPTION_1,
-        hasTutorial: true,
-        handlePrefix: (prefix: string) => strings.formatString(prefix, <MapIcon icon='polygon' />) as JSX.Element[],
-        handleSuffix: (suffix: string) => strings.formatString(suffix, '', strings.SAVE) as string,
-      },
-      { text: strings.SITE_EXCLUSION_AREAS_DESCRIPTION_2 },
-    ],
-    []
+    () =>
+      activeLocale
+        ? [
+            { text: strings.SITE_EXCLUSION_AREAS_DESCRIPTION_0 },
+            {
+              text: strings.SITE_EXCLUSION_AREAS_DESCRIPTION_1,
+              hasTutorial: true,
+              handlePrefix: (prefix: string) =>
+                strings.formatString(prefix, <MapIcon icon='polygon' />) as JSX.Element[],
+              handleSuffix: (suffix: string) => strings.formatString(suffix, '', strings.SAVE) as string,
+            },
+            { text: strings.SITE_EXCLUSION_AREAS_DESCRIPTION_2 },
+          ]
+        : [],
+    [activeLocale]
   );
+
+  const tutorialDescription = useMemo(() => {
+    if (!activeLocale) {
+      return;
+    }
+    return strings.formatString(
+      strings.PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_DESCRIPTION,
+      <MapIcon icon='polygon' />
+    ) as JSX.Element[];
+  }, [activeLocale]);
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
       <StepTitleDescription
         description={description}
         title={strings.SITE_EXCLUSION_AREAS_OPTIONAL}
-        tutorialDescription={strings.PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_DESCRIPTION}
+        tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_exclusions_boundary_instructions_video'
         tutorialTitle={strings.PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_TITLE}
       />

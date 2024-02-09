@@ -13,6 +13,7 @@ import {
 } from 'src/types/Map';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import useSnackbar from 'src/utils/useSnackbar';
+import { useLocalization } from 'src/providers';
 import EditableMap, { LayerFeature } from 'src/components/Map/EditableMapV2';
 import { leftMostFeature, toFeature, toMultiPolygon } from 'src/components/Map/utils';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
@@ -64,6 +65,7 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
   const theme = useTheme();
   const snackbar = useSnackbar();
   const getRenderAttributes = useRenderAttributes();
+  const activeLocale = useLocalization();
 
   const zones = useMemo<FeatureCollection | undefined>(() => zonesData?.fixedBoundaries, [zonesData?.fixedBoundaries]);
 
@@ -156,20 +158,33 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
   }, [getRenderAttributes, site.boundary, site.exclusion, site.id, theme.palette.TwClrBaseWhite, zones]);
 
   const description = useMemo<Description[]>(
-    () => [
-      { text: strings.SITE_ZONE_BOUNDARIES_DESCRIPTION_0 },
-      {
-        text: strings.SITE_ZONE_BOUNDARIES_DESCRIPTION_1,
-        hasTutorial: true,
-        handlePrefix: (prefix: string) => strings.formatString(prefix, <MapIcon icon='slice' />) as JSX.Element[],
-      },
-      {
-        text: strings.SITE_ZONE_BOUNDARIES_SIZE,
-        isBold: true,
-      },
-    ],
-    []
+    () =>
+      activeLocale
+        ? [
+            { text: strings.SITE_ZONE_BOUNDARIES_DESCRIPTION_0 },
+            {
+              text: strings.SITE_ZONE_BOUNDARIES_DESCRIPTION_1,
+              hasTutorial: true,
+              handlePrefix: (prefix: string) => strings.formatString(prefix, <MapIcon icon='slice' />) as JSX.Element[],
+            },
+            {
+              text: strings.SITE_ZONE_BOUNDARIES_SIZE,
+              isBold: true,
+            },
+          ]
+        : [],
+    [activeLocale]
   );
+
+  const tutorialDescription = useMemo(() => {
+    if (!activeLocale) {
+      return '';
+    }
+    return strings.formatString(
+      strings.ADDING_ZONE_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,
+      <MapIcon icon='slice' />
+    ) as JSX.Element[];
+  }, [activeLocale]);
 
   const onEditableBoundaryChanged = (editableBoundary?: FeatureCollection) => {
     // pick the latest geometry that was drawn
@@ -295,7 +310,7 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
         description={description}
         dontShowAgainPreferenceName='dont-show-site-zone-boundaries-instructions'
         title={strings.SITE_ZONE_BOUNDARIES}
-        tutorialDescription={strings.ADDING_ZONE_BOUNDARIES_INSTRUCTIONS_DESCRIPTION}
+        tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_zone_boundary_instructions_video'
         tutorialTitle={strings.ADDING_ZONE_BOUNDARIES}
       />

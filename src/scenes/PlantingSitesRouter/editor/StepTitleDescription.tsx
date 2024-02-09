@@ -25,7 +25,7 @@ export type StepTitleDescriptionProps = {
   dontShowAgainPreferenceName?: string;
   minHeight?: string;
   title: string;
-  tutorialDescription?: string;
+  tutorialDescription?: string | JSX.Element[];
   tutorialDocLinkKey?: DocType;
   tutorialTitle?: string;
 };
