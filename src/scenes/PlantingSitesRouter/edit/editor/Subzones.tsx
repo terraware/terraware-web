@@ -219,7 +219,7 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
     }
     return strings.formatString(
       strings.ADDING_SUBZONE_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,
-      <MapIcon icon='slice' />
+      <MapIcon centerAligned icon='slice' />
     ) as JSX.Element[];
   }, [activeLocale]);
 

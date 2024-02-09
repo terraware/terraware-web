@@ -52,7 +52,7 @@ export default function VideoDialog(props: VideoDialogProps): JSX.Element {
   return (
     <DialogBox scrolled onClose={onClose} open={open} title={title} size={'large'} middleButtons={buttons()}>
       <Box display='flex' flexDirection='column'>
-        <Typography textAlign='center' margin={theme.spacing(0, 'auto', 2)} display='flex' alignItems='center'>
+        <Typography margin={theme.spacing(0, 'auto', 2)} display='inline-block'>
           {description}
         </Typography>
         <iframe
