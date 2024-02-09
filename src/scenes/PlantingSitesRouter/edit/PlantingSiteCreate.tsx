@@ -182,7 +182,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                 </Box>
                 <PageSnackbar />
                 <Card flushMobile style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                  <DetailsInputForm
+                  <DetailsInputForm<PlantingSite>
                     onChange={onChange}
                     onValidate={onValidate}
                     plantingSeasons={plantingSeasons}

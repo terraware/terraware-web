@@ -24,7 +24,7 @@ export default function Details({
   return (
     <Box display='flex' flexDirection='column'>
       <StepTitleDescription description={[]} title={strings.DETAILS} />
-      <DetailsInputForm
+      <DetailsInputForm<PlantingSite>
         onChange={onChange}
         onValidate={onValidate}
         plantingSeasons={plantingSeasons}

@@ -29,7 +29,7 @@ type EditableRow = {
   endDate?: IsoDate;
 };
 
-type ValidPlantingSeason = {
+export type ValidPlantingSeason = {
   id?: number;
   startDate: IsoDate;
   endDate: IsoDate;
