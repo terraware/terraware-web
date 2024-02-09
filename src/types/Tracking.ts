@@ -45,6 +45,9 @@ export type SitePlantingZone = Omit<PlantingZone, 'areaHa' | 'plantingSubzones'>
   plantingSubzones: Omit<PlantingSubzone, 'areaHa'>[];
 };
 
+/**
+ * A minium planting site representation for basic details view/edit purposes.
+ */
 export type SiteDetails = Location & {
   boundary?: MultiPolygon;
   description?: string;

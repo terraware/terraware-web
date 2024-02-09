@@ -2,20 +2,14 @@ import React, { useMemo } from 'react';
 import { Step, StepLabel, Stepper, Typography, useTheme } from '@mui/material';
 import { FormButton, PageForm } from '@terraware/web-components';
 import strings from 'src/strings';
+import { SiteEditStep } from 'src/types/PlantingSite';
 
 export type OptionalStep = {
   completed: boolean;
 };
 
-export type PlantingSiteStepType =
-  | 'details'
-  | 'site_boundary'
-  | 'exclusion_areas'
-  | 'zone_boundaries'
-  | 'subzone_boundaries';
-
 export type PlantingSiteStep = {
-  type: PlantingSiteStepType;
+  type: SiteEditStep;
   label: string;
   // to govern optional steps and their status
   optional?: OptionalStep;
@@ -24,7 +18,7 @@ export type PlantingSiteStep = {
 export type FormProps = {
   children: React.ReactNode;
   className?: string;
-  currentStep: PlantingSiteStepType;
+  currentStep: SiteEditStep;
   onCancel: () => void;
   onSaveAndNext: () => void;
   onSaveAndClose: () => void;
