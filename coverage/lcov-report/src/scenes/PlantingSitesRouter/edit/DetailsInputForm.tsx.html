@@ -228,7 +228,26 @@
 <a name='L163'></a><a href='#L163'>163</a>
 <a name='L164'></a><a href='#L164'>164</a>
 <a name='L165'></a><a href='#L165'>165</a>
-<a name='L166'></a><a href='#L166'>166</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a>
+<a name='L168'></a><a href='#L168'>168</a>
+<a name='L169'></a><a href='#L169'>169</a>
+<a name='L170'></a><a href='#L170'>170</a>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -307,6 +326,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -398,7 +418,7 @@ import { Grid } from '@mui/material';
 import strings from 'src/strings';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
-import { PlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
+import { PlantingZone, UpdatedPlantingSeason } from 'src/types/Tracking';
 import isEnabled from 'src/features';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -408,25 +428,34 @@ import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelecto
 import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import LocationTimeZoneSelector from 'src/components/LocationTimeZoneSelector';
-import PlantingSeasonsEdit from './PlantingSeasonsEdit';
+import PlantingSeasonsEdit, { ValidPlantingSeason } from './PlantingSeasonsEdit';
 &nbsp;
-export type DetailsInputFormProps = {
+export type SiteDetails = {
+  description?: string;
+  id: number;
+  name: string;
+  plantingSeasons: ValidPlantingSeason[];
+  plantingZones?: PlantingZone[];
+  projectId?: number;
+};
+&nbsp;
+export type DetailsInputFormProps&lt;T extends SiteDetails&gt; = {
   onChange: (id: string, value: unknown) =&gt; void;
   onValidate?: (hasErrors: boolean) =&gt; void;
   plantingSeasons?: UpdatedPlantingSeason[];
-  record: PlantingSite;
+  record: T;
   setPlantingSeasons: (plantingSeasons: UpdatedPlantingSeason[]) =&gt; void;
-  setRecord: (setFn: (previousValue: PlantingSite) =&gt; PlantingSite) =&gt; void;
+  setRecord: (setFn: (previousValue: T) =&gt; T) =&gt; void;
 };
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >DetailsInputForm(</span>{
+export default function <span class="fstat-no" title="function not covered" >DetailsInputForm&lt;</span>T extends SiteDetails&gt;({
   onChange,
   onValidate,
   plantingSeasons,
   record,
   setPlantingSeasons,
   setRecord,
-}: DetailsInputFormProps): JSX.Element {
+}: DetailsInputFormProps&lt;T&gt;): JSX.Element {
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const [validateInput, setValidateInput] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [nameError, setNameError] = <span class="cstat-no" title="statement not covered" >useState('');</span>
@@ -472,6 +501,7 @@ export default function <span class="fstat-no" title="function not covered" >Det
   }, [activeLocale, dispatch, plantingSites, selectedOrganization.id]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    // TODO: also include planting site drafts in this list
     const otherSiteNames = <span class="cstat-no" title="statement not covered" >(plantingSites ?? []).filter(<span class="fstat-no" title="function not covered" >(s</span>ite) =&gt; <span class="cstat-no" title="statement not covered" >site.id !== record.id)</span>.map(<span class="fstat-no" title="function not covered" >(s</span>ite) =&gt; <span class="cstat-no" title="statement not covered" >site.name)</span>;</span>
 <span class="cstat-no" title="statement not covered" >    setUsedNames(new Set(otherSiteNames));</span>
   }, [plantingSites, record.id]);
@@ -552,7 +582,7 @@ export default function <span class="fstat-no" title="function not covered" >Det
       )}
       {projectsEnabled &amp;&amp; (
         &lt;Grid item xs={gridSize()}&gt;
-          &lt;ProjectsDropdown&lt;PlantingSite&gt; availableProjects={availableProjects} record={record} setRecord={setRecord} /&gt;
+          &lt;ProjectsDropdown&lt;T&gt; availableProjects={availableProjects} record={record} setRecord={setRecord} /&gt;
         &lt;/Grid&gt;
       )}
     &lt;/Grid&gt;
@@ -565,7 +595,7 @@ export default function <span class="fstat-no" title="function not covered" >Det
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-09T17:10:05.409Z
+                at 2024-02-09T17:19:24.464Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
