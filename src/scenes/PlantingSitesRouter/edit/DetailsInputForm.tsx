@@ -3,7 +3,7 @@ import { Grid } from '@mui/material';
 import strings from 'src/strings';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
-import { PlantingSite, PlantingZone, UpdatedPlantingSeason } from 'src/types/Tracking';
+import { PlantingZone, UpdatedPlantingSeason } from 'src/types/Tracking';
 import isEnabled from 'src/features';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useLocalization, useOrganization } from 'src/providers';
