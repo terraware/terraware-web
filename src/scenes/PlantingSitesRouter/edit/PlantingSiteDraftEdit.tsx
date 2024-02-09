@@ -6,7 +6,7 @@ import { useLocalization } from 'src/providers';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { requestPlantingSite } from 'src/redux/features/tracking/trackingThunks';
-import PlantingSiteEditor from 'src/scenes/PlantingSitesRouter/editor/Editor';
+import PlantingSiteEditor from './editor/Editor';
 
 type PlantingSiteDraftEditProps = {
   reloadPlantingSites: () => void;

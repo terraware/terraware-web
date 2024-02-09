@@ -17,7 +17,7 @@ import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelector
 import PageSnackbar from 'src/components/PageSnackbar';
 import { PlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
 import { View } from 'src/components/common/ListMapSelector';
-import BoundariesAndZones from './BoundariesAndZones';
+import BoundariesAndZones from 'src/scenes/PlantingSitesRouter/view/BoundariesAndZones';
 import { useOrganization } from 'src/providers/hooks';
 import Card from 'src/components/common/Card';
 import PlantingSiteMapEditor from 'src/components/Map/PlantingSiteMapEditor';

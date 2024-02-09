@@ -3,7 +3,7 @@ import useQuery from 'src/utils/useQuery';
 import { PlantingSite } from 'src/types/Tracking';
 import { SiteType } from 'src/types/PlantingSite';
 import { useOrganization } from 'src/providers';
-import PlantingSiteEditor from 'src/scenes/PlantingSitesRouter/editor/Editor';
+import PlantingSiteEditor from './editor/Editor';
 
 type PlantingSiteDraftCreateProps = {
   reloadPlantingSites: () => void;

@@ -19,13 +19,12 @@ const useStyles = makeStyles(() => ({
 export default function PlantingSitesCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const classes = useStyles();
   const { column, row, value, index } = props;
+  const isDraft = false; // TODO: lookup BE property when available
 
   const createLinkToPlantingSiteView = (iValue: React.ReactNode | unknown[]) => {
-    const isDraft = false; // TODO: lookup BE property when available
-    const to = (isDraft ? APP_PATHS.PLANTING_SITES_DRAFT_VIEW : APP_PATHS.PLANTING_SITES_VIEW).replace(
-      ':plantingSiteId',
-      row.id.toString()
-    );
+    const plantingSiteViewUrl = isDraft ? APP_PATHS.PLANTING_SITES_DRAFT_VIEW : APP_PATHS.PLANTING_SITES_VIEW;
+
+    const to = plantingSiteViewUrl.replace(':plantingSiteId', row.id.toString());
 
     return <Link to={to}>{iValue as React.ReactNode}</Link>;
   };
@@ -43,14 +42,11 @@ export default function PlantingSitesCellRenderer(props: RendererProps<TableRowT
   }
 
   if (column.key === 'draft') {
-    // TODO: check BE prop once available on draft status
-    const isDraftStatus = false;
-
     return (
       <CellRenderer
         index={index}
         column={column}
-        value={isDraftStatus ? <DraftBadge /> : null}
+        value={isDraft ? <DraftBadge /> : null}
         row={row}
         className={classes.text}
       />
