@@ -3,7 +3,7 @@ import { Grid } from '@mui/material';
 import strings from 'src/strings';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
-import { PlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
+import { PlantingSite, PlantingZone, UpdatedPlantingSeason } from 'src/types/Tracking';
 import isEnabled from 'src/features';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -13,25 +13,34 @@ import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelecto
 import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import LocationTimeZoneSelector from 'src/components/LocationTimeZoneSelector';
-import PlantingSeasonsEdit from './PlantingSeasonsEdit';
+import PlantingSeasonsEdit, { ValidPlantingSeason } from './PlantingSeasonsEdit';
 
-export type DetailsInputFormProps = {
+export type SiteDetails = {
+  description?: string;
+  id: number;
+  name: string;
+  plantingSeasons: ValidPlantingSeason[];
+  plantingZones?: PlantingZone[];
+  projectId?: number;
+};
+
+export type DetailsInputFormProps<T extends SiteDetails> = {
   onChange: (id: string, value: unknown) => void;
   onValidate?: (hasErrors: boolean) => void;
   plantingSeasons?: UpdatedPlantingSeason[];
-  record: PlantingSite;
+  record: T;
   setPlantingSeasons: (plantingSeasons: UpdatedPlantingSeason[]) => void;
-  setRecord: (setFn: (previousValue: PlantingSite) => PlantingSite) => void;
+  setRecord: (setFn: (previousValue: T) => T) => void;
 };
 
-export default function DetailsInputForm({
+export default function DetailsInputForm<T extends SiteDetails>({
   onChange,
   onValidate,
   plantingSeasons,
   record,
   setPlantingSeasons,
   setRecord,
-}: DetailsInputFormProps): JSX.Element {
+}: DetailsInputFormProps<T>): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const [validateInput, setValidateInput] = useState<boolean>(false);
   const [nameError, setNameError] = useState('');
@@ -77,6 +86,7 @@ export default function DetailsInputForm({
   }, [activeLocale, dispatch, plantingSites, selectedOrganization.id]);
 
   useEffect(() => {
+    // TODO: also include planting site drafts in this list
     const otherSiteNames = (plantingSites ?? []).filter((site) => site.id !== record.id).map((site) => site.name);
     setUsedNames(new Set(otherSiteNames));
   }, [plantingSites, record.id]);
@@ -157,7 +167,7 @@ export default function DetailsInputForm({
       )}
       {projectsEnabled && (
         <Grid item xs={gridSize()}>
-          <ProjectsDropdown<PlantingSite> availableProjects={availableProjects} record={record} setRecord={setRecord} />
+          <ProjectsDropdown<T> availableProjects={availableProjects} record={record} setRecord={setRecord} />
         </Grid>
       )}
     </Grid>
