@@ -129,6 +129,8 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
 
     if (response.requestSucceeded) {
       snackbar.toastSuccess(strings.CHANGES_SAVED);
+      // TODO race condition here, sometimes the view loads before the planting sites data has been refreshed and the
+      // project un-assign doesn't look like it has applied (but is applied if you refresh)
       reloadPlantingSites();
       goToPlantingSite(id);
       return true;

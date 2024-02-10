@@ -157,7 +157,12 @@ export default function DetailsInputForm({
       )}
       {projectsEnabled && (
         <Grid item xs={gridSize()}>
-          <ProjectsDropdown<PlantingSite> availableProjects={availableProjects} record={record} setRecord={setRecord} />
+          <ProjectsDropdown<PlantingSite>
+            availableProjects={availableProjects}
+            record={record}
+            setRecord={setRecord}
+            allowUnselect
+          />
         </Grid>
       )}
     </Grid>
