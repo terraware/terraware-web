@@ -182,7 +182,7 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
     }
     return strings.formatString(
       strings.ADDING_ZONE_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,
-      <MapIcon icon='slice' />
+      <MapIcon centerAligned icon='slice' />
     ) as JSX.Element[];
   }, [activeLocale]);
 

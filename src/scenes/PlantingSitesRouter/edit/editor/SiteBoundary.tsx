@@ -154,7 +154,7 @@ export default function SiteBoundary({ isSimpleSite, onChange, onValidate, site 
     }
     return strings.formatString(
       strings.PLANTING_SITE_CREATE_INSTRUCTIONS_DESCRIPTION,
-      <MapIcon icon='polygon' />
+      <MapIcon centerAligned icon='polygon' />
     ) as JSX.Element[];
   }, [activeLocale]);
 

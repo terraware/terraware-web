@@ -80,7 +80,7 @@ export default function Exclusions({ onChange, onValidate, site }: ExclusionsPro
     }
     return strings.formatString(
       strings.PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_DESCRIPTION,
-      <MapIcon icon='polygon' />
+      <MapIcon centerAligned icon='polygon' />
     ) as JSX.Element[];
   }, [activeLocale]);
 
