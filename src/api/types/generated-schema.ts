@@ -524,6 +524,18 @@ export interface paths {
     /** Reassigns some of the seedlings from a delivery to a different planting subzone. */
     post: operations["reassignDelivery"];
   };
+  "/api/v1/tracking/draftSites": {
+    /** Saves a draft of an in-progress planting site. */
+    post: operations["createDraftPlantingSite"];
+  };
+  "/api/v1/tracking/draftSites/{id}": {
+    /** Gets the details of a saved draft of a planting site. */
+    get: operations["getDraftPlantingSite"];
+    /** Updates an existing draft of an in-progress planting site. */
+    put: operations["updateDraftPlantingSite"];
+    /** Deletes an existing draft of an in-progress planting site. */
+    delete: operations["deleteDraftPlantingSite"];
+  };
   "/api/v1/tracking/mapbox/token": {
     /**
      * Gets an API token to use for displaying Mapbox maps.
@@ -1367,6 +1379,41 @@ export interface components {
        */
       verbosity?: number;
     };
+    CreateDraftPlantingSiteRequestPayload: {
+      /** @description In-progress state of the draft. This includes map data and other information needed by the client. It is treated as opaque data by the server. */
+      data: {
+        [key: string]: unknown;
+      };
+      description?: string;
+      name: string;
+      /**
+       * Format: int32
+       * @description If the user has started defining planting subzones, the number of subzones defined so far.
+       */
+      numPlantingSubzones?: number;
+      /**
+       * Format: int32
+       * @description If the user has started defining planting zones, the number of zones defined so far.
+       */
+      numPlantingZones?: number;
+      /** Format: int64 */
+      organizationId: number;
+      /**
+       * Format: int64
+       * @description If the draft is associated with a project, its ID.
+       */
+      projectId?: number;
+      /**
+       * @description Time zone name in IANA tz database format
+       * @example America/New_York
+       */
+      timeZone?: string;
+    };
+    CreateDraftPlantingSiteResponsePayload: {
+      /** Format: int64 */
+      id: number;
+      status: components["schemas"]["SuccessOrError"];
+    };
     CreateFacilityRequestPayload: {
       /** Format: date */
       buildCompletedDate?: string;
@@ -1726,6 +1773,47 @@ export interface components {
        */
       lastRespondedTime?: string;
     };
+    DraftPlantingSitePayload: {
+      /**
+       * Format: int64
+       * @description ID of the user who created this draft. Only that user is allowed to modify or delete the draft.
+       */
+      createdBy: number;
+      /** Format: date-time */
+      createdTime: string;
+      /** @description In-progress state of the draft. This includes map data and other information needed by the client. It is treated as opaque data by the server. */
+      data: {
+        [key: string]: unknown;
+      };
+      description?: string;
+      /** Format: int64 */
+      id: number;
+      /** Format: date-time */
+      modifiedTime: string;
+      name: string;
+      /**
+       * Format: int32
+       * @description If the user has started defining planting subzones, the number of subzones defined so far.
+       */
+      numPlantingSubzones?: number;
+      /**
+       * Format: int32
+       * @description If the user has started defining planting zones, the number of zones defined so far.
+       */
+      numPlantingZones?: number;
+      /** Format: int64 */
+      organizationId: number;
+      /**
+       * Format: int64
+       * @description If the draft is associated with a project, its ID.
+       */
+      projectId?: number;
+      /**
+       * @description Time zone name in IANA tz database format
+       * @example America/New_York
+       */
+      timeZone?: string;
+    };
     ErrorDetails: {
       message: string;
     };
@@ -1834,6 +1922,10 @@ export interface components {
     };
     GetDeviceResponsePayload: {
       device: components["schemas"]["DeviceConfig"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetDraftPlantingSiteResponsePayload: {
+      site: components["schemas"]["DraftPlantingSitePayload"];
       status: components["schemas"]["SuccessOrError"];
     };
     GetFacilityResponse: {
@@ -3498,6 +3590,34 @@ export interface components {
        * @description Level of diagnostic information to log.
        */
       verbosity?: number;
+    };
+    UpdateDraftPlantingSiteRequestPayload: {
+      /** @description In-progress state of the draft. This includes map data and other information needed by the client. It is treated as opaque data by the server. */
+      data: {
+        [key: string]: unknown;
+      };
+      description?: string;
+      name: string;
+      /**
+       * Format: int32
+       * @description If the user has started defining planting subzones, the number of subzones defined so far.
+       */
+      numPlantingSubzones?: number;
+      /**
+       * Format: int32
+       * @description If the user has started defining planting zones, the number of zones defined so far.
+       */
+      numPlantingZones?: number;
+      /**
+       * Format: int64
+       * @description If the draft is associated with a project, its ID.
+       */
+      projectId?: number;
+      /**
+       * @description Time zone name in IANA tz database format
+       * @example America/New_York
+       */
+      timeZone?: string;
     };
     UpdateFacilityRequestPayload: {
       /** Format: date */
@@ -6416,6 +6536,75 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["ReassignDeliveryRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Saves a draft of an in-progress planting site. */
+  createDraftPlantingSite: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateDraftPlantingSiteRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateDraftPlantingSiteResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets the details of a saved draft of a planting site. */
+  getDraftPlantingSite: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetDraftPlantingSiteResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Updates an existing draft of an in-progress planting site. */
+  updateDraftPlantingSite: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateDraftPlantingSiteRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Deletes an existing draft of an in-progress planting site. */
+  deleteDraftPlantingSite: {
+    parameters: {
+      path: {
+        id: number;
       };
     };
     responses: {

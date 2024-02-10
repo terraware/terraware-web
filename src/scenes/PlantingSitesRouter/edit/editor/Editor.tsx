@@ -6,7 +6,7 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Message } from '@terraware/web-components';
 import strings from 'src/strings';
 import { PlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
-import { SiteType } from 'src/types/PlantingSite';
+import { SiteEditStep, SiteType } from 'src/types/PlantingSite';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useDocLinks } from 'src/docLinks';
@@ -18,7 +18,7 @@ import TextWithLink from 'src/components/common/TextWithLink';
 import Card from 'src/components/common/Card';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import PageSnackbar from 'src/components/PageSnackbar';
-import Form, { PlantingSiteStep, PlantingSiteStepType } from './Form';
+import Form, { PlantingSiteStep } from './Form';
 import Details from './Details';
 import SiteBoundary from './SiteBoundary';
 import Exclusions from './Exclusions';
@@ -56,9 +56,9 @@ export default function Editor(props: EditorProps): JSX.Element {
     ((hasErrors: boolean, isOptionalCompleted?: boolean) => void) | undefined
   >();
   const [showStartOver, setShowStartOver] = useState<boolean>(false);
-  const [currentStep, setCurrentStep] = useState<PlantingSiteStepType>('details');
-  const [completedOptionalSteps, setCompletedOptionalSteps] = useState<Record<PlantingSiteStepType, boolean>>(
-    {} as Record<PlantingSiteStepType, boolean>
+  const [currentStep, setCurrentStep] = useState<SiteEditStep>('details');
+  const [completedOptionalSteps, setCompletedOptionalSteps] = useState<Record<SiteEditStep, boolean>>(
+    {} as Record<SiteEditStep, boolean>
   );
   const [plantingSite, setPlantingSite, onChange] = useForm({ ...site });
   const [plantingSeasons, setPlantingSeasons] = useState<UpdatedPlantingSeason[]>();
@@ -70,7 +70,7 @@ export default function Editor(props: EditorProps): JSX.Element {
       return [];
     }
 
-    const isCompleted = (optionalStep: PlantingSiteStepType) => completedOptionalSteps[optionalStep] ?? false;
+    const isCompleted = (optionalStep: SiteEditStep) => completedOptionalSteps[optionalStep] ?? false;
 
     const simpleSiteSteps: PlantingSiteStep[] = [
       {
@@ -156,7 +156,7 @@ export default function Editor(props: EditorProps): JSX.Element {
         } else {
           // update state of optional step for the stepper visualization
           if (isOptionalCompleted !== undefined) {
-            setCompletedOptionalSteps((current: Record<PlantingSiteStepType, boolean>) => ({
+            setCompletedOptionalSteps((current: Record<SiteEditStep, boolean>) => ({
               ...current,
               [currentStep]: isOptionalCompleted,
             }));
@@ -177,7 +177,7 @@ export default function Editor(props: EditorProps): JSX.Element {
       exclusion: _.cloneDeep(site.exclusion),
       plantingZones: _.cloneDeep(site.plantingZones),
     }));
-    setCompletedOptionalSteps({} as Record<PlantingSiteStepType, boolean>);
+    setCompletedOptionalSteps({} as Record<SiteEditStep, boolean>);
     setShowStartOver(false);
   };
 
