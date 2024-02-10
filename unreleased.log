@@ -1,3 +1,5 @@
+8eb3132702 SW-4843 Add types for Draft Planting Sites (#2154)
+d85597d849 Fix video modal description text style when the text is too long (#2153)
 658b8f1810 SW-4631 Refactor planting site view to accept a generic type (#2152)
 e9ae480557 SW-4838 Add user preference to not show video tutorial again (#2150)
 8ded87a7ee Updated translations from Phrase (#2151)

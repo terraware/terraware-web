@@ -633,7 +633,7 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Message } from '@terraware/web-components';
 import strings from 'src/strings';
 import { PlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
-import { SiteType } from 'src/types/PlantingSite';
+import { SiteEditStep, SiteType } from 'src/types/PlantingSite';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useDocLinks } from 'src/docLinks';
@@ -645,7 +645,7 @@ import TextWithLink from 'src/components/common/TextWithLink';
 import Card from 'src/components/common/Card';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import PageSnackbar from 'src/components/PageSnackbar';
-import Form, { PlantingSiteStep, PlantingSiteStepType } from './Form';
+import Form, { PlantingSiteStep } from './Form';
 import Details from './Details';
 import SiteBoundary from './SiteBoundary';
 import Exclusions from './Exclusions';
@@ -683,9 +683,9 @@ export default function <span class="fstat-no" title="function not covered" >Edi
     ((hasErrors: boolean, isOptionalCompleted?: boolean) =&gt; void) | undefined
   &gt;();
   const [showStartOver, setShowStartOver] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
-  const [currentStep, setCurrentStep] = <span class="cstat-no" title="statement not covered" >useState&lt;PlantingSiteStepType&gt;('details');</span>
-  const [completedOptionalSteps, setCompletedOptionalSteps] = <span class="cstat-no" title="statement not covered" >useState&lt;Record&lt;PlantingSiteStepType, boolean&gt;&gt;(</span>
-    {} as Record&lt;PlantingSiteStepType, boolean&gt;
+  const [currentStep, setCurrentStep] = <span class="cstat-no" title="statement not covered" >useState&lt;SiteEditStep&gt;('details');</span>
+  const [completedOptionalSteps, setCompletedOptionalSteps] = <span class="cstat-no" title="statement not covered" >useState&lt;Record&lt;SiteEditStep, boolean&gt;&gt;(</span>
+    {} as Record&lt;SiteEditStep, boolean&gt;
   );
   const [plantingSite, setPlantingSite, onChange] = <span class="cstat-no" title="statement not covered" >useForm({ ...site });</span>
   const [plantingSeasons, setPlantingSeasons] = <span class="cstat-no" title="statement not covered" >useState&lt;UpdatedPlantingSeason[]&gt;();</span>
@@ -697,7 +697,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
 <span class="cstat-no" title="statement not covered" >      return [];</span>
     }
 &nbsp;
-    const isCompleted = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(o</span>ptionalStep: PlantingSiteStepType) =&gt; <span class="cstat-no" title="statement not covered" >completedOptionalSteps[optionalStep] ?? false;</span></span>
+    const isCompleted = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(o</span>ptionalStep: SiteEditStep) =&gt; <span class="cstat-no" title="statement not covered" >completedOptionalSteps[optionalStep] ?? false;</span></span>
 &nbsp;
     const simpleSiteSteps: PlantingSiteStep[] = <span class="cstat-no" title="statement not covered" >[</span>
       {
@@ -783,7 +783,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
         } else {
           // update state of optional step for the stepper visualization
 <span class="cstat-no" title="statement not covered" >          if (isOptionalCompleted !== undefined) {</span>
-<span class="cstat-no" title="statement not covered" >            setCompletedOptionalSteps(<span class="fstat-no" title="function not covered" >(c</span>urrent: Record&lt;PlantingSiteStepType, boolean&gt;) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+<span class="cstat-no" title="statement not covered" >            setCompletedOptionalSteps(<span class="fstat-no" title="function not covered" >(c</span>urrent: Record&lt;SiteEditStep, boolean&gt;) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
               ...current,
               [currentStep]: isOptionalCompleted,
             }));
@@ -804,7 +804,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
       exclusion: _.cloneDeep(site.exclusion),
       plantingZones: _.cloneDeep(site.plantingZones),
     }));
-<span class="cstat-no" title="statement not covered" >    setCompletedOptionalSteps({} as Record&lt;PlantingSiteStepType, boolean&gt;);</span>
+<span class="cstat-no" title="statement not covered" >    setCompletedOptionalSteps({} as Record&lt;SiteEditStep, boolean&gt;);</span>
 <span class="cstat-no" title="statement not covered" >    setShowStartOver(false);</span>
   };
 &nbsp;
@@ -913,7 +913,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-09T21:42:38.509Z
+                at 2024-02-10T00:16:36.107Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
