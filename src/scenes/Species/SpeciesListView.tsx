@@ -9,8 +9,6 @@ import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import TfMain from 'src/components/common/TfMain';
 import PageSnackbar from 'src/components/PageSnackbar';
-import AddSpeciesModal from './AddSpeciesModal';
-import DeleteSpeciesModal from './DeleteSpeciesModal';
 import TextField from '../../components/common/Textfield/Textfield';
 import SearchService from 'src/services/SearchService';
 import { FieldNodePayload, FieldOptionsMap, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
@@ -35,14 +33,12 @@ import { BusySpinner, DropdownItem, SortOrder } from '@terraware/web-components'
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { PillList, PillListItem, Tooltip } from '@terraware/web-components';
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
-import { SpeciesService } from 'src/services';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import _ from 'lodash';
 import useQuery from 'src/utils/useQuery';
 import { useHistory } from 'react-router';
 import { APP_PATHS } from 'src/constants';
 import { SpeciesSearchResultRow } from './types';
-import { handlePromises } from 'src/services/utils';
 import Card from 'src/components/common/Card';
 
 type SpeciesListProps = {
@@ -134,10 +130,7 @@ const CSV_FIELDS = [
 export default function SpeciesListView({ reloadData, species }: SpeciesListProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const classes = useStyles();
-  const [selectedSpecies, setSelectedSpecies] = useState<Species>();
   const [selectedSpeciesRows, setSelectedSpeciesRows] = useState<SpeciesSearchResultRow[]>([]);
-  const [editSpeciesModalOpen, setEditSpeciesModalOpen] = useState(false);
-  const [deleteSpeciesModalOpen, setDeleteSpeciesModalOpen] = useState(false);
   const [importSpeciesModalOpen, setImportSpeciesModalOpen] = useState(false);
   const [checkDataModalOpen, setCheckDataModalOpen] = useState(false);
   const snackbar = useSnackbar();
@@ -504,41 +497,8 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     onApplyFilters();
   }, [onApplyFilters]);
 
-  const onCloseEditSpeciesModal = (saved: boolean, snackbarMessage?: string) => {
-    if (saved) {
-      reloadData();
-    }
-    setEditSpeciesModalOpen(false);
-    if (snackbarMessage) {
-      snackbar.toastSuccess(snackbarMessage);
-    }
-  };
-
   const onNewSpecies = () => {
-    setSelectedSpecies(undefined);
-    setEditSpeciesModalOpen(true);
-  };
-
-  const setErrorSnackbar = (snackbarMessage: string) => {
-    snackbar.toastError(snackbarMessage);
-  };
-
-  const openEditSpeciesModal = async (speciesId: number) => {
-    const speciesResponse = await SpeciesService.getSpecies(speciesId, selectedOrganization.id);
-    if (speciesResponse.requestSucceeded) {
-      setSelectedSpecies(speciesResponse.species);
-      setEditSpeciesModalOpen(true);
-    } else {
-      setErrorSnackbar(strings.GENERIC_ERROR);
-    }
-  };
-
-  const OnEditSpecies = () => {
-    openEditSpeciesModal(selectedSpeciesRows[0].id);
-  };
-
-  const OnDeleteSpecies = () => {
-    setDeleteSpeciesModalOpen(true);
+    history.push(APP_PATHS.SPECIES_NEW);
   };
 
   const clearSearch = () => {
@@ -547,21 +507,6 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
 
   const onChangeSearch = (id: string, value: unknown) => {
     setSearchValue(value as string);
-  };
-
-  const deleteSelectedSpecies = async (speciesIds: number[]) => {
-    if (speciesIds.length > 0) {
-      setIsBusy(true);
-      const success = await handlePromises(
-        speciesIds.map((id: number) => SpeciesService.deleteSpecies(id, selectedOrganization.id))
-      );
-      setIsBusy(false);
-      if (!success) {
-        snackbar.toastError(strings.GENERIC_ERROR);
-      }
-      setDeleteSpeciesModalOpen(false);
-      reloadData();
-    }
   };
 
   const downloadReportHandler = async () => {
@@ -728,19 +673,6 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         reviewErrors={reviewErrorsHandler}
         reloadData={reloadData}
       />
-      <DeleteSpeciesModal
-        open={deleteSpeciesModalOpen}
-        onClose={() => setDeleteSpeciesModalOpen(false)}
-        onSubmit={(toDelete: number[]) => deleteSelectedSpecies(toDelete)}
-        speciesToDelete={selectedSpeciesRows}
-      />
-      {editSpeciesModalOpen && (
-        <AddSpeciesModal
-          open={editSpeciesModalOpen}
-          onClose={onCloseEditSpeciesModal}
-          initialSpecies={selectedSpecies}
-        />
-      )}
       <ImportSpeciesModal
         open={importSpeciesModalOpen}
         onClose={onCloseImportSpeciesModal}
@@ -851,40 +783,12 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
                   columns={selectedColumns}
                   rows={results}
                   orderBy={'scientificName'}
-                  showCheckbox={userCanEdit}
-                  selectedRows={selectedSpeciesRows}
-                  setSelectedRows={userCanEdit ? setSelectedSpeciesRows : undefined}
-                  showTopBar={true}
+                  showTopBar={false}
                   Renderer={SpeciesCellRenderer}
                   controlledOnSelect={true}
                   reloadData={reloadDataProblemsHandler}
                   sortHandler={onSortChange}
                   isPresorted={!!searchSortOrder}
-                  topBarButtons={
-                    selectedSpeciesRows.length === 1
-                      ? [
-                          {
-                            buttonType: 'destructive',
-                            ...(!isMobile && { buttonText: strings.DELETE }),
-                            onButtonClick: OnDeleteSpecies,
-                            icon: 'iconTrashCan',
-                          },
-                          {
-                            buttonType: 'passive',
-                            ...(!isMobile && { buttonText: strings.EDIT }),
-                            onButtonClick: OnEditSpecies,
-                            icon: 'iconEdit',
-                          },
-                        ]
-                      : [
-                          {
-                            buttonType: 'destructive',
-                            ...(!isMobile && { buttonText: strings.DELETE }),
-                            onButtonClick: OnDeleteSpecies,
-                            icon: 'iconTrashCan',
-                          },
-                        ]
-                  }
                 />
               )}
             </Grid>

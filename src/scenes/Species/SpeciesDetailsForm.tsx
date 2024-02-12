@@ -1,7 +1,7 @@
-import { Grid } from '@mui/material';
-import { Theme } from '@mui/material';
+import { Grid, Theme, useTheme } from '@mui/material';
+import TextField from '../../components/common/Textfield/Textfield';
 import { makeStyles } from '@mui/styles';
-import { BusySpinner, Dropdown, MultiSelect } from '@terraware/web-components';
+import { Dropdown, MultiSelect } from '@terraware/web-components';
 import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
 import {
@@ -10,43 +10,28 @@ import {
   ecosystemTypes,
   growthForms,
   Species,
-  SpeciesRequestError,
   storageBehaviors,
 } from 'src/types/Species';
+import { useLocalization, useOrganization } from 'src/providers/hooks';
+import { SpeciesService } from 'src/services';
+import { APP_PATHS } from 'src/constants';
+import { useHistory } from 'react-router-dom';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
-import useForm from 'src/utils/useForm';
-import Button from '../../components/common/button/Button';
 import Checkbox from '../../components/common/Checkbox';
-import DialogBox from '../../components/common/DialogBox/DialogBox';
 import Select from '../../components/common/Select/Select';
-import TextField from '../../components/common/Textfield/Textfield';
 import TooltipLearnMoreModal, {
   LearnMoreModalContentGrowthForm,
   LearnMoreModalContentSeedStorageBehavior,
   LearnMoreLink,
   TooltipLearnMoreModalData,
 } from 'src/components/TooltipLearnMoreModal';
-import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { SpeciesService } from 'src/services';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  spacing: {
-    marginRight: theme.spacing(2),
-  },
   blockCheckbox: {
     display: 'block',
   },
-  mainGrid: {
-    textAlign: 'left',
-  },
 }));
-
-export type AddSpeciesModalProps = {
-  open: boolean;
-  onClose: (saved: boolean, snackbarMessage?: string) => void;
-  initialSpecies?: Species;
-};
 
 function initSpecies(species?: Species): Species {
   return (
@@ -56,28 +41,42 @@ function initSpecies(species?: Species): Species {
     }
   );
 }
+type SpeciesDetailsFormProps = {
+  speciesId?: string | undefined;
+  gridSize: number;
+  record: Species;
+  setRecord: React.Dispatch<React.SetStateAction<Species>>;
+  onChange: (id: string, value: unknown) => void;
+  nameFormatError: string | string[];
+  setNameFormatError: React.Dispatch<React.SetStateAction<string | string[]>>;
+};
 
-export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Element {
+export default function SpeciesDetailsForm({
+  gridSize,
+  speciesId,
+  record,
+  setRecord,
+  onChange,
+  nameFormatError,
+  setNameFormatError,
+}: SpeciesDetailsFormProps): JSX.Element {
   const { activeLocale } = useLocalization();
-  const { selectedOrganization } = useOrganization();
-  const organizationId = selectedOrganization.id;
+  const theme = useTheme();
   const classes = useStyles();
-  const { open, onClose, initialSpecies } = props;
-  const [record, setRecord, onChange] = useForm<Species>(initSpecies());
-  const [userSearched, setUserSearched] = useState<boolean>(false);
-  const [nameFormatError, setNameFormatError] = useState<string | string[]>('');
+  const [species, setSpecies] = useState<Species>();
+  const history = useHistory();
+  const { selectedOrganization } = useOrganization();
   const [optionsForName, setOptionsForName] = useState<string[]>();
   const [optionsForCommonName, setOptionsForCommonName] = useState<string[]>();
   const [newScientificName, setNewScientificName] = useState(false);
-  const [isBusy, setIsBusy] = useState<boolean>(false);
-  // Debounce search term so that it only gives us latest value if searchTerm has not been updated within last 500ms.
+  const [userSearched, setUserSearched] = useState<boolean>(false);
   const debouncedSearchTerm = useDebounce(record.scientificName, 250);
   const [showWarning, setShowWarning] = useState(false);
-
   const [tooltipLearnMoreModalOpen, setTooltipLearnMoreModalOpen] = useState(false);
   const [tooltipLearnMoreModalData, setTooltipLearnMoreModalData] = useState<TooltipLearnMoreModalData | undefined>(
     undefined
   );
+
   const openTooltipLearnMoreModal = (data: TooltipLearnMoreModalData) => {
     setTooltipLearnMoreModalData(data);
     setTooltipLearnMoreModalOpen(true);
@@ -86,13 +85,32 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
     setTooltipLearnMoreModalOpen(false);
   };
 
-  React.useEffect(() => {
-    if (open) {
-      setRecord(initSpecies(initialSpecies));
+  useEffect(() => {
+    const getSpecies = async () => {
+      const speciesResponse = await SpeciesService.getSpecies(Number(speciesId), selectedOrganization.id);
+      if (speciesResponse.requestSucceeded) {
+        setSpecies(speciesResponse.species);
+      } else {
+        history.push(APP_PATHS.SPECIES);
+      }
+    };
+    if (selectedOrganization && speciesId) {
+      getSpecies();
     }
+  }, [speciesId, selectedOrganization, history]);
 
-    setNameFormatError('');
-  }, [open, setRecord, initialSpecies]);
+  useEffect(() => {
+    setRecord({
+      scientificName: species?.scientificName || '',
+      commonName: species?.commonName,
+      id: species?.id ?? -1,
+      familyName: species?.familyName,
+      conservationCategory: species?.conservationCategory,
+      growthForm: species?.growthForm,
+      seedStorageBehavior: species?.seedStorageBehavior,
+      ecosystemTypes: species?.ecosystemTypes,
+    });
+  }, [species, setRecord, selectedOrganization]);
 
   useEffect(() => {
     const getOptionsForTyped = async () => {
@@ -148,40 +166,6 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
     }
   }, [debouncedSearchTerm, setRecord, userSearched]);
 
-  const handleCancel = () => {
-    onClose(false);
-  };
-
-  const createNewSpecies = async () => {
-    if (!record.scientificName) {
-      setNameFormatError(strings.REQUIRED_FIELD);
-    } else {
-      setIsBusy(true);
-      const response = await SpeciesService.createSpecies(record, organizationId);
-      setIsBusy(false);
-      if (response.requestSucceeded) {
-        onClose(true);
-      } else {
-        if (response.error === SpeciesRequestError.PreexistingSpecies) {
-          setNameFormatError(strings.formatString(strings.EXISTING_SPECIES_MSG, record.scientificName));
-        }
-      }
-    }
-  };
-
-  const saveChanges = async () => {
-    if (!record.scientificName) {
-      setNameFormatError(strings.REQUIRED_FIELD);
-    } else {
-      setIsBusy(true);
-      const response = await SpeciesService.updateSpecies(record, organizationId);
-      setIsBusy(false);
-      if (response.requestSucceeded) {
-        onClose(true);
-      }
-    }
-  };
-
   const onChangeScientificName = (value: string) => {
     setNameFormatError('');
     setNewScientificName(false);
@@ -192,39 +176,15 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   };
 
   return (
-    <DialogBox
-      scrolled
-      onClose={handleCancel}
-      open={open}
-      title={initialSpecies ? strings.EDIT_SPECIES : strings.ADD_SPECIES}
-      size={'large'}
-      middleButtons={[
-        <Button
-          onClick={handleCancel}
-          id='cancelAddSpecies'
-          label={strings.CANCEL}
-          priority='secondary'
-          type='passive'
-          className={classes.spacing}
-          key='button-1'
-        />,
-        <Button
-          onClick={initialSpecies ? saveChanges : createNewSpecies}
-          id='saveAddSpecies'
-          label={strings.SAVE}
-          key='button-2'
-        />,
-      ]}
-    >
-      {isBusy && <BusySpinner withSkrim={true} />}
+    <>
       <TooltipLearnMoreModal
         content={tooltipLearnMoreModalData?.content}
         onClose={handleTooltipLearnMoreModalClose}
         open={tooltipLearnMoreModalOpen}
         title={tooltipLearnMoreModalData?.title}
       />
-      <Grid container spacing={4} className={classes.mainGrid}>
-        <Grid item xs={12}>
+      <Grid container spacing={3}>
+        <Grid item xs={gridSize}>
           <Select
             id='scientificName'
             selectedValue={record.scientificName}
@@ -235,7 +195,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             editable={true}
             fullWidth={true}
             warningText={
-              showWarning && !initialSpecies && newScientificName && !nameFormatError
+              showWarning && newScientificName && !nameFormatError
                 ? strings.formatString(strings.SCIENTIFIC_NAME_NOT_FOUND, record.scientificName)
                 : ''
             }
@@ -246,7 +206,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             tooltipTitle={strings.TOOLTIP_SCIENTIFIC_NAME}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={gridSize}>
           <Select
             id='commonName'
             selectedValue={record.commonName}
@@ -260,18 +220,16 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             tooltipTitle={strings.TOOLTIP_COMMON_NAME}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={gridSize}>
           <TextField
-            id='familyName'
-            value={record.familyName}
-            onChange={(value) => onChange('familyName', value)}
+            id={'family'}
             label={strings.FAMILY}
-            aria-label={strings.FAMILY}
-            type={'text'}
-            tooltipTitle={strings.TOOLTIP_SPECIES_FAMILY}
+            onChange={(value) => onChange('familyname', value)}
+            value={record.familyName}
+            type='text'
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={gridSize}>
           <Dropdown
             id='conservationCategory'
             label={strings.CONSERVATION_CATEGORY}
@@ -294,16 +252,8 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
               </>
             }
           />
-          <Checkbox
-            id='Rare'
-            name='rare'
-            label={strings.RARE}
-            onChange={() => onChange('rare', !record.rare)}
-            value={record.rare}
-            className={classes.blockCheckbox}
-          />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={gridSize}>
           <Dropdown
             id='growthForm'
             selectedValue={record.growthForm}
@@ -329,7 +279,17 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             }
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={gridSize}>
+          <Checkbox
+            id='Rare'
+            name='rare'
+            label={strings.RARE}
+            onChange={() => onChange('rare', !record.rare)}
+            value={record.rare}
+            className={classes.blockCheckbox}
+          />
+        </Grid>
+        <Grid item xs={gridSize}>
           <Dropdown
             id='seedStorageBehavior'
             selectedValue={record.seedStorageBehavior}
@@ -355,7 +315,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             }
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={gridSize}>
           <MultiSelect
             fullWidth={true}
             label={strings.ECOSYSTEM_TYPE}
@@ -386,6 +346,6 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
           />
         </Grid>
       </Grid>
-    </DialogBox>
+    </>
   );
 }

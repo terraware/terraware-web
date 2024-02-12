@@ -5,8 +5,13 @@ import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { useOrganization } from 'src/providers';
 import SpeciesListView from 'src/scenes/Species/SpeciesListView';
+import SpeciesDetailView from 'src/scenes/Species/SpeciesDetailView';
+import SpeciesEditView from 'src/scenes/Species/SpeciesEditView';
+import SpeciesAddView from 'src/scenes/Species/SpeciesAddView';
+import { Route, Switch } from 'react-router-dom';
+import { APP_PATHS } from 'src/constants';
 
-const SpeciesView = () => {
+const SpeciesRouter = () => {
   const dispatch = useAppDispatch();
   const { selectedOrganization } = useOrganization();
 
@@ -23,10 +28,26 @@ const SpeciesView = () => {
   }, [species, reloadSpecies]);
 
   if ((species || []).length === 0) {
+    console.log('BLAH!');
     return <EmptyStatePage pageName={'Species'} reloadData={reloadSpecies} />;
   }
 
-  return <SpeciesListView reloadData={reloadSpecies} species={species || []} />;
+  return (
+    <Switch>
+      <Route exact path={APP_PATHS.SPECIES_NEW}>
+        <SpeciesAddView />
+      </Route>
+      <Route exact path={APP_PATHS.SPECIES}>
+        <SpeciesListView reloadData={reloadSpecies} species={species || []} />
+      </Route>
+      <Route exact path={APP_PATHS.SPECIES_EDIT}>
+        <SpeciesEditView />
+      </Route>
+      <Route path={APP_PATHS.SPECIES_DETAILS}>
+        <SpeciesDetailView />
+      </Route>
+    </Switch>
+  );
 };
 
-export default SpeciesView;
+export default SpeciesRouter;

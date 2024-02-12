@@ -9,6 +9,8 @@ import ProblemTooltip from './ProblemTooltip';
 import { TextTruncated } from '@terraware/web-components';
 import strings from 'src/strings';
 import { getRgbaFromHex } from 'src/utils/color';
+import Link from 'src/components/common/Link';
+import { APP_PATHS } from 'src/constants';
 
 const useStyles = makeStyles((theme: Theme) => ({
   icon: {
@@ -40,10 +42,17 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
 }));
+
 export default function SpeciesCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const classes = useStyles();
   const { column, row, value, index, onRowClick, reloadData } = props;
   const [openedTooltip, setOpenedTooltip] = useState(false);
+
+  const createLinkToSpeciesDetail = (iValue: React.ReactNode | unknown[]) => {
+    return (
+      <Link to={APP_PATHS.SPECIES_DETAILS.replace(':speciesId', row.id.toString())}>{iValue as React.ReactNode}</Link>
+    );
+  };
 
   const handleClickAway = () => {
     setOpenedTooltip(false);
@@ -105,6 +114,8 @@ export default function SpeciesCellRenderer(props: RendererProps<TableRowType>):
         }
       />
     );
+  } else if (column.key === 'scientificName') {
+    return <CellRenderer index={index} column={column} value={createLinkToSpeciesDetail(value)} row={row} />;
   }
 
   return <CellRenderer {...props} />;

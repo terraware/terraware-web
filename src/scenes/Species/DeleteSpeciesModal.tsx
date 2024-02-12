@@ -3,15 +3,15 @@ import { Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import { BusySpinner, Button, DialogBox, TextTruncated } from '@terraware/web-components';
 import { SpeciesService } from 'src/services';
-import { SpeciesSearchResultRow } from './types';
 import { useOrganization } from 'src/providers';
 import useSnackbar from 'src/utils/useSnackbar';
+import { Species } from 'src/types/Species';
 
 export interface DeleteSpeciesDialogProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (toDelete: number[]) => void;
-  speciesToDelete: SpeciesSearchResultRow[];
+  onSubmit: (toDelete: number) => void;
+  speciesToDelete: Species;
 }
 
 export default function DeleteSpeciesDialog(props: DeleteSpeciesDialogProps): JSX.Element | null {
@@ -20,8 +20,7 @@ export default function DeleteSpeciesDialog(props: DeleteSpeciesDialogProps): JS
   const snackbar = useSnackbar();
   const { selectedOrganization } = useOrganization();
   const [inUseSpecies, setInUseSpecies] = useState<Record<string, string>>();
-  const [toDelete, setToDelete] = useState<number[]>();
-  const [cannotDelete, setCannotDelete] = useState<number[]>();
+  const [cannotDelete, setCannotDelete] = useState<boolean>();
 
   useEffect(() => {
     const fetchInUseSpecies = async () => {
@@ -46,51 +45,21 @@ export default function DeleteSpeciesDialog(props: DeleteSpeciesDialogProps): JS
 
   useEffect(() => {
     if (inUseSpecies) {
-      const forDeletion = speciesToDelete
-        .filter((species) => !inUseSpecies[species.id.toString()])
-        .map((species) => species.id);
-      const avoidDeletion = speciesToDelete
-        .filter((species) => inUseSpecies[species.id.toString()])
-        .map((species) => species.id);
-      setToDelete(forDeletion);
-      setCannotDelete(avoidDeletion);
+      if (inUseSpecies[speciesToDelete.id.toString()]) {
+        setCannotDelete(true);
+      } else {
+        setCannotDelete(false);
+      }
     }
   }, [inUseSpecies, speciesToDelete]);
 
   const deleteSpecies = () => {
-    onSubmit(toDelete ?? []);
-  };
-
-  const getTruncated = (speciesIds: number[]): JSX.Element | null => {
-    if (!inUseSpecies) {
-      return null;
-    }
-    const inputValues = speciesIds.map((id) => inUseSpecies[id.toString()]);
-
-    return (
-      <TextTruncated
-        stringList={inputValues}
-        maxLengthPx={350}
-        textStyle={{ fontSize: 16 }}
-        showAllStyle={{ padding: theme.spacing(2), fontSize: 16 }}
-        listSeparator={strings.LIST_SEPARATOR}
-        moreSeparator={strings.TRUNCATED_TEXT_MORE_SEPARATOR}
-        moreText={strings.TRUNCATED_TEXT_MORE_LINK}
-      />
-    );
+    onSubmit(speciesToDelete.id);
   };
 
   const getMessage = (): string | JSX.Element => {
-    if (cannotDelete?.length && !toDelete?.length) {
+    if (cannotDelete) {
       return strings.SELECTED_SPECIES_IN_USE;
-    }
-    if (cannotDelete?.length && toDelete?.length) {
-      return (
-        <>
-          <Typography marginBottom={1}>{strings.SELECTED_SPECIES_SOME_IN_USE}</Typography>
-          {getTruncated(cannotDelete)}
-        </>
-      );
     }
     return strings.SELECTED_SPECIES_UNUSED;
   };
@@ -99,7 +68,7 @@ export default function DeleteSpeciesDialog(props: DeleteSpeciesDialogProps): JS
     return null;
   }
 
-  if (!toDelete) {
+  if (cannotDelete === undefined) {
     return <BusySpinner withSkrim={true} />;
   }
 
@@ -124,14 +93,14 @@ export default function DeleteSpeciesDialog(props: DeleteSpeciesDialogProps): JS
           onClick={deleteSpecies}
           size='medium'
           key='button-2'
-          disabled={!toDelete?.length}
+          disabled={cannotDelete}
         />,
       ]}
       skrim={true}
     >
       <>
         {getMessage()}
-        {toDelete.length > 0 && <Typography marginTop={2}>{strings.DELETE_CONFIRMATION_MODAL_MAIN_TEXT}</Typography>}
+        {!cannotDelete && <Typography marginTop={2}>{strings.DELETE_CONFIRMATION_MODAL_MAIN_TEXT}</Typography>}
       </>
     </DialogBox>
   );
