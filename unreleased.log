@@ -1,3 +1,4 @@
+ddb65eb543 SW-4839 Add onUnAssign prop to the ProjectAssignModal and implement allowUnselect to underlying ProjectsDropdown component so we can do something when a user unselects the project (#2155)
 9dfb6ae425 SW-4839 Add the ability to unselect the project in the accession create form (#2149)
 8eb3132702 SW-4843 Add types for Draft Planting Sites (#2154)
 d85597d849 Fix video modal description text style when the text is too long (#2153)
