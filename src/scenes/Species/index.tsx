@@ -28,7 +28,6 @@ const SpeciesRouter = () => {
   }, [species, reloadSpecies]);
 
   if ((species || []).length === 0) {
-    console.log('BLAH!');
     return <EmptyStatePage pageName={'Species'} reloadData={reloadSpecies} />;
   }
 
