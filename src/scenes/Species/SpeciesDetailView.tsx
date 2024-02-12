@@ -16,6 +16,7 @@ import {
 import { Button, DropdownItem } from '@terraware/web-components';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { SpeciesService } from 'src/services';
+import { TextTruncated } from '@terraware/web-components';
 
 import TfMain from '../../components/common/TfMain';
 import BackToLink from 'src/components/common/BackToLink';
@@ -195,7 +196,17 @@ export default function SpeciesDetailView(): JSX.Element {
             />
           </Grid>
           <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-            <TextField id={'ecosystemType'} label={strings.ECOSYSTEM_TYPE} value={'test'} type='text' display={true} />
+            <TextField id={'ecosystemType'} label={strings.ECOSYSTEM_TYPE} type='text' display={true} />
+            <Box paddingTop={'8px'} paddingBottom={'8px'}>
+              <TextTruncated
+                stringList={(species?.ecosystemTypes ?? []) as string[]}
+                maxLengthPx={100}
+                listSeparator={strings.LIST_SEPARATOR_SECONDARY}
+                moreSeparator={strings.TRUNCATED_TEXT_MORE_SEPARATOR}
+                moreText={strings.TRUNCATED_TEXT_MORE_LINK}
+                textStyle={{ fontSize: '16px', fontWeight: '500' }}
+              />
+            </Box>
           </Grid>
         </Grid>
       </Grid>
