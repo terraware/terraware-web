@@ -1,3 +1,4 @@
+02e6f0963e SW-4839 Implement onUnAssign for projects in the BatchSummary view (#2157)
 b86aacefca SW-4839 Implement onUnAssign logic in the accession view when a user unselects the project from the summary card modal (#2156)
 ddb65eb543 SW-4839 Add onUnAssign prop to the ProjectAssignModal and implement allowUnselect to underlying ProjectsDropdown component so we can do something when a user unselects the project (#2155)
 9dfb6ae425 SW-4839 Add the ability to unselect the project in the accession create form (#2149)
