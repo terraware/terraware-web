@@ -20,7 +20,6 @@ import SpeciesCellRenderer from './TableCellRenderer';
 import useDebounce from 'src/utils/useDebounce';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import useSnackbar from 'src/utils/useSnackbar';
 import { isContributor } from 'src/utils/organization';
 import TooltipLearnMoreModal, {
   LearnMoreModalContentGrowthForm,
@@ -130,10 +129,8 @@ const CSV_FIELDS = [
 export default function SpeciesListView({ reloadData, species }: SpeciesListProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const classes = useStyles();
-  const [selectedSpeciesRows, setSelectedSpeciesRows] = useState<SpeciesSearchResultRow[]>([]);
   const [importSpeciesModalOpen, setImportSpeciesModalOpen] = useState(false);
   const [checkDataModalOpen, setCheckDataModalOpen] = useState(false);
-  const snackbar = useSnackbar();
   const [searchValue, setSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(searchValue, 250);
   const [results, setResults] = useState<SpeciesSearchResultRow[]>();
@@ -316,7 +313,9 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         count: 1000,
       };
 
+      setIsBusy(true);
       const data = await SearchService.search(searchParams);
+      setIsBusy(false);
       const result = (data ?? []).reduce((acc, d) => {
         return Object.keys(d).reduce((innerAcc, k) => {
           const isEcosystemTypes = k === 'ecosystemTypes';

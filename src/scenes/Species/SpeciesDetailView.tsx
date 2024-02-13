@@ -1,23 +1,14 @@
 import { Grid, Theme, Typography, useTheme, Box } from '@mui/material';
 import TextField from '../../components/common/Textfield/Textfield';
 import { makeStyles } from '@mui/styles';
-import { BusySpinner, Dropdown, MultiSelect } from '@terraware/web-components';
+import { BusySpinner } from '@terraware/web-components';
 import React, { useEffect, useState } from 'react';
 import strings from 'src/strings';
-import {
-  conservationCategories,
-  EcosystemType,
-  ecosystemTypes,
-  growthForms,
-  Species,
-  SpeciesRequestError,
-  storageBehaviors,
-} from 'src/types/Species';
+import { Species } from 'src/types/Species';
 import { Button, DropdownItem } from '@terraware/web-components';
-import { useLocalization, useOrganization } from 'src/providers/hooks';
+import { useOrganization } from 'src/providers/hooks';
 import { SpeciesService } from 'src/services';
 import { TextTruncated } from '@terraware/web-components';
-
 import TfMain from '../../components/common/TfMain';
 import BackToLink from 'src/components/common/BackToLink';
 import { APP_PATHS } from 'src/constants';

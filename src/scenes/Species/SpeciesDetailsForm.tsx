@@ -1,4 +1,4 @@
-import { Grid, Theme, useTheme } from '@mui/material';
+import { Grid, Theme } from '@mui/material';
 import TextField from '../../components/common/Textfield/Textfield';
 import { makeStyles } from '@mui/styles';
 import { Dropdown, MultiSelect } from '@terraware/web-components';
@@ -33,14 +33,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-function initSpecies(species?: Species): Species {
-  return (
-    species ?? {
-      scientificName: '',
-      id: -1,
-    }
-  );
-}
 type SpeciesDetailsFormProps = {
   speciesId?: string | undefined;
   gridSize: number;
@@ -61,7 +53,6 @@ export default function SpeciesDetailsForm({
   setNameFormatError,
 }: SpeciesDetailsFormProps): JSX.Element {
   const { activeLocale } = useLocalization();
-  const theme = useTheme();
   const classes = useStyles();
   const [species, setSpecies] = useState<Species>();
   const history = useHistory();
@@ -109,6 +100,7 @@ export default function SpeciesDetailsForm({
       growthForm: species?.growthForm,
       seedStorageBehavior: species?.seedStorageBehavior,
       ecosystemTypes: species?.ecosystemTypes,
+      rare: species?.rare,
     });
   }, [species, setRecord, selectedOrganization]);
 
@@ -224,7 +216,7 @@ export default function SpeciesDetailsForm({
           <TextField
             id={'family'}
             label={strings.FAMILY}
-            onChange={(value) => onChange('familyname', value)}
+            onChange={(value) => onChange('familyName', value)}
             value={record.familyName}
             type='text'
           />
