@@ -6,7 +6,10 @@ export const SEED_COLLECTOR_GOOGLE_PLAY_LINK =
 
 export enum APP_PATHS {
   ACCELERATOR = '/accelerator',
-  ACCELERATOR_ADMIN = '/accelerator/admin',
+  ACCELERATOR_DELIVERABLES = '/accelerator/deliverables',
+  ACCELERATOR_MODULE_CONTENT = '/accelerator/modules',
+  ACCELERATOR_OVERVIEW = '/accelerator/overview',
+  ACCELERATOR_PEOPLE = '/accelerator/people',
   ACCESSIONS = '/accessions',
   ACCESSIONS2_NEW = '/accessions/new',
   ACCESSIONS2_ITEM = '/accessions/:accessionId',

@@ -139,7 +139,7 @@ export default function NavBar({
         <NavItem
           label={strings.ACCELERATOR_ADMIN}
           icon='home'
-          onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_ADMIN)}
+          onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_OVERVIEW)}
           id='home'
         />
       )}
