@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1707762642969" clover="3.2.0">
-  <project timestamp="1707762642969" name="All files">
-    <metrics statements="16121" coveredstatements="550" conditionals="10445" coveredconditionals="154" methods="5042" coveredmethods="124" elements="31608" coveredelements="828" complexity="0" loc="16121" ncloc="16121" packages="131" files="632" classes="632"/>
+<coverage generated="1707858764815" clover="3.2.0">
+  <project timestamp="1707858764816" name="All files">
+    <metrics statements="16139" coveredstatements="550" conditionals="10447" coveredconditionals="154" methods="5051" coveredmethods="124" elements="31637" coveredelements="828" complexity="0" loc="16139" ncloc="16139" packages="130" files="636" classes="636"/>
     <package name="src">
       <metrics statements="173" coveredstatements="0" conditionals="126" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -7971,45 +7971,72 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter">
-      <metrics statements="22" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="9" coveredmethods="0"/>
-      <file name="NavBar.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/NavBar.tsx">
-        <metrics statements="14" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="6" coveredmethods="0"/>
-        <line num="16" count="0" type="stmt"/>
-        <line num="17" count="0" type="stmt"/>
+      <metrics statements="45" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="20" coveredmethods="0"/>
+      <file name="AcceleratorDeliverablesView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/AcceleratorDeliverablesView.tsx">
+        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+      </file>
+      <file name="AcceleratorMain.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/AcceleratorMain.tsx">
+        <metrics statements="4" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+      </file>
+      <file name="AcceleratorModuleContentView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/AcceleratorModuleContentView.tsx">
+        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+      </file>
+      <file name="AcceleratorOverviewView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/AcceleratorOverviewView.tsx">
+        <metrics statements="5" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+      </file>
+      <file name="AcceleratorPeopleView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/AcceleratorPeopleView.tsx">
+        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+      </file>
+      <file name="NavBar.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/NavBar.tsx">
+        <metrics statements="22" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="10" coveredmethods="0"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
-        <line num="25" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="25" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
         <line num="31" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="32" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
+        <line num="37" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="83" count="0" type="stmt"/>
+        <line num="92" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/index.tsx">
         <metrics statements="8" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="3" coveredmethods="0"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="42" count="0" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
         <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
-      </file>
-    </package>
-    <package name="src.scenes.AcceleratorRouter.AcceleratorAdminView">
-      <metrics statements="5" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
-      <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/AcceleratorAdminView/index.tsx">
-        <metrics statements="5" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="9" count="0" type="stmt"/>
-        <line num="15" count="0" type="stmt"/>
-        <line num="16" count="0" type="stmt"/>
-        <line num="17" count="0" type="stmt"/>
-        <line num="19" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.AccessionsRouter">
