@@ -17,10 +17,10 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
   const { isDesktop } = useDeviceInfo();
   const history = useHistory();
 
-  const isAcceleratorDeliverablesRoute = useRouteMatch(APP_PATHS.ACCELERATOR_DELIVERABLES + '/');
-  const isAcceleratorModuleContentRoute = useRouteMatch(APP_PATHS.ACCELERATOR_MODULE_CONTENT + '/');
-  const isAcceleratorOverviewRoute = useRouteMatch(APP_PATHS.ACCELERATOR_OVERVIEW + '/');
-  const isAcceleratorPeopleRoute = useRouteMatch(APP_PATHS.ACCELERATOR_PEOPLE + '/');
+  const isAcceleratorDeliverablesRoute = useRouteMatch(APP_PATHS.ACCELERATOR_DELIVERABLES);
+  const isAcceleratorModuleContentRoute = useRouteMatch(APP_PATHS.ACCELERATOR_MODULE_CONTENT);
+  const isAcceleratorOverviewRoute = useRouteMatch(APP_PATHS.ACCELERATOR_OVERVIEW);
+  const isAcceleratorPeopleRoute = useRouteMatch(APP_PATHS.ACCELERATOR_PEOPLE);
 
   const navigate = (url: string) => {
     history.push(url);
