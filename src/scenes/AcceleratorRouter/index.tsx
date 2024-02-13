@@ -7,7 +7,10 @@ import ErrorBoundary from 'src/ErrorBoundary';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStateLocation from 'src/utils/useStateLocation';
 import { getRgbaFromHex } from 'src/utils/color';
-import AcceleratorAdminView from 'src/scenes/AcceleratorRouter/AcceleratorAdminView';
+import AcceleratorDeliverablesView from 'src/scenes/AcceleratorRouter/AcceleratorDeliverablesView';
+import AcceleratorModuleContentView from 'src/scenes/AcceleratorRouter/AcceleratorModuleContentView';
+import AcceleratorOverviewView from 'src/scenes/AcceleratorRouter/AcceleratorOverviewView';
+import AcceleratorPeopleView from 'src/scenes/AcceleratorRouter/AcceleratorPeopleView';
 import NavBar from 'src/scenes/AcceleratorRouter/NavBar';
 
 interface AcceleratorRouterProps {
@@ -45,7 +48,7 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
   const location = useStateLocation();
 
   const viewHasBackgroundImage = useCallback((): boolean => {
-    return location.pathname.startsWith(APP_PATHS.ACCELERATOR_ADMIN);
+    return location.pathname.startsWith(APP_PATHS.ACCELERATOR_OVERVIEW);
   }, [location]);
 
   return (
@@ -66,8 +69,17 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
       >
         <ErrorBoundary setShowNavBar={setShowNavBar}>
           <Switch>
-            <Route path={APP_PATHS.ACCELERATOR_ADMIN}>
-              <AcceleratorAdminView />
+            <Route path={APP_PATHS.ACCELERATOR_OVERVIEW}>
+              <AcceleratorOverviewView />
+            </Route>
+            <Route path={APP_PATHS.ACCELERATOR_DELIVERABLES}>
+              <AcceleratorDeliverablesView />
+            </Route>
+            <Route path={APP_PATHS.ACCELERATOR_MODULE_CONTENT}>
+              <AcceleratorModuleContentView />
+            </Route>
+            <Route path={APP_PATHS.ACCELERATOR_PEOPLE}>
+              <AcceleratorPeopleView />
             </Route>
           </Switch>
         </ErrorBoundary>

@@ -1,3 +1,4 @@
+import { NavSection } from '@terraware/web-components';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
@@ -43,6 +44,31 @@ export default function NavBar({ setShowNavBar, backgroundTransparent }: NavBarP
         icon='home'
         onClick={() => closeAndNavigateTo(APP_PATHS.HOME)}
         id='home'
+      />
+
+      <NavSection />
+
+      <NavItem
+        label={strings.OVERVIEW}
+        onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_OVERVIEW)}
+        id='overview'
+      />
+
+      <NavSection />
+
+      <NavItem
+        label={strings.DELIVERABLES}
+        onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_DELIVERABLES)}
+        id='deliverables'
+      />
+
+      <NavSection />
+
+      <NavItem label={strings.PEOPLE} onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_PEOPLE)} id='people' />
+      <NavItem
+        label={strings.MODULE_CONTENT}
+        onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_MODULE_CONTENT)}
+        id='module-content'
       />
 
       <NavFooter>
