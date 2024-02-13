@@ -1,6 +1,6 @@
 import { Typography, useTheme, Box } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Species } from 'src/types/Species';
 import { useOrganization } from 'src/providers/hooks';
 import { SpeciesService } from 'src/services';
@@ -50,6 +50,34 @@ export default function SpeciesEditView(): JSX.Element {
     history.push(speciesLocation);
   };
 
+  useEffect(() => {
+    const getSpecies = async () => {
+      const speciesResponse = await SpeciesService.getSpecies(Number(speciesId), selectedOrganization.id);
+      if (speciesResponse.requestSucceeded) {
+        setSpecies(speciesResponse.species);
+      } else {
+        history.push(APP_PATHS.SPECIES);
+      }
+    };
+    if (selectedOrganization && speciesId) {
+      getSpecies();
+    }
+  }, [speciesId, selectedOrganization, history]);
+
+  useEffect(() => {
+    setRecord({
+      scientificName: species?.scientificName || '',
+      commonName: species?.commonName,
+      id: species?.id ?? -1,
+      familyName: species?.familyName,
+      conservationCategory: species?.conservationCategory,
+      growthForm: species?.growthForm,
+      seedStorageBehavior: species?.seedStorageBehavior,
+      ecosystemTypes: species?.ecosystemTypes,
+      rare: species?.rare,
+    });
+  }, [species, setRecord, selectedOrganization]);
+
   const saveSpecies = async () => {
     if (!record.scientificName) {
       setNameFormatError(strings.REQUIRED_FIELD);
@@ -90,7 +118,6 @@ export default function SpeciesEditView(): JSX.Element {
         >
           <SpeciesDetailsForm
             gridSize={gridSize()}
-            speciesId={speciesId}
             record={record}
             onChange={onChange}
             setRecord={setRecord}

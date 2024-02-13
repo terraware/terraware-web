@@ -12,10 +12,8 @@ import {
   Species,
   storageBehaviors,
 } from 'src/types/Species';
-import { useLocalization, useOrganization } from 'src/providers/hooks';
+import { useLocalization } from 'src/providers/hooks';
 import { SpeciesService } from 'src/services';
-import { APP_PATHS } from 'src/constants';
-import { useHistory } from 'react-router-dom';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import Checkbox from '../../components/common/Checkbox';
@@ -34,7 +32,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type SpeciesDetailsFormProps = {
-  speciesId?: string | undefined;
   gridSize: number;
   record: Species;
   setRecord: React.Dispatch<React.SetStateAction<Species>>;
@@ -45,7 +42,6 @@ type SpeciesDetailsFormProps = {
 
 export default function SpeciesDetailsForm({
   gridSize,
-  speciesId,
   record,
   setRecord,
   onChange,
@@ -54,9 +50,6 @@ export default function SpeciesDetailsForm({
 }: SpeciesDetailsFormProps): JSX.Element {
   const { activeLocale } = useLocalization();
   const classes = useStyles();
-  const [species, setSpecies] = useState<Species>();
-  const history = useHistory();
-  const { selectedOrganization } = useOrganization();
   const [optionsForName, setOptionsForName] = useState<string[]>();
   const [optionsForCommonName, setOptionsForCommonName] = useState<string[]>();
   const [newScientificName, setNewScientificName] = useState(false);
@@ -75,34 +68,6 @@ export default function SpeciesDetailsForm({
   const handleTooltipLearnMoreModalClose = () => {
     setTooltipLearnMoreModalOpen(false);
   };
-
-  useEffect(() => {
-    const getSpecies = async () => {
-      const speciesResponse = await SpeciesService.getSpecies(Number(speciesId), selectedOrganization.id);
-      if (speciesResponse.requestSucceeded) {
-        setSpecies(speciesResponse.species);
-      } else {
-        history.push(APP_PATHS.SPECIES);
-      }
-    };
-    if (selectedOrganization && speciesId) {
-      getSpecies();
-    }
-  }, [speciesId, selectedOrganization, history]);
-
-  useEffect(() => {
-    setRecord({
-      scientificName: species?.scientificName || '',
-      commonName: species?.commonName,
-      id: species?.id ?? -1,
-      familyName: species?.familyName,
-      conservationCategory: species?.conservationCategory,
-      growthForm: species?.growthForm,
-      seedStorageBehavior: species?.seedStorageBehavior,
-      ecosystemTypes: species?.ecosystemTypes,
-      rare: species?.rare,
-    });
-  }, [species, setRecord, selectedOrganization]);
 
   useEffect(() => {
     const getOptionsForTyped = async () => {
