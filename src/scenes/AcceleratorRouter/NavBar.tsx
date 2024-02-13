@@ -10,10 +10,10 @@ import LocaleSelector from 'src/components/LocaleSelector';
 import NavFooter from 'src/components/common/Navbar/NavFooter';
 
 type NavBarProps = {
-  setShowNavBar: (value: boolean) => void;
   backgroundTransparent?: boolean;
+  setShowNavBar: (value: boolean) => void;
 };
-export default function NavBar({ setShowNavBar, backgroundTransparent }: NavBarProps): JSX.Element | null {
+export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarProps): JSX.Element | null {
   const { isDesktop } = useDeviceInfo();
   const history = useHistory();
 
@@ -41,55 +41,55 @@ export default function NavBar({ setShowNavBar, backgroundTransparent }: NavBarP
 
   return (
     <Navbar
-      setShowNavBar={setShowNavBar as React.Dispatch<React.SetStateAction<boolean>>}
       backgroundTransparent={backgroundTransparent}
+      setShowNavBar={setShowNavBar as React.Dispatch<React.SetStateAction<boolean>>}
     >
       <NavItem
-        label={strings.BACK_TO_TERRAWARE}
         icon='home'
-        onClick={() => closeAndNavigateTo(APP_PATHS.HOME)}
         id='home'
+        label={strings.BACK_TO_TERRAWARE}
+        onClick={() => closeAndNavigateTo(APP_PATHS.HOME)}
       />
 
       <NavSection />
 
       <NavItem
+        id='overview'
         label={strings.OVERVIEW}
         onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_OVERVIEW)}
-        id='overview'
         selected={!!isAcceleratorOverviewRoute}
       />
 
       <NavSection />
 
       <NavItem
+        id='deliverables'
         label={strings.DELIVERABLES}
         onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_DELIVERABLES)}
-        id='deliverables'
         selected={!!isAcceleratorDeliverablesRoute}
       />
 
       <NavSection />
 
       <NavItem
+        id='people'
         label={strings.PEOPLE}
         onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_PEOPLE)}
-        id='people'
         selected={!!isAcceleratorPeopleRoute}
       />
       <NavItem
+        id='module-content'
         label={strings.MODULE_CONTENT}
         onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_MODULE_CONTENT)}
-        id='module-content'
         selected={!!isAcceleratorModuleContentRoute}
       />
 
       <NavFooter>
         <NavItem
-          label={strings.CONTACT_US}
           icon='mail'
-          onClick={() => closeAndNavigateTo(APP_PATHS.CONTACT_US)}
           id='contactus'
+          label={strings.CONTACT_US}
+          onClick={() => closeAndNavigateTo(APP_PATHS.CONTACT_US)}
         />
 
         <LocaleSelector transparent={true} />
