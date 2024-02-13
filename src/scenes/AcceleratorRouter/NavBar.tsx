@@ -1,6 +1,6 @@
 import { NavSection } from '@terraware/web-components';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -16,6 +16,11 @@ type NavBarProps = {
 export default function NavBar({ setShowNavBar, backgroundTransparent }: NavBarProps): JSX.Element | null {
   const { isDesktop } = useDeviceInfo();
   const history = useHistory();
+
+  const isAcceleratorDeliverablesRoute = useRouteMatch(APP_PATHS.ACCELERATOR_DELIVERABLES + '/');
+  const isAcceleratorModuleContentRoute = useRouteMatch(APP_PATHS.ACCELERATOR_MODULE_CONTENT + '/');
+  const isAcceleratorOverviewRoute = useRouteMatch(APP_PATHS.ACCELERATOR_OVERVIEW + '/');
+  const isAcceleratorPeopleRoute = useRouteMatch(APP_PATHS.ACCELERATOR_PEOPLE + '/');
 
   const navigate = (url: string) => {
     history.push(url);
@@ -52,6 +57,7 @@ export default function NavBar({ setShowNavBar, backgroundTransparent }: NavBarP
         label={strings.OVERVIEW}
         onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_OVERVIEW)}
         id='overview'
+        selected={!!isAcceleratorOverviewRoute}
       />
 
       <NavSection />
@@ -60,15 +66,22 @@ export default function NavBar({ setShowNavBar, backgroundTransparent }: NavBarP
         label={strings.DELIVERABLES}
         onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_DELIVERABLES)}
         id='deliverables'
+        selected={!!isAcceleratorDeliverablesRoute}
       />
 
       <NavSection />
 
-      <NavItem label={strings.PEOPLE} onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_PEOPLE)} id='people' />
+      <NavItem
+        label={strings.PEOPLE}
+        onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_PEOPLE)}
+        id='people'
+        selected={!!isAcceleratorPeopleRoute}
+      />
       <NavItem
         label={strings.MODULE_CONTENT}
         onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_MODULE_CONTENT)}
         id='module-content'
+        selected={!!isAcceleratorModuleContentRoute}
       />
 
       <NavFooter>
