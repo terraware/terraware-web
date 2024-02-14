@@ -30,6 +30,11 @@ import { batchesReducer, batchesRequestsReducer } from './features/batches/batch
 import { accessionsReducer } from './features/accessions/accessionsSlice';
 import { reportsSettingsReducer } from 'src/redux/features/reportsSettings/reportsSettingsSlice';
 import { speciesProjectsReducer } from 'src/redux/features/species/speciesProjectsSlice';
+import {
+  draftPlantingSiteCreateReducer,
+  draftPlantingSiteEditReducer,
+  draftPlantingSiteGetReducer,
+} from 'src/redux/features/draftPlantingSite/draftPlantingSiteSlice';
 
 // assembly of app reducers
 export const reducers = {
@@ -37,6 +42,9 @@ export const reducers = {
   appVersion: appVersionReducer,
   batches: batchesReducer,
   batchesRequests: batchesRequestsReducer,
+  draftPlantingSiteCreate: draftPlantingSiteCreateReducer,
+  draftPlantingSiteEdit: draftPlantingSiteEditReducer,
+  draftPlantingSiteGet: draftPlantingSiteGetReducer,
   message: messageReducer,
   monitoringPlots: monitoringPlotsReducer,
   observations: observationsReducer,

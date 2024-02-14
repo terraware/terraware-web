@@ -55,18 +55,7 @@ export const fromDraft = (site: DraftPlantingSite): DraftPlantingSitePayload => 
 
 // convert from BE representation to client representation
 export const toDraft = (payload: DraftPlantingSitePayload): DraftPlantingSite => {
-  const {
-    createdBy,
-    data,
-    description,
-    id,
-    name,
-    numPlantingSubzones,
-    numPlantingZones,
-    organizationId,
-    projectId,
-    timeZone,
-  } = payload;
+  const { createdBy, data, description, id, name, organizationId, projectId, timeZone } = payload;
 
   const boundary: MultiPolygon | undefined = data.boundary as MultiPolygon | undefined;
   const exclusion: MultiPolygon | undefined = data.exclusion as MultiPolygon | undefined;
