@@ -1,5 +1,5 @@
 import { paths } from 'src/api/types/generated-schema';
-import { MultiPolygon, PlantingSite, SiteDetails } from 'src/types/Tracking';
+import { MultiPolygon, PlantingSite, MinimalPlantingSite } from 'src/types/Tracking';
 import { MapBoundingBox, MapData, MapEntity, MapGeometry, MapSourceBaseData } from 'src/types/Map';
 import HttpService, { Response } from './HttpService';
 import {
@@ -141,7 +141,7 @@ const getPolygons = (boundary?: MultiPolygon): MapGeometry => {
 /**
  * Transform planting site geometry data into UI model
  */
-const extractPlantingSite = (site: SiteDetails): MapSourceBaseData => {
+const extractPlantingSite = (site: MinimalPlantingSite): MapSourceBaseData => {
   const { id, name, description, boundary } = site;
 
   return {
@@ -159,7 +159,7 @@ const extractPlantingSite = (site: SiteDetails): MapSourceBaseData => {
 /**
  * Transform zones geometry data into UI model
  */
-const extractPlantingZones = (site: SiteDetails): MapSourceBaseData => {
+const extractPlantingZones = (site: MinimalPlantingSite): MapSourceBaseData => {
   const zonesData =
     site.plantingZones?.map((zone) => {
       const { id, name, boundary } = zone;
@@ -179,7 +179,7 @@ const extractPlantingZones = (site: SiteDetails): MapSourceBaseData => {
 /**
  * Transform subzones geometry data into UI model
  */
-const extractSubzones = (site: SiteDetails): MapSourceBaseData => {
+const extractSubzones = (site: MinimalPlantingSite): MapSourceBaseData => {
   const allPlantingSubzonesData =
     site.plantingZones?.flatMap((zone) => {
       const { plantingSubzones } = zone;
