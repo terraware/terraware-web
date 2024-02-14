@@ -1,3 +1,5 @@
+c357558e41 SW-4851 Add CRUD service functions for draft planting sites (#2158)
+41e63fd286 Updated translations from Phrase (#2163)
 2a329aaacf SW-4714: FE - Stub out side nav pages (#2162)
 02e6f0963e SW-4839 Implement onUnAssign for projects in the BatchSummary view (#2157)
 b86aacefca SW-4839 Implement onUnAssign logic in the accession view when a user unselects the project from the summary card modal (#2156)
