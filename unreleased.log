@@ -1,3 +1,4 @@
+b438664be3 Rename types to be more descriptive (#2166)
 6966dd3caf SW-4850 Allow project unselect from within the planting site view (#2161)
 c357558e41 SW-4851 Add CRUD service functions for draft planting sites (#2158)
 41e63fd286 Updated translations from Phrase (#2163)
