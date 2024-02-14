@@ -8,7 +8,6 @@ import { Species } from 'src/types/Species';
 import { Button, DropdownItem } from '@terraware/web-components';
 import { useOrganization } from 'src/providers/hooks';
 import { SpeciesService } from 'src/services';
-import { TextTruncated } from '@terraware/web-components';
 import TfMain from '../../components/common/TfMain';
 import BackToLink from 'src/components/common/BackToLink';
 import { APP_PATHS } from 'src/constants';
@@ -19,6 +18,7 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import { isContributor } from 'src/utils/organization';
 import DeleteSpeciesModal from './DeleteSpeciesModal';
 import useSnackbar from 'src/utils/useSnackbar';
+import Checkbox from 'src/components/common/Checkbox';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleWithButton: {
@@ -28,6 +28,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
     marginBottom: theme.spacing(4),
   },
+    blockCheckbox: {
+      display: 'block',
+    },
 }));
 
 export default function SpeciesDetailView(): JSX.Element {
@@ -169,13 +172,15 @@ export default function SpeciesDetailView(): JSX.Element {
             />
           </Grid>
           <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-            <TextField
-              id={'rare'}
-              label={strings.RARE}
-              value={species?.rare ? 'True' : 'False'}
-              type='text'
-              display={true}
-            />
+          <Checkbox
+            id='Rare'
+            name='rare'
+            label={strings.RARE}
+            disabled={true}
+            onChange={(value: boolean) => {}}
+            value={species?.rare}
+            className={classes.blockCheckbox}
+          />
           </Grid>
           <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
             <TextField
@@ -187,17 +192,7 @@ export default function SpeciesDetailView(): JSX.Element {
             />
           </Grid>
           <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-            <TextField id={'ecosystemType'} label={strings.ECOSYSTEM_TYPE} type='text' display={true} />
-            <Box paddingTop={'8px'} paddingBottom={'8px'}>
-              <TextTruncated
-                stringList={(species?.ecosystemTypes ?? []) as string[]}
-                maxLengthPx={100}
-                listSeparator={strings.LIST_SEPARATOR_SECONDARY}
-                moreSeparator={strings.TRUNCATED_TEXT_MORE_SEPARATOR}
-                moreText={strings.TRUNCATED_TEXT_MORE_LINK}
-                textStyle={{ fontSize: '16px', fontWeight: '500' }}
-              />
-            </Box>
+            <TextField id={'ecosystemType'} label={strings.ECOSYSTEM_TYPE} type='text' display={true} value={species?.ecosystemTypes?.join(', ')}/>
           </Grid>
         </Grid>
       </Grid>
