@@ -177,7 +177,7 @@ export default function SpeciesDetailView(): JSX.Element {
               name='rare'
               label={strings.RARE}
               disabled={true}
-              onChange={(value: boolean) => {}}
+              onChange={(value: boolean) => {return;}}
               value={species?.rare}
               className={classes.blockCheckbox}
             />
