@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1707922287242" clover="3.2.0">
-  <project timestamp="1707922287242" name="All files">
-    <metrics statements="16155" coveredstatements="550" conditionals="10451" coveredconditionals="154" methods="5056" coveredmethods="124" elements="31662" coveredelements="828" complexity="0" loc="16155" ncloc="16155" packages="130" files="637" classes="637"/>
+<coverage generated="1707928495636" clover="3.2.0">
+  <project timestamp="1707928495636" name="All files">
+    <metrics statements="16156" coveredstatements="550" conditionals="10451" coveredconditionals="154" methods="5056" coveredmethods="124" elements="31663" coveredelements="828" complexity="0" loc="16156" ncloc="16156" packages="130" files="637" classes="637"/>
     <package name="src">
       <metrics statements="173" coveredstatements="0" conditionals="126" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -6709,7 +6709,7 @@
       </file>
     </package>
     <package name="src.hooks">
-      <metrics statements="54" coveredstatements="25" conditionals="14" coveredconditionals="6" methods="22" coveredmethods="11"/>
+      <metrics statements="55" coveredstatements="25" conditionals="14" coveredconditionals="6" methods="22" coveredmethods="11"/>
       <file name="useAppVersion.ts" path="/home/runner/work/terraware-web/terraware-web/src/hooks/useAppVersion.ts">
         <metrics statements="8" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="5" count="0" type="stmt"/>
@@ -6734,7 +6734,7 @@
         <line num="26" count="0" type="stmt"/>
       </file>
       <file name="useProjects.ts" path="/home/runner/work/terraware-web/terraware-web/src/hooks/useProjects.ts">
-        <metrics statements="12" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <metrics statements="13" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
@@ -6743,10 +6743,11 @@
         <line num="16" count="0" type="stmt"/>
         <line num="17" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="18" count="0" type="stmt"/>
-        <line num="22" count="0" type="stmt"/>
-        <line num="23" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="20" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
-        <line num="28" count="0" type="stmt"/>
+        <line num="25" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
       </file>
       <file name="useUndoRedoState.ts" path="/home/runner/work/terraware-web/terraware-web/src/hooks/useUndoRedoState.ts">
         <metrics statements="25" coveredstatements="25" conditionals="6" coveredconditionals="6" methods="11" coveredmethods="11"/>
