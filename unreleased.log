@@ -1,3 +1,4 @@
+af99dc6a8e SW-4844 Redux for draft planting site CRUD (#2167)
 34227e001f SW-4858: FE - Remove side nav "Terraware button" and implement breadcrumbs at top of Accelerator global header (#2165)
 b438664be3 Rename types to be more descriptive (#2166)
 6966dd3caf SW-4850 Allow project unselect from within the planting site view (#2161)
