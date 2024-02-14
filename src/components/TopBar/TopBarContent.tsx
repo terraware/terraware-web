@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import { IconButton, Theme, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Svg } from '@terraware/web-components';
@@ -9,9 +9,11 @@ import OrganizationsDropdown from '../OrganizationsDropdown';
 import UserMenu from '../UserMenu';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import SmallDeviceUserMenu from '../SmallDeviceUserMenu';
-import { useOrganization } from 'src/providers/hooks';
+import { useOrganization, useUser } from 'src/providers/hooks';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import strings from 'src/strings';
+import { isAcceleratorAdmin } from 'src/types/User';
 
 const useStyles = makeStyles((theme: Theme) => ({
   logo: {
@@ -19,6 +21,22 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   backgroundLogo: {
     background: 'url(/assets/logo.svg) no-repeat center/37px',
+  },
+  breadcrumbSelected: {
+    backgroundColor: '#EF7047',
+    borderRadius: '16px',
+    color: theme.palette.TwClrBaseWhite,
+    fontFamily: 'Inter',
+    fontSize: '16px',
+    fontWeight: 500,
+    padding: '0.5em 0.8em',
+    userSelect: 'none',
+  },
+  breadcrumbSeparator: {
+    color: theme.palette.TwClrBaseGray300,
+    fontSize: '16px',
+    margin: '0 1em',
+    userSelect: 'none',
   },
   separator: {
     width: '1px',
@@ -61,6 +79,8 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   const { selectedOrganization, organizations, reloadOrganizations } = useOrganization();
   const { setShowNavBar } = props;
   const { isDesktop } = useDeviceInfo();
+  const { user } = useUser();
+  const isAcceleratorRoute = useRouteMatch(APP_PATHS.ACCELERATOR);
 
   const onHandleLogout = () => {
     window.location.href = `/sso/logout`;
@@ -74,13 +94,24 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
             <Svg.Logo className={classes.logo} />
           </Link>
         </div>
+
         {organizations && organizations.length > 0 && (
           <>
             <div className={classes.separator} />
+            {isAcceleratorRoute && user && isAcceleratorAdmin(user) && (
+              <div>
+                <Link fontSize={16} to={APP_PATHS.HOME}>
+                  Terraware
+                </Link>
+                <span className={classes.breadcrumbSeparator}>/</span>
+                <span className={classes.breadcrumbSelected}>{strings.ACCELERATOR_CONSOLE}</span>
+              </div>
+            )}
             <OrganizationsDropdown />
           </>
         )}
       </div>
+
       <div className={classes.right}>
         <NotificationsDropdown
           organizationId={selectedOrganization.id !== -1 ? selectedOrganization.id : undefined}
