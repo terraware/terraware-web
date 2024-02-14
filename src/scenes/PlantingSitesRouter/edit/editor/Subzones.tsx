@@ -3,7 +3,8 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { Feature, FeatureCollection } from 'geojson';
 import { Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
-import { PlantingSite, PlantingSubzone, PlantingZone } from 'src/types/Tracking';
+import { MinimalPlantingSubzone, MinimalPlantingZone } from 'src/types/Tracking';
+import { DraftPlantingSite } from 'src/types/PlantingSite';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import {
   GeometryFeature,
@@ -37,10 +38,10 @@ import useStyles from './useMapStyle';
 export type SubzonesProps = {
   onChange: (id: string, value: unknown) => void;
   onValidate?: (hasErrors: boolean, isOptionalStepCompleted?: boolean) => void;
-  site: PlantingSite;
+  site: DraftPlantingSite;
 };
 
-const featureSiteSubzones = (site: PlantingSite): Record<number, FeatureCollection> =>
+const featureSiteSubzones = (site: DraftPlantingSite): Record<number, FeatureCollection> =>
   (site.plantingZones ?? []).reduce(
     (subzonesMap, zone) => {
       subzonesMap[zone.id] = {
@@ -110,14 +111,13 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
     // subzones are children of zones, we need to repopuplate zones with new subzones information
     // and update `plantingZones` in the site
     const numZones = site.plantingZones?.length ?? 0;
-    const plantingZones: PlantingZone[] | undefined = site.plantingZones?.map((zone) => {
-      const plantingSubzones: PlantingSubzone[] = (subzones?.[zone.id]?.features ?? [])
+    const plantingZones: MinimalPlantingZone[] | undefined = site.plantingZones?.map((zone) => {
+      const plantingSubzones: MinimalPlantingSubzone[] = (subzones?.[zone.id]?.features ?? [])
         .map((subzone) => {
           const { geometry, properties } = subzone;
           const multiPolygon = toMultiPolygon(geometry);
           if (multiPolygon && properties) {
             return {
-              areaHa: 0, // TODO update with api requirements when ready, we shouldn't be calculating this on the client
               boundary: multiPolygon,
               fullName: properties.name!,
               id: properties.id!,
@@ -128,7 +128,7 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
             return undefined;
           }
         })
-        .filter((subzone) => !!subzone) as PlantingSubzone[];
+        .filter((subzone) => !!subzone) as MinimalPlantingSubzone[];
       return { ...zone, plantingSubzones };
     });
     const numSubzones = plantingZones?.flatMap((zone) => zone.plantingSubzones)?.length ?? 0;

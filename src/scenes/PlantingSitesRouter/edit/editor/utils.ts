@@ -2,26 +2,24 @@ import { Feature, FeatureCollection, MultiPolygon, Polygon } from 'geojson';
 import area from '@turf/area';
 import bbox from '@turf/bbox';
 import bboxPolygon from '@turf/bbox-polygon';
-import { PlantingSubzone, PlantingZone } from 'src/types/Tracking';
+import { MinimalPlantingSubzone, MinimalPlantingZone } from 'src/types/Tracking';
 import { GeometryFeature } from 'src/types/Map';
 import { cutPolygons, toFeature } from 'src/components/Map/utils';
 
 const SQ_M_TO_HECTARES = 1 / 10000;
 
-export type DefaultZonePayload = Omit<PlantingZone, 'plantingSubzones' | 'areaHa'>;
+export type DefaultZonePayload = Omit<MinimalPlantingZone, 'plantingSubzones'>;
 
-export const defaultZonePayload = (payload: DefaultZonePayload): PlantingZone => {
+export const defaultZonePayload = (payload: DefaultZonePayload): MinimalPlantingZone => {
   const { boundary, id, name, targetPlantingDensity } = payload;
   const subzoneName = 'A';
 
   return {
-    areaHa: 0,
     boundary,
     id,
     name,
     plantingSubzones: [
       {
-        areaHa: 0,
         boundary,
         fullName: subzoneName,
         id,
@@ -78,7 +76,7 @@ export const toZoneFeature = (feature: Feature, idGenerator: () => number) =>
  * Utility to generate a feature from planting zone data.
  * This is from BE planting zone data to a zone feature.
  */
-export const plantingZoneToFeature = (zone: PlantingZone): Feature => {
+export const plantingZoneToFeature = (zone: MinimalPlantingZone): Feature => {
   const { boundary, id, name, targetPlantingDensity } = zone;
   return toFeature(boundary, { id, name, targetPlantingDensity }, id);
 };
@@ -87,7 +85,7 @@ export const plantingZoneToFeature = (zone: PlantingZone): Feature => {
  * Utility to generate a feature from planting subzone data.
  * This is from BE planting subzone data to a subzone feature.
  */
-export const plantingSubzoneToFeature = (subzone: PlantingSubzone): Feature => {
+export const plantingSubzoneToFeature = (subzone: MinimalPlantingSubzone): Feature => {
   const { boundary, id, name } = subzone;
   return toFeature(boundary, { id, name }, id);
 };
