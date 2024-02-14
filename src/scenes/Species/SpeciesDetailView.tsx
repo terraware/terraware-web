@@ -77,9 +77,9 @@ export default function SpeciesDetailView(): JSX.Element {
     }
   };
 
-  const deleteSelectedSpecies = async (speciesId: number) => {
+  const deleteSelectedSpecies = async (id: number) => {
     setIsBusy(true);
-    const success = await SpeciesService.deleteSpecies(speciesId, selectedOrganization.id);
+    const success = await SpeciesService.deleteSpecies(id, selectedOrganization.id);
     setIsBusy(false);
     if (!success) {
       snackbar.toastError(strings.GENERIC_ERROR);
