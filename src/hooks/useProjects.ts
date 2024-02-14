@@ -16,6 +16,8 @@ export const useProjects = (record?: { projectId?: number }) => {
   useEffect(() => {
     if (availableProjects && record?.projectId) {
       setSelectedProject(availableProjects.find((project) => project.id === record.projectId));
+    } else {
+      setSelectedProject(undefined);
     }
   }, [availableProjects, record?.projectId]);
 
