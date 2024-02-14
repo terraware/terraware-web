@@ -28,9 +28,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
     marginBottom: theme.spacing(4),
   },
-    blockCheckbox: {
-      display: 'block',
-    },
+  blockCheckbox: {
+    display: 'block',
+  },
 }));
 
 export default function SpeciesDetailView(): JSX.Element {
@@ -172,15 +172,15 @@ export default function SpeciesDetailView(): JSX.Element {
             />
           </Grid>
           <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-          <Checkbox
-            id='Rare'
-            name='rare'
-            label={strings.RARE}
-            disabled={true}
-            onChange={(value: boolean) => {}}
-            value={species?.rare}
-            className={classes.blockCheckbox}
-          />
+            <Checkbox
+              id='Rare'
+              name='rare'
+              label={strings.RARE}
+              disabled={true}
+              onChange={(value: boolean) => {}}
+              value={species?.rare}
+              className={classes.blockCheckbox}
+            />
           </Grid>
           <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
             <TextField
@@ -192,7 +192,13 @@ export default function SpeciesDetailView(): JSX.Element {
             />
           </Grid>
           <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-            <TextField id={'ecosystemType'} label={strings.ECOSYSTEM_TYPE} type='text' display={true} value={species?.ecosystemTypes?.join(', ')}/>
+            <TextField
+              id={'ecosystemType'}
+              label={strings.ECOSYSTEM_TYPE}
+              type='text'
+              display={true}
+              value={species?.ecosystemTypes?.join(', ')}
+            />
           </Grid>
         </Grid>
       </Grid>
