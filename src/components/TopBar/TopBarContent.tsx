@@ -11,8 +11,8 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import SmallDeviceUserMenu from '../SmallDeviceUserMenu';
 import { useOrganization, useUser } from 'src/providers/hooks';
 import Link from 'src/components/common/Link';
+import AcceleratorBreadcrumbs from 'src/components/TopBar/AcceleratorBreadcrumbs';
 import { APP_PATHS } from 'src/constants';
-import strings from 'src/strings';
 import { isAcceleratorAdmin } from 'src/types/User';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -21,22 +21,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   backgroundLogo: {
     background: 'url(/assets/logo.svg) no-repeat center/37px',
-  },
-  breadcrumbSelected: {
-    backgroundColor: '#EF7047',
-    borderRadius: '16px',
-    color: theme.palette.TwClrBaseWhite,
-    fontFamily: 'Inter',
-    fontSize: '16px',
-    fontWeight: 500,
-    padding: '0.5em 0.8em',
-    userSelect: 'none',
-  },
-  breadcrumbSeparator: {
-    color: theme.palette.TwClrBaseGray300,
-    fontSize: '16px',
-    margin: '0 1em',
-    userSelect: 'none',
   },
   separator: {
     width: '1px',
@@ -98,15 +82,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         {organizations && organizations.length > 0 && (
           <>
             <div className={classes.separator} />
-            {isAcceleratorRoute && user && isAcceleratorAdmin(user) && (
-              <div>
-                <Link fontSize={16} to={APP_PATHS.HOME}>
-                  Terraware
-                </Link>
-                <span className={classes.breadcrumbSeparator}>/</span>
-                <span className={classes.breadcrumbSelected}>{strings.ACCELERATOR_CONSOLE}</span>
-              </div>
-            )}
+            {isAcceleratorRoute && user && isAcceleratorAdmin(user) && <AcceleratorBreadcrumbs />}
             <OrganizationsDropdown />
           </>
         )}
