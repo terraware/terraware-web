@@ -1,9 +1,7 @@
 import HttpService, { Response } from './HttpService';
 import {
   CreateDraftPlantingSiteRequestPayload,
-  CreateDraftPlantingSiteResponsePayload,
   DraftPlantingSite,
-  DraftPlantingSitePayload,
   GetDraftPlantingSiteResponsePayload,
   UpdateDraftPlantingSiteRequestPayload,
 } from 'src/types/PlantingSite';
@@ -15,22 +13,22 @@ const DRAFT_PLANTING_SITE_ENDPOINT = '/api/v1/draftSites/{id}';
 const httpDrafts = HttpService.root(DRAFT_PLANTING_SITES_ENDPOINT);
 const httpDraft = HttpService.root(DRAFT_PLANTING_SITE_ENDPOINT);
 
-type CreateDraftPlantingSiteResponse = Response & {
+export type CreateDraftPlantingSiteResponse = Response & {
   draftId: number | null;
 };
 
-type DraftPlantingSiteData = {
+export type DraftPlantingSiteData = {
   site?: DraftPlantingSite;
 };
 
-type GetDraftPlantingSiteResponse = Response & DraftPlantingSiteData;
+export type GetDraftPlantingSiteResponse = Response & DraftPlantingSiteData;
 
 /**
  * Create a draft
  */
-const createDraftPlantingSite = async (
-  entity: CreateDraftPlantingSiteRequestPayload
-): Promise<CreateDraftPlantingSiteResponse> => {
+const createDraftPlantingSite = async (draft: DraftPlantingSite): Promise<CreateDraftPlantingSiteResponse> => {
+  const { ...entity }: CreateDraftPlantingSiteRequestPayload = fromDraft(draft);
+
   const serverResponse: Response = await httpDrafts.post({ entity });
 
   const response: CreateDraftPlantingSiteResponse = {
