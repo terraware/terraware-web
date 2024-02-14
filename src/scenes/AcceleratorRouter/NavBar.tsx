@@ -44,14 +44,18 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
       backgroundTransparent={backgroundTransparent}
       setShowNavBar={setShowNavBar as React.Dispatch<React.SetStateAction<boolean>>}
     >
-      <NavItem
-        icon='home'
-        id='home'
-        label={strings.BACK_TO_TERRAWARE}
-        onClick={() => closeAndNavigateTo(APP_PATHS.HOME)}
-      />
+      {!isDesktop && (
+        <>
+          <NavItem
+            icon='home'
+            id='home'
+            label={strings.BACK_TO_TERRAWARE}
+            onClick={() => closeAndNavigateTo(APP_PATHS.HOME)}
+          />
 
-      <NavSection />
+          <NavSection />
+        </>
+      )}
 
       <NavItem
         id='overview'
