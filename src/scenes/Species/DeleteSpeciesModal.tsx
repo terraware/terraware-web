@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, useTheme } from '@mui/material';
+import { Typography } from '@mui/material';
 import strings from 'src/strings';
-import { BusySpinner, Button, DialogBox, TextTruncated } from '@terraware/web-components';
+import { BusySpinner, Button, DialogBox } from '@terraware/web-components';
 import { SpeciesService } from 'src/services';
 import { useOrganization } from 'src/providers';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -16,7 +16,6 @@ export interface DeleteSpeciesDialogProps {
 
 export default function DeleteSpeciesDialog(props: DeleteSpeciesDialogProps): JSX.Element | null {
   const { onClose, open, onSubmit, speciesToDelete } = props;
-  const theme = useTheme();
   const snackbar = useSnackbar();
   const { selectedOrganization } = useOrganization();
   const [inUseSpecies, setInUseSpecies] = useState<Record<string, string>>();

@@ -4,7 +4,6 @@ import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePag
 import PageHeader from 'src/components/seeds/PageHeader';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import AddSpeciesModal from '../../scenes/Species/SpeciesAddView';
 import ImportSpeciesModal, { downloadCsvTemplate } from '../../scenes/Species/ImportSpeciesModal';
 import TfMain from '../common/TfMain';
 import { Container, Theme } from '@mui/material';
