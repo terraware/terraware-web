@@ -41,20 +41,22 @@ export type Location = {
   timeZone?: string;
 };
 
-export type SitePlantingZone = Omit<PlantingZone, 'areaHa' | 'plantingSubzones'> & {
-  plantingSubzones: Omit<PlantingSubzone, 'areaHa'>[];
+export type MinimalPlantingSubzone = Omit<PlantingSubzone, 'areaHa'>;
+
+export type MinimalPlantingZone = Omit<PlantingZone, 'areaHa' | 'plantingSubzones'> & {
+  plantingSubzones: MinimalPlantingSubzone[];
 };
 
 /**
- * A minium planting site representation for basic details view/edit purposes.
+ * A minimal planting site representing basic details for view/edit purposes.
  */
-export type SiteDetails = Location & {
+export type MinimalPlantingSite = Location & {
   boundary?: MultiPolygon;
   description?: string;
   id: number;
   name: string;
   organizationId: number;
   plantingSeasons: PlantingSeason[];
-  plantingZones?: SitePlantingZone[];
+  plantingZones?: MinimalPlantingZone[];
   projectId?: number;
 };

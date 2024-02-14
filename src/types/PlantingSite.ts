@@ -1,5 +1,5 @@
 import { components } from 'src/api/types/generated-schema';
-import { MultiPolygon, PlantingSite, SiteDetails } from './Tracking';
+import { MultiPolygon, PlantingSite, MinimalPlantingSite } from './Tracking';
 
 export type Population = {
   species_scientificName: string;
@@ -57,7 +57,7 @@ export type GetDraftPlantingSiteResponsePayload = components['schemas']['GetDraf
 /**
  * Client side draft planting site with first class properties.
  */
-export type DraftPlantingSite = SiteDetails & {
+export type DraftPlantingSite = MinimalPlantingSite & {
   createdBy: number; // user that created this draft
   exclusion?: MultiPolygon;
   siteEditStep: SiteEditStep;

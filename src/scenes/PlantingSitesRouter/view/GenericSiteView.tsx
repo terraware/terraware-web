@@ -9,7 +9,7 @@ import TextField from '@terraware/web-components/components/Textfield/Textfield'
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
-import { PlantingSeason, SiteDetails } from 'src/types/Tracking';
+import { PlantingSeason, MinimalPlantingSite } from 'src/types/Tracking';
 import { useProjects } from 'src/hooks/useProjects';
 import PageSnackbar from 'src/components/PageSnackbar';
 import BoundariesAndZones from './BoundariesAndZones';
@@ -30,14 +30,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export type GenericSiteViewProps<T extends SiteDetails> = {
+export type GenericSiteViewProps<T extends MinimalPlantingSite> = {
   editDisabled?: boolean;
   editUrl: string;
   onDelete: () => void;
   plantingSite: T;
 };
 
-export default function GenericSiteView<T extends SiteDetails>({
+export default function GenericSiteView<T extends MinimalPlantingSite>({
   editDisabled,
   editUrl,
   onDelete,

@@ -1,10 +1,10 @@
 import { Box, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
-import { SiteDetails } from 'src/types/Tracking';
+import { MinimalPlantingSite } from 'src/types/Tracking';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 
 type SimplePlantingSiteProps = {
-  plantingSite: SiteDetails;
+  plantingSite: MinimalPlantingSite;
 };
 
 export default function SimplePlantingSite({ plantingSite }: SimplePlantingSiteProps): JSX.Element {

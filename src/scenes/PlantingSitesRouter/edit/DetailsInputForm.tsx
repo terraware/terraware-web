@@ -3,7 +3,7 @@ import { Grid } from '@mui/material';
 import strings from 'src/strings';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
-import { SiteDetails, UpdatedPlantingSeason } from 'src/types/Tracking';
+import { MinimalPlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
 import isEnabled from 'src/features';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -15,7 +15,7 @@ import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import LocationTimeZoneSelector from 'src/components/LocationTimeZoneSelector';
 import PlantingSeasonsEdit from './PlantingSeasonsEdit';
 
-export type DetailsInputFormProps<T extends SiteDetails> = {
+export type DetailsInputFormProps<T extends MinimalPlantingSite> = {
   onChange: (id: string, value: unknown) => void;
   onValidate?: (hasErrors: boolean) => void;
   plantingSeasons?: UpdatedPlantingSeason[];
@@ -24,7 +24,7 @@ export type DetailsInputFormProps<T extends SiteDetails> = {
   setRecord: (setFn: (previousValue: T) => T) => void;
 };
 
-export default function DetailsInputForm<T extends SiteDetails>({
+export default function DetailsInputForm<T extends MinimalPlantingSite>({
   onChange,
   onValidate,
   plantingSeasons,

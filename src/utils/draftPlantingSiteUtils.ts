@@ -1,4 +1,4 @@
-import { MultiPolygon, PlantingSeason, SitePlantingZone } from 'src/types/Tracking';
+import { MultiPolygon, PlantingSeason, MinimalPlantingZone } from 'src/types/Tracking';
 import { DraftPlantingSite, DraftPlantingSitePayload, SiteEditStep, SiteType } from 'src/types/PlantingSite';
 
 /**
@@ -71,7 +71,7 @@ export const toDraft = (payload: DraftPlantingSitePayload): DraftPlantingSite =>
   const boundary: MultiPolygon | undefined = data.boundary as MultiPolygon | undefined;
   const exclusion: MultiPolygon | undefined = data.exclusion as MultiPolygon | undefined;
   const plantingSeasons: PlantingSeason[] = data.plantingSeasons as PlantingSeason[];
-  const plantingZones: SitePlantingZone[] | undefined = data.plantingZones as SitePlantingZone[] | undefined;
+  const plantingZones: MinimalPlantingZone[] | undefined = data.plantingZones as MinimalPlantingZone[] | undefined;
   const siteEditStep: SiteEditStep = data.siteEditStep as SiteEditStep;
   const siteType: SiteType = data.siteType as SiteType;
 

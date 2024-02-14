@@ -1,4 +1,4 @@
-import { MultiPolygon, PlantingSeason, SitePlantingZone } from 'src/types/Tracking';
+import { MultiPolygon, PlantingSeason, MinimalPlantingZone } from 'src/types/Tracking';
 import { DraftPlantingSite, DraftPlantingSitePayload } from 'src/types/PlantingSite';
 import { fromDraft, toDraft } from './draftPlantingSiteUtils';
 
@@ -124,7 +124,7 @@ const subzone22: MultiPolygon = {
 
 const plantingSeasons: PlantingSeason[] = [{ id: 1, startDate: '2024-01-01', endDate: '2024-02-01' }];
 
-const plantingZones: SitePlantingZone[] = [
+const plantingZones: MinimalPlantingZone[] = [
   {
     boundary: zone1,
     id: 1,
