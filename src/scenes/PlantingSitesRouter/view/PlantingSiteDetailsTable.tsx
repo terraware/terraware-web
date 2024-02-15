@@ -5,7 +5,6 @@ import getDateDisplayValue from '@terraware/web-components/utils/date';
 import strings from 'src/strings';
 import { SubzoneAggregation, ZoneAggregation } from 'src/types/Observations';
 import { MinimalPlantingSite } from 'src/types/Tracking';
-import { APP_PATHS } from 'src/constants';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import Link from 'src/components/common/Link';
@@ -19,6 +18,7 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 type PlantingSiteDetailsTableProps = {
   data: ZoneAggregation[];
   plantingSite: MinimalPlantingSite;
+  zoneViewUrl: string;
 };
 
 const useStyles = makeStyles(() => ({
@@ -65,7 +65,11 @@ const columns = (): TableColumnType[] => [
   },
 ];
 
-export default function PlantingSiteDetailsTable({ data, plantingSite }: PlantingSiteDetailsTableProps): JSX.Element {
+export default function PlantingSiteDetailsTable({
+  data,
+  plantingSite,
+  zoneViewUrl,
+}: PlantingSiteDetailsTableProps): JSX.Element {
   const classes = useStyles();
   const defaultTimeZone = useDefaultTimeZone();
 
@@ -78,22 +82,21 @@ export default function PlantingSiteDetailsTable({ data, plantingSite }: Plantin
         columns={columns}
         rows={data}
         orderBy='name'
-        Renderer={DetailsRenderer(classes, timeZone, plantingSite.id)}
+        Renderer={DetailsRenderer(classes, timeZone, plantingSite.id, zoneViewUrl)}
       />
     </Box>
   );
 }
 
 const DetailsRenderer =
-  (classes: any, timeZone: string, plantingSiteId: number) =>
+  (classes: any, timeZone: string, plantingSiteId: number, zoneViewUrl: string) =>
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
 
     const createLinkToZone = () => {
-      const url = APP_PATHS.PLANTING_SITES_ZONE_VIEW.replace(':plantingSiteId', plantingSiteId.toString()).replace(
-        ':zoneId',
-        row.id.toString()
-      );
+      const url = zoneViewUrl
+        .replace(':plantingSiteId', plantingSiteId.toString())
+        .replace(':zoneId', row.id.toString());
       return <Link to={url}>{row.name as React.ReactNode}</Link>;
     };
 

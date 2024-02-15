@@ -20,6 +20,8 @@ import PlantingSiteZoneView from './view/PlantingSiteZoneView';
 import PlantingSiteDraftCreate from './edit/PlantingSiteDraftCreate';
 import PlantingSiteDraftEdit from './edit/PlantingSiteDraftEdit';
 import PlantingSiteDraftView from './view/PlantingSiteDraftView';
+import PlantingSiteDraftSubzoneView from './view/PlantingSiteDraftSubzoneView';
+import PlantingSiteDraftZoneView from './view/PlantingSiteDraftZoneView';
 import isEnabled from 'src/features';
 
 /**
@@ -104,6 +106,12 @@ export function PlantingSitesRouter({ reloadTracking }: PlantingSitesProps): JSX
 export function PlantingSitesDraftRouter(): JSX.Element {
   return (
     <Switch>
+      <Route path={APP_PATHS.PLANTING_SITES_DRAFT_SUBZONE_VIEW}>
+        <PlantingSiteDraftSubzoneView />
+      </Route>
+      <Route path={APP_PATHS.PLANTING_SITES_DRAFT_ZONE_VIEW}>
+        <PlantingSiteDraftZoneView />
+      </Route>
       <Route path={APP_PATHS.PLANTING_SITES_DRAFT_NEW}>
         <PlantingSiteDraftCreate />
       </Route>

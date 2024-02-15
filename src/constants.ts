@@ -74,6 +74,8 @@ export enum APP_PATHS {
   PLANTING_SITES_DRAFT_NEW = '/planting-sites/draft/new',
   PLANTING_SITES_DRAFT_VIEW = '/planting-sites/draft/:plantingSiteId',
   PLANTING_SITES_DRAFT_EDIT = '/planting-sites/draft/:plantingSiteId/edit',
+  PLANTING_SITES_DRAFT_ZONE_VIEW = '/planting-sites/draft/:plantingSiteId/zone/:zoneId',
+  PLANTING_SITES_DRAFT_SUBZONE_VIEW = '/planting-sites/draft/:plantingSiteId/zone/:zoneId/subzone/:subzoneId',
   PLANTING_SITES_VIEW = '/planting-sites/:plantingSiteId',
   PLANTING_SITES_EDIT = '/planting-sites/:plantingSiteId/edit',
   PLANTING_SITES_ZONE_VIEW = '/planting-sites/:plantingSiteId/zone/:zoneId',
