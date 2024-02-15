@@ -3,6 +3,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { Feature, FeatureCollection } from 'geojson';
 import { Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
+import { MinimalPlantingZone } from 'src/types/Tracking';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
 import {
   GeometryFeature,
@@ -30,10 +31,10 @@ import {
   toZoneFeature,
 } from './utils';
 import useStyles from './useMapStyle';
+import { OnValidate } from './types';
 
 export type ZonesProps = {
-  onChange: (id: string, value: unknown) => void;
-  onValidate?: (hasErrors: boolean, isOptionalStepCompleted?: boolean) => void;
+  onValidate?: OnValidate;
   site: DraftPlantingSite;
 };
 
@@ -54,7 +55,7 @@ type Stack = {
   fixedBoundaries?: FeatureCollection;
 };
 
-export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.Element {
+export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
   const [zonesData, setZonesData, undo, redo] = useUndoRedoState<Stack>({
     editableBoundary: emptyBoundary(),
     errorAnnotations: [],
@@ -70,49 +71,46 @@ export default function Zones({ onChange, onValidate, site }: ZonesProps): JSX.E
   const zones = useMemo<FeatureCollection | undefined>(() => zonesData?.fixedBoundaries, [zonesData?.fixedBoundaries]);
 
   useEffect(() => {
-    // TODO: use new BE API when it is ready, to populate the zones for creation with
-    // right now this onChange does nothing but allow us to move to next phase of subzones cutting
     if (onValidate) {
       const missingZones = zones === undefined;
       const zonesTooSmall = !!zonesData?.errorAnnotations?.length;
       // check for missing zone names
       const missingZoneNames = !missingZones && zones!.features.some((zone) => !zone?.properties?.name?.trim());
+      const missingData = (missingZones || missingZoneNames) && !onValidate.isSaveAndClose;
 
-      if (zonesTooSmall) {
-        snackbar.toastError(strings.SITE_ZONE_BOUNDARIES_TOO_SMALL);
-      } else if (missingZoneNames) {
-        snackbar.toastError(strings.SITE_ZONE_NAMES_MISSING);
+      if (zonesTooSmall || missingData) {
+        snackbar.toastError(zonesTooSmall ? strings.SITE_ZONE_BOUNDARIES_TOO_SMALL : strings.SITE_ZONE_NAMES_MISSING);
+        onValidate.apply(true);
+        return;
       }
 
       // populates zones
-      let numZones = 0;
-      if (!missingZoneNames && !zonesTooSmall && zones) {
-        const plantingZones = zones.features
-          .map((zone, index) => {
-            const { geometry, properties } = zone;
-            const multiPolygon = toMultiPolygon(geometry);
+      const plantingZones = zones?.features
+        .map((zone, index) => {
+          const { geometry, properties } = zone;
+          const multiPolygon = toMultiPolygon(geometry);
 
-            if (multiPolygon) {
-              return defaultZonePayload({
-                boundary: multiPolygon,
-                id: properties?.id ?? index,
-                name: properties?.name ?? '',
-                targetPlantingDensity: properties?.targetPlantingDensity ?? 1500,
-              });
-            } else {
-              return undefined;
-            }
-          })
-          .filter((data) => !!data);
-        onChange('plantingZones', plantingZones);
-        numZones = plantingZones.length;
-      }
+          if (multiPolygon) {
+            return defaultZonePayload({
+              boundary: multiPolygon,
+              id: properties?.id ?? index,
+              name: properties?.name ?? '',
+              targetPlantingDensity: properties?.targetPlantingDensity ?? 1500,
+            });
+          } else {
+            return undefined;
+          }
+        })
+        .filter((zone) => !!zone) as MinimalPlantingZone[] | undefined;
+
+      const numZones = plantingZones?.length ?? 0;
 
       // callback with status of error and completion of this step
       const completed = numZones > 1;
-      onValidate(missingZones || missingZoneNames || zonesTooSmall, completed);
+      const data = plantingZones ? { plantingZones } : undefined;
+      onValidate.apply(data === undefined, data, completed);
     }
-  }, [onChange, onValidate, snackbar, zones, zonesData?.errorAnnotations]);
+  }, [onValidate, snackbar, zones, zonesData?.errorAnnotations]);
 
   const readOnlyBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
     if (!zones?.features) {

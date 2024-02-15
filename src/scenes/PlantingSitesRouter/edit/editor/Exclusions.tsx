@@ -11,36 +11,38 @@ import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import MapIcon from 'src/components/Map/MapIcon';
 import StepTitleDescription, { Description } from './StepTitleDescription';
+import { OnValidate } from './types';
 
 export type ExclusionsProps = {
-  onChange: (id: string, value: unknown) => void;
-  onValidate?: (hasErrors: boolean, isOptionalStepCompleted?: boolean) => void;
+  onValidate?: OnValidate;
   site: DraftPlantingSite;
 };
 
-export default function Exclusions({ onChange, onValidate, site }: ExclusionsProps): JSX.Element {
-  const [exclusions, setExclusions, undo, redo] = useUndoRedoState<FeatureCollection | undefined>();
+const featureSiteExclusions = (site: DraftPlantingSite): FeatureCollection | undefined => {
+  if (site.exclusion) {
+    return {
+      type: 'FeatureCollection',
+      features: [toFeature(site.exclusion!, {}, 0)],
+    };
+  } else {
+    return undefined;
+  }
+};
+
+export default function Exclusions({ onValidate, site }: ExclusionsProps): JSX.Element {
+  const [exclusions, setExclusions, undo, redo] = useUndoRedoState<FeatureCollection | undefined>(
+    featureSiteExclusions(site)
+  );
   const getRenderAttributes = useRenderAttributes();
   const { activeLocale } = useLocalization();
 
   useEffect(() => {
-    if (site.exclusion) {
-      setExclusions({
-        type: 'FeatureCollection',
-        features: [toFeature(site.exclusion!, {}, 0)],
-      });
-    }
-  }, [setExclusions, site.exclusion]);
-
-  useEffect(() => {
     if (onValidate) {
-      const boundary = exclusions ? unionMultiPolygons(exclusions) : null;
-      if (boundary) {
-        onChange('exclusion', boundary);
-      }
-      onValidate(false, !!boundary);
+      const exclusion = exclusions ? unionMultiPolygons(exclusions) : null;
+      const data = exclusion ? { exclusion } : undefined;
+      onValidate.apply(false, data, !!data);
     }
-  }, [onChange, onValidate, exclusions]);
+  }, [onValidate, exclusions]);
 
   const readOnlyBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
     if (!site.boundary) {

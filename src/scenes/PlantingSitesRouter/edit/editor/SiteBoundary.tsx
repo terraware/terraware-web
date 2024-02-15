@@ -17,11 +17,11 @@ import EditableMap from 'src/components/Map/EditableMapV2';
 import MapIcon from 'src/components/Map/MapIcon';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import { boundingAreaHectares, defaultZonePayload } from './utils';
+import { OnValidate } from './types';
 
 export type SiteBoundaryProps = {
   isSimpleSite: boolean;
-  onChange: (id: string, value: unknown) => void;
-  onValidate?: (hasErrors: boolean) => void;
+  onValidate?: OnValidate;
   site: DraftPlantingSite;
 };
 
@@ -33,7 +33,7 @@ const featureSiteBoundary = (id: number, boundary?: MultiPolygon): FeatureCollec
         features: [toFeature(boundary, {}, id)],
       };
 
-export default function SiteBoundary({ isSimpleSite, onChange, onValidate, site }: SiteBoundaryProps): JSX.Element {
+export default function SiteBoundary({ isSimpleSite, onValidate, site }: SiteBoundaryProps): JSX.Element {
   const [description, setDescription] = useState<Description[]>([]);
   const [siteBoundary, setSiteBoundary, undo, redo] = useUndoRedoState<FeatureCollection | undefined>(
     featureSiteBoundary(site.id, site.boundary)
@@ -43,8 +43,8 @@ export default function SiteBoundary({ isSimpleSite, onChange, onValidate, site 
   const { activeLocale } = useLocalization();
 
   // construct union of multipolygons
-  const boundary = useMemo<MultiPolygon | null>(
-    () => (siteBoundary ? unionMultiPolygons(siteBoundary) : null),
+  const boundary = useMemo<MultiPolygon | undefined>(
+    () => (siteBoundary && unionMultiPolygons(siteBoundary)) || undefined,
     [siteBoundary]
   );
 
@@ -95,16 +95,15 @@ export default function SiteBoundary({ isSimpleSite, onChange, onValidate, site 
 
   useEffect(() => {
     if (onValidate) {
-      if (!boundary || errorAnnotations?.length) {
+      if ((!boundary && !onValidate.isSaveAndClose) || errorAnnotations?.length) {
         snackbar.toastError(
           errorAnnotations?.length ? strings.SITE_BOUNDARY_ERRORS : strings.SITE_BOUNDARY_ABSENT_WARNING
         );
-        onValidate(true);
+        onValidate.apply(true);
         return;
       } else {
-        onChange('boundary', boundary);
         // create one zone per disjoint polygon in the site boundary
-        const zones: MinimalPlantingZone[] = boundary.coordinates.flatMap(
+        const plantingZones: MinimalPlantingZone[] | undefined = boundary?.coordinates.flatMap(
           (coordinates: Position[][], index: number) => {
             const zoneBoundary: MultiPolygon = { type: 'MultiPolygon', coordinates: [coordinates] };
             return defaultZonePayload({
@@ -115,11 +114,10 @@ export default function SiteBoundary({ isSimpleSite, onChange, onValidate, site 
             });
           }
         );
-        onChange('plantingZones', zones);
-        onValidate(false);
+        onValidate.apply(false, { boundary, plantingZones });
       }
     }
-  }, [boundary, errorAnnotations, isSimpleSite, onChange, onValidate, site.id, siteBoundary, snackbar]);
+  }, [boundary, errorAnnotations, isSimpleSite, onValidate, site.id, siteBoundary, snackbar]);
 
   useEffect(() => {
     if (!activeLocale) {

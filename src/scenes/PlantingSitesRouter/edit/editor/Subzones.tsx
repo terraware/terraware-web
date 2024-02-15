@@ -34,10 +34,10 @@ import {
   toZoneFeature,
 } from './utils';
 import useStyles from './useMapStyle';
+import { OnValidate } from './types';
 
 export type SubzonesProps = {
-  onChange: (id: string, value: unknown) => void;
-  onValidate?: (hasErrors: boolean, isOptionalStepCompleted?: boolean) => void;
+  onValidate?: OnValidate;
   site: DraftPlantingSite;
 };
 
@@ -61,7 +61,7 @@ type Stack = {
   fixedBoundaries?: Record<number, FeatureCollection>;
 };
 
-export default function Subzones({ onChange, onValidate, site }: SubzonesProps): JSX.Element {
+export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Element {
   const [selectedZone, setSelectedZone] = useState<number | undefined>(site.plantingZones?.[0]?.id);
 
   // map of zone id to subzones
@@ -104,13 +104,12 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
     const hasSubzoneSizeErrors = !!subzonesData?.errorAnnotations?.length;
     if (hasSubzoneSizeErrors) {
       snackbar.toastError(strings.SITE_SUBZONE_BOUNDARIES_TOO_SMALL);
-      onValidate(hasSubzoneSizeErrors);
+      onValidate.apply(true);
       return;
     }
 
     // subzones are children of zones, we need to repopuplate zones with new subzones information
     // and update `plantingZones` in the site
-    const numZones = site.plantingZones?.length ?? 0;
     const plantingZones: MinimalPlantingZone[] | undefined = site.plantingZones?.map((zone) => {
       const plantingSubzones: MinimalPlantingSubzone[] = (subzones?.[zone.id]?.features ?? [])
         .map((subzone) => {
@@ -131,10 +130,11 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
         .filter((subzone) => !!subzone) as MinimalPlantingSubzone[];
       return { ...zone, plantingSubzones };
     });
+    const numZones = site.plantingZones?.length ?? 0;
     const numSubzones = plantingZones?.flatMap((zone) => zone.plantingSubzones)?.length ?? 0;
-    onChange('plantingZones', plantingZones);
-    onValidate(plantingZones === undefined, numSubzones > numZones);
-  }, [subzonesData?.errorAnnotations, onChange, onValidate, site, snackbar, subzones, zones]);
+    const data = plantingZones ? { plantingZones } : undefined;
+    onValidate.apply(plantingZones === undefined, data, numSubzones > numZones);
+  }, [subzonesData?.errorAnnotations, onValidate, site, snackbar, subzones, zones]);
 
   const readOnlyBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
     if (!zones) {

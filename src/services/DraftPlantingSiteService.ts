@@ -7,8 +7,8 @@ import {
 } from 'src/types/PlantingSite';
 import { fromDraft, toDraft } from 'src/utils/draftPlantingSiteUtils';
 
-const DRAFT_PLANTING_SITES_ENDPOINT = '/api/v1/draftSites';
-const DRAFT_PLANTING_SITE_ENDPOINT = '/api/v1/draftSites/{id}';
+const DRAFT_PLANTING_SITES_ENDPOINT = '/api/v1/tracking/draftSites';
+const DRAFT_PLANTING_SITE_ENDPOINT = '/api/v1/tracking/draftSites/{id}';
 
 const httpDrafts = HttpService.root(DRAFT_PLANTING_SITES_ENDPOINT);
 const httpDraft = HttpService.root(DRAFT_PLANTING_SITE_ENDPOINT);

@@ -4,10 +4,11 @@ import { UpdatedPlantingSeason } from 'src/types/Tracking';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
 import DetailsInputForm from 'src/scenes/PlantingSitesRouter/edit/DetailsInputForm';
 import StepTitleDescription from './StepTitleDescription';
+import { OnValidate } from './types';
 
 export type DetailsProps = {
   onChange: (id: string, value: unknown) => void;
-  onValidate?: (hasErrors: boolean) => void;
+  onValidate?: OnValidate;
   plantingSeasons?: UpdatedPlantingSeason[];
   setPlantingSeasons: (plantingSeasons: UpdatedPlantingSeason[]) => void;
   setPlantingSite: (setFn: (previousValue: DraftPlantingSite) => DraftPlantingSite) => void;
@@ -27,7 +28,7 @@ export default function Details({
       <StepTitleDescription description={[]} title={strings.DETAILS} />
       <DetailsInputForm<DraftPlantingSite>
         onChange={onChange}
-        onValidate={onValidate}
+        onValidate={onValidate?.apply}
         plantingSeasons={plantingSeasons}
         record={site}
         setPlantingSeasons={setPlantingSeasons}
