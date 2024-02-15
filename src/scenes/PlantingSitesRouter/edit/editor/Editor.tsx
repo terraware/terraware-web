@@ -135,7 +135,11 @@ export default function Editor(props: EditorProps): JSX.Element {
   }, [activeLocale, isSimpleSite, completedOptionalSteps]);
 
   const goToPlantingSites = () => {
-    history.push(APP_PATHS.PLANTING_SITES);
+    if (plantingSite.id !== -1) {
+      history.push(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${plantingSite.id}`));
+    } else {
+      history.push(APP_PATHS.PLANTING_SITES);
+    }
   };
 
   const getCurrentStepIndex = (): number => {

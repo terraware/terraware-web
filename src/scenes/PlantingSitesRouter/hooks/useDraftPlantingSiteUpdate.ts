@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import _ from 'lodash';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
 import { DraftPlantingSite, SiteEditStep } from 'src/types/PlantingSite';
@@ -72,7 +71,7 @@ export default function useDraftPlantingSiteUpdate(): Response {
         snackbar.toastSuccess(strings.PLANTING_SITE_SAVED);
         history.push(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${draftRequest.draft.id}`));
       } else {
-        setUpdatedDraft({ ...draftRequest, draft: _.cloneDeep(draftRequest.draft) });
+        setUpdatedDraft(draftRequest);
       }
     }
   }, [draftRequest, draftResult?.status, history, redirect, snackbar]);
