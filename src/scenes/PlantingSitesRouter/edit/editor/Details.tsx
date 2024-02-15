@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
 import strings from 'src/strings';
-import { PlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
+import { UpdatedPlantingSeason } from 'src/types/Tracking';
+import { DraftPlantingSite } from 'src/types/PlantingSite';
 import DetailsInputForm from 'src/scenes/PlantingSitesRouter/edit/DetailsInputForm';
 import StepTitleDescription from './StepTitleDescription';
 
@@ -9,8 +10,8 @@ export type DetailsProps = {
   onValidate?: (hasErrors: boolean) => void;
   plantingSeasons?: UpdatedPlantingSeason[];
   setPlantingSeasons: (plantingSeasons: UpdatedPlantingSeason[]) => void;
-  setPlantingSite: (setFn: (previousValue: PlantingSite) => PlantingSite) => void;
-  site: PlantingSite;
+  setPlantingSite: (setFn: (previousValue: DraftPlantingSite) => DraftPlantingSite) => void;
+  site: DraftPlantingSite;
 };
 
 export default function Details({
@@ -24,7 +25,7 @@ export default function Details({
   return (
     <Box display='flex' flexDirection='column'>
       <StepTitleDescription description={[]} title={strings.DETAILS} />
-      <DetailsInputForm<PlantingSite>
+      <DetailsInputForm<DraftPlantingSite>
         onChange={onChange}
         onValidate={onValidate}
         plantingSeasons={plantingSeasons}

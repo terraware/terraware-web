@@ -39,7 +39,7 @@ export default function PlantingSites({ reloadTracking }: PlantingSitesProps): J
       </Route>
       {userDrawnDetailedSites && (
         <Route path={APP_PATHS.PLANTING_SITES_DRAFT_VIEW}>
-          <PlantingSitesDraftRouter reloadTracking={reloadTracking} />
+          <PlantingSitesDraftRouter />
         </Route>
       )}
       <Route path={APP_PATHS.PLANTING_SITES_VIEW}>
@@ -101,14 +101,14 @@ export function PlantingSitesRouter({ reloadTracking }: PlantingSitesProps): JSX
   );
 }
 
-export function PlantingSitesDraftRouter({ reloadTracking }: PlantingSitesProps): JSX.Element {
+export function PlantingSitesDraftRouter(): JSX.Element {
   return (
     <Switch>
       <Route path={APP_PATHS.PLANTING_SITES_DRAFT_NEW}>
-        <PlantingSiteDraftCreate reloadPlantingSites={reloadTracking} />
+        <PlantingSiteDraftCreate />
       </Route>
       <Route path={APP_PATHS.PLANTING_SITES_DRAFT_EDIT}>
-        <PlantingSiteDraftEdit reloadPlantingSites={reloadTracking} />
+        <PlantingSiteDraftEdit />
       </Route>
       <Route path={APP_PATHS.PLANTING_SITES_DRAFT_VIEW}>
         <PlantingSiteDraftView />

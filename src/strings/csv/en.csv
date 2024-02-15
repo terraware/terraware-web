@@ -925,6 +925,7 @@ PLANTING_SITE_CREATE_INSTRUCTIONS_DESCRIPTION,Use the drawing {0} tool to draw t
 PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE,Drawing Site Boundaries,
 PLANTING_SITE_DELETED,Planting site deleted!,
 PLANTING_SITE_MAP_VIEW_PROMPT,"In order to access map view, please select a single planting site.",
+PLANTING_SITE_SAVED,Planting Site Saved,
 PLANTING_SITE_TYPE,Planting Site Type,
 PLANTING_SITE_TYPE_DETAILED,Detailed,
 PLANTING_SITE_TYPE_SIMPLE,Simple,

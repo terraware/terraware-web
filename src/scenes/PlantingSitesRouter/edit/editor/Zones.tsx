@@ -3,7 +3,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { Feature, FeatureCollection } from 'geojson';
 import { Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
-import { PlantingSite } from 'src/types/Tracking';
+import { DraftPlantingSite } from 'src/types/PlantingSite';
 import {
   GeometryFeature,
   MapPopupRenderer,
@@ -34,10 +34,10 @@ import useStyles from './useMapStyle';
 export type ZonesProps = {
   onChange: (id: string, value: unknown) => void;
   onValidate?: (hasErrors: boolean, isOptionalStepCompleted?: boolean) => void;
-  site: PlantingSite;
+  site: DraftPlantingSite;
 };
 
-const featureSiteZones = (site: PlantingSite): FeatureCollection | undefined => {
+const featureSiteZones = (site: DraftPlantingSite): FeatureCollection | undefined => {
   if (site.plantingZones) {
     const features = site.plantingZones.map(plantingZoneToFeature);
     return { type: 'FeatureCollection', features };

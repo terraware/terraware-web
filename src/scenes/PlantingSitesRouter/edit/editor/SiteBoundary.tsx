@@ -6,7 +6,8 @@ import bboxPolygon from '@turf/bbox-polygon';
 import centroid from '@turf/centroid';
 import _ from 'lodash';
 import strings from 'src/strings';
-import { PlantingSite, PlantingZone } from 'src/types/Tracking';
+import { MinimalPlantingZone } from 'src/types/Tracking';
+import { DraftPlantingSite } from 'src/types/PlantingSite';
 import useSnackbar from 'src/utils/useSnackbar';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { useLocalization } from 'src/providers';
@@ -21,7 +22,7 @@ export type SiteBoundaryProps = {
   isSimpleSite: boolean;
   onChange: (id: string, value: unknown) => void;
   onValidate?: (hasErrors: boolean) => void;
-  site: PlantingSite;
+  site: DraftPlantingSite;
 };
 
 const featureSiteBoundary = (id: number, boundary?: MultiPolygon): FeatureCollection | undefined =>
@@ -102,9 +103,9 @@ export default function SiteBoundary({ isSimpleSite, onChange, onValidate, site 
         return;
       } else {
         onChange('boundary', boundary);
-        if (site.id !== -1) {
-          // create one zone per disjoint polygon in the site boundary
-          const zones: PlantingZone[] = boundary.coordinates.flatMap((coordinates: Position[][], index: number) => {
+        // create one zone per disjoint polygon in the site boundary
+        const zones: MinimalPlantingZone[] = boundary.coordinates.flatMap(
+          (coordinates: Position[][], index: number) => {
             const zoneBoundary: MultiPolygon = { type: 'MultiPolygon', coordinates: [coordinates] };
             return defaultZonePayload({
               boundary: zoneBoundary,
@@ -112,9 +113,9 @@ export default function SiteBoundary({ isSimpleSite, onChange, onValidate, site 
               name: isSimpleSite ? `${strings.ZONE}${index || ''}` : '',
               targetPlantingDensity: 1500,
             });
-          });
-          onChange('plantingZones', zones);
-        }
+          }
+        );
+        onChange('plantingZones', zones);
         onValidate(false);
       }
     }

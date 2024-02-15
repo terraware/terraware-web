@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react';
 import { Box } from '@mui/material';
 import { FeatureCollection } from 'geojson';
 import strings from 'src/strings';
-import { PlantingSite } from 'src/types/Tracking';
+import { DraftPlantingSite } from 'src/types/PlantingSite';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { RenderableReadOnlyBoundary } from 'src/types/Map';
 import { useLocalization } from 'src/providers';
@@ -15,7 +15,7 @@ import StepTitleDescription, { Description } from './StepTitleDescription';
 export type ExclusionsProps = {
   onChange: (id: string, value: unknown) => void;
   onValidate?: (hasErrors: boolean, isOptionalStepCompleted?: boolean) => void;
-  site: PlantingSite;
+  site: DraftPlantingSite;
 };
 
 export default function Exclusions({ onChange, onValidate, site }: ExclusionsProps): JSX.Element {

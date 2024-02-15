@@ -5,8 +5,9 @@ import { useHistory } from 'react-router-dom';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Message } from '@terraware/web-components';
 import strings from 'src/strings';
-import { PlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
-import { SiteEditStep, SiteType } from 'src/types/PlantingSite';
+import { UpdatedPlantingSeason } from 'src/types/Tracking';
+import { DraftPlantingSite } from 'src/types/PlantingSite';
+import { SiteEditStep } from 'src/types/PlantingSite';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useDocLinks } from 'src/docLinks';
@@ -27,9 +28,7 @@ import Subzones from './Subzones';
 import StartOverConfirmation from './StartOverConfirmation';
 
 export type EditorProps = {
-  reloadPlantingSites: () => void;
-  site: PlantingSite;
-  siteType: SiteType;
+  site: DraftPlantingSite;
 };
 
 const useStyles = makeStyles(() => ({
@@ -41,7 +40,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function Editor(props: EditorProps): JSX.Element {
-  const { reloadPlantingSites, site, siteType } = props;
+  const { site } = props;
+  const { siteEditStep, siteType } = site;
   const { activeLocale } = useLocalization();
   const contentRef = useRef(null);
   const history = useHistory();
@@ -56,7 +56,7 @@ export default function Editor(props: EditorProps): JSX.Element {
     ((hasErrors: boolean, isOptionalCompleted?: boolean) => void) | undefined
   >();
   const [showStartOver, setShowStartOver] = useState<boolean>(false);
-  const [currentStep, setCurrentStep] = useState<SiteEditStep>('details');
+  const [currentStep, setCurrentStep] = useState<SiteEditStep>(siteEditStep);
   const [completedOptionalSteps, setCompletedOptionalSteps] = useState<Record<SiteEditStep, boolean>>(
     {} as Record<SiteEditStep, boolean>
   );
@@ -129,7 +129,7 @@ export default function Editor(props: EditorProps): JSX.Element {
     goToPlantingSites();
   };
 
-  const saveSite = async (): Promise<PlantingSite | undefined> => {
+  const saveSite = async (): Promise<DraftPlantingSite | undefined> => {
     // TODO save site and update site state
     // return undefined if error and toast error
     return plantingSite;
@@ -149,8 +149,7 @@ export default function Editor(props: EditorProps): JSX.Element {
           return;
         }
         if (closeEditor) {
-          snackbar.toastSuccess(strings.SAVED);
-          reloadPlantingSites();
+          snackbar.toastSuccess(strings.PLANTING_SITE_SAVED);
           // TODO go to saved site
           goToPlantingSites();
         } else {
@@ -169,7 +168,7 @@ export default function Editor(props: EditorProps): JSX.Element {
 
   const onStartOver = () => {
     setCurrentStep('site_boundary');
-    setPlantingSite((current: PlantingSite) => ({
+    setPlantingSite((current: DraftPlantingSite) => ({
       ...current,
       // start over only resets the polygonal information
       // edits to name, description, planting seasons and project are preserved

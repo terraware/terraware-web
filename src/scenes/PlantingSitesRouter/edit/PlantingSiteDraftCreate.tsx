@@ -1,30 +1,26 @@
 import { useMemo } from 'react';
 import useQuery from 'src/utils/useQuery';
-import { PlantingSite } from 'src/types/Tracking';
-import { SiteType } from 'src/types/PlantingSite';
+import { DraftPlantingSite, SiteType } from 'src/types/PlantingSite';
 import { useOrganization } from 'src/providers';
 import PlantingSiteEditor from './editor/Editor';
 
-type PlantingSiteDraftCreateProps = {
-  reloadPlantingSites: () => void;
-};
-
-export default function PlantingSiteDraftCreate(props: PlantingSiteDraftCreateProps): JSX.Element {
-  const { reloadPlantingSites } = props;
+export default function PlantingSiteDraftCreate(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const query = useQuery();
+  const siteType = useMemo<SiteType>(() => (query.has('detailed') ? 'detailed' : 'simple'), [query]);
 
-  const site = useMemo<PlantingSite>(
+  const site = useMemo<DraftPlantingSite>(
     () => ({
-      id: 0,
+      createdBy: -1,
+      id: -1,
       name: '',
       organizationId: selectedOrganization.id,
       plantingSeasons: [],
+      siteEditStep: 'details',
+      siteType,
     }),
-    [selectedOrganization.id]
+    [selectedOrganization.id, siteType]
   );
 
-  const siteType = useMemo<SiteType>(() => (query.has('detailed') ? 'detailed' : 'simple'), [query]);
-
-  return <PlantingSiteEditor reloadPlantingSites={reloadPlantingSites} site={site} siteType={siteType} />;
+  return <PlantingSiteEditor site={site} />;
 }
