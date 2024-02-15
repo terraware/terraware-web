@@ -168,8 +168,9 @@
 <a name='L103'></a><a href='#L103'>103</a>
 <a name='L104'></a><a href='#L104'>104</a>
 <a name='L105'></a><a href='#L105'>105</a>
-<a name='L106'></a><a href='#L106'>106</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -193,21 +194,24 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -286,36 +290,38 @@ import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import MapIcon from 'src/components/Map/MapIcon';
 import StepTitleDescription, { Description } from './StepTitleDescription';
+import { OnValidate } from './types';
 &nbsp;
 export type ExclusionsProps = {
-  onChange: (id: string, value: unknown) =&gt; void;
-  onValidate?: (hasErrors: boolean, isOptionalStepCompleted?: boolean) =&gt; void;
+  onValidate?: OnValidate;
   site: DraftPlantingSite;
 };
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >Exclusions(</span>{ onChange, onValidate, site }: ExclusionsProps): JSX.Element {
-  const [exclusions, setExclusions, undo, redo] = <span class="cstat-no" title="statement not covered" >useUndoRedoState&lt;FeatureCollection | undefined&gt;();</span>
+const featureSiteExclusions = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>ite: DraftPlantingSite): FeatureCollection | undefined =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  if (site.exclusion) {</span>
+<span class="cstat-no" title="statement not covered" >    return {</span>
+      type: 'FeatureCollection',
+      features: [toFeature(site.exclusion!, {}, 0)],
+    };
+  } else {
+<span class="cstat-no" title="statement not covered" >    return undefined;</span>
+  }
+};
+&nbsp;
+export default function <span class="fstat-no" title="function not covered" >Exclusions(</span>{ onValidate, site }: ExclusionsProps): JSX.Element {
+  const [exclusions, setExclusions, undo, redo] = <span class="cstat-no" title="statement not covered" >useUndoRedoState&lt;FeatureCollection | undefined&gt;(</span>
+    featureSiteExclusions(site)
+  );
   const getRenderAttributes = <span class="cstat-no" title="statement not covered" >useRenderAttributes();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (site.exclusion) {</span>
-<span class="cstat-no" title="statement not covered" >      setExclusions({</span>
-        type: 'FeatureCollection',
-        features: [toFeature(site.exclusion!, {}, 0)],
-      });
-    }
-  }, [setExclusions, site.exclusion]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (onValidate) {</span>
-      const boundary = <span class="cstat-no" title="statement not covered" >exclusions ? unionMultiPolygons(exclusions) : null;</span>
-<span class="cstat-no" title="statement not covered" >      if (boundary) {</span>
-<span class="cstat-no" title="statement not covered" >        onChange('exclusion', boundary);</span>
-      }
-<span class="cstat-no" title="statement not covered" >      onValidate(false, !!boundary);</span>
+      const exclusion = <span class="cstat-no" title="statement not covered" >exclusions ? unionMultiPolygons(exclusions) : null;</span>
+      const data = <span class="cstat-no" title="statement not covered" >exclusion ? { exclusion } : undefined;</span>
+<span class="cstat-no" title="statement not covered" >      onValidate.apply(false, data, !!data);</span>
     }
-  }, [onChange, onValidate, exclusions]);
+  }, [onValidate, exclusions]);
 &nbsp;
   const readOnlyBoundary = <span class="cstat-no" title="statement not covered" >useMemo&lt;RenderableReadOnlyBoundary[] | undefined&gt;(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!site.boundary) {</span>
@@ -385,7 +391,7 @@ export default function <span class="fstat-no" title="function not covered" >Exc
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-15T18:19:35.701Z
+                at 2024-02-15T19:00:52.532Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

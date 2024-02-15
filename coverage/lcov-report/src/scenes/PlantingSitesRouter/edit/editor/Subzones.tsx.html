@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/81</span>
+                <span class='fraction'>0/83</span>
             </div>
         
             
@@ -647,7 +647,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -666,6 +665,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1039,10 +1039,10 @@ import {
   toZoneFeature,
 } from './utils';
 import useStyles from './useMapStyle';
+import { OnValidate } from './types';
 &nbsp;
 export type SubzonesProps = {
-  onChange: (id: string, value: unknown) =&gt; void;
-  onValidate?: (hasErrors: boolean, isOptionalStepCompleted?: boolean) =&gt; void;
+  onValidate?: OnValidate;
   site: DraftPlantingSite;
 };
 &nbsp;
@@ -1066,7 +1066,7 @@ type Stack = {
   fixedBoundaries?: Record&lt;number, FeatureCollection&gt;;
 };
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >Subzones(</span>{ onChange, onValidate, site }: SubzonesProps): JSX.Element {
+export default function <span class="fstat-no" title="function not covered" >Subzones(</span>{ onValidate, site }: SubzonesProps): JSX.Element {
   const [selectedZone, setSelectedZone] = <span class="cstat-no" title="statement not covered" >useState&lt;number | undefined&gt;(site.plantingZones?.[0]?.id);</span>
 &nbsp;
   // map of zone id to subzones
@@ -1109,13 +1109,12 @@ export default function <span class="fstat-no" title="function not covered" >Sub
     const hasSubzoneSizeErrors = <span class="cstat-no" title="statement not covered" >!!subzonesData?.errorAnnotations?.length;</span>
 <span class="cstat-no" title="statement not covered" >    if (hasSubzoneSizeErrors) {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError(strings.SITE_SUBZONE_BOUNDARIES_TOO_SMALL);</span>
-<span class="cstat-no" title="statement not covered" >      onValidate(hasSubzoneSizeErrors);</span>
+<span class="cstat-no" title="statement not covered" >      onValidate.apply(true);</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
 &nbsp;
     // subzones are children of zones, we need to repopuplate zones with new subzones information
     // and update `plantingZones` in the site
-    const numZones = <span class="cstat-no" title="statement not covered" >site.plantingZones?.length ?? 0;</span>
     const plantingZones: MinimalPlantingZone[] | undefined = <span class="cstat-no" title="statement not covered" >site.plantingZones?.map(<span class="fstat-no" title="function not covered" >(z</span>one) =&gt; {</span>
       const plantingSubzones: MinimalPlantingSubzone[] = <span class="cstat-no" title="statement not covered" >(subzones?.[zone.id]?.features ?? [])</span>
         .map(<span class="fstat-no" title="function not covered" >(s</span>ubzone) =&gt; {
@@ -1136,10 +1135,11 @@ export default function <span class="fstat-no" title="function not covered" >Sub
         .filter(<span class="fstat-no" title="function not covered" >(s</span>ubzone) =&gt; <span class="cstat-no" title="statement not covered" >!!subzone)</span> as MinimalPlantingSubzone[];
 <span class="cstat-no" title="statement not covered" >      return { ...zone, plantingSubzones };</span>
     });
+    const numZones = <span class="cstat-no" title="statement not covered" >site.plantingZones?.length ?? 0;</span>
     const numSubzones = <span class="cstat-no" title="statement not covered" >plantingZones?.flatMap(<span class="fstat-no" title="function not covered" >(z</span>one) =&gt; <span class="cstat-no" title="statement not covered" >zone.plantingSubzones)</span>?.length ?? 0;</span>
-<span class="cstat-no" title="statement not covered" >    onChange('plantingZones', plantingZones);</span>
-<span class="cstat-no" title="statement not covered" >    onValidate(plantingZones === undefined, numSubzones &gt; numZones);</span>
-  }, [subzonesData?.errorAnnotations, onChange, onValidate, site, snackbar, subzones, zones]);
+    const data = <span class="cstat-no" title="statement not covered" >plantingZones ? { plantingZones } : undefined;</span>
+<span class="cstat-no" title="statement not covered" >    onValidate.apply(plantingZones === undefined, data, numSubzones &gt; numZones);</span>
+  }, [subzonesData?.errorAnnotations, onValidate, site, snackbar, subzones, zones]);
 &nbsp;
   const readOnlyBoundary = <span class="cstat-no" title="statement not covered" >useMemo&lt;RenderableReadOnlyBoundary[] | undefined&gt;(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!zones) {</span>
@@ -1480,7 +1480,7 @@ const TooltipContents = <span class="cstat-no" title="statement not covered" ><s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-15T18:19:35.701Z
+                at 2024-02-15T19:00:52.532Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
