@@ -27,6 +27,7 @@ import Exclusions from './Exclusions';
 import Zones from './Zones';
 import Subzones from './Subzones';
 import StartOverConfirmation from './StartOverConfirmation';
+import { OnValidate } from './types';
 
 export type EditorProps = {
   site: DraftPlantingSite;
@@ -52,9 +53,7 @@ export default function Editor(props: EditorProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
 
   const [showPageMessage, setShowPageMessage] = useState<boolean>(true);
-  const [onValidate, setOnValidate] = useState<
-    ((hasErrors: boolean, data?: Partial<DraftPlantingSite>, isOptionalCompleted?: boolean) => void) | undefined
-  >();
+  const [onValidate, setOnValidate] = useState<OnValidate | undefined>();
   const [showStartOver, setShowStartOver] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<SiteEditStep>(siteEditStep);
   const [completedOptionalSteps, setCompletedOptionalSteps] = useState<Record<SiteEditStep, boolean>>(
@@ -165,36 +164,39 @@ export default function Editor(props: EditorProps): JSX.Element {
     if (onValidate) {
       return;
     }
-    setOnValidate(() => (hasErrors: boolean, data?: Partial<DraftPlantingSite>, isOptionalCompleted?: boolean) => {
-      setOnValidate(undefined);
-      if (!hasErrors) {
-        const isLastStep = currentStep === steps[steps.length - 1].type;
-        const redirect = close || isLastStep;
-        // if user hits Save&Close we want to bring user back to the same step in the flow on next visit
-        const nextStep = redirect ? currentStep : steps[getCurrentStepIndex() + 1].type;
+    setOnValidate({
+      isSaveAndClose: close,
+      apply: (hasErrors: boolean, data?: Partial<DraftPlantingSite>, isOptionalCompleted?: boolean) => {
+        setOnValidate(undefined);
+        if (!hasErrors) {
+          const isLastStep = currentStep === steps[steps.length - 1].type;
+          const redirect = close || isLastStep;
+          // if user hits Save&Close we want to bring user back to the same step in the flow on next visit
+          const nextStep = redirect ? currentStep : steps[getCurrentStepIndex() + 1].type;
 
-        const draft: DraftPlantingSite = {
-          ...plantingSite,
-          ...(data ?? {}),
-          plantingSeasons: getPlantingSeasonsToSave(),
-          siteEditStep: nextStep,
-        };
+          const draft: DraftPlantingSite = {
+            ...plantingSite,
+            ...(data ?? {}),
+            plantingSeasons: getPlantingSeasonsToSave(),
+            siteEditStep: nextStep,
+          };
 
-        if (plantingSite.id === -1) {
-          // new site
-          createDraft({ draft, nextStep }, redirect);
-        } else if (isLastStep && !close) {
-          // user is done with create wizard, create planting site off draft and delete the draft
-          createPlantingSite(draft);
-        } else {
-          // update the draft
-          const optionalSteps =
-            isOptionalCompleted !== undefined
-              ? { ...completedOptionalSteps, [currentStep]: isOptionalCompleted }
-              : undefined;
-          updateDraft({ draft, nextStep, optionalSteps }, redirect);
+          if (plantingSite.id === -1) {
+            // new site
+            createDraft({ draft, nextStep }, redirect);
+          } else if (isLastStep && !close) {
+            // user is done with create wizard, create planting site off draft and delete the draft
+            createPlantingSite(draft);
+          } else {
+            // update the draft
+            const optionalSteps =
+              isOptionalCompleted !== undefined
+                ? { ...completedOptionalSteps, [currentStep]: isOptionalCompleted }
+                : undefined;
+            updateDraft({ draft, nextStep, optionalSteps }, redirect);
+          }
         }
-      }
+      },
     });
   };
 

@@ -31,9 +31,10 @@ import {
   toZoneFeature,
 } from './utils';
 import useStyles from './useMapStyle';
+import { OnValidate } from './types';
 
 export type ZonesProps = {
-  onValidate?: (hasErrors: boolean, data?: Partial<DraftPlantingSite>, isOptionalStepCompleted?: boolean) => void;
+  onValidate?: OnValidate;
   site: DraftPlantingSite;
 };
 
@@ -75,41 +76,39 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
       const zonesTooSmall = !!zonesData?.errorAnnotations?.length;
       // check for missing zone names
       const missingZoneNames = !missingZones && zones!.features.some((zone) => !zone?.properties?.name?.trim());
+      const missingData = (missingZones || missingZoneNames) && !onValidate.isSaveAndClose;
 
-      if (zonesTooSmall) {
-        snackbar.toastError(strings.SITE_ZONE_BOUNDARIES_TOO_SMALL);
-      } else if (missingZoneNames) {
-        snackbar.toastError(strings.SITE_ZONE_NAMES_MISSING);
+      if (zonesTooSmall || missingData) {
+        snackbar.toastError(zonesTooSmall ? strings.SITE_ZONE_BOUNDARIES_TOO_SMALL : strings.SITE_ZONE_NAMES_MISSING);
+        onValidate.apply(true);
+        return;
       }
 
       // populates zones
-      let numZones = 0;
-      let plantingZones;
-      if (!missingZoneNames && !zonesTooSmall && zones) {
-        plantingZones = zones.features
-          .map((zone, index) => {
-            const { geometry, properties } = zone;
-            const multiPolygon = toMultiPolygon(geometry);
+      const plantingZones = zones?.features
+        .map((zone, index) => {
+          const { geometry, properties } = zone;
+          const multiPolygon = toMultiPolygon(geometry);
 
-            if (multiPolygon) {
-              return defaultZonePayload({
-                boundary: multiPolygon,
-                id: properties?.id ?? index,
-                name: properties?.name ?? '',
-                targetPlantingDensity: properties?.targetPlantingDensity ?? 1500,
-              });
-            } else {
-              return undefined;
-            }
-          })
-          .filter((zone) => !!zone) as MinimalPlantingZone[];
-        numZones = plantingZones.length;
-      }
+          if (multiPolygon) {
+            return defaultZonePayload({
+              boundary: multiPolygon,
+              id: properties?.id ?? index,
+              name: properties?.name ?? '',
+              targetPlantingDensity: properties?.targetPlantingDensity ?? 1500,
+            });
+          } else {
+            return undefined;
+          }
+        })
+        .filter((zone) => !!zone) as MinimalPlantingZone[] | undefined;
+
+      const numZones = plantingZones?.length ?? 0;
 
       // callback with status of error and completion of this step
       const completed = numZones > 1;
       const data = plantingZones ? { plantingZones } : undefined;
-      onValidate(missingZones || missingZoneNames || zonesTooSmall, data, completed);
+      onValidate.apply(data === undefined, data, completed);
     }
   }, [onValidate, snackbar, zones, zonesData?.errorAnnotations]);
 

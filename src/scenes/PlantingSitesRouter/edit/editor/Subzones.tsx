@@ -34,9 +34,10 @@ import {
   toZoneFeature,
 } from './utils';
 import useStyles from './useMapStyle';
+import { OnValidate } from './types';
 
 export type SubzonesProps = {
-  onValidate?: (hasErrors: boolean, data?: Partial<DraftPlantingSite>, isOptionalStepCompleted?: boolean) => void;
+  onValidate?: OnValidate;
   site: DraftPlantingSite;
 };
 
@@ -103,13 +104,12 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
     const hasSubzoneSizeErrors = !!subzonesData?.errorAnnotations?.length;
     if (hasSubzoneSizeErrors) {
       snackbar.toastError(strings.SITE_SUBZONE_BOUNDARIES_TOO_SMALL);
-      onValidate(hasSubzoneSizeErrors);
+      onValidate.apply(true);
       return;
     }
 
     // subzones are children of zones, we need to repopuplate zones with new subzones information
     // and update `plantingZones` in the site
-    const numZones = site.plantingZones?.length ?? 0;
     const plantingZones: MinimalPlantingZone[] | undefined = site.plantingZones?.map((zone) => {
       const plantingSubzones: MinimalPlantingSubzone[] = (subzones?.[zone.id]?.features ?? [])
         .map((subzone) => {
@@ -130,9 +130,10 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
         .filter((subzone) => !!subzone) as MinimalPlantingSubzone[];
       return { ...zone, plantingSubzones };
     });
+    const numZones = site.plantingZones?.length ?? 0;
     const numSubzones = plantingZones?.flatMap((zone) => zone.plantingSubzones)?.length ?? 0;
     const data = plantingZones ? { plantingZones } : undefined;
-    onValidate(plantingZones === undefined, data, numSubzones > numZones);
+    onValidate.apply(plantingZones === undefined, data, numSubzones > numZones);
   }, [subzonesData?.errorAnnotations, onValidate, site, snackbar, subzones, zones]);
 
   const readOnlyBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {

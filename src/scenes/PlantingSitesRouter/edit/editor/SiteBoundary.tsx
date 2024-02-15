@@ -17,10 +17,11 @@ import EditableMap from 'src/components/Map/EditableMapV2';
 import MapIcon from 'src/components/Map/MapIcon';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import { boundingAreaHectares, defaultZonePayload } from './utils';
+import { OnValidate } from './types';
 
 export type SiteBoundaryProps = {
   isSimpleSite: boolean;
-  onValidate?: (hasErrors: boolean, data?: Partial<DraftPlantingSite>) => void;
+  onValidate?: OnValidate;
   site: DraftPlantingSite;
 };
 
@@ -42,8 +43,8 @@ export default function SiteBoundary({ isSimpleSite, onValidate, site }: SiteBou
   const { activeLocale } = useLocalization();
 
   // construct union of multipolygons
-  const boundary = useMemo<MultiPolygon | null>(
-    () => (siteBoundary ? unionMultiPolygons(siteBoundary) : null),
+  const boundary = useMemo<MultiPolygon | undefined>(
+    () => (siteBoundary && unionMultiPolygons(siteBoundary)) || undefined,
     [siteBoundary]
   );
 
@@ -94,15 +95,15 @@ export default function SiteBoundary({ isSimpleSite, onValidate, site }: SiteBou
 
   useEffect(() => {
     if (onValidate) {
-      if (!boundary || errorAnnotations?.length) {
+      if ((!boundary && !onValidate.isSaveAndClose) || errorAnnotations?.length) {
         snackbar.toastError(
           errorAnnotations?.length ? strings.SITE_BOUNDARY_ERRORS : strings.SITE_BOUNDARY_ABSENT_WARNING
         );
-        onValidate(true);
+        onValidate.apply(true);
         return;
       } else {
         // create one zone per disjoint polygon in the site boundary
-        const plantingZones: MinimalPlantingZone[] = boundary.coordinates.flatMap(
+        const plantingZones: MinimalPlantingZone[] | undefined = boundary?.coordinates.flatMap(
           (coordinates: Position[][], index: number) => {
             const zoneBoundary: MultiPolygon = { type: 'MultiPolygon', coordinates: [coordinates] };
             return defaultZonePayload({
@@ -113,7 +114,7 @@ export default function SiteBoundary({ isSimpleSite, onValidate, site }: SiteBou
             });
           }
         );
-        onValidate(false, { boundary, plantingZones });
+        onValidate.apply(false, { boundary, plantingZones });
       }
     }
   }, [boundary, errorAnnotations, isSimpleSite, onValidate, site.id, siteBoundary, snackbar]);

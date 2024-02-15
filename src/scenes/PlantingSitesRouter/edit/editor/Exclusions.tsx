@@ -11,9 +11,10 @@ import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import MapIcon from 'src/components/Map/MapIcon';
 import StepTitleDescription, { Description } from './StepTitleDescription';
+import { OnValidate } from './types';
 
 export type ExclusionsProps = {
-  onValidate?: (hasErrors: boolean, data?: Partial<DraftPlantingSite>, isOptionalStepCompleted?: boolean) => void;
+  onValidate?: OnValidate;
   site: DraftPlantingSite;
 };
 
@@ -39,7 +40,7 @@ export default function Exclusions({ onValidate, site }: ExclusionsProps): JSX.E
     if (onValidate) {
       const exclusion = exclusions ? unionMultiPolygons(exclusions) : null;
       const data = exclusion ? { exclusion } : undefined;
-      onValidate(false, data, !!data);
+      onValidate.apply(false, data, !!data);
     }
   }, [onValidate, exclusions]);
 
