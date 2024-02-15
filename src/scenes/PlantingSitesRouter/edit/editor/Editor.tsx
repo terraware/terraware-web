@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import _ from 'lodash';
 import { makeStyles } from '@mui/styles';
 import { useHistory } from 'react-router-dom';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
@@ -73,16 +72,16 @@ export default function Editor(props: EditorProps): JSX.Element {
 
   // update local state when draft is created
   useEffect(() => {
-    if (createDraftStatus === 'success' && createdDraft) {
+    if (createdDraft) {
       setPlantingSite(createdDraft.draft);
       setCurrentStep(createdDraft.nextStep);
       onFinishCreate();
     }
-  }, [createDraftStatus, createdDraft, onFinishCreate, setPlantingSite]);
+  }, [createdDraft, onFinishCreate, setPlantingSite]);
 
   // update local state when draft is updated
   useEffect(() => {
-    if (updateDraftStatus === 'success' && updatedDraft) {
+    if (updatedDraft) {
       setPlantingSite(updatedDraft.draft);
       setCurrentStep(updatedDraft.nextStep);
       if (updatedDraft.optionalSteps) {
@@ -90,7 +89,7 @@ export default function Editor(props: EditorProps): JSX.Element {
       }
       onFinishUpdate();
     }
-  }, [updateDraftStatus, updatedDraft, onFinishUpdate, setPlantingSite]);
+  }, [updatedDraft, onFinishUpdate, setPlantingSite]);
 
   const isSimpleSite = useMemo<boolean>(() => siteType === 'simple', [siteType]);
 
@@ -213,9 +212,9 @@ export default function Editor(props: EditorProps): JSX.Element {
       ...plantingSite,
       // start over only resets the polygonal information
       // edits to name, description, planting seasons and project are preserved
-      boundary: _.cloneDeep(site.boundary),
-      exclusion: _.cloneDeep(site.exclusion),
-      plantingZones: _.cloneDeep(site.plantingZones),
+      boundary: undefined,
+      exclusion: undefined,
+      plantingZones: undefined,
       siteEditStep: nextStep,
     };
 

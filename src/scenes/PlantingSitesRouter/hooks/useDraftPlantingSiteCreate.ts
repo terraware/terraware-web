@@ -49,7 +49,6 @@ export default function useDraftPlantingSiteCreate(): Response {
 
   const createDraft = useCallback(
     (request: Data, redirectToDraft: boolean) => {
-      setCreatedDraft(undefined);
       const dispatched = dispatch(requestCreateDraft(request.draft));
       setRequestId(dispatched.requestId);
       setDraftRequest(request);
@@ -84,7 +83,10 @@ export default function useDraftPlantingSiteCreate(): Response {
       createDraft,
       createDraftStatus: draftResult?.status,
       createdDraft,
-      onFinishCreate: () => void setRequestId(''),
+      onFinishCreate: () => {
+        setCreatedDraft(undefined);
+        setRequestId('');
+      },
     }),
     [createDraft, createdDraft, draftResult?.status]
   );

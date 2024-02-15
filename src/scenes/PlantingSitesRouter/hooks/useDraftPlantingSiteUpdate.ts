@@ -52,7 +52,6 @@ export default function useDraftPlantingSiteUpdate(): Response {
 
   const updateDraft = useCallback(
     (request: Data, redirectToDraft: boolean) => {
-      setUpdatedDraft(undefined);
       const dispatched = dispatch(requestUpdateDraft(request.draft));
       setRequestId(dispatched.requestId);
       setDraftRequest(request);
@@ -80,7 +79,10 @@ export default function useDraftPlantingSiteUpdate(): Response {
 
   return useMemo<Response>(
     () => ({
-      onFinishUpdate: () => void setRequestId(''),
+      onFinishUpdate: () => {
+        setUpdatedDraft(undefined);
+        setRequestId('');
+      },
       updateDraft,
       updateDraftStatus: draftResult?.status,
       updatedDraft,
