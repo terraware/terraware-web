@@ -43,27 +43,6 @@ export const searchDraftPlantingSiteSubzones = createCachedSelector(
     `draft_${plantingSiteId}_${zoneId}_${query}`
 );
 
-// get a subzone by id
-export const selectDraftPlantingSiteSubzone = createCachedSelector(
-  (state: RootState, plantingSiteId: number, zoneId: number, subzoneId: number) => subzoneId,
-  (state: RootState, plantingSiteId: number, zoneId: number) =>
-    searchDraftPlantingSiteSubzones(state, plantingSiteId, zoneId, ''),
-  (subzoneId, zone) => {
-    const subzone = zone?.plantingSubzones.find((sz) => sz.id === subzoneId);
-    if (subzone) {
-      return {
-        ...zone,
-        plantingSubzones: [subzone],
-      } as ZoneAggregation;
-    } else {
-      return undefined;
-    }
-  }
-)(
-  (state: RootState, plantingSiteId: number, zoneId: number, subzoneId: number) =>
-    `draft_${plantingSiteId}_${zoneId}_${subzoneId}`
-);
-
 // convert zone to aggregation view
 const toAggregation = (zone: MinimalPlantingZone): ZoneAggregation =>
   ({

@@ -58,7 +58,7 @@ export type Props = {
   ) => ZoneAggregation | undefined;
 };
 
-export default function PlantingSiteZoneView({
+export default function GenericZoneView({
   siteSelector,
   siteViewPrefix,
   siteViewUrl,
@@ -71,7 +71,9 @@ export default function PlantingSiteZoneView({
   const { plantingSiteId, zoneId } = useParams<{ plantingSiteId: string; zoneId: string }>();
 
   const plantingSite = useAppSelector((state) => siteSelector(state, Number(plantingSiteId)));
-  const plantingZone = useAppSelector((state) => zoneSelector(state, Number(plantingSiteId), Number(zoneId), ''));
+  const plantingZone = useAppSelector((state) =>
+    zoneSelector(state, Number(plantingSiteId), Number(zoneId), search.trim())
+  );
 
   const searchProps = useMemo<SearchProps>(
     () => ({
