@@ -11,6 +11,12 @@ export const selectDraftPlantingSiteEdit = (requestId: string) => (state: RootSt
 export const selectDraftPlantingSiteGet = (id: number) => (state: RootState) => state.draftPlantingSiteGet[id];
 export const selectDraftPlantingSite = (state: RootState, id: number) => selectDraftPlantingSiteGet(id)(state)?.data;
 
+/**
+ * Returns PlantingSiteSearchResult[], not a draft planting site will full geometries
+ */
+export const selectDraftPlantingSites = (organizationId: number) => (state: RootState) =>
+  state.draftPlantingSiteSearch[organizationId];
+
 // search zones by name
 export const searchDraftPlantingSiteZones = createCachedSelector(
   (state: RootState, plantingSiteId: number, query: string) => {

@@ -2,10 +2,13 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Box, CircularProgress, Grid, Typography } from '@mui/material';
 import { Button, theme } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
-import { TrackingService } from 'src/services';
+import { PlantingSiteSearchResult } from 'src/types/Tracking';
+import { DraftPlantingSiteService, TrackingService } from 'src/services';
 import { SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { PlantingSitesFilters } from 'src/types/PlantingSite';
 import strings from 'src/strings';
+import isEnabled from 'src/features';
+import { useLocalization } from 'src/providers';
 import useDebounce from 'src/utils/useDebounce';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
@@ -17,11 +20,39 @@ import { useOrganization, useTimeZones } from 'src/providers/hooks';
 import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import useForm from 'src/utils/useForm';
 
+type SiteProperty = keyof PlantingSiteSearchResult;
+
+const getVal = (site: PlantingSiteSearchResult, key: SiteProperty) => {
+  if (key === 'numPlantingSubzones') {
+    return site['numPlantingSubzones(raw)'] ?? 0;
+  }
+  if (key === 'numPlantingZones') {
+    return site['numPlantingZones(raw)'] ?? 0;
+  }
+  return site[key] ?? '';
+};
+
+function siteSortFunction(sortField: SiteProperty, isAscending: boolean, locale: string | undefined) {
+  return (siteA: PlantingSiteSearchResult, siteB: PlantingSiteSearchResult) => {
+    const valueA = getVal(siteA, sortField);
+    const valueB = getVal(siteB, sortField);
+
+    if (sortField === 'numPlantingSubzones' || sortField === 'numPlantingZones') {
+      return isAscending ? Number(valueA) - Number(valueB) : Number(valueB) - Number(valueA);
+    }
+
+    return isAscending
+      ? String(valueA).localeCompare(String(valueB), locale)
+      : String(valueB).localeCompare(String(valueA), locale);
+  };
+}
+
 export default function PlantingSitesList(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const timeZones = useTimeZones();
   const defaultTimeZone = useDefaultTimeZone().get();
   const contentRef = useRef(null);
+  const { activeLocale } = useLocalization();
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
   const [plantingSites, setPlantingSites] = useState<SearchResponseElement[] | null>();
   const [plantingSiteTypeSelectOpen, setPlantingSiteTypeSelectOpen] = useState(false);
@@ -33,8 +64,61 @@ export default function PlantingSitesList(): JSX.Element {
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const { isMobile } = useDeviceInfo();
+  const featureFlagSites = isEnabled('User Detailed Sites');
 
   const filtersEmpty = useCallback(() => !filters.projectIds || filters.projectIds.length === 0, [filters]);
+
+  /**
+   * Search planting sites and draft planting sites.
+   * Return merged/sorted results.
+   */
+  const searchData = useCallback(
+    async (searchFields: SearchNodePayload[]) => {
+      const apiSearchResults = await TrackingService.searchPlantingSites(
+        selectedOrganization.id,
+        searchFields,
+        searchSortOrder
+      );
+
+      let transformedResults = apiSearchResults?.map(
+        (result) => setTimeZone(result, timeZones, defaultTimeZone) as PlantingSiteSearchResult
+      );
+
+      if (featureFlagSites) {
+        // fetch data for draft sites
+        const draftSearchResults = await DraftPlantingSiteService.searchDraftPlantingSites(
+          selectedOrganization.id,
+          searchFields,
+          searchSortOrder
+        );
+
+        if (draftSearchResults) {
+          // merge search results from planting sites and draft planting sites
+          transformedResults = [
+            ...(transformedResults || []),
+            ...draftSearchResults.map(
+              (result) =>
+                ({
+                  ...setTimeZone(result, timeZones, defaultTimeZone),
+                  isDraft: true,
+                  numPlantingSubzones: result.numPlantingSubzones ?? '0',
+                  numPlantingZones: result.numPlantingZones ?? '0',
+                }) as PlantingSiteSearchResult
+            ),
+          ];
+
+          // sort merged results by sort order
+          const sortField: SiteProperty = (searchSortOrder?.field ?? 'name') as SiteProperty;
+          const isAscending = searchSortOrder?.direction === 'Ascending';
+
+          transformedResults.sort(siteSortFunction(sortField, isAscending, activeLocale || undefined));
+        }
+      }
+
+      return transformedResults;
+    },
+    [activeLocale, defaultTimeZone, featureFlagSites, searchSortOrder, selectedOrganization.id, timeZones]
+  );
 
   const onSearch = useCallback(async () => {
     const searchFields: SearchNodePayload[] = [];
@@ -58,18 +142,13 @@ export default function PlantingSitesList(): JSX.Element {
       });
     }
 
-    const apiSearchResults = await TrackingService.searchPlantingSites(
-      selectedOrganization.id,
-      searchFields,
-      searchSortOrder
-    );
+    const transformedResults = await searchData(searchFields);
 
-    const transformedResults = apiSearchResults?.map((result) => setTimeZone(result, timeZones, defaultTimeZone));
     if (!debouncedSearchTerm) {
       setPlantingSites(transformedResults);
     }
     setSearchResults(transformedResults);
-  }, [debouncedSearchTerm, filters.projectIds, selectedOrganization.id, searchSortOrder, timeZones, defaultTimeZone]);
+  }, [debouncedSearchTerm, filters.projectIds, searchData]);
 
   useEffect(() => {
     onSearch();

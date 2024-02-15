@@ -5,7 +5,11 @@ import {
   GetDraftPlantingSiteResponsePayload,
   UpdateDraftPlantingSiteRequestPayload,
 } from 'src/types/PlantingSite';
+import { PlantingSiteSearchResult } from 'src/types/Tracking';
+import { SearchNodePayload, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
+import SearchService from './SearchService';
 import { fromDraft, toDraft } from 'src/utils/draftPlantingSiteUtils';
+import { isArray } from 'src/types/utils';
 
 const DRAFT_PLANTING_SITES_ENDPOINT = '/api/v1/tracking/draftSites';
 const DRAFT_PLANTING_SITE_ENDPOINT = '/api/v1/tracking/draftSites/{id}';
@@ -77,6 +81,63 @@ const deleteDraftPlantingSite = (id: number): Promise<Response> =>
   });
 
 /**
+ * Search draft sites, returns basic info without geometries
+ */
+const searchDraftPlantingSites = async (
+  organizationId: number,
+  searchField?: SearchNodePayload | SearchNodePayload[],
+  sortOrder?: SearchSortOrder
+): Promise<PlantingSiteSearchResult[] | null> => {
+  const params: SearchRequestPayload = {
+    prefix: 'draftPlantingSites',
+    fields: [
+      'description',
+      'id',
+      'name',
+      'numPlantingSubzones',
+      'numPlantingSubzones(raw)',
+      'numPlantingZones',
+      'numPlantingZones(raw)',
+      'project_id',
+      'project_name',
+      'timeZone',
+    ],
+    sortOrder: sortOrder ? [sortOrder] : [{ field: 'name', direction: 'Ascending' }],
+    search: {
+      operation: 'and',
+      children: [
+        {
+          field: 'organization_id',
+          operation: 'field',
+          values: [organizationId],
+        },
+      ],
+    },
+    count: 0,
+  };
+
+  if (searchField) {
+    if (isArray(searchField)) {
+      for (const field of searchField) {
+        params.search.children.push(field);
+      }
+    } else {
+      params.search.children.push(searchField);
+    }
+  }
+
+  const response = await SearchService.search(params);
+
+  return response as PlantingSiteSearchResult[] | null;
+};
+
+/**
  * Basic CRUD and search
  */
-export { createDraftPlantingSite, deleteDraftPlantingSite, getDraftPlantingSite, updateDraftPlantingSite };
+export {
+  createDraftPlantingSite,
+  deleteDraftPlantingSite,
+  getDraftPlantingSite,
+  searchDraftPlantingSites,
+  updateDraftPlantingSite,
+};

@@ -13,11 +13,16 @@ export type PlantingSiteSearchResult = {
   boundary?: MultiPolygon;
   id: string;
   name: string;
+  description?: string;
+  isDraft?: boolean;
   numPlantingSubzones: string;
+  'numPlantingSubzones(raw)': number;
   numPlantingZones: string;
+  'numPlantingZones(raw)': number;
   project_id: number;
   project_name: string;
-  'totalPlants(raw)': string;
+  timeZone?: string;
+  'totalPlants(raw)': number;
 };
 
 // delivery and plantings

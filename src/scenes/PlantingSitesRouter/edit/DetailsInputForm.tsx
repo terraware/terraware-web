@@ -11,6 +11,8 @@ import { useProjects } from 'src/hooks/useProjects';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
+import { selectDraftPlantingSites } from 'src/redux/features/draftPlantingSite/draftPlantingSiteSelectors';
+import { requestSearchDrafts } from 'src/redux/features/draftPlantingSite/draftPlantingSiteThunks';
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import LocationTimeZoneSelector from 'src/components/LocationTimeZoneSelector';
 import PlantingSeasonsEdit from './PlantingSeasonsEdit';
@@ -46,6 +48,7 @@ export default function DetailsInputForm<T extends MinimalPlantingSite>({
   const { selectedOrganization } = useOrganization();
   const dispatch = useAppDispatch();
   const plantingSites = useAppSelector(selectPlantingSites);
+  const draftSites = useAppSelector(selectDraftPlantingSites(selectedOrganization.id));
 
   const checkErrors = useCallback(() => {
     let hasNameError = true;
@@ -77,10 +80,14 @@ export default function DetailsInputForm<T extends MinimalPlantingSite>({
   }, [activeLocale, dispatch, plantingSites, selectedOrganization.id]);
 
   useEffect(() => {
-    // TODO: also include planting site drafts in this list
-    const otherSiteNames = (plantingSites ?? []).filter((site) => site.id !== record.id).map((site) => site.name);
+    dispatch(requestSearchDrafts(selectedOrganization.id));
+  }, [dispatch, selectedOrganization.id]);
+
+  useEffect(() => {
+    const allSites = [...(plantingSites || []), ...(draftSites?.data || [])];
+    const otherSiteNames = allSites.filter((site) => site.id !== record.id).map((site) => site.name);
     setUsedNames(new Set(otherSiteNames));
-  }, [plantingSites, record.id]);
+  }, [draftSites, plantingSites, record.id]);
 
   useEffect(() => {
     if (!onValidate) {

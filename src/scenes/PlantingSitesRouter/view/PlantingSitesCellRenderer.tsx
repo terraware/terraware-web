@@ -19,7 +19,7 @@ const useStyles = makeStyles(() => ({
 export default function PlantingSitesCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const classes = useStyles();
   const { column, row, value, index } = props;
-  const isDraft = false; // TODO: lookup BE property when available
+  const isDraft = row.isDraft;
 
   const createLinkToPlantingSiteView = (iValue: React.ReactNode | unknown[]) => {
     const plantingSiteViewUrl = isDraft ? APP_PATHS.PLANTING_SITES_DRAFT_VIEW : APP_PATHS.PLANTING_SITES_VIEW;
