@@ -32,7 +32,7 @@ const SpeciesRouter = () => {
       return <SpeciesListView reloadData={reloadSpecies} species={species || []} />;
     }
     return <EmptyStatePage pageName={'Species'} reloadData={reloadSpecies} />;
-  }, [species]);
+  }, [species, reloadSpecies]);
 
   return (
     <Switch>
