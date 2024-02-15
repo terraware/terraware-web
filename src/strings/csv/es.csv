@@ -925,6 +925,7 @@ PLANTING_SITE_CREATE_INSTRUCTIONS_DESCRIPTION,Utiliza la herramienta de dibujo {
 PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE,Trazar los límites del sitio,
 PLANTING_SITE_DELETED,¡Sitio de plantación borrado!,
 PLANTING_SITE_MAP_VIEW_PROMPT,"Para acceder a la vista del mapa, seleccione un solo lugar de siembra.",
+PLANTING_SITE_SAVED,Sitio de plantación guardado,
 PLANTING_SITE_TYPE,Tipo de lugar de plantación,
 PLANTING_SITE_TYPE_DETAILED,Detallado,
 PLANTING_SITE_TYPE_SIMPLE,Sencillo,
