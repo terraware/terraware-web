@@ -1,5 +1,5 @@
 import { Grid, Theme } from '@mui/material';
-import TextField from '../../components/common/Textfield/Textfield';
+import TextField from 'src/components/common/Textfield/Textfield';
 import { makeStyles } from '@mui/styles';
 import { Dropdown, MultiSelect } from '@terraware/web-components';
 import React, { useEffect, useState } from 'react';
@@ -16,8 +16,8 @@ import { useLocalization } from 'src/providers/hooks';
 import { SpeciesService } from 'src/services';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
-import Checkbox from '../../components/common/Checkbox';
-import Select from '../../components/common/Select/Select';
+import Checkbox from 'src/components/common/Checkbox';
+import Select from 'src/components/common/Select/Select';
 import TooltipLearnMoreModal, {
   LearnMoreModalContentGrowthForm,
   LearnMoreModalContentSeedStorageBehavior,

@@ -21,8 +21,11 @@ function initSpecies(species?: Species): Species {
     }
   );
 }
+type SpeciesAddViewProps = {
+  reloadData: () => void;
+};
 
-export default function SpeciesAddView(): JSX.Element {
+export default function SpeciesAddView({reloadData}: SpeciesAddViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const organizationId = selectedOrganization.id;
   const [record, setRecord, onChange] = useForm<Species>(initSpecies());
@@ -41,6 +44,7 @@ export default function SpeciesAddView(): JSX.Element {
       setIsBusy(false);
       if (response.requestSucceeded) {
         if (response.speciesId) {
+          reloadData();
           history.push(APP_PATHS.SPECIES_DETAILS.replace(':speciesId', response.speciesId.toString()));
         }
       } else {

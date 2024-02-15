@@ -33,7 +33,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export default function SpeciesDetailView(): JSX.Element {
+type SpeciesDetailViewProps = {
+  reloadData: () => void;
+};
+
+export default function SpeciesDetailView({reloadData}: SpeciesDetailViewProps): JSX.Element {
   const theme = useTheme();
   const classes = useStyles();
   const [species, setSpecies] = useState<Species>();
@@ -88,6 +92,7 @@ export default function SpeciesDetailView(): JSX.Element {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
     setDeleteSpeciesModalOpen(false);
+    reloadData();
     history.push(APP_PATHS.SPECIES);
   };
 

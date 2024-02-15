@@ -27,23 +27,26 @@ const SpeciesRouter = () => {
     }
   }, [species, reloadSpecies]);
 
-  if ((species || []).length === 0) {
+  const getSpeciesView = useCallback((): JSX.Element => {
+    if ( (species || []).length > 0){
+      return <SpeciesListView reloadData={reloadSpecies} species={species || []} />;
+    }
     return <EmptyStatePage pageName={'Species'} reloadData={reloadSpecies} />;
-  }
+  }, [species]);
 
   return (
     <Switch>
       <Route exact path={APP_PATHS.SPECIES_NEW}>
-        <SpeciesAddView />
+        <SpeciesAddView reloadData={reloadSpecies}/>
       </Route>
       <Route exact path={APP_PATHS.SPECIES}>
-        <SpeciesListView reloadData={reloadSpecies} species={species || []} />
+      {getSpeciesView()}
       </Route>
       <Route exact path={APP_PATHS.SPECIES_EDIT}>
         <SpeciesEditView />
       </Route>
       <Route path={APP_PATHS.SPECIES_DETAILS}>
-        <SpeciesDetailView />
+        <SpeciesDetailView reloadData={reloadSpecies}/>
       </Route>
     </Switch>
   );
