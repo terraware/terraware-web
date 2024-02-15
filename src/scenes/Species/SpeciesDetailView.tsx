@@ -37,7 +37,7 @@ type SpeciesDetailViewProps = {
   reloadData: () => void;
 };
 
-export default function SpeciesDetailView({reloadData}: SpeciesDetailViewProps): JSX.Element {
+export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps): JSX.Element {
   const theme = useTheme();
   const classes = useStyles();
   const [species, setSpecies] = useState<Species>();

@@ -25,7 +25,7 @@ type SpeciesAddViewProps = {
   reloadData: () => void;
 };
 
-export default function SpeciesAddView({reloadData}: SpeciesAddViewProps): JSX.Element {
+export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const organizationId = selectedOrganization.id;
   const [record, setRecord, onChange] = useForm<Species>(initSpecies());
