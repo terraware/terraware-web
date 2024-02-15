@@ -36,8 +36,7 @@ import {
 import useStyles from './useMapStyle';
 
 export type SubzonesProps = {
-  onChange: (id: string, value: unknown) => void;
-  onValidate?: (hasErrors: boolean, isOptionalStepCompleted?: boolean) => void;
+  onValidate?: (hasErrors: boolean, data?: Partial<DraftPlantingSite>, isOptionalStepCompleted?: boolean) => void;
   site: DraftPlantingSite;
 };
 
@@ -61,7 +60,7 @@ type Stack = {
   fixedBoundaries?: Record<number, FeatureCollection>;
 };
 
-export default function Subzones({ onChange, onValidate, site }: SubzonesProps): JSX.Element {
+export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Element {
   const [selectedZone, setSelectedZone] = useState<number | undefined>(site.plantingZones?.[0]?.id);
 
   // map of zone id to subzones
@@ -132,9 +131,9 @@ export default function Subzones({ onChange, onValidate, site }: SubzonesProps):
       return { ...zone, plantingSubzones };
     });
     const numSubzones = plantingZones?.flatMap((zone) => zone.plantingSubzones)?.length ?? 0;
-    onChange('plantingZones', plantingZones);
-    onValidate(plantingZones === undefined, numSubzones > numZones);
-  }, [subzonesData?.errorAnnotations, onChange, onValidate, site, snackbar, subzones, zones]);
+    const data = plantingZones ? { plantingZones } : undefined;
+    onValidate(plantingZones === undefined, data, numSubzones > numZones);
+  }, [subzonesData?.errorAnnotations, onValidate, site, snackbar, subzones, zones]);
 
   const readOnlyBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
     if (!zones) {

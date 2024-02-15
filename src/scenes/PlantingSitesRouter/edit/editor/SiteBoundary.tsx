@@ -20,8 +20,7 @@ import { boundingAreaHectares, defaultZonePayload } from './utils';
 
 export type SiteBoundaryProps = {
   isSimpleSite: boolean;
-  onChange: (id: string, value: unknown) => void;
-  onValidate?: (hasErrors: boolean) => void;
+  onValidate?: (hasErrors: boolean, data?: Partial<DraftPlantingSite>) => void;
   site: DraftPlantingSite;
 };
 
@@ -33,7 +32,7 @@ const featureSiteBoundary = (id: number, boundary?: MultiPolygon): FeatureCollec
         features: [toFeature(boundary, {}, id)],
       };
 
-export default function SiteBoundary({ isSimpleSite, onChange, onValidate, site }: SiteBoundaryProps): JSX.Element {
+export default function SiteBoundary({ isSimpleSite, onValidate, site }: SiteBoundaryProps): JSX.Element {
   const [description, setDescription] = useState<Description[]>([]);
   const [siteBoundary, setSiteBoundary, undo, redo] = useUndoRedoState<FeatureCollection | undefined>(
     featureSiteBoundary(site.id, site.boundary)
@@ -102,9 +101,8 @@ export default function SiteBoundary({ isSimpleSite, onChange, onValidate, site 
         onValidate(true);
         return;
       } else {
-        onChange('boundary', boundary);
         // create one zone per disjoint polygon in the site boundary
-        const zones: MinimalPlantingZone[] = boundary.coordinates.flatMap(
+        const plantingZones: MinimalPlantingZone[] = boundary.coordinates.flatMap(
           (coordinates: Position[][], index: number) => {
             const zoneBoundary: MultiPolygon = { type: 'MultiPolygon', coordinates: [coordinates] };
             return defaultZonePayload({
@@ -115,11 +113,10 @@ export default function SiteBoundary({ isSimpleSite, onChange, onValidate, site 
             });
           }
         );
-        onChange('plantingZones', zones);
-        onValidate(false);
+        onValidate(false, { boundary, plantingZones });
       }
     }
-  }, [boundary, errorAnnotations, isSimpleSite, onChange, onValidate, site.id, siteBoundary, snackbar]);
+  }, [boundary, errorAnnotations, isSimpleSite, onValidate, site.id, siteBoundary, snackbar]);
 
   useEffect(() => {
     if (!activeLocale) {

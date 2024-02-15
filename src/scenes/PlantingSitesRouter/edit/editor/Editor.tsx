@@ -1,24 +1,26 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import _ from 'lodash';
 import { makeStyles } from '@mui/styles';
 import { useHistory } from 'react-router-dom';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Button, Message } from '@terraware/web-components';
+import { BusySpinner, Button, Message } from '@terraware/web-components';
 import strings from 'src/strings';
-import { UpdatedPlantingSeason } from 'src/types/Tracking';
+import { PlantingSeason, UpdatedPlantingSeason } from 'src/types/Tracking';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
 import { SiteEditStep } from 'src/types/PlantingSite';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useDocLinks } from 'src/docLinks';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import useSnackbar from 'src/utils/useSnackbar';
 import useForm from 'src/utils/useForm';
 import TfMain from 'src/components/common/TfMain';
 import TextWithLink from 'src/components/common/TextWithLink';
 import Card from 'src/components/common/Card';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import PageSnackbar from 'src/components/PageSnackbar';
+import usePlantingSiteCreate from 'src/scenes/PlantingSitesRouter/hooks/usePlantingSiteCreate';
+import useDraftPlantingSiteCreate from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteCreate';
+import useDraftPlantingSiteUpdate from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteUpdate';
 import Form, { PlantingSiteStep } from './Form';
 import Details from './Details';
 import SiteBoundary from './SiteBoundary';
@@ -46,14 +48,13 @@ export default function Editor(props: EditorProps): JSX.Element {
   const contentRef = useRef(null);
   const history = useHistory();
   const theme = useTheme();
-  const snackbar = useSnackbar();
   const classes = useStyles();
   const docLinks = useDocLinks();
   const { isMobile } = useDeviceInfo();
 
   const [showPageMessage, setShowPageMessage] = useState<boolean>(true);
   const [onValidate, setOnValidate] = useState<
-    ((hasErrors: boolean, isOptionalCompleted?: boolean) => void) | undefined
+    ((hasErrors: boolean, data?: Partial<DraftPlantingSite>, isOptionalCompleted?: boolean) => void) | undefined
   >();
   const [showStartOver, setShowStartOver] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<SiteEditStep>(siteEditStep);
@@ -61,7 +62,35 @@ export default function Editor(props: EditorProps): JSX.Element {
     {} as Record<SiteEditStep, boolean>
   );
   const [plantingSite, setPlantingSite, onChange] = useForm({ ...site });
-  const [plantingSeasons, setPlantingSeasons] = useState<UpdatedPlantingSeason[]>();
+  const [plantingSeasons, setPlantingSeasons] = useState<UpdatedPlantingSeason[]>(site.plantingSeasons);
+
+  /**
+   * set up hooks to create/update a draft and also to create a planting site from draft
+   */
+  const { onFinishCreate, createDraft, createDraftStatus, createdDraft } = useDraftPlantingSiteCreate();
+  const { onFinishUpdate, updateDraft, updateDraftStatus, updatedDraft } = useDraftPlantingSiteUpdate();
+  const { createPlantingSite, createPlantingSiteStatus } = usePlantingSiteCreate();
+
+  // update local state when draft is created
+  useEffect(() => {
+    if (createDraftStatus === 'success' && createdDraft) {
+      setPlantingSite(createdDraft.draft);
+      setCurrentStep(createdDraft.nextStep);
+      onFinishCreate();
+    }
+  }, [createDraftStatus, createdDraft, onFinishCreate, setPlantingSite]);
+
+  // update local state when draft is updated
+  useEffect(() => {
+    if (updateDraftStatus === 'success' && updatedDraft) {
+      setPlantingSite(updatedDraft.draft);
+      setCurrentStep(updatedDraft.nextStep);
+      if (updatedDraft.optionalSteps) {
+        setCompletedOptionalSteps(updatedDraft.optionalSteps);
+      }
+      onFinishUpdate();
+    }
+  }, [updateDraftStatus, updatedDraft, onFinishUpdate, setPlantingSite]);
 
   const isSimpleSite = useMemo<boolean>(() => siteType === 'simple', [siteType]);
 
@@ -124,15 +153,12 @@ export default function Editor(props: EditorProps): JSX.Element {
     return stepIndex;
   };
 
+  const getPlantingSeasonsToSave = (): PlantingSeason[] =>
+    plantingSeasons.map((season: UpdatedPlantingSeason) => ({ ...season, id: -1 }));
+
   const onCancel = () => {
     // TODO: confirm with user?
     goToPlantingSites();
-  };
-
-  const saveSite = async (): Promise<DraftPlantingSite | undefined> => {
-    // TODO save site and update site state
-    // return undefined if error and toast error
-    return plantingSite;
   };
 
   const onSave = (close: boolean) => {
@@ -140,43 +166,60 @@ export default function Editor(props: EditorProps): JSX.Element {
     if (onValidate) {
       return;
     }
-    setOnValidate(() => async (hasErrors: boolean, isOptionalCompleted?: boolean) => {
+    setOnValidate(() => (hasErrors: boolean, data?: Partial<DraftPlantingSite>, isOptionalCompleted?: boolean) => {
       setOnValidate(undefined);
       if (!hasErrors) {
-        const closeEditor = close || currentStep === steps[steps.length - 1].type;
-        const savedSite = await saveSite();
-        if (!savedSite) {
-          return;
-        }
-        if (closeEditor) {
-          snackbar.toastSuccess(strings.PLANTING_SITE_SAVED);
-          // TODO go to saved site
-          goToPlantingSites();
+        const isLastStep = currentStep === steps[steps.length - 1].type;
+        const redirect = close || isLastStep;
+        // if user hits Save&Close we want to bring user back to the same step in the flow on next visit
+        const nextStep = redirect ? currentStep : steps[getCurrentStepIndex() + 1].type;
+
+        const draft: DraftPlantingSite = {
+          ...plantingSite,
+          ...(data ?? {}),
+          plantingSeasons: getPlantingSeasonsToSave(),
+          siteEditStep: nextStep,
+        };
+
+        if (plantingSite.id === -1) {
+          // new site
+          createDraft({ draft, nextStep }, redirect);
+        } else if (isLastStep && !close) {
+          // user is done with create wizard, create planting site off draft and delete the draft
+          createPlantingSite(draft);
         } else {
-          // update state of optional step for the stepper visualization
-          if (isOptionalCompleted !== undefined) {
-            setCompletedOptionalSteps((current: Record<SiteEditStep, boolean>) => ({
-              ...current,
-              [currentStep]: isOptionalCompleted,
-            }));
-          }
-          setCurrentStep(steps[getCurrentStepIndex() + 1].type);
+          // update the draft
+          const optionalSteps =
+            isOptionalCompleted !== undefined
+              ? { ...completedOptionalSteps, [currentStep]: isOptionalCompleted }
+              : undefined;
+          updateDraft({ draft, nextStep, optionalSteps }, redirect);
         }
       }
     });
   };
 
+  /**
+   * On start over, data is reset to clear all boundaries and only keep the details information.
+   * Optional steps completion state is reset.
+   * User is taken back to 'site_boundary' step, if the update succeeds.
+   */
   const onStartOver = () => {
-    setCurrentStep('site_boundary');
-    setPlantingSite((current: DraftPlantingSite) => ({
-      ...current,
+    const nextStep = 'site_boundary';
+    const optionalSteps = {} as Record<SiteEditStep, boolean>;
+    const redirect = false;
+
+    const draft: DraftPlantingSite = {
+      ...plantingSite,
       // start over only resets the polygonal information
       // edits to name, description, planting seasons and project are preserved
       boundary: _.cloneDeep(site.boundary),
       exclusion: _.cloneDeep(site.exclusion),
       plantingZones: _.cloneDeep(site.plantingZones),
-    }));
-    setCompletedOptionalSteps({} as Record<SiteEditStep, boolean>);
+      siteEditStep: nextStep,
+    };
+
+    updateDraft({ draft, nextStep, optionalSteps }, redirect);
     setShowStartOver(false);
   };
 
@@ -194,6 +237,8 @@ export default function Editor(props: EditorProps): JSX.Element {
 
   return (
     <TfMain>
+      {createPlantingSiteStatus === 'pending' && <BusySpinner withSkrim={true} />}
+      {(createDraftStatus === 'pending' || updateDraftStatus === 'pending') && <BusySpinner />}
       {showStartOver && <StartOverConfirmation onClose={() => setShowStartOver(false)} onConfirm={onStartOver} />}
       <PageHeaderWrapper nextElement={contentRef.current}>
         <Box sx={{ padding: theme.spacing(0, 0, 4, 3), display: 'flex' }}>
@@ -256,22 +301,11 @@ export default function Editor(props: EditorProps): JSX.Element {
               />
             )}
             {currentStep === 'site_boundary' && (
-              <SiteBoundary
-                isSimpleSite={isSimpleSite}
-                onChange={onChange}
-                onValidate={onValidate}
-                site={plantingSite}
-              />
+              <SiteBoundary isSimpleSite={isSimpleSite} onValidate={onValidate} site={plantingSite} />
             )}
-            {currentStep === 'exclusion_areas' && (
-              <Exclusions onChange={onChange} onValidate={onValidate} site={plantingSite} />
-            )}
-            {currentStep === 'zone_boundaries' && (
-              <Zones onChange={onChange} onValidate={onValidate} site={plantingSite} />
-            )}
-            {currentStep === 'subzone_boundaries' && (
-              <Subzones onChange={onChange} onValidate={onValidate} site={plantingSite} />
-            )}
+            {currentStep === 'exclusion_areas' && <Exclusions onValidate={onValidate} site={plantingSite} />}
+            {currentStep === 'zone_boundaries' && <Zones onValidate={onValidate} site={plantingSite} />}
+            {currentStep === 'subzone_boundaries' && <Subzones onValidate={onValidate} site={plantingSite} />}
           </Card>
         </Form>
       )}

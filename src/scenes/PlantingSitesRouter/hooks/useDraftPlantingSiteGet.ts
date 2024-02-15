@@ -18,7 +18,11 @@ export type Response = {
   site?: DraftPlantingSite;
 };
 
-export default function useDraftPlantingSite({ draftId }: Props): Response {
+/**
+ * Hook to fetch a draft planting site.
+ * Returns status on request and the fetched draft site.
+ */
+export default function useDraftPlantingSiteGet({ draftId }: Props): Response {
   const snackbar = useSnackbar();
   const history = useHistory();
   const dispatch = useAppDispatch();
