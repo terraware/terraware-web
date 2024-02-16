@@ -90,9 +90,10 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
     setIsBusy(false);
     if (!success) {
       snackbar.toastError(strings.GENERIC_ERROR);
+    } else {
+      reloadData();
     }
     setDeleteSpeciesModalOpen(false);
-    reloadData();
     history.push(APP_PATHS.SPECIES);
   };
 

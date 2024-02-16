@@ -45,7 +45,7 @@ export default function SpeciesEditView(): JSX.Element {
 
   const goToSpecies = (id?: number) => {
     const speciesLocation = {
-      pathname: APP_PATHS.SPECIES + (id ? `/${id}` : ''),
+      pathname: APP_PATHS.SPECIES_DETAILS.replace(':speciesId', speciesId.toString()),
     };
     history.push(speciesLocation);
   };
