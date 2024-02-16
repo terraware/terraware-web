@@ -92,7 +92,6 @@ export default function PlantingSitesList(): JSX.Element {
           return acc;
         }
         const { value } = result;
-        const isDraft = index === 1;
 
         return [
           ...acc,
@@ -102,7 +101,6 @@ export default function PlantingSitesList(): JSX.Element {
                 ...setTimeZone(site, timeZones, defaultTimeZone),
                 numPlantingSubzones: site.numPlantingSubzones ?? '0',
                 numPlantingZones: site.numPlantingZones ?? '0',
-                isDraft,
               }) as PlantingSiteSearchResult
           ),
         ];

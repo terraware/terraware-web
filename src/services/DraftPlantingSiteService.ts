@@ -128,7 +128,7 @@ const searchDraftPlantingSites = async (
 
   const response = await SearchService.search(params);
 
-  return response as PlantingSiteSearchResult[] | null;
+  return response ? (response.map((site) => ({ ...site, isDraft: true })) as PlantingSiteSearchResult[]) : null;
 };
 
 /**
