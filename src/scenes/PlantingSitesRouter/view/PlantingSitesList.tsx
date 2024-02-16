@@ -87,7 +87,7 @@ export default function PlantingSitesList(): JSX.Element {
       // batch the search requests
       const results = await Promise.allSettled(searchRequests);
 
-      const sites: PlantingSiteSearchResult[] = results.reduce((acc, result, index) => {
+      const sites: PlantingSiteSearchResult[] = results.reduce((acc, result) => {
         if (result.status === 'rejected') {
           return acc;
         }
