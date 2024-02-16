@@ -74,48 +74,49 @@ export default function PlantingSitesList(): JSX.Element {
    */
   const searchData = useCallback(
     async (searchFields: SearchNodePayload[]) => {
-      const apiSearchResults = await TrackingService.searchPlantingSites(
-        selectedOrganization.id,
-        searchFields,
-        searchSortOrder
-      );
-
-      let transformedResults = apiSearchResults?.map(
-        (result) => setTimeZone(result, timeZones, defaultTimeZone) as PlantingSiteSearchResult
-      );
+      const searchRequests = [
+        TrackingService.searchPlantingSites(selectedOrganization.id, searchFields, searchSortOrder),
+      ];
 
       if (featureFlagSites) {
-        // fetch data for draft sites
-        const draftSearchResults = await DraftPlantingSiteService.searchDraftPlantingSites(
-          selectedOrganization.id,
-          searchFields,
-          searchSortOrder
+        searchRequests.push(
+          DraftPlantingSiteService.searchDraftPlantingSites(selectedOrganization.id, searchFields, searchSortOrder)
         );
-
-        if (draftSearchResults) {
-          // merge search results from planting sites and draft planting sites
-          transformedResults = [
-            ...(transformedResults || []),
-            ...draftSearchResults.map(
-              (result) =>
-                ({
-                  ...setTimeZone(result, timeZones, defaultTimeZone),
-                  isDraft: true,
-                  numPlantingSubzones: result.numPlantingSubzones ?? '0',
-                  numPlantingZones: result.numPlantingZones ?? '0',
-                }) as PlantingSiteSearchResult
-            ),
-          ];
-
-          // sort merged results by sort order
-          const sortField: SiteProperty = (searchSortOrder?.field ?? 'name') as SiteProperty;
-          const isAscending = searchSortOrder?.direction === 'Ascending';
-
-          transformedResults.sort(siteSortFunction(sortField, isAscending, activeLocale || undefined));
-        }
       }
 
-      return transformedResults;
+      // batch the search requests
+      const results = await Promise.allSettled(searchRequests);
+
+      const sites: PlantingSiteSearchResult[] = results.reduce((acc, result, index) => {
+        if (result.status === 'rejected') {
+          return acc;
+        }
+        const { value } = result;
+        const isDraft = index === 1;
+
+        return [
+          ...acc,
+          ...(value ?? []).map(
+            (site) =>
+              ({
+                ...setTimeZone(site, timeZones, defaultTimeZone),
+                numPlantingSubzones: site.numPlantingSubzones ?? '0',
+                numPlantingZones: site.numPlantingZones ?? '0',
+                isDraft,
+              }) as PlantingSiteSearchResult
+          ),
+        ];
+      }, [] as PlantingSiteSearchResult[]);
+
+      if (featureFlagSites && sites.some((site) => site.isDraft)) {
+        // sort merged results by sort order
+        const sortField: SiteProperty = (searchSortOrder?.field ?? 'name') as SiteProperty;
+        const isAscending = searchSortOrder?.direction === 'Ascending';
+
+        sites.sort(siteSortFunction(sortField, isAscending, activeLocale || undefined));
+      }
+
+      return sites;
     },
     [activeLocale, defaultTimeZone, featureFlagSites, searchSortOrder, selectedOrganization.id, timeZones]
   );
