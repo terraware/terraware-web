@@ -29,7 +29,7 @@ import SeedsDashboard from 'src/scenes/SeedsDashboard';
 import CheckIn from 'src/scenes/CheckIn';
 import AccessionsRouter from 'src/scenes/AccessionsRouter';
 import MonitoringRouter from 'src/scenes/MonitoringRouter';
-import SpeciesView from 'src/scenes/Species';
+import SpeciesRouter from 'src/scenes/Species';
 import OrganizationRouter from 'src/scenes/OrganizationRouter';
 import PeopleRouter from 'src/scenes/PeopleRouter';
 import { isPlaceholderOrg, selectedOrgHasFacilityType } from 'src/utils/organization';
@@ -227,8 +227,8 @@ const TerrawareRouter = ({ showNavBar, setShowNavBar }: TerrawareRouterProps) =>
               <MonitoringRouter />
             </Route>
 
-            <Route exact path={APP_PATHS.SPECIES}>
-              <SpeciesView />
+            <Route path={APP_PATHS.SPECIES}>
+              <SpeciesRouter />
             </Route>
 
             <Route path={APP_PATHS.ORGANIZATION}>
