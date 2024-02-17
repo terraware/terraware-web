@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { Box } from '@mui/material';
-import { FeatureCollection } from 'geojson';
+import { Feature, FeatureCollection } from 'geojson';
 import strings from 'src/strings';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
@@ -11,7 +11,9 @@ import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import MapIcon from 'src/components/Map/MapIcon';
 import StepTitleDescription, { Description } from './StepTitleDescription';
+import useSnackbar from 'src/utils/useSnackbar';
 import { OnValidate } from './types';
+import { findErrors } from './utils';
 
 export type ExclusionsProps = {
   onValidate?: OnValidate;
@@ -29,20 +31,37 @@ const featureSiteExclusions = (site: DraftPlantingSite): FeatureCollection | und
   }
 };
 
+// undo redo stack to capture exclusions and errors
+type Stack = {
+  errorAnnotations?: Feature[];
+  exclusions?: FeatureCollection;
+};
+
 export default function Exclusions({ onValidate, site }: ExclusionsProps): JSX.Element {
-  const [exclusions, setExclusions, undo, redo] = useUndoRedoState<FeatureCollection | undefined>(
-    featureSiteExclusions(site)
-  );
+  const [exclusionsData, setExclusionsData, undo, redo] = useUndoRedoState<Stack>({
+    exclusions: featureSiteExclusions(site),
+  });
   const getRenderAttributes = useRenderAttributes();
   const { activeLocale } = useLocalization();
+  const snackbar = useSnackbar();
+
+  const exclusions = useMemo<FeatureCollection | undefined>(
+    () => exclusionsData?.exclusions,
+    [exclusionsData?.exclusions]
+  );
 
   useEffect(() => {
     if (onValidate) {
+      if (exclusionsData?.errorAnnotations?.length) {
+        snackbar.toastError(strings.SITE_BOUNDARY_ERRORS);
+        onValidate.apply(true);
+        return;
+      }
       const exclusion = exclusions ? unionMultiPolygons(exclusions) : null;
       const data = exclusion ? { exclusion } : undefined;
       onValidate.apply(false, data, !!data);
     }
-  }, [onValidate, exclusions]);
+  }, [exclusions, exclusionsData?.errorAnnotations, onValidate, snackbar]);
 
   const readOnlyBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
     if (!site.boundary) {
@@ -86,6 +105,25 @@ export default function Exclusions({ onValidate, site }: ExclusionsProps): JSX.E
     ) as JSX.Element[];
   }, [activeLocale]);
 
+  /**
+   * Check for errors and mark annotations.
+   */
+  const onEditableBoundaryChanged = async (editableBoundary?: FeatureCollection) => {
+    const errors = await findErrors(
+      {
+        ...site,
+        exclusion: (editableBoundary && unionMultiPolygons(editableBoundary)) || undefined,
+      },
+      'exclusion',
+      []
+    );
+
+    setExclusionsData({
+      errorAnnotations: errors,
+      exclusions: editableBoundary,
+    });
+  };
+
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
       <StepTitleDescription
@@ -97,7 +135,8 @@ export default function Exclusions({ onValidate, site }: ExclusionsProps): JSX.E
       />
       <EditableMap
         editableBoundary={exclusions}
-        onEditableBoundaryChanged={setExclusions}
+        errorAnnotations={exclusionsData?.errorAnnotations}
+        onEditableBoundaryChanged={onEditableBoundaryChanged}
         onRedo={redo}
         onUndo={undo}
         readOnlyBoundary={readOnlyBoundary}

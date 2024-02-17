@@ -1,4 +1,4 @@
-import { Feature, FeatureCollection, MultiPolygon, Polygon } from 'geojson';
+import { Feature, FeatureCollection, MultiPolygon, Polygon, Position } from 'geojson';
 import area from '@turf/area';
 import bbox from '@turf/bbox';
 import bboxPolygon from '@turf/bbox-polygon';
@@ -228,9 +228,35 @@ export const findErrors = async (
   //    site or exclusion or zone or subzone mentioned in the problem
   // 4. map problem type to a string.<mapped_string_for_problem> as errorText
 
-  // The if check is only to keep typescript happy with unused variables, until we use it soon with the BE API
-  if (draft) {
-    // This is a temporary implementation.
+  if (!draft) {
+    return [];
+  }
+
+  // This is a temporary implementation until we use BE API.
+  if (errorCheckLevel === 'exclusion') {
+    return [];
+  } else if (errorCheckLevel === 'site_boundary') {
+    // check if individual polygons are of a minimum size
+    const individualPolygons: Polygon[] =
+      draft.boundary?.coordinates.flatMap((coordinates: Position[][]) => ({
+        type: 'Polygon',
+        coordinates,
+      })) ?? [];
+    let index = 0;
+    const polygonsTooSmall = individualPolygons
+      .flatMap((poly: Polygon) => {
+        const siteArea = boundingAreaHectares(poly);
+        if (siteArea < 1) {
+          // stopgap to check for 100m x 100m until we have BE API
+          const errorText = strings.formatString(strings.SITE_BOUNDARY_POLYGON_TOO_SMALL, siteArea);
+          return [{ type: 'Feature', geometry: poly, properties: { errorText, fill: true }, id: index++ } as Feature];
+        } else {
+          return [];
+        }
+      })
+      .filter((feature) => !!feature);
+    return polygonsTooSmall;
+  } else {
     const errorText =
       errorCheckLevel === 'subzone' ? strings.SITE_SUBZONE_BOUNDARY_TOO_SMALL : strings.SITE_ZONE_BOUNDARY_TOO_SMALL;
     const minimumSideDimension = errorCheckLevel === 'subzone' ? 25 : 100;
@@ -242,9 +268,6 @@ export const findErrors = async (
       .filter((boundary) => boundingAreaHectares(boundary.geometry) < minArea)
       .map((boundary) => ({ ...boundary, properties: { errorText: errorText ?? '--', fill: true } }));
 
-    // the await pattern here is a placeholder until we switch over to API request
-    return await Promise.resolve(errors);
-  } else {
-    return await Promise.resolve([]);
+    return errors;
   }
 };

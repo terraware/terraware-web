@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
-import { Feature, FeatureCollection, MultiPolygon, Polygon, Position } from 'geojson';
+import { Feature, FeatureCollection, MultiPolygon, Position } from 'geojson';
 import bbox from '@turf/bbox';
 import bboxPolygon from '@turf/bbox-polygon';
 import centroid from '@turf/centroid';
@@ -18,11 +18,24 @@ import MapIcon from 'src/components/Map/MapIcon';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import { boundingAreaHectares, defaultZonePayload } from './utils';
 import { OnValidate } from './types';
+import { findErrors } from './utils';
 
 export type SiteBoundaryProps = {
   onValidate?: OnValidate;
   site: DraftPlantingSite;
 };
+
+// create default planting zones off the site boundary
+const createPlantingZonesWith = (boundary?: MultiPolygon): MinimalPlantingZone[] | undefined =>
+  boundary?.coordinates.flatMap((coordinates: Position[][], index: number) => {
+    const zoneBoundary: MultiPolygon = { type: 'MultiPolygon', coordinates: [coordinates] };
+    return defaultZonePayload({
+      boundary: zoneBoundary,
+      id: index,
+      name: `${strings.ZONE}${index + 1}`,
+      targetPlantingDensity: 1500,
+    });
+  });
 
 const featureSiteBoundary = (id: number, boundary?: MultiPolygon): FeatureCollection | undefined =>
   !boundary
@@ -32,19 +45,25 @@ const featureSiteBoundary = (id: number, boundary?: MultiPolygon): FeatureCollec
         features: [toFeature(boundary, {}, id)],
       };
 
+// undo redo stack to capture site boundary and errors
+type Stack = {
+  errorAnnotations?: Feature[];
+  siteBoundary?: FeatureCollection;
+};
+
 export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): JSX.Element {
   const [description, setDescription] = useState<Description[]>([]);
-  const [siteBoundary, setSiteBoundary, undo, redo] = useUndoRedoState<FeatureCollection | undefined>(
-    featureSiteBoundary(site.id, site.boundary)
-  );
+  const [siteBoundaryData, setSiteBoundaryData, undo, redo] = useUndoRedoState<Stack>({
+    siteBoundary: featureSiteBoundary(site.id, site.boundary),
+  });
   const [mode, setMode] = useState<MapEditorMode>();
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
 
   // construct union of multipolygons
   const boundary = useMemo<MultiPolygon | undefined>(
-    () => (siteBoundary && unionMultiPolygons(siteBoundary)) || undefined,
-    [siteBoundary]
+    () => (siteBoundaryData?.siteBoundary && unionMultiPolygons(siteBoundaryData?.siteBoundary)) || undefined,
+    [siteBoundaryData?.siteBoundary]
   );
 
   const boundingArea = useMemo<number>(() => (boundary ? boundingAreaHectares(boundary) : 0), [boundary]);
@@ -66,31 +85,10 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
         ];
       }
 
-      // check if individual polygons are of a minimum size
-      const individualPolygons: Polygon[] = boundary.coordinates.flatMap((coordinates: Position[][]) => ({
-        type: 'Polygon',
-        coordinates,
-      }));
-      let index = 0;
-      const polygonsTooSmall = individualPolygons
-        .flatMap((poly: Polygon) => {
-          const area = boundingAreaHectares(poly);
-          if (area < 1) {
-            // stopgap to check for 100m x 100m until we have BE API
-            const errorText = strings.formatString(strings.SITE_BOUNDARY_POLYGON_TOO_SMALL, area);
-            return [{ type: 'Feature', geometry: poly, properties: { errorText, fill: true }, id: index++ } as Feature];
-          } else {
-            return [];
-          }
-        })
-        .filter((feature) => !!feature);
-
-      if (polygonsTooSmall.length) {
-        return polygonsTooSmall;
-      }
+      return siteBoundaryData?.errorAnnotations;
     }
     return undefined;
-  }, [boundary, boundingArea, boundingAreaTooLarge]);
+  }, [boundary, boundingArea, boundingAreaTooLarge, siteBoundaryData?.errorAnnotations]);
 
   useEffect(() => {
     if (onValidate) {
@@ -102,21 +100,11 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
         return;
       } else {
         // create one zone per disjoint polygon in the site boundary
-        const plantingZones: MinimalPlantingZone[] | undefined = boundary?.coordinates.flatMap(
-          (coordinates: Position[][], index: number) => {
-            const zoneBoundary: MultiPolygon = { type: 'MultiPolygon', coordinates: [coordinates] };
-            return defaultZonePayload({
-              boundary: zoneBoundary,
-              id: index,
-              name: `${strings.ZONE}${index + 1}`,
-              targetPlantingDensity: 1500,
-            });
-          }
-        );
+        const plantingZones = createPlantingZonesWith(boundary);
         onValidate.apply(false, { boundary, plantingZones });
       }
     }
-  }, [boundary, errorAnnotations, onValidate, site.id, siteBoundary, snackbar]);
+  }, [boundary, errorAnnotations, onValidate, site.id, snackbar]);
 
   useEffect(() => {
     if (!activeLocale) {
@@ -156,6 +144,27 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
     ) as JSX.Element[];
   }, [activeLocale]);
 
+  /**
+   * Check for errors and mark annotations.
+   */
+  const onEditableBoundaryChanged = async (editableBoundary?: FeatureCollection) => {
+    const newBoundary = (editableBoundary && unionMultiPolygons(editableBoundary)) || undefined;
+    const errors = await findErrors(
+      {
+        ...site,
+        boundary: newBoundary,
+        plantingZones: createPlantingZonesWith(newBoundary),
+      },
+      'site_boundary',
+      []
+    );
+
+    setSiteBoundaryData({
+      errorAnnotations: errors,
+      siteBoundary: editableBoundary,
+    });
+  };
+
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
       <StepTitleDescription
@@ -168,9 +177,9 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
         tutorialTitle={strings.PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE}
       />
       <EditableMap
-        editableBoundary={siteBoundary}
+        editableBoundary={siteBoundaryData?.siteBoundary}
         errorAnnotations={errorAnnotations}
-        onEditableBoundaryChanged={setSiteBoundary}
+        onEditableBoundaryChanged={onEditableBoundaryChanged}
         onRedo={redo}
         onUndo={undo}
         setMode={setMode}

@@ -1257,6 +1257,7 @@ SITE_EXCLUSION_AREAS_DESCRIPTION_0,"Areas within the site boundary that are not 
 SITE_EXCLUSION_AREAS_DESCRIPTION_1,"Use the drawing {0} tool to draw the exclusion areas of your planting site. (Watch a [tutorial.]) If there are no areas to exclude, click ""{1}.""",
 SITE_EXCLUSION_AREAS_DESCRIPTION_2,Exclude areas from your planting site by drawing shapes within or overlapping the planting site boundary. Complete the exclusion area shapes by either double-clicking or by clicking on the starting point again.,
 SITE_EXCLUSION_AREAS_OPTIONAL,Exclusion Areas (Optional),
+SITE_EXCLUSION_ERRORS,There are errors in the exclusion boundary.,
 SITE_LOCATION,Site Location,
 SITE_MAP,Site Map,
 SITE_SUBZONE_BOUNDARIES,Subzone Boundaries,
