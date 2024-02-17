@@ -3,7 +3,9 @@ import area from '@turf/area';
 import bbox from '@turf/bbox';
 import bboxPolygon from '@turf/bbox-polygon';
 import { MinimalPlantingSubzone, MinimalPlantingZone } from 'src/types/Tracking';
+import { DraftPlantingSite } from 'src/types/PlantingSite';
 import { GeometryFeature } from 'src/types/Map';
+import strings from 'src/strings';
 import { cutPolygons, toFeature } from 'src/components/Map/utils';
 
 const SQ_M_TO_HECTARES = 1 / 10000;
@@ -165,47 +167,84 @@ export const getLatestFeature = (
  *  input feature collection to further divide into boundaries
  * @param cutWith
  *  polygon to use as the cutting boundary overlay
- * @param errorText
- *  error message to use in error annotations
- * @param minimumSideDimension
- *  minimum side of a square in meters, that needs to be contained within each cut zone (eg. 100 for 100m x 100m)
+ * @param errorCheckLevel
+ *  level at which to check errors for
+ * @param createDraftSiteWith
+ *  callback to create a draft site with the cut boundaries, to be used for error checking
  * @param onSuccess
  *  callback on success, which accepts the new list of cut boundaries
  * @param onError
  *  callback when the cut geometries are too small, or there were no new cut geometries due to no overlap,
  *  callback accepts list of error annotation features
  */
+export type ErrorCheckLevel = 'site_boundary' | 'exclusion' | 'zone' | 'subzone';
 export type CutData = {
   cutWithFeature?: GeometryFeature;
-  errorText: string;
-  minimumSideDimension: number;
+  errorCheckLevel: ErrorCheckLevel;
+  createDraftSiteWith: (cutBoundaries: GeometryFeature[]) => DraftPlantingSite;
   source?: FeatureCollection;
 };
-export const cutOverlappingBoundaries = (
+export const cutOverlappingBoundaries = async (
   data: CutData,
   onSuccess: (cutBoundaries: GeometryFeature[]) => void,
   onError: (errorAnnotations: Feature[]) => void
 ) => {
-  const { cutWithFeature, errorText, minimumSideDimension, source } = data;
+  const { cutWithFeature, errorCheckLevel, createDraftSiteWith, source } = data;
   if (!source || !cutWithFeature) {
     onError([]);
     return;
   }
-
-  const minArea = minimumSideDimension * minimumSideDimension * SQ_M_TO_HECTARES;
-
   // cut new polygons using the cut geometry overlapping the fixed boundaries
   const cutBoundaries = cutPolygons(source!.features as GeometryFeature[], cutWithFeature!.geometry) || [];
 
-  // check if the cut polygons are too small to be boundaries (in which case, we won't create new fixed boundaries using the cut polygons)
-  // mark them as error annotations instead
-  const boundariesTooSmall = cutBoundaries
-    .filter((boundary) => boundingAreaHectares(boundary.geometry) < minArea) // (stopgap until we have BE supported API for size validation)
-    .map((boundary) => ({ ...boundary, properties: { errorText, fill: true } }));
+  if (!cutBoundaries.length) {
+    onError([]);
+    return;
+  }
 
-  if (cutBoundaries.length && !boundariesTooSmall.length) {
+  const errors = await findErrors(createDraftSiteWith(cutBoundaries), errorCheckLevel, cutBoundaries);
+
+  if (!errors.length) {
     onSuccess(cutBoundaries);
   } else {
-    onError(boundariesTooSmall);
+    onError(errors);
+  }
+};
+
+/**
+ * Find errors in the draft site with a dry-run planting site creation.
+ * The response contains error annotation information, if any.
+ * TODO: replace error checking code with actual BE API request when it is ready
+ */
+export const findErrors = async (
+  draft: DraftPlantingSite,
+  errorCheckLevel: ErrorCheckLevel,
+  cutBoundaries: GeometryFeature[] // TODO: remove this when switching to BE API, use the draft payload instead
+): Promise<Feature[]> => {
+  // TODO: use BE API
+  // 1. do a dry-run of planting site create with the input 'draft'
+  // 2. check problems returned
+  // 3. map problems to error annotation with boundary of
+  //    site or exclusion or zone or subzone mentioned in the problem
+  // 4. map problem type to a string.<mapped_string_for_problem> as errorText
+
+  // The if check is only to keep typescript happy with unused variables, until we use it soon with the BE API
+  if (draft) {
+    // This is a temporary implementation.
+    const errorText =
+      errorCheckLevel === 'subzone' ? strings.SITE_SUBZONE_BOUNDARY_TOO_SMALL : strings.SITE_ZONE_BOUNDARY_TOO_SMALL;
+    const minimumSideDimension = errorCheckLevel === 'subzone' ? 25 : 100;
+    const minArea = minimumSideDimension * minimumSideDimension * SQ_M_TO_HECTARES;
+
+    // check if the cut polygons are too small to be boundaries (in which case, we won't create new fixed boundaries using the cut polygons)
+    // mark them as error annotations instead
+    const errors = cutBoundaries
+      .filter((boundary) => boundingAreaHectares(boundary.geometry) < minArea)
+      .map((boundary) => ({ ...boundary, properties: { errorText: errorText ?? '--', fill: true } }));
+
+    // the await pattern here is a placeholder until we switch over to API request
+    return await Promise.resolve(errors);
+  } else {
+    return await Promise.resolve([]);
   }
 };

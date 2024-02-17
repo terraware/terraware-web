@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
-import { Feature, FeatureCollection } from 'geojson';
+import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
 import { Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
 import { MinimalPlantingZone } from 'src/types/Tracking';
@@ -38,6 +38,28 @@ export type ZonesProps = {
   site: DraftPlantingSite;
 };
 
+/**
+ * Create a draft site with edited polygons, for error checking.
+ * @param site
+ *   Site is the original draft site this worflow started with.
+ * @return a callback function (using above params in the closure)
+ *   A callback function which accepts new cut zone geometries,
+ *   and should return a version of the draft planting site accounting
+ *   for the potentially new zone boundaries.
+ */
+const createDraftSiteWith = (site: DraftPlantingSite) => (cutZones: GeometryFeature[]) => ({
+  ...site,
+  plantingZones: cutZones.map((zone, index) =>
+    defaultZonePayload({
+      boundary: toMultiPolygon(zone.geometry) as MultiPolygon,
+      id: index,
+      name: `${index}`, // temporary name for error checking
+      targetPlantingDensity: zone.properties?.targetPlantingDensity ?? 1500,
+    })
+  ),
+});
+
+// create zone feature collections from the site
 const featureSiteZones = (site: DraftPlantingSite): FeatureCollection | undefined => {
   if (site.plantingZones) {
     const features = site.plantingZones.map(plantingZoneToFeature);
@@ -184,7 +206,7 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
     ) as JSX.Element[];
   }, [activeLocale]);
 
-  const onEditableBoundaryChanged = (editableBoundary?: FeatureCollection) => {
+  const onEditableBoundaryChanged = async (editableBoundary?: FeatureCollection) => {
     // pick the latest geometry that was drawn
     const cutWithFeature = getLatestFeature(zonesData?.editableBoundary, editableBoundary);
 
@@ -230,11 +252,11 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
       }));
     };
 
-    cutOverlappingBoundaries(
+    await cutOverlappingBoundaries(
       {
         cutWithFeature,
-        errorText: strings.SITE_ZONE_BOUNDARY_TOO_SMALL,
-        minimumSideDimension: 100,
+        errorCheckLevel: 'zone',
+        createDraftSiteWith: createDraftSiteWith(site),
         source: zones,
       },
       onSuccess,

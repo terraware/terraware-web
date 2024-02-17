@@ -61,6 +61,46 @@ export const feature3: GeometryFeature = {
   id: 2,
 };
 
+export const feature4: GeometryFeature = {
+  type: 'Feature',
+  geometry: {
+    type: 'MultiPolygon',
+    coordinates: [
+      [
+        [
+          [7.4999, 1],
+          [7.5001, 1],
+          [7.5001, 1.001],
+          [7.4999, 1.001],
+          [7.4999, 1],
+        ],
+      ],
+    ],
+  },
+  properties: { lorem: 'ipsum' },
+  id: 2,
+};
+
+export const feature5: GeometryFeature = {
+  type: 'Feature',
+  geometry: {
+    type: 'MultiPolygon',
+    coordinates: [
+      [
+        [
+          [12.4999, 1],
+          [12.5001, 1],
+          [12.5001, 1.001],
+          [12.4999, 1.001],
+          [12.4999, 1],
+        ],
+      ],
+    ],
+  },
+  properties: { lorem: 'ipsum' },
+  id: 2,
+};
+
 export const cutOnNoOverlap: Geometry = {
   type: 'MultiPolygon',
   coordinates: [
@@ -93,6 +133,7 @@ export const cutWithOverlap: Geometry = {
 
 export const featureCollection1: FeatureCollection = { type: 'FeatureCollection', features: [feature1] };
 export const featureCollection2: FeatureCollection = { type: 'FeatureCollection', features: [feature1, feature2] };
+export const featureCollection3: FeatureCollection = { type: 'FeatureCollection', features: [feature4, feature5] };
 
 export const cutOnNoOverlapFeature: GeometryFeature = {
   type: 'Feature',

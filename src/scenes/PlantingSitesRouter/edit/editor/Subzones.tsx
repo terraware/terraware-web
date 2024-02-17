@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
-import { Feature, FeatureCollection } from 'geojson';
+import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
 import { Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
 import { MinimalPlantingSubzone, MinimalPlantingZone } from 'src/types/Tracking';
@@ -41,6 +41,43 @@ export type SubzonesProps = {
   site: DraftPlantingSite;
 };
 
+/**
+ * Create a draft site with edited polygons, for error checking.
+ * @param site
+ *   Site is the original draft site this worflow started with.
+ * @param subzones
+ *   Record of zone id to subzones
+ * @param selectedZone
+ *   The zone for which new subzones will be cut.
+ * @return a callback function (using above params in the closure)
+ *   A callback function which accepts new cut subzone geometries,
+ *   and should return a version of the draft planting site accounting
+ *   for the potentially new subzone boundaries.
+ */
+const createDraftSiteWith =
+  (
+    site: DraftPlantingSite,
+    subzones: Record<number, FeatureCollection> | undefined,
+    selectedZone: number | undefined
+  ) =>
+  (cutBoundaries: GeometryFeature[]) => ({
+    ...site,
+    plantingZones: site.plantingZones?.map((zone) => ({
+      ...zone,
+      // re-create subzones from the record of zones to subzones
+      // unless this is the selected zone, in which case use the newly cut boundaries
+      plantingSubzones:
+        (selectedZone === zone.id ? cutBoundaries : subzones?.[zone.id]?.features)?.map((subzone, index) => ({
+          boundary: toMultiPolygon(subzone.geometry) as MultiPolygon,
+          fullName: `${index}`,
+          id: index,
+          name: `${index}`, // temporary name just for error checking
+          plantingCompleted: false,
+        })) ?? [],
+    })),
+  });
+
+// create subzone feature collections from site, for edit purposes
 const featureSiteSubzones = (site: DraftPlantingSite): Record<number, FeatureCollection> =>
   (site.plantingZones ?? []).reduce(
     (subzonesMap, zone) => {
@@ -224,7 +261,7 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
   }, [activeLocale]);
 
   // when we have a new polygon, add it to the subzones list after carving out the overlapping region in the zone.
-  const onEditableBoundaryChanged = (editableBoundary?: FeatureCollection) => {
+  const onEditableBoundaryChanged = async (editableBoundary?: FeatureCollection) => {
     // pick the latest geometry that was drawn
     const cutWithFeature = getLatestFeature(subzonesData?.editableBoundary, editableBoundary);
 
@@ -286,11 +323,11 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
       }));
     };
 
-    cutOverlappingBoundaries(
+    await cutOverlappingBoundaries(
       {
         cutWithFeature,
-        errorText: strings.SITE_SUBZONE_BOUNDARY_TOO_SMALL,
-        minimumSideDimension: 25,
+        errorCheckLevel: 'subzone',
+        createDraftSiteWith: createDraftSiteWith(site, subzones, selectedZone),
         source: selectedZone !== undefined ? subzones?.[selectedZone] : undefined,
       },
       onSuccess,
