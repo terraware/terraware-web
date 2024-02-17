@@ -53,7 +53,7 @@ export default function Exclusions({ onValidate, site }: ExclusionsProps): JSX.E
   useEffect(() => {
     if (onValidate) {
       if (exclusionsData?.errorAnnotations?.length) {
-        snackbar.toastError(strings.SITE_BOUNDARY_ERRORS);
+        snackbar.toastError(strings.SITE_EXCLUSION_ERRORS);
         onValidate.apply(true);
         return;
       }
