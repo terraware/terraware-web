@@ -72,8 +72,14 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
             <Route path={APP_PATHS.ACCELERATOR_OVERVIEW}>
               <AcceleratorOverviewView />
             </Route>
-            <Route path={APP_PATHS.ACCELERATOR_DELIVERABLES}>
+            <Route path={APP_PATHS.ACCELERATOR_DELIVERABLES_EDIT}>
+              <AcceleratorDeliverablesEdit />
+            </Route>
+            <Route path={APP_PATHS.ACCELERATOR_DELIVERABLES_VIEW}>
               <AcceleratorDeliverablesView />
+            </Route>
+            <Route path={APP_PATHS.ACCELERATOR_DELIVERABLES}>
+              <AcceleratorDeliverablesList />
             </Route>
             <Route path={APP_PATHS.ACCELERATOR_MODULE_CONTENT}>
               <AcceleratorModuleContentView />

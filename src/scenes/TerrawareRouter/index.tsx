@@ -44,6 +44,8 @@ import MyAccountRouter from 'src/scenes/MyAccountRouter';
 import ObservationsRouter from 'src/scenes/ObservationsRouter';
 import OptInFeaturesView from 'src/scenes/OptInFeatures';
 import RedirectsRouter from 'src/scenes/RedirectsRouter';
+import DeliverablesRouter from 'src/scenes/DeliverablesRouter';
+import isEnabled from 'src/features';
 
 interface TerrawareRouterProps {
   showNavBar: boolean;
@@ -91,6 +93,8 @@ const TerrawareRouter = ({ showNavBar, setShowNavBar }: TerrawareRouterProps) =>
   const projects: Project[] | undefined = useAppSelector(selectProjects);
 
   const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
+
+  const featureFlagDeliverables = isEnabled('Deliverables MVP');
 
   const reloadSpecies = useCallback(() => {
     void dispatch(requestSpecies(selectedOrganization.id));
@@ -292,6 +296,12 @@ const TerrawareRouter = ({ showNavBar, setShowNavBar }: TerrawareRouterProps) =>
             <Route path={APP_PATHS.OBSERVATIONS}>
               <ObservationsRouter />
             </Route>
+
+            {featureFlagDeliverables && (
+              <Route path={APP_PATHS.DELIVERABLES}>
+                <DeliverablesRouter />
+              </Route>
+            )}
 
             {!isProduction && (
               <Route exact path={APP_PATHS.OPT_IN}>
