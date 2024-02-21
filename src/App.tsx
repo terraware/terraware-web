@@ -21,6 +21,7 @@ import AppBootstrap from 'src/AppBootstrap';
 import NoOrgRouter from 'src/scenes/NoOrgRouter';
 import TerrawareRouter from 'src/scenes/TerrawareRouter';
 import AcceleratorRouter from 'src/scenes/AcceleratorRouter';
+import isEnabled from 'src/features';
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -82,6 +83,8 @@ function AppContent() {
 
   const [showNavBar, setShowNavBar] = useState(true);
 
+  const featureFlagAccelerator = isEnabled('Accelerator');
+
   useEffect(() => {
     if (organizations?.length === 0 && MINIMAL_USER_ROUTES.indexOf(location.pathname) === -1) {
       history.push(APP_PATHS.WELCOME);
@@ -110,7 +113,11 @@ function AppContent() {
       <div className={classes.container}>
         {organizations.length === 0 ? (
           <NoOrgRouter />
-        ) : isAcceleratorRoute && user && isAcceleratorAdmin(user) && isAdmin(selectedOrganization) ? (
+        ) : isAcceleratorRoute &&
+          featureFlagAccelerator &&
+          user &&
+          isAcceleratorAdmin(user) &&
+          isAdmin(selectedOrganization) ? (
           <AcceleratorRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
         ) : (
           <TerrawareRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />

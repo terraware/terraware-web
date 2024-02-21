@@ -14,6 +14,7 @@ import Link from 'src/components/common/Link';
 import AcceleratorBreadcrumbs from 'src/components/TopBar/AcceleratorBreadcrumbs';
 import { APP_PATHS } from 'src/constants';
 import { isAcceleratorAdmin } from 'src/types/User';
+import isEnabled from 'src/features';
 
 const useStyles = makeStyles((theme: Theme) => ({
   logo: {
@@ -65,6 +66,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   const { isDesktop } = useDeviceInfo();
   const { user } = useUser();
   const isAcceleratorRoute = useRouteMatch(APP_PATHS.ACCELERATOR);
+  const featureFlagAccelerator = isEnabled('Accelerator');
 
   const onHandleLogout = () => {
     window.location.href = `/sso/logout`;
@@ -82,7 +84,9 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         {organizations && organizations.length > 0 && (
           <>
             <div className={classes.separator} />
-            {isAcceleratorRoute && user && isAcceleratorAdmin(user) && <AcceleratorBreadcrumbs />}
+            {isAcceleratorRoute && featureFlagAccelerator && user && isAcceleratorAdmin(user) && (
+              <AcceleratorBreadcrumbs />
+            )}
             <OrganizationsDropdown />
           </>
         )}
