@@ -45,10 +45,7 @@ export default function Exclusions({ onValidate, site }: ExclusionsProps): JSX.E
   const { activeLocale } = useLocalization();
   const snackbar = useSnackbar();
 
-  const exclusions = useMemo<FeatureCollection | undefined>(
-    () => exclusionsData?.exclusions,
-    [exclusionsData?.exclusions]
-  );
+  const exclusions = exclusionsData?.exclusions;
 
   useEffect(() => {
     if (onValidate) {
