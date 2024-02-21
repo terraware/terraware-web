@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/65</span>
+                <span class='fraction'>0/62</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/50</span>
+                <span class='fraction'>0/48</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/60</span>
+                <span class='fraction'>0/57</span>
             </div>
         
             
@@ -280,9 +280,12 @@
 <a name='L215'></a><a href='#L215'>215</a>
 <a name='L216'></a><a href='#L216'>216</a>
 <a name='L217'></a><a href='#L217'>217</a>
-<a name='L218'></a><a href='#L218'>218</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L218'></a><a href='#L218'>218</a>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a>
+<a name='L223'></a><a href='#L223'>223</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -321,13 +324,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -502,14 +512,12 @@ import { makeStyles } from '@mui/styles';
 import { Box, Typography, useTheme } from '@mui/material';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
 import strings from 'src/strings';
-import { PlantingZone, MinimalPlantingSite } from 'src/types/Tracking';
+import { MinimalPlantingSite, MinimalPlantingZone } from 'src/types/Tracking';
 import { MapEntityId, MapSourceProperties } from 'src/types/Map';
 import { ZoneAggregation } from 'src/types/Observations';
-import { useAppSelector } from 'src/redux/store';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { regexMatch } from 'src/utils/search';
 import { PlantingSiteMap } from 'src/components/Map';
-import { searchPlantingSiteZones } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import { MapService } from 'src/services';
@@ -532,26 +540,33 @@ export const useMapTooltipStyles = <span class="cstat-no" title="statement not c
 }));
 &nbsp;
 type BoundariesAndZonesProps = {
+  data: ZoneAggregation[];
   plantingSite: MinimalPlantingSite;
+  search: string;
+  setSearch: (query: string) =&gt; void;
   setView?: (view: View) =&gt; void;
   view?: View;
+  zoneViewUrl: string;
 };
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >BoundariesAndZones(</span>{ plantingSite, setView, view }: BoundariesAndZonesProps): JSX.Element {
-  const [search, setSearch] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
+export default function <span class="fstat-no" title="function not covered" >BoundariesAndZones(</span>{
+  data,
+  plantingSite,
+  search,
+  setSearch,
+  setView,
+  view,
+  zoneViewUrl,
+}: BoundariesAndZonesProps): JSX.Element {
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-&nbsp;
-  const data = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >    searchPlantingSiteZones(state, plantingSite.id, view === 'map' ? '' : search.trim())</span>
-  );
 &nbsp;
   const searchProps = <span class="cstat-no" title="statement not covered" >useMemo&lt;SearchProps&gt;(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
       search,
       onSearch: <span class="fstat-no" title="function not covered" >(v</span>alue: string) =&gt; <span class="cstat-no" title="statement not covered" >setSearch(value),</span>
     }),
-    [search]
+    [search, setSearch]
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
@@ -570,7 +585,7 @@ export default function <span class="fstat-no" title="function not covered" >Bou
           initialView={'map'}
           onView={<span class="fstat-no" title="function not covered" >(n</span>ewView) =&gt; <span class="cstat-no" title="statement not covered" >setView?.(newView)}</span>
           search={&lt;Search {...searchProps} /&gt;}
-          list={&lt;PlantingSiteDetailsTable data={data} plantingSite={plantingSite} /&gt;}
+          list={&lt;PlantingSiteDetailsTable data={data} plantingSite={plantingSite} zoneViewUrl={zoneViewUrl} /&gt;}
           map={&lt;PlantingSiteMapView plantingSite={plantingSite} data={data} search={search.trim()} /&gt;}
         /&gt;
       )}
@@ -603,7 +618,7 @@ function <span class="fstat-no" title="function not covered" >PlantingSiteMapVie
 <span class="cstat-no" title="statement not covered" >      setSearchZoneEntities([]);</span>
     } else {
       const entities = <span class="cstat-no" title="statement not covered" >data</span>
-        .filter(<span class="fstat-no" title="function not covered" >(z</span>one: PlantingZone) =&gt; <span class="cstat-no" title="statement not covered" >regexMatch(zone.name, search))</span>
+        .filter(<span class="fstat-no" title="function not covered" >(z</span>one: MinimalPlantingZone) =&gt; <span class="cstat-no" title="statement not covered" >regexMatch(zone.name, search))</span>
         .map(<span class="fstat-no" title="function not covered" >(z</span>one) =&gt; (<span class="cstat-no" title="statement not covered" >{ sourceId: 'zones', id: zone.id })</span>);
 <span class="cstat-no" title="statement not covered" >      setSearchZoneEntities(entities);</span>
     }
@@ -721,7 +736,7 @@ const contextRenderer =
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-21T23:09:54.581Z
+                at 2024-02-21T23:45:39.048Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
@@ -189,7 +189,10 @@
 <a name='L124'></a><a href='#L124'>124</a>
 <a name='L125'></a><a href='#L125'>125</a>
 <a name='L126'></a><a href='#L126'>126</a>
-<a name='L127'></a><a href='#L127'>127</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -257,32 +260,35 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -322,7 +328,6 @@ import getDateDisplayValue from '@terraware/web-components/utils/date';
 import strings from 'src/strings';
 import { SubzoneAggregation, ZoneAggregation } from 'src/types/Observations';
 import { MinimalPlantingSite } from 'src/types/Tracking';
-import { APP_PATHS } from 'src/constants';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import Link from 'src/components/common/Link';
@@ -336,6 +341,7 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 type PlantingSiteDetailsTableProps = {
   data: ZoneAggregation[];
   plantingSite: MinimalPlantingSite;
+  zoneViewUrl: string;
 };
 &nbsp;
 const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
@@ -382,7 +388,11 @@ const columns = <span class="cstat-no" title="statement not covered" ><span clas
   },
 ];
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >PlantingSiteDetailsTable(</span>{ data, plantingSite }: PlantingSiteDetailsTableProps): JSX.Element {
+export default function <span class="fstat-no" title="function not covered" >PlantingSiteDetailsTable(</span>{
+  data,
+  plantingSite,
+  zoneViewUrl,
+}: PlantingSiteDetailsTableProps): JSX.Element {
   const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const defaultTimeZone = <span class="cstat-no" title="statement not covered" >useDefaultTimeZone();</span>
 &nbsp;
@@ -395,23 +405,22 @@ export default function <span class="fstat-no" title="function not covered" >Pla
         columns={columns}
         rows={data}
         orderBy='name'
-        Renderer={DetailsRenderer(classes, timeZone, plantingSite.id)}
+        Renderer={DetailsRenderer(classes, timeZone, plantingSite.id, zoneViewUrl)}
       /&gt;
     &lt;/Box&gt;
   );
 }
 &nbsp;
 const DetailsRenderer =
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  (c</span>lasses: any, timeZone: string, plantingSiteId: number) =&gt;</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  (c</span>lasses: any, timeZone: string, plantingSiteId: number, zoneViewUrl: string) =&gt;</span>
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  (p</span>rops: RendererProps&lt;TableRowType&gt;): JSX.Element =&gt; {</span>
     const { column, row, value } = <span class="cstat-no" title="statement not covered" >props;</span>
 &nbsp;
     const createLinkToZone = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-      const url = <span class="cstat-no" title="statement not covered" >APP_PATHS.PLANTING_SITES_ZONE_VIEW.replace(':plantingSiteId', plantingSiteId.toString()).replace(</span>
-        ':zoneId',
-        row.id.toString()
-      );
-<span class="cstat-no" title="statement not covered" >      return &lt;Link to={url}&gt;{row.name as React.ReactNode}&lt;/Link&gt;;</span>
+      const url = <span class="cstat-no" title="statement not covered" >zoneViewUrl</span>
+        .replace(':plantingSiteId', plantingSiteId.toString())
+        .replace(':zoneId', row.id.toString());
+<span class="cstat-no" title="statement not covered" >      return &lt;Link to={url}&gt;{(row.name || '--') as React.ReactNode}&lt;/Link&gt;;</span>
     };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (column.key === 'name') {</span>
@@ -448,7 +457,7 @@ const DetailsRenderer =
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-21T23:09:54.581Z
+                at 2024-02-21T23:45:39.048Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
