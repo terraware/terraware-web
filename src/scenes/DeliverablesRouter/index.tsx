@@ -4,9 +4,7 @@ import DeliverablesEdit from './DeliverablesEdit';
 import DeliverablesView from './DeliverablesView';
 import DeliverablesList from './DeliverablesList';
 
-const DeliverablesRouter = ({ reloadTracking }: PlantingSitesProps): JSX.Element => {
-  const userDrawnDetailedSites = isEnabled('User Detailed Sites');
-
+const DeliverablesRouter = (): JSX.Element => {
   return (
     <Switch>
       <Route path={APP_PATHS.DELIVERABLES_EDIT}>

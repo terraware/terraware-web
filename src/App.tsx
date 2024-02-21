@@ -83,7 +83,7 @@ function AppContent() {
 
   const [showNavBar, setShowNavBar] = useState(true);
 
-  const featureFlagDeliverables = isEnabled('Deliverables MVP');
+  const featureFlagAccelerator = isEnabled('Accelerator');
 
   useEffect(() => {
     if (organizations?.length === 0 && MINIMAL_USER_ROUTES.indexOf(location.pathname) === -1) {
@@ -113,7 +113,11 @@ function AppContent() {
       <div className={classes.container}>
         {organizations.length === 0 ? (
           <NoOrgRouter />
-        ) : isAcceleratorRoute && featureFlagDeliverables && user && isAcceleratorAdmin(user) && isAdmin(selectedOrganization) ? (
+        ) : isAcceleratorRoute &&
+          featureFlagAccelerator &&
+          user &&
+          isAcceleratorAdmin(user) &&
+          isAdmin(selectedOrganization) ? (
           <AcceleratorRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
         ) : (
           <TerrawareRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />

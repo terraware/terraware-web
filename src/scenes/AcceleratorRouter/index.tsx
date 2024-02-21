@@ -8,6 +8,8 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStateLocation from 'src/utils/useStateLocation';
 import { getRgbaFromHex } from 'src/utils/color';
 import AcceleratorDeliverablesView from 'src/scenes/AcceleratorRouter/AcceleratorDeliverablesView';
+import AcceleratorDeliverablesEdit from 'src/scenes/AcceleratorRouter/AcceleratorDeliverablesEdit';
+import AcceleratorDeliverablesList from 'src/scenes/AcceleratorRouter/AcceleratorDeliverablesList';
 import AcceleratorModuleContentView from 'src/scenes/AcceleratorRouter/AcceleratorModuleContentView';
 import AcceleratorOverviewView from 'src/scenes/AcceleratorRouter/AcceleratorOverviewView';
 import AcceleratorPeopleView from 'src/scenes/AcceleratorRouter/AcceleratorPeopleView';

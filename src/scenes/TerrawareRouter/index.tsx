@@ -45,7 +45,6 @@ import ObservationsRouter from 'src/scenes/ObservationsRouter';
 import OptInFeaturesView from 'src/scenes/OptInFeatures';
 import RedirectsRouter from 'src/scenes/RedirectsRouter';
 import DeliverablesRouter from 'src/scenes/DeliverablesRouter';
-import isEnabled from 'src/features';
 
 interface TerrawareRouterProps {
   showNavBar: boolean;
@@ -85,6 +84,7 @@ const TerrawareRouter = ({ showNavBar, setShowNavBar }: TerrawareRouterProps) =>
   const location = useStateLocation();
   const { selectedOrganization } = useOrganization();
   const featureFlagProjects = isEnabled('Projects');
+  const featureFlagAccelerator = isEnabled('Accelerator');
   const classes = useStyles();
 
   const species = useAppSelector(selectSpecies);
@@ -93,8 +93,6 @@ const TerrawareRouter = ({ showNavBar, setShowNavBar }: TerrawareRouterProps) =>
   const projects: Project[] | undefined = useAppSelector(selectProjects);
 
   const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
-
-  const featureFlagDeliverables = isEnabled('Deliverables MVP');
 
   const reloadSpecies = useCallback(() => {
     void dispatch(requestSpecies(selectedOrganization.id));
@@ -297,7 +295,7 @@ const TerrawareRouter = ({ showNavBar, setShowNavBar }: TerrawareRouterProps) =>
               <ObservationsRouter />
             </Route>
 
-            {featureFlagDeliverables && (
+            {featureFlagAccelerator && (
               <Route path={APP_PATHS.DELIVERABLES}>
                 <DeliverablesRouter />
               </Route>
