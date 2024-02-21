@@ -7,6 +7,7 @@ import { useLocalization } from 'src/providers';
 import { PlantingSite } from 'src/types/Tracking';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+import { searchPlantingSiteZones } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
 import { requestPlantingSite } from 'src/redux/features/tracking/trackingThunks';
 import DeletePlantingSiteModal from 'src/scenes/PlantingSitesRouter/edit/DeletePlantingSiteModal';
 import GenericSiteView from './GenericSiteView';
@@ -36,6 +37,8 @@ export default function PlantingSiteView(): JSX.Element {
           editUrl={APP_PATHS.PLANTING_SITES_EDIT}
           onDelete={() => setDeleteModalOpen(true)}
           plantingSite={plantingSite}
+          selector={searchPlantingSiteZones}
+          zoneViewUrl={APP_PATHS.PLANTING_SITES_ZONE_VIEW}
         />
       )}
     </TfMain>

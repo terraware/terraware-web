@@ -58,7 +58,7 @@ export default function PlantingSiteZoneView(): JSX.Element {
 
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, Number(plantingSiteId)));
   const plantingZone = useAppSelector((state) =>
-    searchPlantingSiteMonitoringPlots(state, Number(plantingSiteId), Number(zoneId), Number(subzoneId), '')
+    searchPlantingSiteMonitoringPlots(state, Number(plantingSiteId), Number(zoneId), Number(subzoneId), search.trim())
   );
 
   const timeZone = plantingSite?.timeZone ?? defaultTimeZone.get().id;

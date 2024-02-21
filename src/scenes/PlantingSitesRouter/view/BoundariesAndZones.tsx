@@ -3,14 +3,12 @@ import { makeStyles } from '@mui/styles';
 import { Box, Typography, useTheme } from '@mui/material';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
 import strings from 'src/strings';
-import { PlantingZone, MinimalPlantingSite } from 'src/types/Tracking';
+import { MinimalPlantingSite, MinimalPlantingZone } from 'src/types/Tracking';
 import { MapEntityId, MapSourceProperties } from 'src/types/Map';
 import { ZoneAggregation } from 'src/types/Observations';
-import { useAppSelector } from 'src/redux/store';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { regexMatch } from 'src/utils/search';
 import { PlantingSiteMap } from 'src/components/Map';
-import { searchPlantingSiteZones } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
 import { MapService } from 'src/services';
@@ -33,26 +31,33 @@ export const useMapTooltipStyles = makeStyles(() => ({
 }));
 
 type BoundariesAndZonesProps = {
+  data: ZoneAggregation[];
   plantingSite: MinimalPlantingSite;
+  search: string;
+  setSearch: (query: string) => void;
   setView?: (view: View) => void;
   view?: View;
+  zoneViewUrl: string;
 };
 
-export default function BoundariesAndZones({ plantingSite, setView, view }: BoundariesAndZonesProps): JSX.Element {
-  const [search, setSearch] = useState<string>('');
+export default function BoundariesAndZones({
+  data,
+  plantingSite,
+  search,
+  setSearch,
+  setView,
+  view,
+  zoneViewUrl,
+}: BoundariesAndZonesProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-
-  const data = useAppSelector((state) =>
-    searchPlantingSiteZones(state, plantingSite.id, view === 'map' ? '' : search.trim())
-  );
 
   const searchProps = useMemo<SearchProps>(
     () => ({
       search,
       onSearch: (value: string) => setSearch(value),
     }),
-    [search]
+    [search, setSearch]
   );
 
   return (
@@ -71,7 +76,7 @@ export default function BoundariesAndZones({ plantingSite, setView, view }: Boun
           initialView={'map'}
           onView={(newView) => setView?.(newView)}
           search={<Search {...searchProps} />}
-          list={<PlantingSiteDetailsTable data={data} plantingSite={plantingSite} />}
+          list={<PlantingSiteDetailsTable data={data} plantingSite={plantingSite} zoneViewUrl={zoneViewUrl} />}
           map={<PlantingSiteMapView plantingSite={plantingSite} data={data} search={search.trim()} />}
         />
       )}
@@ -104,7 +109,7 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
       setSearchZoneEntities([]);
     } else {
       const entities = data
-        .filter((zone: PlantingZone) => regexMatch(zone.name, search))
+        .filter((zone: MinimalPlantingZone) => regexMatch(zone.name, search))
         .map((zone) => ({ sourceId: 'zones', id: zone.id }));
       setSearchZoneEntities(entities);
     }

@@ -14,6 +14,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useAppSelector } from 'src/redux/store';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+import { searchPlantingSiteZones } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
 import PageSnackbar from 'src/components/PageSnackbar';
 import { PlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
 import { View } from 'src/components/common/ListMapSelector';
@@ -48,7 +49,11 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
   const [onValidate, setOnValidate] = useState<((hasErrors: boolean) => void) | undefined>(undefined);
   const [plantingSeasons, setPlantingSeasons] = useState<UpdatedPlantingSeason[]>();
   const [view, setView] = useState<View>('map');
+  const [search, setSearch] = useState<string>('');
   const selectedPlantingSite = useAppSelector((state) => selectPlantingSite(state, Number(plantingSiteId)));
+  const data = useAppSelector((state) =>
+    searchPlantingSiteZones(state, Number(plantingSiteId), view === 'map' ? '' : search.trim())
+  );
 
   const defaultPlantingSite = (): PlantingSite => ({
     id: -1,
@@ -190,7 +195,17 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
                     setPlantingSeasons={setPlantingSeasons}
                     setRecord={setRecord}
                   />
-                  {record?.plantingZones && <BoundariesAndZones plantingSite={record} setView={setView} view={view} />}
+                  {record?.plantingZones && (
+                    <BoundariesAndZones
+                      data={data}
+                      plantingSite={record}
+                      search={search}
+                      setSearch={setSearch}
+                      setView={setView}
+                      view={view}
+                      zoneViewUrl={APP_PATHS.PLANTING_SITES_ZONE_VIEW}
+                    />
+                  )}
                   {!record?.plantingZones && (
                     <Grid container flexGrow={1}>
                       <Grid item xs={12} display='flex'>

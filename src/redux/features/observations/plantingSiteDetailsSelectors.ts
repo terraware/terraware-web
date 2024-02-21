@@ -1,4 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
+import { createCachedSelector } from 're-reselect';
 import { RootState } from 'src/redux/rootReducer';
 import { Aggregation, ZoneAggregation } from 'src/types/Observations';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
@@ -124,13 +125,13 @@ export const selectPlantingSubzone = createSelector(
       selectPlantingZone(state, plantingSiteId, zoneId),
     (state: RootState, plantingSiteId: number, zoneId: number, subzoneId: number) => subzoneId,
   ],
-  (zone, subzoneId) => {
+  (zone, subzoneId): ZoneAggregation | undefined => {
     const subzone = zone?.plantingSubzones.find((sz) => sz.id === subzoneId);
     if (subzone) {
       return {
         ...zone,
         plantingSubzones: [subzone],
-      };
+      } as ZoneAggregation;
     } else {
       return undefined;
     }
@@ -140,10 +141,13 @@ export const selectPlantingSubzone = createSelector(
 /**
  * Search zones by name
  */
-export const searchPlantingSiteZones = (state: RootState, plantingSiteId: number, query: string) => {
-  const data = selectPlantingSiteZones(state, plantingSiteId);
-  return (query ? data?.filter((datum) => regexMatch(datum.name, query)) : data) ?? [];
-};
+export const searchPlantingSiteZones = createCachedSelector(
+  (state: RootState, plantingSiteId: number, query: string) => {
+    const data = selectPlantingSiteZones(state, plantingSiteId);
+    return (query ? data?.filter((datum) => regexMatch(datum.name, query)) : data) ?? [];
+  },
+  (data) => data
+)((state: RootState, plantingSiteId: number, query: string) => `${plantingSiteId}_${query}`);
 
 /**
  * Search subzones by name
@@ -164,28 +168,28 @@ export const searchPlantingSiteSubzones = (state: RootState, plantingSiteId: num
 /**
  * Search monitoring plots by name
  */
-export const searchPlantingSiteMonitoringPlots = (
-  state: RootState,
-  plantingSiteId: number,
-  zoneId: number,
-  subzoneId: number,
-  query: string
-) => {
-  const data = selectPlantingSubzone(state, plantingSiteId, zoneId, subzoneId);
+export const searchPlantingSiteMonitoringPlots = createCachedSelector(
+  (state: RootState, plantingSiteId: number, zoneId: number, subzoneId: number, query: string) => query,
+  (state: RootState, plantingSiteId: number, zoneId: number, subzoneId: number, query: string) =>
+    selectPlantingSubzone(state, plantingSiteId, zoneId, subzoneId),
+  (query, data): ZoneAggregation | undefined => {
+    if (!query || !data) {
+      return data;
+    }
 
-  if (!query || !data) {
-    return data;
+    const subzone = data.plantingSubzones[0];
+
+    return {
+      ...data,
+      plantingSubzones: [
+        {
+          ...subzone,
+          monitoringPlots: subzone.monitoringPlots.filter((plot) => regexMatch(plot.monitoringPlotName, query)),
+        },
+      ],
+    } as ZoneAggregation;
   }
-
-  const subzone = data.plantingSubzones[0];
-
-  return {
-    ...data,
-    plantingSubzones: [
-      {
-        ...subzone,
-        monitoringPlots: subzone.monitoringPlots.filter((plot) => regexMatch(plot.monitoringPlotName, query)),
-      },
-    ],
-  };
-};
+)(
+  (state: RootState, plantingSiteId: number, zoneId: number, subzoneId: number, query: string) =>
+    `${plantingSiteId}_${zoneId}_${subzoneId}_${query}`
+);

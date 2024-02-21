@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Box, Typography, Grid, Theme, useTheme, List, ListItem } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { RootState } from 'src/redux/rootReducer';
 import { DateTime } from 'luxon';
 import { Button, DropdownItem } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -10,7 +11,9 @@ import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import { PlantingSeason, MinimalPlantingSite } from 'src/types/Tracking';
+import { ZoneAggregation } from 'src/types/Observations';
 import { useProjects } from 'src/hooks/useProjects';
+import { useAppSelector } from 'src/redux/store';
 import PageSnackbar from 'src/components/PageSnackbar';
 import BoundariesAndZones from './BoundariesAndZones';
 import BackToLink from 'src/components/common/BackToLink';
@@ -35,6 +38,8 @@ export type GenericSiteViewProps<T extends MinimalPlantingSite> = {
   editUrl: string;
   onDelete: () => void;
   plantingSite: T;
+  selector: (state: RootState, plantingSiteId: number, query: string) => ZoneAggregation[];
+  zoneViewUrl: string;
 };
 
 export default function GenericSiteView<T extends MinimalPlantingSite>({
@@ -42,6 +47,8 @@ export default function GenericSiteView<T extends MinimalPlantingSite>({
   editUrl,
   onDelete,
   plantingSite,
+  selector,
+  zoneViewUrl,
 }: GenericSiteViewProps<T>): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const classes = useStyles();
@@ -49,9 +56,11 @@ export default function GenericSiteView<T extends MinimalPlantingSite>({
   const history = useHistory();
   const tz = useLocationTimeZone().get(plantingSite);
   const [plantingSeasons, setPlantingSeasons] = useState<PlantingSeason[]>([]);
+  const [search, setSearch] = useState<string>('');
   const [view, setView] = useState<View>('map');
   const projectsEnabled = isEnabled('Projects');
   const { selectedProject } = useProjects(plantingSite);
+  const data = useAppSelector((state) => selector(state, plantingSite.id, view === 'map' ? '' : search.trim()));
 
   const gridSize = () => {
     if (isMobile) {
@@ -178,7 +187,15 @@ export default function GenericSiteView<T extends MinimalPlantingSite>({
           )}
         </Grid>
         {plantingSite.boundary && plantingSite.plantingZones && (
-          <BoundariesAndZones plantingSite={plantingSite} setView={setView} view={view} />
+          <BoundariesAndZones
+            data={data}
+            plantingSite={plantingSite}
+            search={search}
+            setSearch={setSearch}
+            setView={setView}
+            view={view}
+            zoneViewUrl={zoneViewUrl}
+          />
         )}
         {plantingSite.boundary && !plantingSite.plantingZones && (
           <Grid container flexGrow={1}>

@@ -3,6 +3,7 @@ import { BusySpinner } from '@terraware/web-components';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
 import { APP_PATHS } from 'src/constants';
 import { useUser } from 'src/providers';
+import { searchDraftPlantingSiteZones } from 'src/redux/features/draftPlantingSite/draftPlantingSiteSelectors';
 import useDraftPlantingSite from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteGet';
 import TfMain from 'src/components/common/TfMain';
 import GenericSiteView from './GenericSiteView';
@@ -20,6 +21,8 @@ export default function PlantingSiteDraftView(): JSX.Element {
           editUrl={APP_PATHS.PLANTING_SITES_DRAFT_EDIT}
           onDelete={() => window.alert('WIP')}
           plantingSite={result.site}
+          selector={searchDraftPlantingSiteZones}
+          zoneViewUrl={APP_PATHS.PLANTING_SITES_DRAFT_ZONE_VIEW}
         />
       </TfMain>
     );
