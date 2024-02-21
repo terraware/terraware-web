@@ -1,12 +1,7 @@
 import env from 'src/utils/useEnvironment';
 import { CachedUserService } from 'src/services';
 
-export type FeatureName =
-  | 'Show Production View'
-  | 'Projects'
-  | 'User Detailed Sites'
-  | 'Deliverables MVP'
-  | 'Accelerator Console';
+export type FeatureName = 'Show Production View' | 'Projects' | 'User Detailed Sites' | 'Accelerator';
 
 export type Feature = {
   name: FeatureName;
@@ -59,21 +54,12 @@ export const OPT_IN_FEATURES: Feature[] = [
     disclosure: ['This is WIP'],
   },
   {
-    name: 'Deliverables MVP',
-    preferenceName: 'enableDeliverablesMVP',
+    name: 'Accelerator',
+    preferenceName: 'enableAccelerator',
     active: true,
     enabled: false,
     allowInternalProduction: false,
     description: ['Document uploads for Phase-0 support'],
-    disclosure: ['This is WIP'],
-  },
-  {
-    name: 'Accelerator Console',
-    preferenceName: 'enableAcceleratorConsole',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Accelerator console for cohort support.'],
     disclosure: ['This is WIP'],
   },
 ];
