@@ -103,7 +103,7 @@ export default function CohortForm<T extends CreateCohortRequest | UpdateCohortR
           <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
             <Dropdown
               required
-              label={strings.CREATE_ORGANIZATION_QUESTION_ORGANIZATION_TYPE}
+              label={strings.CURRENT_PHASE}
               onChange={(value) => updateField('phase', value)}
               selectedValue={localRecord.phase}
               options={currentPhaseDropdownOptions}
