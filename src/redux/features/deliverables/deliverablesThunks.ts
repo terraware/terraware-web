@@ -4,7 +4,7 @@ import { SearchCriteria, SearchSortOrder } from 'src/types/Search';
 import DeliverablesService from 'src/services/DeliverablesService';
 import { setDeliverableListAction } from 'src/redux/features/deliverables/deliverablesSlice';
 
-export const requestDeliverables = (
+export const requestDeliverableList = (
   organizationId: number,
   searchCriteria?: SearchCriteria,
   sortOrder?: SearchSortOrder
