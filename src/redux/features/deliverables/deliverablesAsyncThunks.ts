@@ -31,9 +31,7 @@ export const requestDeliverablesSearch = createAsyncThunk(
 
 export const requestDeliverableFetch = createAsyncThunk(
   'deliverables/fetch-one',
-  async (request: { deliverableId: number }, { rejectWithValue }) => {
-    const { deliverableId } = request;
-
+  async (deliverableId: number, { rejectWithValue }) => {
     const response: Response & DeliverableData = await DeliverablesService.getDeliverable(deliverableId);
     if (response && response.requestSucceeded) {
       return response.deliverable;

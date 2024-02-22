@@ -4,7 +4,7 @@ import {
   SearchResponseDeliverableAdmin,
   SearchResponseDeliverableBase,
 } from 'src/services/DeliverablesService';
-import { buildReducers, setStatus } from 'src/redux/features/asyncUtils';
+import { buildReducers, setStatus, Statuses } from 'src/redux/features/asyncUtils';
 import {
   requestDeliverableFetch,
   requestDeliverablesSearch,
@@ -34,24 +34,14 @@ export const deliverablesSearchReducer = deliverablesSearchSlice.reducer;
 /**
  * Individual Deliverable
  */
-const initialStateDeliverable: { [key: number | string]: Deliverable } = {};
+const initialStateDeliverable: { [key: number | string]: { status: Statuses; data: Deliverable } } = {};
 
 export const deliverablesSlice = createSlice({
   name: 'deliverablesSearchSlice',
   initialState: initialStateDeliverable,
   reducers: {},
   extraReducers: (builder) => {
-    builder
-      .addCase(requestDeliverableFetch.pending, setStatus('pending'))
-      .addCase(requestDeliverableFetch.fulfilled, (state, action) => {
-        setStatus('success')(state, action);
-        // Allows for the deliverable to be selected by ID
-        const deliverableId = action.meta.arg.deliverableId;
-        if (action.payload) {
-          state[deliverableId] = action.payload;
-        }
-      })
-      .addCase(requestDeliverableFetch.rejected, setStatus('error'));
+    buildReducers(requestDeliverableFetch, true)(builder);
   },
 });
 
