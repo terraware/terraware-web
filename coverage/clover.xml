@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1708559139558" clover="3.2.0">
-  <project timestamp="1708559139558" name="All files">
-    <metrics statements="16355" coveredstatements="550" conditionals="10536" coveredconditionals="154" methods="5123" coveredmethods="124" elements="32014" coveredelements="828" complexity="0" loc="16355" ncloc="16355" packages="133" files="657" classes="657"/>
+<coverage generated="1708560660147" clover="3.2.0">
+  <project timestamp="1708560660147" name="All files">
+    <metrics statements="16373" coveredstatements="550" conditionals="10544" coveredconditionals="154" methods="5127" coveredmethods="124" elements="32044" coveredelements="828" complexity="0" loc="16373" ncloc="16373" packages="133" files="658" classes="658"/>
     <package name="src">
       <metrics statements="174" coveredstatements="0" conditionals="127" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -13699,7 +13699,26 @@
       </file>
     </package>
     <package name="src.scenes.PlantingSitesRouter.edit">
-      <metrics statements="277" coveredstatements="0" conditionals="153" coveredconditionals="0" methods="84" coveredmethods="0"/>
+      <metrics statements="293" coveredstatements="0" conditionals="159" coveredconditionals="0" methods="87" coveredmethods="0"/>
+      <file name="DeleteDraftPlantingSiteModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantingSitesRouter/edit/DeleteDraftPlantingSiteModal.tsx">
+        <metrics statements="16" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+      </file>
       <file name="DeletePlantingSiteModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantingSitesRouter/edit/DeletePlantingSiteModal.tsx">
         <metrics statements="15" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="21" count="0" type="stmt"/>
@@ -14685,7 +14704,7 @@
       </file>
     </package>
     <package name="src.scenes.PlantingSitesRouter.view">
-      <metrics statements="281" coveredstatements="0" conditionals="211" coveredconditionals="0" methods="103" coveredmethods="0"/>
+      <metrics statements="283" coveredstatements="0" conditionals="213" coveredconditionals="0" methods="104" coveredmethods="0"/>
       <file name="BoundariesAndZones.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantingSitesRouter/view/BoundariesAndZones.tsx">
         <metrics statements="57" coveredstatements="0" conditionals="48" coveredconditionals="0" methods="25" coveredmethods="0"/>
         <line num="22" count="0" type="stmt"/>
@@ -14842,14 +14861,16 @@
         <line num="128" count="0" type="stmt"/>
       </file>
       <file name="PlantingSiteDraftView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantingSitesRouter/view/PlantingSiteDraftView.tsx">
-        <metrics statements="7" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="12" count="0" type="stmt"/>
-        <line num="13" count="0" type="stmt"/>
+        <metrics statements="9" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="14" count="0" type="stmt"/>
-        <line num="16" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
-        <line num="22" count="0" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
+        <line num="19" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
       </file>
       <file name="PlantingSiteDraftZoneView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantingSitesRouter/view/PlantingSiteDraftZoneView.tsx">
         <metrics statements="5" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
