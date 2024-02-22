@@ -25,10 +25,10 @@ export default function CohortForm<T extends CreateCohortRequest | UpdateCohortR
   const [validateFields, setValidateFields] = useState<boolean>(false);
 
   const currentPhaseDropdownOptions = [
-    { label: strings.COHORT_PHASE_0, value: 'Phase 0 - Due Diligence' },
-    { label: strings.COHORT_PHASE_1, value: 'Phase 1 - Feasibility Study' },
-    { label: strings.COHORT_PHASE_2, value: 'Phase 2 - Plan and Scale' },
-    { label: strings.COHORT_PHASE_3, value: 'Phase 3 - Implement and Monitor' },
+    { label: strings.COHORT_PHASE_DUE_DILIGENCE, value: 'Phase 0 - Due Diligence' },
+    { label: strings.COHORT_PHASE_FEASIBILITY_STUDY, value: 'Phase 1 - Feasibility Study' },
+    { label: strings.COHORT_PHASE_PLAN_AND_SCALE, value: 'Phase 2 - Plan and Scale' },
+    { label: strings.COHORT_PHASE_IMPLEMENT_AND_MONITOR, value: 'Phase 3 - Implement and Monitor' },
   ];
 
   const updateField = (field: keyof T, value: any) => {
