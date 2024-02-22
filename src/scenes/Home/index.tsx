@@ -3,7 +3,7 @@ import { Container, Grid } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import PageCard from 'src/components/common/PageCard';
-import PageHeader from 'src/components/seeds/PageHeader';
+import PageHeader from 'src/components/PageHeader';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';

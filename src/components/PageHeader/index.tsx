@@ -1,9 +1,8 @@
 import React from 'react';
-import Title from '../common/Title';
-import PageSnackbar from 'src/components/PageSnackbar';
 import { Container, Grid, Box, Typography, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import strings from '../../strings';
+import Title from 'src/components/common/Title';
+import PageSnackbar from 'src/components/PageSnackbar';
 import BackToLink from 'src/components/common/BackToLink';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -34,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   back: {
     marginBottom: theme.spacing(3),
   },
-  backToAccessions: {
+  backToLink: {
     marginLeft: 0,
     marginBottom: theme.spacing(3),
   },
@@ -44,14 +43,16 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 interface Props {
-  title?: string | string[];
-  subtitle?: string | React.ReactNode;
+  back?: boolean;
+  backName?: string;
+  backUrl?: string;
   children?: React.ReactNode[];
-  rightComponent?: React.ReactNode;
   page?: string;
   parentPage?: string;
-  back?: boolean;
-  backUrl?: string;
+  rightComponent?: React.ReactNode;
+  snackbarPageKey?: string;
+  subtitle?: string | React.ReactNode;
+  title?: string | string[];
   titleClassName?: string;
 }
 
@@ -61,9 +62,11 @@ export default function PageHeader({
   children,
   rightComponent,
   back,
+  backName,
   backUrl,
   page,
   parentPage,
+  snackbarPageKey,
   titleClassName,
 }: Props): JSX.Element {
   const classes = useStyles();
@@ -79,14 +82,8 @@ export default function PageHeader({
     <Container maxWidth={false} className={classes.mainContainer}>
       <Grid container spacing={0} className={classes.container}>
         <Grid item xs={12}>
-          {back && backUrl && (
-            <BackToLink
-              id='back'
-              to={backUrl}
-              className={classes.backToAccessions}
-              replace={back}
-              name={strings.ACCESSIONS}
-            />
+          {back && backUrl && backName && (
+            <BackToLink id='back' to={backUrl} className={classes.backToLink} replace={back} name={backName} />
           )}
         </Grid>
         {page && parentPage && title && (
@@ -114,7 +111,7 @@ export default function PageHeader({
                 </Typography>
               )}
             </Box>
-            <PageSnackbar pageKey='seeds' />
+            <PageSnackbar pageKey={snackbarPageKey} />
             {children}
           </div>
         </Grid>
