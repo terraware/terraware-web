@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Container, Grid, useTheme } from '@mui/material';
 import { Dropdown, Textfield } from '@terraware/web-components';
-import strings from 'src/strings';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageForm from 'src/components/common/PageForm';
-import { CreateCohortRequest, UpdateCohortRequest } from 'src/scenes/AcceleratorRouter/AcceleratorCohortNewView';
+import strings from 'src/strings';
+import { CreateCohortRequest, UpdateCohortRequest } from 'src/types/Cohort';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 type CohortFormProps<T extends CreateCohortRequest | UpdateCohortRequest> = {
   onNext: (cohort: T) => void;
@@ -25,10 +25,10 @@ export default function CohortForm<T extends CreateCohortRequest | UpdateCohortR
   const [validateFields, setValidateFields] = useState<boolean>(false);
 
   const currentPhaseDropdownOptions = [
-    { label: strings.COHORT_PHASE_0, value: 0 },
-    { label: strings.COHORT_PHASE_1, value: 1 },
-    { label: strings.COHORT_PHASE_2, value: 2 },
-    { label: strings.COHORT_PHASE_3, value: 3 },
+    { label: strings.COHORT_PHASE_0, value: 'Phase 0 - Due Diligence' },
+    { label: strings.COHORT_PHASE_1, value: 'Phase 1 - Feasibility Study' },
+    { label: strings.COHORT_PHASE_2, value: 'Phase 2 - Plan and Scale' },
+    { label: strings.COHORT_PHASE_3, value: 'Phase 3 - Implement and Monitor' },
   ];
 
   const updateField = (field: keyof T, value: any) => {
@@ -43,7 +43,9 @@ export default function CohortForm<T extends CreateCohortRequest | UpdateCohortR
       return false;
     }
 
-    // TODO: check for currentPhase value
+    if (!localRecord.phase) {
+      return false;
+    }
 
     return true;
   };
@@ -102,11 +104,11 @@ export default function CohortForm<T extends CreateCohortRequest | UpdateCohortR
             <Dropdown
               required
               label={strings.CREATE_ORGANIZATION_QUESTION_ORGANIZATION_TYPE}
-              onChange={(value) => updateField('currentPhase', value)}
-              selectedValue={localRecord.currentPhase}
+              onChange={(value) => updateField('phase', value)}
+              selectedValue={localRecord.phase}
               options={currentPhaseDropdownOptions}
               fullWidth={true}
-              errorText={validateFields && typeof localRecord?.currentPhase !== 'number' ? strings.REQUIRED_FIELD : ''}
+              errorText={validateFields && !localRecord?.phase ? strings.REQUIRED_FIELD : ''}
             />
           </Grid>
         </Grid>
