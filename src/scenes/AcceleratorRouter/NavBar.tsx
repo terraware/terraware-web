@@ -85,14 +85,13 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
         selected={!!isAcceleratorPeopleRoute}
       />
 
-      {false && (
-        <NavItem
-          id='module-content'
-          label={strings.MODULE_CONTENT}
-          onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_MODULE_CONTENT)}
-          selected={!!isAcceleratorModuleContentRoute}
-        />
-      )}
+      <NavItem
+        icon='iconFolder'
+        id='module-content'
+        label={strings.MODULE_CONTENT}
+        onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_MODULE_CONTENT)}
+        selected={!!isAcceleratorModuleContentRoute}
+      />
 
       <NavFooter>
         <NavItem
