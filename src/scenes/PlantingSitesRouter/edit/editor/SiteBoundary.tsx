@@ -20,7 +20,6 @@ import { boundingAreaHectares, defaultZonePayload } from './utils';
 import { OnValidate } from './types';
 
 export type SiteBoundaryProps = {
-  isSimpleSite: boolean;
   onValidate?: OnValidate;
   site: DraftPlantingSite;
 };
@@ -33,7 +32,7 @@ const featureSiteBoundary = (id: number, boundary?: MultiPolygon): FeatureCollec
         features: [toFeature(boundary, {}, id)],
       };
 
-export default function SiteBoundary({ isSimpleSite, onValidate, site }: SiteBoundaryProps): JSX.Element {
+export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): JSX.Element {
   const [description, setDescription] = useState<Description[]>([]);
   const [siteBoundary, setSiteBoundary, undo, redo] = useUndoRedoState<FeatureCollection | undefined>(
     featureSiteBoundary(site.id, site.boundary)
@@ -109,7 +108,7 @@ export default function SiteBoundary({ isSimpleSite, onValidate, site }: SiteBou
             return defaultZonePayload({
               boundary: zoneBoundary,
               id: index,
-              name: isSimpleSite ? `${strings.ZONE}${index || ''}` : '',
+              name: `${strings.ZONE}${index + 1}`,
               targetPlantingDensity: 1500,
             });
           }
@@ -117,7 +116,7 @@ export default function SiteBoundary({ isSimpleSite, onValidate, site }: SiteBou
         onValidate.apply(false, { boundary, plantingZones });
       }
     }
-  }, [boundary, errorAnnotations, isSimpleSite, onValidate, site.id, siteBoundary, snackbar]);
+  }, [boundary, errorAnnotations, onValidate, site.id, siteBoundary, snackbar]);
 
   useEffect(() => {
     if (!activeLocale) {

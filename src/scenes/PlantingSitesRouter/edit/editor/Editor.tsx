@@ -5,7 +5,7 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, Message } from '@terraware/web-components';
 import strings from 'src/strings';
 import { PlantingSeason, UpdatedPlantingSeason } from 'src/types/Tracking';
-import { DraftPlantingSite } from 'src/types/PlantingSite';
+import { DraftPlantingSite, OptionalSiteEditStep } from 'src/types/PlantingSite';
 import { SiteEditStep } from 'src/types/PlantingSite';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
@@ -41,6 +41,34 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+/**
+ * Check if user has already completed certain steps and mark them as completed.
+ */
+const initializeOptionalStepsStatus = (site: DraftPlantingSite): Record<OptionalSiteEditStep, boolean> => {
+  const status: Record<OptionalSiteEditStep, boolean> = {
+    exclusion_areas: false,
+    zone_boundaries: false,
+    subzone_boundaries: false,
+  };
+
+  if (site.exclusion) {
+    // if we have an exclusion, mark this optional step as completed
+    status.exclusion_areas = true;
+  }
+
+  if (site.plantingZones) {
+    const numZones = site.plantingZones.length;
+    const numSubzones = site.plantingZones.flatMap((zone) => zone.plantingSubzones).length;
+
+    // if we have more than just the default zone, mark this optional step as completed
+    status.zone_boundaries = numZones > 1;
+    // if we have more than just the default subzones, mark this optional step as completed
+    status.subzone_boundaries = numSubzones > numZones;
+  }
+
+  return status;
+};
+
 export default function Editor(props: EditorProps): JSX.Element {
   const { site } = props;
   const { siteEditStep, siteType } = site;
@@ -56,8 +84,8 @@ export default function Editor(props: EditorProps): JSX.Element {
   const [onValidate, setOnValidate] = useState<OnValidate | undefined>();
   const [showStartOver, setShowStartOver] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<SiteEditStep>(siteEditStep);
-  const [completedOptionalSteps, setCompletedOptionalSteps] = useState<Record<SiteEditStep, boolean>>(
-    {} as Record<SiteEditStep, boolean>
+  const [completedOptionalSteps, setCompletedOptionalSteps] = useState<Record<OptionalSiteEditStep, boolean>>(
+    initializeOptionalStepsStatus(site)
   );
   const [plantingSite, setPlantingSite, onChange] = useForm({ ...site });
   const [plantingSeasons, setPlantingSeasons] = useState<UpdatedPlantingSeason[]>(site.plantingSeasons);
@@ -97,7 +125,7 @@ export default function Editor(props: EditorProps): JSX.Element {
       return [];
     }
 
-    const isCompleted = (optionalStep: SiteEditStep) => completedOptionalSteps[optionalStep] ?? false;
+    const isCompleted = (optionalStep: OptionalSiteEditStep) => completedOptionalSteps[optionalStep] ?? false;
 
     const simpleSiteSteps: PlantingSiteStep[] = [
       {
@@ -211,7 +239,6 @@ export default function Editor(props: EditorProps): JSX.Element {
    */
   const onStartOver = () => {
     const nextStep = 'site_boundary';
-    const optionalSteps = {} as Record<SiteEditStep, boolean>;
     const redirect = false;
 
     const draft: DraftPlantingSite = {
@@ -223,6 +250,8 @@ export default function Editor(props: EditorProps): JSX.Element {
       plantingZones: undefined,
       siteEditStep: nextStep,
     };
+
+    const optionalSteps = initializeOptionalStepsStatus(draft);
 
     updateDraft({ draft, nextStep, optionalSteps }, redirect);
     setShowStartOver(false);
@@ -305,9 +334,7 @@ export default function Editor(props: EditorProps): JSX.Element {
                 site={plantingSite}
               />
             )}
-            {currentStep === 'site_boundary' && (
-              <SiteBoundary isSimpleSite={isSimpleSite} onValidate={onValidate} site={plantingSite} />
-            )}
+            {currentStep === 'site_boundary' && <SiteBoundary onValidate={onValidate} site={plantingSite} />}
             {currentStep === 'exclusion_areas' && <Exclusions onValidate={onValidate} site={plantingSite} />}
             {currentStep === 'zone_boundaries' && <Zones onValidate={onValidate} site={plantingSite} />}
             {currentStep === 'subzone_boundaries' && <Subzones onValidate={onValidate} site={plantingSite} />}
