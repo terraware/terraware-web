@@ -1229,7 +1229,7 @@ export interface components {
       quantity: number;
     };
     CohortListResponsePayload: {
-      cohort: components["schemas"]["CohortPayload"][];
+      cohorts: components["schemas"]["CohortPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
     CohortPayload: {
