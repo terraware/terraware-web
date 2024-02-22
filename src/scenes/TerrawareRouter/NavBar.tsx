@@ -66,12 +66,15 @@ export default function NavBar({
     }
   }, [isDesktop, setShowNavBar]);
 
-  const closeAndNavigateTo = useCallback((path: string) => {
-    closeNavBar();
-    if (path) {
-      history.push(path);
-    }
-  }, [closeNavBar, history]);
+  const closeAndNavigateTo = useCallback(
+    (path: string) => {
+      closeNavBar();
+      if (path) {
+        history.push(path);
+      }
+    },
+    [closeNavBar, history]
+  );
 
   const checkNurseryWithdrawals = useCallback(() => {
     NurseryWithdrawalService.hasNurseryWithdrawals(selectedOrganization.id).then((result: boolean) => {
@@ -108,6 +111,8 @@ export default function NavBar({
     if (featureFlagAccelerator && isAdmin(selectedOrganization)) {
       // TODO fetch 1 deliverable to indicate presence
       setHasDeliverables(true);
+    } else {
+      setHasDeliverables(false);
     }
   }, [featureFlagAccelerator, selectedOrganization]);
 
@@ -139,21 +144,21 @@ export default function NavBar({
     return showNurseryWithdrawals ? [inventoryMenu, withdrawalLogMenu] : [inventoryMenu];
   };
 
-  const reportsMenu = useMemo<JSX.Element | null>(() =>
-    reports.length > 0 && selectedOrganization.canSubmitReports
-    ? (
+  const reportsMenu = useMemo<JSX.Element | null>(
+    () =>
+      reports.length > 0 && selectedOrganization.canSubmitReports ? (
         <NavItem
           icon='iconGraphReport'
           label={strings.REPORTS}
           selected={!!isReportsRoute}
           onClick={() => {
-          closeAndNavigateTo(APP_PATHS.REPORTS);
+            closeAndNavigateTo(APP_PATHS.REPORTS);
           }}
           id='reports-list'
         />
-      )
-    : null
-  , [closeAndNavigateTo, isReportsRoute, reports.length, selectedOrganization.canSubmitReports]);
+      ) : null,
+    [closeAndNavigateTo, isReportsRoute, reports.length, selectedOrganization.canSubmitReports]
+  );
 
   return (
     <Navbar

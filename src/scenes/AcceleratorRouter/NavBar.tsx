@@ -58,6 +58,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
       )}
 
       <NavItem
+        icon='home'
         id='overview'
         label={strings.OVERVIEW}
         onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_OVERVIEW)}
@@ -67,6 +68,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
       <NavSection />
 
       <NavItem
+        icon='organizationNav'
         id='deliverables'
         label={strings.DELIVERABLES}
         onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_DELIVERABLES)}
@@ -76,17 +78,21 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
       <NavSection />
 
       <NavItem
+        icon='peopleNav'
         id='people'
         label={strings.PEOPLE}
         onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_PEOPLE)}
         selected={!!isAcceleratorPeopleRoute}
       />
-      <NavItem
-        id='module-content'
-        label={strings.MODULE_CONTENT}
-        onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_MODULE_CONTENT)}
-        selected={!!isAcceleratorModuleContentRoute}
-      />
+
+      {false && (
+        <NavItem
+          id='module-content'
+          label={strings.MODULE_CONTENT}
+          onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_MODULE_CONTENT)}
+          selected={!!isAcceleratorModuleContentRoute}
+        />
+      )}
 
       <NavFooter>
         <NavItem
