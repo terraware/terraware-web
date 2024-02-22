@@ -26,8 +26,8 @@ export const requestSaveBatch = createAsyncThunk(
       if (batch.accessionId) {
         // Extra validation to ensure an accession ID matches the given species
         if (batch.accessionId && batch.speciesId) {
-          const orgIdSpeciedId = `${organizationId}-${batch.speciesId}`;
-          const accessionsResponseData = (getState() as RootState).accessions[orgIdSpeciedId] || {};
+          const orgIdSpeciesId = `${organizationId}-${batch.speciesId}`;
+          const accessionsResponseData = (getState() as RootState).accessions[orgIdSpeciesId] || {};
           if (
             !(accessionsResponseData.accessions || []).find(
               (accession: SearchResponseAccession) => Number(accession.id) === batch.accessionId

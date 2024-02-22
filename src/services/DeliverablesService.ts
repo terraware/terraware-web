@@ -1,5 +1,6 @@
-import SearchService from './SearchService';
 import { SearchCriteria, SearchRequestPayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import SearchService from 'src/services/SearchService';
+import { Response } from 'src/services/HttpService';
 
 /**
  * Accelerator "deliverable" related services
@@ -34,6 +35,10 @@ export type Deliverable = {
   deliverableContent: string;
 };
 
+export type DeliverableData = {
+  deliverable: Deliverable | null;
+};
+
 export type SearchResponseDeliverableBase = {
   documentCount: number;
   id: number;
@@ -52,33 +57,36 @@ const SEARCH_FIELDS_DELIVERABLES_BASE = ['documentCount', 'id', 'name', 'project
 
 const SEARCH_FIELDS_DELIVERABLES_ADMIN = [...SEARCH_FIELDS_DELIVERABLES_BASE, 'category', 'description'];
 
-const getDeliverable = async (deliverableId: number): Promise<Deliverable> => {
+const getDeliverable = async (deliverableId: number): Promise<Response & DeliverableData> => {
   // TODO replace with axios
   return {
-    id: 1,
-    documents: [
-      {
-        name: 'Upload 1',
-        description: 'Some description for the upload',
-        dateUploaded: '2024-02-15',
-      },
-    ],
-    category: 'Legal',
-    status: 'Not Submitted',
-    name: 'Company Formation Document',
-    projectName: 'Treemendo.us',
-    // TODO need to figure out if we are going to allow raw HTML or just have regular text
-    deliverableContent:
-      'The Company Formation Document is to confirm the entity is properly formed and registered in the country.\n' +
-      '\n' +
-      'Depending on your jurisdiction, this document may be called a Certificate of Incorporation or a Business Registration Certificate, for example.\n' +
-      '\n' +
-      'Submit:\n' +
-      'A document issued by the relevant authority in your jurisdiction that contains the following information:\n' +
-      'Company Name\n' +
-      'Legal Form / Structure – (e.g. corporation, limited liability company, etc.)\n' +
-      'Date of Formation/Incorporation\n' +
-      'Company Number (if applicable)',
+    requestSucceeded: true,
+    deliverable: {
+      id: 1,
+      documents: [
+        {
+          name: 'Upload 1',
+          description: 'Some description for the upload',
+          dateUploaded: '2024-02-15',
+        },
+      ],
+      category: 'Legal',
+      status: 'Not Submitted',
+      name: 'Company Formation Document',
+      projectName: 'Treemendo.us',
+      // TODO need to figure out if we are going to allow raw HTML or just have regular text
+      deliverableContent:
+        'The Company Formation Document is to confirm the entity is properly formed and registered in the country.\n' +
+        '\n' +
+        'Depending on your jurisdiction, this document may be called a Certificate of Incorporation or a Business Registration Certificate, for example.\n' +
+        '\n' +
+        'Submit:\n' +
+        'A document issued by the relevant authority in your jurisdiction that contains the following information:\n' +
+        'Company Name\n' +
+        'Legal Form / Structure – (e.g. corporation, limited liability company, etc.)\n' +
+        'Date of Formation/Incorporation\n' +
+        'Company Number (if applicable)',
+    },
   };
 };
 
