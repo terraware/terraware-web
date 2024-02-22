@@ -56,9 +56,9 @@ const AcceleratorOverviewView = () => {
                 <Button id='new-cohort' label={strings.ADD_COHORT} icon='plus' onClick={goToNewCohort} size='medium' />
               )}
             </Grid>
-            <PageSnackbar />
           </Grid>
         </PageHeaderWrapper>
+        <PageSnackbar />
       </Grid>
     </AcceleratorMain>
   );
