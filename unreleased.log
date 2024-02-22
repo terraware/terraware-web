@@ -1,3 +1,4 @@
+020f71ae80 SW-4874 Initialize completion status of optional steps when editing a draft site (#2174)
 ca9c6fd6e2 SW-4845 Add search for draft sites and list them in planting sites table (#2173)
 d2aec4101f SW-4848 Add support to delete a draft planting site (#2171)
 95dcd8f50c SW-4871 Add support for draft sites in BoundariesAndZones component  (#2170)
