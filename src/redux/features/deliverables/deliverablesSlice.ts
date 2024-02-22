@@ -1,9 +1,14 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import {
   Deliverable,
   SearchResponseDeliverableAdmin,
   SearchResponseDeliverableBase,
 } from 'src/services/DeliverablesService';
+import { buildReducers, setStatus } from 'src/redux/features/asyncUtils';
+import {
+  requestDeliverableFetch,
+  requestDeliverablesSearch,
+} from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 
 /**
  * Deliverable list
@@ -13,49 +18,41 @@ export type DeliverablesResponseData = {
   deliverables?: (SearchResponseDeliverableAdmin | SearchResponseDeliverableBase)[];
 };
 
-const initialStateDeliverableList: Record<number, DeliverablesResponseData> = {};
+const initialStateDeliverablesSearch: { [key: string]: DeliverablesResponseData } = {};
 
-// `orgId` will be -1 for the admin records
-type SetDeliverableListPayload = { organizationId: number; data: DeliverablesResponseData };
-
-export const deliverableListSlice = createSlice({
-  name: 'deliverableListSlice',
-  initialState: initialStateDeliverableList,
-  reducers: {
-    setDeliverableListAction: (state, action: PayloadAction<SetDeliverableListPayload>) => {
-      const payload: SetDeliverableListPayload = action.payload;
-      state[payload.organizationId] = payload.data;
-    },
+export const deliverablesSearchSlice = createSlice({
+  name: 'deliverablesSearchSlice',
+  initialState: initialStateDeliverablesSearch,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestDeliverablesSearch)(builder);
   },
 });
 
-export const { setDeliverableListAction } = deliverableListSlice.actions;
-
-export const deliverableListReducer = deliverableListSlice.reducer;
+export const deliverablesSearchReducer = deliverablesSearchSlice.reducer;
 
 /**
  * Individual Deliverable
  */
-export type DeliverableResponseData = {
-  error?: string | true;
-  deliverable?: Deliverable;
-};
-
-const initialStateDeliverable: Record<number, DeliverableResponseData> = {};
-
-type SetDeliverablePayload = { deliverableId: number; data: DeliverableResponseData };
+const initialStateDeliverable: { [key: number | string]: Deliverable } = {};
 
 export const deliverablesSlice = createSlice({
-  name: 'deliverableListSlice',
+  name: 'deliverablesSearchSlice',
   initialState: initialStateDeliverable,
-  reducers: {
-    setDeliverableAction: (state, action: PayloadAction<SetDeliverablePayload>) => {
-      const payload: SetDeliverablePayload = action.payload;
-      state[payload.deliverableId] = payload.data;
-    },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(requestDeliverableFetch.pending, setStatus('pending'))
+      .addCase(requestDeliverableFetch.fulfilled, (state, action) => {
+        setStatus('success')(state, action);
+        // Allows for the deliverable to be selected by ID
+        const deliverableId = action.meta.arg.deliverableId;
+        if (action.payload) {
+          state[deliverableId] = action.payload;
+        }
+      })
+      .addCase(requestDeliverableFetch.rejected, setStatus('error'));
   },
 });
-
-export const { setDeliverableAction } = deliverablesSlice.actions;
 
 export const deliverablesReducer = deliverablesSlice.reducer;
