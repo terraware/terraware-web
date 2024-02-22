@@ -1257,6 +1257,7 @@ SITE_EXCLUSION_AREAS_DESCRIPTION_0,"Deben excluirse las zonas dentro de los lím
 SITE_EXCLUSION_AREAS_DESCRIPTION_1,"Use la herramienta {0} de dibujo para dibujar las áreas de exclusión de su sitio de plantación (vea un [tutorial]). Si no hay áreas a excluir, haga clic en ""{1}"".",
 SITE_EXCLUSION_AREAS_DESCRIPTION_2,Excluya las áreas de su sitio de plantación dibujando figuras dentro de o superpuestas al límite del sitio de plantación. Complete las figuras del área de exclusión dando doble clic o un clic otra vez sobre el punto de partida.,
 SITE_EXCLUSION_AREAS_OPTIONAL,Zonas de exclusión (opcional),
+SITE_EXCLUSION_ERRORS,Hay errores en el límite de exclusión.,
 SITE_LOCATION,Ubicación del sitio,
 SITE_MAP,Mapa del sitio,
 SITE_SUBZONE_BOUNDARIES,Límites de las subzonas,
