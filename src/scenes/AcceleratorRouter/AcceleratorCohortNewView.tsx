@@ -6,9 +6,20 @@ import { APP_PATHS } from 'src/constants';
 import AcceleratorMain from 'src/scenes/AcceleratorRouter/AcceleratorMain';
 import CohortForm from 'src/scenes/AcceleratorRouter/CohortForm';
 import strings from 'src/strings';
-import { CreateProjectRequest } from 'src/types/Project';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
+
+export type CreateCohortRequest = {
+  currentPhase: 0 | 1 | 2 | 3;
+  name: string;
+  organizationId: number;
+};
+
+export type UpdateCohortRequest = {
+  currentPhase: 0 | 1 | 2 | 3;
+  name: string;
+  organizationId: number;
+};
 
 type AcceleratorCohortNewViewProps = {
   reloadData?: () => void;
@@ -20,8 +31,8 @@ export default function AcceleratorCohortNewView({ reloadData }: AcceleratorCoho
   const [isBusy, setIsBusy] = useState<boolean>(false);
   const snackbar = useSnackbar();
 
-  const [record, setRecord] = useForm<CreateProjectRequest>({
-    // currentPhase: '',
+  const [record, setRecord] = useForm<CreateCohortRequest>({
+    currentPhase: 0,
     name: '',
     organizationId: 1,
   });
@@ -66,7 +77,7 @@ export default function AcceleratorCohortNewView({ reloadData }: AcceleratorCoho
 
       {isBusy && <BusySpinner withSkrim={true} />}
 
-      <CohortForm<CreateProjectRequest> cohort={record} onCancel={goToAcceleratorOverview} onNext={createNewCohort} />
+      <CohortForm<CreateCohortRequest> cohort={record} onCancel={goToAcceleratorOverview} onNext={createNewCohort} />
     </AcceleratorMain>
   );
 }

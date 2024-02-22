@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { Container, Grid, useTheme } from '@mui/material';
-import { Textfield } from '@terraware/web-components';
+import { Dropdown, Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageForm from 'src/components/common/PageForm';
-import { CreateProjectRequest, UpdateProjectRequest } from 'src/types/Project';
+import { CreateCohortRequest, UpdateCohortRequest } from 'src/scenes/AcceleratorRouter/AcceleratorCohortNewView';
 
-type CohortFormProps<T extends CreateProjectRequest | UpdateProjectRequest> = {
+type CohortFormProps<T extends CreateCohortRequest | UpdateCohortRequest> = {
   onNext: (cohort: T) => void;
   cohort: T;
   onCancel: () => void;
   saveText?: string;
 };
 
-export default function CohortForm<T extends CreateProjectRequest | UpdateProjectRequest>(
+export default function CohortForm<T extends CreateCohortRequest | UpdateCohortRequest>(
   props: CohortFormProps<T>
 ): JSX.Element {
   const { onNext, onCancel, saveText = strings.SAVE, cohort } = props;
@@ -23,6 +23,13 @@ export default function CohortForm<T extends CreateProjectRequest | UpdateProjec
 
   const [localRecord, setLocalRecord] = useState<T>(cohort);
   const [validateFields, setValidateFields] = useState<boolean>(false);
+
+  const currentPhaseDropdownOptions = [
+    { label: strings.COHORT_CURRENT_PHASE_0, value: 0 },
+    { label: strings.COHORT_CURRENT_PHASE_1, value: 1 },
+    { label: strings.COHORT_CURRENT_PHASE_2, value: 2 },
+    { label: strings.COHORT_CURRENT_PHASE_3, value: 3 },
+  ];
 
   const updateField = (field: keyof T, value: any) => {
     setLocalRecord((prev) => ({
@@ -92,7 +99,15 @@ export default function CohortForm<T extends CreateProjectRequest | UpdateProjec
             />
           </Grid>
           <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
-            TODO: Add "Current Phase" dropdown here
+            <Dropdown
+              required
+              label={strings.CREATE_ORGANIZATION_QUESTION_ORGANIZATION_TYPE}
+              onChange={(value) => updateField('currentPhase', value)}
+              selectedValue={localRecord.currentPhase}
+              options={currentPhaseDropdownOptions}
+              fullWidth={true}
+              errorText={validateFields && typeof localRecord?.currentPhase !== 'number' ? strings.REQUIRED_FIELD : ''}
+            />
           </Grid>
         </Grid>
       </Container>
