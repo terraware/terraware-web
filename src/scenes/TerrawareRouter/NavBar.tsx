@@ -34,6 +34,7 @@ export default function NavBar({
   const { isDesktop } = useDeviceInfo();
   const history = useHistory();
   const featureFlagProjects = isEnabled('Projects');
+  const featureFlagAccelerator = isEnabled('Accelerator');
   const { user } = useUser();
 
   const isAccessionDashboardRoute = useRouteMatch(APP_PATHS.SEEDS_DASHBOARD + '/');
@@ -135,7 +136,7 @@ export default function NavBar({
       setShowNavBar={setShowNavBar as React.Dispatch<React.SetStateAction<boolean>>}
       backgroundTransparent={backgroundTransparent}
     >
-      {user && isAcceleratorAdmin(user) && (
+      {featureFlagAccelerator && user && isAcceleratorAdmin(user) && (
         <NavItem
           label={strings.ACCELERATOR_ADMIN}
           icon='home'
