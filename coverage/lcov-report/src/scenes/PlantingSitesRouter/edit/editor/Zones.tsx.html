@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/134</span>
+                <span class='fraction'>0/138</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/72</span>
+                <span class='fraction'>0/74</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/126</span>
+                <span class='fraction'>0/128</span>
             </div>
         
             
@@ -491,7 +491,29 @@
 <a name='L426'></a><a href='#L426'>426</a>
 <a name='L427'></a><a href='#L427'>427</a>
 <a name='L428'></a><a href='#L428'>428</a>
-<a name='L429'></a><a href='#L429'>429</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L429'></a><a href='#L429'>429</a>
+<a name='L430'></a><a href='#L430'>430</a>
+<a name='L431'></a><a href='#L431'>431</a>
+<a name='L432'></a><a href='#L432'>432</a>
+<a name='L433'></a><a href='#L433'>433</a>
+<a name='L434'></a><a href='#L434'>434</a>
+<a name='L435'></a><a href='#L435'>435</a>
+<a name='L436'></a><a href='#L436'>436</a>
+<a name='L437'></a><a href='#L437'>437</a>
+<a name='L438'></a><a href='#L438'>438</a>
+<a name='L439'></a><a href='#L439'>439</a>
+<a name='L440'></a><a href='#L440'>440</a>
+<a name='L441'></a><a href='#L441'>441</a>
+<a name='L442'></a><a href='#L442'>442</a>
+<a name='L443'></a><a href='#L443'>443</a>
+<a name='L444'></a><a href='#L444'>444</a>
+<a name='L445'></a><a href='#L445'>445</a>
+<a name='L446'></a><a href='#L446'>446</a>
+<a name='L447'></a><a href='#L447'>447</a>
+<a name='L448'></a><a href='#L448'>448</a>
+<a name='L449'></a><a href='#L449'>449</a>
+<a name='L450'></a><a href='#L450'>450</a>
+<a name='L451'></a><a href='#L451'>451</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -522,6 +544,28 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -921,7 +965,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
-import { Feature, FeatureCollection } from 'geojson';
+import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
 import { Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
 import { MinimalPlantingZone } from 'src/types/Tracking';
@@ -959,6 +1003,28 @@ export type ZonesProps = {
   site: DraftPlantingSite;
 };
 &nbsp;
+/**
+ * Create a draft site with edited polygons, for error checking.
+ * @param site
+ *   Site is the original draft site this worflow started with.
+ * @return a callback function (using above params in the closure)
+ *   A callback function which accepts new cut zone geometries,
+ *   and should return a version of the draft planting site accounting
+ *   for the potentially new zone boundaries.
+ */
+const createDraftSiteWith = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>ite: DraftPlantingSite) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(c</span>utZones: GeometryFeature[]) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span></span>
+  ...site,
+  plantingZones: cutZones.map(<span class="fstat-no" title="function not covered" >(z</span>one, index) =&gt;
+<span class="cstat-no" title="statement not covered" >    defaultZonePayload({</span>
+      boundary: toMultiPolygon(zone.geometry) as MultiPolygon,
+      id: index,
+      name: `${index}`, // temporary name for error checking
+      targetPlantingDensity: zone.properties?.targetPlantingDensity ?? 1500,
+    })
+  ),
+});
+&nbsp;
+// create zone feature collections from the site
 const featureSiteZones = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>ite: DraftPlantingSite): FeatureCollection | undefined =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  if (site.plantingZones) {</span>
     const features = <span class="cstat-no" title="statement not covered" >site.plantingZones.map(plantingZoneToFeature);</span>
@@ -1105,7 +1171,7 @@ export default function <span class="fstat-no" title="function not covered" >Zon
     ) as JSX.Element[];
   }, [activeLocale]);
 &nbsp;
-  const onEditableBoundaryChanged = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>ditableBoundary?: FeatureCollection) =&gt; {</span>
+  const onEditableBoundaryChanged = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (editableBoundary?: FeatureCollection) =&gt; {</span>
     // pick the latest geometry that was drawn
     const cutWithFeature = <span class="cstat-no" title="statement not covered" >getLatestFeature(zonesData?.editableBoundary, editableBoundary);</span>
 &nbsp;
@@ -1151,11 +1217,11 @@ export default function <span class="fstat-no" title="function not covered" >Zon
       }));
     };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    cutOverlappingBoundaries(</span>
+<span class="cstat-no" title="statement not covered" >    await cutOverlappingBoundaries(</span>
       {
         cutWithFeature,
-        errorText: strings.SITE_ZONE_BOUNDARY_TOO_SMALL,
-        minimumSideDimension: 100,
+        errorCheckLevel: 'zone',
+        createDraftSiteWith: createDraftSiteWith(site),
         source: zones,
       },
       onSuccess,
@@ -1354,7 +1420,7 @@ const TooltipContents = <span class="cstat-no" title="statement not covered" ><s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-22T00:40:23.140Z
+                at 2024-02-22T01:12:38.311Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
