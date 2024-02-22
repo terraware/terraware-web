@@ -34,6 +34,7 @@ import {
   draftPlantingSiteCreateReducer,
   draftPlantingSiteEditReducer,
   draftPlantingSiteGetReducer,
+  draftPlantingSiteSearchReducer,
 } from 'src/redux/features/draftPlantingSite/draftPlantingSiteSlice';
 
 // assembly of app reducers
@@ -45,6 +46,7 @@ export const reducers = {
   draftPlantingSiteCreate: draftPlantingSiteCreateReducer,
   draftPlantingSiteEdit: draftPlantingSiteEditReducer,
   draftPlantingSiteGet: draftPlantingSiteGetReducer,
+  draftPlantingSiteSearch: draftPlantingSiteSearchReducer,
   message: messageReducer,
   monitoringPlots: monitoringPlotsReducer,
   observations: observationsReducer,
