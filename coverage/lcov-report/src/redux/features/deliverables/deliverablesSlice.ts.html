@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -111,20 +111,12 @@
 <a name='L46'></a><a href='#L46'>46</a>
 <a name='L47'></a><a href='#L47'>47</a>
 <a name='L48'></a><a href='#L48'>48</a>
-<a name='L49'></a><a href='#L49'>49</a>
-<a name='L50'></a><a href='#L50'>50</a>
-<a name='L51'></a><a href='#L51'>51</a>
-<a name='L52'></a><a href='#L52'>52</a>
-<a name='L53'></a><a href='#L53'>53</a>
-<a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L49'></a><a href='#L49'>49</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -141,28 +133,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -177,20 +148,28 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createSlice } from '@reduxjs/toolkit';
 import {
   Deliverable,
   SearchResponseDeliverableAdmin,
   SearchResponseDeliverableBase,
 } from 'src/services/DeliverablesService';
+import { buildReducers, Statuses } from 'src/redux/features/asyncUtils';
+import {
+  requestDeliverableFetch,
+  requestDeliverablesSearch,
+} from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 &nbsp;
 /**
  * Deliverable list
@@ -200,50 +179,32 @@ export type DeliverablesResponseData = {
   deliverables?: (SearchResponseDeliverableAdmin | SearchResponseDeliverableBase)[];
 };
 &nbsp;
-const initialStateDeliverableList: Record&lt;number, DeliverablesResponseData&gt; = <span class="cstat-no" title="statement not covered" >{};</span>
+const initialStateDeliverablesSearch: { [key: string]: DeliverablesResponseData } = <span class="cstat-no" title="statement not covered" >{};</span>
 &nbsp;
-// `orgId` will be -1 for the admin records
-type SetDeliverableListPayload = { organizationId: number; data: DeliverablesResponseData };
-&nbsp;
-export const deliverableListSlice = <span class="cstat-no" title="statement not covered" >createSlice({</span>
-  name: 'deliverableListSlice',
-  initialState: initialStateDeliverableList,
-  reducers: {
-    setDeliverableListAction: <span class="fstat-no" title="function not covered" >(s</span>tate, action: PayloadAction&lt;SetDeliverableListPayload&gt;) =&gt; {
-      const payload: SetDeliverableListPayload = <span class="cstat-no" title="statement not covered" >action.payload;</span>
-<span class="cstat-no" title="statement not covered" >      state[payload.organizationId] = payload.data;</span>
-    },
+export const deliverablesSearchSlice = <span class="cstat-no" title="statement not covered" >createSlice({</span>
+  name: 'deliverablesSearchSlice',
+  initialState: initialStateDeliverablesSearch,
+  reducers: {},
+  extraReducers: <span class="fstat-no" title="function not covered" >(b</span>uilder) =&gt; {
+<span class="cstat-no" title="statement not covered" >    buildReducers(requestDeliverablesSearch)(builder);</span>
   },
 });
 &nbsp;
-export const { setDeliverableListAction } = <span class="cstat-no" title="statement not covered" >deliverableListSlice.actions;</span>
-&nbsp;
-export const deliverableListReducer = <span class="cstat-no" title="statement not covered" >deliverableListSlice.reducer;</span>
+export const deliverablesSearchReducer = <span class="cstat-no" title="statement not covered" >deliverablesSearchSlice.reducer;</span>
 &nbsp;
 /**
  * Individual Deliverable
  */
-export type DeliverableResponseData = {
-  error?: string | true;
-  deliverable?: Deliverable;
-};
-&nbsp;
-const initialStateDeliverable: Record&lt;number, DeliverableResponseData&gt; = <span class="cstat-no" title="statement not covered" >{};</span>
-&nbsp;
-type SetDeliverablePayload = { deliverableId: number; data: DeliverableResponseData };
+const initialStateDeliverable: { [key: number | string]: { status: Statuses; data: Deliverable } } = <span class="cstat-no" title="statement not covered" >{};</span>
 &nbsp;
 export const deliverablesSlice = <span class="cstat-no" title="statement not covered" >createSlice({</span>
-  name: 'deliverableListSlice',
+  name: 'deliverablesSearchSlice',
   initialState: initialStateDeliverable,
-  reducers: {
-    setDeliverableAction: <span class="fstat-no" title="function not covered" >(s</span>tate, action: PayloadAction&lt;SetDeliverablePayload&gt;) =&gt; {
-      const payload: SetDeliverablePayload = <span class="cstat-no" title="statement not covered" >action.payload;</span>
-<span class="cstat-no" title="statement not covered" >      state[payload.deliverableId] = payload.data;</span>
-    },
+  reducers: {},
+  extraReducers: <span class="fstat-no" title="function not covered" >(b</span>uilder) =&gt; {
+<span class="cstat-no" title="statement not covered" >    buildReducers(requestDeliverableFetch, true)(builder);</span>
   },
 });
-&nbsp;
-export const { setDeliverableAction } = <span class="cstat-no" title="statement not covered" >deliverablesSlice.actions;</span>
 &nbsp;
 export const deliverablesReducer = <span class="cstat-no" title="statement not covered" >deliverablesSlice.reducer;</span>
 &nbsp;</pre></td></tr></table></pre>
@@ -253,7 +214,7 @@ export const deliverablesReducer = <span class="cstat-no" title="statement not c
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-22T21:57:50.308Z
+                at 2024-02-22T22:58:35.850Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
