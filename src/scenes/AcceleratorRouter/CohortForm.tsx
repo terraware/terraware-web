@@ -64,50 +64,50 @@ export default function CohortForm<T extends CreateCohortRequest | UpdateCohortR
   return (
     <PageForm
       cancelID='cancelNewCohort'
-      saveID='createNewCohort'
       onCancel={onCancel}
       onSave={onNextHandler}
       saveButtonText={saveText}
+      saveID='createNewCohort'
     >
       <Container
         maxWidth={false}
         sx={{
           display: 'flex',
           margin: '0 auto',
-          width: isMobile ? '100%' : '700px',
           paddingLeft: theme.spacing(isMobile ? 0 : 4),
           paddingRight: theme.spacing(isMobile ? 0 : 4),
           paddingTop: theme.spacing(5),
+          width: isMobile ? '100%' : '700px',
         }}
       >
         <Grid
           container
-          width={isMobile ? '100%' : '700px'}
           sx={{
             backgroundColor: theme.palette.TwClrBg,
             borderRadius: theme.spacing(4),
             padding: theme.spacing(3),
           }}
+          width={isMobile ? '100%' : '700px'}
         >
           <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
             <Textfield
-              id='name'
-              value={localRecord.name}
-              onChange={(value) => updateField('name', value)}
-              type='text'
-              label={strings.NAME}
               errorText={validateFields && !localRecord?.name ? strings.REQUIRED_FIELD : ''}
+              id='name'
+              label={strings.NAME}
+              onChange={(value) => updateField('name', value)}
               required
+              type='text'
+              value={localRecord.name}
             />
           </Grid>
           <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
             <Dropdown
-              required
+              fullWidth={true}
               label={strings.CURRENT_PHASE}
               onChange={(value) => updateField('phase', value)}
-              selectedValue={localRecord.phase}
               options={currentPhaseDropdownOptions}
-              fullWidth={true}
+              required
+              selectedValue={localRecord.phase}
             />
           </Grid>
         </Grid>
