@@ -7,9 +7,11 @@ import {
   createDraftPlantingSite,
   deleteDraftPlantingSite,
   getDraftPlantingSite,
+  searchDraftPlantingSites,
   updateDraftPlantingSite,
 } from 'src/services/DraftPlantingSiteService';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
+import { PlantingSiteSearchResult } from 'src/types/Tracking';
 
 /**
  * Create a draft
@@ -52,6 +54,22 @@ export const requestDeleteDraft = createAsyncThunk('requestDeleteDraft', async (
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 });
+
+/**
+ * Search drafts
+ */
+export const requestSearchDrafts = createAsyncThunk(
+  'requestSearchDrafts',
+  async (organizationId: number, { rejectWithValue }) => {
+    const response: PlantingSiteSearchResult[] | null = await searchDraftPlantingSites(organizationId);
+
+    if (response) {
+      return response;
+    } else {
+      return rejectWithValue(strings.GENERIC_ERROR);
+    }
+  }
+);
 
 /**
  * Update a draft

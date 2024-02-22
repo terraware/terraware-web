@@ -1,7 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { buildReducers, StatusT } from 'src/redux/features/asyncUtils';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
-import { requestCreateDraft, requestDeleteDraft, requestGetDraft, requestUpdateDraft } from './draftPlantingSiteThunks';
+import { PlantingSiteSearchResult } from 'src/types/Tracking';
+import {
+  requestCreateDraft,
+  requestDeleteDraft,
+  requestGetDraft,
+  requestSearchDrafts,
+  requestUpdateDraft,
+} from './draftPlantingSiteThunks';
 
 // created state
 type CreatedState = Record<string, StatusT<number>>;
@@ -43,6 +50,20 @@ const draftPlantingSiteGetSlice = createSlice({
   },
 });
 
+// search state
+type SearchState = Record<string, StatusT<PlantingSiteSearchResult[]>>;
+const initialSearchState: SearchState = {};
+
+const draftPlantingSiteSearchSlice = createSlice({
+  name: 'draftPlantingSiteSearchSlice',
+  initialState: initialSearchState,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestSearchDrafts, true)(builder);
+  },
+});
+
 export const draftPlantingSiteCreateReducer = draftPlantingSiteCreateSlice.reducer;
 export const draftPlantingSiteEditReducer = draftPlantingSiteEditSlice.reducer;
 export const draftPlantingSiteGetReducer = draftPlantingSiteGetSlice.reducer;
+export const draftPlantingSiteSearchReducer = draftPlantingSiteSearchSlice.reducer;

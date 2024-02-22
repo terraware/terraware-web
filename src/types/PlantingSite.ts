@@ -34,6 +34,7 @@ export type UpdatePlantingSubzonePayload = components['schemas']['UpdatePlanting
 
 export type SiteType = 'simple' | 'detailed';
 export type SiteEditStep = 'details' | 'site_boundary' | 'exclusion_areas' | 'zone_boundaries' | 'subzone_boundaries';
+export type OptionalSiteEditStep = Exclude<SiteEditStep, 'details' | 'site_boundary'>;
 
 export type PlantingSitesFilters = {
   projectIds?: number[];

@@ -34,7 +34,9 @@ import {
   draftPlantingSiteCreateReducer,
   draftPlantingSiteEditReducer,
   draftPlantingSiteGetReducer,
+  draftPlantingSiteSearchReducer,
 } from 'src/redux/features/draftPlantingSite/draftPlantingSiteSlice';
+import { deliverableListReducer } from 'src/redux/features/deliverables/deliverablesSlice';
 
 // assembly of app reducers
 export const reducers = {
@@ -42,32 +44,34 @@ export const reducers = {
   appVersion: appVersionReducer,
   batches: batchesReducer,
   batchesRequests: batchesRequestsReducer,
+  deliverableList: deliverableListReducer,
   draftPlantingSiteCreate: draftPlantingSiteCreateReducer,
   draftPlantingSiteEdit: draftPlantingSiteEditReducer,
   draftPlantingSiteGet: draftPlantingSiteGetReducer,
+  draftPlantingSiteSearch: draftPlantingSiteSearchReducer,
   message: messageReducer,
   monitoringPlots: monitoringPlotsReducer,
   observations: observationsReducer,
   observationsResults: observationsResultsReducer,
-  plantings: plantingsReducer,
   plantingSiteObservationsResults: plantingSiteObservationsResultsReducer,
   plantingSitesSearchResults: plantingSitesSearchResultsReducer,
+  plantings: plantingsReducer,
+  projects: projectsReducer,
+  projectsRequests: projectsRequestsReducer,
   replaceObservationPlot: replaceObservationPlotReducer,
   reportsSettings: reportsSettingsReducer,
   rescheduleObservation: rescheduleObservationReducer,
   scheduleObservation: scheduleObservationReducer,
   sitePopulation: sitePopulationReducer,
   siteReportedPlantsResults: siteReportedPlantsReducer,
+  snackbar: snackbarReducer,
   species: speciesReducer,
   speciesProjects: speciesProjectsReducer,
-  snackbar: snackbarReducer,
+  subLocations: subLocationsReducer,
   tracking: trackingReducer,
   updatePlantingCompleted: updatePlantingCompletedReducer,
   updatePlantingsCompleted: updatePlantingsCompletedReducer,
   userAnalytics: userAnalyticsReducer,
-  projects: projectsReducer,
-  projectsRequests: projectsRequestsReducer,
-  subLocations: subLocationsReducer,
 };
 const combinedReducers = combineReducers(reducers);
 

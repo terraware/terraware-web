@@ -1,5 +1,6 @@
 import { Feature } from 'geojson';
 import { GeometryFeature } from 'src/types/Map';
+import { DraftPlantingSite } from 'src/types/PlantingSite';
 import { alphabetName, cutOverlappingBoundaries, getLatestFeature, subzoneNameGenerator } from './utils';
 import {
   cutOnNoOverlapFeature,
@@ -8,7 +9,20 @@ import {
   feature2,
   featureCollection1,
   featureCollection2,
+  featureCollection3,
 } from 'src/components/Map/testdata';
+
+const createDraftSiteWith = (cutBoundaries: GeometryFeature[]): DraftPlantingSite => {
+  return {
+    createdBy: 0,
+    id: 1,
+    name: 'test',
+    organizationId: 2,
+    plantingSeasons: [],
+    siteEditStep: 'details',
+    siteType: 'simple',
+  };
+};
 
 describe('subzoneNameGenerator', () => {
   test("should return 'A' when there are no used names", () => {
@@ -86,20 +100,20 @@ describe('cutBoundaries', () => {
     cutData = [];
   });
 
-  test('should call onError when data is invalid', () => {
-    cutOverlappingBoundaries({ errorText: '', minimumSideDimension: 1 }, onSuccess, onError);
+  test('should call onError when data is invalid', async () => {
+    await cutOverlappingBoundaries({ errorCheckLevel: 'subzone', createDraftSiteWith }, onSuccess, onError);
     expect(success).toBe(0);
     expect(cutBoundaries).toBe(0);
     expect(error).toBe(1);
     expect(errorAnnotations).toBe(0);
   });
 
-  test('should call onError when cut geometry does not overlap', () => {
-    cutOverlappingBoundaries(
+  test('should call onError when cut geometry does not overlap', async () => {
+    await cutOverlappingBoundaries(
       {
         cutWithFeature: cutOnNoOverlapFeature,
-        errorText: '',
-        minimumSideDimension: 10,
+        errorCheckLevel: 'subzone',
+        createDraftSiteWith,
         source: featureCollection2,
       },
       onSuccess,
@@ -111,12 +125,12 @@ describe('cutBoundaries', () => {
     expect(errorAnnotations).toBe(0);
   });
 
-  test('should call onSuccess with cut boundaries when cut geometry does overlap', () => {
-    cutOverlappingBoundaries(
+  test('should call onSuccess with cut boundaries when cut geometry does overlap', async () => {
+    await cutOverlappingBoundaries(
       {
         cutWithFeature: cutOnOverlapFeature,
-        errorText: '',
-        minimumSideDimension: 10,
+        errorCheckLevel: 'subzone',
+        createDraftSiteWith,
         source: featureCollection2,
       },
       onSuccess,
@@ -200,13 +214,13 @@ describe('cutBoundaries', () => {
     expect(errorAnnotations).toBe(0);
   });
 
-  test('should call onError with error annotations when generated boundary sizes are too small', () => {
-    cutOverlappingBoundaries(
+  test('should call onError with error annotations when generated boundary sizes are too small', async () => {
+    await cutOverlappingBoundaries(
       {
         cutWithFeature: cutOnOverlapFeature,
-        errorText: 'too small!!',
-        minimumSideDimension: 10000000,
-        source: featureCollection2,
+        errorCheckLevel: 'zone',
+        createDraftSiteWith,
+        source: featureCollection3,
       },
       onSuccess,
       onError
@@ -223,30 +237,30 @@ describe('cutBoundaries', () => {
           coordinates: [
             [
               [
-                [5, 5],
-                [7.5, 5],
-                [7.5, 10],
-                [5, 10],
-                [5, 5],
+                [7.4999, 1],
+                [7.5, 1],
+                [7.5, 1.001],
+                [7.4999, 1.001],
+                [7.4999, 1],
               ],
             ],
           ],
         },
-        properties: { errorText: 'too small!!', fill: true },
-        id: 0,
+        properties: { errorText: '--', fill: true },
+        id: 2,
       },
       {
         type: 'Feature',
-        properties: { errorText: 'too small!!', fill: true },
+        properties: { errorText: '--', fill: true },
         geometry: {
           type: 'Polygon',
           coordinates: [
             [
-              [7.5, 5],
-              [10, 5],
-              [10, 10],
-              [7.5, 10],
-              [7.5, 5],
+              [7.5, 1],
+              [7.5001, 1],
+              [7.5001, 1.001],
+              [7.5, 1.001],
+              [7.5, 1],
             ],
           ],
         },
@@ -258,30 +272,30 @@ describe('cutBoundaries', () => {
           coordinates: [
             [
               [
-                [12.5, 5],
-                [15, 5],
-                [15, 10],
-                [12.5, 10],
-                [12.5, 5],
+                [12.5, 1],
+                [12.5001, 1],
+                [12.5001, 1.001],
+                [12.5, 1.001],
+                [12.5, 1],
               ],
             ],
           ],
         },
-        properties: { errorText: 'too small!!', fill: true },
-        id: 1,
+        properties: { errorText: '--', fill: true },
+        id: 2,
       },
       {
         type: 'Feature',
-        properties: { errorText: 'too small!!', fill: true },
+        properties: { errorText: '--', fill: true },
         geometry: {
           type: 'Polygon',
           coordinates: [
             [
-              [10, 5],
-              [12.5, 5],
-              [12.5, 10],
-              [10, 10],
-              [10, 5],
+              [12.4999, 1],
+              [12.5, 1],
+              [12.5, 1.001],
+              [12.4999, 1.001],
+              [12.4999, 1],
             ],
           ],
         },

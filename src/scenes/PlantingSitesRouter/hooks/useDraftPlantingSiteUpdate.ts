@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
-import { DraftPlantingSite, SiteEditStep } from 'src/types/PlantingSite';
+import { DraftPlantingSite, OptionalSiteEditStep, SiteEditStep } from 'src/types/PlantingSite';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Statuses } from 'src/redux/features/asyncUtils';
 import { selectDraftPlantingSiteEdit } from 'src/redux/features/draftPlantingSite/draftPlantingSiteSelectors';
@@ -22,7 +22,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 export type Data = {
   draft: DraftPlantingSite;
   nextStep: SiteEditStep;
-  optionalSteps?: Record<SiteEditStep, boolean>;
+  optionalSteps?: Record<OptionalSiteEditStep, boolean>;
 };
 
 export type Response = {
