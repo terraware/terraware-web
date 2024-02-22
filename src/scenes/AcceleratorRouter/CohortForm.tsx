@@ -7,16 +7,16 @@ import { CreateCohortRequest, UpdateCohortRequest } from 'src/types/Cohort';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 type CohortFormProps<T extends CreateCohortRequest | UpdateCohortRequest> = {
-  onNext: (cohort: T) => void;
   cohort: T;
   onCancel: () => void;
+  onNext: (cohort: T) => void;
   saveText?: string;
 };
 
 export default function CohortForm<T extends CreateCohortRequest | UpdateCohortRequest>(
   props: CohortFormProps<T>
 ): JSX.Element {
-  const { onNext, onCancel, saveText = strings.SAVE, cohort } = props;
+  const { cohort, onCancel, onNext, saveText = strings.SAVE } = props;
 
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
