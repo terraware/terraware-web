@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import SubNavbar from '@terraware/web-components/components/Navbar/SubNavbar';
 import { APP_PATHS } from 'src/constants';
@@ -17,10 +17,10 @@ import LocaleSelector from 'src/components/LocaleSelector';
 import NavFooter from 'src/components/common/Navbar/NavFooter';
 
 type NavBarProps = {
-  setShowNavBar: (value: boolean) => void;
   backgroundTransparent?: boolean;
-  withdrawalCreated?: boolean;
   hasPlantingSites?: boolean;
+  setShowNavBar: (value: boolean) => void;
+  withdrawalCreated?: boolean;
 };
 export default function NavBar({
   setShowNavBar,
@@ -31,6 +31,7 @@ export default function NavBar({
   const { selectedOrganization } = useOrganization();
   const [showNurseryWithdrawals, setShowNurseryWithdrawals] = useState<boolean>(false);
   const [reports, setReports] = useState<Reports>([]);
+  const [hasDeliverables, setHasDeliverables] = useState<boolean>(false);
   const { isDesktop } = useDeviceInfo();
   const history = useHistory();
   const featureFlagProjects = isEnabled('Projects');
@@ -41,6 +42,7 @@ export default function NavBar({
   const isAccessionsRoute = useRouteMatch(APP_PATHS.ACCESSIONS + '/');
   const isCheckinRoute = useRouteMatch(APP_PATHS.CHECKIN + '/');
   const isContactUsRoute = useRouteMatch(APP_PATHS.CONTACT_US + '/');
+  const isDeliverablesRoute = useRouteMatch(APP_PATHS.DELIVERABLES + '/');
   const isHomeRoute = useRouteMatch(APP_PATHS.HOME + '/');
   const isPeopleRoute = useRouteMatch(APP_PATHS.PEOPLE + '/');
   const isSpeciesRoute = useRouteMatch(APP_PATHS.SPECIES + '/');
@@ -58,22 +60,18 @@ export default function NavBar({
   const isObservationsRoute = useRouteMatch(APP_PATHS.OBSERVATIONS + '/');
   const isProjectsRoute = useRouteMatch(APP_PATHS.PROJECTS + '/');
 
-  const navigate = (url: string) => {
-    history.push(url);
-  };
-
-  const closeAndNavigateTo = (path: string) => {
-    closeNavBar();
-    if (path) {
-      navigate(path);
-    }
-  };
-
-  const closeNavBar = () => {
+  const closeNavBar = useCallback(() => {
     if (!isDesktop) {
       setShowNavBar(false);
     }
-  };
+  }, [isDesktop, setShowNavBar]);
+
+  const closeAndNavigateTo = useCallback((path: string) => {
+    closeNavBar();
+    if (path) {
+      history.push(path);
+    }
+  }, [closeNavBar, history]);
 
   const checkNurseryWithdrawals = useCallback(() => {
     NurseryWithdrawalService.hasNurseryWithdrawals(selectedOrganization.id).then((result: boolean) => {
@@ -100,8 +98,18 @@ export default function NavBar({
       setReports(reportsResults.reports || []);
     };
 
-    reportSearch();
-  }, [selectedOrganization.id]);
+    if (isAdmin(selectedOrganization)) {
+      // not open to contributors, will get a 403
+      reportSearch();
+    }
+  }, [selectedOrganization]);
+
+  useEffect(() => {
+    if (featureFlagAccelerator && isAdmin(selectedOrganization)) {
+      // TODO fetch 1 deliverable to indicate presence
+      setHasDeliverables(true);
+    }
+  }, [featureFlagAccelerator, selectedOrganization]);
 
   const getSeedlingsMenuItems = () => {
     const inventoryMenu = (
@@ -131,6 +139,22 @@ export default function NavBar({
     return showNurseryWithdrawals ? [inventoryMenu, withdrawalLogMenu] : [inventoryMenu];
   };
 
+  const reportsMenu = useMemo<JSX.Element | null>(() =>
+    reports.length > 0 && selectedOrganization.canSubmitReports
+    ? (
+        <NavItem
+          icon='iconGraphReport'
+          label={strings.REPORTS}
+          selected={!!isReportsRoute}
+          onClick={() => {
+          closeAndNavigateTo(APP_PATHS.REPORTS);
+          }}
+          id='reports-list'
+        />
+      )
+    : null
+  , [closeAndNavigateTo, isReportsRoute, reports.length, selectedOrganization.canSubmitReports]);
+
   return (
     <Navbar
       setShowNavBar={setShowNavBar as React.Dispatch<React.SetStateAction<boolean>>}
@@ -144,7 +168,6 @@ export default function NavBar({
           id='home'
         />
       )}
-
       <NavItem
         label={strings.HOME}
         icon='home'
@@ -219,18 +242,25 @@ export default function NavBar({
           )}
         </SubNavbar>
       </NavItem>
-      {reports.length > 0 && selectedOrganization.canSubmitReports && (
+      {!hasDeliverables && reportsMenu && (
         <>
           <NavSection />
+          {reportsMenu}
+        </>
+      )}
+      {hasDeliverables && (
+        <>
+          <NavSection title={strings.PARTICIPANTS.toUpperCase()} />
           <NavItem
-            icon='iconGraphReport'
-            label={strings.REPORTS}
-            selected={!!isReportsRoute}
+            label={strings.DELIVERABLES}
+            icon='organizationNav'
+            selected={!!isDeliverablesRoute}
             onClick={() => {
-              closeAndNavigateTo(APP_PATHS.REPORTS);
+              closeAndNavigateTo(isDeliverablesRoute ? '' : APP_PATHS.DELIVERABLES);
             }}
-            id='reports-list'
+            id='deliverables'
           />
+          {reportsMenu}
         </>
       )}
       {isAdmin(selectedOrganization) && (

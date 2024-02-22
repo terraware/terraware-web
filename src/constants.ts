@@ -7,7 +7,6 @@ export const SEED_COLLECTOR_GOOGLE_PLAY_LINK =
 export enum APP_PATHS {
   ACCELERATOR = '/accelerator',
   ACCELERATOR_DELIVERABLES = '/accelerator/deliverables',
-  ACCELERATOR_DELIVERABLES_EDIT = '/accelerator/deliverables/:deliverableId/edit',
   ACCELERATOR_DELIVERABLES_VIEW = '/accelerator/deliverables/:deliverableId',
   ACCELERATOR_MODULE_CONTENT = '/accelerator/modules',
   ACCELERATOR_OVERVIEW = '/accelerator/overview',
@@ -20,7 +19,6 @@ export enum APP_PATHS {
   CHECKIN = '/checkin',
   CONTACT_US = '/contactus',
   DELIVERABLES = '/deliverables',
-  DELIVERABLES_EDIT = '/deliverables/:deliverableId/edit',
   DELIVERABLES_VIEW = '/deliverables/:deliverableId',
   ERROR = '/error',
   ERROR_MOBILE_NOT_SUPPORTED = '/error/mobile-not-supported',
