@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePages/EmptyStateContent';
-import PageHeader from 'src/components/seeds/PageHeader';
+import PageHeader from 'src/components/PageHeader';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import ImportSpeciesModal, { downloadCsvTemplate } from '../../scenes/Species/ImportSpeciesModal';

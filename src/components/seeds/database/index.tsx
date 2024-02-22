@@ -13,7 +13,7 @@ import { SortOrder as Order } from 'src/components/common/table/sort';
 import strings from 'src/strings';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { getAllSeedBanks } from 'src/utils/organization';
-import PageHeader from '../PageHeader';
+import PageHeader from 'src/components/PageHeader';
 import { columnsIndexed, RIGHT_ALIGNED_COLUMNS } from './columns';
 import DownloadReportModal from './DownloadReportModal';
 import EditColumns from './EditColumns';
@@ -719,6 +719,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
             subtitle={strings.ACCESSIONS_DATABASE_DESCRIPTION}
             page={strings.ACCESSIONS}
             parentPage={strings.SEEDS}
+            snackbarPageKey={'seeds'}
             rightComponent={
               isOnboarded ? (
                 <>

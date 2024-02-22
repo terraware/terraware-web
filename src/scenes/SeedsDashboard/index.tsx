@@ -14,7 +14,7 @@ import Icon from 'src/components/common/icon/Icon';
 import Link from 'src/components/common/Link';
 import { useOrganization } from 'src/providers/hooks';
 import { AccessionState, stateName } from 'src/types/Accession';
-import PageHeader from 'src/components/seeds/PageHeader';
+import PageHeader from 'src/components/PageHeader';
 import SummaryPaper from 'src/scenes/SeedsDashboard/SummaryPaper';
 import AccessionByStatus from 'src/scenes/SeedsDashboard/AccessionByStatus';
 
@@ -118,7 +118,12 @@ export default function SeedSummary(): JSX.Element {
 
   return (
     <TfMain>
-      <PageHeader subtitle={strings.WELCOME_MSG} page={strings.SEED_DASHBOARD} parentPage={strings.SEEDS} />
+      <PageHeader
+        subtitle={strings.WELCOME_MSG}
+        page={strings.SEED_DASHBOARD}
+        parentPage={strings.SEEDS}
+        snackbarPageKey={'seeds'}
+      />
       <Container maxWidth={false} className={classes.mainContainer}>
         {selectedOrganization && summary ? (
           <Grid container spacing={3}>
