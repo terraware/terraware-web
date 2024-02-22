@@ -8,6 +8,8 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStateLocation from 'src/utils/useStateLocation';
 import { getRgbaFromHex } from 'src/utils/color';
 import AcceleratorDeliverablesView from 'src/scenes/AcceleratorRouter/AcceleratorDeliverablesView';
+import AcceleratorDeliverablesEdit from 'src/scenes/AcceleratorRouter/AcceleratorDeliverablesEdit';
+import AcceleratorDeliverablesList from 'src/scenes/AcceleratorRouter/AcceleratorDeliverablesList';
 import AcceleratorModuleContentView from 'src/scenes/AcceleratorRouter/AcceleratorModuleContentView';
 import AcceleratorOverviewView from 'src/scenes/AcceleratorRouter/AcceleratorOverviewView';
 import AcceleratorPeopleView from 'src/scenes/AcceleratorRouter/AcceleratorPeopleView';
@@ -72,8 +74,14 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
             <Route path={APP_PATHS.ACCELERATOR_OVERVIEW}>
               <AcceleratorOverviewView />
             </Route>
-            <Route path={APP_PATHS.ACCELERATOR_DELIVERABLES}>
+            <Route path={APP_PATHS.ACCELERATOR_DELIVERABLES_EDIT}>
+              <AcceleratorDeliverablesEdit />
+            </Route>
+            <Route path={APP_PATHS.ACCELERATOR_DELIVERABLES_VIEW}>
               <AcceleratorDeliverablesView />
+            </Route>
+            <Route path={APP_PATHS.ACCELERATOR_DELIVERABLES}>
+              <AcceleratorDeliverablesList />
             </Route>
             <Route path={APP_PATHS.ACCELERATOR_MODULE_CONTENT}>
               <AcceleratorModuleContentView />
