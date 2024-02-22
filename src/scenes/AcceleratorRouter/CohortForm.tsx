@@ -108,7 +108,6 @@ export default function CohortForm<T extends CreateCohortRequest | UpdateCohortR
               selectedValue={localRecord.phase}
               options={currentPhaseDropdownOptions}
               fullWidth={true}
-              errorText={validateFields && !localRecord?.phase ? strings.REQUIRED_FIELD : ''}
             />
           </Grid>
         </Grid>
