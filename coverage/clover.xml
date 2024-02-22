@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1708616800576" clover="3.2.0">
-  <project timestamp="1708616800577" name="All files">
-    <metrics statements="16471" coveredstatements="564" conditionals="10618" coveredconditionals="163" methods="5152" coveredmethods="125" elements="32241" coveredelements="852" complexity="0" loc="16471" ncloc="16471" packages="133" files="658" classes="658"/>
+<coverage generated="1708631434756" clover="3.2.0">
+  <project timestamp="1708631434756" name="All files">
+    <metrics statements="16470" coveredstatements="564" conditionals="10618" coveredconditionals="163" methods="5152" coveredmethods="125" elements="32240" coveredelements="852" complexity="0" loc="16470" ncloc="16470" packages="133" files="658" classes="658"/>
     <package name="src">
       <metrics statements="174" coveredstatements="0" conditionals="127" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -6257,7 +6257,7 @@
       </file>
     </package>
     <package name="src.components.seeds.database">
-      <metrics statements="432" coveredstatements="0" conditionals="276" coveredconditionals="0" methods="142" coveredmethods="0"/>
+      <metrics statements="431" coveredstatements="0" conditionals="276" coveredconditionals="0" methods="142" coveredmethods="0"/>
       <file name="DownloadReportModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/seeds/database/DownloadReportModal.tsx">
         <metrics statements="5" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
@@ -6317,7 +6317,7 @@
         <line num="248" count="0" type="stmt"/>
       </file>
       <file name="Filters.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/seeds/database/Filters.tsx">
-        <metrics statements="95" coveredstatements="0" conditionals="54" coveredconditionals="0" methods="42" coveredmethods="0"/>
+        <metrics statements="94" coveredstatements="0" conditionals="54" coveredconditionals="0" methods="42" coveredmethods="0"/>
         <line num="20" count="0" type="stmt"/>
         <line num="31" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -6352,7 +6352,6 @@
         <line num="139" count="0" type="stmt"/>
         <line num="140" count="0" type="stmt"/>
         <line num="142" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="143" count="0" type="stmt"/>
         <line num="144" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="145" count="0" type="stmt"/>
         <line num="148" count="0" type="stmt"/>

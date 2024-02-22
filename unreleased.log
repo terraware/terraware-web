@@ -1,3 +1,4 @@
+a89e5f9d4d SW-4912 Show filter values in accessions filters (#2187)
 cc668e99cb Updated translations from Phrase (#2183)
 460f6918c9 SW-4877 Refactor draft planting site editor error validation code looking ahead  (#2176)
 020f71ae80 SW-4874 Initialize completion status of optional steps when editing a draft site (#2174)
