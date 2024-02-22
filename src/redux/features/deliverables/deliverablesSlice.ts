@@ -9,19 +9,19 @@ export type DeliverablesResponseData = {
 const initialState: Record<number, DeliverablesResponseData> = {};
 
 // `orgId` will be -1 for the admin records
-type SetDeliverablesPayload = { organizationId: number; data: DeliverablesResponseData };
+type SetDeliverableListPayload = { organizationId: number; data: DeliverablesResponseData };
 
-export const deliverablesSlice = createSlice({
-  name: 'deliverablesSlice',
+export const deliverableListSlice = createSlice({
+  name: 'deliverableListSlice',
   initialState,
   reducers: {
-    setDeliverablesAction: (state, action: PayloadAction<SetDeliverablesPayload>) => {
-      const payload: SetDeliverablesPayload = action.payload;
+    setDeliverableListAction: (state, action: PayloadAction<SetDeliverableListPayload>) => {
+      const payload: SetDeliverableListPayload = action.payload;
       state[payload.organizationId] = payload.data;
     },
   },
 });
 
-export const { setDeliverablesAction } = deliverablesSlice.actions;
+export const { setDeliverableListAction } = deliverableListSlice.actions;
 
-export const deliverablesReducer = deliverablesSlice.reducer;
+export const deliverableListReducer = deliverableListSlice.reducer;

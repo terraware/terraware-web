@@ -2,7 +2,7 @@ import { Dispatch } from 'redux';
 import { RootState } from 'src/redux/rootReducer';
 import { SearchCriteria, SearchSortOrder } from 'src/types/Search';
 import DeliverablesService from 'src/services/DeliverablesService';
-import { setDeliverablesAction } from 'src/redux/features/deliverables/deliverablesSlice';
+import { setDeliverableListAction } from 'src/redux/features/deliverables/deliverablesSlice';
 
 export const requestDeliverables = (
   organizationId: number,
@@ -16,17 +16,17 @@ export const requestDeliverables = (
         : DeliverablesService.searchDeliverablesForParticipant(organizationId, searchCriteria, sortOrder));
 
       if (!results?.length) {
-        dispatch(setDeliverablesAction({ organizationId, data: { error: true } }));
+        dispatch(setDeliverableListAction({ organizationId, data: { error: true } }));
         return;
       }
 
-      dispatch(setDeliverablesAction({ organizationId, data: { deliverables: results } }));
+      dispatch(setDeliverableListAction({ organizationId, data: { deliverables: results } }));
     } catch (e: unknown) {
       // should not happen, the response above captures any http request errors
       // tslint:disable-next-line: no-console
       const errorMessage = (e as Error).message ?? e;
       dispatch(
-        setDeliverablesAction({
+        setDeliverableListAction({
           organizationId,
           data: { error: `Error dispatching request deliverables - ${errorMessage}` },
         })
