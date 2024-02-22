@@ -6,20 +6,9 @@ import { APP_PATHS } from 'src/constants';
 import AcceleratorMain from 'src/scenes/AcceleratorRouter/AcceleratorMain';
 import CohortForm from 'src/scenes/AcceleratorRouter/CohortForm';
 import strings from 'src/strings';
+import { CreateCohortRequest } from 'src/types/Cohort';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
-
-export type CreateCohortRequest = {
-  currentPhase: 0 | 1 | 2 | 3;
-  name: string;
-  organizationId: number;
-};
-
-export type UpdateCohortRequest = {
-  currentPhase: 0 | 1 | 2 | 3;
-  name: string;
-  organizationId: number;
-};
 
 type AcceleratorCohortNewViewProps = {
   reloadData?: () => void;
@@ -32,9 +21,8 @@ export default function AcceleratorCohortNewView({ reloadData }: AcceleratorCoho
   const snackbar = useSnackbar();
 
   const [record, setRecord] = useForm<CreateCohortRequest>({
-    currentPhase: 0,
+    phase: 'Phase 0 - Due Diligence',
     name: '',
-    organizationId: 1,
   });
 
   const createNewCohort = async (_cohort: unknown) => {
