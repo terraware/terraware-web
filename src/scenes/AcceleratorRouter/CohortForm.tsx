@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Container, Grid, useTheme } from '@mui/material';
 import { Dropdown, Textfield } from '@terraware/web-components';
 import PageForm from 'src/components/common/PageForm';
+import { useLocalization } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { CreateCohortRequestPayload, UpdateCohortRequestPayload } from 'src/types/Cohort';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -19,17 +20,24 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
   const { busy, cohort, onCancel, onSave } = props;
 
   const { isMobile } = useDeviceInfo();
+  const { activeLocale } = useLocalization();
   const theme = useTheme();
 
   const [localRecord, setLocalRecord] = useState<T>(cohort);
   const [validateFields, setValidateFields] = useState<boolean>(false);
 
-  const currentPhaseDropdownOptions = [
-    { label: strings.COHORT_PHASE_DUE_DILIGENCE, value: 'Phase 0 - Due Diligence' },
-    { label: strings.COHORT_PHASE_FEASIBILITY_STUDY, value: 'Phase 1 - Feasibility Study' },
-    { label: strings.COHORT_PHASE_PLAN_AND_SCALE, value: 'Phase 2 - Plan and Scale' },
-    { label: strings.COHORT_PHASE_IMPLEMENT_AND_MONITOR, value: 'Phase 3 - Implement and Monitor' },
-  ];
+  const currentPhaseDropdownOptions = useMemo(() => {
+    if (!activeLocale) {
+      return [];
+    }
+
+    return [
+      { label: strings.COHORT_PHASE_DUE_DILIGENCE, value: 'Phase 0 - Due Diligence' },
+      { label: strings.COHORT_PHASE_FEASIBILITY_STUDY, value: 'Phase 1 - Feasibility Study' },
+      { label: strings.COHORT_PHASE_PLAN_AND_SCALE, value: 'Phase 2 - Plan and Scale' },
+      { label: strings.COHORT_PHASE_IMPLEMENT_AND_MONITOR, value: 'Phase 3 - Implement and Monitor' },
+    ];
+  }, [activeLocale]);
 
   const updateField = (field: keyof T, value: any) => {
     setLocalRecord((prev) => ({
