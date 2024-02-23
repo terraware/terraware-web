@@ -10,6 +10,7 @@ import { useOrganization, useUser } from 'src/providers/hooks';
 import ReportService, { Reports } from 'src/services/ReportService';
 import { isAdmin } from 'src/utils/organization';
 import isEnabled from 'src/features';
+import DeliverablesService from 'src/services/DeliverablesService';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import NavItem from 'src/components/common/Navbar/NavItem';
 import NavSection from 'src/components/common/Navbar/NavSection';
@@ -108,9 +109,13 @@ export default function NavBar({
   }, [selectedOrganization]);
 
   useEffect(() => {
+    const fetchDeliverables = async () => {
+      // using a direct service call, without redux, to keep with existing pattern in the nav bars
+      const deliverables = await DeliverablesService.searchDeliverablesForParticipant(selectedOrganization.id);
+      setHasDeliverables(!!(deliverables && deliverables.length > 0));
+    };
     if (featureFlagAccelerator && isAdmin(selectedOrganization)) {
-      // TODO fetch 1 deliverable to indicate presence
-      setHasDeliverables(true);
+      fetchDeliverables();
     } else {
       setHasDeliverables(false);
     }
