@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1708723329377" clover="3.2.0">
-  <project timestamp="1708723329377" name="All files">
-    <metrics statements="16660" coveredstatements="564" conditionals="10705" coveredconditionals="163" methods="5205" coveredmethods="125" elements="32570" coveredelements="852" complexity="0" loc="16660" ncloc="16660" packages="136" files="676" classes="676"/>
+<coverage generated="1708723586766" clover="3.2.0">
+  <project timestamp="1708723586766" name="All files">
+    <metrics statements="16661" coveredstatements="564" conditionals="10707" coveredconditionals="163" methods="5205" coveredmethods="125" elements="32573" coveredelements="852" complexity="0" loc="16661" ncloc="16661" packages="136" files="676" classes="676"/>
     <package name="src">
       <metrics statements="174" coveredstatements="0" conditionals="127" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -1403,7 +1403,7 @@
       </file>
     </package>
     <package name="src.components.DeliverableView">
-      <metrics statements="36" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="12" coveredmethods="0"/>
+      <metrics statements="37" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="12" coveredmethods="0"/>
       <file name="Description.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/Description.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="4" count="0" type="stmt"/>
@@ -1430,11 +1430,12 @@
         <line num="5" count="0" type="stmt"/>
       </file>
       <file name="TitleBar.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/TitleBar.tsx">
-        <metrics statements="4" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="8" count="0" type="stmt"/>
+        <metrics statements="5" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="9" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/index.tsx">
         <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -16902,26 +16903,26 @@
         <line num="18" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
-        <line num="54" count="0" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
-        <line num="72" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="73" count="0" type="stmt"/>
-        <line num="78" count="0" type="stmt"/>
-        <line num="81" count="0" type="stmt"/>
-        <line num="92" count="0" type="stmt"/>
-        <line num="97" count="0" type="stmt"/>
-        <line num="98" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="99" count="0" type="stmt"/>
-        <line num="102" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="73" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="93" count="0" type="stmt"/>
+        <line num="98" count="0" type="stmt"/>
+        <line num="99" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="100" count="0" type="stmt"/>
         <line num="103" count="0" type="stmt"/>
-        <line num="111" count="0" type="stmt"/>
-        <line num="116" count="0" type="stmt"/>
-        <line num="117" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="118" count="0" type="stmt"/>
-        <line num="121" count="0" type="stmt"/>
-        <line num="124" count="0" type="stmt"/>
-        <line num="133" count="0" type="stmt"/>
+        <line num="104" count="0" type="stmt"/>
+        <line num="112" count="0" type="stmt"/>
+        <line num="117" count="0" type="stmt"/>
+        <line num="118" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="119" count="0" type="stmt"/>
+        <line num="122" count="0" type="stmt"/>
+        <line num="125" count="0" type="stmt"/>
+        <line num="134" count="0" type="stmt"/>
       </file>
       <file name="DraftPlantingSiteService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/DraftPlantingSiteService.ts">
         <metrics statements="26" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="7" coveredmethods="0"/>
@@ -18500,10 +18501,10 @@
       </file>
       <file name="Deliverables.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/Deliverables.ts">
         <metrics statements="4" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="46" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="48" count="0" type="stmt"/>
-        <line num="50" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="47" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
       </file>
       <file name="Device.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/Device.ts">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
