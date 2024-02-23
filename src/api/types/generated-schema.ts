@@ -8,6 +8,20 @@
 type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 
 export interface paths {
+  "/api/v1/accelerator/cohorts": {
+    /** Gets the list of cohorts. */
+    get: operations["listCohorts"];
+    /** Creates a new cohort. */
+    post: operations["createCohort"];
+  };
+  "/api/v1/accelerator/cohorts/{cohortId}": {
+    /** Gets information about a single cohort. */
+    get: operations["getCohort"];
+    /** Updates the information within a single cohort. */
+    put: operations["updateCohort"];
+    /** Deletes a single cohort. */
+    delete: operations["deleteCohort"];
+  };
   "/api/v1/automations": {
     /** Gets a list of automations for a device or facility. */
     get: operations["listAutomations"];
@@ -1214,6 +1228,22 @@ export interface components {
        */
       quantity: number;
     };
+    CohortListResponsePayload: {
+      cohorts: components["schemas"]["CohortPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    CohortPayload: {
+      /** Format: int64 */
+      id: number;
+      name: string;
+      participantIds?: number[];
+      /** @enum {string} */
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+    };
+    CohortResponsePayload: {
+      cohort: components["schemas"]["CohortPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     CompletePlotObservationRequestPayload: {
       conditions: ("AnimalDamage" | "FastGrowth" | "FavorableWeather" | "Fungus" | "Pests" | "SeedProduction" | "UnfavorableWeather")[];
       notes?: string;
@@ -1321,6 +1351,11 @@ export interface components {
       /** @enum {string} */
       treatment?: "Soak" | "Scarify" | "Chemical" | "Stratification" | "Other" | "Light";
       treatmentNotes?: string;
+    };
+    CreateCohortRequestPayload: {
+      name: string;
+      /** @enum {string} */
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
     };
     CreateDeviceRequestPayload: {
       /**
@@ -1544,7 +1579,7 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     CreatePlantingSiteRequestPayload: {
-      boundary?: components["schemas"]["MultiPolygon"];
+      boundary?: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
       description?: string;
       name: string;
       /** Format: int64 */
@@ -3539,6 +3574,11 @@ export interface components {
       /** Format: int32 */
       version: number;
     };
+    UpdateCohortRequestPayload: {
+      name: string;
+      /** @enum {string} */
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+    };
     UpdateDeviceRequestPayload: {
       /**
        * @description Protocol-specific address of device, e.g., an IP address or a Bluetooth device ID.
@@ -3846,7 +3886,7 @@ export interface components {
       /** @description If true, the user wants to receive all the notifications for their organizations via email. This does not apply to certain kinds of notifications such as "You've been added to a new organization." */
       emailNotificationsEnabled: boolean;
       firstName?: string;
-      globalRoles: ("Super-Admin" | "Accelerator Admin")[];
+      globalRoles: ("Super-Admin" | "Accelerator Admin" | "TF Expert" | "Read Only")[];
       /**
        * Format: int64
        * @description User's unique ID. This should not be shown to the user, but is a required input to some API endpoints.
@@ -3902,6 +3942,114 @@ export type external = Record<string, never>;
 
 export interface operations {
 
+  /** Gets the list of cohorts. */
+  listCohorts: {
+    parameters: {
+      query: {
+        /** @description If specified, retrieve associated entities to the supplied depth. For example, 'participant' depth will return the participants associated to the cohort. */
+        depth: "Cohort" | "Participant";
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CohortListResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Creates a new cohort. */
+  createCohort: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateCohortRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The cohort was created successfully. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CohortResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets information about a single cohort. */
+  getCohort: {
+    parameters: {
+      query: {
+        /** @description If specified, retrieve associated entities to the supplied depth. For example, 'participant' depth will return the participants associated to the cohort. */
+        depth: "Cohort" | "Participant";
+      };
+      path: {
+        cohortId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CohortResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Updates the information within a single cohort. */
+  updateCohort: {
+    parameters: {
+      path: {
+        cohortId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateCohortRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CohortResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Deletes a single cohort. */
+  deleteCohort: {
+    parameters: {
+      path: {
+        cohortId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
   /** Gets a list of automations for a device or facility. */
   listAutomations: {
     parameters: {

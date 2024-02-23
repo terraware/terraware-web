@@ -281,6 +281,8 @@ DELETE_STATISTICS,Eliminar estadísticas,
 DELETE_VIABILITY_TEST,Eliminar prueba de viabilidad,
 DELETE_VIABILITY_TEST_MESSAGE,Está a punto de borrar la prueba de viabilidad {0}.,
 DELETED_SPECIES,<deleted species>,
+DELIVERABLE_CATEGORY,Categoría: {0},"Shows the deliverable document's category name, example Category: Legal"
+DELIVERABLE_PROJECT,Proyecto: {0},"Shows the project name associated with the deliverable document, example Project: Andromeda"
 DELIVERABLES,Entregables,
 DESCRIBE_ORGANIZATION_TYPE_DETAILS,Describa su organización,
 DESCRIPTION,Descripción,
