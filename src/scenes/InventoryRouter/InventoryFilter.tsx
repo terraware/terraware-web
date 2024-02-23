@@ -24,7 +24,7 @@ type InventoryFilterProps = {
   notPresentFilterLabel?: string;
   notPresentFilterShown?: boolean;
   options: number[];
-  renderOption: (id: number) => string;
+  renderOption: (id: string | number) => string;
   setFilters: (f: InventoryFiltersType) => void;
 };
 
