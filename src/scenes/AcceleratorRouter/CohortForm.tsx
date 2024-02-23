@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Container, Grid, useTheme } from '@mui/material';
 import { Dropdown, Textfield } from '@terraware/web-components';
 import PageForm from 'src/components/common/PageForm';
@@ -68,6 +68,11 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
       ...localRecord,
     });
   };
+
+  useEffect(() => {
+    // update local record when cohort changes
+    setLocalRecord(cohort);
+  }, [cohort]);
 
   return (
     <PageForm
