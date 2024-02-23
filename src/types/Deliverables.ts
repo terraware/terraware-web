@@ -19,6 +19,7 @@ export type Deliverable = {
   category: DeliverableCategoryType;
   status: DeliverableStatusType;
   name: string;
+  projectId: number;
   projectName: string;
   deliverableContent: string;
 };

@@ -34,6 +34,7 @@ const getDeliverable = async (deliverableId: number): Promise<Response & Deliver
       status: 'Not Submitted',
       name: 'Company Formation Document',
       projectName: 'Treemendo.us',
+      projectId: 1,
       // TODO need to figure out if we are going to allow raw HTML or just have regular text
       deliverableContent:
         'The Company Formation Document is to confirm the entity is properly formed and registered in the country.\n' +

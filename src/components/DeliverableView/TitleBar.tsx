@@ -2,11 +2,13 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { categoryLabel } from 'src/types/Deliverables';
+import { useProjects } from 'src/hooks/useProjects';
 import BackToLink from 'src/components/common/BackToLink';
 import { EditProps } from './types';
 
 const TitleBar = ({ callToAction, deliverable, isAcceleratorConsole }: EditProps): JSX.Element => {
-  const { category, name, projectName } = deliverable;
+  const { category, name } = deliverable;
+  const { selectedProject } = useProjects(deliverable);
   const theme = useTheme();
 
   return (
@@ -27,7 +29,7 @@ const TitleBar = ({ callToAction, deliverable, isAcceleratorConsole }: EditProps
       >
         <Box display='flex' flexDirection='column'>
           <Typography fontSize='14px' lineHeight='20px' fontWeight={400} color={theme.palette.TwClrTxt}>
-            {strings.formatString(strings.DELIVERABLE_PROJECT, projectName)}
+            {strings.formatString(strings.DELIVERABLE_PROJECT, selectedProject?.name ?? '')}
           </Typography>
           <Typography
             fontSize='24px'
