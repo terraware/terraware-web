@@ -1,10 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {
-  Deliverable,
-  SearchResponseDeliverableAdmin,
-  SearchResponseDeliverableBase,
-} from 'src/services/DeliverablesService';
-import { buildReducers, Statuses } from 'src/redux/features/asyncUtils';
+import { Deliverable, SearchResponseDeliverableAdmin, SearchResponseDeliverableBase } from 'src/types/Deliverables';
+import { buildReducers, StatusT } from 'src/redux/features/asyncUtils';
 import {
   requestDeliverableFetch,
   requestDeliverablesSearch,
@@ -18,7 +14,7 @@ export type DeliverablesResponseData = {
   deliverables?: (SearchResponseDeliverableAdmin | SearchResponseDeliverableBase)[];
 };
 
-const initialStateDeliverablesSearch: { [key: string]: DeliverablesResponseData } = {};
+const initialStateDeliverablesSearch: { [key: string]: StatusT<DeliverablesResponseData> } = {};
 
 export const deliverablesSearchSlice = createSlice({
   name: 'deliverablesSearchSlice',
@@ -34,10 +30,10 @@ export const deliverablesSearchReducer = deliverablesSearchSlice.reducer;
 /**
  * Individual Deliverable
  */
-const initialStateDeliverable: { [key: number | string]: { status: Statuses; data: Deliverable } } = {};
+const initialStateDeliverable: { [key: number | string]: StatusT<Deliverable> } = {};
 
 export const deliverablesSlice = createSlice({
-  name: 'deliverablesSearchSlice',
+  name: 'deliverablesSlice',
   initialState: initialStateDeliverable,
   reducers: {},
   extraReducers: (builder) => {

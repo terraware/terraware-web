@@ -4,7 +4,7 @@ import { ViewProps } from './types';
 const Description = (props: ViewProps): JSX.Element => {
   return (
     <Box display='flex' flexDirection='column'>
-      Description coming soon {props.isAcceleratorConsole}!
+      <div>Description coming soon {props.isAcceleratorConsole}!</div>
     </Box>
   );
 };

@@ -1,58 +1,18 @@
 import { SearchCriteria, SearchRequestPayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import {
+  DeliverableTypeType,
+  DeliverableCategoryType,
+  DeliverableStatusType,
+  DeliverableData,
+  SearchResponseDeliverableBase,
+  SearchResponseDeliverableAdmin,
+} from 'src/types/Deliverables';
 import SearchService from 'src/services/SearchService';
 import { Response } from 'src/services/HttpService';
 
 /**
  * Accelerator "deliverable" related services
  */
-
-/**
- * Exported types and constants
- */
-
-// TODO these will come from generated types
-export type DeliverableTypeType = 'Document';
-// export type DeliverableTypes = ['Document'];
-
-export type DeliverableCategoryType = 'All' | 'Legal' | 'Financial' | 'GIS' | 'Forestry' | 'Stakeholder Engagement';
-// export type DeliverableCategories = ['All', 'Legal', 'Financial', 'GIS', 'Forestry', 'Stakeholder Engagement'];
-export type DeliverableStatusType = 'Not Submitted' | 'In Review' | 'Rejected' | 'Approved';
-// export type DeliverableStatuses = ['Not Submitted', 'In Review', 'Rejected', 'Approved'];
-
-export type DeliverableDocument = {
-  name: string;
-  description: string;
-  dateUploaded: string;
-};
-
-export type Deliverable = {
-  id: number;
-  documents: DeliverableDocument[];
-  category: DeliverableCategoryType;
-  status: DeliverableStatusType;
-  name: string;
-  projectName: string;
-  deliverableContent: string;
-};
-
-export type DeliverableData = {
-  deliverable: Deliverable | null;
-};
-
-export type SearchResponseDeliverableBase = {
-  documentCount: number;
-  id: number;
-  name: string;
-  project_name: string;
-  status: DeliverableStatusType;
-  type: DeliverableTypeType;
-};
-
-export type SearchResponseDeliverableAdmin = SearchResponseDeliverableBase & {
-  category: DeliverableCategoryType;
-  description: string;
-};
-
 const SEARCH_FIELDS_DELIVERABLES_BASE = ['documentCount', 'id', 'name', 'project_name', 'status', 'type'];
 
 const SEARCH_FIELDS_DELIVERABLES_ADMIN = [...SEARCH_FIELDS_DELIVERABLES_BASE, 'category', 'description'];

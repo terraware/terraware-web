@@ -4,7 +4,7 @@ import { ViewProps } from './types';
 const StatusBar = (props: ViewProps): JSX.Element => {
   return (
     <Box display='flex' flexDirection='column'>
-      StatusBar coming soon {props.isAcceleratorConsole}!
+      <div>StatusBar coming soon {props.isAcceleratorConsole}!</div>
     </Box>
   );
 };

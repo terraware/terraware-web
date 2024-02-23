@@ -2,11 +2,8 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import strings from 'src/strings';
 import { SearchCriteria, SearchSortOrder } from 'src/types/Search';
 import { Response } from 'src/services/HttpService';
-import DeliverablesService, {
-  DeliverableData,
-  SearchResponseDeliverableAdmin,
-  SearchResponseDeliverableBase,
-} from 'src/services/DeliverablesService';
+import DeliverablesService from 'src/services/DeliverablesService';
+import { DeliverableData, SearchResponseDeliverableAdmin, SearchResponseDeliverableBase } from 'src/types/Deliverables';
 
 export const requestDeliverablesSearch = createAsyncThunk(
   'deliverables/search',
