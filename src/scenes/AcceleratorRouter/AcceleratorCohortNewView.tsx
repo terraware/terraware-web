@@ -50,10 +50,7 @@ export default function AcceleratorCohortNewView({ reloadData }: AcceleratorCoho
       }
 
       // set snackbar with status
-      snackbar.toastSuccess(
-        strings.COHORT_ADDED,
-        strings.formatString(strings.COHORT_ADDED_WITH_NAME, cohort.name) as string
-      );
+      snackbar.toastSuccess(strings.formatString(strings.COHORT_ADDED, cohort.name) as string);
 
       // navigate to accelerator overview
       goToAcceleratorOverview();
