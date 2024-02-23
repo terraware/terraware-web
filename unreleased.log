@@ -1,3 +1,4 @@
+bdbb5dcb71 SW-4902 Show deliverable title/metadata leveraging redux + mock data (#2191)
 0894cc028c Updated translations from Phrase (#2190)
 09195e2aa5 Refactor the PageHeader component out of the seeds namespace (#2189)
 32ff83ddaf SW-4891 Refactor the deliverables redux to use async thunks (#2188)
