@@ -3,7 +3,8 @@ export type DeliverableTypeType = 'Document';
 // export type DeliverableTypes = ['Document'];
 
 export type DeliverableCategoryType = 'All' | 'Legal' | 'Financial' | 'GIS' | 'Forestry' | 'Stakeholder Engagement';
-// export type DeliverableCategories = ['All', 'Legal', 'Financial', 'GIS', 'Forestry', 'Stakeholder Engagement'];
+export const DeliverableCategories = ['All', 'Legal', 'Financial', 'GIS', 'Forestry', 'Stakeholder Engagement'];
+
 export type DeliverableStatusType =
   | 'Not Submitted'
   | 'In Review'
@@ -11,7 +12,14 @@ export type DeliverableStatusType =
   | 'Approved'
   | 'Needs Translation'
   | 'Not Needed';
-// export type DeliverableStatuses = ['Not Submitted', 'In Review', 'Rejected', 'Approved'];
+export const DeliverableStatuses = [
+  'Not Submitted',
+  'In Review',
+  'Rejected',
+  'Approved',
+  'Needs Translation',
+  'Not Needed',
+];
 
 export type DeliverableDocument = {
   name: string;
@@ -35,7 +43,8 @@ export type DeliverableData = {
   deliverable: Deliverable | null;
 };
 
-export type SearchResponseDeliverableBase = {
+export type SearchResponseDeliverableAdmin = {
+  category: DeliverableCategoryType;
   documentCount: number;
   id: number;
   name: string;
@@ -44,8 +53,7 @@ export type SearchResponseDeliverableBase = {
   type: DeliverableTypeType;
 };
 
-export type SearchResponseDeliverableAdmin = SearchResponseDeliverableBase & {
-  category: DeliverableCategoryType;
+export type SearchResponseDeliverableParticipant = SearchResponseDeliverableAdmin & {
   description: string;
 };
 
@@ -54,6 +62,8 @@ export type UpdateStatusRequest = {
   reason?: string;
   status: DeliverableStatusType;
 };
+
+export type SearchResponseDeliverable = SearchResponseDeliverableAdmin | SearchResponseDeliverableParticipant;
 
 // TODO: update category types with BE model and return values from i18n strings dictionary
 export const categoryLabel = (category: DeliverableCategoryType): string => {

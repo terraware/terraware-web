@@ -12,7 +12,7 @@ import {
  */
 export type DeliverablesResponseData = {
   error?: string | true;
-  deliverables?: (SearchResponseDeliverableAdmin | SearchResponseDeliverableBase)[];
+  data?: (SearchResponseDeliverableAdmin | SearchResponseDeliverableBase)[];
 };
 
 const initialStateDeliverablesSearch: { [key: string]: StatusT<DeliverablesResponseData> } = {};
