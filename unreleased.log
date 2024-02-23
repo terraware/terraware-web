@@ -1,3 +1,4 @@
+0894cc028c Updated translations from Phrase (#2190)
 09195e2aa5 Refactor the PageHeader component out of the seeds namespace (#2189)
 32ff83ddaf SW-4891 Refactor the deliverables redux to use async thunks (#2188)
 b2664857d0 SW-4891 Single Deliverable redux and mock data (#2185)
