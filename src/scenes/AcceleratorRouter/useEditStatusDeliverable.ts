@@ -20,6 +20,7 @@ export type Response = {
  * Returns status on request and function to update status.
  */
 export default function useEditStatusDeliverable(): Response {
+  const [lastRequest, setLastRequest] = useState<UpdateStatusRequest | undefined>();
   const [requestId, setRequestId] = useState<string>('');
   const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
@@ -27,20 +28,32 @@ export default function useEditStatusDeliverable(): Response {
 
   const update = useCallback(
     (request: UpdateStatusRequest) => {
+      setLastRequest(undefined);
       const dispatched = dispatch(requestUpdateDeliverableStatus(request));
       setRequestId(dispatched.requestId);
+      setLastRequest(request);
     },
     [dispatch]
   );
 
   useEffect(() => {
+    if (!lastRequest) {
+      return;
+    }
     if (result?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     } else if (result?.status === 'success') {
       // refresh deliverable data in store
       dispatch(requestDeliverableFetch(result?.data!));
+      if (lastRequest.status === 'Approved') {
+        snackbar.toastSuccess(strings.DELIVERABLE_APPROVED);
+      } else if (lastRequest.status === 'Rejected') {
+        snackbar.toastWarning(strings.DELIVERABLE_REJECTED);
+      } else {
+        snackbar.toastInfo(strings.DELIVERABLE_STATUS_UPDATED);
+      }
     }
-  }, [dispatch, result, snackbar]);
+  }, [dispatch, lastRequest, result, snackbar]);
 
   return useMemo<Response>(
     () => ({
