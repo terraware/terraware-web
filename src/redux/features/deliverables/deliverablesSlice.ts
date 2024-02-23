@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Deliverable, SearchResponseDeliverableAdmin, SearchResponseDeliverableBase } from 'src/types/Deliverables';
+import { Deliverable, SearchResponseDeliverable } from 'src/types/Deliverables';
 import { buildReducers, StatusT } from 'src/redux/features/asyncUtils';
 import {
   requestDeliverableFetch,
@@ -10,12 +10,7 @@ import {
 /**
  * Deliverable list
  */
-export type DeliverablesResponseData = {
-  error?: string | true;
-  data?: (SearchResponseDeliverableAdmin | SearchResponseDeliverableBase)[];
-};
-
-const initialStateDeliverablesSearch: { [key: string]: StatusT<DeliverablesResponseData> } = {};
+const initialStateDeliverablesSearch: { [key: string]: StatusT<SearchResponseDeliverable[]> } = {};
 
 export const deliverablesSearchSlice = createSlice({
   name: 'deliverablesSearchSlice',
