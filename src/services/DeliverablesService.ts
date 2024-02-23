@@ -1,11 +1,13 @@
 import { SearchCriteria, SearchRequestPayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import {
+  Deliverable,
   DeliverableTypeType,
   DeliverableCategoryType,
   DeliverableStatusType,
   DeliverableData,
   SearchResponseDeliverableBase,
   SearchResponseDeliverableAdmin,
+  UpdateStatusRequest,
 } from 'src/types/Deliverables';
 import SearchService from 'src/services/SearchService';
 import { Response } from 'src/services/HttpService';
@@ -17,38 +19,46 @@ const SEARCH_FIELDS_DELIVERABLES_BASE = ['documentCount', 'id', 'name', 'project
 
 const SEARCH_FIELDS_DELIVERABLES_ADMIN = [...SEARCH_FIELDS_DELIVERABLES_BASE, 'category', 'description'];
 
+const mockDeliverable: Deliverable = {
+  id: 1,
+  documents: [
+    {
+      name: 'Upload 1',
+      description: 'Some description for the upload',
+      dateUploaded: '2024-02-15',
+    },
+  ],
+  category: 'Legal',
+  status: 'Not Submitted',
+  name: 'Company Formation Document',
+  projectName: 'Treemendo.us',
+  projectId: 1,
+  // TODO need to figure out if we are going to allow raw HTML or just have regular text
+  deliverableContent:
+    'The Company Formation Document is to confirm the entity is properly formed and registered in the country.\n' +
+    '\n' +
+    'Depending on your jurisdiction, this document may be called a Certificate of Incorporation or a Business Registration Certificate, for example.\n' +
+    '\n' +
+    'Submit:\n' +
+    'A document issued by the relevant authority in your jurisdiction that contains the following information:\n' +
+    'Company Name\n' +
+    'Legal Form / Structure – (e.g. corporation, limited liability company, etc.)\n' +
+    'Date of Formation/Incorporation\n' +
+    'Company Number (if applicable)',
+};
+
 const getDeliverable = async (deliverableId: number): Promise<Response & DeliverableData> => {
   // TODO replace with axios
-  return {
+  return Promise.resolve({
     requestSucceeded: true,
-    deliverable: {
-      id: 1,
-      documents: [
-        {
-          name: 'Upload 1',
-          description: 'Some description for the upload',
-          dateUploaded: '2024-02-15',
-        },
-      ],
-      category: 'Legal',
-      status: 'Not Submitted',
-      name: 'Company Formation Document',
-      projectName: 'Treemendo.us',
-      projectId: 1,
-      // TODO need to figure out if we are going to allow raw HTML or just have regular text
-      deliverableContent:
-        'The Company Formation Document is to confirm the entity is properly formed and registered in the country.\n' +
-        '\n' +
-        'Depending on your jurisdiction, this document may be called a Certificate of Incorporation or a Business Registration Certificate, for example.\n' +
-        '\n' +
-        'Submit:\n' +
-        'A document issued by the relevant authority in your jurisdiction that contains the following information:\n' +
-        'Company Name\n' +
-        'Legal Form / Structure – (e.g. corporation, limited liability company, etc.)\n' +
-        'Date of Formation/Incorporation\n' +
-        'Company Number (if applicable)',
-    },
-  };
+    deliverable: { ...mockDeliverable },
+  });
+};
+
+const updateStatus = ({ reason, status }: UpdateStatusRequest): Promise<Response> => {
+  mockDeliverable.status = status;
+  mockDeliverable.reason = reason;
+  return Promise.resolve({ requestSucceeded: true });
 };
 
 // TODO will get removed once BE is done
@@ -76,7 +86,7 @@ const searchDeliverables = async (
 
   // TODO change this over once BE is done
   // return SearchService.search(params);
-  return mockResponseData;
+  return Promise.resolve(mockResponseData);
 };
 
 const transformBaseDeliverableElement = (element: SearchResponseElement): SearchResponseDeliverableBase => ({
@@ -126,6 +136,7 @@ const DeliverablesService = {
   getDeliverable,
   searchDeliverablesForAdmin,
   searchDeliverablesForParticipant,
+  updateStatus,
 };
 
 export default DeliverablesService;
