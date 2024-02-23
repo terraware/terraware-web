@@ -1,5 +1,4 @@
 import { Typography, useTheme } from '@mui/material';
-import { BusySpinner } from '@terraware/web-components';
 import React, { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
@@ -58,7 +57,7 @@ export default function AcceleratorCohortNewView({ reloadData }: AcceleratorCoho
     [setIsBusy, snackbar, goToAcceleratorOverview]
   );
 
-  const onCohortConfigured = useCallback(
+  const onCohortSaved = useCallback(
     (cohort: CreateCohortRequestPayload) => {
       setRecord(cohort);
       createNewCohort(cohort);
@@ -72,12 +71,11 @@ export default function AcceleratorCohortNewView({ reloadData }: AcceleratorCoho
         {strings.ADD_COHORT}
       </Typography>
 
-      {isBusy && <BusySpinner withSkrim={true} />}
-
       <CohortForm<CreateCohortRequestPayload>
+        busy={isBusy}
         cohort={record}
         onCancel={goToAcceleratorOverview}
-        onNext={onCohortConfigured}
+        onSave={onCohortSaved}
       />
     </AcceleratorMain>
   );

@@ -7,16 +7,16 @@ import { CreateCohortRequestPayload, UpdateCohortRequestPayload } from 'src/type
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 type CohortFormProps<T extends CreateCohortRequestPayload | UpdateCohortRequestPayload> = {
+  busy?: boolean;
   cohort: T;
   onCancel: () => void;
-  onNext: (cohort: T) => void;
-  saveText?: string;
+  onSave: (cohort: T) => void;
 };
 
 export default function CohortForm<T extends CreateCohortRequestPayload | UpdateCohortRequestPayload>(
   props: CohortFormProps<T>
 ): JSX.Element {
-  const { cohort, onCancel, onNext, saveText = strings.SAVE } = props;
+  const { busy, cohort, onCancel, onSave } = props;
 
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
@@ -50,23 +50,23 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
     return true;
   };
 
-  const onNextHandler = () => {
+  const onSaveHandler = () => {
     if (!validateForm()) {
       setValidateFields(true);
       return;
     }
 
-    onNext({
+    onSave({
       ...localRecord,
     });
   };
 
   return (
     <PageForm
+      busy={busy}
       cancelID='cancelNewCohort'
       onCancel={onCancel}
-      onSave={onNextHandler}
-      saveButtonText={saveText}
+      onSave={onSaveHandler}
       saveID='createNewCohort'
     >
       <Container
