@@ -8,3 +8,6 @@ export const selectDeliverable = (deliverableId: number) => (state: RootState) =
 
 export const selectDeliverableFetchRequest = (deliverableId: number) => (state: RootState) =>
   state.deliverables[deliverableId];
+
+export const selectDeliverablesEditRequest = (requestId: string) => (state: RootState) =>
+  state.deliverablesEdit[requestId];

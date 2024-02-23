@@ -5,7 +5,10 @@ import { APP_PATHS } from 'src/constants';
 import { Deliverable } from 'src/types/Deliverables';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Statuses } from 'src/redux/features/asyncUtils';
-import { selectDeliverableFetchRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
+import {
+  selectDeliverable,
+  selectDeliverableFetchRequest,
+} from 'src/redux/features/deliverables/deliverablesSelectors';
 import { requestDeliverableFetch } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -28,6 +31,7 @@ export default function useFetchDeliverable({ deliverableId, isAcceleratorConsol
   const history = useHistory();
   const dispatch = useAppDispatch();
   const deliverableResult = useAppSelector(selectDeliverableFetchRequest(deliverableId));
+  const deliverableDataResult = useAppSelector(selectDeliverable(deliverableId));
 
   const goToDeliverables = useCallback(() => {
     history.push(isAcceleratorConsole ? APP_PATHS.ACCELERATOR_DELIVERABLES : APP_PATHS.DELIVERABLES);
@@ -51,8 +55,8 @@ export default function useFetchDeliverable({ deliverableId, isAcceleratorConsol
   return useMemo<Response>(
     () => ({
       status: deliverableResult?.status ?? 'pending',
-      deliverable: deliverableResult?.data,
+      deliverable: deliverableDataResult,
     }),
-    [deliverableResult]
+    [deliverableResult, deliverableDataResult]
   );
 }

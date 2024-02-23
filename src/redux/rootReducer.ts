@@ -36,7 +36,11 @@ import {
   draftPlantingSiteGetReducer,
   draftPlantingSiteSearchReducer,
 } from 'src/redux/features/draftPlantingSite/draftPlantingSiteSlice';
-import { deliverablesSearchReducer, deliverablesReducer } from 'src/redux/features/deliverables/deliverablesSlice';
+import {
+  deliverablesEditReducer,
+  deliverablesSearchReducer,
+  deliverablesReducer,
+} from 'src/redux/features/deliverables/deliverablesSlice';
 
 // assembly of app reducers
 export const reducers = {
@@ -44,6 +48,7 @@ export const reducers = {
   appVersion: appVersionReducer,
   batches: batchesReducer,
   batchesRequests: batchesRequestsReducer,
+  deliverablesEdit: deliverablesEditReducer,
   deliverablesSearch: deliverablesSearchReducer,
   deliverables: deliverablesReducer,
   draftPlantingSiteCreate: draftPlantingSiteCreateReducer,

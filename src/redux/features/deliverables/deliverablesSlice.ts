@@ -4,6 +4,7 @@ import { buildReducers, StatusT } from 'src/redux/features/asyncUtils';
 import {
   requestDeliverableFetch,
   requestDeliverablesSearch,
+  requestUpdateDeliverableStatus,
 } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 
 /**
@@ -42,3 +43,20 @@ export const deliverablesSlice = createSlice({
 });
 
 export const deliverablesReducer = deliverablesSlice.reducer;
+
+/**
+ * Simple OK/response for requests such as updating deliverable status, keeps
+ * state of deliverable id that was edited.
+ */
+const initialStateEditDeliverable: { [key: number | string]: StatusT<number> } = {};
+
+export const deliverablesEditSlice = createSlice({
+  name: 'deliverablesEditSlice',
+  initialState: initialStateEditDeliverable,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestUpdateDeliverableStatus)(builder);
+  },
+});
+
+export const deliverablesEditReducer = deliverablesEditSlice.reducer;
