@@ -49,6 +49,11 @@ export default function SearchFiltersWrapperV2({
     () =>
       Object.keys(currentFilters)
         .map((key): PillListItem<string> | false => {
+          // If there are no values, there should be no pill
+          if (!currentFilters[key] || (currentFilters[key].values || []).length === 0) {
+            return false;
+          }
+
           const filterConfig = [...(iconFilters || []), ...(featuredFilters || [])].find(
             (filter: FilterConfig) => filter.field === key
           );
