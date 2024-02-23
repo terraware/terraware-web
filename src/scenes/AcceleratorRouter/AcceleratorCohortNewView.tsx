@@ -32,7 +32,6 @@ export default function AcceleratorCohortNewView({ reloadData }: AcceleratorCoho
 
   const createNewCohort = useCallback(
     async (cohort: CreateCohortRequest) => {
-
       // first create the cohort
       let cohortId = -1;
       setIsBusy(true);
