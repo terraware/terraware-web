@@ -147,7 +147,7 @@ const AcceleratorDeliverablesList = () => {
                 availableProjects={availableParticipants}
                 record={participantFilter}
                 setRecord={setParticipantFilter}
-                label={false}
+                label={''}
               />
             </Grid>
           </Grid>

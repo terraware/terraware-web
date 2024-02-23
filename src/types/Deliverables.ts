@@ -1,4 +1,6 @@
 // TODO these will come from generated types
+import strings from '../strings';
+
 export type DeliverableTypeType = 'Document';
 // export type DeliverableTypes = ['Document'];
 
@@ -72,5 +74,24 @@ export const categoryLabel = (category: DeliverableCategoryType): string => {
       return 'Legal';
     default:
       return category as string;
+  }
+};
+
+export const statusLabel = (status: DeliverableStatusType): string => {
+  switch (status) {
+    case 'Not Submitted':
+      return strings.NOT_SUBMITTED;
+    case 'In Review':
+      return strings.IN_REVIEW;
+    case 'Rejected':
+      return strings.REJECTED;
+    case 'Approved':
+      return strings.APPROVED;
+    case 'Not Needed':
+      return strings.NOT_NEEDED;
+    case 'Needs Translation':
+      return strings.NEEDS_TRANSLATION;
+    default:
+      return status as string;
   }
 };

@@ -7,7 +7,7 @@ import { useLocalization } from 'src/providers';
 type ProjectsDropdownProps<T extends { projectId?: number } | undefined> = {
   allowUnselect?: boolean;
   availableProjects: Project[] | undefined;
-  label?: string | false | undefined;
+  label?: string | undefined;
   record: T;
   setRecord: (setFn: (previousValue: T) => T) => void;
 };
@@ -20,8 +20,6 @@ function ProjectsDropdown<T extends { projectId?: number } | undefined>({
   setRecord,
 }: ProjectsDropdownProps<T>) {
   const { activeLocale } = useLocalization();
-
-  const dropdownLabel = label === false ? undefined : label || strings.PROJECT;
 
   const projectOptions = useMemo(() => {
     const options: DropdownItem[] = [];
@@ -49,7 +47,7 @@ function ProjectsDropdown<T extends { projectId?: number } | undefined>({
   return (
     <Dropdown
       id='projectId'
-      label={dropdownLabel}
+      label={label === '' ? label : strings.PROJECT}
       selectedValue={record?.projectId}
       options={projectOptions}
       onChange={(projectId: string) => {
