@@ -1,14 +1,18 @@
-import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
+import Page from 'src/components/Page';
 import DeliverableView from 'src/components/DeliverableView';
+import useFetchDeliverable from 'src/components/DeliverableView/useFetchDeliverable';
 
 const DeliverablesView = () => {
   const { deliverableId } = useParams<{ deliverableId: string }>();
 
-  // TODO fetch deliverable etc
-  const deliverable = useMemo(() => ({ id: deliverableId }), [deliverableId]);
+  const { deliverable } = useFetchDeliverable({ deliverableId: Number(deliverableId) });
 
-  return <DeliverableView deliverable={deliverable} />;
+  if (deliverable) {
+    return <DeliverableView deliverable={deliverable} />;
+  } else {
+    return <Page isLoading={true} />;
+  }
 };
 
 export default DeliverablesView;
