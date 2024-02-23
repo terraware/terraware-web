@@ -4,7 +4,7 @@ import { ViewProps } from './types';
 const DocumentsUploader = (props: ViewProps): JSX.Element => {
   return (
     <Box display='flex' flexDirection='column'>
-      DocumentsUploader coming soon {props.isAcceleratorConsole}!
+      <div>DocumentsUploader coming soon {props.isAcceleratorConsole}!</div>
     </Box>
   );
 };

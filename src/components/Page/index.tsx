@@ -6,10 +6,10 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import PageSnackbar from 'src/components/PageSnackbar';
 
 export type PageProps = {
-  content: React.ReactNode;
+  content?: React.ReactNode;
   contentStyle?: Record<string, string | number>;
   isLoading?: boolean;
-  title: React.ReactNode;
+  title?: React.ReactNode;
   useBackground?: boolean;
 };
 
