@@ -3,17 +3,17 @@ import { Container, Grid, useTheme } from '@mui/material';
 import { Dropdown, Textfield } from '@terraware/web-components';
 import PageForm from 'src/components/common/PageForm';
 import strings from 'src/strings';
-import { CreateCohortRequest, UpdateCohortRequest } from 'src/types/Cohort';
+import { CreateCohortRequestPayload, UpdateCohortRequestPayload } from 'src/types/Cohort';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-type CohortFormProps<T extends CreateCohortRequest | UpdateCohortRequest> = {
+type CohortFormProps<T extends CreateCohortRequestPayload | UpdateCohortRequestPayload> = {
   cohort: T;
   onCancel: () => void;
   onNext: (cohort: T) => void;
   saveText?: string;
 };
 
-export default function CohortForm<T extends CreateCohortRequest | UpdateCohortRequest>(
+export default function CohortForm<T extends CreateCohortRequestPayload | UpdateCohortRequestPayload>(
   props: CohortFormProps<T>
 ): JSX.Element {
   const { cohort, onCancel, onNext, saveText = strings.SAVE } = props;

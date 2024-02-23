@@ -7,7 +7,7 @@ import AcceleratorMain from 'src/scenes/AcceleratorRouter/AcceleratorMain';
 import CohortForm from 'src/scenes/AcceleratorRouter/CohortForm';
 import CohortService from 'src/services/CohortService';
 import strings from 'src/strings';
-import { CreateCohortRequest } from 'src/types/Cohort';
+import { CreateCohortRequestPayload } from 'src/types/Cohort';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -21,7 +21,7 @@ export default function AcceleratorCohortNewView({ reloadData }: AcceleratorCoho
   const [isBusy, setIsBusy] = useState<boolean>(false);
   const snackbar = useSnackbar();
 
-  const [record, setRecord] = useForm<CreateCohortRequest>({
+  const [record, setRecord] = useForm<CreateCohortRequestPayload>({
     phase: 'Phase 0 - Due Diligence',
     name: '',
   });
@@ -31,7 +31,7 @@ export default function AcceleratorCohortNewView({ reloadData }: AcceleratorCoho
   }, [history]);
 
   const createNewCohort = useCallback(
-    async (cohort: CreateCohortRequest) => {
+    async (cohort: CreateCohortRequestPayload) => {
       // first create the cohort
       let cohortId = -1;
       setIsBusy(true);
@@ -59,7 +59,7 @@ export default function AcceleratorCohortNewView({ reloadData }: AcceleratorCoho
   );
 
   const onCohortConfigured = useCallback(
-    (cohort: CreateCohortRequest) => {
+    (cohort: CreateCohortRequestPayload) => {
       setRecord(cohort);
       createNewCohort(cohort);
     },
@@ -74,7 +74,11 @@ export default function AcceleratorCohortNewView({ reloadData }: AcceleratorCoho
 
       {isBusy && <BusySpinner withSkrim={true} />}
 
-      <CohortForm<CreateCohortRequest> cohort={record} onCancel={goToAcceleratorOverview} onNext={onCohortConfigured} />
+      <CohortForm<CreateCohortRequestPayload>
+        cohort={record}
+        onCancel={goToAcceleratorOverview}
+        onNext={onCohortConfigured}
+      />
     </AcceleratorMain>
   );
 }

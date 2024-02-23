@@ -1,6 +1,6 @@
 import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response, Response2 } from 'src/services/HttpService';
-import { CreateCohortRequest, Cohort, UpdateCohortRequest } from 'src/types/Cohort';
+import { CreateCohortRequestPayload, Cohort, UpdateCohortRequestPayload } from 'src/types/Cohort';
 
 /**
  * Cohorts related services
@@ -49,7 +49,7 @@ const listCohorts = async (organizationId: number, locale?: string | null): Prom
 /**
  * Create a cohort
  */
-const createCohort = (cohort: CreateCohortRequest): Promise<Response> =>
+const createCohort = (cohort: CreateCohortRequestPayload): Promise<Response> =>
   httpCohorts.post({
     entity: cohort,
   });
@@ -63,7 +63,7 @@ const getCohort = (cohortId: number): Promise<Response2<Cohort>> =>
     (response) => ({ data: response?.cohort })
   );
 
-const updateCohort = (cohortId: number, payload: UpdateCohortRequest) =>
+const updateCohort = (cohortId: number, payload: UpdateCohortRequestPayload) =>
   httpCohort.put2<UpdateCohortResponsePayload>({
     url: COHORT_ENDPOINT,
     urlReplacements: { '{cohortId}': `${cohortId}` },
