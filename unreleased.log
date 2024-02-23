@@ -1,3 +1,4 @@
+b554474638 SW-4919 Use service function to gate display of deliverables menu (#2192)
 56593014ae SW-4859: FE - Overview - Add Cohort flow (#2182)
 7f5dc622b6 Updated translations from Phrase (#2193)
 bdbb5dcb71 SW-4902 Show deliverable title/metadata leveraging redux + mock data (#2191)
