@@ -50,12 +50,15 @@ export default function AcceleratorCohortNewView({ reloadData }: AcceleratorCoho
       }
 
       // set snackbar with status
-      snackbar.toastSuccess(strings.COHORT_ADDED, strings.formatString(strings.PROJECT_ADDED, record.name) as string);
+      snackbar.toastSuccess(
+        strings.COHORT_ADDED,
+        strings.formatString(strings.COHORT_ADDED_WITH_NAME, cohort.name) as string
+      );
 
       // navigate to accelerator overview
       goToAcceleratorOverview();
     },
-    [setIsBusy, record, snackbar, goToAcceleratorOverview]
+    [setIsBusy, snackbar, goToAcceleratorOverview]
   );
 
   const onCohortConfigured = useCallback(
