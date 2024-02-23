@@ -49,16 +49,16 @@ const mockDeliverable: Deliverable = {
 
 const getDeliverable = async (deliverableId: number): Promise<Response & DeliverableData> => {
   // TODO replace with axios
-  return Promise.resolve({
+  return {
     requestSucceeded: true,
     deliverable: { ...mockDeliverable },
-  });
+  };
 };
 
-const updateStatus = ({ reason, status }: UpdateStatusRequest): Promise<Response> => {
+const updateStatus = async ({ reason, status }: UpdateStatusRequest): Promise<Response> => {
   mockDeliverable.status = status;
   mockDeliverable.reason = reason;
-  return Promise.resolve({ requestSucceeded: true });
+  return { requestSucceeded: true };
 };
 
 // TODO will get removed once BE is done
@@ -86,7 +86,7 @@ const searchDeliverables = async (
 
   // TODO change this over once BE is done
   // return SearchService.search(params);
-  return Promise.resolve(mockResponseData);
+  return mockResponseData;
 };
 
 const transformBaseDeliverableElement = (element: SearchResponseElement): SearchResponseDeliverableBase => ({
