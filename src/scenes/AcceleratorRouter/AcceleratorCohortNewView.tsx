@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import AcceleratorMain from 'src/scenes/AcceleratorRouter/AcceleratorMain';
 import CohortForm from 'src/scenes/AcceleratorRouter/CohortForm';
+import CohortService from 'src/services/CohortService';
 import strings from 'src/strings';
 import { CreateCohortRequest } from 'src/types/Cohort';
 import useForm from 'src/utils/useForm';
@@ -25,37 +26,46 @@ export default function AcceleratorCohortNewView({ reloadData }: AcceleratorCoho
     name: '',
   });
 
-  const createNewCohort = async (_cohort: unknown) => {
-    // // first create the cohort
-    // let cohortId = -1;
-    // const response = await CohortService.createCohort(record);
-    // if (!response.requestSucceeded) {
-    //   snackbar.toastError();
-    //   return;
-    // } else {
-    //   cohortId = response.data.id;
-    // }
-
-    // if (!cohortId) {
-    //   snackbar.toastError();
-    //   return;
-    // }
-
-    // send request to create cohort
-    setIsBusy(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsBusy(false);
-
-    // set snackbar with status
-    snackbar.toastSuccess(strings.COHORT_ADDED, strings.formatString(strings.PROJECT_ADDED, record.name) as string);
-
-    // navigate to accelerator overview
-    goToAcceleratorOverview();
-  };
-
   const goToAcceleratorOverview = useCallback(() => {
     history.push({ pathname: APP_PATHS.ACCELERATOR_OVERVIEW });
   }, [history]);
+
+  const createNewCohort = useCallback(
+    async (cohort: CreateCohortRequest) => {
+
+      // first create the cohort
+      let cohortId = -1;
+      setIsBusy(true);
+      const response = await CohortService.createCohort(cohort);
+      setIsBusy(false);
+      if (!response.requestSucceeded) {
+        snackbar.toastError();
+        return;
+      } else {
+        cohortId = response.data?.cohort?.id;
+      }
+
+      if (!cohortId) {
+        snackbar.toastError();
+        return;
+      }
+
+      // set snackbar with status
+      snackbar.toastSuccess(strings.COHORT_ADDED, strings.formatString(strings.PROJECT_ADDED, record.name) as string);
+
+      // navigate to accelerator overview
+      goToAcceleratorOverview();
+    },
+    [setIsBusy, record, snackbar, goToAcceleratorOverview]
+  );
+
+  const onCohortConfigured = useCallback(
+    (cohort: CreateCohortRequest) => {
+      setRecord(cohort);
+      createNewCohort(cohort);
+    },
+    [setRecord, createNewCohort]
+  );
 
   return (
     <AcceleratorMain>
@@ -65,7 +75,7 @@ export default function AcceleratorCohortNewView({ reloadData }: AcceleratorCoho
 
       {isBusy && <BusySpinner withSkrim={true} />}
 
-      <CohortForm<CreateCohortRequest> cohort={record} onCancel={goToAcceleratorOverview} onNext={createNewCohort} />
+      <CohortForm<CreateCohortRequest> cohort={record} onCancel={goToAcceleratorOverview} onNext={onCohortConfigured} />
     </AcceleratorMain>
   );
 }
