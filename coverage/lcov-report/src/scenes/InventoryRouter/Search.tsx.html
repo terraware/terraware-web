@@ -421,7 +421,9 @@
 <a name='L356'></a><a href='#L356'>356</a>
 <a name='L357'></a><a href='#L357'>357</a>
 <a name='L358'></a><a href='#L358'>358</a>
-<a name='L359'></a><a href='#L359'>359</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L359'></a><a href='#L359'>359</a>
+<a name='L360'></a><a href='#L360'>360</a>
+<a name='L361'></a><a href='#L361'>361</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -688,7 +690,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1034,7 +1038,7 @@ export default function <span class="fstat-no" title="function not covered" >Sea
             label={strings.NURSERY}
             filterKey='facilityIds'
             options={nurseries.map(<span class="fstat-no" title="function not covered" >(n</span>: Facility) =&gt; <span class="cstat-no" title="statement not covered" >n.id)</span>}
-            renderOption={<span class="fstat-no" title="function not covered" >(i</span>d: number) =&gt; <span class="cstat-no" title="statement not covered" >nurseries.find(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.id === id)</span>?.name ?? ''}</span>
+            renderOption={<span class="fstat-no" title="function not covered" >(i</span>d: string | number) =&gt; <span class="cstat-no" title="statement not covered" >nurseries.find(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.id === id)</span>?.name ?? ''}</span>
           /&gt;
         )}
         {origin === 'Nursery' &amp;&amp; (
@@ -1046,7 +1050,9 @@ export default function <span class="fstat-no" title="function not covered" >Sea
             options={[...(availableSpecies || [])]
               .sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.scientificName.localeCompare(b.scientificName, activeLocale || undefined))</span>
               .map(<span class="fstat-no" title="function not covered" >(n</span>: Species) =&gt; <span class="cstat-no" title="statement not covered" >n.id)</span>}
-            renderOption={<span class="fstat-no" title="function not covered" >(i</span>d: number) =&gt; <span class="cstat-no" title="statement not covered" >(availableSpecies || []).find(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.id === id)</span>?.scientificName ?? ''}</span>
+            renderOption={<span class="fstat-no" title="function not covered" >(i</span>d: string | number) =&gt;
+<span class="cstat-no" title="statement not covered" >              (availableSpecies || []).find(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.id === id)</span>?.scientificName ?? ''</span>
+            }
           /&gt;
         )}
 &nbsp;
@@ -1058,7 +1064,7 @@ export default function <span class="fstat-no" title="function not covered" >Sea
               label={strings.NURSERY}
               filterKey='facilityIds'
               options={nurseries.map(<span class="fstat-no" title="function not covered" >(n</span>: Facility) =&gt; <span class="cstat-no" title="statement not covered" >n.id)</span>}
-              renderOption={<span class="fstat-no" title="function not covered" >(i</span>d: number) =&gt; <span class="cstat-no" title="statement not covered" >nurseries.find(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.id === id)</span>?.name ?? ''}</span>
+              renderOption={<span class="fstat-no" title="function not covered" >(i</span>d: string | number) =&gt; <span class="cstat-no" title="statement not covered" >nurseries.find(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.id === id)</span>?.name ?? ''}</span>
             /&gt;
             {filters.facilityIds &amp;&amp; filters.facilityIds.length &gt; 0 &amp;&amp; (
               &lt;InventoryFilters
@@ -1068,7 +1074,7 @@ export default function <span class="fstat-no" title="function not covered" >Sea
                 label={strings.SUB_LOCATIONS}
                 filterKey='subLocationsIds'
                 options={subLocations?.map(<span class="fstat-no" title="function not covered" >(s</span>l: SubLocation) =&gt; <span class="cstat-no" title="statement not covered" >sl.id)</span> ?? []}
-                renderOption={<span class="fstat-no" title="function not covered" >(i</span>d: number) =&gt; <span class="cstat-no" title="statement not covered" >subLocations?.find(<span class="fstat-no" title="function not covered" >(s</span>l) =&gt; <span class="cstat-no" title="statement not covered" >sl.id === id)</span>?.name ?? ''}</span>
+                renderOption={<span class="fstat-no" title="function not covered" >(i</span>d: string | number) =&gt; <span class="cstat-no" title="statement not covered" >subLocations?.find(<span class="fstat-no" title="function not covered" >(s</span>l) =&gt; <span class="cstat-no" title="statement not covered" >sl.id === id)</span>?.name ?? ''}</span>
               /&gt;
             )}
           &lt;/&gt;
@@ -1081,7 +1087,7 @@ export default function <span class="fstat-no" title="function not covered" >Sea
             label={strings.PROJECT}
             filterKey='projectIds'
             options={(projects || []).map(<span class="fstat-no" title="function not covered" >(n</span>: Project) =&gt; <span class="cstat-no" title="statement not covered" >n.id)</span>}
-            renderOption={<span class="fstat-no" title="function not covered" >(i</span>d: number) =&gt; (<span class="cstat-no" title="statement not covered" >id ? (projects || []).find(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.id === id)</span>?.name ?? '' : '')</span>}
+            renderOption={<span class="fstat-no" title="function not covered" >(i</span>d: string | number) =&gt; (<span class="cstat-no" title="statement not covered" >id ? (projects || []).find(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.id === id)</span>?.name ?? '' : '')</span>}
             notPresentFilterShown
             notPresentFilterLabel={strings.NO_PROJECT}
           /&gt;
@@ -1144,7 +1150,7 @@ export default function <span class="fstat-no" title="function not covered" >Sea
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-23T23:49:52.568Z
+                at 2024-02-24T00:28:50.438Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
