@@ -1,3 +1,4 @@
+3ded90895d Updated translations from Phrase (#2202)
 9cf0127f14 Implement v2 for search filters wrapper with isolated icon filters and featured filters (#2198)
 2554d8ebb8 Make it possible to use string values within the FilterMultiSelectContainer component tree (#2197)
 dfb8de1446 SW-4917 Add call-to-action buttons/flows for the accelerator-console view of deliverable (#2196)
