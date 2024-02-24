@@ -8,7 +8,7 @@ const Description = (props: ViewProps): JSX.Element => {
   return (
     <Box display='flex' flexDirection='column'>
       <div>
-        {deliverable.status !== 'Rejected' && isAcceleratorConsole && (
+        {deliverable.status !== 'Rejected' && !isAcceleratorConsole && (
           <DeliverableStatusBadge status={deliverable.status} />
         )}
         Description coming soon!
