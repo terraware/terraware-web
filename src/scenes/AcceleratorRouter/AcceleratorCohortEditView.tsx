@@ -10,11 +10,7 @@ import { UpdateCohortRequestPayload } from 'src/types/Cohort';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
-type AcceleratorCohortEditViewProps = {
-  reloadData?: () => void;
-};
-
-export default function AcceleratorCohortEditView({ reloadData }: AcceleratorCohortEditViewProps): JSX.Element {
+export default function AcceleratorCohortEditView(): JSX.Element {
   const history = useHistory();
   const theme = useTheme();
   const [isBusy, setIsBusy] = useState<boolean>(false);
