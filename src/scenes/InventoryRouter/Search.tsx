@@ -253,7 +253,7 @@ export default function Search<T extends { facilityInventories?: string }>(props
             label={strings.NURSERY}
             filterKey='facilityIds'
             options={nurseries.map((n: Facility) => n.id)}
-            renderOption={(id: number) => nurseries.find((n) => n.id === id)?.name ?? ''}
+            renderOption={(id: string | number) => nurseries.find((n) => n.id === id)?.name ?? ''}
           />
         )}
         {origin === 'Nursery' && (
@@ -265,7 +265,9 @@ export default function Search<T extends { facilityInventories?: string }>(props
             options={[...(availableSpecies || [])]
               .sort((a, b) => a.scientificName.localeCompare(b.scientificName, activeLocale || undefined))
               .map((n: Species) => n.id)}
-            renderOption={(id: number) => (availableSpecies || []).find((n) => n.id === id)?.scientificName ?? ''}
+            renderOption={(id: string | number) =>
+              (availableSpecies || []).find((n) => n.id === id)?.scientificName ?? ''
+            }
           />
         )}
 
@@ -277,7 +279,7 @@ export default function Search<T extends { facilityInventories?: string }>(props
               label={strings.NURSERY}
               filterKey='facilityIds'
               options={nurseries.map((n: Facility) => n.id)}
-              renderOption={(id: number) => nurseries.find((n) => n.id === id)?.name ?? ''}
+              renderOption={(id: string | number) => nurseries.find((n) => n.id === id)?.name ?? ''}
             />
             {filters.facilityIds && filters.facilityIds.length > 0 && (
               <InventoryFilters
@@ -287,7 +289,7 @@ export default function Search<T extends { facilityInventories?: string }>(props
                 label={strings.SUB_LOCATIONS}
                 filterKey='subLocationsIds'
                 options={subLocations?.map((sl: SubLocation) => sl.id) ?? []}
-                renderOption={(id: number) => subLocations?.find((sl) => sl.id === id)?.name ?? ''}
+                renderOption={(id: string | number) => subLocations?.find((sl) => sl.id === id)?.name ?? ''}
               />
             )}
           </>
@@ -300,7 +302,7 @@ export default function Search<T extends { facilityInventories?: string }>(props
             label={strings.PROJECT}
             filterKey='projectIds'
             options={(projects || []).map((n: Project) => n.id)}
-            renderOption={(id: number) => (id ? (projects || []).find((n) => n.id === id)?.name ?? '' : '')}
+            renderOption={(id: string | number) => (id ? (projects || []).find((n) => n.id === id)?.name ?? '' : '')}
             notPresentFilterShown
             notPresentFilterLabel={strings.NO_PROJECT}
           />

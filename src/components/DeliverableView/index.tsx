@@ -1,4 +1,4 @@
-import { Message } from '@terraware/web-components';
+import { BusySpinner, Message } from '@terraware/web-components';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Card from 'src/components/common/Card';
@@ -10,7 +10,9 @@ import Description from './Description';
 import DocumentsUploader from './DocumentsUploader';
 import DocumentsList from './DocumentsList';
 
-export type Props = EditProps;
+export type Props = EditProps & {
+  isBusy?: boolean;
+};
 
 const DeliverableView = (props: Props): JSX.Element => {
   const { ...viewProps }: ViewProps = props;
@@ -28,12 +30,15 @@ const DeliverableView = (props: Props): JSX.Element => {
   return (
     <Page
       content={
-        <Card style={{ display: 'flex', flexDirection: 'column' }}>
-          <StatusBar {...viewProps} />
-          <Description {...viewProps} />
-          <DocumentsUploader {...viewProps} />
-          <DocumentsList {...viewProps} />
-        </Card>
+        <>
+          {props.isBusy && <BusySpinner />}
+          <Card style={{ display: 'flex', flexDirection: 'column' }}>
+            <StatusBar {...viewProps} />
+            <Description {...viewProps} />
+            <DocumentsUploader {...viewProps} />
+            <DocumentsList {...viewProps} />
+          </Card>
+        </>
       }
       title={<TitleBar {...props} />}
     />

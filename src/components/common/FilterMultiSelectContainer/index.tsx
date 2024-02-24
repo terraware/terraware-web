@@ -52,11 +52,11 @@ type FilterMultiSelectContainerProps<T> = {
   notPresentFilterLabel?: string;
   notPresentFilterShown?: boolean;
   options: (string | number)[];
-  renderOption: (id: number) => string;
+  renderOption: (id: number | string) => string;
   setFilters: (f: T) => void;
 };
 
-export default function FilterMultiSelectContainer<T extends Record<string, (number | null)[]>>(
+export default function FilterMultiSelectContainer<T extends Record<string, (string | number | null)[]>>(
   props: FilterMultiSelectContainerProps<T>
 ): JSX.Element {
   const {
@@ -123,16 +123,16 @@ export default function FilterMultiSelectContainer<T extends Record<string, (num
 
   const renderFilterMultiSelect = () => {
     return (
-      <FilterMultiSelect
+      <FilterMultiSelect<string | number>
         filterKey={String(filterKey)}
         initialSelection={initialSelection}
         label={label}
         onCancel={handleClose}
-        onConfirm={(selectedIds: (number | null)[]) => {
+        onConfirm={(selectedValues: (string | number | null)[]) => {
           handleClose();
-          setFilters({ ...filters, [filterKey]: selectedIds });
+          setFilters({ ...filters, [filterKey]: selectedValues });
         }}
-        options={options.map((option) => Number(option))}
+        options={options}
         optionsVisible={optionsVisible}
         renderOption={renderOption}
         notPresentFilterLabel={notPresentFilterLabel}

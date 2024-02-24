@@ -125,7 +125,7 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
             label={strings.PROJECTS}
             filterKey='projectIds'
             options={projects?.map((project: Project) => project.id) ?? []}
-            renderOption={(id: number) => projects?.find((project) => project.id === id)?.name ?? ''}
+            renderOption={(id: string | number) => projects?.find((project) => project.id === id)?.name ?? ''}
           />
         )}
       </Box>
