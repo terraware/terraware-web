@@ -3,27 +3,23 @@ import HttpService, { Response, Response2 } from 'src/services/HttpService';
 import { CreateCohortRequestPayload, Cohort, UpdateCohortRequestPayload } from 'src/types/Cohort';
 
 /**
- * Cohorts related services
+ * Cohort related services
  */
 
 const COHORTS_ENDPOINT = '/api/v1/accelerator/cohorts';
 const COHORT_ENDPOINT = '/api/v1/accelerator/cohorts/{cohortId}';
 
-type ListCohortsResponsePayload =
+export type ListCohortsResponsePayload =
   paths[typeof COHORTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
-type GetCohortResponsePayload = paths[typeof COHORT_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+export type CreateCohortResponsePayload =
+  paths[typeof COHORTS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+export type GetCohortResponsePayload =
+  paths[typeof COHORT_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 export type UpdateCohortResponsePayload =
   paths[typeof COHORT_ENDPOINT]['put']['responses'][200]['content']['application/json'];
 export type DeleteCohortResponsePayload =
   paths[typeof COHORT_ENDPOINT]['delete']['responses'][200]['content']['application/json'];
-
-/**
- * exported type
- */
-export type CohortsData = {
-  cohorts?: Cohort[];
-};
 
 const httpCohort = HttpService.root(COHORT_ENDPOINT);
 const httpCohorts = HttpService.root(COHORTS_ENDPOINT);
@@ -31,20 +27,17 @@ const httpCohorts = HttpService.root(COHORTS_ENDPOINT);
 /**
  * List all cohorts
  */
-const listCohorts = async (organizationId: number, locale?: string | null): Promise<CohortsData & Response> => {
-  const response: CohortsData & Response = await httpCohorts.get<ListCohortsResponsePayload, CohortsData>(
+const listCohorts = async (organizationId: number, locale?: string | null): Promise<Response2<Cohort[]>> =>
+  httpCohorts.get<ListCohortsResponsePayload, { data: Cohort[] | undefined }>(
     {
       params: {
         organizationId: organizationId.toString(),
       },
     },
-    (data) => ({
-      cohorts: data?.cohorts.sort((a, b) => a.name.localeCompare(b.name, locale || undefined)),
+    (response) => ({
+      data: response?.cohorts?.sort((a, b) => a.name.localeCompare(b.name, locale || undefined)),
     })
   );
-
-  return response;
-};
 
 /**
  * Create a cohort
