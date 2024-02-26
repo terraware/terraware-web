@@ -2,6 +2,7 @@ import { useTheme } from '@mui/material';
 import { Badge } from '@terraware/web-components';
 import { BadgeProps } from '@terraware/web-components/components/Badge';
 import { useCallback } from 'react';
+import { useLocalization } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
 
@@ -9,8 +10,9 @@ type DeliverableStatusBadgeProps = {
   status: DeliverableStatusType;
 };
 
-const DeliverableStatusBadge = (props: DeliverableStatusBadgeProps): JSX.Element | undefined => {
+const DeliverableStatusBadge = (props: DeliverableStatusBadgeProps): JSX.Element => {
   const { status } = props;
+  const { activeLocale } = useLocalization();
   const theme = useTheme();
 
   const getBadgePropsForStatus = useCallback((): BadgeProps => {
@@ -78,9 +80,13 @@ const DeliverableStatusBadge = (props: DeliverableStatusBadgeProps): JSX.Element
   }, [status, theme]);
 
   return (
-    <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
-      <Badge {...getBadgePropsForStatus()} />
-    </div>
+    <>
+      {!activeLocale ? undefined : (
+        <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
+          <Badge {...getBadgePropsForStatus()} />
+        </div>
+      )}
+    </>
   );
 };
 
