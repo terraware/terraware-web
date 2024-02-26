@@ -1,6 +1,8 @@
 import {
   OptionalSearchRequestPayload,
+  SearchCriteria,
   SearchNodePayload,
+  SearchRequestPayload,
   SearchResponseElement,
   SearchSortOrder,
 } from 'src/types/Search';
@@ -14,6 +16,7 @@ import {
   SearchResponseDeliverableAdmin,
   UpdateStatusRequest,
 } from 'src/types/Deliverables';
+import SearchService from 'src/services/SearchService';
 import { Response } from 'src/services/HttpService';
 
 /**
