@@ -294,10 +294,10 @@ DELETE_VIABILITY_TEST_MESSAGE,You’re about to delete viability test {0}.,
 DELETED_SPECIES,<deleted species>,
 DELIVERABLE_APPROVED,Deliverable Approved,
 DELIVERABLE_CATEGORY,Category: {0},"Shows the deliverable document's category name, example Category: Legal"
+DELIVERABLE_NAME,Deliverable Name,
 DELIVERABLE_PROJECT,Project: {0},"Shows the project name associated with the deliverable document, example Project: Andromeda"
 DELIVERABLE_REJECTED,Deliverable Rejected,
 DELIVERABLE_STATUS_UPDATED,Deliverable Status Updated,
-DELIVERABLE_NAME,Deliverable Name,
 DELIVERABLES,Deliverables,
 DESCRIBE_ORGANIZATION_TYPE_DETAILS,Describe your organization,
 DESCRIPTION,Description,
