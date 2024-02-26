@@ -123,7 +123,6 @@ const DeliverablesTable = ({ columns, extraTableFilters, pageHeaderRef, organiza
 
   useEffect(() => {
     const search: SearchNodePayload = getSearchPayload();
-    console.log('search', search);
     const request = dispatch(requestDeliverablesSearch({ organizationId, search, searchSortOrder }));
     setDeliverablesSearchRequestId(request.requestId);
   }, [dispatch, getSearchPayload, organizationId, searchSortOrder]);
