@@ -1,4 +1,11 @@
-import { SearchCriteria, SearchRequestPayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import {
+  OptionalSearchRequestPayload,
+  SearchCriteria,
+  SearchNodePayload,
+  SearchRequestPayload,
+  SearchResponseElement,
+  SearchSortOrder,
+} from 'src/types/Search';
 import {
   Deliverable,
   DeliverableTypeType,
@@ -67,16 +74,14 @@ let mockResponseData: SearchResponseElement[] = [];
 const searchDeliverables = async (
   fields: string[],
   organizationId: number,
-  searchCriteria?: SearchCriteria,
+  search?: SearchNodePayload,
   sortOrder?: SearchSortOrder
 ): Promise<SearchResponseElement[] | null> => {
-  const params: SearchRequestPayload = {
+  const params: OptionalSearchRequestPayload = {
     // TODO confirm prefix when BE is done
     prefix: 'deliverables',
     fields,
-    // TODO this might need to be updated, this function injects a search criteria for `facility_organization_id`
-    // which may not be applicable
-    search: SearchService.convertToSearchNodePayload(searchCriteria ?? {}, organizationId),
+    search,
     // TODO implement pagination when BE is done
     count: 1000,
   };
@@ -104,10 +109,10 @@ const transformAdminDeliverableElement = (element: SearchResponseElement): Searc
 
 const searchDeliverablesForAdmin = async (
   organizationId: number,
-  searchCriteria?: SearchCriteria,
+  search?: SearchNodePayload,
   sortOrder?: SearchSortOrder
 ): Promise<SearchResponseDeliverableAdmin[] | null> => {
-  const result = await searchDeliverables(SEARCH_FIELDS_DELIVERABLES_ADMIN, organizationId, searchCriteria, sortOrder);
+  const result = await searchDeliverables(SEARCH_FIELDS_DELIVERABLES_ADMIN, organizationId, search, sortOrder);
   if (!result) {
     return result;
   }
@@ -117,15 +122,10 @@ const searchDeliverablesForAdmin = async (
 
 const searchDeliverablesForParticipant = async (
   organizationId: number,
-  searchCriteria?: SearchCriteria,
+  search?: SearchNodePayload,
   sortOrder?: SearchSortOrder
 ): Promise<SearchResponseDeliverableParticipant[] | null> => {
-  const result = await searchDeliverables(
-    SEARCH_FIELDS_DELIVERABLES_PARTICIPANT,
-    organizationId,
-    searchCriteria,
-    sortOrder
-  );
+  const result = await searchDeliverables(SEARCH_FIELDS_DELIVERABLES_PARTICIPANT, organizationId, search, sortOrder);
   if (!result) {
     return result;
   }
