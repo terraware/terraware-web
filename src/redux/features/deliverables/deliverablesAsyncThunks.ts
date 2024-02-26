@@ -3,12 +3,7 @@ import strings from 'src/strings';
 import { SearchCriteria, SearchSortOrder } from 'src/types/Search';
 import { Response } from 'src/services/HttpService';
 import DeliverablesService from 'src/services/DeliverablesService';
-import {
-  DeliverableData,
-  SearchResponseDeliverableAdmin,
-  SearchResponseDeliverableBase,
-  UpdateStatusRequest,
-} from 'src/types/Deliverables';
+import { DeliverableData, SearchResponseDeliverable, UpdateStatusRequest } from 'src/types/Deliverables';
 
 export const requestDeliverablesSearch = createAsyncThunk(
   'deliverables/search',
@@ -18,10 +13,9 @@ export const requestDeliverablesSearch = createAsyncThunk(
   ) => {
     const { organizationId, searchCriteria, sortOrder } = request;
 
-    const response: (SearchResponseDeliverableAdmin | SearchResponseDeliverableBase)[] | null =
-      await (organizationId === -1
-        ? DeliverablesService.searchDeliverablesForAdmin(organizationId, searchCriteria, sortOrder)
-        : DeliverablesService.searchDeliverablesForParticipant(organizationId, searchCriteria, sortOrder));
+    const response: SearchResponseDeliverable[] | null = await (organizationId === -1
+      ? DeliverablesService.searchDeliverablesForAdmin(organizationId, searchCriteria, sortOrder)
+      : DeliverablesService.searchDeliverablesForParticipant(organizationId, searchCriteria, sortOrder));
 
     if (response) {
       return response;
