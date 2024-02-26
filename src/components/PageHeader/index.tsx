@@ -47,6 +47,7 @@ interface Props {
   backName?: string;
   backUrl?: string;
   children?: React.ReactNode[];
+  leftComponent?: React.ReactNode;
   page?: string;
   parentPage?: string;
   rightComponent?: React.ReactNode;
@@ -60,6 +61,7 @@ export default function PageHeader({
   title,
   subtitle,
   children,
+  leftComponent,
   rightComponent,
   back,
   backName,
@@ -103,6 +105,7 @@ export default function PageHeader({
                 >
                   {title || getPageHeading()}
                 </Typography>
+                {!!leftComponent && <div style={{ marginRight: 'auto' }}>{leftComponent}</div>}
                 {!!rightComponent && <div>{rightComponent}</div>}
               </Box>
               {subtitle && (

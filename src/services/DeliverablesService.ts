@@ -5,7 +5,7 @@ import {
   DeliverableCategoryType,
   DeliverableStatusType,
   DeliverableData,
-  SearchResponseDeliverableBase,
+  SearchResponseDeliverableParticipant,
   SearchResponseDeliverableAdmin,
   UpdateStatusRequest,
 } from 'src/types/Deliverables';
@@ -15,9 +15,10 @@ import { Response } from 'src/services/HttpService';
 /**
  * Accelerator "deliverable" related services
  */
-const SEARCH_FIELDS_DELIVERABLES_BASE = ['documentCount', 'id', 'name', 'project_name', 'status', 'type'];
 
-const SEARCH_FIELDS_DELIVERABLES_ADMIN = [...SEARCH_FIELDS_DELIVERABLES_BASE, 'category', 'description'];
+const SEARCH_FIELDS_DELIVERABLES_ADMIN = ['category', 'documentCount', 'id', 'name', 'project_name', 'status', 'type'];
+
+const SEARCH_FIELDS_DELIVERABLES_PARTICIPANT = [...SEARCH_FIELDS_DELIVERABLES_ADMIN, 'description'];
 
 const mockDeliverable: Deliverable = {
   id: 1,
@@ -89,7 +90,8 @@ const searchDeliverables = async (
   return mockResponseData;
 };
 
-const transformBaseDeliverableElement = (element: SearchResponseElement): SearchResponseDeliverableBase => ({
+const transformAdminDeliverableElement = (element: SearchResponseElement): SearchResponseDeliverableAdmin => ({
+  category: element.category as DeliverableCategoryType,
   documentCount: Number(element.documentCount),
   id: Number(element.id),
   name: `${element.name}`,
@@ -110,26 +112,28 @@ const searchDeliverablesForAdmin = async (
     return result;
   }
 
-  return result.map(
-    (element: SearchResponseElement): SearchResponseDeliverableAdmin => ({
-      ...transformBaseDeliverableElement(element),
-      category: element.category as DeliverableCategoryType,
-      description: `${element.description}`,
-    })
-  );
+  return result.map(transformAdminDeliverableElement);
 };
 
 const searchDeliverablesForParticipant = async (
   organizationId: number,
   searchCriteria?: SearchCriteria,
   sortOrder?: SearchSortOrder
-): Promise<SearchResponseDeliverableBase[] | null> => {
-  const result = await searchDeliverables(SEARCH_FIELDS_DELIVERABLES_BASE, organizationId, searchCriteria, sortOrder);
+): Promise<SearchResponseDeliverableParticipant[] | null> => {
+  const result = await searchDeliverables(
+    SEARCH_FIELDS_DELIVERABLES_PARTICIPANT,
+    organizationId,
+    searchCriteria,
+    sortOrder
+  );
   if (!result) {
     return result;
   }
 
-  return result.map(transformBaseDeliverableElement);
+  return result.map((element) => ({
+    ...transformAdminDeliverableElement(element),
+    description: `${element.description}`,
+  }));
 };
 
 const DeliverablesService = {

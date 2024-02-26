@@ -47,7 +47,7 @@ function ProjectsDropdown<T extends { projectId?: number } | undefined>({
   return (
     <Dropdown
       id='projectId'
-      label={label || strings.PROJECT}
+      label={label === '' ? label : strings.PROJECT}
       selectedValue={record?.projectId}
       options={projectOptions}
       onChange={(projectId: string) => {
