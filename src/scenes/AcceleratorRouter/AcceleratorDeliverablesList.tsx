@@ -5,6 +5,7 @@ import { Separator, SortOrder, TableColumnType } from '@terraware/web-components
 import strings from 'src/strings';
 import theme from 'src/theme';
 import { useLocalization } from 'src/providers';
+import { useParticipants } from 'src/hooks/useParticipants';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import useDebounce from 'src/utils/useDebounce';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -14,12 +15,11 @@ import { DeliverableCategories, DeliverableStatuses, SearchResponseDeliverable }
 import PageHeader from 'src/components/PageHeader';
 import Card from 'src/components/common/Card';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import ParticipantsDropdown from 'src/components/ParticipantsDropdown';
 import { BaseTable as Table } from 'src/components/common/table';
 import SearchFiltersWrapperV2, { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import DeliverableCellRenderer from './DeliverableCellRenderer';
 import AcceleratorMain from './AcceleratorMain';
-import ParticipantsDropdown from '../../components/ParticipantsDropdown';
-import { useParticipants } from '../../hooks/useParticipants';
 
 const useStyles = makeStyles(() => ({
   mainContainer: {

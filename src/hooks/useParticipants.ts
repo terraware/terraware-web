@@ -29,13 +29,11 @@ export const useParticipants = (participantId?: number) => {
   useEffect(() => {
     if (!availableParticipants) {
       const request = dispatch(requestParticipantsList());
-      console.log('request', request);
       setRequestId(request.requestId);
     }
   }, [availableParticipants, dispatch]);
 
   useEffect(() => {
-    console.log('participantsListRequest', participantsListRequest);
     if (!participantsListRequest) {
       return;
     }
