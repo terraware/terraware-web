@@ -41,6 +41,7 @@ import {
   deliverablesSearchReducer,
   deliverablesReducer,
 } from 'src/redux/features/deliverables/deliverablesSlice';
+import { participantsListReducer } from './features/participants/participantsSlice';
 
 // assembly of app reducers
 export const reducers = {
@@ -59,6 +60,7 @@ export const reducers = {
   monitoringPlots: monitoringPlotsReducer,
   observations: observationsReducer,
   observationsResults: observationsResultsReducer,
+  participantsList: participantsListReducer,
   plantingSiteObservationsResults: plantingSiteObservationsResultsReducer,
   plantingSitesSearchResults: plantingSitesSearchResultsReducer,
   plantings: plantingsReducer,
