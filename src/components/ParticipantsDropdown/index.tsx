@@ -51,10 +51,21 @@ function ParticipantsDropdown<T extends { participantId?: number } | undefined>(
       selectedValue={record?.participantId}
       options={participantOptions}
       onChange={(participantId: string) => {
-        setRecord((previousValue) => {
+        setRecord((previousValue: T): T => {
+          if (participantId === '') {
+            if (previousValue) {
+              return {
+                ...previousValue,
+                participantId: undefined,
+              };
+            } else {
+              return previousValue;
+            }
+          }
+
           return {
             ...previousValue,
-            participantId: participantId ? Number(participantId) : null,
+            participantId: Number(participantId),
           };
         });
       }}
