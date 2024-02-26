@@ -16,67 +16,57 @@ const DeliverableStatusBadge = (props: DeliverableStatusBadgeProps): JSX.Element
   const theme = useTheme();
 
   const getBadgePropsForStatus = useCallback((): BadgeProps => {
-    let badgeProps: BadgeProps;
-
     switch (status) {
       case 'Approved':
-        badgeProps = {
+        return {
           backgroundColor: theme.palette.TwClrBgSuccessTertiary,
           borderColor: theme.palette.TwClrBrdrSuccess,
           labelColor: theme.palette.TwClrTxtSuccess,
           label: strings.APPROVED,
         };
-        break;
       case 'In Review':
-        badgeProps = {
+        return {
           backgroundColor: theme.palette.TwClrBgWarningTertiary,
           borderColor: theme.palette.TwClrBrdrWarning,
           labelColor: theme.palette.TwClrTxtWarning,
           label: strings.APPROVED,
         };
-        break;
       case 'Needs Translation':
-        badgeProps = {
+        return {
           backgroundColor: theme.palette.TwClrBgInfoTertiary,
           borderColor: theme.palette.TwClrBrdrInfo,
           labelColor: theme.palette.TwClrTxtInfo,
           label: strings.APPROVED,
         };
-        break;
       case 'Not Needed':
-        badgeProps = {
+        return {
           backgroundColor: theme.palette.TwClrBgInfoTertiary,
           borderColor: theme.palette.TwClrBrdrInfo,
           labelColor: theme.palette.TwClrTxtInfo,
           label: strings.NOT_NEEDED,
         };
-        break;
       case 'Not Submitted':
-        badgeProps = {
+        return {
           backgroundColor: theme.palette.TwClrBgInfoTertiary,
           borderColor: theme.palette.TwClrBrdrInfo,
           labelColor: theme.palette.TwClrTxtInfo,
           label: strings.NOT_SUBMITTED,
         };
-        break;
       case 'Rejected':
-        badgeProps = {
+        return {
           backgroundColor: theme.palette.TwClrBgDangerTertiary,
           borderColor: theme.palette.TwClrBrdrDanger,
           labelColor: theme.palette.TwClrTxtDanger,
           label: strings.REJECTED,
         };
-        break;
       default:
-        badgeProps = {
+        return {
           backgroundColor: theme.palette.TwClrBgInfoTertiary,
           borderColor: theme.palette.TwClrBrdrInfo,
           labelColor: theme.palette.TwClrTxtInfo,
           label: status,
         };
     }
-
-    return badgeProps;
   }, [status, theme]);
 
   return (
