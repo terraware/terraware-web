@@ -25,7 +25,19 @@ const SEARCH_FIELDS_DELIVERABLES_ADMIN = ['category', 'documentCount', 'id', 'na
 const SEARCH_FIELDS_DELIVERABLES_PARTICIPANT = [...SEARCH_FIELDS_DELIVERABLES_ADMIN, 'description'];
 
 const mockDeliverable: Deliverable = {
-  id: 1,
+  category: 'Legal',
+  // TODO need to figure out if we are going to allow raw HTML or just have regular text
+  deliverableContent:
+    'The Company Formation Document is to confirm the entity is properly formed and registered in the country.\n' +
+    '\n' +
+    'Depending on your jurisdiction, this document may be called a Certificate of Incorporation or a Business Registration Certificate, for example.\n' +
+    '\n' +
+    'Submit:\n' +
+    'A document issued by the relevant authority in your jurisdiction that contains the following information:\n' +
+    'Company Name\n' +
+    'Legal Form / Structure – (e.g. corporation, limited liability company, etc.)\n' +
+    'Date of Formation/Incorporation\n' +
+    'Company Number (if applicable)',
   documents: [
     {
       name: 'Upload 1',
@@ -52,23 +64,12 @@ const mockDeliverable: Deliverable = {
       project_name: 'Andromeda',
     },
   ],
-  category: 'Legal',
-  status: 'Not Submitted',
+  id: 1,
   name: 'Company Formation Document',
-  projectName: 'Treemendo.us',
   projectId: 1,
-  // TODO need to figure out if we are going to allow raw HTML or just have regular text
-  deliverableContent:
-    'The Company Formation Document is to confirm the entity is properly formed and registered in the country.\n' +
-    '\n' +
-    'Depending on your jurisdiction, this document may be called a Certificate of Incorporation or a Business Registration Certificate, for example.\n' +
-    '\n' +
-    'Submit:\n' +
-    'A document issued by the relevant authority in your jurisdiction that contains the following information:\n' +
-    'Company Name\n' +
-    'Legal Form / Structure – (e.g. corporation, limited liability company, etc.)\n' +
-    'Date of Formation/Incorporation\n' +
-    'Company Number (if applicable)',
+  projectName: 'Treemendo.us',
+  status: 'Not Submitted',
+  templateUrl: 'https://docs.google.com/document/d/1NkNoho843CE-6NM8rmmHfdAT7HJS6vWhfzezcvkj3yM/edit?usp=sharing',
 };
 
 const getDeliverable = async (deliverableId: number): Promise<Response & DeliverableData> => {
