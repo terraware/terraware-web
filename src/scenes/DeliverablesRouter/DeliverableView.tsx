@@ -7,9 +7,8 @@ import Page from 'src/components/Page';
 import DocumentsList from 'src/scenes/DeliverablesRouter/DocumentsList';
 import { EditProps, ViewProps } from 'src/components/DeliverableView/types';
 import TitleBar from 'src/components/DeliverableView/TitleBar';
-import StatusBar from 'src/components/DeliverableView/StatusBar';
-import Description from 'src/components/DeliverableView/Description';
 import DocumentsUploader from 'src/components/DeliverableView/DocumentsUploader';
+import Metadata from 'src/components/DeliverableView/Metadata';
 
 export type Props = EditProps & {
   isBusy?: boolean;
@@ -34,8 +33,7 @@ const DeliverableView = (props: Props): JSX.Element => {
         <>
           {props.isBusy && <BusySpinner />}
           <Card style={{ display: 'flex', flexDirection: 'column' }}>
-            <StatusBar {...viewProps} />
-            <Description {...viewProps} />
+            <Metadata {...viewProps} />
             <DocumentsUploader {...viewProps} />
             <DocumentsList {...viewProps} />
           </Card>
