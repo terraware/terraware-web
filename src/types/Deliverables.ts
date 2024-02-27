@@ -27,6 +27,9 @@ export type DeliverableDocument = {
   name: string;
   description: string;
   dateUploaded: string;
+  link: string;
+  documentType: string;
+  project_name: string;
 };
 
 export type Deliverable = {
