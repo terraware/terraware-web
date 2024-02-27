@@ -27,7 +27,7 @@ const DocumentsList = (props: DocumentsListProps): JSX.Element => {
     <Box display='flex' flexDirection='column'>
       <Grid item xs={12}>
         <Table
-          id={'documents-list'}
+          id={'documents-list' + props.isAcceleratorConsole ? '-admin' : ''}
           columns={() => props.columns}
           rows={props.deliverable.documents}
           orderBy={searchSortOrder.field}
