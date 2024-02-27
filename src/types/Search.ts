@@ -15,3 +15,4 @@ export type FieldOptionsMap = { [key: string]: { partial: boolean; values: (stri
 
 /** Search request payload that requires a search node to be specified. */
 export type SearchRequestPayload = components['schemas']['SearchRequestPayload'] & { search: SearchNodePayload };
+export type OptionalSearchRequestPayload = components['schemas']['SearchRequestPayload'];

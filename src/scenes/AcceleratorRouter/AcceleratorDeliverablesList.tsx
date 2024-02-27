@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Container, Grid, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Separator, SortOrder, TableColumnType } from '@terraware/web-components';
@@ -6,7 +6,7 @@ import strings from 'src/strings';
 import theme from 'src/theme';
 import { useLocalization } from 'src/providers';
 import { useParticipants } from 'src/hooks/useParticipants';
-import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import useDebounce from 'src/utils/useDebounce';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectDeliverablesSearchRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
@@ -63,6 +63,8 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
       ]
     : [];
 
+const FUZZY_SEARCH_COLUMNS = ['name', 'project_name'];
+
 const AcceleratorDeliverablesList = () => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
@@ -80,9 +82,6 @@ const AcceleratorDeliverablesList = () => {
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
   const [searchValue, setSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(searchValue, 250);
-  // Logging this out for now so the build doesn't fail, still needs to be hooked up per previous TODO
-  // tslint:disable-next-line:no-console
-  console.log(debouncedSearchTerm);
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>({
     field: 'deliverableName',
     direction: 'Ascending',
@@ -94,11 +93,15 @@ const AcceleratorDeliverablesList = () => {
         ? [
             {
               field: 'status',
+              // These options are strings for now, but may end up as enums when the BE types come through, if that is
+              // the case we will need to implement the renderOption and pillValueRenderer to render the desired
+              // human readable values
               options: DeliverableStatuses,
               label: strings.STATUS,
             },
             {
               field: 'category',
+              // Same note as above
               options: DeliverableCategories,
               label: strings.CATEGORY,
             },
@@ -113,11 +116,60 @@ const AcceleratorDeliverablesList = () => {
       direction: order === 'asc' ? 'Ascending' : 'Descending',
     });
 
+  const getSearchPayload = useCallback((): SearchNodePayload => {
+    const searchNodeChildren: SearchNodePayload[] = [];
+
+    // Apply search field to search API payload
+    if (debouncedSearchTerm) {
+      const fuzzySearchValueChildren = FUZZY_SEARCH_COLUMNS.map(
+        (field: string): FieldNodePayload => ({
+          operation: 'field',
+          field,
+          type: 'Fuzzy',
+          values: [debouncedSearchTerm],
+        })
+      );
+
+      searchNodeChildren.push({
+        operation: 'or',
+        children: fuzzySearchValueChildren,
+      });
+    }
+
+    // Apply filters to search API payload
+    if (Object.keys(filters).length > 0) {
+      const filterValueChildren = Object.keys(filters)
+        .filter((field: string) => (filters[field]?.values || []).length > 0)
+        .map((field: string): SearchNodePayload => filters[field]);
+
+      searchNodeChildren.push({
+        operation: 'and',
+        children: filterValueChildren,
+      });
+    }
+
+    // Apply participant filter which lives outside the table
+    if (participantFilter.participantId) {
+      searchNodeChildren.push({
+        operation: 'field',
+        field: 'participant_id',
+        type: 'Exact',
+        values: [`${participantFilter.participantId}`],
+      });
+    }
+
+    return {
+      operation: 'and',
+      children: searchNodeChildren,
+    };
+  }, [debouncedSearchTerm, filters, participantFilter.participantId]);
+
   useEffect(() => {
+    const search: SearchNodePayload = getSearchPayload();
     // -1 for "non-organization scoped search" IE admin search
-    const request = dispatch(requestDeliverablesSearch({ organizationId: -1 }));
+    const request = dispatch(requestDeliverablesSearch({ organizationId: -1, search, searchSortOrder }));
     setDeliverablesSearchRequestId(request.requestId);
-  }, [dispatch]);
+  }, [dispatch, getSearchPayload, searchSortOrder]);
 
   useEffect(() => {
     // TODO do something if the request has an error
@@ -179,7 +231,6 @@ const AcceleratorDeliverablesList = () => {
               order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
               Renderer={DeliverableCellRenderer}
               sortHandler={onSortChange}
-              // onReorderEnd={reorderSearchColumns}
             />
           </Grid>
         </Card>
