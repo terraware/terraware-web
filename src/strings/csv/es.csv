@@ -733,6 +733,7 @@ NO_MOBILE_SUPPORT_TITLE,La página web de Terraware aún no es compatible con di
 NO_NEGATIVE_NUMBERS,No se admiten números negativos.,
 NO_NOTIFICATIONS,No hay notificaciones que mostrar.,
 NO_NURSERIES_NON_ADMIN_MSG,"Antes de que pueda añadir y administrar su inventario de viveros, deberá tener un vivero y especies dentro de Terraware. Solo los administradores pueden añadir viveros y especies, así que comuníquese con el suyo para obtener ayuda.",
+NO_PARTICIPANT,Ningún participante,
 NO_PAST_DATES,No se admiten fechas pasadas.,
 NO_PEOPLE_IN_ORG,No hay personas en la organización.,
 NO_PLANTING_SITES_DESCRIPTION,Comience por añadir un sitio de plantación. Añadir un sitio de plantación le permitirá rastrear a dónde van las plantas de semillero al dejar el vivero.,
