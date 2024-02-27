@@ -5,8 +5,7 @@ import Card from 'src/components/common/Card';
 import Page from 'src/components/Page';
 import { EditProps, ViewProps } from './types';
 import TitleBar from './TitleBar';
-import StatusBar from './StatusBar';
-import Description from './Description';
+import Metadata from './Metadata';
 import DocumentsUploader from './DocumentsUploader';
 import DocumentsList from './DocumentsList';
 
@@ -33,8 +32,7 @@ const DeliverableView = (props: Props): JSX.Element => {
         <>
           {props.isBusy && <BusySpinner />}
           <Card style={{ display: 'flex', flexDirection: 'column' }}>
-            <StatusBar {...viewProps} />
-            <Description {...viewProps} />
+            <Metadata {...viewProps} />
             <DocumentsUploader {...viewProps} />
             <DocumentsList {...viewProps} />
           </Card>

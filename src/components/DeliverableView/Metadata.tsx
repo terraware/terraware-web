@@ -3,7 +3,7 @@ import { ViewProps } from './types';
 import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
 import strings from 'src/strings';
 
-const StatusBar = (props: ViewProps): JSX.Element => {
+const Metadata = (props: ViewProps): JSX.Element => {
   const { deliverable, isAcceleratorConsole } = props;
   const theme = useTheme();
 
@@ -32,8 +32,15 @@ const StatusBar = (props: ViewProps): JSX.Element => {
           <strong>{strings.INTERNAL_COMMENTS}</strong> ?
         </Box>
       )}
+
+      <Box marginBottom='16px'>
+        {deliverable.status !== 'Rejected' && !isAcceleratorConsole && (
+          <DeliverableStatusBadge status={deliverable.status} />
+        )}
+        Description coming soon!
+      </Box>
     </Box>
   );
 };
 
-export default StatusBar;
+export default Metadata;
