@@ -14,7 +14,7 @@ interface FeaturedFiltersProps {
 type MultiSelectFilters = Record<string, (string | number | null)[]>;
 
 const defaultSearchNodeCreator = (field: string, values: (number | string | null)[]) => ({
-  field: 'status',
+  field,
   operation: 'field',
   type: 'Exact',
   values: values.map((value: number | string | null): string | null => (value === null ? value : `${value}`)),

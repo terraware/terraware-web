@@ -1,5 +1,6 @@
 import { Action, combineReducers } from '@reduxjs/toolkit';
 import { appVersionReducer } from './features/appVersion/appVersionSlice';
+import { cohortsReducer, cohortsRequestsReducer } from 'src/redux/features/cohorts/cohortsSlice';
 import {
   observationsReducer,
   observationsResultsReducer,
@@ -41,6 +42,7 @@ import {
   deliverablesSearchReducer,
   deliverablesReducer,
 } from 'src/redux/features/deliverables/deliverablesSlice';
+import { participantsListReducer } from './features/participants/participantsSlice';
 
 // assembly of app reducers
 export const reducers = {
@@ -48,6 +50,8 @@ export const reducers = {
   appVersion: appVersionReducer,
   batches: batchesReducer,
   batchesRequests: batchesRequestsReducer,
+  cohorts: cohortsReducer,
+  cohortsRequests: cohortsRequestsReducer,
   deliverablesEdit: deliverablesEditReducer,
   deliverablesSearch: deliverablesSearchReducer,
   deliverables: deliverablesReducer,
@@ -59,6 +63,7 @@ export const reducers = {
   monitoringPlots: monitoringPlotsReducer,
   observations: observationsReducer,
   observationsResults: observationsResultsReducer,
+  participantsList: participantsListReducer,
   plantingSiteObservationsResults: plantingSiteObservationsResultsReducer,
   plantingSitesSearchResults: plantingSitesSearchResultsReducer,
   plantings: plantingsReducer,

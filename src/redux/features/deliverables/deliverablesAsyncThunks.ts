@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import strings from 'src/strings';
-import { SearchCriteria, SearchSortOrder } from 'src/types/Search';
+import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { Response } from 'src/services/HttpService';
 import DeliverablesService from 'src/services/DeliverablesService';
 import { DeliverableData, SearchResponseDeliverable, UpdateStatusRequest } from 'src/types/Deliverables';
@@ -8,14 +8,14 @@ import { DeliverableData, SearchResponseDeliverable, UpdateStatusRequest } from 
 export const requestDeliverablesSearch = createAsyncThunk(
   'deliverables/search',
   async (
-    request: { organizationId: number; searchCriteria?: SearchCriteria; sortOrder?: SearchSortOrder },
+    request: { organizationId: number; search?: SearchNodePayload; searchSortOrder?: SearchSortOrder },
     { rejectWithValue }
   ) => {
-    const { organizationId, searchCriteria, sortOrder } = request;
+    const { organizationId, search, searchSortOrder } = request;
 
     const response: SearchResponseDeliverable[] | null = await (organizationId === -1
-      ? DeliverablesService.searchDeliverablesForAdmin(organizationId, searchCriteria, sortOrder)
-      : DeliverablesService.searchDeliverablesForParticipant(organizationId, searchCriteria, sortOrder));
+      ? DeliverablesService.searchDeliverablesForAdmin(organizationId, search, searchSortOrder)
+      : DeliverablesService.searchDeliverablesForParticipant(organizationId, search, searchSortOrder));
 
     if (response) {
       return response;
