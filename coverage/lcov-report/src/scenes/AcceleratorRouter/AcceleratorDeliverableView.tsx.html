@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/DeliverableView/index.tsx</title>
+    <title>Code coverage report for src/scenes/AcceleratorRouter/AcceleratorDeliverableView.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,20 +19,20 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/DeliverableView</a> index.tsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/scenes/AcceleratorRouter</a> AcceleratorDeliverableView.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
@@ -110,10 +110,7 @@
 <a name='L45'></a><a href='#L45'>45</a>
 <a name='L46'></a><a href='#L46'>46</a>
 <a name='L47'></a><a href='#L47'>47</a>
-<a name='L48'></a><a href='#L48'>48</a>
-<a name='L49'></a><a href='#L49'>49</a>
-<a name='L50'></a><a href='#L50'>50</a>
-<a name='L51'></a><a href='#L51'>51</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L48'></a><a href='#L48'>48</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -129,9 +126,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -163,28 +157,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { BusySpinner, Message } from '@terraware/web-components';
-import { useRouteMatch } from 'react-router-dom';
-import { APP_PATHS } from 'src/constants';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+import { BusySpinner, Message } from '@terraware/web-components';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Card from 'src/components/common/Card';
 import Page from 'src/components/Page';
-import DocumentsList from 'src/scenes/DeliverablesRouter/DocumentsList';
 import AcceleratorDocumentsList from 'src/scenes/AcceleratorRouter/AcceleratorDocumentsList';
-import { EditProps, ViewProps } from './types';
-import TitleBar from './TitleBar';
-import Metadata from './Metadata';
-import DocumentsUploader from './DocumentsUploader';
+import { EditProps, ViewProps } from 'src/components/DeliverableView/types';
+import TitleBar from 'src/components/DeliverableView/TitleBar';
+import DocumentsUploader from 'src/components/DeliverableView/DocumentsUploader';
+import Metadata from 'src/components/DeliverableView/Metadata';
 &nbsp;
 export type Props = EditProps &amp; {
   isBusy?: boolean;
 };
 &nbsp;
-const DeliverableView = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>rops: Props): JSX.Element =&gt; {</span>
+const AcceleratorDeliverableView = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>rops: Props): JSX.Element =&gt; {</span>
   const { ...viewProps }: ViewProps = <span class="cstat-no" title="statement not covered" >props;</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
-  const isAcceleratorRoute = <span class="cstat-no" title="statement not covered" >useRouteMatch(APP_PATHS.ACCELERATOR);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (isMobile) {</span>
 <span class="cstat-no" title="statement not covered" >    return (</span>
@@ -203,7 +194,7 @@ const DeliverableView = <span class="cstat-no" title="statement not covered" ><s
           &lt;Card style={{ display: 'flex', flexDirection: 'column' }}&gt;
             &lt;Metadata {...viewProps} /&gt;
             &lt;DocumentsUploader {...viewProps} /&gt;
-            {isAcceleratorRoute ? &lt;AcceleratorDocumentsList {...props} /&gt; : &lt;DocumentsList {...props} /&gt;}
+            &lt;AcceleratorDocumentsList {...viewProps} /&gt;
           &lt;/Card&gt;
         &lt;/&gt;
       }
@@ -212,7 +203,7 @@ const DeliverableView = <span class="cstat-no" title="statement not covered" ><s
   );
 };
 &nbsp;
-export default DeliverableView;
+export default AcceleratorDeliverableView;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -220,7 +211,7 @@ export default DeliverableView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-27T21:43:54.573Z
+                at 2024-02-27T22:13:01.631Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
