@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Box, Grid } from '@mui/material';
 import { PillList, PillListItem, Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
@@ -30,7 +30,7 @@ export type SearchProps = SearchInputProps & {
   iconFilters?: FilterConfig[];
   featuredFilters?: FilterConfig[];
   currentFilters: Record<string, SearchNodePayload>;
-  setCurrentFilters: (filters: Record<string, any>) => void;
+  setCurrentFilters: (filters: Record<string, SearchNodePayload>) => void;
 };
 
 const defaultPillValueRenderer = (values: (string | number | null)[]): string | undefined => values.join(', ');
@@ -85,6 +85,17 @@ export default function SearchFiltersWrapperV2({
     [currentFilters, iconFilters, featuredFilters, setCurrentFilters]
   );
 
+  // Since we have two different places filters can exist, we need to combine them before setting in the consumer
+  const setFilters = useCallback(
+    (incomingFilters: Record<string, SearchNodePayload>) => {
+      setCurrentFilters({
+        ...currentFilters,
+        ...incomingFilters,
+      });
+    },
+    [currentFilters, setCurrentFilters]
+  );
+
   return (
     <Grid container>
       <Grid item xs={12} display='flex' alignItems='center'>
@@ -103,15 +114,11 @@ export default function SearchFiltersWrapperV2({
         </Box>
 
         {featuredFilters && (
-          <FeaturedFilters
-            filters={featuredFilters}
-            setCurrentFilters={setCurrentFilters}
-            currentFilters={currentFilters}
-          />
+          <FeaturedFilters filters={featuredFilters} setCurrentFilters={setFilters} currentFilters={currentFilters} />
         )}
 
         {iconFilters && (
-          <IconFilters filters={iconFilters} setCurrentFilters={setCurrentFilters} currentFilters={currentFilters} />
+          <IconFilters filters={iconFilters} setCurrentFilters={setFilters} currentFilters={currentFilters} />
         )}
       </Grid>
 
