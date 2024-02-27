@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
@@ -106,44 +106,7 @@
 <a name='L41'></a><a href='#L41'>41</a>
 <a name='L42'></a><a href='#L42'>42</a>
 <a name='L43'></a><a href='#L43'>43</a>
-<a name='L44'></a><a href='#L44'>44</a>
-<a name='L45'></a><a href='#L45'>45</a>
-<a name='L46'></a><a href='#L46'>46</a>
-<a name='L47'></a><a href='#L47'>47</a>
-<a name='L48'></a><a href='#L48'>48</a>
-<a name='L49'></a><a href='#L49'>49</a>
-<a name='L50'></a><a href='#L50'>50</a>
-<a name='L51'></a><a href='#L51'>51</a>
-<a name='L52'></a><a href='#L52'>52</a>
-<a name='L53'></a><a href='#L53'>53</a>
-<a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L44'></a><a href='#L44'>44</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -157,8 +120,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -187,40 +148,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useState } from 'react';
 import { Box, Grid } from '@mui/material';
-import strings from 'src/strings';
 import { SearchSortOrder } from 'src/types/Search';
-import { useLocalization } from 'src/providers';
 import { TableColumnType } from 'src/components/common/table/types';
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
 import { ViewProps } from './types';
+import DocumentCellRenderer from './DocumentCellRenderer';
 &nbsp;
-const columns = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(a</span>ctiveLocale: string | null): TableColumnType[] =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  activeLocale</span>
-    ? [
-        {
-          key: 'name',
-          name: strings.DOCUMENT_NAME,
-          type: 'string',
-        },
-        {
-          key: 'description',
-          name: strings.DESCRIPTION,
-          type: 'string',
-        },
-        {
-          key: 'dateUploaded',
-          name: strings.DATE_UPLOADED,
-          type: 'string',
-        },
-      ]
-    : [];
+interface DocumentsListProps extends ViewProps {
+  columns: TableColumnType[];
+}
 &nbsp;
-const DocumentsList = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>rops: ViewProps): JSX.Element =&gt; {</span>
-  const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-&nbsp;
+const DocumentsList = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>rops: DocumentsListProps): JSX.Element =&gt; {</span>
   const [searchSortOrder, setSearchSortOrder] = <span class="cstat-no" title="statement not covered" >useState&lt;SearchSortOrder&gt;({</span>
     field: 'deliverableName',
     direction: 'Ascending',
@@ -236,11 +178,12 @@ const DocumentsList = <span class="cstat-no" title="statement not covered" ><spa
     &lt;Box display='flex' flexDirection='column'&gt;
       &lt;Grid item xs={12}&gt;
         &lt;Table
-          id={'documents-list'}
-          columns={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >columns(activeLocale)}</span>
+          id={'documents-list' + props.isAcceleratorConsole ? '-admin' : ''}
+          columns={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >props.columns}</span>
           rows={props.deliverable.documents}
           orderBy={searchSortOrder.field}
           order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
+          Renderer={DocumentCellRenderer}
           sortHandler={onSortChange}
         /&gt;
       &lt;/Grid&gt;
@@ -256,7 +199,7 @@ export default DocumentsList;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-27T21:30:08.947Z
+                at 2024-02-27T21:39:13.203Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

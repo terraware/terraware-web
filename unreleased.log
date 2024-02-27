@@ -1,3 +1,5 @@
+9e3108e527 Updated translations from Phrase (#2216)
+6a0c9024ac SW-4906 Move the documents list to view-agnostic, implement in participant and accelerator views (#2214)
 850fceb796 SW-4906 Implement documents list in deliverable view (#2212)
 9c89989c7e Updated translations from Phrase (#2213)
 ea966c817c SW-4908: FE - Edit Cohort flow (#2201)
