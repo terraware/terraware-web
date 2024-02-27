@@ -32,6 +32,16 @@ const mockDeliverable: Deliverable = {
       description: 'Some description for the upload',
       dateUploaded: '2024-02-15',
     },
+    {
+      name: 'Upload 2',
+      description: 'One description for the upload',
+      dateUploaded: '2024-02-14',
+    },
+    {
+      name: 'Upload A',
+      description: 'Another description for the upload',
+      dateUploaded: '2024-02-11',
+    },
   ],
   category: 'Legal',
   status: 'Not Submitted',
