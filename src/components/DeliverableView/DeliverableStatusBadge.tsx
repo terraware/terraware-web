@@ -1,7 +1,7 @@
 import { useTheme } from '@mui/material';
 import { Badge } from '@terraware/web-components';
 import { BadgeProps } from '@terraware/web-components/components/Badge';
-import { useCallback } from 'react';
+import { useMemo } from 'react';
 import { useLocalization } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
@@ -15,7 +15,11 @@ const DeliverableStatusBadge = (props: DeliverableStatusBadgeProps): JSX.Element
   const { activeLocale } = useLocalization();
   const theme = useTheme();
 
-  const getBadgePropsForStatus = useCallback((): BadgeProps => {
+  const badgeProps = useMemo((): BadgeProps | undefined => {
+    if (!activeLocale) {
+      return undefined;
+    }
+
     switch (status) {
       case 'Approved':
         return {
@@ -60,22 +64,17 @@ const DeliverableStatusBadge = (props: DeliverableStatusBadgeProps): JSX.Element
           label: strings.REJECTED,
         };
       default:
-        return {
-          backgroundColor: theme.palette.TwClrBgInfoTertiary,
-          borderColor: theme.palette.TwClrBrdrInfo,
-          labelColor: theme.palette.TwClrTxtInfo,
-          label: status,
-        };
+        return undefined;
     }
-  }, [status, theme]);
+  }, [activeLocale, status, theme]);
 
   return (
     <>
-      {!activeLocale ? undefined : (
+      {activeLocale && badgeProps ? (
         <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
-          <Badge {...getBadgePropsForStatus()} />
+          <Badge {...badgeProps} />
         </div>
-      )}
+      ) : undefined}
     </>
   );
 };
