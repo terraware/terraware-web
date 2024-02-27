@@ -1,14 +1,17 @@
 import { BusySpinner, Message } from '@terraware/web-components';
+import { useRouteMatch } from 'react-router-dom';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Card from 'src/components/common/Card';
 import Page from 'src/components/Page';
+import DocumentsList from 'src/scenes/DeliverablesRouter/DocumentsList';
+import AcceleratorDocumentsList from 'src/scenes/AcceleratorRouter/AcceleratorDocumentsList';
 import { EditProps, ViewProps } from './types';
 import TitleBar from './TitleBar';
 import StatusBar from './StatusBar';
 import Description from './Description';
 import DocumentsUploader from './DocumentsUploader';
-import DocumentsList from './DocumentsList';
 
 export type Props = EditProps & {
   isBusy?: boolean;
@@ -17,6 +20,7 @@ export type Props = EditProps & {
 const DeliverableView = (props: Props): JSX.Element => {
   const { ...viewProps }: ViewProps = props;
   const { isMobile } = useDeviceInfo();
+  const isAcceleratorRoute = useRouteMatch(APP_PATHS.ACCELERATOR);
 
   if (isMobile) {
     return (
@@ -36,7 +40,7 @@ const DeliverableView = (props: Props): JSX.Element => {
             <StatusBar {...viewProps} />
             <Description {...viewProps} />
             <DocumentsUploader {...viewProps} />
-            <DocumentsList {...viewProps} />
+            {isAcceleratorRoute ? <AcceleratorDocumentsList {...props} /> : <DocumentsList {...props} />}
           </Card>
         </>
       }
