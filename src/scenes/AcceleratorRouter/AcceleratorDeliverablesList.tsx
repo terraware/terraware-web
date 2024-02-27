@@ -5,17 +5,17 @@ import { Separator, SortOrder, TableColumnType } from '@terraware/web-components
 import strings from 'src/strings';
 import theme from 'src/theme';
 import { useLocalization } from 'src/providers';
+import { useParticipants } from 'src/hooks/useParticipants';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
-import { useProjects } from 'src/hooks/useProjects';
 import useDebounce from 'src/utils/useDebounce';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectDeliverablesSearchRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
 import { requestDeliverablesSearch } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import { DeliverableCategories, DeliverableStatuses, SearchResponseDeliverable } from 'src/types/Deliverables';
 import PageHeader from 'src/components/PageHeader';
-import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import Card from 'src/components/common/Card';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import ParticipantsDropdown from 'src/components/ParticipantsDropdown';
 import { BaseTable as Table } from 'src/components/common/table';
 import SearchFiltersWrapperV2, { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import DeliverableCellRenderer from './DeliverableCellRenderer';
@@ -66,13 +66,11 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
 const AcceleratorDeliverablesList = () => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
-  // TODO remake this hook for participants
-  const { availableProjects: availableParticipants } = useProjects();
+  const { availableParticipants } = useParticipants();
   const contentRef = useRef(null);
   const classes = useStyles();
 
-  // TODO filter deliverables based on selected participant, using the participants instead of projects
-  const [participantFilter, setParticipantFilter] = useState<{ projectId?: number }>({ projectId: undefined });
+  const [participantFilter, setParticipantFilter] = useState<{ participantId?: number }>({ participantId: undefined });
 
   const [deliverables, setDeliverables] = useState<SearchResponseDeliverable[]>([]);
   const [deliverablesSearchRequestId, setDeliverablesSearchRequestId] = useState('');
@@ -142,9 +140,9 @@ const AcceleratorDeliverablesList = () => {
               </Typography>
             </Grid>
             <Grid item sx={{ marginLeft: theme.spacing(1.5) }}>
-              {/* Using the projects dropdown as a stand in for now */}
-              <ProjectsDropdown
-                availableProjects={availableParticipants}
+              <ParticipantsDropdown
+                allowUnselect
+                availableParticipants={availableParticipants}
                 record={participantFilter}
                 setRecord={setParticipantFilter}
                 label={''}
