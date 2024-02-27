@@ -41,7 +41,7 @@ export default function ContactUsView(): JSX.Element {
         <i>"{process.env.REACT_APP_TERRAWARE_FE_BUILD_VERSION || 'n/a'}"</i>
       ) as string,
       buttonText: strings.REPORT_PROBLEM,
-      link: docLinks.report_a_problem,
+      link: `${docLinks.report_a_problem}?build=${process.env.REACT_APP_TERRAWARE_FE_BUILD_VERSION || ''}`,
     },
     {
       icon: 'sparkles',
