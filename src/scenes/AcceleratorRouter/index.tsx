@@ -9,8 +9,8 @@ import useStateLocation from 'src/utils/useStateLocation';
 import { getRgbaFromHex } from 'src/utils/color';
 import CohortListView from 'src/scenes/AcceleratorRouter/CohortListView';
 import CohortView from 'src/scenes/AcceleratorRouter/CohortView';
-import AcceleratorCohortEditView from 'src/scenes/AcceleratorRouter/AcceleratorCohortEditView';
-import AcceleratorCohortNewView from 'src/scenes/AcceleratorRouter/AcceleratorCohortNewView';
+import CohortEditView from 'src/scenes/AcceleratorRouter/CohortEditView';
+import CohortNewView from 'src/scenes/AcceleratorRouter/CohortNewView';
 import AcceleratorDeliverableViewWrapper from 'src/scenes/AcceleratorRouter/AcceleratorDeliverableViewWrapper';
 import AcceleratorDeliverablesList from 'src/scenes/AcceleratorRouter/AcceleratorDeliverablesList';
 import AcceleratorModuleContentView from 'src/scenes/AcceleratorRouter/AcceleratorModuleContentView';
@@ -78,13 +78,13 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
               <AcceleratorOverviewView />
             </Route>
             <Route path={APP_PATHS.ACCELERATOR_COHORTS_EDIT}>
-              <AcceleratorCohortEditView />
+              <CohortEditView />
             </Route>
             <Route exact path={APP_PATHS.ACCELERATOR_COHORTS}>
               <CohortListView />
             </Route>
             <Route path={APP_PATHS.ACCELERATOR_COHORTS_NEW}>
-              <AcceleratorCohortNewView />
+              <CohortNewView />
             </Route>
             <Route path={APP_PATHS.ACCELERATOR_COHORTS_VIEW}>
               <CohortView />

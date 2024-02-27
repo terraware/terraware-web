@@ -10,7 +10,7 @@ import { CreateCohortRequestPayload } from 'src/types/Cohort';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
-export default function AcceleratorCohortNewView(): JSX.Element {
+export default function CohortNewView(): JSX.Element {
   const history = useHistory();
   const theme = useTheme();
   const [isBusy, setIsBusy] = useState<boolean>(false);
