@@ -1,3 +1,4 @@
+644ffeeee9 SW-4881 Search and filtering within internal deliverables table (#2206)
 0b330fd639 SW-4881 Add participant dropdown to internal deliverables table (#2205)
 73a59b3885 Updated translations from Phrase (#2207)
 186c27f8e8 SW-4881 Implement the internal deliverables list, using the new SearchFiltersWrapperV2 (#2199)
