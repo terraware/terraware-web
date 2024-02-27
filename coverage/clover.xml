@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1709052611689" clover="3.2.0">
-  <project timestamp="1709052611689" name="All files">
-    <metrics statements="16920" coveredstatements="564" conditionals="10858" coveredconditionals="163" methods="5288" coveredmethods="125" elements="33066" coveredelements="852" complexity="0" loc="16920" ncloc="16920" packages="140" files="690" classes="690"/>
+<coverage generated="1709053067663" clover="3.2.0">
+  <project timestamp="1709053067663" name="All files">
+    <metrics statements="16934" coveredstatements="564" conditionals="10858" coveredconditionals="163" methods="5293" coveredmethods="125" elements="33085" coveredelements="852" complexity="0" loc="16934" ncloc="16934" packages="140" files="691" classes="691"/>
     <package name="src">
       <metrics statements="174" coveredstatements="0" conditionals="127" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -6050,7 +6050,7 @@
       </file>
     </package>
     <package name="src.components.common.SearchFiltersWrapperV2">
-      <metrics statements="54" coveredstatements="0" conditionals="38" coveredconditionals="0" methods="31" coveredmethods="0"/>
+      <metrics statements="56" coveredstatements="0" conditionals="38" coveredconditionals="0" methods="32" coveredmethods="0"/>
       <file name="FeaturedFilters.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/SearchFiltersWrapperV2/FeaturedFilters.tsx">
         <metrics statements="13" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="10" coveredmethods="0"/>
         <line num="16" count="0" type="stmt"/>
@@ -6090,7 +6090,7 @@
         <line num="100" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/SearchFiltersWrapperV2/index.tsx">
-        <metrics statements="22" coveredstatements="0" conditionals="24" coveredconditionals="0" methods="10" coveredmethods="0"/>
+        <metrics statements="24" coveredstatements="0" conditionals="24" coveredconditionals="0" methods="11" coveredmethods="0"/>
         <line num="36" count="0" type="stmt"/>
         <line num="46" count="0" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
@@ -6110,9 +6110,11 @@
         <line num="77" count="0" type="stmt"/>
         <line num="81" count="0" type="stmt"/>
         <line num="84" count="0" type="stmt"/>
-        <line num="88" count="0" type="stmt"/>
-        <line num="98" count="0" type="stmt"/>
-        <line num="101" count="0" type="stmt"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="91" count="0" type="stmt"/>
+        <line num="99" count="0" type="stmt"/>
+        <line num="109" count="0" type="stmt"/>
+        <line num="112" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.common.Select">
@@ -18524,7 +18526,7 @@
       </file>
     </package>
     <package name="src.stories">
-      <metrics statements="80" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="26" coveredmethods="0"/>
+      <metrics statements="92" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="30" coveredmethods="0"/>
       <file name="BreadCrumbs.stories.tsx" path="/home/runner/work/terraware-web/terraware-web/src/stories/BreadCrumbs.stories.tsx">
         <metrics statements="16" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="6" count="0" type="stmt"/>
@@ -18617,6 +18619,21 @@
         <line num="47" count="0" type="stmt"/>
         <line num="49" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
+      </file>
+      <file name="SearchFiltersWrapperV2.stories.tsx" path="/home/runner/work/terraware-web/terraware-web/src/stories/SearchFiltersWrapperV2.stories.tsx">
+        <metrics statements="12" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
       </file>
       <file name="TfMain.stories.tsx" path="/home/runner/work/terraware-web/terraware-web/src/stories/TfMain.stories.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>

@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
@@ -188,7 +188,14 @@
 <a name='L123'></a><a href='#L123'>123</a>
 <a name='L124'></a><a href='#L124'>124</a>
 <a name='L125'></a><a href='#L125'>125</a>
-<a name='L126'></a><a href='#L126'>126</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L126'></a><a href='#L126'>126</a>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -275,6 +282,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -309,11 +327,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useMemo } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useMemo } from 'react';
 import { Box, Grid } from '@mui/material';
 import { PillList, PillListItem, Textfield } from '@terraware/web-components';
 import strings from 'src/strings';
@@ -345,7 +359,7 @@ export type SearchProps = SearchInputProps &amp; {
   iconFilters?: FilterConfig[];
   featuredFilters?: FilterConfig[];
   currentFilters: Record&lt;string, SearchNodePayload&gt;;
-  setCurrentFilters: (filters: Record&lt;string, any&gt;) =&gt; void;
+  setCurrentFilters: (filters: Record&lt;string, SearchNodePayload&gt;) =&gt; void;
 };
 &nbsp;
 const defaultPillValueRenderer = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(v</span>alues: (string | number | null)[]): string | undefined =&gt; <span class="cstat-no" title="statement not covered" >values.join(', ');</span></span>
@@ -400,6 +414,17 @@ export default function <span class="fstat-no" title="function not covered" >Sea
     [currentFilters, iconFilters, featuredFilters, setCurrentFilters]
   );
 &nbsp;
+  // Since we have two different places filters can exist, we need to combine them before setting in the consumer
+  const setFilters = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (i</span>ncomingFilters: Record&lt;string, SearchNodePayload&gt;) =&gt; {
+<span class="cstat-no" title="statement not covered" >      setCurrentFilters({</span>
+        ...currentFilters,
+        ...incomingFilters,
+      });
+    },
+    [currentFilters, setCurrentFilters]
+  );
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Grid container&gt;
       &lt;Grid item xs={12} display='flex' alignItems='center'&gt;
@@ -418,15 +443,11 @@ export default function <span class="fstat-no" title="function not covered" >Sea
         &lt;/Box&gt;
 &nbsp;
         {featuredFilters &amp;&amp; (
-          &lt;FeaturedFilters
-            filters={featuredFilters}
-            setCurrentFilters={setCurrentFilters}
-            currentFilters={currentFilters}
-          /&gt;
+          &lt;FeaturedFilters filters={featuredFilters} setCurrentFilters={setFilters} currentFilters={currentFilters} /&gt;
         )}
 &nbsp;
         {iconFilters &amp;&amp; (
-          &lt;IconFilters filters={iconFilters} setCurrentFilters={setCurrentFilters} currentFilters={currentFilters} /&gt;
+          &lt;IconFilters filters={iconFilters} setCurrentFilters={setFilters} currentFilters={currentFilters} /&gt;
         )}
       &lt;/Grid&gt;
 &nbsp;
@@ -445,7 +466,7 @@ export default function <span class="fstat-no" title="function not covered" >Sea
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-27T16:50:11.185Z
+                at 2024-02-27T16:57:47.162Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
