@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1709069953687" clover="3.2.0">
-  <project timestamp="1709069953688" name="All files">
-    <metrics statements="17031" coveredstatements="564" conditionals="10912" coveredconditionals="163" methods="5322" coveredmethods="125" elements="33265" coveredelements="852" complexity="0" loc="17031" ncloc="17031" packages="141" files="698" classes="698"/>
+<coverage generated="1709070235078" clover="3.2.0">
+  <project timestamp="1709070235078" name="All files">
+    <metrics statements="17047" coveredstatements="564" conditionals="10934" coveredconditionals="163" methods="5323" coveredmethods="125" elements="33304" coveredelements="852" complexity="0" loc="17047" ncloc="17047" packages="141" files="698" classes="698"/>
     <package name="src">
       <metrics statements="174" coveredstatements="0" conditionals="127" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -1403,11 +1403,25 @@
       </file>
     </package>
     <package name="src.components.DeliverableView">
-      <metrics statements="48" coveredstatements="0" conditionals="30" coveredconditionals="0" methods="15" coveredmethods="0"/>
-      <file name="Description.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/Description.tsx">
-        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="4" count="0" type="stmt"/>
-        <line num="5" count="0" type="stmt"/>
+      <metrics statements="64" coveredstatements="0" conditionals="52" coveredconditionals="0" methods="16" coveredmethods="0"/>
+      <file name="DeliverableStatusBadge.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/DeliverableStatusBadge.tsx">
+        <metrics statements="16" coveredstatements="0" conditionals="13" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="19" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="23" count="0" type="cond" truecount="0" falsecount="7"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
       </file>
       <file name="DocumentCellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/DocumentCellRenderer.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -1436,10 +1450,12 @@
         <line num="4" count="0" type="stmt"/>
         <line num="5" count="0" type="stmt"/>
       </file>
-      <file name="StatusBar.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/StatusBar.tsx">
-        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="4" count="0" type="stmt"/>
-        <line num="5" count="0" type="stmt"/>
+      <file name="Metadata.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/Metadata.tsx">
+        <metrics statements="4" coveredstatements="0" conditionals="9" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
       </file>
       <file name="TitleBar.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/TitleBar.tsx">
         <metrics statements="5" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -1451,13 +1467,13 @@
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/index.tsx">
         <metrics statements="7" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="19" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="25" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="26" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
+        <line num="24" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
       </file>
       <file name="types.ts" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/types.ts">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
