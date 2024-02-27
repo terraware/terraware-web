@@ -254,9 +254,7 @@
 <a name='L189'></a><a href='#L189'>189</a>
 <a name='L190'></a><a href='#L190'>190</a>
 <a name='L191'></a><a href='#L191'>191</a>
-<a name='L192'></a><a href='#L192'>192</a>
-<a name='L193'></a><a href='#L193'>193</a>
-<a name='L194'></a><a href='#L194'>194</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L192'></a><a href='#L192'>192</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -324,11 +322,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -456,17 +452,17 @@ import { Separator, SortOrder, TableColumnType } from '@terraware/web-components
 import strings from 'src/strings';
 import theme from 'src/theme';
 import { useLocalization } from 'src/providers';
+import { useParticipants } from 'src/hooks/useParticipants';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
-import { useProjects } from 'src/hooks/useProjects';
 import useDebounce from 'src/utils/useDebounce';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectDeliverablesSearchRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
 import { requestDeliverablesSearch } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import { DeliverableCategories, DeliverableStatuses, SearchResponseDeliverable } from 'src/types/Deliverables';
 import PageHeader from 'src/components/PageHeader';
-import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import Card from 'src/components/common/Card';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import ParticipantsDropdown from 'src/components/ParticipantsDropdown';
 import { BaseTable as Table } from 'src/components/common/table';
 import SearchFiltersWrapperV2, { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import DeliverableCellRenderer from './DeliverableCellRenderer';
@@ -517,13 +513,11 @@ const columns = <span class="cstat-no" title="statement not covered" ><span clas
 const AcceleratorDeliverablesList = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-  // TODO remake this hook for participants
-  const { availableProjects: availableParticipants } = <span class="cstat-no" title="statement not covered" >useProjects();</span>
+  const { availableParticipants } = <span class="cstat-no" title="statement not covered" >useParticipants();</span>
   const contentRef = <span class="cstat-no" title="statement not covered" >useRef(null);</span>
   const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
 &nbsp;
-  // TODO filter deliverables based on selected participant, using the participants instead of projects
-  const [participantFilter, setParticipantFilter] = <span class="cstat-no" title="statement not covered" >useState&lt;{ projectId?: number }&gt;({ projectId: undefined });</span>
+  const [participantFilter, setParticipantFilter] = <span class="cstat-no" title="statement not covered" >useState&lt;{ participantId?: number }&gt;({ participantId: undefined });</span>
 &nbsp;
   const [deliverables, setDeliverables] = <span class="cstat-no" title="statement not covered" >useState&lt;SearchResponseDeliverable[]&gt;([]);</span>
   const [deliverablesSearchRequestId, setDeliverablesSearchRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
@@ -593,9 +587,9 @@ const AcceleratorDeliverablesList = <span class="cstat-no" title="statement not 
               &lt;/Typography&gt;
             &lt;/Grid&gt;
             &lt;Grid item sx={{ marginLeft: theme.spacing(1.5) }}&gt;
-              {/* Using the projects dropdown as a stand in for now */}
-              &lt;ProjectsDropdown
-                availableProjects={availableParticipants}
+              &lt;ParticipantsDropdown
+                allowUnselect
+                availableParticipants={availableParticipants}
                 record={participantFilter}
                 setRecord={setParticipantFilter}
                 label={''}
@@ -649,7 +643,7 @@ export default AcceleratorDeliverablesList;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-27T14:07:41.032Z
+                at 2024-02-27T16:24:37.309Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
