@@ -2,18 +2,20 @@ import { useMemo } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { FileChooser } from '@terraware/web-components';
 import strings from 'src/strings';
+import { useLocalization } from 'src/providers';
 import { ViewProps } from './types';
 
 const DocumentsUploader = ({ deliverable }: ViewProps): JSX.Element => {
   const theme = useTheme();
+  const { activeLocale } = useLocalization();
 
   const template = useMemo(() => {
-    if (deliverable.templateUrl) {
+    if (activeLocale && deliverable.templateUrl) {
       return { text: strings.DOWNLOAD_TEMPLATE, url: deliverable.templateUrl };
     } else {
       return undefined;
     }
-  }, [deliverable.templateUrl]);
+  }, [activeLocale, deliverable.templateUrl]);
 
   return (
     <Box display='flex' flexDirection='column'>
