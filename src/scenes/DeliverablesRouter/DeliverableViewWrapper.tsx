@@ -3,7 +3,7 @@ import Page from 'src/components/Page';
 import useFetchDeliverable from 'src/components/DeliverableView/useFetchDeliverable';
 import DeliverableView from './DeliverableView';
 
-const DeliverablesView = () => {
+const DeliverableViewWrapper = () => {
   const { deliverableId } = useParams<{ deliverableId: string }>();
 
   const { deliverable } = useFetchDeliverable({ deliverableId: Number(deliverableId) });
@@ -15,4 +15,4 @@ const DeliverablesView = () => {
   }
 };
 
-export default DeliverablesView;
+export default DeliverableViewWrapper;

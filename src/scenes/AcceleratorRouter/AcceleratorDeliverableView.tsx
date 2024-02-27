@@ -14,7 +14,7 @@ export type Props = EditProps & {
   isBusy?: boolean;
 };
 
-const DeliverableView = (props: Props): JSX.Element => {
+const AcceleratorDeliverableView = (props: Props): JSX.Element => {
   const { ...viewProps }: ViewProps = props;
   const { isMobile } = useDeviceInfo();
 
@@ -44,4 +44,4 @@ const DeliverableView = (props: Props): JSX.Element => {
   );
 };
 
-export default DeliverableView;
+export default AcceleratorDeliverableView;

@@ -8,10 +8,10 @@ import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import useFetchDeliverable from 'src/components/DeliverableView/useFetchDeliverable';
 import useEditStatusDeliverable from './useEditStatusDeliverable';
-import DeliverableView from './DeliverableView';
+import AcceleratorDeliverableView from './AcceleratorDeliverableView';
 import RejectDialog from './RejectDialog';
 
-const AcceleratorDeliverablesView = () => {
+const AcceleratorDeliverableViewWrapper = () => {
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
   const { deliverableId } = useParams<{ deliverableId: string }>();
   const { status: requestStatus, update } = useEditStatusDeliverable();
@@ -100,7 +100,7 @@ const AcceleratorDeliverablesView = () => {
     return (
       <>
         {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectDeliverable} />}
-        <DeliverableView
+        <AcceleratorDeliverableView
           callToAction={callToAction}
           deliverable={deliverable}
           isAcceleratorConsole={true}
@@ -113,4 +113,4 @@ const AcceleratorDeliverablesView = () => {
   }
 };
 
-export default AcceleratorDeliverablesView;
+export default AcceleratorDeliverableViewWrapper;
