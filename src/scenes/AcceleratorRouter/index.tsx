@@ -9,7 +9,7 @@ import useStateLocation from 'src/utils/useStateLocation';
 import { getRgbaFromHex } from 'src/utils/color';
 import AcceleratorCohortEditView from 'src/scenes/AcceleratorRouter/AcceleratorCohortEditView';
 import AcceleratorCohortNewView from 'src/scenes/AcceleratorRouter/AcceleratorCohortNewView';
-import AcceleratorDeliverablesView from 'src/scenes/AcceleratorRouter/AcceleratorDeliverablesView';
+import AcceleratorDeliverableViewWrapper from 'src/scenes/AcceleratorRouter/AcceleratorDeliverableViewWrapper';
 import AcceleratorDeliverablesList from 'src/scenes/AcceleratorRouter/AcceleratorDeliverablesList';
 import AcceleratorModuleContentView from 'src/scenes/AcceleratorRouter/AcceleratorModuleContentView';
 import AcceleratorOverviewView from 'src/scenes/AcceleratorRouter/AcceleratorOverviewView';
@@ -82,7 +82,7 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
               <AcceleratorCohortNewView />
             </Route>
             <Route path={APP_PATHS.ACCELERATOR_DELIVERABLES_VIEW}>
-              <AcceleratorDeliverablesView />
+              <AcceleratorDeliverableViewWrapper />
             </Route>
             <Route path={APP_PATHS.ACCELERATOR_DELIVERABLES}>
               <AcceleratorDeliverablesList />
