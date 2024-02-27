@@ -6,9 +6,9 @@ import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
-import DeliverableView from 'src/components/DeliverableView';
 import useFetchDeliverable from 'src/components/DeliverableView/useFetchDeliverable';
 import useEditStatusDeliverable from './useEditStatusDeliverable';
+import DeliverableView from './DeliverableView';
 import RejectDialog from './RejectDialog';
 
 const AcceleratorDeliverablesView = () => {

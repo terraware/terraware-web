@@ -1,16 +1,15 @@
+import React from 'react';
 import { BusySpinner, Message } from '@terraware/web-components';
-import { useRouteMatch } from 'react-router-dom';
-import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Card from 'src/components/common/Card';
 import Page from 'src/components/Page';
 import DocumentsList from 'src/scenes/DeliverablesRouter/DocumentsList';
-import AcceleratorDocumentsList from 'src/scenes/AcceleratorRouter/AcceleratorDocumentsList';
-import { EditProps, ViewProps } from './types';
-import TitleBar from './TitleBar';
-import Metadata from './Metadata';
-import DocumentsUploader from './DocumentsUploader';
+import { EditProps, ViewProps } from 'src/components/DeliverableView/types';
+import TitleBar from 'src/components/DeliverableView/TitleBar';
+import StatusBar from 'src/components/DeliverableView/StatusBar';
+import Description from 'src/components/DeliverableView/Description';
+import DocumentsUploader from 'src/components/DeliverableView/DocumentsUploader';
 
 export type Props = EditProps & {
   isBusy?: boolean;
@@ -19,7 +18,6 @@ export type Props = EditProps & {
 const DeliverableView = (props: Props): JSX.Element => {
   const { ...viewProps }: ViewProps = props;
   const { isMobile } = useDeviceInfo();
-  const isAcceleratorRoute = useRouteMatch(APP_PATHS.ACCELERATOR);
 
   if (isMobile) {
     return (
@@ -36,9 +34,10 @@ const DeliverableView = (props: Props): JSX.Element => {
         <>
           {props.isBusy && <BusySpinner />}
           <Card style={{ display: 'flex', flexDirection: 'column' }}>
-            <Metadata {...viewProps} />
+            <StatusBar {...viewProps} />
+            <Description {...viewProps} />
             <DocumentsUploader {...viewProps} />
-            {isAcceleratorRoute ? <AcceleratorDocumentsList {...props} /> : <DocumentsList {...props} />}
+            <DocumentsList {...viewProps} />
           </Card>
         </>
       }

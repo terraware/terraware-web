@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import Page from 'src/components/Page';
-import DeliverableView from 'src/components/DeliverableView';
 import useFetchDeliverable from 'src/components/DeliverableView/useFetchDeliverable';
+import DeliverableView from './DeliverableView';
 
 const DeliverablesView = () => {
   const { deliverableId } = useParams<{ deliverableId: string }>();
