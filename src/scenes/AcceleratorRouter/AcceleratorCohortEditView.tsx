@@ -15,7 +15,6 @@ export default function AcceleratorCohortEditView(): JSX.Element {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const theme = useTheme();
-  const [isBusy, setIsBusy] = useState<boolean>(false);
   const snackbar = useSnackbar();
 
   const pathParams = useParams<{ cohortId: string }>();
@@ -33,7 +32,6 @@ export default function AcceleratorCohortEditView(): JSX.Element {
 
   const saveCohort = useCallback(
     (_cohort: UpdateCohortRequestPayload) => {
-      setIsBusy(true);
       const dispatched = dispatch(requestCohortUpdate({ cohortId, cohort: _cohort }));
       setRequestId(dispatched.requestId);
     },
@@ -48,8 +46,6 @@ export default function AcceleratorCohortEditView(): JSX.Element {
     if (!cohortUpdateRequest) {
       return;
     }
-
-    setIsBusy(false);
 
     if (cohortUpdateRequest.status === 'error') {
       snackbar.toastError();
@@ -68,7 +64,7 @@ export default function AcceleratorCohortEditView(): JSX.Element {
 
       {cohort && (
         <CohortForm<UpdateCohortRequestPayload>
-          busy={isBusy}
+          busy={cohortUpdateRequest?.status === 'pending'}
           cohort={cohort}
           onCancel={goToAcceleratorOverview}
           onSave={saveCohort}
