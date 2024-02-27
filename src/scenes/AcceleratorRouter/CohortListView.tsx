@@ -59,7 +59,6 @@ const CohortListView = () => {
   const history = useHistory();
 
   const cohorts = useAppSelector(selectCohorts);
-  console.log(cohorts);
 
   const goToNewCohort = () => {
     const newProjectLocation = {
