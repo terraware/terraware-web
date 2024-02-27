@@ -25,6 +25,13 @@ export default function CohortNewView(): JSX.Element {
     history.push({ pathname: APP_PATHS.ACCELERATOR_COHORTS });
   }, [history]);
 
+  const goToCohortView = useCallback(
+    (cohortId: number) => {
+      history.push({ pathname: APP_PATHS.ACCELERATOR_COHORTS_VIEW.replace(':cohortId', `${cohortId}`) });
+    },
+    [history]
+  );
+
   const createNewCohort = useCallback(
     async (cohort: CreateCohortRequestPayload) => {
       // first create the cohort
@@ -48,9 +55,9 @@ export default function CohortNewView(): JSX.Element {
       snackbar.toastSuccess(strings.formatString(strings.COHORT_ADDED, cohort.name) as string);
 
       // navigate to cohorts list
-      goToCohortsList();
+      goToCohortView(cohortId);
     },
-    [setIsBusy, snackbar, goToCohortsList]
+    [setIsBusy, snackbar, goToCohortView]
   );
 
   const onCohortSaved = useCallback(
