@@ -4,7 +4,7 @@ import strings from 'src/strings';
 import { SearchSortOrder } from 'src/types/Search';
 import { useLocalization } from 'src/providers';
 import { TableColumnType } from 'src/components/common/table/types';
-import { BaseTable as Table } from 'src/components/common/table';
+import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
 import { ViewProps } from './types';
 
@@ -47,7 +47,8 @@ const DocumentsList = (props: ViewProps): JSX.Element => {
     <Box display='flex' flexDirection='column'>
       <Grid item xs={12}>
         <Table
-          columns={columns(activeLocale)}
+          id={'documents-list'}
+          columns={() => columns(activeLocale)}
           rows={props.deliverable.documents}
           orderBy={searchSortOrder.field}
           order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
