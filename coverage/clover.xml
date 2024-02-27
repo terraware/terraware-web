@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1709053067663" clover="3.2.0">
-  <project timestamp="1709053067663" name="All files">
-    <metrics statements="16934" coveredstatements="564" conditionals="10858" coveredconditionals="163" methods="5293" coveredmethods="125" elements="33085" coveredelements="852" complexity="0" loc="16934" ncloc="16934" packages="140" files="691" classes="691"/>
+<coverage generated="1709061512106" clover="3.2.0">
+  <project timestamp="1709061512106" name="All files">
+    <metrics statements="17011" coveredstatements="564" conditionals="10894" coveredconditionals="163" methods="5315" coveredmethods="125" elements="33220" coveredelements="852" complexity="0" loc="17011" ncloc="17011" packages="141" files="695" classes="695"/>
     <package name="src">
       <metrics statements="174" coveredstatements="0" conditionals="127" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -7213,12 +7213,12 @@
       <metrics statements="10" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>
       <file name="rootReducer.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/rootReducer.ts">
         <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="47" count="0" type="stmt"/>
-        <line num="84" count="0" type="stmt"/>
-        <line num="89" count="0" type="stmt"/>
-        <line num="90" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="91" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="87" count="0" type="stmt"/>
+        <line num="92" count="0" type="stmt"/>
+        <line num="93" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="94" count="0" type="stmt"/>
+        <line num="97" count="0" type="stmt"/>
       </file>
       <file name="store.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/store.ts">
         <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
@@ -7359,6 +7359,67 @@
         <line num="43" count="0" type="stmt"/>
         <line num="50" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.redux.features.cohorts">
+      <metrics statements="49" coveredstatements="0" conditionals="26" coveredconditionals="0" methods="15" coveredmethods="0"/>
+      <file name="cohortsAsyncThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/cohorts/cohortsAsyncThunks.ts">
+        <metrics statements="27" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="17" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="31" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="45" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="61" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="72" count="0" type="stmt"/>
+        <line num="74" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+      </file>
+      <file name="cohortsSelectors.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/cohorts/cohortsSelectors.ts">
+        <metrics statements="5" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+      </file>
+      <file name="cohortsSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/cohorts/cohortsSlice.ts">
+        <metrics statements="17" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="27" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="31" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.redux.features.deliverables">
@@ -8381,34 +8442,64 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter">
-      <metrics statements="175" coveredstatements="0" conditionals="82" coveredconditionals="0" methods="51" coveredmethods="0"/>
-      <file name="AcceleratorCohortNewView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/AcceleratorCohortNewView.tsx">
-        <metrics statements="25" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="4" coveredmethods="0"/>
+      <metrics statements="204" coveredstatements="0" conditionals="92" coveredconditionals="0" methods="58" coveredmethods="0"/>
+      <file name="AcceleratorCohortEditView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/AcceleratorCohortEditView.tsx">
+        <metrics statements="27" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="6" coveredmethods="0"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
-        <line num="19" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
-        <line num="28" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="29" count="0" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="38" count="0" type="stmt"/>
-        <line num="39" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="40" count="0" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
         <line num="46" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="47" count="0" type="stmt"/>
-        <line num="48" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
+        <line num="50" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
-        <line num="60" count="0" type="stmt"/>
-        <line num="62" count="0" type="stmt"/>
-        <line num="63" count="0" type="stmt"/>
-        <line num="68" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+      </file>
+      <file name="AcceleratorCohortNewView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/AcceleratorCohortNewView.tsx">
+        <metrics statements="25" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="42" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
       </file>
       <file name="AcceleratorDeliverablesList.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/AcceleratorDeliverablesList.tsx">
         <metrics statements="12" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="4" coveredmethods="0"/>
@@ -8490,7 +8581,7 @@
         <line num="5" count="0" type="stmt"/>
       </file>
       <file name="CohortForm.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/CohortForm.tsx">
-        <metrics statements="26" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="8" coveredmethods="0"/>
+        <metrics statements="28" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="9" coveredmethods="0"/>
         <line num="20" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
@@ -8515,8 +8606,10 @@
         <line num="64" count="0" type="stmt"/>
         <line num="67" count="0" type="stmt"/>
         <line num="72" count="0" type="stmt"/>
-        <line num="105" count="0" type="stmt"/>
-        <line num="115" count="0" type="stmt"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="110" count="0" type="stmt"/>
+        <line num="120" count="0" type="stmt"/>
       </file>
       <file name="NavBar.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/NavBar.tsx">
         <metrics statements="22" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="10" coveredmethods="0"/>
@@ -8557,14 +8650,14 @@
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/index.tsx">
         <metrics statements="8" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="3" coveredmethods="0"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="47" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
         <line num="49" count="0" type="stmt"/>
         <line num="50" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
       </file>
       <file name="useEditStatusDeliverable.ts" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/useEditStatusDeliverable.ts">
         <metrics statements="24" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="4" coveredmethods="0"/>
@@ -17090,7 +17183,7 @@
       </file>
     </package>
     <package name="src.services">
-      <metrics statements="1279" coveredstatements="331" conditionals="447" coveredconditionals="83" methods="355" coveredmethods="68"/>
+      <metrics statements="1278" coveredstatements="331" conditionals="447" coveredconditionals="83" methods="355" coveredmethods="68"/>
       <file name="AccessionService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/AccessionService.ts">
         <metrics statements="56" coveredstatements="39" conditionals="8" coveredconditionals="6" methods="17" coveredmethods="5"/>
         <line num="10" count="1" type="stmt"/>
@@ -17167,26 +17260,25 @@
         <line num="44" count="2" type="stmt"/>
       </file>
       <file name="CohortService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/CohortService.ts">
-        <metrics statements="19" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="8" coveredmethods="0"/>
+        <metrics statements="18" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="9" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="42" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="45" count="0" type="stmt"/>
         <line num="46" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
-        <line num="53" count="0" type="stmt"/>
-        <line num="57" count="0" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="63" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
         <line num="66" count="0" type="stmt"/>
         <line num="67" count="0" type="stmt"/>
-        <line num="73" count="0" type="stmt"/>
-        <line num="74" count="0" type="stmt"/>
-        <line num="82" count="0" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
       </file>
       <file name="DeliverablesService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/DeliverablesService.ts">
         <metrics statements="28" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="7" coveredmethods="0"/>

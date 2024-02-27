@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -146,14 +146,7 @@
 <a name='L81'></a><a href='#L81'>81</a>
 <a name='L82'></a><a href='#L82'>82</a>
 <a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a>
-<a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a>
-<a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L84'></a><a href='#L84'>84</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -163,10 +156,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -196,9 +185,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -248,27 +234,23 @@ import HttpService, { Response, Response2 } from 'src/services/HttpService';
 import { CreateCohortRequestPayload, Cohort, UpdateCohortRequestPayload } from 'src/types/Cohort';
 &nbsp;
 /**
- * Cohorts related services
+ * Cohort related services
  */
 &nbsp;
 const COHORTS_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v1/accelerator/cohorts';</span>
 const COHORT_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v1/accelerator/cohorts/{cohortId}';</span>
 &nbsp;
-type ListCohortsResponsePayload =
+export type ListCohortsResponsePayload =
   paths[typeof COHORTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 &nbsp;
-type GetCohortResponsePayload = paths[typeof COHORT_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+export type CreateCohortResponsePayload =
+  paths[typeof COHORTS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+export type GetCohortResponsePayload =
+  paths[typeof COHORT_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 export type UpdateCohortResponsePayload =
   paths[typeof COHORT_ENDPOINT]['put']['responses'][200]['content']['application/json'];
 export type DeleteCohortResponsePayload =
   paths[typeof COHORT_ENDPOINT]['delete']['responses'][200]['content']['application/json'];
-&nbsp;
-/**
- * exported type
- */
-export type CohortsData = {
-  cohorts?: Cohort[];
-};
 &nbsp;
 const httpCohort = <span class="cstat-no" title="statement not covered" >HttpService.root(COHORT_ENDPOINT);</span>
 const httpCohorts = <span class="cstat-no" title="statement not covered" >HttpService.root(COHORTS_ENDPOINT);</span>
@@ -276,20 +258,17 @@ const httpCohorts = <span class="cstat-no" title="statement not covered" >HttpSe
 /**
  * List all cohorts
  */
-const listCohorts = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (organizationId: number, locale?: string | null): Promise&lt;CohortsData &amp; Response&gt; =&gt; {</span>
-  const response: CohortsData &amp; Response = <span class="cstat-no" title="statement not covered" >await httpCohorts.get&lt;ListCohortsResponsePayload, CohortsData&gt;(</span>
+const listCohorts = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (organizationId: number, locale?: string | null): Promise&lt;Response2&lt;Cohort[]&gt;&gt; =&gt;</span>
+<span class="cstat-no" title="statement not covered" >  httpCohorts.get&lt;ListCohortsResponsePayload, { data: Cohort[] | undefined }&gt;(</span>
     {
       params: {
         organizationId: organizationId.toString(),
       },
     },
-<span class="fstat-no" title="function not covered" >    (d</span>ata) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
-      cohorts: data?.cohorts.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.name.localeCompare(b.name, locale || undefined))</span>,
+<span class="fstat-no" title="function not covered" >    (r</span>esponse) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+      data: response?.cohorts?.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.name.localeCompare(b.name, locale || undefined))</span>,
     })
   );
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return response;</span>
-};
 &nbsp;
 /**
  * Create a cohort
@@ -340,7 +319,7 @@ export default CohortService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-27T16:57:47.162Z
+                at 2024-02-27T19:18:31.611Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
