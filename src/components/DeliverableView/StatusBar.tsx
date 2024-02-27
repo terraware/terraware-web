@@ -21,12 +21,17 @@ const StatusBar = (props: ViewProps): JSX.Element => {
         </Box>
       )}
 
-      <Box border={`1px solid ${theme.palette.TwClrBaseGray100}`} borderRadius='8px' marginBottom='16px' padding='16px'>
-        {deliverable.status !== 'Rejected' && isAcceleratorConsole && (
-          <DeliverableStatusBadge status={deliverable.status} />
-        )}
-        <strong>{strings.INTERNAL_COMMENTS}</strong> ?
-      </Box>
+      {isAcceleratorConsole && (
+        <Box
+          border={`1px solid ${theme.palette.TwClrBaseGray100}`}
+          borderRadius='8px'
+          marginBottom='16px'
+          padding='16px'
+        >
+          {deliverable.status !== 'Rejected' && <DeliverableStatusBadge status={deliverable.status} />}
+          <strong>{strings.INTERNAL_COMMENTS}</strong> ?
+        </Box>
+      )}
     </Box>
   );
 };
