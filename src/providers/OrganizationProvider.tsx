@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory, useRouteMatch } from 'react-router';
+import { useHistory } from 'react-router';
 import { APP_PATHS } from 'src/constants';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { OrganizationService, PreferencesService } from 'src/services';
 import { Organization } from 'src/types/Organization';
 import { OrganizationContext } from './contexts';
@@ -33,7 +34,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   const query = useQuery();
   const location = useStateLocation();
   const { userPreferences, updateUserPreferences, bootstrapped: userBootstrapped } = useUser();
-  const isAcceleratorRoute = useRouteMatch(APP_PATHS.ACCELERATOR);
+  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const reloadOrganizations = useCallback(async (selectedOrgId?: number) => {
     const populateOrganizations = async () => {
