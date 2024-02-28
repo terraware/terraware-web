@@ -9,8 +9,7 @@ import {
   OrganizationProvider,
   UserProvider,
 } from 'src/providers';
-import { useRouteMatch } from 'react-router-dom';
-import { APP_PATHS } from './constants';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 
 const useStyles = makeStyles((theme: Theme) => ({
   spinner: {
@@ -40,7 +39,7 @@ function BlockingBootstrap({ children }: BlockingBootstrapProps): JSX.Element {
   const { bootstrapped: userBootstrapped } = useUser();
   const { bootstrapped: organizationBootstrapped } = useOrganization();
   const { bootstrapped: localizationBootstrapped } = useLocalization();
-  const isAcceleratorRoute = useRouteMatch(APP_PATHS.ACCELERATOR);
+  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   useEffect(() => {
     setBootstrapped(
