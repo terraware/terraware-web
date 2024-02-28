@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1709148248594" clover="3.2.0">
-  <project timestamp="1709148248594" name="All files">
-    <metrics statements="17115" coveredstatements="564" conditionals="10973" coveredconditionals="163" methods="5343" coveredmethods="125" elements="33431" coveredelements="852" complexity="0" loc="17115" ncloc="17115" packages="141" files="703" classes="703"/>
+<coverage generated="1709152728527" clover="3.2.0">
+  <project timestamp="1709152728527" name="All files">
+    <metrics statements="17116" coveredstatements="564" conditionals="10973" coveredconditionals="163" methods="5343" coveredmethods="125" elements="33432" coveredelements="852" complexity="0" loc="17116" ncloc="17116" packages="141" files="703" classes="703"/>
     <package name="src">
       <metrics statements="174" coveredstatements="0" conditionals="129" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -4902,7 +4902,7 @@
       </file>
     </package>
     <package name="src.components.TopBar">
-      <metrics statements="21" coveredstatements="0" conditionals="28" coveredconditionals="0" methods="9" coveredmethods="0"/>
+      <metrics statements="22" coveredstatements="0" conditionals="28" coveredconditionals="0" methods="9" coveredmethods="0"/>
       <file name="AcceleratorBreadcrumbs.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/TopBar/AcceleratorBreadcrumbs.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
@@ -4910,12 +4910,13 @@
         <line num="30" count="0" type="stmt"/>
       </file>
       <file name="TopBar.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/TopBar/TopBar.tsx">
-        <metrics statements="5" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <metrics statements="6" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
-        <line num="36" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
       </file>
       <file name="TopBarContent.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/TopBar/TopBarContent.tsx">
         <metrics statements="13" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="5" coveredmethods="0"/>

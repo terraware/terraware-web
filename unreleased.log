@@ -1,3 +1,4 @@
+6a33a1fdaf SW-4935: Update hardcoded styles to use accent tokens (#2232)
 474cfae1e3 Replace isAcceleratorConsole flags with useAcceleratorConsole hook (#2229)
 5255c14bd8 SW-4904 Render HTML directly in the deliverable Metadata component (#2228)
 cfe15e2858 Create useAcceleratorConsole hook and put the route check and feature flag check inside it, replace usages of both across the app (#2227)
