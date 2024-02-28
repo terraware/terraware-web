@@ -47,7 +47,7 @@ const InternalComment = ({ deliverable }: InternalCommentProps) => {
       <DialogBox
         onClose={toggleDialog}
         open={isDialogOpen}
-        title={strings.ADD_ORGANIZATION}
+        title={strings.INTERNAL_COMMENTS}
         size='medium'
         middleButtons={[
           <Button
