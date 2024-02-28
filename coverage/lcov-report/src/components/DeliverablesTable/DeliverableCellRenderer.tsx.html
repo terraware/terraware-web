@@ -39,7 +39,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
@@ -120,11 +120,8 @@
 <a name='L55'></a><a href='#L55'>55</a>
 <a name='L56'></a><a href='#L56'>56</a>
 <a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L58'></a><a href='#L58'>58</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -146,14 +143,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -171,7 +165,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -183,13 +176,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
 import { makeStyles } from '@mui/styles';
 import { Badge } from '@terraware/web-components';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { DeliverableStatusType, statusLabel } from 'src/types/Deliverables';
 import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
@@ -204,47 +197,42 @@ const useStyles = <span class="cstat-no" title="statement not covered" >makeStyl
   },
 }));
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >DeliverableCellRenderer(</span>isAcceleratorConsole?: boolean) {
+export default function <span class="fstat-no" title="function not covered" >DeliverableCellRenderer(</span>props: RendererProps&lt;TableRowType&gt;): JSX.Element {
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
+  const { column, row, index, value } = <span class="cstat-no" title="statement not covered" >props;</span>
+  const { isAcceleratorRoute } = <span class="cstat-no" title="statement not covered" >useAcceleratorConsole();</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return <span class="fstat-no" title="function not covered" >(p</span>rops: RendererProps&lt;TableRowType&gt;): JSX.Element =&gt; {</span>
-    const { column, row, index, value } = <span class="cstat-no" title="statement not covered" >props;</span>
-&nbsp;
-    const createLinkToDeliverable = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>Value: React.ReactNode | unknown[]) =&gt; {</span>
-      const deliverableUrl = <span class="cstat-no" title="statement not covered" >isAcceleratorConsole</span>
-        ? APP_PATHS.ACCELERATOR_DELIVERABLES_VIEW
-        : APP_PATHS.DELIVERABLES_VIEW;
-      const to = <span class="cstat-no" title="statement not covered" >deliverableUrl.replace(':deliverableId', `${row.id}`);</span>
-<span class="cstat-no" title="statement not covered" >      return &lt;Link to={to}&gt;{iValue as React.ReactNode}&lt;/Link&gt;;</span>
-    };
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    if (column.key === 'name') {</span>
-<span class="cstat-no" title="statement not covered" >      return (</span>
-        &lt;CellRenderer
-          index={index}
-          column={column}
-          value={createLinkToDeliverable(value)}
-          row={row}
-          className={classes.text}
-        /&gt;
-      );
-    }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    if (column.key === 'status') {</span>
-      // TODO convert BE label value to locale specific string
-<span class="cstat-no" title="statement not covered" >      return (</span>
-        &lt;CellRenderer
-          index={index}
-          column={column}
-          value={activeLocale ? &lt;Badge label={statusLabel(value as DeliverableStatusType)} /&gt; : ''}
-          row={row}
-        /&gt;
-      );
-    }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return &lt;CellRenderer {...props} /&gt;;</span>
+  const createLinkToDeliverable = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>Value: React.ReactNode | unknown[]) =&gt; {</span>
+    const deliverableUrl = <span class="cstat-no" title="statement not covered" >isAcceleratorRoute ? APP_PATHS.ACCELERATOR_DELIVERABLES_VIEW : APP_PATHS.DELIVERABLES_VIEW;</span>
+    const to = <span class="cstat-no" title="statement not covered" >deliverableUrl.replace(':deliverableId', `${row.id}`);</span>
+<span class="cstat-no" title="statement not covered" >    return &lt;Link to={to}&gt;{iValue as React.ReactNode}&lt;/Link&gt;;</span>
   };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (column.key === 'name') {</span>
+<span class="cstat-no" title="statement not covered" >    return (</span>
+      &lt;CellRenderer
+        index={index}
+        column={column}
+        value={createLinkToDeliverable(value)}
+        row={row}
+        className={classes.text}
+      /&gt;
+    );
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (column.key === 'status') {</span>
+<span class="cstat-no" title="statement not covered" >    return (</span>
+      &lt;CellRenderer
+        index={index}
+        column={column}
+        value={activeLocale ? &lt;Badge label={statusLabel(value as DeliverableStatusType)} /&gt; : ''}
+        row={row}
+      /&gt;
+    );
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return &lt;CellRenderer {...props} /&gt;;</span>
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -253,7 +241,7 @@ export default function <span class="fstat-no" title="function not covered" >Del
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-28T18:31:08.191Z
+                at 2024-02-28T19:24:08.091Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
