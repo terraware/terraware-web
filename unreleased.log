@@ -1,3 +1,4 @@
+d0d3e11122 SW-4922 Create InternalComments component that shows and allows for editing of the deliverable's `internalComment` (#2231)
 cbe274fc9b Change the 'update status' flow into 'update deliverable' (#2230)
 6a33a1fdaf SW-4935: Update hardcoded styles to use accent tokens (#2232)
 474cfae1e3 Replace isAcceleratorConsole flags with useAcceleratorConsole hook (#2229)

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1709153767120" clover="3.2.0">
-  <project timestamp="1709153767120" name="All files">
-    <metrics statements="17118" coveredstatements="564" conditionals="10975" coveredconditionals="163" methods="5343" coveredmethods="125" elements="33436" coveredelements="852" complexity="0" loc="17118" ncloc="17118" packages="141" files="703" classes="703"/>
+<coverage generated="1709159078290" clover="3.2.0">
+  <project timestamp="1709159078290" name="All files">
+    <metrics statements="17135" coveredstatements="564" conditionals="10983" coveredconditionals="163" methods="5349" coveredmethods="125" elements="33467" coveredelements="852" complexity="0" loc="17135" ncloc="17135" packages="141" files="704" classes="704"/>
     <package name="src">
       <metrics statements="174" coveredstatements="0" conditionals="129" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -1400,7 +1400,7 @@
       </file>
     </package>
     <package name="src.components.DeliverableView">
-      <metrics statements="66" coveredstatements="0" conditionals="46" coveredconditionals="0" methods="17" coveredmethods="0"/>
+      <metrics statements="83" coveredstatements="0" conditionals="54" coveredconditionals="0" methods="23" coveredmethods="0"/>
       <file name="DeliverableStatusBadge.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/DeliverableStatusBadge.tsx">
         <metrics statements="16" coveredstatements="0" conditionals="13" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="13" count="0" type="stmt"/>
@@ -1449,13 +1449,33 @@
         <line num="20" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
       </file>
+      <file name="InternalComment.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/InternalComment.tsx">
+        <metrics statements="17" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="6" coveredmethods="0"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+      </file>
       <file name="Metadata.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/Metadata.tsx">
         <metrics statements="5" coveredstatements="0" conditionals="9" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="8" count="0" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
-        <line num="13" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
       </file>
       <file name="MobileMessage.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/MobileMessage.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
