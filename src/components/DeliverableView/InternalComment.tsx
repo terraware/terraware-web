@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Grid, Typography } from '@mui/material';
+import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import strings from 'src/strings';
 import theme from 'src/theme';
 import { Deliverable } from 'src/types/Deliverables';
 import useSnackbar from 'src/utils/useSnackbar';
 import Button from 'src/components/common/button/Button';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
-import TextField from 'src/components/common/TextField';
 import useUpdateDeliverable from 'src/scenes/AcceleratorRouter/useUpdateDeliverable';
 
 interface InternalCommentProps {
@@ -48,7 +48,7 @@ const InternalComment = ({ deliverable }: InternalCommentProps) => {
         onClose={toggleDialog}
         open={isDialogOpen}
         title={strings.INTERNAL_COMMENTS}
-        size='medium'
+        size='large'
         middleButtons={[
           <Button
             id='cancelEditInternalComment'
@@ -64,11 +64,12 @@ const InternalComment = ({ deliverable }: InternalCommentProps) => {
         <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
           <Grid item xs={12}>
             <TextField
-              label={strings.INTERNAL_COMMENTS}
-              type='text'
+              label={''}
+              type='textarea'
               id='internalComment'
-              onChange={(_, value) => setInternalComment(value as string)}
+              onChange={(value) => setInternalComment(value as string)}
               value={internalComment}
+              preserveNewlines
             />
           </Grid>
         </Grid>
