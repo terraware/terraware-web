@@ -1,8 +1,8 @@
 import React from 'react';
 import AcceleratorMain from 'src/scenes/AcceleratorRouter/AcceleratorMain';
 
-const AcceleratorPeopleView = () => {
+const PeopleView = () => {
   return <AcceleratorMain />;
 };
 
-export default AcceleratorPeopleView;
+export default PeopleView;
