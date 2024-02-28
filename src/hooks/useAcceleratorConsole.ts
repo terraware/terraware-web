@@ -4,7 +4,7 @@ import isEnabled from 'src/features';
 
 const useAcceleratorConsole = () => {
   const featureFlagAccelerator = isEnabled('Accelerator');
-  const isAcceleratorRoute = useRouteMatch(APP_PATHS.ACCELERATOR);
+  const isAcceleratorRoute = !!useRouteMatch(APP_PATHS.ACCELERATOR);
 
   return { featureFlagAccelerator, isAcceleratorRoute };
 };

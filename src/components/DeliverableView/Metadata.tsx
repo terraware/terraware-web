@@ -1,12 +1,14 @@
 import React from 'react';
 import { Box, useTheme } from '@mui/material';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { ViewProps } from './types';
 import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
 import strings from 'src/strings';
 
 const Metadata = (props: ViewProps): JSX.Element => {
-  const { deliverable, isAcceleratorConsole } = props;
+  const { deliverable } = props;
   const theme = useTheme();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   return (
     <Box display='flex' flexDirection='column'>
@@ -22,7 +24,7 @@ const Metadata = (props: ViewProps): JSX.Element => {
         </Box>
       )}
 
-      {isAcceleratorConsole && (
+      {isAcceleratorRoute && (
         <Box
           border={`1px solid ${theme.palette.TwClrBaseGray100}`}
           borderRadius='8px'
@@ -35,7 +37,7 @@ const Metadata = (props: ViewProps): JSX.Element => {
       )}
 
       <Box marginBottom='16px'>
-        {deliverable.status !== 'Rejected' && !isAcceleratorConsole && (
+        {deliverable.status !== 'Rejected' && !isAcceleratorRoute && (
           <DeliverableStatusBadge status={deliverable.status} />
         )}
 

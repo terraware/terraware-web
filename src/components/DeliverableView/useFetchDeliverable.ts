@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
 import { Deliverable } from 'src/types/Deliverables';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Statuses } from 'src/redux/features/asyncUtils';
 import {
@@ -14,7 +15,6 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 export type Props = {
   deliverableId: number;
-  isAcceleratorConsole?: boolean;
 };
 
 export type Response = {
@@ -26,7 +26,8 @@ export type Response = {
  * Hook to fetch a deliverable.
  * Returns status on request and the fetched deliverable.
  */
-export default function useFetchDeliverable({ deliverableId, isAcceleratorConsole }: Props): Response {
+export default function useFetchDeliverable({ deliverableId }: Props): Response {
+  const { isAcceleratorRoute } = useAcceleratorConsole();
   const snackbar = useSnackbar();
   const history = useHistory();
   const dispatch = useAppDispatch();
@@ -34,8 +35,8 @@ export default function useFetchDeliverable({ deliverableId, isAcceleratorConsol
   const deliverableDataResult = useAppSelector(selectDeliverable(deliverableId));
 
   const goToDeliverables = useCallback(() => {
-    history.push(isAcceleratorConsole ? APP_PATHS.ACCELERATOR_DELIVERABLES : APP_PATHS.DELIVERABLES);
-  }, [history, isAcceleratorConsole]);
+    history.push(isAcceleratorRoute ? APP_PATHS.ACCELERATOR_DELIVERABLES : APP_PATHS.DELIVERABLES);
+  }, [history, isAcceleratorRoute]);
 
   useEffect(() => {
     if (!isNaN(deliverableId)) {

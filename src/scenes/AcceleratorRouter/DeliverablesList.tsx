@@ -108,7 +108,6 @@ const DeliverablesList = () => {
       <DeliverablesTable
         columns={columns}
         extraTableFilters={extraTableFilters}
-        isAcceleratorConsole
         organizationId={-1}
         pageHeaderRef={contentRef}
       />
