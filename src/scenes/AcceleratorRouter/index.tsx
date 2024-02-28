@@ -11,11 +11,11 @@ import CohortListView from 'src/scenes/AcceleratorRouter/CohortListView';
 import CohortView from 'src/scenes/AcceleratorRouter/CohortView';
 import CohortEditView from 'src/scenes/AcceleratorRouter/CohortEditView';
 import CohortNewView from 'src/scenes/AcceleratorRouter/CohortNewView';
-import AcceleratorDeliverableViewWrapper from 'src/scenes/AcceleratorRouter/AcceleratorDeliverableViewWrapper';
-import AcceleratorDeliverablesList from 'src/scenes/AcceleratorRouter/AcceleratorDeliverablesList';
-import AcceleratorModuleContentView from 'src/scenes/AcceleratorRouter/AcceleratorModuleContentView';
-import AcceleratorOverviewView from 'src/scenes/AcceleratorRouter/AcceleratorOverviewView';
-import AcceleratorPeopleView from 'src/scenes/AcceleratorRouter/AcceleratorPeopleView';
+import DeliverableViewWrapper from 'src/scenes/AcceleratorRouter/DeliverableViewWrapper';
+import DeliverablesList from 'src/scenes/AcceleratorRouter/DeliverablesList';
+import ModuleContentView from 'src/scenes/AcceleratorRouter/ModuleContentView';
+import OverviewView from 'src/scenes/AcceleratorRouter/OverviewView';
+import PeopleView from 'src/scenes/AcceleratorRouter/PeopleView';
 import NavBar from 'src/scenes/AcceleratorRouter/NavBar';
 
 interface AcceleratorRouterProps {
@@ -75,7 +75,7 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
         <ErrorBoundary setShowNavBar={setShowNavBar}>
           <Switch>
             <Route path={APP_PATHS.ACCELERATOR_OVERVIEW}>
-              <AcceleratorOverviewView />
+              <OverviewView />
             </Route>
             <Route path={APP_PATHS.ACCELERATOR_COHORTS_EDIT}>
               <CohortEditView />
@@ -90,16 +90,16 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
               <CohortView />
             </Route>
             <Route path={APP_PATHS.ACCELERATOR_DELIVERABLES_VIEW}>
-              <AcceleratorDeliverableViewWrapper />
+              <DeliverableViewWrapper />
             </Route>
             <Route path={APP_PATHS.ACCELERATOR_DELIVERABLES}>
-              <AcceleratorDeliverablesList />
+              <DeliverablesList />
             </Route>
             <Route path={APP_PATHS.ACCELERATOR_MODULE_CONTENT}>
-              <AcceleratorModuleContentView />
+              <ModuleContentView />
             </Route>
             <Route path={APP_PATHS.ACCELERATOR_PEOPLE}>
-              <AcceleratorPeopleView />
+              <PeopleView />
             </Route>
           </Switch>
         </ErrorBoundary>

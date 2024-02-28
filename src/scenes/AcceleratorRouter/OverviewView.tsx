@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const AcceleratorOverviewView = () => {
+const OverviewView = () => {
   const { isMobile } = useDeviceInfo();
   const history = useHistory();
   const classes = useStyles();
@@ -64,4 +64,4 @@ const AcceleratorOverviewView = () => {
   );
 };
 
-export default AcceleratorOverviewView;
+export default OverviewView;

@@ -7,7 +7,7 @@ import { useLocalization } from 'src/providers';
 import Card from 'src/components/common/Card';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
-import AcceleratorDocumentsList from 'src/scenes/AcceleratorRouter/AcceleratorDocumentsList';
+import DocumentsList from 'src/scenes/AcceleratorRouter/DocumentsList';
 import { EditProps, ViewProps } from 'src/components/DeliverableView/types';
 import MobileMessage from 'src/components/DeliverableView/MobileMessage';
 import TitleBar from 'src/components/DeliverableView/TitleBar';
@@ -18,7 +18,7 @@ export type Props = EditProps & {
   isBusy?: boolean;
 };
 
-const AcceleratorDeliverableView = (props: Props): JSX.Element => {
+const DeliverableView = (props: Props): JSX.Element => {
   const { ...viewProps }: ViewProps = props;
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
@@ -44,11 +44,11 @@ const AcceleratorDeliverableView = (props: Props): JSX.Element => {
         <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
           <Metadata {...viewProps} />
           <DocumentsUploader {...viewProps} />
-          <AcceleratorDocumentsList {...viewProps} />
+          <DocumentsList {...viewProps} />
         </Card>
       </>
     </Page>
   );
 };
 
-export default AcceleratorDeliverableView;
+export default DeliverableView;

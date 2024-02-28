@@ -1,8 +1,8 @@
 import React from 'react';
 import AcceleratorMain from 'src/scenes/AcceleratorRouter/AcceleratorMain';
 
-const AcceleratorModuleContentView = () => {
+const ModuleContentView = () => {
   return <AcceleratorMain />;
 };
 
-export default AcceleratorModuleContentView;
+export default ModuleContentView;
