@@ -1,9 +1,10 @@
 import React from 'react';
 import { Box, useTheme } from '@mui/material';
-import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
-import { ViewProps } from './types';
-import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
 import strings from 'src/strings';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
+import { ViewProps } from './types';
+import InternalComment from './InternalComment';
 
 const Metadata = (props: ViewProps): JSX.Element => {
   const { deliverable } = props;
@@ -31,8 +32,9 @@ const Metadata = (props: ViewProps): JSX.Element => {
           marginBottom='16px'
           padding='16px'
         >
+          <InternalComment deliverable={deliverable} />
+
           {deliverable.status !== 'Rejected' && <DeliverableStatusBadge status={deliverable.status} />}
-          <strong>{strings.INTERNAL_COMMENTS}</strong> ?
         </Box>
       )}
 
