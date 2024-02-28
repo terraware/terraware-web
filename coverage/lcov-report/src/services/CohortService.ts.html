@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
@@ -143,10 +143,7 @@
 <a name='L78'></a><a href='#L78'>78</a>
 <a name='L79'></a><a href='#L79'>79</a>
 <a name='L80'></a><a href='#L80'>80</a>
-<a name='L81'></a><a href='#L81'>81</a>
-<a name='L82'></a><a href='#L82'>82</a>
-<a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L81'></a><a href='#L81'>81</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -169,11 +166,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -181,10 +173,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -242,6 +236,7 @@ const COHORT_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/
 &nbsp;
 export type ListCohortsResponsePayload =
   paths[typeof COHORTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+export type ListCohortsRequestDepth = paths[typeof COHORTS_ENDPOINT]['get']['parameters']['query']['depth'];
 &nbsp;
 export type CreateCohortResponsePayload =
   paths[typeof COHORTS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
@@ -258,17 +253,13 @@ const httpCohorts = <span class="cstat-no" title="statement not covered" >HttpSe
 /**
  * List all cohorts
  */
-const listCohorts = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (organizationId: number, locale?: string | null): Promise&lt;Response2&lt;Cohort[]&gt;&gt; =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  httpCohorts.get&lt;ListCohortsResponsePayload, { data: Cohort[] | undefined }&gt;(</span>
-    {
-      params: {
-        organizationId: organizationId.toString(),
-      },
-    },
-<span class="fstat-no" title="function not covered" >    (r</span>esponse) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
-      data: response?.cohorts?.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.name.localeCompare(b.name, locale || undefined))</span>,
-    })
-  );
+const listCohorts = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (</span>
+  locale: string | null,
+  depth: ListCohortsRequestDepth = <span class="branch-0 cbranch-no" title="branch not covered" >'Cohort'</span>
+): Promise&lt;Response2&lt;Cohort[]&gt;&gt; =&gt;
+<span class="cstat-no" title="statement not covered" >  httpCohorts.get&lt;ListCohortsResponsePayload, { data: Cohort[] | undefined }&gt;({ params: { depth } }, <span class="fstat-no" title="function not covered" >(r</span>esponse) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+    data: response?.cohorts?.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.name.localeCompare(b.name, locale || undefined))</span>,
+  }));
 &nbsp;
 /**
  * Create a cohort
@@ -319,7 +310,7 @@ export default CohortService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-27T23:49:25.266Z
+                at 2024-02-28T00:20:40.318Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
