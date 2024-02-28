@@ -95,7 +95,7 @@ const AcceleratorDeliverableViewWrapper = () => {
     } else {
       return undefined;
     }
-  }, [deliverable?.status, onOptionItemClick, setStatus]);
+  }, [deliverable?.status, onOptionItemClick, setStatus, theme]);
 
   if (deliverable) {
     return (
