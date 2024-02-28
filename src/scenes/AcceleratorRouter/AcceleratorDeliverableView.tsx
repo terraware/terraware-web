@@ -9,6 +9,7 @@ import { EditProps, ViewProps } from 'src/components/DeliverableView/types';
 import TitleBar from 'src/components/DeliverableView/TitleBar';
 import DocumentsUploader from 'src/components/DeliverableView/DocumentsUploader';
 import Metadata from 'src/components/DeliverableView/Metadata';
+import DeliverablePageMessage from 'src/scenes/DeliverablesRouter/DeliverablePageMessage';
 
 export type Props = EditProps & {
   isBusy?: boolean;
@@ -32,6 +33,7 @@ const AcceleratorDeliverableView = (props: Props): JSX.Element => {
       content={
         <>
           {props.isBusy && <BusySpinner />}
+          <DeliverablePageMessage {...viewProps} />
           <Card style={{ display: 'flex', flexDirection: 'column' }}>
             <Metadata {...viewProps} />
             <DocumentsUploader {...viewProps} />

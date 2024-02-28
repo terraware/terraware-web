@@ -4,6 +4,7 @@ import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Card from 'src/components/common/Card';
 import Page from 'src/components/Page';
+import DeliverablePageMessage from 'src/scenes/DeliverablesRouter/DeliverablePageMessage';
 import DocumentsList from 'src/scenes/DeliverablesRouter/DocumentsList';
 import { EditProps, ViewProps } from 'src/components/DeliverableView/types';
 import TitleBar from 'src/components/DeliverableView/TitleBar';
@@ -32,6 +33,7 @@ const DeliverableView = (props: Props): JSX.Element => {
       content={
         <>
           {props.isBusy && <BusySpinner />}
+          <DeliverablePageMessage {...viewProps} />
           <Card style={{ display: 'flex', flexDirection: 'column' }}>
             <Metadata {...viewProps} />
             <DocumentsUploader {...viewProps} />
