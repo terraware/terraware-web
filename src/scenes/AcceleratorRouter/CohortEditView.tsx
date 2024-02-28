@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import AcceleratorMain from 'src/scenes/AcceleratorRouter/AcceleratorMain';
 import CohortForm from 'src/scenes/AcceleratorRouter/CohortForm';
 
-export default function AcceleratorCohortEditView(): JSX.Element {
+export default function CohortEditView(): JSX.Element {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const theme = useTheme();

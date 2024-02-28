@@ -10,7 +10,7 @@ import { CreateCohortRequestPayload } from 'src/types/Cohort';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
-export default function AcceleratorCohortNewView(): JSX.Element {
+export default function CohortNewView(): JSX.Element {
   const history = useHistory();
   const theme = useTheme();
   const [isBusy, setIsBusy] = useState<boolean>(false);
@@ -24,6 +24,13 @@ export default function AcceleratorCohortNewView(): JSX.Element {
   const goToCohortsList = useCallback(() => {
     history.push({ pathname: APP_PATHS.ACCELERATOR_COHORTS });
   }, [history]);
+
+  const goToCohortView = useCallback(
+    (cohortId: number) => {
+      history.push({ pathname: APP_PATHS.ACCELERATOR_COHORTS_VIEW.replace(':cohortId', `${cohortId}`) });
+    },
+    [history]
+  );
 
   const createNewCohort = useCallback(
     async (cohort: CreateCohortRequestPayload) => {
@@ -48,9 +55,9 @@ export default function AcceleratorCohortNewView(): JSX.Element {
       snackbar.toastSuccess(strings.formatString(strings.COHORT_ADDED, cohort.name) as string);
 
       // navigate to cohorts list
-      goToCohortsList();
+      goToCohortView(cohortId);
     },
-    [setIsBusy, snackbar, goToCohortsList]
+    [setIsBusy, snackbar, goToCohortView]
   );
 
   const onCohortSaved = useCallback(
