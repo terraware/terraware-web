@@ -1,3 +1,4 @@
+import React from 'react';
 import { Box, useTheme } from '@mui/material';
 import { ViewProps } from './types';
 import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
@@ -37,7 +38,8 @@ const Metadata = (props: ViewProps): JSX.Element => {
         {deliverable.status !== 'Rejected' && !isAcceleratorConsole && (
           <DeliverableStatusBadge status={deliverable.status} />
         )}
-        Description coming soon!
+
+        <div dangerouslySetInnerHTML={{ __html: deliverable.deliverableContent }} />
       </Box>
     </Box>
   );

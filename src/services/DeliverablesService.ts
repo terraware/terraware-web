@@ -27,17 +27,20 @@ const SEARCH_FIELDS_DELIVERABLES_PARTICIPANT = [...SEARCH_FIELDS_DELIVERABLES_AD
 const mockDeliverable: Deliverable = {
   category: 'Legal',
   // TODO need to figure out if we are going to allow raw HTML or just have regular text
-  deliverableContent:
-    'The Company Formation Document is to confirm the entity is properly formed and registered in the country.\n' +
-    '\n' +
-    'Depending on your jurisdiction, this document may be called a Certificate of Incorporation or a Business Registration Certificate, for example.\n' +
-    '\n' +
-    'Submit:\n' +
-    'A document issued by the relevant authority in your jurisdiction that contains the following information:\n' +
-    'Company Name\n' +
-    'Legal Form / Structure – (e.g. corporation, limited liability company, etc.)\n' +
-    'Date of Formation/Incorporation\n' +
-    'Company Number (if applicable)',
+  deliverableContent: `
+    <div>
+     	<p>The Company Formation Document is to confirm the entity is properly formed and registered in the country.</p>
+     	<p>Depending on your jurisdiction, this document may be called a Certificate of Incorporation or a Business Registration Certificate, for example.</p>
+     	<p><b>Submit:</b></p>
+     	<p>A document issued by the relevant authority in your jurisdiction that contains the following information:</p>
+   	  <ol>
+    		<li>Company Name</li>
+    		<li>Legal Form / Structure – (e.g. corporation, limited liability company, etc.)</li>
+    		<li>Date of Formation/Incorporation</li>
+    		<li>Company Number (if applicable)</li>
+		  </ol>
+    </div>
+  `,
   documents: [
     {
       name: 'Upload 1',
