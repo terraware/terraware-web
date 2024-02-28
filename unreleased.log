@@ -1,3 +1,4 @@
+b5f1b99247 Strip Accelerator file prefix in AcceleratorRouter/Accelerator* components (#2222)
 4cab45303e Do not show the organization dropdown if we are in the accelerator console (#2226)
 7385da8b4a SW-4933 Merge the redundant Page components  (#2221)
 47bac7b58c Updated translations from Phrase (#2225)
