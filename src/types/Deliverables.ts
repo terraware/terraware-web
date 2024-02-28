@@ -33,15 +33,16 @@ export type DeliverableDocument = {
 };
 
 export type Deliverable = {
-  id: number;
-  documents: DeliverableDocument[];
   category: DeliverableCategoryType;
-  reason?: string;
-  status: DeliverableStatusType;
+  deliverableContent: string;
+  documents: DeliverableDocument[];
+  id: number;
   name: string;
   projectId: number;
   projectName: string;
-  deliverableContent: string;
+  reason?: string;
+  status: DeliverableStatusType;
+  templateUrl?: string;
 };
 
 export type DeliverableData = {

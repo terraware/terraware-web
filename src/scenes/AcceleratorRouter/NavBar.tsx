@@ -17,6 +17,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
   const { isDesktop } = useDeviceInfo();
   const history = useHistory();
 
+  const isAcceleratorCohortsRoute = useRouteMatch(APP_PATHS.ACCELERATOR_COHORTS);
   const isAcceleratorDeliverablesRoute = useRouteMatch(APP_PATHS.ACCELERATOR_DELIVERABLES);
   const isAcceleratorModuleContentRoute = useRouteMatch(APP_PATHS.ACCELERATOR_MODULE_CONTENT);
   const isAcceleratorOverviewRoute = useRouteMatch(APP_PATHS.ACCELERATOR_OVERVIEW);
@@ -66,6 +67,14 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
       />
 
       <NavSection />
+
+      <NavItem
+        icon='organizationNav'
+        id='cohorts'
+        label={strings.COHORTS}
+        onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_COHORTS)}
+        selected={!!isAcceleratorCohortsRoute}
+      />
 
       <NavItem
         icon='organizationNav'

@@ -2,16 +2,16 @@ import { Typography, useTheme } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
+import strings from 'src/strings';
+import { UpdateCohortRequestPayload } from 'src/types/Cohort';
+import useSnackbar from 'src/utils/useSnackbar';
 import { requestCohort, requestCohortUpdate } from 'src/redux/features/cohorts/cohortsAsyncThunks';
 import { selectCohort, selectCohortRequest } from 'src/redux/features/cohorts/cohortsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import AcceleratorMain from 'src/scenes/AcceleratorRouter/AcceleratorMain';
 import CohortForm from 'src/scenes/AcceleratorRouter/CohortForm';
-import strings from 'src/strings';
-import { UpdateCohortRequestPayload } from 'src/types/Cohort';
-import useSnackbar from 'src/utils/useSnackbar';
 
-export default function AcceleratorCohortEditView(): JSX.Element {
+export default function CohortEditView(): JSX.Element {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const theme = useTheme();
@@ -38,9 +38,9 @@ export default function AcceleratorCohortEditView(): JSX.Element {
     [cohortId, dispatch]
   );
 
-  const goToAcceleratorOverview = useCallback(() => {
-    history.push({ pathname: APP_PATHS.ACCELERATOR_OVERVIEW });
-  }, [history]);
+  const goToCohortView = useCallback(() => {
+    history.push({ pathname: APP_PATHS.ACCELERATOR_COHORTS_VIEW.replace(':cohortId', `${cohortId}`) });
+  }, [history, cohortId]);
 
   useEffect(() => {
     if (!cohortUpdateRequest) {
@@ -52,9 +52,9 @@ export default function AcceleratorCohortEditView(): JSX.Element {
     } else if (cohortUpdateRequest.status === 'success') {
       snackbar.toastSuccess(strings.CHANGES_SAVED, strings.SAVED);
       dispatch(requestCohort({ cohortId }));
-      goToAcceleratorOverview();
+      goToCohortView();
     }
-  }, [cohortId, cohortUpdateRequest, dispatch, goToAcceleratorOverview, snackbar]);
+  }, [cohortId, cohortUpdateRequest, dispatch, goToCohortView, snackbar]);
 
   return (
     <AcceleratorMain>
@@ -66,7 +66,7 @@ export default function AcceleratorCohortEditView(): JSX.Element {
         <CohortForm<UpdateCohortRequestPayload>
           busy={cohortUpdateRequest?.status === 'pending'}
           cohort={cohort}
-          onCancel={goToAcceleratorOverview}
+          onCancel={goToCohortView}
           onSave={saveCohort}
         />
       )}
