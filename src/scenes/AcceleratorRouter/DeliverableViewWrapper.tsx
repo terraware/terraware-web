@@ -7,14 +7,14 @@ import { DeliverableStatusType } from 'src/types/Deliverables';
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import useFetchDeliverable from 'src/components/DeliverableView/useFetchDeliverable';
-import useEditStatusDeliverable from './useEditStatusDeliverable';
+import useUpdateDeliverable from './useUpdateDeliverable';
 import DeliverableView from './DeliverableView';
 import RejectDialog from './RejectDialog';
 
 const DeliverableViewWrapper = () => {
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
   const { deliverableId } = useParams<{ deliverableId: string }>();
-  const { status: requestStatus, update } = useEditStatusDeliverable();
+  const { status: requestStatus, update } = useUpdateDeliverable();
   const theme = useTheme();
 
   const { deliverable } = useFetchDeliverable({ deliverableId: Number(deliverableId) });

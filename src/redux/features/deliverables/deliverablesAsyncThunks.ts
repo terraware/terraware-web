@@ -3,7 +3,7 @@ import strings from 'src/strings';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { Response } from 'src/services/HttpService';
 import DeliverablesService from 'src/services/DeliverablesService';
-import { DeliverableData, SearchResponseDeliverable, UpdateStatusRequest } from 'src/types/Deliverables';
+import { DeliverableData, SearchResponseDeliverable, UpdateRequest } from 'src/types/Deliverables';
 
 export const requestDeliverablesSearch = createAsyncThunk(
   'deliverables/search',
@@ -37,10 +37,10 @@ export const requestDeliverableFetch = createAsyncThunk(
   }
 );
 
-export const requestUpdateDeliverableStatus = createAsyncThunk(
-  'deliverables/update-status',
-  async (request: UpdateStatusRequest, { rejectWithValue }) => {
-    const response: Response = await DeliverablesService.updateStatus(request);
+export const requestDeliverableUpdate = createAsyncThunk(
+  'deliverables/update',
+  async (request: UpdateRequest, { rejectWithValue }) => {
+    const response: Response = await DeliverablesService.update(request);
     if (response && response.requestSucceeded) {
       return request.id;
     }

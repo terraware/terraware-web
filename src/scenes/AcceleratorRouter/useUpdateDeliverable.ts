@@ -1,35 +1,36 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import strings from 'src/strings';
-import { UpdateStatusRequest } from 'src/types/Deliverables';
+import { UpdateRequest } from 'src/types/Deliverables';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Statuses } from 'src/redux/features/asyncUtils';
 import { selectDeliverablesEditRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
 import {
   requestDeliverableFetch,
-  requestUpdateDeliverableStatus,
+  requestDeliverableUpdate,
 } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export type Response = {
+  internalComment?: string;
   status?: Statuses;
-  update: (request: UpdateStatusRequest) => void;
+  update: (request: UpdateRequest) => void;
 };
 
 /**
- * Hook to update a deliverable status.
+ * Hook to update a deliverable, which updates the underlying deliverable submission (used for internalComments and status currently).
  * Returns status on request and function to update status.
  */
-export default function useEditStatusDeliverable(): Response {
-  const [lastRequest, setLastRequest] = useState<UpdateStatusRequest | undefined>();
+export default function useUpdateDeliverable(): Response {
+  const [lastRequest, setLastRequest] = useState<UpdateRequest | undefined>();
   const [requestId, setRequestId] = useState<string>('');
   const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
   const result = useAppSelector(selectDeliverablesEditRequest(requestId));
 
   const update = useCallback(
-    (request: UpdateStatusRequest) => {
+    (request: UpdateRequest) => {
       setLastRequest(undefined);
-      const dispatched = dispatch(requestUpdateDeliverableStatus(request));
+      const dispatched = dispatch(requestDeliverableUpdate(request));
       setRequestId(dispatched.requestId);
       setLastRequest(request);
     },
@@ -40,6 +41,7 @@ export default function useEditStatusDeliverable(): Response {
     if (!lastRequest) {
       return;
     }
+
     if (result?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     } else if (result?.status === 'success') {

@@ -12,7 +12,7 @@ import {
   DeliverableData,
   SearchResponseDeliverableParticipant,
   SearchResponseDeliverableAdmin,
-  UpdateStatusRequest,
+  UpdateRequest,
 } from 'src/types/Deliverables';
 import { Response } from 'src/services/HttpService';
 
@@ -68,6 +68,7 @@ const mockDeliverable: Deliverable = {
     },
   ],
   id: 1,
+  internalComment: 'This is a great looking submission',
   name: 'Company Formation Document',
   projectId: 1,
   projectName: 'Treemendo.us',
@@ -83,9 +84,13 @@ const getDeliverable = async (deliverableId: number): Promise<Response & Deliver
   };
 };
 
-const updateStatus = async ({ reason, status }: UpdateStatusRequest): Promise<Response> => {
-  mockDeliverable.status = status;
+const update = async ({ internalComment, reason, status }: UpdateRequest): Promise<Response> => {
+  if (status) {
+    mockDeliverable.status = status;
+  }
+
   mockDeliverable.reason = reason;
+  mockDeliverable.internalComment = internalComment;
   return { requestSucceeded: true };
 };
 
@@ -160,7 +165,7 @@ const DeliverablesService = {
   getDeliverable,
   searchDeliverablesForAdmin,
   searchDeliverablesForParticipant,
-  updateStatus,
+  update,
 };
 
 export default DeliverablesService;
