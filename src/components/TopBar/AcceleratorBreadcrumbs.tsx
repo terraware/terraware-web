@@ -7,7 +7,7 @@ import strings from 'src/strings';
 
 const useStyles = makeStyles((theme: Theme) => ({
   selected: {
-    backgroundColor: '#EF7047',
+    backgroundColor: theme.palette.TwClrBgAccent,
     borderRadius: '16px',
     color: theme.palette.TwClrBaseWhite,
     fontFamily: 'Inter',
