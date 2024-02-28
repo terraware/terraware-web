@@ -263,7 +263,7 @@ export default function NavBar({
           <NavSection title={strings.PARTICIPANTS.toUpperCase()} />
           <NavItem
             label={strings.DELIVERABLES}
-            icon='organizationNav'
+            icon='iconSubmit'
             selected={!!isDeliverablesRoute}
             onClick={() => {
               closeAndNavigateTo(isDeliverablesRoute ? '' : APP_PATHS.DELIVERABLES);
