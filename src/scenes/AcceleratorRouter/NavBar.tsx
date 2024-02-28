@@ -69,7 +69,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
       <NavSection />
 
       <NavItem
-        icon='organizationNav'
+        icon='iconBusinessNetwork'
         id='cohorts'
         label={strings.COHORTS}
         onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_COHORTS)}
@@ -77,7 +77,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
       />
 
       <NavItem
-        icon='organizationNav'
+        icon='iconSubmit'
         id='deliverables'
         label={strings.DELIVERABLES}
         onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_DELIVERABLES)}
