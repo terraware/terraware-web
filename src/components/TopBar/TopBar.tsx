@@ -1,4 +1,4 @@
-import { AppBar, Theme, Toolbar } from '@mui/material';
+import { AppBar, Theme, Toolbar, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
@@ -32,6 +32,7 @@ export default function TopBar(props: TopBarProps): JSX.Element {
   const { isDesktop } = useDeviceInfo();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const classes = useStyles({ isDesktop, fullWidth: props.fullWidth });
+  const theme = useTheme();
 
   return (
     <AppBar position='fixed' className={classes.appBar}>
@@ -39,7 +40,7 @@ export default function TopBar(props: TopBarProps): JSX.Element {
         className={isDesktop ? undefined : classes.mobile}
         disableGutters={true}
         sx={{
-          borderTop: isAcceleratorRoute ? '8px solid #EF7047' : undefined,
+          borderTop: isAcceleratorRoute ? `8px solid ${theme.palette.TwClrBgAccent}` : undefined,
           paddingBottom: '24px',
           paddingLeft: '32px',
           paddingRight: '32px',
