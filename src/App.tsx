@@ -110,6 +110,7 @@ function AppContent() {
       <TopBar>
         <TopBarContent setShowNavBar={setShowNavBar} />
       </TopBar>
+
       <div className={classes.container}>
         {organizations.length === 0 ? (
           <NoOrgRouter />
