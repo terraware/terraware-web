@@ -7,7 +7,7 @@ import { useLocalization } from 'src/providers';
 import Card from 'src/components/common/Card';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
-import DeliverablePageMessage from 'src/scenes/DeliverablesRouter/DeliverablePageMessage';
+import PageMessage from 'src/scenes/DeliverablesRouter/PageMessage';
 import DocumentsList from 'src/scenes/DeliverablesRouter/DocumentsList';
 import { EditProps, ViewProps } from 'src/components/DeliverableView/types';
 import TitleBar from 'src/components/DeliverableView/TitleBar';
@@ -42,7 +42,7 @@ const DeliverableView = (props: Props): JSX.Element => {
     <Page title={<TitleBar {...props} />} crumbs={crumbs}>
       <>
         {props.isBusy && <BusySpinner />}
-        <DeliverablePageMessage {...viewProps} />
+        <PageMessage {...viewProps} />
         <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
           <Metadata {...viewProps} />
           <DocumentsUploader {...viewProps} />

@@ -2,11 +2,12 @@ import React from 'react';
 import { Box, useTheme } from '@mui/material';
 import { Button, Message } from '@terraware/web-components';
 import { ViewProps } from 'src/components/DeliverableView/types';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers/hooks';
 import strings from 'src/strings';
 
-const DeliverableView = (props: ViewProps): JSX.Element => {
-  const { deliverable, isAcceleratorConsole } = props;
+const PageMessage = ({ deliverable }: ViewProps): JSX.Element => {
+  const { isAcceleratorRoute } = useAcceleratorConsole();
   const { activeLocale } = useLocalization();
   const theme = useTheme();
 
@@ -21,7 +22,7 @@ const DeliverableView = (props: ViewProps): JSX.Element => {
           <Message
             body={deliverable?.reason || ''}
             pageButtons={
-              isAcceleratorConsole
+              isAcceleratorRoute
                 ? [
                     <Button
                       icon='iconEdit'
@@ -45,4 +46,4 @@ const DeliverableView = (props: ViewProps): JSX.Element => {
   );
 };
 
-export default DeliverableView;
+export default PageMessage;
