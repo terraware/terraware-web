@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1709144749658" clover="3.2.0">
-  <project timestamp="1709144749658" name="All files">
+<coverage generated="1709145068701" clover="3.2.0">
+  <project timestamp="1709145068701" name="All files">
     <metrics statements="17112" coveredstatements="564" conditionals="10973" coveredconditionals="163" methods="5344" coveredmethods="125" elements="33429" coveredelements="852" complexity="0" loc="17112" ncloc="17112" packages="141" files="703" classes="703"/>
     <package name="src">
       <metrics statements="174" coveredstatements="0" conditionals="129" coveredconditionals="0" methods="46" coveredmethods="0"/>
@@ -1450,10 +1450,10 @@
       </file>
       <file name="Metadata.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/Metadata.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="9" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="6" count="0" type="stmt"/>
         <line num="7" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
-        <line num="10" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
       </file>
       <file name="MobileMessage.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/MobileMessage.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -17414,31 +17414,31 @@
         <line num="23" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
-        <line num="75" count="0" type="stmt"/>
-        <line num="77" count="0" type="stmt"/>
-        <line num="83" count="0" type="stmt"/>
-        <line num="84" count="0" type="stmt"/>
-        <line num="85" count="0" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="80" count="0" type="stmt"/>
         <line num="86" count="0" type="stmt"/>
-        <line num="90" count="0" type="stmt"/>
-        <line num="91" count="0" type="stmt"/>
-        <line num="97" count="0" type="stmt"/>
-        <line num="106" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="107" count="0" type="stmt"/>
-        <line num="112" count="0" type="stmt"/>
+        <line num="87" count="0" type="stmt"/>
+        <line num="88" count="0" type="stmt"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="93" count="0" type="stmt"/>
+        <line num="94" count="0" type="stmt"/>
+        <line num="100" count="0" type="stmt"/>
+        <line num="109" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="110" count="0" type="stmt"/>
         <line num="115" count="0" type="stmt"/>
-        <line num="127" count="0" type="stmt"/>
-        <line num="132" count="0" type="stmt"/>
-        <line num="133" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="134" count="0" type="stmt"/>
+        <line num="118" count="0" type="stmt"/>
+        <line num="130" count="0" type="stmt"/>
+        <line num="135" count="0" type="stmt"/>
+        <line num="136" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="137" count="0" type="stmt"/>
         <line num="140" count="0" type="stmt"/>
-        <line num="145" count="0" type="stmt"/>
-        <line num="146" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="147" count="0" type="stmt"/>
+        <line num="143" count="0" type="stmt"/>
+        <line num="148" count="0" type="stmt"/>
+        <line num="149" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="150" count="0" type="stmt"/>
-        <line num="156" count="0" type="stmt"/>
-        <line num="166" count="0" type="stmt"/>
+        <line num="153" count="0" type="stmt"/>
+        <line num="159" count="0" type="stmt"/>
+        <line num="169" count="0" type="stmt"/>
       </file>
       <file name="DraftPlantingSiteService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/DraftPlantingSiteService.ts">
         <metrics statements="26" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="7" coveredmethods="0"/>
