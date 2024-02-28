@@ -1,8 +1,7 @@
 import { AppBar, Theme, Toolbar } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React from 'react';
-import { useRouteMatch } from 'react-router-dom';
-import { APP_PATHS } from 'src/constants';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -31,7 +30,7 @@ type TopBarProps = {
 
 export default function TopBar(props: TopBarProps): JSX.Element {
   const { isDesktop } = useDeviceInfo();
-  const isAcceleratorRoute = useRouteMatch(APP_PATHS.ACCELERATOR);
+  const { isAcceleratorRoute } = useAcceleratorConsole();
   const classes = useStyles({ isDesktop, fullWidth: props.fullWidth });
 
   return (
