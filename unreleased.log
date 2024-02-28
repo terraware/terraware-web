@@ -1,3 +1,4 @@
+7cad3e992b Rename the AcceleratorCohort* views to Cohort* (#2219)
 7917089ad1 SW-4932 Add CohortListView and CohortView with basic table and navigation (#2218)
 c52bda9704 Updated translations from Phrase (#2220)
 d9d9676424 SW-4905 Show documents upload landing area (#2217)
