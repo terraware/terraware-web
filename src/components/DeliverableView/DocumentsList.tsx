@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Grid } from '@mui/material';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { SearchSortOrder } from 'src/types/Search';
 import { TableColumnType } from 'src/components/common/table/types';
 import Table from 'src/components/common/table';
@@ -12,6 +13,7 @@ interface DocumentsListProps extends ViewProps {
 }
 
 const DocumentsList = (props: DocumentsListProps): JSX.Element => {
+  const { isAcceleratorRoute } = useAcceleratorConsole();
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>({
     field: 'deliverableName',
     direction: 'Ascending',
@@ -27,7 +29,7 @@ const DocumentsList = (props: DocumentsListProps): JSX.Element => {
     <Box display='flex' flexDirection='column'>
       <Grid item xs={12}>
         <Table
-          id={'documents-list' + props.isAcceleratorConsole ? '-admin' : ''}
+          id={'documents-list' + isAcceleratorRoute ? '-admin' : ''}
           columns={() => props.columns}
           rows={props.deliverable.documents}
           orderBy={searchSortOrder.field}

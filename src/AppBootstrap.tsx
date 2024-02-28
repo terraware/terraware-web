@@ -9,6 +9,7 @@ import {
   OrganizationProvider,
   UserProvider,
 } from 'src/providers';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 
 const useStyles = makeStyles((theme: Theme) => ({
   spinner: {
@@ -38,10 +39,14 @@ function BlockingBootstrap({ children }: BlockingBootstrapProps): JSX.Element {
   const { bootstrapped: userBootstrapped } = useUser();
   const { bootstrapped: organizationBootstrapped } = useOrganization();
   const { bootstrapped: localizationBootstrapped } = useLocalization();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   useEffect(() => {
-    setBootstrapped(bootstrapped || (userBootstrapped && organizationBootstrapped && localizationBootstrapped));
-  }, [bootstrapped, userBootstrapped, organizationBootstrapped, localizationBootstrapped]);
+    setBootstrapped(
+      bootstrapped ||
+        (userBootstrapped && !!(organizationBootstrapped || isAcceleratorRoute) && localizationBootstrapped)
+    );
+  }, [bootstrapped, userBootstrapped, organizationBootstrapped, isAcceleratorRoute, localizationBootstrapped]);
 
   if (!bootstrapped) {
     return (

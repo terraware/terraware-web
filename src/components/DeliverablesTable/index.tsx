@@ -18,7 +18,6 @@ import DeliverableCellRenderer from './DeliverableCellRenderer';
 interface DeliverablesTableProps {
   columns: (activeLocale: string | null) => TableColumnType[];
   extraTableFilters?: SearchNodePayload[];
-  isAcceleratorConsole?: boolean;
   organizationId: number;
   pageHeaderRef: RefObject<HTMLDivElement>;
 }
@@ -31,13 +30,7 @@ const useStyles = makeStyles(() => ({
 
 const FUZZY_SEARCH_COLUMNS = ['name', 'project_name'];
 
-const DeliverablesTable = ({
-  columns,
-  extraTableFilters,
-  isAcceleratorConsole,
-  pageHeaderRef,
-  organizationId,
-}: DeliverablesTableProps) => {
+const DeliverablesTable = ({ columns, extraTableFilters, pageHeaderRef, organizationId }: DeliverablesTableProps) => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const classes = useStyles();
@@ -160,7 +153,7 @@ const DeliverablesTable = ({
             rows={deliverables}
             orderBy={searchSortOrder.field}
             order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
-            Renderer={DeliverableCellRenderer(isAcceleratorConsole)}
+            Renderer={DeliverableCellRenderer}
             sortHandler={onSortChange}
           />
         </Grid>

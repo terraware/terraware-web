@@ -40,7 +40,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
 const DocumentsList = (props: ViewProps): JSX.Element => {
   const { activeLocale } = useLocalization();
 
-  return <SharedDocumentsList columns={columns(activeLocale)} isAcceleratorConsole {...props} />;
+  return <SharedDocumentsList columns={columns(activeLocale)} {...props} />;
 };
 
 export default DocumentsList;

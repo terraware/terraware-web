@@ -7,13 +7,12 @@ import { useLocalization } from 'src/providers';
 import Card from 'src/components/common/Card';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
-import DeliverablePageMessage from 'src/scenes/DeliverablesRouter/DeliverablePageMessage';
-import DocumentsList from 'src/scenes/DeliverablesRouter/DocumentsList';
+import DocumentsList from 'src/scenes/AcceleratorRouter/DocumentsList';
 import { EditProps, ViewProps } from 'src/components/DeliverableView/types';
+import MobileMessage from 'src/components/DeliverableView/MobileMessage';
 import TitleBar from 'src/components/DeliverableView/TitleBar';
 import DocumentsUploader from 'src/components/DeliverableView/DocumentsUploader';
 import Metadata from 'src/components/DeliverableView/Metadata';
-import MobileMessage from 'src/components/DeliverableView/MobileMessage';
 
 export type Props = EditProps & {
   isBusy?: boolean;
@@ -28,7 +27,7 @@ const DeliverableView = (props: Props): JSX.Element => {
     () => [
       {
         name: activeLocale ? strings.DELIVERABLES : '',
-        to: APP_PATHS.DELIVERABLES,
+        to: APP_PATHS.ACCELERATOR_DELIVERABLES,
       },
     ],
     [activeLocale]
@@ -39,10 +38,9 @@ const DeliverableView = (props: Props): JSX.Element => {
   }
 
   return (
-    <Page title={<TitleBar {...props} />} crumbs={crumbs}>
+    <Page title={<TitleBar {...viewProps} />} rightComponent={props.callToAction} crumbs={crumbs}>
       <>
         {props.isBusy && <BusySpinner />}
-        <DeliverablePageMessage {...viewProps} />
         <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
           <Metadata {...viewProps} />
           <DocumentsUploader {...viewProps} />

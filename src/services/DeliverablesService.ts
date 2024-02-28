@@ -12,7 +12,7 @@ import {
   DeliverableData,
   SearchResponseDeliverableParticipant,
   SearchResponseDeliverableAdmin,
-  UpdateStatusRequest,
+  UpdateRequest,
 } from 'src/types/Deliverables';
 import { Response } from 'src/services/HttpService';
 
@@ -27,17 +27,20 @@ const SEARCH_FIELDS_DELIVERABLES_PARTICIPANT = [...SEARCH_FIELDS_DELIVERABLES_AD
 const mockDeliverable: Deliverable = {
   category: 'Legal',
   // TODO need to figure out if we are going to allow raw HTML or just have regular text
-  deliverableContent:
-    'The Company Formation Document is to confirm the entity is properly formed and registered in the country.\n' +
-    '\n' +
-    'Depending on your jurisdiction, this document may be called a Certificate of Incorporation or a Business Registration Certificate, for example.\n' +
-    '\n' +
-    'Submit:\n' +
-    'A document issued by the relevant authority in your jurisdiction that contains the following information:\n' +
-    'Company Name\n' +
-    'Legal Form / Structure – (e.g. corporation, limited liability company, etc.)\n' +
-    'Date of Formation/Incorporation\n' +
-    'Company Number (if applicable)',
+  deliverableContent: `
+    <div>
+     	<p>The Company Formation Document is to confirm the entity is properly formed and registered in the country.</p>
+     	<p>Depending on your jurisdiction, this document may be called a Certificate of Incorporation or a Business Registration Certificate, for example.</p>
+     	<p><b>Submit:</b></p>
+     	<p>A document issued by the relevant authority in your jurisdiction that contains the following information:</p>
+   	  <ol>
+    		<li>Company Name</li>
+    		<li>Legal Form / Structure – (e.g. corporation, limited liability company, etc.)</li>
+    		<li>Date of Formation/Incorporation</li>
+    		<li>Company Number (if applicable)</li>
+		  </ol>
+    </div>
+  `,
   documents: [
     {
       name: 'Upload 1',
@@ -65,6 +68,7 @@ const mockDeliverable: Deliverable = {
     },
   ],
   id: 1,
+  internalComment: 'This is a great looking submission',
   name: 'Company Formation Document',
   projectId: 1,
   projectName: 'Treemendo.us',
@@ -80,9 +84,13 @@ const getDeliverable = async (deliverableId: number): Promise<Response & Deliver
   };
 };
 
-const updateStatus = async ({ reason, status }: UpdateStatusRequest): Promise<Response> => {
-  mockDeliverable.status = status;
+const update = async ({ internalComment, reason, status }: UpdateRequest): Promise<Response> => {
+  if (status) {
+    mockDeliverable.status = status;
+  }
+
   mockDeliverable.reason = reason;
+  mockDeliverable.internalComment = internalComment;
   return { requestSucceeded: true };
 };
 
@@ -157,7 +165,7 @@ const DeliverablesService = {
   getDeliverable,
   searchDeliverablesForAdmin,
   searchDeliverablesForParticipant,
-  updateStatus,
+  update,
 };
 
 export default DeliverablesService;

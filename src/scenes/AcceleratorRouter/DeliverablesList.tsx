@@ -48,7 +48,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
       ]
     : [];
 
-const AcceleratorDeliverablesList = () => {
+const DeliverablesList = () => {
   const { activeLocale } = useLocalization();
   const { availableParticipants } = useParticipants();
   const contentRef = useRef(null);
@@ -108,7 +108,6 @@ const AcceleratorDeliverablesList = () => {
       <DeliverablesTable
         columns={columns}
         extraTableFilters={extraTableFilters}
-        isAcceleratorConsole
         organizationId={-1}
         pageHeaderRef={contentRef}
       />
@@ -116,4 +115,4 @@ const AcceleratorDeliverablesList = () => {
   );
 };
 
-export default AcceleratorDeliverablesList;
+export default DeliverablesList;

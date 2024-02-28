@@ -1,25 +1,23 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import { Button, DropdownItem } from '@terraware/web-components';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import useFetchDeliverable from 'src/components/DeliverableView/useFetchDeliverable';
-import useEditStatusDeliverable from './useEditStatusDeliverable';
-import AcceleratorDeliverableView from './AcceleratorDeliverableView';
+import useUpdateDeliverable from './useUpdateDeliverable';
+import DeliverableView from './DeliverableView';
 import RejectDialog from './RejectDialog';
 
-const AcceleratorDeliverableViewWrapper = () => {
+const DeliverableViewWrapper = () => {
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
   const { deliverableId } = useParams<{ deliverableId: string }>();
-  const { status: requestStatus, update } = useEditStatusDeliverable();
+  const { status: requestStatus, update } = useUpdateDeliverable();
+  const theme = useTheme();
 
-  const { deliverable } = useFetchDeliverable({
-    deliverableId: Number(deliverableId),
-    isAcceleratorConsole: true,
-  });
+  const { deliverable } = useFetchDeliverable({ deliverableId: Number(deliverableId) });
 
   // temporary solution until we have the confirmation modal design
   const setStatus = useCallback(
@@ -66,7 +64,7 @@ const AcceleratorDeliverableViewWrapper = () => {
   const callToAction = useMemo(() => {
     if (deliverable?.status && deliverable.status !== 'Approved' && deliverable.status !== 'Rejected') {
       return (
-        <Box display='flex' flexDirection='row' flexGrow={0}>
+        <Box display='flex' flexDirection='row' flexGrow={0} marginRight={theme.spacing(3)} justifyContent='right'>
           <Button
             id='rejectDeliverable'
             label={strings.REJECT_ACTION}
@@ -94,18 +92,13 @@ const AcceleratorDeliverableViewWrapper = () => {
     } else {
       return undefined;
     }
-  }, [deliverable?.status, onOptionItemClick, setStatus]);
+  }, [deliverable?.status, onOptionItemClick, setStatus, theme]);
 
   if (deliverable) {
     return (
       <>
         {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectDeliverable} />}
-        <AcceleratorDeliverableView
-          callToAction={callToAction}
-          deliverable={deliverable}
-          isAcceleratorConsole={true}
-          isBusy={requestStatus === 'pending'}
-        />
+        <DeliverableView callToAction={callToAction} deliverable={deliverable} isBusy={requestStatus === 'pending'} />
       </>
     );
   } else {
@@ -113,4 +106,4 @@ const AcceleratorDeliverableViewWrapper = () => {
   }
 };
 
-export default AcceleratorDeliverableViewWrapper;
+export default DeliverableViewWrapper;

@@ -3,6 +3,7 @@ import { useHistory } from 'react-router';
 import { APP_PATHS } from 'src/constants';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { OrganizationService, PreferencesService } from 'src/services';
 import { Organization } from 'src/types/Organization';
 import { OrganizationContext } from './contexts';
@@ -33,6 +34,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   const query = useQuery();
   const location = useStateLocation();
   const { userPreferences, updateUserPreferences, bootstrapped: userBootstrapped } = useUser();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const reloadOrganizations = useCallback(async (selectedOrgId?: number) => {
     const populateOrganizations = async () => {
@@ -99,7 +101,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   }, [reloadOrgPreferences]);
 
   useEffect(() => {
-    if (userBootstrapped && userPreferences && organizations) {
+    if (userBootstrapped && userPreferences && organizations && !isAcceleratorRoute) {
       const queryOrganizationId = query.get('organizationId');
       let orgToUse;
       if (organizations.length) {
@@ -122,13 +124,23 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
           }
         }
       }
-      if (!orgToUse && queryOrganizationId) {
+
+      if (queryOrganizationId && (!orgToUse || isAcceleratorRoute)) {
         // user does not belong to any orgs, clear the url param org id
         query.delete('organizationId');
         history.replace(getLocation(location.pathname, location, query.toString()));
       }
     }
-  }, [organizations, selectedOrganization, query, location, history, userPreferences, userBootstrapped]);
+  }, [
+    organizations,
+    selectedOrganization,
+    query,
+    location,
+    history,
+    userPreferences,
+    userBootstrapped,
+    isAcceleratorRoute,
+  ]);
 
   useEffect(() => {
     if (selectedOrganization?.id && userPreferences.lastVisitedOrg !== selectedOrganization.id) {

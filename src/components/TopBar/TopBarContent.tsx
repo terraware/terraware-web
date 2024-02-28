@@ -1,8 +1,9 @@
 import React from 'react';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { IconButton, Theme, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Svg } from '@terraware/web-components';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import Icon from '../common/icon/Icon';
 import NotificationsDropdown from '../NotificationsDropdown';
 import OrganizationsDropdown from '../OrganizationsDropdown';
@@ -14,7 +15,6 @@ import Link from 'src/components/common/Link';
 import AcceleratorBreadcrumbs from 'src/components/TopBar/AcceleratorBreadcrumbs';
 import { APP_PATHS } from 'src/constants';
 import { isAcceleratorAdmin } from 'src/types/User';
-import isEnabled from 'src/features';
 
 const useStyles = makeStyles((theme: Theme) => ({
   logo: {
@@ -65,8 +65,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   const { setShowNavBar } = props;
   const { isDesktop } = useDeviceInfo();
   const { user } = useUser();
-  const isAcceleratorRoute = useRouteMatch(APP_PATHS.ACCELERATOR);
-  const featureFlagAccelerator = isEnabled('Accelerator');
+  const { isAcceleratorRoute, featureFlagAccelerator } = useAcceleratorConsole();
 
   const onHandleLogout = () => {
     window.location.href = `/sso/logout`;
@@ -87,7 +86,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
             {isAcceleratorRoute && featureFlagAccelerator && user && isAcceleratorAdmin(user) && (
               <AcceleratorBreadcrumbs />
             )}
-            <OrganizationsDropdown />
+            {!isAcceleratorRoute && <OrganizationsDropdown />}
           </>
         )}
       </div>

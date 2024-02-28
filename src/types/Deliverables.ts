@@ -37,6 +37,7 @@ export type Deliverable = {
   deliverableContent: string;
   documents: DeliverableDocument[];
   id: number;
+  internalComment?: string;
   name: string;
   projectId: number;
   projectName: string;
@@ -63,10 +64,11 @@ export type SearchResponseDeliverableParticipant = SearchResponseDeliverableAdmi
   description: string;
 };
 
-export type UpdateStatusRequest = {
+export type UpdateRequest = {
   id: number;
+  internalComment?: string;
   reason?: string;
-  status: DeliverableStatusType;
+  status?: DeliverableStatusType;
 };
 
 export type SearchResponseDeliverable = SearchResponseDeliverableAdmin | SearchResponseDeliverableParticipant;
