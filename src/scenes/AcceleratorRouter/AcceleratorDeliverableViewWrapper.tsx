@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import { Button, DropdownItem } from '@terraware/web-components';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
@@ -15,6 +15,7 @@ const AcceleratorDeliverableViewWrapper = () => {
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
   const { deliverableId } = useParams<{ deliverableId: string }>();
   const { status: requestStatus, update } = useEditStatusDeliverable();
+  const theme = useTheme();
 
   const { deliverable } = useFetchDeliverable({
     deliverableId: Number(deliverableId),
@@ -66,7 +67,7 @@ const AcceleratorDeliverableViewWrapper = () => {
   const callToAction = useMemo(() => {
     if (deliverable?.status && deliverable.status !== 'Approved' && deliverable.status !== 'Rejected') {
       return (
-        <Box display='flex' flexDirection='row' flexGrow={0}>
+        <Box display='flex' flexDirection='row' flexGrow={0} marginRight={theme.spacing(3)} justifyContent='right'>
           <Button
             id='rejectDeliverable'
             label={strings.REJECT_ACTION}

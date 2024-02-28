@@ -15,7 +15,8 @@ import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import Table from 'src/components/common/table';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
-import { Page, Crumb } from 'src/components/BreadCrumbs';
+import { Crumb } from 'src/components/BreadCrumbs';
+import Page from 'src/components/Page';
 
 const useStyles = makeStyles(() => ({
   text: {
