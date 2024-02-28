@@ -21,11 +21,11 @@ const InternalComment = ({ deliverable }: InternalCommentProps) => {
   const [internalComment, setInternalComment] = useState(deliverable.internalComment || '');
 
   const toggleDialog = useCallback(() => {
-    setIsDialogOpen(!isDialogOpen);
-  }, [isDialogOpen]);
+    setIsDialogOpen((prev) => !prev);
+  }, []);
 
   const handleUpdate = () => {
-    update({ id: deliverable.id, internalComment });
+    update({ ...deliverable, internalComment });
   };
 
   useEffect(() => {
