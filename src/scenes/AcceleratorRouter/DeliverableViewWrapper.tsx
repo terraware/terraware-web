@@ -17,10 +17,7 @@ const DeliverableViewWrapper = () => {
   const { status: requestStatus, update } = useEditStatusDeliverable();
   const theme = useTheme();
 
-  const { deliverable } = useFetchDeliverable({
-    deliverableId: Number(deliverableId),
-    isAcceleratorConsole: true,
-  });
+  const { deliverable } = useFetchDeliverable({ deliverableId: Number(deliverableId) });
 
   // temporary solution until we have the confirmation modal design
   const setStatus = useCallback(
@@ -101,12 +98,7 @@ const DeliverableViewWrapper = () => {
     return (
       <>
         {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectDeliverable} />}
-        <DeliverableView
-          callToAction={callToAction}
-          deliverable={deliverable}
-          isAcceleratorConsole={true}
-          isBusy={requestStatus === 'pending'}
-        />
+        <DeliverableView callToAction={callToAction} deliverable={deliverable} isBusy={requestStatus === 'pending'} />
       </>
     );
   } else {

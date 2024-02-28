@@ -5,7 +5,7 @@ import { ViewProps } from './types';
 import TitleBar from 'src/components/DeliverableView/TitleBar';
 
 const MobileMessage = (props: ViewProps): JSX.Element => (
-  <Page title={<TitleBar deliverable={props.deliverable} isAcceleratorConsole={props.isAcceleratorConsole} />}>
+  <Page title={<TitleBar deliverable={props.deliverable} />}>
     <Message body={strings.FEATURE_AVAILABLE_ON_DESKTOP} priority='info' type='page' />
   </Page>
 );
