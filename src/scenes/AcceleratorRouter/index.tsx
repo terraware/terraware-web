@@ -7,6 +7,8 @@ import ErrorBoundary from 'src/ErrorBoundary';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStateLocation from 'src/utils/useStateLocation';
 import { getRgbaFromHex } from 'src/utils/color';
+import CohortListView from 'src/scenes/AcceleratorRouter/CohortListView';
+import CohortView from 'src/scenes/AcceleratorRouter/CohortView';
 import AcceleratorCohortEditView from 'src/scenes/AcceleratorRouter/AcceleratorCohortEditView';
 import AcceleratorCohortNewView from 'src/scenes/AcceleratorRouter/AcceleratorCohortNewView';
 import AcceleratorDeliverableViewWrapper from 'src/scenes/AcceleratorRouter/AcceleratorDeliverableViewWrapper';
@@ -78,8 +80,14 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
             <Route path={APP_PATHS.ACCELERATOR_COHORTS_EDIT}>
               <AcceleratorCohortEditView />
             </Route>
+            <Route exact path={APP_PATHS.ACCELERATOR_COHORTS}>
+              <CohortListView />
+            </Route>
             <Route path={APP_PATHS.ACCELERATOR_COHORTS_NEW}>
               <AcceleratorCohortNewView />
+            </Route>
+            <Route path={APP_PATHS.ACCELERATOR_COHORTS_VIEW}>
+              <CohortView />
             </Route>
             <Route path={APP_PATHS.ACCELERATOR_DELIVERABLES_VIEW}>
               <AcceleratorDeliverableViewWrapper />

@@ -21,8 +21,8 @@ export default function AcceleratorCohortNewView(): JSX.Element {
     name: '',
   });
 
-  const goToAcceleratorOverview = useCallback(() => {
-    history.push({ pathname: APP_PATHS.ACCELERATOR_OVERVIEW });
+  const goToCohortsList = useCallback(() => {
+    history.push({ pathname: APP_PATHS.ACCELERATOR_COHORTS });
   }, [history]);
 
   const createNewCohort = useCallback(
@@ -47,10 +47,10 @@ export default function AcceleratorCohortNewView(): JSX.Element {
       // set snackbar with status
       snackbar.toastSuccess(strings.formatString(strings.COHORT_ADDED, cohort.name) as string);
 
-      // navigate to accelerator overview
-      goToAcceleratorOverview();
+      // navigate to cohorts list
+      goToCohortsList();
     },
-    [setIsBusy, snackbar, goToAcceleratorOverview]
+    [setIsBusy, snackbar, goToCohortsList]
   );
 
   const onCohortSaved = useCallback(
@@ -70,7 +70,7 @@ export default function AcceleratorCohortNewView(): JSX.Element {
       <CohortForm<CreateCohortRequestPayload>
         busy={isBusy}
         cohort={record}
-        onCancel={goToAcceleratorOverview}
+        onCancel={goToCohortsList}
         onSave={onCohortSaved}
       />
     </AcceleratorMain>
