@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1709152728527" clover="3.2.0">
-  <project timestamp="1709152728527" name="All files">
-    <metrics statements="17116" coveredstatements="564" conditionals="10973" coveredconditionals="163" methods="5343" coveredmethods="125" elements="33432" coveredelements="852" complexity="0" loc="17116" ncloc="17116" packages="141" files="703" classes="703"/>
+<coverage generated="1709153767120" clover="3.2.0">
+  <project timestamp="1709153767120" name="All files">
+    <metrics statements="17118" coveredstatements="564" conditionals="10975" coveredconditionals="163" methods="5343" coveredmethods="125" elements="33436" coveredelements="852" complexity="0" loc="17118" ncloc="17118" packages="141" files="703" classes="703"/>
     <package name="src">
       <metrics statements="174" coveredstatements="0" conditionals="129" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -8773,32 +8773,32 @@
         <line num="56" count="0" type="stmt"/>
         <line num="59" count="0" type="stmt"/>
       </file>
-      <file name="useEditStatusDeliverable.ts" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/useEditStatusDeliverable.ts">
+      <file name="useUpdateDeliverable.ts" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/useUpdateDeliverable.ts">
         <metrics statements="24" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="4" coveredmethods="0"/>
-        <line num="23" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
-        <line num="39" count="0" type="stmt"/>
-        <line num="40" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="43" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="44" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="41" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="42" count="0" type="stmt"/>
         <line num="45" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="47" count="0" type="stmt"/>
-        <line num="48" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="47" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="49" count="0" type="stmt"/>
         <line num="50" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="53" count="0" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="59" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.AccessionsRouter">
@@ -17317,7 +17317,7 @@
       </file>
     </package>
     <package name="src.services">
-      <metrics statements="1277" coveredstatements="331" conditionals="448" coveredconditionals="83" methods="355" coveredmethods="68"/>
+      <metrics statements="1279" coveredstatements="331" conditionals="450" coveredconditionals="83" methods="355" coveredmethods="68"/>
       <file name="AccessionService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/AccessionService.ts">
         <metrics statements="56" coveredstatements="39" conditionals="8" coveredconditionals="6" methods="17" coveredmethods="5"/>
         <line num="10" count="1" type="stmt"/>
@@ -17414,35 +17414,37 @@
         <line num="72" count="0" type="stmt"/>
       </file>
       <file name="DeliverablesService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/DeliverablesService.ts">
-        <metrics statements="28" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="7" coveredmethods="0"/>
+        <metrics statements="30" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="23" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
-        <line num="78" count="0" type="stmt"/>
-        <line num="80" count="0" type="stmt"/>
-        <line num="86" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="81" count="0" type="stmt"/>
         <line num="87" count="0" type="stmt"/>
-        <line num="88" count="0" type="stmt"/>
+        <line num="88" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="89" count="0" type="stmt"/>
+        <line num="92" count="0" type="stmt"/>
         <line num="93" count="0" type="stmt"/>
         <line num="94" count="0" type="stmt"/>
-        <line num="100" count="0" type="stmt"/>
-        <line num="109" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="110" count="0" type="stmt"/>
+        <line num="98" count="0" type="stmt"/>
+        <line num="99" count="0" type="stmt"/>
+        <line num="105" count="0" type="stmt"/>
+        <line num="114" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="115" count="0" type="stmt"/>
-        <line num="118" count="0" type="stmt"/>
-        <line num="130" count="0" type="stmt"/>
+        <line num="120" count="0" type="stmt"/>
+        <line num="123" count="0" type="stmt"/>
         <line num="135" count="0" type="stmt"/>
-        <line num="136" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="137" count="0" type="stmt"/>
         <line num="140" count="0" type="stmt"/>
-        <line num="143" count="0" type="stmt"/>
+        <line num="141" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="142" count="0" type="stmt"/>
+        <line num="145" count="0" type="stmt"/>
         <line num="148" count="0" type="stmt"/>
-        <line num="149" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="150" count="0" type="stmt"/>
         <line num="153" count="0" type="stmt"/>
-        <line num="159" count="0" type="stmt"/>
-        <line num="169" count="0" type="stmt"/>
+        <line num="154" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="155" count="0" type="stmt"/>
+        <line num="158" count="0" type="stmt"/>
+        <line num="164" count="0" type="stmt"/>
+        <line num="174" count="0" type="stmt"/>
       </file>
       <file name="DraftPlantingSiteService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/DraftPlantingSiteService.ts">
         <metrics statements="26" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="7" coveredmethods="0"/>
@@ -19040,19 +19042,19 @@
         <metrics statements="15" coveredstatements="0" conditionals="9" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
-        <line num="75" count="0" type="stmt"/>
-        <line num="76" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="78" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="78" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="80" count="0" type="stmt"/>
-        <line num="84" count="0" type="stmt"/>
-        <line num="85" count="0" type="cond" truecount="0" falsecount="7"/>
-        <line num="87" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="86" count="0" type="stmt"/>
+        <line num="87" count="0" type="cond" truecount="0" falsecount="7"/>
         <line num="89" count="0" type="stmt"/>
         <line num="91" count="0" type="stmt"/>
         <line num="93" count="0" type="stmt"/>
         <line num="95" count="0" type="stmt"/>
         <line num="97" count="0" type="stmt"/>
         <line num="99" count="0" type="stmt"/>
+        <line num="101" count="0" type="stmt"/>
       </file>
       <file name="Device.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/Device.ts">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>

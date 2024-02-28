@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/scenes/AcceleratorRouter/useEditStatusDeliverable.ts</title>
+    <title>Code coverage report for src/scenes/AcceleratorRouter/useUpdateDeliverable.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,7 +19,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/scenes/AcceleratorRouter</a> useEditStatusDeliverable.ts</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/scenes/AcceleratorRouter</a> useUpdateDeliverable.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -128,7 +128,9 @@
 <a name='L63'></a><a href='#L63'>63</a>
 <a name='L64'></a><a href='#L64'>64</a>
 <a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -147,21 +149,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -169,6 +156,23 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -195,36 +199,37 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback, useEffect, useMemo, useState } from 'react';
 import strings from 'src/strings';
-import { UpdateStatusRequest } from 'src/types/Deliverables';
+import { UpdateRequest } from 'src/types/Deliverables';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Statuses } from 'src/redux/features/asyncUtils';
 import { selectDeliverablesEditRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
 import {
   requestDeliverableFetch,
-  requestUpdateDeliverableStatus,
+  requestDeliverableUpdate,
 } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
 export type Response = {
+  internalComment?: string;
   status?: Statuses;
-  update: (request: UpdateStatusRequest) =&gt; void;
+  update: (request: UpdateRequest) =&gt; void;
 };
 &nbsp;
 /**
- * Hook to update a deliverable status.
+ * Hook to update a deliverable, which updates the underlying deliverable submission (used for internalComments and status currently).
  * Returns status on request and function to update status.
  */
-export default function <span class="fstat-no" title="function not covered" >useEditStatusDeliverable(</span>): Response {
-  const [lastRequest, setLastRequest] = <span class="cstat-no" title="statement not covered" >useState&lt;UpdateStatusRequest | undefined&gt;();</span>
+export default function <span class="fstat-no" title="function not covered" >useUpdateDeliverable(</span>): Response {
+  const [lastRequest, setLastRequest] = <span class="cstat-no" title="statement not covered" >useState&lt;UpdateRequest | undefined&gt;();</span>
   const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const result = <span class="cstat-no" title="statement not covered" >useAppSelector(selectDeliverablesEditRequest(requestId));</span>
 &nbsp;
   const update = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (r</span>equest: UpdateStatusRequest) =&gt; {
+<span class="fstat-no" title="function not covered" >    (r</span>equest: UpdateRequest) =&gt; {
 <span class="cstat-no" title="statement not covered" >      setLastRequest(undefined);</span>
-      const dispatched = <span class="cstat-no" title="statement not covered" >dispatch(requestUpdateDeliverableStatus(request));</span>
+      const dispatched = <span class="cstat-no" title="statement not covered" >dispatch(requestDeliverableUpdate(request));</span>
 <span class="cstat-no" title="statement not covered" >      setRequestId(dispatched.requestId);</span>
 <span class="cstat-no" title="statement not covered" >      setLastRequest(request);</span>
     },
@@ -235,6 +240,7 @@ export default function <span class="fstat-no" title="function not covered" >use
 <span class="cstat-no" title="statement not covered" >    if (!lastRequest) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    if (result?.status === 'error') {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError(strings.GENERIC_ERROR);</span>
     } else <span class="cstat-no" title="statement not covered" >if (result?.status === 'success') {</span>
@@ -265,7 +271,7 @@ export default function <span class="fstat-no" title="function not covered" >use
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-28T20:38:48.017Z
+                at 2024-02-28T20:56:06.626Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
