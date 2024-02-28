@@ -9,6 +9,8 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import strings from 'src/strings';
 import getHelpEmail from 'src/components/common/HelpEmail';
 import { useDocLinks } from 'src/docLinks';
+import { useAppSelector } from 'src/redux/store';
+import { selectAppVersion } from 'src/redux/features/appVersion/appVersionSelectors';
 
 const useStyles = makeStyles(() => ({
   title: {
@@ -38,10 +40,10 @@ export default function ContactUsView(): JSX.Element {
       title: strings.TITLE_REPORT_PROBLEM,
       description: strings.formatString(
         strings.DESCRIPTION_REPORT_PROBLEM,
-        <i>"{process.env.REACT_APP_TERRAWARE_FE_BUILD_VERSION || 'n/a'}"</i>
+        <i>"{useAppSelector(selectAppVersion) || 'n/a'}"</i>
       ) as string,
       buttonText: strings.REPORT_PROBLEM,
-      link: `${docLinks.report_a_problem}?build=${process.env.REACT_APP_TERRAWARE_FE_BUILD_VERSION || ''}`,
+      link: `${docLinks.report_a_problem}?build=${useAppSelector(selectAppVersion) || ''}`,
     },
     {
       icon: 'sparkles',
