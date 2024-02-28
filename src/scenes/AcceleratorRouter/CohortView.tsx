@@ -11,7 +11,8 @@ import { selectCohort } from 'src/redux/features/cohorts/cohortsSelectors';
 import { requestCohort } from 'src/redux/features/cohorts/cohortsAsyncThunks';
 import Card from 'src/components/common/Card';
 import Button from 'src/components/common/button/Button';
-import { Crumb, Page } from 'src/components/BreadCrumbs';
+import { Crumb } from 'src/components/BreadCrumbs';
+import Page from 'src/components/Page';
 import TextField from 'src/components/common/Textfield/Textfield';
 
 const CohortView = () => {

@@ -1,22 +1,32 @@
 import React, { useRef } from 'react';
+import { CircularProgress, Grid, Typography, useTheme } from '@mui/material';
 import TfMain from 'src/components/common/TfMain';
-import { Box, CircularProgress, Grid, useTheme } from '@mui/material';
-import { useDeviceInfo } from '@terraware/web-components/utils';
-import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import PageSnackbar from 'src/components/PageSnackbar';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 
 export type PageProps = {
-  content?: React.ReactNode;
+  children?: React.ReactNode;
   contentStyle?: Record<string, string | number>;
+  crumbs?: Crumb[];
   isLoading?: boolean;
+  rightComponent?: React.ReactNode;
   title?: React.ReactNode;
-  useBackground?: boolean;
 };
 
-const Page = ({ content, contentStyle, isLoading, title, useBackground }: PageProps): JSX.Element => {
-  const theme = useTheme();
-  const { isMobile } = useDeviceInfo();
+/**
+ * A generic page structure with bread crumbs, title, header wrapper and instantiated children.
+ */
+export default function Page({
+  children,
+  contentStyle,
+  crumbs,
+  isLoading,
+  rightComponent,
+  title,
+}: PageProps): JSX.Element {
   const contentRef = useRef(null);
+  const theme = useTheme();
 
   if (isLoading) {
     return (
@@ -27,21 +37,44 @@ const Page = ({ content, contentStyle, isLoading, title, useBackground }: PagePr
   }
 
   return (
-    <TfMain backgroundImageVisible={useBackground}>
+    <TfMain>
       <PageHeaderWrapper nextElement={contentRef.current}>
-        <Grid item xs={12} paddingLeft={theme.spacing(3)} marginBottom={theme.spacing(4)}>
-          <Grid item xs={12} display={isMobile ? 'block' : 'flex'} alignItems='center'>
-            {title}
-          </Grid>
+        <>{crumbs && <BreadCrumbs crumbs={crumbs} hierarchical={true} />}</>
+        <Grid container justifyContent='space-between' alignItems='center'>
+          {title && typeof title !== 'string' && (
+            <Grid item xs={8}>
+              {title}
+            </Grid>
+          )}
+          {title && typeof title === 'string' && (
+            <Grid item xs={8}>
+              <Typography
+                sx={{
+                  marginTop: theme.spacing(3),
+                  marginBottom: theme.spacing(4),
+                  paddingLeft: theme.spacing(3),
+                  fontSize: '20px',
+                  fontWeight: 600,
+                  color: theme.palette.TwClrBaseGray800,
+                }}
+              >
+                {title}
+              </Typography>
+            </Grid>
+          )}
+          {rightComponent && (
+            <Grid item xs={4} sx={{ textAlign: 'right' }}>
+              {rightComponent}
+            </Grid>
+          )}
         </Grid>
       </PageHeaderWrapper>
       <Grid item xs={12}>
         <PageSnackbar />
       </Grid>
-      <Box ref={contentRef} sx={contentStyle}>
-        {content}
-      </Box>
+      <Grid container ref={contentRef} sx={contentStyle}>
+        {children}
+      </Grid>
     </TfMain>
   );
-};
-export default Page;
+}
