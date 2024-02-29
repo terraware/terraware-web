@@ -42,7 +42,7 @@ const DeliverableView = (props: Props): JSX.Element => {
   return (
     <Page title={<TitleBar {...viewProps} />} rightComponent={props.callToAction} crumbs={crumbs}>
       {props.isBusy && <BusySpinner />}
-      <Box display='flex' flexDirection='column' sx={{ flexGrow: 1 }}>
+      <Box display='flex' flexDirection='column' flexGrow={1}>
         <RejectedDeliverableMessage {...viewProps} />
         <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
           <Metadata {...viewProps} />
