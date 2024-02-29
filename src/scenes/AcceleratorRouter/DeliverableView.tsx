@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { BusySpinner } from '@terraware/web-components';
+import { Box } from '@mui/material';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -40,15 +41,15 @@ const DeliverableView = (props: Props): JSX.Element => {
 
   return (
     <Page title={<TitleBar {...viewProps} />} rightComponent={props.callToAction} crumbs={crumbs}>
-      <>
-        {props.isBusy && <BusySpinner />}
+      {props.isBusy && <BusySpinner />}
+      <Box display='flex' flexDirection='column' flexGrow={1}>
         <RejectedDeliverableMessage {...viewProps} />
         <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
           <Metadata {...viewProps} />
           <DocumentsUploader {...viewProps} />
           <DocumentsList {...viewProps} />
         </Card>
-      </>
+      </Box>
     </Page>
   );
 };
