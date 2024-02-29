@@ -7,10 +7,14 @@ import { selectDeliverablesEditRequest } from 'src/redux/features/deliverables/d
 import {
   requestGetDeliverable,
 <<<<<<< HEAD
+<<<<<<< HEAD
   requestUpdateDeliverable,
 =======
   requestDeliverableUpdate,
 >>>>>>> 1e4ce5e0d6 (Rewire 'list deliverables' and 'get deliverable' mocked redux to use the API from the backend)
+=======
+  requestUpdateDeliverable,
+>>>>>>> 3c3fc3103f (Implement the update API from the backend)
 } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import useSnackbar from 'src/utils/useSnackbar';
 

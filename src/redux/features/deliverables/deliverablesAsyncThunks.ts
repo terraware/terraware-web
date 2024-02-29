@@ -4,10 +4,14 @@ import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { Response } from 'src/services/HttpService';
 import DeliverablesService, { ListDeliverablesRequestParams } from 'src/services/DeliverablesService';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Deliverable, DeliverableData } from 'src/types/Deliverables';
 =======
 import { DeliverableData, UpdateRequest } from 'src/types/Deliverables';
 >>>>>>> 1e4ce5e0d6 (Rewire 'list deliverables' and 'get deliverable' mocked redux to use the API from the backend)
+=======
+import { Deliverable, DeliverableData } from 'src/types/Deliverables';
+>>>>>>> 3c3fc3103f (Implement the update API from the backend)
 
 export const requestListDeliverables = createAsyncThunk(
   'deliverables/list',
@@ -24,9 +28,12 @@ export const requestListDeliverables = createAsyncThunk(
 <<<<<<< HEAD
 =======
 
+<<<<<<< HEAD
     const response = await DeliverablesService.listDeliverables(locale, listRequest, search, searchSortOrder);
 >>>>>>> 1e4ce5e0d6 (Rewire 'list deliverables' and 'get deliverable' mocked redux to use the API from the backend)
 
+=======
+>>>>>>> 3c3fc3103f (Implement the update API from the backend)
     const response = await DeliverablesService.list(locale, listRequest, search, searchSortOrder);
     if (response) {
       return response;
