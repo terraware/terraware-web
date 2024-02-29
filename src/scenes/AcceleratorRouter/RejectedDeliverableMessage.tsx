@@ -18,7 +18,7 @@ const RejectedDeliverableMessage = ({ deliverable }: ViewProps): JSX.Element => 
       {activeLocale && deliverable?.status === 'Rejected' && (
         <Box marginBottom={theme.spacing(4)}>
           <Message
-            body={deliverable?.reason || ''}
+            body={deliverable?.feedback || ''}
             pageButtons={[
               <Button
                 icon='iconEdit'
