@@ -1,3 +1,4 @@
+7a1aff42f8 SW-4930: Show page message for participant view when deliverable is rejected (#2224)
 f96f299700 Updated translations from Phrase (#2234)
 18db3ef56d SW-4885 Use deliverables/cohorts nav icons (#2233)
 d0d3e11122 SW-4922 Create InternalComments component that shows and allows for editing of the deliverable's `internalComment` (#2231)
