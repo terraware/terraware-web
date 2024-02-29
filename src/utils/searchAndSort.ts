@@ -96,10 +96,7 @@ export const sortResults = <T extends Record<string, unknown>>(
   if (isNumberField) {
     results = results.sort((a, b) => Number(getRawField(a, field)) - Number(getRawField(b, field)));
   } else {
-    results = results.sort((a, b) =>
-      // TODO this might cause issues if the field is undefined on the result
-      `${a[field]}`.localeCompare(`${b[field]}`, locale || undefined)
-    );
+    results = results.sort((a, b) => `${a[field] || ''}`.localeCompare(`${b[field] || ''}`, locale || undefined));
   }
 
   if (isDescending) {
