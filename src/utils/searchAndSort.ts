@@ -72,6 +72,33 @@ const searchConditionMet = <T extends Record<string, unknown>>(result: T, condit
   return false;
 };
 
+const sortResults = <T extends Record<string, unknown>>(
+  results: T[],
+  locale: string | null,
+  sortOrder: SearchSortOrder,
+  numberFields?: string[]
+) => {
+  const field = sortOrder.field;
+  // Defaults to ascending if not provided
+  const isDescending = sortOrder.direction === 'Descending';
+  const isNumberField = (numberFields || []).includes(field);
+
+  if (isNumberField) {
+    results = results.sort((a, b) => Number(a[field]) - Number(b[field]));
+  } else {
+    results = results.sort((a, b) =>
+      // TODO this might cause issues if the field is undefined on the result
+      `${a[field]}`.localeCompare(`${b[field]}`, locale || undefined)
+    );
+  }
+
+  if (isDescending) {
+    results.reverse();
+  }
+
+  return results;
+};
+
 /**
  * In-memory search (filter) and sort on a result list using the Search API search and sortOrder interfaces
  * The search currently only supports `Exact` and 'Fuzzy' type searches, 'Range' and 'ExactOrFuzzy' are not supported
@@ -97,25 +124,8 @@ export const searchAndSort = <T extends Record<string, unknown>>(
   }
 
   if (sortOrderConfig) {
-    const field = sortOrderConfig.sortOrder.field;
-    const locale = sortOrderConfig.locale || undefined;
-    // Defaults to ascending if not provided
-    const isDescending = sortOrderConfig.sortOrder.direction === 'Descending';
-    const isNumberField = (sortOrderConfig.numberFields || []).includes(field);
-
-    if (isNumberField) {
-      _results = _results.sort((a, b) =>
-        isDescending ? Number(b[field]) - Number(a[field]) : Number(a[field]) - Number(b[field])
-      );
-    } else {
-      _results = _results.sort((a, b) =>
-        // TODO this might cause issues if the field is undefined on the result
-        `${a[field]}`.localeCompare(`${b[field]}`, locale || undefined)
-      );
-      if (isDescending) {
-        _results.reverse();
-      }
-    }
+    const { locale, sortOrder, numberFields } = sortOrderConfig;
+    _results = sortResults(_results, locale, sortOrder, numberFields);
   }
 
   return _results;
