@@ -72,7 +72,16 @@ const searchConditionMet = <T extends Record<string, unknown>>(result: T, condit
   return false;
 };
 
-const sortResults = <T extends Record<string, unknown>>(
+// Try to get the `*(raw)` field if it exists, otherwise fall back to the regular field
+const getRawField = <T extends Record<string, unknown>>(result: T, field: string): unknown | undefined => {
+  const rawField = result[`${field}(raw)`];
+  if (rawField !== undefined) {
+    return rawField;
+  }
+  return result[field];
+};
+
+export const sortResults = <T extends Record<string, unknown>>(
   results: T[],
   locale: string | null,
   sortOrder: SearchSortOrder,
@@ -84,7 +93,7 @@ const sortResults = <T extends Record<string, unknown>>(
   const isNumberField = (numberFields || []).includes(field);
 
   if (isNumberField) {
-    results = results.sort((a, b) => Number(a[field]) - Number(b[field]));
+    results = results.sort((a, b) => Number(getRawField(a, field)) - Number(getRawField(b, field)));
   } else {
     results = results.sort((a, b) =>
       // TODO this might cause issues if the field is undefined on the result
