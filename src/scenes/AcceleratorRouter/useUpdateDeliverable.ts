@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Statuses } from 'src/redux/features/asyncUtils';
 import { selectDeliverablesEditRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
 import {
-  requestDeliverableFetch,
+  requestGetDeliverable,
   requestDeliverableUpdate,
 } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -46,7 +46,7 @@ export default function useUpdateDeliverable(): Response {
       snackbar.toastError(strings.GENERIC_ERROR);
     } else if (result?.status === 'success') {
       // refresh deliverable data in store
-      dispatch(requestDeliverableFetch(result?.data!));
+      dispatch(requestGetDeliverable(result?.data!));
       if (lastRequest.status === 'Approved') {
         snackbar.toastSuccess(strings.DELIVERABLE_APPROVED);
       } else if (lastRequest.status === 'Rejected') {

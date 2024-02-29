@@ -21,7 +21,7 @@ const Metadata = (props: ViewProps): JSX.Element => {
           padding='16px'
         >
           <DeliverableStatusBadge status={deliverable.status} />
-          <strong>{strings.FEEDBACK}</strong> {deliverable.reason}
+          <strong>{strings.FEEDBACK}</strong> {deliverable.feedback}
         </Box>
       )}
 
@@ -43,7 +43,7 @@ const Metadata = (props: ViewProps): JSX.Element => {
           <DeliverableStatusBadge status={deliverable.status} />
         )}
 
-        <div dangerouslySetInnerHTML={{ __html: deliverable.deliverableContent }} />
+        <div dangerouslySetInnerHTML={{ __html: deliverable.descriptionHtml || '' }} />
       </Box>
     </Box>
   );

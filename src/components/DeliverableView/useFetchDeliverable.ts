@@ -10,7 +10,7 @@ import {
   selectDeliverable,
   selectDeliverableFetchRequest,
 } from 'src/redux/features/deliverables/deliverablesSelectors';
-import { requestDeliverableFetch } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
+import { requestGetDeliverable } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export type Props = {
@@ -40,7 +40,7 @@ export default function useFetchDeliverable({ deliverableId }: Props): Response 
 
   useEffect(() => {
     if (!isNaN(deliverableId)) {
-      dispatch(requestDeliverableFetch(deliverableId));
+      dispatch(requestGetDeliverable(deliverableId));
     } else {
       goToDeliverables();
     }
