@@ -11,37 +11,7 @@ type MockResult = {
   status?: string;
 };
 
-const results: MockResult[] = [
-  {
-    category: 'Legal Eligibility',
-    id: 1,
-    name: 'Incorporation Documents',
-    numberField: 2,
-    numberFieldAsString: '7',
-    projectName: 'Omega Project',
-    status: 'Rejected',
-  },
-  {
-    category: 'Financial Viability',
-    id: 9,
-    name: 'Budget',
-    numberField: 0,
-    numberFieldAsString: '2',
-    projectName: 'Omega Project',
-    status: 'Not Submitted',
-  },
-  {
-    category: 'GIS',
-    id: 3,
-    name: 'A Document',
-    numberField: 3,
-    numberFieldAsString: '1',
-    projectName: 'Another Project',
-    status: 'Submitted',
-  },
-];
-
-xdescribe('splitTrigrams', () => {
+describe('splitTrigrams', () => {
   it('should split a string into trigrams in the same way postgres does', () => {
     const catTrigrams = [' c', ' ca', 'cat', 'at '];
     expect(splitTrigrams('cat')).toEqual(catTrigrams);
@@ -53,6 +23,36 @@ xdescribe('splitTrigrams', () => {
 
 describe('searchAndSort', () => {
   it('should return the results in the same order if no search or sort are provided', () => {
+    const results: MockResult[] = [
+      {
+        category: 'Legal Eligibility',
+        id: 1,
+        name: 'Incorporation Documents',
+        numberField: 2,
+        numberFieldAsString: '7',
+        projectName: 'Omega Project',
+        status: 'Rejected',
+      },
+      {
+        category: 'Financial Viability',
+        id: 9,
+        name: 'Budget',
+        numberField: 0,
+        numberFieldAsString: '2',
+        projectName: 'Omega Project',
+        status: 'Not Submitted',
+      },
+      {
+        category: 'GIS',
+        id: 3,
+        name: 'A Document',
+        numberField: 3,
+        numberFieldAsString: '1',
+        projectName: 'Another Project',
+        status: 'Submitted',
+      },
+    ];
+
     expect(searchAndSort(results)).toEqual(results);
   });
 
