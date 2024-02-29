@@ -9,6 +9,8 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import strings from 'src/strings';
 import getHelpEmail from 'src/components/common/HelpEmail';
 import { useDocLinks } from 'src/docLinks';
+import { useAppSelector } from 'src/redux/store';
+import { selectAppVersion } from 'src/redux/features/appVersion/appVersionSelectors';
 
 const useStyles = makeStyles(() => ({
   title: {
@@ -30,18 +32,16 @@ export default function ContactUsView(): JSX.Element {
   const classes = useStyles();
   const { isMobile } = useDeviceInfo();
   const docLinks = useDocLinks();
+  const appVersion = useAppSelector(selectAppVersion);
 
   /*TODO USE CORRECT LINKS HERE */
   const listItemContent: ListItemContent[] = [
     {
       icon: 'bug',
       title: strings.TITLE_REPORT_PROBLEM,
-      description: strings.formatString(
-        strings.DESCRIPTION_REPORT_PROBLEM,
-        <i>"{process.env.REACT_APP_TERRAWARE_FE_BUILD_VERSION || 'n/a'}"</i>
-      ) as string,
+      description: strings.formatString(strings.DESCRIPTION_REPORT_PROBLEM, <i>"{appVersion || 'n/a'}"</i>) as string,
       buttonText: strings.REPORT_PROBLEM,
-      link: docLinks.report_a_problem,
+      link: `${docLinks.report_a_problem}?build=${appVersion || ''}`,
     },
     {
       icon: 'sparkles',
