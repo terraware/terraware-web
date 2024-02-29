@@ -32,6 +32,7 @@ export default function ContactUsView(): JSX.Element {
   const classes = useStyles();
   const { isMobile } = useDeviceInfo();
   const docLinks = useDocLinks();
+  const appVersion = useAppSelector(selectAppVersion);
 
   /*TODO USE CORRECT LINKS HERE */
   const listItemContent: ListItemContent[] = [
@@ -40,10 +41,10 @@ export default function ContactUsView(): JSX.Element {
       title: strings.TITLE_REPORT_PROBLEM,
       description: strings.formatString(
         strings.DESCRIPTION_REPORT_PROBLEM,
-        <i>"{useAppSelector(selectAppVersion) || 'n/a'}"</i>
+        <i>"{appVersion || 'n/a'}"</i>
       ) as string,
       buttonText: strings.REPORT_PROBLEM,
-      link: `${docLinks.report_a_problem}?build=${useAppSelector(selectAppVersion) || ''}`,
+      link: `${docLinks.report_a_problem}?build=${appVersion || ''}`,
     },
     {
       icon: 'sparkles',
