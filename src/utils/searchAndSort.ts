@@ -74,11 +74,12 @@ const searchConditionMet = <T extends Record<string, unknown>>(result: T, condit
 
 // Try to get the `*(raw)` field if it exists, otherwise fall back to the regular field
 const getRawField = <T extends Record<string, unknown>>(result: T, field: string): unknown | undefined => {
-  const rawField = result[`${field}(raw)`];
-  if (rawField !== undefined) {
-    return rawField;
+  const fallback = [result[`${field}(raw)`], result[field], 0];
+  for (const value of fallback) {
+    if (value !== undefined) {
+      return value;
+    }
   }
-  return result[field];
 };
 
 export const sortResults = <T extends Record<string, unknown>>(
