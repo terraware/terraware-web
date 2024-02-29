@@ -1,21 +1,20 @@
-import { useMemo } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { FileChooser } from '@terraware/web-components';
 import strings from 'src/strings';
-import { useLocalization } from 'src/providers';
 import { ViewProps } from './types';
 
 const DocumentsUploader = ({ deliverable }: ViewProps): JSX.Element => {
   const theme = useTheme();
-  const { activeLocale } = useLocalization();
+  // const { activeLocale } = useLocalization();
 
-  const template = useMemo(() => {
-    if (activeLocale && deliverable.templateUrl) {
-      return { text: strings.DOWNLOAD_TEMPLATE, url: deliverable.templateUrl };
-    } else {
-      return undefined;
-    }
-  }, [activeLocale, deliverable.templateUrl]);
+  // TODO templateURL doesn't seem to exist in the deliverable
+  // const template = useMemo(() => {
+  //   if (activeLocale && deliverable.templateUrl) {
+  //     return { text: strings.DOWNLOAD_TEMPLATE, url: deliverable.templateUrl };
+  //   } else {
+  //     return undefined;
+  //   }
+  // }, [activeLocale, deliverable.templateUrl]);
 
   return (
     <Box display='flex' flexDirection='column'>
@@ -29,7 +28,7 @@ const DocumentsUploader = ({ deliverable }: ViewProps): JSX.Element => {
         multipleSelection
         uploadDescription={strings.UPLOAD_FILES_DESCRIPTION}
         uploadText={strings.UPLOAD_FILES_TITLE}
-        template={template}
+        // template={template}
       />
     </Box>
   );

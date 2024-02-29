@@ -1712,7 +1712,7 @@ export interface components {
     };
     DeliverablePayload: {
       /** @enum {string} */
-      category: "Legal Eligibility" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Co-Benefits" | "Proposed Restoration Activities" | "Media" | "Supplemental Files";
+      category: "Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files";
       /** @description Optional description of the deliverable in HTML form. */
       descriptionHtml?: string;
       documents: components["schemas"]["SubmissionDocumentPayload"][];
@@ -2405,7 +2405,7 @@ export interface components {
     };
     ListDeliverablesElement: {
       /** @enum {string} */
-      category: "Legal Eligibility" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Co-Benefits" | "Proposed Restoration Activities" | "Media" | "Supplemental Files";
+      category: "Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files";
       /** @description Optional description of the deliverable in HTML form. */
       descriptionHtml?: string;
       /** Format: int64 */
@@ -3482,6 +3482,7 @@ export interface components {
       /** Format: int64 */
       id: number;
       name: string;
+      originalName?: string;
     };
     /**
      * @description Indicates of success or failure of the requested operation.

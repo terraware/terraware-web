@@ -5,19 +5,19 @@ export type Deliverable = components['schemas']['DeliverablePayload'];
 export type DeliverableTypeType = components['schemas']['DeliverablePayload']['type'];
 
 export type DeliverableCategoryType = components['schemas']['DeliverablePayload']['category'];
-export const DeliverableCategories = [
-  'Legal Eligibility',
+export const DeliverableCategories: DeliverableCategoryType[] = [
+  'Carbon Eligibility',
+  'Compliance',
   'Financial Viability',
   'GIS',
-  'Carbon Eligibility',
-  'Stakeholders and Co-Benefits',
   'Proposed Restoration Activities',
-  'Media',
+  'Stakeholders and Community Impact',
   'Supplemental Files',
+  'Verra Non-Permanence Risk Tool (NPRT)',
 ];
 
 export type DeliverableStatusType = components['schemas']['DeliverablePayload']['status'];
-export const DeliverableStatuses = [
+export const DeliverableStatuses: DeliverableStatusType[] = [
   'Not Submitted',
   'In Review',
   'Rejected',
@@ -41,20 +41,20 @@ export type DeliverablesData = {
 
 export const categoryLabel = (category: DeliverableCategoryType): string => {
   switch (category) {
-    case 'Legal Eligibility':
-      return strings.LEGAL_ELIGIBILITY;
+    case 'Verra Non-Permanence Risk Tool (NPRT)':
+      return strings.VERRA_NPRT;
     case 'Financial Viability':
       return strings.FINANCIAL_VIABILITY;
     case 'GIS':
       return strings.GIS;
     case 'Carbon Eligibility':
       return strings.CARBON_ELIGIBILITY;
-    case 'Stakeholders and Co-Benefits':
-      return strings.STAKEHOLDERS_AND_COBENEFITS;
+    case 'Stakeholders and Community Impact':
+      return strings.STAKEHOLDERS_AND_COMMUNITY_IMPACT;
     case 'Proposed Restoration Activities':
       return strings.PROPOSED_RESTORATION_ACTIVITIES;
-    case 'Media':
-      return strings.MEDIA;
+    case 'Compliance':
+      return strings.COMPLIANCE;
     case 'Supplemental Files':
       return strings.SUPPLEMENTAL_FILES;
 

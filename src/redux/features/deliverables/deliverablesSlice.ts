@@ -4,7 +4,11 @@ import { buildReducers, StatusT } from 'src/redux/features/asyncUtils';
 import {
   requestGetDeliverable,
   requestListDeliverables,
+<<<<<<< HEAD
   requestUpdateDeliverable,
+=======
+  requestDeliverableUpdate,
+>>>>>>> 1e4ce5e0d6 (Rewire 'list deliverables' and 'get deliverable' mocked redux to use the API from the backend)
 } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 
 /**
