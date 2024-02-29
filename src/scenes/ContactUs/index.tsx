@@ -39,10 +39,7 @@ export default function ContactUsView(): JSX.Element {
     {
       icon: 'bug',
       title: strings.TITLE_REPORT_PROBLEM,
-      description: strings.formatString(
-        strings.DESCRIPTION_REPORT_PROBLEM,
-        <i>"{appVersion || 'n/a'}"</i>
-      ) as string,
+      description: strings.formatString(strings.DESCRIPTION_REPORT_PROBLEM, <i>"{appVersion || 'n/a'}"</i>) as string,
       buttonText: strings.REPORT_PROBLEM,
       link: `${docLinks.report_a_problem}?build=${appVersion || ''}`,
     },
