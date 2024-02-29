@@ -19,33 +19,7 @@ import PlantingSiteTypeSelect from 'src/scenes/PlantingSitesRouter/edit/Planting
 import { useOrganization, useTimeZones } from 'src/providers/hooks';
 import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import useForm from 'src/utils/useForm';
-
-type SiteProperty = keyof PlantingSiteSearchResult;
-
-const getVal = (site: PlantingSiteSearchResult, key: SiteProperty) => {
-  if (key === 'numPlantingSubzones') {
-    return site['numPlantingSubzones(raw)'] ?? 0;
-  }
-  if (key === 'numPlantingZones') {
-    return site['numPlantingZones(raw)'] ?? 0;
-  }
-  return site[key] ?? '';
-};
-
-function siteSortFunction(sortField: SiteProperty, isAscending: boolean, locale: string | undefined) {
-  return (siteA: PlantingSiteSearchResult, siteB: PlantingSiteSearchResult) => {
-    const valueA = getVal(siteA, sortField);
-    const valueB = getVal(siteB, sortField);
-
-    if (sortField === 'numPlantingSubzones' || sortField === 'numPlantingZones') {
-      return isAscending ? Number(valueA) - Number(valueB) : Number(valueB) - Number(valueA);
-    }
-
-    return isAscending
-      ? String(valueA).localeCompare(String(valueB), locale)
-      : String(valueB).localeCompare(String(valueA), locale);
-  };
-}
+import { sortResults } from 'src/utils/searchAndSort';
 
 export default function PlantingSitesList(): JSX.Element {
   const { selectedOrganization } = useOrganization();
@@ -108,10 +82,13 @@ export default function PlantingSitesList(): JSX.Element {
 
       if (featureFlagSites && sites.some((site) => site.isDraft)) {
         // sort merged results by sort order
-        const sortField: SiteProperty = (searchSortOrder?.field ?? 'name') as SiteProperty;
-        const isAscending = searchSortOrder?.direction === 'Ascending';
-
-        sites.sort(siteSortFunction(sortField, isAscending, activeLocale || undefined));
+        return sortResults(sites, activeLocale, searchSortOrder, [
+          'id',
+          'numPlantingSubzones',
+          'numPlantingZones',
+          'project_id',
+          'totalPlants',
+        ]);
       }
 
       return sites;
