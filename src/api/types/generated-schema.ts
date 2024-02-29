@@ -1734,6 +1734,7 @@ export interface components {
       projectName: string;
       /** @enum {string} */
       status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
+      templateUrl?: string;
       /** @enum {string} */
       type: "Document";
     };
