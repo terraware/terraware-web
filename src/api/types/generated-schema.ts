@@ -3,787 +3,799 @@
  * Do not make direct changes to the file.
  */
 
+
 /** WithRequired type helpers */
 type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 
 export interface paths {
-  '/api/v1/accelerator/cohorts': {
+  "/api/v1/accelerator/cohorts": {
     /** Gets the list of cohorts. */
-    get: operations['listCohorts'];
+    get: operations["listCohorts"];
     /** Creates a new cohort. */
-    post: operations['createCohort'];
+    post: operations["createCohort"];
   };
-  '/api/v1/accelerator/cohorts/{cohortId}': {
+  "/api/v1/accelerator/cohorts/{cohortId}": {
     /** Gets information about a single cohort. */
-    get: operations['getCohort'];
+    get: operations["getCohort"];
     /** Updates the information within a single cohort. */
-    put: operations['updateCohort'];
+    put: operations["updateCohort"];
     /** Deletes a single cohort. */
-    delete: operations['deleteCohort'];
+    delete: operations["deleteCohort"];
   };
-  '/api/v1/accelerator/deliverables': {
+  "/api/v1/accelerator/deliverables": {
     /**
      * Lists the deliverables for accelerator projects
      * @description The list may optionally be filtered based on certain criteria as specified in the query string. If no filter parameters are supplied, lists all the deliverables in all the participants and projects that are visible to the user. For users with accelerator admin privileges, this will be the full list of all deliverables for all accelerator projects.
      */
-    get: operations['listDeliverables'];
+    get: operations["listDeliverables"];
   };
-  '/api/v1/accelerator/deliverables/{deliverableId}': {
+  "/api/v1/accelerator/deliverables/{deliverableId}": {
     /** Gets the details of a single deliverable and its submission documents, if any. */
-    get: operations['getDeliverable'];
+    get: operations["getDeliverable"];
   };
-  '/api/v1/accelerator/deliverables/{deliverableId}/documents/{documentId}': {
+  "/api/v1/accelerator/deliverables/{deliverableId}/documents": {
+    /** Uploads a new document to satisfy a deliverable. */
+    post: operations["uploadDeliverableDocument"];
+  };
+  "/api/v1/accelerator/deliverables/{deliverableId}/documents/{documentId}": {
     /** Gets a single submission document from a deliverable. */
-    get: operations['getDeliverableDocument'];
+    get: operations["getDeliverableDocument"];
   };
-  '/api/v1/automations': {
+  "/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}": {
+    /**
+     * Updates the state of a submission from a project.
+     * @description Only permitted for users with accelerator admin privileges.
+     */
+    put: operations["updateSubmission"];
+  };
+  "/api/v1/automations": {
     /** Gets a list of automations for a device or facility. */
-    get: operations['listAutomations'];
+    get: operations["listAutomations"];
     /** Creates a new automation for a device or facility. */
-    post: operations['createAutomation'];
+    post: operations["createAutomation"];
   };
-  '/api/v1/automations/{automationId}': {
+  "/api/v1/automations/{automationId}": {
     /** Gets the details of a single automation for a device or facility. */
-    get: operations['getAutomation'];
+    get: operations["getAutomation"];
     /** Updates an existing automation for a device or facility. */
-    put: operations['updateAutomation'];
+    put: operations["updateAutomation"];
     /** Deletes an existing automation from a device or facility. */
-    delete: operations['deleteAutomation'];
+    delete: operations["deleteAutomation"];
   };
-  '/api/v1/automations/{automationId}/trigger': {
+  "/api/v1/automations/{automationId}/trigger": {
     /** Reports that an automation has been triggered. */
-    post: operations['postAutomationTrigger'];
+    post: operations["postAutomationTrigger"];
   };
-  '/api/v1/devices': {
+  "/api/v1/devices": {
     /** Registers a new device a facility's device manager. */
-    post: operations['createDevice'];
+    post: operations["createDevice"];
   };
-  '/api/v1/devices/managers': {
+  "/api/v1/devices/managers": {
     /** Searches for device managers matching a set of criteria. */
-    get: operations['getDeviceManagers'];
+    get: operations["getDeviceManagers"];
   };
-  '/api/v1/devices/managers/{deviceManagerId}': {
+  "/api/v1/devices/managers/{deviceManagerId}": {
     /** Gets information about a specific device manager. */
-    get: operations['getDeviceManager'];
+    get: operations["getDeviceManager"];
   };
-  '/api/v1/devices/managers/{deviceManagerId}/connect': {
+  "/api/v1/devices/managers/{deviceManagerId}/connect": {
     /** Connects a device manager to a facility. */
-    post: operations['connectDeviceManager'];
+    post: operations["connectDeviceManager"];
   };
-  '/api/v1/devices/templates': {
+  "/api/v1/devices/templates": {
     /** Lists the available templates for new devices. */
-    get: operations['listDeviceTemplates'];
+    get: operations["listDeviceTemplates"];
   };
-  '/api/v1/devices/{id}': {
+  "/api/v1/devices/{id}": {
     /** Gets the configuration of a single device. */
-    get: operations['getDevice'];
+    get: operations["getDevice"];
     /** Updates the configuration of an existing device. */
-    put: operations['updateDevice'];
+    put: operations["updateDevice"];
   };
-  '/api/v1/devices/{id}/unresponsive': {
+  "/api/v1/devices/{id}/unresponsive": {
     /**
      * Marks a device as unresponsive.
      * @description Notifies the appropriate users so they can troubleshoot the problem.
      */
-    post: operations['deviceUnresponsive'];
+    post: operations["deviceUnresponsive"];
   };
-  '/api/v1/facilities': {
+  "/api/v1/facilities": {
     /** Lists all accessible facilities. */
-    get: operations['listAllFacilities'];
+    get: operations["listAllFacilities"];
     /** Creates a new facility. */
-    post: operations['createFacility'];
+    post: operations["createFacility"];
   };
-  '/api/v1/facilities/{facilityId}': {
+  "/api/v1/facilities/{facilityId}": {
     /** Gets information about a single facility. */
-    get: operations['getFacility'];
+    get: operations["getFacility"];
     /** Updates information about a facility. */
-    put: operations['updateFacility'];
+    put: operations["updateFacility"];
   };
-  '/api/v1/facilities/{facilityId}/alert/send': {
+  "/api/v1/facilities/{facilityId}/alert/send": {
     /** Sends an alert to the facility's configured alert recipients. */
-    post: operations['sendFacilityAlert'];
+    post: operations["sendFacilityAlert"];
   };
-  '/api/v1/facilities/{facilityId}/configured': {
+  "/api/v1/facilities/{facilityId}/configured": {
     /**
      * Marks a facility as fully configured.
      * @description After connecting a device manager and finishing any necessary configuration of the facility's devices, send this request to enable processing of timeseries values and alerts from the device manager. Only valid if the facility's connection state is `Connected`.
      */
-    post: operations['postConfigured'];
+    post: operations["postConfigured"];
   };
-  '/api/v1/facilities/{facilityId}/devices': {
+  "/api/v1/facilities/{facilityId}/devices": {
     /** Lists the configurations of all the devices at a facility. */
-    get: operations['listFacilityDevices'];
+    get: operations["listFacilityDevices"];
   };
-  '/api/v1/facilities/{facilityId}/subLocations': {
+  "/api/v1/facilities/{facilityId}/subLocations": {
     /** Gets a list of sub-locations at a facility. */
-    get: operations['listSubLocations'];
+    get: operations["listSubLocations"];
     /** Creates a new sub-location at a facility. */
-    post: operations['createSubLocation'];
+    post: operations["createSubLocation"];
   };
-  '/api/v1/facilities/{facilityId}/subLocations/{subLocationId}': {
+  "/api/v1/facilities/{facilityId}/subLocations/{subLocationId}": {
     /** Gets information about a specific sub-location at a facility. */
-    get: operations['getSubLocation'];
+    get: operations["getSubLocation"];
     /** Updates the name of a sub-location at a facility. */
-    put: operations['updateSubLocation'];
+    put: operations["updateSubLocation"];
     /**
      * Deletes a sub-location from a facility.
      * @description The sub-location must not be in use.
      */
-    delete: operations['deleteSubLocation'];
+    delete: operations["deleteSubLocation"];
   };
-  '/api/v1/facility/{facilityId}/devices': {
+  "/api/v1/facility/{facilityId}/devices": {
     /** Lists the configurations of all the devices at a facility. */
-    get: operations['listFacilityDevices_1'];
+    get: operations["listFacilityDevices_1"];
   };
-  '/api/v1/i18n/timeZones': {
+  "/api/v1/i18n/timeZones": {
     /** Gets a list of supported time zones and their names. */
-    get: operations['listTimeZoneNames'];
+    get: operations["listTimeZoneNames"];
   };
-  '/api/v1/login': {
+  "/api/v1/login": {
     /**
      * Redirects to a login page.
      * @description For interactive web applications, this can be used to redirect the user to a login page to allow the application to make other API requests. The login process will set a cookie that will authenticate to the API, and will then redirect back to the application. One approach is to use this in error response handlers: if an API request returns HTTP 401 Unauthorized, set location.href to this endpoint and set "redirect" to the URL of the page the user was on so they'll return there after logging in.
      */
-    get: operations['login'];
+    get: operations["login"];
   };
-  '/api/v1/notifications': {
+  "/api/v1/notifications": {
     /** Retrieve all notifications for current user scoped to an organization. */
-    get: operations['readAll'];
+    get: operations["readAll"];
     /** Update notifications as read or unread */
-    put: operations['markAllRead'];
+    put: operations["markAllRead"];
   };
-  '/api/v1/notifications/count': {
+  "/api/v1/notifications/count": {
     /** Retrieve notifications count by organization for current user. */
-    get: operations['count'];
+    get: operations["count"];
   };
-  '/api/v1/notifications/{id}': {
+  "/api/v1/notifications/{id}": {
     /** Retrieve a notification by its id. */
-    get: operations['read'];
+    get: operations["read"];
     /** Update a single notification as read or unread */
-    put: operations['markRead'];
+    put: operations["markRead"];
   };
-  '/api/v1/nursery/batches': {
+  "/api/v1/nursery/batches": {
     /** Creates a new seedling batch at a nursery. */
-    post: operations['createBatch'];
+    post: operations["createBatch"];
   };
-  '/api/v1/nursery/batches/uploads': {
+  "/api/v1/nursery/batches/uploads": {
     /**
      * Uploads a list of seedling batches to add to the nursery.
      * @description The uploaded file must be in CSV format. A template with the correct headers may be downloaded from the `/api/v1/nursery/batches/uploads/template` endpoint.
      */
-    post: operations['uploadSeedlingBatchesList'];
+    post: operations["uploadSeedlingBatchesList"];
   };
-  '/api/v1/nursery/batches/uploads/template': {
+  "/api/v1/nursery/batches/uploads/template": {
     /** Gets a template file that contains the required header row for seedling batch uploads. */
-    get: operations['getSeedlingBatchesUploadTemplate'];
+    get: operations["getSeedlingBatchesUploadTemplate"];
   };
-  '/api/v1/nursery/batches/uploads/{uploadId}': {
+  "/api/v1/nursery/batches/uploads/{uploadId}": {
     /**
      * Gets the status of a seedling batches list uploaded previously.
      * @description Clients may poll this endpoint to monitor the progress of the file.
      */
-    get: operations['getSeedlingBatchesListUploadStatus'];
+    get: operations["getSeedlingBatchesListUploadStatus"];
   };
-  '/api/v1/nursery/batches/{batchId}/history': {
+  "/api/v1/nursery/batches/{batchId}/history": {
     /**
      * Gets the history of changes to a seedling batch.
      * @description Each event includes a version number. For events such as details edits that are snapshots of the values at a particular time, clients can compare against the event with the previous version number to see what has changed, e.g., to show a delta or a diff view.
      */
-    get: operations['getBatchHistory'];
+    get: operations["getBatchHistory"];
   };
-  '/api/v1/nursery/batches/{batchId}/photos': {
+  "/api/v1/nursery/batches/{batchId}/photos": {
     /** Lists all the photos of a seedling batch. */
-    get: operations['listBatchPhotos'];
+    get: operations["listBatchPhotos"];
     /** Creates a new photo of a seedling batch. */
-    post: operations['createBatchPhoto'];
+    post: operations["createBatchPhoto"];
   };
-  '/api/v1/nursery/batches/{batchId}/photos/{photoId}': {
+  "/api/v1/nursery/batches/{batchId}/photos/{photoId}": {
     /**
      * Retrieves a specific photo from a seedling batch.
      * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
      */
-    get: operations['getBatchPhoto'];
+    get: operations["getBatchPhoto"];
     /** Deletes a photo from a seedling batch. */
-    delete: operations['deleteBatchPhoto'];
+    delete: operations["deleteBatchPhoto"];
   };
-  '/api/v1/nursery/batches/{id}': {
+  "/api/v1/nursery/batches/{id}": {
     /** Gets information about a single seedling batch. */
-    get: operations['getBatch'];
+    get: operations["getBatch"];
     /** Updates non-quantity-related details about a batch. */
-    put: operations['updateBatch'];
+    put: operations["updateBatch"];
     /** Deletes an existing seedling batch from a nursery. */
-    delete: operations['deleteBatch'];
+    delete: operations["deleteBatch"];
   };
-  '/api/v1/nursery/batches/{id}/changeStatuses': {
+  "/api/v1/nursery/batches/{id}/changeStatuses": {
     /**
      * Changes the statuses of seedlings in a batch.
      * @description There must be enough seedlings available to move to the next status.
      */
-    post: operations['changeBatchStatuses'];
+    post: operations["changeBatchStatuses"];
   };
-  '/api/v1/nursery/batches/{id}/quantities': {
+  "/api/v1/nursery/batches/{id}/quantities": {
     /**
      * Updates the remaining quantities in a seedling batch.
      * @description This should not be used to record withdrawals; use the withdrawal API for that.
      */
-    put: operations['updateBatchQuantities'];
+    put: operations["updateBatchQuantities"];
   };
-  '/api/v1/nursery/facilities/{facilityId}/summary': {
+  "/api/v1/nursery/facilities/{facilityId}/summary": {
     /** Gets a summary of the numbers of plants in a nursery. */
-    get: operations['getNurserySummary'];
+    get: operations["getNurserySummary"];
   };
-  '/api/v1/nursery/species/{speciesId}/summary': {
+  "/api/v1/nursery/species/{speciesId}/summary": {
     /** Gets a summary of the numbers of plants of each species in all nurseries. */
-    get: operations['getSpeciesSummary'];
+    get: operations["getSpeciesSummary"];
   };
-  '/api/v1/nursery/withdrawals': {
+  "/api/v1/nursery/withdrawals": {
     /** Withdraws seedlings from one or more seedling batches at a nursery. */
-    post: operations['createBatchWithdrawal'];
+    post: operations["createBatchWithdrawal"];
   };
-  '/api/v1/nursery/withdrawals/{withdrawalId}': {
+  "/api/v1/nursery/withdrawals/{withdrawalId}": {
     /** Gets information about a specific nursery withdrawal. */
-    get: operations['getNurseryWithdrawal'];
+    get: operations["getNurseryWithdrawal"];
   };
-  '/api/v1/nursery/withdrawals/{withdrawalId}/photos': {
+  "/api/v1/nursery/withdrawals/{withdrawalId}/photos": {
     /** Lists all the photos of a withdrawal. */
-    get: operations['listWithdrawalPhotos'];
+    get: operations["listWithdrawalPhotos"];
     /** Creates a new photo of a seedling batch withdrawal. */
-    post: operations['uploadWithdrawalPhoto'];
+    post: operations["uploadWithdrawalPhoto"];
   };
-  '/api/v1/nursery/withdrawals/{withdrawalId}/photos/{photoId}': {
+  "/api/v1/nursery/withdrawals/{withdrawalId}/photos/{photoId}": {
     /**
      * Retrieves a specific photo from a withdrawal.
      * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
      */
-    get: operations['getWithdrawalPhoto'];
+    get: operations["getWithdrawalPhoto"];
   };
-  '/api/v1/organizations': {
+  "/api/v1/organizations": {
     /**
      * Lists all organizations.
      * @description Lists all organizations the user can access.
      */
-    get: operations['listOrganizations'];
+    get: operations["listOrganizations"];
     /** Creates a new organization. */
-    post: operations['createOrganization'];
+    post: operations["createOrganization"];
   };
-  '/api/v1/organizations/{organizationId}': {
+  "/api/v1/organizations/{organizationId}": {
     /** Gets information about an organization. */
-    get: operations['getOrganization'];
+    get: operations["getOrganization"];
     /** Updates an existing organization. */
-    put: operations['updateOrganization'];
+    put: operations["updateOrganization"];
     /**
      * Deletes an existing organization.
      * @description Organizations can only be deleted if they have no members other than the current user.
      */
-    delete: operations['deleteOrganization'];
+    delete: operations["deleteOrganization"];
   };
-  '/api/v1/organizations/{organizationId}/roles': {
+  "/api/v1/organizations/{organizationId}/roles": {
     /** Lists the roles in an organization. */
-    get: operations['listOrganizationRoles'];
+    get: operations["listOrganizationRoles"];
   };
-  '/api/v1/organizations/{organizationId}/users': {
+  "/api/v1/organizations/{organizationId}/users": {
     /** Lists the users in an organization. */
-    get: operations['listOrganizationUsers'];
+    get: operations["listOrganizationUsers"];
     /** Adds a user to an organization. */
-    post: operations['addOrganizationUser'];
+    post: operations["addOrganizationUser"];
   };
-  '/api/v1/organizations/{organizationId}/users/{userId}': {
+  "/api/v1/organizations/{organizationId}/users/{userId}": {
     /** Gets information about a user's membership in an organization. */
-    get: operations['getOrganizationUser'];
+    get: operations["getOrganizationUser"];
     /**
      * Updates the user's organization information.
      * @description Only includes organization-level information that can be modified by organization administrators.
      */
-    put: operations['updateOrganizationUser'];
+    put: operations["updateOrganizationUser"];
     /**
      * Removes a user from an organization.
      * @description Does not remove any data created by the user.
      */
-    delete: operations['deleteOrganizationUser'];
+    delete: operations["deleteOrganizationUser"];
   };
-  '/api/v1/projects': {
+  "/api/v1/projects": {
     /** Lists accessible projects. */
-    get: operations['listProjects'];
+    get: operations["listProjects"];
     /** Creates a new project. */
-    post: operations['createProject'];
+    post: operations["createProject"];
   };
-  '/api/v1/projects/{id}': {
+  "/api/v1/projects/{id}": {
     /** Gets information about a specific project. */
-    get: operations['getProject'];
+    get: operations["getProject"];
     /** Updates information about an existing project. */
-    put: operations['updateProject'];
+    put: operations["updateProject"];
     /**
      * Deletes an existing project.
      * @description Any accessions, seedling batches, or planting sites that were assigned to the project will no longer be assigned to any project.
      */
-    delete: operations['deleteProject'];
+    delete: operations["deleteProject"];
   };
-  '/api/v1/projects/{id}/assign': {
+  "/api/v1/projects/{id}/assign": {
     /**
      * Assigns multiple entities to a project.
      * @description Overwrites any existing project assignments.
      */
-    post: operations['assignProject'];
+    post: operations["assignProject"];
   };
-  '/api/v1/reports': {
+  "/api/v1/reports": {
     /** Lists an organization's reports. */
-    get: operations['listReports'];
+    get: operations["listReports"];
   };
-  '/api/v1/reports/settings': {
+  "/api/v1/reports/settings": {
     /** Gets the report settings for an organization. */
-    get: operations['getReportSettings'];
+    get: operations["getReportSettings"];
     /** Updates the report settings for an organization. */
-    put: operations['updateReportSettings'];
+    put: operations["updateReportSettings"];
   };
-  '/api/v1/reports/{id}': {
+  "/api/v1/reports/{id}": {
     /** Retrieves the contents of a report. */
-    get: operations['getReport'];
+    get: operations["getReport"];
     /**
      * Updates a report.
      * @description The report must be locked by the current user.
      */
-    put: operations['updateReport'];
+    put: operations["updateReport"];
   };
-  '/api/v1/reports/{id}/files': {
+  "/api/v1/reports/{id}/files": {
     /** Lists the files associated with a report. */
-    get: operations['listReportFiles'];
+    get: operations["listReportFiles"];
   };
-  '/api/v1/reports/{id}/lock': {
+  "/api/v1/reports/{id}/lock": {
     /**
      * Locks a report.
      * @description Only succeeds if the report is not currently locked or if it is locked by the current user.
      */
-    post: operations['lockReport'];
+    post: operations["lockReport"];
   };
-  '/api/v1/reports/{id}/lock/force': {
+  "/api/v1/reports/{id}/lock/force": {
     /** Locks a report even if it is locked by another user already. */
-    post: operations['forceLockReport'];
+    post: operations["forceLockReport"];
   };
-  '/api/v1/reports/{id}/photos': {
+  "/api/v1/reports/{id}/photos": {
     /** Lists the photos associated with a report. */
-    get: operations['listReportPhotos'];
+    get: operations["listReportPhotos"];
   };
-  '/api/v1/reports/{id}/submit': {
+  "/api/v1/reports/{id}/submit": {
     /**
      * Submits a report.
      * @description The report must be locked by the current user. Submitting a report releases the lock. Once a report is submitted, it may no longer be locked or updated.
      */
-    post: operations['submitReport'];
+    post: operations["submitReport"];
   };
-  '/api/v1/reports/{id}/unlock': {
+  "/api/v1/reports/{id}/unlock": {
     /** Releases the lock on a report. */
-    post: operations['unlockReport'];
+    post: operations["unlockReport"];
   };
-  '/api/v1/reports/{reportId}/files': {
+  "/api/v1/reports/{reportId}/files": {
     /** Uploads a file to associate with a report. */
-    post: operations['uploadReportFile'];
+    post: operations["uploadReportFile"];
   };
-  '/api/v1/reports/{reportId}/files/{fileId}': {
+  "/api/v1/reports/{reportId}/files/{fileId}": {
     /** Downloads a file associated with a report. */
-    get: operations['downloadReportFile'];
+    get: operations["downloadReportFile"];
     /** Deletes a file from a report. */
-    delete: operations['deleteReportFile'];
+    delete: operations["deleteReportFile"];
   };
-  '/api/v1/reports/{reportId}/photos': {
+  "/api/v1/reports/{reportId}/photos": {
     /** Uploads a photo to include with a report. */
-    post: operations['uploadReportPhoto'];
+    post: operations["uploadReportPhoto"];
   };
-  '/api/v1/reports/{reportId}/photos/{photoId}': {
+  "/api/v1/reports/{reportId}/photos/{photoId}": {
     /**
      * Gets the contents of a photo.
      * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
      */
-    get: operations['getReportPhoto'];
+    get: operations["getReportPhoto"];
     /** Updates a photo's caption. */
-    put: operations['updateReportPhoto'];
+    put: operations["updateReportPhoto"];
     /** Deletes a photo from a report. */
-    delete: operations['deleteReportPhoto'];
+    delete: operations["deleteReportPhoto"];
   };
-  '/api/v1/search': {
+  "/api/v1/search": {
     /**
      * Exports selected fields from data matching a set of search criteria.
      * @description If a sublist field has multiple values, they are separated with line breaks in the exported file.
      */
-    post: operations['search_1'];
+    post: operations["search_1"];
   };
-  '/api/v1/seedbank/accessions/{id}': {
+  "/api/v1/seedbank/accessions/{id}": {
     /** Deletes an existing accession. */
-    delete: operations['delete'];
+    delete: operations["delete"];
   };
-  '/api/v1/seedbank/accessions/{id}/checkIn': {
+  "/api/v1/seedbank/accessions/{id}/checkIn": {
     /** Marks an accession as checked in. */
-    post: operations['checkIn'];
+    post: operations["checkIn"];
   };
-  '/api/v1/seedbank/accessions/{id}/history': {
+  "/api/v1/seedbank/accessions/{id}/history": {
     /** Gets the history of changes to an accession. */
-    get: operations['getAccessionHistory'];
+    get: operations["getAccessionHistory"];
   };
-  '/api/v1/seedbank/accessions/{id}/photos': {
+  "/api/v1/seedbank/accessions/{id}/photos": {
     /** List all the available photos for an accession. */
-    get: operations['listPhotos'];
+    get: operations["listPhotos"];
   };
-  '/api/v1/seedbank/accessions/{id}/photos/{photoFilename}': {
+  "/api/v1/seedbank/accessions/{id}/photos/{photoFilename}": {
     /**
      * Retrieve a specific photo from an accession.
      * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
      */
-    get: operations['getPhoto'];
+    get: operations["getPhoto"];
     /**
      * Upload a new photo for an accession.
      * @description If there was already a photo with the specified filename, replaces it.
      */
-    post: operations['uploadPhoto'];
+    post: operations["uploadPhoto"];
   };
-  '/api/v1/seedbank/clock': {
+  "/api/v1/seedbank/clock": {
     /**
      * Get the server's current date and time.
      * @description In test environments, the clock can be advanced artificially, which will cause it to differ from the real-world date and time.
      */
-    get: operations['getCurrentTime'];
+    get: operations["getCurrentTime"];
   };
-  '/api/v1/seedbank/log/{tag}': {
+  "/api/v1/seedbank/log/{tag}": {
     /** Records a log message from a device at a seed bank. */
-    post: operations['recordLogMessage'];
+    post: operations["recordLogMessage"];
   };
-  '/api/v1/seedbank/summary': {
+  "/api/v1/seedbank/summary": {
     /** Get summary statistics about a specific seed bank or all seed banks within an organization. */
-    get: operations['getSeedBankSummary'];
+    get: operations["getSeedBankSummary"];
     /** Get summary statistics about accessions that match a specified set of search criteria. */
-    post: operations['summarizeAccessionSearch'];
+    post: operations["summarizeAccessionSearch"];
   };
-  '/api/v1/seedbank/values': {
+  "/api/v1/seedbank/values": {
     /** List the values of a set of search fields for a set of accessions matching certain filter criteria. */
-    post: operations['listFieldValues'];
+    post: operations["listFieldValues"];
   };
-  '/api/v1/seedbank/values/all': {
+  "/api/v1/seedbank/values/all": {
     /** List the possible values of a set of search fields. */
-    post: operations['listAllFieldValues'];
+    post: operations["listAllFieldValues"];
   };
-  '/api/v1/species': {
+  "/api/v1/species": {
     /** Lists all the species available in an organization. */
-    get: operations['listSpecies'];
+    get: operations["listSpecies"];
     /** Creates a new species. */
-    post: operations['createSpecies'];
+    post: operations["createSpecies"];
   };
-  '/api/v1/species/lookup/details': {
+  "/api/v1/species/lookup/details": {
     /** Gets more information about a species with a particular scientific name. */
-    get: operations['getSpeciesDetails'];
+    get: operations["getSpeciesDetails"];
   };
-  '/api/v1/species/lookup/names': {
+  "/api/v1/species/lookup/names": {
     /** @description Gets a list of known scientific names whose words begin with particular letters. */
-    get: operations['listSpeciesNames'];
+    get: operations["listSpeciesNames"];
   };
-  '/api/v1/species/problems/{problemId}': {
+  "/api/v1/species/problems/{problemId}": {
     /** @description Returns details about a problem with a species. */
-    get: operations['getSpeciesProblem'];
+    get: operations["getSpeciesProblem"];
     /**
      * Applies suggested changes to fix a problem with a species.
      * @description Only valid for problems that include suggested changes.
      */
-    post: operations['acceptProblemSuggestion'];
+    post: operations["acceptProblemSuggestion"];
     /** Deletes information about a problem with a species without applying any suggested changes. */
-    delete: operations['deleteProblem'];
+    delete: operations["deleteProblem"];
   };
-  '/api/v1/species/uploads': {
+  "/api/v1/species/uploads": {
     /**
      * Uploads a list of species to add to the organization.
      * @description The uploaded file must be in CSV format. A template with the correct headers may be downloaded from the `/api/v1/species/uploads/template` endpoint.
      */
-    post: operations['uploadSpeciesList'];
+    post: operations["uploadSpeciesList"];
   };
-  '/api/v1/species/uploads/template': {
+  "/api/v1/species/uploads/template": {
     /** Gets a template file that contains the required header row for species list uploads. */
-    get: operations['getSpeciesListUploadTemplate'];
+    get: operations["getSpeciesListUploadTemplate"];
   };
-  '/api/v1/species/uploads/{uploadId}': {
+  "/api/v1/species/uploads/{uploadId}": {
     /**
      * Gets the status of a species list uploaded previously.
      * @description Clients may poll this endpoint to monitor the progress of the file.
      */
-    get: operations['getSpeciesListUploadStatus'];
+    get: operations["getSpeciesListUploadStatus"];
     /**
      * Deletes a species list upload that is awaiting user action.
      * @description This may only be called if the status of the upload is "Awaiting User Action".
      */
-    delete: operations['deleteSpeciesListUpload'];
+    delete: operations["deleteSpeciesListUpload"];
   };
-  '/api/v1/species/uploads/{uploadId}/resolve': {
+  "/api/v1/species/uploads/{uploadId}/resolve": {
     /**
      * Resolves the problems with a species list that is awaiting user action.
      * @description This may only be called if the status of the upload is "Awaiting User Action".
      */
-    post: operations['resolveSpeciesListUpload'];
+    post: operations["resolveSpeciesListUpload"];
   };
-  '/api/v1/species/{speciesId}': {
+  "/api/v1/species/{speciesId}": {
     /** Gets information about a single species. */
-    get: operations['getSpecies'];
+    get: operations["getSpecies"];
     /** Updates an existing species. */
-    put: operations['updateSpecies'];
+    put: operations["updateSpecies"];
     /**
      * Deletes an existing species.
      * @description The species will no longer appear in the organization's list of species, but existing data (plants, seeds, etc.) that refer to the species will still refer to it.
      */
-    delete: operations['deleteSpecies'];
+    delete: operations["deleteSpecies"];
   };
-  '/api/v1/timeseries': {
+  "/api/v1/timeseries": {
     /** Lists the timeseries for one or more devices. */
-    get: operations['listTimeseries'];
+    get: operations["listTimeseries"];
   };
-  '/api/v1/timeseries/create': {
+  "/api/v1/timeseries/create": {
     /**
      * Defines a list of timeseries for one or more devices.
      * @description If there are existing timeseries with the same names, the old definitions will be overwritten.
      */
-    post: operations['createMultipleTimeseries'];
+    post: operations["createMultipleTimeseries"];
   };
-  '/api/v1/timeseries/history': {
+  "/api/v1/timeseries/history": {
     /** Returns historical values of timeseries. */
-    post: operations['getTimeseriesHistory'];
+    post: operations["getTimeseriesHistory"];
   };
-  '/api/v1/timeseries/values': {
+  "/api/v1/timeseries/values": {
     /** Records new values for one or more timeseries. */
-    post: operations['recordTimeseriesValues'];
+    post: operations["recordTimeseriesValues"];
   };
-  '/api/v1/tracking/deliveries/{id}': {
+  "/api/v1/tracking/deliveries/{id}": {
     /** Gets information about a specific delivery of seedlings to a planting site. */
-    get: operations['getDelivery'];
+    get: operations["getDelivery"];
   };
-  '/api/v1/tracking/deliveries/{id}/reassign': {
+  "/api/v1/tracking/deliveries/{id}/reassign": {
     /** Reassigns some of the seedlings from a delivery to a different planting subzone. */
-    post: operations['reassignDelivery'];
+    post: operations["reassignDelivery"];
   };
-  '/api/v1/tracking/draftSites': {
+  "/api/v1/tracking/draftSites": {
     /** Saves a draft of an in-progress planting site. */
-    post: operations['createDraftPlantingSite'];
+    post: operations["createDraftPlantingSite"];
   };
-  '/api/v1/tracking/draftSites/{id}': {
+  "/api/v1/tracking/draftSites/{id}": {
     /** Gets the details of a saved draft of a planting site. */
-    get: operations['getDraftPlantingSite'];
+    get: operations["getDraftPlantingSite"];
     /** Updates an existing draft of an in-progress planting site. */
-    put: operations['updateDraftPlantingSite'];
+    put: operations["updateDraftPlantingSite"];
     /** Deletes an existing draft of an in-progress planting site. */
-    delete: operations['deleteDraftPlantingSite'];
+    delete: operations["deleteDraftPlantingSite"];
   };
-  '/api/v1/tracking/mapbox/token': {
+  "/api/v1/tracking/mapbox/token": {
     /**
      * Gets an API token to use for displaying Mapbox maps.
      * @description Mapbox API tokens are short-lived; when a token expires, request a new one.
      */
-    get: operations['getMapboxToken'];
+    get: operations["getMapboxToken"];
   };
-  '/api/v1/tracking/observations': {
+  "/api/v1/tracking/observations": {
     /** Gets a list of observations of planting sites. */
-    get: operations['listObservations'];
+    get: operations["listObservations"];
     /** Schedules a new observation. */
-    post: operations['scheduleObservation'];
+    post: operations["scheduleObservation"];
   };
-  '/api/v1/tracking/observations/results': {
+  "/api/v1/tracking/observations/results": {
     /** Gets a list of the results of observations. */
-    get: operations['listObservationResults'];
+    get: operations["listObservationResults"];
   };
-  '/api/v1/tracking/observations/{observationId}': {
+  "/api/v1/tracking/observations/{observationId}": {
     /** Gets information about a single observation. */
-    get: operations['getObservation'];
+    get: operations["getObservation"];
     /** Reschedules an existing observation. */
-    put: operations['rescheduleObservation'];
+    put: operations["rescheduleObservation"];
   };
-  '/api/v1/tracking/observations/{observationId}/plots': {
+  "/api/v1/tracking/observations/{observationId}/plots": {
     /** Gets a list of monitoring plots assigned to an observation. */
-    get: operations['listAssignedPlots'];
+    get: operations["listAssignedPlots"];
   };
-  '/api/v1/tracking/observations/{observationId}/plots/{plotId}': {
+  "/api/v1/tracking/observations/{observationId}/plots/{plotId}": {
     /** Updates information about the observation of a plot. */
-    put: operations['updatePlotObservation'];
+    put: operations["updatePlotObservation"];
     /** Stores the results of a completed observation of a plot. */
-    post: operations['completePlotObservation'];
+    post: operations["completePlotObservation"];
   };
-  '/api/v1/tracking/observations/{observationId}/plots/{plotId}/claim': {
+  "/api/v1/tracking/observations/{observationId}/plots/{plotId}/claim": {
     /**
      * Claims a monitoring plot.
      * @description A plot may only be claimed by one user at a time.
      */
-    post: operations['claimMonitoringPlot'];
+    post: operations["claimMonitoringPlot"];
   };
-  '/api/v1/tracking/observations/{observationId}/plots/{plotId}/photos': {
+  "/api/v1/tracking/observations/{observationId}/plots/{plotId}/photos": {
     /** Uploads a photo of a monitoring plot. */
-    post: operations['uploadPlotPhoto'];
+    post: operations["uploadPlotPhoto"];
   };
-  '/api/v1/tracking/observations/{observationId}/plots/{plotId}/photos/{fileId}': {
+  "/api/v1/tracking/observations/{observationId}/plots/{plotId}/photos/{fileId}": {
     /**
      * Retrieves a specific photo from an observation of a monitoring plot.
      * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
      */
-    get: operations['getPlotPhoto'];
+    get: operations["getPlotPhoto"];
   };
-  '/api/v1/tracking/observations/{observationId}/plots/{plotId}/release': {
+  "/api/v1/tracking/observations/{observationId}/plots/{plotId}/release": {
     /** Releases the claim on a monitoring plot. */
-    post: operations['releaseMonitoringPlot'];
+    post: operations["releaseMonitoringPlot"];
   };
-  '/api/v1/tracking/observations/{observationId}/plots/{plotId}/replace': {
+  "/api/v1/tracking/observations/{observationId}/plots/{plotId}/replace": {
     /**
      * Requests that a monitoring plot be replaced with a new one.
      * @description Additional monitoring plots may be replaced as well, e.g., if the requested plot is part of a permanent cluster. In some cases, the requested plot will be removed from the observation but not replaced with a different one.
      */
-    post: operations['replaceObservationPlot'];
+    post: operations["replaceObservationPlot"];
   };
-  '/api/v1/tracking/observations/{observationId}/results': {
+  "/api/v1/tracking/observations/{observationId}/results": {
     /**
      * Gets the results of an observation of a planting site.
      * @description Some information is only available once all plots have been completed.
      */
-    get: operations['getObservationResults'];
+    get: operations["getObservationResults"];
   };
-  '/api/v1/tracking/sites': {
+  "/api/v1/tracking/sites": {
     /**
      * Gets a list of an organization's planting sites.
      * @description The list can optionally contain information about planting zones and subzones.
      */
-    get: operations['listPlantingSites'];
+    get: operations["listPlantingSites"];
     /** Creates a new planting site. */
-    post: operations['createPlantingSite'];
+    post: operations["createPlantingSite"];
   };
-  '/api/v1/tracking/sites/{id}': {
+  "/api/v1/tracking/sites/{id}": {
     /**
      * Gets information about a specific planting site.
      * @description Includes information about the site's planting zones and subzones.
      */
-    get: operations['getPlantingSite'];
+    get: operations["getPlantingSite"];
     /** Updates information about an existing planting site. */
-    put: operations['updatePlantingSite'];
+    put: operations["updatePlantingSite"];
     /**
      * Deletes a planting site.
      * @description Planting site should not have any plantings.
      */
-    delete: operations['deletePlantingSite'];
+    delete: operations["deletePlantingSite"];
   };
-  '/api/v1/tracking/sites/{id}/reportedPlants': {
+  "/api/v1/tracking/sites/{id}/reportedPlants": {
     /**
      * Gets the total number of plants planted at a planting site and in each planting zone.
      * @description The totals are based on nursery withdrawals.
      */
-    get: operations['getPlantingSiteReportedPlants'];
+    get: operations["getPlantingSiteReportedPlants"];
   };
-  '/api/v1/tracking/subzones/{id}': {
+  "/api/v1/tracking/subzones/{id}": {
     /** Updates information about a planting subzone. */
-    put: operations['updatePlantingSubzone'];
+    put: operations["updatePlantingSubzone"];
   };
-  '/api/v1/tracking/subzones/{id}/species': {
+  "/api/v1/tracking/subzones/{id}/species": {
     /**
      * Gets a list of the species that have been planted in a specific planting subzone.
      * @description The list is based on nursery withdrawals.
      */
-    get: operations['listPlantingSubzoneSpecies'];
+    get: operations["listPlantingSubzoneSpecies"];
   };
-  '/api/v1/users/me': {
+  "/api/v1/users/me": {
     /** Gets information about the current user. */
-    get: operations['getMyself'];
+    get: operations["getMyself"];
     /** Updates information about the current user. */
-    put: operations['updateMyself'];
+    put: operations["updateMyself"];
     /**
      * Deletes the current user's account.
      * @description WARNING! This operation is not reversible.
      */
-    delete: operations['deleteMyself'];
+    delete: operations["deleteMyself"];
   };
-  '/api/v1/users/me/preferences': {
+  "/api/v1/users/me/preferences": {
     /** Gets the current user's preferences. */
-    get: operations['getUserPreferences'];
+    get: operations["getUserPreferences"];
     /** Updates the current user's preferences. */
-    put: operations['updateUserPreferences'];
+    put: operations["updateUserPreferences"];
   };
-  '/api/v1/versions': {
+  "/api/v1/versions": {
     /** Gets the minimum and recommended versions for Terraware's client applications. */
-    get: operations['getVersions'];
+    get: operations["getVersions"];
   };
-  '/api/v2/seedbank/accessions': {
+  "/api/v2/seedbank/accessions": {
     /** Creates a new accession. */
-    post: operations['createAccession'];
+    post: operations["createAccession"];
   };
-  '/api/v2/seedbank/accessions/uploads': {
+  "/api/v2/seedbank/accessions/uploads": {
     /**
      * Uploads a list of accessions to add to the facility.
      * @description The uploaded file must be in CSV format. A template with the correct headers may be downloaded from the `/api/v2/seedbank/accessions/uploads/template` endpoint.
      */
-    post: operations['uploadAccessionsList'];
+    post: operations["uploadAccessionsList"];
   };
-  '/api/v2/seedbank/accessions/uploads/template': {
+  "/api/v2/seedbank/accessions/uploads/template": {
     /** Gets a template file that contains the required header row for accessions list uploads. */
-    get: operations['getAccessionsListUploadTemplate'];
+    get: operations["getAccessionsListUploadTemplate"];
   };
-  '/api/v2/seedbank/accessions/uploads/{uploadId}': {
+  "/api/v2/seedbank/accessions/uploads/{uploadId}": {
     /**
      * Gets the status of an accessions list uploaded previously.
      * @description Clients may poll this endpoint to monitor the progress of the file.
      */
-    get: operations['getAccessionsListUploadStatus'];
+    get: operations["getAccessionsListUploadStatus"];
     /**
      * Deletes an accessions list upload that is awaiting user action.
      * @description This may only be called if the status of the upload is "Awaiting User Action".
      */
-    delete: operations['deleteAccessionsListUpload'];
+    delete: operations["deleteAccessionsListUpload"];
   };
-  '/api/v2/seedbank/accessions/uploads/{uploadId}/resolve': {
+  "/api/v2/seedbank/accessions/uploads/{uploadId}/resolve": {
     /**
      * Resolves the problems with an accessions list that is awaiting user action.
      * @description This may only be called if the status of the upload is "Awaiting User Action".
      */
-    post: operations['resolveAccessionsListUpload'];
+    post: operations["resolveAccessionsListUpload"];
   };
-  '/api/v2/seedbank/accessions/{accessionId}/transfers/nursery': {
+  "/api/v2/seedbank/accessions/{accessionId}/transfers/nursery": {
     /** Transfers seeds to a nursery. */
-    post: operations['createNurseryTransferWithdrawal'];
+    post: operations["createNurseryTransferWithdrawal"];
   };
-  '/api/v2/seedbank/accessions/{accessionId}/viabilityTests': {
+  "/api/v2/seedbank/accessions/{accessionId}/viabilityTests": {
     /** List all of the accession's viability tests. */
-    get: operations['listViabilityTests'];
+    get: operations["listViabilityTests"];
     /**
      * Create a new viability test on an existing accession.
      * @description May cause the accession's remaining quantity to change.
      */
-    post: operations['createViabilityTest'];
+    post: operations["createViabilityTest"];
   };
-  '/api/v2/seedbank/accessions/{accessionId}/viabilityTests/{viabilityTestId}': {
+  "/api/v2/seedbank/accessions/{accessionId}/viabilityTests/{viabilityTestId}": {
     /** Get a single viability test. */
-    get: operations['getViabilityTest'];
+    get: operations["getViabilityTest"];
     /**
      * Update the details of an existing viability test.
      * @description May cause the accession's remaining quantity to change.
      */
-    put: operations['updateViabilityTest'];
+    put: operations["updateViabilityTest"];
     /**
      * Delete an existing viability test.
      * @description May cause the accession's remaining quantity to change.
      */
-    delete: operations['deleteViabilityTest'];
+    delete: operations["deleteViabilityTest"];
   };
-  '/api/v2/seedbank/accessions/{accessionId}/withdrawals': {
+  "/api/v2/seedbank/accessions/{accessionId}/withdrawals": {
     /** List all the withdrawals from an accession. */
-    get: operations['listWithdrawals'];
+    get: operations["listWithdrawals"];
     /**
      * Create a new withdrawal on an existing accession.
      * @description May cause the accession's remaining quantity to change.
      */
-    post: operations['createWithdrawal'];
+    post: operations["createWithdrawal"];
   };
-  '/api/v2/seedbank/accessions/{accessionId}/withdrawals/{withdrawalId}': {
+  "/api/v2/seedbank/accessions/{accessionId}/withdrawals/{withdrawalId}": {
     /** Get a single withdrawal. */
-    get: operations['getWithdrawal'];
+    get: operations["getWithdrawal"];
     /**
      * Update the details of an existing withdrawal.
      * @description May cause the accession's remaining quantity to change.
      */
-    put: operations['updateWithdrawal'];
+    put: operations["updateWithdrawal"];
     /**
      * Delete an existing withdrawal.
      * @description May cause the accession's remaining quantity to change.
      */
-    delete: operations['deleteWithdrawal'];
+    delete: operations["deleteWithdrawal"];
   };
-  '/api/v2/seedbank/accessions/{id}': {
+  "/api/v2/seedbank/accessions/{id}": {
     /** Retrieve an existing accession. */
-    get: operations['getAccession'];
+    get: operations["getAccession"];
     /** Update an existing accession. */
-    put: operations['updateAccession'];
+    put: operations["updateAccession"];
   };
 }
 
@@ -806,7 +818,7 @@ export interface components {
       /** @description User-entered notes about the event, if any. */
       notes?: string;
       /** @enum {string} */
-      type: 'Created' | 'QuantityUpdated' | 'StateChanged' | 'ViabilityTesting' | 'Withdrawal';
+      type: "Created" | "QuantityUpdated" | "StateChanged" | "ViabilityTesting" | "Withdrawal";
     };
     AccessionPayloadV2: {
       /** @description Server-generated human-readable identifier for the accession. This is unique within a single seed bank, but different seed banks may have accessions with the same number. */
@@ -815,19 +827,19 @@ export interface components {
        * @description Server-calculated active indicator. This is based on the accession's state.
        * @enum {string}
        */
-      active: 'Inactive' | 'Active';
+      active: "Inactive" | "Active";
       bagNumbers?: string[];
       /** Format: date */
       collectedDate?: string;
       collectionSiteCity?: string;
-      collectionSiteCoordinates?: components['schemas']['Geolocation'][];
+      collectionSiteCoordinates?: components["schemas"]["Geolocation"][];
       collectionSiteCountryCode?: string;
       collectionSiteCountrySubdivision?: string;
       collectionSiteLandowner?: string;
       collectionSiteName?: string;
       collectionSiteNotes?: string;
       /** @enum {string} */
-      collectionSource?: 'Wild' | 'Reintroduced' | 'Cultivated' | 'Other';
+      collectionSource?: "Wild" | "Reintroduced" | "Cultivated" | "Other";
       /** @description Names of the people who collected the seeds. */
       collectors?: string[];
       /** Format: date */
@@ -838,7 +850,7 @@ export interface components {
        */
       estimatedCount?: number;
       /** @description Estimated weight of seeds remaining. Absent if there isn't enough information to calculate an estimate. */
-      estimatedWeight?: components['schemas']['SeedQuantityPayload'];
+      estimatedWeight?: components["schemas"]["SeedQuantityPayload"];
       /** Format: int64 */
       facilityId: number;
       /** @description If true, plants from this accession's seeds were delivered to a planting site. */
@@ -849,7 +861,7 @@ export interface components {
        */
       id: number;
       /** @description Most recent user observation of seeds remaining in the accession. This is not directly editable; it is updated by the server whenever the "remainingQuantity" field is edited. */
-      latestObservedQuantity?: components['schemas']['SeedQuantityPayload'];
+      latestObservedQuantity?: components["schemas"]["SeedQuantityPayload"];
       /**
        * Format: date-time
        * @description Time of most recent user observation of seeds remaining in the accession. This is updated by the server whenever the "remainingQuantity" field is edited.
@@ -868,12 +880,12 @@ export interface components {
       /** Format: date */
       receivedDate?: string;
       /** @description Number or weight of seeds remaining for withdrawal and testing. May be calculated by the server after withdrawals. */
-      remainingQuantity?: components['schemas']['SeedQuantityPayload'];
+      remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
       /**
        * @description Which source of data this accession originally came from.
        * @enum {string}
        */
-      source?: 'Web' | 'Seed Collector App' | 'File Import';
+      source?: "Web" | "Seed Collector App" | "File Import";
       /** @description Common name of the species, if defined. */
       speciesCommonName?: string;
       /**
@@ -884,28 +896,28 @@ export interface components {
       /** @description Scientific name of the species. */
       speciesScientificName?: string;
       /** @enum {string} */
-      state: 'Awaiting Check-In' | 'Awaiting Processing' | 'Processing' | 'Drying' | 'In Storage' | 'Used Up';
+      state: "Awaiting Check-In" | "Awaiting Processing" | "Processing" | "Drying" | "In Storage" | "Used Up";
       subLocation?: string;
       /** Format: int32 */
       subsetCount?: number;
       /** @description Weight of subset of seeds. Units must be a weight measurement, not "Seeds". */
-      subsetWeight?: components['schemas']['SeedQuantityPayload'];
+      subsetWeight?: components["schemas"]["SeedQuantityPayload"];
       /**
        * Format: int32
        * @description Total number of seeds withdrawn. If withdrawals are measured by weight, this is an estimate based on the accession's subset count and weight.
        */
       totalWithdrawnCount?: number;
       /** @description Total weight of seeds withdrawn. If withdrawals are measured by seed count, this is an estimate based on the accession's subset count and weight. */
-      totalWithdrawnWeight?: components['schemas']['SeedQuantityPayload'];
+      totalWithdrawnWeight?: components["schemas"]["SeedQuantityPayload"];
       /** Format: int32 */
       viabilityPercent?: number;
-      viabilityTests?: components['schemas']['GetViabilityTestPayload'][];
-      withdrawals?: components['schemas']['GetWithdrawalPayload'][];
+      viabilityTests?: components["schemas"]["GetViabilityTestPayload"][];
+      withdrawals?: components["schemas"]["GetWithdrawalPayload"][];
     };
     AddOrganizationUserRequestPayload: {
       email: string;
       /** @enum {string} */
-      role: 'Contributor' | 'Manager' | 'Admin' | 'Owner' | 'Terraformation Contact';
+      role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
     };
     AllFieldValuesPayload: {
       /** @description If true, the list of values is too long to return in its entirety and "values" is a partial list. */
@@ -914,15 +926,12 @@ export interface components {
       values: string[];
     };
     /** @description Search criterion that matches results that meet all of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x AND y AND z. */
-    AndNodePayload: WithRequired<
-      {
-        operation: 'and';
-      } & Omit<components['schemas']['SearchNodePayload'], 'operation'> & {
-          /** @description List of criteria all of which must be satisfied */
-          children?: components['schemas']['SearchNodePayload'][];
-        },
-      'children'
-    >;
+    AndNodePayload: WithRequired<{
+      operation: "and";
+    } & Omit<components["schemas"]["SearchNodePayload"], "operation"> & {
+      /** @description List of criteria all of which must be satisfied */
+      children?: components["schemas"]["SearchNodePayload"][];
+    }, "children">;
     AnnualDetailsPayloadV1: {
       bestMonthsForObservation: number[];
       budgetNarrativeSummary?: string;
@@ -936,7 +945,7 @@ export interface components {
       projectSummary?: string;
       socialImpact?: string;
       successStories?: string;
-      sustainableDevelopmentGoals: components['schemas']['GoalProgressPayloadV1'][];
+      sustainableDevelopmentGoals: components["schemas"]["GoalProgressPayloadV1"][];
     };
     AssignProjectRequestPayload: {
       accessionIds?: number[];
@@ -944,7 +953,7 @@ export interface components {
       plantingSiteIds?: number[];
     };
     AssignedPlotPayload: {
-      boundary: components['schemas']['Geometry'];
+      boundary: components["schemas"]["Geometry"];
       claimedByName?: string;
       /** Format: int64 */
       claimedByUserId?: number;
@@ -999,114 +1008,80 @@ export interface components {
       timeseriesValue?: number;
     };
     /** @description A change to the non-quantity-related details of a batch. */
-    BatchHistoryDetailsEditedPayload: WithRequired<
-      components['schemas']['BatchHistoryPayloadCommonProps'] & {
-        /** Format: int64 */
-        createdBy?: number;
-        /** Format: date-time */
-        createdTime?: string;
-        notes?: string;
-        /**
-         * Format: int64
-         * @description The ID of the batch's project if the project still exists. If the project was subsequently deleted, this will be null but the project name will still be set.
-         */
-        projectId?: number;
-        /** @description The name of the project at the time the details were edited. If the project was subsequently renamed or deleted, this name remains the same. */
-        projectName?: string;
-        /** Format: date */
-        readyByDate?: string;
-        subLocations?: components['schemas']['BatchHistorySubLocationPayload'][];
-        /** @enum {string} */
-        substrate?: 'MediaMix' | 'Soil' | 'Sand' | 'Moss' | 'PerliteVermiculite' | 'Other';
-        substrateNotes?: string;
-        /** @enum {string} */
-        treatment?: 'Soak' | 'Scarify' | 'Chemical' | 'Stratification' | 'Other' | 'Light';
-        treatmentNotes?: string;
-        /** @enum {string} */
-        type?: 'DetailsEdited';
-        /** Format: int32 */
-        version?: number;
-      },
-      'createdBy' | 'createdTime' | 'subLocations' | 'type' | 'version'
-    >;
+    BatchHistoryDetailsEditedPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & ({
+      /** Format: int64 */
+      createdBy?: number;
+      /** Format: date-time */
+      createdTime?: string;
+      notes?: string;
+      /**
+       * Format: int64
+       * @description The ID of the batch's project if the project still exists. If the project was subsequently deleted, this will be null but the project name will still be set.
+       */
+      projectId?: number;
+      /** @description The name of the project at the time the details were edited. If the project was subsequently renamed or deleted, this name remains the same. */
+      projectName?: string;
+      /** Format: date */
+      readyByDate?: string;
+      subLocations?: components["schemas"]["BatchHistorySubLocationPayload"][];
+      /** @enum {string} */
+      substrate?: "MediaMix" | "Soil" | "Sand" | "Moss" | "PerliteVermiculite" | "Other";
+      substrateNotes?: string;
+      /** @enum {string} */
+      treatment?: "Soak" | "Scarify" | "Chemical" | "Stratification" | "Other" | "Light";
+      treatmentNotes?: string;
+      /** @enum {string} */
+      type?: "DetailsEdited";
+      /** Format: int32 */
+      version?: number;
+    }), "createdBy" | "createdTime" | "subLocations" | "type" | "version">;
     /** @description A nursery transfer withdrawal from another batch that added seedlings to this batch. */
-    BatchHistoryIncomingWithdrawalPayload: WithRequired<
-      components['schemas']['BatchHistoryPayloadCommonProps'] & {
-        /** Format: int64 */
-        createdBy?: number;
-        /** Format: date-time */
-        createdTime?: string;
-        /** Format: int64 */
-        fromBatchId?: number;
-        /** Format: int32 */
-        germinatingQuantityAdded?: number;
-        /** Format: int32 */
-        notReadyQuantityAdded?: number;
-        /** Format: int32 */
-        readyQuantityAdded?: number;
-        /** @enum {string} */
-        type?: 'IncomingWithdrawal';
-        /** Format: int32 */
-        version?: number;
-        /** Format: int64 */
-        withdrawalId?: number;
-        /** Format: date */
-        withdrawnDate?: string;
-      },
-      | 'createdBy'
-      | 'createdTime'
-      | 'fromBatchId'
-      | 'germinatingQuantityAdded'
-      | 'notReadyQuantityAdded'
-      | 'readyQuantityAdded'
-      | 'type'
-      | 'version'
-      | 'withdrawalId'
-      | 'withdrawnDate'
-    >;
+    BatchHistoryIncomingWithdrawalPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & {
+      /** Format: int64 */
+      createdBy?: number;
+      /** Format: date-time */
+      createdTime?: string;
+      /** Format: int64 */
+      fromBatchId?: number;
+      /** Format: int32 */
+      germinatingQuantityAdded?: number;
+      /** Format: int32 */
+      notReadyQuantityAdded?: number;
+      /** Format: int32 */
+      readyQuantityAdded?: number;
+      /** @enum {string} */
+      type?: "IncomingWithdrawal";
+      /** Format: int32 */
+      version?: number;
+      /** Format: int64 */
+      withdrawalId?: number;
+      /** Format: date */
+      withdrawnDate?: string;
+    }, "createdBy" | "createdTime" | "fromBatchId" | "germinatingQuantityAdded" | "notReadyQuantityAdded" | "readyQuantityAdded" | "type" | "version" | "withdrawalId" | "withdrawnDate">;
     /** @description A withdrawal that removed seedlings from this batch. This does not include the full details of the withdrawal; they can be retrieved using the withdrawal ID. */
-    BatchHistoryOutgoingWithdrawalPayload: WithRequired<
-      components['schemas']['BatchHistoryPayloadCommonProps'] & {
-        /** Format: int64 */
-        createdBy?: number;
-        /** Format: date-time */
-        createdTime?: string;
-        /** Format: int32 */
-        germinatingQuantityWithdrawn?: number;
-        /** Format: int32 */
-        notReadyQuantityWithdrawn?: number;
-        /** @enum {string} */
-        purpose?: 'Nursery Transfer' | 'Dead' | 'Out Plant' | 'Other';
-        /** Format: int32 */
-        readyQuantityWithdrawn?: number;
-        /** @enum {string} */
-        type?: 'OutgoingWithdrawal';
-        /** Format: int32 */
-        version?: number;
-        /** Format: int64 */
-        withdrawalId?: number;
-        /** Format: date */
-        withdrawnDate?: string;
-      },
-      | 'createdBy'
-      | 'createdTime'
-      | 'germinatingQuantityWithdrawn'
-      | 'notReadyQuantityWithdrawn'
-      | 'purpose'
-      | 'readyQuantityWithdrawn'
-      | 'type'
-      | 'version'
-      | 'withdrawalId'
-      | 'withdrawnDate'
-    >;
-    BatchHistoryPayload:
-      | components['schemas']['BatchHistoryDetailsEditedPayload']
-      | components['schemas']['BatchHistoryIncomingWithdrawalPayload']
-      | components['schemas']['BatchHistoryOutgoingWithdrawalPayload']
-      | components['schemas']['BatchHistoryPhotoCreatedPayload']
-      | components['schemas']['BatchHistoryPhotoDeletedPayload']
-      | components['schemas']['BatchHistoryQuantityEditedPayload']
-      | components['schemas']['BatchHistoryStatusChangedPayload'];
+    BatchHistoryOutgoingWithdrawalPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & ({
+      /** Format: int64 */
+      createdBy?: number;
+      /** Format: date-time */
+      createdTime?: string;
+      /** Format: int32 */
+      germinatingQuantityWithdrawn?: number;
+      /** Format: int32 */
+      notReadyQuantityWithdrawn?: number;
+      /** @enum {string} */
+      purpose?: "Nursery Transfer" | "Dead" | "Out Plant" | "Other";
+      /** Format: int32 */
+      readyQuantityWithdrawn?: number;
+      /** @enum {string} */
+      type?: "OutgoingWithdrawal";
+      /** Format: int32 */
+      version?: number;
+      /** Format: int64 */
+      withdrawalId?: number;
+      /** Format: date */
+      withdrawnDate?: string;
+    }), "createdBy" | "createdTime" | "germinatingQuantityWithdrawn" | "notReadyQuantityWithdrawn" | "purpose" | "readyQuantityWithdrawn" | "type" | "version" | "withdrawalId" | "withdrawnDate">;
+    BatchHistoryPayload: components["schemas"]["BatchHistoryDetailsEditedPayload"] | components["schemas"]["BatchHistoryIncomingWithdrawalPayload"] | components["schemas"]["BatchHistoryOutgoingWithdrawalPayload"] | components["schemas"]["BatchHistoryPhotoCreatedPayload"] | components["schemas"]["BatchHistoryPhotoDeletedPayload"] | components["schemas"]["BatchHistoryQuantityEditedPayload"] | components["schemas"]["BatchHistoryStatusChangedPayload"];
     BatchHistoryPayloadCommonProps: {
       /** Format: int64 */
       createdBy: number;
@@ -1115,73 +1090,61 @@ export interface components {
       /** Format: int32 */
       version?: number;
     };
-    BatchHistoryPhotoCreatedPayload: WithRequired<
-      components['schemas']['BatchHistoryPayloadCommonProps'] & {
-        /** Format: int64 */
-        createdBy?: number;
-        /** Format: date-time */
-        createdTime?: string;
-        /**
-         * Format: int64
-         * @description ID of the photo if it exists. Null if the photo has been deleted.
-         */
-        fileId?: number;
-        /** @enum {string} */
-        type?: 'PhotoCreated';
-      },
-      'createdBy' | 'createdTime' | 'type'
-    >;
-    BatchHistoryPhotoDeletedPayload: WithRequired<
-      components['schemas']['BatchHistoryPayloadCommonProps'] & {
-        /** Format: int64 */
-        createdBy?: number;
-        /** Format: date-time */
-        createdTime?: string;
-        /** @enum {string} */
-        type?: 'PhotoDeleted';
-      },
-      'createdBy' | 'createdTime' | 'type'
-    >;
+    BatchHistoryPhotoCreatedPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & {
+      /** Format: int64 */
+      createdBy?: number;
+      /** Format: date-time */
+      createdTime?: string;
+      /**
+       * Format: int64
+       * @description ID of the photo if it exists. Null if the photo has been deleted.
+       */
+      fileId?: number;
+      /** @enum {string} */
+      type?: "PhotoCreated";
+    }, "createdBy" | "createdTime" | "type">;
+    BatchHistoryPhotoDeletedPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & {
+      /** Format: int64 */
+      createdBy?: number;
+      /** Format: date-time */
+      createdTime?: string;
+      /** @enum {string} */
+      type?: "PhotoDeleted";
+    }, "createdBy" | "createdTime" | "type">;
     /** @description A manual edit of a batch's remaining quantities. */
-    BatchHistoryQuantityEditedPayload: WithRequired<
-      components['schemas']['BatchHistoryPayloadCommonProps'] & {
-        /** Format: int64 */
-        createdBy?: number;
-        /** Format: date-time */
-        createdTime?: string;
-        /** Format: int32 */
-        germinatingQuantity?: number;
-        /** Format: int32 */
-        notReadyQuantity?: number;
-        /** Format: int32 */
-        readyQuantity?: number;
-        /** @enum {string} */
-        type?: 'QuantityEdited';
-        /** Format: int32 */
-        version?: number;
-      },
-      'createdBy' | 'createdTime' | 'germinatingQuantity' | 'notReadyQuantity' | 'readyQuantity' | 'type' | 'version'
-    >;
+    BatchHistoryQuantityEditedPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & {
+      /** Format: int64 */
+      createdBy?: number;
+      /** Format: date-time */
+      createdTime?: string;
+      /** Format: int32 */
+      germinatingQuantity?: number;
+      /** Format: int32 */
+      notReadyQuantity?: number;
+      /** Format: int32 */
+      readyQuantity?: number;
+      /** @enum {string} */
+      type?: "QuantityEdited";
+      /** Format: int32 */
+      version?: number;
+    }, "createdBy" | "createdTime" | "germinatingQuantity" | "notReadyQuantity" | "readyQuantity" | "type" | "version">;
     /** @description The new quantities resulting from changing the statuses of seedlings in a batch. The values here are the total quantities remaining after the status change, not the number of seedlings whose statuses were changed. */
-    BatchHistoryStatusChangedPayload: WithRequired<
-      components['schemas']['BatchHistoryPayloadCommonProps'] & {
-        /** Format: int64 */
-        createdBy?: number;
-        /** Format: date-time */
-        createdTime?: string;
-        /** Format: int32 */
-        germinatingQuantity?: number;
-        /** Format: int32 */
-        notReadyQuantity?: number;
-        /** Format: int32 */
-        readyQuantity?: number;
-        /** @enum {string} */
-        type?: 'StatusChanged';
-        /** Format: int32 */
-        version?: number;
-      },
-      'createdBy' | 'createdTime' | 'germinatingQuantity' | 'notReadyQuantity' | 'readyQuantity' | 'type' | 'version'
-    >;
+    BatchHistoryStatusChangedPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & {
+      /** Format: int64 */
+      createdBy?: number;
+      /** Format: date-time */
+      createdTime?: string;
+      /** Format: int32 */
+      germinatingQuantity?: number;
+      /** Format: int32 */
+      notReadyQuantity?: number;
+      /** Format: int32 */
+      readyQuantity?: number;
+      /** @enum {string} */
+      type?: "StatusChanged";
+      /** Format: int32 */
+      version?: number;
+    }, "createdBy" | "createdTime" | "germinatingQuantity" | "notReadyQuantity" | "readyQuantity" | "type" | "version">;
     BatchHistorySubLocationPayload: {
       /**
        * Format: int64
@@ -1232,12 +1195,12 @@ export interface components {
       speciesId: number;
       subLocationIds: number[];
       /** @enum {string} */
-      substrate?: 'MediaMix' | 'Soil' | 'Sand' | 'Moss' | 'PerliteVermiculite' | 'Other';
+      substrate?: "MediaMix" | "Soil" | "Sand" | "Moss" | "PerliteVermiculite" | "Other";
       substrateNotes?: string;
       /** Format: int32 */
       totalWithdrawn: number;
       /** @enum {string} */
-      treatment?: 'Soak' | 'Scarify' | 'Chemical' | 'Stratification' | 'Other' | 'Light';
+      treatment?: "Soak" | "Scarify" | "Chemical" | "Stratification" | "Other" | "Light";
       treatmentNotes?: string;
       /**
        * Format: int32
@@ -1250,8 +1213,8 @@ export interface components {
       id: number;
     };
     BatchResponsePayload: {
-      batch: components['schemas']['BatchPayload'];
-      status: components['schemas']['SuccessOrError'];
+      batch: components["schemas"]["BatchPayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     BatchWithdrawalPayload: {
       /** Format: int64 */
@@ -1268,9 +1231,9 @@ export interface components {
     };
     /** @description Coordinate reference system used for X and Y coordinates in this geometry. By default, coordinates are in WGS 84, with longitude and latitude in degrees. In that case, this element is not present. Otherwise, it specifies which coordinate system to use. */
     CRS: {
-      properties: components['schemas']['CRSProperties'];
+      properties: components["schemas"]["CRSProperties"];
       /** @enum {string} */
-      type: 'name';
+      type: "name";
     };
     CRSProperties: {
       /**
@@ -1284,7 +1247,7 @@ export interface components {
        * @description Which status change to apply.
        * @enum {string}
        */
-      operation: 'GerminatingToNotReady' | 'NotReadyToReady';
+      operation: "GerminatingToNotReady" | "NotReadyToReady";
       /**
        * Format: int32
        * @description Number of seedlings to move from one status to the next.
@@ -1292,8 +1255,8 @@ export interface components {
       quantity: number;
     };
     CohortListResponsePayload: {
-      cohorts: components['schemas']['CohortPayload'][];
-      status: components['schemas']['SuccessOrError'];
+      cohorts: components["schemas"]["CohortPayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     CohortPayload: {
       /** Format: int64 */
@@ -1301,33 +1264,21 @@ export interface components {
       name: string;
       participantIds?: number[];
       /** @enum {string} */
-      phase:
-        | 'Phase 0 - Due Diligence'
-        | 'Phase 1 - Feasibility Study'
-        | 'Phase 2 - Plan and Scale'
-        | 'Phase 3 - Implement and Monitor';
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
     };
     CohortResponsePayload: {
-      cohort: components['schemas']['CohortPayload'];
-      status: components['schemas']['SuccessOrError'];
+      cohort: components["schemas"]["CohortPayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     CompletePlotObservationRequestPayload: {
-      conditions: (
-        | 'AnimalDamage'
-        | 'FastGrowth'
-        | 'FavorableWeather'
-        | 'Fungus'
-        | 'Pests'
-        | 'SeedProduction'
-        | 'UnfavorableWeather'
-      )[];
+      conditions: ("AnimalDamage" | "FastGrowth" | "FavorableWeather" | "Fungus" | "Pests" | "SeedProduction" | "UnfavorableWeather")[];
       notes?: string;
       /**
        * Format: date-time
        * @description Date and time the observation was performed in the field.
        */
       observedTime: string;
-      plants: components['schemas']['RecordedPlantPayload'][];
+      plants: components["schemas"]["RecordedPlantPayload"][];
     };
     ConnectDeviceManagerRequestPayload: {
       /** Format: int64 */
@@ -1338,14 +1289,14 @@ export interface components {
       /** Format: date */
       collectedDate?: string;
       collectionSiteCity?: string;
-      collectionSiteCoordinates?: components['schemas']['Geolocation'][];
+      collectionSiteCoordinates?: components["schemas"]["Geolocation"][];
       collectionSiteCountryCode?: string;
       collectionSiteCountrySubdivision?: string;
       collectionSiteLandowner?: string;
       collectionSiteName?: string;
       collectionSiteNotes?: string;
       /** @enum {string} */
-      collectionSource?: 'Wild' | 'Reintroduced' | 'Cultivated' | 'Other';
+      collectionSource?: "Wild" | "Reintroduced" | "Cultivated" | "Other";
       collectors?: string[];
       /** Format: int64 */
       facilityId?: number;
@@ -1361,16 +1312,16 @@ export interface components {
       /** Format: date */
       receivedDate?: string;
       /** @enum {string} */
-      source?: 'Web' | 'Seed Collector App' | 'File Import';
+      source?: "Web" | "Seed Collector App" | "File Import";
       /** Format: int64 */
       speciesId?: number;
       /** @enum {string} */
-      state?: 'Awaiting Check-In' | 'Awaiting Processing' | 'Processing' | 'Drying' | 'In Storage' | 'Used Up';
+      state?: "Awaiting Check-In" | "Awaiting Processing" | "Processing" | "Drying" | "In Storage" | "Used Up";
       subLocation?: string;
     };
     CreateAccessionResponsePayloadV2: {
-      accession: components['schemas']['AccessionPayloadV2'];
-      status: components['schemas']['SuccessOrError'];
+      accession: components["schemas"]["AccessionPayloadV2"];
+      status: components["schemas"]["SuccessOrError"];
     };
     CreateAutomationRequestPayload: {
       description?: string;
@@ -1394,12 +1345,12 @@ export interface components {
     CreateAutomationResponsePayload: {
       /** Format: int64 */
       id: number;
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     CreateBatchPhotoResponsePayload: {
       /** Format: int64 */
       id: number;
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     CreateBatchRequestPayload: {
       /** Format: date */
@@ -1421,20 +1372,16 @@ export interface components {
       speciesId: number;
       subLocationIds?: number[];
       /** @enum {string} */
-      substrate?: 'MediaMix' | 'Soil' | 'Sand' | 'Moss' | 'PerliteVermiculite' | 'Other';
+      substrate?: "MediaMix" | "Soil" | "Sand" | "Moss" | "PerliteVermiculite" | "Other";
       substrateNotes?: string;
       /** @enum {string} */
-      treatment?: 'Soak' | 'Scarify' | 'Chemical' | 'Stratification' | 'Other' | 'Light';
+      treatment?: "Soak" | "Scarify" | "Chemical" | "Stratification" | "Other" | "Light";
       treatmentNotes?: string;
     };
     CreateCohortRequestPayload: {
       name: string;
       /** @enum {string} */
-      phase:
-        | 'Phase 0 - Due Diligence'
-        | 'Phase 1 - Feasibility Study'
-        | 'Phase 2 - Plan and Scale'
-        | 'Phase 3 - Implement and Monitor';
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
     };
     CreateDeviceRequestPayload: {
       /**
@@ -1526,7 +1473,7 @@ export interface components {
     CreateDraftPlantingSiteResponsePayload: {
       /** Format: int64 */
       id: number;
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     CreateFacilityRequestPayload: {
       /** Format: date */
@@ -1554,12 +1501,12 @@ export interface components {
        */
       timeZone?: string;
       /** @enum {string} */
-      type: 'Seed Bank' | 'Desalination' | 'Reverse Osmosis' | 'Nursery';
+      type: "Seed Bank" | "Desalination" | "Reverse Osmosis" | "Nursery";
     };
     CreateFacilityResponsePayload: {
       /** Format: int64 */
       id: number;
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     CreateNurseryTransferRequestPayload: {
       /** Format: date */
@@ -1583,18 +1530,18 @@ export interface components {
     };
     CreateNurseryTransferResponsePayload: {
       /** @description Updated accession that includes a withdrawal for the nursery transfer. */
-      accession: components['schemas']['AccessionPayloadV2'];
+      accession: components["schemas"]["AccessionPayloadV2"];
       /** @description Details of newly-created seedling batch. */
-      batch: components['schemas']['BatchPayload'];
-      status: components['schemas']['SuccessOrError'];
+      batch: components["schemas"]["BatchPayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     CreateNurseryWithdrawalPhotoResponsePayload: {
       /** Format: int64 */
       id: number;
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     CreateNurseryWithdrawalRequestPayload: {
-      batchWithdrawals: components['schemas']['BatchWithdrawalPayload'][];
+      batchWithdrawals: components["schemas"]["BatchWithdrawalPayload"][];
       /**
        * Format: int64
        * @description If purpose is "Nursery Transfer", the ID of the facility to transfer to. Must be in the same organization as the originating facility. Not allowed for purposes other than "Nursery Transfer".
@@ -1614,7 +1561,7 @@ export interface components {
        */
       plantingSubzoneId?: number;
       /** @enum {string} */
-      purpose: 'Nursery Transfer' | 'Dead' | 'Out Plant' | 'Other';
+      purpose: "Nursery Transfer" | "Dead" | "Out Plant" | "Other";
       /**
        * Format: date
        * @description If purpose is "Nursery Transfer", the estimated ready-by date to use for the batches that are created at the other nursery.
@@ -1635,10 +1582,10 @@ export interface components {
        */
       countrySubdivisionCode?: string;
       description?: string;
-      managedLocationTypes?: ('SeedBank' | 'Nursery' | 'PlantingSite')[];
+      managedLocationTypes?: ("SeedBank" | "Nursery" | "PlantingSite")[];
       name: string;
       /** @enum {string} */
-      organizationType?: 'Government' | 'NGO' | 'Arboreta' | 'Academia' | 'ForProfit' | 'Other';
+      organizationType?: "Government" | "NGO" | "Arboreta" | "Academia" | "ForProfit" | "Other";
       /** @description Non-empty additional description of organization when type is Other. */
       organizationTypeDetails?: string;
       /**
@@ -1655,15 +1602,15 @@ export interface components {
        * @description The ID of the newly-added user.
        */
       id: number;
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     CreatePlantingSiteRequestPayload: {
-      boundary?: components['schemas']['MultiPolygon'] | components['schemas']['Polygon'];
+      boundary?: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
       description?: string;
       name: string;
       /** Format: int64 */
       organizationId: number;
-      plantingSeasons?: components['schemas']['NewPlantingSeasonPayload'][];
+      plantingSeasons?: components["schemas"]["NewPlantingSeasonPayload"][];
       /** Format: int64 */
       projectId?: number;
       /**
@@ -1675,7 +1622,7 @@ export interface components {
     CreatePlantingSiteResponsePayload: {
       /** Format: int64 */
       id: number;
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     CreateProjectRequestPayload: {
       description?: string;
@@ -1686,12 +1633,12 @@ export interface components {
     CreateProjectResponsePayload: {
       /** Format: int64 */
       id: number;
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     CreateSpeciesResponsePayload: {
       /** Format: int64 */
       id: number;
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     CreateSubLocationRequestPayload: {
       name: string;
@@ -1710,7 +1657,7 @@ export interface components {
       /** @description Name of this timeseries. Duplicate timeseries names for the same device aren't allowed, but different devices can have timeseries with the same name. */
       timeseriesName: string;
       /** @enum {string} */
-      type: 'Numeric' | 'Text';
+      type: "Numeric" | "Text";
       /**
        * @description Units of measure for values in this timeseries.
        * @example volts
@@ -1718,14 +1665,14 @@ export interface components {
       units?: string;
     };
     CreateTimeseriesRequestPayload: {
-      timeseries: components['schemas']['CreateTimeseriesEntry'][];
+      timeseries: components["schemas"]["CreateTimeseriesEntry"][];
     };
     CreateViabilityTestRequestPayload: {
       /** Format: date */
       endDate?: string;
       notes?: string;
       /** @enum {string} */
-      seedType?: 'Fresh' | 'Stored';
+      seedType?: "Fresh" | "Stored";
       /** Format: int32 */
       seedsCompromised?: number;
       /** Format: int32 */
@@ -1737,22 +1684,12 @@ export interface components {
       /** Format: date */
       startDate?: string;
       /** @enum {string} */
-      substrate?:
-        | 'Nursery Media'
-        | 'Agar'
-        | 'Paper'
-        | 'Other'
-        | 'Sand'
-        | 'Media Mix'
-        | 'Soil'
-        | 'Moss'
-        | 'Perlite/Vermiculite'
-        | 'None';
-      testResults?: components['schemas']['ViabilityTestResultPayload'][];
+      substrate?: "Nursery Media" | "Agar" | "Paper" | "Other" | "Sand" | "Media Mix" | "Soil" | "Moss" | "Perlite/Vermiculite" | "None";
+      testResults?: components["schemas"]["ViabilityTestResultPayload"][];
       /** @enum {string} */
-      testType: 'Lab' | 'Nursery' | 'Cut';
+      testType: "Lab" | "Nursery" | "Cut";
       /** @enum {string} */
-      treatment?: 'Soak' | 'Scarify' | 'Chemical' | 'Stratification' | 'Other' | 'Light';
+      treatment?: "Soak" | "Scarify" | "Chemical" | "Stratification" | "Other" | "Light";
       /**
        * Format: int64
        * @description ID of user who withdrew seeds to perform the test. Defaults to the current user. If non-null, the current user must have permission to see the referenced user's membership details in the organization.
@@ -1764,29 +1701,21 @@ export interface components {
       date?: string;
       notes?: string;
       /** @enum {string} */
-      purpose?: 'Other' | 'Viability Testing' | 'Out-planting' | 'Nursery';
+      purpose?: "Other" | "Viability Testing" | "Out-planting" | "Nursery";
       /**
        * Format: int64
        * @description ID of the user who withdrew the seeds. Default is the current user's ID. If non-null, the current user must have permission to read the referenced user's membership details in the organization.
        */
       withdrawnByUserId?: number;
       /** @description Quantity of seeds withdrawn. If this quantity is in weight and the remaining quantity of the accession is in seeds or vice versa, the accession must have a subset weight and count. */
-      withdrawnQuantity?: components['schemas']['SeedQuantityPayload'];
+      withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
     };
     DeliverablePayload: {
       /** @enum {string} */
-      category:
-        | 'Legal Eligibility'
-        | 'Financial Viability'
-        | 'GIS'
-        | 'Carbon Eligibility'
-        | 'Stakeholders and Co-Benefits'
-        | 'Proposed Restoration Activities'
-        | 'Media'
-        | 'Supplemental Files';
+      category: "Legal Eligibility" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Co-Benefits" | "Proposed Restoration Activities" | "Media" | "Supplemental Files";
       /** @description Optional description of the deliverable in HTML form. */
       descriptionHtml?: string;
-      documents: components['schemas']['SubmissionDocumentPayload'][];
+      documents: components["schemas"]["SubmissionDocumentPayload"][];
       /** @description If the deliverable has been reviewed, the user-visible feedback from the review. */
       feedback?: string;
       /** Format: int64 */
@@ -1804,9 +1733,9 @@ export interface components {
       projectId: number;
       projectName: string;
       /** @enum {string} */
-      status: 'Not Submitted' | 'In Review' | 'Needs Translation' | 'Approved' | 'Rejected' | 'Not Needed';
+      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
       /** @enum {string} */
-      type: 'Document';
+      type: "Document";
     };
     /** @description If the withdrawal was an outplanting to a planting site, the delivery that was created. Not present for other withdrawal purposes. */
     DeliveryPayload: {
@@ -1814,7 +1743,7 @@ export interface components {
       id: number;
       /** Format: int64 */
       plantingSiteId: number;
-      plantings: components['schemas']['PlantingPayload'][];
+      plantings: components["schemas"]["PlantingPayload"][];
       /** Format: int64 */
       withdrawalId: number;
     };
@@ -1904,7 +1833,7 @@ export interface components {
     DeviceTemplatePayload: {
       address?: string;
       /** @enum {string} */
-      category: 'PV' | 'Seed Bank Default';
+      category: "PV" | "Seed Bank Default";
       /** Format: int64 */
       id: number;
       make: string;
@@ -1987,7 +1916,7 @@ export interface components {
        */
       capacity?: number;
       /** @enum {string} */
-      connectionState: 'Not Connected' | 'Connected' | 'Configured';
+      connectionState: "Not Connected" | "Connected" | "Configured";
       /** Format: date-time */
       createdTime: string;
       description?: string;
@@ -2009,20 +1938,17 @@ export interface components {
        */
       timeZone?: string;
       /** @enum {string} */
-      type: 'Seed Bank' | 'Desalination' | 'Reverse Osmosis' | 'Nursery';
+      type: "Seed Bank" | "Desalination" | "Reverse Osmosis" | "Nursery";
     };
-    FieldNodePayload: WithRequired<
-      {
-        operation: 'field';
-      } & Omit<components['schemas']['SearchNodePayload'], 'operation'> & {
-          field?: string;
-          /** @enum {string} */
-          type?: 'Exact' | 'ExactOrFuzzy' | 'Fuzzy' | 'Range';
-          /** @description List of values to match. For exact and fuzzy searches, a list of at least one value to search for; the list may include null to match accessions where the field does not have a value. For range searches, the list must contain exactly two values, the minimum and maximum; one of the values may be null to search for all values above a minimum or below a maximum. */
-          values?: (string | null)[];
-        },
-      'field' | 'type' | 'values'
-    >;
+    FieldNodePayload: WithRequired<{
+      operation: "field";
+    } & Omit<components["schemas"]["SearchNodePayload"], "operation"> & ({
+      field?: string;
+      /** @enum {string} */
+      type?: "Exact" | "ExactOrFuzzy" | "Fuzzy" | "Range";
+      /** @description List of values to match. For exact and fuzzy searches, a list of at least one value to search for; the list may include null to match accessions where the field does not have a value. For range searches, the list must contain exactly two values, the minimum and maximum; one of the values may be null to search for all values above a minimum or below a maximum. */
+      values?: (string | null)[];
+    }), "field" | "type" | "values">;
     FieldValuesPayload: {
       /** @description If true, the list of values is too long to return in its entirety and "values" is a partial list. */
       partial: boolean;
@@ -2036,97 +1962,87 @@ export interface components {
     };
     /** @description GEOMETRY-FIX-TYPE-ON-CLIENT-SIDE */
     Geometry: {
-      crs?: components['schemas']['CRS'];
+      crs?: components["schemas"]["CRS"];
       /** @enum {string} */
-      type:
-        | 'Point'
-        | 'LineString'
-        | 'Polygon'
-        | 'MultiPoint'
-        | 'MultiLineString'
-        | 'MultiPolygon'
-        | 'GeometryCollection';
+      type: "Point" | "LineString" | "Polygon" | "MultiPoint" | "MultiLineString" | "MultiPolygon" | "GeometryCollection";
     };
-    GeometryCollection: WithRequired<
-      {
-        type: 'GeometryCollection';
-      } & Omit<components['schemas']['Geometry'], 'type'> & {
-          geometries?: components['schemas']['Geometry'][];
-          /** @enum {string} */
-          type?: 'GeometryCollection';
-        },
-      'geometries' | 'type'
-    >;
+    GeometryCollection: WithRequired<{
+      type: "GeometryCollection";
+    } & Omit<components["schemas"]["Geometry"], "type"> & {
+      geometries?: components["schemas"]["Geometry"][];
+      /** @enum {string} */
+      type?: "GeometryCollection";
+    }, "geometries" | "type">;
     GetAccessionHistoryResponsePayload: {
       /** @description History of changes in descending time order (newest first.) */
-      history: components['schemas']['AccessionHistoryEntryPayload'][];
-      status: components['schemas']['SuccessOrError'];
+      history: components["schemas"]["AccessionHistoryEntryPayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetAccessionResponsePayloadV2: {
-      accession: components['schemas']['AccessionPayloadV2'];
-      status: components['schemas']['SuccessOrError'];
+      accession: components["schemas"]["AccessionPayloadV2"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetAutomationResponsePayload: {
-      automation: components['schemas']['AutomationPayload'];
-      status: components['schemas']['SuccessOrError'];
+      automation: components["schemas"]["AutomationPayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetBatchHistoryResponsePayload: {
-      history: components['schemas']['BatchHistoryPayload'][];
-      status: components['schemas']['SuccessOrError'];
+      history: components["schemas"]["BatchHistoryPayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetCurrentTimeResponsePayload: {
       /** Format: date-time */
       currentTime: string;
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetDeliverableResponsePayload: {
-      deliverable: components['schemas']['DeliverablePayload'];
-      status: components['schemas']['SuccessOrError'];
+      deliverable: components["schemas"]["DeliverablePayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetDeliveryResponsePayload: {
-      delivery: components['schemas']['DeliveryPayload'];
-      status: components['schemas']['SuccessOrError'];
+      delivery: components["schemas"]["DeliveryPayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetDeviceManagerResponsePayload: {
-      manager: components['schemas']['DeviceManagerPayload'];
-      status: components['schemas']['SuccessOrError'];
+      manager: components["schemas"]["DeviceManagerPayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetDeviceManagersResponsePayload: {
       /** @description List of device managers that match the conditions in the request. Empty if there were no matches, e.g., the requested short code didn't exist. */
-      managers: components['schemas']['DeviceManagerPayload'][];
-      status: components['schemas']['SuccessOrError'];
+      managers: components["schemas"]["DeviceManagerPayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetDeviceResponsePayload: {
-      device: components['schemas']['DeviceConfig'];
-      status: components['schemas']['SuccessOrError'];
+      device: components["schemas"]["DeviceConfig"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetDraftPlantingSiteResponsePayload: {
-      site: components['schemas']['DraftPlantingSitePayload'];
-      status: components['schemas']['SuccessOrError'];
+      site: components["schemas"]["DraftPlantingSitePayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetFacilityResponse: {
-      facility: components['schemas']['FacilityPayload'];
-      status: components['schemas']['SuccessOrError'];
+      facility: components["schemas"]["FacilityPayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetMapboxTokenResponsePayload: {
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
       token: string;
     };
     GetNotificationResponsePayload: {
-      notification: components['schemas']['NotificationPayload'];
-      status: components['schemas']['SuccessOrError'];
+      notification: components["schemas"]["NotificationPayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetNotificationsCountResponsePayload: {
-      notifications: components['schemas']['NotificationCountPayload'][];
-      status: components['schemas']['SuccessOrError'];
+      notifications: components["schemas"]["NotificationCountPayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetNotificationsResponsePayload: {
-      notifications: components['schemas']['NotificationPayload'][];
-      status: components['schemas']['SuccessOrError'];
+      notifications: components["schemas"]["NotificationPayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetNurserySummaryResponsePayload: {
-      status: components['schemas']['SuccessOrError'];
-      summary: components['schemas']['NurserySummaryPayload'];
+      status: components["schemas"]["SuccessOrError"];
+      summary: components["schemas"]["NurserySummaryPayload"];
     };
     GetNurseryV1: {
       /** Format: date */
@@ -2151,38 +2067,38 @@ export interface components {
       totalPlantsPropagated: number;
       /** Format: int64 */
       totalPlantsPropagatedForProject?: number;
-      workers: components['schemas']['WorkersPayloadV1'];
+      workers: components["schemas"]["WorkersPayloadV1"];
     };
     GetNurseryWithdrawalResponsePayload: {
-      batches: components['schemas']['BatchPayload'][];
+      batches: components["schemas"]["BatchPayload"][];
       /** @description If the withdrawal was an outplanting to a planting site, the delivery that was created. Not present for other withdrawal purposes. */
-      delivery?: components['schemas']['DeliveryPayload'];
-      status: components['schemas']['SuccessOrError'];
-      withdrawal: components['schemas']['NurseryWithdrawalPayload'];
+      delivery?: components["schemas"]["DeliveryPayload"];
+      status: components["schemas"]["SuccessOrError"];
+      withdrawal: components["schemas"]["NurseryWithdrawalPayload"];
     };
     GetObservationResponsePayload: {
-      observation: components['schemas']['ObservationPayload'];
-      status: components['schemas']['SuccessOrError'];
+      observation: components["schemas"]["ObservationPayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetObservationResultsResponsePayload: {
-      observation: components['schemas']['ObservationResultsPayload'];
-      status: components['schemas']['SuccessOrError'];
+      observation: components["schemas"]["ObservationResultsPayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetOrganizationResponsePayload: {
-      organization: components['schemas']['OrganizationPayload'];
-      status: components['schemas']['SuccessOrError'];
+      organization: components["schemas"]["OrganizationPayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetOrganizationUserResponsePayload: {
-      status: components['schemas']['SuccessOrError'];
-      user: components['schemas']['OrganizationUserPayload'];
+      status: components["schemas"]["SuccessOrError"];
+      user: components["schemas"]["OrganizationUserPayload"];
     };
     GetPlantingSiteReportedPlantsResponsePayload: {
-      site: components['schemas']['PlantingSiteReportedPlantsPayload'];
-      status: components['schemas']['SuccessOrError'];
+      site: components["schemas"]["PlantingSiteReportedPlantsPayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetPlantingSiteResponsePayload: {
-      site: components['schemas']['PlantingSitePayload'];
-      status: components['schemas']['SuccessOrError'];
+      site: components["schemas"]["PlantingSitePayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetPlantingSiteSpeciesV1: {
       /** Format: int64 */
@@ -2200,7 +2116,7 @@ export interface components {
       name: string;
       notes?: string;
       selected: boolean;
-      species: components['schemas']['GetPlantingSiteSpeciesV1'][];
+      species: components["schemas"]["GetPlantingSiteSpeciesV1"][];
       /** Format: int32 */
       totalPlantedArea?: number;
       /** Format: int32 */
@@ -2209,11 +2125,11 @@ export interface components {
       totalPlantsPlanted?: number;
       /** Format: int32 */
       totalTreesPlanted?: number;
-      workers: components['schemas']['WorkersPayloadV1'];
+      workers: components["schemas"]["WorkersPayloadV1"];
     };
     GetProjectResponsePayload: {
-      project: components['schemas']['ProjectPayload'];
-      status: components['schemas']['SuccessOrError'];
+      project: components["schemas"]["ProjectPayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetReportPayload: {
       /** Format: int64 */
@@ -2234,7 +2150,7 @@ export interface components {
       /** Format: int32 */
       quarter: number;
       /** @enum {string} */
-      status: 'New' | 'In Progress' | 'Locked' | 'Submitted';
+      status: "New" | "In Progress" | "Locked" | "Submitted";
       submittedByName?: string;
       /** Format: int64 */
       submittedByUserId?: number;
@@ -2244,41 +2160,27 @@ export interface components {
       /** Format: int32 */
       year: number;
     };
-    GetReportPayloadV1: WithRequired<
-      {
-        version: '1';
-      } & Omit<components['schemas']['GetReportPayload'], 'version'> & {
-          annualDetails?: components['schemas']['AnnualDetailsPayloadV1'];
-          isAnnual?: boolean;
-          notes?: string;
-          nurseries?: components['schemas']['GetNurseryV1'][];
-          organizationName?: string;
-          plantingSites?: components['schemas']['GetPlantingSiteV1'][];
-          seedBanks?: components['schemas']['GetSeedBankV1'][];
-          summaryOfProgress?: string;
-          /** Format: int32 */
-          totalNurseries?: number;
-          /** Format: int32 */
-          totalPlantingSites?: number;
-          /** Format: int32 */
-          totalSeedBanks?: number;
-        },
-      | 'id'
-      | 'isAnnual'
-      | 'nurseries'
-      | 'organizationName'
-      | 'plantingSites'
-      | 'quarter'
-      | 'seedBanks'
-      | 'status'
-      | 'totalNurseries'
-      | 'totalPlantingSites'
-      | 'totalSeedBanks'
-      | 'year'
-    >;
+    GetReportPayloadV1: WithRequired<{
+      version: "1";
+    } & Omit<components["schemas"]["GetReportPayload"], "version"> & {
+      annualDetails?: components["schemas"]["AnnualDetailsPayloadV1"];
+      isAnnual?: boolean;
+      notes?: string;
+      nurseries?: components["schemas"]["GetNurseryV1"][];
+      organizationName?: string;
+      plantingSites?: components["schemas"]["GetPlantingSiteV1"][];
+      seedBanks?: components["schemas"]["GetSeedBankV1"][];
+      summaryOfProgress?: string;
+      /** Format: int32 */
+      totalNurseries?: number;
+      /** Format: int32 */
+      totalPlantingSites?: number;
+      /** Format: int32 */
+      totalSeedBanks?: number;
+    }, "id" | "isAnnual" | "nurseries" | "organizationName" | "plantingSites" | "quarter" | "seedBanks" | "status" | "totalNurseries" | "totalPlantingSites" | "totalSeedBanks" | "year">;
     GetReportResponsePayload: {
-      report: components['schemas']['GetReportPayloadV1'];
-      status: components['schemas']['SuccessOrError'];
+      report: components["schemas"]["GetReportPayloadV1"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetReportSettingsResponsePayload: {
       /** @description If false, settings have not been configured yet and the values in the rest of the payload are the defaults. */
@@ -2286,8 +2188,8 @@ export interface components {
       /** @description If true, organization-level reports are enabled. */
       organizationEnabled: boolean;
       /** @description Per-project report settings. */
-      projects: components['schemas']['ProjectReportSettingsPayload'][];
-      status: components['schemas']['SuccessOrError'];
+      projects: components["schemas"]["ProjectReportSettingsPayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetSeedBankV1: {
       /** Format: date */
@@ -2308,23 +2210,23 @@ export interface components {
       totalSeedsStored: number;
       /** Format: int64 */
       totalSeedsStoredForProject?: number;
-      workers: components['schemas']['WorkersPayloadV1'];
+      workers: components["schemas"]["WorkersPayloadV1"];
     };
     GetSpeciesProblemResponsePayload: {
-      problem: components['schemas']['SpeciesProblemElement'];
-      status: components['schemas']['SuccessOrError'];
+      problem: components["schemas"]["SpeciesProblemElement"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetSpeciesResponsePayload: {
-      species: components['schemas']['SpeciesResponseElement'];
-      status: components['schemas']['SuccessOrError'];
+      species: components["schemas"]["SpeciesResponseElement"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetSpeciesSummaryResponsePayload: {
-      status: components['schemas']['SuccessOrError'];
-      summary: components['schemas']['SpeciesSummaryPayload'];
+      status: components["schemas"]["SuccessOrError"];
+      summary: components["schemas"]["SpeciesSummaryPayload"];
     };
     GetSubLocationResponsePayload: {
-      status: components['schemas']['SuccessOrError'];
-      subLocation: components['schemas']['SubLocationPayload'];
+      status: components["schemas"]["SuccessOrError"];
+      subLocation: components["schemas"]["SubLocationPayload"];
     };
     GetTimeseriesHistoryRequestPayload: {
       /**
@@ -2348,45 +2250,35 @@ export interface components {
        */
       startTime?: string;
       /** @description Timeseries to query. May be from different devices. */
-      timeseries: components['schemas']['TimeseriesIdPayload'][];
+      timeseries: components["schemas"]["TimeseriesIdPayload"][];
     };
     GetTimeseriesHistoryResponsePayload: {
-      values: components['schemas']['TimeseriesValuesPayload'][];
+      values: components["schemas"]["TimeseriesValuesPayload"][];
     };
     GetUploadStatusDetailsPayload: {
-      errors?: components['schemas']['UploadProblemPayload'][];
+      errors?: components["schemas"]["UploadProblemPayload"][];
       /** @description True if the server is finished processing the file, either successfully or not. */
       finished: boolean;
       /** Format: int64 */
       id: number;
       /** @enum {string} */
-      status:
-        | 'Receiving'
-        | 'Validating'
-        | 'Processing'
-        | 'Completed'
-        | 'Processing Failed'
-        | 'Invalid'
-        | 'Receiving Failed'
-        | 'Awaiting Validation'
-        | 'Awaiting User Action'
-        | 'Awaiting Processing';
-      warnings?: components['schemas']['UploadProblemPayload'][];
+      status: "Receiving" | "Validating" | "Processing" | "Completed" | "Processing Failed" | "Invalid" | "Receiving Failed" | "Awaiting Validation" | "Awaiting User Action" | "Awaiting Processing";
+      warnings?: components["schemas"]["UploadProblemPayload"][];
     };
     GetUploadStatusResponsePayload: {
-      details: components['schemas']['GetUploadStatusDetailsPayload'];
-      status: components['schemas']['SuccessOrError'];
+      details: components["schemas"]["GetUploadStatusDetailsPayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetUserPreferencesResponsePayload: {
       /** @description The user's preferences, or null if no preferences have been stored yet. */
       preferences?: {
         [key: string]: unknown;
       };
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetUserResponsePayload: {
-      status: components['schemas']['SuccessOrError'];
-      user: components['schemas']['UserProfilePayload'];
+      status: components["schemas"]["SuccessOrError"];
+      user: components["schemas"]["UserProfilePayload"];
     };
     GetViabilityTestPayload: {
       /** Format: int64 */
@@ -2397,7 +2289,7 @@ export interface components {
       id: number;
       notes?: string;
       /** @enum {string} */
-      seedType?: 'Fresh' | 'Stored';
+      seedType?: "Fresh" | "Stored";
       /** Format: int32 */
       seedsCompromised?: number;
       /** Format: int32 */
@@ -2409,24 +2301,14 @@ export interface components {
       /** Format: date */
       startDate?: string;
       /** @enum {string} */
-      substrate?:
-        | 'Nursery Media'
-        | 'Agar'
-        | 'Paper'
-        | 'Other'
-        | 'Sand'
-        | 'Media Mix'
-        | 'Soil'
-        | 'Moss'
-        | 'Perlite/Vermiculite'
-        | 'None';
-      testResults?: components['schemas']['ViabilityTestResultPayload'][];
+      substrate?: "Nursery Media" | "Agar" | "Paper" | "Other" | "Sand" | "Media Mix" | "Soil" | "Moss" | "Perlite/Vermiculite" | "None";
+      testResults?: components["schemas"]["ViabilityTestResultPayload"][];
       /** @enum {string} */
-      testType: 'Lab' | 'Nursery' | 'Cut';
+      testType: "Lab" | "Nursery" | "Cut";
       /** Format: int32 */
       totalSeedsGerminated?: number;
       /** @enum {string} */
-      treatment?: 'Soak' | 'Scarify' | 'Chemical' | 'Stratification' | 'Other' | 'Light';
+      treatment?: "Soak" | "Scarify" | "Chemical" | "Stratification" | "Other" | "Light";
       /**
        * Format: int32
        * @description Server-calculated viability percent for this test. For lab and nursery tests, this is based on the total seeds germinated across all test results. For cut tests, it is based on the number of seeds filled.
@@ -2441,8 +2323,8 @@ export interface components {
       withdrawnByUserId?: number;
     };
     GetViabilityTestResponsePayload: {
-      status: components['schemas']['SuccessOrError'];
-      viabilityTest: components['schemas']['GetViabilityTestPayload'];
+      status: components["schemas"]["SuccessOrError"];
+      viabilityTest: components["schemas"]["GetViabilityTestPayload"];
     };
     GetWithdrawalPayload: {
       /** Format: date */
@@ -2453,7 +2335,7 @@ export interface components {
        */
       estimatedCount?: number;
       /** @description Weight of seeds withdrawn. Calculated by server. This is an estimate if "withdrawnQuantity" is a seed count and the accession has subset weight and count data. Absent if "withdrawnQuantity" is a seed count and the accession has no subset weight and count. */
-      estimatedWeight?: components['schemas']['SeedQuantityPayload'];
+      estimatedWeight?: components["schemas"]["SeedQuantityPayload"];
       /**
        * Format: int64
        * @description Server-assigned unique ID of this withdrawal.
@@ -2461,7 +2343,7 @@ export interface components {
       id?: number;
       notes?: string;
       /** @enum {string} */
-      purpose?: 'Other' | 'Viability Testing' | 'Out-planting' | 'Nursery';
+      purpose?: "Other" | "Viability Testing" | "Out-planting" | "Nursery";
       /**
        * Format: int64
        * @description If this withdrawal is of purpose "Viability Testing", the ID of the test it is associated with.
@@ -2475,48 +2357,28 @@ export interface components {
        */
       withdrawnByUserId?: number;
       /** @description Quantity of seeds withdrawn. For viability testing withdrawals, this is always the same as the test's "seedsTested" value. */
-      withdrawnQuantity?: components['schemas']['SeedQuantityPayload'];
+      withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
     };
     GetWithdrawalResponsePayload: {
-      status: components['schemas']['SuccessOrError'];
-      withdrawal: components['schemas']['GetWithdrawalPayload'];
+      status: components["schemas"]["SuccessOrError"];
+      withdrawal: components["schemas"]["GetWithdrawalPayload"];
     };
     GetWithdrawalsResponsePayload: {
-      status: components['schemas']['SuccessOrError'];
-      withdrawals: components['schemas']['GetWithdrawalPayload'][];
+      status: components["schemas"]["SuccessOrError"];
+      withdrawals: components["schemas"]["GetWithdrawalPayload"][];
     };
     GoalProgressPayloadV1: {
       /** @enum {string} */
-      goal:
-        | 'NoPoverty'
-        | 'ZeroHunger'
-        | 'GoodHealth'
-        | 'QualityEducation'
-        | 'GenderEquality'
-        | 'CleanWater'
-        | 'AffordableEnergy'
-        | 'DecentWork'
-        | 'Industry'
-        | 'ReducedInequalities'
-        | 'SustainableCities'
-        | 'ResponsibleConsumption'
-        | 'ClimateAction'
-        | 'LifeBelowWater'
-        | 'LifeOnLand'
-        | 'Peace'
-        | 'Partnerships';
+      goal: "NoPoverty" | "ZeroHunger" | "GoodHealth" | "QualityEducation" | "GenderEquality" | "CleanWater" | "AffordableEnergy" | "DecentWork" | "Industry" | "ReducedInequalities" | "SustainableCities" | "ResponsibleConsumption" | "ClimateAction" | "LifeBelowWater" | "LifeOnLand" | "Peace" | "Partnerships";
       progress?: string;
     };
-    LineString: WithRequired<
-      {
-        type: 'LineString';
-      } & Omit<components['schemas']['Geometry'], 'type'> & {
-          coordinates?: number[][];
-          /** @enum {string} */
-          type?: 'LineString';
-        },
-      'coordinates' | 'type'
-    >;
+    LineString: WithRequired<{
+      type: "LineString";
+    } & Omit<components["schemas"]["Geometry"], "type"> & {
+      coordinates?: number[][];
+      /** @enum {string} */
+      type?: "LineString";
+    }, "coordinates" | "type">;
     ListAllFieldValuesRequestPayload: {
       fields: string[];
       /** Format: int64 */
@@ -2524,33 +2386,25 @@ export interface components {
     };
     ListAllFieldValuesResponsePayload: {
       results: {
-        [key: string]: components['schemas']['AllFieldValuesPayload'];
+        [key: string]: components["schemas"]["AllFieldValuesPayload"];
       };
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListAssignedPlotsResponsePayload: {
-      plots: components['schemas']['AssignedPlotPayload'][];
-      status: components['schemas']['SuccessOrError'];
+      plots: components["schemas"]["AssignedPlotPayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListAutomationsResponsePayload: {
-      automations: components['schemas']['AutomationPayload'][];
-      status: components['schemas']['SuccessOrError'];
+      automations: components["schemas"]["AutomationPayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListBatchPhotosResponsePayload: {
-      photos: components['schemas']['BatchPhotoPayload'][];
-      status: components['schemas']['SuccessOrError'];
+      photos: components["schemas"]["BatchPhotoPayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListDeliverablesElement: {
       /** @enum {string} */
-      category:
-        | 'Legal Eligibility'
-        | 'Financial Viability'
-        | 'GIS'
-        | 'Carbon Eligibility'
-        | 'Stakeholders and Co-Benefits'
-        | 'Proposed Restoration Activities'
-        | 'Media'
-        | 'Supplemental Files';
+      category: "Legal Eligibility" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Co-Benefits" | "Proposed Restoration Activities" | "Media" | "Supplemental Files";
       /** @description Optional description of the deliverable in HTML form. */
       descriptionHtml?: string;
       /** Format: int64 */
@@ -2571,25 +2425,25 @@ export interface components {
       projectId: number;
       projectName: string;
       /** @enum {string} */
-      status: 'Not Submitted' | 'In Review' | 'Needs Translation' | 'Approved' | 'Rejected' | 'Not Needed';
+      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
       /** @enum {string} */
-      type: 'Document';
+      type: "Document";
     };
     ListDeliverablesResponsePayload: {
-      deliverables: components['schemas']['ListDeliverablesElement'][];
-      status: components['schemas']['SuccessOrError'];
+      deliverables: components["schemas"]["ListDeliverablesElement"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListDeviceConfigsResponse: {
-      devices: components['schemas']['DeviceConfig'][];
-      status: components['schemas']['SuccessOrError'];
+      devices: components["schemas"]["DeviceConfig"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListDeviceTemplatesResponsePayload: {
-      status: components['schemas']['SuccessOrError'];
-      templates: components['schemas']['DeviceTemplatePayload'][];
+      status: components["schemas"]["SuccessOrError"];
+      templates: components["schemas"]["DeviceTemplatePayload"][];
     };
     ListFacilitiesResponse: {
-      facilities: components['schemas']['FacilityPayload'][];
-      status: components['schemas']['SuccessOrError'];
+      facilities: components["schemas"]["FacilityPayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListFieldValuesRequestPayload: {
       /** Format: int64 */
@@ -2597,25 +2451,21 @@ export interface components {
       fields: string[];
       /** Format: int64 */
       organizationId?: number;
-      search?:
-        | components['schemas']['AndNodePayload']
-        | components['schemas']['FieldNodePayload']
-        | components['schemas']['NotNodePayload']
-        | components['schemas']['OrNodePayload'];
+      search?: components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"];
     };
     ListFieldValuesResponsePayload: {
       results: {
-        [key: string]: components['schemas']['FieldValuesPayload'];
+        [key: string]: components["schemas"]["FieldValuesPayload"];
       };
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListObservationResultsResponsePayload: {
-      observations: components['schemas']['ObservationResultsPayload'][];
-      status: components['schemas']['SuccessOrError'];
+      observations: components["schemas"]["ObservationResultsPayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListObservationsResponsePayload: {
-      observations: components['schemas']['ObservationPayload'][];
-      status: components['schemas']['SuccessOrError'];
+      observations: components["schemas"]["ObservationPayload"][];
+      status: components["schemas"]["SuccessOrError"];
       /**
        * Format: int32
        * @description Total number of monitoring plots that haven't been completed yet across all current observations.
@@ -2628,16 +2478,16 @@ export interface components {
       totalUnclaimedPlots: number;
     };
     ListOrganizationRolesResponsePayload: {
-      roles: components['schemas']['OrganizationRolePayload'][];
-      status: components['schemas']['SuccessOrError'];
+      roles: components["schemas"]["OrganizationRolePayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListOrganizationUsersResponsePayload: {
-      status: components['schemas']['SuccessOrError'];
-      users: components['schemas']['OrganizationUserPayload'][];
+      status: components["schemas"]["SuccessOrError"];
+      users: components["schemas"]["OrganizationUserPayload"][];
     };
     ListOrganizationsResponsePayload: {
-      organizations: components['schemas']['OrganizationPayload'][];
-      status: components['schemas']['SuccessOrError'];
+      organizations: components["schemas"]["OrganizationPayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListPhotosResponseElement: {
       filename: string;
@@ -2645,20 +2495,20 @@ export interface components {
       size: number;
     };
     ListPhotosResponsePayload: {
-      photos: components['schemas']['ListPhotosResponseElement'][];
-      status: components['schemas']['SuccessOrError'];
+      photos: components["schemas"]["ListPhotosResponseElement"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListPlantingSitesResponsePayload: {
-      sites: components['schemas']['PlantingSitePayload'][];
-      status: components['schemas']['SuccessOrError'];
+      sites: components["schemas"]["PlantingSitePayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListPlantingSubzoneSpeciesResponsePayload: {
-      species: components['schemas']['PlantingSubzoneSpeciesPayload'][];
-      status: components['schemas']['SuccessOrError'];
+      species: components["schemas"]["PlantingSubzoneSpeciesPayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListProjectsResponsePayload: {
-      projects: components['schemas']['ProjectPayload'][];
-      status: components['schemas']['SuccessOrError'];
+      projects: components["schemas"]["ProjectPayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListReportFilesResponseElement: {
       filename: string;
@@ -2666,8 +2516,8 @@ export interface components {
       id: number;
     };
     ListReportFilesResponsePayload: {
-      files: components['schemas']['ListReportFilesResponseElement'][];
-      status: components['schemas']['SuccessOrError'];
+      files: components["schemas"]["ListReportFilesResponseElement"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListReportPhotosResponseElement: {
       caption?: string;
@@ -2676,8 +2526,8 @@ export interface components {
       id: number;
     };
     ListReportPhotosResponsePayload: {
-      photos: components['schemas']['ListReportPhotosResponseElement'][];
-      status: components['schemas']['SuccessOrError'];
+      photos: components["schemas"]["ListReportPhotosResponseElement"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListReportsResponseElement: {
       /** Format: int64 */
@@ -2698,7 +2548,7 @@ export interface components {
       /** Format: int32 */
       quarter: number;
       /** @enum {string} */
-      status: 'New' | 'In Progress' | 'Locked' | 'Submitted';
+      status: "New" | "In Progress" | "Locked" | "Submitted";
       submittedByName?: string;
       /** Format: int64 */
       submittedByUserId?: number;
@@ -2708,63 +2558,54 @@ export interface components {
       year: number;
     };
     ListReportsResponsePayload: {
-      reports: components['schemas']['ListReportsResponseElement'][];
-      status: components['schemas']['SuccessOrError'];
+      reports: components["schemas"]["ListReportsResponseElement"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListSpeciesResponsePayload: {
-      species: components['schemas']['SpeciesResponseElement'][];
-      status: components['schemas']['SuccessOrError'];
+      species: components["schemas"]["SpeciesResponseElement"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListSubLocationsResponsePayload: {
-      status: components['schemas']['SuccessOrError'];
-      subLocations: components['schemas']['SubLocationPayload'][];
+      status: components["schemas"]["SuccessOrError"];
+      subLocations: components["schemas"]["SubLocationPayload"][];
     };
     ListTimeZoneNamesResponsePayload: {
-      status: components['schemas']['SuccessOrError'];
-      timeZones: components['schemas']['TimeZonePayload'][];
+      status: components["schemas"]["SuccessOrError"];
+      timeZones: components["schemas"]["TimeZonePayload"][];
     };
     ListTimeseriesResponsePayload: {
-      status: components['schemas']['SuccessOrError'];
-      timeseries: components['schemas']['TimeseriesPayload'][];
+      status: components["schemas"]["SuccessOrError"];
+      timeseries: components["schemas"]["TimeseriesPayload"][];
     };
     ListViabilityTestsResponsePayload: {
-      status: components['schemas']['SuccessOrError'];
-      viabilityTests: components['schemas']['GetViabilityTestPayload'][];
+      status: components["schemas"]["SuccessOrError"];
+      viabilityTests: components["schemas"]["GetViabilityTestPayload"][];
     };
     ListWithdrawalPhotosResponsePayload: {
-      photos: components['schemas']['NurseryWithdrawalPhotoPayload'][];
-      status: components['schemas']['SuccessOrError'];
+      photos: components["schemas"]["NurseryWithdrawalPhotoPayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
-    MultiLineString: WithRequired<
-      {
-        type: 'MultiLineString';
-      } & Omit<components['schemas']['Geometry'], 'type'> & {
-          coordinates?: number[][][];
-          /** @enum {string} */
-          type?: 'MultiLineString';
-        },
-      'coordinates' | 'type'
-    >;
-    MultiPoint: WithRequired<
-      {
-        type: 'MultiPoint';
-      } & Omit<components['schemas']['Geometry'], 'type'> & {
-          coordinates?: number[][];
-          /** @enum {string} */
-          type?: 'MultiPoint';
-        },
-      'coordinates' | 'type'
-    >;
-    MultiPolygon: WithRequired<
-      {
-        type: 'MultiPolygon';
-      } & Omit<components['schemas']['Geometry'], 'type'> & {
-          coordinates?: number[][][][];
-          /** @enum {string} */
-          type?: 'MultiPolygon';
-        },
-      'coordinates' | 'type'
-    >;
+    MultiLineString: WithRequired<{
+      type: "MultiLineString";
+    } & Omit<components["schemas"]["Geometry"], "type"> & {
+      coordinates?: number[][][];
+      /** @enum {string} */
+      type?: "MultiLineString";
+    }, "coordinates" | "type">;
+    MultiPoint: WithRequired<{
+      type: "MultiPoint";
+    } & Omit<components["schemas"]["Geometry"], "type"> & {
+      coordinates?: number[][];
+      /** @enum {string} */
+      type?: "MultiPoint";
+    }, "coordinates" | "type">;
+    MultiPolygon: WithRequired<{
+      type: "MultiPolygon";
+    } & Omit<components["schemas"]["Geometry"], "type"> & {
+      coordinates?: number[][][][];
+      /** @enum {string} */
+      type?: "MultiPolygon";
+    }, "coordinates" | "type">;
     NewPlantingSeasonPayload: {
       /** Format: date */
       endDate: string;
@@ -2772,14 +2613,11 @@ export interface components {
       startDate: string;
     };
     /** @description Search criterion that matches results that do not match a set of search criteria. */
-    NotNodePayload: WithRequired<
-      {
-        operation: 'not';
-      } & Omit<components['schemas']['SearchNodePayload'], 'operation'> & {
-          child?: components['schemas']['SearchNodePayload'];
-        },
-      'child'
-    >;
+    NotNodePayload: WithRequired<{
+      operation: "not";
+    } & Omit<components["schemas"]["SearchNodePayload"], "operation"> & {
+      child?: components["schemas"]["SearchNodePayload"];
+    }, "child">;
     NotificationCountPayload: {
       /** Format: int64 */
       organizationId?: number;
@@ -2796,7 +2634,7 @@ export interface components {
       /** Format: uri */
       localUrl: string;
       /** @enum {string} */
-      notificationCriticality: 'Info' | 'Warning' | 'Error' | 'Success';
+      notificationCriticality: "Info" | "Warning" | "Error" | "Success";
       /** Format: int64 */
       organizationId?: number;
       title: string;
@@ -2816,7 +2654,7 @@ export interface components {
       /** Format: int64 */
       readyQuantity: number;
       /** @description Species currently present in the nursery. */
-      species: components['schemas']['NurserySummarySpeciesPayload'][];
+      species: components["schemas"]["NurserySummarySpeciesPayload"][];
       /**
        * Format: int64
        * @description Total number of plants that have been withdrawn due to death.
@@ -2839,7 +2677,7 @@ export interface components {
       scientificName: string;
     };
     NurseryWithdrawalPayload: {
-      batchWithdrawals: components['schemas']['BatchWithdrawalPayload'][];
+      batchWithdrawals: components["schemas"]["BatchWithdrawalPayload"][];
       /**
        * Format: int64
        * @description If purpose is "Nursery Transfer", the ID of the facility to which the seedlings were transferred.
@@ -2851,7 +2689,7 @@ export interface components {
       id: number;
       notes?: string;
       /** @enum {string} */
-      purpose: 'Nursery Transfer' | 'Dead' | 'Out Plant' | 'Other';
+      purpose: "Nursery Transfer" | "Dead" | "Out Plant" | "Other";
       /** Format: date */
       withdrawnDate: string;
     };
@@ -2860,26 +2698,26 @@ export interface components {
       id: number;
     };
     ObservationMonitoringPlotCoordinatesPayload: {
-      gpsCoordinates: components['schemas']['Point'];
+      gpsCoordinates: components["schemas"]["Point"];
       /** @enum {string} */
-      position: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
+      position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
     };
     ObservationMonitoringPlotPhotoPayload: {
       /** Format: int64 */
       fileId: number;
-      gpsCoordinates: components['schemas']['Point'];
+      gpsCoordinates: components["schemas"]["Point"];
       /** @enum {string} */
-      position: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
+      position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
     };
     ObservationMonitoringPlotResultsPayload: {
-      boundary: components['schemas']['Polygon'];
+      boundary: components["schemas"]["Polygon"];
       claimedByName?: string;
       /** Format: int64 */
       claimedByUserId?: number;
       /** Format: date-time */
       completedTime?: string;
       /** @description Observed coordinates, if any, up to one per position. */
-      coordinates: components['schemas']['ObservationMonitoringPlotCoordinatesPayload'][];
+      coordinates: components["schemas"]["ObservationMonitoringPlotCoordinatesPayload"][];
       /** @description True if this was a permanent monitoring plot in this observation. Clients should not assume that the set of permanent monitoring plots is the same in all observations; the number of permanent monitoring plots can be adjusted over time based on observation results. */
       isPermanent: boolean;
       /** Format: int64 */
@@ -2892,15 +2730,15 @@ export interface components {
        */
       mortalityRate?: number;
       notes?: string;
-      photos: components['schemas']['ObservationMonitoringPlotPhotoPayload'][];
+      photos: components["schemas"]["ObservationMonitoringPlotPhotoPayload"][];
       /**
        * Format: int32
        * @description Number of live plants per hectare.
        */
       plantingDensity: number;
-      species: components['schemas']['ObservationSpeciesResultsPayload'][];
+      species: components["schemas"]["ObservationSpeciesResultsPayload"][];
       /** @enum {string} */
-      status: 'Outstanding' | 'InProgress' | 'Completed';
+      status: "Outstanding" | "InProgress" | "Completed";
       /**
        * Format: int32
        * @description Total number of plants recorded. Includes all plants, regardless of live/dead status or species.
@@ -2944,10 +2782,10 @@ export interface components {
        */
       startDate: string;
       /** @enum {string} */
-      state: 'Upcoming' | 'InProgress' | 'Completed' | 'Overdue';
+      state: "Upcoming" | "InProgress" | "Completed" | "Overdue";
     };
     ObservationPlantingSubzoneResultsPayload: {
-      monitoringPlots: components['schemas']['ObservationMonitoringPlotResultsPayload'][];
+      monitoringPlots: components["schemas"]["ObservationMonitoringPlotResultsPayload"][];
       /** Format: int64 */
       plantingSubzoneId: number;
     };
@@ -2971,10 +2809,10 @@ export interface components {
        * @description Estimated planting density for the zone based on the observed planting densities of monitoring plots. Only present if all the subzones in the zone have been marked as having completed planting.
        */
       plantingDensity?: number;
-      plantingSubzones: components['schemas']['ObservationPlantingSubzoneResultsPayload'][];
+      plantingSubzones: components["schemas"]["ObservationPlantingSubzoneResultsPayload"][];
       /** Format: int64 */
       plantingZoneId: number;
-      species: components['schemas']['ObservationSpeciesResultsPayload'][];
+      species: components["schemas"]["ObservationSpeciesResultsPayload"][];
       /**
        * Format: int32
        * @description Total number of plants recorded. Includes all plants, regardless of live/dead status or species.
@@ -3008,18 +2846,18 @@ export interface components {
       plantingDensity?: number;
       /** Format: int64 */
       plantingSiteId: number;
-      plantingZones: components['schemas']['ObservationPlantingZoneResultsPayload'][];
-      species: components['schemas']['ObservationSpeciesResultsPayload'][];
+      plantingZones: components["schemas"]["ObservationPlantingZoneResultsPayload"][];
+      species: components["schemas"]["ObservationSpeciesResultsPayload"][];
       /** Format: date */
       startDate: string;
       /** @enum {string} */
-      state: 'Upcoming' | 'InProgress' | 'Completed' | 'Overdue';
+      state: "Upcoming" | "InProgress" | "Completed" | "Overdue";
       /** Format: int32 */
       totalSpecies: number;
     };
     ObservationSpeciesResultsPayload: {
       /** @enum {string} */
-      certainty: 'Known' | 'Other' | 'Unknown';
+      certainty: "Known" | "Other" | "Unknown";
       /**
        * Format: int32
        * @description Number of dead plants observed in permanent monitoring plots in all observations including this one. 0 if this is a plot-level result for a temporary monitoring plot.
@@ -3049,15 +2887,12 @@ export interface components {
       totalPlants: number;
     };
     /** @description Search criterion that matches results that meet any of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x OR y OR z. */
-    OrNodePayload: WithRequired<
-      {
-        operation: 'or';
-      } & Omit<components['schemas']['SearchNodePayload'], 'operation'> & {
-          /** @description List of criteria at least one of which must be satisfied */
-          children?: components['schemas']['SearchNodePayload'][];
-        },
-      'children'
-    >;
+    OrNodePayload: WithRequired<{
+      operation: "or";
+    } & Omit<components["schemas"]["SearchNodePayload"], "operation"> & {
+      /** @description List of criteria at least one of which must be satisfied */
+      children?: components["schemas"]["SearchNodePayload"][];
+    }, "children">;
     OrganizationPayload: {
       /** @description Whether this organization can submit reports to Terraformation. */
       canSubmitReports: boolean;
@@ -3075,7 +2910,7 @@ export interface components {
       createdTime: string;
       description?: string;
       /** @description This organization's facilities. Only included if depth is "Facility". */
-      facilities?: components['schemas']['FacilityPayload'][];
+      facilities?: components["schemas"]["FacilityPayload"][];
       /** Format: int64 */
       id: number;
       name: string;
@@ -3083,10 +2918,10 @@ export interface components {
        * @description The current user's role in the organization.
        * @enum {string}
        */
-      organizationType?: 'Government' | 'NGO' | 'Arboreta' | 'Academia' | 'ForProfit' | 'Other';
+      organizationType?: "Government" | "NGO" | "Arboreta" | "Academia" | "ForProfit" | "Other";
       organizationTypeDetails?: string;
       /** @enum {string} */
-      role: 'Contributor' | 'Manager' | 'Admin' | 'Owner' | 'Terraformation Contact';
+      role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
       /**
        * @description Time zone name in IANA tz database format
        * @example America/New_York
@@ -3101,7 +2936,7 @@ export interface components {
     };
     OrganizationRolePayload: {
       /** @enum {string} */
-      role: 'Contributor' | 'Manager' | 'Admin' | 'Owner' | 'Terraformation Contact';
+      role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
       /**
        * Format: int32
        * @description Total number of users in the organization with this role.
@@ -3122,7 +2957,7 @@ export interface components {
       /** @description The user's last name. Not present if the user has been added to the organization but has not signed up for an account yet. */
       lastName?: string;
       /** @enum {string} */
-      role: 'Contributor' | 'Manager' | 'Admin' | 'Owner' | 'Terraformation Contact';
+      role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
     };
     PlantingPayload: {
       /** Format: int64 */
@@ -3139,7 +2974,7 @@ export interface components {
       /** Format: int64 */
       speciesId: number;
       /** @enum {string} */
-      type: 'Delivery' | 'Reassignment From' | 'Reassignment To';
+      type: "Delivery" | "Reassignment From" | "Reassignment To";
     };
     PlantingSeasonPayload: {
       /** Format: date */
@@ -3152,16 +2987,16 @@ export interface components {
     PlantingSitePayload: {
       /** @description Area of planting site in hectares. Only present if the site has planting zones. */
       areaHa?: number;
-      boundary?: components['schemas']['MultiPolygon'];
+      boundary?: components["schemas"]["MultiPolygon"];
       description?: string;
-      exclusion?: components['schemas']['MultiPolygon'];
+      exclusion?: components["schemas"]["MultiPolygon"];
       /** Format: int64 */
       id: number;
       name: string;
       /** Format: int64 */
       organizationId: number;
-      plantingSeasons: components['schemas']['PlantingSeasonPayload'][];
-      plantingZones?: components['schemas']['PlantingZonePayload'][];
+      plantingSeasons: components["schemas"]["PlantingSeasonPayload"][];
+      plantingZones?: components["schemas"]["PlantingZonePayload"][];
       /** Format: int64 */
       projectId?: number;
       /**
@@ -3173,7 +3008,7 @@ export interface components {
     PlantingSiteReportedPlantsPayload: {
       /** Format: int64 */
       id: number;
-      plantingZones: components['schemas']['PlantingZoneReportedPlantsPayload'][];
+      plantingZones: components["schemas"]["PlantingZoneReportedPlantsPayload"][];
       /** Format: int32 */
       plantsSinceLastObservation: number;
       /** Format: int32 */
@@ -3184,7 +3019,7 @@ export interface components {
     PlantingSubzonePayload: {
       /** @description Area of planting subzone in hectares. */
       areaHa: number;
-      boundary: components['schemas']['MultiPolygon'];
+      boundary: components["schemas"]["MultiPolygon"];
       fullName: string;
       /** Format: int64 */
       id: number;
@@ -3205,11 +3040,11 @@ export interface components {
     PlantingZonePayload: {
       /** @description Area of planting zone in hectares. */
       areaHa: number;
-      boundary: components['schemas']['MultiPolygon'];
+      boundary: components["schemas"]["MultiPolygon"];
       /** Format: int64 */
       id: number;
       name: string;
-      plantingSubzones: components['schemas']['PlantingSubzonePayload'][];
+      plantingSubzones: components["schemas"]["PlantingSubzonePayload"][];
       targetPlantingDensity: number;
     };
     PlantingZoneReportedPlantsPayload: {
@@ -3222,33 +3057,27 @@ export interface components {
       /** Format: int32 */
       totalPlants: number;
     };
-    Point: WithRequired<
-      {
-        type: 'Point';
-      } & Omit<components['schemas']['Geometry'], 'type'> & {
-          /**
-           * @description A single position consisting of X and Y values in the coordinate system specified by the crs field.
-           * @example [
-           *   120,
-           *   -9.53
-           * ]
-           */
-          coordinates?: number[];
-          /** @enum {string} */
-          type?: 'Point';
-        },
-      'coordinates' | 'type'
-    >;
-    Polygon: WithRequired<
-      {
-        type: 'Polygon';
-      } & Omit<components['schemas']['Geometry'], 'type'> & {
-          coordinates?: number[][][];
-          /** @enum {string} */
-          type?: 'Polygon';
-        },
-      'coordinates' | 'type'
-    >;
+    Point: WithRequired<{
+      type: "Point";
+    } & Omit<components["schemas"]["Geometry"], "type"> & {
+      /**
+       * @description A single position consisting of X and Y values in the coordinate system specified by the crs field.
+       * @example [
+       *   120,
+       *   -9.53
+       * ]
+       */
+      coordinates?: number[];
+      /** @enum {string} */
+      type?: "Point";
+    }, "coordinates" | "type">;
+    Polygon: WithRequired<{
+      type: "Polygon";
+    } & Omit<components["schemas"]["Geometry"], "type"> & {
+      coordinates?: number[][][];
+      /** @enum {string} */
+      type?: "Polygon";
+    }, "coordinates" | "type">;
     ProjectPayload: {
       description?: string;
       /** Format: int64 */
@@ -3276,7 +3105,7 @@ export interface components {
       /** Format: date */
       operationStartedDate?: string;
       selected: boolean;
-      workers: components['schemas']['WorkersPayloadV1'];
+      workers: components["schemas"]["WorkersPayloadV1"];
     };
     PutPlantingSiteSpeciesV1: {
       /** Format: int64 */
@@ -3293,7 +3122,7 @@ export interface components {
       mortalityRate?: number;
       notes?: string;
       selected: boolean;
-      species: components['schemas']['PutPlantingSiteSpeciesV1'][];
+      species: components["schemas"]["PutPlantingSiteSpeciesV1"][];
       /** Format: int32 */
       totalPlantedArea?: number;
       /** Format: int32 */
@@ -3302,26 +3131,23 @@ export interface components {
       totalPlantsPlanted?: number;
       /** Format: int32 */
       totalTreesPlanted?: number;
-      workers: components['schemas']['WorkersPayloadV1'];
+      workers: components["schemas"]["WorkersPayloadV1"];
     };
     PutReportPayload: {
       version: string;
     };
-    PutReportPayloadV1: WithRequired<
-      {
-        version: '1';
-      } & Omit<components['schemas']['PutReportPayload'], 'version'> & {
-          annualDetails?: components['schemas']['AnnualDetailsPayloadV1'];
-          notes?: string;
-          nurseries?: components['schemas']['PutNurseryV1'][];
-          plantingSites?: components['schemas']['PutPlantingSiteV1'][];
-          seedBanks?: components['schemas']['PutSeedBankV1'][];
-          summaryOfProgress?: string;
-        },
-      'nurseries' | 'plantingSites' | 'seedBanks'
-    >;
+    PutReportPayloadV1: WithRequired<{
+      version: "1";
+    } & Omit<components["schemas"]["PutReportPayload"], "version"> & {
+      annualDetails?: components["schemas"]["AnnualDetailsPayloadV1"];
+      notes?: string;
+      nurseries?: components["schemas"]["PutNurseryV1"][];
+      plantingSites?: components["schemas"]["PutPlantingSiteV1"][];
+      seedBanks?: components["schemas"]["PutSeedBankV1"][];
+      summaryOfProgress?: string;
+    }, "nurseries" | "plantingSites" | "seedBanks">;
     PutReportRequestPayload: {
-      report: components['schemas']['PutReportPayloadV1'];
+      report: components["schemas"]["PutReportPayloadV1"];
     };
     PutSeedBankV1: {
       /** Format: date */
@@ -3334,10 +3160,10 @@ export interface components {
       /** Format: date */
       operationStartedDate?: string;
       selected: boolean;
-      workers: components['schemas']['WorkersPayloadV1'];
+      workers: components["schemas"]["WorkersPayloadV1"];
     };
     ReassignDeliveryRequestPayload: {
-      reassignments: components['schemas']['ReassignmentPayload'][];
+      reassignments: components["schemas"]["ReassignmentPayload"][];
     };
     ReassignmentPayload: {
       /** Format: int64 */
@@ -3352,20 +3178,20 @@ export interface components {
       toPlantingSubzoneId: number;
     };
     RecordTimeseriesValuesRequestPayload: {
-      timeseries: components['schemas']['TimeseriesValuesPayload'][];
+      timeseries: components["schemas"]["TimeseriesValuesPayload"][];
     };
     /** @description Results of a request to record timeseries values. */
     RecordTimeseriesValuesResponsePayload: {
-      error?: components['schemas']['ErrorDetails'];
+      error?: components["schemas"]["ErrorDetails"];
       /** @description List of values that the server failed to record. Will not be included if all the values were recorded successfully. */
-      failures?: components['schemas']['TimeseriesValuesErrorPayload'][];
-      status: components['schemas']['SuccessOrError'];
+      failures?: components["schemas"]["TimeseriesValuesErrorPayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     RecordedPlantPayload: {
       /** @enum {string} */
-      certainty: 'Known' | 'Other' | 'Unknown';
+      certainty: "Known" | "Other" | "Unknown";
       /** @description GPS coordinates where plant was observed. */
-      gpsCoordinates: components['schemas']['Point'];
+      gpsCoordinates: components["schemas"]["Point"];
       /**
        * Format: int64
        * @description Required if certainty is Known. Ignored if certainty is Other or Unknown.
@@ -3374,11 +3200,11 @@ export interface components {
       /** @description If certainty is Other, the optional user-supplied name of the species. Ignored if certainty is Known or Unknown. */
       speciesName?: string;
       /** @enum {string} */
-      status: 'Live' | 'Dead' | 'Existing';
+      status: "Live" | "Dead" | "Existing";
     };
     ReplaceObservationPlotRequestPayload: {
       /** @enum {string} */
-      duration: 'Temporary' | 'LongTerm';
+      duration: "Temporary" | "LongTerm";
       justification: string;
     };
     ReplaceObservationPlotResponsePayload: {
@@ -3386,7 +3212,7 @@ export interface components {
       addedMonitoringPlotIds: number[];
       /** @description IDs of monitoring plots that were removed from the observation. Will usually include the requested plot ID, but may be empty if the replacement request couldn't be satisfied. */
       removedMonitoringPlotIds: number[];
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     RescheduleObservationRequestPayload: {
       /**
@@ -3424,10 +3250,10 @@ export interface components {
     ScheduleObservationResponsePayload: {
       /** Format: int64 */
       id: number;
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     /** @description A search criterion. The search will return results that match this criterion. The criterion can be composed of other search criteria to form arbitrary Boolean search expressions. TYPESCRIPT-OVERRIDE-TYPE-WITH-ANY */
-    SearchNodePayload: { operation: 'and' | 'field' | 'not' | 'or'; [key: string]: any };
+    SearchNodePayload: {operation: "and" | "field" | "not" | "or"; [key: string]: any;};
     SearchRequestPayload: {
       /**
        * Format: int32
@@ -3451,26 +3277,22 @@ export interface components {
        * @example facilities.accessions
        */
       prefix?: string;
-      search?:
-        | components['schemas']['AndNodePayload']
-        | components['schemas']['FieldNodePayload']
-        | components['schemas']['NotNodePayload']
-        | components['schemas']['OrNodePayload'];
+      search?: components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"];
       /** @description How to sort the search results. This controls both the order of the top-level results and the order of any lists of child objects. */
-      sortOrder?: components['schemas']['SearchSortOrderElement'][];
+      sortOrder?: components["schemas"]["SearchSortOrderElement"][];
     };
     SearchResponsePayload: {
       cursor?: string;
       results: {
-        [key: string]: unknown;
-      }[];
+          [key: string]: unknown;
+        }[];
     };
     SearchSortOrderElement: {
       /**
        * @default Ascending
        * @enum {string}
        */
-      direction?: 'Ascending' | 'Descending';
+      direction?: "Ascending" | "Descending";
       field: string;
     };
     SeedCountSummaryPayload: {
@@ -3502,7 +3324,7 @@ export interface components {
       /** @description Number of units of seeds. If "units" is "Seeds", this is the number of seeds and must be an integer. Otherwise it is a measurement in the weight units specified in the "units" field, and may have a fractional part. */
       quantity: number;
       /** @enum {string} */
-      units: 'Seeds' | 'Grams' | 'Milligrams' | 'Kilograms' | 'Ounces' | 'Pounds';
+      units: "Seeds" | "Grams" | "Milligrams" | "Kilograms" | "Ounces" | "Pounds";
     };
     SendFacilityAlertRequestPayload: {
       /** @description Alert body in plain text. HTML alerts are not supported yet. */
@@ -3510,11 +3332,11 @@ export interface components {
       subject: string;
     };
     SimpleErrorResponsePayload: {
-      error: components['schemas']['ErrorDetails'];
-      status: components['schemas']['SuccessOrError'];
+      error: components["schemas"]["ErrorDetails"];
+      status: components["schemas"]["SuccessOrError"];
     };
     SimpleSuccessResponsePayload: {
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     SpeciesLookupCommonNamePayload: {
       /** @description ISO 639-1 two-letter language code indicating the name's language. Some common names in the server's taxonomic database are not tagged with languages; this value will not be present for those names. */
@@ -3523,18 +3345,18 @@ export interface components {
     };
     SpeciesLookupDetailsResponsePayload: {
       /** @description List of known common names for the species, if any. */
-      commonNames?: components['schemas']['SpeciesLookupCommonNamePayload'][];
+      commonNames?: components["schemas"]["SpeciesLookupCommonNamePayload"][];
       /**
        * @description IUCN Red List conservation category code.
        * @enum {string}
        */
-      conservationCategory?: 'CR' | 'DD' | 'EN' | 'EW' | 'EX' | 'LC' | 'NE' | 'NT' | 'VU';
+      conservationCategory?: "CR" | "DD" | "EN" | "EW" | "EX" | "LC" | "NE" | "NT" | "VU";
       familyName: string;
       /**
        * @description If this is not the accepted name for the species, the type of problem the name has. Currently, this will always be "Name Is Synonym".
        * @enum {string}
        */
-      problemType?: 'Name Misspelled' | 'Name Not Found' | 'Name Is Synonym';
+      problemType?: "Name Misspelled" | "Name Not Found" | "Name Is Synonym";
       scientificName: string;
       /** @description If this is not the accepted name for the species, the name to suggest as an alternative. */
       suggestedScientificName?: string;
@@ -3543,17 +3365,17 @@ export interface components {
       names: string[];
       /** @description True if there were more matching names than could be included in the response. */
       partial: boolean;
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     SpeciesProblemElement: {
       /** @enum {string} */
-      field: 'Scientific Name';
+      field: "Scientific Name";
       /** Format: int64 */
       id: number;
       /** @description Value for the field in question that would correct the problem. Absent if the system is unable to calculate a corrected value. */
       suggestedValue?: string;
       /** @enum {string} */
-      type: 'Name Misspelled' | 'Name Not Found' | 'Name Is Synonym';
+      type: "Name Misspelled" | "Name Not Found" | "Name Is Synonym";
     };
     SpeciesRequestPayload: {
       commonName?: string;
@@ -3561,39 +3383,11 @@ export interface components {
        * @description IUCN Red List conservation category code.
        * @enum {string}
        */
-      conservationCategory?: 'CR' | 'DD' | 'EN' | 'EW' | 'EX' | 'LC' | 'NE' | 'NT' | 'VU';
-      ecosystemTypes?: (
-        | 'Boreal forests/Taiga'
-        | 'Deserts and xeric shrublands'
-        | 'Flooded grasslands and savannas'
-        | 'Mangroves'
-        | 'Mediterranean forests, woodlands and scrubs'
-        | 'Montane grasslands and shrublands'
-        | 'Temperate broad leaf and mixed forests'
-        | 'Temperate coniferous forest'
-        | 'Temperate grasslands, savannas and shrublands'
-        | 'Tropical and subtropical coniferous forests'
-        | 'Tropical and subtropical dry broad leaf forests'
-        | 'Tropical and subtropical grasslands, savannas and shrublands'
-        | 'Tropical and subtropical moist broad leaf forests'
-        | 'Tundra'
-      )[];
+      conservationCategory?: "CR" | "DD" | "EN" | "EW" | "EX" | "LC" | "NE" | "NT" | "VU";
+      ecosystemTypes?: ("Boreal forests/Taiga" | "Deserts and xeric shrublands" | "Flooded grasslands and savannas" | "Mangroves" | "Mediterranean forests, woodlands and scrubs" | "Montane grasslands and shrublands" | "Temperate broad leaf and mixed forests" | "Temperate coniferous forest" | "Temperate grasslands, savannas and shrublands" | "Tropical and subtropical coniferous forests" | "Tropical and subtropical dry broad leaf forests" | "Tropical and subtropical grasslands, savannas and shrublands" | "Tropical and subtropical moist broad leaf forests" | "Tundra")[];
       familyName?: string;
       /** @enum {string} */
-      growthForm?:
-        | 'Tree'
-        | 'Shrub'
-        | 'Forb'
-        | 'Graminoid'
-        | 'Fern'
-        | 'Fungus'
-        | 'Lichen'
-        | 'Moss'
-        | 'Vine'
-        | 'Liana'
-        | 'Shrub/Tree'
-        | 'Subshrub'
-        | 'Multiple Forms';
+      growthForm?: "Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern" | "Fungus" | "Lichen" | "Moss" | "Vine" | "Liana" | "Shrub/Tree" | "Subshrub" | "Multiple Forms";
       /**
        * Format: int64
        * @description Which organization's species list to update.
@@ -3602,14 +3396,7 @@ export interface components {
       rare?: boolean;
       scientificName: string;
       /** @enum {string} */
-      seedStorageBehavior?:
-        | 'Orthodox'
-        | 'Recalcitrant'
-        | 'Intermediate'
-        | 'Unknown'
-        | 'Likely Orthodox'
-        | 'Likely Recalcitrant'
-        | 'Likely Intermediate';
+      seedStorageBehavior?: "Orthodox" | "Recalcitrant" | "Intermediate" | "Unknown" | "Likely Orthodox" | "Likely Recalcitrant" | "Likely Intermediate";
     };
     SpeciesResponseElement: {
       commonName?: string;
@@ -3617,53 +3404,18 @@ export interface components {
        * @description IUCN Red List conservation category code.
        * @enum {string}
        */
-      conservationCategory?: 'CR' | 'DD' | 'EN' | 'EW' | 'EX' | 'LC' | 'NE' | 'NT' | 'VU';
-      ecosystemTypes?: (
-        | 'Boreal forests/Taiga'
-        | 'Deserts and xeric shrublands'
-        | 'Flooded grasslands and savannas'
-        | 'Mangroves'
-        | 'Mediterranean forests, woodlands and scrubs'
-        | 'Montane grasslands and shrublands'
-        | 'Temperate broad leaf and mixed forests'
-        | 'Temperate coniferous forest'
-        | 'Temperate grasslands, savannas and shrublands'
-        | 'Tropical and subtropical coniferous forests'
-        | 'Tropical and subtropical dry broad leaf forests'
-        | 'Tropical and subtropical grasslands, savannas and shrublands'
-        | 'Tropical and subtropical moist broad leaf forests'
-        | 'Tundra'
-      )[];
+      conservationCategory?: "CR" | "DD" | "EN" | "EW" | "EX" | "LC" | "NE" | "NT" | "VU";
+      ecosystemTypes?: ("Boreal forests/Taiga" | "Deserts and xeric shrublands" | "Flooded grasslands and savannas" | "Mangroves" | "Mediterranean forests, woodlands and scrubs" | "Montane grasslands and shrublands" | "Temperate broad leaf and mixed forests" | "Temperate coniferous forest" | "Temperate grasslands, savannas and shrublands" | "Tropical and subtropical coniferous forests" | "Tropical and subtropical dry broad leaf forests" | "Tropical and subtropical grasslands, savannas and shrublands" | "Tropical and subtropical moist broad leaf forests" | "Tundra")[];
       familyName?: string;
       /** @enum {string} */
-      growthForm?:
-        | 'Tree'
-        | 'Shrub'
-        | 'Forb'
-        | 'Graminoid'
-        | 'Fern'
-        | 'Fungus'
-        | 'Lichen'
-        | 'Moss'
-        | 'Vine'
-        | 'Liana'
-        | 'Shrub/Tree'
-        | 'Subshrub'
-        | 'Multiple Forms';
+      growthForm?: "Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern" | "Fungus" | "Lichen" | "Moss" | "Vine" | "Liana" | "Shrub/Tree" | "Subshrub" | "Multiple Forms";
       /** Format: int64 */
       id: number;
-      problems?: components['schemas']['SpeciesProblemElement'][];
+      problems?: components["schemas"]["SpeciesProblemElement"][];
       rare?: boolean;
       scientificName: string;
       /** @enum {string} */
-      seedStorageBehavior?:
-        | 'Orthodox'
-        | 'Recalcitrant'
-        | 'Intermediate'
-        | 'Unknown'
-        | 'Likely Orthodox'
-        | 'Likely Recalcitrant'
-        | 'Likely Intermediate';
+      seedStorageBehavior?: "Orthodox" | "Recalcitrant" | "Intermediate" | "Unknown" | "Likely Orthodox" | "Likely Recalcitrant" | "Likely Intermediate";
     };
     SpeciesSummaryNurseryPayload: {
       /** Format: int64 */
@@ -3682,7 +3434,7 @@ export interface components {
       lossRate?: number;
       /** Format: int64 */
       notReadyQuantity: number;
-      nurseries: components['schemas']['SpeciesSummaryNurseryPayload'][];
+      nurseries: components["schemas"]["SpeciesSummaryNurseryPayload"][];
       /** Format: int64 */
       readyQuantity: number;
       /** Format: int64 */
@@ -3725,7 +3477,7 @@ export interface components {
       createdTime: string;
       description: string;
       /** @enum {string} */
-      documentStore: 'Dropbox' | 'Google';
+      documentStore: "Dropbox" | "Google";
       /** Format: int64 */
       id: number;
       name: string;
@@ -3734,21 +3486,17 @@ export interface components {
      * @description Indicates of success or failure of the requested operation.
      * @enum {string}
      */
-    SuccessOrError: 'ok' | 'error';
+    SuccessOrError: "ok" | "error";
     SummarizeAccessionSearchRequestPayload: {
-      search?:
-        | components['schemas']['AndNodePayload']
-        | components['schemas']['FieldNodePayload']
-        | components['schemas']['NotNodePayload']
-        | components['schemas']['OrNodePayload'];
+      search?: components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"];
     };
     SummarizeAccessionSearchResponsePayload: {
       /** Format: int32 */
       accessions: number;
-      seedsRemaining: components['schemas']['SeedCountSummaryPayload'];
+      seedsRemaining: components["schemas"]["SeedCountSummaryPayload"];
       /** Format: int32 */
       species: number;
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     /** @description Summary of important statistics about the seed bank for the Summary page. */
     SummaryResponsePayload: {
@@ -3759,10 +3507,10 @@ export interface components {
       /** Format: int32 */
       activeAccessions: number;
       /** @description Summary of the number of seeds remaining across all active accessions. */
-      seedsRemaining: components['schemas']['SeedCountSummaryPayload'];
+      seedsRemaining: components["schemas"]["SeedCountSummaryPayload"];
       /** Format: int32 */
       species: number;
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     TimeZonePayload: {
       /**
@@ -3793,10 +3541,10 @@ export interface components {
        */
       deviceId: number;
       /** @description If any values have been recorded for the timeseries, the latest one. */
-      latestValue?: components['schemas']['TimeseriesValuePayload'];
+      latestValue?: components["schemas"]["TimeseriesValuePayload"];
       timeseriesName: string;
       /** @enum {string} */
-      type: 'Numeric' | 'Text';
+      type: "Numeric" | "Text";
       /**
        * @description Units of measure for values in this timeseries.
        * @example volts
@@ -3820,7 +3568,7 @@ export interface components {
       /** @description Name of timeseries as specified in the failing request. */
       timeseriesName: string;
       /** @description Values that the server was not able to successfully record. */
-      values: components['schemas']['TimeseriesValuePayload'][];
+      values: components["schemas"]["TimeseriesValuePayload"][];
     };
     TimeseriesValuesPayload: {
       /**
@@ -3830,21 +3578,21 @@ export interface components {
       deviceId: number;
       /** @description Name of timeseries. This must be the name of a timeseries that has already been created for the device. */
       timeseriesName: string;
-      values: components['schemas']['TimeseriesValuePayload'][];
+      values: components["schemas"]["TimeseriesValuePayload"][];
     };
     UpdateAccessionRequestPayloadV2: {
       bagNumbers?: string[];
       /** Format: date */
       collectedDate?: string;
       collectionSiteCity?: string;
-      collectionSiteCoordinates?: components['schemas']['Geolocation'][];
+      collectionSiteCoordinates?: components["schemas"]["Geolocation"][];
       collectionSiteCountryCode?: string;
       collectionSiteCountrySubdivision?: string;
       collectionSiteLandowner?: string;
       collectionSiteName?: string;
       collectionSiteNotes?: string;
       /** @enum {string} */
-      collectionSource?: 'Wild' | 'Reintroduced' | 'Cultivated' | 'Other';
+      collectionSource?: "Wild" | "Reintroduced" | "Cultivated" | "Other";
       collectors?: string[];
       /** Format: date */
       dryingEndDate?: string;
@@ -3862,24 +3610,24 @@ export interface components {
       /** Format: date */
       receivedDate?: string;
       /** @description Quantity of seeds remaining in the accession. If this is different than the existing value, it is considered a new observation, and the new value will override any previously-calculated remaining quantities. */
-      remainingQuantity?: components['schemas']['SeedQuantityPayload'];
+      remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
       /** @description Notes associated with remaining quantity updates if any. */
       remainingQuantityNotes?: string;
       /** Format: int64 */
       speciesId?: number;
       /** @enum {string} */
-      state?: 'Awaiting Check-In' | 'Awaiting Processing' | 'Processing' | 'Drying' | 'In Storage' | 'Used Up';
+      state?: "Awaiting Check-In" | "Awaiting Processing" | "Processing" | "Drying" | "In Storage" | "Used Up";
       subLocation?: string;
       /** Format: int32 */
       subsetCount?: number;
       /** @description Weight of subset of seeds. Units must be a weight measurement, not "Seeds". */
-      subsetWeight?: components['schemas']['SeedQuantityPayload'];
+      subsetWeight?: components["schemas"]["SeedQuantityPayload"];
       /** Format: int32 */
       viabilityPercent?: number;
     };
     UpdateAccessionResponsePayloadV2: {
-      accession: components['schemas']['AccessionPayloadV2'];
-      status: components['schemas']['SuccessOrError'];
+      accession: components["schemas"]["AccessionPayloadV2"];
+      status: components["schemas"]["SuccessOrError"];
     };
     UpdateAutomationRequestPayload: {
       description?: string;
@@ -3916,10 +3664,10 @@ export interface components {
       readyByDate?: string;
       subLocationIds?: number[];
       /** @enum {string} */
-      substrate?: 'MediaMix' | 'Soil' | 'Sand' | 'Moss' | 'PerliteVermiculite' | 'Other';
+      substrate?: "MediaMix" | "Soil" | "Sand" | "Moss" | "PerliteVermiculite" | "Other";
       substrateNotes?: string;
       /** @enum {string} */
-      treatment?: 'Soak' | 'Scarify' | 'Chemical' | 'Stratification' | 'Other' | 'Light';
+      treatment?: "Soak" | "Scarify" | "Chemical" | "Stratification" | "Other" | "Light";
       treatmentNotes?: string;
       /** Format: int32 */
       version: number;
@@ -3927,11 +3675,7 @@ export interface components {
     UpdateCohortRequestPayload: {
       name: string;
       /** @enum {string} */
-      phase:
-        | 'Phase 0 - Due Diligence'
-        | 'Phase 1 - Feasibility Study'
-        | 'Phase 2 - Plan and Scale'
-        | 'Phase 3 - Implement and Monitor';
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
     };
     UpdateDeviceRequestPayload: {
       /**
@@ -4055,7 +3799,7 @@ export interface components {
       description?: string;
       name: string;
       /** @enum {string} */
-      organizationType?: 'Government' | 'NGO' | 'Arboreta' | 'Academia' | 'ForProfit' | 'Other';
+      organizationType?: "Government" | "NGO" | "Arboreta" | "Academia" | "ForProfit" | "Other";
       /** @description Non-empty additional description of organization when type is Other. */
       organizationTypeDetails?: string;
       /**
@@ -4067,14 +3811,14 @@ export interface components {
     };
     UpdateOrganizationUserRequestPayload: {
       /** @enum {string} */
-      role: 'Contributor' | 'Manager' | 'Admin' | 'Owner' | 'Terraformation Contact';
+      role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
     };
     UpdatePlantingSiteRequestPayload: {
       /** @description Site boundary. Ignored if this is a detailed planting site. */
-      boundary?: components['schemas']['MultiPolygon'];
+      boundary?: components["schemas"]["MultiPolygon"];
       description?: string;
       name: string;
-      plantingSeasons?: components['schemas']['UpdatedPlantingSeasonPayload'][];
+      plantingSeasons?: components["schemas"]["UpdatedPlantingSeasonPayload"][];
       /** Format: int64 */
       projectId?: number;
       /**
@@ -4088,7 +3832,7 @@ export interface components {
     };
     UpdatePlotObservationRequestPayload: {
       /** @description Observed coordinates, if any, up to one per position. */
-      coordinates: components['schemas']['ObservationMonitoringPlotCoordinatesPayload'][];
+      coordinates: components["schemas"]["ObservationMonitoringPlotCoordinatesPayload"][];
     };
     UpdateProjectRequestPayload: {
       description?: string;
@@ -4103,10 +3847,16 @@ export interface components {
       /** Format: int64 */
       organizationId: number;
       /** @description Per-project report settings. If a project is missing from this list, its settings will revert to the defaults. */
-      projects: components['schemas']['ProjectReportSettingsPayload'][];
+      projects: components["schemas"]["ProjectReportSettingsPayload"][];
     };
     UpdateSubLocationRequestPayload: {
       name: string;
+    };
+    UpdateSubmissionRequestPayload: {
+      feedback?: string;
+      internalComment?: string;
+      /** @enum {string} */
+      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
     };
     UpdateUserPreferencesRequestPayload: {
       /**
@@ -4144,7 +3894,7 @@ export interface components {
       endDate?: string;
       notes?: string;
       /** @enum {string} */
-      seedType?: 'Fresh' | 'Stored';
+      seedType?: "Fresh" | "Stored";
       /** Format: int32 */
       seedsCompromised?: number;
       /** Format: int32 */
@@ -4156,20 +3906,10 @@ export interface components {
       /** Format: date */
       startDate?: string;
       /** @enum {string} */
-      substrate?:
-        | 'Nursery Media'
-        | 'Agar'
-        | 'Paper'
-        | 'Other'
-        | 'Sand'
-        | 'Media Mix'
-        | 'Soil'
-        | 'Moss'
-        | 'Perlite/Vermiculite'
-        | 'None';
-      testResults?: components['schemas']['ViabilityTestResultPayload'][];
+      substrate?: "Nursery Media" | "Agar" | "Paper" | "Other" | "Sand" | "Media Mix" | "Soil" | "Moss" | "Perlite/Vermiculite" | "None";
+      testResults?: components["schemas"]["ViabilityTestResultPayload"][];
       /** @enum {string} */
-      treatment?: 'Soak' | 'Scarify' | 'Chemical' | 'Stratification' | 'Other' | 'Light';
+      treatment?: "Soak" | "Scarify" | "Chemical" | "Stratification" | "Other" | "Light";
       /**
        * Format: int64
        * @description ID of user who withdrew seeds to perform the test. If non-null, the current user must have permission to see the referenced user's membership details in the organization. If absent or null, the existing value is left unchanged.
@@ -4181,14 +3921,14 @@ export interface components {
       date?: string;
       notes?: string;
       /** @enum {string} */
-      purpose?: 'Other' | 'Viability Testing' | 'Out-planting' | 'Nursery';
+      purpose?: "Other" | "Viability Testing" | "Out-planting" | "Nursery";
       /**
        * Format: int64
        * @description ID of the user who withdrew the seeds. Default is the withdrawal's existing user ID. If non-null, the current user must have permission to read the referenced user's membership details in the organization.
        */
       withdrawnByUserId?: number;
       /** @description Quantity of seeds withdrawn. For viability testing withdrawals, this is always the same as the test's "seedsTested" value. Otherwise, it is a user-supplied value. If this quantity is in weight and the remaining quantity of the accession is in seeds or vice versa, the accession must have a subset weight and count. */
-      withdrawnQuantity?: components['schemas']['SeedQuantityPayload'];
+      withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
     };
     UpdatedPlantingSeasonPayload: {
       /** Format: date */
@@ -4201,23 +3941,28 @@ export interface components {
       /** Format: date */
       startDate: string;
     };
+    UploadDeliverableDocumentResponsePayload: {
+      /** Format: int64 */
+      documentId: number;
+      status: components["schemas"]["SuccessOrError"];
+    };
     UploadFileResponsePayload: {
       /**
        * Format: int64
        * @description ID of uploaded file. This may be used to poll for the file's status.
        */
       id: number;
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     UploadPlotPhotoRequestPayload: {
-      gpsCoordinates: components['schemas']['Point'];
+      gpsCoordinates: components["schemas"]["Point"];
       /** @enum {string} */
-      position: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
+      position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
     };
     UploadPlotPhotoResponsePayload: {
       /** Format: int64 */
       fileId: number;
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     /** @description List of conditions that might cause the user to want to cancel the upload but that can be automatically resolved if desired. */
     UploadProblemPayload: {
@@ -4231,14 +3976,14 @@ export interface components {
        */
       position?: number;
       /** @enum {string} */
-      type: 'Unrecognized Value' | 'Missing Required Value' | 'Duplicate Value' | 'Malformed Value';
+      type: "Unrecognized Value" | "Missing Required Value" | "Duplicate Value" | "Malformed Value";
       /** @description The value that caused the problem. Absent if the problem wasn't caused by a specific field value. */
       value?: string;
     };
     UploadReportFileResponsePayload: {
       /** Format: int64 */
       id: number;
-      status: components['schemas']['SuccessOrError'];
+      status: components["schemas"]["SuccessOrError"];
     };
     UserProfilePayload: {
       /**
@@ -4250,7 +3995,7 @@ export interface components {
       /** @description If true, the user wants to receive all the notifications for their organizations via email. This does not apply to certain kinds of notifications such as "You've been added to a new organization." */
       emailNotificationsEnabled: boolean;
       firstName?: string;
-      globalRoles: ('Super-Admin' | 'Accelerator Admin' | 'TF Expert' | 'Read Only')[];
+      globalRoles: ("Super-Admin" | "Accelerator Admin" | "TF Expert" | "Read Only")[];
       /**
        * Format: int64
        * @description User's unique ID. This should not be shown to the user, but is a required input to some API endpoints.
@@ -4275,8 +4020,8 @@ export interface components {
       recommendedVersion: string;
     };
     VersionsResponsePayload: {
-      status: components['schemas']['SuccessOrError'];
-      versions: components['schemas']['VersionsEntryPayload'][];
+      status: components["schemas"]["SuccessOrError"];
+      versions: components["schemas"]["VersionsEntryPayload"][];
     };
     ViabilityTestResultPayload: {
       /** Format: date */
@@ -4305,19 +4050,20 @@ export type $defs = Record<string, never>;
 export type external = Record<string, never>;
 
 export interface operations {
+
   /** Gets the list of cohorts. */
   listCohorts: {
     parameters: {
       query: {
         /** @description If specified, retrieve associated entities to the supplied depth. For example, 'participant' depth will return the participants associated to the cohort. */
-        depth: 'Cohort' | 'Participant';
+        depth: "Cohort" | "Participant";
       };
     };
     responses: {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['CohortListResponsePayload'];
+          "application/json": components["schemas"]["CohortListResponsePayload"];
         };
       };
     };
@@ -4326,14 +4072,14 @@ export interface operations {
   createCohort: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateCohortRequestPayload'];
+        "application/json": components["schemas"]["CreateCohortRequestPayload"];
       };
     };
     responses: {
       /** @description The cohort was created successfully. */
       200: {
         content: {
-          'application/json': components['schemas']['CohortResponsePayload'];
+          "application/json": components["schemas"]["CohortResponsePayload"];
         };
       };
     };
@@ -4343,7 +4089,7 @@ export interface operations {
     parameters: {
       query: {
         /** @description If specified, retrieve associated entities to the supplied depth. For example, 'participant' depth will return the participants associated to the cohort. */
-        depth: 'Cohort' | 'Participant';
+        depth: "Cohort" | "Participant";
       };
       path: {
         cohortId: number;
@@ -4353,13 +4099,13 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['CohortResponsePayload'];
+          "application/json": components["schemas"]["CohortResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -4373,20 +4119,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateCohortRequestPayload'];
+        "application/json": components["schemas"]["UpdateCohortRequestPayload"];
       };
     };
     responses: {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['CohortResponsePayload'];
+          "application/json": components["schemas"]["CohortResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -4402,13 +4148,13 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -4432,7 +4178,7 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['ListDeliverablesResponsePayload'];
+          "application/json": components["schemas"]["ListDeliverablesResponsePayload"];
         };
       };
     };
@@ -4448,13 +4194,40 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['GetDeliverableResponsePayload'];
+          "application/json": components["schemas"]["GetDeliverableResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Uploads a new document to satisfy a deliverable. */
+  uploadDeliverableDocument: {
+    parameters: {
+      path: {
+        deliverableId: number;
+      };
+    };
+    requestBody?: {
+      content: {
+        "multipart/form-data": {
+          description: string;
+          /** Format: binary */
+          file: string;
+          /** Format: int64 */
+          projectId: number;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadDeliverableDocumentResponsePayload"];
         };
       };
     };
@@ -4475,13 +4248,38 @@ export interface operations {
           Location?: unknown;
         };
         content: {
-          'application/json': string;
+          "application/json": string;
         };
       };
       /** @description The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Updates the state of a submission from a project.
+   * @description Only permitted for users with accelerator admin privileges.
+   */
+  updateSubmission: {
+    parameters: {
+      path: {
+        deliverableId: number;
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateSubmissionRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -4498,7 +4296,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListAutomationsResponsePayload'];
+          "application/json": components["schemas"]["ListAutomationsResponsePayload"];
         };
       };
     };
@@ -4507,14 +4305,14 @@ export interface operations {
   createAutomation: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateAutomationRequestPayload'];
+        "application/json": components["schemas"]["CreateAutomationRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['CreateAutomationResponsePayload'];
+          "application/json": components["schemas"]["CreateAutomationResponsePayload"];
         };
       };
     };
@@ -4530,7 +4328,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetAutomationResponsePayload'];
+          "application/json": components["schemas"]["GetAutomationResponsePayload"];
         };
       };
     };
@@ -4544,14 +4342,14 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateAutomationRequestPayload'];
+        "application/json": components["schemas"]["UpdateAutomationRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -4567,7 +4365,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -4581,14 +4379,14 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['AutomationTriggerRequestPayload'];
+        "application/json": components["schemas"]["AutomationTriggerRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -4597,14 +4395,14 @@ export interface operations {
   createDevice: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateDeviceRequestPayload'];
+        "application/json": components["schemas"]["CreateDeviceRequestPayload"];
       };
     };
     responses: {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -4623,7 +4421,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetDeviceManagersResponsePayload'];
+          "application/json": components["schemas"]["GetDeviceManagersResponsePayload"];
         };
       };
     };
@@ -4639,7 +4437,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetDeviceManagerResponsePayload'];
+          "application/json": components["schemas"]["GetDeviceManagerResponsePayload"];
         };
       };
     };
@@ -4653,14 +4451,14 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['ConnectDeviceManagerRequestPayload'];
+        "application/json": components["schemas"]["ConnectDeviceManagerRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -4669,14 +4467,14 @@ export interface operations {
   listDeviceTemplates: {
     parameters: {
       query?: {
-        category?: 'PV' | 'Seed Bank Default';
+        category?: "PV" | "Seed Bank Default";
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListDeviceTemplatesResponsePayload'];
+          "application/json": components["schemas"]["ListDeviceTemplatesResponsePayload"];
         };
       };
     };
@@ -4692,13 +4490,13 @@ export interface operations {
       /** @description Device configuration retrieved. */
       200: {
         content: {
-          'application/json': components['schemas']['GetDeviceResponsePayload'];
+          "application/json": components["schemas"]["GetDeviceResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -4712,20 +4510,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateDeviceRequestPayload'];
+        "application/json": components["schemas"]["UpdateDeviceRequestPayload"];
       };
     };
     responses: {
       /** @description Device configuration updated. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -4742,20 +4540,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['DeviceUnresponsiveRequestPayload'];
+        "application/json": components["schemas"]["DeviceUnresponsiveRequestPayload"];
       };
     };
     responses: {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -4766,7 +4564,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListFacilitiesResponse'];
+          "application/json": components["schemas"]["ListFacilitiesResponse"];
         };
       };
     };
@@ -4775,14 +4573,14 @@ export interface operations {
   createFacility: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateFacilityRequestPayload'];
+        "application/json": components["schemas"]["CreateFacilityRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['CreateFacilityResponsePayload'];
+          "application/json": components["schemas"]["CreateFacilityResponsePayload"];
         };
       };
     };
@@ -4798,7 +4596,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetFacilityResponse'];
+          "application/json": components["schemas"]["GetFacilityResponse"];
         };
       };
     };
@@ -4812,14 +4610,14 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateFacilityRequestPayload'];
+        "application/json": components["schemas"]["UpdateFacilityRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -4833,20 +4631,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['SendFacilityAlertRequestPayload'];
+        "application/json": components["schemas"]["SendFacilityAlertRequestPayload"];
       };
     };
     responses: {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The request was received, but the user is still configuring or placing sensors, so no notification has been generated. */
       202: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -4865,13 +4663,13 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The facility's device manager was not in the process of being configured. */
       409: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -4887,13 +4685,13 @@ export interface operations {
       /** @description Successfully listed the facility's devices. */
       200: {
         content: {
-          'application/json': components['schemas']['ListDeviceConfigsResponse'];
+          "application/json": components["schemas"]["ListDeviceConfigsResponse"];
         };
       };
       /** @description The facility does not exist or is not accessible by the current user. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -4909,7 +4707,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListSubLocationsResponsePayload'];
+          "application/json": components["schemas"]["ListSubLocationsResponsePayload"];
         };
       };
     };
@@ -4923,20 +4721,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateSubLocationRequestPayload'];
+        "application/json": components["schemas"]["CreateSubLocationRequestPayload"];
       };
     };
     responses: {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['GetSubLocationResponsePayload'];
+          "application/json": components["schemas"]["GetSubLocationResponsePayload"];
         };
       };
       /** @description A sub-location with the requested name already exists at the facility. */
       409: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -4953,7 +4751,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetSubLocationResponsePayload'];
+          "application/json": components["schemas"]["GetSubLocationResponsePayload"];
         };
       };
     };
@@ -4968,20 +4766,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateSubLocationRequestPayload'];
+        "application/json": components["schemas"]["UpdateSubLocationRequestPayload"];
       };
     };
     responses: {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description A sub-location with the requested name already exists at the facility. */
       409: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -5001,13 +4799,13 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The sub-location is in use, e.g., there are seeds or seedlings stored there. */
       409: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -5023,13 +4821,13 @@ export interface operations {
       /** @description Successfully listed the facility's devices. */
       200: {
         content: {
-          'application/json': components['schemas']['ListDeviceConfigsResponse'];
+          "application/json": components["schemas"]["ListDeviceConfigsResponse"];
         };
       };
       /** @description The facility does not exist or is not accessible by the current user. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -5049,7 +4847,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListTimeZoneNamesResponsePayload'];
+          "application/json": components["schemas"]["ListTimeZoneNamesResponsePayload"];
         };
       };
     };
@@ -5084,7 +4882,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetNotificationsResponsePayload'];
+          "application/json": components["schemas"]["GetNotificationsResponsePayload"];
         };
       };
     };
@@ -5093,14 +4891,14 @@ export interface operations {
   markAllRead: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateNotificationsRequestPayload'];
+        "application/json": components["schemas"]["UpdateNotificationsRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -5111,7 +4909,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetNotificationsCountResponsePayload'];
+          "application/json": components["schemas"]["GetNotificationsCountResponsePayload"];
         };
       };
     };
@@ -5127,13 +4925,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetNotificationResponsePayload'];
+          "application/json": components["schemas"]["GetNotificationResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -5147,20 +4945,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateNotificationRequestPayload'];
+        "application/json": components["schemas"]["UpdateNotificationRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -5169,14 +4967,14 @@ export interface operations {
   createBatch: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateBatchRequestPayload'];
+        "application/json": components["schemas"]["CreateBatchRequestPayload"];
       };
     };
     responses: {
       /** @description The batch was created successfully. Response includes fields populated by the server, including the batch ID. */
       200: {
         content: {
-          'application/json': components['schemas']['BatchResponsePayload'];
+          "application/json": components["schemas"]["BatchResponsePayload"];
         };
       };
     };
@@ -5193,7 +4991,7 @@ export interface operations {
     };
     requestBody?: {
       content: {
-        'multipart/form-data': {
+        "multipart/form-data": {
           /** Format: binary */
           file: string;
         };
@@ -5203,7 +5001,7 @@ export interface operations {
       /** @description The file has been successfully received. It will be processed asynchronously; use the ID returned in the response payload to poll for its status using the `/api/v1/nursery/batches/uploads/{uploadId}` GET endpoint. */
       200: {
         content: {
-          'application/json': components['schemas']['UploadFileResponsePayload'];
+          "application/json": components["schemas"]["UploadFileResponsePayload"];
         };
       };
     };
@@ -5214,7 +5012,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': string;
+          "application/json": string;
         };
       };
     };
@@ -5233,7 +5031,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetUploadStatusResponsePayload'];
+          "application/json": components["schemas"]["GetUploadStatusResponsePayload"];
         };
       };
     };
@@ -5252,13 +5050,13 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['GetBatchHistoryResponsePayload'];
+          "application/json": components["schemas"]["GetBatchHistoryResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -5274,13 +5072,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListBatchPhotosResponsePayload'];
+          "application/json": components["schemas"]["ListBatchPhotosResponsePayload"];
         };
       };
       /** @description The batch does not exist. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -5294,7 +5092,7 @@ export interface operations {
     };
     requestBody?: {
       content: {
-        'multipart/form-data': {
+        "multipart/form-data": {
           /** Format: binary */
           file: string;
         };
@@ -5304,7 +5102,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['CreateBatchPhotoResponsePayload'];
+          "application/json": components["schemas"]["CreateBatchPhotoResponsePayload"];
         };
       };
     };
@@ -5330,14 +5128,14 @@ export interface operations {
       /** @description The photo was successfully retrieved. */
       200: {
         content: {
-          'image/jpeg': string;
-          'image/png': string;
+          "image/jpeg": string;
+          "image/png": string;
         };
       };
       /** @description The batch does not exist, or does not have a photo with the requested ID. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -5354,13 +5152,13 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The batch does not exist, or does not have a photo with the requested ID. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -5376,13 +5174,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['BatchResponsePayload'];
+          "application/json": components["schemas"]["BatchResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -5396,26 +5194,26 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateBatchRequestPayload'];
+        "application/json": components["schemas"]["UpdateBatchRequestPayload"];
       };
     };
     responses: {
       /** @description The batch was updated successfully. Response includes fields populated or modified by the server as a result of the update. */
       200: {
         content: {
-          'application/json': components['schemas']['BatchResponsePayload'];
+          "application/json": components["schemas"]["BatchResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
       /** @description The requested resource has a newer version and was not updated. */
       412: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -5431,7 +5229,7 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -5448,26 +5246,26 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['ChangeBatchStatusRequestPayload'];
+        "application/json": components["schemas"]["ChangeBatchStatusRequestPayload"];
       };
     };
     responses: {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['BatchResponsePayload'];
+          "application/json": components["schemas"]["BatchResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
       /** @description The requested resource has a newer version and was not updated. */
       412: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -5484,26 +5282,26 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateBatchQuantitiesRequestPayload'];
+        "application/json": components["schemas"]["UpdateBatchQuantitiesRequestPayload"];
       };
     };
     responses: {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['BatchResponsePayload'];
+          "application/json": components["schemas"]["BatchResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
       /** @description The requested resource has a newer version and was not updated. */
       412: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -5519,7 +5317,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetNurserySummaryResponsePayload'];
+          "application/json": components["schemas"]["GetNurserySummaryResponsePayload"];
         };
       };
     };
@@ -5535,7 +5333,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetSpeciesSummaryResponsePayload'];
+          "application/json": components["schemas"]["GetSpeciesSummaryResponsePayload"];
         };
       };
     };
@@ -5544,14 +5342,14 @@ export interface operations {
   createBatchWithdrawal: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateNurseryWithdrawalRequestPayload'];
+        "application/json": components["schemas"]["CreateNurseryWithdrawalRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetNurseryWithdrawalResponsePayload'];
+          "application/json": components["schemas"]["GetNurseryWithdrawalResponsePayload"];
         };
       };
     };
@@ -5567,7 +5365,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetNurseryWithdrawalResponsePayload'];
+          "application/json": components["schemas"]["GetNurseryWithdrawalResponsePayload"];
         };
       };
     };
@@ -5583,13 +5381,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListWithdrawalPhotosResponsePayload'];
+          "application/json": components["schemas"]["ListWithdrawalPhotosResponsePayload"];
         };
       };
       /** @description The withdrawal does not exist. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -5603,7 +5401,7 @@ export interface operations {
     };
     requestBody?: {
       content: {
-        'multipart/form-data': {
+        "multipart/form-data": {
           /** Format: binary */
           file: string;
         };
@@ -5613,7 +5411,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['CreateNurseryWithdrawalPhotoResponsePayload'];
+          "application/json": components["schemas"]["CreateNurseryWithdrawalPhotoResponsePayload"];
         };
       };
     };
@@ -5639,14 +5437,14 @@ export interface operations {
       /** @description The photo was successfully retrieved. */
       200: {
         content: {
-          'image/jpeg': string;
-          'image/png': string;
+          "image/jpeg": string;
+          "image/png": string;
         };
       };
       /** @description The withdrawal does not exist, or does not have a photo with the requested ID. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -5666,7 +5464,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListOrganizationsResponsePayload'];
+          "application/json": components["schemas"]["ListOrganizationsResponsePayload"];
         };
       };
     };
@@ -5675,14 +5473,14 @@ export interface operations {
   createOrganization: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateOrganizationRequestPayload'];
+        "application/json": components["schemas"]["CreateOrganizationRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetOrganizationResponsePayload'];
+          "application/json": components["schemas"]["GetOrganizationResponsePayload"];
         };
       };
     };
@@ -5703,7 +5501,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetOrganizationResponsePayload'];
+          "application/json": components["schemas"]["GetOrganizationResponsePayload"];
         };
       };
     };
@@ -5717,14 +5515,14 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateOrganizationRequestPayload'];
+        "application/json": components["schemas"]["UpdateOrganizationRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -5743,13 +5541,13 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The organization has other members and cannot be deleted. */
       409: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -5765,7 +5563,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListOrganizationRolesResponsePayload'];
+          "application/json": components["schemas"]["ListOrganizationRolesResponsePayload"];
         };
       };
     };
@@ -5781,7 +5579,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListOrganizationUsersResponsePayload'];
+          "application/json": components["schemas"]["ListOrganizationUsersResponsePayload"];
         };
       };
     };
@@ -5795,14 +5593,14 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['AddOrganizationUserRequestPayload'];
+        "application/json": components["schemas"]["AddOrganizationUserRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['CreateOrganizationUserResponsePayload'];
+          "application/json": components["schemas"]["CreateOrganizationUserResponsePayload"];
         };
       };
     };
@@ -5819,7 +5617,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetOrganizationUserResponsePayload'];
+          "application/json": components["schemas"]["GetOrganizationUserResponsePayload"];
         };
       };
     };
@@ -5837,26 +5635,26 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateOrganizationUserRequestPayload'];
+        "application/json": components["schemas"]["UpdateOrganizationUserRequestPayload"];
       };
     };
     responses: {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The user is not a member of the organization. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
       /** @description An organization must have at least one owner; cannot change the role of an organization's only owner. */
       409: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -5876,19 +5674,19 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The user is not a member of the organization. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
       /** @description The user is the organization's only owner and an organization must have at least one owner. */
       409: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -5905,7 +5703,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListProjectsResponsePayload'];
+          "application/json": components["schemas"]["ListProjectsResponsePayload"];
         };
       };
     };
@@ -5914,14 +5712,14 @@ export interface operations {
   createProject: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateProjectRequestPayload'];
+        "application/json": components["schemas"]["CreateProjectRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['CreateProjectResponsePayload'];
+          "application/json": components["schemas"]["CreateProjectResponsePayload"];
         };
       };
     };
@@ -5937,7 +5735,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetProjectResponsePayload'];
+          "application/json": components["schemas"]["GetProjectResponsePayload"];
         };
       };
     };
@@ -5951,14 +5749,14 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateProjectRequestPayload'];
+        "application/json": components["schemas"]["UpdateProjectRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -5977,7 +5775,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -5994,14 +5792,14 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['AssignProjectRequestPayload'];
+        "application/json": components["schemas"]["AssignProjectRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -6017,7 +5815,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListReportsResponsePayload'];
+          "application/json": components["schemas"]["ListReportsResponsePayload"];
         };
       };
     };
@@ -6033,7 +5831,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetReportSettingsResponsePayload'];
+          "application/json": components["schemas"]["GetReportSettingsResponsePayload"];
         };
       };
     };
@@ -6042,14 +5840,14 @@ export interface operations {
   updateReportSettings: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateReportSettingsRequestPayload'];
+        "application/json": components["schemas"]["UpdateReportSettingsRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -6065,7 +5863,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetReportResponsePayload'];
+          "application/json": components["schemas"]["GetReportResponsePayload"];
         };
       };
     };
@@ -6082,20 +5880,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['PutReportRequestPayload'];
+        "application/json": components["schemas"]["PutReportRequestPayload"];
       };
     };
     responses: {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The report is not locked by the current user. */
       409: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -6111,7 +5909,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListReportFilesResponsePayload'];
+          "application/json": components["schemas"]["ListReportFilesResponsePayload"];
         };
       };
     };
@@ -6130,13 +5928,13 @@ export interface operations {
       /** @description The report is now locked by the current user. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The report was already locked by another user. */
       409: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -6152,7 +5950,7 @@ export interface operations {
       /** @description The report is now locked by the current user. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -6168,7 +5966,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListReportPhotosResponsePayload'];
+          "application/json": components["schemas"]["ListReportPhotosResponsePayload"];
         };
       };
     };
@@ -6187,19 +5985,19 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The report is missing required information and can't be submitted. */
       400: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
       /** @description The report is not locked by the current user or has already been submitted. */
       409: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -6215,13 +6013,13 @@ export interface operations {
       /** @description The report is no longer locked. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The report is locked by another user. */
       409: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -6235,7 +6033,7 @@ export interface operations {
     };
     requestBody?: {
       content: {
-        'multipart/form-data': {
+        "multipart/form-data": {
           /** Format: binary */
           file: string;
         };
@@ -6245,7 +6043,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['UploadReportFileResponsePayload'];
+          "application/json": components["schemas"]["UploadReportFileResponsePayload"];
         };
       };
     };
@@ -6262,7 +6060,7 @@ export interface operations {
       /** @description The file was successfully retrieved. */
       200: {
         content: {
-          '*/*': string;
+          "*/*": string;
         };
       };
     };
@@ -6279,7 +6077,7 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -6293,7 +6091,7 @@ export interface operations {
     };
     requestBody?: {
       content: {
-        'multipart/form-data': {
+        "multipart/form-data": {
           /** Format: binary */
           file: string;
         };
@@ -6303,7 +6101,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['UploadReportFileResponsePayload'];
+          "application/json": components["schemas"]["UploadReportFileResponsePayload"];
         };
       };
     };
@@ -6329,8 +6127,8 @@ export interface operations {
       /** @description The photo was successfully retrieved. */
       200: {
         content: {
-          'image/jpeg': string;
-          'image/png': string;
+          "image/jpeg": string;
+          "image/png": string;
         };
       };
     };
@@ -6345,14 +6143,14 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateReportPhotoRequestPayload'];
+        "application/json": components["schemas"]["UpdateReportPhotoRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -6369,7 +6167,7 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -6381,15 +6179,15 @@ export interface operations {
   search_1: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['SearchRequestPayload'];
+        "application/json": components["schemas"]["SearchRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SearchResponsePayload'];
-          'text/csv': string;
+          "application/json": components["schemas"]["SearchResponsePayload"];
+          "text/csv": string;
         };
       };
     };
@@ -6405,13 +6203,13 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -6427,13 +6225,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['UpdateAccessionResponsePayloadV2'];
+          "application/json": components["schemas"]["UpdateAccessionResponsePayloadV2"];
         };
       };
       /** @description The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -6449,13 +6247,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetAccessionHistoryResponsePayload'];
+          "application/json": components["schemas"]["GetAccessionHistoryResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -6471,13 +6269,13 @@ export interface operations {
       /** @description The accession's photos are listed in the response. */
       200: {
         content: {
-          'application/json': components['schemas']['ListPhotosResponsePayload'];
+          "application/json": components["schemas"]["ListPhotosResponsePayload"];
         };
       };
       /** @description The accession does not exist. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -6503,14 +6301,14 @@ export interface operations {
       /** @description The photo was successfully retrieved. */
       200: {
         content: {
-          'image/jpeg': string;
-          'image/png': string;
+          "image/jpeg": string;
+          "image/png": string;
         };
       };
       /** @description The accession does not exist, or does not have a photo with the requested filename. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -6528,7 +6326,7 @@ export interface operations {
     };
     requestBody?: {
       content: {
-        'multipart/form-data': {
+        "multipart/form-data": {
           /** Format: binary */
           file: string;
         };
@@ -6538,13 +6336,13 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The specified accession does not exist. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -6558,7 +6356,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetCurrentTimeResponsePayload'];
+          "application/json": components["schemas"]["GetCurrentTimeResponsePayload"];
         };
       };
     };
@@ -6576,7 +6374,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': string;
+        "application/json": string;
       };
     };
     responses: {
@@ -6600,7 +6398,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SummaryResponsePayload'];
+          "application/json": components["schemas"]["SummaryResponsePayload"];
         };
       };
     };
@@ -6609,14 +6407,14 @@ export interface operations {
   summarizeAccessionSearch: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['SummarizeAccessionSearchRequestPayload'];
+        "application/json": components["schemas"]["SummarizeAccessionSearchRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SummarizeAccessionSearchResponsePayload'];
+          "application/json": components["schemas"]["SummarizeAccessionSearchResponsePayload"];
         };
       };
     };
@@ -6625,14 +6423,14 @@ export interface operations {
   listFieldValues: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['ListFieldValuesRequestPayload'];
+        "application/json": components["schemas"]["ListFieldValuesRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListFieldValuesResponsePayload'];
+          "application/json": components["schemas"]["ListFieldValuesResponsePayload"];
         };
       };
     };
@@ -6641,14 +6439,14 @@ export interface operations {
   listAllFieldValues: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['ListAllFieldValuesRequestPayload'];
+        "application/json": components["schemas"]["ListAllFieldValuesRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListAllFieldValuesResponsePayload'];
+          "application/json": components["schemas"]["ListAllFieldValuesResponsePayload"];
         };
       };
     };
@@ -6667,7 +6465,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListSpeciesResponsePayload'];
+          "application/json": components["schemas"]["ListSpeciesResponsePayload"];
         };
       };
     };
@@ -6676,20 +6474,20 @@ export interface operations {
   createSpecies: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['SpeciesRequestPayload'];
+        "application/json": components["schemas"]["SpeciesRequestPayload"];
       };
     };
     responses: {
       /** @description Species created. */
       200: {
         content: {
-          'application/json': components['schemas']['CreateSpeciesResponsePayload'];
+          "application/json": components["schemas"]["CreateSpeciesResponsePayload"];
         };
       };
       /** @description A species with the requested name already exists. */
       409: {
         content: {
-          'application/json': components['schemas']['CreateSpeciesResponsePayload'];
+          "application/json": components["schemas"]["CreateSpeciesResponsePayload"];
         };
       };
     };
@@ -6711,13 +6509,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SpeciesLookupDetailsResponsePayload'];
+          "application/json": components["schemas"]["SpeciesLookupDetailsResponsePayload"];
         };
       };
       /** @description The scientific name was not found in the server's taxonomic database. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -6739,7 +6537,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SpeciesLookupNamesResponsePayload'];
+          "application/json": components["schemas"]["SpeciesLookupNamesResponsePayload"];
         };
       };
     };
@@ -6755,13 +6553,13 @@ export interface operations {
       /** @description Problem retrieved. */
       200: {
         content: {
-          'application/json': components['schemas']['GetSpeciesProblemResponsePayload'];
+          "application/json": components["schemas"]["GetSpeciesProblemResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -6780,19 +6578,19 @@ export interface operations {
       /** @description Suggestion applied. Response contains the updated species information. */
       200: {
         content: {
-          'application/json': components['schemas']['GetSpeciesResponsePayload'];
+          "application/json": components["schemas"]["GetSpeciesResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
       /** @description There is no suggested change for this problem. */
       409: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -6808,13 +6606,13 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -6831,7 +6629,7 @@ export interface operations {
     };
     requestBody?: {
       content: {
-        'multipart/form-data': {
+        "multipart/form-data": {
           /** Format: binary */
           file: string;
         };
@@ -6841,7 +6639,7 @@ export interface operations {
       /** @description The file has been successfully received. It will be processed asynchronously; use the ID returned in the response payload to poll for its status using the `/api/v1/species/uploads/{uploadId}` GET endpoint. */
       200: {
         content: {
-          'application/json': components['schemas']['UploadFileResponsePayload'];
+          "application/json": components["schemas"]["UploadFileResponsePayload"];
         };
       };
     };
@@ -6852,7 +6650,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': string;
+          "application/json": string;
         };
       };
     };
@@ -6871,7 +6669,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetUploadStatusResponsePayload'];
+          "application/json": components["schemas"]["GetUploadStatusResponsePayload"];
         };
       };
     };
@@ -6890,13 +6688,13 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The upload was not awaiting user action. */
       409: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -6913,20 +6711,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['ResolveUploadRequestPayload'];
+        "application/json": components["schemas"]["ResolveUploadRequestPayload"];
       };
     };
     responses: {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The upload was not awaiting user action. */
       409: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -6946,13 +6744,13 @@ export interface operations {
       /** @description Species retrieved. */
       200: {
         content: {
-          'application/json': components['schemas']['GetSpeciesResponsePayload'];
+          "application/json": components["schemas"]["GetSpeciesResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -6966,20 +6764,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['SpeciesRequestPayload'];
+        "application/json": components["schemas"]["SpeciesRequestPayload"];
       };
     };
     responses: {
       /** @description Species updated or merged with an existing species. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -6998,19 +6796,19 @@ export interface operations {
       /** @description Species deleted. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
       /** @description Cannot delete the species because it is currently in use. */
       409: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -7026,7 +6824,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListTimeseriesResponsePayload'];
+          "application/json": components["schemas"]["ListTimeseriesResponsePayload"];
         };
       };
     };
@@ -7038,14 +6836,14 @@ export interface operations {
   createMultipleTimeseries: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateTimeseriesRequestPayload'];
+        "application/json": components["schemas"]["CreateTimeseriesRequestPayload"];
       };
     };
     responses: {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -7054,14 +6852,14 @@ export interface operations {
   getTimeseriesHistory: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['GetTimeseriesHistoryRequestPayload'];
+        "application/json": components["schemas"]["GetTimeseriesHistoryRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetTimeseriesHistoryResponsePayload'];
+          "application/json": components["schemas"]["GetTimeseriesHistoryResponsePayload"];
         };
       };
     };
@@ -7070,26 +6868,26 @@ export interface operations {
   recordTimeseriesValues: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['RecordTimeseriesValuesRequestPayload'];
+        "application/json": components["schemas"]["RecordTimeseriesValuesRequestPayload"];
       };
     };
     responses: {
       /** @description Successfully processed the request. Note that this status will be returned even if the server was unable to record some of the values. In that case, the failed values will be returned in the response payload. */
       200: {
         content: {
-          'application/json': components['schemas']['RecordTimeseriesValuesResponsePayload'];
+          "application/json": components["schemas"]["RecordTimeseriesValuesResponsePayload"];
         };
       };
       /** @description The request was valid, but the user is still configuring or placing sensors, so the timeseries values have not been recorded. */
       202: {
         content: {
-          'application/json': components['schemas']['RecordTimeseriesValuesResponsePayload'];
+          "application/json": components["schemas"]["RecordTimeseriesValuesResponsePayload"];
         };
       };
       /** @description The request had more than 1000 values. */
       413: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -7105,7 +6903,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetDeliveryResponsePayload'];
+          "application/json": components["schemas"]["GetDeliveryResponsePayload"];
         };
       };
     };
@@ -7119,14 +6917,14 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['ReassignDeliveryRequestPayload'];
+        "application/json": components["schemas"]["ReassignDeliveryRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -7135,14 +6933,14 @@ export interface operations {
   createDraftPlantingSite: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateDraftPlantingSiteRequestPayload'];
+        "application/json": components["schemas"]["CreateDraftPlantingSiteRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['CreateDraftPlantingSiteResponsePayload'];
+          "application/json": components["schemas"]["CreateDraftPlantingSiteResponsePayload"];
         };
       };
     };
@@ -7158,7 +6956,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetDraftPlantingSiteResponsePayload'];
+          "application/json": components["schemas"]["GetDraftPlantingSiteResponsePayload"];
         };
       };
     };
@@ -7172,14 +6970,14 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateDraftPlantingSiteRequestPayload'];
+        "application/json": components["schemas"]["UpdateDraftPlantingSiteRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -7195,7 +6993,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -7209,19 +7007,19 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['GetMapboxTokenResponsePayload'];
+          "application/json": components["schemas"]["GetMapboxTokenResponsePayload"];
         };
       };
       /** @description The server is not configured to return Mapbox tokens. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
       /** @description The server is temporarily unable to generate a new Mapbox token. */
       503: {
         content: {
-          'application/json': components['schemas']['GetMapboxTokenResponsePayload'];
+          "application/json": components["schemas"]["GetMapboxTokenResponsePayload"];
         };
       };
     };
@@ -7240,7 +7038,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListObservationsResponsePayload'];
+          "application/json": components["schemas"]["ListObservationsResponsePayload"];
         };
       };
     };
@@ -7249,14 +7047,14 @@ export interface operations {
   scheduleObservation: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['ScheduleObservationRequestPayload'];
+        "application/json": components["schemas"]["ScheduleObservationRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ScheduleObservationResponsePayload'];
+          "application/json": components["schemas"]["ScheduleObservationResponsePayload"];
         };
       };
     };
@@ -7275,7 +7073,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListObservationResultsResponsePayload'];
+          "application/json": components["schemas"]["ListObservationResultsResponsePayload"];
         };
       };
     };
@@ -7291,7 +7089,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetObservationResponsePayload'];
+          "application/json": components["schemas"]["GetObservationResponsePayload"];
         };
       };
     };
@@ -7305,14 +7103,14 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['RescheduleObservationRequestPayload'];
+        "application/json": components["schemas"]["RescheduleObservationRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -7328,7 +7126,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListAssignedPlotsResponsePayload'];
+          "application/json": components["schemas"]["ListAssignedPlotsResponsePayload"];
         };
       };
     };
@@ -7343,14 +7141,14 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdatePlotObservationRequestPayload'];
+        "application/json": components["schemas"]["UpdatePlotObservationRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -7365,20 +7163,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['CompletePlotObservationRequestPayload'];
+        "application/json": components["schemas"]["CompletePlotObservationRequestPayload"];
       };
     };
     responses: {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The observation of the plot was already completed. */
       409: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -7398,13 +7196,13 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The plot is already claimed by someone else. */
       409: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -7419,10 +7217,10 @@ export interface operations {
     };
     requestBody?: {
       content: {
-        'multipart/form-data': {
+        "multipart/form-data": {
           /** Format: binary */
           file: string;
-          payload: components['schemas']['UploadPlotPhotoRequestPayload'];
+          payload: components["schemas"]["UploadPlotPhotoRequestPayload"];
         };
       };
     };
@@ -7430,7 +7228,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['UploadPlotPhotoResponsePayload'];
+          "application/json": components["schemas"]["UploadPlotPhotoResponsePayload"];
         };
       };
     };
@@ -7457,14 +7255,14 @@ export interface operations {
       /** @description The photo was successfully retrieved. */
       200: {
         content: {
-          'image/jpeg': string;
-          'image/png': string;
+          "image/jpeg": string;
+          "image/png": string;
         };
       };
       /** @description The plot observation does not exist, or does not have a photo with the requested ID. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -7481,13 +7279,13 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description You don't have a claim on the plot. */
       409: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -7505,26 +7303,26 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['ReplaceObservationPlotRequestPayload'];
+        "application/json": components["schemas"]["ReplaceObservationPlotRequestPayload"];
       };
     };
     responses: {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['ReplaceObservationPlotResponsePayload'];
+          "application/json": components["schemas"]["ReplaceObservationPlotResponsePayload"];
         };
       };
       /** @description The observation does not exist or does not have the requested monitoring plot. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
       /** @description The observation of the monitoring plot has already been completed and the plot cannot be replaced. */
       409: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -7543,7 +7341,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetObservationResultsResponsePayload'];
+          "application/json": components["schemas"]["GetObservationResultsResponsePayload"];
         };
       };
     };
@@ -7564,7 +7362,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListPlantingSitesResponsePayload'];
+          "application/json": components["schemas"]["ListPlantingSitesResponsePayload"];
         };
       };
     };
@@ -7573,14 +7371,14 @@ export interface operations {
   createPlantingSite: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreatePlantingSiteRequestPayload'];
+        "application/json": components["schemas"]["CreatePlantingSiteRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['CreatePlantingSiteResponsePayload'];
+          "application/json": components["schemas"]["CreatePlantingSiteResponsePayload"];
         };
       };
     };
@@ -7599,7 +7397,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetPlantingSiteResponsePayload'];
+          "application/json": components["schemas"]["GetPlantingSiteResponsePayload"];
         };
       };
     };
@@ -7613,14 +7411,14 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdatePlantingSiteRequestPayload'];
+        "application/json": components["schemas"]["UpdatePlantingSiteRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -7639,13 +7437,13 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The planting site is in use, e.g., there are plantings allocated to the site. */
       409: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -7664,7 +7462,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetPlantingSiteReportedPlantsResponsePayload'];
+          "application/json": components["schemas"]["GetPlantingSiteReportedPlantsResponsePayload"];
         };
       };
     };
@@ -7678,14 +7476,14 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdatePlantingSubzoneRequestPayload'];
+        "application/json": components["schemas"]["UpdatePlantingSubzoneRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -7704,7 +7502,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListPlantingSubzoneSpeciesResponsePayload'];
+          "application/json": components["schemas"]["ListPlantingSubzoneSpeciesResponsePayload"];
         };
       };
     };
@@ -7715,7 +7513,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetUserResponsePayload'];
+          "application/json": components["schemas"]["GetUserResponsePayload"];
         };
       };
     };
@@ -7724,14 +7522,14 @@ export interface operations {
   updateMyself: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateUserRequestPayload'];
+        "application/json": components["schemas"]["UpdateUserRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -7745,7 +7543,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -7762,7 +7560,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetUserPreferencesResponsePayload'];
+          "application/json": components["schemas"]["GetUserPreferencesResponsePayload"];
         };
       };
     };
@@ -7771,14 +7569,14 @@ export interface operations {
   updateUserPreferences: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateUserPreferencesRequestPayload'];
+        "application/json": components["schemas"]["UpdateUserPreferencesRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -7789,7 +7587,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['VersionsResponsePayload'];
+          "application/json": components["schemas"]["VersionsResponsePayload"];
         };
       };
     };
@@ -7798,14 +7596,14 @@ export interface operations {
   createAccession: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateAccessionRequestPayloadV2'];
+        "application/json": components["schemas"]["CreateAccessionRequestPayloadV2"];
       };
     };
     responses: {
       /** @description The accession was created successfully. Response includes fields populated by the server, including the accession number and ID. */
       200: {
         content: {
-          'application/json': components['schemas']['CreateAccessionResponsePayloadV2'];
+          "application/json": components["schemas"]["CreateAccessionResponsePayloadV2"];
         };
       };
     };
@@ -7822,7 +7620,7 @@ export interface operations {
     };
     requestBody?: {
       content: {
-        'multipart/form-data': {
+        "multipart/form-data": {
           /** Format: binary */
           file: string;
         };
@@ -7832,7 +7630,7 @@ export interface operations {
       /** @description The file has been successfully received. It will be processed asynchronously; use the ID returned in the response payload to poll for its status using the `/api/v2/seedbank/accessions/uploads/{uploadId}` GET endpoint. */
       200: {
         content: {
-          'application/json': components['schemas']['UploadFileResponsePayload'];
+          "application/json": components["schemas"]["UploadFileResponsePayload"];
         };
       };
     };
@@ -7843,7 +7641,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': string;
+          "application/json": string;
         };
       };
     };
@@ -7862,7 +7660,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetUploadStatusResponsePayload'];
+          "application/json": components["schemas"]["GetUploadStatusResponsePayload"];
         };
       };
     };
@@ -7881,13 +7679,13 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The upload was not awaiting user action. */
       409: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -7904,20 +7702,20 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['ResolveUploadRequestPayload'];
+        "application/json": components["schemas"]["ResolveUploadRequestPayload"];
       };
     };
     responses: {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          'application/json': components['schemas']['SimpleSuccessResponsePayload'];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The upload was not awaiting user action. */
       409: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -7931,14 +7729,14 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateNurseryTransferRequestPayload'];
+        "application/json": components["schemas"]["CreateNurseryTransferRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['CreateNurseryTransferResponsePayload'];
+          "application/json": components["schemas"]["CreateNurseryTransferResponsePayload"];
         };
       };
     };
@@ -7954,7 +7752,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['ListViabilityTestsResponsePayload'];
+          "application/json": components["schemas"]["ListViabilityTestsResponsePayload"];
         };
       };
     };
@@ -7971,14 +7769,14 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateViabilityTestRequestPayload'];
+        "application/json": components["schemas"]["CreateViabilityTestRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['UpdateAccessionResponsePayloadV2'];
+          "application/json": components["schemas"]["UpdateAccessionResponsePayloadV2"];
         };
       };
     };
@@ -7995,7 +7793,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetViabilityTestResponsePayload'];
+          "application/json": components["schemas"]["GetViabilityTestResponsePayload"];
         };
       };
     };
@@ -8013,14 +7811,14 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateViabilityTestRequestPayload'];
+        "application/json": components["schemas"]["UpdateViabilityTestRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['UpdateAccessionResponsePayloadV2'];
+          "application/json": components["schemas"]["UpdateAccessionResponsePayloadV2"];
         };
       };
     };
@@ -8040,7 +7838,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['UpdateAccessionResponsePayloadV2'];
+          "application/json": components["schemas"]["UpdateAccessionResponsePayloadV2"];
         };
       };
     };
@@ -8056,7 +7854,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetWithdrawalsResponsePayload'];
+          "application/json": components["schemas"]["GetWithdrawalsResponsePayload"];
         };
       };
     };
@@ -8073,14 +7871,14 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateWithdrawalRequestPayload'];
+        "application/json": components["schemas"]["CreateWithdrawalRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['UpdateAccessionResponsePayloadV2'];
+          "application/json": components["schemas"]["UpdateAccessionResponsePayloadV2"];
         };
       };
     };
@@ -8097,7 +7895,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetWithdrawalResponsePayload'];
+          "application/json": components["schemas"]["GetWithdrawalResponsePayload"];
         };
       };
     };
@@ -8115,14 +7913,14 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateWithdrawalRequestPayload'];
+        "application/json": components["schemas"]["UpdateWithdrawalRequestPayload"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['UpdateAccessionResponsePayloadV2'];
+          "application/json": components["schemas"]["UpdateAccessionResponsePayloadV2"];
         };
       };
     };
@@ -8142,7 +7940,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['UpdateAccessionResponsePayloadV2'];
+          "application/json": components["schemas"]["UpdateAccessionResponsePayloadV2"];
         };
       };
     };
@@ -8158,13 +7956,13 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          'application/json': components['schemas']['GetAccessionResponsePayloadV2'];
+          "application/json": components["schemas"]["GetAccessionResponsePayloadV2"];
         };
       };
       /** @description The requested resource was not found. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -8182,26 +7980,26 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateAccessionRequestPayloadV2'];
+        "application/json": components["schemas"]["UpdateAccessionRequestPayloadV2"];
       };
     };
     responses: {
       /** @description The accession was updated successfully. Response includes fields populated or modified by the server as a result of the update. */
       200: {
         content: {
-          'application/json': components['schemas']['UpdateAccessionResponsePayloadV2'];
+          "application/json": components["schemas"]["UpdateAccessionResponsePayloadV2"];
         };
       };
       /** @description The specified accession doesn't exist. */
       404: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
       /** @description One of the requested changes couldn't be made because the accession is in a state that doesn't allow the change. */
       409: {
         content: {
-          'application/json': components['schemas']['SimpleErrorResponsePayload'];
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
