@@ -23,7 +23,6 @@ export default function SpeciesTests() {
 
     await page.locator('#scientificName').getByRole('textbox').fill(newSpeciesName);
 
-
     await page.getByRole('heading', { name: 'Add Species' }).click();
 
     await page.locator('#commonName').getByRole('textbox').click();
