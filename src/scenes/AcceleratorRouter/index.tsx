@@ -7,7 +7,15 @@ import ErrorBoundary from 'src/ErrorBoundary';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStateLocation from 'src/utils/useStateLocation';
 import { getRgbaFromHex } from 'src/utils/color';
-import AcceleratorAdminView from 'src/scenes/AcceleratorRouter/AcceleratorAdminView';
+import CohortListView from 'src/scenes/AcceleratorRouter/CohortListView';
+import CohortView from 'src/scenes/AcceleratorRouter/CohortView';
+import CohortEditView from 'src/scenes/AcceleratorRouter/CohortEditView';
+import CohortNewView from 'src/scenes/AcceleratorRouter/CohortNewView';
+import DeliverableViewWrapper from 'src/scenes/AcceleratorRouter/DeliverableViewWrapper';
+import DeliverablesList from 'src/scenes/AcceleratorRouter/DeliverablesList';
+import ModuleContentView from 'src/scenes/AcceleratorRouter/ModuleContentView';
+import OverviewView from 'src/scenes/AcceleratorRouter/OverviewView';
+import PeopleView from 'src/scenes/AcceleratorRouter/PeopleView';
 import NavBar from 'src/scenes/AcceleratorRouter/NavBar';
 
 interface AcceleratorRouterProps {
@@ -45,7 +53,7 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
   const location = useStateLocation();
 
   const viewHasBackgroundImage = useCallback((): boolean => {
-    return location.pathname.startsWith(APP_PATHS.ACCELERATOR_ADMIN);
+    return location.pathname.startsWith(APP_PATHS.ACCELERATOR_OVERVIEW);
   }, [location]);
 
   return (
@@ -66,8 +74,32 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
       >
         <ErrorBoundary setShowNavBar={setShowNavBar}>
           <Switch>
-            <Route path={APP_PATHS.ACCELERATOR_ADMIN}>
-              <AcceleratorAdminView />
+            <Route path={APP_PATHS.ACCELERATOR_OVERVIEW}>
+              <OverviewView />
+            </Route>
+            <Route path={APP_PATHS.ACCELERATOR_COHORTS_EDIT}>
+              <CohortEditView />
+            </Route>
+            <Route exact path={APP_PATHS.ACCELERATOR_COHORTS}>
+              <CohortListView />
+            </Route>
+            <Route path={APP_PATHS.ACCELERATOR_COHORTS_NEW}>
+              <CohortNewView />
+            </Route>
+            <Route path={APP_PATHS.ACCELERATOR_COHORTS_VIEW}>
+              <CohortView />
+            </Route>
+            <Route path={APP_PATHS.ACCELERATOR_DELIVERABLES_VIEW}>
+              <DeliverableViewWrapper />
+            </Route>
+            <Route path={APP_PATHS.ACCELERATOR_DELIVERABLES}>
+              <DeliverablesList />
+            </Route>
+            <Route path={APP_PATHS.ACCELERATOR_MODULE_CONTENT}>
+              <ModuleContentView />
+            </Route>
+            <Route path={APP_PATHS.ACCELERATOR_PEOPLE}>
+              <PeopleView />
             </Route>
           </Switch>
         </ErrorBoundary>

@@ -1,5 +1,5 @@
 import strings from 'src/strings';
-import { Box, Theme, Typography } from '@mui/material';
+import { Box, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, DialogBox } from '@terraware/web-components';
 
@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export type VideoDialogProps = {
-  description: string;
+  description: string | JSX.Element[];
   link: string;
   open: boolean;
   onClose: () => void;
@@ -25,6 +25,7 @@ export type VideoDialogProps = {
 export default function VideoDialog(props: VideoDialogProps): JSX.Element {
   const { description, link, open, onClose, onDontShowAgain, title } = props;
   const classes = useStyles();
+  const theme = useTheme();
 
   const buttons = (): JSX.Element[] => {
     const dontShowAgainButton: JSX.Element = (
@@ -51,7 +52,7 @@ export default function VideoDialog(props: VideoDialogProps): JSX.Element {
   return (
     <DialogBox scrolled onClose={onClose} open={open} title={title} size={'large'} middleButtons={buttons()}>
       <Box display='flex' flexDirection='column'>
-        <Typography textAlign='center' marginBottom={2}>
+        <Typography margin={theme.spacing(0, 'auto', 2)} display='inline-block'>
           {description}
         </Typography>
         <iframe
@@ -60,7 +61,7 @@ export default function VideoDialog(props: VideoDialogProps): JSX.Element {
           src={link}
           title={title}
           frameBorder='0'
-          allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+          allow='autoplay; fullscreen; picture-in-picture;'
           allowFullScreen
         />
       </Box>

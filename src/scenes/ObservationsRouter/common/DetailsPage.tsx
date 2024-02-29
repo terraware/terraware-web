@@ -7,7 +7,8 @@ import { useLocalization } from 'src/providers';
 import { useAppSelector } from 'src/redux/store';
 import { selectObservationPlantingZone } from 'src/redux/features/observations/observationPlantingZoneSelectors';
 import { selectObservationDetails } from 'src/redux/features/observations/observationDetailsSelectors';
-import { Crumb, Page } from 'src/components/BreadCrumbs';
+import { Crumb } from 'src/components/BreadCrumbs';
+import Page from 'src/components/Page';
 
 type DetailsPageProps = {
   plantingSiteId?: number | string;

@@ -12,7 +12,7 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { useOrganization } from 'src/providers';
 import ReportsCellRenderer from 'src/components/Reports/TableCellRenderer';
 import TfMain from 'src/components/common/TfMain';
-import PageHeader from 'src/components/seeds/PageHeader';
+import PageHeader from 'src/components/PageHeader';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectReportsSettings } from 'src/redux/features/reportsSettings/reportsSettingsSelectors';
 import { requestReportsSettings } from 'src/redux/features/reportsSettings/reportsSettingsThunks';

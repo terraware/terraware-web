@@ -16,6 +16,7 @@ interface OverviewItemCardProjectProps<T extends { id: number; projectId?: numbe
   entity: T;
   reloadData: () => void;
   projectAssignPayloadCreator: () => AssignProjectRequestPayload;
+  onUnAssign?: () => void;
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -31,6 +32,7 @@ const ProjectOverviewItemCard = <T extends { id: number; projectId?: number }>({
   entity,
   reloadData,
   projectAssignPayloadCreator,
+  onUnAssign,
 }: OverviewItemCardProjectProps<T>) => {
   const { selectedOrganization } = useOrganization();
   const userCanEdit = !isContributor(selectedOrganization);
@@ -66,6 +68,7 @@ const ProjectOverviewItemCard = <T extends { id: number; projectId?: number }>({
             }}
             isModalOpen={isProjectAssignModalOpen}
             onClose={() => setIsProjectAssignModalOpen(false)}
+            onUnAssign={onUnAssign}
           />
         </>
       }

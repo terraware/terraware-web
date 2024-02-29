@@ -1,5 +1,6 @@
+import { NavSection } from '@terraware/web-components';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -9,12 +10,18 @@ import LocaleSelector from 'src/components/LocaleSelector';
 import NavFooter from 'src/components/common/Navbar/NavFooter';
 
 type NavBarProps = {
-  setShowNavBar: (value: boolean) => void;
   backgroundTransparent?: boolean;
+  setShowNavBar: (value: boolean) => void;
 };
-export default function NavBar({ setShowNavBar, backgroundTransparent }: NavBarProps): JSX.Element | null {
+export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarProps): JSX.Element | null {
   const { isDesktop } = useDeviceInfo();
   const history = useHistory();
+
+  const isAcceleratorCohortsRoute = useRouteMatch(APP_PATHS.ACCELERATOR_COHORTS);
+  const isAcceleratorDeliverablesRoute = useRouteMatch(APP_PATHS.ACCELERATOR_DELIVERABLES);
+  const isAcceleratorModuleContentRoute = useRouteMatch(APP_PATHS.ACCELERATOR_MODULE_CONTENT);
+  const isAcceleratorOverviewRoute = useRouteMatch(APP_PATHS.ACCELERATOR_OVERVIEW);
+  const isAcceleratorPeopleRoute = useRouteMatch(APP_PATHS.ACCELERATOR_PEOPLE);
 
   const navigate = (url: string) => {
     history.push(url);
@@ -35,22 +42,72 @@ export default function NavBar({ setShowNavBar, backgroundTransparent }: NavBarP
 
   return (
     <Navbar
-      setShowNavBar={setShowNavBar as React.Dispatch<React.SetStateAction<boolean>>}
       backgroundTransparent={backgroundTransparent}
+      setShowNavBar={setShowNavBar as React.Dispatch<React.SetStateAction<boolean>>}
     >
+      {!isDesktop && (
+        <>
+          <NavItem
+            icon='home'
+            id='home'
+            label={strings.BACK_TO_TERRAWARE}
+            onClick={() => closeAndNavigateTo(APP_PATHS.HOME)}
+          />
+
+          <NavSection />
+        </>
+      )}
+
       <NavItem
-        label={strings.BACK_TO_TERRAWARE}
         icon='home'
-        onClick={() => closeAndNavigateTo(APP_PATHS.HOME)}
-        id='home'
+        id='overview'
+        label={strings.OVERVIEW}
+        onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_OVERVIEW)}
+        selected={!!isAcceleratorOverviewRoute}
+      />
+
+      <NavSection />
+
+      <NavItem
+        icon='iconBusinessNetwork'
+        id='cohorts'
+        label={strings.COHORTS}
+        onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_COHORTS)}
+        selected={!!isAcceleratorCohortsRoute}
+      />
+
+      <NavItem
+        icon='iconSubmit'
+        id='deliverables'
+        label={strings.DELIVERABLES}
+        onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_DELIVERABLES)}
+        selected={!!isAcceleratorDeliverablesRoute}
+      />
+
+      <NavSection />
+
+      <NavItem
+        icon='peopleNav'
+        id='people'
+        label={strings.PEOPLE}
+        onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_PEOPLE)}
+        selected={!!isAcceleratorPeopleRoute}
+      />
+
+      <NavItem
+        icon='iconFolder'
+        id='module-content'
+        label={strings.MODULE_CONTENT}
+        onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_MODULE_CONTENT)}
+        selected={!!isAcceleratorModuleContentRoute}
       />
 
       <NavFooter>
         <NavItem
-          label={strings.CONTACT_US}
           icon='mail'
-          onClick={() => closeAndNavigateTo(APP_PATHS.CONTACT_US)}
           id='contactus'
+          label={strings.CONTACT_US}
+          onClick={() => closeAndNavigateTo(APP_PATHS.CONTACT_US)}
         />
 
         <LocaleSelector transparent={true} />

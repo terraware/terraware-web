@@ -2,7 +2,6 @@
 import { CssBaseline, StyledEngineProvider, Theme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import { useRouteMatch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { makeStyles } from '@mui/styles';
 import { APP_PATHS } from 'src/constants';
@@ -14,6 +13,7 @@ import { getRgbaFromHex } from 'src/utils/color';
 import { store } from 'src/redux/store';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useAppVersion } from 'src/hooks/useAppVersion';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import ToastSnackbar from 'src/components/ToastSnackbar';
 import TopBar from 'src/components/TopBar/TopBar';
 import TopBarContent from 'src/components/TopBar/TopBarContent';
@@ -78,7 +78,7 @@ function AppContent() {
   const { organizations, selectedOrganization } = useOrganization();
   const history = useHistory();
   const { user } = useUser();
-  const isAcceleratorRoute = useRouteMatch(APP_PATHS.ACCELERATOR);
+  const { isAcceleratorRoute, featureFlagAccelerator } = useAcceleratorConsole();
 
   const [showNavBar, setShowNavBar] = useState(true);
 
@@ -107,10 +107,15 @@ function AppContent() {
       <TopBar>
         <TopBarContent setShowNavBar={setShowNavBar} />
       </TopBar>
+
       <div className={classes.container}>
         {organizations.length === 0 ? (
           <NoOrgRouter />
-        ) : isAcceleratorRoute && user && isAcceleratorAdmin(user) && isAdmin(selectedOrganization) ? (
+        ) : isAcceleratorRoute &&
+          featureFlagAccelerator &&
+          user &&
+          isAcceleratorAdmin(user) &&
+          isAdmin(selectedOrganization) ? (
           <AcceleratorRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
         ) : (
           <TerrawareRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />

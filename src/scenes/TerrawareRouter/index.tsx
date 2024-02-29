@@ -29,7 +29,7 @@ import SeedsDashboard from 'src/scenes/SeedsDashboard';
 import CheckIn from 'src/scenes/CheckIn';
 import AccessionsRouter from 'src/scenes/AccessionsRouter';
 import MonitoringRouter from 'src/scenes/MonitoringRouter';
-import SpeciesView from 'src/scenes/Species';
+import SpeciesRouter from 'src/scenes/Species';
 import OrganizationRouter from 'src/scenes/OrganizationRouter';
 import PeopleRouter from 'src/scenes/PeopleRouter';
 import { isPlaceholderOrg, selectedOrgHasFacilityType } from 'src/utils/organization';
@@ -44,6 +44,7 @@ import MyAccountRouter from 'src/scenes/MyAccountRouter';
 import ObservationsRouter from 'src/scenes/ObservationsRouter';
 import OptInFeaturesView from 'src/scenes/OptInFeatures';
 import RedirectsRouter from 'src/scenes/RedirectsRouter';
+import DeliverablesRouter from 'src/scenes/DeliverablesRouter';
 
 interface TerrawareRouterProps {
   showNavBar: boolean;
@@ -83,6 +84,7 @@ const TerrawareRouter = ({ showNavBar, setShowNavBar }: TerrawareRouterProps) =>
   const location = useStateLocation();
   const { selectedOrganization } = useOrganization();
   const featureFlagProjects = isEnabled('Projects');
+  const featureFlagAccelerator = isEnabled('Accelerator');
   const classes = useStyles();
 
   const species = useAppSelector(selectSpecies);
@@ -227,8 +229,8 @@ const TerrawareRouter = ({ showNavBar, setShowNavBar }: TerrawareRouterProps) =>
               <MonitoringRouter />
             </Route>
 
-            <Route exact path={APP_PATHS.SPECIES}>
-              <SpeciesView />
+            <Route path={APP_PATHS.SPECIES}>
+              <SpeciesRouter />
             </Route>
 
             <Route path={APP_PATHS.ORGANIZATION}>
@@ -292,6 +294,12 @@ const TerrawareRouter = ({ showNavBar, setShowNavBar }: TerrawareRouterProps) =>
             <Route path={APP_PATHS.OBSERVATIONS}>
               <ObservationsRouter />
             </Route>
+
+            {featureFlagAccelerator && (
+              <Route path={APP_PATHS.DELIVERABLES}>
+                <DeliverablesRouter />
+              </Route>
+            )}
 
             {!isProduction && (
               <Route exact path={APP_PATHS.OPT_IN}>

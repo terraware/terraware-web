@@ -1,5 +1,6 @@
 import { Action, combineReducers } from '@reduxjs/toolkit';
 import { appVersionReducer } from './features/appVersion/appVersionSlice';
+import { cohortsReducer, cohortsRequestsReducer } from 'src/redux/features/cohorts/cohortsSlice';
 import {
   observationsReducer,
   observationsResultsReducer,
@@ -30,6 +31,18 @@ import { batchesReducer, batchesRequestsReducer } from './features/batches/batch
 import { accessionsReducer } from './features/accessions/accessionsSlice';
 import { reportsSettingsReducer } from 'src/redux/features/reportsSettings/reportsSettingsSlice';
 import { speciesProjectsReducer } from 'src/redux/features/species/speciesProjectsSlice';
+import {
+  draftPlantingSiteCreateReducer,
+  draftPlantingSiteEditReducer,
+  draftPlantingSiteGetReducer,
+  draftPlantingSiteSearchReducer,
+} from 'src/redux/features/draftPlantingSite/draftPlantingSiteSlice';
+import {
+  deliverablesEditReducer,
+  deliverablesSearchReducer,
+  deliverablesReducer,
+} from 'src/redux/features/deliverables/deliverablesSlice';
+import { participantsListReducer } from './features/participants/participantsSlice';
 
 // assembly of app reducers
 export const reducers = {
@@ -37,29 +50,39 @@ export const reducers = {
   appVersion: appVersionReducer,
   batches: batchesReducer,
   batchesRequests: batchesRequestsReducer,
+  cohorts: cohortsReducer,
+  cohortsRequests: cohortsRequestsReducer,
+  deliverablesEdit: deliverablesEditReducer,
+  deliverablesSearch: deliverablesSearchReducer,
+  deliverables: deliverablesReducer,
+  draftPlantingSiteCreate: draftPlantingSiteCreateReducer,
+  draftPlantingSiteEdit: draftPlantingSiteEditReducer,
+  draftPlantingSiteGet: draftPlantingSiteGetReducer,
+  draftPlantingSiteSearch: draftPlantingSiteSearchReducer,
   message: messageReducer,
   monitoringPlots: monitoringPlotsReducer,
   observations: observationsReducer,
   observationsResults: observationsResultsReducer,
-  plantings: plantingsReducer,
+  participantsList: participantsListReducer,
   plantingSiteObservationsResults: plantingSiteObservationsResultsReducer,
   plantingSitesSearchResults: plantingSitesSearchResultsReducer,
+  plantings: plantingsReducer,
+  projects: projectsReducer,
+  projectsRequests: projectsRequestsReducer,
   replaceObservationPlot: replaceObservationPlotReducer,
   reportsSettings: reportsSettingsReducer,
   rescheduleObservation: rescheduleObservationReducer,
   scheduleObservation: scheduleObservationReducer,
   sitePopulation: sitePopulationReducer,
   siteReportedPlantsResults: siteReportedPlantsReducer,
+  snackbar: snackbarReducer,
   species: speciesReducer,
   speciesProjects: speciesProjectsReducer,
-  snackbar: snackbarReducer,
+  subLocations: subLocationsReducer,
   tracking: trackingReducer,
   updatePlantingCompleted: updatePlantingCompletedReducer,
   updatePlantingsCompleted: updatePlantingsCompletedReducer,
   userAnalytics: userAnalyticsReducer,
-  projects: projectsReducer,
-  projectsRequests: projectsRequestsReducer,
-  subLocations: subLocationsReducer,
 };
 const combinedReducers = combineReducers(reducers);
 

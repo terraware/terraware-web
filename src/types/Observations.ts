@@ -1,5 +1,5 @@
 import { components } from 'src/api/types/generated-schema';
-import { PlantingSite, PlantingZone, PlantingSubzone, MultiPolygon } from './Tracking';
+import { MultiPolygon, PlantingZone, PlantingSubzone, MinimalPlantingSite } from './Tracking';
 import strings from 'src/strings';
 
 // basic information on a single observation (excluding observation results)
@@ -129,6 +129,6 @@ export type ZoneAggregation = Omit<PlantingZone, 'plantingSubzones'> & {
   plantingSubzones: SubzoneAggregation[];
 };
 
-export type PlantingSiteAggregation = Omit<PlantingSite, 'plantingZones'> & {
+export type PlantingSiteAggregation = Omit<MinimalPlantingSite, 'plantingZones'> & {
   plantingZones: ZoneAggregation[];
 };

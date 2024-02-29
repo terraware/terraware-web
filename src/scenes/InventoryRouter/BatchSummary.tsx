@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Grid, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useSnackbar from 'src/utils/useSnackbar';
 import { Batch } from 'src/types/Batch';
+import { NurseryBatchService } from 'src/services';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import Link from 'src/components/common/Link';
 import ProjectOverviewItemCard from 'src/components/ProjectOverviewItemCard';
@@ -19,8 +21,18 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
   const { batch, reloadData } = props;
   const { isMobile, isTablet } = useDeviceInfo();
   const featureFlagProjects = isEnabled('Projects');
+  const snackbar = useSnackbar();
 
   const theme = useTheme();
+
+  const onProjectUnAssign = useCallback(async () => {
+    const response = await NurseryBatchService.updateBatch({ ...batch, projectId: undefined });
+    if (response.requestSucceeded) {
+      reloadData();
+    } else {
+      snackbar.toastError();
+    }
+  }, [batch, reloadData, snackbar]);
 
   const overviewItemCount = featureFlagProjects ? 7 : 6;
   const overviewGridSize = isMobile ? '100%' : isTablet ? '50%' : overviewItemCount <= 6 ? '33%' : '25%';
@@ -62,6 +74,7 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
             entity={batch}
             reloadData={reloadData}
             projectAssignPayloadCreator={() => ({ batchIds: [batch.id] })}
+            onUnAssign={onProjectUnAssign}
           />
         </Grid>
       )}

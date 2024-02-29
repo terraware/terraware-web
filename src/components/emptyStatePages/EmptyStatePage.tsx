@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePages/EmptyStateContent';
-import PageHeader from 'src/components/seeds/PageHeader';
+import PageHeader from 'src/components/PageHeader';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import AddSpeciesModal from '../../scenes/Species/AddSpeciesModal';
 import ImportSpeciesModal, { downloadCsvTemplate } from '../../scenes/Species/ImportSpeciesModal';
 import TfMain from '../common/TfMain';
 import { Container, Theme } from '@mui/material';
@@ -15,7 +14,7 @@ import { isContributor } from 'src/utils/organization';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import ImportInventoryModal, { downloadInventoryCsvTemplate } from 'src/scenes/InventoryRouter/ImportInventoryModal';
-import PlantingSiteTypeSelect from 'src/scenes/PlantingSitesRouter/PlantingSiteTypeSelect';
+import PlantingSiteTypeSelect from 'src/scenes/PlantingSitesRouter/edit/PlantingSiteTypeSelect';
 import { useOrganization } from 'src/providers/hooks';
 
 interface StyleProps {
@@ -88,7 +87,6 @@ export default function EmptyStatePage({
     downloadInventoryCsvTemplate();
   };
 
-  const [addSpeciesModalOpened, setAddSpeciesModalOpened] = useState(false);
   const [importSpeciesModalOpened, setImportSpeciesModalOpened] = useState(false);
   const [importInventoryModalOpened, setImportInventoryModalOpened] = useState(false);
   const [plantingSiteTypeSelectOpen, setPlantingSiteTypeSelectOpen] = useState(false);
@@ -117,7 +115,7 @@ export default function EmptyStatePage({
         buttonText: strings.ADD_SPECIES,
         buttonIcon: 'plus',
         onClickButton: () => {
-          setAddSpeciesModalOpened(true);
+          history.push(APP_PATHS.SPECIES_NEW);
         },
       },
     ],
@@ -242,19 +240,6 @@ export default function EmptyStatePage({
 
   const content = pageContent();
 
-  const onCloseEditSpeciesModal = (saved: boolean, snackbarMessage?: string) => {
-    if (saved) {
-      if (reloadData) {
-        reloadData();
-      }
-      history.push({ pathname: APP_PATHS.SPECIES, search: '?checkData' });
-    }
-    setAddSpeciesModalOpened(false);
-    if (snackbarMessage) {
-      snackbar.toastSuccess(snackbarMessage);
-    }
-  };
-
   const onCloseImportSpeciesModal = (saved: boolean, snackbarMessage?: string) => {
     if (saved) {
       if (reloadData) {
@@ -289,7 +274,6 @@ export default function EmptyStatePage({
     <TfMain backgroundImageVisible={backgroundImageVisible}>
       {selectedOrganization && (
         <>
-          <AddSpeciesModal open={addSpeciesModalOpened} onClose={onCloseEditSpeciesModal} />
           <ImportSpeciesModal open={importSpeciesModalOpened} onClose={onCloseImportSpeciesModal} />
           <ImportInventoryModal open={importInventoryModalOpened} onClose={onCloseImportInventoryModal} />
         </>

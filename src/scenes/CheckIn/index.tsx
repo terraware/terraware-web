@@ -10,7 +10,7 @@ import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import useStateLocation from 'src/utils/useStateLocation';
-import PageHeader from 'src/components/seeds/PageHeader';
+import PageHeader from 'src/components/PageHeader';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TextField from 'src/components/common/Textfield/Textfield';
@@ -103,8 +103,10 @@ export default function CheckIn(): JSX.Element {
         <PageHeader
           title={strings.CHECKIN_ACCESSIONS}
           subtitle={getSubtitle()}
-          back={true}
+          back
           backUrl={APP_PATHS.ACCESSIONS}
+          backName={strings.ACCESSIONS}
+          snackbarPageKey={'seeds'}
         />
       </PageHeaderWrapper>
       <Container ref={contentRef} maxWidth={false} className={classes.mainContainer}>

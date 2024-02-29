@@ -7,7 +7,7 @@ import TfMain from 'src/components/common/TfMain';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import PageHeader from 'src/components/seeds/PageHeader';
+import PageHeader from 'src/components/PageHeader';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {

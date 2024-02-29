@@ -146,6 +146,15 @@ export default function Accession2View(): JSX.Element {
     }
   }, [accessionId, accession, snackbar]);
 
+  const onProjectUnAssign = useCallback(async () => {
+    const response = await AccessionService.updateAccession({ ...accession, projectId: undefined } as Accession);
+    if (response.requestSucceeded) {
+      void reloadData();
+    } else {
+      snackbar.toastError();
+    }
+  }, [accession, reloadData, snackbar]);
+
   useEffect(() => {
     reloadData();
   }, [accessionId, reloadData]);
@@ -598,6 +607,7 @@ export default function Accession2View(): JSX.Element {
               entity={accession}
               reloadData={reloadData}
               projectAssignPayloadCreator={() => ({ accessionIds: [accession.id] })}
+              onUnAssign={onProjectUnAssign}
             />
           </Grid>
         )}
