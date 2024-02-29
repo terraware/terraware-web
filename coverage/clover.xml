@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1709175446180" clover="3.2.0">
-  <project timestamp="1709175446180" name="All files">
-    <metrics statements="17139" coveredstatements="564" conditionals="10988" coveredconditionals="163" methods="5350" coveredmethods="125" elements="33477" coveredelements="852" complexity="0" loc="17139" ncloc="17139" packages="141" files="705" classes="705"/>
+<coverage generated="1709177088501" clover="3.2.0">
+  <project timestamp="1709177088502" name="All files">
+    <metrics statements="17140" coveredstatements="564" conditionals="10990" coveredconditionals="163" methods="5350" coveredmethods="125" elements="33480" coveredelements="852" complexity="0" loc="17140" ncloc="17140" packages="141" files="705" classes="705"/>
     <package name="src">
       <metrics statements="174" coveredstatements="0" conditionals="129" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -10438,14 +10438,15 @@
       </file>
     </package>
     <package name="src.scenes.ContactUs">
-      <metrics statements="7" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="3" coveredmethods="0"/>
+      <metrics statements="8" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="3" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ContactUs/index.tsx">
-        <metrics statements="7" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="3" coveredmethods="0"/>
-        <line num="13" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
+        <metrics statements="8" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="15" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
         <line num="62" count="0" type="stmt"/>
         <line num="68" count="0" type="stmt"/>
       </file>
