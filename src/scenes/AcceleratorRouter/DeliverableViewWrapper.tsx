@@ -32,9 +32,9 @@ const DeliverableViewWrapper = () => {
   );
 
   const rejectDeliverable = useCallback(
-    (reason: string) => {
+    (feedback: string) => {
       if (deliverable?.id !== undefined) {
-        update({ id: deliverable.id, status: 'Rejected', reason });
+        update({ id: deliverable.id, status: 'Rejected', reason: feedback });
       }
       setShowRejectDialog(false);
     },

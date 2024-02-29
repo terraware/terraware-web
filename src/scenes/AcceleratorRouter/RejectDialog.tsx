@@ -5,18 +5,18 @@ import strings from 'src/strings';
 
 export type RejectDialogProps = {
   onClose: () => void;
-  onSubmit: (reason: string) => void;
+  onSubmit: (feedback: string) => void;
 };
 
 export default function RejectDialog({ onClose, onSubmit }: RejectDialogProps): JSX.Element {
-  const [reason, setReason] = useState<string>('');
+  const [feedback, setFeedback] = useState<string>('');
   const [validate, setValidate] = useState<boolean>(false);
   const theme = useTheme();
 
   const reject = () => {
     setValidate(true);
-    if (reason) {
-      onSubmit(reason);
+    if (feedback) {
+      onSubmit(feedback);
     }
   };
 
@@ -51,12 +51,12 @@ export default function RejectDialog({ onClose, onSubmit }: RejectDialogProps): 
       <Box textAlign='left'>
         <Textfield
           autoFocus
-          errorText={validate && !reason.trim() ? strings.REQUIRED_FIELD : ''}
-          label={strings.REASON}
-          id='reason'
-          onChange={(value) => setReason(value as string)}
+          errorText={validate && !feedback.trim() ? strings.REQUIRED_FIELD : ''}
+          label={strings.FEEDBACK}
+          id='feedback'
+          onChange={(value) => setFeedback(value as string)}
           type='textarea'
-          value={reason}
+          value={feedback}
         />
       </Box>
     </DialogBox>

@@ -21,7 +21,7 @@ const Metadata = (props: ViewProps): JSX.Element => {
           padding='16px'
         >
           <DeliverableStatusBadge status={deliverable.status} />
-          <strong>{strings.REASON}</strong> {deliverable.reason}
+          <strong>{strings.FEEDBACK}</strong> {deliverable.reason}
         </Box>
       )}
 
