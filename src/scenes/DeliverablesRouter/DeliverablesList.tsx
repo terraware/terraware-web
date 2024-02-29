@@ -80,7 +80,7 @@ const DeliverablesList = (): JSX.Element => {
     () =>
       activeLocale ? (
         <>
-          <Grid container>
+          <Grid container sx={{ marginTop: theme.spacing(0.5) }}>
             <Grid item>
               <Separator height={'40px'} />
             </Grid>
