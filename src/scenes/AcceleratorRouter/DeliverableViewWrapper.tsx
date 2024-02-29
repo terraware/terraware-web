@@ -24,21 +24,21 @@ const DeliverableViewWrapper = () => {
     (status: DeliverableStatusType) => {
       if (deliverable?.id !== undefined) {
         if (window.confirm(`Are you sure you want to set the status to ${status} ?`)) {
-          update({ id: deliverable.id, status });
+          update({ ...deliverable, status });
         }
       }
     },
-    [deliverable?.id, update]
+    [deliverable, update]
   );
 
   const rejectDeliverable = useCallback(
     (feedback: string) => {
       if (deliverable?.id !== undefined) {
-        update({ id: deliverable.id, status: 'Rejected', reason: feedback });
+        update({ ...deliverable, status: 'Rejected', feedback });
       }
       setShowRejectDialog(false);
     },
-    [deliverable?.id, setShowRejectDialog, update]
+    [deliverable, setShowRejectDialog, update]
   );
 
   const onOptionItemClick = useCallback(

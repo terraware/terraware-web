@@ -1,315 +1,82 @@
-import {
-  OptionalSearchRequestPayload,
-  SearchNodePayload,
-  SearchResponseElement,
-  SearchSortOrder,
-} from 'src/types/Search';
+import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import {
   Deliverable,
-  DeliverableTypeType,
-  DeliverableCategoryType,
-  DeliverableStatusType,
   DeliverableData,
-  SearchResponseDeliverableParticipant,
-  SearchResponseDeliverableAdmin,
-  UpdateRequest,
+  DeliverablesData,
+  ListDeliverablesResponsePayload,
 } from 'src/types/Deliverables';
-import { Response } from 'src/services/HttpService';
+import HttpService, { Response, Params } from 'src/services/HttpService';
+import { paths } from 'src/api/types/generated-schema';
 
 /**
  * Accelerator "deliverable" related services
  */
 
-const SEARCH_FIELDS_DELIVERABLES_ADMIN = ['category', 'documentCount', 'id', 'name', 'project_name', 'status', 'type'];
+const ENDPOINT_DELIVERABLES = '/api/v1/accelerator/deliverables';
+const ENDPOINT_DELIVERABLE = '/api/v1/accelerator/deliverables/{deliverableId}';
+const ENDPOINT_DELIVERABLE_SUBMISSION = '/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}';
 
-const SEARCH_FIELDS_DELIVERABLES_PARTICIPANT = [...SEARCH_FIELDS_DELIVERABLES_ADMIN, 'description'];
+export type ListDeliverablesRequestParams = paths[typeof ENDPOINT_DELIVERABLES]['get']['parameters']['query'];
+export type GetDeliverableResponsePayload =
+  paths[typeof ENDPOINT_DELIVERABLE]['get']['responses'][200]['content']['application/json'];
 
-const mockDeliverable: Deliverable = {
-  category: 'Legal',
-  // TODO need to figure out if we are going to allow raw HTML or just have regular text
-  deliverableContent: `
-    <div>
-     	<p>The Company Formation Document is to confirm the entity is properly formed and registered in the country.</p>
-     	<p>Depending on your jurisdiction, this document may be called a Certificate of Incorporation or a Business Registration Certificate, for example.</p>
-     	<p><b>Submit:</b></p>
-     	<p>A document issued by the relevant authority in your jurisdiction that contains the following information:</p>
-   	  <ol>
-    		<li>Company Name</li>
-    		<li>Legal Form / Structure – (e.g. corporation, limited liability company, etc.)</li>
-    		<li>Date of Formation/Incorporation</li>
-    		<li>Company Number (if applicable)</li>
-		  </ol>
-    </div>
-  `,
-  documents: [
-    {
-      name: 'Upload 1',
-      description: 'Some description for the upload',
-      dateUploaded: '2024-02-15',
-      documentType: 'google',
-      link: 'http://placekitten.com/200/300',
-      project_name: 'Andromeda',
-    },
-    {
-      name: 'Upload 2',
-      description: 'One description for the upload',
-      dateUploaded: '2024-02-14',
-      documentType: 'google',
-      link: 'http://placekitten.com/200/300',
-      project_name: 'Andromeda',
-    },
-    {
-      name: 'Upload A',
-      description: 'Another description for the upload',
-      dateUploaded: '2024-02-11',
-      documentType: 'google',
-      link: 'http://placekitten.com/200/300',
-      project_name: 'Andromeda',
-    },
-  ],
-  id: 1,
-  internalComment: 'This is a great looking submission',
-  name: 'Company Formation Document',
-  projectId: 1,
-  projectName: 'Treemendo.us',
-  status: 'Not Submitted',
-  templateUrl: 'https://docs.google.com/document/d/1NkNoho843CE-6NM8rmmHfdAT7HJS6vWhfzezcvkj3yM/edit?usp=sharing',
-};
+export type UpdateSubmissionRequestPayload =
+  paths[typeof ENDPOINT_DELIVERABLE_SUBMISSION]['put']['requestBody']['content']['application/json'];
+export type UpdateSubmissionResponsePayload =
+  paths[typeof ENDPOINT_DELIVERABLE_SUBMISSION]['put']['responses'][200]['content']['application/json'];
 
-const getDeliverable = async (deliverableId: number): Promise<Response & DeliverableData> => {
-  // TODO replace with axios
-  return {
-    requestSucceeded: true,
-    deliverable: { ...mockDeliverable },
+const httpDeliverables = HttpService.root(ENDPOINT_DELIVERABLES);
+const httpDeliverable = HttpService.root(ENDPOINT_DELIVERABLE);
+const httpDeliverableSubmission = HttpService.root(ENDPOINT_DELIVERABLE_SUBMISSION);
+
+const get = async (deliverableId: number): Promise<Response & DeliverableData> =>
+  httpDeliverable.get<GetDeliverableResponsePayload, DeliverableData>(
+    {
+      urlReplacements: { '{deliverableId}': `${deliverableId}` },
+    },
+    (response) => ({ deliverable: response?.deliverable })
+  );
+
+const update = async (deliverable: Deliverable): Promise<Response> => {
+  const payload: UpdateSubmissionRequestPayload = {
+    status: deliverable.status,
   };
-};
-
-const update = async ({ internalComment, reason, status }: UpdateRequest): Promise<Response> => {
-  if (status) {
-    mockDeliverable.status = status;
+  if (deliverable.internalComment) {
+    payload.internalComment = deliverable.internalComment;
+  }
+  if (deliverable.feedback) {
+    payload.feedback = deliverable.feedback;
   }
 
-  mockDeliverable.reason = reason;
-  mockDeliverable.internalComment = internalComment;
-  return { requestSucceeded: true };
+  return httpDeliverableSubmission.put2<UpdateSubmissionResponsePayload>({
+    urlReplacements: {
+      '{deliverableId}': `${deliverable.id}`,
+      '{projectId}': `${deliverable.projectId}`,
+    },
+    entity: payload,
+  });
 };
 
-// TODO will get removed once BE is done
-let mockResponseData: SearchResponseElement[] = [];
-const searchDeliverables = async (
-  fields: string[],
-  organizationId: number,
+const list = async (
+  locale: string | null,
+  request?: ListDeliverablesRequestParams,
   search?: SearchNodePayload,
-  sortOrder?: SearchSortOrder
-): Promise<SearchResponseElement[] | null> => {
-  const params: OptionalSearchRequestPayload = {
-    // TODO confirm prefix when BE is done
-    prefix: 'deliverables',
-    fields,
-    search,
-    // TODO implement pagination when BE is done
-    count: 1000,
-  };
-
-  if (sortOrder) {
-    params.sortOrder = [sortOrder];
-  }
-
-  // TODO change this over once BE is done
-  // return SearchService.search(params);
-  return mockResponseData;
-};
-
-const transformAdminDeliverableElement = (element: SearchResponseElement): SearchResponseDeliverableAdmin => ({
-  category: element.category as DeliverableCategoryType,
-  documentCount: Number(element.documentCount),
-  id: Number(element.id),
-  name: `${element.name}`,
-  project_name: `${element.project_name}`,
-  status: element.category as DeliverableStatusType,
-  // These casts (category, description, type) are typesafe but not runtime safe, if we ever use these cast properties in business logic we should
-  // consider implementing a typeguard to ensure the type is actually the type we're casting to
-  type: element.type as DeliverableTypeType,
-});
-
-const searchDeliverablesForAdmin = async (
-  organizationId: number,
-  search?: SearchNodePayload,
-  sortOrder?: SearchSortOrder
-): Promise<SearchResponseDeliverableAdmin[] | null> => {
-  const result = await searchDeliverables(SEARCH_FIELDS_DELIVERABLES_ADMIN, organizationId, search, sortOrder);
-  if (!result) {
-    return result;
-  }
-
-  return result.map(transformAdminDeliverableElement);
-};
-
-const searchDeliverablesForParticipant = async (
-  organizationId: number,
-  search?: SearchNodePayload,
-  sortOrder?: SearchSortOrder
-): Promise<SearchResponseDeliverableParticipant[] | null> => {
-  const result = await searchDeliverables(SEARCH_FIELDS_DELIVERABLES_PARTICIPANT, organizationId, search, sortOrder);
-  if (!result) {
-    return result;
-  }
-
-  return result.map((element) => ({
-    ...transformAdminDeliverableElement(element),
-    description: `${element.description}`,
-  }));
-};
+  searchSortOrder?: SearchSortOrder
+  // TODO sort, search, etc...
+): Promise<(DeliverablesData & Response) | null> =>
+  httpDeliverables.get<ListDeliverablesResponsePayload, DeliverablesData>(
+    {
+      params: request as Params,
+    },
+    (data) => ({
+      deliverables: (data?.deliverables || []).sort((a, b) => a.name.localeCompare(b.name, locale || undefined)),
+    })
+  );
 
 const DeliverablesService = {
-  getDeliverable,
-  searchDeliverablesForAdmin,
-  searchDeliverablesForParticipant,
+  get,
+  list,
   update,
 };
 
 export default DeliverablesService;
-
-// TODO will get removed once BE is done
-mockResponseData = [
-  {
-    id: 1,
-    name: 'Company Formation Document',
-    description: 'To confirm the entity is properly formed lorem ipsum dolor sit amet, consectetur adipiscing elit',
-    type: 'Document',
-    documentCount: 1,
-    category: 'Legal',
-    project_name: 'Treemendo.us',
-    status: 'Approved',
-  },
-  {
-    id: 2,
-    name: 'Current Legal Status Document',
-    description: 'To confirm the entity is in good standing lorem ipsum dolor sit amet, consectetur adipiscing elit',
-    type: 'Document',
-    documentCount: 1,
-    category: 'Legal',
-    project_name: 'Treemendo.us',
-    status: 'Rejected',
-  },
-  {
-    id: 3,
-    name: 'Parent/Subsidiary Information',
-    description: 'To understand if there are other entities lorem ipsum dolor sit amet, consectetur adipiscing elit',
-    type: 'Document',
-    documentCount: 1,
-    category: 'Legal',
-    project_name: 'Treemendo.us',
-    status: 'In Review',
-  },
-  {
-    id: 4,
-    name: 'Owner/Director Information',
-    description: 'To confirm owners and managers so we lorem ipsum dolor sit amet, consectetur adipiscing elit',
-    type: 'Document',
-    documentCount: 1,
-    category: 'Legal',
-    project_name: 'Treemendo.us',
-    status: 'In Review',
-  },
-  {
-    id: 5,
-    name: 'Attorney Contact Information',
-    description: 'So we can be in contact with your legal lorem ipsum dolor sit amet, consectetur adipiscing elit',
-    type: 'Document',
-    documentCount: 0,
-    category: 'Legal',
-    project_name: 'Treemendo.us',
-    status: 'Not Submitted',
-  },
-  {
-    id: 6,
-    name: 'Landowner’s Name',
-    description: 'To confirm the name of the landowner lorem ipsum dolor sit amet, consectetur adipiscing elit',
-    type: 'Document',
-    documentCount: 0,
-    category: 'Legal',
-    project_name: 'Treemendo.us',
-    status: 'Not Submitted',
-  },
-  {
-    id: 7,
-    name: 'Land Title (If Government-Owned)',
-    description: 'To confirm the entity is properly formed lorem ipsum dolor sit amet, consectetur adipiscing elit',
-    type: 'Document',
-    documentCount: 0,
-    category: 'Legal',
-    project_name: 'Treemendo.us',
-    status: 'Not Submitted',
-  },
-  {
-    id: 8,
-    name: 'Land Title (If Not Government-Owned)',
-    description: 'To confirm the entity is in good standing lorem ipsum dolor sit amet, consectetur adipiscing elit',
-    type: 'Document',
-    documentCount: 0,
-    category: 'Legal',
-    project_name: 'Treemendo.us',
-    status: 'Not Submitted',
-  },
-  {
-    id: 9,
-    name: 'List of Disputes or Legal Proceedings',
-    description: 'To understand if there are other entities lorem ipsum dolor sit amet, consectetur adipiscing elit',
-    type: 'Document',
-    documentCount: 0,
-    category: 'Legal',
-    project_name: 'Treemendo.us',
-    status: 'Not Submitted',
-  },
-  {
-    id: 10,
-    name: 'List of State and Local Permits, Consents',
-    description: 'To confirm owners and managers so we lorem ipsum dolor sit amet, consectetur adipiscing elit',
-    type: 'Document',
-    documentCount: 0,
-    category: 'Legal',
-    project_name: 'Treemendo.us',
-    status: '',
-  },
-  {
-    id: 11,
-    name: 'Photos of the land',
-    description: 'Photos showing the area before any plantings have occurred',
-    type: 'Document',
-    documentCount: 5,
-    category: 'Forestry',
-    project_name: 'Treemendo.us',
-    status: 'In Review',
-  },
-  {
-    id: 12,
-    name: 'Company Formation Document',
-    description: 'To confirm the entity is properly formed lorem ipsum dolor sit amet, consectetur adipiscing elit',
-    type: 'Document',
-    documentCount: 0,
-    category: 'Legal',
-    project_name: 'Andromeda',
-    status: 'Approved',
-  },
-  {
-    id: 13,
-    name: 'Current Legal Status Document',
-    description: 'To confirm the entity is in good standing lorem ipsum dolor sit amet, consectetur adipiscing elit',
-    type: 'Document',
-    documentCount: 0,
-    category: 'Legal',
-    project_name: 'Andromeda',
-    status: 'Rejected',
-  },
-  {
-    id: 14,
-    name: 'Parent/Subsidiary Information',
-    description: 'To understand if there are other entities lorem ipsum dolor sit amet, consectetur adipiscing elit',
-    type: 'Document',
-    documentCount: 0,
-    category: 'Legal',
-    project_name: 'Andromeda',
-    status: 'In Review',
-  },
-];

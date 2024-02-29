@@ -4,12 +4,12 @@ import { makeStyles } from '@mui/styles';
 import { SortOrder, TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
 import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
-import { DeliverableCategories, DeliverableStatuses, SearchResponseDeliverable } from 'src/types/Deliverables';
+import { DeliverableCategories, DeliverableStatuses, ListDeliverablesElement } from 'src/types/Deliverables';
 import { useLocalization } from 'src/providers';
 import useDebounce from 'src/utils/useDebounce';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectDeliverablesSearchRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
-import { requestDeliverablesSearch } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
+import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import Card from 'src/components/common/Card';
 import SearchFiltersWrapperV2, { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import { BaseTable as Table } from 'src/components/common/table';
@@ -35,7 +35,7 @@ const DeliverablesTable = ({ columns, extraTableFilters, pageHeaderRef, organiza
   const { activeLocale } = useLocalization();
   const classes = useStyles();
 
-  const [deliverables, setDeliverables] = useState<SearchResponseDeliverable[]>([]);
+  const [deliverables, setDeliverables] = useState<ListDeliverablesElement[]>([]);
   const [deliverablesSearchRequestId, setDeliverablesSearchRequestId] = useState('');
   const deliverablesSearchRequest = useAppSelector(selectDeliverablesSearchRequest(deliverablesSearchRequestId));
 
@@ -123,14 +123,16 @@ const DeliverablesTable = ({ columns, extraTableFilters, pageHeaderRef, organiza
 
   useEffect(() => {
     const search: SearchNodePayload = getSearchPayload();
-    const request = dispatch(requestDeliverablesSearch({ organizationId, search, searchSortOrder }));
+    const request = dispatch(
+      requestListDeliverables({ locale: activeLocale, listRequest: { organizationId }, search, searchSortOrder })
+    );
     setDeliverablesSearchRequestId(request.requestId);
-  }, [dispatch, getSearchPayload, organizationId, searchSortOrder]);
+  }, [activeLocale, dispatch, getSearchPayload, organizationId, searchSortOrder]);
 
   useEffect(() => {
     // TODO do something if the request has an error
-    if (deliverablesSearchRequest && deliverablesSearchRequest.data) {
-      setDeliverables(deliverablesSearchRequest.data);
+    if (deliverablesSearchRequest && deliverablesSearchRequest.data?.deliverables) {
+      setDeliverables(deliverablesSearchRequest.data.deliverables);
     }
   }, [deliverablesSearchRequest]);
 

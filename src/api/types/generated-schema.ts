@@ -22,6 +22,32 @@ export interface paths {
     /** Deletes a single cohort. */
     delete: operations["deleteCohort"];
   };
+  "/api/v1/accelerator/deliverables": {
+    /**
+     * Lists the deliverables for accelerator projects
+     * @description The list may optionally be filtered based on certain criteria as specified in the query string. If no filter parameters are supplied, lists all the deliverables in all the participants and projects that are visible to the user. For users with accelerator admin privileges, this will be the full list of all deliverables for all accelerator projects.
+     */
+    get: operations["listDeliverables"];
+  };
+  "/api/v1/accelerator/deliverables/{deliverableId}": {
+    /** Gets the details of a single deliverable and its submission documents, if any. */
+    get: operations["getDeliverable"];
+  };
+  "/api/v1/accelerator/deliverables/{deliverableId}/documents": {
+    /** Uploads a new document to satisfy a deliverable. */
+    post: operations["uploadDeliverableDocument"];
+  };
+  "/api/v1/accelerator/deliverables/{deliverableId}/documents/{documentId}": {
+    /** Gets a single submission document from a deliverable. */
+    get: operations["getDeliverableDocument"];
+  };
+  "/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}": {
+    /**
+     * Updates the state of a submission from a project.
+     * @description Only permitted for users with accelerator admin privileges.
+     */
+    put: operations["updateSubmission"];
+  };
   "/api/v1/automations": {
     /** Gets a list of automations for a device or facility. */
     get: operations["listAutomations"];
@@ -1684,6 +1710,34 @@ export interface components {
       /** @description Quantity of seeds withdrawn. If this quantity is in weight and the remaining quantity of the accession is in seeds or vice versa, the accession must have a subset weight and count. */
       withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
     };
+    DeliverablePayload: {
+      /** @enum {string} */
+      category: "Legal Eligibility" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Co-Benefits" | "Proposed Restoration Activities" | "Media" | "Supplemental Files";
+      /** @description Optional description of the deliverable in HTML form. */
+      descriptionHtml?: string;
+      documents: components["schemas"]["SubmissionDocumentPayload"][];
+      /** @description If the deliverable has been reviewed, the user-visible feedback from the review. */
+      feedback?: string;
+      /** Format: int64 */
+      id: number;
+      /** @description Internal-only comment on the submission. Only present if the current user has accelerator admin privileges. */
+      internalComment?: string;
+      name: string;
+      /** Format: int64 */
+      organizationId: number;
+      organizationName: string;
+      /** Format: int64 */
+      participantId: number;
+      participantName: string;
+      /** Format: int64 */
+      projectId: number;
+      projectName: string;
+      /** @enum {string} */
+      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
+      templateUrl?: string;
+      /** @enum {string} */
+      type: "Document";
+    };
     /** @description If the withdrawal was an outplanting to a planting site, the delivery that was created. Not present for other withdrawal purposes. */
     DeliveryPayload: {
       /** Format: int64 */
@@ -1940,6 +1994,10 @@ export interface components {
     GetCurrentTimeResponsePayload: {
       /** Format: date-time */
       currentTime: string;
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetDeliverableResponsePayload: {
+      deliverable: components["schemas"]["DeliverablePayload"];
       status: components["schemas"]["SuccessOrError"];
     };
     GetDeliveryResponsePayload: {
@@ -2343,6 +2401,37 @@ export interface components {
     };
     ListBatchPhotosResponsePayload: {
       photos: components["schemas"]["BatchPhotoPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListDeliverablesElement: {
+      /** @enum {string} */
+      category: "Legal Eligibility" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Co-Benefits" | "Proposed Restoration Activities" | "Media" | "Supplemental Files";
+      /** @description Optional description of the deliverable in HTML form. */
+      descriptionHtml?: string;
+      /** Format: int64 */
+      id: number;
+      name: string;
+      /**
+       * Format: int32
+       * @description Number of documents submitted for this deliverable. Only valid for deliverables of type Document.
+       */
+      numDocuments?: number;
+      /** Format: int64 */
+      organizationId: number;
+      organizationName: string;
+      /** Format: int64 */
+      participantId: number;
+      participantName: string;
+      /** Format: int64 */
+      projectId: number;
+      projectName: string;
+      /** @enum {string} */
+      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
+      /** @enum {string} */
+      type: "Document";
+    };
+    ListDeliverablesResponsePayload: {
+      deliverables: components["schemas"]["ListDeliverablesElement"][];
       status: components["schemas"]["SuccessOrError"];
     };
     ListDeviceConfigsResponse: {
@@ -3384,6 +3473,16 @@ export interface components {
       id: number;
       name: string;
     };
+    SubmissionDocumentPayload: {
+      /** Format: date-time */
+      createdTime: string;
+      description: string;
+      /** @enum {string} */
+      documentStore: "Dropbox" | "Google";
+      /** Format: int64 */
+      id: number;
+      name: string;
+    };
     /**
      * @description Indicates of success or failure of the requested operation.
      * @enum {string}
@@ -3754,6 +3853,12 @@ export interface components {
     UpdateSubLocationRequestPayload: {
       name: string;
     };
+    UpdateSubmissionRequestPayload: {
+      feedback?: string;
+      internalComment?: string;
+      /** @enum {string} */
+      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
+    };
     UpdateUserPreferencesRequestPayload: {
       /**
        * Format: int64
@@ -3836,6 +3941,11 @@ export interface components {
       id?: number;
       /** Format: date */
       startDate: string;
+    };
+    UploadDeliverableDocumentResponsePayload: {
+      /** Format: int64 */
+      documentId: number;
+      status: components["schemas"]["SuccessOrError"];
     };
     UploadFileResponsePayload: {
       /**
@@ -4046,6 +4156,131 @@ export interface operations {
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Lists the deliverables for accelerator projects
+   * @description The list may optionally be filtered based on certain criteria as specified in the query string. If no filter parameters are supplied, lists all the deliverables in all the participants and projects that are visible to the user. For users with accelerator admin privileges, this will be the full list of all deliverables for all accelerator projects.
+   */
+  listDeliverables: {
+    parameters: {
+      query?: {
+        /** @description List deliverables for projects belonging to this organization. Ignored if participantId or projectId is specified. */
+        organizationId?: number;
+        /** @description List deliverables for all projects in this participant. Ignored if projectId is specified. */
+        participantId?: number;
+        /** @description List deliverables for this project only. */
+        projectId?: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListDeliverablesResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets the details of a single deliverable and its submission documents, if any. */
+  getDeliverable: {
+    parameters: {
+      path: {
+        deliverableId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetDeliverableResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Uploads a new document to satisfy a deliverable. */
+  uploadDeliverableDocument: {
+    parameters: {
+      path: {
+        deliverableId: number;
+      };
+    };
+    requestBody?: {
+      content: {
+        "multipart/form-data": {
+          description: string;
+          /** Format: binary */
+          file: string;
+          /** Format: int64 */
+          projectId: number;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadDeliverableDocumentResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets a single submission document from a deliverable. */
+  getDeliverableDocument: {
+    parameters: {
+      path: {
+        deliverableId: number;
+        documentId: number;
+      };
+    };
+    responses: {
+      /** @description If the current user has permission to view the document, redirects to the document on the document store. Depending on the document store, the redirect URL may or may not be valid for only a limited time. */
+      307: {
+        headers: {
+          /** @description URL of document in document store. */
+          Location?: unknown;
+        };
+        content: {
+          "application/json": string;
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Updates the state of a submission from a project.
+   * @description Only permitted for users with accelerator admin privileges.
+   */
+  updateSubmission: {
+    parameters: {
+      path: {
+        deliverableId: number;
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateSubmissionRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };

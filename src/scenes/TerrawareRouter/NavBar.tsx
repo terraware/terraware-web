@@ -6,7 +6,7 @@ import strings from 'src/strings';
 import { NurseryWithdrawalService } from 'src/services';
 import { isAcceleratorAdmin } from 'src/types/User';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { useOrganization, useUser } from 'src/providers/hooks';
+import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import ReportService, { Reports } from 'src/services/ReportService';
 import { isAdmin } from 'src/utils/organization';
 import isEnabled from 'src/features';
@@ -38,6 +38,7 @@ export default function NavBar({
   const featureFlagProjects = isEnabled('Projects');
   const featureFlagAccelerator = isEnabled('Accelerator');
   const { user } = useUser();
+  const { activeLocale } = useLocalization();
 
   const isAccessionDashboardRoute = useRouteMatch(APP_PATHS.SEEDS_DASHBOARD + '/');
   const isAccessionsRoute = useRouteMatch(APP_PATHS.ACCESSIONS + '/');
@@ -110,16 +111,19 @@ export default function NavBar({
 
   useEffect(() => {
     const fetchDeliverables = async () => {
+      // TODO I think we should pull this out of redux
       // using a direct service call, without redux, to keep with existing pattern in the nav bars
-      const deliverables = await DeliverablesService.searchDeliverablesForParticipant(selectedOrganization.id);
-      setHasDeliverables(!!(deliverables && deliverables.length > 0));
+      const response = await DeliverablesService.list(activeLocale, {
+        organizationId: selectedOrganization.id,
+      });
+      setHasDeliverables(!!(response && response.deliverables.length > 0));
     };
     if (featureFlagAccelerator && isAdmin(selectedOrganization)) {
       fetchDeliverables();
     } else {
       setHasDeliverables(false);
     }
-  }, [featureFlagAccelerator, selectedOrganization]);
+  }, [activeLocale, featureFlagAccelerator, selectedOrganization]);
 
   const getSeedlingsMenuItems = () => {
     const inventoryMenu = (

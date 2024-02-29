@@ -1,19 +1,19 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import strings from 'src/strings';
-import { UpdateRequest } from 'src/types/Deliverables';
+import { Deliverable } from 'src/types/Deliverables';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Statuses } from 'src/redux/features/asyncUtils';
 import { selectDeliverablesEditRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
 import {
-  requestDeliverableFetch,
-  requestDeliverableUpdate,
+  requestGetDeliverable,
+  requestUpdateDeliverable,
 } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export type Response = {
   internalComment?: string;
   status?: Statuses;
-  update: (request: UpdateRequest) => void;
+  update: (deliverable: Deliverable) => void;
 };
 
 /**
@@ -21,18 +21,18 @@ export type Response = {
  * Returns status on request and function to update status.
  */
 export default function useUpdateDeliverable(): Response {
-  const [lastRequest, setLastRequest] = useState<UpdateRequest | undefined>();
+  const [lastRequest, setLastRequest] = useState<Deliverable>();
   const [requestId, setRequestId] = useState<string>('');
   const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
   const result = useAppSelector(selectDeliverablesEditRequest(requestId));
 
   const update = useCallback(
-    (request: UpdateRequest) => {
+    (deliverable: Deliverable) => {
       setLastRequest(undefined);
-      const dispatched = dispatch(requestDeliverableUpdate(request));
+      const dispatched = dispatch(requestUpdateDeliverable({ deliverable }));
       setRequestId(dispatched.requestId);
-      setLastRequest(request);
+      setLastRequest(deliverable);
     },
     [dispatch]
   );
@@ -46,7 +46,7 @@ export default function useUpdateDeliverable(): Response {
       snackbar.toastError(strings.GENERIC_ERROR);
     } else if (result?.status === 'success') {
       // refresh deliverable data in store
-      dispatch(requestDeliverableFetch(result?.data!));
+      dispatch(requestGetDeliverable(result?.data!));
       if (lastRequest.status === 'Approved') {
         snackbar.toastSuccess(strings.DELIVERABLE_APPROVED);
       } else if (lastRequest.status === 'Rejected') {
