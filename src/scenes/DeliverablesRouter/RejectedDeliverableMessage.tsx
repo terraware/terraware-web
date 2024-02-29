@@ -14,7 +14,7 @@ const RejectedDeliverableMessage = ({ deliverable }: ViewProps): JSX.Element => 
       {activeLocale && deliverable?.status === 'Rejected' && (
         <Box marginBottom={theme.spacing(4)}>
           <Message
-            body={deliverable?.reason || ''}
+            body={deliverable?.feedback || ''}
             priority='critical'
             title={strings.DELIVERABLE_REJECTED}
             type='page'
