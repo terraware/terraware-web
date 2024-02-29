@@ -16,3 +16,8 @@ export type FieldOptionsMap = { [key: string]: { partial: boolean; values: (stri
 /** Search request payload that requires a search node to be specified. */
 export type SearchRequestPayload = components['schemas']['SearchRequestPayload'] & { search: SearchNodePayload };
 export type OptionalSearchRequestPayload = components['schemas']['SearchRequestPayload'];
+
+export const isFieldNodePayload = (node: SearchNodePayload): node is FieldNodePayload => node.operation === 'field';
+export const isNotNodePayload = (node: SearchNodePayload): node is NotNodePayload => node.operation === 'not';
+export const isAndNodePayload = (node: SearchNodePayload): node is AndNodePayload => node.operation === 'and';
+export const isOrNodePayload = (node: SearchNodePayload): node is OrNodePayload => node.operation === 'or';

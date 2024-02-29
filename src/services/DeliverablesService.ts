@@ -7,6 +7,7 @@ import {
 } from 'src/types/Deliverables';
 import HttpService, { Response, Params } from 'src/services/HttpService';
 import { paths } from 'src/api/types/generated-schema';
+import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
 
 /**
  * Accelerator "deliverable" related services
@@ -63,15 +64,25 @@ const list = async (
   search?: SearchNodePayload,
   searchSortOrder?: SearchSortOrder
   // TODO sort, search, etc...
-): Promise<(DeliverablesData & Response) | null> =>
-  httpDeliverables.get<ListDeliverablesResponsePayload, DeliverablesData>(
+): Promise<(DeliverablesData & Response) | null> => {
+  let searchOrderConfig: SearchOrderConfig;
+  if (searchSortOrder) {
+    searchOrderConfig = {
+      locale,
+      sortOrder: searchSortOrder,
+      numberFields: ['id', 'numDocuments', 'organizationId', 'participantId'],
+    };
+  }
+
+  return httpDeliverables.get<ListDeliverablesResponsePayload, DeliverablesData>(
     {
       params: request as Params,
     },
     (data) => ({
-      deliverables: (data?.deliverables || []).sort((a, b) => a.name.localeCompare(b.name, locale || undefined)),
+      deliverables: searchAndSort(data?.deliverables || [], search, searchOrderConfig),
     })
   );
+};
 
 const DeliverablesService = {
   get,
