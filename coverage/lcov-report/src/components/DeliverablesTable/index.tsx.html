@@ -228,7 +228,9 @@
 <a name='L163'></a><a href='#L163'>163</a>
 <a name='L164'></a><a href='#L164'>164</a>
 <a name='L165'></a><a href='#L165'>165</a>
-<a name='L166'></a><a href='#L166'>166</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a>
+<a name='L168'></a><a href='#L168'>168</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -354,6 +356,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -399,12 +403,12 @@ import { makeStyles } from '@mui/styles';
 import { SortOrder, TableColumnType } from '@terraware/web-components';
 import strings from 'src/strings';
 import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
-import { DeliverableCategories, DeliverableStatuses, SearchResponseDeliverable } from 'src/types/Deliverables';
+import { DeliverableCategories, DeliverableStatuses, ListDeliverablesElement } from 'src/types/Deliverables';
 import { useLocalization } from 'src/providers';
 import useDebounce from 'src/utils/useDebounce';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectDeliverablesSearchRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
-import { requestDeliverablesSearch } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
+import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import Card from 'src/components/common/Card';
 import SearchFiltersWrapperV2, { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import { BaseTable as Table } from 'src/components/common/table';
@@ -430,7 +434,7 @@ const DeliverablesTable = <span class="cstat-no" title="statement not covered" >
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
 &nbsp;
-  const [deliverables, setDeliverables] = <span class="cstat-no" title="statement not covered" >useState&lt;SearchResponseDeliverable[]&gt;([]);</span>
+  const [deliverables, setDeliverables] = <span class="cstat-no" title="statement not covered" >useState&lt;ListDeliverablesElement[]&gt;([]);</span>
   const [deliverablesSearchRequestId, setDeliverablesSearchRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const deliverablesSearchRequest = <span class="cstat-no" title="statement not covered" >useAppSelector(selectDeliverablesSearchRequest(deliverablesSearchRequestId));</span>
 &nbsp;
@@ -518,14 +522,16 @@ const DeliverablesTable = <span class="cstat-no" title="statement not covered" >
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const search: SearchNodePayload = <span class="cstat-no" title="statement not covered" >getSearchPayload();</span>
-    const request = <span class="cstat-no" title="statement not covered" >dispatch(requestDeliverablesSearch({ organizationId, search, searchSortOrder }));</span>
+    const request = <span class="cstat-no" title="statement not covered" >dispatch(</span>
+      requestListDeliverables({ locale: activeLocale, listRequest: { organizationId }, search, searchSortOrder })
+    );
 <span class="cstat-no" title="statement not covered" >    setDeliverablesSearchRequestId(request.requestId);</span>
-  }, [dispatch, getSearchPayload, organizationId, searchSortOrder]);
+  }, [activeLocale, dispatch, getSearchPayload, organizationId, searchSortOrder]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     // TODO do something if the request has an error
-<span class="cstat-no" title="statement not covered" >    if (deliverablesSearchRequest &amp;&amp; deliverablesSearchRequest.data) {</span>
-<span class="cstat-no" title="statement not covered" >      setDeliverables(deliverablesSearchRequest.data);</span>
+<span class="cstat-no" title="statement not covered" >    if (deliverablesSearchRequest &amp;&amp; deliverablesSearchRequest.data?.deliverables) {</span>
+<span class="cstat-no" title="statement not covered" >      setDeliverables(deliverablesSearchRequest.data.deliverables);</span>
     }
   }, [deliverablesSearchRequest]);
 &nbsp;
@@ -565,7 +571,7 @@ export default DeliverablesTable;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-29T23:41:13.088Z
+                at 2024-02-29T23:49:46.966Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

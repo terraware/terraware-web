@@ -1,2 +1,4 @@
+b4ab0fa777 SW-4643 Add additional tests for locations and accessions (#2138)
+ad31de1183 Rewire deliverable APIs to the backend  (#2235)
 e18498d059 Fix Deliverable page message layout issue (#2243)
 1325c74908 Updated translations from Phrase (#2241)

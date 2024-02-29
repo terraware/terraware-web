@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
@@ -112,7 +112,12 @@
 <a name='L47'></a><a href='#L47'>47</a>
 <a name='L48'></a><a href='#L48'>48</a>
 <a name='L49'></a><a href='#L49'>49</a>
-<a name='L50'></a><a href='#L50'>50</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -125,22 +130,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -157,6 +152,21 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -165,21 +175,23 @@
 import strings from 'src/strings';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { Response } from 'src/services/HttpService';
-import DeliverablesService from 'src/services/DeliverablesService';
-import { DeliverableData, SearchResponseDeliverable, UpdateRequest } from 'src/types/Deliverables';
+import DeliverablesService, { ListDeliverablesRequestParams } from 'src/services/DeliverablesService';
+import { Deliverable, DeliverableData } from 'src/types/Deliverables';
 &nbsp;
-export const requestDeliverablesSearch = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
-  'deliverables/search',
+export const requestListDeliverables = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
+  'deliverables/list',
 <span class="fstat-no" title="function not covered" >  as</span>ync (
-    request: { organizationId: number; search?: SearchNodePayload; searchSortOrder?: SearchSortOrder },
+    request: {
+      locale: string | null;
+      listRequest?: ListDeliverablesRequestParams;
+      search?: SearchNodePayload;
+      searchSortOrder?: SearchSortOrder;
+    },
     { rejectWithValue }
   ) =&gt; {
-    const { organizationId, search, searchSortOrder } = <span class="cstat-no" title="statement not covered" >request;</span>
+    const { listRequest, locale, search, searchSortOrder } = <span class="cstat-no" title="statement not covered" >request;</span>
 &nbsp;
-    const response: SearchResponseDeliverable[] | null = <span class="cstat-no" title="statement not covered" >await (organizationId === -1</span>
-      ? DeliverablesService.searchDeliverablesForAdmin(organizationId, search, searchSortOrder)
-      : DeliverablesService.searchDeliverablesForParticipant(organizationId, search, searchSortOrder));
-&nbsp;
+    const response = <span class="cstat-no" title="statement not covered" >await DeliverablesService.list(locale, listRequest, search, searchSortOrder);</span>
 <span class="cstat-no" title="statement not covered" >    if (response) {</span>
 <span class="cstat-no" title="statement not covered" >      return response;</span>
     }
@@ -188,10 +200,10 @@ export const requestDeliverablesSearch = <span class="cstat-no" title="statement
   }
 );
 &nbsp;
-export const requestDeliverableFetch = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
-  'deliverables/fetch-one',
+export const requestGetDeliverable = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
+  'deliverables/get-one',
 <span class="fstat-no" title="function not covered" >  as</span>ync (deliverableId: number, { rejectWithValue }) =&gt; {
-    const response: Response &amp; DeliverableData = <span class="cstat-no" title="statement not covered" >await DeliverablesService.getDeliverable(deliverableId);</span>
+    const response: Response &amp; DeliverableData = <span class="cstat-no" title="statement not covered" >await DeliverablesService.get(deliverableId);</span>
 <span class="cstat-no" title="statement not covered" >    if (response &amp;&amp; response.requestSucceeded) {</span>
 <span class="cstat-no" title="statement not covered" >      return response.deliverable;</span>
     }
@@ -200,13 +212,16 @@ export const requestDeliverableFetch = <span class="cstat-no" title="statement n
   }
 );
 &nbsp;
-export const requestDeliverableUpdate = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
+export const requestUpdateDeliverable = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
   'deliverables/update',
-<span class="fstat-no" title="function not covered" >  as</span>ync (request: UpdateRequest, { rejectWithValue }) =&gt; {
-    const response: Response = <span class="cstat-no" title="statement not covered" >await DeliverablesService.update(request);</span>
+<span class="fstat-no" title="function not covered" >  as</span>ync (request: { deliverable: Deliverable }, { rejectWithValue }) =&gt; {
+    const { deliverable } = <span class="cstat-no" title="statement not covered" >request;</span>
+&nbsp;
+    const response: Response = <span class="cstat-no" title="statement not covered" >await DeliverablesService.update(deliverable);</span>
 <span class="cstat-no" title="statement not covered" >    if (response &amp;&amp; response.requestSucceeded) {</span>
-<span class="cstat-no" title="statement not covered" >      return request.id;</span>
+<span class="cstat-no" title="statement not covered" >      return deliverable.id;</span>
     }
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    return rejectWithValue(strings.GENERIC_ERROR);</span>
   }
 );
@@ -217,7 +232,7 @@ export const requestDeliverableUpdate = <span class="cstat-no" title="statement 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-29T23:41:13.088Z
+                at 2024-02-29T23:49:46.966Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
