@@ -21,7 +21,7 @@ export const splitTrigrams = (value: string): string[] => {
   const _value = value.replace(/[^0-9a-z]/gi, ' ').replace(/\s+/, ' ');
 
   // Split into words, pad each word with spaces
-  const words = _value.split(' ').map((value) => ` ${value} `);
+  const words = _value.split(' ').map((word) => ` ${word} `);
 
   for (const word of words) {
     position = 3;
