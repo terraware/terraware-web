@@ -39,13 +39,6 @@ export type DeliverablesData = {
   deliverables: ListDeliverablesElement[];
 };
 
-export type UpdateRequest = {
-  id: number;
-  internalComment?: string;
-  reason?: string;
-  status?: DeliverableStatusType;
-};
-
 export const categoryLabel = (category: DeliverableCategoryType): string => {
   switch (category) {
     case 'Legal Eligibility':

@@ -3,7 +3,7 @@ import strings from 'src/strings';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { Response } from 'src/services/HttpService';
 import DeliverablesService, { ListDeliverablesRequestParams } from 'src/services/DeliverablesService';
-import { DeliverableData, UpdateRequest } from 'src/types/Deliverables';
+import { Deliverable, DeliverableData } from 'src/types/Deliverables';
 
 export const requestListDeliverables = createAsyncThunk(
   'deliverables/list',
@@ -18,8 +18,7 @@ export const requestListDeliverables = createAsyncThunk(
   ) => {
     const { listRequest, locale, search, searchSortOrder } = request;
 
-    const response = await DeliverablesService.listDeliverables(locale, listRequest, search, searchSortOrder);
-
+    const response = await DeliverablesService.list(locale, listRequest, search, searchSortOrder);
     if (response) {
       return response;
     }
@@ -31,7 +30,7 @@ export const requestListDeliverables = createAsyncThunk(
 export const requestGetDeliverable = createAsyncThunk(
   'deliverables/get-one',
   async (deliverableId: number, { rejectWithValue }) => {
-    const response: Response & DeliverableData = await DeliverablesService.getDeliverable(deliverableId);
+    const response: Response & DeliverableData = await DeliverablesService.get(deliverableId);
     if (response && response.requestSucceeded) {
       return response.deliverable;
     }
@@ -40,13 +39,16 @@ export const requestGetDeliverable = createAsyncThunk(
   }
 );
 
-export const requestDeliverableUpdate = createAsyncThunk(
+export const requestUpdateDeliverable = createAsyncThunk(
   'deliverables/update',
-  async (request: UpdateRequest, { rejectWithValue }) => {
-    const response: Response = await DeliverablesService.update(request);
+  async (request: { deliverable: Deliverable }, { rejectWithValue }) => {
+    const { deliverable } = request;
+
+    const response: Response = await DeliverablesService.update(deliverable);
     if (response && response.requestSucceeded) {
-      return request.id;
+      return deliverable.id;
     }
+
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );

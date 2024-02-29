@@ -4,7 +4,6 @@ import {
   DeliverableData,
   DeliverablesData,
   ListDeliverablesResponsePayload,
-  UpdateRequest,
 } from 'src/types/Deliverables';
 import HttpService, { Response, Params } from 'src/services/HttpService';
 import { paths } from 'src/api/types/generated-schema';
@@ -13,38 +12,52 @@ import { paths } from 'src/api/types/generated-schema';
  * Accelerator "deliverable" related services
  */
 
-const ENDPOINT_LIST_DELIVERABLES = '/api/v1/accelerator/deliverables';
-const ENDPOINT_GET_DELIVERABLE = '/api/v1/accelerator/deliverables/{deliverableId}';
+const ENDPOINT_DELIVERABLES = '/api/v1/accelerator/deliverables';
+const ENDPOINT_DELIVERABLE = '/api/v1/accelerator/deliverables/{deliverableId}';
+const ENDPOINT_DELIVERABLE_SUBMISSION = '/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}';
 
-export type ListDeliverablesRequestParams = paths[typeof ENDPOINT_LIST_DELIVERABLES]['get']['parameters']['query'];
+export type ListDeliverablesRequestParams = paths[typeof ENDPOINT_DELIVERABLES]['get']['parameters']['query'];
 export type GetDeliverableResponsePayload =
-  paths[typeof ENDPOINT_GET_DELIVERABLE]['get']['responses'][200]['content']['application/json'];
+  paths[typeof ENDPOINT_DELIVERABLE]['get']['responses'][200]['content']['application/json'];
 
-const httpDeliverables = HttpService.root(ENDPOINT_LIST_DELIVERABLES);
+export type UpdateSubmissionRequestPayload =
+  paths[typeof ENDPOINT_DELIVERABLE_SUBMISSION]['put']['requestBody']['content']['application/json'];
+export type UpdateSubmissionResponsePayload =
+  paths[typeof ENDPOINT_DELIVERABLE_SUBMISSION]['put']['responses'][200]['content']['application/json'];
 
-// TODO remove this when we replace the update
-let mockDeliverable: Deliverable;
+const httpDeliverables = HttpService.root(ENDPOINT_DELIVERABLES);
+const httpDeliverable = HttpService.root(ENDPOINT_DELIVERABLE);
+const httpDeliverableSubmission = HttpService.root(ENDPOINT_DELIVERABLE_SUBMISSION);
 
-const getDeliverable = async (deliverableId: number): Promise<Response & DeliverableData> =>
-  httpDeliverables.get<GetDeliverableResponsePayload, DeliverableData>(
+const get = async (deliverableId: number): Promise<Response & DeliverableData> =>
+  httpDeliverable.get<GetDeliverableResponsePayload, DeliverableData>(
     {
-      url: ENDPOINT_GET_DELIVERABLE,
       urlReplacements: { '{deliverableId}': `${deliverableId}` },
     },
     (response) => ({ deliverable: response?.deliverable })
   );
 
-const update = async ({ internalComment, reason, status }: UpdateRequest): Promise<Response> => {
-  if (status) {
-    mockDeliverable.status = status;
+const update = async (deliverable: Deliverable): Promise<Response> => {
+  const payload: UpdateSubmissionRequestPayload = {
+    status: deliverable.status,
+  };
+  if (deliverable.internalComment) {
+    payload.internalComment = deliverable.internalComment;
+  }
+  if (deliverable.feedback) {
+    payload.feedback = deliverable.feedback;
   }
 
-  mockDeliverable.feedback = reason;
-  mockDeliverable.internalComment = internalComment;
-  return { requestSucceeded: true };
+  return httpDeliverableSubmission.put2<UpdateSubmissionResponsePayload>({
+    urlReplacements: {
+      '{deliverableId}': `${deliverable.id}`,
+      '{projectId}': `${deliverable.projectId}`,
+    },
+    entity: payload,
+  });
 };
 
-const listDeliverables = async (
+const list = async (
   locale: string | null,
   request?: ListDeliverablesRequestParams,
   search?: SearchNodePayload,
@@ -61,8 +74,8 @@ const listDeliverables = async (
   );
 
 const DeliverablesService = {
-  getDeliverable,
-  listDeliverables,
+  get,
+  list,
   update,
 };
 

@@ -113,7 +113,7 @@ export default function NavBar({
     const fetchDeliverables = async () => {
       // TODO I think we should pull this out of redux
       // using a direct service call, without redux, to keep with existing pattern in the nav bars
-      const response = await DeliverablesService.listDeliverables(activeLocale, {
+      const response = await DeliverablesService.list(activeLocale, {
         organizationId: selectedOrganization.id,
       });
       setHasDeliverables(!!(response && response.deliverables.length > 0));
