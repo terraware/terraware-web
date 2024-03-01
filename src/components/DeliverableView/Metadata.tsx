@@ -13,18 +13,6 @@ const Metadata = (props: ViewProps): JSX.Element => {
 
   return (
     <Box display='flex' flexDirection='column'>
-      {deliverable.status === 'Rejected' && (
-        <Box
-          border={`1px solid ${theme.palette.TwClrBaseGray100}`}
-          borderRadius='8px'
-          marginBottom='16px'
-          padding='16px'
-        >
-          <DeliverableStatusBadge status={deliverable.status} />
-          <strong>{strings.FEEDBACK}</strong> {deliverable.feedback}
-        </Box>
-      )}
-
       {isAcceleratorRoute && (
         <Box
           border={`1px solid ${theme.palette.TwClrBaseGray100}`}
