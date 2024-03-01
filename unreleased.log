@@ -1,3 +1,4 @@
+8397c2fc0a SW-4944 Create ACL for global roles, plumb into the UserProvider (#2251)
 218b413409 Updated translations from Phrase (#2250)
 8d32f20644 Use the new sort function in the planting sites local sort (#2244)
 c375921f55 Reformatted markdown for keygen command in remote-backend. (#2240)
