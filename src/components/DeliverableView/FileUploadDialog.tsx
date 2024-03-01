@@ -74,10 +74,8 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
 
   return (
     <DialogBox
-      open={true}
-      title={strings.SUBMIT_DOCUMENT}
-      size='large'
       onClose={() => !busy && onClose()}
+      open={true}
       middleButtons={[
         <Button
           disabled={busy}
@@ -97,6 +95,9 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
           priority='primary'
         />,
       ]}
+      scrolled
+      size='large'
+      title={strings.SUBMIT_DOCUMENT}
     >
       <Box display='flex' flexDirection='column'>
         {busy && <CircularProgress className={classes.spinner} size='100' />}
