@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, useTheme } from '@mui/material';
-import strings from 'src/strings';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
 import { ViewProps } from './types';
