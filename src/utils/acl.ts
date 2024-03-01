@@ -35,24 +35,21 @@ export type GlobalRolePermission =
   | PermissionParticipant
   | PermissionProjectAcceleratorData;
 
-type PermissionCheckFn<T = any> = (user: User, permission: GlobalRolePermission, metadata: T) => boolean;
+type PermissionCheckFn<T = any> = (user: User, permission: GlobalRolePermission, metadata?: T) => boolean;
 
-const GLOBAL_ROLE_SUPER_ADMIN: UserGlobalRole = 'Super-Admin';
-const GLOBAL_ROLE_ACCELERATOR_ADMIN: UserGlobalRole = 'Accelerator Admin';
-const GLOBAL_ROLE_TF_EXPERT_ADMIN: UserGlobalRole = 'TF Expert';
-const GLOBAL_ROLE_READ_ONLY_ADMIN: UserGlobalRole = 'Read Only';
+export const GLOBAL_ROLE_SUPER_ADMIN: UserGlobalRole = 'Super-Admin';
+export const GLOBAL_ROLE_ACCELERATOR_ADMIN: UserGlobalRole = 'Accelerator Admin';
+export const GLOBAL_ROLE_TF_EXPERT: UserGlobalRole = 'TF Expert';
+export const GLOBAL_ROLE_READ_ONLY: UserGlobalRole = 'Read Only';
 const isUserGlobalRole = (input: unknown): input is UserGlobalRole =>
-  [
-    GLOBAL_ROLE_SUPER_ADMIN,
-    GLOBAL_ROLE_ACCELERATOR_ADMIN,
-    GLOBAL_ROLE_TF_EXPERT_ADMIN,
-    GLOBAL_ROLE_READ_ONLY_ADMIN,
-  ].includes(input as UserGlobalRole);
+  [GLOBAL_ROLE_SUPER_ADMIN, GLOBAL_ROLE_ACCELERATOR_ADMIN, GLOBAL_ROLE_TF_EXPERT, GLOBAL_ROLE_READ_ONLY].includes(
+    input as UserGlobalRole
+  );
 
 const SuperAdminPlus: UserGlobalRoles = [GLOBAL_ROLE_SUPER_ADMIN];
 const AcceleratorAdminPlus: UserGlobalRoles = [...SuperAdminPlus, GLOBAL_ROLE_ACCELERATOR_ADMIN];
-const TFExpertPlus: UserGlobalRoles = [...AcceleratorAdminPlus, GLOBAL_ROLE_TF_EXPERT_ADMIN];
-const ReadOnlyPlus: UserGlobalRoles = [...TFExpertPlus, GLOBAL_ROLE_READ_ONLY_ADMIN];
+const TFExpertPlus: UserGlobalRoles = [...AcceleratorAdminPlus, GLOBAL_ROLE_TF_EXPERT];
+const ReadOnlyPlus: UserGlobalRoles = [...TFExpertPlus, GLOBAL_ROLE_READ_ONLY];
 
 const isSuperAdmin = (user: User): boolean => user.globalRoles.includes(GLOBAL_ROLE_SUPER_ADMIN);
 const isAcceleratorAdmin = (user: User): boolean => user.globalRoles.includes(GLOBAL_ROLE_ACCELERATOR_ADMIN);
@@ -62,16 +59,18 @@ type AssignGlobalRoleToUserMetadata = { roleToSet: UserGlobalRole };
 const isAllowedAssignGlobalRoleToUser: PermissionCheckFn<AssignGlobalRoleToUserMetadata> = (
   user: User,
   _: GlobalRolePermission,
-  metadata: AssignGlobalRoleToUserMetadata
+  metadata?: AssignGlobalRoleToUserMetadata
 ): boolean => {
-  if (isSuperAdmin(user)) {
+  if (!metadata) {
+    return false;
+  } else if (isSuperAdmin(user)) {
     return true;
   } else if (isAcceleratorAdmin(user)) {
     // Accelerator admin can only assign accelerator admin, tf expert, and read only
     if (
-      (
-        [GLOBAL_ROLE_ACCELERATOR_ADMIN, GLOBAL_ROLE_TF_EXPERT_ADMIN, GLOBAL_ROLE_READ_ONLY_ADMIN] as UserGlobalRole[]
-      ).includes(metadata.roleToSet)
+      ([GLOBAL_ROLE_ACCELERATOR_ADMIN, GLOBAL_ROLE_TF_EXPERT, GLOBAL_ROLE_READ_ONLY] as UserGlobalRole[]).includes(
+        metadata.roleToSet
+      )
     ) {
       return true;
     }
@@ -83,7 +82,7 @@ const isAllowedAssignGlobalRoleToUser: PermissionCheckFn<AssignGlobalRoleToUserM
 // List of permissions and roles that have those permissions
 const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   VIEW_CONSOLE: ReadOnlyPlus,
-  READ_GLOBAL_ROLES: SuperAdminPlus,
+  READ_GLOBAL_ROLES: AcceleratorAdminPlus,
   ASSIGN_GLOBAL_ROLE_TO_USER: isAllowedAssignGlobalRoleToUser,
   CREATE_COHORTS: AcceleratorAdminPlus,
   READ_COHORTS: TFExpertPlus,
@@ -102,7 +101,7 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
 export const isAllowed: PermissionCheckFn = (
   user: User,
   permission: GlobalRolePermission,
-  metadata: unknown
+  metadata?: unknown
 ): boolean => {
   const acl = ACL[permission];
   if (!acl) {
