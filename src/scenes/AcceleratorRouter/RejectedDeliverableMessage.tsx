@@ -6,16 +6,12 @@ import { useLocalization } from 'src/providers/hooks';
 import strings from 'src/strings';
 
 type Props = ViewProps & {
-  showRejectDialog?: () => void;
+  showRejectDialog: () => void;
 };
 
 const RejectedDeliverableMessage = ({ deliverable, showRejectDialog }: Props): JSX.Element => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-
-  const onClickEditFeedback = () => {
-    showRejectDialog?.();
-  };
 
   return (
     <>
@@ -28,7 +24,7 @@ const RejectedDeliverableMessage = ({ deliverable, showRejectDialog }: Props): J
                 icon='iconEdit'
                 key={0}
                 label={strings.EDIT_FEEDBACK}
-                onClick={onClickEditFeedback}
+                onClick={showRejectDialog}
                 priority='secondary'
                 size='small'
                 type='passive'

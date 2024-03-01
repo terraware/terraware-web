@@ -9,7 +9,7 @@ import Card from 'src/components/common/Card';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import DocumentsList from 'src/scenes/AcceleratorRouter/DocumentsList';
-import { EditProps, ViewProps } from 'src/components/DeliverableView/types';
+import { EditProps } from 'src/components/DeliverableView/types';
 import MobileMessage from 'src/components/DeliverableView/MobileMessage';
 import TitleBar from 'src/components/DeliverableView/TitleBar';
 import DocumentsUploader from 'src/components/DeliverableView/DocumentsUploader';
@@ -18,11 +18,11 @@ import RejectedDeliverableMessage from 'src/scenes/AcceleratorRouter/RejectedDel
 
 export type Props = EditProps & {
   isBusy?: boolean;
-  showRejectDialog?: () => void;
+  showRejectDialog: () => void;
 };
 
 const DeliverableView = (props: Props): JSX.Element => {
-  const { ...viewProps }: ViewProps = props;
+  const { ...viewProps }: Props = props;
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
 
