@@ -18,6 +18,7 @@ import RejectedDeliverableMessage from 'src/scenes/AcceleratorRouter/RejectedDel
 
 export type Props = EditProps & {
   isBusy?: boolean;
+  showRejectDialog?: () => void;
 };
 
 const DeliverableView = (props: Props): JSX.Element => {

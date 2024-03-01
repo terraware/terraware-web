@@ -5,12 +5,16 @@ import { ViewProps } from 'src/components/DeliverableView/types';
 import { useLocalization } from 'src/providers/hooks';
 import strings from 'src/strings';
 
-const RejectedDeliverableMessage = ({ deliverable }: ViewProps): JSX.Element => {
+type Props = ViewProps & {
+  showRejectDialog?: () => void;
+};
+
+const RejectedDeliverableMessage = ({ deliverable, showRejectDialog }: Props): JSX.Element => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
 
   const onClickEditFeedback = () => {
-    alert('TODO: Edit rejection feedback');
+    showRejectDialog?.();
   };
 
   return (

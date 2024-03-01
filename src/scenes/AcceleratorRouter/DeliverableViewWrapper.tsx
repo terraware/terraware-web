@@ -98,7 +98,12 @@ const DeliverableViewWrapper = () => {
     return (
       <>
         {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectDeliverable} />}
-        <DeliverableView callToAction={callToAction} deliverable={deliverable} isBusy={requestStatus === 'pending'} />
+        <DeliverableView
+          callToAction={callToAction}
+          deliverable={deliverable}
+          isBusy={requestStatus === 'pending'}
+          showRejectDialog={() => setShowRejectDialog(true)}
+        />
       </>
     );
   } else {
