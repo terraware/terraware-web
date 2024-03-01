@@ -83,9 +83,13 @@ const DeliverableViewWrapper = () => {
         <OptionsMenu
           onOptionItemClick={onOptionItemClick}
           optionItems={[
-            { label: strings.NOT_SUBMITTED, value: 'not_submitted' },
-            { label: strings.NEEDS_TRANSLATION, value: 'needs_translation' },
-            { label: strings.NOT_NEEDED, value: 'not_needed' },
+            ...(deliverable?.status === 'Not Submitted'
+              ? []
+              : [{ label: strings.NOT_SUBMITTED, value: 'not_submitted' }]),
+            ...(deliverable?.status === 'Needs Translation'
+              ? []
+              : [{ label: strings.NEEDS_TRANSLATION, value: 'needs_translation' }]),
+            ...(deliverable?.status === 'Not Needed' ? [] : [{ label: strings.NOT_NEEDED, value: 'not_needed' }]),
           ]}
         />
       </Box>
