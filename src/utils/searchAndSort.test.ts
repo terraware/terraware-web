@@ -6,6 +6,7 @@ type MockResult = {
   id?: number;
   name?: string;
   numberField?: number;
+  'numberField(raw)'?: number;
   numberFieldAsString?: string;
   projectName?: string;
   status?: string;
@@ -522,6 +523,80 @@ describe('searchAndSort', () => {
       },
       {
         numberFieldAsString: '1',
+      },
+    ];
+
+    expect(searchAndSort(results, undefined, searchOrderConfig)).toEqual(sortedResultsDescending);
+  });
+
+  it('should sort the results as expected for a number field - test fallback from `$field(raw)` to `$field` to `0`', () => {
+    const searchOrderConfig: SearchOrderConfig = {
+      locale: 'en',
+      sortOrder: {
+        field: 'numberField',
+        direction: 'Ascending',
+      },
+      numberFields: ['numberField'],
+    };
+
+    const results: MockResult[] = [
+      // Falls back to `numberField(raw)`
+      {
+        id: 1,
+        'numberField(raw)': 7,
+      },
+      // Falls back to `numberField(raw)`
+      {
+        id: 2,
+        'numberField(raw)': 2,
+      },
+      // Falls back to `numberField`
+      {
+        id: 3,
+        numberField: 1,
+      },
+      // Falls back to 0
+      {
+        id: 4,
+      },
+    ];
+
+    const sortedResultsAscending: MockResult[] = [
+      {
+        id: 4,
+      },
+      {
+        id: 3,
+        numberField: 1,
+      },
+      {
+        id: 2,
+        'numberField(raw)': 2,
+      },
+      {
+        id: 1,
+        'numberField(raw)': 7,
+      },
+    ];
+
+    expect(searchAndSort(results, undefined, searchOrderConfig)).toEqual(sortedResultsAscending);
+
+    searchOrderConfig.sortOrder.direction = 'Descending';
+    const sortedResultsDescending: MockResult[] = [
+      {
+        id: 1,
+        'numberField(raw)': 7,
+      },
+      {
+        id: 2,
+        'numberField(raw)': 2,
+      },
+      {
+        id: 3,
+        numberField: 1,
+      },
+      {
+        id: 4,
       },
     ];
 
