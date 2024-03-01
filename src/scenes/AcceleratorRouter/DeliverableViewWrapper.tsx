@@ -62,36 +62,34 @@ const DeliverableViewWrapper = () => {
   );
 
   const callToAction = useMemo(() => {
-    if (deliverable?.status && deliverable.status !== 'Approved' && deliverable.status !== 'Rejected') {
-      return (
-        <Box display='flex' flexDirection='row' flexGrow={0} marginRight={theme.spacing(3)} justifyContent='right'>
-          <Button
-            id='rejectDeliverable'
-            label={strings.REJECT_ACTION}
-            priority='secondary'
-            onClick={() => void setShowRejectDialog(true)}
-            size='medium'
-            type='destructive'
-          />
-          <Button
-            id='approveDeliverable'
-            label={strings.APPROVE_DELIVERABLE}
-            onClick={() => setStatus('Approved')}
-            size='medium'
-          />
-          <OptionsMenu
-            onOptionItemClick={onOptionItemClick}
-            optionItems={[
-              { label: strings.NOT_SUBMITTED, value: 'not_submitted' },
-              { label: strings.NEEDS_TRANSLATION, value: 'needs_translation' },
-              { label: strings.NOT_NEEDED, value: 'not_needed' },
-            ]}
-          />
-        </Box>
-      );
-    } else {
-      return undefined;
-    }
+    return (
+      <Box display='flex' flexDirection='row' flexGrow={0} marginRight={theme.spacing(3)} justifyContent='right'>
+        <Button
+          disabled={deliverable?.status === 'Rejected'}
+          id='rejectDeliverable'
+          label={strings.REJECT_ACTION}
+          priority='secondary'
+          onClick={() => void setShowRejectDialog(true)}
+          size='medium'
+          type='destructive'
+        />
+        <Button
+          disabled={deliverable?.status === 'Approved'}
+          id='approveDeliverable'
+          label={strings.APPROVE_DELIVERABLE}
+          onClick={() => setStatus('Approved')}
+          size='medium'
+        />
+        <OptionsMenu
+          onOptionItemClick={onOptionItemClick}
+          optionItems={[
+            { label: strings.NOT_SUBMITTED, value: 'not_submitted' },
+            { label: strings.NEEDS_TRANSLATION, value: 'needs_translation' },
+            { label: strings.NOT_NEEDED, value: 'not_needed' },
+          ]}
+        />
+      </Box>
+    );
   }, [deliverable?.status, onOptionItemClick, setStatus, theme]);
 
   if (deliverable) {
