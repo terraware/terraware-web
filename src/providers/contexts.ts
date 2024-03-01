@@ -1,6 +1,7 @@
 import { createContext } from 'react';
 import { Organization } from 'src/types/Organization';
 import { ProvidedLocalizationData, ProvidedOrganizationData, ProvidedUserData } from './DataTypes';
+import { GlobalRolePermission } from 'src/utils/acl';
 
 export const UserContext = createContext<ProvidedUserData>({
   reloadUser: () => {
@@ -14,6 +15,7 @@ export const UserContext = createContext<ProvidedUserData>({
   userPreferences: {},
   bootstrapped: false,
   updateUserPreferences: () => Promise.resolve(true),
+  isAllowed: (_: GlobalRolePermission, __?: unknown) => false,
 });
 
 export const defaultSelectedOrg: Organization = {
