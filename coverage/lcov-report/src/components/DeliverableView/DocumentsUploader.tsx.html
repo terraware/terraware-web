@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -101,13 +101,22 @@
 <a name='L36'></a><a href='#L36'>36</a>
 <a name='L37'></a><a href='#L37'>37</a>
 <a name='L38'></a><a href='#L38'>38</a>
-<a name='L39'></a><a href='#L39'>39</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -122,12 +131,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -139,14 +142,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useMemo } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback, useMemo, useState } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { FileChooser } from '@terraware/web-components';
 import strings from 'src/strings';
 import { useLocalization } from 'src/providers';
 import { ViewProps } from './types';
+import FileUploadDialog from './FileUploadDialog';
 &nbsp;
 const DocumentsUploader = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> deliverable }: ViewProps): JSX.Element =&gt; {</span>
+  const [files, setFiles] = <span class="cstat-no" title="statement not covered" >useState&lt;File[]&gt;([]);</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
 &nbsp;
@@ -158,15 +174,20 @@ const DocumentsUploader = <span class="cstat-no" title="statement not covered" >
     }
   }, [activeLocale, deliverable.templateUrl]);
 &nbsp;
+  const onCloseFileUploadDialog = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >void setFiles([]),</span> []);</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Box display='flex' flexDirection='column'&gt;
+      {files.length &gt; 0 &amp;&amp; (
+        &lt;FileUploadDialog deliverable={deliverable} files={files} onClose={onCloseFileUploadDialog} /&gt;
+      )}
       &lt;Typography marginBottom={theme.spacing(2)} fontSize='20px' lineHeight='28px' fontWeight={600}&gt;
         {strings.DOCUMENTS}
       &lt;/Typography&gt;
       &lt;FileChooser
         acceptFileType='image/*,application/*'
         chooseFileText={strings.CHOOSE_FILE}
-        setFiles={<span class="fstat-no" title="function not covered" >(f</span>iles: File[]) =&gt; <span class="cstat-no" title="statement not covered" >window.alert(`${files.length} files selected`)}</span>
+        setFiles={setFiles}
         multipleSelection
         uploadDescription={strings.UPLOAD_FILES_DESCRIPTION}
         uploadText={strings.UPLOAD_FILES_TITLE}
@@ -184,7 +205,7 @@ export default DocumentsUploader;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-01T23:00:28.637Z
+                at 2024-03-02T00:00:25.086Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
