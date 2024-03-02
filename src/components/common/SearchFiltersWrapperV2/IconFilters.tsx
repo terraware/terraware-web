@@ -1,10 +1,13 @@
 import React, { useMemo, useState } from 'react';
-import { Button, Tooltip } from '@terraware/web-components';
+
 import { Popover, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { Button, Tooltip } from '@terraware/web-components';
+
+import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import strings from 'src/strings';
 import { FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
-import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
+
 import { FilterConfig } from './index';
 
 const useStyles = makeStyles((_theme: Theme) => ({

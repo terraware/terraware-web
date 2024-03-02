@@ -1,16 +1,18 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import { PlantingSite, PlantingSiteReportedPlants } from 'src/types/Tracking';
-import strings from 'src/strings';
+
 import { Box, Typography, useTheme } from '@mui/material';
-import { useAppSelector } from 'src/redux/store';
-import { selectSitePopulationZones } from 'src/redux/features/tracking/sitePopulationSelector';
+
 import FormattedNumber from 'src/components/common/FormattedNumber';
-import { selectPlantingSite, selectSiteReportedPlants } from 'src/redux/features/tracking/trackingSelectors';
-import { getShortDate } from 'src/utils/dateFormatter';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useLocalization } from 'src/providers';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
+import { selectSitePopulationZones } from 'src/redux/features/tracking/sitePopulationSelector';
+import { selectPlantingSite, selectSiteReportedPlants } from 'src/redux/features/tracking/trackingSelectors';
+import { useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
+import { PlantingSite, PlantingSiteReportedPlants } from 'src/types/Tracking';
+import { getShortDate } from 'src/utils/dateFormatter';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type TotalReportedPlantsCardProps = {
   plantingSiteId: number;

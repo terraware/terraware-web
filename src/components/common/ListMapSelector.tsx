@@ -1,11 +1,14 @@
 import React from 'react';
+
 import { Box, Theme, Typography, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+
 import strings from 'src/strings';
+import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+
 import Icon from './icon/Icon';
 import { IconName } from './icon/icons';
-import { makeStyles } from '@mui/styles';
-import { getRgbaFromHex } from 'src/utils/color';
 
 const useStyles = makeStyles((theme: Theme) => ({
   icon: {

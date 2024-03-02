@@ -1,12 +1,14 @@
 import React, { useMemo, useRef } from 'react';
-import strings from 'src/strings';
-import TfMain from 'src/components/common/TfMain';
+
 import { Box, CircularProgress, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Dropdown, IconName } from '@terraware/web-components';
-import { PlantingSite } from 'src/types/Tracking';
 import { useDeviceInfo } from '@terraware/web-components/utils';
-import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+
 import PageSnackbar from 'src/components/PageSnackbar';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import TfMain from 'src/components/common/TfMain';
+import strings from 'src/strings';
+import { PlantingSite } from 'src/types/Tracking';
 
 export type ButtonProps = {
   title: string;

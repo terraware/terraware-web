@@ -1,7 +1,8 @@
 import { Dispatch } from 'redux';
+
+import { setAccessionsAction } from 'src/redux/features/accessions/accessionsSlice';
 import { RootState } from 'src/redux/rootReducer';
 import SeedBankService, { SearchResponseAccession } from 'src/services/SeedBankService';
-import { setAccessionsAction } from 'src/redux/features/accessions/accessionsSlice';
 
 export const requestAccessions = (organizationId: number, speciesId?: number) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {

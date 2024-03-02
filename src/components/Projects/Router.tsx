@@ -1,11 +1,12 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { APP_PATHS } from 'src/constants';
+
+import ProjectEditView from 'src/components/ProjectEditView';
 import ProjectNewView from 'src/components/ProjectNewView';
 import ProjectView from 'src/components/ProjectView';
-import ProjectEditView from 'src/components/ProjectEditView';
 import Projects from 'src/components/Projects';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
+import { APP_PATHS } from 'src/constants';
 
 export type ProjectsRouterProps = {
   isPlaceholderOrg: () => boolean;

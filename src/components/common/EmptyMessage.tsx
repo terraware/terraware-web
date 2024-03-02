@@ -1,10 +1,12 @@
 import React from 'react';
-import { makeStyles } from '@mui/styles';
+
 import { Theme, Typography, useTheme } from '@mui/material';
-import Button from 'src/components/common/button/Button';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import strings from 'src/strings';
+import { makeStyles } from '@mui/styles';
+
 import Link from 'src/components/common/Link';
+import Button from 'src/components/common/button/Button';
+import strings from 'src/strings';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 interface StyleProps {
   isMobile: boolean;

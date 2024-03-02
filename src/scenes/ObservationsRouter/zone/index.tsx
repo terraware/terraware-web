@@ -1,24 +1,27 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+
 import { Box, Grid } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
-import { FieldOptionsMap } from 'src/types/Search';
-import { APP_PATHS } from 'src/constants';
-import strings from 'src/strings';
-import { useLocalization, useOrganization } from 'src/providers';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-import { useAppSelector } from 'src/redux/store';
-import { searchObservationPlantingZone } from 'src/redux/features/observations/observationPlantingZoneSelectors';
-import { FilterField } from 'src/components/common/FilterGroup';
-import { ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
+
 import Card from 'src/components/common/Card';
-import Table from 'src/components/common/table';
+import { FilterField } from 'src/components/common/FilterGroup';
 import Search, { SearchFiltersProps } from 'src/components/common/SearchFiltersWrapper';
-import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
+import Table from 'src/components/common/table';
+import { APP_PATHS } from 'src/constants';
+import { useLocalization, useOrganization } from 'src/providers';
+import { searchObservationPlantingZone } from 'src/redux/features/observations/observationPlantingZoneSelectors';
+import { useAppSelector } from 'src/redux/store';
 import AggregatedPlantsStats from 'src/scenes/ObservationsRouter/common/AggregatedPlantsStats';
-import ObservationPlantingZoneRenderer from './ObservationPlantingZoneRenderer';
-import { isManagerOrHigher } from 'src/utils/organization';
+import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
 import ReplaceObservationPlotModal from 'src/scenes/ObservationsRouter/replacePlot/ReplaceObservationPlotModal';
+import strings from 'src/strings';
+import { ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
+import { FieldOptionsMap } from 'src/types/Search';
+import { isManagerOrHigher } from 'src/utils/organization';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+
+import ObservationPlantingZoneRenderer from './ObservationPlantingZoneRenderer';
 
 const defaultColumns = (): TableColumnType[] => [
   { key: 'monitoringPlotName', name: strings.MONITORING_PLOT, type: 'string' },

@@ -1,6 +1,7 @@
-import axios from '..';
-import { Device, DeviceTemplate } from 'src/types/Device';
 import { paths } from 'src/api/types/generated-schema';
+import { Device, DeviceTemplate } from 'src/types/Device';
+
+import axios from '..';
 import addQueryParams from '../helpers/addQueryParams';
 
 const DEVICES_ENDPOINT = '/api/v1/devices';

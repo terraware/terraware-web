@@ -1,12 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import strings from 'src/strings';
-import { APP_PATHS } from 'src/constants';
-import useForm from 'src/utils/useForm';
+
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
-import SeedBankService, { AccessionPostRequestBody } from 'src/services/SeedBankService';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { Dropdown } from '@terraware/web-components';
+import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
+
+import ProjectsDropdown from 'src/components/ProjectsDropdown';
+import PageForm from 'src/components/common/PageForm';
+import SpeciesSelector from 'src/components/common/SpeciesSelector';
+import Textfield from 'src/components/common/Textfield/Textfield';
+import TfMain from 'src/components/common/TfMain';
+import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useProjects } from 'src/hooks/useProjects';
+import { useOrganization } from 'src/providers';
+import SeedBankService, { AccessionPostRequestBody } from 'src/services/SeedBankService';
+import strings from 'src/strings';
+import { accessionCreateStates } from 'src/types/Accession';
+import { Facility } from 'src/types/Facility';
+import { getSeedBank } from 'src/utils/organization';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
+
 import {
   Accession2Address,
   Accession2GPS,
@@ -15,20 +32,6 @@ import {
   Collectors2,
   SeedBank2Selector,
 } from './properties';
-import SpeciesSelector from 'src/components/common/SpeciesSelector';
-import Textfield from 'src/components/common/Textfield/Textfield';
-import PageForm from 'src/components/common/PageForm';
-import { accessionCreateStates } from 'src/types/Accession';
-import useSnackbar from 'src/utils/useSnackbar';
-import TfMain from 'src/components/common/TfMain';
-import { Dropdown } from '@terraware/web-components';
-import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
-import { useOrganization } from 'src/providers';
-import { getSeedBank } from 'src/utils/organization';
-import { Facility } from 'src/types/Facility';
-import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
-import ProjectsDropdown from 'src/components/ProjectsDropdown';
-import isEnabled from 'src/features';
 
 const SubTitleStyle = {
   fontSize: '20px',

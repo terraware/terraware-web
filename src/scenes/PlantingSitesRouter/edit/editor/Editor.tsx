@@ -1,32 +1,35 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { makeStyles } from '@mui/styles';
 import { useHistory } from 'react-router-dom';
+
 import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { BusySpinner, Button, Message } from '@terraware/web-components';
-import strings from 'src/strings';
-import { PlantingSeason, UpdatedPlantingSeason } from 'src/types/Tracking';
-import { DraftPlantingSite, OptionalSiteEditStep } from 'src/types/PlantingSite';
-import { SiteEditStep } from 'src/types/PlantingSite';
-import { APP_PATHS } from 'src/constants';
-import { useLocalization } from 'src/providers';
-import { useDocLinks } from 'src/docLinks';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import useForm from 'src/utils/useForm';
-import TfMain from 'src/components/common/TfMain';
-import TextWithLink from 'src/components/common/TextWithLink';
+
+import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import PageSnackbar from 'src/components/PageSnackbar';
-import usePlantingSiteCreate from 'src/scenes/PlantingSitesRouter/hooks/usePlantingSiteCreate';
+import TextWithLink from 'src/components/common/TextWithLink';
+import TfMain from 'src/components/common/TfMain';
+import { APP_PATHS } from 'src/constants';
+import { useDocLinks } from 'src/docLinks';
+import { useLocalization } from 'src/providers';
 import useDraftPlantingSiteCreate from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteCreate';
 import useDraftPlantingSiteUpdate from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteUpdate';
-import Form, { PlantingSiteStep } from './Form';
+import usePlantingSiteCreate from 'src/scenes/PlantingSitesRouter/hooks/usePlantingSiteCreate';
+import strings from 'src/strings';
+import { DraftPlantingSite, OptionalSiteEditStep } from 'src/types/PlantingSite';
+import { SiteEditStep } from 'src/types/PlantingSite';
+import { PlantingSeason, UpdatedPlantingSeason } from 'src/types/Tracking';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useForm from 'src/utils/useForm';
+
 import Details from './Details';
-import SiteBoundary from './SiteBoundary';
 import Exclusions from './Exclusions';
-import Zones from './Zones';
-import Subzones from './Subzones';
+import Form, { PlantingSiteStep } from './Form';
+import SiteBoundary from './SiteBoundary';
 import StartOverConfirmation from './StartOverConfirmation';
+import Subzones from './Subzones';
+import Zones from './Zones';
 import { OnValidate } from './types';
 
 export type EditorProps = {

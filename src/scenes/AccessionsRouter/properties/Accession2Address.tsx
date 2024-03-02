@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import strings from 'src/strings';
-import { Grid, Box, useTheme } from '@mui/material';
-import { AccessionPostRequestBody } from 'src/services/SeedBankService';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import Textfield from 'src/components/common/Textfield/Textfield';
-import Autocomplete from 'src/components/common/Autocomplete';
-import { LocationService } from 'src/services';
-import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
-import { Country } from 'src/types/Country';
+import React, { useEffect, useState } from 'react';
+
+import { Box, Grid, useTheme } from '@mui/material';
+
 import AddLink from 'src/components/common/AddLink';
+import Autocomplete from 'src/components/common/Autocomplete';
+import Textfield from 'src/components/common/Textfield/Textfield';
+import { LocationService } from 'src/services';
+import { AccessionPostRequestBody } from 'src/services/SeedBankService';
+import strings from 'src/strings';
+import { Country } from 'src/types/Country';
+import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
 import { useLocalization } from '../../../providers';
 
 type Accession2AddressProps = {

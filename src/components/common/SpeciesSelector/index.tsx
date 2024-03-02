@@ -1,12 +1,14 @@
+import React, { useCallback, useEffect, useState } from 'react';
+
 import { Grid, Typography } from '@mui/material';
-import React, { useEffect, useState, useCallback } from 'react';
-import strings from 'src/strings';
 import { SelectT } from '@terraware/web-components';
-import useDebounce from 'src/utils/useDebounce';
+
 import { useOrganization } from 'src/providers/hooks';
 import { SpeciesService } from 'src/services';
-import { getRequestId, setRequestId } from 'src/utils/requestsId';
+import strings from 'src/strings';
 import { SuggestedSpecies } from 'src/types/Species';
+import { getRequestId, setRequestId } from 'src/utils/requestsId';
+import useDebounce from 'src/utils/useDebounce';
 
 interface SpeciesSelectorProps<T extends { speciesId?: number } | undefined> {
   speciesId?: number;

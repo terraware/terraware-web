@@ -1,12 +1,14 @@
 import React from 'react';
+
 import { Grid } from '@mui/material';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import strings from 'src/strings';
-import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import { ReportNursery } from 'src/types/Report';
-import { useInfoCardStyles, InfoField } from 'src/components/Reports/LocationSelection/InfoField';
+
 import { LocationSectionProps } from 'src/components/Reports/LocationSelection';
+import { InfoField, useInfoCardStyles } from 'src/components/Reports/LocationSelection/InfoField';
 import { transformNumericValue } from 'src/components/Reports/LocationSelection/util';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import strings from 'src/strings';
+import { ReportNursery } from 'src/types/Report';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const LocationSectionNursery = (props: LocationSectionProps): JSX.Element => {
   const { editable, location, onUpdateLocation, validate, projectName } = props;

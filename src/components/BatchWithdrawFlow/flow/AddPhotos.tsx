@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+
 import { Container, useTheme } from '@mui/material';
-import strings from 'src/strings';
-import SelectPhotos from 'src/components/common/SelectPhotos';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
+
 import PageForm from 'src/components/common/PageForm';
+import SelectPhotos from 'src/components/common/SelectPhotos';
+import strings from 'src/strings';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 type AddPhotosProps = {
   onNext: (photos: File[]) => void;

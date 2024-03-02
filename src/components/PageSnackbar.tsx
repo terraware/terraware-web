@@ -1,16 +1,18 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+
 import { Snackbar as SnackbarUI } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Message, Button } from '@terraware/web-components';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { Snackbar } from 'src/types/Snackbar';
+import { Button, Message } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
+
+import DetectAppVersion from 'src/components/common/DetectAppVersion';
+import { sendMessage } from 'src/redux/features/message/messageSlice';
 import { selectSnackbar } from 'src/redux/features/snackbar/snackbarSelectors';
 import { clearSnackbar } from 'src/redux/features/snackbar/snackbarSlice';
-import { sendMessage } from 'src/redux/features/message/messageSlice';
-import { useDeviceInfo } from '@terraware/web-components/utils';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { Snackbar } from 'src/types/Snackbar';
 import { SNACKBAR_PAGE_CLOSE_KEY } from 'src/utils/useSnackbar';
-import DetectAppVersion from 'src/components/common/DetectAppVersion';
 
 interface StyleProps {
   isMobile?: boolean;

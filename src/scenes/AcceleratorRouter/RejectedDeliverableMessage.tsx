@@ -1,6 +1,8 @@
 import React from 'react';
+
 import { Box, useTheme } from '@mui/material';
 import { Button, Message } from '@terraware/web-components';
+
 import { ViewProps } from 'src/components/DeliverableView/types';
 import { useLocalization } from 'src/providers/hooks';
 import strings from 'src/strings';

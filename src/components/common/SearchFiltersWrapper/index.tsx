@@ -1,13 +1,16 @@
 import React, { useMemo } from 'react';
+
 import { Box, Grid } from '@mui/material';
 import { PillList, Textfield } from '@terraware/web-components';
 import { Option } from '@terraware/web-components/components/table/types';
+
+import { FilterField } from 'src/components/common/FilterGroup';
 import strings from 'src/strings';
 import { FieldOptionsMap, FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
-import { FilterField } from 'src/components/common/FilterGroup';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import IconFilters from './IconFilters';
+
 import FeaturedFilters from './FeaturedFilters';
+import IconFilters from './IconFilters';
 
 export type SearchInputProps = {
   search: string;

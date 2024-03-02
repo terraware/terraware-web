@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { buildReducers, setStatus, StatusT } from 'src/redux/features/asyncUtils';
-import { BatchData } from 'src/services/NurseryBatchService';
+
+import { StatusT, buildReducers, setStatus } from 'src/redux/features/asyncUtils';
 import { requestFetchBatch, requestSaveBatch } from 'src/redux/features/batches/batchesAsyncThunks';
+import { BatchData } from 'src/services/NurseryBatchService';
 import { Batch } from 'src/types/Batch';
 
 // Since the save batch request might not have a species ID, since one of the requests only returns a batch ID,

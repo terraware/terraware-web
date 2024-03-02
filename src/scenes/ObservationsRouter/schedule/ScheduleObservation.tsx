@@ -1,15 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+
 import { APP_PATHS } from 'src/constants';
-import strings from 'src/strings';
-import { useAppSelector, useAppDispatch } from 'src/redux/store';
 import { useOrganization } from 'src/providers';
-import { selectObservationSchedulableSites } from 'src/redux/features/observations/observationsUtilsSelectors';
-import { selectScheduleObservation } from 'src/redux/features/observations/observationsSelectors';
-import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import { requestScheduleObservation } from 'src/redux/features/observations/observationsAsyncThunks';
+import { selectScheduleObservation } from 'src/redux/features/observations/observationsSelectors';
 import { requestObservations } from 'src/redux/features/observations/observationsThunks';
+import { selectObservationSchedulableSites } from 'src/redux/features/observations/observationsUtilsSelectors';
+import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
+
 import ScheduleObservationForm from './ScheduleObservationForm';
 
 export default function ScheduleObservation(): JSX.Element {

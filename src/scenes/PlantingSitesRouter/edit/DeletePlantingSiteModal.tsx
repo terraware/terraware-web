@@ -1,16 +1,18 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+
 import { Typography } from '@mui/material';
 import { BusySpinner, Button, DialogBox } from '@terraware/web-components';
-import strings from 'src/strings';
-import { APP_PATHS } from 'src/constants';
-import useSnackbar from 'src/utils/useSnackbar';
-import { useDocLinks } from 'src/docLinks';
-import { PlantingSite } from 'src/types/Tracking';
-import { TrackingService } from 'src/services';
-import { useAppSelector } from 'src/redux/store';
-import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
+
 import TextWithLink from 'src/components/common/TextWithLink';
+import { APP_PATHS } from 'src/constants';
+import { useDocLinks } from 'src/docLinks';
+import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
+import { useAppSelector } from 'src/redux/store';
+import { TrackingService } from 'src/services';
+import strings from 'src/strings';
+import { PlantingSite } from 'src/types/Tracking';
+import useSnackbar from 'src/utils/useSnackbar';
 
 export type DeletePlantingSiteModalProps = {
   plantingSite: PlantingSite;

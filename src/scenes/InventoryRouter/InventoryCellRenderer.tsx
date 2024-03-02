@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@mui/styles';
+
 import { useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { TextTruncated } from '@terraware/web-components';
-import { APP_PATHS } from 'src/constants';
+
+import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
-import Link from 'src/components/common/Link';
+import { APP_PATHS } from 'src/constants';
+import ChangeQuantityModal from 'src/scenes/InventoryRouter/view/ChangeQuantityModal';
+import QuantitiesMenu from 'src/scenes/InventoryRouter/view/QuantitiesMenu';
 import strings from 'src/strings';
 import { Batch } from 'src/types/Batch';
 import useQuery from 'src/utils/useQuery';
-import ChangeQuantityModal from 'src/scenes/InventoryRouter/view/ChangeQuantityModal';
-import QuantitiesMenu from 'src/scenes/InventoryRouter/view/QuantitiesMenu';
 
 const COLUMN_WIDTH = 250;
 

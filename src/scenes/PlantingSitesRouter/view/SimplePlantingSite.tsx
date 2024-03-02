@@ -1,7 +1,8 @@
 import { Box, Typography, useTheme } from '@mui/material';
+
+import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 import strings from 'src/strings';
 import { MinimalPlantingSite } from 'src/types/Tracking';
-import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 
 type SimplePlantingSiteProps = {
   plantingSite: MinimalPlantingSite;

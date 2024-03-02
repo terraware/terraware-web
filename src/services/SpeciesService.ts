@@ -1,9 +1,10 @@
 import { paths } from 'src/api/types/generated-schema';
-import HttpService, { Response, ServerData } from './HttpService';
-import { Species, SpeciesDetails, SuggestedSpecies } from 'src/types/Species';
 import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
-import SearchService from './SearchService';
 import { FieldNodePayload, SearchRequestPayload, SearchResponseElement } from 'src/types/Search';
+import { Species, SpeciesDetails, SuggestedSpecies } from 'src/types/Species';
+
+import HttpService, { Response, ServerData } from './HttpService';
+import SearchService from './SearchService';
 
 /**
  * Service for species related functionality

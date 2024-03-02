@@ -1,13 +1,15 @@
-import { Box, Theme, Typography, useTheme } from '@mui/material';
-import { Button } from '@terraware/web-components';
 import { useMemo } from 'react';
-import strings from 'src/strings';
-import { selectSubzoneSpeciesPopulations } from 'src/redux/features/tracking/sitePopulationSelector';
-import { useAppSelector } from 'src/redux/store';
-import FormattedNumber from 'src/components/common/FormattedNumber';
+
+import { Box, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { Button } from '@terraware/web-components';
+
+import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import { selectSubzoneSpeciesPopulations } from 'src/redux/features/tracking/sitePopulationSelector';
+import { useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
 
 const useStyles = makeStyles((theme: Theme) => ({
   speciesList: {

@@ -1,12 +1,14 @@
 import React, { useCallback } from 'react';
+
 import { TableColumnType } from '@terraware/web-components';
-import strings from 'src/strings';
-import { FieldNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
-import { NurseryBatchService } from 'src/services';
+
 import isEnabled from 'src/features';
 import InventorySeedlingsTable, {
   InventorySeedlingsTableProps,
 } from 'src/scenes/InventoryRouter/view/InventorySeedlingsTable';
+import { NurseryBatchService } from 'src/services';
+import strings from 'src/strings';
+import { FieldNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 
 interface InventorySeedlingsTableForSpeciesProps
   extends Omit<

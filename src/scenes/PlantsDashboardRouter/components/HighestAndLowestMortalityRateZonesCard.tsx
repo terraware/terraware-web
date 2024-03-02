@@ -1,12 +1,13 @@
-import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import strings from 'src/strings';
 import { Box, Divider, Typography, useTheme } from '@mui/material';
-import { useAppSelector } from 'src/redux/store';
-import { selectObservationPlantingZone } from 'src/redux/features/observations/observationPlantingZoneSelectors';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+
 import FormattedNumber from 'src/components/common/FormattedNumber';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import { selectObservationPlantingZone } from 'src/redux/features/observations/observationPlantingZoneSelectors';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
+import { useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
 import { ObservationPlantingZoneResults } from 'src/types/Observations';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type HighestAndLowestMortalityRateCardProps = {
   plantingSiteId: number;

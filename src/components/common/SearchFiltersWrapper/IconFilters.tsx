@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { Button, Tooltip } from '@terraware/web-components';
+
 import { Popover, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import strings from 'src/strings';
+import { Button, Tooltip } from '@terraware/web-components';
+
 import FilterGroup from 'src/components/common/FilterGroup';
+import strings from 'src/strings';
+
 import { SearchFiltersProps } from './index';
 
 const useStyles = makeStyles((_theme: Theme) => ({

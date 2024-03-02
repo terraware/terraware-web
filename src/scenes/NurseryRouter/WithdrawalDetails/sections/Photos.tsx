@@ -1,9 +1,11 @@
-import { Box, Typography } from '@mui/material';
-import strings from 'src/strings';
 import { useEffect, useState } from 'react';
-import { NurseryWithdrawalService } from 'src/services';
-import useSnackbar from 'src/utils/useSnackbar';
+
+import { Box, Typography } from '@mui/material';
+
 import PhotosList from 'src/components/common/PhotosList';
+import { NurseryWithdrawalService } from 'src/services';
+import strings from 'src/strings';
+import useSnackbar from 'src/utils/useSnackbar';
 
 const NURSERY_WITHDRAWAL_PHOTO_ENDPOINT = '/api/v1/nursery/withdrawals/{withdrawalId}/photos/{photoId}';
 

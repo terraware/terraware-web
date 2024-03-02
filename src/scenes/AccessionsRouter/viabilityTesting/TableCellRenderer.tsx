@@ -1,13 +1,16 @@
 import React from 'react';
+
 import { Box, Theme, Typography, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Icon } from '@terraware/web-components';
+
+import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import strings from 'src/strings';
-import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+
 import { getCutTestViabilityPercent } from './utils';
-import Link from 'src/components/common/Link';
 
 const useStyles = makeStyles((theme: Theme) => ({
   syncIcon: {

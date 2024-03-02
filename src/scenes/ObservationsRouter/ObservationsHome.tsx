@@ -1,28 +1,31 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { CircularProgress, Box } from '@mui/material';
+
+import { Box, CircularProgress } from '@mui/material';
+
+import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
+import { ButtonProps } from 'src/components/PlantsPrimaryPage/PlantsPrimaryPageView';
+import Card from 'src/components/common/Card';
+import { View } from 'src/components/common/ListMapSelector';
+import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
+import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
+import { APP_PATHS } from 'src/constants';
+import { useLocalization, useOrganization } from 'src/providers';
+import { selectPlantingSiteObservationsResults } from 'src/redux/features/observations/observationsSelectors';
+import {
+  selectObservationSchedulableSites,
+  selectUpcomingObservations,
+} from 'src/redux/features/observations/observationsUtilsSelectors';
+import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
+import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { FieldOptionsMap } from 'src/types/Search';
 import { PlantingSite } from 'src/types/Tracking';
-import { APP_PATHS } from 'src/constants';
-import { useAppSelector, useAppDispatch } from 'src/redux/store';
-import { useLocalization, useOrganization } from 'src/providers';
-import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
-import { selectPlantingSiteObservationsResults } from 'src/redux/features/observations/observationsSelectors';
-import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
-import {
-  selectUpcomingObservations,
-  selectObservationSchedulableSites,
-} from 'src/redux/features/observations/observationsUtilsSelectors';
-import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
-import Card from 'src/components/common/Card';
-import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
-import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
-import { View } from 'src/components/common/ListMapSelector';
-import { ButtonProps } from 'src/components/PlantsPrimaryPage/PlantsPrimaryPageView';
+import { isAdmin } from 'src/utils/organization';
+
 import ObservationsDataView from './ObservationsDataView';
 import ObservationsEventsNotification from './ObservationsEventsNotification';
-import { isAdmin } from 'src/utils/organization';
 
 export type ObservationsHomeProps = SearchProps & {
   setFilterOptions: (value: FieldOptionsMap) => void;

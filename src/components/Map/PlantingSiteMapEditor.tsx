@@ -1,8 +1,9 @@
-import { PlantingSite } from 'src/types/Tracking';
-import EditableMap from 'src/components/Map/EditableMap';
 import { Box, Typography, useTheme } from '@mui/material';
 import { MultiPolygon } from 'geojson';
+
+import EditableMap from 'src/components/Map/EditableMap';
 import strings from 'src/strings';
+import { PlantingSite } from 'src/types/Tracking';
 
 type PlantingSiteMapEditorProps = {
   onBoundaryChanged: (geometry: MultiPolygon | null) => void;

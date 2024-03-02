@@ -1,9 +1,10 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { APP_PATHS } from 'src/constants';
+
+import ReportSettingsEdit from 'src/components/Reports/ReportSettingsEdit';
 import ReportsView from 'src/components/Reports/ReportsView';
 import { ReportEdit, ReportList, ReportView } from 'src/components/Reports/index';
-import ReportSettingsEdit from 'src/components/Reports/ReportSettingsEdit';
+import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
 

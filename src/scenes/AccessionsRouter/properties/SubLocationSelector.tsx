@@ -1,6 +1,8 @@
 import React from 'react';
-import strings from 'src/strings';
+
 import { Select } from '@terraware/web-components';
+
+import strings from 'src/strings';
 
 type SubLocationSelectorProps = {
   id?: string;

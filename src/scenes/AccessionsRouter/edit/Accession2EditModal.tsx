@@ -1,22 +1,25 @@
 import { useEffect, useState } from 'react';
+
 import { Grid, Typography } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
-import { Accession } from 'src/types/Accession';
+
+import SpeciesSelector from 'src/components/common/SpeciesSelector';
+import { useOrganization } from 'src/providers';
 import AccessionService from 'src/services/AccessionService';
 import strings from 'src/strings';
+import { Accession } from 'src/types/Accession';
+import { getSeedBank } from 'src/utils/organization';
 import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
+
 import {
   Accession2Address,
   Accession2GPS,
+  Accession2PlantSiteDetails,
   CollectedReceivedDate2,
   Collectors2,
-  Accession2PlantSiteDetails,
 } from '../properties';
-import SpeciesSelector from 'src/components/common/SpeciesSelector';
-import useSnackbar from 'src/utils/useSnackbar';
-import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
-import { getSeedBank } from 'src/utils/organization';
-import { useOrganization } from 'src/providers';
 
 export interface Accession2EditModalProps {
   open: boolean;

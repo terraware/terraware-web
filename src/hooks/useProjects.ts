@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
+
 import { useOrganization } from 'src/providers';
-import { Project } from 'src/types/Project';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { Project } from 'src/types/Project';
 
 export const useProjects = (record?: { projectId?: number }) => {
   const dispatch = useAppDispatch();

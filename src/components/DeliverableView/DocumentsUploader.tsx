@@ -1,10 +1,13 @@
 import { useCallback, useMemo, useState } from 'react';
+
 import { Box, Typography, useTheme } from '@mui/material';
 import { FileChooser } from '@terraware/web-components';
-import strings from 'src/strings';
+
 import { useLocalization } from 'src/providers';
-import { ViewProps } from './types';
+import strings from 'src/strings';
+
 import FileUploadDialog from './FileUploadDialog';
+import { ViewProps } from './types';
 
 const DocumentsUploader = ({ deliverable }: ViewProps): JSX.Element => {
   const [files, setFiles] = useState<File[]>([]);

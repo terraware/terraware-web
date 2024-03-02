@@ -1,21 +1,24 @@
-import { Box, Grid, Theme, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+
+import { Box, Grid, Theme, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { Dropdown } from '@terraware/web-components';
+
+import PageSnackbar from 'src/components/PageSnackbar';
+import TfMain from 'src/components/common/TfMain';
+import { APP_PATHS } from 'src/constants';
+import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
 import { OrganizationUser } from 'src/types/User';
-import TextField from '../../components/common/Textfield/Textfield';
-import useForm from 'src/utils/useForm';
-import { OrganizationUserService } from 'src/services';
-import ErrorBox from '../../components/common/ErrorBox/ErrorBox';
-import { APP_PATHS } from 'src/constants';
-import PageForm from '../../components/common/PageForm';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import PageSnackbar from 'src/components/PageSnackbar';
+import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
-import TfMain from 'src/components/common/TfMain';
+
+import ErrorBox from '../../components/common/ErrorBox/ErrorBox';
+import PageForm from '../../components/common/PageForm';
+import TextField from '../../components/common/Textfield/Textfield';
 import { useOrganization } from '../../providers/hooks';
-import { Dropdown } from '@terraware/web-components';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleSubtitle: {

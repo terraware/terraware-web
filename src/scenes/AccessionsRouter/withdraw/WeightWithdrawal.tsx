@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
-import strings from 'src/strings';
+
 import { Box, Grid, useTheme } from '@mui/material';
 import { Checkbox, Textfield } from '@terraware/web-components';
+
+import strings from 'src/strings';
 import { Accession, Withdrawal } from 'src/types/Accession';
 import { convertUnits, unitAbbv } from 'src/units';
 

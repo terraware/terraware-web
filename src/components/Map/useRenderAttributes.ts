@@ -1,7 +1,9 @@
 import { useCallback } from 'react';
+
 import { useTheme } from '@mui/material';
-import { getRgbaFromHex } from 'src/utils/color';
+
 import { MapSourceRenderProperties, RenderableObject } from 'src/types/Map';
+import { getRgbaFromHex } from 'src/utils/color';
 
 export default function useRenderAttributes(): (type: RenderableObject) => MapSourceRenderProperties {
   const theme = useTheme();

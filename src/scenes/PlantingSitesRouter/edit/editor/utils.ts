@@ -1,12 +1,13 @@
-import { Feature, FeatureCollection, MultiPolygon, Polygon, Position } from 'geojson';
 import area from '@turf/area';
 import bbox from '@turf/bbox';
 import bboxPolygon from '@turf/bbox-polygon';
-import { MinimalPlantingSubzone, MinimalPlantingZone } from 'src/types/Tracking';
-import { DraftPlantingSite } from 'src/types/PlantingSite';
-import { GeometryFeature } from 'src/types/Map';
-import strings from 'src/strings';
+import { Feature, FeatureCollection, MultiPolygon, Polygon, Position } from 'geojson';
+
 import { cutPolygons, toFeature } from 'src/components/Map/utils';
+import strings from 'src/strings';
+import { GeometryFeature } from 'src/types/Map';
+import { DraftPlantingSite } from 'src/types/PlantingSite';
+import { MinimalPlantingSubzone, MinimalPlantingZone } from 'src/types/Tracking';
 
 const SQ_M_TO_HECTARES = 1 / 10000;
 

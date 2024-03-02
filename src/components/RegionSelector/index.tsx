@@ -1,11 +1,14 @@
-import { Grid, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
+
+import { Grid, useTheme } from '@mui/material';
+import { Dropdown } from '@terraware/web-components';
+
+import { LocationService } from 'src/services';
 import strings from 'src/strings';
 import { Country, Subdivision } from 'src/types/Country';
-import { LocationService } from 'src/services';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { Dropdown } from '@terraware/web-components';
+
 import { useLocalization } from '../../providers';
 
 type RegionSelectorProps = {

@@ -1,20 +1,22 @@
 import React, { useMemo } from 'react';
+
 import { Box } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
-import strings from 'src/strings';
-import { APP_PATHS } from 'src/constants';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { useLocalization } from 'src/providers';
-import Card from 'src/components/common/Card';
+
 import { Crumb } from 'src/components/BreadCrumbs';
-import Page from 'src/components/Page';
-import RejectedDeliverableMessage from 'src/scenes/DeliverablesRouter/RejectedDeliverableMessage';
-import DocumentsList from 'src/scenes/DeliverablesRouter/DocumentsList';
-import { EditProps, ViewProps } from 'src/components/DeliverableView/types';
-import TitleBar from 'src/components/DeliverableView/TitleBar';
 import DocumentsUploader from 'src/components/DeliverableView/DocumentsUploader';
 import Metadata from 'src/components/DeliverableView/Metadata';
 import MobileMessage from 'src/components/DeliverableView/MobileMessage';
+import TitleBar from 'src/components/DeliverableView/TitleBar';
+import { EditProps, ViewProps } from 'src/components/DeliverableView/types';
+import Page from 'src/components/Page';
+import Card from 'src/components/common/Card';
+import { APP_PATHS } from 'src/constants';
+import { useLocalization } from 'src/providers';
+import DocumentsList from 'src/scenes/DeliverablesRouter/DocumentsList';
+import RejectedDeliverableMessage from 'src/scenes/DeliverablesRouter/RejectedDeliverableMessage';
+import strings from 'src/strings';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 export type Props = EditProps & {
   isBusy?: boolean;

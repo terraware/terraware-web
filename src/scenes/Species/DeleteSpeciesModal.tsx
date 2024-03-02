@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
+
 import { Typography } from '@mui/material';
-import strings from 'src/strings';
 import { BusySpinner, Button, DialogBox } from '@terraware/web-components';
-import { SpeciesService } from 'src/services';
+
 import { useOrganization } from 'src/providers';
-import useSnackbar from 'src/utils/useSnackbar';
+import { SpeciesService } from 'src/services';
+import strings from 'src/strings';
 import { Species } from 'src/types/Species';
+import useSnackbar from 'src/utils/useSnackbar';
 
 export interface DeleteSpeciesDialogProps {
   open: boolean;

@@ -1,6 +1,8 @@
 import React from 'react';
+
 import { SpeciesService } from 'src/services';
 import strings from 'src/strings';
+
 import ImportModal from '../../components/common/ImportModal';
 
 export type ImportSpeciesModalProps = {

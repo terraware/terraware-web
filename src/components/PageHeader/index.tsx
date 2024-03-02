@@ -1,9 +1,11 @@
 import React from 'react';
-import { Container, Grid, Box, Typography, Theme, useTheme } from '@mui/material';
+
+import { Box, Container, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import Title from 'src/components/common/Title';
+
 import PageSnackbar from 'src/components/PageSnackbar';
 import BackToLink from 'src/components/common/BackToLink';
+import Title from 'src/components/common/Title';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {

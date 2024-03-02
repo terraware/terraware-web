@@ -1,12 +1,15 @@
+import React, { useEffect, useState } from 'react';
+
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect, useState } from 'react';
+
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
-import Button from '../../components/common/button/Button';
+
 import DialogBox from '../../components/common/DialogBox/DialogBox';
-import Icon from '../../components/common/icon/Icon';
 import ProgressCircle from '../../components/common/ProgressCircle/ProgressCircle';
+import Button from '../../components/common/button/Button';
+import Icon from '../../components/common/icon/Icon';
 
 const useStyles = makeStyles((theme: Theme) => ({
   spacing: {

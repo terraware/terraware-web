@@ -1,17 +1,18 @@
 import React, { useCallback, useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
+
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
-import { selectedOrgHasFacilityType } from 'src/utils/organization';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
-import InventoryV2View from 'src/scenes/InventoryRouter/InventoryV2View';
-import InventoryCreateView from 'src/scenes/InventoryRouter/InventoryCreateView';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import InventoryBatchView from 'src/scenes/InventoryRouter/InventoryBatchView';
+import InventoryCreateView from 'src/scenes/InventoryRouter/InventoryCreateView';
 import InventoryForNurseryView from 'src/scenes/InventoryRouter/InventoryForNurseryView';
 import InventoryForSpeciesView from 'src/scenes/InventoryRouter/InventoryForSpeciesView';
+import InventoryV2View from 'src/scenes/InventoryRouter/InventoryV2View';
 import SpeciesBulkWithdrawView from 'src/scenes/InventoryRouter/SpeciesBulkWithdrawView';
+import { selectedOrgHasFacilityType } from 'src/utils/organization';
 
 interface InventoryRouterProps {
   setWithdrawalCreated: (value: boolean) => void;

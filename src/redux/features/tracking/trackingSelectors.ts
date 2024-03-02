@@ -1,6 +1,7 @@
+import { createCachedSelector } from 're-reselect';
+
 import { RootState } from 'src/redux/rootReducer';
 import { PlantingSite } from 'src/types/Tracking';
-import { createCachedSelector } from 're-reselect';
 
 export const selectPlantingSites = (state: RootState) => state.tracking?.plantingSites;
 

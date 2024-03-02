@@ -1,20 +1,42 @@
 import { Action, combineReducers } from '@reduxjs/toolkit';
-import { appVersionReducer } from './features/appVersion/appVersionSlice';
+
 import { cohortsReducer, cohortsRequestsReducer } from 'src/redux/features/cohorts/cohortsSlice';
+import {
+  deliverablesEditReducer,
+  deliverablesReducer,
+  deliverablesSearchReducer,
+} from 'src/redux/features/deliverables/deliverablesSlice';
+import {
+  draftPlantingSiteCreateReducer,
+  draftPlantingSiteEditReducer,
+  draftPlantingSiteGetReducer,
+  draftPlantingSiteSearchReducer,
+} from 'src/redux/features/draftPlantingSite/draftPlantingSiteSlice';
+import { projectsReducer, projectsRequestsReducer } from 'src/redux/features/projects/projectsSlice';
+import { reportsSettingsReducer } from 'src/redux/features/reportsSettings/reportsSettingsSlice';
+import { speciesProjectsReducer } from 'src/redux/features/species/speciesProjectsSlice';
+
+import { accessionsReducer } from './features/accessions/accessionsSlice';
+import { appVersionReducer } from './features/appVersion/appVersionSlice';
+import { batchesReducer, batchesRequestsReducer } from './features/batches/batchesSlice';
+import { messageReducer } from './features/message/messageSlice';
 import {
   observationsReducer,
   observationsResultsReducer,
   plantingSiteObservationsResultsReducer,
-  scheduleObservationReducer,
   replaceObservationPlotReducer,
   rescheduleObservationReducer,
+  scheduleObservationReducer,
 } from './features/observations/observationsSlice';
+import { participantsListReducer } from './features/participants/participantsSlice';
 import {
   plantingsReducer,
   updatePlantingCompletedReducer,
   updatePlantingsCompletedReducer,
 } from './features/plantings/plantingsSlice';
+import { snackbarReducer } from './features/snackbar/snackbarSlice';
 import { speciesReducer } from './features/species/speciesSlice';
+import { subLocationsReducer } from './features/subLocations/subLocationsSlice';
 import {
   monitoringPlotsReducer,
   plantingSitesSearchResultsReducer,
@@ -22,27 +44,7 @@ import {
   siteReportedPlantsReducer,
   trackingReducer,
 } from './features/tracking/trackingSlice';
-import { snackbarReducer } from './features/snackbar/snackbarSlice';
-import { messageReducer } from './features/message/messageSlice';
 import { userAnalyticsReducer } from './features/user/userAnalyticsSlice';
-import { projectsReducer, projectsRequestsReducer } from 'src/redux/features/projects/projectsSlice';
-import { subLocationsReducer } from './features/subLocations/subLocationsSlice';
-import { batchesReducer, batchesRequestsReducer } from './features/batches/batchesSlice';
-import { accessionsReducer } from './features/accessions/accessionsSlice';
-import { reportsSettingsReducer } from 'src/redux/features/reportsSettings/reportsSettingsSlice';
-import { speciesProjectsReducer } from 'src/redux/features/species/speciesProjectsSlice';
-import {
-  draftPlantingSiteCreateReducer,
-  draftPlantingSiteEditReducer,
-  draftPlantingSiteGetReducer,
-  draftPlantingSiteSearchReducer,
-} from 'src/redux/features/draftPlantingSite/draftPlantingSiteSlice';
-import {
-  deliverablesEditReducer,
-  deliverablesSearchReducer,
-  deliverablesReducer,
-} from 'src/redux/features/deliverables/deliverablesSlice';
-import { participantsListReducer } from './features/participants/participantsSlice';
 
 // assembly of app reducers
 export const reducers = {

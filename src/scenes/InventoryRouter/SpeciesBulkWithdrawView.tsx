@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+
+import BatchWithdrawFlow from 'src/components/BatchWithdrawFlow';
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 import { NurseryBatchService } from 'src/services';
 import useQuery from 'src/utils/useQuery';
-import BatchWithdrawFlow from 'src/components/BatchWithdrawFlow';
 
 type SpeciesBulkWithdrawViewComponentProps = {
   withdrawalCreatedCallback?: () => void;

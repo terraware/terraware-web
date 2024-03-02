@@ -1,13 +1,16 @@
 import { useEffect, useMemo, useState } from 'react';
+
 import { TableColumnType } from '@terraware/web-components';
-import strings from 'src/strings';
-import { Delivery } from 'src/types/Tracking';
-import { Species } from 'src/types/Species';
+
 import Table from 'src/components/common/table';
 import { useUser } from 'src/providers';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import strings from 'src/strings';
 import { Batch, NurseryWithdrawal } from 'src/types/Batch';
+import { Species } from 'src/types/Species';
+import { Delivery } from 'src/types/Tracking';
 import { batchToSpecies } from 'src/utils/batch';
+import { useNumberFormatter } from 'src/utils/useNumber';
+
 import WithdrawalRenderer from './WithdrawalRenderer';
 
 type OutplantWithdrawalTableProps = {

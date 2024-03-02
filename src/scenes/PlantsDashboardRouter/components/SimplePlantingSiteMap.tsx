@@ -1,8 +1,10 @@
-import { Box, CircularProgress } from '@mui/material';
 import { useMemo } from 'react';
-import { useAppSelector } from 'src/redux/store';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+
+import { Box, CircularProgress } from '@mui/material';
+
 import { PlantingSiteMap } from 'src/components/Map';
+import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+import { useAppSelector } from 'src/redux/store';
 import { MapService } from 'src/services';
 
 type SimplePlantingSiteMapProps = {

@@ -1,6 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
+import { Status, buildReducers } from 'src/redux/features/asyncUtils';
+
 import { requestUpdatePlantingCompleted, requestUpdatePlantingsCompleted } from './plantingsAsyncThunks';
-import { buildReducers, Status } from 'src/redux/features/asyncUtils';
 
 // Define a type for the slice state
 export type PlantingSearchData = {

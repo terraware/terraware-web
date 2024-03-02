@@ -1,8 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
+import { Response2 } from 'src/services/HttpService';
+import ParticipantsService from 'src/services/ParticipantsService';
 import strings from 'src/strings';
 import { Participant } from 'src/types/Participant';
-import ParticipantsService from 'src/services/ParticipantsService';
-import { Response2 } from 'src/services/HttpService';
 
 export const requestParticipantsList = createAsyncThunk(
   'participants/list',

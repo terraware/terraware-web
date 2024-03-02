@@ -1,17 +1,19 @@
 import { useCallback, useEffect, useState } from 'react';
+
 import { Grid } from '@mui/material';
 import _ from 'lodash';
-import strings from 'src/strings';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { SpeciesInventorySummary } from 'src/types/Inventory';
-import { NurseryInventoryService } from 'src/services';
-import useSnackbar from 'src/utils/useSnackbar';
+
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import isEnabled from 'src/features';
-import { requestSpeciesProjects } from 'src/redux/features/species/speciesProjectsThunks';
 import { useOrganization } from 'src/providers';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectSpeciesProjects } from 'src/redux/features/species/speciesProjectsSelectors';
+import { requestSpeciesProjects } from 'src/redux/features/species/speciesProjectsThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { NurseryInventoryService } from 'src/services';
+import strings from 'src/strings';
+import { SpeciesInventorySummary } from 'src/types/Inventory';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useSnackbar from 'src/utils/useSnackbar';
 
 interface InventorySummaryProps {
   speciesId: number;

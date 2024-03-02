@@ -1,16 +1,19 @@
 import React, { useCallback, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+
 import { Grid, Typography, useTheme } from '@mui/material';
-import { Button, Checkbox } from '@terraware/web-components';
 import { makeStyles } from '@mui/styles';
-import strings from 'src/strings';
+import { Button, Checkbox } from '@terraware/web-components';
+
 import { useOrganization } from 'src/providers';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
-import { Project } from 'src/types/Project';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ReportsSettings } from 'src/services/ReportSettingsService';
+import strings from 'src/strings';
+import { Project } from 'src/types/Project';
+
 import { APP_PATHS } from '../../constants';
-import { useHistory } from 'react-router-dom';
 
 interface ReportSettingsEditFormFieldsProps {
   isEditing: boolean;

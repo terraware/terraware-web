@@ -1,8 +1,9 @@
-import { ActionReducerMapBuilder, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Cohort } from 'src/types/Cohort';
-import { buildReducers, StatusT } from 'src/redux/features/asyncUtils';
-import { UpdateCohortResponsePayload } from 'src/services/CohortService';
+import { ActionReducerMapBuilder, PayloadAction, createSlice } from '@reduxjs/toolkit';
+
+import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { requestCohortDelete, requestCohortUpdate } from 'src/redux/features/cohorts/cohortsAsyncThunks';
+import { UpdateCohortResponsePayload } from 'src/services/CohortService';
+import { Cohort } from 'src/types/Cohort';
 
 // Define a type for the slice state
 type Data = {

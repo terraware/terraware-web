@@ -1,15 +1,16 @@
 import React, { useCallback, useEffect } from 'react';
+import { Route, Switch } from 'react-router-dom';
+
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { APP_PATHS } from 'src/constants';
+import { useOrganization } from 'src/providers';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
-import { useOrganization } from 'src/providers';
-import SpeciesListView from 'src/scenes/Species/SpeciesListView';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import SpeciesAddView from 'src/scenes/Species/SpeciesAddView';
 import SpeciesDetailView from 'src/scenes/Species/SpeciesDetailView';
 import SpeciesEditView from 'src/scenes/Species/SpeciesEditView';
-import SpeciesAddView from 'src/scenes/Species/SpeciesAddView';
-import { Route, Switch } from 'react-router-dom';
-import { APP_PATHS } from 'src/constants';
+import SpeciesListView from 'src/scenes/Species/SpeciesListView';
 
 const SpeciesRouter = () => {
   const dispatch = useAppDispatch();

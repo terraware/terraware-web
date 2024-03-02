@@ -1,27 +1,30 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import TfMain from 'src/components/common/TfMain';
-import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import BackToLink from 'src/components/common/BackToLink';
-import strings from 'src/strings';
-import { APP_PATHS } from 'src/constants';
-import PageSnackbar from 'src/components/PageSnackbar';
-import useQuery from 'src/utils/useQuery';
-import BatchSummary from './BatchSummary';
 import { Button, Tabs } from '@terraware/web-components';
-import { useHistory, useParams } from 'react-router-dom';
-import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import BatchDetails from './BatchDetails';
-import BatchHistory from './BatchHistory';
-import { getNurseryById } from 'src/utils/organization';
+
+import PageSnackbar from 'src/components/PageSnackbar';
+import BackToLink from 'src/components/common/BackToLink';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import TfMain from 'src/components/common/TfMain';
+import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
-import { Species } from 'src/types/Species';
-import { Facility } from 'src/types/Facility';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { requestFetchBatch } from 'src/redux/features/batches/batchesAsyncThunks';
 import { selectBatch } from 'src/redux/features/batches/batchesSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
+import { Facility } from 'src/types/Facility';
+import { Species } from 'src/types/Species';
+import { getNurseryById } from 'src/utils/organization';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useQuery from 'src/utils/useQuery';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+
+import BatchDetails from './BatchDetails';
+import BatchHistory from './BatchHistory';
+import BatchSummary from './BatchSummary';
 
 export type OriginPage = 'Nursery' | 'Species' | 'Batches' | 'InventoryAdd';
 

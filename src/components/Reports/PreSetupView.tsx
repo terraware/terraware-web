@@ -1,13 +1,15 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+
 import { Container, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
+
+import PageHeader from 'src/components/PageHeader';
 import TfMain from 'src/components/common/TfMain';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
+import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import PageHeader from 'src/components/PageHeader';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {

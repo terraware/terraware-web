@@ -1,5 +1,6 @@
-import MapLegend from 'src/components/common/MapLegend';
 import { Meta, StoryObj } from '@storybook/react';
+
+import MapLegend from 'src/components/common/MapLegend';
 
 const meta = {
   title: 'MapLegend',

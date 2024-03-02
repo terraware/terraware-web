@@ -1,17 +1,19 @@
-import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+
 import { Box, Typography, useTheme } from '@mui/material';
-import strings from 'src/strings';
+
+import PageForm from 'src/components/common/PageForm';
+import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useUser } from 'src/providers';
-import PageForm from 'src/components/common/PageForm';
-import useSnackbar from 'src/utils/useSnackbar';
-import TfMain from 'src/components/common/TfMain';
-import BatchDetailsForm from 'src/scenes/InventoryRouter/form/BatchDetailsForm';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { SavableBatch, requestSaveBatch } from 'src/redux/features/batches/batchesAsyncThunks';
 import { selectBatchesRequest } from 'src/redux/features/batches/batchesSelectors';
-import { requestSaveBatch, SavableBatch } from 'src/redux/features/batches/batchesAsyncThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { InventoryListType, InventoryListTypes } from 'src/scenes/InventoryRouter/InventoryV2View';
+import BatchDetailsForm from 'src/scenes/InventoryRouter/form/BatchDetailsForm';
+import strings from 'src/strings';
+import useSnackbar from 'src/utils/useSnackbar';
 
 export default function InventoryCreateView(): JSX.Element {
   const dispatch = useAppDispatch();

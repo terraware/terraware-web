@@ -1,7 +1,9 @@
 import { useState } from 'react';
+
 import { Box, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { ViewPhotosDialog } from '@terraware/web-components';
+
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 

@@ -1,16 +1,17 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
-import strings from 'src/strings';
+
 import { APP_PATHS } from 'src/constants';
-import { Deliverable } from 'src/types/Deliverables';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Statuses } from 'src/redux/features/asyncUtils';
+import { requestGetDeliverable } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import {
   selectDeliverable,
   selectDeliverableFetchRequest,
 } from 'src/redux/features/deliverables/deliverablesSelectors';
-import { requestGetDeliverable } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
+import { Deliverable } from 'src/types/Deliverables';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export type Props = {

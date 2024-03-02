@@ -1,11 +1,14 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { APP_PATHS } from 'src/constants';
-import strings from 'src/strings';
-import { makeStyles } from '@mui/styles';
+
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import Button from './components/common/button/Button';
+import { makeStyles } from '@mui/styles';
+
+import { APP_PATHS } from 'src/constants';
 import { useDocLinks } from 'src/docLinks';
+import strings from 'src/strings';
+
+import Button from './components/common/button/Button';
 
 interface StyleProps {
   inApp?: boolean;

@@ -1,10 +1,12 @@
 import React from 'react';
-import strings from 'src/strings';
+
 import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
-import { Dropdown, Icon } from '@terraware/web-components';
-import { Accession, AccessionState, stateName } from 'src/types/Accession';
-import { AccessionService } from 'src/services';
 import { makeStyles } from '@mui/styles';
+import { Dropdown, Icon } from '@terraware/web-components';
+
+import { AccessionService } from 'src/services';
+import strings from 'src/strings';
+import { Accession, AccessionState, stateName } from 'src/types/Accession';
 
 const useStyles = makeStyles((theme: Theme) => ({
   messageIcon: {

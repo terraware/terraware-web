@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+
 import { BusySpinner } from '@terraware/web-components';
-import strings from 'src/strings';
-import Button from 'src/components/common/button/Button';
+
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
+import Button from 'src/components/common/button/Button';
 import { UserService } from 'src/services';
+import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export interface DeleteAccountModalProps {

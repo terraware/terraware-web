@@ -1,20 +1,22 @@
+import React, { useEffect, useRef, useState } from 'react';
+import { useHistory } from 'react-router';
+
 import { Box, Container, Grid, useTheme } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect, useRef, useState } from 'react';
-import { useHistory } from 'react-router';
-import { SeedBankService } from 'src/services';
-import { SearchResponseElement } from 'src/types/Search';
-import Button from 'src/components/common/button/Button';
-import TfMain from 'src/components/common/TfMain';
-import { APP_PATHS } from 'src/constants';
-import strings from 'src/strings';
-import useStateLocation from 'src/utils/useStateLocation';
+
 import PageHeader from 'src/components/PageHeader';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TextField from 'src/components/common/Textfield/Textfield';
+import TfMain from 'src/components/common/TfMain';
+import Button from 'src/components/common/button/Button';
+import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers/hooks';
+import { SeedBankService } from 'src/services';
+import strings from 'src/strings';
+import { SearchResponseElement } from 'src/types/Search';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useStateLocation from 'src/utils/useStateLocation';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {

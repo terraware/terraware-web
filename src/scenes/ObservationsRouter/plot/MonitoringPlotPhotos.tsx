@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
-import { ObservationMonitoringPlotPhoto } from 'src/types/Observations';
+
 import PhotosList from 'src/components/common/PhotosList';
+import { ObservationMonitoringPlotPhoto } from 'src/types/Observations';
 
 const PHOTO_URL = '/api/v1/tracking/observations/{observationId}/plots/{monitoringPlotId}/photos/{fileId}';
 

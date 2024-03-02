@@ -1,15 +1,17 @@
 import React, { useEffect } from 'react';
-import strings from 'src/strings';
-import Button from 'src/components/common/button/Button';
-import DialogBox from 'src/components/common/DialogBox/DialogBox';
+
 import { Box, Grid, Typography } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
-import { Accession } from 'src/types/Accession';
+import { preventDefaultEvent } from '@terraware/web-components/utils';
+
+import AddLink from 'src/components/common/AddLink';
+import DialogBox from 'src/components/common/DialogBox/DialogBox';
+import Button from 'src/components/common/button/Button';
 import AccessionService from 'src/services/AccessionService';
+import strings from 'src/strings';
+import { Accession } from 'src/types/Accession';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
-import { preventDefaultEvent } from '@terraware/web-components/utils';
-import AddLink from 'src/components/common/AddLink';
 
 export interface ViabilityDialogProps {
   open: boolean;

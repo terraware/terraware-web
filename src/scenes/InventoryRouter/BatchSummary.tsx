@@ -1,16 +1,18 @@
 import React, { useCallback } from 'react';
+
 import { Grid, useTheme } from '@mui/material';
-import strings from 'src/strings';
+
+import ProjectOverviewItemCard from 'src/components/ProjectOverviewItemCard';
+import Link from 'src/components/common/Link';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
+import OverviewItemCardSubLocations from 'src/scenes/InventoryRouter/view/OverviewItemCardSubLocations';
+import { NurseryBatchService } from 'src/services';
+import strings from 'src/strings';
+import { Batch } from 'src/types/Batch';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
-import { Batch } from 'src/types/Batch';
-import { NurseryBatchService } from 'src/services';
-import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import Link from 'src/components/common/Link';
-import ProjectOverviewItemCard from 'src/components/ProjectOverviewItemCard';
-import OverviewItemCardSubLocations from 'src/scenes/InventoryRouter/view/OverviewItemCardSubLocations';
 
 interface BatchSummaryProps {
   batch: Batch;

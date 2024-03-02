@@ -1,4 +1,5 @@
 import React from 'react';
+
 import FilterMultiSelectContainer from 'src/components/common/FilterMultiSelectContainer';
 
 export type InventoryFiltersType = {

@@ -1,12 +1,13 @@
-import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import strings from 'src/strings';
 import { Box, Typography, useTheme } from '@mui/material';
-import { getShortDate } from 'src/utils/dateFormatter';
-import { useLocalization } from 'src/providers';
+
 import FormattedNumber from 'src/components/common/FormattedNumber';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-import { useAppSelector } from 'src/redux/store';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import { useLocalization } from 'src/providers';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
+import { useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
+import { getShortDate } from 'src/utils/dateFormatter';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type TotalMortalityRateCardProps = {
   plantingSiteId: number;

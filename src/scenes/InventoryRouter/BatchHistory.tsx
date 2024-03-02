@@ -1,24 +1,27 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+
 import { Grid, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Option } from '@terraware/web-components/components/table/types';
 import { TableColumnType } from '@terraware/web-components';
-import strings from 'src/strings';
+import { Option } from '@terraware/web-components/components/table/types';
+
 import Card from 'src/components/common/Card';
-import Table from 'src/components/common/table';
-import { NurseryBatchService, OrganizationUserService } from 'src/services';
-import {
-  batchHistoryEventEnumToLocalized,
-  BatchHistoryItem,
-  BatchHistoryPayload,
-  getBatchHistoryTypesEnum,
-} from 'src/types/Batch';
-import { OrganizationUser } from 'src/types/User';
-import { useOrganization } from 'src/providers';
-import { getUserDisplayName } from 'src/utils/user';
-import { FieldOptionsMap, FieldValuesPayload } from 'src/types/Search';
 import { FilterField } from 'src/components/common/FilterGroup';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
+import Table from 'src/components/common/table';
+import { useOrganization } from 'src/providers';
+import { NurseryBatchService, OrganizationUserService } from 'src/services';
+import strings from 'src/strings';
+import {
+  BatchHistoryItem,
+  BatchHistoryPayload,
+  batchHistoryEventEnumToLocalized,
+  getBatchHistoryTypesEnum,
+} from 'src/types/Batch';
+import { FieldOptionsMap, FieldValuesPayload } from 'src/types/Search';
+import { OrganizationUser } from 'src/types/User';
+import { getUserDisplayName } from 'src/utils/user';
+
 import BatchHistoryRenderer from './BatchHistoryRenderer';
 import EventDetailsModal from './EventDetailsModal';
 

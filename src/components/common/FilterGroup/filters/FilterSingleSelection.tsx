@@ -1,10 +1,12 @@
+import React from 'react';
+
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React from 'react';
-import { FieldNodePayload } from 'src/types/Search';
-import strings from 'src/strings';
-import { Option } from '@terraware/web-components/components/table/types';
 import { Dropdown, DropdownItem } from '@terraware/web-components';
+import { Option } from '@terraware/web-components/components/table/types';
+
+import strings from 'src/strings';
+import { FieldNodePayload } from 'src/types/Search';
 
 const useStyles = makeStyles((theme: Theme) => ({
   box: {

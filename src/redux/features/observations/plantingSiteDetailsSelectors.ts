@@ -1,8 +1,9 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { createCachedSelector } from 're-reselect';
+
+import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { RootState } from 'src/redux/rootReducer';
 import { Aggregation, ZoneAggregation } from 'src/types/Observations';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { isAfter } from 'src/utils/dateUtils';
 import { regexMatch } from 'src/utils/search';
 

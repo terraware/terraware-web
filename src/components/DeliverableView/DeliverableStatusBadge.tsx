@@ -1,7 +1,9 @@
+import { useMemo } from 'react';
+
 import { useTheme } from '@mui/material';
 import { Badge } from '@terraware/web-components';
 import { BadgeProps } from '@terraware/web-components/components/Badge';
-import { useMemo } from 'react';
+
 import { useLocalization } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';

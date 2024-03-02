@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+
 import { BusySpinner } from '@terraware/web-components';
+
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
-import { PlantingSite } from 'src/types/Tracking';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { searchPlantingSiteZones } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
+import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { requestPlantingSite } from 'src/redux/features/tracking/trackingThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import DeletePlantingSiteModal from 'src/scenes/PlantingSitesRouter/edit/DeletePlantingSiteModal';
+import { PlantingSite } from 'src/types/Tracking';
+
 import GenericSiteView from './GenericSiteView';
 
 export default function PlantingSiteView(): JSX.Element {

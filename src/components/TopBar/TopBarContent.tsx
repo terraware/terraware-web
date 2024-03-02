@@ -1,19 +1,22 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { IconButton, Theme, Grid } from '@mui/material';
+
+import { Grid, IconButton, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Svg } from '@terraware/web-components';
+
+import AcceleratorBreadcrumbs from 'src/components/TopBar/AcceleratorBreadcrumbs';
+import Link from 'src/components/common/Link';
+import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
-import Icon from '../common/icon/Icon';
+import { useOrganization, useUser } from 'src/providers/hooks';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
 import NotificationsDropdown from '../NotificationsDropdown';
 import OrganizationsDropdown from '../OrganizationsDropdown';
-import UserMenu from '../UserMenu';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
 import SmallDeviceUserMenu from '../SmallDeviceUserMenu';
-import { useOrganization, useUser } from 'src/providers/hooks';
-import Link from 'src/components/common/Link';
-import AcceleratorBreadcrumbs from 'src/components/TopBar/AcceleratorBreadcrumbs';
-import { APP_PATHS } from 'src/constants';
+import UserMenu from '../UserMenu';
+import Icon from '../common/icon/Icon';
 
 const useStyles = makeStyles((theme: Theme) => ({
   logo: {

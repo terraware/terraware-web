@@ -1,9 +1,11 @@
 import React, { useCallback, useState } from 'react';
+
 import { Popover, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+
+import FilterMultiSelect from 'src/components/common/FilterMultiSelect';
 import Icon from 'src/components/common/icon/Icon';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import FilterMultiSelect from 'src/components/common/FilterMultiSelect';
 
 const useStyles = makeStyles((theme: Theme) => ({
   dropdown: {

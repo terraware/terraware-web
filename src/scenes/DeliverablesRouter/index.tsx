@@ -1,5 +1,7 @@
 import { Route, Switch } from 'react-router-dom';
+
 import { APP_PATHS } from 'src/constants';
+
 import DeliverableViewWrapper from './DeliverableViewWrapper';
 import DeliverablesList from './DeliverablesList';
 

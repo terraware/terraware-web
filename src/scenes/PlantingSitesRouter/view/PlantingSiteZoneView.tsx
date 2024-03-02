@@ -1,6 +1,7 @@
 import { APP_PATHS } from 'src/constants';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { searchPlantingSiteSubzones } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
+import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+
 import GenericZoneView from './GenericZoneView';
 
 export default function PlantingSiteZoneView(): JSX.Element {

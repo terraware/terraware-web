@@ -1,12 +1,13 @@
 import React, { useCallback } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { useOrganization } from 'src/providers';
-import { isPlaceholderOrg, selectedOrgHasFacilityType } from 'src/utils/organization';
-import { APP_PATHS } from 'src/constants';
+
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
-import SeedBankView from 'src/scenes/SeedBanksRouter/SeedBankView';
+import { APP_PATHS } from 'src/constants';
+import { useOrganization } from 'src/providers';
 import SeedBankDetailsView from 'src/scenes/SeedBanksRouter/SeedBankDetailsView';
+import SeedBankView from 'src/scenes/SeedBanksRouter/SeedBankView';
 import SeedBanksListView from 'src/scenes/SeedBanksRouter/SeedBanksListView';
+import { isPlaceholderOrg, selectedOrgHasFacilityType } from 'src/utils/organization';
 
 const SeedBanksRouter = () => {
   const { selectedOrganization } = useOrganization();

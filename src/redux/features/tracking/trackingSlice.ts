@@ -1,8 +1,10 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PlantingSite, PlantingSiteReportedPlants, PlantingSiteSearchResult } from 'src/types/Tracking';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
+import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { PlantingSiteZone } from 'src/types/PlantingSite';
+import { PlantingSite, PlantingSiteReportedPlants, PlantingSiteSearchResult } from 'src/types/Tracking';
+
 import { MonitoringPlotsResponse, requestMonitoringPlots } from './trackingAsyncThunks';
-import { buildReducers, StatusT } from 'src/redux/features/asyncUtils';
 
 // all sites data
 type SitesData = {

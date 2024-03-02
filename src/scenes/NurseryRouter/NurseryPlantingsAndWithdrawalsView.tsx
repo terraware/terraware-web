@@ -3,21 +3,24 @@
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Tabs } from '@terraware/web-components';
-import strings from 'src/strings';
-import useQuery from 'src/utils/useQuery';
-import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
-import { useLocalization, useOrganization } from 'src/providers';
-import { useAppDispatch } from 'src/redux/store';
-import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
+
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
-import PlantingProgress from './PlantingProgressTabContent';
-import NurseryWithdrawals from './NurseryWithdrawalsTabContent';
+import { useLocalization, useOrganization } from 'src/providers';
+import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import { requestPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingThunks';
+import { useAppDispatch } from 'src/redux/store';
+import strings from 'src/strings';
+import useQuery from 'src/utils/useQuery';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+
+import NurseryWithdrawals from './NurseryWithdrawalsTabContent';
+import PlantingProgress from './PlantingProgressTabContent';
 
 const useStyles = makeStyles(() => ({
   tabs: {

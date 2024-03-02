@@ -1,9 +1,12 @@
 import React from 'react';
+
 import { Box, useTheme } from '@mui/material';
-import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+
 import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
-import { ViewProps } from './types';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+
 import InternalComment from './InternalComment';
+import { ViewProps } from './types';
 
 const Metadata = (props: ViewProps): JSX.Element => {
   const { deliverable } = props;

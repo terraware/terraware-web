@@ -1,16 +1,18 @@
+import React, { useCallback, useMemo, useState } from 'react';
+
 import { Box, Container, Popover, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useCallback, useMemo, useState } from 'react';
-import { FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
-import strings from 'src/strings';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { DatabaseColumn, Option } from '@terraware/web-components/components/table/types';
-import TextField from 'src/components/common/Textfield/Textfield';
-import useDebounce from 'src/utils/useDebounce';
-import Icon from 'src/components/common/icon/Icon';
-import FilterMultiSelect from 'src/components/common/FilterMultiSelect';
-import FilterGroup from 'src/components/common/FilterGroup';
 import { Button, PillList, PillListItem, Tooltip } from '@terraware/web-components';
+import { DatabaseColumn, Option } from '@terraware/web-components/components/table/types';
+
+import FilterGroup from 'src/components/common/FilterGroup';
+import FilterMultiSelect from 'src/components/common/FilterMultiSelect';
+import TextField from 'src/components/common/Textfield/Textfield';
+import Icon from 'src/components/common/icon/Icon';
+import strings from 'src/strings';
+import { FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
+import useDebounce from 'src/utils/useDebounce';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 interface StyleProps {
   isMobile?: boolean;

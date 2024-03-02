@@ -1,15 +1,18 @@
 import React, { useMemo, useState } from 'react';
-import strings from 'src/strings';
-import Button from 'src/components/common/button/Button';
-import DialogBox from 'src/components/common/DialogBox/DialogBox';
+
 import { Box, Grid } from '@mui/material';
 import { BusySpinner, Icon, Textfield } from '@terraware/web-components';
-import { ModalValuesType } from './BatchesCellRenderer';
-import { NurseryBatchService } from 'src/services';
-import useSnackbar from 'src/utils/useSnackbar';
-import useForm from 'src/utils/useForm';
+
+import DialogBox from 'src/components/common/DialogBox/DialogBox';
+import Button from 'src/components/common/button/Button';
 import { useUser } from 'src/providers';
+import { NurseryBatchService } from 'src/services';
+import strings from 'src/strings';
+import useForm from 'src/utils/useForm';
 import { useNumberFormatter } from 'src/utils/useNumber';
+import useSnackbar from 'src/utils/useSnackbar';
+
+import { ModalValuesType } from './BatchesCellRenderer';
 
 export interface ChangeQuantityModalProps {
   onClose: () => void;

@@ -1,6 +1,7 @@
-import { RootState } from 'src/redux/rootReducer';
 import { createSelector } from '@reduxjs/toolkit';
 import { createCachedSelector } from 're-reselect';
+
+import { RootState } from 'src/redux/rootReducer';
 
 export const selectSitePopulationZones = (state: RootState) => state.sitePopulation?.zones;
 

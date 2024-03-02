@@ -1,11 +1,13 @@
 import React from 'react';
-import strings from 'src/strings';
-import Button from 'src/components/common/button/Button';
-import DialogBox from 'src/components/common/DialogBox/DialogBox';
+
 import { Typography } from '@mui/material';
+
+import DialogBox from 'src/components/common/DialogBox/DialogBox';
+import Button from 'src/components/common/button/Button';
+import { AccessionService } from 'src/services';
+import strings from 'src/strings';
 import { Accession } from 'src/types/Accession';
 import { ViabilityTest } from 'src/types/Accession';
-import { AccessionService } from 'src/services';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export interface DeleteViabilityTestModalProps {

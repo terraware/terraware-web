@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
+
 import { Grid } from '@mui/material';
 import { Story } from '@storybook/react';
+
 import SearchFiltersWrapper, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 
 const SearchFiltersWrapperTemplate: Story<SearchProps> = (args) => {

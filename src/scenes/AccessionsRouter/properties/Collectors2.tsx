@@ -1,12 +1,14 @@
-import { Close } from '@mui/icons-material';
-import { useTheme, Box, IconButton } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { SeedBankService } from 'src/services';
+
+import { Close } from '@mui/icons-material';
+import { Box, IconButton, useTheme } from '@mui/material';
+
+import AddLink from 'src/components/common/AddLink';
 import Autocomplete from 'src/components/common/Autocomplete';
+import { useOrganization } from 'src/providers/hooks';
+import { SeedBankService } from 'src/services';
 import strings from 'src/strings';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
-import AddLink from 'src/components/common/AddLink';
-import { useOrganization } from 'src/providers/hooks';
 
 interface Props {
   collectors?: string[];

@@ -1,11 +1,13 @@
-import { Box, Link, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import React from 'react';
 
-import strings from 'src/strings';
-import Button from '../common/button/Button';
-import DialogBox from '../common/DialogBox/DialogBox';
+import { Box, Link, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+
 import { useLocalization } from 'src/providers';
+import strings from 'src/strings';
+
+import DialogBox from '../common/DialogBox/DialogBox';
+import Button from '../common/button/Button';
 
 const useStyles = makeStyles((theme: Theme) => ({
   spacing: {

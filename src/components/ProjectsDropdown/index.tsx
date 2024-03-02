@@ -1,8 +1,10 @@
 import React, { useMemo } from 'react';
+
 import { Dropdown, DropdownItem } from '@terraware/web-components';
+
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { Project } from 'src/types/Project';
-import { useLocalization } from 'src/providers';
 
 type ProjectsDropdownProps<T extends { projectId?: number } | undefined> = {
   allowUnselect?: boolean;

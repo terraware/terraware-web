@@ -1,12 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { ObservationsService, Response } from 'src/services';
+import strings from 'src/strings';
 import {
-  ScheduleObservationRequestPayload,
   ReplaceObservationPlotRequestPayload,
   ReplaceObservationPlotResponsePayload,
   RescheduleObservationRequestPayload,
+  ScheduleObservationRequestPayload,
 } from 'src/types/Observations';
-import strings from 'src/strings';
 
 export const requestScheduleObservation = createAsyncThunk(
   'scheduleObservation',

@@ -1,22 +1,24 @@
 import React, { useCallback, useEffect, useState } from 'react';
+
 import { Container, Grid, Theme, Typography, useTheme } from '@mui/material';
-import { Checkbox, Textfield } from '@terraware/web-components';
 import { makeStyles } from '@mui/styles';
-import strings from 'src/strings';
-import { Report, ReportNursery, ReportPlantingSite } from 'src/types/Report';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { ReportSeedBank } from 'src/types/Report';
-import ReportService from 'src/services/ReportService';
-import { useOrganization } from 'src/providers';
-import { useAppDispatch } from 'src/redux/store';
-import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
-import { requestSpecies } from 'src/redux/features/species/speciesThunks';
-import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
-import { requestPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingThunks';
+import { Checkbox, Textfield } from '@terraware/web-components';
+
+import LocationSection from 'src/components/Reports/LocationSelection';
+import ViewPhotos from 'src/components/Reports/ViewPhotos';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import SelectPhotos from 'src/components/common/SelectPhotos';
-import ViewPhotos from 'src/components/Reports/ViewPhotos';
-import LocationSection from 'src/components/Reports/LocationSelection';
+import { useOrganization } from 'src/providers';
+import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
+import { requestSpecies } from 'src/redux/features/species/speciesThunks';
+import { requestPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingThunks';
+import { useAppDispatch } from 'src/redux/store';
+import ReportService from 'src/services/ReportService';
+import strings from 'src/strings';
+import { Report, ReportNursery, ReportPlantingSite } from 'src/types/Report';
+import { ReportSeedBank } from 'src/types/Report';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const MAX_PHOTOS = 30;
 

@@ -1,7 +1,7 @@
+import { defaultSelectedOrg } from 'src/providers/contexts';
 import { Facility, FacilityType } from 'src/types/Facility';
 import { HighOrganizationRolesValues, Organization, OrganizationRole } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
-import { defaultSelectedOrg } from 'src/providers/contexts';
 
 export const getFacilitiesByType = (organization: Organization, type: FacilityType, locale?: string) => {
   let facilitiesByType: Facility[] = [];

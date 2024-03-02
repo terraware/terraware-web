@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+
 import { APP_PATHS } from 'src/constants';
-import { SiteType } from 'src/types/PlantingSite';
 import isEnabled from 'src/features';
+import { SiteType } from 'src/types/PlantingSite';
+
 import DetailedPlantingSiteHelpModal from './DetailedPlantingSiteHelpModal';
 import PlantingSiteSelectTypeModal from './PlantingSiteSelectTypeModal';
 import PlantingSiteSelectTypeModal2 from './PlantingSiteSelectTypeModal2';

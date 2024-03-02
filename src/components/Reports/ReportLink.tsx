@@ -1,6 +1,7 @@
 import React from 'react';
-import { APP_PATHS } from 'src/constants';
+
 import Link from 'src/components/common/Link';
+import { APP_PATHS } from 'src/constants';
 import { ListReport } from 'src/types/Report';
 
 interface ReportLinkProps {
