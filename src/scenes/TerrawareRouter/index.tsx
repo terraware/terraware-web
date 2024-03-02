@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
 import { Slide, Theme } from '@mui/material';
 import NavBar from 'src/scenes/TerrawareRouter/NavBar';
@@ -45,11 +45,20 @@ import ObservationsRouter from 'src/scenes/ObservationsRouter';
 import OptInFeaturesView from 'src/scenes/OptInFeatures';
 import RedirectsRouter from 'src/scenes/RedirectsRouter';
 import DeliverablesRouter from 'src/scenes/DeliverablesRouter';
+import NoOrgRouter from 'src/scenes/NoOrgRouter';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 
 interface TerrawareRouterProps {
   showNavBar: boolean;
   setShowNavBar: (value: boolean) => void;
 }
+
+const MINIMAL_USER_ROUTES: string[] = [
+  APP_PATHS.WELCOME,
+  APP_PATHS.MY_ACCOUNT,
+  APP_PATHS.MY_ACCOUNT_EDIT,
+  APP_PATHS.OPT_IN,
+];
 
 const useStyles = makeStyles((theme: Theme) => ({
   content: {
@@ -82,7 +91,9 @@ const TerrawareRouter = ({ showNavBar, setShowNavBar }: TerrawareRouterProps) =>
   const { isProduction } = useEnvironment();
   const { reloadUserPreferences: reloadPreferences } = useUser();
   const location = useStateLocation();
-  const { selectedOrganization } = useOrganization();
+  const history = useHistory();
+  const { organizations, selectedOrganization } = useOrganization();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
   const featureFlagProjects = isEnabled('Projects');
   const featureFlagAccelerator = isEnabled('Accelerator');
   const classes = useStyles();
@@ -181,7 +192,19 @@ const TerrawareRouter = ({ showNavBar, setShowNavBar }: TerrawareRouterProps) =>
     selectedOrgHasSpecies,
   ]);
 
-  return (
+  useEffect(() => {
+    if (isAcceleratorRoute) {
+      return;
+    }
+
+    if (organizations?.length === 0 && MINIMAL_USER_ROUTES.indexOf(location.pathname) === -1) {
+      history.push(APP_PATHS.WELCOME);
+    }
+  }, [history, isAcceleratorRoute, location, organizations]);
+
+  return !isAcceleratorRoute && organizations.length === 0 ? (
+    <NoOrgRouter />
+  ) : (
     <>
       {type !== 'desktop' ? (
         <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
