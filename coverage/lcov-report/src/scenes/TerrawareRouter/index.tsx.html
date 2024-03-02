@@ -381,7 +381,11 @@
 <a name='L316'></a><a href='#L316'>316</a>
 <a name='L317'></a><a href='#L317'>317</a>
 <a name='L318'></a><a href='#L318'>318</a>
-<a name='L319'></a><a href='#L319'>319</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L319'></a><a href='#L319'>319</a>
+<a name='L320'></a><a href='#L320'>320</a>
+<a name='L321'></a><a href='#L321'>321</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -701,51 +705,53 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { makeStyles } from '@mui/styles';
+&nbsp;
 import { Slide, Theme } from '@mui/material';
-import NavBar from 'src/scenes/TerrawareRouter/NavBar';
+import { makeStyles } from '@mui/styles';
+&nbsp;
 import ErrorBoundary from 'src/ErrorBoundary';
+import ProjectsRouter from 'src/components/Projects/Router';
+import ReportsRouter from 'src/components/Reports/Router';
 import { APP_PATHS } from 'src/constants';
-import useEnvironment from 'src/utils/useEnvironment';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import useStateLocation from 'src/utils/useStateLocation';
 import isEnabled from 'src/features';
-import { getRgbaFromHex } from 'src/utils/color';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
-import { PlantingSite } from 'src/types/Tracking';
-import { Project } from 'src/types/Project';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { selectHasObservationsResults } from 'src/redux/features/observations/observationsSelectors';
+import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
+import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
-import { requestProjects } from 'src/redux/features/projects/projectsThunks';
-import { selectHasObservationsResults } from 'src/redux/features/observations/observationsSelectors';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
-import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
-import ProjectsRouter from 'src/components/Projects/Router';
-import PlantingSites from 'src/scenes/PlantingSitesRouter';
-import ReportsRouter from 'src/components/Reports/Router';
-import Home from 'src/scenes/Home';
-import SeedsDashboard from 'src/scenes/SeedsDashboard';
-import CheckIn from 'src/scenes/CheckIn';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import AccessionsRouter from 'src/scenes/AccessionsRouter';
-import MonitoringRouter from 'src/scenes/MonitoringRouter';
-import SpeciesRouter from 'src/scenes/Species';
-import OrganizationRouter from 'src/scenes/OrganizationRouter';
-import PeopleRouter from 'src/scenes/PeopleRouter';
-import { isPlaceholderOrg, selectedOrgHasFacilityType } from 'src/utils/organization';
-import SeedBanksRouter from 'src/scenes/SeedBanksRouter';
-import NurseriesRouter from 'src/scenes/NurseriesRouter';
-import PlantsDashboardRouter from 'src/scenes/PlantsDashboardRouter';
-import InventoryRouter from 'src/scenes/InventoryRouter';
 import BatchBulkWithdrawView from 'src/scenes/BatchBulkWithdrawView';
-import NurseryRouter from 'src/scenes/NurseryRouter';
+import CheckIn from 'src/scenes/CheckIn';
 import ContactUsView from 'src/scenes/ContactUs';
+import DeliverablesRouter from 'src/scenes/DeliverablesRouter';
+import Home from 'src/scenes/Home';
+import InventoryRouter from 'src/scenes/InventoryRouter';
+import MonitoringRouter from 'src/scenes/MonitoringRouter';
 import MyAccountRouter from 'src/scenes/MyAccountRouter';
+import NurseriesRouter from 'src/scenes/NurseriesRouter';
+import NurseryRouter from 'src/scenes/NurseryRouter';
 import ObservationsRouter from 'src/scenes/ObservationsRouter';
 import OptInFeaturesView from 'src/scenes/OptInFeatures';
+import OrganizationRouter from 'src/scenes/OrganizationRouter';
+import PeopleRouter from 'src/scenes/PeopleRouter';
+import PlantingSites from 'src/scenes/PlantingSitesRouter';
+import PlantsDashboardRouter from 'src/scenes/PlantsDashboardRouter';
 import RedirectsRouter from 'src/scenes/RedirectsRouter';
-import DeliverablesRouter from 'src/scenes/DeliverablesRouter';
+import SeedBanksRouter from 'src/scenes/SeedBanksRouter';
+import SeedsDashboard from 'src/scenes/SeedsDashboard';
+import SpeciesRouter from 'src/scenes/Species';
+import NavBar from 'src/scenes/TerrawareRouter/NavBar';
+import { Project } from 'src/types/Project';
+import { PlantingSite } from 'src/types/Tracking';
+import { getRgbaFromHex } from 'src/utils/color';
+import { isPlaceholderOrg, selectedOrgHasFacilityType } from 'src/utils/organization';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useEnvironment from 'src/utils/useEnvironment';
+import useStateLocation from 'src/utils/useStateLocation';
 &nbsp;
 interface TerrawareRouterProps {
   showNavBar: boolean;
@@ -1024,7 +1030,7 @@ export default TerrawareRouter;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-02T03:33:17.649Z
+                at 2024-03-02T03:45:30.581Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

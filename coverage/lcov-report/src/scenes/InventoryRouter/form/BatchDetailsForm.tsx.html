@@ -528,7 +528,9 @@
 <a name='L463'></a><a href='#L463'>463</a>
 <a name='L464'></a><a href='#L464'>464</a>
 <a name='L465'></a><a href='#L465'>465</a>
-<a name='L466'></a><a href='#L466'>466</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L466'></a><a href='#L466'>466</a>
+<a name='L467'></a><a href='#L467'>467</a>
+<a name='L468'></a><a href='#L468'>468</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -568,6 +570,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -993,35 +997,37 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useState, useMemo, useCallback } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useMemo, useState } from 'react';
+&nbsp;
 import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
-import DatePicker from 'src/components/common/DatePicker';
-import strings from 'src/strings';
-import useForm from 'src/utils/useForm';
-import { CreateBatchRequestPayload } from 'src/types/Batch';
-import { useOrganization } from 'src/providers/hooks';
-import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
-import { useNumberFormatter } from 'src/utils/useNumber';
-import { useUser } from 'src/providers';
-import FacilityService from 'src/services/FacilityService';
-import { stateName } from 'src/types/Accession';
-import isEnabled from 'src/features';
-import { SavableBatch } from 'src/redux/features/batches/batchesAsyncThunks';
-import useSnackbar from 'src/utils/useSnackbar';
-import { useProjects } from 'src/hooks/useProjects';
+&nbsp;
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
-import { useSubLocations } from 'src/scenes/InventoryRouter/form/useSubLocations';
+import DatePicker from 'src/components/common/DatePicker';
+import isEnabled from 'src/features';
+import { useProjects } from 'src/hooks/useProjects';
+import { useUser } from 'src/providers';
+import { useOrganization } from 'src/providers/hooks';
+import { SavableBatch } from 'src/redux/features/batches/batchesAsyncThunks';
+import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
+import AccessionsDropdown from 'src/scenes/InventoryRouter/form/AccessionsDropdown';
+import NurseryDropdownV2 from 'src/scenes/InventoryRouter/form/NurseryDropdownV2';
+import SpeciesDropdown from 'src/scenes/InventoryRouter/form/SpeciesDropdown';
 import SubLocationsDropdown from 'src/scenes/InventoryRouter/form/SubLocationsDropdown';
 import { useAccessions } from 'src/scenes/InventoryRouter/form/useAccessions';
-import AccessionsDropdown from 'src/scenes/InventoryRouter/form/AccessionsDropdown';
-import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
-import SpeciesDropdown from 'src/scenes/InventoryRouter/form/SpeciesDropdown';
 import { useNurseries } from 'src/scenes/InventoryRouter/form/useNurseries';
-import NurseryDropdownV2 from 'src/scenes/InventoryRouter/form/NurseryDropdownV2';
-import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
+import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
+import { useSubLocations } from 'src/scenes/InventoryRouter/form/useSubLocations';
+import FacilityService from 'src/services/FacilityService';
+import strings from 'src/strings';
+import { stateName } from 'src/types/Accession';
+import { CreateBatchRequestPayload } from 'src/types/Batch';
+import useForm from 'src/utils/useForm';
+import { useNumberFormatter } from 'src/utils/useNumber';
+import useSnackbar from 'src/utils/useSnackbar';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 &nbsp;
 export interface BatchDetailsFormProps {
   doValidateBatch: boolean;
@@ -1465,7 +1471,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-02T03:33:17.649Z
+                at 2024-03-02T03:45:30.581Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

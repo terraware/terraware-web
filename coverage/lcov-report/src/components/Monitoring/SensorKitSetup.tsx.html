@@ -261,30 +261,13 @@
 <a name='L196'></a><a href='#L196'>196</a>
 <a name='L197'></a><a href='#L197'>197</a>
 <a name='L198'></a><a href='#L198'>198</a>
-<a name='L199'></a><a href='#L199'>199</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L199'></a><a href='#L199'>199</a>
+<a name='L200'></a><a href='#L200'>200</a>
+<a name='L201'></a><a href='#L201'>201</a>
+<a name='L202'></a><a href='#L202'>202</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -326,6 +309,29 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -459,24 +465,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { makeStyles } from '@mui/styles';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useState } from 'react';
+&nbsp;
 import { Theme } from '@mui/material';
 import { Container, Grid } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
-import strings from 'src/strings';
-import { Facility } from 'src/types/Facility';
-import { DeviceManager } from 'src/types/DeviceManager';
-import { Device } from 'src/types/Device';
-import { listFacilityDevicesById } from 'src/api/facility/facility';
+import { makeStyles } from '@mui/styles';
+&nbsp;
 import { listDeviceManagers } from 'src/api/deviceManager/deviceManager';
+import { listFacilityDevicesById } from 'src/api/facility/facility';
+import strings from 'src/strings';
+import { Device } from 'src/types/Device';
+import { DeviceManager } from 'src/types/DeviceManager';
+import { Facility } from 'src/types/Facility';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+&nbsp;
+import ConfigureSensorKit from './sensorKitSetup/ConfigureSensorKit';
+import DetectSensors from './sensorKitSetup/DetectSensors';
+import InstallDeviceManager from './sensorKitSetup/InstallDeviceManager';
+import { LOCATIONS } from './sensorKitSetup/Locations';
 import SelectPVSystem from './sensorKitSetup/SelectPVSystem';
 import SensorKitID from './sensorKitSetup/SensorKitID';
-import InstallDeviceManager from './sensorKitSetup/InstallDeviceManager';
-import DetectSensors from './sensorKitSetup/DetectSensors';
 import SensorLocations from './sensorKitSetup/SensorLocations';
-import ConfigureSensorKit from './sensorKitSetup/ConfigureSensorKit';
-import { LOCATIONS } from './sensorKitSetup/Locations';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
 &nbsp;
 interface StyleProps {
   isMobile: boolean;
@@ -664,7 +673,7 @@ export default function <span class="fstat-no" title="function not covered" >Sen
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-02T03:33:17.649Z
+                at 2024-03-02T03:45:30.581Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -1,3 +1,4 @@
+7d686b1b55 SW-3877 Reformat import statements via prettier (#2254)
 2799b8caf9 SW-3877: Added prettier plugin for sorting imports (#2253)
 7d0de32c28 SW-4928 Deliverable file upload dialog that accepts description, without API integration (#2245)
 8397c2fc0a SW-4944 Create ACL for global roles, plumb into the UserProvider (#2251)

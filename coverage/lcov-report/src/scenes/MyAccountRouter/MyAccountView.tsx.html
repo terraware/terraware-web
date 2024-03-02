@@ -635,7 +635,13 @@
 <a name='L570'></a><a href='#L570'>570</a>
 <a name='L571'></a><a href='#L571'>571</a>
 <a name='L572'></a><a href='#L572'>572</a>
-<a name='L573'></a><a href='#L573'>573</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L573'></a><a href='#L573'>573</a>
+<a name='L574'></a><a href='#L574'>574</a>
+<a name='L575'></a><a href='#L575'>575</a>
+<a name='L576'></a><a href='#L576'>576</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1209,48 +1215,51 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+&nbsp;
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem } from '@terraware/web-components';
-import {
-  OrganizationUserService,
-  OrganizationService,
-  PreferencesService,
-  UserService,
-  LocationService,
-} from 'src/services';
-import Table from 'src/components/common/table';
+&nbsp;
+import RegionSelector from 'src/components/RegionSelector';
+import TimeZoneSelector from 'src/components/TimeZoneSelector';
+import WeightSystemSelector from 'src/components/WeightSystemSelector';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import TfMain from 'src/components/common/TfMain';
+import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
-import strings from 'src/strings';
-import { roleName, Organization } from 'src/types/Organization';
-import { OrganizationUser, User } from 'src/types/User';
-import useForm from 'src/utils/useForm';
-import PageForm from '../../components/common/PageForm';
-import TextField from '../../components/common/Textfield/Textfield';
-import AssignNewOwnerDialog from './AssignNewOwnerModal';
-import LeaveOrganizationDialog from './LeaveOrganizationModal';
-import CannotRemoveOrgDialog from './CannotRemoveOrgModal';
-import DeleteOrgDialog from './DeleteOrgModal';
-import Checkbox from '../../components/common/Checkbox';
-import { Box, Grid, Typography, useTheme } from '@mui/material';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import useSnackbar from 'src/utils/useSnackbar';
-import TfMain from 'src/components/common/TfMain';
-import PageHeaderWrapper from '../../components/common/PageHeaderWrapper';
-import TitleDescription from '../../components/common/TitleDescription';
 import { useLocalization, useUser } from 'src/providers';
-import TimeZoneSelector from 'src/components/TimeZoneSelector';
-import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useTimeZones } from 'src/providers';
-import { getUTC } from 'src/utils/useTimeZoneUtils';
-import { weightSystems } from 'src/units';
-import WeightSystemSelector from 'src/components/WeightSystemSelector';
-import LocaleSelector from '../../components/LocaleSelector';
+import {
+  LocationService,
+  OrganizationService,
+  OrganizationUserService,
+  PreferencesService,
+  UserService,
+} from 'src/services';
+import strings from 'src/strings';
 import { findLocaleDetails, useSupportedLocales } from 'src/strings/locales';
-import DeleteAccountModal from './DeleteAccountModal';
 import { Country } from 'src/types/Country';
+import { Organization, roleName } from 'src/types/Organization';
+import { TimeZoneDescription } from 'src/types/TimeZones';
+import { OrganizationUser, User } from 'src/types/User';
+import { weightSystems } from 'src/units';
 import { getCountryByCode } from 'src/utils/country';
-import RegionSelector from 'src/components/RegionSelector';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
+import { getUTC } from 'src/utils/useTimeZoneUtils';
+&nbsp;
+import LocaleSelector from '../../components/LocaleSelector';
+import Checkbox from '../../components/common/Checkbox';
+import PageForm from '../../components/common/PageForm';
+import PageHeaderWrapper from '../../components/common/PageHeaderWrapper';
+import TextField from '../../components/common/Textfield/Textfield';
+import TitleDescription from '../../components/common/TitleDescription';
+import AssignNewOwnerDialog from './AssignNewOwnerModal';
+import CannotRemoveOrgDialog from './CannotRemoveOrgModal';
+import DeleteAccountModal from './DeleteAccountModal';
+import DeleteOrgDialog from './DeleteOrgModal';
+import LeaveOrganizationDialog from './LeaveOrganizationModal';
 &nbsp;
 type MyAccountProps = {
   organizations?: Organization[];
@@ -1786,7 +1795,7 @@ const MyAccountContent = <span class="cstat-no" title="statement not covered" ><
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-02T03:33:17.649Z
+                at 2024-03-02T03:45:30.581Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
