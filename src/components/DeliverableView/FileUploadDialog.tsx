@@ -6,6 +6,7 @@ import strings from 'src/strings';
 import { Deliverable } from 'src/types/Deliverables';
 import { useAppDispatch } from 'src/redux/store';
 import { requestGetDeliverable } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
+import useUpdateDeliverable from 'src/scenes/AcceleratorRouter/useUpdateDeliverable';
 
 const useStyles = makeStyles((theme: Theme) => ({
   description: {
@@ -41,6 +42,7 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
   const theme = useTheme();
   const classes = useStyles();
   const dispatch = useAppDispatch();
+  const { update } = useUpdateDeliverable();
 
   const submit = useCallback(() => {
     setValidate(true);
@@ -48,12 +50,13 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
       return;
     }
     setBusy(true);
+    update({ ...deliverable, status: 'In Review' });
     setTimeout(() => {
       // mock api latency
       dispatch(requestGetDeliverable(deliverable.id));
       onClose();
     }, 3000);
-  }, [deliverable.id, description, dispatch, onClose]);
+  }, [deliverable, description, dispatch, onClose, update]);
 
   const changeDescription = (index: number, val: string) => {
     setDescription((prev) => {
