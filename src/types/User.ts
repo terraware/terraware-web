@@ -3,6 +3,7 @@ import { components } from 'src/api/types/generated-schema';
 
 export type User = components['schemas']['UserProfilePayload'];
 export type UserGlobalRoles = User['globalRoles'];
+export type UserGlobalRole = User['globalRoles'][0];
 
 export type OrganizationUser = {
   firstName?: string;
@@ -12,8 +13,3 @@ export type OrganizationUser = {
   role: OrganizationRole;
   addedTime?: string;
 };
-
-const AcceleratorAdminRoles: UserGlobalRoles = ['Super-Admin', 'Accelerator Admin'];
-
-export const isAcceleratorAdmin = (user: User): boolean =>
-  user.globalRoles.some((globalRole: UserGlobalRoles[0]) => AcceleratorAdminRoles.includes(globalRole));

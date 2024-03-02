@@ -4,7 +4,6 @@ import SubNavbar from '@terraware/web-components/components/Navbar/SubNavbar';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { NurseryWithdrawalService } from 'src/services';
-import { isAcceleratorAdmin } from 'src/types/User';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import ReportService, { Reports } from 'src/services/ReportService';
@@ -174,7 +173,7 @@ export default function NavBar({
       setShowNavBar={setShowNavBar as React.Dispatch<React.SetStateAction<boolean>>}
       backgroundTransparent={backgroundTransparent}
     >
-      {featureFlagAccelerator && user && isAcceleratorAdmin(user) && (
+      {featureFlagAccelerator && user && (
         <NavItem
           label={strings.ACCELERATOR_ADMIN}
           icon='home'

@@ -1,15 +1,15 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { FileChooser } from '@terraware/web-components';
 import strings from 'src/strings';
 import { useLocalization } from 'src/providers';
-import useUpdateDeliverable from 'src/scenes/AcceleratorRouter/useUpdateDeliverable';
 import { ViewProps } from './types';
+import FileUploadDialog from './FileUploadDialog';
 
 const DocumentsUploader = ({ deliverable }: ViewProps): JSX.Element => {
+  const [files, setFiles] = useState<File[]>([]);
   const theme = useTheme();
   const { activeLocale } = useLocalization();
-  const { update } = useUpdateDeliverable();
 
   const template = useMemo(() => {
     if (activeLocale && deliverable.templateUrl) {
@@ -19,16 +19,13 @@ const DocumentsUploader = ({ deliverable }: ViewProps): JSX.Element => {
     }
   }, [activeLocale, deliverable.templateUrl]);
 
-  const setFiles = useCallback(
-    (files: File[]) => {
-      window.alert(`${files.length} files selected`);
-      update({ ...deliverable, status: 'In Review' });
-    },
-    [deliverable, update]
-  );
+  const onCloseFileUploadDialog = useCallback(() => void setFiles([]), []);
 
   return (
     <Box display='flex' flexDirection='column'>
+      {files.length > 0 && (
+        <FileUploadDialog deliverable={deliverable} files={files} onClose={onCloseFileUploadDialog} />
+      )}
       <Typography marginBottom={theme.spacing(2)} fontSize='20px' lineHeight='28px' fontWeight={600}>
         {strings.DOCUMENTS}
       </Typography>

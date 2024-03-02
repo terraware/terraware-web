@@ -14,7 +14,6 @@ import { useOrganization, useUser } from 'src/providers/hooks';
 import Link from 'src/components/common/Link';
 import AcceleratorBreadcrumbs from 'src/components/TopBar/AcceleratorBreadcrumbs';
 import { APP_PATHS } from 'src/constants';
-import { isAcceleratorAdmin } from 'src/types/User';
 
 const useStyles = makeStyles((theme: Theme) => ({
   logo: {
@@ -83,9 +82,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         {organizations && organizations.length > 0 && (
           <>
             <div className={classes.separator} />
-            {isAcceleratorRoute && featureFlagAccelerator && user && isAcceleratorAdmin(user) && (
-              <AcceleratorBreadcrumbs />
-            )}
+            {isAcceleratorRoute && featureFlagAccelerator && user && <AcceleratorBreadcrumbs />}
             {!isAcceleratorRoute && <OrganizationsDropdown />}
           </>
         )}

@@ -5,10 +5,8 @@ import { useHistory } from 'react-router';
 import { Provider } from 'react-redux';
 import { makeStyles } from '@mui/styles';
 import { APP_PATHS } from 'src/constants';
-import { isAcceleratorAdmin } from 'src/types/User';
 import useStateLocation from 'src/utils/useStateLocation';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { isAdmin } from 'src/utils/organization';
 import { getRgbaFromHex } from 'src/utils/color';
 import { store } from 'src/redux/store';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
@@ -75,18 +73,23 @@ function AppContent() {
   const { isDesktop, type } = useDeviceInfo();
   const classes = useStyles({ isDesktop });
   const location = useStateLocation();
-  const { organizations, selectedOrganization } = useOrganization();
+  const { organizations } = useOrganization();
   const history = useHistory();
-  const { user } = useUser();
+  const { isAllowed } = useUser();
   const { isAcceleratorRoute, featureFlagAccelerator } = useAcceleratorConsole();
 
   const [showNavBar, setShowNavBar] = useState(true);
 
+  // TODO this should also be put into the TerrawareRouter
   useEffect(() => {
+    if (isAcceleratorRoute) {
+      return;
+    }
+
     if (organizations?.length === 0 && MINIMAL_USER_ROUTES.indexOf(location.pathname) === -1) {
       history.push(APP_PATHS.WELCOME);
     }
-  }, [organizations, location, history]);
+  }, [organizations, location, history, isAcceleratorRoute]);
 
   useEffect(() => {
     if (type === 'mobile' || type === 'tablet') {
@@ -109,13 +112,10 @@ function AppContent() {
       </TopBar>
 
       <div className={classes.container}>
-        {organizations.length === 0 ? (
+        {/* TODO NoOrgRouter should be put inside the TerrawareRouter */}
+        {!isAcceleratorRoute && organizations.length === 0 ? (
           <NoOrgRouter />
-        ) : isAcceleratorRoute &&
-          featureFlagAccelerator &&
-          user &&
-          isAcceleratorAdmin(user) &&
-          isAdmin(selectedOrganization) ? (
+        ) : isAcceleratorRoute && featureFlagAccelerator && isAllowed('VIEW_CONSOLE') ? (
           <AcceleratorRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
         ) : (
           <TerrawareRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
