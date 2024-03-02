@@ -46,7 +46,6 @@ import OptInFeaturesView from 'src/scenes/OptInFeatures';
 import RedirectsRouter from 'src/scenes/RedirectsRouter';
 import DeliverablesRouter from 'src/scenes/DeliverablesRouter';
 import NoOrgRouter from 'src/scenes/NoOrgRouter';
-import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 
 interface TerrawareRouterProps {
   showNavBar: boolean;
@@ -93,7 +92,6 @@ const TerrawareRouter = ({ showNavBar, setShowNavBar }: TerrawareRouterProps) =>
   const location = useStateLocation();
   const history = useHistory();
   const { organizations, selectedOrganization } = useOrganization();
-  const { isAcceleratorRoute } = useAcceleratorConsole();
   const featureFlagProjects = isEnabled('Projects');
   const featureFlagAccelerator = isEnabled('Accelerator');
   const classes = useStyles();
@@ -193,16 +191,12 @@ const TerrawareRouter = ({ showNavBar, setShowNavBar }: TerrawareRouterProps) =>
   ]);
 
   useEffect(() => {
-    if (isAcceleratorRoute) {
-      return;
-    }
-
     if (organizations?.length === 0 && MINIMAL_USER_ROUTES.indexOf(location.pathname) === -1) {
       history.push(APP_PATHS.WELCOME);
     }
-  }, [history, isAcceleratorRoute, location, organizations]);
+  }, [history, location, organizations]);
 
-  return !isAcceleratorRoute && organizations.length === 0 ? (
+  return organizations.length === 0 ? (
     <NoOrgRouter />
   ) : (
     <>
