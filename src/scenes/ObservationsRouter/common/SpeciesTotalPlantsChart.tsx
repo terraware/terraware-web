@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
-import { ObservationSpeciesResults } from 'src/types/Observations';
+
 import BarChart from 'src/components/common/Chart/BarChart';
+import { ObservationSpeciesResults } from 'src/types/Observations';
 
 export type SpeciesTotalPlantsChartProps = {
   minHeight?: string;

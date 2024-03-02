@@ -1,13 +1,15 @@
 import React from 'react';
-import { makeStyles } from '@mui/styles';
+
 import { Box, Typography } from '@mui/material';
-import { APP_PATHS } from 'src/constants';
+import { makeStyles } from '@mui/styles';
 import { RendererProps, TableRowType } from '@terraware/web-components';
 import { Textfield } from '@terraware/web-components';
+
 import Link from 'src/components/common/Link';
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
-import { useNumberFormatter } from 'src/utils/useNumber';
+import { APP_PATHS } from 'src/constants';
 import { useUser } from 'src/providers';
+import { useNumberFormatter } from 'src/utils/useNumber';
 
 const useStyles = makeStyles(() => ({
   text: {

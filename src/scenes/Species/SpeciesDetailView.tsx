@@ -1,24 +1,27 @@
-import { Grid, Theme, Typography, useTheme, Box } from '@mui/material';
-import TextField from '../../components/common/Textfield/Textfield';
+import React, { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+
+import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { BusySpinner } from '@terraware/web-components';
-import React, { useEffect, useState } from 'react';
-import strings from 'src/strings';
-import { Species } from 'src/types/Species';
 import { Button, DropdownItem } from '@terraware/web-components';
+
+import PageSnackbar from 'src/components/PageSnackbar';
+import BackToLink from 'src/components/common/BackToLink';
+import Checkbox from 'src/components/common/Checkbox';
+import OptionsMenu from 'src/components/common/OptionsMenu';
+import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers/hooks';
 import { SpeciesService } from 'src/services';
-import TfMain from '../../components/common/TfMain';
-import BackToLink from 'src/components/common/BackToLink';
-import { APP_PATHS } from 'src/constants';
-import { useHistory, useParams } from 'react-router-dom';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import PageSnackbar from 'src/components/PageSnackbar';
-import OptionsMenu from 'src/components/common/OptionsMenu';
+import strings from 'src/strings';
+import { Species } from 'src/types/Species';
 import { isContributor } from 'src/utils/organization';
-import DeleteSpeciesModal from './DeleteSpeciesModal';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
-import Checkbox from 'src/components/common/Checkbox';
+
+import TextField from '../../components/common/Textfield/Textfield';
+import TfMain from '../../components/common/TfMain';
+import DeleteSpeciesModal from './DeleteSpeciesModal';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleWithButton: {

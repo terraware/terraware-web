@@ -1,6 +1,7 @@
 import React from 'react';
-import { makeStyles } from '@mui/styles';
+
 import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 

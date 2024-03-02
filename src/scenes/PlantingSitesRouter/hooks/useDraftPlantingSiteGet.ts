@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
-import strings from 'src/strings';
+
 import { APP_PATHS } from 'src/constants';
-import { DraftPlantingSite } from 'src/types/PlantingSite';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Statuses } from 'src/redux/features/asyncUtils';
 import { selectDraftPlantingSiteGet } from 'src/redux/features/draftPlantingSite/draftPlantingSiteSelectors';
 import { requestGetDraft } from 'src/redux/features/draftPlantingSite/draftPlantingSiteThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
+import { DraftPlantingSite } from 'src/types/PlantingSite';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export type Props = {

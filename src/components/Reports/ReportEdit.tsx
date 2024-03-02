@@ -1,28 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { BusySpinner, FormButton } from '@terraware/web-components';
-import { makeStyles } from '@mui/styles';
+
 import { Box, Typography, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { BusySpinner, FormButton } from '@terraware/web-components';
 import produce from 'immer';
-import { overWordLimit } from 'src/utils/text';
-import strings from 'src/strings';
-import ReportService from 'src/services/ReportService';
-import { Report, ReportFile } from 'src/types/Report';
-import { APP_PATHS } from 'src/constants';
-import useSnackbar from 'src/utils/useSnackbar';
-import { useOrganization, useUser } from 'src/providers';
-import ReportForm from 'src/components/Reports/ReportForm';
-import TfMain from 'src/components/common/TfMain';
-import PageForm from 'src/components/common/PageForm';
-import SubmitConfirmationDialog from 'src/components/Reports/SubmitConfirmationDialog';
-import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
-import useReportFiles from 'src/components/Reports/useReportFiles';
+
 import CannotEditReportDialog from 'src/components/Reports/InvalidUserModal';
 import {
   buildCompletedDateValid,
   buildStartedDateValid,
   operationStartedDateValid,
 } from 'src/components/Reports/LocationSelection/util';
+import ReportForm from 'src/components/Reports/ReportForm';
+import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
+import SubmitConfirmationDialog from 'src/components/Reports/SubmitConfirmationDialog';
+import useReportFiles from 'src/components/Reports/useReportFiles';
+import PageForm from 'src/components/common/PageForm';
+import TfMain from 'src/components/common/TfMain';
+import { APP_PATHS } from 'src/constants';
+import { useOrganization, useUser } from 'src/providers';
+import ReportService from 'src/services/ReportService';
+import strings from 'src/strings';
+import { Report, ReportFile } from 'src/types/Report';
+import { overWordLimit } from 'src/utils/text';
+import useSnackbar from 'src/utils/useSnackbar';
 
 const useStyles = makeStyles((theme) => ({
   form: {

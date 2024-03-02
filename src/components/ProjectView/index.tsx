@@ -1,24 +1,26 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router';
+import { useParams } from 'react-router-dom';
+
 import { Grid } from '@mui/material';
 import { DropdownItem } from '@terraware/web-components';
+
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
+import DeleteConfirmationDialog from 'src/components/ProjectView/DeleteConfirmationDialog';
 import Card from 'src/components/common/Card';
-import strings from 'src/strings';
+import OptionsMenu from 'src/components/common/OptionsMenu';
+import TextField from 'src/components/common/Textfield/Textfield';
+import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { requestProjectDelete } from 'src/redux/features/projects/projectsAsyncThunks';
 import { selectProject, selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
 import { requestProject, requestProjects } from 'src/redux/features/projects/projectsThunks';
-import Button from 'src/components/common/button/Button';
-import OptionsMenu from 'src/components/common/OptionsMenu';
-import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
-import { requestProjectDelete } from 'src/redux/features/projects/projectsAsyncThunks';
-import DeleteConfirmationDialog from 'src/components/ProjectView/DeleteConfirmationDialog';
-import TextField from 'src/components/common/Textfield/Textfield';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 export default function ProjectView(): JSX.Element {
   const dispatch = useAppDispatch();

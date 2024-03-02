@@ -1,5 +1,5 @@
 import strings from 'src/strings';
-import { labSubstrates, accessionNurserySubstrates } from 'src/types/Accession';
+import { accessionNurserySubstrates, labSubstrates } from 'src/types/Accession';
 
 export const getFullTestType = (testType: 'Lab' | 'Nursery' | 'Cut') => {
   if (testType === 'Lab') {

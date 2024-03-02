@@ -1,6 +1,7 @@
 import { components } from 'src/api/types/generated-schema';
-import { MultiPolygon, PlantingZone, PlantingSubzone, MinimalPlantingSite } from './Tracking';
 import strings from 'src/strings';
+
+import { MinimalPlantingSite, MultiPolygon, PlantingSubzone, PlantingZone } from './Tracking';
 
 // basic information on a single observation (excluding observation results)
 export type Observation = components['schemas']['ObservationPayload'];

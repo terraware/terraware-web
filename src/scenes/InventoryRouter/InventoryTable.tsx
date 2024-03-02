@@ -1,20 +1,23 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { TableColumnType } from '@terraware/web-components';
+
 import { Box, Grid } from '@mui/material';
+import { TableColumnType } from '@terraware/web-components';
 import _, { isArray } from 'lodash';
-import strings from 'src/strings';
-import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
-import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
-import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
-import { APP_PATHS } from 'src/constants';
+
+import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton';
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
-import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
-import Search from 'src/scenes/InventoryRouter/Search';
-import InventoryCellRenderer from './InventoryCellRenderer';
-import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton';
+import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
+import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
+import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
+import Search from 'src/scenes/InventoryRouter/Search';
+import strings from 'src/strings';
+import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
+
+import InventoryCellRenderer from './InventoryCellRenderer';
 
 interface InventoryTableProps {
   allowSelectionProjectAssign?: boolean;

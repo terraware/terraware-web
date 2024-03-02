@@ -1,7 +1,8 @@
 import { Dispatch } from 'redux';
+
+import { setReportsSettingsAction } from 'src/redux/features/reportsSettings/reportsSettingsSlice';
 import { RootState } from 'src/redux/rootReducer';
 import ReportSettingsService, { GetReportsSettingsResponse } from 'src/services/ReportSettingsService';
-import { setReportsSettingsAction } from 'src/redux/features/reportsSettings/reportsSettingsSlice';
 
 export const requestReportsSettings = (organizationId: number) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {

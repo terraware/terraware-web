@@ -1,16 +1,18 @@
 import React from 'react';
+
 import { Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { IconName } from 'src/components/common/icon/icons';
+
+import PageSnackbar from 'src/components/PageSnackbar';
+import getHelpEmail from 'src/components/common/HelpEmail';
 import PageCard from 'src/components/common/PageCard';
 import TfMain from 'src/components/common/TfMain';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import PageSnackbar from 'src/components/PageSnackbar';
-import strings from 'src/strings';
-import getHelpEmail from 'src/components/common/HelpEmail';
+import { IconName } from 'src/components/common/icon/icons';
 import { useDocLinks } from 'src/docLinks';
-import { useAppSelector } from 'src/redux/store';
 import { selectAppVersion } from 'src/redux/features/appVersion/appVersionSelectors';
+import { useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles(() => ({
   title: {

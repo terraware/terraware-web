@@ -1,28 +1,31 @@
-import { Box, Container, Grid, Theme, Typography, useTheme } from '@mui/material';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import strings from 'src/strings';
-import { APP_PATHS } from 'src/constants';
-import TfMain from 'src/components/common/TfMain';
-import PageSnackbar from 'src/components/PageSnackbar';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import ImportInventoryModal from './ImportInventoryModal';
-import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import { Button, DropdownItem, Tabs } from '@terraware/web-components';
-import OptionsMenu from 'src/components/common/OptionsMenu';
+
+import { Box, Container, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import useQuery from 'src/utils/useQuery';
-import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
-import { isAdmin } from 'src/utils/organization';
+import { Button, DropdownItem, Tabs } from '@terraware/web-components';
+
+import PageSnackbar from 'src/components/PageSnackbar';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
-import NurseryInventoryService, { SearchInventoryParams } from 'src/services/NurseryInventoryService';
+import OptionsMenu from 'src/components/common/OptionsMenu';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import TfMain from 'src/components/common/TfMain';
+import { APP_PATHS } from 'src/constants';
 import { useOrganization, useUser } from 'src/providers';
-import InventoryListBySpecies from './InventoryListBySpecies';
-import InventoryListByNursery from './InventoryListByNursery';
-import DownloadReportModal from './DownloadReportModal';
-import InventoryListByBatch from './InventoryListByBatch';
 import { PreferencesService } from 'src/services';
+import NurseryInventoryService, { SearchInventoryParams } from 'src/services/NurseryInventoryService';
+import strings from 'src/strings';
+import { isAdmin } from 'src/utils/organization';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useQuery from 'src/utils/useQuery';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+
+import DownloadReportModal from './DownloadReportModal';
+import ImportInventoryModal from './ImportInventoryModal';
+import InventoryListByBatch from './InventoryListByBatch';
+import InventoryListByNursery from './InventoryListByNursery';
+import InventoryListBySpecies from './InventoryListBySpecies';
 
 export const InventoryListTypes: Record<string, string> = {
   BATCHES_BY_SPECIES: 'batches_by_species',

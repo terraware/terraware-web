@@ -1,15 +1,18 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
+
 import { Box, useTheme } from '@mui/material';
 import { Button, DropdownItem } from '@terraware/web-components';
-import strings from 'src/strings';
-import { DeliverableStatusType } from 'src/types/Deliverables';
+
+import useFetchDeliverable from 'src/components/DeliverableView/useFetchDeliverable';
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
-import useFetchDeliverable from 'src/components/DeliverableView/useFetchDeliverable';
-import useUpdateDeliverable from './useUpdateDeliverable';
+import strings from 'src/strings';
+import { DeliverableStatusType } from 'src/types/Deliverables';
+
 import DeliverableView from './DeliverableView';
 import RejectDialog from './RejectDialog';
+import useUpdateDeliverable from './useUpdateDeliverable';
 
 const DeliverableViewWrapper = () => {
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);

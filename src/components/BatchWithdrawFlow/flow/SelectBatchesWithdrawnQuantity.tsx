@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
+
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
-import PageForm from 'src/components/common/PageForm';
-import { useDeviceInfo } from '@terraware/web-components/utils';
-import strings from 'src/strings';
-import { NurseryWithdrawalRequest, NurseryWithdrawalPurposes } from 'src/types/Batch';
-import { ErrorBox, TableColumnType } from '@terraware/web-components';
-import WithdrawalBatchesCellRenderer from './WithdrawalBatchesCellRenderer';
-import useForm from 'src/utils/useForm';
 import { makeStyles } from '@mui/styles';
-import { useOrganization } from 'src/providers';
+import { ErrorBox, TableColumnType } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
+
+import Card from 'src/components/common/Card';
+import PageForm from 'src/components/common/PageForm';
 import Table from 'src/components/common/table';
 import isEnabled from 'src/features';
-import Card from 'src/components/common/Card';
+import { useOrganization } from 'src/providers';
+import strings from 'src/strings';
+import { NurseryWithdrawalPurposes, NurseryWithdrawalRequest } from 'src/types/Batch';
+import useForm from 'src/utils/useForm';
+
+import WithdrawalBatchesCellRenderer from './WithdrawalBatchesCellRenderer';
 
 type SelectBatchesWithdrawnQuantityProps = {
   onNext: (withdrawal: NurseryWithdrawalRequest) => void;

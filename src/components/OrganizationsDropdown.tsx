@@ -1,12 +1,15 @@
-import { DropdownItem, PopoverMenu } from '@terraware/web-components';
-import { makeStyles } from '@mui/styles';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
+
+import { makeStyles } from '@mui/styles';
+import { DropdownItem, PopoverMenu } from '@terraware/web-components';
+
 import { APP_PATHS } from 'src/constants';
+import { useOrganization } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
+
 import AddNewOrganizationModal from './AddNewOrganizationModal';
-import { useOrganization } from 'src/providers/hooks';
 
 const useStyles = makeStyles(() => ({
   anchorText: {

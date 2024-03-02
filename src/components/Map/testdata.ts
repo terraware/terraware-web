@@ -1,4 +1,5 @@
 import { FeatureCollection, Geometry } from 'geojson';
+
 import { GeometryFeature } from 'src/types/Map';
 
 export const feature1: GeometryFeature = {

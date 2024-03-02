@@ -1,5 +1,5 @@
-import { Participant } from 'src/types/Participant';
 import { Response2 } from 'src/services/HttpService';
+import { Participant } from 'src/types/Participant';
 
 /**
  * Accelerator "participant" related services

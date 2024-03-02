@@ -1,11 +1,13 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
+import { Status, StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { Observation, ObservationResultsPayload, ReplaceObservationPlotResponsePayload } from 'src/types/Observations';
+
 import {
-  requestScheduleObservation,
   requestReplaceObservationPlot,
   requestRescheduleObservation,
+  requestScheduleObservation,
 } from './observationsAsyncThunks';
-import { buildReducers, Status, StatusT } from 'src/redux/features/asyncUtils';
 
 // Define a type for the slice state
 type ResultsData = {

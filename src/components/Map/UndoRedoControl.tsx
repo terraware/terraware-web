@@ -1,4 +1,4 @@
-import { Box, useTheme, Theme } from '@mui/material';
+import { Box, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button } from '@terraware/web-components';
 

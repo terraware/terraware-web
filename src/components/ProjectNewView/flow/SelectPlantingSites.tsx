@@ -1,21 +1,23 @@
 import React, { useCallback } from 'react';
+
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
-import { useDeviceInfo } from '@terraware/web-components/utils';
 import { FormButton, Message, TableColumnType } from '@terraware/web-components';
-import PageForm from 'src/components/common/PageForm';
-import strings from 'src/strings';
-import Table from 'src/components/common/table';
-import { CreateProjectRequest } from 'src/types/Project';
-import { PlantingSiteSearchResult } from 'src/types/Tracking';
-import { TrackingService } from 'src/services';
-import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { useDeviceInfo } from '@terraware/web-components/utils';
+
 import { FlowStates } from 'src/components/ProjectNewView';
+import ProjectEntitySearch from 'src/components/ProjectNewView/flow/ProjectEntitySearch';
 import {
   ProjectEntityFilters,
   useProjectEntitySelection,
 } from 'src/components/ProjectNewView/flow/useProjectEntitySelection';
-import ProjectEntitySearch from 'src/components/ProjectNewView/flow/ProjectEntitySearch';
 import Card from 'src/components/common/Card';
+import PageForm from 'src/components/common/PageForm';
+import Table from 'src/components/common/table';
+import { TrackingService } from 'src/services';
+import strings from 'src/strings';
+import { CreateProjectRequest } from 'src/types/Project';
+import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { PlantingSiteSearchResult } from 'src/types/Tracking';
 
 type SelectPlantingSitesProps = {
   project: CreateProjectRequest;

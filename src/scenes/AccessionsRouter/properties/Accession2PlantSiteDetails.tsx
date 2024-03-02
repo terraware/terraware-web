@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import strings from 'src/strings';
-import { Grid, Box, useTheme } from '@mui/material';
-import { AccessionPostRequestBody } from 'src/services/SeedBankService';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import Textfield from 'src/components/common/Textfield/Textfield';
-import { CollectionSource } from './index';
+
+import { Box, Grid, useTheme } from '@mui/material';
+
 import AddLink from 'src/components/common/AddLink';
+import Textfield from 'src/components/common/Textfield/Textfield';
+import { AccessionPostRequestBody } from 'src/services/SeedBankService';
+import strings from 'src/strings';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+import { CollectionSource } from './index';
 
 type Accession2PlantSiteDetailsProps = {
   record: AccessionPostRequestBody;

@@ -1,10 +1,12 @@
 import React, { useRef } from 'react';
+import { useHistory } from 'react-router-dom';
+
 import { Grid, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { useHistory } from 'react-router-dom';
-import Button from 'src/components/common/button/Button';
-import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+
 import PageSnackbar from 'src/components/PageSnackbar';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import AcceleratorMain from 'src/scenes/AcceleratorRouter/AcceleratorMain';
 import strings from 'src/strings';

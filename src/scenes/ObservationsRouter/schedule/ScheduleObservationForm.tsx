@@ -1,15 +1,17 @@
 import React, { useEffect, useMemo, useState } from 'react';
+
 import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { BusySpinner, DatePicker, Dropdown } from '@terraware/web-components';
 import { DateTime } from 'luxon';
-import { BusySpinner, Dropdown, DatePicker } from '@terraware/web-components';
-import strings from 'src/strings';
-import { PlantingSite } from 'src/types/Tracking';
-import { Statuses } from 'src/redux/features/asyncUtils';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
+
 import PageSnackbar from 'src/components/PageSnackbar';
+import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
-import Card from 'src/components/common/Card';
+import { Statuses } from 'src/redux/features/asyncUtils';
+import strings from 'src/strings';
+import { PlantingSite } from 'src/types/Tracking';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 export type ScheduleObservationFormProps = {
   title: string;

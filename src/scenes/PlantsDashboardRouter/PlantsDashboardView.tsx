@@ -1,44 +1,47 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import strings from 'src/strings';
-import { PlantingSite } from 'src/types/Tracking';
-import { APP_PATHS } from 'src/constants';
-import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
+import { useHistory } from 'react-router-dom';
+
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import {
-  requestSitePopulation,
-  requestSiteReportedPlants,
-  requestPlantingSitesSearchResults,
-} from 'src/redux/features/tracking/trackingThunks';
-import { useLocalization, useOrganization } from 'src/providers';
-import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { useDeviceInfo } from '@terraware/web-components/utils';
-import TotalReportedPlantsCard from './components/TotalReportedPlantsCard';
-import PlantsReportedPerSpeciesCard from './components/PlantsReportedPerSpeciesCard';
-import { requestSpecies } from 'src/redux/features/species/speciesThunks';
-import NumberOfSpeciesPlantedCard from './components/NumberOfSpeciesPlantedCard';
-import PlantingSiteProgressCard from './components/PlantingSiteProgressCard';
-import PlantingProgressPerZoneCard from './components/PlantingProgressPerZoneCard';
-import ZoneLevelDataMap from './components/ZoneLevelDataMap';
+
+import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
+import { APP_PATHS } from 'src/constants';
+import { useLocalization, useOrganization } from 'src/providers';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-import TotalMortalityRateCard from './components/TotalMoratlityRateCard';
+import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
+import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { selectSitePopulationZones } from 'src/redux/features/tracking/sitePopulationSelector';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import HighestAndLowestMortalityRateZonesCard from './components/HighestAndLowestMortalityRateZonesCard';
-import HighestAndLowestMortalityRateSpeciesCard from './components/HighestAndLowestMortalityRateSpeciesCard';
-import LiveDeadPlantsPerSpeciesCard from './components/LiveDeadPlantsPerSpeciesCard';
-import PlantingDensityPerZoneCard from './components/PlantingDensityPerZoneCard';
-import { getShortDate } from 'src/utils/dateFormatter';
-import HectaresPlantedCard from './components/HectaresPlantedCard';
-import EmptyMessage from '../../components/common/EmptyMessage';
-import { useHistory } from 'react-router-dom';
-import PlantingSiteDensityCard from 'src/scenes/PlantsDashboardRouter/components/PlantingSiteDensityCard';
-import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
-import FormattedNumber from '../../components/common/FormattedNumber';
+import {
+  requestPlantingSitesSearchResults,
+  requestSitePopulation,
+  requestSiteReportedPlants,
+} from 'src/redux/features/tracking/trackingThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import ObservedNumberOfSpeciesCard from 'src/scenes/PlantsDashboardRouter/components/ObservedNumberOfSpeciesCard';
+import PlantingSiteDensityCard from 'src/scenes/PlantsDashboardRouter/components/PlantingSiteDensityCard';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
+import strings from 'src/strings';
+import { PlantingSite } from 'src/types/Tracking';
+import { getShortDate } from 'src/utils/dateFormatter';
 import { isAfter } from 'src/utils/dateUtils';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+
+import EmptyMessage from '../../components/common/EmptyMessage';
+import FormattedNumber from '../../components/common/FormattedNumber';
+import HectaresPlantedCard from './components/HectaresPlantedCard';
+import HighestAndLowestMortalityRateSpeciesCard from './components/HighestAndLowestMortalityRateSpeciesCard';
+import HighestAndLowestMortalityRateZonesCard from './components/HighestAndLowestMortalityRateZonesCard';
+import LiveDeadPlantsPerSpeciesCard from './components/LiveDeadPlantsPerSpeciesCard';
+import NumberOfSpeciesPlantedCard from './components/NumberOfSpeciesPlantedCard';
+import PlantingDensityPerZoneCard from './components/PlantingDensityPerZoneCard';
+import PlantingProgressPerZoneCard from './components/PlantingProgressPerZoneCard';
+import PlantingSiteProgressCard from './components/PlantingSiteProgressCard';
+import PlantsReportedPerSpeciesCard from './components/PlantsReportedPerSpeciesCard';
+import TotalMortalityRateCard from './components/TotalMoratlityRateCard';
+import TotalReportedPlantsCard from './components/TotalReportedPlantsCard';
+import ZoneLevelDataMap from './components/ZoneLevelDataMap';
 
 export default function PlantsDashboardView(): JSX.Element {
   const org = useOrganization();

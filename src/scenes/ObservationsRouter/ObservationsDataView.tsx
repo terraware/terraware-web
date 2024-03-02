@@ -1,18 +1,21 @@
 import { useEffect, useState } from 'react';
+
 import { Box, Typography, useTheme } from '@mui/material';
-import strings from 'src/strings';
-import { useLocalization } from 'src/providers';
-import { FieldOptionsMap } from 'src/types/Search';
-import { ObservationState } from 'src/types/Observations';
-import { PlantingSite } from 'src/types/Tracking';
-import { useAppSelector } from 'src/redux/store';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-import { searchObservations, selectObservationsZoneNames } from 'src/redux/features/observations/observationsSelectors';
+
 import ListMapView from 'src/components/ListMapView';
 import { View } from 'src/components/common/ListMapSelector';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
-import OrgObservationsListView from './org/OrgObservationsListView';
+import { useLocalization } from 'src/providers';
+import { searchObservations, selectObservationsZoneNames } from 'src/redux/features/observations/observationsSelectors';
+import { useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
+import { ObservationState } from 'src/types/Observations';
+import { FieldOptionsMap } from 'src/types/Search';
+import { PlantingSite } from 'src/types/Tracking';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+
 import ObservationMapView from './map/ObservationMapView';
+import OrgObservationsListView from './org/OrgObservationsListView';
 
 export type ObservationsDataViewProps = SearchProps & {
   setFilterOptions: (value: FieldOptionsMap) => void;

@@ -1,7 +1,9 @@
 import React from 'react';
-import { makeStyles } from '@mui/styles';
+
 import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { MultiSelect } from '@terraware/web-components';
+
 import strings from 'src/strings';
 import { SubLocation } from 'src/types/Facility';
 

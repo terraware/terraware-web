@@ -1,12 +1,15 @@
 import React, { useCallback, useMemo } from 'react';
+
 import { Box, Grid } from '@mui/material';
 import { PillList, PillListItem, Textfield } from '@terraware/web-components';
+
+import { FilterField } from 'src/components/common/FilterGroup';
 import strings from 'src/strings';
 import { SearchNodePayload } from 'src/types/Search';
-import { FilterField } from 'src/components/common/FilterGroup';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import IconFilters from './IconFilters';
+
 import FeaturedFilters from './FeaturedFilters';
+import IconFilters from './IconFilters';
 
 export type SearchInputProps = {
   search: string;

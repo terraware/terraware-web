@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { UpdateProjectRequest } from 'src/types/Project';
+
 import { Response2 } from 'src/services/HttpService';
 import ProjectsService, {
   AssignProjectRequestPayload,
@@ -8,6 +8,7 @@ import ProjectsService, {
   UpdateProjectResponsePayload,
 } from 'src/services/ProjectsService';
 import strings from 'src/strings';
+import { UpdateProjectRequest } from 'src/types/Project';
 
 export const requestProjectUpdate = createAsyncThunk(
   'projects/update',

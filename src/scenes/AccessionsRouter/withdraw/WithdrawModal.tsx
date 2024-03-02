@@ -1,32 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import strings from 'src/strings';
-import Button from 'src/components/common/button/Button';
-import DialogBox from 'src/components/common/DialogBox/DialogBox';
-import { Box, Grid, useTheme, Radio, RadioGroup, FormControlLabel, Typography, Theme } from '@mui/material';
-import { SelectT, Textfield } from '@terraware/web-components';
-import DatePicker from 'src/components/common/DatePicker';
-import { Accession, Withdrawal } from 'src/types/Accession';
-import { NurseryTransfer } from 'src/types/Batch';
-import useForm from 'src/utils/useForm';
-import AccessionService, { ViabilityTestPostRequest } from 'src/services/AccessionService';
-import { withdrawalPurposes } from 'src/utils/withdrawalPurposes';
-import { OrganizationUserService } from 'src/services';
-import { OrganizationUser, User } from 'src/types/User';
-import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
-import { treatments, withdrawalTypes } from 'src/types/Accession';
-import useSnackbar from 'src/utils/useSnackbar';
-import { Dropdown } from '@terraware/web-components';
-import { isContributor, getAllNurseries, getSeedBank } from 'src/utils/organization';
-import { renderUser } from 'src/utils/renderUser';
-import { getSubstratesAccordingToType } from 'src/utils/viabilityTest';
-import AddLink from 'src/components/common/AddLink';
-import { useOrganization } from 'src/providers/hooks';
-import { Facility } from 'src/types/Facility';
-import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
+
+import { Box, FormControlLabel, Grid, Radio, RadioGroup, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { SelectT, Textfield } from '@terraware/web-components';
+import { Dropdown } from '@terraware/web-components';
+import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
+
+import AddLink from 'src/components/common/AddLink';
+import DatePicker from 'src/components/common/DatePicker';
+import DialogBox from 'src/components/common/DialogBox/DialogBox';
+import Button from 'src/components/common/button/Button';
+import { useOrganization } from 'src/providers/hooks';
 import CountWithdrawal from 'src/scenes/AccessionsRouter/withdraw/CountWithdrawal';
 import WeightWithdrawal from 'src/scenes/AccessionsRouter/withdraw/WeightWithdrawal';
+import { OrganizationUserService } from 'src/services';
+import AccessionService, { ViabilityTestPostRequest } from 'src/services/AccessionService';
+import strings from 'src/strings';
+import { Accession, Withdrawal } from 'src/types/Accession';
+import { treatments, withdrawalTypes } from 'src/types/Accession';
+import { NurseryTransfer } from 'src/types/Batch';
+import { Facility } from 'src/types/Facility';
+import { OrganizationUser, User } from 'src/types/User';
 import { Unit } from 'src/units';
+import { getAllNurseries, getSeedBank, isContributor } from 'src/utils/organization';
+import { renderUser } from 'src/utils/renderUser';
+import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
+import { getSubstratesAccordingToType } from 'src/utils/viabilityTest';
+import { withdrawalPurposes } from 'src/utils/withdrawalPurposes';
 
 const useStyles = makeStyles((theme: Theme) => ({
   withdraw: {

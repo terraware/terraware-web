@@ -1,27 +1,30 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Route, Switch } from 'react-router-dom';
+
 import { CircularProgress } from '@mui/material';
+
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import { requestPlantingSiteObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import {
   selectPlantingSiteObservationsResults,
   selectPlantingSiteObservationsResultsError,
 } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
+import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
 import { selectPlantingSites, selectPlantingSitesError } from 'src/redux/features/tracking/trackingSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+
 import PlantingSiteCreate from './edit/PlantingSiteCreate';
-import PlantingSitesList from './view/PlantingSitesList';
-import PlantingSiteView from './view/PlantingSiteView';
-import PlantingSiteSubzoneView from './view/PlantingSiteSubzoneView';
-import PlantingSiteZoneView from './view/PlantingSiteZoneView';
 import PlantingSiteDraftCreate from './edit/PlantingSiteDraftCreate';
 import PlantingSiteDraftEdit from './edit/PlantingSiteDraftEdit';
 import PlantingSiteDraftView from './view/PlantingSiteDraftView';
 import PlantingSiteDraftZoneView from './view/PlantingSiteDraftZoneView';
-import isEnabled from 'src/features';
+import PlantingSiteSubzoneView from './view/PlantingSiteSubzoneView';
+import PlantingSiteView from './view/PlantingSiteView';
+import PlantingSiteZoneView from './view/PlantingSiteZoneView';
+import PlantingSitesList from './view/PlantingSitesList';
 
 /**
  * This page will route to the correct component based on url params

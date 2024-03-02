@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import strings from 'src/strings';
+
 import { Dropdown } from '@terraware/web-components';
+
 import TooltipLearnMoreModal, {
   LearnMoreLink,
   LearnMoreModalContentCollectionSource,
   TooltipLearnMoreModalData,
 } from 'src/components/TooltipLearnMoreModal';
+import strings from 'src/strings';
 
 interface Props {
   placeholder: string;

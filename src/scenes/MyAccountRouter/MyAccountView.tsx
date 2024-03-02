@@ -1,47 +1,50 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem } from '@terraware/web-components';
-import {
-  OrganizationUserService,
-  OrganizationService,
-  PreferencesService,
-  UserService,
-  LocationService,
-} from 'src/services';
-import Table from 'src/components/common/table';
+
+import RegionSelector from 'src/components/RegionSelector';
+import TimeZoneSelector from 'src/components/TimeZoneSelector';
+import WeightSystemSelector from 'src/components/WeightSystemSelector';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import TfMain from 'src/components/common/TfMain';
+import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
-import strings from 'src/strings';
-import { roleName, Organization } from 'src/types/Organization';
-import { OrganizationUser, User } from 'src/types/User';
-import useForm from 'src/utils/useForm';
-import PageForm from '../../components/common/PageForm';
-import TextField from '../../components/common/Textfield/Textfield';
-import AssignNewOwnerDialog from './AssignNewOwnerModal';
-import LeaveOrganizationDialog from './LeaveOrganizationModal';
-import CannotRemoveOrgDialog from './CannotRemoveOrgModal';
-import DeleteOrgDialog from './DeleteOrgModal';
-import Checkbox from '../../components/common/Checkbox';
-import { Box, Grid, Typography, useTheme } from '@mui/material';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import useSnackbar from 'src/utils/useSnackbar';
-import TfMain from 'src/components/common/TfMain';
-import PageHeaderWrapper from '../../components/common/PageHeaderWrapper';
-import TitleDescription from '../../components/common/TitleDescription';
 import { useLocalization, useUser } from 'src/providers';
-import TimeZoneSelector from 'src/components/TimeZoneSelector';
-import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useTimeZones } from 'src/providers';
-import { getUTC } from 'src/utils/useTimeZoneUtils';
-import { weightSystems } from 'src/units';
-import WeightSystemSelector from 'src/components/WeightSystemSelector';
-import LocaleSelector from '../../components/LocaleSelector';
+import {
+  LocationService,
+  OrganizationService,
+  OrganizationUserService,
+  PreferencesService,
+  UserService,
+} from 'src/services';
+import strings from 'src/strings';
 import { findLocaleDetails, useSupportedLocales } from 'src/strings/locales';
-import DeleteAccountModal from './DeleteAccountModal';
 import { Country } from 'src/types/Country';
+import { Organization, roleName } from 'src/types/Organization';
+import { TimeZoneDescription } from 'src/types/TimeZones';
+import { OrganizationUser, User } from 'src/types/User';
+import { weightSystems } from 'src/units';
 import { getCountryByCode } from 'src/utils/country';
-import RegionSelector from 'src/components/RegionSelector';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
+import { getUTC } from 'src/utils/useTimeZoneUtils';
+
+import LocaleSelector from '../../components/LocaleSelector';
+import Checkbox from '../../components/common/Checkbox';
+import PageForm from '../../components/common/PageForm';
+import PageHeaderWrapper from '../../components/common/PageHeaderWrapper';
+import TextField from '../../components/common/Textfield/Textfield';
+import TitleDescription from '../../components/common/TitleDescription';
+import AssignNewOwnerDialog from './AssignNewOwnerModal';
+import CannotRemoveOrgDialog from './CannotRemoveOrgModal';
+import DeleteAccountModal from './DeleteAccountModal';
+import DeleteOrgDialog from './DeleteOrgModal';
+import LeaveOrganizationDialog from './LeaveOrganizationModal';
 
 type MyAccountProps = {
   organizations?: Organization[];

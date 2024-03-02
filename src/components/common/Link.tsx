@@ -1,7 +1,8 @@
 import React, { MouseEvent, ReactNode, SyntheticEvent } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { makeStyles } from '@mui/styles';
+
 import { Link as MuiLink, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
 export type LinkProps = {
   children: ReactNode;

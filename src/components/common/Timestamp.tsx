@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react';
+
 import { useLocalization } from 'src/providers';
 import { useUserTimeZone } from 'src/utils/useTimeZoneUtils';
-import { useEffect, useState } from 'react';
 
 export interface TimestampProps {
   className?: string;

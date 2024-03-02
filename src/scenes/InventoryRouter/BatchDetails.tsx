@@ -1,18 +1,21 @@
-import { Box, Grid, Typography, useTheme } from '@mui/material';
-import strings from 'src/strings';
-import Card from 'src/components/common/Card';
-import { Batch } from 'src/types/Batch';
-import OverviewItemCard from '../../components/common/OverviewItemCard';
-import { useDeviceInfo } from '@terraware/web-components/utils';
 import { useEffect, useState } from 'react';
-import { NurseryBatchService } from 'src/services';
-import PhotosList from '../../components/common/PhotosList';
-import useSnackbar from 'src/utils/useSnackbar';
+
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
-import BatchDetailsModal from './BatchDetailsModal';
-import { BATCH_PHOTO_ENDPOINT } from 'src/services/NurseryBatchService';
-import { batchSubstrateEnumToLocalized } from 'src/types/Accession';
+import { useDeviceInfo } from '@terraware/web-components/utils';
+
+import Card from 'src/components/common/Card';
 import ChangeQuantityModal from 'src/scenes/InventoryRouter/view/ChangeQuantityModal';
+import { NurseryBatchService } from 'src/services';
+import { BATCH_PHOTO_ENDPOINT } from 'src/services/NurseryBatchService';
+import strings from 'src/strings';
+import { batchSubstrateEnumToLocalized } from 'src/types/Accession';
+import { Batch } from 'src/types/Batch';
+import useSnackbar from 'src/utils/useSnackbar';
+
+import OverviewItemCard from '../../components/common/OverviewItemCard';
+import PhotosList from '../../components/common/PhotosList';
+import BatchDetailsModal from './BatchDetailsModal';
 
 interface BatchDetailsProps {
   batch: Batch;

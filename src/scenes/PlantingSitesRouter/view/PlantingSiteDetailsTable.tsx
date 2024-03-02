@@ -1,14 +1,15 @@
-import { makeStyles } from '@mui/styles';
 import { Box } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { TableColumnType } from '@terraware/web-components';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
+
+import Link from 'src/components/common/Link';
+import Table from 'src/components/common/table';
+import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
+import { RendererProps } from 'src/components/common/table/types';
 import strings from 'src/strings';
 import { SubzoneAggregation, ZoneAggregation } from 'src/types/Observations';
 import { MinimalPlantingSite } from 'src/types/Tracking';
-import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
-import { RendererProps } from 'src/components/common/table/types';
-import Link from 'src/components/common/Link';
-import Table from 'src/components/common/table';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 /**

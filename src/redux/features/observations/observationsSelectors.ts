@@ -1,13 +1,15 @@
 import { createCachedSelector } from 're-reselect';
-import {
-  ObservationState,
-  Observation,
-  ObservationResults,
-  ObservationPlantingZoneResults,
-} from 'src/types/Observations';
-import { RootState } from 'src/redux/rootReducer';
+
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import { RootState } from 'src/redux/rootReducer';
+import {
+  Observation,
+  ObservationPlantingZoneResults,
+  ObservationResults,
+  ObservationState,
+} from 'src/types/Observations';
+
 import { mergeObservations, searchZones } from './utils';
 
 export const ALL_STATES: ObservationState[] = ['Completed', 'Overdue', 'InProgress'];

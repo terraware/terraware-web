@@ -1,13 +1,15 @@
-import { NavSection } from '@terraware/web-components';
 import React from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
+
+import { NavSection } from '@terraware/web-components';
+
+import LocaleSelector from 'src/components/LocaleSelector';
+import NavFooter from 'src/components/common/Navbar/NavFooter';
+import NavItem from 'src/components/common/Navbar/NavItem';
+import Navbar from 'src/components/common/Navbar/Navbar';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import Navbar from 'src/components/common/Navbar/Navbar';
-import NavItem from 'src/components/common/Navbar/NavItem';
-import LocaleSelector from 'src/components/LocaleSelector';
-import NavFooter from 'src/components/common/Navbar/NavFooter';
 
 type NavBarProps = {
   backgroundTransparent?: boolean;

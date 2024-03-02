@@ -1,10 +1,11 @@
-import { Feature, FeatureCollection, Geometry, MultiPolygon } from 'geojson';
 import { Theme } from '@mui/material';
 import center from '@turf/center';
 import difference from '@turf/difference';
 import intersect from '@turf/intersect';
 import union from '@turf/union';
+import { Feature, FeatureCollection, Geometry, MultiPolygon } from 'geojson';
 import _ from 'lodash';
+
 import {
   GeometryFeature,
   MapDrawingLayer,

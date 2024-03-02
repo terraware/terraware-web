@@ -1,13 +1,16 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import strings from '../../src/strings';
-import { APP_PATHS } from 'src/constants';
+
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import useEnvironment from 'src/utils/useEnvironment';
 import { DropdownItem, PopoverMenu } from '@terraware/web-components';
-import { useUser } from 'src/providers';
+
+import { APP_PATHS } from 'src/constants';
 import { useDocLinks } from 'src/docLinks';
+import { useUser } from 'src/providers';
+import useEnvironment from 'src/utils/useEnvironment';
+
+import strings from '../../src/strings';
 
 const useStyles = makeStyles((theme: Theme) => ({
   userName: {

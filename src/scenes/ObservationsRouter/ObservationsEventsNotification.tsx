@@ -1,12 +1,14 @@
 import { useMemo } from 'react';
+
 import { Box, Typography } from '@mui/material';
 import { Button, Message } from '@terraware/web-components';
+
+import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
-import strings from 'src/strings';
 import { SEED_COLLECTOR_APP_STORE_LINK, SEED_COLLECTOR_GOOGLE_PLAY_LINK } from 'src/constants';
 import { useLocalization } from 'src/providers';
+import strings from 'src/strings';
 import { getLongDate } from 'src/utils/dateFormatter';
-import Link from 'src/components/common/Link';
 
 export type ObservationEvent = {
   id: number;

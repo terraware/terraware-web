@@ -1,10 +1,12 @@
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+
+import { SpeciesService } from 'src/services';
 import strings from 'src/strings';
 import { SpeciesProblemElement } from 'src/types/Species';
-import Button from '../../components/common/button/Button';
 import useSnackbar from 'src/utils/useSnackbar';
-import { SpeciesService } from 'src/services';
+
+import Button from '../../components/common/button/Button';
 
 const useStyles = makeStyles((theme: Theme) => ({
   tooltipContainer: {

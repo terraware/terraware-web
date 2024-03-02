@@ -1,14 +1,16 @@
 import { useEffect, useMemo, useState } from 'react';
+
 import { Grid, useTheme } from '@mui/material';
 import { TextTruncated } from '@terraware/web-components';
-import strings from 'src/strings';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import useSnackbar from 'src/utils/useSnackbar';
+
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import NurseryFacilitiesService, {
   NurserySummaryPayload,
   NurserySummarySpecies,
 } from 'src/services/NurseryFacilitiesService';
+import strings from 'src/strings';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useSnackbar from 'src/utils/useSnackbar';
 
 type InventorySummaryForNurseryProps = {
   nurseryId: number;

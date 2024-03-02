@@ -1,4 +1,5 @@
 import LocalizedStrings, { GlobalStrings } from 'react-localization';
+
 import { strings as english } from './strings-en';
 
 // Use the English strings table as the source of truth for the list of keys.

@@ -1,10 +1,12 @@
 import React from 'react';
-import { makeStyles } from '@mui/styles';
+
 import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+
 import Link from 'src/components/common/Link';
-import { APP_PATHS } from 'src/constants';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
+import { APP_PATHS } from 'src/constants';
 
 const useStyles = makeStyles((theme: Theme) => ({
   link: {

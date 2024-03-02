@@ -1,15 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import strings from 'src/strings';
-import Button from 'src/components/common/button/Button';
-import DialogBox from 'src/components/common/DialogBox/DialogBox';
-import { useProjects } from 'src/hooks/useProjects';
-import ProjectsDropdown from 'src/components/ProjectsDropdown';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
-import useSnackbar from 'src/utils/useSnackbar';
-import { requestProjectAssign } from 'src/redux/features/projects/projectsAsyncThunks';
-import { AssignProjectRequestPayload } from 'src/services/ProjectsService';
+
 import { Grid } from '@mui/material';
+
+import ProjectsDropdown from 'src/components/ProjectsDropdown';
+import DialogBox from 'src/components/common/DialogBox/DialogBox';
+import Button from 'src/components/common/button/Button';
+import { useProjects } from 'src/hooks/useProjects';
+import { requestProjectAssign } from 'src/redux/features/projects/projectsAsyncThunks';
+import { selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { AssignProjectRequestPayload } from 'src/services/ProjectsService';
+import strings from 'src/strings';
+import useSnackbar from 'src/utils/useSnackbar';
 
 type ProjectAssignableEntity = { id: number; projectId?: number };
 interface ProjectAssignModalProps<T extends ProjectAssignableEntity> {

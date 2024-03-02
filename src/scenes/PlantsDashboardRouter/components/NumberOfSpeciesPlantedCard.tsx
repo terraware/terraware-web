@@ -1,14 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import strings from 'src/strings';
+
 import { Box, Typography, useTheme } from '@mui/material';
-import { useAppSelector } from 'src/redux/store';
+
+import BarChart from 'src/components/common/Chart/BarChart';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import { useUser } from 'src/providers';
+import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
+import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { selectSitePopulationZones } from 'src/redux/features/tracking/sitePopulationSelector';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
-import BarChart from 'src/components/common/Chart/BarChart';
-import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
-import { useUser } from 'src/providers';
+import { useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
 import { useNumberFormatter } from 'src/utils/useNumber';
 
 type NumberOfSpeciesPlantedCardProps = {

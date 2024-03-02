@@ -1,7 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
+
 import { Box, CircularProgress, useTheme } from '@mui/material';
-import useSnackbar from 'src/utils/useSnackbar';
-import GenericMap from './GenericMap';
+import _ from 'lodash';
+
+import { MapLayer } from 'src/components/common/MapLayerSelect';
+import { MapService } from 'src/services';
 import {
   MapControl,
   MapData,
@@ -11,9 +14,9 @@ import {
   MapPopupRenderer,
   MapSource,
 } from 'src/types/Map';
-import { MapService } from 'src/services';
-import _ from 'lodash';
-import { MapLayer } from 'src/components/common/MapLayerSelect';
+import useSnackbar from 'src/utils/useSnackbar';
+
+import GenericMap from './GenericMap';
 import useRenderAttributes from './useRenderAttributes';
 
 const mapImages = [

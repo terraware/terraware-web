@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+
 import { APP_PATHS } from 'src/constants';
 import PlantsDashboardView from 'src/scenes/PlantsDashboardRouter/PlantsDashboardView';
 

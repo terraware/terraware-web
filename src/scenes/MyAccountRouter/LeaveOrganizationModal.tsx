@@ -1,7 +1,9 @@
 import React from 'react';
+
 import strings from 'src/strings';
-import Button from '../../components/common/button/Button';
+
 import DialogBox from '../../components/common/DialogBox/DialogBox';
+import Button from '../../components/common/button/Button';
 
 export interface LeaveOrganizationDialogProps {
   open: boolean;

@@ -1,16 +1,18 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Grid, Box, useTheme } from '@mui/material';
+
+import { Box, Grid, useTheme } from '@mui/material';
 import { PillListItem, Textfield } from '@terraware/web-components';
 import { PillList } from '@terraware/web-components';
-import strings from 'src/strings';
-import { useLocalization, useOrganization } from 'src/providers';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { requestProjects } from 'src/redux/features/projects/projectsThunks';
-import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import { ProjectEntityFilters } from 'src/components/ProjectNewView/flow/useProjectEntitySelection';
+
 import ProjectEntityFilter, {
   EntitySpecificFilterConfig,
 } from 'src/components/ProjectNewView/flow/ProjectEntityFilter';
+import { ProjectEntityFilters } from 'src/components/ProjectNewView/flow/useProjectEntitySelection';
+import { useLocalization, useOrganization } from 'src/providers';
+import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
+import { requestProjects } from 'src/redux/features/projects/projectsThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
 
 interface ProjectEntitySearchProps {
   searchValue: string;

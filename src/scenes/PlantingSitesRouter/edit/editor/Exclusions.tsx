@@ -1,17 +1,20 @@
 import { useEffect, useMemo } from 'react';
+
 import { Box } from '@mui/material';
 import { Feature, FeatureCollection } from 'geojson';
-import strings from 'src/strings';
-import { DraftPlantingSite } from 'src/types/PlantingSite';
-import useUndoRedoState from 'src/hooks/useUndoRedoState';
-import { RenderableReadOnlyBoundary } from 'src/types/Map';
-import { useLocalization } from 'src/providers';
+
 import EditableMap from 'src/components/Map/EditableMapV2';
-import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
-import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import MapIcon from 'src/components/Map/MapIcon';
-import StepTitleDescription, { Description } from './StepTitleDescription';
+import useRenderAttributes from 'src/components/Map/useRenderAttributes';
+import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
+import useUndoRedoState from 'src/hooks/useUndoRedoState';
+import { useLocalization } from 'src/providers';
+import strings from 'src/strings';
+import { RenderableReadOnlyBoundary } from 'src/types/Map';
+import { DraftPlantingSite } from 'src/types/PlantingSite';
 import useSnackbar from 'src/utils/useSnackbar';
+
+import StepTitleDescription, { Description } from './StepTitleDescription';
 import { OnValidate } from './types';
 import { findErrors } from './utils';
 

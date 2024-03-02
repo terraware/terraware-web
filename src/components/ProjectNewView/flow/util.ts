@@ -1,4 +1,5 @@
 import strings from 'src/strings';
+
 import { FlowStates } from '../index';
 
 export const getSaveText = (

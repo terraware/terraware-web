@@ -1,6 +1,6 @@
 import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response, Response2 } from 'src/services/HttpService';
-import { CreateCohortRequestPayload, Cohort, UpdateCohortRequestPayload } from 'src/types/Cohort';
+import { Cohort, CreateCohortRequestPayload, UpdateCohortRequestPayload } from 'src/types/Cohort';
 
 /**
  * Cohort related services

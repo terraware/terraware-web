@@ -1,12 +1,14 @@
-import { useTheme, Box, Typography } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
+
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
-import { Accession } from 'src/types/Accession';
 import strings from 'src/strings';
-import TableCellRenderer from './TableCellRenderer';
+import { Accession } from 'src/types/Accession';
 import { ViabilityTest } from 'src/types/Accession';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+import TableCellRenderer from './TableCellRenderer';
 
 interface ViabilityTestingDatabaseProps {
   accession: Accession;

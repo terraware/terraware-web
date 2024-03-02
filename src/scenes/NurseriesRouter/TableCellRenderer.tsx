@@ -1,8 +1,10 @@
 import React from 'react';
+
 import { APP_PATHS } from 'src/constants';
+
+import Link from '../../components/common/Link';
 import CellRenderer, { TableRowType } from '../../components/common/table/TableCellRenderer';
 import { RendererProps } from '../../components/common/table/types';
-import Link from '../../components/common/Link';
 
 export default function NurseriesCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row, value, index } = props;

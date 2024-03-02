@@ -1,21 +1,23 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { makeStyles } from '@mui/styles';
+
 import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
-import strings from 'src/strings';
-import { APP_PATHS } from 'src/constants';
-import EmptyMessage from 'src/components/common/EmptyMessage';
-import { getAllSeedBanks, isAdmin } from 'src/utils/organization';
-import TfMain from 'src/components/common/TfMain';
-import Select from 'src/components/common/Select/Select';
-import { Facility } from 'src/types/Facility';
-import { PreferencesService } from 'src/services';
+import { makeStyles } from '@mui/styles';
+
 import SeedBankMonitoring from 'src/components/Monitoring/SeedBankMonitoring';
-import Button from 'src/components/common/button/Button';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
 import PageSnackbar from 'src/components/PageSnackbar';
+import EmptyMessage from 'src/components/common/EmptyMessage';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import Select from 'src/components/common/Select/Select';
+import TfMain from 'src/components/common/TfMain';
+import Button from 'src/components/common/button/Button';
+import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers/hooks';
+import { PreferencesService } from 'src/services';
+import strings from 'src/strings';
+import { Facility } from 'src/types/Facility';
+import { getAllSeedBanks, isAdmin } from 'src/utils/organization';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 interface StyleProps {
   isMobile: boolean;

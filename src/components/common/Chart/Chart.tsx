@@ -1,13 +1,16 @@
-import { useState, useEffect, useRef } from 'react';
-import { makeStyles } from '@mui/styles';
+import { useEffect, useRef, useState } from 'react';
+
 import { Theme, useTheme } from '@mui/material';
-import { WithRequired } from 'src/types/utils';
-import { generateTerrawareRandomColors } from 'src/utils/generateRandomColor';
-import { useLocalization } from 'src/providers';
-import { newChart } from '.';
+import { makeStyles } from '@mui/styles';
 import { Chart as ChartJS, ChartTypeRegistry } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { AnnotationPluginOptions } from 'chartjs-plugin-annotation/types/options';
+
+import { useLocalization } from 'src/providers';
+import { WithRequired } from 'src/types/utils';
+import { generateTerrawareRandomColors } from 'src/utils/generateRandomColor';
+
+import { newChart } from '.';
 
 ChartJS.register(annotationPlugin);
 

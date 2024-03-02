@@ -1,24 +1,26 @@
 /* eslint-disable import/no-webpack-loader-syntax */
-import { CssBaseline, StyledEngineProvider, Theme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
 import { Provider } from 'react-redux';
+import { useHistory } from 'react-router';
+
+import { CssBaseline, StyledEngineProvider, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { APP_PATHS } from 'src/constants';
-import useStateLocation from 'src/utils/useStateLocation';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { getRgbaFromHex } from 'src/utils/color';
-import { store } from 'src/redux/store';
-import { useLocalization, useOrganization, useUser } from 'src/providers';
-import { useAppVersion } from 'src/hooks/useAppVersion';
-import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+
+import AppBootstrap from 'src/AppBootstrap';
 import ToastSnackbar from 'src/components/ToastSnackbar';
 import TopBar from 'src/components/TopBar/TopBar';
 import TopBarContent from 'src/components/TopBar/TopBarContent';
-import AppBootstrap from 'src/AppBootstrap';
+import { APP_PATHS } from 'src/constants';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useAppVersion } from 'src/hooks/useAppVersion';
+import { useLocalization, useOrganization, useUser } from 'src/providers';
+import { store } from 'src/redux/store';
+import AcceleratorRouter from 'src/scenes/AcceleratorRouter';
 import NoOrgRouter from 'src/scenes/NoOrgRouter';
 import TerrawareRouter from 'src/scenes/TerrawareRouter';
-import AcceleratorRouter from 'src/scenes/AcceleratorRouter';
+import { getRgbaFromHex } from 'src/utils/color';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useStateLocation from 'src/utils/useStateLocation';
 
 interface StyleProps {
   isDesktop?: boolean;

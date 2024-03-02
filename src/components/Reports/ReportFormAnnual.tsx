@@ -1,14 +1,17 @@
 import React, { useRef, useState } from 'react';
+
 import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
-import { Button, Checkbox, Textfield } from '@terraware/web-components';
-import { Report, ReportFile } from 'src/types/Report';
-import strings from 'src/strings';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { SustainableDevelopmentGoal, SDG } from 'src/types/Report';
-import useSDGProgress from './useSDGProgress';
-import { REPORT_FILE_ENDPOINT } from 'src/services/ReportService';
 import { makeStyles } from '@mui/styles';
+import { Button, Checkbox, Textfield } from '@terraware/web-components';
+
+import { REPORT_FILE_ENDPOINT } from 'src/services/ReportService';
+import strings from 'src/strings';
+import { Report, ReportFile } from 'src/types/Report';
+import { SDG, SustainableDevelopmentGoal } from 'src/types/Report';
 import { numWords, overWordLimit } from 'src/utils/text';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+import useSDGProgress from './useSDGProgress';
 
 const useStyles = makeStyles((theme: Theme) => ({
   hiddenInput: {

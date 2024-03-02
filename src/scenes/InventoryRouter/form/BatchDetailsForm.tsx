@@ -1,32 +1,34 @@
-import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+
 import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
-import DatePicker from 'src/components/common/DatePicker';
-import strings from 'src/strings';
-import useForm from 'src/utils/useForm';
-import { CreateBatchRequestPayload } from 'src/types/Batch';
-import { useOrganization } from 'src/providers/hooks';
-import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
-import { useNumberFormatter } from 'src/utils/useNumber';
-import { useUser } from 'src/providers';
-import FacilityService from 'src/services/FacilityService';
-import { stateName } from 'src/types/Accession';
-import isEnabled from 'src/features';
-import { SavableBatch } from 'src/redux/features/batches/batchesAsyncThunks';
-import useSnackbar from 'src/utils/useSnackbar';
-import { useProjects } from 'src/hooks/useProjects';
+
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
-import { useSubLocations } from 'src/scenes/InventoryRouter/form/useSubLocations';
+import DatePicker from 'src/components/common/DatePicker';
+import isEnabled from 'src/features';
+import { useProjects } from 'src/hooks/useProjects';
+import { useUser } from 'src/providers';
+import { useOrganization } from 'src/providers/hooks';
+import { SavableBatch } from 'src/redux/features/batches/batchesAsyncThunks';
+import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
+import AccessionsDropdown from 'src/scenes/InventoryRouter/form/AccessionsDropdown';
+import NurseryDropdownV2 from 'src/scenes/InventoryRouter/form/NurseryDropdownV2';
+import SpeciesDropdown from 'src/scenes/InventoryRouter/form/SpeciesDropdown';
 import SubLocationsDropdown from 'src/scenes/InventoryRouter/form/SubLocationsDropdown';
 import { useAccessions } from 'src/scenes/InventoryRouter/form/useAccessions';
-import AccessionsDropdown from 'src/scenes/InventoryRouter/form/AccessionsDropdown';
-import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
-import SpeciesDropdown from 'src/scenes/InventoryRouter/form/SpeciesDropdown';
 import { useNurseries } from 'src/scenes/InventoryRouter/form/useNurseries';
-import NurseryDropdownV2 from 'src/scenes/InventoryRouter/form/NurseryDropdownV2';
-import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
+import { useSpecies } from 'src/scenes/InventoryRouter/form/useSpecies';
+import { useSubLocations } from 'src/scenes/InventoryRouter/form/useSubLocations';
+import FacilityService from 'src/services/FacilityService';
+import strings from 'src/strings';
+import { stateName } from 'src/types/Accession';
+import { CreateBatchRequestPayload } from 'src/types/Batch';
+import useForm from 'src/utils/useForm';
+import { useNumberFormatter } from 'src/utils/useNumber';
+import useSnackbar from 'src/utils/useSnackbar';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 export interface BatchDetailsFormProps {
   doValidateBatch: boolean;

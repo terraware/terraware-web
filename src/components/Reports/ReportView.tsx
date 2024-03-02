@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
-import TfMain from 'src/components/common/TfMain';
-import strings from 'src/strings';
-import { APP_PATHS } from 'src/constants';
-import { Report } from 'src/types/Report';
-import ReportService from 'src/services/ReportService';
-import BackToLink from 'src/components/common/BackToLink';
-import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
-import useSnackbar from 'src/utils/useSnackbar';
+
 import ConcurrentEditorWarningDialog from 'src/components/Reports/ConcurrentEditorWarningDialog';
+import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
 import useReportFiles from 'src/components/Reports/useReportFiles';
+import BackToLink from 'src/components/common/BackToLink';
+import TfMain from 'src/components/common/TfMain';
+import { APP_PATHS } from 'src/constants';
+import ReportService from 'src/services/ReportService';
+import strings from 'src/strings';
+import { Report } from 'src/types/Report';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useSnackbar from 'src/utils/useSnackbar';
+
 import ReportForm from './ReportForm';
 
 export default function ReportView(): JSX.Element {

@@ -1,23 +1,25 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+
 import { Grid, Typography, useTheme } from '@mui/material';
-import { Button, BusySpinner, DialogBox, Dropdown, Textfield } from '@terraware/web-components';
+import { BusySpinner, Button, DialogBox, Dropdown, Textfield } from '@terraware/web-components';
+
+import { useLocalization, useOrganization } from 'src/providers';
+import { requestReplaceObservationPlot } from 'src/redux/features/observations/observationsAsyncThunks';
+import {
+  selectHasCompletedObservations,
+  selectReplaceObservationPlot,
+} from 'src/redux/features/observations/observationsSelectors';
+import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import { requestMonitoringPlots } from 'src/redux/features/tracking/trackingAsyncThunks';
+import { selectMonitoringPlots } from 'src/redux/features/tracking/trackingSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import useSnackbar from 'src/utils/useSnackbar';
 import {
   ObservationMonitoringPlotResultsPayload,
   ReplaceObservationPlotDuration,
   ReplaceObservationPlotResponsePayload,
 } from 'src/types/Observations';
-import { useLocalization, useOrganization } from 'src/providers';
-import { useAppSelector, useAppDispatch } from 'src/redux/store';
-import { requestReplaceObservationPlot } from 'src/redux/features/observations/observationsAsyncThunks';
-import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
-import { requestMonitoringPlots } from 'src/redux/features/tracking/trackingAsyncThunks';
-import { selectMonitoringPlots } from 'src/redux/features/tracking/trackingSelectors';
-import {
-  selectHasCompletedObservations,
-  selectReplaceObservationPlot,
-} from 'src/redux/features/observations/observationsSelectors';
+import useSnackbar from 'src/utils/useSnackbar';
 
 export interface ReplaceObservationPlotModalProps {
   monitoringPlot: ObservationMonitoringPlotResultsPayload;

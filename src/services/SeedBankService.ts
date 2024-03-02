@@ -1,7 +1,7 @@
 import { paths } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
-import HttpService, { Response } from './HttpService';
-import SearchService from './SearchService';
+import { AccessionState } from 'src/types/Accession';
+import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
 import {
   SearchCriteria,
   SearchNodePayload,
@@ -10,9 +10,10 @@ import {
   SearchResponseElementWithId,
   SearchSortOrder,
 } from 'src/types/Search';
-import { AccessionState } from 'src/types/Accession';
 import { UnitType } from 'src/units';
-import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
+
+import HttpService, { Response } from './HttpService';
+import SearchService from './SearchService';
 
 /**
  * Seed bank related services

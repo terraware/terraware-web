@@ -1,9 +1,10 @@
 import React from 'react';
-import strings from 'src/strings';
-import { useLocalization } from 'src/providers';
-import { TableColumnType } from 'src/components/common/table/types';
+
 import { default as SharedDocumentsList } from 'src/components/DeliverableView/DocumentsList';
 import { ViewProps } from 'src/components/DeliverableView/types';
+import { TableColumnType } from 'src/components/common/table/types';
+import { useLocalization } from 'src/providers';
+import strings from 'src/strings';
 
 const columns = (activeLocale: string | null): TableColumnType[] =>
   activeLocale

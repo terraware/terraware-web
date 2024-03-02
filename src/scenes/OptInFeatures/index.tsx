@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Box, LinearProgress, Switch, Stack, Grid, useTheme } from '@mui/material';
+
+import { Box, Grid, LinearProgress, Stack, Switch, useTheme } from '@mui/material';
+
+import PageSnackbar from 'src/components/PageSnackbar';
+import TfMain from 'src/components/common/TfMain';
+import { Feature, OPT_IN_FEATURES } from 'src/features';
 import { PreferencesService } from 'src/services';
+import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
-import PageSnackbar from 'src/components/PageSnackbar';
-import { Feature, OPT_IN_FEATURES } from 'src/features';
-import TfMain from 'src/components/common/TfMain';
-import { getRgbaFromHex } from 'src/utils/color';
 
 type OptInFeaturesViewProps = {
   refresh?: () => void;

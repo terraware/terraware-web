@@ -1,13 +1,15 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+
 import { Grid, Typography } from '@mui/material';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
+
+import DialogBox from 'src/components/common/DialogBox/DialogBox';
+import Button from 'src/components/common/button/Button';
+import useUpdateDeliverable from 'src/scenes/AcceleratorRouter/useUpdateDeliverable';
 import strings from 'src/strings';
 import theme from 'src/theme';
 import { Deliverable } from 'src/types/Deliverables';
 import useSnackbar from 'src/utils/useSnackbar';
-import Button from 'src/components/common/button/Button';
-import DialogBox from 'src/components/common/DialogBox/DialogBox';
-import useUpdateDeliverable from 'src/scenes/AcceleratorRouter/useUpdateDeliverable';
 
 interface InternalCommentProps {
   deliverable: Deliverable;

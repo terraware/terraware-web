@@ -1,11 +1,12 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
+
+import NoOrgLandingPage from 'src/components/emptyStatePages/NoOrgLandingPage';
 import { APP_PATHS } from 'src/constants';
 import { useUser } from 'src/providers';
-import useEnvironment from 'src/utils/useEnvironment';
-import NoOrgLandingPage from 'src/components/emptyStatePages/NoOrgLandingPage';
 import MyAccountRouter from 'src/scenes/MyAccountRouter';
 import OptInFeaturesView from 'src/scenes/OptInFeatures';
+import useEnvironment from 'src/utils/useEnvironment';
 
 const NoOrgRouter = () => {
   const { isProduction } = useEnvironment();

@@ -1,14 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
+
+import { ThemeProvider } from '@mui/material';
+
 import App from './App';
 import AppError from './AppError';
+import { APP_PATHS } from './constants';
+import './index.css';
 import reportWebVitals from './reportWebVitals';
 import strings from './strings';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import theme from './theme';
-import { APP_PATHS } from './constants';
-import { ThemeProvider } from '@mui/material';
 
 ReactDOM.render(
   <React.StrictMode>

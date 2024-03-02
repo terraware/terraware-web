@@ -1,16 +1,19 @@
+import React, { useState } from 'react';
+
 import { ClickAwayListener, IconButton, Theme, Tooltip } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useState } from 'react';
+import { TextTruncated } from '@terraware/web-components';
+
+import Link from 'src/components/common/Link';
+import { APP_PATHS } from 'src/constants';
+import strings from 'src/strings';
 import { SpeciesProblemElement } from 'src/types/Species';
+import { getRgbaFromHex } from 'src/utils/color';
+
 import Icon from '../../components/common/icon/Icon';
 import CellRenderer, { TableRowType } from '../../components/common/table/TableCellRenderer';
 import { RendererProps } from '../../components/common/table/types';
 import ProblemTooltip from './ProblemTooltip';
-import { TextTruncated } from '@terraware/web-components';
-import strings from 'src/strings';
-import { getRgbaFromHex } from 'src/utils/color';
-import Link from 'src/components/common/Link';
-import { APP_PATHS } from 'src/constants';
 
 const useStyles = makeStyles((theme: Theme) => ({
   icon: {

@@ -1,12 +1,15 @@
 import React from 'react';
+
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import strings from 'src/strings';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { ObservationSpeciesResults } from 'src/types/Observations';
-import OverviewItemCard from 'src/components/common/OverviewItemCard';
+
 import Card from 'src/components/common/Card';
-import SpeciesTotalPlantsChart from './SpeciesTotalPlantsChart';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import strings from 'src/strings';
+import { ObservationSpeciesResults } from 'src/types/Observations';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
 import SpeciesMortalityRateChart from './SpeciesMortalityRateChart';
+import SpeciesTotalPlantsChart from './SpeciesTotalPlantsChart';
 
 export type AggregatedPlantsStatsProps = {
   completedTime?: string;

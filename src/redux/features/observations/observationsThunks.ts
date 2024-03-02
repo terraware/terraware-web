@@ -1,6 +1,8 @@
 import { Dispatch } from 'redux';
-import { ObservationsService } from 'src/services';
+
 import { RootState } from 'src/redux/rootReducer';
+import { ObservationsService } from 'src/services';
+
 import {
   setObservationsAction,
   setObservationsResultsAction,

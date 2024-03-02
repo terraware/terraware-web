@@ -1,21 +1,24 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import strings from 'src/strings';
-import Button from 'src/components/common/button/Button';
-import DialogBox from 'src/components/common/DialogBox/DialogBox';
-import { Box, Grid, useTheme, Radio, RadioGroup, FormControlLabel, Typography, Theme } from '@mui/material';
+
+import { Box, FormControlLabel, Grid, Radio, RadioGroup, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Accession } from 'src/types/Accession';
-import AccessionService from 'src/services/AccessionService';
-import useForm from 'src/utils/useForm';
-import { isUnitInPreferredSystem, Unit, usePreferredWeightUnits } from 'src/units';
-import useSnackbar from 'src/utils/useSnackbar';
 import { Dropdown, Icon, Textfield } from '@terraware/web-components';
-import Link from 'src/components/common/Link';
-import EditState from './EditState';
 import _ from 'lodash';
-import { useUser } from 'src/providers';
+
 import ConvertedValue from 'src/components/ConvertedValue';
+import DialogBox from 'src/components/common/DialogBox/DialogBox';
+import Link from 'src/components/common/Link';
+import Button from 'src/components/common/button/Button';
+import { useUser } from 'src/providers';
+import AccessionService from 'src/services/AccessionService';
+import strings from 'src/strings';
+import { Accession } from 'src/types/Accession';
+import { Unit, isUnitInPreferredSystem, usePreferredWeightUnits } from 'src/units';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
+
+import EditState from './EditState';
 
 const useStyles = makeStyles((theme: Theme) => ({
   addIcon: {

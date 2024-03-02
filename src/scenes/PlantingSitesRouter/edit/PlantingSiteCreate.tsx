@@ -1,29 +1,32 @@
 import { useEffect, useState } from 'react';
-import TfMain from 'src/components/common/TfMain';
+import { useHistory, useParams } from 'react-router-dom';
+
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
-import strings from 'src/strings';
+import { makeStyles } from '@mui/styles';
+import { MultiPolygon } from 'geojson';
+
+import PlantingSiteMapEditor from 'src/components/Map/PlantingSiteMapEditor';
+import PageSnackbar from 'src/components/PageSnackbar';
+import Card from 'src/components/common/Card';
+import { View } from 'src/components/common/ListMapSelector';
 import PageForm from 'src/components/common/PageForm';
-import useForm from 'src/utils/useForm';
+import TfMain from 'src/components/common/TfMain';
+import { APP_PATHS } from 'src/constants';
+import { useOrganization } from 'src/providers/hooks';
+import { searchPlantingSiteZones } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
+import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+import { useAppSelector } from 'src/redux/store';
+import BoundariesAndZones from 'src/scenes/PlantingSitesRouter/view/BoundariesAndZones';
 import TrackingService, {
   PlantingSiteId,
   PlantingSitePostRequestBody,
   PlantingSitePutRequestBody,
 } from 'src/services/TrackingService';
-import { APP_PATHS } from 'src/constants';
-import { useHistory, useParams } from 'react-router-dom';
-import useSnackbar from 'src/utils/useSnackbar';
-import { useAppSelector } from 'src/redux/store';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { searchPlantingSiteZones } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
-import PageSnackbar from 'src/components/PageSnackbar';
+import strings from 'src/strings';
 import { PlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
-import { View } from 'src/components/common/ListMapSelector';
-import BoundariesAndZones from 'src/scenes/PlantingSitesRouter/view/BoundariesAndZones';
-import { useOrganization } from 'src/providers/hooks';
-import Card from 'src/components/common/Card';
-import PlantingSiteMapEditor from 'src/components/Map/PlantingSiteMapEditor';
-import { makeStyles } from '@mui/styles';
-import { MultiPolygon } from 'geojson';
+import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
+
 import DetailsInputForm from './DetailsInputForm';
 
 type CreatePlantingSiteProps = {

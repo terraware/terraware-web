@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
+
+import { requestParticipantsList } from 'src/redux/features/participants/participantsAsyncThunks';
+import { selectParticipantsListRequest } from 'src/redux/features/participants/participantsSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Participant } from 'src/types/Participant';
 import useSnackbar from 'src/utils/useSnackbar';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { selectParticipantsListRequest } from 'src/redux/features/participants/participantsSelectors';
-import { requestParticipantsList } from 'src/redux/features/participants/participantsAsyncThunks';
 
 export const useParticipants = (participantId?: number) => {
   const dispatch = useAppDispatch();

@@ -1,6 +1,9 @@
 import { Dispatch } from 'redux';
-import { TrackingService } from 'src/services';
+
 import { RootState } from 'src/redux/rootReducer';
+import { TrackingService } from 'src/services';
+import { PlantingSiteSearchResult } from 'src/types/Tracking';
+
 import {
   setPlantingSiteAction,
   setPlantingSitesAction,
@@ -8,7 +11,6 @@ import {
   setSitePopulationAction,
   setSiteReportedPlantsAction,
 } from './trackingSlice';
-import { PlantingSiteSearchResult } from 'src/types/Tracking';
 
 export const requestPlantingSite = (plantingSiteId: number, locale?: string | null) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {

@@ -1,6 +1,8 @@
 import Coordinates from 'coordinate-parser';
+
 import { components, paths } from 'src/api/types/generated-schema';
-import { Accession, ACCESSION_2_STATES, AccessionState, Geolocation } from 'src/types/Accession';
+import { ACCESSION_2_STATES, Accession, AccessionState, Geolocation } from 'src/types/Accession';
+
 import HttpService, { Response, Response2 } from './HttpService';
 
 /**

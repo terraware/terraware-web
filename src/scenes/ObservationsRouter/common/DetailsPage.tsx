@@ -1,14 +1,15 @@
 import { useMemo } from 'react';
+
+import { Crumb } from 'src/components/BreadCrumbs';
+import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
+import { useLocalization } from 'src/providers';
+import { selectObservationDetails } from 'src/redux/features/observations/observationDetailsSelectors';
+import { selectObservationPlantingZone } from 'src/redux/features/observations/observationPlantingZoneSelectors';
+import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-import { useLocalization } from 'src/providers';
-import { useAppSelector } from 'src/redux/store';
-import { selectObservationPlantingZone } from 'src/redux/features/observations/observationPlantingZoneSelectors';
-import { selectObservationDetails } from 'src/redux/features/observations/observationDetailsSelectors';
-import { Crumb } from 'src/components/BreadCrumbs';
-import Page from 'src/components/Page';
 
 type DetailsPageProps = {
   plantingSiteId?: number | string;

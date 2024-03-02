@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
+
 import { Grid, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import strings from 'src/strings';
-import { ReportNursery, ReportPlantingSite, ReportSeedBank } from 'src/types/Report';
+
 import { InfoField } from 'src/components/Reports/LocationSelection/InfoField';
+import LocationSectionNursery from 'src/components/Reports/LocationSelection/Nursery';
+import LocationSectionPlantingSite from 'src/components/Reports/LocationSelection/PlantingSite';
+import LocationSectionSeedBank from 'src/components/Reports/LocationSelection/SeedBank';
 import {
   buildCompletedDateValid,
   buildStartedDateValid,
   operationStartedDateValid,
   transformNumericValue,
 } from 'src/components/Reports/LocationSelection/util';
-import LocationSectionNursery from 'src/components/Reports/LocationSelection/Nursery';
-import LocationSectionSeedBank from 'src/components/Reports/LocationSelection/SeedBank';
-import LocationSectionPlantingSite from 'src/components/Reports/LocationSelection/PlantingSite';
+import strings from 'src/strings';
+import { ReportNursery, ReportPlantingSite, ReportSeedBank } from 'src/types/Report';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 export type LocationSectionProps = {
   editable: boolean;

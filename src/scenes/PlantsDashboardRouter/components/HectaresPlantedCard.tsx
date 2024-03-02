@@ -1,13 +1,15 @@
-import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import { Box, Typography, useTheme } from '@mui/material';
-import strings from 'src/strings';
-import { APP_PATHS } from 'src/constants';
 import React, { useMemo } from 'react';
-import { useAppSelector } from 'src/redux/store';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+
+import { Box, Typography, useTheme } from '@mui/material';
+
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import { APP_PATHS } from 'src/constants';
+import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+import { useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
 
 type HectaresPlantedCardProps = {
   plantingSiteId: number;

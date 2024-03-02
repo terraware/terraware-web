@@ -1,21 +1,23 @@
-import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import TfMain from '../../components/common/TfMain';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
+
+import PageSnackbar from 'src/components/PageSnackbar';
 import { APP_PATHS } from 'src/constants';
-import strings from 'src/strings';
-import TextField from '../../components/common/Textfield/Textfield';
-import Button from '../../components/common/button/Button';
-import { organizationTypeLabel } from 'src/types/Organization';
-import { Country } from 'src/types/Country';
+import { useLocalization, useOrganization, useTimeZones } from 'src/providers/hooks';
 import { LocationService, OrganizationUserService } from 'src/services';
+import strings from 'src/strings';
+import { Country } from 'src/types/Country';
+import { organizationTypeLabel } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
-import PageSnackbar from 'src/components/PageSnackbar';
-import { getDateDisplayValue } from '@terraware/web-components/utils';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { useLocalization, useOrganization, useTimeZones } from 'src/providers/hooks';
+
+import TextField from '../../components/common/Textfield/Textfield';
+import TfMain from '../../components/common/TfMain';
+import Button from '../../components/common/button/Button';
 import { getUTC } from '../../utils/useTimeZoneUtils';
 
 export default function OrganizationView(): JSX.Element {

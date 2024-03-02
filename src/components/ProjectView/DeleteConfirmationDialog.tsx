@@ -1,6 +1,8 @@
 import React from 'react';
+
 import { Typography } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';
+
 import strings from 'src/strings';
 
 export type DeleteConfirmationDialogProps = {

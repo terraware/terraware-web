@@ -1,8 +1,9 @@
+import { DropdownItem } from '@terraware/web-components';
 import moment from 'moment';
+
+import strings from 'src/strings';
 import theme from 'src/theme';
 import { changeTimezone } from 'src/utils/useTimeZoneUtils';
-import { DropdownItem } from '@terraware/web-components';
-import strings from 'src/strings';
 
 export function timePeriods(): DropdownItem[] {
   return [

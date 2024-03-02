@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { Theme, Box } from '@mui/material';
+
+import { Box, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Icon } from '@terraware/web-components';
-import strings from 'src/strings';
-import { useAppSelector } from 'src/redux/store';
-import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import { useOrganization } from 'src/providers';
-import { isContributor } from 'src/utils/organization';
-import { AssignProjectRequestPayload } from 'src/services/ProjectsService';
+
 import ProjectAssignModal from 'src/components/ProjectAssignModal';
-import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import Link from 'src/components/common/Link';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import { useOrganization } from 'src/providers';
+import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
+import { useAppSelector } from 'src/redux/store';
+import { AssignProjectRequestPayload } from 'src/services/ProjectsService';
+import strings from 'src/strings';
+import { isContributor } from 'src/utils/organization';
 
 interface OverviewItemCardProjectProps<T extends { id: number; projectId?: number }> {
   entity: T;

@@ -1,7 +1,8 @@
-import strings from 'src/strings';
 import { Box, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, DialogBox } from '@terraware/web-components';
+
+import strings from 'src/strings';
 
 const useStyles = makeStyles((theme: Theme) => ({
   buttonSpacing: {

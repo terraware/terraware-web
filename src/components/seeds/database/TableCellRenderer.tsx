@@ -1,13 +1,16 @@
+import React from 'react';
+
 import { FiberManualRecord } from '@mui/icons-material';
 import { TableCell, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React from 'react';
-import { SearchResponseElement } from 'src/types/Search';
+
+import Link from 'src/components/common/Link';
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
-import { RIGHT_ALIGNED_COLUMNS } from './columns';
 import { APP_PATHS } from 'src/constants';
-import Link from 'src/components/common/Link';
+import { SearchResponseElement } from 'src/types/Search';
+
+import { RIGHT_ALIGNED_COLUMNS } from './columns';
 
 const statusStyles = makeStyles((theme: Theme) => ({
   flex: {

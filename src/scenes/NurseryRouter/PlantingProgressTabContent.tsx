@@ -1,23 +1,26 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+
 import { Typography, useTheme } from '@mui/material';
-import strings from 'src/strings';
-import { useLocalization, useOrganization } from 'src/providers';
-import { FieldOptionsMap, SearchNodePayload } from 'src/types/Search';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import Card from 'src/components/common/Card';
+
 import ListMapView from 'src/components/ListMapView';
+import Card from 'src/components/common/Card';
 import { FilterField } from 'src/components/common/FilterGroup';
-import Search, { FeaturedFilterConfig, SearchProps } from 'src/components/common/SearchFiltersWrapper';
-import PlantingProgressList from './PlantingProgressList';
-import PlantingProgressMap from './PlantingProgressMap';
 import { View } from 'src/components/common/ListMapSelector';
 import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
-import { selectPlantingSitesNames } from 'src/redux/features/tracking/trackingSelectors';
-import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
+import Search, { FeaturedFilterConfig, SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import isEnabled from 'src/features';
+import { useLocalization, useOrganization } from 'src/providers';
+import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
+import { selectPlantingSitesNames } from 'src/redux/features/tracking/trackingSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
 import { Project } from 'src/types/Project';
+import { FieldOptionsMap, SearchNodePayload } from 'src/types/Search';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+import PlantingProgressList from './PlantingProgressList';
+import PlantingProgressMap from './PlantingProgressMap';
 
 const initialView: View = 'list';
 

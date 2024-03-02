@@ -1,16 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
+
 import { APP_PATHS } from 'src/constants';
-import useQuery from 'src/utils/useQuery';
-import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { store } from 'src/redux/store';
 import { OrganizationService, PreferencesService } from 'src/services';
 import { Organization } from 'src/types/Organization';
-import { OrganizationContext } from './contexts';
+import useQuery from 'src/utils/useQuery';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+
 import { PreferencesType, ProvidedOrganizationData } from './DataTypes';
+import { OrganizationContext } from './contexts';
 import { defaultSelectedOrg } from './contexts';
 import { useUser } from './hooks';
-import { store } from 'src/redux/store';
 
 export type OrganizationProviderProps = {
   children?: React.ReactNode;

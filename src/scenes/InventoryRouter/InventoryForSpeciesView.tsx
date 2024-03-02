@@ -1,18 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { useTheme, Grid, Typography } from '@mui/material';
-import strings from 'src/strings';
-import TfMain from 'src/components/common/TfMain';
+
+import { Grid, Typography, useTheme } from '@mui/material';
+
 import PageSnackbar from 'src/components/PageSnackbar';
+import BackToLink from 'src/components/common/BackToLink';
+import Card from 'src/components/common/Card';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import InventorySeedlingsTableForSpecies from 'src/scenes/InventoryRouter/view/InventorySeedlingsTableForSpecies';
+import InventorySummaryForSpecies from 'src/scenes/InventoryRouter/view/InventorySummaryForSpecies';
+import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
-import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import BackToLink from 'src/components/common/BackToLink';
-import Card from 'src/components/common/Card';
-import InventorySummaryForSpecies from 'src/scenes/InventoryRouter/view/InventorySummaryForSpecies';
-import InventorySeedlingsTableForSpecies from 'src/scenes/InventoryRouter/view/InventorySeedlingsTableForSpecies';
 
 interface InventoryForSpeciesViewProps {
   species: Species[];

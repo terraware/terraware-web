@@ -1,12 +1,13 @@
 import { createSelector } from '@reduxjs/toolkit';
-import strings from 'src/strings';
-import { regexMatch } from 'src/utils/search';
-import { RootState } from 'src/redux/rootReducer';
-import { PlantingSiteSearchResult } from 'src/types/Tracking';
-import { SearchNodePayload } from 'src/types/Search';
-import { selectPlantingSites, selectPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingSelectors';
+
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { PlantingSearchData } from 'src/redux/features/plantings/plantingsSlice';
+import { selectPlantingSites, selectPlantingSitesSearchResults } from 'src/redux/features/tracking/trackingSelectors';
+import { RootState } from 'src/redux/rootReducer';
+import strings from 'src/strings';
+import { SearchNodePayload } from 'src/types/Search';
+import { PlantingSiteSearchResult } from 'src/types/Tracking';
+import { regexMatch } from 'src/utils/search';
 
 export const selectPlantings = (state: RootState) => state.plantings?.plantings;
 

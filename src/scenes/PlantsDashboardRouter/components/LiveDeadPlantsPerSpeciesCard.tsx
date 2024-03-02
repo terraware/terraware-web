@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import strings from 'src/strings';
+
 import { Box, Theme, Typography, useTheme } from '@mui/material';
-import { Dropdown } from '@terraware/web-components';
-import PieChart from 'src/components/common/Chart/PieChart';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-import { useAppSelector } from 'src/redux/store';
-import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
 import { makeStyles } from '@mui/styles';
+import { Dropdown } from '@terraware/web-components';
+
+import PieChart from 'src/components/common/Chart/PieChart';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
+import { useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type LiveDeadPlantsPerSpeciesCardProps = {
   plantingSiteId: number;

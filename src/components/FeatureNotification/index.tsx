@@ -1,7 +1,9 @@
 import { useMemo } from 'react';
-import UserNotification from './UserNotification';
+
 import { Notification } from 'src/types/Notifications';
+
 import OrganizationNotification from './OrganizationNotification';
+import UserNotification from './UserNotification';
 
 export default function useFeatureNotifications(): Notification[] {
   const userNotification = UserNotification();

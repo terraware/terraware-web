@@ -1,11 +1,13 @@
 import React from 'react';
+
 import { Grid } from '@mui/material';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import strings from 'src/strings';
-import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import { ReportSeedBank } from 'src/types/Report';
-import { useInfoCardStyles } from 'src/components/Reports/LocationSelection/InfoField';
+
 import { LocationSectionProps } from 'src/components/Reports/LocationSelection';
+import { useInfoCardStyles } from 'src/components/Reports/LocationSelection/InfoField';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import strings from 'src/strings';
+import { ReportSeedBank } from 'src/types/Report';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const LocationSectionSeedBank = (props: LocationSectionProps): JSX.Element => {
   const { location, projectName } = props;

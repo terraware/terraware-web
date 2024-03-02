@@ -1,13 +1,9 @@
 import { useState } from 'react';
+
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox, IconTooltip } from '@terraware/web-components';
-import { Accession } from 'src/types/Accession';
-import strings from 'src/strings';
-import { ViabilityTest } from 'src/types/Accession';
-import { getFullTestType } from 'src/utils/viabilityTest';
-import ObservationsChart from './ObservationsChart';
 import { useDeviceInfo } from '@terraware/web-components/utils';
-import DeleteViabilityTestModal from './DeleteViabilityTestModal';
+
 import TooltipLearnMoreModal, {
   LearnMoreLink,
   LearnMoreModalContentSeedType,
@@ -15,6 +11,13 @@ import TooltipLearnMoreModal, {
   LearnMoreModalContentTreatment,
   TooltipLearnMoreModalData,
 } from 'src/components/TooltipLearnMoreModal';
+import strings from 'src/strings';
+import { Accession } from 'src/types/Accession';
+import { ViabilityTest } from 'src/types/Accession';
+import { getFullTestType } from 'src/utils/viabilityTest';
+
+import DeleteViabilityTestModal from './DeleteViabilityTestModal';
+import ObservationsChart from './ObservationsChart';
 
 export interface ViewViabilityTestModalProps {
   open: boolean;

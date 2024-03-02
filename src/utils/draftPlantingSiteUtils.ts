@@ -1,5 +1,5 @@
-import { MultiPolygon, PlantingSeason, MinimalPlantingZone } from 'src/types/Tracking';
 import { DraftPlantingSite, DraftPlantingSitePayload, SiteEditStep, SiteType } from 'src/types/PlantingSite';
+import { MinimalPlantingZone, MultiPolygon, PlantingSeason } from 'src/types/Tracking';
 
 /**
  * Utils to convert from DraftPlantingSitePayload `data` JSON

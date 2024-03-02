@@ -1,8 +1,9 @@
 import React from 'react';
-import strings from 'src/strings';
-import { SearchResponseBatches } from 'src/services/NurseryBatchService';
-import { PlantingSiteSearchResult } from 'src/types/Tracking';
+
 import { SearchResponseAccession } from 'src/components/ProjectNewView/flow/SelectAccessions';
+import { SearchResponseBatches } from 'src/services/NurseryBatchService';
+import strings from 'src/strings';
+import { PlantingSiteSearchResult } from 'src/types/Tracking';
 
 const singularOrPlural = (renderNumber: number, singular: string, plural: string): string =>
   renderNumber === 1

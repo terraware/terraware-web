@@ -1,6 +1,8 @@
 import { Typography, useTheme } from '@mui/material';
-import strings from 'src/strings';
+
 import Card from 'src/components/common/Card';
+import strings from 'src/strings';
+
 import NurseryWithdrawalsTable from './NurseryWithdrawalsTable';
 
 export default function NurseryWithdrawalsTabContent(): JSX.Element {

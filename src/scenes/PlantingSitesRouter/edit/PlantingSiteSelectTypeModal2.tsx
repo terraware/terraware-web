@@ -1,8 +1,10 @@
 import React, { useCallback, useState } from 'react';
-import strings from 'src/strings';
+
 import { Box, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, DialogBox } from '@terraware/web-components';
+
+import strings from 'src/strings';
 import { SiteType } from 'src/types/PlantingSite';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';

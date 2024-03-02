@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { Story } from '@storybook/react';
+
 import { Box } from '@mui/material';
+import { Story } from '@storybook/react';
+
 import VideoDialog, { VideoDialogProps } from 'src/components/common/VideoDialog';
 
 const VideoDialogTemplate: Story<VideoDialogProps> = (args) => {

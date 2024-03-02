@@ -1,23 +1,26 @@
 import { useEffect, useMemo, useState } from 'react';
+
 import { Box } from '@mui/material';
-import { Feature, FeatureCollection, MultiPolygon, Position } from 'geojson';
 import bbox from '@turf/bbox';
 import bboxPolygon from '@turf/bbox-polygon';
 import centroid from '@turf/centroid';
+import { Feature, FeatureCollection, MultiPolygon, Position } from 'geojson';
 import _ from 'lodash';
-import strings from 'src/strings';
-import { MinimalPlantingZone } from 'src/types/Tracking';
-import { DraftPlantingSite } from 'src/types/PlantingSite';
-import useSnackbar from 'src/utils/useSnackbar';
-import useUndoRedoState from 'src/hooks/useUndoRedoState';
-import { useLocalization } from 'src/providers';
+
 import { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
-import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
 import EditableMap from 'src/components/Map/EditableMapV2';
 import MapIcon from 'src/components/Map/MapIcon';
+import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
+import useUndoRedoState from 'src/hooks/useUndoRedoState';
+import { useLocalization } from 'src/providers';
+import strings from 'src/strings';
+import { DraftPlantingSite } from 'src/types/PlantingSite';
+import { MinimalPlantingZone } from 'src/types/Tracking';
+import useSnackbar from 'src/utils/useSnackbar';
+
 import StepTitleDescription, { Description } from './StepTitleDescription';
-import { boundingAreaHectares, defaultZonePayload } from './utils';
 import { OnValidate } from './types';
+import { boundingAreaHectares, defaultZonePayload } from './utils';
 import { findErrors } from './utils';
 
 export type SiteBoundaryProps = {
