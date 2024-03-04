@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 import NoOrgRouter from 'src/scenes/NoOrgRouter';
@@ -22,12 +23,12 @@ export default function TerrawareRouter(props: TerrawareRouterProps) {
   const { organizations } = useOrganization();
   const history = useHistory();
   const location = useStateLocation();
-  
-   useEffect(() => {
+
+  useEffect(() => {
     if (organizations?.length === 0 && MINIMAL_USER_ROUTES.indexOf(location.pathname) === -1) {
       history.push(APP_PATHS.WELCOME);
     }
   }, [history, location, organizations]);
 
-  return organizations.length === 0 ? <NoOrgRouter /> : <OrgRouter  {...props} />;
+  return organizations.length === 0 ? <NoOrgRouter /> : <OrgRouter {...props} />;
 }
