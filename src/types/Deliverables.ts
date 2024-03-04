@@ -28,6 +28,12 @@ export const DeliverableStatuses: DeliverableStatusType[] = [
 
 export type DeliverableDocument = components['schemas']['SubmissionDocumentPayload'];
 
+export type UploadDeliverableDocumentRequest = {
+  description: string;
+  file: File;
+  projectId: number;
+};
+
 export type DeliverableData = {
   deliverable: Deliverable | undefined;
 };

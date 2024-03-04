@@ -1,13 +1,18 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, CircularProgress, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
 
-import { requestGetDeliverable } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
-import { useAppDispatch } from 'src/redux/store';
+import {
+  requestGetDeliverable,
+  requestUploadDeliverableDocument,
+} from 'src/redux/features/deliverables/deliverablesAsyncThunks';
+import { selectDeliverablesEditRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { Deliverable } from 'src/types/Deliverables';
+import { Deliverable, UploadDeliverableDocumentRequest } from 'src/types/Deliverables';
+import useSnackbar from 'src/utils/useSnackbar';
 
 const useStyles = makeStyles((theme: Theme) => ({
   description: {
@@ -37,25 +42,42 @@ export type FileUploadDialogProps = {
 };
 
 export default function FileUploadDialog({ deliverable, files, onClose }: FileUploadDialogProps): JSX.Element {
-  const [busy, setBusy] = useState<boolean>(false);
   const [validate, setValidate] = useState<boolean>(false);
+  const [requestId, setRequestId] = useState<string>('');
   const [description, setDescription] = useState<string[]>(files.map((_) => ''));
   const theme = useTheme();
   const classes = useStyles();
   const dispatch = useAppDispatch();
+  const snackbar = useSnackbar();
+  const uploadResult = useAppSelector(selectDeliverablesEditRequest(requestId));
+
+  useEffect(() => {
+    if (!uploadResult?.status || uploadResult?.status === 'pending') {
+      return;
+    }
+    if (uploadResult?.status === 'error') {
+      snackbar.toastError();
+    }
+    // close the modal and refresh deliverable even in case of error, there may have been partial successes
+    onClose();
+    dispatch(requestGetDeliverable(deliverable.id));
+  }, [deliverable.id, dispatch, onClose, snackbar, uploadResult?.status]);
 
   const submit = useCallback(() => {
     setValidate(true);
     if (description.some((d) => !d.trim())) {
       return;
     }
-    setBusy(true);
-    setTimeout(() => {
-      // mock api latency
-      dispatch(requestGetDeliverable(deliverable.id));
-      onClose();
-    }, 3000);
-  }, [deliverable.id, description, dispatch, onClose]);
+    const documents = files.map(
+      (file, index): UploadDeliverableDocumentRequest => ({
+        description: description[index],
+        file,
+        projectId: deliverable.projectId,
+      })
+    );
+    const request = dispatch(requestUploadDeliverableDocument({ deliverableId: deliverable.id, documents }));
+    setRequestId(request.requestId);
+  }, [deliverable.id, deliverable.projectId, description, dispatch, files]);
 
   const changeDescription = (index: number, val: string) => {
     setDescription((prev) => {
@@ -76,11 +98,11 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
 
   return (
     <DialogBox
-      onClose={() => !busy && onClose()}
+      onClose={() => uploadResult?.status !== 'pending' && onClose()}
       open={true}
       middleButtons={[
         <Button
-          disabled={busy}
+          disabled={uploadResult?.status === 'pending'}
           id='cancel'
           key='button-1'
           label={strings.CANCEL}
@@ -89,7 +111,7 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
           type='passive'
         />,
         <Button
-          disabled={busy}
+          disabled={uploadResult?.status === 'pending'}
           id='submit'
           key='button-2'
           label={strings.SUBMIT}
@@ -102,7 +124,7 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
       title={strings.SUBMIT_DOCUMENT}
     >
       <Box display='flex' flexDirection='column'>
-        {busy && <CircularProgress className={classes.spinner} size='100' />}
+        {uploadResult?.status === 'pending' && <CircularProgress className={classes.spinner} size='100' />}
         {files.map((file, index) => (
           <Box key={`${file.name}_${index}`} textAlign='left' sx={index < files.length - 1 ? blockStyle : {}}>
             <Textfield display id={`name_${index}`} label={strings.FILE_NAME} type='text' value={file.name} />

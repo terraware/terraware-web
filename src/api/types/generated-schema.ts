@@ -33,13 +33,13 @@ export interface paths {
     /** Gets the details of a single deliverable and its submission documents, if any. */
     get: operations["getDeliverable"];
   };
-  "/api/v1/accelerator/deliverables/{deliverableId}/documents": {
-    /** Uploads a new document to satisfy a deliverable. */
-    post: operations["uploadDeliverableDocument"];
-  };
   "/api/v1/accelerator/deliverables/{deliverableId}/documents/{documentId}": {
     /** Gets a single submission document from a deliverable. */
     get: operations["getDeliverableDocument"];
+  };
+  "/api/v1/accelerator/deliverables/{deliverableId}/documents/{projectId}": {
+    /** Uploads a new document to satisfy a deliverable. */
+    post: operations["uploadDeliverableDocument"];
   };
   "/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}": {
     /**
@@ -4207,33 +4207,6 @@ export interface operations {
       };
     };
   };
-  /** Uploads a new document to satisfy a deliverable. */
-  uploadDeliverableDocument: {
-    parameters: {
-      path: {
-        deliverableId: number;
-      };
-    };
-    requestBody?: {
-      content: {
-        "multipart/form-data": {
-          description: string;
-          /** Format: binary */
-          file: string;
-          /** Format: int64 */
-          projectId: number;
-        };
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UploadDeliverableDocumentResponsePayload"];
-        };
-      };
-    };
-  };
   /** Gets a single submission document from a deliverable. */
   getDeliverableDocument: {
     parameters: {
@@ -4257,6 +4230,32 @@ export interface operations {
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Uploads a new document to satisfy a deliverable. */
+  uploadDeliverableDocument: {
+    parameters: {
+      path: {
+        deliverableId: number;
+        projectId: number;
+      };
+    };
+    requestBody?: {
+      content: {
+        "multipart/form-data": {
+          description: string;
+          /** Format: binary */
+          file: string;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadDeliverableDocumentResponsePayload"];
         };
       };
     };

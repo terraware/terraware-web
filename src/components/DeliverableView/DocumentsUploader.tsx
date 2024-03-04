@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box } from '@mui/material';
 import { FileChooser } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
@@ -11,7 +11,6 @@ import { ViewProps } from './types';
 
 const DocumentsUploader = ({ deliverable }: ViewProps): JSX.Element => {
   const [files, setFiles] = useState<File[]>([]);
-  const theme = useTheme();
   const { activeLocale } = useLocalization();
 
   const template = useMemo(() => {
@@ -29,13 +28,11 @@ const DocumentsUploader = ({ deliverable }: ViewProps): JSX.Element => {
       {files.length > 0 && (
         <FileUploadDialog deliverable={deliverable} files={files} onClose={onCloseFileUploadDialog} />
       )}
-      <Typography marginBottom={theme.spacing(2)} fontSize='20px' lineHeight='28px' fontWeight={600}>
-        {strings.DOCUMENTS}
-      </Typography>
       <FileChooser
         acceptFileType='image/*,application/*'
         chooseFileText={strings.CHOOSE_FILE}
         setFiles={setFiles}
+        maxFiles={15 - deliverable.documents.length}
         multipleSelection
         uploadDescription={strings.UPLOAD_FILES_DESCRIPTION}
         uploadText={strings.UPLOAD_FILES_TITLE}
