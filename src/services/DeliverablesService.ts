@@ -19,7 +19,7 @@ import { getPromisesResponse } from './utils';
 const ENDPOINT_DELIVERABLES = '/api/v1/accelerator/deliverables';
 const ENDPOINT_DELIVERABLE = '/api/v1/accelerator/deliverables/{deliverableId}';
 const ENDPOINT_DELIVERABLE_SUBMISSION = '/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}';
-const ENDPOINT_DELIVERABLE_DOCUMENT_UPLOAD = '/api/v1/accelerator/deliverables/{deliverableId}/documents';
+const ENDPOINT_DELIVERABLE_DOCUMENT_UPLOAD = '/api/v1/accelerator/deliverables/{deliverableId}/documents/{projectId}';
 
 export type ListDeliverablesRequestParams = paths[typeof ENDPOINT_DELIVERABLES]['get']['parameters']['query'];
 export type GetDeliverableResponsePayload =
@@ -94,16 +94,13 @@ const list = async (
  */
 const upload = async (deliverableId: number, documents: UploadDeliverableDocumentRequest[]): Promise<boolean> => {
   const headers = { 'content-type': 'multipart/form-data' };
-  const urlReplacements = {
-    '{deliverableId}': `${deliverableId}`,
-  };
   const promises = documents.map((document) => {
     const { description, file, projectId } = document;
-    const entity = new FormData();
-
-    entity.append('description', description);
-    entity.append('file', file);
-    entity.append('projectId', `${projectId}`);
+    const urlReplacements = {
+      '{deliverableId}': `${deliverableId}`,
+      '{projectId}': `${projectId}`,
+    };
+    const entity = { description, file };
 
     return httpDocumentUpload.post({ urlReplacements, entity, headers });
   });
