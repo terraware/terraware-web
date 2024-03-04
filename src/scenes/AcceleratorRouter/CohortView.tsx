@@ -10,7 +10,7 @@ import Card from 'src/components/common/Card';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { requestCohort } from 'src/redux/features/cohorts/cohortsAsyncThunks';
 import { selectCohort } from 'src/redux/features/cohorts/cohortsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -22,6 +22,8 @@ const CohortView = () => {
   const history = useHistory();
   const location = useStateLocation();
   const { activeLocale } = useLocalization();
+  const { isAllowed } = useUser();
+  const canEdit = isAllowed('UPDATE_COHORTS');
   const pathParams = useParams<{ cohortId: string }>();
   const cohortId = Number(pathParams.cohortId);
 
@@ -39,10 +41,11 @@ const CohortView = () => {
 
   const rightComponent = useMemo(
     () =>
-      activeLocale && (
+      activeLocale &&
+      canEdit && (
         <Button label={strings.EDIT_COHORT} icon='iconEdit' onClick={goToEditCohort} size='medium' id='editCohort' />
       ),
-    [goToEditCohort, activeLocale]
+    [activeLocale, canEdit, goToEditCohort]
   );
 
   const crumbs: Crumb[] = useMemo(

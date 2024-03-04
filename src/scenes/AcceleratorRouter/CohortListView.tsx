@@ -12,7 +12,7 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { requestCohorts } from 'src/redux/features/cohorts/cohortsAsyncThunks';
 import { selectCohorts } from 'src/redux/features/cohorts/cohortsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -60,6 +60,8 @@ const CohortListView = () => {
   const contentRef = useRef(null);
   const classes = useStyles();
   const history = useHistory();
+  const { isAllowed } = useUser();
+  const canCreateCohorts = isAllowed('CREATE_COHORTS');
 
   const cohorts = useAppSelector(selectCohorts);
 
@@ -81,14 +83,15 @@ const CohortListView = () => {
           <Grid item xs={8}>
             <h1 className={classes.title}>{strings.COHORTS}</h1>
           </Grid>
-          <Grid item xs={4} className={classes.centered}>
-            {isMobile ? (
-              <Button id='new-cohort' icon='plus' onClick={goToNewCohort} size='medium' />
-            ) : (
-              <Button id='new-cohort' label={strings.ADD_COHORT} icon='plus' onClick={goToNewCohort} size='medium' />
-            )}
-          </Grid>
-
+          {canCreateCohorts && (
+            <Grid item xs={4} className={classes.centered}>
+              {isMobile ? (
+                <Button id='new-cohort' icon='plus' onClick={goToNewCohort} size='medium' />
+              ) : (
+                <Button id='new-cohort' label={strings.ADD_COHORT} icon='plus' onClick={goToNewCohort} size='medium' />
+              )}
+            </Grid>
+          )}
           <PageSnackbar />
         </Grid>
       </PageHeaderWrapper>
