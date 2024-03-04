@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import useQuery from 'src/utils/useQuery';
-import { APP_PATHS } from 'src/constants';
+
 import BatchWithdrawFlow from 'src/components/BatchWithdrawFlow';
+import { APP_PATHS } from 'src/constants';
+import useQuery from 'src/utils/useQuery';
 
 type BatchBulkWithdrawViewProps = {
   withdrawalCreatedCallback?: () => void;

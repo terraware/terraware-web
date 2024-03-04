@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
-import { FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
+
 import { Box, Theme, Typography, useTheme } from '@mui/material';
-import strings from 'src/strings';
-import MultipleSelection from './filters/FilterMultipleSelection';
-import SingleSelection from './filters/FilterSingleSelection';
-import Search from './filters/FilterSearch';
-import DateRange from './filters/FilterDateRange';
-import FilterNumberRange from './filters/FilterNumberRange';
-import FilterCountWeight from './filters/FilterCountWeight';
-import { Option } from '@terraware/web-components/components/table/types';
 import { makeStyles } from '@mui/styles';
 import { Button } from '@terraware/web-components';
+import { Option } from '@terraware/web-components/components/table/types';
+
+import strings from 'src/strings';
+import { FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+
 import FilterBoolean from './filters/FilterBoolean';
+import FilterCountWeight from './filters/FilterCountWeight';
+import DateRange from './filters/FilterDateRange';
+import MultipleSelection from './filters/FilterMultipleSelection';
+import FilterNumberRange from './filters/FilterNumberRange';
+import Search from './filters/FilterSearch';
+import SingleSelection from './filters/FilterSingleSelection';
 
 interface StyleProps {
   isMobile?: boolean;

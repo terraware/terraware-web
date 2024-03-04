@@ -1,8 +1,11 @@
 import React from 'react';
+
 import { Box } from '@mui/material';
+
+import FilterMultiSelectContainer from 'src/components/common/FilterMultiSelectContainer';
 import theme from 'src/theme';
 import { SearchNodePayload } from 'src/types/Search';
-import FilterMultiSelectContainer from 'src/components/common/FilterMultiSelectContainer';
+
 import { FeaturedFilterConfig } from './index';
 
 interface FeaturedFiltersProps {

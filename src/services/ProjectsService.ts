@@ -1,8 +1,8 @@
 import { components, paths } from 'src/api/types/generated-schema';
 import HttpService, { Response, Response2 } from 'src/services/HttpService';
+import SearchService from 'src/services/SearchService';
 import { CreateProjectRequest, Project, UpdateProjectRequest } from 'src/types/Project';
 import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
-import SearchService from 'src/services/SearchService';
 
 /**
  * Projects related services

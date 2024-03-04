@@ -1,20 +1,22 @@
 /* eslint-disable import/no-webpack-loader-syntax */
-import { CssBaseline, StyledEngineProvider, Theme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
+
+import { CssBaseline, StyledEngineProvider, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { getRgbaFromHex } from 'src/utils/color';
-import { store } from 'src/redux/store';
-import { useLocalization, useUser } from 'src/providers';
-import { useAppVersion } from 'src/hooks/useAppVersion';
-import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+
+import AppBootstrap from 'src/AppBootstrap';
 import ToastSnackbar from 'src/components/ToastSnackbar';
 import TopBar from 'src/components/TopBar/TopBar';
 import TopBarContent from 'src/components/TopBar/TopBarContent';
-import AppBootstrap from 'src/AppBootstrap';
-import TerrawareRouter from 'src/scenes/TerrawareRouter';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useAppVersion } from 'src/hooks/useAppVersion';
+import { useLocalization, useUser } from 'src/providers';
+import { store } from 'src/redux/store';
 import AcceleratorRouter from 'src/scenes/AcceleratorRouter';
+import TerrawareRouter from 'src/scenes/TerrawareRouter';
+import { getRgbaFromHex } from 'src/utils/color';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 interface StyleProps {
   isDesktop?: boolean;

@@ -1,14 +1,16 @@
 import React from 'react';
+
 import { Theme } from '@mui/material';
-import { APP_PATHS } from 'src/constants';
-import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
-import { RendererProps } from 'src/components/common/table/types';
-import Link from 'src/components/common/Link';
 import { TextTruncated } from '@terraware/web-components';
-import { getShortDate } from 'src/utils/dateFormatter';
-import { ObservationState, getStatus } from 'src/types/Observations';
+
+import Link from 'src/components/common/Link';
+import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
+import { RendererProps } from 'src/components/common/table/types';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
+import { ObservationState, getStatus } from 'src/types/Observations';
+import { getShortDate } from 'src/utils/dateFormatter';
 
 const COLUMN_WIDTH = 250;
 

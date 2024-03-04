@@ -1,12 +1,15 @@
-import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
+
+import { makeStyles } from '@mui/styles';
+
+import { listDeviceManagers } from 'src/api/deviceManager/deviceManager';
 import strings from 'src/strings';
-import { Facility } from 'src/types/Facility';
 import { DeviceManager } from 'src/types/DeviceManager';
+import { Facility } from 'src/types/Facility';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
 import TextField from '../../common/Textfield/Textfield';
 import FlowStep, { FlowError } from './FlowStep';
-import { listDeviceManagers } from 'src/api/deviceManager/deviceManager';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 interface StyleProps {
   isMobile: boolean;

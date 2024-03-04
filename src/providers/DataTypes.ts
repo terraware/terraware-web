@@ -1,7 +1,8 @@
 import React from 'react';
-import { User } from 'src/types/User';
+
 import { Organization } from 'src/types/Organization';
 import { TimeZoneDescription } from 'src/types/TimeZones';
+import { User } from 'src/types/User';
 import { GlobalRolePermission } from 'src/utils/acl';
 
 export type PreferencesType = { [key: string]: unknown };

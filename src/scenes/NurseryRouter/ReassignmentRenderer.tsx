@@ -1,11 +1,13 @@
 import React from 'react';
+
+import { Box, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Box, Typography, Theme } from '@mui/material';
+import { Autocomplete, Textfield } from '@terraware/web-components';
+
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
-import { Autocomplete, Textfield } from '@terraware/web-components';
-import { NumericFormatter } from 'src/types/Number';
 import strings from 'src/strings';
+import { NumericFormatter } from 'src/types/Number';
 
 const useStyles = makeStyles((theme: Theme) => ({
   subzone: {

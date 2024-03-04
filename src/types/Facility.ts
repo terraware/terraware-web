@@ -1,5 +1,5 @@
-import strings from 'src/strings';
 import { components } from 'src/api/types/generated-schema';
+import strings from 'src/strings';
 
 export type SubLocation = components['schemas']['SubLocationPayload'];
 

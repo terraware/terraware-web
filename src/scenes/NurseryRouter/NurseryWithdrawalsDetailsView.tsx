@@ -1,29 +1,32 @@
-import { useHistory, useParams } from 'react-router-dom';
-import TfMain from 'src/components/common/TfMain';
-import { Box, Tab, Theme, Typography, useTheme } from '@mui/material';
-import { APP_PATHS } from 'src/constants';
-import { Button } from '@terraware/web-components';
-import strings from 'src/strings';
-import PageSnackbar from 'src/components/PageSnackbar';
-import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { useEffect, useRef, useState } from 'react';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { makeStyles } from '@mui/styles';
-import { NurseryWithdrawalService } from 'src/services';
-import { Batch, NurseryWithdrawal } from 'src/types/Batch';
-import { Delivery } from 'src/types/Tracking';
-import useSnackbar from 'src/utils/useSnackbar';
+import { useHistory, useParams } from 'react-router-dom';
+
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import useQuery from 'src/utils/useQuery';
-import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
-import WithdrawalTabPanelContent from './WithdrawalDetails/WithdrawalTabPanelContent';
-import ReassignmentTabPanelContent from './WithdrawalDetails/ReassignmentTabPanelContent';
-import NonOutplantWithdrawalContent from './WithdrawalDetails/NonOutplantWithdrawalContent';
-import { Species } from 'src/types/Species';
-import { NurseryWithdrawalPurposes } from 'src/types/Batch';
+import { Box, Tab, Theme, Typography, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { Button } from '@terraware/web-components';
+
+import PageSnackbar from 'src/components/PageSnackbar';
 import BackToLink from 'src/components/common/BackToLink';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import TfMain from 'src/components/common/TfMain';
+import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers/hooks';
+import { NurseryWithdrawalService } from 'src/services';
+import strings from 'src/strings';
+import { Batch, NurseryWithdrawal } from 'src/types/Batch';
+import { NurseryWithdrawalPurposes } from 'src/types/Batch';
+import { Species } from 'src/types/Species';
+import { Delivery } from 'src/types/Tracking';
 import { isTrue } from 'src/utils/boolean';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useQuery from 'src/utils/useQuery';
+import useSnackbar from 'src/utils/useSnackbar';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+
+import NonOutplantWithdrawalContent from './WithdrawalDetails/NonOutplantWithdrawalContent';
+import ReassignmentTabPanelContent from './WithdrawalDetails/ReassignmentTabPanelContent';
+import WithdrawalTabPanelContent from './WithdrawalDetails/WithdrawalTabPanelContent';
 
 const useStyles = makeStyles((theme: Theme) => ({
   backToWithdrawals: {

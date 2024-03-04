@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
+
 import { CircularProgress, StyledEngineProvider, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import {
-  useUser,
-  useOrganization,
-  useLocalization,
   LocalizationProvider,
   OrganizationProvider,
   UserProvider,
+  useLocalization,
+  useOrganization,
+  useUser,
 } from 'src/providers';
-import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 
 const useStyles = makeStyles((theme: Theme) => ({
   spinner: {

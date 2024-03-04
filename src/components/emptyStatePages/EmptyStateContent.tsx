@@ -1,11 +1,13 @@
 import React from 'react';
-import { Container, Theme, Grid } from '@mui/material';
+
+import { Container, Grid, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+
+import Link from 'src/components/common/Link';
 import Button from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
 import { IconName } from 'src/components/common/icon/icons';
-import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import Link from 'src/components/common/Link';
 
 type EmptyStateStyleProps = {
   titleFontSize: string;

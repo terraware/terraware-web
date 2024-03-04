@@ -1,6 +1,8 @@
-import { Typography, useTheme } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+
+import { Typography, useTheme } from '@mui/material';
+
 import { APP_PATHS } from 'src/constants';
 import AcceleratorMain from 'src/scenes/AcceleratorRouter/AcceleratorMain';
 import CohortForm from 'src/scenes/AcceleratorRouter/CohortForm';

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { LocalizationContext } from './contexts';
-import { TimeZoneDescription } from 'src/types/TimeZones';
+
+import { HttpService, LocationService } from 'src/services';
 import strings, { ILocalizedStringsMap } from 'src/strings';
+import { TimeZoneDescription } from 'src/types/TimeZones';
+
 import { ProvidedLocalizationData, useUser } from '.';
 import { useSupportedLocales } from '../strings/locales';
-import { HttpService, LocationService } from 'src/services';
+import { LocalizationContext } from './contexts';
 
 export type LocalizationProviderProps = {
   children?: React.ReactNode;

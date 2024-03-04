@@ -2,9 +2,11 @@ import { Box, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, Icon } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
+
+import strings from 'src/strings';
 import { Accession } from 'src/types/Accession';
 import { ViabilityTest } from 'src/types/Accession';
-import strings from 'src/strings';
+
 import ViabilityTestingDatabase from './ViabilityTestingDatabase';
 
 const useStyles = makeStyles((theme: Theme) => ({

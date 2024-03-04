@@ -1,15 +1,17 @@
+import { useEffect, useMemo, useState } from 'react';
+
 import { Box } from '@mui/material';
+import { getTodaysDateFormatted } from '@terraware/web-components/utils';
+
+import TextWithLink from 'src/components/common/TextWithLink';
 import { APP_PATHS } from 'src/constants';
+import { useOrganization, useTimeZones, useUser } from 'src/providers';
+import { OrganizationService, PreferencesService, UserService } from 'src/services';
 import strings from 'src/strings';
 import { Notification } from 'src/types/Notifications';
-import TextWithLink from 'src/components/common/TextWithLink';
-import { useOrganization, useTimeZones, useUser } from 'src/providers';
-import { getTodaysDateFormatted } from '@terraware/web-components/utils';
-import { useEffect, useMemo, useState } from 'react';
 import { InitializedTimeZone, TimeZoneDescription } from 'src/types/TimeZones';
-import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
-import { OrganizationService, PreferencesService, UserService } from 'src/services';
 import { featureNotificationExpired } from 'src/utils/featureNotifications';
+import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
 
 export default function OrganizationNotification(): Notification | null {
   const { selectedOrganization, reloadOrganizations } = useOrganization();

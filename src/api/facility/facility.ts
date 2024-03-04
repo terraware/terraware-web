@@ -1,6 +1,8 @@
 import axios from 'axios';
+
 import { Device } from 'src/types/Device';
 import { Facility } from 'src/types/Facility';
+
 import { paths } from '../types/generated-schema';
 
 const FACILITY_DEVICES = '/api/v1/facilities/{facilityId}/devices';

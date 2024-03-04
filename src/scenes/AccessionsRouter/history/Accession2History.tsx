@@ -1,12 +1,14 @@
-import { useTheme, CircularProgress, Box, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Accession } from 'src/types/Accession';
+
+import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
+import _ from 'lodash';
+
+import Link from 'src/components/common/Link';
+import { APP_PATHS } from 'src/constants';
 import AccessionService, { AccessionHistoryEntry } from 'src/services/AccessionService';
 import strings from 'src/strings';
+import { Accession } from 'src/types/Accession';
 import useSnackbar from 'src/utils/useSnackbar';
-import _ from 'lodash';
-import { APP_PATHS } from 'src/constants';
-import Link from 'src/components/common/Link';
 
 interface Accession2HistoryProps {
   accession: Accession;

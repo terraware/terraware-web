@@ -1,15 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { makeStyles } from '@mui/styles';
-import { APP_PATHS } from 'src/constants';
-import CellRenderer, { TableRowType } from '../../components/common/table/TableCellRenderer';
-import { RendererProps } from '../../components/common/table/types';
+
 import { Theme, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Button, TextTruncated } from '@terraware/web-components';
+
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { NurseryWithdrawalPurposes } from 'src/types/Batch';
-import { isTrue } from 'src/utils/boolean';
 import { NurseryWithdrawalPurpose, purposeLabel } from 'src/types/Batch';
+import { isTrue } from 'src/utils/boolean';
+
+import CellRenderer, { TableRowType } from '../../components/common/table/TableCellRenderer';
+import { RendererProps } from '../../components/common/table/types';
 
 const useStyles = makeStyles((theme: Theme) => ({
   link: {

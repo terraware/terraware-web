@@ -1,7 +1,9 @@
+import React from 'react';
+
 import { CalendarToday, Warning, WifiTethering } from '@mui/icons-material';
 import { Fab, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React from 'react';
+
 import { NotificationCriticality } from 'src/types/Notifications';
 
 const useStyles = makeStyles((theme: Theme) => ({

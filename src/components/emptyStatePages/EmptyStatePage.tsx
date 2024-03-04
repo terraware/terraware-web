@@ -1,21 +1,24 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
-import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePages/EmptyStateContent';
-import PageHeader from 'src/components/PageHeader';
-import { APP_PATHS } from 'src/constants';
-import strings from 'src/strings';
-import ImportSpeciesModal, { downloadCsvTemplate } from '../../scenes/Species/ImportSpeciesModal';
-import TfMain from '../common/TfMain';
+
 import { Container, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import useSnackbar from 'src/utils/useSnackbar';
-import { IconName } from 'src/components/common/icon/icons';
-import { isContributor } from 'src/utils/organization';
+
+import PageHeader from 'src/components/PageHeader';
 import EmptyMessage from 'src/components/common/EmptyMessage';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { IconName } from 'src/components/common/icon/icons';
+import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePages/EmptyStateContent';
+import { APP_PATHS } from 'src/constants';
+import { useOrganization } from 'src/providers/hooks';
 import ImportInventoryModal, { downloadInventoryCsvTemplate } from 'src/scenes/InventoryRouter/ImportInventoryModal';
 import PlantingSiteTypeSelect from 'src/scenes/PlantingSitesRouter/edit/PlantingSiteTypeSelect';
-import { useOrganization } from 'src/providers/hooks';
+import strings from 'src/strings';
+import { isContributor } from 'src/utils/organization';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useSnackbar from 'src/utils/useSnackbar';
+
+import ImportSpeciesModal, { downloadCsvTemplate } from '../../scenes/Species/ImportSpeciesModal';
+import TfMain from '../common/TfMain';
 
 interface StyleProps {
   isMobile: boolean;

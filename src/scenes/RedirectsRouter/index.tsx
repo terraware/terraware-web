@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
+
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 

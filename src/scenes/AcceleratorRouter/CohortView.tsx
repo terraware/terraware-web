@@ -1,19 +1,21 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router';
+import { useParams } from 'react-router-dom';
+
 import { Grid } from '@mui/material';
-import strings from 'src/strings';
-import { APP_PATHS } from 'src/constants';
-import { useLocalization } from 'src/providers';
-import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { selectCohort } from 'src/redux/features/cohorts/cohortsSelectors';
-import { requestCohort } from 'src/redux/features/cohorts/cohortsAsyncThunks';
-import Card from 'src/components/common/Card';
-import Button from 'src/components/common/button/Button';
+
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
+import Card from 'src/components/common/Card';
 import TextField from 'src/components/common/Textfield/Textfield';
+import Button from 'src/components/common/button/Button';
+import { APP_PATHS } from 'src/constants';
+import { useLocalization } from 'src/providers';
+import { requestCohort } from 'src/redux/features/cohorts/cohortsAsyncThunks';
+import { selectCohort } from 'src/redux/features/cohorts/cohortsSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 const CohortView = () => {
   const dispatch = useAppDispatch();

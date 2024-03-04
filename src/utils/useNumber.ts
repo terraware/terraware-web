@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+
 import { findLocaleDetails, supportedLocales } from 'src/strings/locales';
 
 const getLocaleToUse = (locale?: string) => (locale === 'gx' ? 'fr' : locale || 'en');

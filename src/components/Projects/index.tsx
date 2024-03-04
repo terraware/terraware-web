@@ -1,24 +1,26 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+
 import { Grid, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+
+import PageSnackbar from 'src/components/PageSnackbar';
+import ProjectCellRenderer from 'src/components/Projects/ProjectCellRenderer';
+import Card from 'src/components/common/Card';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import TextField from 'src/components/common/Textfield/Textfield';
+import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
-import strings from 'src/strings';
-import TfMain from 'src/components/common/TfMain';
-import PageSnackbar from 'src/components/PageSnackbar';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import TextField from 'src/components/common/Textfield/Textfield';
-import useDebounce from 'src/utils/useDebounce';
-import { getRequestId, setRequestId } from 'src/utils/requestsId';
-import { useOrganization, useLocalization } from 'src/providers/hooks';
-import { Project } from 'src/types/Project';
+import { useLocalization, useOrganization } from 'src/providers/hooks';
 import ProjectsService from 'src/services/ProjectsService';
-import ProjectCellRenderer from 'src/components/Projects/ProjectCellRenderer';
-import Card from 'src/components/common/Card';
+import strings from 'src/strings';
+import { Project } from 'src/types/Project';
+import { getRequestId, setRequestId } from 'src/utils/requestsId';
+import useDebounce from 'src/utils/useDebounce';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles(() => ({
   title: {

@@ -1,6 +1,8 @@
 import { Dispatch } from 'redux';
-import { PlantingsService } from 'src/services';
+
 import { RootState } from 'src/redux/rootReducer';
+import { PlantingsService } from 'src/services';
+
 import { setPlantingsAction } from './plantingsSlice';
 
 export const requestPlantings = (organizationId: number) => {

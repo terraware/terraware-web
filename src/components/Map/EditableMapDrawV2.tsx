@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
-import _ from 'lodash';
-import { Feature, FeatureCollection } from 'geojson';
 import { MapRef, useControl } from 'react-map-gl';
+
 import MapboxDraw, {
   DrawCreateEvent,
   DrawMode,
@@ -10,6 +9,8 @@ import MapboxDraw, {
   DrawUpdateEvent,
 } from '@mapbox/mapbox-gl-draw';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
+import { Feature, FeatureCollection } from 'geojson';
+import _ from 'lodash';
 
 /**
  * Flattened representation of the editor's current state. This is based on a combination of factors

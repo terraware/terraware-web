@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@mui/styles';
+
 import { Container, Grid } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Story } from '@storybook/react';
+
 import Card from 'src/components/common/Card';
-import TfMain from 'src/components/common/TfMain';
 import SearchFiltersWrapperV2, { FilterConfig, SearchProps } from 'src/components/common/SearchFiltersWrapperV2';
+import TfMain from 'src/components/common/TfMain';
 
 const useStyles = makeStyles(() => ({
   mainContainer: {

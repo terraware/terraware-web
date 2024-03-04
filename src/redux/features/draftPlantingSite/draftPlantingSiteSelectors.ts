@@ -1,8 +1,9 @@
-import { RootState } from 'src/redux/rootReducer';
 import { createCachedSelector } from 're-reselect';
-import { regexMatch } from 'src/utils/search';
-import { MinimalPlantingZone } from 'src/types/Tracking';
+
+import { RootState } from 'src/redux/rootReducer';
 import { SubzoneAggregation, ZoneAggregation } from 'src/types/Observations';
+import { MinimalPlantingZone } from 'src/types/Tracking';
+import { regexMatch } from 'src/utils/search';
 
 export const selectDraftPlantingSiteCreate = (requestId: string) => (state: RootState) =>
   state.draftPlantingSiteCreate[requestId];

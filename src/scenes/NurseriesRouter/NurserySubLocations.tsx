@@ -1,7 +1,8 @@
 import { useCallback } from 'react';
+
+import SubLocations from 'src/components/common/SubLocations';
 import { APP_PATHS } from 'src/constants';
 import { PartialSubLocation } from 'src/types/Facility';
-import SubLocations from 'src/components/common/SubLocations';
 
 export type NurserySubLocationsProps = {
   nurseryId?: number;

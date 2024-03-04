@@ -1,6 +1,7 @@
 import { paths } from 'src/api/types/generated-schema';
-import HttpService, { Response } from './HttpService';
+
 import CachedUserService from './CachedUserService';
+import HttpService, { Response } from './HttpService';
 
 /**
  * Service for preferences related functionality

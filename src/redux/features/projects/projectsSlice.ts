@@ -1,12 +1,13 @@
-import { ActionReducerMapBuilder, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Project } from 'src/types/Project';
-import { buildReducers, StatusT } from 'src/redux/features/asyncUtils';
-import { UpdateProjectResponsePayload } from 'src/services/ProjectsService';
+import { ActionReducerMapBuilder, PayloadAction, createSlice } from '@reduxjs/toolkit';
+
+import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import {
   requestProjectAssign,
   requestProjectDelete,
   requestProjectUpdate,
 } from 'src/redux/features/projects/projectsAsyncThunks';
+import { UpdateProjectResponsePayload } from 'src/services/ProjectsService';
+import { Project } from 'src/types/Project';
 
 // Define a type for the slice state
 type Data = {

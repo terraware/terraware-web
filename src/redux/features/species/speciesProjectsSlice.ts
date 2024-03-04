@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
 import { SpeciesProjectsSearchResponse } from 'src/services/SpeciesService';
 
 type SpeciesId = number;

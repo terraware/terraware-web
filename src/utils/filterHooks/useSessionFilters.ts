@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import useQuery from 'src/utils/useQuery';
-import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+
 import {
   FiltersType,
   getFiltersFromQuery,
@@ -10,6 +9,8 @@ import {
   writeFiltersToQuery,
   writeFiltersToSession,
 } from 'src/utils/filterHooks';
+import useQuery from 'src/utils/useQuery';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 export const useSessionFilters = (viewIdentifier: string, writeToQuery = true) => {
   const location = useStateLocation();

@@ -1,11 +1,13 @@
 import React from 'react';
-import { makeStyles } from '@mui/styles';
+
 import { Box, Typography, useTheme } from '@mui/material';
-import strings from 'src/strings';
-import { APP_PATHS } from 'src/constants';
+import { makeStyles } from '@mui/styles';
+
+import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
-import Link from 'src/components/common/Link';
+import { APP_PATHS } from 'src/constants';
+import strings from 'src/strings';
 
 const useStyles = makeStyles(() => ({
   text: {

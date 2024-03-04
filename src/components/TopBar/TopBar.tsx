@@ -1,6 +1,8 @@
+import React from 'react';
+
 import { AppBar, Theme, Toolbar, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React from 'react';
+
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 

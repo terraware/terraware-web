@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
-import NoOrgRouter from "src/scenes/NoOrgRouter";
+import NoOrgRouter from 'src/scenes/NoOrgRouter';
 import OrgRouter from 'src/scenes/OrgRouter';
 import useStateLocation from 'src/utils/useStateLocation';
 

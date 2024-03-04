@@ -1,30 +1,33 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+
 import { Box, Container, Divider, Grid, Theme, Typography, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Button, DialogBox, Dropdown, Textfield } from '@terraware/web-components';
-import DatePicker from 'src/components/common/DatePicker';
-import strings from 'src/strings';
-import useForm from 'src/utils/useForm';
-import useSnackbar from 'src/utils/useSnackbar';
 import { useDeviceInfo } from '@terraware/web-components/utils';
-import { Batch, BatchPhoto } from 'src/types/Batch';
-import { NurseryBatchService } from 'src/services';
-import { useOrganization } from 'src/providers/hooks';
-import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
-import { Facility } from 'src/types/Facility';
-import { getNurseryById } from 'src/utils/organization';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
-import { useNumberFormatter } from 'src/utils/useNumber';
+
+import DatePicker from 'src/components/common/DatePicker';
 import { useUser } from 'src/providers';
+import { useOrganization } from 'src/providers/hooks';
+import { NurseryBatchService } from 'src/services';
+import { BATCH_PHOTO_ENDPOINT } from 'src/services/NurseryBatchService';
+import strings from 'src/strings';
 import {
   batchSubstrateEnumToLocalized,
   batchSubstrateLocalizedToEnum,
   nurserySubstratesLocalized,
   treatments,
 } from 'src/types/Accession';
-import SelectPhotos from '../../components/common/SelectPhotos';
-import { makeStyles } from '@mui/styles';
-import { BATCH_PHOTO_ENDPOINT } from 'src/services/NurseryBatchService';
+import { Batch, BatchPhoto } from 'src/types/Batch';
+import { Facility } from 'src/types/Facility';
 import { isNumber } from 'src/types/utils';
+import { getNurseryById } from 'src/utils/organization';
+import useForm from 'src/utils/useForm';
+import { useNumberFormatter } from 'src/utils/useNumber';
+import useSnackbar from 'src/utils/useSnackbar';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
+
+import SelectPhotos from '../../components/common/SelectPhotos';
 
 export interface BatchDetailsModalProps {
   onClose: () => void;

@@ -1,7 +1,9 @@
 import { createContext } from 'react';
+
 import { Organization } from 'src/types/Organization';
-import { ProvidedLocalizationData, ProvidedOrganizationData, ProvidedUserData } from './DataTypes';
 import { GlobalRolePermission } from 'src/utils/acl';
+
+import { ProvidedLocalizationData, ProvidedOrganizationData, ProvidedUserData } from './DataTypes';
 
 export const UserContext = createContext<ProvidedUserData>({
   reloadUser: () => {

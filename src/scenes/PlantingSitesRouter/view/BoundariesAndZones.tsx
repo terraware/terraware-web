@@ -1,23 +1,26 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { makeStyles } from '@mui/styles';
+
 import { Box, Typography, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
-import strings from 'src/strings';
-import { MinimalPlantingSite, MinimalPlantingZone } from 'src/types/Tracking';
-import { MapEntityId, MapSourceProperties } from 'src/types/Map';
-import { ZoneAggregation } from 'src/types/Observations';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-import { regexMatch } from 'src/utils/search';
+
+import ListMapView from 'src/components/ListMapView';
 import { PlantingSiteMap } from 'src/components/Map';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { MapTooltip, TooltipProperty } from 'src/components/Map/MapRenderUtils';
+import { View } from 'src/components/common/ListMapSelector';
 import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
-import { MapService } from 'src/services';
 import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
-import { View } from 'src/components/common/ListMapSelector';
-import ListMapView from 'src/components/ListMapView';
+import { MapService } from 'src/services';
+import strings from 'src/strings';
+import { MapEntityId, MapSourceProperties } from 'src/types/Map';
+import { ZoneAggregation } from 'src/types/Observations';
+import { MinimalPlantingSite, MinimalPlantingZone } from 'src/types/Tracking';
+import { regexMatch } from 'src/utils/search';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+
 import PlantingSiteDetailsTable from './PlantingSiteDetailsTable';
-import { TooltipProperty, MapTooltip } from 'src/components/Map/MapRenderUtils';
 
 export const useMapTooltipStyles = makeStyles(() => ({
   popup: {

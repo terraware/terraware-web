@@ -1,7 +1,9 @@
 import { Box, CircularProgress } from '@mui/material';
-import Map, { MapImage } from './Map';
+
 import { MapControl, MapEntityOptions, MapOptions, MapPopupRenderer } from 'src/types/Map';
 import useMapboxToken from 'src/utils/useMapboxToken';
+
+import Map, { MapImage } from './Map';
 
 const DUMMY_MAP_OPTIONS: MapOptions = {
   bbox: {

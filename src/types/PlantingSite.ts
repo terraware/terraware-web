@@ -1,5 +1,6 @@
 import { components } from 'src/api/types/generated-schema';
-import { MultiPolygon, PlantingSite, MinimalPlantingSite } from './Tracking';
+
+import { MinimalPlantingSite, MultiPolygon, PlantingSite } from './Tracking';
 
 export type Population = {
   species_scientificName: string;

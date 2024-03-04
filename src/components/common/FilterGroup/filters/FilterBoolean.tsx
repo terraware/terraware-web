@@ -1,8 +1,10 @@
-import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
-import { FieldNodePayload } from 'src/types/Search';
-import { Checkbox, theme } from '@terraware/web-components';
+
 import { Box } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { Checkbox, theme } from '@terraware/web-components';
+
+import { FieldNodePayload } from 'src/types/Search';
 
 const useStyles = makeStyles(() => ({
   checkbox: {

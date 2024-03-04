@@ -1,28 +1,30 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Grid, Box, Popover, useTheme } from '@mui/material';
+
+import { Box, Grid, Popover, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Button, PillListItem, Textfield, Tooltip } from '@terraware/web-components';
 import { PillList } from '@terraware/web-components';
-import { makeStyles } from '@mui/styles';
-import strings from 'src/strings';
-import { SearchNodePayload } from 'src/types/Search';
-import { Facility, SubLocation } from 'src/types/Facility';
-import { Species } from 'src/types/Species';
-import { Project } from 'src/types/Project';
+
+import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import isEnabled from 'src/features';
-import useForm from 'src/utils/useForm';
-import { getAllNurseries } from 'src/utils/organization';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
+import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { selectSubLocations } from 'src/redux/features/subLocations/subLocationsSelectors';
-import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestSubLocations } from 'src/redux/features/subLocations/subLocationsThunks';
-import { requestProjects } from 'src/redux/features/projects/projectsThunks';
-import InventoryFilters, { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
-import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { convertFilterGroupToMap, getNurseryName } from 'src/scenes/InventoryRouter/FilterUtils';
-import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
+import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
+import InventoryFilters, { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
+import strings from 'src/strings';
+import { Facility, SubLocation } from 'src/types/Facility';
+import { Project } from 'src/types/Project';
+import { SearchNodePayload } from 'src/types/Search';
+import { Species } from 'src/types/Species';
+import { getAllNurseries } from 'src/utils/organization';
+import useForm from 'src/utils/useForm';
 
 const useStyles = makeStyles(() => ({
   popoverContainer: {

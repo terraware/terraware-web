@@ -1,14 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
+
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
-import { useDeviceInfo } from '@terraware/web-components/utils';
 import { FormButton, Message, TableColumnType } from '@terraware/web-components';
-import PageForm from 'src/components/common/PageForm';
-import strings from 'src/strings';
-import Table from 'src/components/common/table';
-import { CreateProjectRequest } from 'src/types/Project';
-import { NurseryBatchService } from 'src/services';
-import { SearchResponseBatches } from 'src/services/NurseryBatchService';
-import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { useDeviceInfo } from '@terraware/web-components/utils';
+
 import { FlowStates } from 'src/components/ProjectNewView';
 import ProjectEntitySearch, {
   PillListItemWithEmptyValue,
@@ -17,10 +12,18 @@ import {
   ProjectEntityFilters,
   useProjectEntitySelection,
 } from 'src/components/ProjectNewView/flow/useProjectEntitySelection';
-import { getAllNurseries } from 'src/utils/organization';
-import { useOrganization } from 'src/providers';
-import { EntitySpecificFilterConfig } from './ProjectEntityFilter';
 import Card from 'src/components/common/Card';
+import PageForm from 'src/components/common/PageForm';
+import Table from 'src/components/common/table';
+import { useOrganization } from 'src/providers';
+import { NurseryBatchService } from 'src/services';
+import { SearchResponseBatches } from 'src/services/NurseryBatchService';
+import strings from 'src/strings';
+import { CreateProjectRequest } from 'src/types/Project';
+import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { getAllNurseries } from 'src/utils/organization';
+
+import { EntitySpecificFilterConfig } from './ProjectEntityFilter';
 
 type SelectBatchesProps = {
   project: CreateProjectRequest;

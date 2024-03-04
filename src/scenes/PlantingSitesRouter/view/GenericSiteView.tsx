@@ -1,26 +1,29 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Box, Typography, Grid, Theme, useTheme, List, ListItem } from '@mui/material';
+
+import { Box, Grid, List, ListItem, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { RootState } from 'src/redux/rootReducer';
-import { DateTime } from 'luxon';
 import { Button, DropdownItem } from '@terraware/web-components';
-import { useDeviceInfo } from '@terraware/web-components/utils';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
-import strings from 'src/strings';
+import { useDeviceInfo } from '@terraware/web-components/utils';
+import { DateTime } from 'luxon';
+
+import PageSnackbar from 'src/components/PageSnackbar';
+import BackToLink from 'src/components/common/BackToLink';
+import Card from 'src/components/common/Card';
+import { View } from 'src/components/common/ListMapSelector';
+import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
-import { PlantingSeason, MinimalPlantingSite } from 'src/types/Tracking';
-import { ZoneAggregation } from 'src/types/Observations';
 import { useProjects } from 'src/hooks/useProjects';
+import { RootState } from 'src/redux/rootReducer';
 import { useAppSelector } from 'src/redux/store';
-import PageSnackbar from 'src/components/PageSnackbar';
-import BoundariesAndZones from './BoundariesAndZones';
-import BackToLink from 'src/components/common/BackToLink';
+import strings from 'src/strings';
+import { ZoneAggregation } from 'src/types/Observations';
+import { MinimalPlantingSite, PlantingSeason } from 'src/types/Tracking';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
-import Card from 'src/components/common/Card';
-import OptionsMenu from 'src/components/common/OptionsMenu';
-import { View } from 'src/components/common/ListMapSelector';
+
+import BoundariesAndZones from './BoundariesAndZones';
 import SimplePlantingSite from './SimplePlantingSite';
 
 const useStyles = makeStyles((theme: Theme) => ({

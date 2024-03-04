@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
+
 import { Box, Grid } from '@mui/material';
-import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
-import { SearchSortOrder } from 'src/types/Search';
-import { TableColumnType } from 'src/components/common/table/types';
+
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
-import { ViewProps } from './types';
+import { TableColumnType } from 'src/components/common/table/types';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { SearchSortOrder } from 'src/types/Search';
+
 import DocumentCellRenderer from './DocumentCellRenderer';
+import { ViewProps } from './types';
 
 interface DocumentsListProps extends ViewProps {
   columns: TableColumnType[];

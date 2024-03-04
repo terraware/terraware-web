@@ -1,10 +1,12 @@
+import React from 'react';
+
 import { Box, CircularProgress, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React from 'react';
-import PanelTitle from 'src/components/PanelTitle';
-import strings from 'src/strings';
-import Icon from 'src/components/common/icon/Icon';
 import { IconName } from '@terraware/web-components';
+
+import PanelTitle from 'src/components/PanelTitle';
+import Icon from 'src/components/common/icon/Icon';
+import strings from 'src/strings';
 
 const useStyles = makeStyles((theme: Theme) => ({
   icon: {

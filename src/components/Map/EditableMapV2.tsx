@@ -11,10 +11,14 @@ import ReactMapGL, {
   Popup,
   Source,
 } from 'react-map-gl';
-import { Box, useTheme, Theme } from '@mui/material';
+
+import { Box, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import bbox from '@turf/bbox';
 import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
+
+import EditableMapDraw, { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
+import { useIsVisible } from 'src/hooks/useIsVisible';
 import {
   MapDrawingLayer,
   MapEntityId,
@@ -26,12 +30,11 @@ import {
   RenderableReadOnlyBoundary,
 } from 'src/types/Map';
 import { getRgbaFromHex } from 'src/utils/color';
-import EditableMapDraw, { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
 import useMapboxToken from 'src/utils/useMapboxToken';
-import { useIsVisible } from 'src/hooks/useIsVisible';
-import { getMapDrawingLayer, getMapErrorLayer, toMultiPolygon } from './utils';
+
 import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
 import UndoRedoControl from './UndoRedoControl';
+import { getMapDrawingLayer, getMapErrorLayer, toMultiPolygon } from './utils';
 
 const useStyles = makeStyles((theme: Theme) => ({
   sliceTool: {

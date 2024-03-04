@@ -1,14 +1,17 @@
 import { useMemo } from 'react';
+
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import strings from 'src/strings';
-import OutplantReassignmentTable from './sections/OutplantReassignmentTable';
-import { Species } from 'src/types/Species';
-import { Batch, NurseryWithdrawal } from 'src/types/Batch';
-import { Delivery } from 'src/types/Tracking';
+
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useUser } from 'src/providers';
+import strings from 'src/strings';
+import { Batch, NurseryWithdrawal } from 'src/types/Batch';
+import { Species } from 'src/types/Species';
+import { Delivery } from 'src/types/Tracking';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumber';
+
+import OutplantReassignmentTable from './sections/OutplantReassignmentTable';
 
 type ReassignmentTabPanelContentProps = {
   species: Species[];

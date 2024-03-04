@@ -1,4 +1,5 @@
 import React from 'react';
+
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 /**

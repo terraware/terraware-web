@@ -1,24 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@mui/styles';
-import strings from 'src/strings';
-import { Facility } from 'src/types/Facility';
-import { listFacilityDevices } from 'src/api/facility/facility';
-import { Device } from 'src/types/Device';
-import Icon from '../../common/icon/Icon';
-import { Grid, Theme } from '@mui/material';
-import { listTimeseries } from 'src/api/timeseries/timeseries';
-import TemperatureHumidityChart from './TemperatureHumidityChart';
-import PVBatteryChart from './PVBatteryChart';
-import { listDeviceManagers } from 'src/api/deviceManager/deviceManager';
-import { DeviceManager } from 'src/types/DeviceManager';
 import { useHistory } from 'react-router-dom';
-import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
-import useQuery from '../../../utils/useQuery';
-import { timePeriods } from './Common';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
-import { TimeZoneDescription } from 'src/types/TimeZones';
+
+import { Grid, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+
+import { listDeviceManagers } from 'src/api/deviceManager/deviceManager';
+import { listFacilityDevices } from 'src/api/facility/facility';
+import { listTimeseries } from 'src/api/timeseries/timeseries';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
+import strings from 'src/strings';
+import { Device } from 'src/types/Device';
+import { DeviceManager } from 'src/types/DeviceManager';
+import { Facility } from 'src/types/Facility';
+import { TimeZoneDescription } from 'src/types/TimeZones';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
+
+import useQuery from '../../../utils/useQuery';
+import Icon from '../../common/icon/Icon';
+import { timePeriods } from './Common';
+import PVBatteryChart from './PVBatteryChart';
+import TemperatureHumidityChart from './TemperatureHumidityChart';
 
 const useStyles = makeStyles((theme: Theme) => ({
   graphContainer: {

@@ -30,3 +30,6 @@ yarn.lock
 
 # npm license report
 license-report.html
+
+# Test
+**/*.test.ts

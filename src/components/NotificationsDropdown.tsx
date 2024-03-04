@@ -1,23 +1,26 @@
-import moment from 'moment';
-import { Badge, IconButton, List, ListItem, ListItemIcon, ListItemText, Popover, Theme } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
-import { NotificationsService } from 'src/services';
+import { Link } from 'react-router-dom';
+
+import { Badge, IconButton, List, ListItem, ListItemIcon, ListItemText, Popover, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { Button, Tooltip } from '@terraware/web-components';
+import moment from 'moment';
+
 import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
-import strings from 'src/strings';
+import { NotificationsService } from 'src/services';
 import { NotificationsResponse } from 'src/services/NotificationsService';
+import strings from 'src/strings';
 import { Notification } from 'src/types/Notifications';
-import Icon from './common/icon/Icon';
-import DivotPopover from './common/DivotPopover';
-import ErrorBox from './common/ErrorBox/ErrorBox';
 import preventDefault from 'src/utils/preventDefaultEvent';
 import stopPropagation from 'src/utils/stopPropagationEvent';
-import { makeStyles } from '@mui/styles';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import Timestamp from './common/Timestamp';
+
 import useFeatureNotifications from './FeatureNotification';
-import { Button, Tooltip } from '@terraware/web-components';
+import DivotPopover from './common/DivotPopover';
+import ErrorBox from './common/ErrorBox/ErrorBox';
+import Timestamp from './common/Timestamp';
+import Icon from './common/icon/Icon';
 
 interface StyleProps {
   isMobile?: boolean;

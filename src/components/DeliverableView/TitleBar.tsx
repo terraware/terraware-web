@@ -1,7 +1,9 @@
 import { Box, Typography, useTheme } from '@mui/material';
+
+import { useProjects } from 'src/hooks/useProjects';
 import strings from 'src/strings';
 import { categoryLabel } from 'src/types/Deliverables';
-import { useProjects } from 'src/hooks/useProjects';
+
 import { ViewProps } from './types';
 
 const TitleBar = ({ deliverable }: ViewProps): JSX.Element => {

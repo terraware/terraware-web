@@ -1,19 +1,22 @@
-import { Grid, Typography, useTheme } from '@mui/material';
-import { Theme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import Button from 'src/components/common/button/Button';
-import TextField from 'src/components/common/Textfield/Textfield';
-import { APP_PATHS } from 'src/constants';
-import strings from 'src/strings';
-import { OrganizationUserService } from 'src/services';
-import { OrganizationUser } from 'src/types/User';
+
+import { Grid, Typography, useTheme } from '@mui/material';
+import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
+
 import PageSnackbar from 'src/components/PageSnackbar';
-import TfMain from '../../components/common/TfMain';
 import BackToLink from 'src/components/common/BackToLink';
+import TextField from 'src/components/common/Textfield/Textfield';
+import Button from 'src/components/common/button/Button';
+import { APP_PATHS } from 'src/constants';
+import { OrganizationUserService } from 'src/services';
+import strings from 'src/strings';
+import { OrganizationUser } from 'src/types/User';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+import TfMain from '../../components/common/TfMain';
 import { useOrganization } from '../../providers/hooks';
 import { roleName } from '../../types/Organization';
 

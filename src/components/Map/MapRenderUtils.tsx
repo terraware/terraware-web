@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useMap } from 'react-map-gl';
+
+import { Box, IconButton, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Box, IconButton, Typography, useTheme, Theme } from '@mui/material';
 import { Button, Icon } from '@terraware/web-components';
-import { MapPopupRenderer, MapSourceProperties } from 'src/types/Map';
+
 import strings from 'src/strings';
+import { MapPopupRenderer, MapSourceProperties } from 'src/types/Map';
 
 const useStyles = makeStyles((theme: Theme) => ({
   popup: {

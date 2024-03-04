@@ -1,9 +1,12 @@
-import { Checkbox } from '@terraware/web-components';
 import { useCallback, useEffect, useState } from 'react';
-import strings from 'src/strings';
+
+import { Checkbox } from '@terraware/web-components';
+
 import isEnabled from 'src/features';
+import strings from 'src/strings';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
+
 import TimeZoneSelector from './TimeZoneSelector';
 
 type TimeZoneEntity = {

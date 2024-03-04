@@ -1,6 +1,8 @@
 import axios from 'axios';
+
 import { Device } from 'src/types/Device';
 import { Timeseries, TimeseriesHistory } from 'src/types/Timeseries';
+
 import addQueryParams from '../helpers/addQueryParams';
 import { paths } from '../types/generated-schema';
 

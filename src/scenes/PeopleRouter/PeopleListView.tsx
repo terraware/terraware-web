@@ -1,33 +1,36 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+
+import { Grid, Theme, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+
+import PageSnackbar from 'src/components/PageSnackbar';
+import Card from 'src/components/common/Card';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
+import { OrganizationService, OrganizationUserService, Response } from 'src/services';
+import { SearchService } from 'src/services';
 import strings from 'src/strings';
 import { OrganizationRole } from 'src/types/Organization';
+import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
 import { OrganizationUser } from 'src/types/User';
+import { isTfContact } from 'src/utils/organization';
+import { getRequestId, setRequestId } from 'src/utils/requestsId';
+import useDebounce from 'src/utils/useDebounce';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useSnackbar from 'src/utils/useSnackbar';
+
+import PageHeaderWrapper from '../../components/common/PageHeaderWrapper';
+import TextField from '../../components/common/Textfield/Textfield';
 import TfMain from '../../components/common/TfMain';
-import TableCellRenderer from './TableCellRenderer';
-import PageSnackbar from 'src/components/PageSnackbar';
-import RemovePeopleDialog from './RemovePeopleModal';
 import AssignNewOwnerDialog from '../MyAccountRouter/AssignNewOwnerModal';
 import DeleteOrgDialog from '../MyAccountRouter/DeleteOrgModal';
 import CannotRemovePeopleDialog from './CannotRemovePeopleModal';
-import { OrganizationService, OrganizationUserService, Response } from 'src/services';
-import { Grid, Theme, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import useSnackbar from 'src/utils/useSnackbar';
-import PageHeaderWrapper from '../../components/common/PageHeaderWrapper';
-import TextField from '../../components/common/Textfield/Textfield';
-import useDebounce from 'src/utils/useDebounce';
-import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
-import { SearchService } from 'src/services';
-import { getRequestId, setRequestId } from 'src/utils/requestsId';
-import { useUser, useOrganization, useLocalization } from 'src/providers/hooks';
-import { isTfContact } from 'src/utils/organization';
-import Card from 'src/components/common/Card';
+import RemovePeopleDialog from './RemovePeopleModal';
+import TableCellRenderer from './TableCellRenderer';
 
 const useStyles = makeStyles((theme: Theme) => ({
   title: {

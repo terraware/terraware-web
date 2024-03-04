@@ -1,19 +1,21 @@
-import { Typography, useTheme, Box } from '@mui/material';
-import { BusySpinner } from '@terraware/web-components';
 import React, { useEffect, useState } from 'react';
-import { Species } from 'src/types/Species';
-import { useOrganization } from 'src/providers/hooks';
-import { SpeciesService } from 'src/services';
+import { useHistory, useParams } from 'react-router-dom';
+
+import { Box, Typography, useTheme } from '@mui/material';
+import { BusySpinner } from '@terraware/web-components';
+
+import PageSnackbar from 'src/components/PageSnackbar';
+import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
-import { useHistory, useParams } from 'react-router-dom';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import PageSnackbar from 'src/components/PageSnackbar';
-import useSnackbar from 'src/utils/useSnackbar';
-import PageForm from 'src/components/common/PageForm';
-import useForm from 'src/utils/useForm';
+import { useOrganization } from 'src/providers/hooks';
 import SpeciesDetailsForm from 'src/scenes/Species/SpeciesDetailsForm';
+import { SpeciesService } from 'src/services';
 import strings from 'src/strings';
+import { Species } from 'src/types/Species';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
 
 function initSpecies(species?: Species): Species {
   return (

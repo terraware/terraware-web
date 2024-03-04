@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
-import { LocaleDetails } from '.';
+
 import useEnvironment from 'src/utils/useEnvironment';
+
+import { LocaleDetails } from '.';
 
 /** Supported locales in the order they should appear in the locale selector. */
 export const supportedLocales: LocaleDetails[] = [

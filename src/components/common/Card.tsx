@@ -1,5 +1,7 @@
 import { ReactNode } from 'react';
+
 import { Box, useTheme } from '@mui/material';
+
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 export type CardProps = {

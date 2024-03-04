@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Participant } from 'src/types/Participant';
-import { buildReducers, StatusT } from 'src/redux/features/asyncUtils';
+
+import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { requestParticipantsList } from 'src/redux/features/participants/participantsAsyncThunks';
+import { Participant } from 'src/types/Participant';
 
 /**
  * Participant list

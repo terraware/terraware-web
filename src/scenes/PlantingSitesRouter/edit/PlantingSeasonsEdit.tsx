@@ -1,12 +1,14 @@
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+
 import { Box, Grid } from '@mui/material';
 import { DateTime, DurationLike } from 'luxon';
-import strings from 'src/strings';
-import { TimeZoneDescription } from 'src/types/TimeZones';
+
 import AddLink from 'src/components/common/AddLink';
 import DatePicker from 'src/components/common/DatePicker';
-import Icon from 'src/components/common/icon/Icon';
 import Link from 'src/components/common/Link';
+import Icon from 'src/components/common/icon/Icon';
+import strings from 'src/strings';
+import { TimeZoneDescription } from 'src/types/TimeZones';
 
 // Minimum length of a planting season.
 const minDuration: DurationLike = { weeks: 4 };

@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import strings from 'src/strings';
+import React, { useEffect, useState } from 'react';
+
 import { Grid, useTheme } from '@mui/material';
-import { AccessionPostRequestBody } from 'src/services/SeedBankService';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { getAllSeedBanks } from 'src/utils/organization';
-import { Facility, SubLocation } from 'src/types/Facility';
-import { SubLocationService } from 'src/services';
-import { SubLocationSelector, FacilitySelector } from './index';
+
 import { useLocalization, useOrganization } from 'src/providers/hooks';
+import { SubLocationService } from 'src/services';
+import { AccessionPostRequestBody } from 'src/services/SeedBankService';
+import strings from 'src/strings';
+import { Facility, SubLocation } from 'src/types/Facility';
+import { getAllSeedBanks } from 'src/utils/organization';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+import { FacilitySelector, SubLocationSelector } from './index';
 
 type SeedBank2SelectorProps = {
   record: AccessionPostRequestBody;

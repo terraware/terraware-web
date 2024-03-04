@@ -1,22 +1,24 @@
 import { useMemo, useState } from 'react';
-import { makeStyles } from '@mui/styles';
-import { Box } from '@mui/material';
 import { useHistory, useParams } from 'react-router-dom';
+
+import { Box } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { TableColumnType } from '@terraware/web-components';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
-import strings from 'src/strings';
-import { APP_PATHS } from 'src/constants';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-import { useAppSelector } from 'src/redux/store';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { searchPlantingSiteMonitoringPlots } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
-import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
-import { RendererProps } from 'src/components/common/table/types';
-import Card from 'src/components/common/Card';
-import Table from 'src/components/common/table';
-import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
+
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
+import Card from 'src/components/common/Card';
+import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
+import Table from 'src/components/common/table';
+import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
+import { RendererProps } from 'src/components/common/table/types';
+import { APP_PATHS } from 'src/constants';
+import { searchPlantingSiteMonitoringPlots } from 'src/redux/features/observations/plantingSiteDetailsSelectors';
+import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+import { useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 const useStyles = makeStyles(() => ({
   text: {

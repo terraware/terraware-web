@@ -1,18 +1,20 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router';
+import { useParams } from 'react-router-dom';
+
 import { Typography } from '@mui/material';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { selectProject, selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
-import { requestProject } from 'src/redux/features/projects/projectsThunks';
-import TfMain from 'src/components/common/TfMain';
-import strings from 'src/strings';
+
 import ProjectForm from 'src/components/ProjectNewView/flow/ProjectForm';
-import { UpdateProjectRequest } from 'src/types/Project';
-import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { requestProjectUpdate } from 'src/redux/features/projects/projectsAsyncThunks';
+import { selectProject, selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
+import { requestProject } from 'src/redux/features/projects/projectsThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
+import { UpdateProjectRequest } from 'src/types/Project';
 import useSnackbar from 'src/utils/useSnackbar';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 export default function ProjectEditView(): JSX.Element {
   const dispatch = useAppDispatch();

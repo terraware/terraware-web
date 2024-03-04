@@ -1,8 +1,11 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
+
 import { Box, useTheme } from '@mui/material';
 import { keyframes } from '@mui/system';
-import useDebounce from '../../utils/useDebounce';
+
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+import useDebounce from '../../utils/useDebounce';
 
 const TOP_BAR_HEIGHT = 64;
 const DEBOUNCE_TIME = 500;

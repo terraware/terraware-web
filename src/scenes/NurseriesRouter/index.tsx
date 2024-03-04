@@ -1,12 +1,13 @@
 import React, { useCallback } from 'react';
 import { Route, Switch } from 'react-router-dom';
+
+import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
-import { isPlaceholderOrg, selectedOrgHasFacilityType } from 'src/utils/organization';
-import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
-import NurseryView from 'src/scenes/NurseriesRouter/NurseryView';
-import NurseryDetailsView from 'src/scenes/NurseriesRouter/NurseryDetailsView';
 import NurseriesListView from 'src/scenes/NurseriesRouter/NurseriesListView';
+import NurseryDetailsView from 'src/scenes/NurseriesRouter/NurseryDetailsView';
+import NurseryView from 'src/scenes/NurseriesRouter/NurseryView';
+import { isPlaceholderOrg, selectedOrgHasFacilityType } from 'src/utils/organization';
 
 const NurseriesRouter = () => {
   const { selectedOrganization } = useOrganization();

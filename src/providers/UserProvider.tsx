@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { User } from 'src/types/User';
-import { PreferencesService, UserService } from 'src/services';
-import { UserContext } from './contexts';
-import { PreferencesType, ProvidedUserData } from './DataTypes';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { updateGtmInstrumented } from 'src/redux/features/user/userAnalyticsSlice';
+
 import { selectUserAnalytics } from 'src/redux/features/user/userAnalyticsSelectors';
+import { updateGtmInstrumented } from 'src/redux/features/user/userAnalyticsSlice';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { PreferencesService, UserService } from 'src/services';
+import { User } from 'src/types/User';
 import { GlobalRolePermission, isAllowed as isAllowedACL } from 'src/utils/acl';
+
+import { PreferencesType, ProvidedUserData } from './DataTypes';
+import { UserContext } from './contexts';
 
 export type UserProviderProps = {
   children?: React.ReactNode;

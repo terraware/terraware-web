@@ -1,10 +1,12 @@
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';
-import { Accession } from 'src/types/Accession';
+
 import AccessionService from 'src/services/AccessionService';
 import strings from 'src/strings';
-import useSnackbar from 'src/utils/useSnackbar';
+import { Accession } from 'src/types/Accession';
 import { ViabilityTest } from 'src/types/Accession';
+import useSnackbar from 'src/utils/useSnackbar';
+
 import { getCutTestViabilityPercent } from './utils';
 
 export interface ViabilityResultModalProps {

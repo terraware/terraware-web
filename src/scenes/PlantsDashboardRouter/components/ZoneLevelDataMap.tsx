@@ -1,21 +1,23 @@
-import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
-import strings from 'src/strings';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import MapLegend, { MapLegendGroup } from 'src/components/common/MapLegend';
-import { getRgbaFromHex } from 'src/utils/color';
-import { useAppSelector } from 'src/redux/store';
-import { selectPlantingSite, selectZoneProgress } from 'src/redux/features/tracking/trackingSelectors';
-import { PlantingSiteMap } from 'src/components/Map';
-import { MapService } from 'src/services';
-import { getShortDate } from 'src/utils/dateFormatter';
-import { useLocalization } from 'src/providers';
-import { MapSourceProperties } from 'src/types/Map';
-import { MapTooltip, TooltipProperty } from 'src/components/Map/MapRenderUtils';
+
+import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { selectZonePopulationStats } from 'src/redux/features/tracking/sitePopulationSelector';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+
+import { PlantingSiteMap } from 'src/components/Map';
+import { MapTooltip, TooltipProperty } from 'src/components/Map/MapRenderUtils';
+import MapLegend, { MapLegendGroup } from 'src/components/common/MapLegend';
+import { useLocalization } from 'src/providers';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
-import { ObservationResults, ObservationPlantingZoneResults } from 'src/types/Observations';
+import { selectZonePopulationStats } from 'src/redux/features/tracking/sitePopulationSelector';
+import { selectPlantingSite, selectZoneProgress } from 'src/redux/features/tracking/trackingSelectors';
+import { useAppSelector } from 'src/redux/store';
+import { MapService } from 'src/services';
+import strings from 'src/strings';
+import { MapSourceProperties } from 'src/types/Map';
+import { ObservationPlantingZoneResults, ObservationResults } from 'src/types/Observations';
+import { getRgbaFromHex } from 'src/utils/color';
+import { getShortDate } from 'src/utils/dateFormatter';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 export const useStyles = makeStyles(() => ({
   popup: {

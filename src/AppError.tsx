@@ -1,11 +1,13 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
-import { APP_PATHS } from 'src/constants';
-import useQuery from './utils/useQuery';
-import ErrorContent from './ErrorContent';
 import { Provider } from 'react-redux';
+import { Route, Switch } from 'react-router-dom';
+
+import { APP_PATHS } from 'src/constants';
+
 import AppBootstrap from './AppBootstrap';
+import ErrorContent from './ErrorContent';
 import { store } from './redux/store';
+import useQuery from './utils/useQuery';
 
 export default function AppError() {
   return (

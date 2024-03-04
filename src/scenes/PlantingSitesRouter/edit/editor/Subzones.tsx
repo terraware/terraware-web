@@ -1,11 +1,17 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+
 import { Box, Typography, useTheme } from '@mui/material';
-import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
 import { Textfield } from '@terraware/web-components';
-import strings from 'src/strings';
-import { MinimalPlantingSubzone, MinimalPlantingZone } from 'src/types/Tracking';
-import { DraftPlantingSite } from 'src/types/PlantingSite';
+import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
+
+import EditableMap, { LayerFeature } from 'src/components/Map/EditableMapV2';
+import MapIcon from 'src/components/Map/MapIcon';
+import { MapTooltipDialog } from 'src/components/Map/MapRenderUtils';
+import useRenderAttributes from 'src/components/Map/useRenderAttributes';
+import { leftMostFeature, leftOrderedFeatures, toMultiPolygon } from 'src/components/Map/utils';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
+import { useLocalization } from 'src/providers';
+import strings from 'src/strings';
 import {
   GeometryFeature,
   MapEntityOptions,
@@ -14,27 +20,24 @@ import {
   PopupInfo,
   RenderableReadOnlyBoundary,
 } from 'src/types/Map';
-import MapIcon from 'src/components/Map/MapIcon';
+import { DraftPlantingSite } from 'src/types/PlantingSite';
+import { MinimalPlantingSubzone, MinimalPlantingZone } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
-import { useLocalization } from 'src/providers';
-import useRenderAttributes from 'src/components/Map/useRenderAttributes';
-import { leftMostFeature, leftOrderedFeatures, toMultiPolygon } from 'src/components/Map/utils';
-import { MapTooltipDialog } from 'src/components/Map/MapRenderUtils';
-import EditableMap, { LayerFeature } from 'src/components/Map/EditableMapV2';
+
 import StepTitleDescription, { Description } from './StepTitleDescription';
+import { OnValidate } from './types';
+import useStyles from './useMapStyle';
 import {
+  IdGenerator,
   cutOverlappingBoundaries,
   emptyBoundary,
   getLatestFeature,
-  IdGenerator,
   plantingSubzoneToFeature,
   plantingZoneToFeature,
   subzoneNameGenerator,
   toIdentifiableFeature,
   toZoneFeature,
 } from './utils';
-import useStyles from './useMapStyle';
-import { OnValidate } from './types';
 
 export type SubzonesProps = {
   onValidate?: OnValidate;

@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material';
 import { IconTooltip } from '@terraware/web-components';
+
 import strings from 'src/strings';
 import { convertValue } from 'src/units';
 

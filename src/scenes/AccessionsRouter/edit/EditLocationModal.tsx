@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import strings from 'src/strings';
-import Button from 'src/components/common/button/Button';
-import DialogBox from 'src/components/common/DialogBox/DialogBox';
+
 import { Grid } from '@mui/material';
-import { Facility, SubLocation } from 'src/types/Facility';
-import theme from 'src/theme';
-import { getAllSeedBanks } from 'src/utils/organization';
-import { Accession } from 'src/types/Accession';
-import AccessionService from 'src/services/AccessionService';
-import useForm from 'src/utils/useForm';
-import { SubLocationService } from 'src/services';
-import { FacilitySelector, SubLocationSelector } from '../properties';
-import useSnackbar from 'src/utils/useSnackbar';
+
+import DialogBox from 'src/components/common/DialogBox/DialogBox';
+import Button from 'src/components/common/button/Button';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
+import { SubLocationService } from 'src/services';
+import AccessionService from 'src/services/AccessionService';
+import strings from 'src/strings';
+import theme from 'src/theme';
+import { Accession } from 'src/types/Accession';
+import { Facility, SubLocation } from 'src/types/Facility';
+import { getAllSeedBanks } from 'src/utils/organization';
+import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
+
+import { FacilitySelector, SubLocationSelector } from '../properties';
 
 export interface EditLocationModalProps {
   open: boolean;

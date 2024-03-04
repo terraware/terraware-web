@@ -1,16 +1,19 @@
-import { Box, Divider, Grid, useTheme } from '@mui/material';
-import { Button, DialogBox, Textfield } from '@terraware/web-components';
-import strings from 'src/strings';
-import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
-import { BatchHistoryItemForTable } from './BatchHistory';
-import { getEventType } from './BatchHistoryRenderer';
 import { useEffect, useState } from 'react';
+
+import { Box, Divider, Grid, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { Button, DialogBox, Textfield } from '@terraware/web-components';
+import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
+
+import { useOrganization } from 'src/providers';
 import { NurseryBatchService } from 'src/services';
+import { BATCH_PHOTO_ENDPOINT } from 'src/services/NurseryBatchService';
+import strings from 'src/strings';
 import { Batch } from 'src/types/Batch';
 import { getNurseryById } from 'src/utils/organization';
-import { useOrganization } from 'src/providers';
-import { BATCH_PHOTO_ENDPOINT } from 'src/services/NurseryBatchService';
-import { makeStyles } from '@mui/styles';
+
+import { BatchHistoryItemForTable } from './BatchHistory';
+import { getEventType } from './BatchHistoryRenderer';
 
 export interface EventDetailsModalProps {
   onClose: () => void;

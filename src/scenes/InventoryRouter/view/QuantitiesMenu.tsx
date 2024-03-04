@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+
 import { MenuItem, MenuList, Popover, Typography, useTheme } from '@mui/material';
 import { Button, Tooltip } from '@terraware/web-components';
+
 import strings from 'src/strings';
+
 import { ModalValuesType } from './BatchesCellRenderer';
 
 export type QuantitiesMenuProps = {

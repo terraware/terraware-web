@@ -1,8 +1,10 @@
+import React from 'react';
+
 import { Container } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React from 'react';
-import TfMain from 'src/components/common/TfMain';
+
 import PageHeader from 'src/components/PageHeader';
+import TfMain from 'src/components/common/TfMain';
 
 type AcceleratorMainProps = {
   children?: React.ReactNode;

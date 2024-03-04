@@ -1,12 +1,14 @@
 import React from 'react';
-import strings from 'src/strings';
-import Button from 'src/components/common/button/Button';
-import DialogBox from 'src/components/common/DialogBox/DialogBox';
-import { Typography } from '@mui/material';
-import { Accession } from 'src/types/Accession';
-import AccessionService from 'src/services/AccessionService';
-import { APP_PATHS } from 'src/constants';
 import { useHistory } from 'react-router-dom';
+
+import { Typography } from '@mui/material';
+
+import DialogBox from 'src/components/common/DialogBox/DialogBox';
+import Button from 'src/components/common/button/Button';
+import { APP_PATHS } from 'src/constants';
+import AccessionService from 'src/services/AccessionService';
+import strings from 'src/strings';
+import { Accession } from 'src/types/Accession';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export interface DeleteAccessionModalProps {

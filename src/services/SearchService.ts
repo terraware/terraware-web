@@ -1,5 +1,6 @@
 import { paths } from 'src/api/types/generated-schema';
-import { SearchNodePayload, SearchCriteria, SearchResponseElement } from 'src/types/Search';
+import { SearchCriteria, SearchNodePayload, SearchResponseElement } from 'src/types/Search';
+
 import HttpService from './HttpService';
 
 /**

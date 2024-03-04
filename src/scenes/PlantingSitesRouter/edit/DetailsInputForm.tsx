@@ -1,20 +1,23 @@
 import { useCallback, useEffect, useState } from 'react';
+
 import { Grid } from '@mui/material';
-import strings from 'src/strings';
-import { useDeviceInfo } from '@terraware/web-components/utils';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
-import { MinimalPlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
+import { useDeviceInfo } from '@terraware/web-components/utils';
+
+import LocationTimeZoneSelector from 'src/components/LocationTimeZoneSelector';
+import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import isEnabled from 'src/features';
-import { TimeZoneDescription } from 'src/types/TimeZones';
-import { useLocalization, useOrganization } from 'src/providers';
 import { useProjects } from 'src/hooks/useProjects';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
-import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
+import { useLocalization, useOrganization } from 'src/providers';
 import { selectDraftPlantingSites } from 'src/redux/features/draftPlantingSite/draftPlantingSiteSelectors';
 import { requestSearchDrafts } from 'src/redux/features/draftPlantingSite/draftPlantingSiteThunks';
-import ProjectsDropdown from 'src/components/ProjectsDropdown';
-import LocationTimeZoneSelector from 'src/components/LocationTimeZoneSelector';
+import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
+import { TimeZoneDescription } from 'src/types/TimeZones';
+import { MinimalPlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
+
 import PlantingSeasonsEdit from './PlantingSeasonsEdit';
 
 export type DetailsInputFormProps<T extends MinimalPlantingSite> = {

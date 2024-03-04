@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+
 import { Box } from '@mui/material';
 import { Button, DropdownItem, Popover, Tooltip } from '@terraware/web-components';
+
 import strings from 'src/strings';
 
 export type OptionsMenuProps = {

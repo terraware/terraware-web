@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Species } from 'src/types/Species';
-import { Delivery } from 'src/types/Tracking';
+
 import { TableColumnType } from '@terraware/web-components';
-import strings from 'src/strings';
+
 import Table from 'src/components/common/table';
 import { useUser } from 'src/providers';
+import strings from 'src/strings';
+import { Species } from 'src/types/Species';
+import { Delivery } from 'src/types/Tracking';
 import { useNumberFormatter } from 'src/utils/useNumber';
 
 type OutplantReassignmentTableProps = {

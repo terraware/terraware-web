@@ -1,8 +1,10 @@
 import { useMemo } from 'react';
+
 import { Box, useTheme } from '@mui/material';
+
+import MapLegend from 'src/components/common/MapLegend';
 import strings from 'src/strings';
 import { getRgbaFromHex } from 'src/utils/color';
-import MapLegend from 'src/components/common/MapLegend';
 
 export type PlantingSiteMapLegendOption = 'site' | 'zone' | 'subzone' | 'permanentPlot' | 'temporaryPlot';
 

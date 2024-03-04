@@ -1,7 +1,7 @@
 import ExportCsvModal from 'src/components/common/ExportCsvModal';
 import { NurseryBatchService } from 'src/services';
-import NurseryInventoryService, { SearchInventoryParams } from 'src/services/NurseryInventoryService';
 import { SEARCH_FIELDS_NON_EMPTY_BATCHES } from 'src/services/NurseryBatchService';
+import NurseryInventoryService, { SearchInventoryParams } from 'src/services/NurseryInventoryService';
 
 interface DownloadReportModalProps {
   reportData: SearchInventoryParams;

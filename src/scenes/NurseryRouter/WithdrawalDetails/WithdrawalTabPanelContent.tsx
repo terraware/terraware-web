@@ -1,12 +1,14 @@
 import { Box, Typography, useTheme } from '@mui/material';
+
 import strings from 'src/strings';
-import Photos from './sections/Photos';
-import OutplantWithdrawalTable from './sections/OutplantWithdrawalTable';
 import { Batch, NurseryWithdrawal } from 'src/types/Batch';
-import { Delivery } from 'src/types/Tracking';
 import { Species } from 'src/types/Species';
+import { Delivery } from 'src/types/Tracking';
+
 import { WithdrawalSummary } from '../NurseryWithdrawalsDetailsView';
 import WithdrawalOverview from './WithdrawalOverview';
+import OutplantWithdrawalTable from './sections/OutplantWithdrawalTable';
+import Photos from './sections/Photos';
 
 type WithdrawalTabPanelContentProps = {
   species: Species[];

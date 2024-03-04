@@ -1,15 +1,18 @@
 import React, { useMemo, useRef, useState } from 'react';
+
 import { Grid, Typography } from '@mui/material';
 import { Separator, TableColumnType } from '@terraware/web-components';
+
+import DeliverablesTable from 'src/components/DeliverablesTable';
+import PageHeader from 'src/components/PageHeader';
+import ParticipantsDropdown from 'src/components/ParticipantsDropdown';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import { useParticipants } from 'src/hooks/useParticipants';
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import theme from 'src/theme';
 import { SearchNodePayload } from 'src/types/Search';
-import { useLocalization } from 'src/providers';
-import { useParticipants } from 'src/hooks/useParticipants';
-import PageHeader from 'src/components/PageHeader';
-import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import ParticipantsDropdown from 'src/components/ParticipantsDropdown';
-import DeliverablesTable from 'src/components/DeliverablesTable';
+
 import AcceleratorMain from './AcceleratorMain';
 
 const columns = (activeLocale: string | null): TableColumnType[] =>

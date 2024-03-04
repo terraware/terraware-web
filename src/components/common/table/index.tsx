@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Table as WebComponentsTable, TableColumnType, TableRowType } from '@terraware/web-components';
-import strings from 'src/strings';
+
+import { TableColumnType, TableRowType, Table as WebComponentsTable } from '@terraware/web-components';
 import { LocalizationProps, Props } from '@terraware/web-components/components/table';
+import _ from 'lodash';
+
 import { useLocalization, useOrganization } from 'src/providers';
 import { PreferencesService } from 'src/services';
-import _ from 'lodash';
+import strings from 'src/strings';
 
 function renderPaginationText(from: number, to: number, total: number): string {
   if (total > 0) {

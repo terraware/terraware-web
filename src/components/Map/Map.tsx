@@ -1,7 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Box, Theme, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, {
   AttributionControl,
   FullscreenControl,
@@ -11,29 +8,36 @@ import ReactMapGL, {
   Popup,
   Source,
 } from 'react-map-gl';
-import {
-  MapControl,
-  MapEntityId,
-  MapEntityOptions,
-  MapOptions,
-  MapPopupRenderer,
-  MapGeometry,
-  MapViewStyles,
-  PopupInfo,
-} from 'src/types/Map';
-import { MapService } from 'src/services';
-import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
-import { getMapDrawingLayer } from './utils';
+
+import { Box, Theme, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { Icon } from '@terraware/web-components';
 
 /**
  * The following is needed to deal with a mapbox bug
  * See: https://docs.mapbox.com/mapbox-gl-js/guides/install/#transpiling
  */
 import mapboxgl from 'mapbox-gl';
-import MapBanner from './MapBanner';
+import 'mapbox-gl/dist/mapbox-gl.css';
+
 import { useIsVisible } from 'src/hooks/useIsVisible';
+import { MapService } from 'src/services';
+import {
+  MapControl,
+  MapEntityId,
+  MapEntityOptions,
+  MapGeometry,
+  MapOptions,
+  MapPopupRenderer,
+  MapViewStyles,
+  PopupInfo,
+} from 'src/types/Map';
 import useSnackbar from 'src/utils/useSnackbar';
-import { Icon } from '@terraware/web-components';
+
+import MapBanner from './MapBanner';
+import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
+import { getMapDrawingLayer } from './utils';
+
 const mapboxImpl: any = mapboxgl;
 // @tslint
 // eslint-disable-next-line import/no-webpack-loader-syntax

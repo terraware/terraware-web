@@ -1,13 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import ReactMapGL, { FullscreenControl, LngLatBoundsLike, MapRef } from 'react-map-gl';
-import EditableMapDraw, { MapEditorMode } from 'src/components/Map/EditableMapDraw';
-import useMapboxToken from 'src/utils/useMapboxToken';
+
 import { Box, Typography, useTheme } from '@mui/material';
-import { useIsVisible } from 'src/hooks/useIsVisible';
 import bbox from '@turf/bbox';
 import { MultiPolygon } from 'geojson';
+
+import EditableMapDraw, { MapEditorMode } from 'src/components/Map/EditableMapDraw';
+import { useIsVisible } from 'src/hooks/useIsVisible';
 import strings from 'src/strings';
 import { MapViewStyles } from 'src/types/Map';
+import useMapboxToken from 'src/utils/useMapboxToken';
+
 import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
 
 export type EditableMapProps = {

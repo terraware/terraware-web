@@ -1,11 +1,13 @@
 import { useCallback, useMemo, useState } from 'react';
-import { Box, CircularProgress, useTheme, Theme } from '@mui/material';
+
+import { Box, CircularProgress, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
+
+import { requestGetDeliverable } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
+import { useAppDispatch } from 'src/redux/store';
 import strings from 'src/strings';
 import { Deliverable } from 'src/types/Deliverables';
-import { useAppDispatch } from 'src/redux/store';
-import { requestGetDeliverable } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   description: {
