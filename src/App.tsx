@@ -14,11 +14,11 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useAppVersion } from 'src/hooks/useAppVersion';
 import { useLocalization, useUser } from 'src/providers';
 import { store } from 'src/redux/store';
-import TerrawareRouter from 'src/scenes/TerrawareRouter';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const AcceleratorRouter = React.lazy(() => import('src/scenes/AcceleratorRouter'));
+const TerrawareRouter = React.lazy(() => import('src/scenes/TerrawareRouter'));
 
 interface StyleProps {
   isDesktop?: boolean;
