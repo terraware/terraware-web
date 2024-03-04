@@ -5,6 +5,7 @@ import { useHistory } from 'react-router';
 
 import { CssBaseline, StyledEngineProvider, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { BusySpinner } from '@terraware/web-components';
 
 import AppBootstrap from 'src/AppBootstrap';
 import ToastSnackbar from 'src/components/ToastSnackbar';
@@ -15,12 +16,13 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useAppVersion } from 'src/hooks/useAppVersion';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { store } from 'src/redux/store';
-import AcceleratorRouter from 'src/scenes/AcceleratorRouter';
-import NoOrgRouter from 'src/scenes/NoOrgRouter';
-import TerrawareRouter from 'src/scenes/TerrawareRouter';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStateLocation from 'src/utils/useStateLocation';
+
+const AcceleratorRouter = React.lazy(() => import('src/scenes/AcceleratorRouter'));
+const NoOrgRouter = React.lazy(() => import('src/scenes/NoOrgRouter'));
+const TerrawareRouter = React.lazy(() => import('src/scenes/TerrawareRouter'));
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -114,14 +116,16 @@ function AppContent() {
       </TopBar>
 
       <div className={classes.container}>
-        {/* TODO NoOrgRouter should be put inside the TerrawareRouter */}
-        {!isAcceleratorRoute && organizations.length === 0 ? (
-          <NoOrgRouter />
-        ) : isAcceleratorRoute && featureFlagAccelerator && isAllowed('VIEW_CONSOLE') ? (
-          <AcceleratorRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
-        ) : (
-          <TerrawareRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
-        )}
+        <React.Suspense fallback={<BusySpinner withSkrim />}>
+          {/* TODO NoOrgRouter should be put inside the TerrawareRouter */}
+          {!isAcceleratorRoute && organizations.length === 0 ? (
+            <NoOrgRouter />
+          ) : isAcceleratorRoute && featureFlagAccelerator && isAllowed('VIEW_CONSOLE') ? (
+            <AcceleratorRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
+          ) : (
+            <TerrawareRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
+          )}
+        </React.Suspense>
       </div>
     </StyledEngineProvider>
   );
