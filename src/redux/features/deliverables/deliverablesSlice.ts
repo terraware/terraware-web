@@ -5,6 +5,7 @@ import {
   requestGetDeliverable,
   requestListDeliverables,
   requestUpdateDeliverable,
+  requestUploadDeliverableDocument,
 } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import { Deliverable, DeliverablesData } from 'src/types/Deliverables';
 
@@ -52,6 +53,7 @@ export const deliverablesEditSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     buildReducers(requestUpdateDeliverable)(builder);
+    buildReducers(requestUploadDeliverableDocument)(builder);
   },
 });
 

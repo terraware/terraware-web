@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { Box } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
@@ -12,7 +12,7 @@ import { EditProps } from 'src/components/DeliverableView/types';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import DocumentsList from 'src/scenes/AcceleratorRouter/DocumentsList';
 import RejectedDeliverableMessage from 'src/scenes/AcceleratorRouter/RejectedDeliverableMessage';
 import strings from 'src/strings';
@@ -27,6 +27,9 @@ const DeliverableView = (props: Props): JSX.Element => {
   const { ...viewProps }: Props = props;
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
+  const { isAllowed } = useUser();
+  const theme = useTheme();
+  const canEdit = isAllowed('UPDATE_PROJECT_ACCELERATOR_DATA');
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -43,13 +46,16 @@ const DeliverableView = (props: Props): JSX.Element => {
   }
 
   return (
-    <Page title={<TitleBar {...viewProps} />} rightComponent={props.callToAction} crumbs={crumbs}>
+    <Page title={<TitleBar {...viewProps} />} rightComponent={canEdit ? props.callToAction : undefined} crumbs={crumbs}>
       {props.isBusy && <BusySpinner />}
       <Box display='flex' flexDirection='column' flexGrow={1}>
         <RejectedDeliverableMessage {...viewProps} />
         <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
           <Metadata {...viewProps} />
-          <DocumentsUploader {...viewProps} />
+          <Typography marginBottom={theme.spacing(2)} fontSize='20px' lineHeight='28px' fontWeight={600}>
+            {strings.DOCUMENTS}
+          </Typography>
+          {canEdit && <DocumentsUploader {...viewProps} />}
           <DocumentsList {...viewProps} />
         </Card>
       </Box>
