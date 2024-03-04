@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -123,7 +123,13 @@
 <a name='L58'></a><a href='#L58'>58</a>
 <a name='L59'></a><a href='#L59'>59</a>
 <a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -152,6 +158,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -168,6 +177,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -185,7 +197,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useMemo } from 'react';
 &nbsp;
-import { Box } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
 &nbsp;
 import { Crumb } from 'src/components/BreadCrumbs';
@@ -197,7 +209,7 @@ import { EditProps } from 'src/components/DeliverableView/types';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import DocumentsList from 'src/scenes/AcceleratorRouter/DocumentsList';
 import RejectedDeliverableMessage from 'src/scenes/AcceleratorRouter/RejectedDeliverableMessage';
 import strings from 'src/strings';
@@ -212,6 +224,9 @@ const DeliverableView = <span class="cstat-no" title="statement not covered" ><s
   const { ...viewProps }: Props = <span class="cstat-no" title="statement not covered" >props;</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
+  const { isAllowed } = <span class="cstat-no" title="statement not covered" >useUser();</span>
+  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
+  const canEdit = <span class="cstat-no" title="statement not covered" >isAllowed('UPDATE_PROJECT_ACCELERATOR_DATA');</span>
 &nbsp;
   const crumbs: Crumb[] = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >[</span>
@@ -228,13 +243,16 @@ const DeliverableView = <span class="cstat-no" title="statement not covered" ><s
   }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Page title={&lt;TitleBar {...viewProps} /&gt;} rightComponent={props.callToAction} crumbs={crumbs}&gt;
+    &lt;Page title={&lt;TitleBar {...viewProps} /&gt;} rightComponent={canEdit ? props.callToAction : undefined} crumbs={crumbs}&gt;
       {props.isBusy &amp;&amp; &lt;BusySpinner /&gt;}
       &lt;Box display='flex' flexDirection='column' flexGrow={1}&gt;
         &lt;RejectedDeliverableMessage {...viewProps} /&gt;
         &lt;Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}&gt;
           &lt;Metadata {...viewProps} /&gt;
-          &lt;DocumentsUploader {...viewProps} /&gt;
+          &lt;Typography marginBottom={theme.spacing(2)} fontSize='20px' lineHeight='28px' fontWeight={600}&gt;
+            {strings.DOCUMENTS}
+          &lt;/Typography&gt;
+          {canEdit &amp;&amp; &lt;DocumentsUploader {...viewProps} /&gt;}
           &lt;DocumentsList {...viewProps} /&gt;
         &lt;/Card&gt;
       &lt;/Box&gt;
@@ -250,7 +268,7 @@ export default DeliverableView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-04T20:37:24.519Z
+                at 2024-03-04T22:49:16.267Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

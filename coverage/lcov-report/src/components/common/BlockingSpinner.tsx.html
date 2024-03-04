@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/types/Facility.ts</title>
+    <title>Code coverage report for src/components/common/BlockingSpinner.tsx</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../prettify.css" />
-    <link rel="stylesheet" href="../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../sort-arrow-sprite.png);
+            background-image: url(../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/types</a> Facility.ts</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/common</a> BlockingSpinner.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
@@ -93,12 +93,10 @@
 <a name='L28'></a><a href='#L28'>28</a>
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -119,43 +117,42 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { components } from 'src/api/types/generated-schema';
-import strings from 'src/strings';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { CircularProgress, StyledEngineProvider, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 &nbsp;
-export type SubLocation = components['schemas']['SubLocationPayload'];
+const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+  spinner: {
+    height: '200px',
+    width: '200px',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    margin: 'auto',
+    '&amp; .MuiCircularProgress-svg': {
+      color: theme.palette.TwClrIcnBrand,
+      height: '200px',
+      width: '200px',
+    },
+  },
+}));
 &nbsp;
-export type PartialSubLocation = Partial&lt;SubLocation&gt;;
+export default function <span class="fstat-no" title="function not covered" >BlockingSpinner(</span>): JSX.Element {
+  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
 &nbsp;
-export type FacilityType = components['schemas']['FacilityPayload']['type'];
-&nbsp;
-export interface Facility {
-  id: number;
-  name: string;
-  description?: string;
-  organizationId: number;
-  type: FacilityType;
-  connectionState: 'Not Connected' | 'Connected' | 'Configured';
-  timeZone?: string;
-  buildStartedDate?: string;
-  buildCompletedDate?: string;
-  operationStartedDate?: string;
-  capacity?: number;
+<span class="cstat-no" title="statement not covered" >  return (</span>
+    &lt;StyledEngineProvider injectFirst&gt;
+      &lt;CircularProgress className={classes.spinner} size='193' /&gt;
+    &lt;/StyledEngineProvider&gt;
+  );
 }
-&nbsp;
-export const DEFAULT_SUB_LOCATIONS = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span>: string[] =&gt; <span class="cstat-no" title="statement not covered" >[</span></span>
-  strings.FREEZER_1,
-  strings.FREEZER_2,
-  strings.FREEZER_3,
-  strings.REFRIGERATOR_1,
-  strings.REFRIGERATOR_2,
-  strings.REFRIGERATOR_3,
-];
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -165,14 +162,14 @@ export const DEFAULT_SUB_LOCATIONS = <span class="cstat-no" title="statement not
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
                 at 2024-03-04T22:49:16.267Z
             </div>
-        <script src="../../prettify.js"></script>
+        <script src="../../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../sorter.js"></script>
-        <script src="../../block-navigation.js"></script>
+        <script src="../../../sorter.js"></script>
+        <script src="../../../block-navigation.js"></script>
     </body>
 </html>
     
