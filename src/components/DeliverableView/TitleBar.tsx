@@ -1,6 +1,5 @@
 import { Box, Typography, useTheme } from '@mui/material';
 
-import { useProjects } from 'src/hooks/useProjects';
 import strings from 'src/strings';
 import { categoryLabel } from 'src/types/Deliverables';
 
@@ -8,7 +7,6 @@ import { ViewProps } from './types';
 
 const TitleBar = ({ deliverable }: ViewProps): JSX.Element => {
   const { category, name } = deliverable;
-  const { selectedProject } = useProjects(deliverable);
   const theme = useTheme();
 
   return (
@@ -21,7 +19,7 @@ const TitleBar = ({ deliverable }: ViewProps): JSX.Element => {
     >
       <Box display='flex' flexDirection='column'>
         <Typography fontSize='14px' lineHeight='20px' fontWeight={400} color={theme.palette.TwClrTxt}>
-          {strings.formatString(strings.DELIVERABLE_PROJECT, selectedProject?.name ?? '')}
+          {strings.formatString(strings.DELIVERABLE_PROJECT, deliverable.projectName ?? '')}
         </Typography>
         <Typography
           fontSize='24px'
