@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import { requestListGlobalRolesUsers, requestUpdateGlobalRolesUser } from './globalRolesAsyncThunks';
 import { GlobalRolesUsersData } from 'src/types/GlobalRoles';
+
+import { requestListGlobalRolesUsers, requestUpdateGlobalRolesUser } from './globalRolesAsyncThunks';
 
 /**
  * Users with global roles list
