@@ -1,3 +1,4 @@
+b9ec49f204 SW-4948: Accelerator console routes are redirected to Terraware home with reload (#2256)
 683d4c9842 Add permission guards for add/edit cohorts (#2258)
 729267610e Updated translations from Phrase (#2255)
 7d686b1b55 SW-3877 Reformat import statements via prettier (#2254)
