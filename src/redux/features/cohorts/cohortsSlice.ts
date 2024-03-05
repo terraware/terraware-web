@@ -3,7 +3,7 @@ import { ActionReducerMapBuilder, PayloadAction, createSlice } from '@reduxjs/to
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { requestCohortDelete, requestCohortUpdate } from 'src/redux/features/cohorts/cohortsAsyncThunks';
 import { UpdateCohortResponsePayload } from 'src/services/CohortService';
-import { Cohort, MockModule } from 'src/types/Cohort';
+import { Cohort, MockCohortModule } from 'src/types/Cohort';
 
 // Define a type for the slice state
 type Data = {
@@ -63,12 +63,12 @@ export const cohortsRequestsReducer = cohortsRequestsSlice.reducer;
 type CohortId = number;
 
 // Define a type for the slice state
-type CohortModulesState = Record<CohortId, MockModule[]>;
+type CohortModulesState = Record<CohortId, MockCohortModule[]>;
 
 type CohortModulesData = {
   cohortId: CohortId;
   error?: string;
-  modules?: MockModule[];
+  modules?: MockCohortModule[];
 };
 
 const initialCohortModulesState: CohortModulesState = {};

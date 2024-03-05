@@ -1,6 +1,6 @@
 import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response, Response2 } from 'src/services/HttpService';
-import { Cohort, CreateCohortRequestPayload, UpdateCohortRequestPayload } from 'src/types/Cohort';
+import { Cohort, CreateCohortRequestPayload, MockCohortModule, UpdateCohortRequestPayload } from 'src/types/Cohort';
 
 /**
  * Cohort related services
@@ -69,21 +69,10 @@ const deleteCohort = (cohortId: number) =>
 /**
  * List module(s) for a cohort
  */
-type MockModule = {
-  id: number;
-  name: string;
-  description: string;
-  duration: number;
-  order: number;
-  status: 'draft' | 'published';
-  createdAt: string;
-  updatedAt: string;
-};
-
 // TODO: remove mock data when BE is done
-let mockResponseData: MockModule[] = [];
+let mockResponseData: MockCohortModule[] = [];
 
-const listCohortModules = async (cohortId: number): Promise<Response2<MockModule[]>> =>
+const listCohortModules = async (cohortId: number): Promise<Response2<MockCohortModule[]>> =>
   new Promise((resolve) => {
     setTimeout(() => {
       resolve({ data: mockResponseData, requestSucceeded: true });

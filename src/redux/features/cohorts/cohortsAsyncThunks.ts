@@ -9,7 +9,7 @@ import CohortService, {
 } from 'src/services/CohortService';
 import { Response2 } from 'src/services/HttpService';
 import strings from 'src/strings';
-import { Cohort, CreateCohortRequestPayload, MockModule, UpdateCohortRequestPayload } from 'src/types/Cohort';
+import { Cohort, CreateCohortRequestPayload, MockCohortModule, UpdateCohortRequestPayload } from 'src/types/Cohort';
 
 export const requestCohorts = createAsyncThunk(
   'cohorts/list',
@@ -42,7 +42,7 @@ export const requestCohort = createAsyncThunk(
 export const requestCohortModules = createAsyncThunk(
   'cohorts/modules',
   async (request: { cohortId: number }, { dispatch, rejectWithValue }) => {
-    const response: Response2<MockModule[]> = await CohortService.listCohortModules(request.cohortId);
+    const response: Response2<MockCohortModule[]> = await CohortService.listCohortModules(request.cohortId);
 
     if (response !== null && response.requestSucceeded && response.data !== undefined) {
       dispatch(setCohortModulesAction({ cohortId: request.cohortId, error: response.error, modules: response.data }));

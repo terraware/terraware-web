@@ -5,7 +5,7 @@ export type Cohort = components['schemas']['CohortPayload'];
 export type CreateCohortRequestPayload = components['schemas']['CreateCohortRequestPayload'];
 export type UpdateCohortRequestPayload = components['schemas']['UpdateCohortRequestPayload'];
 
-export type MockModule = {
+export type MockCohortModule = {
   createdAt: string;
   description: string;
   duration: number;
