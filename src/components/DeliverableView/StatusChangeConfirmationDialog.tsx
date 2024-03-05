@@ -27,7 +27,13 @@ export default function StatusChangeConfirmationDialog({
           priority='secondary'
           type='passive'
         />,
-        <Button id='submit' key='button-2' label='Continue and Reset Status' onClick={onConfirm} priority='primary' />,
+        <Button
+          id='submit'
+          key='button-2'
+          label={strings.CONTINUE_AND_RESET_STATUS}
+          onClick={onConfirm}
+          priority='primary'
+        />,
       ]}
       scrolled
       size='large'
