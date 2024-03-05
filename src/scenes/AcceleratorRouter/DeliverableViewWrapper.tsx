@@ -49,10 +49,6 @@ const DeliverableViewWrapper = () => {
   const onOptionItemClick = useCallback(
     (optionItem: DropdownItem) => {
       switch (optionItem.value) {
-        case 'not_submitted': {
-          setStatus('Not Submitted');
-          break;
-        }
         case 'needs_translation': {
           setStatus('Needs Translation');
           break;
