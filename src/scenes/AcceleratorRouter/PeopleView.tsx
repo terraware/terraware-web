@@ -36,6 +36,7 @@ const PeopleView = () => {
     setRequestId(request.requestId);
   }, [activeLocale, dispatch]);
 
+  // tslint:disable:no-console
   console.log('globalRoleUsers', globalRoleUsers);
 
   return <AcceleratorMain />;
