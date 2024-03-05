@@ -1,15 +1,15 @@
 import React from 'react';
 
 import { makeStyles } from '@mui/styles';
-import { Badge } from '@terraware/web-components';
 
+import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
 import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers';
-import { DeliverableStatusType, statusLabel } from 'src/types/Deliverables';
+import { DeliverableStatusType } from 'src/types/Deliverables';
 
 const useStyles = makeStyles(() => ({
   text: {
@@ -49,7 +49,7 @@ export default function DeliverableCellRenderer(props: RendererProps<TableRowTyp
       <CellRenderer
         index={index}
         column={column}
-        value={activeLocale ? <Badge label={statusLabel(value as DeliverableStatusType)} /> : ''}
+        value={activeLocale ? <DeliverableStatusBadge status={value as DeliverableStatusType} /> : ''}
         row={row}
       />
     );
