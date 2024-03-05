@@ -10,11 +10,13 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
 
+import ApproveDialog from './ApproveDialog';
 import DeliverableView from './DeliverableView';
 import RejectDialog from './RejectDialog';
 import useUpdateDeliverable from './useUpdateDeliverable';
 
 const DeliverableViewWrapper = () => {
+  const [showApproveDialog, setShowApproveDialog] = useState<boolean>(false);
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
   const { deliverableId } = useParams<{ deliverableId: string }>();
   const { status: requestStatus, update } = useUpdateDeliverable();
@@ -22,17 +24,21 @@ const DeliverableViewWrapper = () => {
 
   const { deliverable } = useFetchDeliverable({ deliverableId: Number(deliverableId) });
 
-  // temporary solution until we have the confirmation modal design
   const setStatus = useCallback(
     (status: DeliverableStatusType) => {
       if (deliverable?.id !== undefined) {
-        if (window.confirm(`Are you sure you want to set the status to ${status} ?`)) {
-          update({ ...deliverable, status });
-        }
+        update({ ...deliverable, status });
       }
     },
     [deliverable, update]
   );
+
+  const approveDeliverable = useCallback(() => {
+    if (deliverable?.id !== undefined) {
+      update({ ...deliverable, status: 'Approved' });
+    }
+    setShowApproveDialog(false);
+  }, [deliverable, setShowApproveDialog, update]);
 
   const rejectDeliverable = useCallback(
     (feedback: string) => {
@@ -80,7 +86,7 @@ const DeliverableViewWrapper = () => {
           disabled={deliverable?.status === 'Approved'}
           id='approveDeliverable'
           label={strings.APPROVE_DELIVERABLE}
-          onClick={() => setStatus('Approved')}
+          onClick={() => void setShowApproveDialog(true)}
           size='medium'
         />
         <OptionsMenu
@@ -97,11 +103,14 @@ const DeliverableViewWrapper = () => {
         />
       </Box>
     );
-  }, [deliverable?.status, onOptionItemClick, setStatus, theme]);
+  }, [deliverable?.status, onOptionItemClick, theme]);
 
   if (deliverable) {
     return (
       <>
+        {showApproveDialog && (
+          <ApproveDialog onClose={() => setShowApproveDialog(false)} onSubmit={approveDeliverable} />
+        )}
         {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectDeliverable} />}
         <DeliverableView
           callToAction={callToAction}
