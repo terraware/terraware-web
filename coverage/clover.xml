@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1709610588511" clover="3.2.0">
-  <project timestamp="1709610588511" name="All files">
-    <metrics statements="17306" coveredstatements="650" conditionals="11063" coveredconditionals="202" methods="5404" coveredmethods="152" elements="33773" coveredelements="1004" complexity="0" loc="17306" ncloc="17306" packages="142" files="711" classes="711"/>
+<coverage generated="1709657451837" clover="3.2.0">
+  <project timestamp="1709657451837" name="All files">
+    <metrics statements="17361" coveredstatements="650" conditionals="11079" coveredconditionals="202" methods="5417" coveredmethods="152" elements="33857" coveredelements="1004" complexity="0" loc="17361" ncloc="17361" packages="143" files="716" classes="716"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="121" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -7314,12 +7314,12 @@
       <metrics statements="10" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>
       <file name="rootReducer.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/rootReducer.ts">
         <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="90" count="0" type="stmt"/>
-        <line num="95" count="0" type="stmt"/>
-        <line num="96" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="97" count="0" type="stmt"/>
-        <line num="100" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="96" count="0" type="stmt"/>
+        <line num="101" count="0" type="stmt"/>
+        <line num="102" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="103" count="0" type="stmt"/>
+        <line num="106" count="0" type="stmt"/>
       </file>
       <file name="store.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/store.ts">
         <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
@@ -7668,6 +7668,42 @@
         <line num="83" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="84" count="0" type="stmt"/>
         <line num="86" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.redux.features.globalRoles">
+      <metrics statements="24" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="8" coveredmethods="0"/>
+      <file name="globalRolesAsyncThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/globalRoles/globalRolesAsyncThunks.ts">
+        <metrics statements="12" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="36" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+      </file>
+      <file name="globalRolesSelectors.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/globalRoles/globalRolesSelectors.ts">
+        <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <line num="3" count="0" type="stmt"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="6" count="0" type="stmt"/>
+        <line num="7" count="0" type="stmt"/>
+      </file>
+      <file name="globalRolesSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/globalRoles/globalRolesSlice.ts">
+        <metrics statements="8" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.redux.features.message">
@@ -8563,7 +8599,7 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter">
-      <metrics statements="276" coveredstatements="0" conditionals="129" coveredconditionals="0" methods="80" coveredmethods="0"/>
+      <metrics statements="293" coveredstatements="0" conditionals="135" coveredconditionals="0" methods="82" coveredmethods="0"/>
       <file name="AcceleratorMain.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/AcceleratorMain.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="14" count="0" type="stmt"/>
@@ -8836,9 +8872,26 @@
         <line num="46" count="0" type="stmt"/>
       </file>
       <file name="PeopleView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/PeopleView.tsx">
-        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="5" count="0" type="stmt"/>
-        <line num="6" count="0" type="stmt"/>
+        <metrics statements="19" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="23" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="27" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="29" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
       </file>
       <file name="RejectDialog.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/RejectDialog.tsx">
         <metrics statements="9" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="3" coveredmethods="0"/>
@@ -17426,7 +17479,7 @@
       </file>
     </package>
     <package name="src.services">
-      <metrics statements="1288" coveredstatements="331" conditionals="452" coveredconditionals="83" methods="359" coveredmethods="68"/>
+      <metrics statements="1301" coveredstatements="331" conditionals="456" coveredconditionals="83" methods="362" coveredmethods="68"/>
       <file name="AccessionService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/AccessionService.ts">
         <metrics statements="56" coveredstatements="39" conditionals="8" coveredconditionals="6" methods="17" coveredmethods="5"/>
         <line num="12" count="1" type="stmt"/>
@@ -17647,6 +17700,22 @@
         <line num="226" count="0" type="stmt"/>
         <line num="228" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="234" count="0" type="stmt"/>
+      </file>
+      <file name="GlobalRolesService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/GlobalRolesService.ts">
+        <metrics statements="13" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="44" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
       </file>
       <file name="HttpService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/HttpService.ts">
         <metrics statements="49" coveredstatements="38" conditionals="19" coveredconditionals="9" methods="21" coveredmethods="13"/>
@@ -19077,7 +19146,7 @@
       </file>
     </package>
     <package name="src.types">
-      <metrics statements="170" coveredstatements="21" conditionals="120" coveredconditionals="2" methods="48" coveredmethods="6"/>
+      <metrics statements="171" coveredstatements="21" conditionals="120" coveredconditionals="2" methods="48" coveredmethods="6"/>
       <file name="Accession.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/Accession.ts">
         <metrics statements="35" coveredstatements="5" conditionals="18" coveredconditionals="0" methods="13" coveredmethods="0"/>
         <line num="12" count="1" type="stmt"/>
@@ -19193,6 +19262,10 @@
       </file>
       <file name="File.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/File.ts">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="GlobalRoles.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/GlobalRoles.ts">
+        <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="6" count="0" type="stmt"/>
       </file>
       <file name="Id.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/Id.ts">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
