@@ -12,6 +12,10 @@ import {
   draftPlantingSiteGetReducer,
   draftPlantingSiteSearchReducer,
 } from 'src/redux/features/draftPlantingSite/draftPlantingSiteSlice';
+import {
+  globalRolesUserUpdateReducer,
+  globalRolesUsersListReducer,
+} from 'src/redux/features/globalRoles/globalRolesSlice';
 import { projectsReducer, projectsRequestsReducer } from 'src/redux/features/projects/projectsSlice';
 import { reportsSettingsReducer } from 'src/redux/features/reportsSettings/reportsSettingsSlice';
 import { speciesProjectsReducer } from 'src/redux/features/species/speciesProjectsSlice';
@@ -62,6 +66,8 @@ export const reducers = {
   draftPlantingSiteEdit: draftPlantingSiteEditReducer,
   draftPlantingSiteGet: draftPlantingSiteGetReducer,
   draftPlantingSiteSearch: draftPlantingSiteSearchReducer,
+  globalRolesUsersList: globalRolesUsersListReducer,
+  globalRolesUserUpdate: globalRolesUserUpdateReducer,
   message: messageReducer,
   monitoringPlots: monitoringPlotsReducer,
   observations: observationsReducer,
