@@ -71,7 +71,13 @@ const CohortView = () => {
             <TextField label={strings.PHASE} id='phase' type='text' value={cohort?.phase} display={true} />
           </Grid>
           <Grid item xs={12}>
-            <TextField label="Modules" id='phase' type='text' value={cohortModules?.map(module => module.name).join(', ')} display={true} />
+            <TextField
+              label='Modules'
+              id='phase'
+              type='text'
+              value={cohortModules?.map((module) => module.name).join(', ')}
+              display={true}
+            />
           </Grid>
         </Grid>
       </Card>

@@ -66,7 +66,6 @@ const deleteCohort = (cohortId: number) =>
     urlReplacements: { '{cohortId}': `${cohortId}` },
   });
 
-
 /**
  * List module(s) for a cohort
  */
@@ -84,15 +83,12 @@ type MockModule = {
 // TODO: remove mock data when BE is done
 let mockResponseData: MockModule[] = [];
 
-const listCohortModules = async (
-  cohortId: number,
-): Promise<Response2<MockModule[]>> =>
+const listCohortModules = async (cohortId: number): Promise<Response2<MockModule[]>> =>
   new Promise((resolve) => {
     setTimeout(() => {
-      resolve({ data: mockResponseData, requestSucceeded: true});
+      resolve({ data: mockResponseData, requestSucceeded: true });
     }, 300);
-  }
-  );
+  });
 
 /**
  * Exported functions
@@ -161,4 +157,3 @@ mockResponseData = [
     updatedAt: '2021-01-01T00:00:00Z',
   },
 ];
-

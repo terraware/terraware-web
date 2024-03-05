@@ -81,7 +81,7 @@ export const cohortModulesSlice = createSlice({
       if (action.payload.cohortId && action.payload.modules) {
         state[action.payload.cohortId] = action.payload.modules;
       }
-    }
+    },
   },
 });
 

@@ -41,8 +41,8 @@ export const requestCohort = createAsyncThunk(
 
 export const requestCohortModules = createAsyncThunk(
   'cohorts/modules',
-  async (request: { cohortId: number; }, { dispatch, rejectWithValue }) => {
-    const response: Response2<MockModule[]>  = await CohortService.listCohortModules(request.cohortId);
+  async (request: { cohortId: number }, { dispatch, rejectWithValue }) => {
+    const response: Response2<MockModule[]> = await CohortService.listCohortModules(request.cohortId);
 
     if (response !== null && response.requestSucceeded && response.data !== undefined) {
       dispatch(setCohortModulesAction({ cohortId: request.cohortId, error: response.error, modules: response.data }));
