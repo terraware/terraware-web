@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Box, useTheme } from '@mui/material';
@@ -10,6 +10,7 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import DeliverableView from './DeliverableView';
 import RejectDialog from './RejectDialog';
@@ -20,17 +21,15 @@ const DeliverableViewWrapper = () => {
   const { deliverableId } = useParams<{ deliverableId: string }>();
   const { status: requestStatus, update } = useUpdateDeliverable();
   const theme = useTheme();
+  const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
 
   const { deliverable } = useFetchDeliverable({ deliverableId: Number(deliverableId) });
 
-  // temporary solution until we have the confirmation modal design
   const setStatus = useCallback(
     (status: DeliverableStatusType) => {
       if (deliverable?.id !== undefined) {
-        if (window.confirm(`Are you sure you want to set the status to ${status} ?`)) {
-          update({ ...deliverable, status });
-        }
+        update({ ...deliverable, status });
       }
     },
     [deliverable, update]
@@ -63,7 +62,7 @@ const DeliverableViewWrapper = () => {
   );
 
   const optionItems = useMemo(() => {
-    let items: DropdownItem[] = [];
+    const items: DropdownItem[] = [];
 
     if (!activeLocale) {
       return items;
@@ -109,6 +108,14 @@ const DeliverableViewWrapper = () => {
       </Box>
     );
   }, [deliverable?.status, onOptionItemClick, optionItems, setStatus, theme]);
+
+  useEffect(() => {
+    if (requestStatus === 'success') {
+      snackbar.toastSuccess(strings.DELIVERABLE_STATUS_UPDATED);
+    } else if (requestStatus === 'error') {
+      snackbar.toastError(strings.GENERIC_ERROR);
+    }
+  }, [requestStatus, snackbar]);
 
   if (deliverable) {
     return (
