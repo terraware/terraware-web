@@ -1,3 +1,7 @@
+import React, { useState } from 'react';
+import { useEffect, useRef } from 'react';
+import { useHistory } from 'react-router-dom';
+
 import {
   Box,
   Button,
@@ -8,23 +12,22 @@ import {
   Paper,
   Popper,
   Slide,
-  Typography,
   Theme,
+  Typography,
   useTheme,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useState } from 'react';
-import { useEffect, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
+
 import { APP_PATHS } from 'src/constants';
-import strings from 'src/strings';
-import { Organization } from 'src/types/Organization';
-import AddNewOrganizationModal from './AddNewOrganizationModal';
-import Icon from './common/icon/Icon';
-import useEnvironment from 'src/utils/useEnvironment';
 import { useUser } from 'src/providers';
 import { useOrganization } from 'src/providers/hooks';
+import strings from 'src/strings';
+import { Organization } from 'src/types/Organization';
 import { getRgbaFromHex } from 'src/utils/color';
+import useEnvironment from 'src/utils/useEnvironment';
+
+import AddNewOrganizationModal from './AddNewOrganizationModal';
+import Icon from './common/icon/Icon';
 
 const useStyles = makeStyles((theme: Theme) => ({
   icon: {

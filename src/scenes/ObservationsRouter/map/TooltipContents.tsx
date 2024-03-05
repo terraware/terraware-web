@@ -1,14 +1,16 @@
 import { useState } from 'react';
-import { Box, Typography, useTheme } from '@mui/material';
+
 import { Portal } from '@mui/base';
+import { Box, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button } from '@terraware/web-components';
-import strings from 'src/strings';
-import { ObservationState, ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
-import { useOrganization } from 'src/providers';
-import { isManagerOrHigher } from 'src/utils/organization';
-import ReplaceObservationPlotModal from 'src/scenes/ObservationsRouter/replacePlot/ReplaceObservationPlotModal';
+
 import { useMapPortalContainer } from 'src/components/Map/MapRenderUtils';
+import { useOrganization } from 'src/providers';
+import ReplaceObservationPlotModal from 'src/scenes/ObservationsRouter/replacePlot/ReplaceObservationPlotModal';
+import strings from 'src/strings';
+import { ObservationMonitoringPlotResultsPayload, ObservationState } from 'src/types/Observations';
+import { isManagerOrHigher } from 'src/utils/organization';
 
 const useStyles = makeStyles(() => ({
   button: {

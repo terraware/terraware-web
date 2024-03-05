@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import strings from 'src/strings';
+
 import { Close } from '@mui/icons-material';
-import { Grid, Box, IconButton, useTheme } from '@mui/material';
-import { AccessionPostRequestBody } from 'src/services/SeedBankService';
-import AccessionService from 'src/services/AccessionService';
+import { Box, Grid, IconButton, useTheme } from '@mui/material';
+import _ from 'lodash';
+
+import AddLink from 'src/components/common/AddLink';
 import Textfield from 'src/components/common/Textfield/Textfield';
+import AccessionService from 'src/services/AccessionService';
+import { AccessionPostRequestBody } from 'src/services/SeedBankService';
+import strings from 'src/strings';
 import { Geolocation } from 'src/types/Accession';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
-import _ from 'lodash';
-import AddLink from 'src/components/common/AddLink';
 
 type Accession2GPSProps = {
   record: AccessionPostRequestBody;

@@ -1,9 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import strings from 'src/strings';
-import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
-import { Response } from 'src/services/HttpService';
+
 import DeliverablesService, { ListDeliverablesRequestParams } from 'src/services/DeliverablesService';
-import { Deliverable, DeliverableData } from 'src/types/Deliverables';
+import { Response } from 'src/services/HttpService';
+import strings from 'src/strings';
+import { Deliverable, DeliverableData, UploadDeliverableDocumentRequest } from 'src/types/Deliverables';
+import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 
 export const requestListDeliverables = createAsyncThunk(
   'deliverables/list',
@@ -47,6 +48,20 @@ export const requestUpdateDeliverable = createAsyncThunk(
     const response: Response = await DeliverablesService.update(deliverable);
     if (response && response.requestSucceeded) {
       return deliverable.id;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestUploadDeliverableDocument = createAsyncThunk(
+  'deliverables/upload',
+  async (request: { deliverableId: number; documents: UploadDeliverableDocumentRequest[] }, { rejectWithValue }) => {
+    const { deliverableId, documents } = request;
+
+    const response: boolean = await DeliverablesService.upload(deliverableId, documents);
+    if (response) {
+      return deliverableId;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);

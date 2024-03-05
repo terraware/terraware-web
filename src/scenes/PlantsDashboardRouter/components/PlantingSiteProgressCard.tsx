@@ -1,10 +1,12 @@
-import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import { Box, Typography, useTheme } from '@mui/material';
-import strings from 'src/strings';
 import React from 'react';
-import { useAppSelector } from 'src/redux/store';
-import { selectSiteReportedPlants } from 'src/redux/features/tracking/trackingSelectors';
+
+import { Box, Typography, useTheme } from '@mui/material';
+
 import FormattedNumber from 'src/components/common/FormattedNumber';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import { selectSiteReportedPlants } from 'src/redux/features/tracking/trackingSelectors';
+import { useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
 
 type PlantingSiteProgressCardProps = {
   plantingSiteId: number;

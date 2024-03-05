@@ -1,18 +1,20 @@
-import { Box } from '@mui/material';
-import { APP_PATHS } from 'src/constants';
-import strings from 'src/strings';
-import { Notification } from 'src/types/Notifications';
-import { weightSystemsNames } from 'src/units';
-import { useSupportedLocales } from 'src/strings/locales';
-import TextWithLink from 'src/components/common/TextWithLink';
-import { useOrganization, useTimeZones, useUser } from 'src/providers';
-import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import { useEffect, useMemo, useState } from 'react';
-import { InitializedTimeZone, TimeZoneDescription } from 'src/types/TimeZones';
-import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
+
+import { Box } from '@mui/material';
+import { getTodaysDateFormatted } from '@terraware/web-components/utils';
+
+import TextWithLink from 'src/components/common/TextWithLink';
+import { APP_PATHS } from 'src/constants';
+import { useOrganization, useTimeZones, useUser } from 'src/providers';
 import { PreferencesService, UserService } from 'src/services';
+import strings from 'src/strings';
+import { useSupportedLocales } from 'src/strings/locales';
+import { Notification } from 'src/types/Notifications';
+import { InitializedTimeZone, TimeZoneDescription } from 'src/types/TimeZones';
+import { weightSystemsNames } from 'src/units';
 import { InitializedUnits } from 'src/units';
 import { featureNotificationExpired } from 'src/utils/featureNotifications';
+import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
 
 export default function UserNotification(): Notification | null {
   const supportedLocales = useSupportedLocales();

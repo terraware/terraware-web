@@ -1,8 +1,10 @@
 import { Message } from '@terraware/web-components';
-import strings from 'src/strings';
-import Page from 'src/components/Page';
-import { ViewProps } from './types';
+
 import TitleBar from 'src/components/DeliverableView/TitleBar';
+import Page from 'src/components/Page';
+import strings from 'src/strings';
+
+import { ViewProps } from './types';
 
 const MobileMessage = (props: ViewProps): JSX.Element => (
   <Page title={<TitleBar deliverable={props.deliverable} />}>

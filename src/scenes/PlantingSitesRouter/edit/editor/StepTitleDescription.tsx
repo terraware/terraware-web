@@ -1,10 +1,12 @@
 import { useMemo, useState } from 'react';
+
 import { Box, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { useUser } from 'src/providers';
+
 import TextWithLink from 'src/components/common/TextWithLink';
 import VideoDialog from 'src/components/common/VideoDialog';
-import { useDocLinks, DocType } from 'src/docLinks';
+import { DocType, useDocLinks } from 'src/docLinks';
+import { useUser } from 'src/providers';
 
 const useStyles = makeStyles((theme: Theme) => ({
   clickableText: {

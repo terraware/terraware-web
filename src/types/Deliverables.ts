@@ -1,5 +1,5 @@
-import strings from 'src/strings';
 import { components } from 'src/api/types/generated-schema';
+import strings from 'src/strings';
 
 export type Deliverable = components['schemas']['DeliverablePayload'];
 export type DeliverableTypeType = components['schemas']['DeliverablePayload']['type'];
@@ -27,6 +27,12 @@ export const DeliverableStatuses: DeliverableStatusType[] = [
 ];
 
 export type DeliverableDocument = components['schemas']['SubmissionDocumentPayload'];
+
+export type UploadDeliverableDocumentRequest = {
+  description: string;
+  file: File;
+  projectId: number;
+};
 
 export type DeliverableData = {
   deliverable: Deliverable | undefined;

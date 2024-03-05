@@ -1,6 +1,8 @@
 import { useState } from 'react';
+
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
+
 import strings from 'src/strings';
 
 export type RejectDialogProps = {

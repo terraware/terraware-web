@@ -1,9 +1,12 @@
+import React from 'react';
+
 import { Grid, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React from 'react';
-import TextField from '../../../common/TextField';
-import { FieldNodePayload } from 'src/types/Search';
+
 import strings from 'src/strings';
+import { FieldNodePayload } from 'src/types/Search';
+
+import TextField from '../../../common/TextField';
 
 const useStyles = makeStyles((theme: Theme) => ({
   box: {

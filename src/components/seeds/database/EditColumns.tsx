@@ -1,16 +1,19 @@
-import { Typography, Grid, Box } from '@mui/material';
 import React from 'react';
+
+import { Box, Grid, Typography } from '@mui/material';
+import { IconTooltip } from '@terraware/web-components';
+
+import DialogBox from 'src/components/common/DialogBox/DialogBox';
+import Button from 'src/components/common/button/Button';
+import isEnabled from 'src/features';
+import { useUser } from 'src/providers';
 import strings from 'src/strings';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
 import Checkbox from '../../common/Checkbox';
 import Divisor from '../../common/Divisor';
 import RadioButton from '../../common/RadioButton';
-import { orderedColumnNames, columnsIndexed, Preset, searchPresets } from './columns';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import DialogBox from 'src/components/common/DialogBox/DialogBox';
-import Button from 'src/components/common/button/Button';
-import { useUser } from 'src/providers';
-import { IconTooltip } from '@terraware/web-components';
-import isEnabled from 'src/features';
+import { Preset, columnsIndexed, orderedColumnNames, searchPresets } from './columns';
 
 export interface Props {
   open: boolean;

@@ -1,11 +1,12 @@
 import React from 'react';
+
+import Link from 'src/components/common/Link';
+import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
+import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
+import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { MonitoringPlotStatus, getPlotStatus, ObservationMonitoringPlotResultsPayload } from 'src/types/Observations';
-import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
-import { RendererProps } from 'src/components/common/table/types';
-import Link from 'src/components/common/Link';
-import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
+import { MonitoringPlotStatus, ObservationMonitoringPlotResultsPayload, getPlotStatus } from 'src/types/Observations';
 
 const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies', 'mortalityRate', 'plantingDensity'];
 

@@ -1,13 +1,15 @@
 import React, { useCallback, useMemo, useState } from 'react';
+
 import { Popover, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import strings from 'src/strings';
-import { useLocalization } from 'src/providers';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import Icon from 'src/components/common/icon/Icon';
-import FilterMultiSelect from 'src/components/common/FilterMultiSelect';
-import { ProjectEntityFilters } from 'src/components/ProjectNewView/flow/useProjectEntitySelection';
+
 import { PillListItemWithEmptyValue } from 'src/components/ProjectNewView/flow/ProjectEntitySearch';
+import { ProjectEntityFilters } from 'src/components/ProjectNewView/flow/useProjectEntitySelection';
+import FilterMultiSelect from 'src/components/common/FilterMultiSelect';
+import Icon from 'src/components/common/icon/Icon';
+import { useLocalization } from 'src/providers';
+import strings from 'src/strings';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   dropdown: {

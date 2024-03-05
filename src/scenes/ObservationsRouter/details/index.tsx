@@ -1,24 +1,27 @@
 import { useEffect, useMemo } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+
 import { Box, Grid } from '@mui/material';
 import { Message, TableColumnType } from '@terraware/web-components';
-import { FieldOptionsMap } from 'src/types/Search';
+
+import Card from 'src/components/common/Card';
+import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
+import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
-import strings from 'src/strings';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-import { getLongDate, getShortDate } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
-import { useAppSelector } from 'src/redux/store';
 import {
   searchObservationDetails,
   selectDetailsZoneNames,
 } from 'src/redux/features/observations/observationDetailsSelectors';
 import { selectObservation } from 'src/redux/features/observations/observationsSelectors';
-import Card from 'src/components/common/Card';
-import Table from 'src/components/common/table';
-import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
-import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
+import { useAppSelector } from 'src/redux/store';
 import AggregatedPlantsStats from 'src/scenes/ObservationsRouter/common/AggregatedPlantsStats';
+import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
+import strings from 'src/strings';
+import { FieldOptionsMap } from 'src/types/Search';
+import { getLongDate, getShortDate } from 'src/utils/dateFormatter';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+
 import ObservationDetailsRenderer from './ObservationDetailsRenderer';
 
 const columns = (): TableColumnType[] => [

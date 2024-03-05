@@ -1,26 +1,28 @@
 import React, { useCallback, useMemo } from 'react';
+
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
-import { useDeviceInfo } from '@terraware/web-components/utils';
 import { FormButton, Message, TableColumnType } from '@terraware/web-components';
-import PageForm from 'src/components/common/PageForm';
-import strings from 'src/strings';
-import Table from 'src/components/common/table';
-import { CreateProjectRequest } from 'src/types/Project';
-import { SeedBankService } from 'src/services';
-import { SearchCriteria, SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
-import { ACCESSION_2_STATES, AccessionState } from 'src/types/Accession';
+import { useDeviceInfo } from '@terraware/web-components/utils';
+
 import { FlowStates } from 'src/components/ProjectNewView';
+import { EntitySpecificFilterConfig } from 'src/components/ProjectNewView/flow/ProjectEntityFilter';
+import ProjectEntitySearch, {
+  PillListItemWithEmptyValue,
+} from 'src/components/ProjectNewView/flow/ProjectEntitySearch';
 import {
   ProjectEntityFilters,
   useProjectEntitySelection,
 } from 'src/components/ProjectNewView/flow/useProjectEntitySelection';
-import ProjectEntitySearch, {
-  PillListItemWithEmptyValue,
-} from 'src/components/ProjectNewView/flow/ProjectEntitySearch';
-import { EntitySpecificFilterConfig } from 'src/components/ProjectNewView/flow/ProjectEntityFilter';
-import { stateName } from 'src/types/Accession';
-import { useLocalization } from 'src/providers';
 import Card from 'src/components/common/Card';
+import PageForm from 'src/components/common/PageForm';
+import Table from 'src/components/common/table';
+import { useLocalization } from 'src/providers';
+import { SeedBankService } from 'src/services';
+import strings from 'src/strings';
+import { ACCESSION_2_STATES, AccessionState } from 'src/types/Accession';
+import { stateName } from 'src/types/Accession';
+import { CreateProjectRequest } from 'src/types/Project';
+import { SearchCriteria, SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 
 type SelectAccessionsProps = {
   project: CreateProjectRequest;

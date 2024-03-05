@@ -1,5 +1,6 @@
-import { Slider } from '@terraware/web-components';
 import { useMemo } from 'react';
+
+import { Slider } from '@terraware/web-components';
 
 type DateSliderProps = {
   dates: string[]; // date strings in the format 'YYYY-MM-DD'

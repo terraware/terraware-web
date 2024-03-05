@@ -1,6 +1,7 @@
-import { CellRenderer as WebComponentsCellRenderer, CellDateRenderer, TableRowType } from '@terraware/web-components';
+import { CellDateRenderer, TableRowType, CellRenderer as WebComponentsCellRenderer } from '@terraware/web-components';
 import { LocalizationProps } from '@terraware/web-components/components/table';
 import { RendererProps } from '@terraware/web-components/components/table/types';
+
 import strings from 'src/strings';
 
 type CellRendererProps<T extends TableRowType> = Omit<RendererProps<T>, keyof LocalizationProps>;

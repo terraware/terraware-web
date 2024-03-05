@@ -1,5 +1,6 @@
-import strings from 'src/strings';
 import { DatabaseColumn } from '@terraware/web-components/components/table/types';
+
+import strings from 'src/strings';
 
 function columns(): DatabaseColumn[] {
   return [

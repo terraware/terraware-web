@@ -1,5 +1,7 @@
 import { useState } from 'react';
+
 import { Story } from '@storybook/react';
+
 import PlantsPrimaryPageView, {
   PlantsPrimaryPageViewProps,
 } from 'src/components/PlantsPrimaryPage/PlantsPrimaryPageView';

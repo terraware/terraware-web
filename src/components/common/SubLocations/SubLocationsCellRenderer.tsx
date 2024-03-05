@@ -1,7 +1,8 @@
 import React from 'react';
+
+import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
-import Link from 'src/components/common/Link';
 import { NumericFormatter } from 'src/types/Number';
 
 export type SubLocationsCellRendererProps = {

@@ -1,9 +1,11 @@
 import React from 'react';
+
 import { DateTime } from 'luxon';
+
+import ReportLink from 'src/components/Reports/ReportLink';
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { ListReport, statusName } from 'src/types/Report';
-import ReportLink from 'src/components/Reports/ReportLink';
 
 export default function ReportsCellRenderer(
   props: RendererProps<ListReport & { organizationName?: string }>

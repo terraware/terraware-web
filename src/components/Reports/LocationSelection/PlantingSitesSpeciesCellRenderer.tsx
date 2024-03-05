@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+
 import { makeStyles } from '@mui/styles';
 import { RendererProps, TableRowType } from '@terraware/web-components';
 import { Textfield } from '@terraware/web-components';
+
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
 import strings from 'src/strings';
-import { getGrowthFormString, Species } from 'src/types/Species';
+import { Species, getGrowthFormString } from 'src/types/Species';
 
 const useStyles = makeStyles(() => ({
   text: {

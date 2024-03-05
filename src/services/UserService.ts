@@ -1,10 +1,11 @@
 import { paths } from 'src/api/types/generated-schema';
-import HttpService, { Response } from './HttpService';
-import CachedUserService from './CachedUserService';
-import PreferencesService from './PreferencesService';
-import { User } from 'src/types/User';
 import { InitializedTimeZone } from 'src/types/TimeZones';
+import { User } from 'src/types/User';
 import { InitializedUnits } from 'src/units';
+
+import CachedUserService from './CachedUserService';
+import HttpService, { Response } from './HttpService';
+import PreferencesService from './PreferencesService';
 
 /**
  * Service for user related functionality

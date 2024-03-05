@@ -1,10 +1,13 @@
 import React, { useRef } from 'react';
+
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import strings from 'src/strings';
+
 import PageSnackbar from 'src/components/PageSnackbar';
+import Card from 'src/components/common/Card';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
-import Card from 'src/components/common/Card';
+import strings from 'src/strings';
+
 import NurseryWithdrawalsTable from './NurseryWithdrawalsTable';
 
 export default function NurseryWithdrawals(): JSX.Element {

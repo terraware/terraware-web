@@ -1,10 +1,12 @@
-import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import { Box, Typography, useTheme } from '@mui/material';
-import strings from 'src/strings';
-import BarChart from 'src/components/common/Chart/BarChart';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useAppSelector } from 'src/redux/store';
+
+import { Box, Typography, useTheme } from '@mui/material';
+
+import BarChart from 'src/components/common/Chart/BarChart';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { selectZoneProgress } from 'src/redux/features/tracking/trackingSelectors';
+import { useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
 import { truncate } from 'src/utils/text';
 
 const MAX_ZONE_NAME_LENGTH = 20;

@@ -1,29 +1,32 @@
-import { makeStyles } from '@mui/styles';
 import React, { useEffect, useMemo, useState } from 'react';
+
+import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { Dropdown } from '@terraware/web-components';
+import { Chart } from 'chart.js';
+import 'chartjs-adapter-date-fns';
+import moment from 'moment';
+
+import { getTimeseriesHistory } from 'src/api/timeseries/timeseries';
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
+import { Device } from 'src/types/Device';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { useNumberFormatter } from 'src/utils/useNumber';
+
+import { newChart } from '../../common/Chart';
 import Select from '../../common/Select/Select';
 import Icon from '../../common/icon/Icon';
-import { Chart } from 'chart.js';
-import { Device } from 'src/types/Device';
-import { getTimeseriesHistory } from 'src/api/timeseries/timeseries';
-import moment from 'moment';
 import {
   ChartPalette,
+  HumidityValues,
+  convertEntryTimestamp,
   getFirstWord,
   getTimePeriodParams,
-  HumidityValues,
   getUnit,
-  convertEntryTimestamp,
   timePeriods,
 } from './Common';
 import { htmlLegendPlugin } from './htmlLegendPlugin';
-import 'chartjs-adapter-date-fns';
-import { Theme } from '@mui/material';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { Dropdown } from '@terraware/web-components';
-import { useLocalization } from 'src/providers';
-import { newChart } from '../../common/Chart';
-import { useNumberFormatter } from 'src/utils/useNumber';
 
 declare global {
   interface Window {

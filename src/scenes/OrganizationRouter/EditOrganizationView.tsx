@@ -1,23 +1,26 @@
-import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
+
+import PageSnackbar from 'src/components/PageSnackbar';
+import RegionSelector from 'src/components/RegionSelector';
+import TimeZoneSelector from 'src/components/TimeZoneSelector';
+import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import { useLocalization, useTimeZones } from 'src/providers';
+import { OrganizationService } from 'src/services';
 import strings from 'src/strings';
 import { Organization, OrganizationType, OrganizationTypes, organizationTypeLabel } from 'src/types/Organization';
-import TextField from '../../components/common/Textfield/Textfield';
-import useForm from 'src/utils/useForm';
-import PageForm from '../../components/common/PageForm';
-import { OrganizationService } from 'src/services';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import PageSnackbar from 'src/components/PageSnackbar';
-import useSnackbar from 'src/utils/useSnackbar';
-import TfMain from 'src/components/common/TfMain';
-import { getUTC, useUserTimeZone } from 'src/utils/useTimeZoneUtils';
-import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import { TimeZoneDescription } from 'src/types/TimeZones';
-import { useLocalization, useTimeZones } from 'src/providers';
-import RegionSelector from 'src/components/RegionSelector';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
+import { getUTC, useUserTimeZone } from 'src/utils/useTimeZoneUtils';
+
+import PageForm from '../../components/common/PageForm';
+import TextField from '../../components/common/Textfield/Textfield';
 
 type OrganizationViewProps = {
   organization: Organization;

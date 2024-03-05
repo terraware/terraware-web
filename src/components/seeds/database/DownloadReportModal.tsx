@@ -1,7 +1,7 @@
-import { SearchCriteria, SearchSortOrder } from 'src/types/Search';
-import { SearchService } from 'src/services';
-import { useOrganization } from 'src/providers/hooks';
 import ExportCsvModal from 'src/components/common/ExportCsvModal';
+import { useOrganization } from 'src/providers/hooks';
+import { SearchService } from 'src/services';
+import { SearchCriteria, SearchSortOrder } from 'src/types/Search';
 
 interface DownloadReportModalProps {
   searchCriteria: SearchCriteria;

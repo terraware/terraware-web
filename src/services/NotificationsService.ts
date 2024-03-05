@@ -1,6 +1,7 @@
 import { paths } from 'src/api/types/generated-schema';
-import HttpService, { Params, Response } from './HttpService';
 import { Notifications, NotificationsCount } from 'src/types/Notifications';
+
+import HttpService, { Params, Response } from './HttpService';
 
 /**
  * In-App notifications related functionality

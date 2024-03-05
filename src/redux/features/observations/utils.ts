@@ -1,19 +1,20 @@
 import getDateDisplayValue from '@terraware/web-components/utils/date';
-import { MultiPolygon, PlantingSite } from 'src/types/Tracking';
-import { Species } from 'src/types/Species';
+
 import {
-  ObservationResultsPayload,
-  ObservationResults,
-  ObservationPlantingZoneResultsPayload,
-  ObservationPlantingZoneResults,
-  ObservationPlantingSubzoneResultsPayload,
-  ObservationPlantingSubzoneResults,
-  ObservationSpeciesResultsPayload,
-  ObservationSpeciesResults,
-  ObservationMonitoringPlotResultsPayload,
-  ObservationMonitoringPlotResults,
   MonitoringPlotStatus,
+  ObservationMonitoringPlotResults,
+  ObservationMonitoringPlotResultsPayload,
+  ObservationPlantingSubzoneResults,
+  ObservationPlantingSubzoneResultsPayload,
+  ObservationPlantingZoneResults,
+  ObservationPlantingZoneResultsPayload,
+  ObservationResults,
+  ObservationResultsPayload,
+  ObservationSpeciesResults,
+  ObservationSpeciesResultsPayload,
 } from 'src/types/Observations';
+import { Species } from 'src/types/Species';
+import { MultiPolygon, PlantingSite } from 'src/types/Tracking';
 import { regexMatch } from 'src/utils/search';
 
 // utils

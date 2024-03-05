@@ -1,17 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
+
 import { APP_PATHS } from 'src/constants';
-import { isPlaceholderOrg } from 'src/utils/organization';
-import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import { useLocalization, useOrganization } from 'src/providers';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { PlantingSite } from 'src/types/Tracking';
-import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
+import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import NurseryPlantingsAndWithdrawalsView from 'src/scenes/NurseryRouter/NurseryPlantingsAndWithdrawalsView';
-import NurseryWithdrawalsDetailsView from 'src/scenes/NurseryRouter/NurseryWithdrawalsDetailsView';
 import NurseryReassignmentView from 'src/scenes/NurseryRouter/NurseryReassignmentView';
+import NurseryWithdrawalsDetailsView from 'src/scenes/NurseryRouter/NurseryWithdrawalsDetailsView';
+import { PlantingSite } from 'src/types/Tracking';
+import { isPlaceholderOrg } from 'src/utils/organization';
 
 const NurseryRouter = () => {
   const dispatch = useAppDispatch();

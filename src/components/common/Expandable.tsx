@@ -1,8 +1,11 @@
+import React, { useEffect, useState } from 'react';
+
 import { IconButton, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect, useState } from 'react';
-import Icon from '../common/icon/Icon';
+
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+import Icon from '../common/icon/Icon';
 
 interface StyleProps {
   isMobile: boolean;

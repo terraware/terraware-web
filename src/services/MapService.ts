@@ -1,10 +1,8 @@
 import { paths } from 'src/api/types/generated-schema';
-import { MultiPolygon, PlantingSite, MinimalPlantingSite } from 'src/types/Tracking';
 import { MapBoundingBox, MapData, MapEntity, MapGeometry, MapSourceBaseData } from 'src/types/Map';
-import HttpService, { Response } from './HttpService';
 import {
-  ObservationMonitoringPlotResultsPayload,
   ObservationMonitoringPlotResults,
+  ObservationMonitoringPlotResultsPayload,
   ObservationPlantingSubzoneResults,
   ObservationPlantingZoneResults,
   ObservationResults,
@@ -12,6 +10,9 @@ import {
   SubzoneAggregation,
   ZoneAggregation,
 } from 'src/types/Observations';
+import { MinimalPlantingSite, MultiPolygon, PlantingSite } from 'src/types/Tracking';
+
+import HttpService, { Response } from './HttpService';
 
 /**
  * Map related service

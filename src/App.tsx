@@ -1,24 +1,24 @@
 /* eslint-disable import/no-webpack-loader-syntax */
-import { CssBaseline, StyledEngineProvider, Theme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
 import { Provider } from 'react-redux';
+
+import { CssBaseline, StyledEngineProvider, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { APP_PATHS } from 'src/constants';
-import useStateLocation from 'src/utils/useStateLocation';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { getRgbaFromHex } from 'src/utils/color';
-import { store } from 'src/redux/store';
-import { useLocalization, useOrganization, useUser } from 'src/providers';
-import { useAppVersion } from 'src/hooks/useAppVersion';
-import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+
+import AppBootstrap from 'src/AppBootstrap';
 import ToastSnackbar from 'src/components/ToastSnackbar';
 import TopBar from 'src/components/TopBar/TopBar';
 import TopBarContent from 'src/components/TopBar/TopBarContent';
-import AppBootstrap from 'src/AppBootstrap';
-import NoOrgRouter from 'src/scenes/NoOrgRouter';
-import TerrawareRouter from 'src/scenes/TerrawareRouter';
-import AcceleratorRouter from 'src/scenes/AcceleratorRouter';
+import BlockingSpinner from 'src/components/common/BlockingSpinner';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useAppVersion } from 'src/hooks/useAppVersion';
+import { useLocalization, useUser } from 'src/providers';
+import { store } from 'src/redux/store';
+import { getRgbaFromHex } from 'src/utils/color';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+const AcceleratorRouter = React.lazy(() => import('src/scenes/AcceleratorRouter'));
+const TerrawareRouter = React.lazy(() => import('src/scenes/TerrawareRouter'));
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -59,37 +59,16 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const MINIMAL_USER_ROUTES: string[] = [
-  APP_PATHS.WELCOME,
-  APP_PATHS.MY_ACCOUNT,
-  APP_PATHS.MY_ACCOUNT_EDIT,
-  APP_PATHS.OPT_IN,
-];
-
 function AppContent() {
   // manager hooks
   useAppVersion();
 
   const { isDesktop, type } = useDeviceInfo();
   const classes = useStyles({ isDesktop });
-  const location = useStateLocation();
-  const { organizations } = useOrganization();
-  const history = useHistory();
   const { isAllowed } = useUser();
   const { isAcceleratorRoute, featureFlagAccelerator } = useAcceleratorConsole();
 
   const [showNavBar, setShowNavBar] = useState(true);
-
-  // TODO this should also be put into the TerrawareRouter
-  useEffect(() => {
-    if (isAcceleratorRoute) {
-      return;
-    }
-
-    if (organizations?.length === 0 && MINIMAL_USER_ROUTES.indexOf(location.pathname) === -1) {
-      history.push(APP_PATHS.WELCOME);
-    }
-  }, [organizations, location, history, isAcceleratorRoute]);
 
   useEffect(() => {
     if (type === 'mobile' || type === 'tablet') {
@@ -112,14 +91,13 @@ function AppContent() {
       </TopBar>
 
       <div className={classes.container}>
-        {/* TODO NoOrgRouter should be put inside the TerrawareRouter */}
-        {!isAcceleratorRoute && organizations.length === 0 ? (
-          <NoOrgRouter />
-        ) : isAcceleratorRoute && featureFlagAccelerator && isAllowed('VIEW_CONSOLE') ? (
-          <AcceleratorRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
-        ) : (
-          <TerrawareRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
-        )}
+        <React.Suspense fallback={<BlockingSpinner />}>
+          {isAcceleratorRoute && featureFlagAccelerator && isAllowed('VIEW_CONSOLE') ? (
+            <AcceleratorRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
+          ) : (
+            <TerrawareRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
+          )}
+        </React.Suspense>
       </div>
     </StyledEngineProvider>
   );

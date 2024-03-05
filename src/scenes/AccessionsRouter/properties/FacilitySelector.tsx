@@ -1,7 +1,9 @@
 import React from 'react';
+
+import { SelectT } from '@terraware/web-components';
+
 import strings from 'src/strings';
 import { Facility } from 'src/types/Facility';
-import { SelectT } from '@terraware/web-components';
 
 type FacilitySelectorProps = {
   id?: string;

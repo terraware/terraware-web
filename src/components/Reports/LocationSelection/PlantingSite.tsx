@@ -1,14 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react';
+
 import { Box, Grid } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import strings from 'src/strings';
-import { ReportPlantingSite } from 'src/types/Report';
+
+import { LocationSectionProps } from 'src/components/Reports/LocationSelection';
+import { InfoField, useInfoCardStyles } from 'src/components/Reports/LocationSelection/InfoField';
+import PlantingSiteSpeciesCellRenderer from 'src/components/Reports/LocationSelection/PlantingSitesSpeciesCellRenderer';
+import { transformNumericValue } from 'src/components/Reports/LocationSelection/util';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import Table from 'src/components/common/table';
 import { useOrganization } from 'src/providers';
-import { SpeciesService } from 'src/services';
-import { Species } from 'src/types/Species';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import {
   selectCurrentObservation,
   selectLatestObservation,
@@ -17,12 +18,13 @@ import {
 } from 'src/redux/features/observations/observationsSelectors';
 import { selectPlantingSite, selectSiteReportedPlants } from 'src/redux/features/tracking/trackingSelectors';
 import { requestSiteReportedPlants } from 'src/redux/features/tracking/trackingThunks';
-import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import PlantingSiteSpeciesCellRenderer from 'src/components/Reports/LocationSelection/PlantingSitesSpeciesCellRenderer';
-import Table from 'src/components/common/table';
-import { InfoField, useInfoCardStyles } from 'src/components/Reports/LocationSelection/InfoField';
-import { LocationSectionProps } from 'src/components/Reports/LocationSelection';
-import { transformNumericValue } from 'src/components/Reports/LocationSelection/util';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { SpeciesService } from 'src/services';
+import strings from 'src/strings';
+import { ReportPlantingSite } from 'src/types/Report';
+import { Species } from 'src/types/Species';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type PlantingSiteSpecies = {
   id: number;

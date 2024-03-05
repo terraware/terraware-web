@@ -1,6 +1,8 @@
 import React from 'react';
+
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';

@@ -1,7 +1,9 @@
 import { Box, Typography, useTheme } from '@mui/material';
-import { Button, Tooltip, IconTooltip } from '@terraware/web-components';
-import useDeviceInfo from '../../utils/useDeviceInfo';
+import { Button, IconTooltip, Tooltip } from '@terraware/web-components';
+
 import strings from 'src/strings';
+
+import useDeviceInfo from '../../utils/useDeviceInfo';
 
 type OverviewItemCardProps = {
   isEditable: boolean;

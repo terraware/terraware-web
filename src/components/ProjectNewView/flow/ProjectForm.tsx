@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+
 import { Container, Grid, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
-import strings from 'src/strings';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
+
 import PageForm from 'src/components/common/PageForm';
+import strings from 'src/strings';
 import { CreateProjectRequest, UpdateProjectRequest } from 'src/types/Project';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 type ProjectFormProps<T extends CreateProjectRequest | UpdateProjectRequest> = {
   onNext: (project: T) => void;

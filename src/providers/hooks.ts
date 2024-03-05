@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+
 import { LocalizationContext, OrganizationContext, UserContext } from './contexts';
 
 export const useOrganization = () => useContext(OrganizationContext);

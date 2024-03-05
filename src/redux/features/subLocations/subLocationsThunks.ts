@@ -1,7 +1,8 @@
 import { Dispatch } from 'redux';
+
+import { setSubLocationsAction } from 'src/redux/features/subLocations/subLocationsSlice';
 import { RootState } from 'src/redux/rootReducer';
 import { SubLocationService } from 'src/services';
-import { setSubLocationsAction } from 'src/redux/features/subLocations/subLocationsSlice';
 
 export const requestSubLocations = (facilityIds: number[]) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {

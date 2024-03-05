@@ -1,8 +1,13 @@
-import type { Preview } from '@storybook/react';
-import { StyledEngineProvider, ThemeProvider } from '@mui/material';
-import { MemoryRouter } from 'react-router';
+import { useState } from 'react';
 import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router';
+
+import { StyledEngineProvider, ThemeProvider } from '@mui/material';
+import type { Preview } from '@storybook/react';
+
+import { LocalizationProvider } from '../src/providers';
 import { store } from '../src/redux/store';
+import theme from '../src/theme';
 
 const preview: Preview = {
   parameters: {
@@ -17,10 +22,6 @@ const preview: Preview = {
 };
 
 export default preview;
-
-import theme from '../src/theme';
-import { useState } from 'react';
-import { LocalizationProvider } from '../src/providers';
 
 export const decorators = [
   (Story) => {

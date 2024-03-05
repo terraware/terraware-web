@@ -1,16 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+
 import { APP_PATHS } from 'src/constants';
-import strings from 'src/strings';
-import { useAppSelector, useAppDispatch } from 'src/redux/store';
 import { useOrganization } from 'src/providers';
-import { PlantingSite } from 'src/types/Tracking';
-import { selectObservations } from 'src/redux/features/observations/observationsSelectors';
-import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
-import { selectRescheduleObservation } from 'src/redux/features/observations/observationsSelectors';
 import { requestRescheduleObservation } from 'src/redux/features/observations/observationsAsyncThunks';
+import { selectObservations } from 'src/redux/features/observations/observationsSelectors';
+import { selectRescheduleObservation } from 'src/redux/features/observations/observationsSelectors';
 import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
+import { PlantingSite } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
+
 import ScheduleObservationForm from './ScheduleObservationForm';
 
 export default function ScheduleObservation(): JSX.Element {

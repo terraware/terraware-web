@@ -1,25 +1,29 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router';
+import { useParams } from 'react-router-dom';
+
 import { Grid } from '@mui/material';
-import strings from 'src/strings';
-import { APP_PATHS } from 'src/constants';
-import { useLocalization } from 'src/providers';
-import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { selectCohort } from 'src/redux/features/cohorts/cohortsSelectors';
-import { requestCohort } from 'src/redux/features/cohorts/cohortsAsyncThunks';
-import Card from 'src/components/common/Card';
-import Button from 'src/components/common/button/Button';
+
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
+import Card from 'src/components/common/Card';
 import TextField from 'src/components/common/Textfield/Textfield';
+import Button from 'src/components/common/button/Button';
+import { APP_PATHS } from 'src/constants';
+import { useLocalization, useUser } from 'src/providers';
+import { requestCohort } from 'src/redux/features/cohorts/cohortsAsyncThunks';
+import { selectCohort } from 'src/redux/features/cohorts/cohortsSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 const CohortView = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const location = useStateLocation();
   const { activeLocale } = useLocalization();
+  const { isAllowed } = useUser();
+  const canEdit = isAllowed('UPDATE_COHORTS');
   const pathParams = useParams<{ cohortId: string }>();
   const cohortId = Number(pathParams.cohortId);
 
@@ -37,10 +41,11 @@ const CohortView = () => {
 
   const rightComponent = useMemo(
     () =>
-      activeLocale && (
+      activeLocale &&
+      canEdit && (
         <Button label={strings.EDIT_COHORT} icon='iconEdit' onClick={goToEditCohort} size='medium' id='editCohort' />
       ),
-    [goToEditCohort, activeLocale]
+    [activeLocale, canEdit, goToEditCohort]
   );
 
   const crumbs: Crumb[] = useMemo(

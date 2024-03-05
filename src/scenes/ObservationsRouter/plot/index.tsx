@@ -1,20 +1,23 @@
 import { useEffect, useMemo } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
+
+import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
-import strings from 'src/strings';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { getShortTime } from 'src/utils/dateFormatter';
 import { useLocalization } from 'src/providers';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-import { useAppSelector } from 'src/redux/store';
 import { selectObservationMonitoringPlot } from 'src/redux/features/observations/observationMonitoringPlotSelectors';
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import Card from 'src/components/common/Card';
+import { useAppSelector } from 'src/redux/store';
 import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
-import SpeciesTotalPlantsChart from 'src/scenes/ObservationsRouter/common/SpeciesTotalPlantsChart';
 import SpeciesMortalityRateChart from 'src/scenes/ObservationsRouter/common/SpeciesMortalityRateChart';
+import SpeciesTotalPlantsChart from 'src/scenes/ObservationsRouter/common/SpeciesTotalPlantsChart';
+import strings from 'src/strings';
+import { getShortTime } from 'src/utils/dateFormatter';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+
 import MonitoringPlotPhotos from './MonitoringPlotPhotos';
 
 export default function ObservationMonitoringPlot(): JSX.Element {

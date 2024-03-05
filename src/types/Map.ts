@@ -1,8 +1,9 @@
 // flattened info for shapes relating to planting site data
 import React from 'react';
-import mapboxgl, { Expression } from 'mapbox-gl';
 import { LayerProps } from 'react-map-gl';
+
 import { Feature, FeatureCollection, GeoJsonProperties, MultiPolygon, Polygon } from 'geojson';
+import mapboxgl, { Expression } from 'mapbox-gl';
 
 export type GeometryFeature = Feature<Polygon | MultiPolygon, GeoJsonProperties>;
 

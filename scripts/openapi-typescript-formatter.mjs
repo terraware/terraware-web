@@ -1,5 +1,5 @@
-import openapiTS from 'openapi-typescript';
 import fs from 'fs';
+import openapiTS from 'openapi-typescript';
 import url from 'url';
 
 // Generate types from the server API schema and output them to generated-schema.ts

@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
+
 import { Box, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, MultiSelect } from '@terraware/web-components';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
+
 import strings from 'src/strings';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
 import Checkbox from '../Checkbox';
 
 interface StyleProps {

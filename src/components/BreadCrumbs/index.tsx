@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { Box, Typography, useTheme } from '@mui/material';
+
 import BackToLink from 'src/components/common/BackToLink';
 import Link from 'src/components/common/Link';
 

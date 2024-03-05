@@ -1,18 +1,20 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { ObservationResults } from 'src/types/Observations';
+
 import { Box, Theme } from '@mui/material';
-import { PlantingSite } from 'src/types/Tracking';
-import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
-import { PlantingSiteMap } from 'src/components/Map';
-import { MapEntityId, MapObject, MapSourceBaseData, MapSourceProperties } from 'src/types/Map';
-import { MapService } from 'src/services';
-import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
-import strings from 'src/strings';
-import MapDateSelect from 'src/components/common/MapDateSelect';
-import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
-import { regexMatch } from 'src/utils/search';
-import TooltipContents from 'src/scenes/ObservationsRouter/map/TooltipContents';
 import { makeStyles } from '@mui/styles';
+
+import { PlantingSiteMap } from 'src/components/Map';
+import MapDateSelect from 'src/components/common/MapDateSelect';
+import MapLayerSelect, { MapLayer } from 'src/components/common/MapLayerSelect';
+import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
+import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
+import TooltipContents from 'src/scenes/ObservationsRouter/map/TooltipContents';
+import { MapService } from 'src/services';
+import strings from 'src/strings';
+import { MapEntityId, MapObject, MapSourceBaseData, MapSourceProperties } from 'src/types/Map';
+import { ObservationResults } from 'src/types/Observations';
+import { PlantingSite } from 'src/types/Tracking';
+import { regexMatch } from 'src/utils/search';
 
 const useStyles = makeStyles((theme: Theme) => ({
   popover: {

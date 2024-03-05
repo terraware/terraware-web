@@ -1,8 +1,10 @@
 import React, { useCallback, useState } from 'react';
+
 import { Button } from '@terraware/web-components';
-import strings from 'src/strings';
+
 import ProjectAssignModal from 'src/components/ProjectAssignModal';
 import { AssignProjectRequestPayload } from 'src/services/ProjectsService';
+import strings from 'src/strings';
 
 interface ProjectAssignTopBarButtonProps {
   totalResultsCount: number | undefined;

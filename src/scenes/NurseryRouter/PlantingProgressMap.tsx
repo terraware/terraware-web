@@ -1,23 +1,26 @@
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
-import { MapService } from 'src/services';
-import { MapData, MapSourceProperties } from 'src/types/Map';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { PlantingSiteMap } from 'src/components/Map';
+
 import { Typography, useTheme } from '@mui/material';
-import PlantingProgressMapDialog from './PlantingProgressMapDialog';
 import { makeStyles } from '@mui/styles';
-import { requestSitePopulation } from 'src/redux/features/tracking/trackingThunks';
+
+import { PlantingSiteMap } from 'src/components/Map';
 import { useOrganization } from 'src/providers';
+import { requestUpdatePlantingCompleted } from 'src/redux/features/plantings/plantingsAsyncThunks';
 import {
   selectUpdatePlantingCompleted,
   selectZonesHaveStatistics,
 } from 'src/redux/features/plantings/plantingsSelectors';
+import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+import { requestSitePopulation } from 'src/redux/features/tracking/trackingThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import StatsWarningDialog from 'src/scenes/NurseryRouter/StatsWarningModal';
+import { MapService } from 'src/services';
 import strings from 'src/strings';
-import { requestUpdatePlantingCompleted } from 'src/redux/features/plantings/plantingsAsyncThunks';
+import { MapData, MapSourceProperties } from 'src/types/Map';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-import StatsWarningDialog from 'src/scenes/NurseryRouter/StatsWarningModal';
+
+import PlantingProgressMapDialog from './PlantingProgressMapDialog';
 
 export const useStyles = makeStyles(() => ({
   popup: {

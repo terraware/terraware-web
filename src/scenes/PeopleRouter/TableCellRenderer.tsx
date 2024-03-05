@@ -1,8 +1,9 @@
 import React from 'react';
-import { APP_PATHS } from 'src/constants';
+
+import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
-import Link from 'src/components/common/Link';
+import { APP_PATHS } from 'src/constants';
 import { isTfContact } from 'src/utils/organization';
 
 export default function Renderer(props: RendererProps<TableRowType>): JSX.Element {

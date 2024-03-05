@@ -1,22 +1,24 @@
 import React, { useCallback } from 'react';
 import { Route, Switch } from 'react-router-dom';
+
 import { Slide, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { APP_PATHS } from 'src/constants';
+
 import ErrorBoundary from 'src/ErrorBoundary';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import useStateLocation from 'src/utils/useStateLocation';
-import { getRgbaFromHex } from 'src/utils/color';
-import CohortListView from 'src/scenes/AcceleratorRouter/CohortListView';
-import CohortView from 'src/scenes/AcceleratorRouter/CohortView';
+import { APP_PATHS } from 'src/constants';
 import CohortEditView from 'src/scenes/AcceleratorRouter/CohortEditView';
+import CohortListView from 'src/scenes/AcceleratorRouter/CohortListView';
 import CohortNewView from 'src/scenes/AcceleratorRouter/CohortNewView';
+import CohortView from 'src/scenes/AcceleratorRouter/CohortView';
 import DeliverableViewWrapper from 'src/scenes/AcceleratorRouter/DeliverableViewWrapper';
 import DeliverablesList from 'src/scenes/AcceleratorRouter/DeliverablesList';
 import ModuleContentView from 'src/scenes/AcceleratorRouter/ModuleContentView';
+import NavBar from 'src/scenes/AcceleratorRouter/NavBar';
 import OverviewView from 'src/scenes/AcceleratorRouter/OverviewView';
 import PeopleView from 'src/scenes/AcceleratorRouter/PeopleView';
-import NavBar from 'src/scenes/AcceleratorRouter/NavBar';
+import { getRgbaFromHex } from 'src/utils/color';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useStateLocation from 'src/utils/useStateLocation';
 
 interface AcceleratorRouterProps {
   showNavBar: boolean;

@@ -1,17 +1,20 @@
+import { useEffect, useMemo, useState } from 'react';
+
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, Icon } from '@terraware/web-components';
-import { useEffect, useMemo, useState } from 'react';
-import { Accession } from 'src/types/Accession';
-import strings from 'src/strings';
-import { LocationService } from 'src/services';
-import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
-import { Country } from 'src/types/Country';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import Accession2EditModal from '../edit/Accession2EditModal';
-import { isContributor } from 'src/utils/organization';
-import { useLocalization, useOrganization } from 'src/providers/hooks';
+
 import PhotosList from 'src/components/common/PhotosList';
+import { useLocalization, useOrganization } from 'src/providers/hooks';
+import { LocationService } from 'src/services';
+import strings from 'src/strings';
+import { Accession } from 'src/types/Accession';
+import { Country } from 'src/types/Country';
+import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
+import { isContributor } from 'src/utils/organization';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+import Accession2EditModal from '../edit/Accession2EditModal';
 
 type DetailPanelProps = {
   accession?: Accession;

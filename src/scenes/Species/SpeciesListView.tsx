@@ -1,44 +1,47 @@
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useHistory } from 'react-router';
+
 import { Grid, Popover, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Button from 'src/components/common/button/Button';
-import EmptyMessage from 'src/components/common/EmptyMessage';
-import { OrderPreserveableTable as Table } from 'src/components/common/table';
-import { TableColumnType } from 'src/components/common/table/types';
-import strings from 'src/strings';
-import { Species } from 'src/types/Species';
-import TfMain from 'src/components/common/TfMain';
+import { BusySpinner, DropdownItem, SortOrder } from '@terraware/web-components';
+import { PillList, PillListItem, Tooltip } from '@terraware/web-components';
+import _ from 'lodash';
+
 import PageSnackbar from 'src/components/PageSnackbar';
-import TextField from '../../components/common/Textfield/Textfield';
-import SearchService from 'src/services/SearchService';
-import { FieldNodePayload, FieldOptionsMap, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
-import useForm from 'src/utils/useForm';
-import Icon from '../../components/common/icon/Icon';
-import ImportSpeciesModal from './ImportSpeciesModal';
-import CheckDataModal from './CheckDataModal';
-import SpeciesCellRenderer from './TableCellRenderer';
-import useDebounce from 'src/utils/useDebounce';
-import { getRequestId, setRequestId } from 'src/utils/requestsId';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { isContributor } from 'src/utils/organization';
 import TooltipLearnMoreModal, {
+  LearnMoreLink,
   LearnMoreModalContentGrowthForm,
   LearnMoreModalContentSeedStorageBehavior,
-  LearnMoreLink,
   TooltipLearnMoreModalData,
 } from 'src/components/TooltipLearnMoreModal';
-import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import { BusySpinner, DropdownItem, SortOrder } from '@terraware/web-components';
-import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { PillList, PillListItem, Tooltip } from '@terraware/web-components';
+import Card from 'src/components/common/Card';
+import EmptyMessage from 'src/components/common/EmptyMessage';
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import OptionsMenu from 'src/components/common/OptionsMenu';
-import _ from 'lodash';
-import useQuery from 'src/utils/useQuery';
-import { useHistory } from 'react-router';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import TfMain from 'src/components/common/TfMain';
+import Button from 'src/components/common/button/Button';
+import { OrderPreserveableTable as Table } from 'src/components/common/table';
+import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { useLocalization, useOrganization } from 'src/providers/hooks';
+import SearchService from 'src/services/SearchService';
+import strings from 'src/strings';
+import { FieldNodePayload, FieldOptionsMap, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
+import { Species } from 'src/types/Species';
+import { isContributor } from 'src/utils/organization';
+import { getRequestId, setRequestId } from 'src/utils/requestsId';
+import useDebounce from 'src/utils/useDebounce';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useForm from 'src/utils/useForm';
+import useQuery from 'src/utils/useQuery';
+
+import TextField from '../../components/common/Textfield/Textfield';
+import Icon from '../../components/common/icon/Icon';
+import CheckDataModal from './CheckDataModal';
+import ImportSpeciesModal from './ImportSpeciesModal';
+import SpeciesCellRenderer from './TableCellRenderer';
 import { SpeciesSearchResultRow } from './types';
-import Card from 'src/components/common/Card';
 
 type SpeciesListProps = {
   reloadData: () => void;

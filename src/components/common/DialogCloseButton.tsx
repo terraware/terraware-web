@@ -1,7 +1,8 @@
+import React from 'react';
+
+import { Close } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import { Theme } from '@mui/material';
-import { Close } from '@mui/icons-material';
-import React from 'react';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({

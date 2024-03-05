@@ -1,40 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { CircularProgress, StyledEngineProvider, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+
+import BlockingSpinner from 'src/components/common/BlockingSpinner';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import {
-  useUser,
-  useOrganization,
-  useLocalization,
   LocalizationProvider,
   OrganizationProvider,
   UserProvider,
+  useLocalization,
+  useOrganization,
+  useUser,
 } from 'src/providers';
-import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  spinner: {
-    height: '200px',
-    width: '200px',
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    margin: 'auto',
-    '& .MuiCircularProgress-svg': {
-      color: theme.palette.TwClrIcnBrand,
-      height: '200px',
-      width: '200px',
-    },
-  },
-}));
 
 type BlockingBootstrapProps = {
   children?: React.ReactNode;
 };
 
 function BlockingBootstrap({ children }: BlockingBootstrapProps): JSX.Element {
-  const classes = useStyles();
   const [bootstrapped, setBootstrapped] = useState<boolean>(false);
   const { bootstrapped: userBootstrapped } = useUser();
   const { bootstrapped: organizationBootstrapped } = useOrganization();
@@ -49,11 +30,7 @@ function BlockingBootstrap({ children }: BlockingBootstrapProps): JSX.Element {
   }, [bootstrapped, userBootstrapped, organizationBootstrapped, isAcceleratorRoute, localizationBootstrapped]);
 
   if (!bootstrapped) {
-    return (
-      <StyledEngineProvider injectFirst>
-        <CircularProgress className={classes.spinner} size='193' />
-      </StyledEngineProvider>
-    );
+    return <BlockingSpinner />;
   }
 
   return <>{children}</>;

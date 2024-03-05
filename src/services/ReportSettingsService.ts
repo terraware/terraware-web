@@ -1,4 +1,5 @@
 import { paths } from 'src/api/types/generated-schema';
+
 import HttpService, { Response, Response2 } from './HttpService';
 
 const REPORTS_SETTINGS_ENDPOINT = '/api/v1/reports/settings';

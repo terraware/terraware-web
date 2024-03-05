@@ -1,11 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Deliverable, DeliverablesData } from 'src/types/Deliverables';
-import { buildReducers, StatusT } from 'src/redux/features/asyncUtils';
+
+import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import {
   requestGetDeliverable,
   requestListDeliverables,
   requestUpdateDeliverable,
+  requestUploadDeliverableDocument,
 } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
+import { Deliverable, DeliverablesData } from 'src/types/Deliverables';
 
 /**
  * Deliverable list
@@ -51,6 +53,7 @@ export const deliverablesEditSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     buildReducers(requestUpdateDeliverable)(builder);
+    buildReducers(requestUploadDeliverableDocument)(builder);
   },
 });
 

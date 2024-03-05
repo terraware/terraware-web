@@ -1,5 +1,4 @@
 import { paths } from 'src/api/types/generated-schema';
-import HttpService, { Response } from './HttpService';
 import {
   Observation,
   ObservationResultsPayload,
@@ -8,6 +7,8 @@ import {
   RescheduleObservationRequestPayload,
   ScheduleObservationRequestPayload,
 } from 'src/types/Observations';
+
+import HttpService, { Response } from './HttpService';
 
 /**
  * Tracking observations related services

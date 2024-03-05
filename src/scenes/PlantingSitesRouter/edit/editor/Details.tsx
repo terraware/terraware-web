@@ -1,8 +1,10 @@
 import { Box } from '@mui/material';
-import strings from 'src/strings';
-import { UpdatedPlantingSeason } from 'src/types/Tracking';
-import { DraftPlantingSite } from 'src/types/PlantingSite';
+
 import DetailsInputForm from 'src/scenes/PlantingSitesRouter/edit/DetailsInputForm';
+import strings from 'src/strings';
+import { DraftPlantingSite } from 'src/types/PlantingSite';
+import { UpdatedPlantingSeason } from 'src/types/Tracking';
+
 import StepTitleDescription from './StepTitleDescription';
 import { OnValidate } from './types';
 

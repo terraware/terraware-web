@@ -1,8 +1,10 @@
 import { Dispatch } from 'redux';
-import { SpeciesService } from 'src/services';
+
 import { RootState } from 'src/redux/rootReducer';
-import { setSpeciesProjectsAction } from './speciesProjectsSlice';
+import { SpeciesService } from 'src/services';
 import { SpeciesProjectsSearchResponse } from 'src/services/SpeciesService';
+
+import { setSpeciesProjectsAction } from './speciesProjectsSlice';
 
 export const requestSpeciesProjects = (organizationId: number, speciesId: number) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {

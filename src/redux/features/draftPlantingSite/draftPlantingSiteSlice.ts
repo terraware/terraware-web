@@ -1,7 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { buildReducers, StatusT } from 'src/redux/features/asyncUtils';
+
+import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
 import { PlantingSiteSearchResult } from 'src/types/Tracking';
+
 import {
   requestCreateDraft,
   requestDeleteDraft,

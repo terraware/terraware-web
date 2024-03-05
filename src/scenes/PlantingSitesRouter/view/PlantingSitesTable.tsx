@@ -1,18 +1,21 @@
 import React, { useCallback, useEffect, useState } from 'react';
+
 import { Box, Grid, useTheme } from '@mui/material';
 import { PillList, PillListItem, TableColumnType, Textfield } from '@terraware/web-components';
-import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
-import strings from 'src/strings';
-import PlantingSitesCellRenderer from './PlantingSitesCellRenderer';
+
+import Card from 'src/components/common/Card';
+import FilterMultiSelectContainer from 'src/components/common/FilterMultiSelectContainer';
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
 import isEnabled from 'src/features';
-import FilterMultiSelectContainer from 'src/components/common/FilterMultiSelectContainer';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { useAppSelector } from 'src/redux/store';
-import { Project } from 'src/types/Project';
+import strings from 'src/strings';
 import { PlantingSitesFilters } from 'src/types/PlantingSite';
-import Card from 'src/components/common/Card';
+import { Project } from 'src/types/Project';
+import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+
+import PlantingSitesCellRenderer from './PlantingSitesCellRenderer';
 
 interface PlantingSitesTableProps {
   results: SearchResponseElement[];

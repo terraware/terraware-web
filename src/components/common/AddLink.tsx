@@ -1,6 +1,7 @@
-import { makeStyles } from '@mui/styles';
 import { Box, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Icon } from '@terraware/web-components';
+
 import Link from 'src/components/common/Link';
 
 const useStyles = makeStyles((theme: Theme) => ({

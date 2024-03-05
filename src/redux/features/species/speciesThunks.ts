@@ -1,6 +1,8 @@
 import { Dispatch } from 'redux';
-import { SpeciesService } from 'src/services';
+
 import { RootState } from 'src/redux/rootReducer';
+import { SpeciesService } from 'src/services';
+
 import { setSpeciesAction } from './speciesSlice';
 
 export const requestSpecies = (organizationId: number) => {

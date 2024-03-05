@@ -1,25 +1,13 @@
+import { useEffect, useState } from 'react';
+
+import { Close } from '@mui/icons-material';
 import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, Checkbox, DialogBox, SelectT, Textfield } from '@terraware/web-components';
-import DatePicker from 'src/components/common/DatePicker';
-import { Accession } from 'src/types/Accession';
-import AccessionService, { ViabilityTestPostRequest } from 'src/services/AccessionService';
-import strings from 'src/strings';
-import useForm from 'src/utils/useForm';
 import { Dropdown } from '@terraware/web-components';
-import { seedTypes, testMethods, TEST_TYPES, treatments } from 'src/types/Accession';
-import { OrganizationUser, User } from 'src/types/User';
-import { useEffect, useState } from 'react';
-import { OrganizationUserService } from 'src/services';
-import { getSeedBank, isContributor } from 'src/utils/organization';
-import useSnackbar from 'src/utils/useSnackbar';
-import { renderUser } from 'src/utils/renderUser';
-import { Close } from '@mui/icons-material';
 import { preventDefaultEvent, useDeviceInfo } from '@terraware/web-components/utils';
 import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
-import { ViabilityTest } from 'src/types/Accession';
-import ViabilityResultModal from './ViabilityResultModal';
-import { getSubstratesAccordingToType } from 'src/utils/viabilityTest';
+
 import TooltipLearnMoreModal, {
   LearnMoreLink,
   LearnMoreModalContentSeedType,
@@ -28,9 +16,24 @@ import TooltipLearnMoreModal, {
   TooltipLearnMoreModalData,
 } from 'src/components/TooltipLearnMoreModal';
 import AddLink from 'src/components/common/AddLink';
+import DatePicker from 'src/components/common/DatePicker';
 import { useOrganization } from 'src/providers/hooks';
+import { OrganizationUserService } from 'src/services';
+import AccessionService, { ViabilityTestPostRequest } from 'src/services/AccessionService';
+import strings from 'src/strings';
+import { Accession } from 'src/types/Accession';
+import { TEST_TYPES, seedTypes, testMethods, treatments } from 'src/types/Accession';
+import { ViabilityTest } from 'src/types/Accession';
 import { Facility } from 'src/types/Facility';
+import { OrganizationUser, User } from 'src/types/User';
+import { getSeedBank, isContributor } from 'src/utils/organization';
+import { renderUser } from 'src/utils/renderUser';
+import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
+import { getSubstratesAccordingToType } from 'src/utils/viabilityTest';
+
+import ViabilityResultModal from './ViabilityResultModal';
 
 const useStyles = makeStyles(() => ({
   checkbox: {

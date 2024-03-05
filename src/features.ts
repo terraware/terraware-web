@@ -1,5 +1,5 @@
-import env from 'src/utils/useEnvironment';
 import { CachedUserService } from 'src/services';
+import env from 'src/utils/useEnvironment';
 
 export type FeatureName = 'Show Production View' | 'Projects' | 'User Detailed Sites' | 'Accelerator';
 

@@ -1,16 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react';
+
 import _ from 'lodash';
-import strings from 'src/strings';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { selectBatchesRequest } from 'src/redux/features/batches/batchesSelectors';
-import { requestFetchBatch, requestSaveBatch } from 'src/redux/features/batches/batchesAsyncThunks';
-import { BatchData } from 'src/services/NurseryBatchService';
-import useSnackbar from 'src/utils/useSnackbar';
-import { Batch } from 'src/types/Batch';
+
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import { useSubLocations } from 'src/scenes/InventoryRouter/form/useSubLocations';
-import SubLocationsDropdown from 'src/scenes/InventoryRouter/form/SubLocationsDropdown';
 import { useOrganization } from 'src/providers';
+import { requestFetchBatch, requestSaveBatch } from 'src/redux/features/batches/batchesAsyncThunks';
+import { selectBatchesRequest } from 'src/redux/features/batches/batchesSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import SubLocationsDropdown from 'src/scenes/InventoryRouter/form/SubLocationsDropdown';
+import { useSubLocations } from 'src/scenes/InventoryRouter/form/useSubLocations';
+import { BatchData } from 'src/services/NurseryBatchService';
+import strings from 'src/strings';
+import { Batch } from 'src/types/Batch';
+import useSnackbar from 'src/utils/useSnackbar';
 
 interface OverviewItemCardSubLocationsProps {
   batch: Batch;

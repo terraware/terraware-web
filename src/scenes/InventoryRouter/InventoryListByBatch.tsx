@@ -1,22 +1,24 @@
 import React, { useCallback, useEffect, useState } from 'react';
+
+import { CircularProgress, Container, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { TableColumnType } from '@terraware/web-components';
-import { CircularProgress, Container, Theme } from '@mui/material';
-import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
+
+import Card from 'src/components/common/Card';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
+import isEnabled from 'src/features';
+import { useOrganization } from 'src/providers';
+import { isBatchEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
+import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
+import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
+import { BatchInventoryResult, InventoryResultWithBatchNumber } from 'src/scenes/InventoryRouter/InventoryV2View';
+import { NurseryBatchService } from 'src/services';
+import { BE_SORTED_FIELDS, SearchInventoryParams } from 'src/services/NurseryInventoryService';
+import strings from 'src/strings';
 import { SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
-import { BE_SORTED_FIELDS, SearchInventoryParams } from 'src/services/NurseryInventoryService';
-import { useOrganization } from 'src/providers';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
-import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
-import { BatchInventoryResult, InventoryResultWithBatchNumber } from 'src/scenes/InventoryRouter/InventoryV2View';
-import strings from 'src/strings';
-import { NurseryBatchService } from 'src/services';
-import Card from 'src/components/common/Card';
-import { isBatchEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
-import isEnabled from 'src/features';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {

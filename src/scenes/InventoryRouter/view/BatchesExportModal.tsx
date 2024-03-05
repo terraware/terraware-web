@@ -1,5 +1,5 @@
-import { SearchResponseElement } from 'src/types/Search';
 import ExportCsvModal from 'src/components/common/ExportCsvModal';
+import { SearchResponseElement } from 'src/types/Search';
 
 interface BatchesExportModalProps {
   batchesExport: () => Promise<SearchResponseElement[] | null>;

@@ -1,28 +1,31 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
+
 import { CircularProgress } from '@mui/material';
-import { FieldOptionsMap } from 'src/types/Search';
-import strings from 'src/strings';
-import { APP_PATHS } from 'src/constants';
-import useSnackbar from 'src/utils/useSnackbar';
-import { useLocalization, useOrganization } from 'src/providers';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
-import { requestSpecies } from 'src/redux/features/species/speciesThunks';
-import {
-  selectObservationsResultsError,
-  selectObservationsResults,
-} from 'src/redux/features/observations/observationsSelectors';
-import { selectSpeciesError, selectSpecies } from 'src/redux/features/species/speciesSelectors';
-import { selectPlantingSitesError, selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+
 import { FilterField } from 'src/components/common/FilterGroup';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
+import { APP_PATHS } from 'src/constants';
+import { useLocalization, useOrganization } from 'src/providers';
+import {
+  selectObservationsResults,
+  selectObservationsResultsError,
+} from 'src/redux/features/observations/observationsSelectors';
+import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import { selectSpecies, selectSpeciesError } from 'src/redux/features/species/speciesSelectors';
+import { requestSpecies } from 'src/redux/features/species/speciesThunks';
+import { selectPlantingSites, selectPlantingSitesError } from 'src/redux/features/tracking/trackingSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
+import { FieldOptionsMap } from 'src/types/Search';
+import { isAdmin } from 'src/utils/organization';
+import useSnackbar from 'src/utils/useSnackbar';
+
 import ObservationsHome from './ObservationsHome';
 import ObservationDetails from './details';
-import ObservationPlantingZoneDetails from './zone';
 import ObservationMonitoringPlotDetails from './plot';
-import { ScheduleObservation, RescheduleObservation } from './schedule';
-import { isAdmin } from 'src/utils/organization';
+import { RescheduleObservation, ScheduleObservation } from './schedule';
+import ObservationPlantingZoneDetails from './zone';
 
 /**
  * This page will route to the correct component based on url params

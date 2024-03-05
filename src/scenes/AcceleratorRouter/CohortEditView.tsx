@@ -1,15 +1,17 @@
-import { Typography, useTheme } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+
+import { Typography, useTheme } from '@mui/material';
+
 import { APP_PATHS } from 'src/constants';
-import strings from 'src/strings';
-import { UpdateCohortRequestPayload } from 'src/types/Cohort';
-import useSnackbar from 'src/utils/useSnackbar';
 import { requestCohort, requestCohortUpdate } from 'src/redux/features/cohorts/cohortsAsyncThunks';
 import { selectCohort, selectCohortRequest } from 'src/redux/features/cohorts/cohortsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import AcceleratorMain from 'src/scenes/AcceleratorRouter/AcceleratorMain';
 import CohortForm from 'src/scenes/AcceleratorRouter/CohortForm';
+import strings from 'src/strings';
+import { UpdateCohortRequestPayload } from 'src/types/Cohort';
+import useSnackbar from 'src/utils/useSnackbar';
 
 export default function CohortEditView(): JSX.Element {
   const dispatch = useAppDispatch();

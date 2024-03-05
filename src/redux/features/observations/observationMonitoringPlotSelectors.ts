@@ -1,5 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { ObservationPlantingSubzoneResults, ObservationMonitoringPlotResults } from 'src/types/Observations';
+
+import { ObservationMonitoringPlotResults, ObservationPlantingSubzoneResults } from 'src/types/Observations';
+
 import { ZoneParams, selectObservationPlantingZone } from './observationPlantingZoneSelectors';
 
 export type MonitoringPlotParams = ZoneParams & {

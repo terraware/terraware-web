@@ -1,29 +1,31 @@
+import React, { useEffect, useState } from 'react';
+
 import { Grid, Theme } from '@mui/material';
-import TextField from 'src/components/common/Textfield/Textfield';
 import { makeStyles } from '@mui/styles';
 import { Dropdown, MultiSelect } from '@terraware/web-components';
-import React, { useEffect, useState } from 'react';
-import strings from 'src/strings';
-import {
-  conservationCategories,
-  EcosystemType,
-  ecosystemTypes,
-  growthForms,
-  Species,
-  storageBehaviors,
-} from 'src/types/Species';
-import { useLocalization } from 'src/providers/hooks';
-import { SpeciesService } from 'src/services';
-import { getRequestId, setRequestId } from 'src/utils/requestsId';
-import useDebounce from 'src/utils/useDebounce';
-import Checkbox from 'src/components/common/Checkbox';
-import Select from 'src/components/common/Select/Select';
+
 import TooltipLearnMoreModal, {
+  LearnMoreLink,
   LearnMoreModalContentGrowthForm,
   LearnMoreModalContentSeedStorageBehavior,
-  LearnMoreLink,
   TooltipLearnMoreModalData,
 } from 'src/components/TooltipLearnMoreModal';
+import Checkbox from 'src/components/common/Checkbox';
+import Select from 'src/components/common/Select/Select';
+import TextField from 'src/components/common/Textfield/Textfield';
+import { useLocalization } from 'src/providers/hooks';
+import { SpeciesService } from 'src/services';
+import strings from 'src/strings';
+import {
+  EcosystemType,
+  Species,
+  conservationCategories,
+  ecosystemTypes,
+  growthForms,
+  storageBehaviors,
+} from 'src/types/Species';
+import { getRequestId, setRequestId } from 'src/utils/requestsId';
+import useDebounce from 'src/utils/useDebounce';
 
 const useStyles = makeStyles((theme: Theme) => ({
   blockCheckbox: {

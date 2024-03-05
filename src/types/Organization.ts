@@ -1,6 +1,7 @@
-import { Facility } from './Facility';
-import strings from 'src/strings';
 import { components } from 'src/api/types/generated-schema';
+import strings from 'src/strings';
+
+import { Facility } from './Facility';
 
 export type ManagedLocationType = 'SeedBank' | 'Nursery' | 'PlantingSite';
 

@@ -1,5 +1,6 @@
-import { Story } from '@storybook/react';
 import { Box, Typography } from '@mui/material';
+import { Story } from '@storybook/react';
+
 import ListMapView, { ListMapViewProps } from 'src/components/ListMapView';
 
 const ListMapViewTemplate: Story<ListMapViewProps> = (args) => {

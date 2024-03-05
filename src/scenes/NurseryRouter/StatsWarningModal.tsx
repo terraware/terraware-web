@@ -1,7 +1,9 @@
-import strings from 'src/strings';
-import Button from '../../components/common/button/Button';
-import DialogBox from '../../components/common/DialogBox/DialogBox';
 import { Typography, useTheme } from '@mui/material';
+
+import strings from 'src/strings';
+
+import DialogBox from '../../components/common/DialogBox/DialogBox';
+import Button from '../../components/common/button/Button';
 
 type CompleteUpdateProps = {
   id: number;

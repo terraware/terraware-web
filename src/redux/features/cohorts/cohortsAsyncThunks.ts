@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { setCohortAction, setCohortsAction } from 'src/redux/features/cohorts/cohortsSlice';
 import CohortService, {
   CreateCohortResponsePayload,

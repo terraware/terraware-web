@@ -1,9 +1,12 @@
-import DateSlider from './DateSlider';
-import { Box, Typography, useTheme } from '@mui/material';
 import { useMemo } from 'react';
+
+import { Box, Typography, useTheme } from '@mui/material';
+
 import Card from 'src/components/common/Card';
 import { useLocalization } from 'src/providers';
 import { getShortDate } from 'src/utils/dateFormatter';
+
+import DateSlider from './DateSlider';
 
 type MapDateSelectProps = {
   dates: string[]; // date strings in the format 'YYYY-MM-DD'

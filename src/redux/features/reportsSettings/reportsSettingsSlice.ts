@@ -1,5 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ReportsSettings, GetReportsSettingsResponse } from 'src/services/ReportSettingsService';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
+import { GetReportsSettingsResponse, ReportsSettings } from 'src/services/ReportSettingsService';
 
 type Payload = {
   settings?: GetReportsSettingsResponse;

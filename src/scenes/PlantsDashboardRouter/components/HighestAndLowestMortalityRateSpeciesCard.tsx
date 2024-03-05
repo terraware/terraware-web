@@ -1,10 +1,11 @@
-import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import strings from 'src/strings';
 import { Box, Divider, Typography, useTheme } from '@mui/material';
-import { useAppSelector } from 'src/redux/store';
+
 import FormattedNumber from 'src/components/common/FormattedNumber';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
+import { useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type HighestAndLowestMortalityRateSpeciesCardProps = {
   plantingSiteId: number;

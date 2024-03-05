@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import strings from 'src/strings';
-import Button from 'src/components/common/button/Button';
+import React, { useEffect, useState } from 'react';
+
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
-import { Accession } from 'src/types/Accession';
+import Button from 'src/components/common/button/Button';
 import AccessionService from 'src/services/AccessionService';
+import strings from 'src/strings';
+import { Accession } from 'src/types/Accession';
 import useForm from 'src/utils/useForm';
+
 import EditState from './EditState';
 import QuantityModal from './QuantityModal';
 

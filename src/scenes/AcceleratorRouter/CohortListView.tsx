@@ -1,20 +1,23 @@
 import React, { useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
+
 import { Grid, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { useDeviceInfo } from '@terraware/web-components/utils';
 import { TableColumnType } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
+
+import PageSnackbar from 'src/components/PageSnackbar';
+import Card from 'src/components/common/Card';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import Button from 'src/components/common/button/Button';
+import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
-import strings from 'src/strings';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { requestCohorts } from 'src/redux/features/cohorts/cohortsAsyncThunks';
 import { selectCohorts } from 'src/redux/features/cohorts/cohortsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import Card from 'src/components/common/Card';
-import Table from 'src/components/common/table';
-import Button from 'src/components/common/button/Button';
-import PageSnackbar from 'src/components/PageSnackbar';
+import strings from 'src/strings';
+
 import AcceleratorMain from './AcceleratorMain';
 import CohortCellRenderer from './CohortCellRenderer';
 
@@ -57,6 +60,8 @@ const CohortListView = () => {
   const contentRef = useRef(null);
   const classes = useStyles();
   const history = useHistory();
+  const { isAllowed } = useUser();
+  const canCreateCohorts = isAllowed('CREATE_COHORTS');
 
   const cohorts = useAppSelector(selectCohorts);
 
@@ -78,14 +83,15 @@ const CohortListView = () => {
           <Grid item xs={8}>
             <h1 className={classes.title}>{strings.COHORTS}</h1>
           </Grid>
-          <Grid item xs={4} className={classes.centered}>
-            {isMobile ? (
-              <Button id='new-cohort' icon='plus' onClick={goToNewCohort} size='medium' />
-            ) : (
-              <Button id='new-cohort' label={strings.ADD_COHORT} icon='plus' onClick={goToNewCohort} size='medium' />
-            )}
-          </Grid>
-
+          {canCreateCohorts && (
+            <Grid item xs={4} className={classes.centered}>
+              {isMobile ? (
+                <Button id='new-cohort' icon='plus' onClick={goToNewCohort} size='medium' />
+              ) : (
+                <Button id='new-cohort' label={strings.ADD_COHORT} icon='plus' onClick={goToNewCohort} size='medium' />
+              )}
+            </Grid>
+          )}
           <PageSnackbar />
         </Grid>
       </PageHeaderWrapper>

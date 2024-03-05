@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { makeStyles } from '@mui/styles';
-import strings from 'src/strings';
+
 import {
   Container,
   FormControl,
@@ -13,30 +12,33 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { NurseryWithdrawalRequest, NurseryWithdrawalPurposes, BatchWithdrawalPayload } from 'src/types/Batch';
+import { makeStyles } from '@mui/styles';
+import { Dropdown, DropdownItem, IconTooltip, Textfield } from '@terraware/web-components';
 import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
-import { APP_PATHS } from 'src/constants';
-import { useAppSelector } from 'src/redux/store';
-import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
-import Divisor from 'src/components/common/Divisor';
-import { Dropdown, Textfield, DropdownItem, IconTooltip } from '@terraware/web-components';
-import DatePicker from 'src/components/common/DatePicker';
-import { getAllNurseries, getNurseryById, isContributor } from 'src/utils/organization';
-import { SpeciesService } from 'src/services';
-import useSnackbar from 'src/utils/useSnackbar';
-import PageForm from 'src/components/common/PageForm';
-import SubzoneSelector, { SubzoneInfo, ZoneInfo } from 'src/components/SubzoneSelector';
-import { useOrganization } from 'src/providers/hooks';
-import { Facility } from 'src/types/Facility';
-import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
-import { useUser } from 'src/providers';
-import { useNumberFormatter } from 'src/utils/useNumber';
-import isEnabled from 'src/features';
-import { SearchResponseElement } from 'src/types/Search';
+
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
+import SubzoneSelector, { SubzoneInfo, ZoneInfo } from 'src/components/SubzoneSelector';
+import DatePicker from 'src/components/common/DatePicker';
+import Divisor from 'src/components/common/Divisor';
+import PageForm from 'src/components/common/PageForm';
+import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
+import { useUser } from 'src/providers';
+import { useOrganization } from 'src/providers/hooks';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
+import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import { useAppSelector } from 'src/redux/store';
+import { SpeciesService } from 'src/services';
+import strings from 'src/strings';
+import { BatchWithdrawalPayload, NurseryWithdrawalPurposes, NurseryWithdrawalRequest } from 'src/types/Batch';
+import { Facility } from 'src/types/Facility';
 import { Project } from 'src/types/Project';
+import { SearchResponseElement } from 'src/types/Search';
+import { getAllNurseries, getNurseryById, isContributor } from 'src/utils/organization';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { useNumberFormatter } from 'src/utils/useNumber';
+import useSnackbar from 'src/utils/useSnackbar';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 const useStyles = makeStyles((theme: Theme) => ({
   withdrawnQuantity: {

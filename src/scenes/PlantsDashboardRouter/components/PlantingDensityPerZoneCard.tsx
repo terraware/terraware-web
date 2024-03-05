@@ -1,15 +1,17 @@
-import { Box, Typography, useTheme } from '@mui/material';
-import { useAppSelector } from 'src/redux/store';
-import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import React, { useEffect, useMemo, useState } from 'react';
-import { truncate } from 'src/utils/text';
-import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import strings from 'src/strings';
+
+import { Box, Typography, useTheme } from '@mui/material';
+
 import BarChart from 'src/components/common/Chart/BarChart';
-import { getShortDate } from 'src/utils/dateFormatter';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useLocalization } from 'src/providers';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
+import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+import { useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
+import { getShortDate } from 'src/utils/dateFormatter';
+import { truncate } from 'src/utils/text';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 const MAX_ZONE_NAME_LENGTH = 20;
 

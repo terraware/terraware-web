@@ -1,14 +1,16 @@
-import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import { Box, Typography, useTheme } from '@mui/material';
-import strings from 'src/strings';
 import React, { useMemo } from 'react';
-import { useAppSelector } from 'src/redux/store';
-import { selectPlantingSite, selectSiteReportedPlants } from 'src/redux/features/tracking/trackingSelectors';
-import { getShortDate } from 'src/utils/dateFormatter';
-import { useLocalization } from 'src/providers';
+
+import { Box, Typography, useTheme } from '@mui/material';
+
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import { useLocalization } from 'src/providers';
 import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
+import { selectPlantingSite, selectSiteReportedPlants } from 'src/redux/features/tracking/trackingSelectors';
+import { useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
+import { getShortDate } from 'src/utils/dateFormatter';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type PlantingSiteDensityCardProps = {
   plantingSiteId: number;

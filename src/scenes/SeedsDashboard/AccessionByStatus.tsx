@@ -1,8 +1,10 @@
-import { Box, Typography, useTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
+
+import { Box, Typography, useTheme } from '@mui/material';
+
+import TwLink from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import TwLink from 'src/components/common/Link';
 
 interface Props {
   label: string;

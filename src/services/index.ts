@@ -1,3 +1,5 @@
+import SubLocationService from 'src/services/SubLocationService';
+
 import AccessionService from './AccessionService';
 import CachedUserService from './CachedUserService';
 import * as DraftPlantingSiteService from './DraftPlantingSiteService';
@@ -10,14 +12,13 @@ import NurseryBatchService from './NurseryBatchService';
 import NurseryInventoryService from './NurseryInventoryService';
 import NurseryWithdrawalService from './NurseryWithdrawalService';
 import ObservationsService from './ObservationsService';
-import OrganizationUserService from './OrganizationUserService';
 import OrganizationService from './OrganizationService';
+import OrganizationUserService from './OrganizationUserService';
 import PlantingsService from './PlantingsService';
 import PreferencesService from './PreferencesService';
 import SearchService from './SearchService';
 import SeedBankService from './SeedBankService';
 import SpeciesService from './SpeciesService';
-import SubLocationService from 'src/services/SubLocationService';
 import SystemService from './SystemService';
 import TrackingService from './TrackingService';
 import UserService from './UserService';

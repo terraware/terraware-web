@@ -1,17 +1,20 @@
-import { Grid, Container, useTheme, Typography } from '@mui/material';
-import { BusySpinner } from '@terraware/web-components';
 import React, { useState } from 'react';
-import strings from 'src/strings';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { Species, SpeciesRequestError } from 'src/types/Species';
-import useForm from 'src/utils/useForm';
+import { useHistory } from 'react-router-dom';
+
+import { Container, Grid, Typography, useTheme } from '@mui/material';
+import { BusySpinner } from '@terraware/web-components';
+
+import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers/hooks';
+import SpeciesDetailsForm from 'src/scenes/Species/SpeciesDetailsForm';
 import { SpeciesService } from 'src/services';
+import strings from 'src/strings';
+import { Species, SpeciesRequestError } from 'src/types/Species';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useForm from 'src/utils/useForm';
+
 import PageForm from '../../components/common/PageForm';
 import TfMain from '../../components/common/TfMain';
-import { useHistory } from 'react-router-dom';
-import { APP_PATHS } from 'src/constants';
-import SpeciesDetailsForm from 'src/scenes/Species/SpeciesDetailsForm';
 
 function initSpecies(species?: Species): Species {
   return (

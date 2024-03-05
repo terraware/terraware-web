@@ -1,9 +1,10 @@
 import React from 'react';
-import { APP_PATHS } from 'src/constants';
-import { MonitoringPlotStatus, getPlotStatus } from 'src/types/Observations';
+
+import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
-import Link from 'src/components/common/Link';
+import { APP_PATHS } from 'src/constants';
+import { MonitoringPlotStatus, getPlotStatus } from 'src/types/Observations';
 
 const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies', 'mortalityRate'];
 
