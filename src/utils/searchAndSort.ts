@@ -180,7 +180,7 @@ export const modifySearchNode = (
     } else if (operation === 'REPLACE') {
       return {
         ...search,
-        values: values,
+        values,
       };
     }
   } else if (search.child) {
