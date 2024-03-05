@@ -63,7 +63,7 @@ const CohortView = () => {
   return (
     <Page crumbs={crumbs} title={cohort?.name || ''} rightComponent={rightComponent}>
       <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, borderRadius: '24px' }}>
-        <Grid container>
+        <Grid container spacing={3}>
           <Grid item xs={4}>
             <TextField label={strings.NAME} id='name' type='text' value={cohort?.name} display={true} />
           </Grid>
