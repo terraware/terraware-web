@@ -11,7 +11,7 @@ import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useUser } from 'src/providers';
-import { requestCohort } from 'src/redux/features/cohorts/cohortsAsyncThunks';
+import { requestCohort, requestCohortModules } from 'src/redux/features/cohorts/cohortsAsyncThunks';
 import { selectCohort } from 'src/redux/features/cohorts/cohortsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -28,9 +28,11 @@ const CohortView = () => {
   const cohortId = Number(pathParams.cohortId);
 
   const cohort = useAppSelector(selectCohort(cohortId));
+  const cohortModules = useAppSelector((state) => state.cohortModules[cohortId]);
 
   useEffect(() => {
     void dispatch(requestCohort({ cohortId }));
+    void dispatch(requestCohortModules({ cohortId }));
   }, [cohortId, dispatch]);
 
   const goToEditCohort = useCallback(
@@ -61,12 +63,21 @@ const CohortView = () => {
   return (
     <Page crumbs={crumbs} title={cohort?.name || ''} rightComponent={rightComponent}>
       <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, borderRadius: '24px' }}>
-        <Grid container>
+        <Grid container spacing={3}>
           <Grid item xs={4}>
             <TextField label={strings.NAME} id='name' type='text' value={cohort?.name} display={true} />
           </Grid>
           <Grid item xs={8}>
             <TextField label={strings.PHASE} id='phase' type='text' value={cohort?.phase} display={true} />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              label='Modules'
+              id='phase'
+              type='text'
+              value={cohortModules?.map((module) => module.name).join(', ')}
+              display={true}
+            />
           </Grid>
         </Grid>
       </Card>
