@@ -96,7 +96,8 @@ export default CohortService;
 // TODO: remove mock data once BE is done
 mockResponseData = [
   {
-    id: 1,
+    cohortId: 1,
+    moduleId: 1,
     name: 'Module 1',
     description: 'Module 1 description',
     duration: 3,
@@ -106,7 +107,8 @@ mockResponseData = [
     updatedAt: '2021-01-01T00:00:00Z',
   },
   {
-    id: 2,
+    cohortId: 1,
+    moduleId: 2,
     name: 'Module 2',
     description: 'Module 2 description',
     duration: 5,
@@ -116,7 +118,8 @@ mockResponseData = [
     updatedAt: '2021-01-01T00:00:00Z',
   },
   {
-    id: 3,
+    cohortId: 1,
+    moduleId: 3,
     name: 'Module 3',
     description: 'Module 3 description',
     duration: 7,
@@ -126,7 +129,8 @@ mockResponseData = [
     updatedAt: '2021-01-01T00:00:00Z',
   },
   {
-    id: 4,
+    cohortId: 1,
+    moduleId: 4,
     name: 'Module 4',
     description: 'Module 4 description',
     duration: 9,
@@ -136,7 +140,8 @@ mockResponseData = [
     updatedAt: '2021-01-01T00:00:00Z',
   },
   {
-    id: 5,
+    cohortId: 1,
+    moduleId: 5,
     name: 'Module 5',
     description: 'Module 5 description',
     duration: 11,
