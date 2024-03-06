@@ -48,6 +48,14 @@ export interface paths {
      */
     put: operations["updateSubmission"];
   };
+  "/api/v1/accelerator/globalRoles/users": {
+    /** Gets the list of users that have global roles. */
+    get: operations["listGlobalRoles"];
+  };
+  "/api/v1/accelerator/globalRoles/users/{userId}": {
+    /** Apply the supplied global roles to the user. */
+    post: operations["updateGlobalRoles"];
+  };
   "/api/v1/automations": {
     /** Gets a list of automations for a device or facility. */
     get: operations["listAutomations"];
@@ -2377,6 +2385,10 @@ export interface components {
       goal: "NoPoverty" | "ZeroHunger" | "GoodHealth" | "QualityEducation" | "GenderEquality" | "CleanWater" | "AffordableEnergy" | "DecentWork" | "Industry" | "ReducedInequalities" | "SustainableCities" | "ResponsibleConsumption" | "ClimateAction" | "LifeBelowWater" | "LifeOnLand" | "Peace" | "Partnerships";
       progress?: string;
     };
+    GlobalRoleUsersListResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      users: components["schemas"]["UserWithGlobalRolesPayload"][];
+    };
     LineString: WithRequired<{
       type: "LineString";
     } & Omit<components["schemas"]["Geometry"], "type"> & {
@@ -3348,6 +3360,9 @@ export interface components {
     SimpleSuccessResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
     };
+    SuccessResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+    };
     SpeciesLookupCommonNamePayload: {
       /** @description ISO 639-1 two-letter language code indicating the name's language. Some common names in the server's taxonomic database are not tagged with languages; this value will not be present for those names. */
       language?: string;
@@ -3788,6 +3803,9 @@ export interface components {
        */
       timeZone?: string;
     };
+    UpdateGlobalRolesRequestPayload: {
+      globalRoles: string[];
+    };
     UpdateNotificationRequestPayload: {
       read: boolean;
     };
@@ -4023,6 +4041,14 @@ export interface components {
        * @example America/New_York
        */
       timeZone?: string;
+    };
+    UserWithGlobalRolesPayload: {
+      email: string;
+      firstName?: string;
+      globalRoles: ("Super-Admin" | "Accelerator Admin" | "TF Expert" | "Read Only")[];
+      /** Format: int64 */
+      id: number;
+      lastName?: string;
     };
     VersionsEntryPayload: {
       appName: string;
@@ -4290,6 +4316,44 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets the list of users that have global roles. */
+  listGlobalRoles: {
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GlobalRoleUsersListResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Apply the supplied global roles to the user. */
+  updateGlobalRoles: {
+    parameters: {
+      path: {
+        userId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateGlobalRolesRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
