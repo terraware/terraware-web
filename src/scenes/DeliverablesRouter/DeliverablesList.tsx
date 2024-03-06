@@ -23,11 +23,6 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           type: 'string',
         },
         {
-          key: 'description',
-          name: strings.DESCRIPTION,
-          type: 'string',
-        },
-        {
           key: 'type',
           name: strings.TYPE,
           type: 'string',
