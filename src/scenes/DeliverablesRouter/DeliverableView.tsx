@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
@@ -13,14 +13,13 @@ import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
+import DocumentLimitReachedMessage from 'src/scenes/DeliverablesRouter/DocumentLimitReachedMessage';
 import DocumentsList from 'src/scenes/DeliverablesRouter/DocumentsList';
 import RejectedDeliverableMessage from 'src/scenes/DeliverablesRouter/RejectedDeliverableMessage';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-import DocumentLimitReachedMessage from './DocumentLimitReachedMessage';
-
-export const MAX_FILES_LIMIT = 15;
+const MAX_FILES_LIMIT = 15;
 
 export type Props = EditProps & {
   isBusy?: boolean;
@@ -32,7 +31,10 @@ const DeliverableView = (props: Props): JSX.Element => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
 
-  const [showDocumentLimitReachedMessage, setShowDocumentLimitReachedMessage] = useState(false);
+  const documentLimitReached = useMemo(
+    () => viewProps.deliverable.documents.length >= MAX_FILES_LIMIT,
+    [viewProps.deliverable.documents.length]
+  );
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -53,16 +55,13 @@ const DeliverableView = (props: Props): JSX.Element => {
       {props.isBusy && <BusySpinner />}
       <Box display='flex' flexDirection='column' flexGrow={1}>
         <RejectedDeliverableMessage {...viewProps} />
-        {showDocumentLimitReachedMessage && <DocumentLimitReachedMessage />}
+        {documentLimitReached && <DocumentLimitReachedMessage maxFiles={MAX_FILES_LIMIT} />}
         <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
           <Metadata {...viewProps} />
           <Typography marginBottom={theme.spacing(2)} fontSize='20px' lineHeight='28px' fontWeight={600}>
             {strings.DOCUMENTS}
           </Typography>
-          <DocumentsUploader
-            {...viewProps}
-            showDocumentLimitReachedMessage={() => setShowDocumentLimitReachedMessage(true)}
-          />
+          <DocumentsUploader {...viewProps} maxFiles={MAX_FILES_LIMIT} />
           <DocumentsList {...viewProps} />
         </Card>
       </Box>

@@ -6,9 +6,11 @@ import { Message } from '@terraware/web-components';
 import { useLocalization } from 'src/providers/hooks';
 import strings from 'src/strings';
 
-import { MAX_FILES_LIMIT } from './DeliverableView';
+type DocumentLimitReachedMessageProps = {
+  maxFiles: number;
+};
 
-const DocumentLimitReachedMessage = (): JSX.Element => {
+const DocumentLimitReachedMessage = ({ maxFiles }: DocumentLimitReachedMessageProps): JSX.Element => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
 
@@ -17,7 +19,7 @@ const DocumentLimitReachedMessage = (): JSX.Element => {
       {activeLocale && (
         <Box marginBottom={theme.spacing(4)}>
           <Message
-            body={strings.formatString(strings.DOCUMENT_LIMIT_REACHED_MESSAGE, MAX_FILES_LIMIT) as string}
+            body={strings.formatString(strings.DOCUMENT_LIMIT_REACHED_MESSAGE, maxFiles) as string}
             priority='warning'
             title={strings.DOCUMENT_LIMIT_REACHED}
             type='page'

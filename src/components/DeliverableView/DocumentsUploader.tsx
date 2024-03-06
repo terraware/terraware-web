@@ -1,31 +1,25 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
 import { FileChooser } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
-import { MAX_FILES_LIMIT } from 'src/scenes/DeliverablesRouter/DeliverableView';
 import strings from 'src/strings';
 
 import FileUploadDialog from './FileUploadDialog';
 import { ViewProps } from './types';
 
 type DocumentUploaderProps = ViewProps & {
-  canEdit?: boolean;
-  showDocumentLimitReachedMessage?: () => void;
+  maxFiles?: number;
 };
 
-const DocumentsUploader = ({
-  canEdit,
-  deliverable,
-  showDocumentLimitReachedMessage,
-}: DocumentUploaderProps): JSX.Element => {
+const DocumentsUploader = ({ deliverable, maxFiles }: DocumentUploaderProps): JSX.Element => {
   const [files, setFiles] = useState<File[]>([]);
   const { activeLocale } = useLocalization();
 
   const documentLimitReached = useMemo(
-    () => deliverable.documents.length >= MAX_FILES_LIMIT,
-    [deliverable.documents.length]
+    () => (maxFiles ? deliverable.documents.length >= maxFiles : false),
+    [deliverable.documents.length, maxFiles]
   );
 
   const template = useMemo(() => {
@@ -38,12 +32,6 @@ const DocumentsUploader = ({
 
   const onCloseFileUploadDialog = useCallback(() => void setFiles([]), []);
 
-  useEffect(() => {
-    if (!canEdit && documentLimitReached && showDocumentLimitReachedMessage) {
-      showDocumentLimitReachedMessage();
-    }
-  }, [canEdit, documentLimitReached, showDocumentLimitReachedMessage]);
-
   return (
     <Box display='flex' flexDirection='column'>
       {files.length > 0 && (
@@ -53,7 +41,7 @@ const DocumentsUploader = ({
         <FileChooser
           acceptFileType='image/*,application/*'
           chooseFileText={strings.CHOOSE_FILE}
-          maxFiles={canEdit ? undefined : MAX_FILES_LIMIT - deliverable.documents.length}
+          maxFiles={maxFiles}
           multipleSelection
           setFiles={setFiles}
           template={template}
