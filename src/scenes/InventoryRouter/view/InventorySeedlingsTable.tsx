@@ -18,6 +18,7 @@ import Search from 'src/scenes/InventoryRouter/Search';
 import { NurseryBatchService } from 'src/services';
 import strings from 'src/strings';
 import { FieldNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
@@ -80,6 +81,8 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   const [openExportModal, setOpenExportModal] = useState<boolean>(false);
   const [temporalSearchValue, setTemporalSearchValue] = useState<string>('');
   const [batches, setBatches] = useState<SearchResponseElement[]>([]);
+  // search results without species filtering, needed to populate values for the species filter dropdown
+  const [speciesUnfilteredBatches, setSpeciesUnfilteredBatches] = useState<SearchResponseElement[]>([]);
   // The main distinction here is that the filtered batches are filtered in the view, whereas `batches` is
   // the filtered-by-search batches list that comes back from the API
   const [filteredBatches, setFilteredBatches] = useState<any[]>([]);
@@ -91,7 +94,19 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
 
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
 
-  const getSearchFields = useCallback(() => {
+  const filterEmptyBatches = useCallback(
+    (unfiltered: SearchResponseElement[]) => {
+      // Because the field group filters have their values
+      // set as SearchNodePayload['values'] (which is (string | null[]), we gotta boolean-ify it
+      // If there is no value set (initial form state), this defaults to false
+      const showEmptyBatches = (filters.showEmptyBatches || [])[0] === 'true';
+
+      return unfiltered.filter((batch: SearchResponseElement) => (showEmptyBatches ? true : !isBatchEmpty(batch)));
+    },
+    [filters.showEmptyBatches]
+  );
+
+  const getNonSpeciesSearchFields = useCallback(() => {
     // Skip fuzzy search on empty strings since the query will be
     // expensive and results will be the same as not adding the fuzzy search
     const fields: FieldNodePayload[] = debouncedSearchTerm ? getFuzzySearchFields(debouncedSearchTerm) : [];
@@ -105,15 +120,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
       });
     }
 
-    if (filters.speciesIds && filters.speciesIds.length > 0) {
-      fields.push({
-        operation: 'field',
-        field: 'species_id',
-        type: 'Exact',
-        values: filters.speciesIds.map((id) => id.toString()),
-      });
-    }
-
     if (filters.projectIds && filters.projectIds.length > 0) {
       fields.push({
         operation: 'field',
@@ -124,24 +130,35 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     }
 
     return fields;
-  }, [getFuzzySearchFields, debouncedSearchTerm, filters]);
+  }, [getFuzzySearchFields, debouncedSearchTerm, filters.facilityIds, filters.projectIds]);
+
+  const getSearchFields = useCallback(() => {
+    const fields: FieldNodePayload[] = getNonSpeciesSearchFields();
+
+    if (filters.speciesIds && filters.speciesIds.length > 0) {
+      fields.push({
+        operation: 'field',
+        field: 'species_id',
+        type: 'Exact',
+        values: filters.speciesIds.map((id) => id.toString()),
+      });
+    }
+
+    return fields;
+  }, [getNonSpeciesSearchFields, filters.speciesIds]);
 
   useEffect(() => {
-    let activeRequests = true;
+    const requestId = setRequestId('inventory-seedlings');
 
     const populateResults = async () => {
       if (!originId) {
         return;
       }
 
-      const batchesResults = await getBatchesSearch(
-        selectedOrganization.id,
-        originId,
-        getSearchFields(),
-        searchSortOrder
-      );
+      const searchFields = getSearchFields();
+      const batchesResults = await getBatchesSearch(selectedOrganization.id, originId, searchFields, searchSortOrder);
 
-      if (activeRequests) {
+      if (requestId === getRequestId('inventory-seedlings')) {
         setBatches(batchesResults || []);
       }
     };
@@ -149,18 +166,48 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     if (!originId || !isNaN(originId)) {
       void populateResults();
     }
-
-    return () => {
-      activeRequests = false;
-    };
   }, [
-    getSearchFields,
-    getBatchesSearch,
-    selectedOrganization,
-    originId,
     filters.facilityIds,
+    getBatchesSearch,
+    getSearchFields,
     modified,
+    originId,
     searchSortOrder,
+    selectedOrganization,
+  ]);
+
+  useEffect(() => {
+    const requestId = setRequestId('inventory-seedlings-species-unfiltered');
+
+    const populateSpeciesUnfilteredResults = async () => {
+      if (!originId) {
+        return;
+      }
+
+      const searchFields = getNonSpeciesSearchFields();
+      const speciesUnfilteredBatchesResults = await getBatchesSearch(
+        selectedOrganization.id,
+        originId,
+        searchFields,
+        searchSortOrder
+      );
+
+      if (requestId === getRequestId('inventory-seedlings-species-unfiltered')) {
+        // keep state of results without species filtering, to populate species_id filter values
+        setSpeciesUnfilteredBatches(filterEmptyBatches(speciesUnfilteredBatchesResults || []));
+      }
+    };
+
+    if (!originId || !isNaN(originId)) {
+      void populateSpeciesUnfilteredResults();
+    }
+  }, [
+    filterEmptyBatches,
+    getBatchesSearch,
+    getNonSpeciesSearchFields,
+    originId,
+    searchSortOrder,
+    selectedOrganization,
   ]);
 
   useEffect(() => {
@@ -185,17 +232,8 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   }, [batches, history, openBatchNumber, origin, originId]);
 
   useEffect(() => {
-    // Because the field group filters have their values
-    // set as SearchNodePayload['values'] (which is (string | null[]), we gotta boolean-ify it
-    // If there is no value set (initial form state), this defaults to false
-    const showEmptyBatches = (filters.showEmptyBatches || [])[0] === 'true';
-
-    const _filteredBatches: SearchResponseElement[] = batches.filter((batch: SearchResponseElement) =>
-      showEmptyBatches ? batch : !isBatchEmpty(batch)
-    );
-
-    setFilteredBatches(_filteredBatches);
-  }, [batches, filters.showEmptyBatches]);
+    setFilteredBatches(filterEmptyBatches(batches));
+  }, [batches, filterEmptyBatches]);
 
   const deleteSelectedBatches = () => {
     const promises = selectedRows.map((r) => NurseryBatchService.deleteBatch(r.id as number));
@@ -327,6 +365,11 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     return getBatchesExport(selectedOrganization.id, originId, getSearchFields(), searchSortOrder);
   }, [getBatchesExport, selectedOrganization.id, originId, getSearchFields, searchSortOrder]);
 
+  const getResultsSpeciesNames = useCallback(
+    (): string[] => speciesUnfilteredBatches.map((s) => s.species_scientificName as string),
+    [speciesUnfilteredBatches]
+  );
+
   return (
     <>
       {openExportModal && (
@@ -394,13 +437,14 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
 
           <Box>
             <Search
-              searchValue={temporalSearchValue}
-              onSearch={(val) => setTemporalSearchValue(val)}
               filters={filters}
-              setFilters={setFilters}
+              getResultsSpeciesNames={getResultsSpeciesNames}
+              onSearch={(val) => setTemporalSearchValue(val)}
               origin={origin}
-              showProjectsFilter
+              searchValue={temporalSearchValue}
+              setFilters={setFilters}
               showEmptyBatchesFilter
+              showProjectsFilter
             />
           </Box>
 
