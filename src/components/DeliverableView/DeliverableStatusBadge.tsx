@@ -4,6 +4,7 @@ import { useTheme } from '@mui/material';
 import { Badge } from '@terraware/web-components';
 import { BadgeProps } from '@terraware/web-components/components/Badge';
 
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
@@ -16,6 +17,7 @@ const DeliverableStatusBadge = (props: DeliverableStatusBadgeProps): JSX.Element
   const { status } = props;
   const { activeLocale } = useLocalization();
   const theme = useTheme();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const badgeProps = useMemo((): BadgeProps | undefined => {
     if (!activeLocale) {
@@ -35,14 +37,14 @@ const DeliverableStatusBadge = (props: DeliverableStatusBadgeProps): JSX.Element
           backgroundColor: theme.palette.TwClrBgWarningTertiary,
           borderColor: theme.palette.TwClrBrdrWarning,
           labelColor: theme.palette.TwClrTxtWarning,
-          label: strings.APPROVED,
+          label: strings.IN_REVIEW,
         };
       case 'Needs Translation':
         return {
           backgroundColor: theme.palette.TwClrBgInfoTertiary,
           borderColor: theme.palette.TwClrBrdrInfo,
           labelColor: theme.palette.TwClrTxtInfo,
-          label: strings.APPROVED,
+          label: isAcceleratorRoute ? strings.NEEDS_TRANSLATION : strings.IN_REVIEW,
         };
       case 'Not Needed':
         return {
@@ -68,17 +70,9 @@ const DeliverableStatusBadge = (props: DeliverableStatusBadgeProps): JSX.Element
       default:
         return undefined;
     }
-  }, [activeLocale, status, theme]);
+  }, [activeLocale, isAcceleratorRoute, status, theme]);
 
-  return (
-    <>
-      {activeLocale && badgeProps ? (
-        <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
-          <Badge {...badgeProps} />
-        </div>
-      ) : undefined}
-    </>
-  );
+  return <>{badgeProps && <Badge {...badgeProps} />}</>;
 };
 
 export default DeliverableStatusBadge;
