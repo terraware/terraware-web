@@ -11,11 +11,13 @@ import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
 
+import ApproveDeliverableDialog from './ApproveDeliverableDialog';
 import DeliverableView from './DeliverableView';
 import RejectDialog from './RejectDialog';
 import useUpdateDeliverable from './useUpdateDeliverable';
 
 const DeliverableViewWrapper = () => {
+  const [showApproveDialog, setShowApproveDialog] = useState<boolean>(false);
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
   const { deliverableId } = useParams<{ deliverableId: string }>();
   const { status: requestStatus, update } = useUpdateDeliverable();
@@ -32,6 +34,13 @@ const DeliverableViewWrapper = () => {
     },
     [deliverable, update]
   );
+
+  const approveDeliverable = useCallback(() => {
+    if (deliverable?.id !== undefined) {
+      update({ ...deliverable, status: 'Approved' });
+    }
+    setShowApproveDialog(false);
+  }, [deliverable, setShowApproveDialog, update]);
 
   const rejectDeliverable = useCallback(
     (feedback: string) => {
@@ -99,17 +108,20 @@ const DeliverableViewWrapper = () => {
           disabled={deliverable?.status === 'Approved'}
           id='approveDeliverable'
           label={strings.APPROVE_DELIVERABLE}
-          onClick={() => setStatus('Approved')}
+          onClick={() => void setShowApproveDialog(true)}
           size='medium'
         />
         <OptionsMenu onOptionItemClick={onOptionItemClick} optionItems={optionItems} />
       </Box>
     );
-  }, [deliverable?.status, onOptionItemClick, optionItems, setStatus, theme]);
+  }, [deliverable?.status, onOptionItemClick, optionItems, theme]);
 
   if (deliverable) {
     return (
       <>
+        {showApproveDialog && (
+          <ApproveDeliverableDialog onClose={() => setShowApproveDialog(false)} onSubmit={approveDeliverable} />
+        )}
         {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectDeliverable} />}
         <DeliverableView
           callToAction={callToAction}
