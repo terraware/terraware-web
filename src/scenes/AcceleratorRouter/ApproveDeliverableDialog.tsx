@@ -8,13 +8,8 @@ export type ApproveDialogProps = {
   onSubmit: () => void;
 };
 
-export default function ApproveDialog({ onClose, onSubmit }: ApproveDialogProps): JSX.Element {
+export default function ApproveDeliverableDialog({ onClose, onSubmit }: ApproveDialogProps): JSX.Element {
   const theme = useTheme();
-
-  const approve = () => {
-    onSubmit();
-    onClose();
-  };
 
   return (
     <DialogBox
@@ -35,7 +30,7 @@ export default function ApproveDialog({ onClose, onSubmit }: ApproveDialogProps)
           id='confirmApprove'
           key='button-2'
           label={strings.APPROVE}
-          onClick={approve}
+          onClick={onSubmit}
           priority='primary'
           type='productive'
         />,

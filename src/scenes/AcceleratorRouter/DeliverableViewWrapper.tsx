@@ -10,7 +10,7 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
 
-import ApproveDialog from './ApproveDialog';
+import ApproveDeliverableDialog from './ApproveDeliverableDialog';
 import DeliverableView from './DeliverableView';
 import RejectDialog from './RejectDialog';
 import useUpdateDeliverable from './useUpdateDeliverable';
@@ -109,7 +109,7 @@ const DeliverableViewWrapper = () => {
     return (
       <>
         {showApproveDialog && (
-          <ApproveDialog onClose={() => setShowApproveDialog(false)} onSubmit={approveDeliverable} />
+          <ApproveDeliverableDialog onClose={() => setShowApproveDialog(false)} onSubmit={approveDeliverable} />
         )}
         {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectDeliverable} />}
         <DeliverableView
