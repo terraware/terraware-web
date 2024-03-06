@@ -80,6 +80,8 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   const [openExportModal, setOpenExportModal] = useState<boolean>(false);
   const [temporalSearchValue, setTemporalSearchValue] = useState<string>('');
   const [batches, setBatches] = useState<SearchResponseElement[]>([]);
+  // search results without species filtering, needed to populate values for the species filter dropdown
+  const [speciesUnfilteredBatches, setSpeciesUnfilteredBatches] = useState<SearchResponseElement[]>([]);
   // The main distinction here is that the filtered batches are filtered in the view, whereas `batches` is
   // the filtered-by-search batches list that comes back from the API
   const [filteredBatches, setFilteredBatches] = useState<any[]>([]);
@@ -134,15 +136,24 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
         return;
       }
 
-      const batchesResults = await getBatchesSearch(
-        selectedOrganization.id,
-        originId,
-        getSearchFields(),
-        searchSortOrder
-      );
+      const searchFields = getSearchFields();
+      const batchesResults = await getBatchesSearch(selectedOrganization.id, originId, searchFields, searchSortOrder);
 
       if (activeRequests) {
         setBatches(batchesResults || []);
+      }
+
+      // keep state of results without species filtering, to populate species_id filter values
+      if (searchFields.find((f) => f.field === 'species_id')) {
+        const speciesUnfilteredBatchesResults = await getBatchesSearch(
+          selectedOrganization.id,
+          originId,
+          searchFields.filter((f) => f.field !== 'species_id'),
+          searchSortOrder
+        );
+        setSpeciesUnfilteredBatches(speciesUnfilteredBatchesResults || []);
+      } else {
+        setSpeciesUnfilteredBatches(batchesResults || []);
       }
     };
 
@@ -401,6 +412,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
               origin={origin}
               showProjectsFilter
               showEmptyBatchesFilter
+              tableResults={speciesUnfilteredBatches}
             />
           </Box>
 

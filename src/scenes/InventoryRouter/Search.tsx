@@ -61,7 +61,12 @@ type PillListItemWithEmptyValue = Omit<PillListItem<string>, 'id'> & {
   emptyValue: unknown;
 };
 
-export default function Search<T extends { facilityInventories?: string }>(props: SearchProps<T>): JSX.Element | null {
+type WithSpecies = {
+  facilityInventories?: string;
+  species_scientificName?: string;
+};
+
+export default function Search<T extends WithSpecies>(props: SearchProps<T>): JSX.Element | null {
   const { searchValue, onSearch, filters, setFilters, showProjectsFilter, showEmptyBatchesFilter, tableResults } =
     props;
 
@@ -96,8 +101,19 @@ export default function Search<T extends { facilityInventories?: string }>(props
       return;
     }
 
-    const speciesWithinResults = tableResults.map((result) => result.facilityInventories?.split('\r')).flat();
-    setAvailableSpecies(species.filter((singleSpecies) => speciesWithinResults.includes(singleSpecies.scientificName)));
+    const speciesWithinResults = new Set(
+      tableResults
+        .map((result) => {
+          if (result.species_scientificName !== undefined) {
+            return result.species_scientificName;
+          } else {
+            return result.facilityInventories?.split('\r');
+          }
+        })
+        .flat()
+    );
+
+    setAvailableSpecies(species.filter((singleSpecies) => speciesWithinResults.has(singleSpecies.scientificName)));
   }, [species, origin, tableResults]);
 
   const subLocations = useAppSelector(selectSubLocations);
