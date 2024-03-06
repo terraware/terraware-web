@@ -17,11 +17,6 @@ const DocumentsUploader = ({ deliverable, maxFiles }: DocumentUploaderProps): JS
   const [files, setFiles] = useState<File[]>([]);
   const { activeLocale } = useLocalization();
 
-  const documentLimitReached = useMemo(
-    () => (maxFiles ? deliverable.documents.length >= maxFiles : false),
-    [deliverable.documents.length, maxFiles]
-  );
-
   const template = useMemo(() => {
     if (activeLocale && deliverable.templateUrl) {
       return { text: strings.DOWNLOAD_TEMPLATE, url: deliverable.templateUrl };
@@ -37,18 +32,16 @@ const DocumentsUploader = ({ deliverable, maxFiles }: DocumentUploaderProps): JS
       {files.length > 0 && (
         <FileUploadDialog deliverable={deliverable} files={files} onClose={onCloseFileUploadDialog} />
       )}
-      {!documentLimitReached && (
-        <FileChooser
-          acceptFileType='image/*,application/*'
-          chooseFileText={strings.CHOOSE_FILE}
-          maxFiles={maxFiles}
-          multipleSelection
-          setFiles={setFiles}
-          template={template}
-          uploadDescription={strings.UPLOAD_FILES_DESCRIPTION}
-          uploadText={strings.UPLOAD_FILES_TITLE}
-        />
-      )}
+      <FileChooser
+        acceptFileType='image/*,application/*'
+        chooseFileText={strings.CHOOSE_FILE}
+        maxFiles={maxFiles}
+        multipleSelection
+        setFiles={setFiles}
+        template={template}
+        uploadDescription={strings.UPLOAD_FILES_DESCRIPTION}
+        uploadText={strings.UPLOAD_FILES_TITLE}
+      />
     </Box>
   );
 };
