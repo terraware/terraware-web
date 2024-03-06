@@ -41,10 +41,6 @@ export interface paths {
     /** Gets a single submission document from a deliverable. */
     get: operations["getDeliverableDocument"];
   };
-  "/api/v1/accelerator/deliverables/{deliverableId}/documents/{projectId}": {
-    /** Uploads a new document to satisfy a deliverable. */
-    post: operations["uploadDeliverableDocument"];
-  };
   "/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}": {
     /**
      * Updates the state of a submission from a project.

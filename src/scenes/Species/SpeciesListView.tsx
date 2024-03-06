@@ -293,14 +293,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     const getApiSearchResults = async () => {
       const searchParams: SearchRequestPayload = {
         prefix: 'species',
-        fields: [
-          'id',
-          'growthForm',
-          'seedStorageBehavior',
-          'ecosystemTypes.ecosystemType',
-          'conservationCategory',
-          'rare',
-        ],
+        fields: ['growthForm', 'seedStorageBehavior', 'ecosystemTypes_ecosystemType', 'conservationCategory'],
         search: {
           operation: 'and',
           children: [
@@ -312,29 +305,23 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
             },
           ],
         },
-        sortOrder: [{ field: 'id', direction: 'Ascending' }],
         count: 1000,
       };
 
       setIsBusy(true);
-      const data = await SearchService.search(searchParams);
+      const data = await SearchService.searchValues(searchParams);
       setIsBusy(false);
-      const result = (data ?? []).reduce((acc, d) => {
-        return Object.keys(d).reduce((innerAcc, k) => {
-          const isEcosystemTypes = k === 'ecosystemTypes';
-          const newKey = isEcosystemTypes ? 'ecosystemTypes.ecosystemType' : k;
-          if (!innerAcc[newKey]) {
-            innerAcc[newKey] = { partial: false, values: [] };
-          }
-          const value = isEcosystemTypes ? (d[k] as any[]).map((et) => et.ecosystemType) : d[k];
-          if (Array.isArray(value)) {
-            (innerAcc[newKey] as Record<string, any>).values.push(...value);
-          } else {
-            (innerAcc[newKey] as Record<string, any>).values.push(value);
-          }
-          return innerAcc;
-        }, acc);
-      }, {}) as FieldOptionsMap;
+
+      const result = (data || {}) as FieldOptionsMap;
+
+      // remap ecosystemTypes to nested field from flattened field
+      /* tslint:disable:no-string-literal */
+      if (result['ecosystemTypes_ecosystemType']) {
+        result['ecosystemTypes.ecosystemType'] = result['ecosystemTypes_ecosystemType'];
+        delete result['ecosystemTypes_ecosystemType'];
+      }
+      /* tslint:enable:no-string-literal */
+
       result.rare = { partial: false, values: [strings.YES, strings.NO] };
       setFilterOptions(result);
     };

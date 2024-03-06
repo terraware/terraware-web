@@ -6,7 +6,7 @@ import {
   SearchValuesResponseElement,
 } from 'src/types/Search';
 
-import HttpService from './HttpService';
+import HttpService, { Response } from './HttpService';
 
 /**
  * Service for user related functionality
@@ -83,10 +83,11 @@ async function search<T extends SearchResponseElement>(entity: RawSearchRequestP
 async function searchValues<T extends SearchValuesResponseElement>(
   entity: RawSearchValuesRequestPayload
 ): Promise<T | null> {
-  try {
-    const response: SearchValuesResponsePayload = (await httpSearchValues.post({ entity })).data;
-    return response.results as T | null;
-  } catch {
+  const serverResponse: Response = await httpSearchValues.post({ entity });
+  if (serverResponse.requestSucceeded) {
+    const response: SearchValuesResponsePayload | null = serverResponse.data?.results ?? null;
+    return response as T | null;
+  } else {
     return null;
   }
 }
