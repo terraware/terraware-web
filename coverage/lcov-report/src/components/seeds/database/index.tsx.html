@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/251</span>
+                <span class='fraction'>0/249</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/67</span>
+                <span class='fraction'>0/66</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/247</span>
+                <span class='fraction'>0/245</span>
             </div>
         
             
@@ -922,13 +922,7 @@
 <a name='L857'></a><a href='#L857'>857</a>
 <a name='L858'></a><a href='#L858'>858</a>
 <a name='L859'></a><a href='#L859'>859</a>
-<a name='L860'></a><a href='#L860'>860</a>
-<a name='L861'></a><a href='#L861'>861</a>
-<a name='L862'></a><a href='#L862'>862</a>
-<a name='L863'></a><a href='#L863'>863</a>
-<a name='L864'></a><a href='#L864'>864</a>
-<a name='L865'></a><a href='#L865'>865</a>
-<a name='L866'></a><a href='#L866'>866</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L860'></a><a href='#L860'>860</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -983,6 +977,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1354,7 +1349,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1366,7 +1360,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1420,19 +1416,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1831,6 +1819,7 @@ import { SearchCriteria, SearchNodePayload, SearchResponseElementWithId, SearchS
 import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { isAdmin } from 'src/utils/organization';
+import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar, { SNACKBAR_PAGE_CLOSE_KEY } from 'src/utils/useSnackbar';
@@ -2218,86 +2207,79 @@ export default function <span class="fstat-no" title="function not covered" >Dat
 <span class="cstat-no" title="statement not covered" >    void populatePendingAccessions();</span>
   }, [selectedOrganization.id]);
 &nbsp;
-  const initAccessions = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (a</span>ctiveRequests: boolean) =&gt; {
-      const getFieldsFromSearchColumns = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-        let columnsNamesToSearch: string[];
-<span class="cstat-no" title="statement not covered" >        if (searchColumns.includes('active')) {</span>
-<span class="cstat-no" title="statement not covered" >          columnsNamesToSearch = [...searchColumns, 'id'];</span>
-        } else {
-<span class="cstat-no" title="statement not covered" >          columnsNamesToSearch = [...searchColumns, 'active', 'id'];</span>
-        }
+  const initAccessions = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    const getFieldsFromSearchColumns = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+      let columnsNamesToSearch: string[];
+<span class="cstat-no" title="statement not covered" >      if (searchColumns.includes('active')) {</span>
+<span class="cstat-no" title="statement not covered" >        columnsNamesToSearch = [...searchColumns, 'id'];</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        columnsNamesToSearch = [...searchColumns, 'active', 'id'];</span>
+      }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        return columnsNamesToSearch;</span>
+<span class="cstat-no" title="statement not covered" >      return columnsNamesToSearch;</span>
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (selectedOrganization) {</span>
+      const requestId = <span class="cstat-no" title="statement not covered" >setRequestId('accessions_search');</span>
+&nbsp;
+      const populateSearchResults = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
+        const apiResponse: SearchResponseElementWithId[] | null = <span class="cstat-no" title="statement not covered" >await SeedBankService.searchAccessions({</span>
+          organizationId: selectedOrganization.id,
+          fields: getFieldsFromSearchColumns(),
+          sortOrder: searchSortOrder,
+          searchCriteria,
+        });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (requestId === getRequestId('accessions_search')) {</span>
+<span class="cstat-no" title="statement not covered" >          setSearchResults(apiResponse);</span>
+        }
       };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      if (selectedOrganization) {</span>
-        const populateSearchResults = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-          const apiResponse: SearchResponseElementWithId[] | null = <span class="cstat-no" title="statement not covered" >await SeedBankService.searchAccessions({</span>
-            organizationId: selectedOrganization.id,
-            fields: getFieldsFromSearchColumns(),
-            sortOrder: searchSortOrder,
-            searchCriteria,
-          });
+      const populateAvailableFieldOptions = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
+        const singleAndMultiChoiceFields = <span class="cstat-no" title="statement not covered" >filterSelectFields(searchColumns);</span>
+        const data = <span class="cstat-no" title="statement not covered" >await SeedBankService.searchFieldValues(</span>
+          singleAndMultiChoiceFields,
+          searchCriteria,
+          selectedOrganization.id
+        );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >          if (activeRequests) {</span>
-<span class="cstat-no" title="statement not covered" >            setSearchResults(apiResponse);</span>
-          }
-        };
+<span class="cstat-no" title="statement not covered" >        if (requestId === getRequestId('accessions_search')) {</span>
+<span class="cstat-no" title="statement not covered" >          setAvailableFieldOptions(data);</span>
+        }
+      };
 &nbsp;
-        const populateAvailableFieldOptions = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-          const singleAndMultiChoiceFields = <span class="cstat-no" title="statement not covered" >filterSelectFields(searchColumns);</span>
-          const data = <span class="cstat-no" title="statement not covered" >await SeedBankService.searchFieldValues(</span>
-            singleAndMultiChoiceFields,
-            searchCriteria,
-            selectedOrganization.id
-          );
+      const populateFieldOptions = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
+        // Since the seed bank service doesn't return values for project IDs, we need to merge the values in
+        const singleAndMultiChoiceFields = <span class="cstat-no" title="statement not covered" >filterSelectFields(</span>
+          searchColumns.filter(<span class="fstat-no" title="function not covered" >(c</span>olumn) =&gt; <span class="cstat-no" title="statement not covered" >column !== 'project_name')</span>
+        );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >          if (activeRequests) {</span>
-<span class="cstat-no" title="statement not covered" >            setAvailableFieldOptions(data);</span>
-          }
-        };
+        const allValues =
+<span class="cstat-no" title="statement not covered" >          (await SeedBankService.searchFieldValues(singleAndMultiChoiceFields, {}, selectedOrganization.id)) || {};</span>
 &nbsp;
-        const populateFieldOptions = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-          // Since the seed bank service doesn't return values for project IDs, we need to merge the values in
-          const singleAndMultiChoiceFields = <span class="cstat-no" title="statement not covered" >filterSelectFields(</span>
-            searchColumns.filter(<span class="fstat-no" title="function not covered" >(c</span>olumn) =&gt; <span class="cstat-no" title="statement not covered" >column !== 'project_name')</span>
-          );
-&nbsp;
-          const allValues =
-<span class="cstat-no" title="statement not covered" >            (await SeedBankService.searchFieldValues(singleAndMultiChoiceFields, {}, selectedOrganization.id)) || {};</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >          if (featureFlagProjects) {</span>
-<span class="cstat-no" title="statement not covered" >            allValues.project_name = {</span>
-              partial: false,
-              values: (projects || []).map(<span class="fstat-no" title="function not covered" >(p</span>roject: Project) =&gt; <span class="cstat-no" title="statement not covered" >project.name)</span>,
-            };
-          }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >          if (activeRequests) {</span>
-<span class="cstat-no" title="statement not covered" >            setFieldOptions(allValues);</span>
-          }
-        };
-&nbsp;
-<span class="cstat-no" title="statement not covered" >        if (searchCriteria) {</span>
-<span class="cstat-no" title="statement not covered" >          void populateSearchResults();</span>
+<span class="cstat-no" title="statement not covered" >        if (featureFlagProjects) {</span>
+<span class="cstat-no" title="statement not covered" >          allValues.project_name = {</span>
+            partial: false,
+            values: (projects || []).map(<span class="fstat-no" title="function not covered" >(p</span>roject: Project) =&gt; <span class="cstat-no" title="statement not covered" >project.name)</span>,
+          };
         }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        void populateAvailableFieldOptions();</span>
-<span class="cstat-no" title="statement not covered" >        void populateFieldOptions();</span>
+<span class="cstat-no" title="statement not covered" >        if (requestId === getRequestId('accessions_search')) {</span>
+<span class="cstat-no" title="statement not covered" >          setFieldOptions(allValues);</span>
+        }
+      };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      if (searchCriteria) {</span>
+<span class="cstat-no" title="statement not covered" >        void populateSearchResults();</span>
       }
-    },
-    [featureFlagProjects, projects, searchColumns, searchCriteria, searchSortOrder, selectedOrganization]
-  );
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      void populateAvailableFieldOptions();</span>
+<span class="cstat-no" title="statement not covered" >      void populateFieldOptions();</span>
+    }
+  }, [featureFlagProjects, projects, searchColumns, searchCriteria, searchSortOrder, selectedOrganization]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    let activeRequests = <span class="cstat-no" title="statement not covered" >true;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    void initAccessions(activeRequests);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return <span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      activeRequests = false;</span>
-    };
+<span class="cstat-no" title="statement not covered" >    void initAccessions();</span>
   }, [initAccessions]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -2482,7 +2464,7 @@ export default function <span class="fstat-no" title="function not covered" >Dat
   }, [searchResults]);
 &nbsp;
   const reloadAccessions = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    void initAccessions(true);</span>
+<span class="cstat-no" title="statement not covered" >    void initAccessions();</span>
   }, [initAccessions]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
@@ -2665,7 +2647,7 @@ export default function <span class="fstat-no" title="function not covered" >Dat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-06T17:14:21.117Z
+                at 2024-03-06T17:38:00.676Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
