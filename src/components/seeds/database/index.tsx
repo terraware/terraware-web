@@ -437,8 +437,9 @@ export default function Database(props: DatabaseProps): JSX.Element {
     };
 
     if (selectedOrganization) {
+      const requestId = setRequestId('accessions_search');
+
       const populateSearchResults = async () => {
-        const requestId = setRequestId('accessions_search');
         const apiResponse: SearchResponseElementWithId[] | null = await SeedBankService.searchAccessions({
           organizationId: selectedOrganization.id,
           fields: getFieldsFromSearchColumns(),
@@ -452,7 +453,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
       };
 
       const populateAvailableFieldOptions = async () => {
-        const requestId = setRequestId('accessions_search_available_values');
         const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
         const data = await SeedBankService.searchFieldValues(
           singleAndMultiChoiceFields,
@@ -460,13 +460,12 @@ export default function Database(props: DatabaseProps): JSX.Element {
           selectedOrganization.id
         );
 
-        if (requestId === getRequestId('accessions_search_available_values')) {
+        if (requestId === getRequestId('accessions_search')) {
           setAvailableFieldOptions(data);
         }
       };
 
       const populateFieldOptions = async () => {
-        const requestId = setRequestId('accessions_search_all_values');
         // Since the seed bank service doesn't return values for project IDs, we need to merge the values in
         const singleAndMultiChoiceFields = filterSelectFields(
           searchColumns.filter((column) => column !== 'project_name')
@@ -482,7 +481,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           };
         }
 
-        if (requestId === getRequestId('accessions_search_all_values')) {
+        if (requestId === getRequestId('accessions_search')) {
           setFieldOptions(allValues);
         }
       };
