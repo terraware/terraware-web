@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/102</span>
+                <span class='fraction'>0/104</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/108</span>
+                <span class='fraction'>0/111</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/42</span>
+                <span class='fraction'>0/41</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/88</span>
+                <span class='fraction'>0/91</span>
             </div>
         
             
@@ -425,7 +425,20 @@
 <a name='L360'></a><a href='#L360'>360</a>
 <a name='L361'></a><a href='#L361'>361</a>
 <a name='L362'></a><a href='#L362'>362</a>
-<a name='L363'></a><a href='#L363'>363</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L363'></a><a href='#L363'>363</a>
+<a name='L364'></a><a href='#L364'>364</a>
+<a name='L365'></a><a href='#L365'>365</a>
+<a name='L366'></a><a href='#L366'>366</a>
+<a name='L367'></a><a href='#L367'>367</a>
+<a name='L368'></a><a href='#L368'>368</a>
+<a name='L369'></a><a href='#L369'>369</a>
+<a name='L370'></a><a href='#L370'>370</a>
+<a name='L371'></a><a href='#L371'>371</a>
+<a name='L372'></a><a href='#L372'>372</a>
+<a name='L373'></a><a href='#L373'>373</a>
+<a name='L374'></a><a href='#L374'>374</a>
+<a name='L375'></a><a href='#L375'>375</a>
+<a name='L376'></a><a href='#L376'>376</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -490,6 +503,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -524,7 +544,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -834,15 +860,15 @@ const initialFilters: Record&lt;string, SearchNodePayload&gt; = <span class="cst
   },
 };
 &nbsp;
-interface SearchProps&lt;T&gt; {
-  searchValue: string;
-  onSearch: (value: string) =&gt; void;
+interface SearchProps {
   filters: InventoryFiltersUnion;
-  setFilters: (f: InventoryFiltersUnion) =&gt; void;
+  getResultsSpeciesNames?: () =&gt; string[];
+  onSearch: (value: string) =&gt; void;
   origin?: OriginPage;
-  showProjectsFilter?: boolean;
+  searchValue: string;
+  setFilters: (f: InventoryFiltersUnion) =&gt; void;
   showEmptyBatchesFilter?: boolean;
-  tableResults?: T[];
+  showProjectsFilter?: boolean;
 }
 &nbsp;
 type PillListItemWithEmptyValue = Omit&lt;PillListItem&lt;string&gt;, 'id'&gt; &amp; {
@@ -850,9 +876,16 @@ type PillListItemWithEmptyValue = Omit&lt;PillListItem&lt;string&gt;, 'id'&gt; &
   emptyValue: unknown;
 };
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >Search&lt;</span>T extends { facilityInventories?: string }&gt;(props: SearchProps&lt;T&gt;): JSX.Element | null {
-  const { searchValue, onSearch, filters, setFilters, showProjectsFilter, showEmptyBatchesFilter, tableResults } =
-<span class="cstat-no" title="statement not covered" >    props;</span>
+export default function <span class="fstat-no" title="function not covered" >Search(</span>props: SearchProps): JSX.Element | null {
+  const {
+    filters,
+    getResultsSpeciesNames,
+    onSearch,
+    searchValue,
+    setFilters,
+    showEmptyBatchesFilter,
+    showProjectsFilter,
+  } = <span class="cstat-no" title="statement not covered" >props;</span>
 &nbsp;
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
@@ -881,13 +914,19 @@ export default function <span class="fstat-no" title="function not covered" >Sea
   }, [dispatch, selectedOrganization.id, activeLocale]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (origin !== 'Nursery' || !species?.length || !tableResults) {</span>
+<span class="cstat-no" title="statement not covered" >    if (origin !== 'Nursery' || !species?.length) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
 &nbsp;
-    const speciesWithinResults = <span class="cstat-no" title="statement not covered" >tableResults.map(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; <span class="cstat-no" title="statement not covered" >result.facilityInventories?.split('\r'))</span>.flat();</span>
-<span class="cstat-no" title="statement not covered" >    setAvailableSpecies(species.filter(<span class="fstat-no" title="function not covered" >(s</span>ingleSpecies) =&gt; <span class="cstat-no" title="statement not covered" >speciesWithinResults.includes(singleSpecies.scientificName))</span>);</span>
-  }, [species, origin, tableResults]);
+    const availableSpeciesNames = <span class="cstat-no" title="statement not covered" >getResultsSpeciesNames?.() || [];</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (!availableSpeciesNames.length) {</span>
+<span class="cstat-no" title="statement not covered" >      setAvailableSpecies([]);</span>
+    } else {
+      const speciesWithinResults = <span class="cstat-no" title="statement not covered" >new Set(availableSpeciesNames);</span>
+<span class="cstat-no" title="statement not covered" >      setAvailableSpecies(species.filter(<span class="fstat-no" title="function not covered" >(s</span>ingleSpecies) =&gt; <span class="cstat-no" title="statement not covered" >speciesWithinResults.has(singleSpecies.scientificName))</span>);</span>
+    }
+  }, [getResultsSpeciesNames, origin, species]);
 &nbsp;
   const subLocations = <span class="cstat-no" title="statement not covered" >useAppSelector(selectSubLocations);</span>
 &nbsp;
@@ -1156,7 +1195,7 @@ export default function <span class="fstat-no" title="function not covered" >Sea
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-06T22:47:01.224Z
+                at 2024-03-06T23:20:48.288Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
