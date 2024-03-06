@@ -33,13 +33,13 @@ export interface paths {
     /** Gets the details of a single deliverable and its submission documents, if any. */
     get: operations["getDeliverable"];
   };
+  "/api/v1/accelerator/deliverables/{deliverableId}/documents": {
+    /** Uploads a new document to satisfy a deliverable. */
+    post: operations["uploadDeliverableDocument"];
+  };
   "/api/v1/accelerator/deliverables/{deliverableId}/documents/{documentId}": {
     /** Gets a single submission document from a deliverable. */
     get: operations["getDeliverableDocument"];
-  };
-  "/api/v1/accelerator/deliverables/{deliverableId}/documents/{projectId}": {
-    /** Uploads a new document to satisfy a deliverable. */
-    post: operations["uploadDeliverableDocument"];
   };
   "/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}": {
     /**
@@ -4265,7 +4265,6 @@ export interface operations {
     parameters: {
       path: {
         deliverableId: number;
-        projectId: number;
       };
     };
     requestBody?: {
@@ -4274,6 +4273,7 @@ export interface operations {
           description: string;
           /** Format: binary */
           file: string;
+          projectId: string;
         };
       };
     };
