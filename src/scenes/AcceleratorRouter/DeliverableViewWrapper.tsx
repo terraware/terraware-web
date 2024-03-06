@@ -7,6 +7,7 @@ import { Button, DropdownItem } from '@terraware/web-components';
 import useFetchDeliverable from 'src/components/DeliverableView/useFetchDeliverable';
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
 
@@ -21,6 +22,7 @@ const DeliverableViewWrapper = () => {
   const { deliverableId } = useParams<{ deliverableId: string }>();
   const { status: requestStatus, update } = useUpdateDeliverable();
   const theme = useTheme();
+  const { activeLocale } = useLocalization();
 
   const { deliverable } = useFetchDeliverable({ deliverableId: Number(deliverableId) });
 
@@ -53,10 +55,6 @@ const DeliverableViewWrapper = () => {
   const onOptionItemClick = useCallback(
     (optionItem: DropdownItem) => {
       switch (optionItem.value) {
-        case 'not_submitted': {
-          setStatus('Not Submitted');
-          break;
-        }
         case 'needs_translation': {
           setStatus('Needs Translation');
           break;
@@ -69,6 +67,30 @@ const DeliverableViewWrapper = () => {
     },
     [setStatus]
   );
+
+  const optionItems = useMemo(() => {
+    const items: DropdownItem[] = [];
+
+    if (!activeLocale) {
+      return items;
+    }
+
+    if (deliverable?.status !== 'Needs Translation') {
+      items.push({
+        label: strings.formatString(strings.STATUS_WITH_STATUS, strings.NEEDS_TRANSLATION) as string,
+        value: 'needs_translation',
+      });
+    }
+
+    if (deliverable?.status !== 'Not Needed') {
+      items.push({
+        label: strings.formatString(strings.STATUS_WITH_STATUS, strings.NOT_NEEDED) as string,
+        value: 'not_needed',
+      });
+    }
+
+    return items;
+  }, [activeLocale, deliverable?.status]);
 
   const callToAction = useMemo(() => {
     return (
@@ -89,21 +111,10 @@ const DeliverableViewWrapper = () => {
           onClick={() => void setShowApproveDialog(true)}
           size='medium'
         />
-        <OptionsMenu
-          onOptionItemClick={onOptionItemClick}
-          optionItems={[
-            ...(deliverable?.status === 'Not Submitted'
-              ? []
-              : [{ label: strings.NOT_SUBMITTED, value: 'not_submitted' }]),
-            ...(deliverable?.status === 'Needs Translation'
-              ? []
-              : [{ label: strings.NEEDS_TRANSLATION, value: 'needs_translation' }]),
-            ...(deliverable?.status === 'Not Needed' ? [] : [{ label: strings.NOT_NEEDED, value: 'not_needed' }]),
-          ]}
-        />
+        <OptionsMenu onOptionItemClick={onOptionItemClick} optionItems={optionItems} />
       </Box>
     );
-  }, [deliverable?.status, onOptionItemClick, theme]);
+  }, [deliverable?.status, onOptionItemClick, optionItems, theme]);
 
   if (deliverable) {
     return (

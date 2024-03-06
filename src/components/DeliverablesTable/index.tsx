@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { DeliverableCategories, DeliverableStatuses, ListDeliverablesElement } from 'src/types/Deliverables';
 import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { SearchAndSortFn } from 'src/utils/searchAndSort';
 import useDebounce from 'src/utils/useDebounce';
 
 import DeliverableCellRenderer from './DeliverableCellRenderer';
@@ -23,6 +24,8 @@ interface DeliverablesTableProps {
   extraTableFilters?: SearchNodePayload[];
   organizationId: number;
   pageHeaderRef: RefObject<HTMLDivElement>;
+  filterModifiers?: (filters: FilterConfig[]) => FilterConfig[];
+  searchAndSort?: SearchAndSortFn<ListDeliverablesElement>;
 }
 
 const useStyles = makeStyles(() => ({
@@ -33,7 +36,14 @@ const useStyles = makeStyles(() => ({
 
 const FUZZY_SEARCH_COLUMNS = ['name', 'project_name'];
 
-const DeliverablesTable = ({ columns, extraTableFilters, pageHeaderRef, organizationId }: DeliverablesTableProps) => {
+const DeliverablesTable = ({
+  columns,
+  extraTableFilters,
+  filterModifiers,
+  pageHeaderRef,
+  organizationId,
+  searchAndSort,
+}: DeliverablesTableProps) => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const classes = useStyles();
@@ -127,10 +137,16 @@ const DeliverablesTable = ({ columns, extraTableFilters, pageHeaderRef, organiza
   useEffect(() => {
     const search: SearchNodePayload = getSearchPayload();
     const request = dispatch(
-      requestListDeliverables({ locale: activeLocale, listRequest: { organizationId }, search, searchSortOrder })
+      requestListDeliverables({
+        locale: activeLocale,
+        listRequest: { organizationId },
+        search,
+        searchSortOrder,
+        searchAndSort,
+      })
     );
     setDeliverablesSearchRequestId(request.requestId);
-  }, [activeLocale, dispatch, getSearchPayload, organizationId, searchSortOrder]);
+  }, [activeLocale, dispatch, getSearchPayload, organizationId, searchSortOrder, searchAndSort]);
 
   useEffect(() => {
     // TODO do something if the request has an error
@@ -148,7 +164,7 @@ const DeliverablesTable = ({ columns, extraTableFilters, pageHeaderRef, organiza
             onSearch={setSearchValue}
             currentFilters={filters}
             setCurrentFilters={setFilters}
-            featuredFilters={featuredFilters}
+            featuredFilters={filterModifiers ? filterModifiers(featuredFilters) : featuredFilters}
           />
         </Grid>
 
