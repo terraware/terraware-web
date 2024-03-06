@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1709750979412" clover="3.2.0">
-  <project timestamp="1709750979413" name="All files">
-    <metrics statements="17392" coveredstatements="665" conditionals="11102" coveredconditionals="215" methods="5419" coveredmethods="154" elements="33913" coveredelements="1034" complexity="0" loc="17392" ncloc="17392" packages="143" files="715" classes="715"/>
+<coverage generated="1709752438806" clover="3.2.0">
+  <project timestamp="1709752438806" name="All files">
+    <metrics statements="17389" coveredstatements="665" conditionals="11102" coveredconditionals="215" methods="5419" coveredmethods="154" elements="33910" coveredelements="1034" complexity="0" loc="17389" ncloc="17389" packages="143" files="715" classes="715"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="121" coveredconditionals="0" methods="45" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -17488,7 +17488,7 @@
       </file>
     </package>
     <package name="src.services">
-      <metrics statements="1301" coveredstatements="331" conditionals="460" coveredconditionals="83" methods="362" coveredmethods="68"/>
+      <metrics statements="1298" coveredstatements="331" conditionals="460" coveredconditionals="83" methods="362" coveredmethods="68"/>
       <file name="AccessionService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/AccessionService.ts">
         <metrics statements="56" coveredstatements="39" conditionals="8" coveredconditionals="6" methods="17" coveredmethods="5"/>
         <line num="12" count="1" type="stmt"/>
@@ -17591,7 +17591,7 @@
         <line num="97" count="0" type="stmt"/>
       </file>
       <file name="DeliverablesService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/DeliverablesService.ts">
-        <metrics statements="33" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="8" coveredmethods="0"/>
+        <metrics statements="30" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="20" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
@@ -17618,13 +17618,10 @@
         <line num="98" count="0" type="stmt"/>
         <line num="99" count="0" type="stmt"/>
         <line num="100" count="0" type="stmt"/>
-        <line num="101" count="0" type="stmt"/>
-        <line num="102" count="0" type="stmt"/>
-        <line num="106" count="0" type="stmt"/>
-        <line num="108" count="0" type="stmt"/>
-        <line num="111" count="0" type="stmt"/>
-        <line num="112" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="115" count="0" type="stmt"/>
+        <line num="103" count="0" type="stmt"/>
+        <line num="105" count="0" type="stmt"/>
+        <line num="106" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="109" count="0" type="stmt"/>
       </file>
       <file name="DraftPlantingSiteService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/DraftPlantingSiteService.ts">
         <metrics statements="26" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="7" coveredmethods="0"/>
