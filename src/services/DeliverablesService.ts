@@ -4,11 +4,12 @@ import {
   Deliverable,
   DeliverableData,
   DeliverablesData,
+  ListDeliverablesElement,
   ListDeliverablesResponsePayload,
   UploadDeliverableDocumentRequest,
 } from 'src/types/Deliverables';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
-import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
+import { SearchAndSortFn, SearchOrderConfig, searchAndSort as genericSearchAndSort } from 'src/utils/searchAndSort';
 
 import { getPromisesResponse } from './utils';
 
@@ -67,8 +68,8 @@ const list = async (
   locale: string | null,
   request?: ListDeliverablesRequestParams,
   search?: SearchNodePayload,
-  searchSortOrder?: SearchSortOrder
-  // TODO sort, search, etc...
+  searchSortOrder?: SearchSortOrder,
+  searchAndSort?: SearchAndSortFn<ListDeliverablesElement>
 ): Promise<(DeliverablesData & Response) | null> => {
   let searchOrderConfig: SearchOrderConfig;
   if (searchSortOrder) {
@@ -84,7 +85,9 @@ const list = async (
       params: request as Params,
     },
     (data) => ({
-      deliverables: searchAndSort(data?.deliverables || [], search, searchOrderConfig),
+      deliverables: searchAndSort
+        ? searchAndSort(data?.deliverables || [], search, searchOrderConfig)
+        : genericSearchAndSort(data?.deliverables || [], search, searchOrderConfig),
     })
   );
 };

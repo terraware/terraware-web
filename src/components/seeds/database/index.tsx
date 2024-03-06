@@ -36,6 +36,7 @@ import { SearchCriteria, SearchNodePayload, SearchResponseElementWithId, SearchS
 import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { isAdmin } from 'src/utils/organization';
+import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar, { SNACKBAR_PAGE_CLOSE_KEY } from 'src/utils/useSnackbar';
@@ -423,86 +424,79 @@ export default function Database(props: DatabaseProps): JSX.Element {
     void populatePendingAccessions();
   }, [selectedOrganization.id]);
 
-  const initAccessions = useCallback(
-    (activeRequests: boolean) => {
-      const getFieldsFromSearchColumns = () => {
-        let columnsNamesToSearch: string[];
-        if (searchColumns.includes('active')) {
-          columnsNamesToSearch = [...searchColumns, 'id'];
-        } else {
-          columnsNamesToSearch = [...searchColumns, 'active', 'id'];
-        }
+  const initAccessions = useCallback(() => {
+    const getFieldsFromSearchColumns = () => {
+      let columnsNamesToSearch: string[];
+      if (searchColumns.includes('active')) {
+        columnsNamesToSearch = [...searchColumns, 'id'];
+      } else {
+        columnsNamesToSearch = [...searchColumns, 'active', 'id'];
+      }
 
-        return columnsNamesToSearch;
+      return columnsNamesToSearch;
+    };
+
+    if (selectedOrganization) {
+      const requestId = setRequestId('accessions_search');
+
+      const populateSearchResults = async () => {
+        const apiResponse: SearchResponseElementWithId[] | null = await SeedBankService.searchAccessions({
+          organizationId: selectedOrganization.id,
+          fields: getFieldsFromSearchColumns(),
+          sortOrder: searchSortOrder,
+          searchCriteria,
+        });
+
+        if (requestId === getRequestId('accessions_search')) {
+          setSearchResults(apiResponse);
+        }
       };
 
-      if (selectedOrganization) {
-        const populateSearchResults = async () => {
-          const apiResponse: SearchResponseElementWithId[] | null = await SeedBankService.searchAccessions({
-            organizationId: selectedOrganization.id,
-            fields: getFieldsFromSearchColumns(),
-            sortOrder: searchSortOrder,
-            searchCriteria,
-          });
+      const populateAvailableFieldOptions = async () => {
+        const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
+        const data = await SeedBankService.searchFieldValues(
+          singleAndMultiChoiceFields,
+          searchCriteria,
+          selectedOrganization.id
+        );
 
-          if (activeRequests) {
-            setSearchResults(apiResponse);
-          }
-        };
+        if (requestId === getRequestId('accessions_search')) {
+          setAvailableFieldOptions(data);
+        }
+      };
 
-        const populateAvailableFieldOptions = async () => {
-          const singleAndMultiChoiceFields = filterSelectFields(searchColumns);
-          const data = await SeedBankService.searchFieldValues(
-            singleAndMultiChoiceFields,
-            searchCriteria,
-            selectedOrganization.id
-          );
+      const populateFieldOptions = async () => {
+        // Since the seed bank service doesn't return values for project IDs, we need to merge the values in
+        const singleAndMultiChoiceFields = filterSelectFields(
+          searchColumns.filter((column) => column !== 'project_name')
+        );
 
-          if (activeRequests) {
-            setAvailableFieldOptions(data);
-          }
-        };
+        const allValues =
+          (await SeedBankService.searchFieldValues(singleAndMultiChoiceFields, {}, selectedOrganization.id)) || {};
 
-        const populateFieldOptions = async () => {
-          // Since the seed bank service doesn't return values for project IDs, we need to merge the values in
-          const singleAndMultiChoiceFields = filterSelectFields(
-            searchColumns.filter((column) => column !== 'project_name')
-          );
-
-          const allValues =
-            (await SeedBankService.searchFieldValues(singleAndMultiChoiceFields, {}, selectedOrganization.id)) || {};
-
-          if (featureFlagProjects) {
-            allValues.project_name = {
-              partial: false,
-              values: (projects || []).map((project: Project) => project.name),
-            };
-          }
-
-          if (activeRequests) {
-            setFieldOptions(allValues);
-          }
-        };
-
-        if (searchCriteria) {
-          void populateSearchResults();
+        if (featureFlagProjects) {
+          allValues.project_name = {
+            partial: false,
+            values: (projects || []).map((project: Project) => project.name),
+          };
         }
 
-        void populateAvailableFieldOptions();
-        void populateFieldOptions();
+        if (requestId === getRequestId('accessions_search')) {
+          setFieldOptions(allValues);
+        }
+      };
+
+      if (searchCriteria) {
+        void populateSearchResults();
       }
-    },
-    [featureFlagProjects, projects, searchColumns, searchCriteria, searchSortOrder, selectedOrganization]
-  );
+
+      void populateAvailableFieldOptions();
+      void populateFieldOptions();
+    }
+  }, [featureFlagProjects, projects, searchColumns, searchCriteria, searchSortOrder, selectedOrganization]);
 
   useEffect(() => {
-    let activeRequests = true;
-
-    void initAccessions(activeRequests);
-
-    return () => {
-      activeRequests = false;
-    };
+    void initAccessions();
   }, [initAccessions]);
 
   useEffect(() => {
@@ -687,7 +681,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   }, [searchResults]);
 
   const reloadAccessions = useCallback(() => {
-    void initAccessions(true);
+    void initAccessions();
   }, [initAccessions]);
 
   return (

@@ -1,5 +1,11 @@
 import { SearchNodePayload } from 'src/types/Search';
-import { SearchOrderConfig, searchAndSort, splitTrigrams } from 'src/utils/searchAndSort';
+import {
+  SearchNodeModifyConfig,
+  SearchOrderConfig,
+  modifySearchNode,
+  searchAndSort,
+  splitTrigrams,
+} from 'src/utils/searchAndSort';
 
 type MockResult = {
   category?: string;
@@ -601,5 +607,92 @@ describe('searchAndSort', () => {
     ];
 
     expect(searchAndSort(results, undefined, searchOrderConfig)).toEqual(sortedResultsDescending);
+  });
+});
+
+describe('modifySearchNode', () => {
+  it('modifies nested search nodes as expected - with condition and append operation', () => {
+    const search: SearchNodePayload = {
+      operation: 'and',
+      children: [
+        {
+          operation: 'and',
+          children: [
+            {
+              field: 'status',
+              operation: 'field',
+              type: 'Exact',
+              values: ['In Review'],
+            },
+          ],
+        },
+      ],
+    };
+
+    const modifyStatus: SearchNodeModifyConfig = {
+      field: 'status',
+      operation: 'APPEND',
+      values: ['Needs Translation'],
+      condition: (values) => values.includes('In Review'),
+    };
+
+    const expectedSearch: SearchNodePayload = {
+      operation: 'and',
+      children: [
+        {
+          operation: 'and',
+          children: [
+            {
+              field: 'status',
+              operation: 'field',
+              type: 'Exact',
+              values: ['In Review', 'Needs Translation'],
+            },
+          ],
+        },
+      ],
+    };
+
+    expect(modifySearchNode(modifyStatus, search)).toEqual(expectedSearch);
+  });
+
+  it('modifies nested search nodes as expected - no condition and replace operation', () => {
+    const search: SearchNodePayload = {
+      operation: 'and',
+      children: [
+        {
+          operation: 'and',
+          child: {
+            field: 'status',
+            operation: 'field',
+            type: 'Exact',
+            values: ['Ignore field 1', 'Ignore field 2'],
+          },
+        },
+      ],
+    };
+
+    const modifyStatus: SearchNodeModifyConfig = {
+      field: 'status',
+      operation: 'REPLACE',
+      values: ['User Visible Field'],
+    };
+
+    const expectedSearch: SearchNodePayload = {
+      operation: 'and',
+      children: [
+        {
+          operation: 'and',
+          child: {
+            field: 'status',
+            operation: 'field',
+            type: 'Exact',
+            values: ['User Visible Field'],
+          },
+        },
+      ],
+    };
+
+    expect(modifySearchNode(modifyStatus, search)).toEqual(expectedSearch);
   });
 });
