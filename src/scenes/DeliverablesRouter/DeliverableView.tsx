@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
@@ -18,6 +18,10 @@ import RejectedDeliverableMessage from 'src/scenes/DeliverablesRouter/RejectedDe
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+import DocumentLimitReachedMessage from './DocumentLimitReachedMessage';
+
+export const MAX_FILES_LIMIT = 15;
+
 export type Props = EditProps & {
   isBusy?: boolean;
 };
@@ -27,6 +31,8 @@ const DeliverableView = (props: Props): JSX.Element => {
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
   const theme = useTheme();
+
+  const [showDocumentLimitReachedMessage, setShowDocumentLimitReachedMessage] = useState(false);
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -47,12 +53,16 @@ const DeliverableView = (props: Props): JSX.Element => {
       {props.isBusy && <BusySpinner />}
       <Box display='flex' flexDirection='column' flexGrow={1}>
         <RejectedDeliverableMessage {...viewProps} />
+        {showDocumentLimitReachedMessage && <DocumentLimitReachedMessage />}
         <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
           <Metadata {...viewProps} />
           <Typography marginBottom={theme.spacing(2)} fontSize='20px' lineHeight='28px' fontWeight={600}>
             {strings.DOCUMENTS}
           </Typography>
-          <DocumentsUploader {...viewProps} />
+          <DocumentsUploader
+            {...viewProps}
+            showDocumentLimitReachedMessage={() => setShowDocumentLimitReachedMessage(true)}
+          />
           <DocumentsList {...viewProps} />
         </Card>
       </Box>
