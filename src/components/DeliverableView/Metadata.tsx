@@ -24,18 +24,20 @@ const Metadata = (props: ViewProps): JSX.Element => {
         >
           <InternalComment deliverable={deliverable} />
 
-          <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
-            {deliverable.status !== 'Rejected' && <DeliverableStatusBadge status={deliverable.status} />}
-          </div>
+          {deliverable.status !== 'Rejected' && (
+            <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
+              <DeliverableStatusBadge status={deliverable.status} />
+            </div>
+          )}
         </Box>
       )}
 
       <Box marginBottom='16px'>
-        <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
-          {deliverable.status !== 'Rejected' && !isAcceleratorRoute && (
+        {deliverable.status !== 'Rejected' && !isAcceleratorRoute && (
+          <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
             <DeliverableStatusBadge status={deliverable.status} />
-          )}
-        </div>
+          </div>
+        )}
 
         <div dangerouslySetInnerHTML={{ __html: deliverable.descriptionHtml || '' }} />
       </Box>
