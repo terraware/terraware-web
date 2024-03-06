@@ -18,6 +18,7 @@ import Search from 'src/scenes/InventoryRouter/Search';
 import { NurseryBatchService } from 'src/services';
 import strings from 'src/strings';
 import { FieldNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
@@ -93,7 +94,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
 
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
 
-  const getSearchFields = useCallback(() => {
+  const getNonSpeciesSearchFields = useCallback(() => {
     // Skip fuzzy search on empty strings since the query will be
     // expensive and results will be the same as not adding the fuzzy search
     const fields: FieldNodePayload[] = debouncedSearchTerm ? getFuzzySearchFields(debouncedSearchTerm) : [];
@@ -107,15 +108,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
       });
     }
 
-    if (filters.speciesIds && filters.speciesIds.length > 0) {
-      fields.push({
-        operation: 'field',
-        field: 'species_id',
-        type: 'Exact',
-        values: filters.speciesIds.map((id) => id.toString()),
-      });
-    }
-
     if (filters.projectIds && filters.projectIds.length > 0) {
       fields.push({
         operation: 'field',
@@ -126,10 +118,25 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     }
 
     return fields;
-  }, [getFuzzySearchFields, debouncedSearchTerm, filters]);
+  }, [getFuzzySearchFields, debouncedSearchTerm, filters.facilityIds, filters.projectIds]);
+
+  const getSearchFields = useCallback(() => {
+    const fields: FieldNodePayload[] = getNonSpeciesSearchFields();
+
+    if (filters.speciesIds && filters.speciesIds.length > 0) {
+      fields.push({
+        operation: 'field',
+        field: 'species_id',
+        type: 'Exact',
+        values: filters.speciesIds.map((id) => id.toString()),
+      });
+    }
+
+    return fields;
+  }, [getNonSpeciesSearchFields, filters.speciesIds]);
 
   useEffect(() => {
-    let activeRequests = true;
+    const requestId = setRequestId('inventory-seedlings');
 
     const populateResults = async () => {
       if (!originId) {
@@ -139,31 +146,14 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
       const searchFields = getSearchFields();
       const batchesResults = await getBatchesSearch(selectedOrganization.id, originId, searchFields, searchSortOrder);
 
-      if (activeRequests) {
+      if (requestId === getRequestId('inventory-seedlings')) {
         setBatches(batchesResults || []);
-      }
-
-      // keep state of results without species filtering, to populate species_id filter values
-      if (searchFields.find((f) => f.field === 'species_id')) {
-        const speciesUnfilteredBatchesResults = await getBatchesSearch(
-          selectedOrganization.id,
-          originId,
-          searchFields.filter((f) => f.field !== 'species_id'),
-          searchSortOrder
-        );
-        setSpeciesUnfilteredBatches(speciesUnfilteredBatchesResults || []);
-      } else {
-        setSpeciesUnfilteredBatches(batchesResults || []);
       }
     };
 
     if (!originId || !isNaN(originId)) {
       void populateResults();
     }
-
-    return () => {
-      activeRequests = false;
-    };
   }, [
     getSearchFields,
     getBatchesSearch,
@@ -173,6 +163,33 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     modified,
     searchSortOrder,
   ]);
+
+  useEffect(() => {
+    const requestId = setRequestId('inventory-seedlings-species-unfiltered');
+
+    const populateSpeciesUnfilteredResults = async () => {
+      if (!originId) {
+        return;
+      }
+
+      const searchFields = getNonSpeciesSearchFields();
+      const speciesUnfilteredBatchesResults = await getBatchesSearch(
+        selectedOrganization.id,
+        originId,
+        searchFields,
+        searchSortOrder
+      );
+
+      if (requestId === getRequestId('inventory-seedlings-species-unfiltered')) {
+        // keep state of results without species filtering, to populate species_id filter values
+        setSpeciesUnfilteredBatches(speciesUnfilteredBatchesResults || []);
+      }
+    };
+
+    if (!originId || !isNaN(originId)) {
+      void populateSpeciesUnfilteredResults();
+    }
+  }, [getNonSpeciesSearchFields, getBatchesSearch, selectedOrganization, originId, searchSortOrder]);
 
   useEffect(() => {
     const batch = batches.find((b) => b.batchNumber === openBatchNumber);
@@ -412,7 +429,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
               origin={origin}
               showProjectsFilter
               showEmptyBatchesFilter
-              tableResults={speciesUnfilteredBatches}
+              tableResults={origin === 'Nursery' ? speciesUnfilteredBatches : undefined}
             />
           </Box>
 
