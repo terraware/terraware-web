@@ -146,21 +146,30 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     setSelectedRows(results);
   }, [results]);
 
+  const getResultsSpeciesNames = useCallback(() => {
+    return results
+      .map(
+        (result: SearchResponseElement & { facilityInventories?: string }) => result.facilityInventories?.split('\r')
+      )
+      .flat()
+      .filter((species) => !!species) as string[];
+  }, [results]);
+
   return (
     <>
       <Box>
         <Search
-          searchValue={temporalSearchValue}
-          onSearch={(val) => setTemporalSearchValue(val)}
           filters={filters}
+          getResultsSpeciesNames={getResultsSpeciesNames}
+          onSearch={(val) => setTemporalSearchValue(val)}
+          origin={origin}
+          searchValue={temporalSearchValue}
           setFilters={(f) => {
             setFilters(f);
             setSessionFilters(f);
           }}
-          origin={origin}
-          showProjectsFilter={origin === 'Batches'}
           showEmptyBatchesFilter={origin === 'Batches'}
-          tableResults={results}
+          showProjectsFilter={origin === 'Batches'}
         />
       </Box>
       <Grid item xs={12}>
