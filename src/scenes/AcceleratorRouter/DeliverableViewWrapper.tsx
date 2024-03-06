@@ -10,7 +10,6 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
-import useSnackbar from 'src/utils/useSnackbar';
 
 import DeliverableView from './DeliverableView';
 import RejectDialog from './RejectDialog';
@@ -21,7 +20,6 @@ const DeliverableViewWrapper = () => {
   const { deliverableId } = useParams<{ deliverableId: string }>();
   const { status: requestStatus, update } = useUpdateDeliverable();
   const theme = useTheme();
-  const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
 
   const { deliverable } = useFetchDeliverable({ deliverableId: Number(deliverableId) });
@@ -108,14 +106,6 @@ const DeliverableViewWrapper = () => {
       </Box>
     );
   }, [deliverable?.status, onOptionItemClick, optionItems, setStatus, theme]);
-
-  useEffect(() => {
-    if (requestStatus === 'success') {
-      snackbar.toastSuccess(strings.DELIVERABLE_STATUS_UPDATED);
-    } else if (requestStatus === 'error') {
-      snackbar.toastError(strings.GENERIC_ERROR);
-    }
-  }, [requestStatus, snackbar]);
 
   if (deliverable) {
     return (
