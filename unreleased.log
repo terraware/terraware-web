@@ -1,3 +1,4 @@
+3a107da533 SW-4873 SW-4967 Hide 'needs translation' status for participants (#2265)
 c40a7d1e9e Since the 'description' column will contain HTML, remove it from the deliverables table (#2264)
 70fa7b0616 SW-4964 Deliverable option menu changes (#2266)
 40d08b12c0 SW-4959 Handle race condition in accessions search when page is loaded with filters in the url (#2260)

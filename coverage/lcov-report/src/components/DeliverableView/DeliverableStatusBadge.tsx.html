@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
@@ -141,13 +141,7 @@
 <a name='L76'></a><a href='#L76'>76</a>
 <a name='L77'></a><a href='#L77'>77</a>
 <a name='L78'></a><a href='#L78'>78</a>
-<a name='L79'></a><a href='#L79'>79</a>
-<a name='L80'></a><a href='#L80'>80</a>
-<a name='L81'></a><a href='#L81'>81</a>
-<a name='L82'></a><a href='#L82'>82</a>
-<a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a>
-<a name='L85'></a><a href='#L85'>85</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L79'></a><a href='#L79'>79</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -161,6 +155,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -220,14 +216,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -237,6 +225,7 @@ import { useTheme } from '@mui/material';
 import { Badge } from '@terraware/web-components';
 import { BadgeProps } from '@terraware/web-components/components/Badge';
 &nbsp;
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
@@ -249,6 +238,7 @@ const DeliverableStatusBadge = <span class="cstat-no" title="statement not cover
   const { status } = <span class="cstat-no" title="statement not covered" >props;</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
+  const { isAcceleratorRoute } = <span class="cstat-no" title="statement not covered" >useAcceleratorConsole();</span>
 &nbsp;
   const badgeProps = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span>: BadgeProps | undefined =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!activeLocale) {</span>
@@ -268,14 +258,14 @@ const DeliverableStatusBadge = <span class="cstat-no" title="statement not cover
           backgroundColor: theme.palette.TwClrBgWarningTertiary,
           borderColor: theme.palette.TwClrBrdrWarning,
           labelColor: theme.palette.TwClrTxtWarning,
-          label: strings.APPROVED,
+          label: strings.IN_REVIEW,
         };
       case 'Needs Translation':
 <span class="cstat-no" title="statement not covered" >        return {</span>
           backgroundColor: theme.palette.TwClrBgInfoTertiary,
           borderColor: theme.palette.TwClrBrdrInfo,
           labelColor: theme.palette.TwClrTxtInfo,
-          label: strings.APPROVED,
+          label: isAcceleratorRoute ? strings.NEEDS_TRANSLATION : strings.IN_REVIEW,
         };
       case 'Not Needed':
 <span class="cstat-no" title="statement not covered" >        return {</span>
@@ -301,17 +291,9 @@ const DeliverableStatusBadge = <span class="cstat-no" title="statement not cover
       default:
 <span class="cstat-no" title="statement not covered" >        return undefined;</span>
     }
-  }, [activeLocale, status, theme]);
+  }, [activeLocale, isAcceleratorRoute, status, theme]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;&gt;
-      {activeLocale &amp;&amp; badgeProps ? (
-        &lt;div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}&gt;
-          &lt;Badge {...badgeProps} /&gt;
-        &lt;/div&gt;
-      ) : undefined}
-    &lt;/&gt;
-  );
+<span class="cstat-no" title="statement not covered" >  return &lt;&gt;{badgeProps &amp;&amp; &lt;Badge {...badgeProps} /&gt;}&lt;/&gt;;</span>
 };
 &nbsp;
 export default DeliverableStatusBadge;
@@ -322,7 +304,7 @@ export default DeliverableStatusBadge;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-06T18:39:12.981Z
+                at 2024-03-06T18:49:38.898Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
