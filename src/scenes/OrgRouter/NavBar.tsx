@@ -36,7 +36,6 @@ export default function NavBar({
   const [hasDeliverables, setHasDeliverables] = useState<boolean>(false);
   const { isDesktop } = useDeviceInfo();
   const history = useHistory();
-  const featureFlagProjects = isEnabled('Projects');
   const featureFlagAccelerator = isEnabled('Accelerator');
   const { user } = useUser();
   const { activeLocale } = useLocalization();
@@ -299,17 +298,15 @@ export default function NavBar({
             }}
             id='people'
           />
-          {featureFlagProjects && (
-            <NavItem
-              label={strings.PROJECTS}
-              icon='iconFolder'
-              selected={!!isProjectsRoute}
-              onClick={() => {
-                closeAndNavigateTo(APP_PATHS.PROJECTS);
-              }}
-              id='projects'
-            />
-          )}
+          <NavItem
+            label={strings.PROJECTS}
+            icon='iconFolder'
+            selected={!!isProjectsRoute}
+            onClick={() => {
+              closeAndNavigateTo(APP_PATHS.PROJECTS);
+            }}
+            id='projects'
+          />
           <NavItem label={strings.LOCATIONS} icon='iconMyLocation' id='locations'>
             <SubNavbar>
               <NavItem

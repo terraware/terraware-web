@@ -6,7 +6,6 @@ import ProjectOverviewItemCard from 'src/components/ProjectOverviewItemCard';
 import Link from 'src/components/common/Link';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import OverviewItemCardSubLocations from 'src/scenes/InventoryRouter/view/OverviewItemCardSubLocations';
 import { NurseryBatchService } from 'src/services';
 import strings from 'src/strings';
@@ -22,7 +21,6 @@ interface BatchSummaryProps {
 export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
   const { batch, reloadData } = props;
   const { isMobile, isTablet } = useDeviceInfo();
-  const featureFlagProjects = isEnabled('Projects');
   const snackbar = useSnackbar();
 
   const theme = useTheme();
@@ -36,7 +34,7 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
     }
   }, [batch, reloadData, snackbar]);
 
-  const overviewItemCount = featureFlagProjects ? 7 : 6;
+  const overviewItemCount = 7;
   const overviewGridSize = isMobile ? '100%' : isTablet ? '50%' : overviewItemCount <= 6 ? '33%' : '25%';
 
   return (
@@ -70,7 +68,7 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
         <OverviewItemCard isEditable={false} title={strings.DATE_ADDED} contents={batch.addedDate} />
       </Grid>
 
-      {featureFlagProjects && batch && (
+      {batch && (
         <Grid item flexBasis={overviewGridSize} flexGrow={1}>
           <ProjectOverviewItemCard<Batch>
             entity={batch}

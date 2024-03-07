@@ -8,7 +8,6 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import Table from 'src/components/common/table';
-import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
 import strings from 'src/strings';
 import { NurseryWithdrawalPurposes, NurseryWithdrawalRequest } from 'src/types/Batch';
@@ -122,7 +121,6 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const [record, setRecord] = useForm<BatchWithdrawalForTable[]>([]);
-  const featureFlagProjects = isEnabled('Projects');
 
   const [species, setSpecies] = useState<any>([]);
   const [errorPageMessage, setErrorPageMessage] = useState('');
@@ -360,10 +358,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
                     <Table
                       id={`batch-withdraw-quantity-table${nurseryWithdrawal.purpose === OUTPLANT ? '-outplant' : ''}`}
                       columns={() =>
-                        (nurseryWithdrawal.purpose === OUTPLANT
-                          ? outplantTableColumns()
-                          : defaultTableColumns()
-                        ).filter((column) => (featureFlagProjects ? column : column.key !== 'projectName'))
+                        nurseryWithdrawal.purpose === OUTPLANT ? outplantTableColumns() : defaultTableColumns()
                       }
                       rows={record.filter((rec) => rec.speciesId === iSpecies.id)}
                       Renderer={WithdrawalBatchesCellRenderer}

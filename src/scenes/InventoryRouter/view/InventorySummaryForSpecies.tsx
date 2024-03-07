@@ -4,7 +4,6 @@ import { Grid } from '@mui/material';
 import _ from 'lodash';
 
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
 import { selectSpeciesProjects } from 'src/redux/features/species/speciesProjectsSelectors';
 import { requestSpeciesProjects } from 'src/redux/features/species/speciesProjectsThunks';
@@ -27,7 +26,6 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
   const { selectedOrganization } = useOrganization();
-  const featureFlagProjects = isEnabled('Projects');
 
   const speciesProjects = useAppSelector(selectSpeciesProjects(speciesId));
   const [summary, setSummary] = useState<SpeciesInventorySummary>();
@@ -44,13 +42,11 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
 
     if (speciesId !== undefined) {
       void populateSummary();
-      if (featureFlagProjects) {
-        void dispatch(requestSpeciesProjects(selectedOrganization.id, speciesId));
-      }
+      void dispatch(requestSpeciesProjects(selectedOrganization.id, speciesId));
     } else {
       setSummary(undefined);
     }
-  }, [speciesId, summary, snackbar, featureFlagProjects, dispatch, selectedOrganization.id]);
+  }, [speciesId, summary, snackbar, dispatch, selectedOrganization.id]);
 
   useEffect(() => {
     reloadData();
@@ -65,7 +61,7 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
 
     const topRowColumns = isMobile ? 12 : 3;
 
-    const showProjectsOverviewCard = !!(featureFlagProjects && speciesProjects);
+    const showProjectsOverviewCard = !!speciesProjects;
     const bottomRowColumns = isMobile ? 12 : showProjectsOverviewCard ? 3 : 4;
 
     return [

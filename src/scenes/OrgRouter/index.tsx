@@ -85,7 +85,6 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   const { reloadUserPreferences: reloadPreferences } = useUser();
   const location = useStateLocation();
   const { selectedOrganization } = useOrganization();
-  const featureFlagProjects = isEnabled('Projects');
   const featureFlagAccelerator = isEnabled('Accelerator');
   const classes = useStyles();
 
@@ -243,15 +242,13 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
               <PeopleRouter />
             </Route>
 
-            {featureFlagProjects && (
-              <Route path={APP_PATHS.PROJECTS}>
-                <ProjectsRouter
-                  reloadProjects={reloadProjects}
-                  isPlaceholderOrg={() => isPlaceholderOrg(selectedOrganization.id)}
-                  selectedOrgHasProjects={selectedOrgHasProjects}
-                />
-              </Route>
-            )}
+            <Route path={APP_PATHS.PROJECTS}>
+              <ProjectsRouter
+                reloadProjects={reloadProjects}
+                isPlaceholderOrg={() => isPlaceholderOrg(selectedOrganization.id)}
+                selectedOrgHasProjects={selectedOrgHasProjects}
+              />
+            </Route>
 
             <Route path={APP_PATHS.SEED_BANKS}>
               <SeedBanksRouter />

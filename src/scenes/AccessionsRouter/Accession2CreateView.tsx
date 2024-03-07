@@ -11,7 +11,6 @@ import SpeciesSelector from 'src/components/common/SpeciesSelector';
 import Textfield from 'src/components/common/Textfield/Textfield';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useProjects } from 'src/hooks/useProjects';
 import { useOrganization } from 'src/providers';
 import SeedBankService, { AccessionPostRequestBody } from 'src/services/SeedBankService';
@@ -54,7 +53,6 @@ export default function CreateAccession(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const [collectedDateError, setCollectedDateError] = useState<string>();
   const [receivedDateError, setReceivedDateError] = useState<string>();
-  const featureFlagProjects = isEnabled('Projects');
 
   const onCollectedDateError = (error?: string) => {
     setCollectedDateError(error);
@@ -226,16 +224,14 @@ export default function CreateAccession(): JSX.Element {
             <Accession2PlantSiteDetails record={record} onChange={onChange} />
           </Grid>
 
-          {featureFlagProjects && (
-            <Box sx={marginTop}>
-              <ProjectsDropdown<AccessionPostRequestBody>
-                record={record}
-                setRecord={setRecord}
-                availableProjects={availableProjects}
-                allowUnselect
-              />
-            </Box>
-          )}
+          <Box sx={marginTop}>
+            <ProjectsDropdown<AccessionPostRequestBody>
+              record={record}
+              setRecord={setRecord}
+              availableProjects={availableProjects}
+              allowUnselect
+            />
+          </Box>
 
           <Grid container>
             <CollectedReceivedDate2

@@ -5,7 +5,6 @@ import { IconTooltip } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
-import isEnabled from 'src/features';
 import { useUser } from 'src/providers';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -26,7 +25,6 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
   const [preset, setPreset] = React.useState<Preset>();
   const { isMobile } = useDeviceInfo();
   const { userPreferences } = useUser();
-  const featureFlagProjects = isEnabled('Projects');
 
   const [value, setValue] = React.useState(props.value);
 
@@ -67,20 +65,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
     return 4;
   };
 
-  let userSections = sections(userPreferences.preferredWeightSystem as string);
-  if (!featureFlagProjects) {
-    userSections = userSections.map(
-      (section: Section): Section =>
-        section.name !== strings.GENERAL
-          ? section
-          : {
-              ...section,
-              options: section.options.filter((optionArray: Option[]) =>
-                optionArray.find((option: Option) => option.key !== 'project_name')
-              ),
-            }
-    );
-  }
+  const userSections = sections(userPreferences.preferredWeightSystem as string);
 
   return (
     <DialogBox

@@ -2,11 +2,8 @@ import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 
 const RedirectsRouter = () => {
-  const featureFlagProjects = isEnabled('Projects');
-
   return (
     <Switch>
       {/* Redirects. Invalid paths will redirect to the closest valid path. */}
@@ -26,11 +23,9 @@ const RedirectsRouter = () => {
       <Route exact path={APP_PATHS.PEOPLE + '/'}>
         <Redirect to={APP_PATHS.PEOPLE} />
       </Route>
-      {featureFlagProjects && (
-        <Route exact path={APP_PATHS.PROJECTS + '/'}>
-          <Redirect to={APP_PATHS.PROJECTS} />
-        </Route>
-      )}
+      <Route exact path={APP_PATHS.PROJECTS + '/'}>
+        <Redirect to={APP_PATHS.PROJECTS} />
+      </Route>
       <Route path={APP_PATHS.SEEDS_DASHBOARD + '/'}>
         <Redirect to={APP_PATHS.SEEDS_DASHBOARD} />
       </Route>

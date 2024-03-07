@@ -14,7 +14,6 @@ import Card from 'src/components/common/Card';
 import { View } from 'src/components/common/ListMapSelector';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useProjects } from 'src/hooks/useProjects';
 import { RootState } from 'src/redux/rootReducer';
 import { useAppSelector } from 'src/redux/store';
@@ -61,7 +60,6 @@ export default function GenericSiteView<T extends MinimalPlantingSite>({
   const [plantingSeasons, setPlantingSeasons] = useState<PlantingSeason[]>([]);
   const [search, setSearch] = useState<string>('');
   const [view, setView] = useState<View>('map');
-  const projectsEnabled = isEnabled('Projects');
   const { selectedProject } = useProjects(plantingSite);
   const data = useAppSelector((state) => selector(state, plantingSite.id, view === 'map' ? '' : search.trim()));
 
@@ -177,17 +175,9 @@ export default function GenericSiteView<T extends MinimalPlantingSite>({
               </List>
             </Grid>
           )}
-          {projectsEnabled && (
-            <Grid item xs={gridSize()} display='flex'>
-              <TextField
-                display={true}
-                id='project'
-                label={strings.PROJECT}
-                type='text'
-                value={selectedProject?.name}
-              />
-            </Grid>
-          )}
+          <Grid item xs={gridSize()} display='flex'>
+            <TextField display={true} id='project' label={strings.PROJECT} type='text' value={selectedProject?.name} />
+          </Grid>
         </Grid>
         {plantingSite.boundary && plantingSite.plantingZones && (
           <BoundariesAndZones

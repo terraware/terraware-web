@@ -22,7 +22,6 @@ import DatePicker from 'src/components/common/DatePicker';
 import Divisor from 'src/components/common/Divisor';
 import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useUser } from 'src/providers';
 import { useOrganization } from 'src/providers/hooks';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
@@ -85,7 +84,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const classes = useStyles();
-  const featureFlagProjects = isEnabled('Projects');
 
   const plantingSites = useAppSelector(selectPlantingSites);
   const projects = useAppSelector(selectProjects);
@@ -657,7 +655,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
               </Grid>
             )}
 
-            {featureFlagProjects && !isSingleBatch && (availableProjects || []).length > 0 && (
+            {!isSingleBatch && (availableProjects || []).length > 0 && (
               <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
                 <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
                   <ProjectsDropdown<{ projectId?: number }>

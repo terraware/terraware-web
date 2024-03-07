@@ -2,7 +2,6 @@ import React, { useCallback } from 'react';
 
 import { TableColumnType } from '@terraware/web-components';
 
-import isEnabled from 'src/features';
 import InventorySeedlingsTable, {
   InventorySeedlingsTableProps,
 } from 'src/scenes/InventoryRouter/view/InventorySeedlingsTable';
@@ -44,8 +43,6 @@ const columns = (): TableColumnType[] => [
 ];
 
 export default function InventorySeedlingsTableForSpecies(props: InventorySeedlingsTableForSpeciesProps): JSX.Element {
-  const featureFlagProjects = isEnabled('Projects');
-
   const speciesId = props.speciesId;
 
   const getFuzzySearchFields = useCallback(
@@ -114,7 +111,7 @@ export default function InventorySeedlingsTableForSpecies(props: InventorySeedli
   return (
     <InventorySeedlingsTable
       {...props}
-      columns={() => (featureFlagProjects ? columns() : columns().filter((column) => column.key !== 'project_name'))}
+      columns={columns}
       isSelectionBulkWithdrawable={isSelectionBulkWithdrawable}
       getFuzzySearchFields={getFuzzySearchFields}
       getBatchesSearch={getBatchesSearch}

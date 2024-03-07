@@ -58,7 +58,6 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
   const { results, setTemporalSearchValue, temporalSearchValue, setSearchSortOrder, filters, setFilters } = props;
 
   const theme = useTheme();
-  const featureFlagProjects = isEnabled('Projects');
   const featureFlagSites = isEnabled('User Detailed Sites');
 
   const projects = useAppSelector(selectProjects);
@@ -100,9 +99,9 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
   );
 
   const tableColumns = useCallback(() => {
-    const columnsData = featureFlagProjects ? columns() : columns().filter((column) => column.key !== 'project_name');
+    const columnsData = columns();
     return featureFlagSites ? columnsData : columnsData.filter((column) => column.key !== 'draft');
-  }, [featureFlagProjects, featureFlagSites]);
+  }, [featureFlagSites]);
 
   return (
     <Card flushMobile>
@@ -121,16 +120,14 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
           />
         </Box>
 
-        {featureFlagProjects && (
-          <FilterMultiSelectContainer<PlantingSitesFilters>
-            filters={filters}
-            setFilters={setFilters}
-            label={strings.PROJECTS}
-            filterKey='projectIds'
-            options={projects?.map((project: Project) => project.id) ?? []}
-            renderOption={(id: string | number) => projects?.find((project) => project.id === id)?.name ?? ''}
-          />
-        )}
+        <FilterMultiSelectContainer<PlantingSitesFilters>
+          filters={filters}
+          setFilters={setFilters}
+          label={strings.PROJECTS}
+          filterKey='projectIds'
+          options={projects?.map((project: Project) => project.id) ?? []}
+          renderOption={(id: string | number) => projects?.find((project) => project.id === id)?.name ?? ''}
+        />
       </Box>
 
       <Grid display='flex' flexDirection='row' alignItems='center' sx={{ marginTop: theme.spacing(2) }}>

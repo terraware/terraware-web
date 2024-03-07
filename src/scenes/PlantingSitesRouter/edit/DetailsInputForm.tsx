@@ -46,7 +46,6 @@ export default function DetailsInputForm<T extends MinimalPlantingSite>({
   const [usedNames, setUsedNames] = useState<Set<string>>();
   const { availableProjects } = useProjects(record);
   const detailedSitesEnabled = isEnabled('User Detailed Sites');
-  const projectsEnabled = isEnabled('Projects');
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const dispatch = useAppDispatch();
@@ -166,16 +165,14 @@ export default function DetailsInputForm<T extends MinimalPlantingSite>({
           />
         </Grid>
       )}
-      {projectsEnabled && (
-        <Grid item xs={gridSize()}>
-          <ProjectsDropdown<T>
-            availableProjects={availableProjects}
-            record={record}
-            setRecord={setRecord}
-            allowUnselect
-          />
-        </Grid>
-      )}
+      <Grid item xs={gridSize()}>
+        <ProjectsDropdown<T>
+          availableProjects={availableProjects}
+          record={record}
+          setRecord={setRecord}
+          allowUnselect
+        />
+      </Grid>
     </Grid>
   );
 }

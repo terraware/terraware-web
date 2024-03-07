@@ -6,7 +6,6 @@ import { TableColumnType } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
-import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
 import { isBatchEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
@@ -83,7 +82,6 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
   const [showResults, setShowResults] = useState(false);
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
-  const featureFlagProjects = isEnabled('Projects');
 
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>({
     field: 'batchNumber',
@@ -187,9 +185,7 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
           setFilters={setFilters}
           setSearchSortOrder={onSearchSortOrder}
           isPresorted={!!searchSortOrder}
-          columns={() =>
-            featureFlagProjects ? columns() : columns().filter((column) => column.key !== 'project_name')
-          }
+          columns={columns}
           reloadData={onApplyFilters}
           origin='Batches'
           allowSelectionProjectAssign
