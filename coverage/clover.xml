@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1709771838770" clover="3.2.0">
-  <project timestamp="1709771838771" name="All files">
-    <metrics statements="17424" coveredstatements="667" conditionals="11125" coveredconditionals="215" methods="5429" coveredmethods="154" elements="33978" coveredelements="1036" complexity="0" loc="17424" ncloc="17424" packages="143" files="717" classes="717"/>
+<coverage generated="1709781163437" clover="3.2.0">
+  <project timestamp="1709781163437" name="All files">
+    <metrics statements="17437" coveredstatements="667" conditionals="11131" coveredconditionals="215" methods="5432" coveredmethods="154" elements="34000" coveredelements="1036" complexity="0" loc="17437" ncloc="17437" packages="143" files="718" classes="718"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="121" coveredconditionals="0" methods="45" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -1393,7 +1393,7 @@
       </file>
     </package>
     <package name="src.components.DeliverableView">
-      <metrics statements="118" coveredstatements="0" conditionals="74" coveredconditionals="0" methods="36" coveredmethods="0"/>
+      <metrics statements="131" coveredstatements="0" conditionals="80" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="DeliverableStatusBadge.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/DeliverableStatusBadge.tsx">
         <metrics statements="17" coveredstatements="0" conditionals="13" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="16" count="0" type="stmt"/>
@@ -1432,16 +1432,27 @@
         <line num="36" count="0" type="stmt"/>
       </file>
       <file name="DocumentsUploader.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/DocumentsUploader.tsx">
-        <metrics statements="9" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="3" coveredmethods="0"/>
-        <line num="16" count="0" type="stmt"/>
-        <line num="17" count="0" type="stmt"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="21" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="22" count="0" type="stmt"/>
+        <metrics statements="20" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <line num="19" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
+        <line num="29" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="30" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="43" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
       </file>
       <file name="FileUploadDialog.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/FileUploadDialog.tsx">
         <metrics statements="35" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="13" coveredmethods="0"/>
@@ -1513,6 +1524,11 @@
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="9" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
+      </file>
+      <file name="StatusChangeConfirmationDialog.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/StatusChangeConfirmationDialog.tsx">
+        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
       </file>
       <file name="TitleBar.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/TitleBar.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>

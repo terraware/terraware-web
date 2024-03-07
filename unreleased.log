@@ -1,3 +1,4 @@
+d4cfa0aabd SW-4945: FE workflow to reset submission status with new document upload (#2252)
 73e5d854b5 SW-4976 Opt-in flag for project scoring and voting (#2274)
 78d78b0963 SW4970: Added search values functionality for querying available filter values (#2271)
 b64507099b SW-4965: Follow up on max # of files limit related UX in file upload dialog (#2268)
