@@ -1,3 +1,4 @@
+3500b8a00a Use updated types with finalized GlobalRoles API from backend (#2276)
 36a089d0f6 Updated translations from Phrase (#2275)
 d4cfa0aabd SW-4945: FE workflow to reset submission status with new document upload (#2252)
 73e5d854b5 SW-4976 Opt-in flag for project scoring and voting (#2274)
