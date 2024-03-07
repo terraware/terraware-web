@@ -55,7 +55,7 @@ const DeliverableView = (props: Props): JSX.Element => {
           <Typography marginBottom={theme.spacing(2)} fontSize='20px' lineHeight='28px' fontWeight={600}>
             {strings.DOCUMENTS}
           </Typography>
-          {canEdit && <DocumentsUploader {...viewProps} />}
+          {canEdit && <DocumentsUploader {...viewProps} deliverableStatusesToIgnore={['Not Submitted', 'In Review']} />}
           <DocumentsList {...viewProps} />
         </Card>
       </Box>
