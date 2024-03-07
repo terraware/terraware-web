@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
+import Page from 'src/components/Page';
 import { useLocalization } from 'src/providers';
 import { requestListGlobalRolesUsers } from 'src/redux/features/globalRoles/globalRolesAsyncThunks';
 import { selectGlobalRolesUsersSearchRequest } from 'src/redux/features/globalRoles/globalRolesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import AcceleratorMain from 'src/scenes/AcceleratorRouter/AcceleratorMain';
 import strings from 'src/strings';
 import { UserWithGlobalRoles } from 'src/types/GlobalRoles';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -39,7 +39,7 @@ const PeopleView = () => {
   // tslint:disable:no-console
   console.log('globalRoleUsers', globalRoleUsers);
 
-  return <AcceleratorMain />;
+  return <Page title={strings.PEOPLE} />;
 };
 
 export default PeopleView;

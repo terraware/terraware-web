@@ -1,4 +1,4 @@
-import React, { RefObject, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Container, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -23,7 +23,6 @@ interface DeliverablesTableProps {
   columns: (activeLocale: string | null) => TableColumnType[];
   extraTableFilters?: SearchNodePayload[];
   organizationId: number;
-  pageHeaderRef: RefObject<HTMLDivElement>;
   filterModifiers?: (filters: FilterConfig[]) => FilterConfig[];
   searchAndSort?: SearchAndSortFn<ListDeliverablesElement>;
 }
@@ -40,7 +39,6 @@ const DeliverablesTable = ({
   columns,
   extraTableFilters,
   filterModifiers,
-  pageHeaderRef,
   organizationId,
   searchAndSort,
 }: DeliverablesTableProps) => {
@@ -156,7 +154,7 @@ const DeliverablesTable = ({
   }, [deliverablesSearchRequest]);
 
   return (
-    <Container ref={pageHeaderRef} maxWidth={false} className={classes.mainContainer}>
+    <Container maxWidth={false} className={classes.mainContainer}>
       <Card flushMobile>
         <Grid item xs={12} sx={{ display: 'flex', marginBottom: '16px', alignItems: 'center' }}>
           <SearchFiltersWrapperV2

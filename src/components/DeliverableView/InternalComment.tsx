@@ -5,11 +5,12 @@ import TextField from '@terraware/web-components/components/Textfield/Textfield'
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
-import useUpdateDeliverable from 'src/scenes/AcceleratorRouter/useUpdateDeliverable';
 import strings from 'src/strings';
 import theme from 'src/theme';
 import { Deliverable } from 'src/types/Deliverables';
 import useSnackbar from 'src/utils/useSnackbar';
+
+import useUpdateDeliverable from './useUpdateDeliverable';
 
 interface InternalCommentProps {
   deliverable: Deliverable;

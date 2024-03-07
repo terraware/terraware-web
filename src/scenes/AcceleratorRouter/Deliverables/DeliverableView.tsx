@@ -13,10 +13,11 @@ import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useUser } from 'src/providers';
-import DocumentsList from 'src/scenes/AcceleratorRouter/DocumentsList';
-import RejectedDeliverableMessage from 'src/scenes/AcceleratorRouter/RejectedDeliverableMessage';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+import DocumentsList from './DocumentsList';
+import RejectedDeliverableMessage from './RejectedDeliverableMessage';
 
 export type Props = EditProps & {
   isBusy?: boolean;

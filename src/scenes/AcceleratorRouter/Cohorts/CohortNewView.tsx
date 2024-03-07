@@ -1,20 +1,18 @@
 import React, { useCallback, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { Typography, useTheme } from '@mui/material';
-
+import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
-import AcceleratorMain from 'src/scenes/AcceleratorRouter/AcceleratorMain';
-import CohortForm from 'src/scenes/AcceleratorRouter/CohortForm';
 import CohortService from 'src/services/CohortService';
 import strings from 'src/strings';
 import { CreateCohortRequestPayload } from 'src/types/Cohort';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import CohortForm from './CohortForm';
+
 export default function CohortNewView(): JSX.Element {
   const history = useHistory();
-  const theme = useTheme();
   const [isBusy, setIsBusy] = useState<boolean>(false);
   const snackbar = useSnackbar();
 
@@ -71,17 +69,13 @@ export default function CohortNewView(): JSX.Element {
   );
 
   return (
-    <AcceleratorMain>
-      <Typography variant='h2' sx={{ fontSize: '24px', fontWeight: 'bold', paddingLeft: theme.spacing(3) }}>
-        {strings.ADD_COHORT}
-      </Typography>
-
+    <Page title={strings.ADD_COHORT} contentStyle={{ display: 'flex', flexDirection: 'column' }}>
       <CohortForm<CreateCohortRequestPayload>
         busy={isBusy}
         cohort={record}
         onCancel={goToCohortsList}
         onSave={onCohortSaved}
       />
-    </AcceleratorMain>
+    </Page>
   );
 }

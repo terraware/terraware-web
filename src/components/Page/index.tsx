@@ -55,7 +55,7 @@ export default function Page({
                   marginTop: theme.spacing(3),
                   marginBottom: theme.spacing(4),
                   paddingLeft: theme.spacing(3),
-                  fontSize: '20px',
+                  fontSize: '24px',
                   fontWeight: 600,
                   color: theme.palette.TwClrBaseGray800,
                 }}
