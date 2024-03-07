@@ -161,25 +161,7 @@
 <a name='L96'></a><a href='#L96'>96</a>
 <a name='L97'></a><a href='#L97'>97</a>
 <a name='L98'></a><a href='#L98'>98</a>
-<a name='L99'></a><a href='#L99'>99</a>
-<a name='L100'></a><a href='#L100'>100</a>
-<a name='L101'></a><a href='#L101'>101</a>
-<a name='L102'></a><a href='#L102'>102</a>
-<a name='L103'></a><a href='#L103'>103</a>
-<a name='L104'></a><a href='#L104'>104</a>
-<a name='L105'></a><a href='#L105'>105</a>
-<a name='L106'></a><a href='#L106'>106</a>
-<a name='L107'></a><a href='#L107'>107</a>
-<a name='L108'></a><a href='#L108'>108</a>
-<a name='L109'></a><a href='#L109'>109</a>
-<a name='L110'></a><a href='#L110'>110</a>
-<a name='L111'></a><a href='#L111'>111</a>
-<a name='L112'></a><a href='#L112'>112</a>
-<a name='L113'></a><a href='#L113'>113</a>
-<a name='L114'></a><a href='#L114'>114</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L99'></a><a href='#L99'>99</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -237,18 +219,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -297,19 +267,16 @@ import { makeStyles } from '@mui/styles';
 &nbsp;
 import ErrorBoundary from 'src/ErrorBoundary';
 import { APP_PATHS } from 'src/constants';
-import CohortEditView from 'src/scenes/AcceleratorRouter/CohortEditView';
-import CohortListView from 'src/scenes/AcceleratorRouter/CohortListView';
-import CohortNewView from 'src/scenes/AcceleratorRouter/CohortNewView';
-import CohortView from 'src/scenes/AcceleratorRouter/CohortView';
-import DeliverableViewWrapper from 'src/scenes/AcceleratorRouter/DeliverableViewWrapper';
-import DeliverablesList from 'src/scenes/AcceleratorRouter/DeliverablesList';
-import ModuleContentView from 'src/scenes/AcceleratorRouter/ModuleContentView';
-import NavBar from 'src/scenes/AcceleratorRouter/NavBar';
-import OverviewView from 'src/scenes/AcceleratorRouter/OverviewView';
-import PeopleView from 'src/scenes/AcceleratorRouter/PeopleView';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStateLocation from 'src/utils/useStateLocation';
+&nbsp;
+import Cohorts from './Cohorts';
+import Deliverables from './Deliverables';
+import ModuleContentView from './Modules';
+import NavBar from './NavBar';
+import OverviewView from './Overview';
+import PeopleView from './People';
 &nbsp;
 interface AcceleratorRouterProps {
   showNavBar: boolean;
@@ -370,23 +337,11 @@ const AcceleratorRouter = <span class="cstat-no" title="statement not covered" >
             &lt;Route path={APP_PATHS.ACCELERATOR_OVERVIEW}&gt;
               &lt;OverviewView /&gt;
             &lt;/Route&gt;
-            &lt;Route path={APP_PATHS.ACCELERATOR_COHORTS_EDIT}&gt;
-              &lt;CohortEditView /&gt;
-            &lt;/Route&gt;
-            &lt;Route exact path={APP_PATHS.ACCELERATOR_COHORTS}&gt;
-              &lt;CohortListView /&gt;
-            &lt;/Route&gt;
-            &lt;Route path={APP_PATHS.ACCELERATOR_COHORTS_NEW}&gt;
-              &lt;CohortNewView /&gt;
-            &lt;/Route&gt;
-            &lt;Route path={APP_PATHS.ACCELERATOR_COHORTS_VIEW}&gt;
-              &lt;CohortView /&gt;
-            &lt;/Route&gt;
-            &lt;Route path={APP_PATHS.ACCELERATOR_DELIVERABLES_VIEW}&gt;
-              &lt;DeliverableViewWrapper /&gt;
+            &lt;Route path={APP_PATHS.ACCELERATOR_COHORTS}&gt;
+              &lt;Cohorts /&gt;
             &lt;/Route&gt;
             &lt;Route path={APP_PATHS.ACCELERATOR_DELIVERABLES}&gt;
-              &lt;DeliverablesList /&gt;
+              &lt;Deliverables /&gt;
             &lt;/Route&gt;
             &lt;Route path={APP_PATHS.ACCELERATOR_MODULE_CONTENT}&gt;
               &lt;ModuleContentView /&gt;
@@ -409,7 +364,7 @@ export default AcceleratorRouter;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-07T17:12:07.706Z
+                at 2024-03-07T19:12:27.125Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
