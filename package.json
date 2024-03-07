@@ -28,6 +28,7 @@
     "build-storybook": "storybook build",
     "pre-commit": "yarn format && yarn lint && yarn ts && yarn test && yarn build",
     "playwright:run": "yarn run playwright test playwright/e2e",
+    "playwright:debug": "yarn run playwright test playwright/e2e --debug",
     "test:e2e": "NODE_OPTIONS=--max-old-space-size=16384 start-server-and-test start http://127.0.0.1:3000 playwright:run"
   },
   "dependencies": {
