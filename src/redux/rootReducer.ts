@@ -1,6 +1,6 @@
 import { Action, combineReducers } from '@reduxjs/toolkit';
 
-import { cohortModulesReducer, cohortsReducer, cohortsRequestsReducer } from 'src/redux/features/cohorts/cohortsSlice';
+import { cohortsReducer, cohortsRequestsReducer } from 'src/redux/features/cohorts/cohortsSlice';
 import {
   deliverablesEditReducer,
   deliverablesReducer,
@@ -56,7 +56,6 @@ export const reducers = {
   appVersion: appVersionReducer,
   batches: batchesReducer,
   batchesRequests: batchesRequestsReducer,
-  cohortModules: cohortModulesReducer,
   cohorts: cohortsReducer,
   cohortsRequests: cohortsRequestsReducer,
   deliverablesEdit: deliverablesEditReducer,

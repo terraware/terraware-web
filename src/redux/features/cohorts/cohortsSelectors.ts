@@ -9,5 +9,3 @@ export const selectCohort =
     state.cohorts?.cohorts?.find((cohort) => cohort.id === cohortId);
 
 export const selectCohortRequest = (state: RootState, requestId: string) => state.cohortsRequests[requestId];
-
-export const selectCohortModules = (state: RootState, cohortId: number) => state.cohortModules[cohortId];
