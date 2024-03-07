@@ -1,21 +1,24 @@
 import React, { useCallback } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 
 import { Slide, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import ErrorBoundary from 'src/ErrorBoundary';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStateLocation from 'src/utils/useStateLocation';
 
 import Cohorts from './Cohorts';
 import Deliverables from './Deliverables';
-import ModuleContentView from './Modules';
+import ModuleContent from './Modules';
 import NavBar from './NavBar';
-import OverviewView from './Overview';
-import PeopleView from './People';
+import Overview from './Overview';
+import People from './People';
+import Scoring from './Scoring';
+import Voting from './Voting';
 
 interface AcceleratorRouterProps {
   showNavBar: boolean;
@@ -50,6 +53,7 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
   const { type } = useDeviceInfo();
   const classes = useStyles();
   const location = useStateLocation();
+  const consoleEnabled = isEnabled('Console');
 
   const viewHasBackgroundImage = useCallback((): boolean => {
     return location.pathname.startsWith(APP_PATHS.ACCELERATOR_OVERVIEW);
@@ -74,7 +78,7 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
         <ErrorBoundary setShowNavBar={setShowNavBar}>
           <Switch>
             <Route path={APP_PATHS.ACCELERATOR_OVERVIEW}>
-              <OverviewView />
+              <Overview />
             </Route>
             <Route path={APP_PATHS.ACCELERATOR_COHORTS}>
               <Cohorts />
@@ -83,10 +87,23 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
               <Deliverables />
             </Route>
             <Route path={APP_PATHS.ACCELERATOR_MODULE_CONTENT}>
-              <ModuleContentView />
+              <ModuleContent />
             </Route>
             <Route path={APP_PATHS.ACCELERATOR_PEOPLE}>
-              <PeopleView />
+              <People />
+            </Route>
+            {consoleEnabled && (
+              <Route path={APP_PATHS.ACCELERATOR_SCORING}>
+                <Scoring />
+              </Route>
+            )}
+            {consoleEnabled && (
+              <Route path={APP_PATHS.ACCELERATOR_VOTING}>
+                <Voting />
+              </Route>
+            )}
+            <Route path={'*'}>
+              <Redirect to={APP_PATHS.ACCELERATOR_OVERVIEW} />
             </Route>
           </Switch>
         </ErrorBoundary>

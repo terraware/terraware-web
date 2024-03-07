@@ -1,4 +1,4 @@
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 
@@ -8,11 +8,14 @@ import DeliverablesList from './DeliverablesList';
 const DeliverablesRouter = () => {
   return (
     <Switch>
-      <Route path={APP_PATHS.ACCELERATOR_DELIVERABLES_VIEW}>
+      <Route exact path={APP_PATHS.ACCELERATOR_DELIVERABLES_VIEW}>
         <DeliverableViewWrapper />
       </Route>
-      <Route path={'*'}>
+      <Route exact path={APP_PATHS.ACCELERATOR_DELIVERABLES}>
         <DeliverablesList />
+      </Route>
+      <Route path={'*'}>
+        <Redirect to={APP_PATHS.ACCELERATOR_DELIVERABLES} />
       </Route>
     </Switch>
   );
