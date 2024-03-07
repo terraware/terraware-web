@@ -3,9 +3,10 @@ import { useHistory } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
-import NoOrgRouter from 'src/scenes/NoOrgRouter';
-import OrgRouter from 'src/scenes/OrgRouter';
 import useStateLocation from 'src/utils/useStateLocation';
+
+const OrgRouter = React.lazy(() => import('src/scenes/OrgRouter'));
+const NoOrgRouter = React.lazy(() => import('src/scenes/NoOrgRouter'));
 
 interface TerrawareRouterProps {
   showNavBar: boolean;
