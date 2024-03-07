@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { setCohortAction, setCohortModulesAction, setCohortsAction } from 'src/redux/features/cohorts/cohortsSlice';
+import { setCohortAction, setCohortsAction } from 'src/redux/features/cohorts/cohortsSlice';
 import CohortService, {
   CreateCohortResponsePayload,
   DeleteCohortResponsePayload,
@@ -9,7 +9,7 @@ import CohortService, {
 } from 'src/services/CohortService';
 import { Response2 } from 'src/services/HttpService';
 import strings from 'src/strings';
-import { Cohort, CreateCohortRequestPayload, MockCohortModule, UpdateCohortRequestPayload } from 'src/types/Cohort';
+import { Cohort, CreateCohortRequestPayload, UpdateCohortRequestPayload } from 'src/types/Cohort';
 
 export const requestCohorts = createAsyncThunk(
   'cohorts/list',
@@ -33,19 +33,6 @@ export const requestCohort = createAsyncThunk(
     if (response !== null && response.requestSucceeded && response.data !== undefined) {
       dispatch(setCohortAction({ error: response.error, cohorts: [response.data] }));
       return response.data;
-    }
-
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
-
-export const requestCohortModules = createAsyncThunk(
-  'cohorts/modules',
-  async (request: { cohortId: number }, { dispatch, rejectWithValue }) => {
-    const response: Response2<MockCohortModule[]> = await CohortService.listCohortModules(request.cohortId);
-
-    if (response !== null && response.requestSucceeded && response.data !== undefined) {
-      dispatch(setCohortModulesAction({ cohortId: request.cohortId, error: response.error, modules: response.data }));
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);

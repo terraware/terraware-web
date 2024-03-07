@@ -1,6 +1,6 @@
 import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response, Response2 } from 'src/services/HttpService';
-import { Cohort, CreateCohortRequestPayload, MockCohortModule, UpdateCohortRequestPayload } from 'src/types/Cohort';
+import { Cohort, CreateCohortRequestPayload, UpdateCohortRequestPayload } from 'src/types/Cohort';
 
 /**
  * Cohort related services
@@ -67,87 +67,14 @@ const deleteCohort = (cohortId: number) =>
   });
 
 /**
- * List module(s) for a cohort
- */
-// TODO: remove mock data when BE is done
-let mockResponseData: MockCohortModule[] = [];
-
-const listCohortModules = async (cohortId: number): Promise<Response2<MockCohortModule[]>> =>
-  new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({ data: mockResponseData, requestSucceeded: true });
-    }, 300);
-  });
-
-/**
  * Exported functions
  */
 const CohortService = {
   createCohort,
   deleteCohort,
   getCohort,
-  listCohortModules,
   listCohorts,
   updateCohort,
 };
 
 export default CohortService;
-
-// TODO: remove mock data once BE is done
-mockResponseData = [
-  {
-    cohortId: 1,
-    moduleId: 1,
-    name: 'Module 1',
-    description: 'Module 1 description',
-    duration: 3,
-    order: 1,
-    status: 'published',
-    createdAt: '2021-01-01T00:00:00Z',
-    updatedAt: '2021-01-01T00:00:00Z',
-  },
-  {
-    cohortId: 1,
-    moduleId: 2,
-    name: 'Module 2',
-    description: 'Module 2 description',
-    duration: 5,
-    order: 2,
-    status: 'published',
-    createdAt: '2021-01-01T00:00:00Z',
-    updatedAt: '2021-01-01T00:00:00Z',
-  },
-  {
-    cohortId: 1,
-    moduleId: 3,
-    name: 'Module 3',
-    description: 'Module 3 description',
-    duration: 7,
-    order: 3,
-    status: 'published',
-    createdAt: '2021-01-01T00:00:00Z',
-    updatedAt: '2021-01-01T00:00:00Z',
-  },
-  {
-    cohortId: 1,
-    moduleId: 4,
-    name: 'Module 4',
-    description: 'Module 4 description',
-    duration: 9,
-    order: 4,
-    status: 'published',
-    createdAt: '2021-01-01T00:00:00Z',
-    updatedAt: '2021-01-01T00:00:00Z',
-  },
-  {
-    cohortId: 1,
-    moduleId: 5,
-    name: 'Module 5',
-    description: 'Module 5 description',
-    duration: 11,
-    order: 5,
-    status: 'published',
-    createdAt: '2021-01-01T00:00:00Z',
-    updatedAt: '2021-01-01T00:00:00Z',
-  },
-];
