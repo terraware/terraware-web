@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/32</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
-                <span class="quiet">Branches</span>
                 <span class='fraction'>0/27</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/22</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/32</span>
+                <span class='fraction'>0/27</span>
             </div>
         
             
@@ -145,20 +145,7 @@
 <a name='L80'></a><a href='#L80'>80</a>
 <a name='L81'></a><a href='#L81'>81</a>
 <a name='L82'></a><a href='#L82'>82</a>
-<a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a>
-<a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a>
-<a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a>
-<a name='L92'></a><a href='#L92'>92</a>
-<a name='L93'></a><a href='#L93'>93</a>
-<a name='L94'></a><a href='#L94'>94</a>
-<a name='L95'></a><a href='#L95'>95</a>
-<a name='L96'></a><a href='#L96'>96</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L83'></a><a href='#L83'>83</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -191,19 +178,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -255,7 +229,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createAsyncThunk } from '@reduxjs/toolkit';
 &nbsp;
-import { setCohortAction, setCohortModulesAction, setCohortsAction } from 'src/redux/features/cohorts/cohortsSlice';
+import { setCohortAction, setCohortsAction } from 'src/redux/features/cohorts/cohortsSlice';
 import CohortService, {
   CreateCohortResponsePayload,
   DeleteCohortResponsePayload,
@@ -264,7 +238,7 @@ import CohortService, {
 } from 'src/services/CohortService';
 import { Response2 } from 'src/services/HttpService';
 import strings from 'src/strings';
-import { Cohort, CreateCohortRequestPayload, MockCohortModule, UpdateCohortRequestPayload } from 'src/types/Cohort';
+import { Cohort, CreateCohortRequestPayload, UpdateCohortRequestPayload } from 'src/types/Cohort';
 &nbsp;
 export const requestCohorts = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
   'cohorts/list',
@@ -288,19 +262,6 @@ export const requestCohort = <span class="cstat-no" title="statement not covered
 <span class="cstat-no" title="statement not covered" >    if (response !== null &amp;&amp; response.requestSucceeded &amp;&amp; response.data !== undefined) {</span>
 <span class="cstat-no" title="statement not covered" >      dispatch(setCohortAction({ error: response.error, cohorts: [response.data] }));</span>
 <span class="cstat-no" title="statement not covered" >      return response.data;</span>
-    }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return rejectWithValue(strings.GENERIC_ERROR);</span>
-  }
-);
-&nbsp;
-export const requestCohortModules = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
-  'cohorts/modules',
-<span class="fstat-no" title="function not covered" >  as</span>ync (request: { cohortId: number }, { dispatch, rejectWithValue }) =&gt; {
-    const response: Response2&lt;MockCohortModule[]&gt; = <span class="cstat-no" title="statement not covered" >await CohortService.listCohortModules(request.cohortId);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    if (response !== null &amp;&amp; response.requestSucceeded &amp;&amp; response.data !== undefined) {</span>
-<span class="cstat-no" title="statement not covered" >      dispatch(setCohortModulesAction({ cohortId: request.cohortId, error: response.error, modules: response.data }));</span>
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return rejectWithValue(strings.GENERIC_ERROR);</span>
@@ -355,7 +316,7 @@ export const requestCohortDelete = <span class="cstat-no" title="statement not c
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-07T23:38:57.304Z
+                at 2024-03-07T23:56:44.736Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
