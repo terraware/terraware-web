@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1709854413527" clover="3.2.0">
-  <project timestamp="1709854413527" name="All files">
-    <metrics statements="17396" coveredstatements="667" conditionals="11065" coveredconditionals="215" methods="5420" coveredmethods="154" elements="33881" coveredelements="1036" complexity="0" loc="17396" ncloc="17396" packages="148" files="720" classes="720"/>
+<coverage generated="1709854737828" clover="3.2.0">
+  <project timestamp="1709854737828" name="All files">
+    <metrics statements="17401" coveredstatements="667" conditionals="11065" coveredconditionals="215" methods="5425" coveredmethods="154" elements="33891" coveredelements="1036" complexity="0" loc="17401" ncloc="17401" packages="148" files="721" classes="721"/>
     <package name="src">
-      <metrics statements="167" coveredstatements="0" conditionals="121" coveredconditionals="0" methods="45" coveredmethods="0"/>
+      <metrics statements="167" coveredstatements="0" conditionals="121" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
-        <metrics statements="21" coveredstatements="0" conditionals="23" coveredconditionals="0" methods="11" coveredmethods="0"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="36" count="0" type="cond" truecount="0" falsecount="2"/>
+        <metrics statements="23" coveredstatements="0" conditionals="23" coveredconditionals="0" methods="13" coveredmethods="0"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
         <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="44" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="45" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="40" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="46" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="47" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="48" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="54" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="62" count="0" type="stmt"/>
+        <line num="50" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="56" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="64" count="0" type="stmt"/>
-        <line num="65" count="0" type="stmt"/>
         <line num="66" count="0" type="stmt"/>
         <line num="67" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
         <line num="69" count="0" type="stmt"/>
         <line num="71" count="0" type="stmt"/>
-        <line num="72" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="73" count="0" type="stmt"/>
+        <line num="74" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="75" count="0" type="stmt"/>
-        <line num="81" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
         <line num="83" count="0" type="stmt"/>
-        <line num="103" count="0" type="stmt"/>
+        <line num="85" count="0" type="stmt"/>
+        <line num="107" count="0" type="stmt"/>
       </file>
       <file name="AppBootstrap.tsx" path="/home/runner/work/terraware-web/terraware-web/src/AppBootstrap.tsx">
-        <metrics statements="15" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="4" coveredmethods="0"/>
-        <line num="16" count="0" type="stmt"/>
-        <line num="39" count="0" type="stmt"/>
-        <line num="40" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="42" count="0" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
+        <metrics statements="13" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
         <line num="44" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
-        <line num="53" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="54" count="0" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="70" count="0" type="stmt"/>
-        <line num="72" count="0" type="stmt"/>
       </file>
       <file name="AppError.tsx" path="/home/runner/work/terraware-web/terraware-web/src/AppError.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
@@ -5026,7 +5026,7 @@
       </file>
     </package>
     <package name="src.components.common">
-      <metrics statements="432" coveredstatements="0" conditionals="359" coveredconditionals="0" methods="142" coveredmethods="0"/>
+      <metrics statements="435" coveredstatements="0" conditionals="359" coveredconditionals="0" methods="144" coveredmethods="0"/>
       <file name="AddLink.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/AddLink.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
@@ -5042,6 +5042,12 @@
         <line num="7" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
+      </file>
+      <file name="BlockingSpinner.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/BlockingSpinner.tsx">
+        <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
       </file>
       <file name="Card.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/Card.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -17507,17 +17513,19 @@
       </file>
     </package>
     <package name="src.scenes.TerrawareRouter">
-      <metrics statements="8" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
+      <metrics statements="10" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="4" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/TerrawareRouter/index.tsx">
-        <metrics statements="8" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="15" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
+        <metrics statements="10" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
-        <line num="27" count="0" type="stmt"/>
-        <line num="28" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="33" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="29" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="34" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
     </package>
     <package name="src.services">
