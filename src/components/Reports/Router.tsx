@@ -17,7 +17,7 @@ const ReportsRouter = (): JSX.Element | null => {
   return (
     <Switch>
       <Route exact path={APP_PATHS.REPORTS}>
-        <ReportsView tab={'reports'} /> : <ReportList />
+        <ReportsView tab={'reports'} />
       </Route>
 
       <Route exact path={APP_PATHS.REPORTS_SETTINGS}>
