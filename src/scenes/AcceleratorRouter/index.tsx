@@ -6,19 +6,16 @@ import { makeStyles } from '@mui/styles';
 
 import ErrorBoundary from 'src/ErrorBoundary';
 import { APP_PATHS } from 'src/constants';
-import CohortEditView from 'src/scenes/AcceleratorRouter/CohortEditView';
-import CohortListView from 'src/scenes/AcceleratorRouter/CohortListView';
-import CohortNewView from 'src/scenes/AcceleratorRouter/CohortNewView';
-import CohortView from 'src/scenes/AcceleratorRouter/CohortView';
-import DeliverableViewWrapper from 'src/scenes/AcceleratorRouter/DeliverableViewWrapper';
-import DeliverablesList from 'src/scenes/AcceleratorRouter/DeliverablesList';
-import ModuleContentView from 'src/scenes/AcceleratorRouter/ModuleContentView';
-import NavBar from 'src/scenes/AcceleratorRouter/NavBar';
-import OverviewView from 'src/scenes/AcceleratorRouter/OverviewView';
-import PeopleView from 'src/scenes/AcceleratorRouter/PeopleView';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStateLocation from 'src/utils/useStateLocation';
+
+import Cohorts from './Cohorts';
+import Deliverables from './Deliverables';
+import ModuleContentView from './Modules';
+import NavBar from './NavBar';
+import OverviewView from './Overview';
+import PeopleView from './People';
 
 interface AcceleratorRouterProps {
   showNavBar: boolean;
@@ -79,23 +76,11 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
             <Route path={APP_PATHS.ACCELERATOR_OVERVIEW}>
               <OverviewView />
             </Route>
-            <Route path={APP_PATHS.ACCELERATOR_COHORTS_EDIT}>
-              <CohortEditView />
-            </Route>
-            <Route exact path={APP_PATHS.ACCELERATOR_COHORTS}>
-              <CohortListView />
-            </Route>
-            <Route path={APP_PATHS.ACCELERATOR_COHORTS_NEW}>
-              <CohortNewView />
-            </Route>
-            <Route path={APP_PATHS.ACCELERATOR_COHORTS_VIEW}>
-              <CohortView />
-            </Route>
-            <Route path={APP_PATHS.ACCELERATOR_DELIVERABLES_VIEW}>
-              <DeliverableViewWrapper />
+            <Route path={APP_PATHS.ACCELERATOR_COHORTS}>
+              <Cohorts />
             </Route>
             <Route path={APP_PATHS.ACCELERATOR_DELIVERABLES}>
-              <DeliverablesList />
+              <Deliverables />
             </Route>
             <Route path={APP_PATHS.ACCELERATOR_MODULE_CONTENT}>
               <ModuleContentView />

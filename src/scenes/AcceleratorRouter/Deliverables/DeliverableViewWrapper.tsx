@@ -5,6 +5,7 @@ import { Box, useTheme } from '@mui/material';
 import { Button, DropdownItem } from '@terraware/web-components';
 
 import useFetchDeliverable from 'src/components/DeliverableView/useFetchDeliverable';
+import useUpdateDeliverable from 'src/components/DeliverableView/useUpdateDeliverable';
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { useLocalization } from 'src/providers';
@@ -14,7 +15,6 @@ import { DeliverableStatusType } from 'src/types/Deliverables';
 import ApproveDeliverableDialog from './ApproveDeliverableDialog';
 import DeliverableView from './DeliverableView';
 import RejectDialog from './RejectDialog';
-import useUpdateDeliverable from './useUpdateDeliverable';
 
 const DeliverableViewWrapper = () => {
   const [showApproveDialog, setShowApproveDialog] = useState<boolean>(false);

@@ -1,22 +1,20 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { Typography, useTheme } from '@mui/material';
-
+import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
 import { requestCohort, requestCohortUpdate } from 'src/redux/features/cohorts/cohortsAsyncThunks';
 import { selectCohort, selectCohortRequest } from 'src/redux/features/cohorts/cohortsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import AcceleratorMain from 'src/scenes/AcceleratorRouter/AcceleratorMain';
-import CohortForm from 'src/scenes/AcceleratorRouter/CohortForm';
 import strings from 'src/strings';
 import { UpdateCohortRequestPayload } from 'src/types/Cohort';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import CohortForm from './CohortForm';
+
 export default function CohortEditView(): JSX.Element {
   const dispatch = useAppDispatch();
   const history = useHistory();
-  const theme = useTheme();
   const snackbar = useSnackbar();
 
   const pathParams = useParams<{ cohortId: string }>();
@@ -59,11 +57,7 @@ export default function CohortEditView(): JSX.Element {
   }, [cohortId, cohortUpdateRequest, dispatch, goToCohortView, snackbar]);
 
   return (
-    <AcceleratorMain>
-      <Typography variant='h2' sx={{ fontSize: '24px', fontWeight: 'bold', paddingLeft: theme.spacing(3) }}>
-        {strings.EDIT_COHORT}
-      </Typography>
-
+    <Page title={strings.EDIT_COHORT} contentStyle={{ display: 'flex', flexDirection: 'column' }}>
       {cohort && (
         <CohortForm<UpdateCohortRequestPayload>
           busy={cohortUpdateRequest?.status === 'pending'}
@@ -72,6 +66,6 @@ export default function CohortEditView(): JSX.Element {
           onSave={saveCohort}
         />
       )}
-    </AcceleratorMain>
+    </Page>
   );
 }

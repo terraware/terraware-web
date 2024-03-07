@@ -9,11 +9,10 @@ import ParticipantsDropdown from 'src/components/ParticipantsDropdown';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { useParticipants } from 'src/hooks/useParticipants';
 import { useLocalization } from 'src/providers';
+import AcceleratorMain from 'src/scenes/AcceleratorRouter/AcceleratorMain';
 import strings from 'src/strings';
 import theme from 'src/theme';
 import { SearchNodePayload } from 'src/types/Search';
-
-import AcceleratorMain from './AcceleratorMain';
 
 const columns = (activeLocale: string | null): TableColumnType[] =>
   activeLocale

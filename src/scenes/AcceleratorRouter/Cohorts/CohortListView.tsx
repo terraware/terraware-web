@@ -1,14 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { Grid, useTheme } from '@mui/material';
+import { Grid, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { TableColumnType } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
-import PageSnackbar from 'src/components/PageSnackbar';
+import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
-import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
@@ -18,21 +17,17 @@ import { selectCohorts } from 'src/redux/features/cohorts/cohortsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 
-import AcceleratorMain from './AcceleratorMain';
 import CohortCellRenderer from './CohortCellRenderer';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   title: {
     margin: 0,
     fontSize: '24px',
     fontWeight: 600,
   },
-  centered: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-    marginBottom: '32px',
+  right: {
+    float: 'right',
+    marginRight: theme.spacing(2),
   },
 }));
 
@@ -54,10 +49,8 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
 
 const CohortListView = () => {
   const dispatch = useAppDispatch();
-  const theme = useTheme();
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
-  const contentRef = useRef(null);
   const classes = useStyles();
   const history = useHistory();
   const { isAllowed } = useUser();
@@ -77,27 +70,23 @@ const CohortListView = () => {
   }, [dispatch, activeLocale]);
 
   return (
-    <AcceleratorMain>
-      <PageHeaderWrapper nextElement={contentRef.current}>
-        <Grid container paddingBottom={theme.spacing(4)} paddingLeft={isMobile ? 0 : theme.spacing(3)}>
-          <Grid item xs={8}>
-            <h1 className={classes.title}>{strings.COHORTS}</h1>
+    <Page
+      title={strings.COHORTS}
+      rightComponent={
+        canCreateCohorts && (
+          <Grid item xs={4} className={classes.right}>
+            {isMobile ? (
+              <Button id='new-cohort' icon='plus' onClick={goToNewCohort} size='medium' />
+            ) : (
+              <Button id='new-cohort' label={strings.ADD_COHORT} icon='plus' onClick={goToNewCohort} size='medium' />
+            )}
           </Grid>
-          {canCreateCohorts && (
-            <Grid item xs={4} className={classes.centered}>
-              {isMobile ? (
-                <Button id='new-cohort' icon='plus' onClick={goToNewCohort} size='medium' />
-              ) : (
-                <Button id='new-cohort' label={strings.ADD_COHORT} icon='plus' onClick={goToNewCohort} size='medium' />
-              )}
-            </Grid>
-          )}
-          <PageSnackbar />
-        </Grid>
-      </PageHeaderWrapper>
-
+        )
+      }
+      contentStyle={{ display: 'flex', flexGrow: 1, flexDirection: 'column' }}
+    >
       <Card flushMobile>
-        <Grid container ref={contentRef}>
+        <Grid container>
           <Grid item xs={12}>
             <Grid container spacing={4}>
               <Grid item xs={12}>
@@ -115,7 +104,7 @@ const CohortListView = () => {
           </Grid>
         </Grid>
       </Card>
-    </AcceleratorMain>
+    </Page>
   );
 };
 
