@@ -1,7 +1,7 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName = 'Show Production View' | 'User Detailed Sites' | 'Accelerator' | 'Voting';
+export type FeatureName = 'Show Production View' | 'User Detailed Sites' | 'Accelerator' | 'Console';
 
 export type Feature = {
   name: FeatureName;
@@ -54,12 +54,12 @@ export const OPT_IN_FEATURES: Feature[] = [
     disclosure: ['This is WIP'],
   },
   {
-    name: 'Voting',
-    preferenceName: 'enableProjectScoringVoting',
+    name: 'Console',
+    preferenceName: 'enableConsole',
     active: true,
     enabled: false,
     allowInternalProduction: false,
-    description: ['Project scoring and voting for accelerator support'],
+    description: ['Participant project management with scoring and voting for accelerator support'],
     disclosure: ['This is WIP'],
   },
 ];
