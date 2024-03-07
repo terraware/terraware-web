@@ -6,7 +6,6 @@ import { Button, PillListItem, Textfield, Tooltip } from '@terraware/web-compone
 import { PillList } from '@terraware/web-components';
 
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
-import isEnabled from 'src/features';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
@@ -77,7 +76,6 @@ export default function Search(props: SearchProps): JSX.Element | null {
   const classes = useStyles();
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
-  const featureFlagProjects = isEnabled('Projects');
 
   const origin = props.origin || 'Species';
 
@@ -310,7 +308,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
           </>
         )}
 
-        {featureFlagProjects && showProjectsFilter && (projects || []).length > 0 && (
+        {showProjectsFilter && (projects || []).length > 0 && (
           <InventoryFilters
             filters={filters}
             setFilters={setFilters}

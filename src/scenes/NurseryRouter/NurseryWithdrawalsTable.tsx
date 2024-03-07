@@ -12,7 +12,6 @@ import SearchFiltersWrapper, {
 } from 'src/components/common/SearchFiltersWrapper';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useLocalization, useOrganization } from 'src/providers';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { useAppSelector } from 'src/redux/store';
@@ -34,14 +33,12 @@ import useDebounce from 'src/utils/useDebounce';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
-const columns = (featureFlagProjects: boolean): TableColumnType[] => [
+const columns = (): TableColumnType[] => [
   { key: 'withdrawnDate', name: strings.DATE, type: 'string' },
   { key: 'purpose', name: strings.PURPOSE, type: 'string' },
   { key: 'facility_name', name: strings.FROM_NURSERY, type: 'string' },
   { key: 'destinationName', name: strings.DESTINATION, type: 'string' },
-  ...((featureFlagProjects
-    ? [{ key: 'project_names', name: strings.PROJECTS, type: 'string' }]
-    : []) as TableColumnType[]),
+  { key: 'project_names', name: strings.PROJECTS, type: 'string' },
   { key: 'plantingSubzoneNames', name: strings.TO_SUBZONE, type: 'string' },
   { key: 'speciesScientificNames', name: strings.SPECIES, type: 'string' },
   { key: 'totalWithdrawn', name: strings.TOTAL_QUANTITY, type: 'number' },
@@ -53,7 +50,6 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const { activeLocale } = useLocalization();
   const history = useHistory();
   const location = useStateLocation();
-  const featureFlagProjects = isEnabled('Projects');
   const query = useQuery();
   const subzoneParam = query.get('subzoneName');
   const siteParam = query.get('siteName');
@@ -107,7 +103,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
 
   const featuredFilters: FeaturedFilterConfig[] = useMemo(
     () =>
-      featureFlagProjects && activeLocale
+      activeLocale
         ? [
             {
               field: 'project_id',
@@ -134,7 +130,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
             },
           ]
         : [],
-    [activeLocale, featureFlagProjects, getProjectName, projects]
+    [activeLocale, getProjectName, projects]
   );
 
   useEffect(() => {
@@ -291,7 +287,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       <Grid item xs={12}>
         <Table
           id='withdrawal-log'
-          columns={() => columns(featureFlagProjects)}
+          columns={columns}
           rows={searchResults || []}
           Renderer={WithdrawalLogRenderer}
           orderBy={searchSortOrder.field}

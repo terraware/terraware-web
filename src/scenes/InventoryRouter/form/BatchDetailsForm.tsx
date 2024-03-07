@@ -7,7 +7,6 @@ import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-comp
 
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import DatePicker from 'src/components/common/DatePicker';
-import isEnabled from 'src/features';
 import { useProjects } from 'src/hooks/useProjects';
 import { useUser } from 'src/providers';
 import { useOrganization } from 'src/providers/hooks';
@@ -59,7 +58,6 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
   const { isMobile } = useDeviceInfo();
   const locationTimezone = useLocationTimeZone();
   const [record, setRecord, onChange] = useForm<FormRecord>(undefined);
-  const featureFlagProjects = isEnabled('Projects');
 
   const facilityId = origin === 'Nursery' ? originId : record?.facilityId;
   const speciesId = origin === 'Species' ? originId : record?.speciesId;
@@ -332,15 +330,13 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
               </Grid>
             )}
 
-            {featureFlagProjects && (
-              <Grid item xs={12} padding={dropdownPadding}>
-                <ProjectsDropdown<FormRecord>
-                  availableProjects={availableProjects}
-                  record={record}
-                  setRecord={setRecord}
-                />
-              </Grid>
-            )}
+            <Grid item xs={12} padding={dropdownPadding}>
+              <ProjectsDropdown<FormRecord>
+                availableProjects={availableProjects}
+                record={record}
+                setRecord={setRecord}
+              />
+            </Grid>
 
             <Grid item xs={gridSize()} paddingLeft={paddingSeparator}>
               <DatePicker

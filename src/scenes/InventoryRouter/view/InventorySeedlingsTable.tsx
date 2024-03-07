@@ -10,7 +10,6 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
 import { isBatchEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
@@ -76,7 +75,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   const theme = useTheme();
   const snackbar = useSnackbar();
   const history = useHistory();
-  const featureFlagProjects = isEnabled('Projects');
 
   const [openExportModal, setOpenExportModal] = useState<boolean>(false);
   const [temporalSearchValue, setTemporalSearchValue] = useState<string>('');
@@ -321,17 +319,15 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
       withdrawTooltip = strings.NO_WITHDRAWABLE_QUANTITIES_FOUND;
     }
 
-    if (featureFlagProjects) {
-      topBarButtons.push(
-        <ProjectAssignTopBarButton
-          key={1}
-          totalResultsCount={batches?.length}
-          selectAllRows={selectAllRows}
-          reloadData={reloadData}
-          projectAssignPayloadCreator={() => ({ batchIds: selectedRows.map((row) => Number(row.id)) })}
-        />
-      );
-    }
+    topBarButtons.push(
+      <ProjectAssignTopBarButton
+        key={1}
+        totalResultsCount={batches?.length}
+        selectAllRows={selectAllRows}
+        reloadData={reloadData}
+        projectAssignPayloadCreator={() => ({ batchIds: selectedRows.map((row) => Number(row.id)) })}
+      />
+    );
 
     topBarButtons.push({
       buttonType: 'passive',

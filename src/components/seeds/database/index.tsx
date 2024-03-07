@@ -20,7 +20,6 @@ import Button from 'src/components/common/button/Button';
 import { BaseTable as Table } from 'src/components/common/table';
 import { SortOrder as Order } from 'src/components/common/table/sort';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import { selectMessage } from 'src/redux/features/message/messageSelectors';
 import { sendMessage } from 'src/redux/features/message/messageSlice';
@@ -176,27 +175,24 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const history = useHistory();
   const query = useQuery();
   const location = useStateLocation();
-  const featureFlagProjects = isEnabled('Projects');
   const { sessionFilters, setSessionFilters } = useSessionFilters('accessions');
 
   const projects = useAppSelector(selectProjects);
 
   const columns = columnsIndexed();
-  const displayColumnDetails = displayColumnNames
-    .filter((name) => (featureFlagProjects ? true : name !== 'project_name'))
-    .map((name) => {
-      const detail = { ...columns[name] };
+  const displayColumnDetails = displayColumnNames.map((name) => {
+    const detail = { ...columns[name] };
 
-      // set the classname for right aligned columns
-      if (RIGHT_ALIGNED_COLUMNS.indexOf(name) !== -1) {
-        detail.className = classes.rightAligned;
-      }
+    // set the classname for right aligned columns
+    if (RIGHT_ALIGNED_COLUMNS.indexOf(name) !== -1) {
+      detail.className = classes.rightAligned;
+    }
 
-      return detail;
-    });
+    return detail;
+  });
   const filterColumns = displayColumnDetails.filter((col) => !['state', 'project_name'].includes(col.key));
   const searchTermColumns = [columns.accessionNumber, columns.speciesName, columns.collectionSiteName];
-  const preExpFilterColumns = featureFlagProjects ? [columns.state, columns.project_name] : [columns.state];
+  const preExpFilterColumns = [columns.state, columns.project_name];
   const [editColumnsModalOpen, setEditColumnsModalOpen] = useState(false);
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElementWithId[] | null>();
@@ -325,12 +321,12 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   useEffect(() => {
     if (orgPreferences?.accessionsColumns) {
-      if (featureFlagProjects && !(orgPreferences.accessionsColumns as string[]).includes('project_name')) {
+      if (!(orgPreferences.accessionsColumns as string[]).includes('project_name')) {
         (orgPreferences.accessionsColumns as string[]).push('project_name');
       }
       updateSearchColumnsBootstrap(orgPreferences.accessionsColumns as string[]);
     }
-  }, [featureFlagProjects, orgPreferences, updateSearchColumnsBootstrap]);
+  }, [orgPreferences, updateSearchColumnsBootstrap]);
 
   useEffect(() => {
     // if url has facilityId= or subLocationName=, apply each filter
@@ -474,12 +470,10 @@ export default function Database(props: DatabaseProps): JSX.Element {
         const allValues =
           (await SeedBankService.searchFieldValues(singleAndMultiChoiceFields, {}, selectedOrganization.id)) || {};
 
-        if (featureFlagProjects) {
-          allValues.project_name = {
-            partial: false,
-            values: (projects || []).map((project: Project) => project.name),
-          };
-        }
+        allValues.project_name = {
+          partial: false,
+          values: (projects || []).map((project: Project) => project.name),
+        };
 
         if (requestId === getRequestId('accessions_search')) {
           setFieldOptions(allValues);
@@ -493,7 +487,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
       void populateAvailableFieldOptions();
       void populateFieldOptions();
     }
-  }, [featureFlagProjects, projects, searchColumns, searchCriteria, searchSortOrder, selectedOrganization]);
+  }, [projects, searchColumns, searchCriteria, searchSortOrder, selectedOrganization]);
 
   useEffect(() => {
     void initAccessions();
@@ -801,26 +795,22 @@ export default function Database(props: DatabaseProps): JSX.Element {
                         isInactive={isInactive}
                         onReorderEnd={reorderSearchColumns}
                         isPresorted
-                        {...(featureFlagProjects
-                          ? {
-                              selectedRows,
-                              setSelectedRows,
-                              showCheckbox: true,
-                              isClickable: () => false,
-                              showTopBar: true,
-                              topBarButtons: [
-                                <ProjectAssignTopBarButton
-                                  key={1}
-                                  totalResultsCount={searchResults?.length}
-                                  selectAllRows={selectAllRows}
-                                  reloadData={reloadAccessions}
-                                  projectAssignPayloadCreator={() => ({
-                                    accessionIds: selectedRows.map((row) => Number(row.id)),
-                                  })}
-                                />,
-                              ],
-                            }
-                          : {})}
+                        selectedRows={selectedRows}
+                        setSelectedRows={setSelectedRows}
+                        showCheckbox
+                        isClickable={() => false}
+                        showTopBar
+                        topBarButtons={[
+                          <ProjectAssignTopBarButton
+                            key={1}
+                            totalResultsCount={searchResults?.length}
+                            selectAllRows={selectAllRows}
+                            reloadData={reloadAccessions}
+                            projectAssignPayloadCreator={() => ({
+                              accessionIds: selectedRows.map((row) => Number(row.id)),
+                            })}
+                          />,
+                        ]}
                       />
                     )}
                     {searchResults === undefined && <CircularProgress />}

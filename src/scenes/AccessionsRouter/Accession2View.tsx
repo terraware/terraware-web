@@ -15,7 +15,6 @@ import BackToLink from 'src/components/common/BackToLink';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useLocalization, useUser } from 'src/providers';
 import { useOrganization } from 'src/providers/hooks';
 import { AccessionService, FacilityService } from 'src/services';
@@ -113,7 +112,6 @@ export default function Accession2View(): JSX.Element {
   const contentRef = useRef(null);
   const { activeLocale } = useLocalization();
   const locationTimeZone = useLocationTimeZone();
-  const featureFlagProjects = isEnabled('Projects');
 
   const seedBankTimeZone = useMemo(() => {
     const facility = accession?.facilityId
@@ -604,7 +602,7 @@ export default function Accession2View(): JSX.Element {
           </Grid>
         )}
 
-        {featureFlagProjects && accession && (
+        {accession && (
           <Grid item flexBasis={overviewGridSize} flexGrow={1}>
             <ProjectOverviewItemCard<Accession>
               entity={accession}

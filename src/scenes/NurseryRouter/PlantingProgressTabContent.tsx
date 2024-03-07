@@ -8,7 +8,6 @@ import { FilterField } from 'src/components/common/FilterGroup';
 import { View } from 'src/components/common/ListMapSelector';
 import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
 import Search, { FeaturedFilterConfig, SearchProps } from 'src/components/common/SearchFiltersWrapper';
-import isEnabled from 'src/features';
 import { useLocalization, useOrganization } from 'src/providers';
 import { requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
@@ -34,7 +33,6 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
-  const featureFlagProjects = isEnabled('Projects');
 
   const projects = useAppSelector(selectProjects);
 
@@ -51,7 +49,7 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
 
   const featuredFilters: FeaturedFilterConfig[] = useMemo(
     () =>
-      featureFlagProjects && activeLocale
+      activeLocale
         ? [
             {
               field: 'project_id',
@@ -78,7 +76,7 @@ export default function PlantingProgress({ reloadTracking }: PlantingProgressPro
             },
           ]
         : [],
-    [activeLocale, featureFlagProjects, getProjectName, projects]
+    [activeLocale, getProjectName, projects]
   );
 
   useEffect(() => {

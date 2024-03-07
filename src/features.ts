@@ -1,7 +1,7 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName = 'Show Production View' | 'Projects' | 'User Detailed Sites' | 'Accelerator' | 'Voting';
+export type FeatureName = 'Show Production View' | 'User Detailed Sites' | 'Accelerator' | 'Voting';
 
 export type Feature = {
   name: FeatureName;
@@ -34,15 +34,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     ],
     get: env().isForcedProductionView,
     set: env().forceProductionView,
-  },
-  {
-    name: 'Projects',
-    preferenceName: 'enableProjects',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Projects functionality'],
-    disclosure: ['This is WIP'],
   },
   {
     name: 'User Detailed Sites',

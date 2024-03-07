@@ -9,7 +9,6 @@ import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton'
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import Search from 'src/scenes/InventoryRouter/Search';
@@ -52,7 +51,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   const history = useHistory();
   const { sessionFilters, setSessionFilters } = useSessionFilters(origin.toLowerCase());
   const [withdrawTooltip, setWithdrawTooltip] = useState<string>();
-  const featureFlagProjects = isEnabled('Projects');
 
   // Sync query filters into view
   useEffect(() => {
@@ -188,7 +186,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                 showCheckbox={true}
                 showTopBar={true}
                 topBarButtons={[
-                  ...(featureFlagProjects && allowSelectionProjectAssign
+                  ...(allowSelectionProjectAssign
                     ? [
                         <ProjectAssignTopBarButton
                           key={1}
