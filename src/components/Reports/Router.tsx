@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 
 import ReportSettingsEdit from 'src/components/Reports/ReportSettingsEdit';
 import ReportsView from 'src/components/Reports/ReportsView';
-import { ReportEdit, ReportList, ReportView } from 'src/components/Reports/index';
+import { ReportEdit, ReportView } from 'src/components/Reports/index';
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 
