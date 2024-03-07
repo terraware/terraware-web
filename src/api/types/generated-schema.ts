@@ -48,14 +48,6 @@ export interface paths {
      */
     put: operations["updateSubmission"];
   };
-  "/api/v1/accelerator/globalRoles/users": {
-    /** Gets the list of users that have global roles. */
-    get: operations["listGlobalRoles"];
-  };
-  "/api/v1/accelerator/globalRoles/users/{userId}": {
-    /** Apply the supplied global roles to the user. */
-    post: operations["updateGlobalRoles"];
-  };
   "/api/v1/automations": {
     /** Gets a list of automations for a device or facility. */
     get: operations["listAutomations"];
@@ -154,6 +146,10 @@ export interface paths {
   "/api/v1/facility/{facilityId}/devices": {
     /** Lists the configurations of all the devices at a facility. */
     get: operations["listFacilityDevices_1"];
+  };
+  "/api/v1/globalRoles/users": {
+    /** Gets the list of users that have global roles. */
+    get: operations["listGlobalRoles"];
   };
   "/api/v1/i18n/timeZones": {
     /** Gets a list of supported time zones and their names. */
@@ -425,6 +421,10 @@ export interface paths {
      * @description If a sublist field has multiple values, they are separated with line breaks in the exported file.
      */
     post: operations["search_1"];
+  };
+  "/api/v1/search/values": {
+    /** Search for distinct values from data matching a set of search criteria. */
+    post: operations["searchDistinctValues"];
   };
   "/api/v1/seedbank/accessions/{id}": {
     /** Deletes an existing accession. */
@@ -710,6 +710,10 @@ export interface paths {
     get: operations["getUserPreferences"];
     /** Updates the current user's preferences. */
     put: operations["updateUserPreferences"];
+  };
+  "/api/v1/users/{userId}/globalRoles": {
+    /** Apply the supplied global roles to the user. */
+    post: operations["updateGlobalRoles"];
   };
   "/api/v1/versions": {
     /** Gets the minimum and recommended versions for Terraware's client applications. */
@@ -3308,6 +3312,11 @@ export interface components {
       direction?: "Ascending" | "Descending";
       field: string;
     };
+    SearchValuesResponsePayload: {
+      results: {
+        [key: string]: components["schemas"]["FieldValuesPayload"];
+      };
+    };
     SeedCountSummaryPayload: {
       /**
        * Format: int64
@@ -3795,7 +3804,7 @@ export interface components {
       timeZone?: string;
     };
     UpdateGlobalRolesRequestPayload: {
-      globalRoles: string[];
+      globalRoles: ("Super-Admin" | "Accelerator Admin" | "TF Expert" | "Read Only")[];
     };
     UpdateNotificationRequestPayload: {
       read: boolean;
@@ -4233,6 +4242,32 @@ export interface operations {
       };
     };
   };
+  /** Uploads a new document to satisfy a deliverable. */
+  uploadDeliverableDocument: {
+    parameters: {
+      path: {
+        deliverableId: number;
+      };
+    };
+    requestBody?: {
+      content: {
+        "multipart/form-data": {
+          description: string;
+          /** Format: binary */
+          file: string;
+          projectId: string;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadDeliverableDocumentResponsePayload"];
+        };
+      };
+    };
+  };
   /** Gets a single submission document from a deliverable. */
   getDeliverableDocument: {
     parameters: {
@@ -4260,32 +4295,6 @@ export interface operations {
       };
     };
   };
-  /** Uploads a new document to satisfy a deliverable. */
-  uploadDeliverableDocument: {
-    parameters: {
-      path: {
-        deliverableId: number;
-      };
-    };
-    requestBody?: {
-      content: {
-        "multipart/form-data": {
-          description: string;
-          /** Format: binary */
-          file: string;
-          projectId: string;
-        };
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UploadDeliverableDocumentResponsePayload"];
-        };
-      };
-    };
-  };
   /**
    * Updates the state of a submission from a project.
    * @description Only permitted for users with accelerator admin privileges.
@@ -4307,44 +4316,6 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Gets the list of users that have global roles. */
-  listGlobalRoles: {
-    responses: {
-      /** @description The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GlobalRoleUsersListResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Apply the supplied global roles to the user. */
-  updateGlobalRoles: {
-    parameters: {
-      path: {
-        userId: number;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateGlobalRolesRequestPayload"];
-      };
-    };
-    responses: {
-      /** @description The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SuccessResponsePayload"];
-        };
-      };
-      /** @description The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -4893,6 +4864,17 @@ export interface operations {
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets the list of users that have global roles. */
+  listGlobalRoles: {
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GlobalRoleUsersListResponsePayload"];
         };
       };
     };
@@ -6253,6 +6235,22 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["SearchResponsePayload"];
           "text/csv": string;
+        };
+      };
+    };
+  };
+  /** Search for distinct values from data matching a set of search criteria. */
+  searchDistinctValues: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SearchRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SearchValuesResponsePayload"];
         };
       };
     };
@@ -7642,6 +7640,33 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Apply the supplied global roles to the user. */
+  updateGlobalRoles: {
+    parameters: {
+      path: {
+        userId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateGlobalRolesRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
