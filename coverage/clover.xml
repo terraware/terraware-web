@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1709767248801" clover="3.2.0">
-  <project timestamp="1709767248801" name="All files">
-    <metrics statements="17420" coveredstatements="665" conditionals="11119" coveredconditionals="215" methods="5429" coveredmethods="154" elements="33968" coveredelements="1034" complexity="0" loc="17420" ncloc="17420" packages="143" files="716" classes="716"/>
+<coverage generated="1709770616524" clover="3.2.0">
+  <project timestamp="1709770616524" name="All files">
+    <metrics statements="17427" coveredstatements="665" conditionals="11125" coveredconditionals="215" methods="5431" coveredmethods="154" elements="33983" coveredelements="1034" complexity="0" loc="17427" ncloc="17427" packages="143" files="717" classes="717"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="121" coveredconditionals="0" methods="45" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -1433,15 +1433,15 @@
       </file>
       <file name="DocumentsUploader.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/DocumentsUploader.tsx">
         <metrics statements="9" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="3" coveredmethods="0"/>
-        <line num="12" count="0" type="stmt"/>
-        <line num="13" count="0" type="stmt"/>
-        <line num="14" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
-        <line num="17" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="17" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="22" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
-        <line num="26" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
       </file>
       <file name="FileUploadDialog.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/FileUploadDialog.tsx">
         <metrics statements="35" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="13" coveredmethods="0"/>
@@ -10593,19 +10593,22 @@
       </file>
     </package>
     <package name="src.scenes.DeliverablesRouter">
-      <metrics statements="51" coveredstatements="0" conditionals="23" coveredconditionals="0" methods="16" coveredmethods="0"/>
+      <metrics statements="58" coveredstatements="0" conditionals="29" coveredconditionals="0" methods="18" coveredmethods="0"/>
       <file name="DeliverableView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/DeliverablesRouter/DeliverableView.tsx">
-        <metrics statements="10" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="26" count="0" type="stmt"/>
-        <line num="27" count="0" type="stmt"/>
+        <metrics statements="13" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="22" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
-        <line num="41" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="42" count="0" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="49" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
       </file>
       <file name="DeliverableViewWrapper.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/DeliverablesRouter/DeliverableViewWrapper.tsx">
         <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -10642,6 +10645,13 @@
         <line num="119" count="0" type="stmt"/>
         <line num="121" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="147" count="0" type="stmt"/>
+      </file>
+      <file name="DocumentLimitReachedMessage.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/DeliverablesRouter/DocumentLimitReachedMessage.tsx">
+        <metrics statements="4" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
       </file>
       <file name="DocumentsList.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/DeliverablesRouter/DocumentsList.tsx">
         <metrics statements="5" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>

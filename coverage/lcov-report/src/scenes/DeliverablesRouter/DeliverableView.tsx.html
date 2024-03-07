@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
@@ -126,10 +126,16 @@
 <a name='L61'></a><a href='#L61'>61</a>
 <a name='L62'></a><a href='#L62'>62</a>
 <a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -151,16 +157,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -168,9 +164,31 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -204,10 +222,13 @@ import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
+import DocumentLimitReachedMessage from 'src/scenes/DeliverablesRouter/DocumentLimitReachedMessage';
 import DocumentsList from 'src/scenes/DeliverablesRouter/DocumentsList';
 import RejectedDeliverableMessage from 'src/scenes/DeliverablesRouter/RejectedDeliverableMessage';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+&nbsp;
+const MAX_FILES_LIMIT = <span class="cstat-no" title="statement not covered" >15;</span>
 &nbsp;
 export type Props = EditProps &amp; {
   isBusy?: boolean;
@@ -218,6 +239,11 @@ const DeliverableView = <span class="cstat-no" title="statement not covered" ><s
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
+&nbsp;
+  const documentLimitReached = <span class="cstat-no" title="statement not covered" >useMemo(</span>
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >viewProps.deliverable.documents.length &gt;= MAX_FILES_LIMIT,</span>
+    [viewProps.deliverable.documents.length]
+  );
 &nbsp;
   const crumbs: Crumb[] = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >[</span>
@@ -238,12 +264,13 @@ const DeliverableView = <span class="cstat-no" title="statement not covered" ><s
       {props.isBusy &amp;&amp; &lt;BusySpinner /&gt;}
       &lt;Box display='flex' flexDirection='column' flexGrow={1}&gt;
         &lt;RejectedDeliverableMessage {...viewProps} /&gt;
+        {documentLimitReached &amp;&amp; &lt;DocumentLimitReachedMessage maxFiles={MAX_FILES_LIMIT} /&gt;}
         &lt;Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}&gt;
           &lt;Metadata {...viewProps} /&gt;
           &lt;Typography marginBottom={theme.spacing(2)} fontSize='20px' lineHeight='28px' fontWeight={600}&gt;
             {strings.DOCUMENTS}
           &lt;/Typography&gt;
-          &lt;DocumentsUploader {...viewProps} /&gt;
+          {!documentLimitReached &amp;&amp; &lt;DocumentsUploader {...viewProps} maxFiles={MAX_FILES_LIMIT} /&gt;}
           &lt;DocumentsList {...viewProps} /&gt;
         &lt;/Card&gt;
       &lt;/Box&gt;
@@ -259,7 +286,7 @@ export default DeliverableView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-06T23:20:48.288Z
+                at 2024-03-07T00:16:56.013Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
