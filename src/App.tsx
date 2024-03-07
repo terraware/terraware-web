@@ -9,14 +9,16 @@ import AppBootstrap from 'src/AppBootstrap';
 import ToastSnackbar from 'src/components/ToastSnackbar';
 import TopBar from 'src/components/TopBar/TopBar';
 import TopBarContent from 'src/components/TopBar/TopBarContent';
+import BlockingSpinner from 'src/components/common/BlockingSpinner';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useAppVersion } from 'src/hooks/useAppVersion';
 import { useLocalization, useUser } from 'src/providers';
 import { store } from 'src/redux/store';
-import AcceleratorRouter from 'src/scenes/AcceleratorRouter';
-import TerrawareRouter from 'src/scenes/TerrawareRouter';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+const AcceleratorRouter = React.lazy(() => import('src/scenes/AcceleratorRouter'));
+const TerrawareRouter = React.lazy(() => import('src/scenes/TerrawareRouter'));
 
 interface StyleProps {
   isDesktop?: boolean;
@@ -89,11 +91,13 @@ function AppContent() {
       </TopBar>
 
       <div className={classes.container}>
-        {isAcceleratorRoute && featureFlagAccelerator && isAllowed('VIEW_CONSOLE') ? (
-          <AcceleratorRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
-        ) : (
-          <TerrawareRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
-        )}
+        <React.Suspense fallback={<BlockingSpinner />}>
+          {isAcceleratorRoute && featureFlagAccelerator && isAllowed('VIEW_CONSOLE') ? (
+            <AcceleratorRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
+          ) : (
+            <TerrawareRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
+          )}
+        </React.Suspense>
       </div>
     </StyledEngineProvider>
   );
