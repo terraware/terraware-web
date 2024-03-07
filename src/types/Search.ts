@@ -10,6 +10,8 @@ export type SearchCriteria = { [key: string]: SearchNodePayload };
 export type SearchSortOrder = components['schemas']['SearchSortOrderElement'];
 export type SearchResponseElement = components['schemas']['SearchResponsePayload']['results'][0];
 export type SearchResponseElementWithId = SearchResponseElement & { id: string };
+export type SearchValuesResponseElement = components['schemas']['SearchValuesResponsePayload']['results'];
+export type SearchValuesResponseElementWithId = SearchValuesResponseElement & { id: string };
 
 export type FieldOptionsMap = { [key: string]: { partial: boolean; values: (string | null)[] } };
 

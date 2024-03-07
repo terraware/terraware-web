@@ -9,6 +9,7 @@ import {
   SearchResponseElement,
   SearchResponseElementWithId,
   SearchSortOrder,
+  SearchValuesResponseElement,
 } from 'src/types/Search';
 import { UnitType } from 'src/units';
 
@@ -21,16 +22,12 @@ import SearchService from './SearchService';
 
 const SUMMARY_ENDPOINT = '/api/v1/seedbank/summary';
 const ACCESSIONS_ENDPOINT = '/api/v2/seedbank/accessions';
-const FIELD_VALUES_ENDPOINT = '/api/v1/seedbank/values';
 const ACCESSIONS_TEMPLATE_ENDPOINT = '/api/v2/seedbank/accessions/uploads/template';
 const ACCESSIONS_UPLOADS_ENDPOINT = '/api/v2/seedbank/accessions/uploads';
 const ACCESSIONS_UPLOAD_STATUS_ENDPOINT = '/api/v2/seedbank/accessions/uploads/{uploadId}';
 const ACCESSIONS_UPLOAD_RESOLVE_ENDPOINT = '/api/v2/seedbank/accessions/uploads/{uploadId}/resolve';
 
-type ValuesPostRequestBody = paths[typeof FIELD_VALUES_ENDPOINT]['post']['requestBody']['content']['application/json'];
-type ValuesPostResponse = paths[typeof FIELD_VALUES_ENDPOINT]['post']['responses'][200]['content']['application/json'];
-
-export type FieldValuesMap = ValuesPostResponse['results'];
+export type FieldValuesMap = SearchValuesResponseElement;
 export const DEFAULT_SEED_SEARCH_FILTERS = {};
 export const DEFAULT_SEED_SEARCH_SORT_ORDER = { field: 'receivedDate', direction: 'Descending' } as SearchSortOrder;
 export type AccessionsUploadTemplate = {
@@ -149,13 +146,13 @@ const searchFieldValues = async (
   organizationId: number
 ): Promise<FieldValuesMap | null> => {
   try {
-    const formattedSearch = SearchService.convertToSearchNodePayload(searchCriteria, organizationId);
-    const entity: ValuesPostRequestBody = {
+    const params: SearchRequestPayload = {
+      prefix: 'facilities.accessions',
       fields,
-      search: formattedSearch,
+      search: SearchService.convertToSearchNodePayload(searchCriteria ?? {}, organizationId),
+      count: 1000,
     };
-    const apiResponse: Response = await HttpService.root(FIELD_VALUES_ENDPOINT).post({ entity });
-    return apiResponse.data.results;
+    return await SearchService.searchValues(params);
   } catch {
     return null;
   }

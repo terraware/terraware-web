@@ -426,6 +426,10 @@ export interface paths {
      */
     post: operations["search_1"];
   };
+  "/api/v1/search/values": {
+    /** Search for distinct values from data matching a set of search criteria. */
+    post: operations["searchDistinctValues"];
+  };
   "/api/v1/seedbank/accessions/{id}": {
     /** Deletes an existing accession. */
     delete: operations["delete"];
@@ -2376,14 +2380,14 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
       withdrawals: components["schemas"]["GetWithdrawalPayload"][];
     };
-    GlobalRoleUsersListResponsePayload: {
-      status: components["schemas"]["SuccessOrError"];
-      users: components["schemas"]["UserWithGlobalRolesPayload"][];
-    };
     GoalProgressPayloadV1: {
       /** @enum {string} */
       goal: "NoPoverty" | "ZeroHunger" | "GoodHealth" | "QualityEducation" | "GenderEquality" | "CleanWater" | "AffordableEnergy" | "DecentWork" | "Industry" | "ReducedInequalities" | "SustainableCities" | "ResponsibleConsumption" | "ClimateAction" | "LifeBelowWater" | "LifeOnLand" | "Peace" | "Partnerships";
       progress?: string;
+    };
+    GlobalRoleUsersListResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      users: components["schemas"]["UserWithGlobalRolesPayload"][];
     };
     LineString: WithRequired<{
       type: "LineString";
@@ -3308,6 +3312,11 @@ export interface components {
       direction?: "Ascending" | "Descending";
       field: string;
     };
+    SearchValuesResponsePayload: {
+      results: {
+        [key: string]: components["schemas"]["FieldValuesPayload"];
+      };
+    };
     SeedCountSummaryPayload: {
       /**
        * Format: int64
@@ -3349,6 +3358,9 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     SimpleSuccessResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+    };
+    SuccessResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
     };
     SpeciesLookupCommonNamePayload: {
@@ -3501,9 +3513,6 @@ export interface components {
      * @enum {string}
      */
     SuccessOrError: "ok" | "error";
-    SuccessResponsePayload: {
-      status: components["schemas"]["SuccessOrError"];
-    };
     SummarizeAccessionSearchRequestPayload: {
       search?: components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"];
     };
@@ -4233,6 +4242,32 @@ export interface operations {
       };
     };
   };
+  /** Uploads a new document to satisfy a deliverable. */
+  uploadDeliverableDocument: {
+    parameters: {
+      path: {
+        deliverableId: number;
+      };
+    };
+    requestBody?: {
+      content: {
+        "multipart/form-data": {
+          description: string;
+          /** Format: binary */
+          file: string;
+          projectId: string;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadDeliverableDocumentResponsePayload"];
+        };
+      };
+    };
+  };
   /** Gets a single submission document from a deliverable. */
   getDeliverableDocument: {
     parameters: {
@@ -4256,32 +4291,6 @@ export interface operations {
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Uploads a new document to satisfy a deliverable. */
-  uploadDeliverableDocument: {
-    parameters: {
-      path: {
-        deliverableId: number;
-      };
-    };
-    requestBody?: {
-      content: {
-        "multipart/form-data": {
-          description: string;
-          /** Format: binary */
-          file: string;
-          projectId: string;
-        };
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UploadDeliverableDocumentResponsePayload"];
         };
       };
     };
@@ -6253,6 +6262,22 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["SearchResponsePayload"];
           "text/csv": string;
+        };
+      };
+    };
+  };
+  /** Search for distinct values from data matching a set of search criteria. */
+  searchDistinctValues: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SearchRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SearchValuesResponsePayload"];
         };
       };
     };
