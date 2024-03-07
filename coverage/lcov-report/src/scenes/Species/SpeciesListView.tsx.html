@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/217</span>
+                <span class='fraction'>0/209</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/112</span>
+                <span class='fraction'>0/106</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/54</span>
+                <span class='fraction'>0/51</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/211</span>
+                <span class='fraction'>0/204</span>
             </div>
         
             
@@ -860,20 +860,7 @@
 <a name='L795'></a><a href='#L795'>795</a>
 <a name='L796'></a><a href='#L796'>796</a>
 <a name='L797'></a><a href='#L797'>797</a>
-<a name='L798'></a><a href='#L798'>798</a>
-<a name='L799'></a><a href='#L799'>799</a>
-<a name='L800'></a><a href='#L800'>800</a>
-<a name='L801'></a><a href='#L801'>801</a>
-<a name='L802'></a><a href='#L802'>802</a>
-<a name='L803'></a><a href='#L803'>803</a>
-<a name='L804'></a><a href='#L804'>804</a>
-<a name='L805'></a><a href='#L805'>805</a>
-<a name='L806'></a><a href='#L806'>806</a>
-<a name='L807'></a><a href='#L807'>807</a>
-<a name='L808'></a><a href='#L808'>808</a>
-<a name='L809'></a><a href='#L809'>809</a>
-<a name='L810'></a><a href='#L810'>810</a>
-<a name='L811'></a><a href='#L811'>811</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L798'></a><a href='#L798'>798</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1183,31 +1170,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1978,14 +1952,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
     const getApiSearchResults = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
       const searchParams: SearchRequestPayload = <span class="cstat-no" title="statement not covered" >{</span>
         prefix: 'species',
-        fields: [
-          'id',
-          'growthForm',
-          'seedStorageBehavior',
-          'ecosystemTypes.ecosystemType',
-          'conservationCategory',
-          'rare',
-        ],
+        fields: ['growthForm', 'seedStorageBehavior', 'ecosystemTypes_ecosystemType', 'conservationCategory'],
         search: {
           operation: 'and',
           children: [
@@ -1997,29 +1964,23 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             },
           ],
         },
-        sortOrder: [{ field: 'id', direction: 'Ascending' }],
         count: 1000,
       };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      setIsBusy(true);</span>
-      const data = <span class="cstat-no" title="statement not covered" >await SearchService.search(searchParams);</span>
+      const data = <span class="cstat-no" title="statement not covered" >await SearchService.searchValues(searchParams);</span>
 <span class="cstat-no" title="statement not covered" >      setIsBusy(false);</span>
-      const result = <span class="cstat-no" title="statement not covered" >(data ?? []).reduce(<span class="fstat-no" title="function not covered" >(a</span>cc, d) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        return Object.keys(d).reduce(<span class="fstat-no" title="function not covered" >(i</span>nnerAcc, k) =&gt; {</span>
-          const isEcosystemTypes = <span class="cstat-no" title="statement not covered" >k === 'ecosystemTypes';</span>
-          const newKey = <span class="cstat-no" title="statement not covered" >isEcosystemTypes ? 'ecosystemTypes.ecosystemType' : k;</span>
-<span class="cstat-no" title="statement not covered" >          if (!innerAcc[newKey]) {</span>
-<span class="cstat-no" title="statement not covered" >            innerAcc[newKey] = { partial: false, values: [] };</span>
-          }
-          const value = <span class="cstat-no" title="statement not covered" >isEcosystemTypes ? (d[k] as any[]).map(<span class="fstat-no" title="function not covered" >(e</span>t) =&gt; <span class="cstat-no" title="statement not covered" >et.ecosystemType)</span> : d[k];</span>
-<span class="cstat-no" title="statement not covered" >          if (Array.isArray(value)) {</span>
-<span class="cstat-no" title="statement not covered" >            (innerAcc[newKey] as Record&lt;string, any&gt;).values.push(...value);</span>
-          } else {
-<span class="cstat-no" title="statement not covered" >            (innerAcc[newKey] as Record&lt;string, any&gt;).values.push(value);</span>
-          }
-<span class="cstat-no" title="statement not covered" >          return innerAcc;</span>
-        }, acc);
-      }, {}) as FieldOptionsMap;
+&nbsp;
+      const result = <span class="cstat-no" title="statement not covered" >(data || {}) as FieldOptionsMap;</span>
+&nbsp;
+      // remap ecosystemTypes to nested field from flattened field
+      /* tslint:disable:no-string-literal */
+<span class="cstat-no" title="statement not covered" >      if (result['ecosystemTypes_ecosystemType']) {</span>
+<span class="cstat-no" title="statement not covered" >        result['ecosystemTypes.ecosystemType'] = result['ecosystemTypes_ecosystemType'];</span>
+<span class="cstat-no" title="statement not covered" >        delete result['ecosystemTypes_ecosystemType'];</span>
+      }
+      /* tslint:enable:no-string-literal */
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      result.rare = { partial: false, values: [strings.YES, strings.NO] };</span>
 <span class="cstat-no" title="statement not covered" >      setFilterOptions(result);</span>
     };
@@ -2500,7 +2461,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-07T00:16:56.013Z
+                at 2024-03-07T00:31:22.073Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

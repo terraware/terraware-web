@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/65</span>
+                <span class='fraction'>0/62</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/64</span>
+                <span class='fraction'>0/61</span>
             </div>
         
             
@@ -370,10 +370,8 @@
 <a name='L305'></a><a href='#L305'>305</a>
 <a name='L306'></a><a href='#L306'>306</a>
 <a name='L307'></a><a href='#L307'>307</a>
-<a name='L308'></a><a href='#L308'>308</a>
-<a name='L309'></a><a href='#L309'>309</a>
-<a name='L310'></a><a href='#L310'>310</a>
-<a name='L311'></a><a href='#L311'>311</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L308'></a><a href='#L308'>308</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -400,10 +398,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -525,11 +519,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -694,6 +688,7 @@ import {
   SearchResponseElement,
   SearchResponseElementWithId,
   SearchSortOrder,
+  SearchValuesResponseElement,
 } from 'src/types/Search';
 import { UnitType } from 'src/units';
 &nbsp;
@@ -706,16 +701,12 @@ import SearchService from './SearchService';
 &nbsp;
 const SUMMARY_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v1/seedbank/summary';</span>
 const ACCESSIONS_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v2/seedbank/accessions';</span>
-const FIELD_VALUES_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v1/seedbank/values';</span>
 const ACCESSIONS_TEMPLATE_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v2/seedbank/accessions/uploads/template';</span>
 const ACCESSIONS_UPLOADS_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v2/seedbank/accessions/uploads';</span>
 const ACCESSIONS_UPLOAD_STATUS_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v2/seedbank/accessions/uploads/{uploadId}';</span>
 const ACCESSIONS_UPLOAD_RESOLVE_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v2/seedbank/accessions/uploads/{uploadId}/resolve';</span>
 &nbsp;
-type ValuesPostRequestBody = paths[typeof FIELD_VALUES_ENDPOINT]['post']['requestBody']['content']['application/json'];
-type ValuesPostResponse = paths[typeof FIELD_VALUES_ENDPOINT]['post']['responses'][200]['content']['application/json'];
-&nbsp;
-export type FieldValuesMap = ValuesPostResponse['results'];
+export type FieldValuesMap = SearchValuesResponseElement;
 export const DEFAULT_SEED_SEARCH_FILTERS = <span class="cstat-no" title="statement not covered" >{};</span>
 export const DEFAULT_SEED_SEARCH_SORT_ORDER = <span class="cstat-no" title="statement not covered" >{ field: 'receivedDate', direction: 'Descending' } as SearchSortOrder;</span>
 export type AccessionsUploadTemplate = {
@@ -834,13 +825,13 @@ const searchFieldValues = <span class="cstat-no" title="statement not covered" >
   organizationId: number
 ): Promise&lt;FieldValuesMap | null&gt; =&gt; {
 <span class="cstat-no" title="statement not covered" >  try {</span>
-    const formattedSearch = <span class="cstat-no" title="statement not covered" >SearchService.convertToSearchNodePayload(searchCriteria, organizationId);</span>
-    const entity: ValuesPostRequestBody = <span class="cstat-no" title="statement not covered" >{</span>
+    const params: SearchRequestPayload = <span class="cstat-no" title="statement not covered" >{</span>
+      prefix: 'facilities.accessions',
       fields,
-      search: formattedSearch,
+      search: SearchService.convertToSearchNodePayload(searchCriteria ?? {}, organizationId),
+      count: 1000,
     };
-    const apiResponse: Response = <span class="cstat-no" title="statement not covered" >await HttpService.root(FIELD_VALUES_ENDPOINT).post({ entity });</span>
-<span class="cstat-no" title="statement not covered" >    return apiResponse.data.results;</span>
+<span class="cstat-no" title="statement not covered" >    return await SearchService.searchValues(params);</span>
   } catch {
 <span class="cstat-no" title="statement not covered" >    return null;</span>
   }
@@ -1000,7 +991,7 @@ export default SeedBankService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-07T00:16:56.013Z
+                at 2024-03-07T00:31:22.073Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

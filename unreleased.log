@@ -1,3 +1,4 @@
+78d78b0963 SW4970: Added search values functionality for querying available filter values (#2271)
 b64507099b SW-4965: Follow up on max # of files limit related UX in file upload dialog (#2268)
 4027b271a8 SW-4872 Enable species filtering in nursery detail batches view (#2270)
 f711e6619c Updated translations from Phrase (#2273)

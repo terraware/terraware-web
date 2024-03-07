@@ -8135,7 +8135,57 @@
 <a name='L8070'></a><a href='#L8070'>8070</a>
 <a name='L8071'></a><a href='#L8071'>8071</a>
 <a name='L8072'></a><a href='#L8072'>8072</a>
-<a name='L8073'></a><a href='#L8073'>8073</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L8073'></a><a href='#L8073'>8073</a>
+<a name='L8074'></a><a href='#L8074'>8074</a>
+<a name='L8075'></a><a href='#L8075'>8075</a>
+<a name='L8076'></a><a href='#L8076'>8076</a>
+<a name='L8077'></a><a href='#L8077'>8077</a>
+<a name='L8078'></a><a href='#L8078'>8078</a>
+<a name='L8079'></a><a href='#L8079'>8079</a>
+<a name='L8080'></a><a href='#L8080'>8080</a>
+<a name='L8081'></a><a href='#L8081'>8081</a>
+<a name='L8082'></a><a href='#L8082'>8082</a>
+<a name='L8083'></a><a href='#L8083'>8083</a>
+<a name='L8084'></a><a href='#L8084'>8084</a>
+<a name='L8085'></a><a href='#L8085'>8085</a>
+<a name='L8086'></a><a href='#L8086'>8086</a>
+<a name='L8087'></a><a href='#L8087'>8087</a>
+<a name='L8088'></a><a href='#L8088'>8088</a>
+<a name='L8089'></a><a href='#L8089'>8089</a>
+<a name='L8090'></a><a href='#L8090'>8090</a>
+<a name='L8091'></a><a href='#L8091'>8091</a>
+<a name='L8092'></a><a href='#L8092'>8092</a>
+<a name='L8093'></a><a href='#L8093'>8093</a>
+<a name='L8094'></a><a href='#L8094'>8094</a>
+<a name='L8095'></a><a href='#L8095'>8095</a>
+<a name='L8096'></a><a href='#L8096'>8096</a>
+<a name='L8097'></a><a href='#L8097'>8097</a>
+<a name='L8098'></a><a href='#L8098'>8098</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -16635,6 +16685,10 @@ export interface paths {
      */
     post: operations["search_1"];
   };
+  "/api/v1/search/values": {
+    /** Search for distinct values from data matching a set of search criteria. */
+    post: operations["searchDistinctValues"];
+  };
   "/api/v1/seedbank/accessions/{id}": {
     /** Deletes an existing accession. */
     delete: operations["delete"];
@@ -18585,14 +18639,14 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
       withdrawals: components["schemas"]["GetWithdrawalPayload"][];
     };
-    GlobalRoleUsersListResponsePayload: {
-      status: components["schemas"]["SuccessOrError"];
-      users: components["schemas"]["UserWithGlobalRolesPayload"][];
-    };
     GoalProgressPayloadV1: {
       /** @enum {string} */
       goal: "NoPoverty" | "ZeroHunger" | "GoodHealth" | "QualityEducation" | "GenderEquality" | "CleanWater" | "AffordableEnergy" | "DecentWork" | "Industry" | "ReducedInequalities" | "SustainableCities" | "ResponsibleConsumption" | "ClimateAction" | "LifeBelowWater" | "LifeOnLand" | "Peace" | "Partnerships";
       progress?: string;
+    };
+    GlobalRoleUsersListResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      users: components["schemas"]["UserWithGlobalRolesPayload"][];
     };
     LineString: WithRequired&lt;{
       type: "LineString";
@@ -19517,6 +19571,11 @@ export interface components {
       direction?: "Ascending" | "Descending";
       field: string;
     };
+    SearchValuesResponsePayload: {
+      results: {
+        [key: string]: components["schemas"]["FieldValuesPayload"];
+      };
+    };
     SeedCountSummaryPayload: {
       /**
        * Format: int64
@@ -19558,6 +19617,9 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     SimpleSuccessResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+    };
+    SuccessResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
     };
     SpeciesLookupCommonNamePayload: {
@@ -19710,9 +19772,6 @@ export interface components {
      * @enum {string}
      */
     SuccessOrError: "ok" | "error";
-    SuccessResponsePayload: {
-      status: components["schemas"]["SuccessOrError"];
-    };
     SummarizeAccessionSearchRequestPayload: {
       search?: components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"];
     };
@@ -20442,6 +20501,32 @@ export interface operations {
       };
     };
   };
+  /** Uploads a new document to satisfy a deliverable. */
+  uploadDeliverableDocument: {
+    parameters: {
+      path: {
+        deliverableId: number;
+      };
+    };
+    requestBody?: {
+      content: {
+        "multipart/form-data": {
+          description: string;
+          /** Format: binary */
+          file: string;
+          projectId: string;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadDeliverableDocumentResponsePayload"];
+        };
+      };
+    };
+  };
   /** Gets a single submission document from a deliverable. */
   getDeliverableDocument: {
     parameters: {
@@ -20465,32 +20550,6 @@ export interface operations {
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Uploads a new document to satisfy a deliverable. */
-  uploadDeliverableDocument: {
-    parameters: {
-      path: {
-        deliverableId: number;
-      };
-    };
-    requestBody?: {
-      content: {
-        "multipart/form-data": {
-          description: string;
-          /** Format: binary */
-          file: string;
-          projectId: string;
-        };
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UploadDeliverableDocumentResponsePayload"];
         };
       };
     };
@@ -22466,6 +22525,22 @@ export interface operations {
       };
     };
   };
+  /** Search for distinct values from data matching a set of search criteria. */
+  searchDistinctValues: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SearchRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SearchValuesResponsePayload"];
+        };
+      };
+    };
+  };
   /** Deletes an existing accession. */
   delete: {
     parameters: {
@@ -24286,7 +24361,7 @@ export interface operations {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-07T00:16:56.013Z
+                at 2024-03-07T00:31:22.073Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
