@@ -33,13 +33,13 @@ export interface paths {
     /** Gets the details of a single deliverable and its submission documents, if any. */
     get: operations["getDeliverable"];
   };
+  "/api/v1/accelerator/deliverables/{deliverableId}/documents": {
+    /** Uploads a new document to satisfy a deliverable. */
+    post: operations["uploadDeliverableDocument"];
+  };
   "/api/v1/accelerator/deliverables/{deliverableId}/documents/{documentId}": {
     /** Gets a single submission document from a deliverable. */
     get: operations["getDeliverableDocument"];
-  };
-  "/api/v1/accelerator/deliverables/{deliverableId}/documents/{projectId}": {
-    /** Uploads a new document to satisfy a deliverable. */
-    post: operations["uploadDeliverableDocument"];
   };
   "/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}": {
     /**
@@ -47,6 +47,14 @@ export interface paths {
      * @description Only permitted for users with accelerator admin privileges.
      */
     put: operations["updateSubmission"];
+  };
+  "/api/v1/accelerator/globalRoles/users": {
+    /** Gets the list of users that have global roles. */
+    get: operations["listGlobalRoles"];
+  };
+  "/api/v1/accelerator/globalRoles/users/{userId}": {
+    /** Apply the supplied global roles to the user. */
+    post: operations["updateGlobalRoles"];
   };
   "/api/v1/automations": {
     /** Gets a list of automations for a device or facility. */
@@ -2368,6 +2376,10 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
       withdrawals: components["schemas"]["GetWithdrawalPayload"][];
     };
+    GlobalRoleUsersListResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      users: components["schemas"]["UserWithGlobalRolesPayload"][];
+    };
     GoalProgressPayloadV1: {
       /** @enum {string} */
       goal: "NoPoverty" | "ZeroHunger" | "GoodHealth" | "QualityEducation" | "GenderEquality" | "CleanWater" | "AffordableEnergy" | "DecentWork" | "Industry" | "ReducedInequalities" | "SustainableCities" | "ResponsibleConsumption" | "ClimateAction" | "LifeBelowWater" | "LifeOnLand" | "Peace" | "Partnerships";
@@ -3489,6 +3501,9 @@ export interface components {
      * @enum {string}
      */
     SuccessOrError: "ok" | "error";
+    SuccessResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+    };
     SummarizeAccessionSearchRequestPayload: {
       search?: components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"];
     };
@@ -3779,6 +3794,9 @@ export interface components {
        */
       timeZone?: string;
     };
+    UpdateGlobalRolesRequestPayload: {
+      globalRoles: string[];
+    };
     UpdateNotificationRequestPayload: {
       read: boolean;
     };
@@ -4015,6 +4033,14 @@ export interface components {
        */
       timeZone?: string;
     };
+    UserWithGlobalRolesPayload: {
+      email: string;
+      firstName?: string;
+      globalRoles: ("Super-Admin" | "Accelerator Admin" | "TF Expert" | "Read Only")[];
+      /** Format: int64 */
+      id: number;
+      lastName?: string;
+    };
     VersionsEntryPayload: {
       appName: string;
       minimumVersion: string;
@@ -4239,7 +4265,6 @@ export interface operations {
     parameters: {
       path: {
         deliverableId: number;
-        projectId: number;
       };
     };
     requestBody?: {
@@ -4248,6 +4273,7 @@ export interface operations {
           description: string;
           /** Format: binary */
           file: string;
+          projectId: string;
         };
       };
     };
@@ -4281,6 +4307,44 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets the list of users that have global roles. */
+  listGlobalRoles: {
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GlobalRoleUsersListResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Apply the supplied global roles to the user. */
+  updateGlobalRoles: {
+    parameters: {
+      path: {
+        userId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateGlobalRolesRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };

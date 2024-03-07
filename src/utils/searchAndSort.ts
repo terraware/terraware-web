@@ -106,6 +106,11 @@ export const sortResults = <T extends Record<string, unknown>>(
   return results;
 };
 
+export type SearchAndSortFn<T extends Record<string, unknown>> = (
+  results: T[],
+  search?: SearchNodePayload,
+  sortOrderConfig?: SearchOrderConfig
+) => T[];
 /**
  * In-memory search (filter) and sort on a result list using the Search API search and sortOrder interfaces
  * The search currently only supports `Exact` and 'Fuzzy' type searches, 'Range' and 'ExactOrFuzzy' are not supported
@@ -136,4 +141,60 @@ export const searchAndSort = <T extends Record<string, unknown>>(
   }
 
   return _results;
+};
+
+export type SearchNodeModifyConfig = {
+  field: string;
+  operation: 'APPEND' | 'REPLACE';
+  values: string[];
+  condition?: (values: string[]) => boolean;
+};
+
+/*
+ * Modifies a search node tree according to a provided configuration. This allows us to do some fancy things like
+ * filter for a specific thing that is not visible to the user, or modify searches where needed to provide extra
+ * search functionality without adding too much complication too the consumer. Can be extended in the future to
+ * change things like the search node's `operation`, `type`, or even add new children. For now just deals with
+ * `values`.
+ */
+export const modifySearchNode = (
+  modifyConfig: SearchNodeModifyConfig,
+  search?: SearchNodePayload
+): SearchNodePayload | undefined => {
+  if (!search) {
+    return search;
+  }
+
+  const { field, operation, values, condition } = modifyConfig;
+
+  if (search.field === field) {
+    if (condition && !condition(search.values)) {
+      return search;
+    }
+
+    if (operation === 'APPEND') {
+      return {
+        ...search,
+        values: [...search.values, ...values],
+      };
+    } else if (operation === 'REPLACE') {
+      return {
+        ...search,
+        values,
+      };
+    }
+  } else if (search.child) {
+    const modifiedChild = modifySearchNode(modifyConfig, search.child);
+    return {
+      ...search,
+      child: modifiedChild || search.child,
+    };
+  } else if (search.children) {
+    return {
+      ...search,
+      children: search.children.map((child: SearchNodePayload) => modifySearchNode(modifyConfig, child)),
+    };
+  }
+
+  return search;
 };

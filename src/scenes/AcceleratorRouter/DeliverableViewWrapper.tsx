@@ -7,32 +7,40 @@ import { Button, DropdownItem } from '@terraware/web-components';
 import useFetchDeliverable from 'src/components/DeliverableView/useFetchDeliverable';
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
 
+import ApproveDeliverableDialog from './ApproveDeliverableDialog';
 import DeliverableView from './DeliverableView';
 import RejectDialog from './RejectDialog';
 import useUpdateDeliverable from './useUpdateDeliverable';
 
 const DeliverableViewWrapper = () => {
+  const [showApproveDialog, setShowApproveDialog] = useState<boolean>(false);
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
   const { deliverableId } = useParams<{ deliverableId: string }>();
   const { status: requestStatus, update } = useUpdateDeliverable();
   const theme = useTheme();
+  const { activeLocale } = useLocalization();
 
   const { deliverable } = useFetchDeliverable({ deliverableId: Number(deliverableId) });
 
-  // temporary solution until we have the confirmation modal design
   const setStatus = useCallback(
     (status: DeliverableStatusType) => {
       if (deliverable?.id !== undefined) {
-        if (window.confirm(`Are you sure you want to set the status to ${status} ?`)) {
-          update({ ...deliverable, status });
-        }
+        update({ ...deliverable, status });
       }
     },
     [deliverable, update]
   );
+
+  const approveDeliverable = useCallback(() => {
+    if (deliverable?.id !== undefined) {
+      update({ ...deliverable, status: 'Approved' });
+    }
+    setShowApproveDialog(false);
+  }, [deliverable, setShowApproveDialog, update]);
 
   const rejectDeliverable = useCallback(
     (feedback: string) => {
@@ -47,10 +55,6 @@ const DeliverableViewWrapper = () => {
   const onOptionItemClick = useCallback(
     (optionItem: DropdownItem) => {
       switch (optionItem.value) {
-        case 'not_submitted': {
-          setStatus('Not Submitted');
-          break;
-        }
         case 'needs_translation': {
           setStatus('Needs Translation');
           break;
@@ -63,6 +67,30 @@ const DeliverableViewWrapper = () => {
     },
     [setStatus]
   );
+
+  const optionItems = useMemo(() => {
+    const items: DropdownItem[] = [];
+
+    if (!activeLocale) {
+      return items;
+    }
+
+    if (deliverable?.status !== 'Needs Translation') {
+      items.push({
+        label: strings.formatString(strings.STATUS_WITH_STATUS, strings.NEEDS_TRANSLATION) as string,
+        value: 'needs_translation',
+      });
+    }
+
+    if (deliverable?.status !== 'Not Needed') {
+      items.push({
+        label: strings.formatString(strings.STATUS_WITH_STATUS, strings.NOT_NEEDED) as string,
+        value: 'not_needed',
+      });
+    }
+
+    return items;
+  }, [activeLocale, deliverable?.status]);
 
   const callToAction = useMemo(() => {
     return (
@@ -80,28 +108,20 @@ const DeliverableViewWrapper = () => {
           disabled={deliverable?.status === 'Approved'}
           id='approveDeliverable'
           label={strings.APPROVE_DELIVERABLE}
-          onClick={() => setStatus('Approved')}
+          onClick={() => void setShowApproveDialog(true)}
           size='medium'
         />
-        <OptionsMenu
-          onOptionItemClick={onOptionItemClick}
-          optionItems={[
-            ...(deliverable?.status === 'Not Submitted'
-              ? []
-              : [{ label: strings.NOT_SUBMITTED, value: 'not_submitted' }]),
-            ...(deliverable?.status === 'Needs Translation'
-              ? []
-              : [{ label: strings.NEEDS_TRANSLATION, value: 'needs_translation' }]),
-            ...(deliverable?.status === 'Not Needed' ? [] : [{ label: strings.NOT_NEEDED, value: 'not_needed' }]),
-          ]}
-        />
+        <OptionsMenu onOptionItemClick={onOptionItemClick} optionItems={optionItems} />
       </Box>
     );
-  }, [deliverable?.status, onOptionItemClick, setStatus, theme]);
+  }, [deliverable?.status, onOptionItemClick, optionItems, theme]);
 
   if (deliverable) {
     return (
       <>
+        {showApproveDialog && (
+          <ApproveDeliverableDialog onClose={() => setShowApproveDialog(false)} onSubmit={approveDeliverable} />
+        )}
         {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectDeliverable} />}
         <DeliverableView
           callToAction={callToAction}

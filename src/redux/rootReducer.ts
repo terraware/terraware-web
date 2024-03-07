@@ -1,6 +1,6 @@
 import { Action, combineReducers } from '@reduxjs/toolkit';
 
-import { cohortsReducer, cohortsRequestsReducer } from 'src/redux/features/cohorts/cohortsSlice';
+import { cohortModulesReducer, cohortsReducer, cohortsRequestsReducer } from 'src/redux/features/cohorts/cohortsSlice';
 import {
   deliverablesEditReducer,
   deliverablesReducer,
@@ -12,6 +12,10 @@ import {
   draftPlantingSiteGetReducer,
   draftPlantingSiteSearchReducer,
 } from 'src/redux/features/draftPlantingSite/draftPlantingSiteSlice';
+import {
+  globalRolesUserUpdateReducer,
+  globalRolesUsersListReducer,
+} from 'src/redux/features/globalRoles/globalRolesSlice';
 import { projectsReducer, projectsRequestsReducer } from 'src/redux/features/projects/projectsSlice';
 import { reportsSettingsReducer } from 'src/redux/features/reportsSettings/reportsSettingsSlice';
 import { speciesProjectsReducer } from 'src/redux/features/species/speciesProjectsSlice';
@@ -52,6 +56,7 @@ export const reducers = {
   appVersion: appVersionReducer,
   batches: batchesReducer,
   batchesRequests: batchesRequestsReducer,
+  cohortModules: cohortModulesReducer,
   cohorts: cohortsReducer,
   cohortsRequests: cohortsRequestsReducer,
   deliverablesEdit: deliverablesEditReducer,
@@ -61,6 +66,8 @@ export const reducers = {
   draftPlantingSiteEdit: draftPlantingSiteEditReducer,
   draftPlantingSiteGet: draftPlantingSiteGetReducer,
   draftPlantingSiteSearch: draftPlantingSiteSearchReducer,
+  globalRolesUsersList: globalRolesUsersListReducer,
+  globalRolesUserUpdate: globalRolesUserUpdateReducer,
   message: messageReducer,
   monitoringPlots: monitoringPlotsReducer,
   observations: observationsReducer,

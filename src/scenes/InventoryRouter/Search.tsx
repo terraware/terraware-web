@@ -45,15 +45,15 @@ const initialFilters: Record<string, SearchNodePayload> = {
   },
 };
 
-interface SearchProps<T> {
-  searchValue: string;
-  onSearch: (value: string) => void;
+interface SearchProps {
   filters: InventoryFiltersUnion;
-  setFilters: (f: InventoryFiltersUnion) => void;
+  getResultsSpeciesNames?: () => string[];
+  onSearch: (value: string) => void;
   origin?: OriginPage;
-  showProjectsFilter?: boolean;
+  searchValue: string;
+  setFilters: (f: InventoryFiltersUnion) => void;
   showEmptyBatchesFilter?: boolean;
-  tableResults?: T[];
+  showProjectsFilter?: boolean;
 }
 
 type PillListItemWithEmptyValue = Omit<PillListItem<string>, 'id'> & {
@@ -61,9 +61,16 @@ type PillListItemWithEmptyValue = Omit<PillListItem<string>, 'id'> & {
   emptyValue: unknown;
 };
 
-export default function Search<T extends { facilityInventories?: string }>(props: SearchProps<T>): JSX.Element | null {
-  const { searchValue, onSearch, filters, setFilters, showProjectsFilter, showEmptyBatchesFilter, tableResults } =
-    props;
+export default function Search(props: SearchProps): JSX.Element | null {
+  const {
+    filters,
+    getResultsSpeciesNames,
+    onSearch,
+    searchValue,
+    setFilters,
+    showEmptyBatchesFilter,
+    showProjectsFilter,
+  } = props;
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -92,13 +99,19 @@ export default function Search<T extends { facilityInventories?: string }>(props
   }, [dispatch, selectedOrganization.id, activeLocale]);
 
   useEffect(() => {
-    if (origin !== 'Nursery' || !species?.length || !tableResults) {
+    if (origin !== 'Nursery' || !species?.length) {
       return;
     }
 
-    const speciesWithinResults = tableResults.map((result) => result.facilityInventories?.split('\r')).flat();
-    setAvailableSpecies(species.filter((singleSpecies) => speciesWithinResults.includes(singleSpecies.scientificName)));
-  }, [species, origin, tableResults]);
+    const availableSpeciesNames = getResultsSpeciesNames?.() || [];
+
+    if (!availableSpeciesNames.length) {
+      setAvailableSpecies([]);
+    } else {
+      const speciesWithinResults = new Set(availableSpeciesNames);
+      setAvailableSpecies(species.filter((singleSpecies) => speciesWithinResults.has(singleSpecies.scientificName)));
+    }
+  }, [getResultsSpeciesNames, origin, species]);
 
   const subLocations = useAppSelector(selectSubLocations);
 

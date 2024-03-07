@@ -3,8 +3,14 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import DeliverablesService, { ListDeliverablesRequestParams } from 'src/services/DeliverablesService';
 import { Response } from 'src/services/HttpService';
 import strings from 'src/strings';
-import { Deliverable, DeliverableData, UploadDeliverableDocumentRequest } from 'src/types/Deliverables';
+import {
+  Deliverable,
+  DeliverableData,
+  ListDeliverablesElement,
+  UploadDeliverableDocumentRequest,
+} from 'src/types/Deliverables';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { SearchAndSortFn } from 'src/utils/searchAndSort';
 
 export const requestListDeliverables = createAsyncThunk(
   'deliverables/list',
@@ -14,12 +20,13 @@ export const requestListDeliverables = createAsyncThunk(
       listRequest?: ListDeliverablesRequestParams;
       search?: SearchNodePayload;
       searchSortOrder?: SearchSortOrder;
+      searchAndSort?: SearchAndSortFn<ListDeliverablesElement>;
     },
     { rejectWithValue }
   ) => {
-    const { listRequest, locale, search, searchSortOrder } = request;
+    const { listRequest, locale, search, searchSortOrder, searchAndSort } = request;
 
-    const response = await DeliverablesService.list(locale, listRequest, search, searchSortOrder);
+    const response = await DeliverablesService.list(locale, listRequest, search, searchSortOrder, searchAndSort);
     if (response) {
       return response;
     }

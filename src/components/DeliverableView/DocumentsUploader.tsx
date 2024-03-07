@@ -11,7 +11,11 @@ import strings from 'src/strings';
 import FileUploadDialog from './FileUploadDialog';
 import { ViewProps } from './types';
 
-const DocumentsUploader = ({ deliverable }: ViewProps): JSX.Element => {
+type DocumentUploaderProps = ViewProps & {
+  maxFiles?: number;
+};
+
+const DocumentsUploader = ({ deliverable, maxFiles }: DocumentUploaderProps): JSX.Element => {
   const [files, setFiles] = useState<File[]>([]);
   const [statusChangeConfirmed, setStatusChangeConfirmed] = useState(false);
   const { activeLocale } = useLocalization();
@@ -66,12 +70,12 @@ const DocumentsUploader = ({ deliverable }: ViewProps): JSX.Element => {
       <FileChooser
         acceptFileType='image/*,application/*'
         chooseFileText={strings.CHOOSE_FILE}
-        setFiles={setFiles}
-        maxFiles={15 - deliverable.documents.length}
+        maxFiles={maxFiles}
         multipleSelection
+        setFiles={setFiles}
+        template={template}
         uploadDescription={strings.UPLOAD_FILES_DESCRIPTION}
         uploadText={strings.UPLOAD_FILES_TITLE}
-        template={template}
       />
     </Box>
   );
