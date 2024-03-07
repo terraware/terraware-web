@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/50</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/47</span>
+                <span class='fraction'>0/42</span>
             </div>
         
             
@@ -300,22 +300,7 @@
 <a name='L235'></a><a href='#L235'>235</a>
 <a name='L236'></a><a href='#L236'>236</a>
 <a name='L237'></a><a href='#L237'>237</a>
-<a name='L238'></a><a href='#L238'>238</a>
-<a name='L239'></a><a href='#L239'>239</a>
-<a name='L240'></a><a href='#L240'>240</a>
-<a name='L241'></a><a href='#L241'>241</a>
-<a name='L242'></a><a href='#L242'>242</a>
-<a name='L243'></a><a href='#L243'>243</a>
-<a name='L244'></a><a href='#L244'>244</a>
-<a name='L245'></a><a href='#L245'>245</a>
-<a name='L246'></a><a href='#L246'>246</a>
-<a name='L247'></a><a href='#L247'>247</a>
-<a name='L248'></a><a href='#L248'>248</a>
-<a name='L249'></a><a href='#L249'>249</a>
-<a name='L250'></a><a href='#L250'>250</a>
-<a name='L251'></a><a href='#L251'>251</a>
-<a name='L252'></a><a href='#L252'>252</a>
-<a name='L253'></a><a href='#L253'>253</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L238'></a><a href='#L238'>238</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -338,8 +323,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -385,19 +368,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -574,7 +544,6 @@ import { IconTooltip } from '@terraware/web-components';
 &nbsp;
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
-import isEnabled from 'src/features';
 import { useUser } from 'src/providers';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -595,7 +564,6 @@ export default function <span class="fstat-no" title="function not covered" >Edi
   const [preset, setPreset] = <span class="cstat-no" title="statement not covered" >React.useState&lt;Preset&gt;();</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const { userPreferences } = <span class="cstat-no" title="statement not covered" >useUser();</span>
-  const featureFlagProjects = <span class="cstat-no" title="statement not covered" >isEnabled('Projects');</span>
 &nbsp;
   const [value, setValue] = <span class="cstat-no" title="statement not covered" >React.useState(props.value);</span>
 &nbsp;
@@ -636,20 +604,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
 <span class="cstat-no" title="statement not covered" >    return 4;</span>
   };
 &nbsp;
-  let userSections = <span class="cstat-no" title="statement not covered" >sections(userPreferences.preferredWeightSystem as string);</span>
-<span class="cstat-no" title="statement not covered" >  if (!featureFlagProjects) {</span>
-<span class="cstat-no" title="statement not covered" >    userSections = userSections.map(</span>
-<span class="fstat-no" title="function not covered" >      (s</span>ection: Section): Section =&gt;
-<span class="cstat-no" title="statement not covered" >        section.name !== strings.GENERAL</span>
-          ? section
-          : {
-              ...section,
-              options: section.options.filter(<span class="fstat-no" title="function not covered" >(o</span>ptionArray: Option[]) =&gt;
-<span class="cstat-no" title="statement not covered" >                optionArray.find(<span class="fstat-no" title="function not covered" >(o</span>ption: Option) =&gt; <span class="cstat-no" title="statement not covered" >option.key !== 'project_name')</span></span>
-              ),
-            }
-    );
-  }
+  const userSections = <span class="cstat-no" title="statement not covered" >sections(userPreferences.preferredWeightSystem as string);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;DialogBox
@@ -826,7 +781,7 @@ function <span class="fstat-no" title="function not covered" >sections(</span>sy
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-07T19:12:27.125Z
+                at 2024-03-07T22:30:31.813Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -1,3 +1,4 @@
+86e9e93958 SW-4968 Remove 'Projects' feature flag and baked in truthy result of the flag (#2277)
 5a29df8190 SW-4989 Reorg accelerator router code (#2278)
 3500b8a00a Use updated types with finalized GlobalRoles API from backend (#2276)
 36a089d0f6 Updated translations from Phrase (#2275)

@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/93</span>
+                <span class='fraction'>0/91</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/48</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/27</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/88</span>
+                <span class='fraction'>0/86</span>
             </div>
         
             
@@ -367,11 +367,7 @@
 <a name='L302'></a><a href='#L302'>302</a>
 <a name='L303'></a><a href='#L303'>303</a>
 <a name='L304'></a><a href='#L304'>304</a>
-<a name='L305'></a><a href='#L305'>305</a>
-<a name='L306'></a><a href='#L306'>306</a>
-<a name='L307'></a><a href='#L307'>307</a>
-<a name='L308'></a><a href='#L308'>308</a>
-<a name='L309'></a><a href='#L309'>309</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L305'></a><a href='#L305'>305</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -406,10 +402,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -429,7 +422,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -664,7 +656,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -693,7 +685,6 @@ import SearchFiltersWrapper, {
 } from 'src/components/common/SearchFiltersWrapper';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useLocalization, useOrganization } from 'src/providers';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { useAppSelector } from 'src/redux/store';
@@ -715,14 +706,12 @@ import useDebounce from 'src/utils/useDebounce';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 &nbsp;
-const columns = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(f</span>eatureFlagProjects: boolean): TableColumnType[] =&gt; <span class="cstat-no" title="statement not covered" >[</span></span>
+const columns = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span>: TableColumnType[] =&gt; <span class="cstat-no" title="statement not covered" >[</span></span>
   { key: 'withdrawnDate', name: strings.DATE, type: 'string' },
   { key: 'purpose', name: strings.PURPOSE, type: 'string' },
   { key: 'facility_name', name: strings.FROM_NURSERY, type: 'string' },
   { key: 'destinationName', name: strings.DESTINATION, type: 'string' },
-  ...((featureFlagProjects
-    ? [{ key: 'project_names', name: strings.PROJECTS, type: 'string' }]
-    : []) as TableColumnType[]),
+  { key: 'project_names', name: strings.PROJECTS, type: 'string' },
   { key: 'plantingSubzoneNames', name: strings.TO_SUBZONE, type: 'string' },
   { key: 'speciesScientificNames', name: strings.SPECIES, type: 'string' },
   { key: 'totalWithdrawn', name: strings.TOTAL_QUANTITY, type: 'number' },
@@ -734,7 +723,6 @@ export default function <span class="fstat-no" title="function not covered" >Nur
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
   const location = <span class="cstat-no" title="statement not covered" >useStateLocation();</span>
-  const featureFlagProjects = <span class="cstat-no" title="statement not covered" >isEnabled('Projects');</span>
   const query = <span class="cstat-no" title="statement not covered" >useQuery();</span>
   const subzoneParam = <span class="cstat-no" title="statement not covered" >query.get('subzoneName');</span>
   const siteParam = <span class="cstat-no" title="statement not covered" >query.get('siteName');</span>
@@ -788,7 +776,7 @@ export default function <span class="fstat-no" title="function not covered" >Nur
 &nbsp;
   const featuredFilters: FeaturedFilterConfig[] = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt;
-<span class="cstat-no" title="statement not covered" >      featureFlagProjects &amp;&amp; activeLocale</span>
+<span class="cstat-no" title="statement not covered" >      activeLocale</span>
         ? [
             {
               field: 'project_id',
@@ -815,7 +803,7 @@ export default function <span class="fstat-no" title="function not covered" >Nur
             },
           ]
         : [],
-    [activeLocale, featureFlagProjects, getProjectName, projects]
+    [activeLocale, getProjectName, projects]
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -972,7 +960,7 @@ export default function <span class="fstat-no" title="function not covered" >Nur
       &lt;Grid item xs={12}&gt;
         &lt;Table
           id='withdrawal-log'
-          columns={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >columns(featureFlagProjects)}</span>
+          columns={columns}
           rows={searchResults || []}
           Renderer={WithdrawalLogRenderer}
           orderBy={searchSortOrder.field}
@@ -994,7 +982,7 @@ export default function <span class="fstat-no" title="function not covered" >Nur
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-07T19:12:27.125Z
+                at 2024-03-07T22:30:31.813Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/118</span>
+                <span class='fraction'>0/117</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/111</span>
+                <span class='fraction'>0/109</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/111</span>
+                <span class='fraction'>0/110</span>
             </div>
         
             
@@ -526,11 +526,7 @@
 <a name='L461'></a><a href='#L461'>461</a>
 <a name='L462'></a><a href='#L462'>462</a>
 <a name='L463'></a><a href='#L463'>463</a>
-<a name='L464'></a><a href='#L464'>464</a>
-<a name='L465'></a><a href='#L465'>465</a>
-<a name='L466'></a><a href='#L466'>466</a>
-<a name='L467'></a><a href='#L467'>467</a>
-<a name='L468'></a><a href='#L468'>468</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L464'></a><a href='#L464'>464</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -571,7 +567,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -583,7 +578,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -808,8 +802,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1006,7 +998,6 @@ import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-comp
 &nbsp;
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import DatePicker from 'src/components/common/DatePicker';
-import isEnabled from 'src/features';
 import { useProjects } from 'src/hooks/useProjects';
 import { useUser } from 'src/providers';
 import { useOrganization } from 'src/providers/hooks';
@@ -1058,7 +1049,6 @@ export default function <span class="fstat-no" title="function not covered" >Bat
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const locationTimezone = <span class="cstat-no" title="statement not covered" >useLocationTimeZone();</span>
   const [record, setRecord, onChange] = <span class="cstat-no" title="statement not covered" >useForm&lt;FormRecord&gt;(undefined);</span>
-  const featureFlagProjects = <span class="cstat-no" title="statement not covered" >isEnabled('Projects');</span>
 &nbsp;
   const facilityId = <span class="cstat-no" title="statement not covered" >origin === 'Nursery' ? originId : record?.facilityId;</span>
   const speciesId = <span class="cstat-no" title="statement not covered" >origin === 'Species' ? originId : record?.speciesId;</span>
@@ -1331,15 +1321,13 @@ export default function <span class="fstat-no" title="function not covered" >Bat
               &lt;/Grid&gt;
             )}
 &nbsp;
-            {featureFlagProjects &amp;&amp; (
-              &lt;Grid item xs={12} padding={dropdownPadding}&gt;
-                &lt;ProjectsDropdown&lt;FormRecord&gt;
-                  availableProjects={availableProjects}
-                  record={record}
-                  setRecord={setRecord}
-                /&gt;
-              &lt;/Grid&gt;
-            )}
+            &lt;Grid item xs={12} padding={dropdownPadding}&gt;
+              &lt;ProjectsDropdown&lt;FormRecord&gt;
+                availableProjects={availableProjects}
+                record={record}
+                setRecord={setRecord}
+              /&gt;
+            &lt;/Grid&gt;
 &nbsp;
             &lt;Grid item xs={gridSize()} paddingLeft={paddingSeparator}&gt;
               &lt;DatePicker
@@ -1471,7 +1459,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-07T19:12:27.125Z
+                at 2024-03-07T22:30:31.813Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
@@ -199,12 +199,7 @@
 <a name='L134'></a><a href='#L134'>134</a>
 <a name='L135'></a><a href='#L135'>135</a>
 <a name='L136'></a><a href='#L136'>136</a>
-<a name='L137'></a><a href='#L137'>137</a>
-<a name='L138'></a><a href='#L138'>138</a>
-<a name='L139'></a><a href='#L139'>139</a>
-<a name='L140'></a><a href='#L140'>140</a>
-<a name='L141'></a><a href='#L141'>141</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L137'></a><a href='#L137'>137</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -232,7 +227,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -250,8 +244,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -349,7 +341,6 @@ import { Grid } from '@mui/material';
 import _ from 'lodash';
 &nbsp;
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
 import { selectSpeciesProjects } from 'src/redux/features/species/speciesProjectsSelectors';
 import { requestSpeciesProjects } from 'src/redux/features/species/speciesProjectsThunks';
@@ -372,7 +363,6 @@ export default function <span class="fstat-no" title="function not covered" >Inv
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
-  const featureFlagProjects = <span class="cstat-no" title="statement not covered" >isEnabled('Projects');</span>
 &nbsp;
   const speciesProjects = <span class="cstat-no" title="statement not covered" >useAppSelector(selectSpeciesProjects(speciesId));</span>
   const [summary, setSummary] = <span class="cstat-no" title="statement not covered" >useState&lt;SpeciesInventorySummary&gt;();</span>
@@ -389,13 +379,11 @@ export default function <span class="fstat-no" title="function not covered" >Inv
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (speciesId !== undefined) {</span>
 <span class="cstat-no" title="statement not covered" >      void populateSummary();</span>
-<span class="cstat-no" title="statement not covered" >      if (featureFlagProjects) {</span>
-<span class="cstat-no" title="statement not covered" >        void dispatch(requestSpeciesProjects(selectedOrganization.id, speciesId));</span>
-      }
+<span class="cstat-no" title="statement not covered" >      void dispatch(requestSpeciesProjects(selectedOrganization.id, speciesId));</span>
     } else {
 <span class="cstat-no" title="statement not covered" >      setSummary(undefined);</span>
     }
-  }, [speciesId, summary, snackbar, featureFlagProjects, dispatch, selectedOrganization.id]);
+  }, [speciesId, summary, snackbar, dispatch, selectedOrganization.id]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    reloadData();</span>
@@ -410,7 +398,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
 &nbsp;
     const topRowColumns = <span class="cstat-no" title="statement not covered" >isMobile ? 12 : 3;</span>
 &nbsp;
-    const showProjectsOverviewCard = <span class="cstat-no" title="statement not covered" >!!(featureFlagProjects &amp;&amp; speciesProjects);</span>
+    const showProjectsOverviewCard = <span class="cstat-no" title="statement not covered" >!!speciesProjects;</span>
     const bottomRowColumns = <span class="cstat-no" title="statement not covered" >isMobile ? 12 : showProjectsOverviewCard ? 3 : 4;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return [</span>
@@ -490,7 +478,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-07T19:12:27.125Z
+                at 2024-03-07T22:30:31.813Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/36</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -219,10 +219,7 @@
 <a name='L154'></a><a href='#L154'>154</a>
 <a name='L155'></a><a href='#L155'>155</a>
 <a name='L156'></a><a href='#L156'>156</a>
-<a name='L157'></a><a href='#L157'>157</a>
-<a name='L158'></a><a href='#L158'>158</a>
-<a name='L159'></a><a href='#L159'>159</a>
-<a name='L160'></a><a href='#L160'>160</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L157'></a><a href='#L157'>157</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -281,7 +278,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -350,10 +346,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -441,7 +435,6 @@ export default function <span class="fstat-no" title="function not covered" >Pla
   const { results, setTemporalSearchValue, temporalSearchValue, setSearchSortOrder, filters, setFilters } = <span class="cstat-no" title="statement not covered" >props;</span>
 &nbsp;
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const featureFlagProjects = <span class="cstat-no" title="statement not covered" >isEnabled('Projects');</span>
   const featureFlagSites = <span class="cstat-no" title="statement not covered" >isEnabled('User Detailed Sites');</span>
 &nbsp;
   const projects = <span class="cstat-no" title="statement not covered" >useAppSelector(selectProjects);</span>
@@ -483,9 +476,9 @@ export default function <span class="fstat-no" title="function not covered" >Pla
   );
 &nbsp;
   const tableColumns = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const columnsData = <span class="cstat-no" title="statement not covered" >featureFlagProjects ? columns() : columns().filter(<span class="fstat-no" title="function not covered" >(c</span>olumn) =&gt; <span class="cstat-no" title="statement not covered" >column.key !== 'project_name')</span>;</span>
+    const columnsData = <span class="cstat-no" title="statement not covered" >columns();</span>
 <span class="cstat-no" title="statement not covered" >    return featureFlagSites ? columnsData : columnsData.filter(<span class="fstat-no" title="function not covered" >(c</span>olumn) =&gt; <span class="cstat-no" title="statement not covered" >column.key !== 'draft')</span>;</span>
-  }, [featureFlagProjects, featureFlagSites]);
+  }, [featureFlagSites]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Card flushMobile&gt;
@@ -504,16 +497,14 @@ export default function <span class="fstat-no" title="function not covered" >Pla
           /&gt;
         &lt;/Box&gt;
 &nbsp;
-        {featureFlagProjects &amp;&amp; (
-          &lt;FilterMultiSelectContainer&lt;PlantingSitesFilters&gt;
-            filters={filters}
-            setFilters={setFilters}
-            label={strings.PROJECTS}
-            filterKey='projectIds'
-            options={projects?.map(<span class="fstat-no" title="function not covered" >(p</span>roject: Project) =&gt; <span class="cstat-no" title="statement not covered" >project.id)</span> ?? []}
-            renderOption={<span class="fstat-no" title="function not covered" >(i</span>d: string | number) =&gt; <span class="cstat-no" title="statement not covered" >projects?.find(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; <span class="cstat-no" title="statement not covered" >project.id === id)</span>?.name ?? ''}</span>
-          /&gt;
-        )}
+        &lt;FilterMultiSelectContainer&lt;PlantingSitesFilters&gt;
+          filters={filters}
+          setFilters={setFilters}
+          label={strings.PROJECTS}
+          filterKey='projectIds'
+          options={projects?.map(<span class="fstat-no" title="function not covered" >(p</span>roject: Project) =&gt; <span class="cstat-no" title="statement not covered" >project.id)</span> ?? []}
+          renderOption={<span class="fstat-no" title="function not covered" >(i</span>d: string | number) =&gt; <span class="cstat-no" title="statement not covered" >projects?.find(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; <span class="cstat-no" title="statement not covered" >project.id === id)</span>?.name ?? ''}</span>
+        /&gt;
       &lt;/Box&gt;
 &nbsp;
       &lt;Grid display='flex' flexDirection='row' alignItems='center' sx={{ marginTop: theme.spacing(2) }}&gt;
@@ -547,7 +538,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-07T19:12:27.125Z
+                at 2024-03-07T22:30:31.813Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

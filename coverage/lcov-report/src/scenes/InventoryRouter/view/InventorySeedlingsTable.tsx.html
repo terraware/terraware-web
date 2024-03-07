@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/142</span>
+                <span class='fraction'>0/140</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/84</span>
+                <span class='fraction'>0/82</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/135</span>
+                <span class='fraction'>0/133</span>
             </div>
         
             
@@ -534,11 +534,7 @@
 <a name='L469'></a><a href='#L469'>469</a>
 <a name='L470'></a><a href='#L470'>470</a>
 <a name='L471'></a><a href='#L471'>471</a>
-<a name='L472'></a><a href='#L472'>472</a>
-<a name='L473'></a><a href='#L473'>473</a>
-<a name='L474'></a><a href='#L474'>474</a>
-<a name='L475'></a><a href='#L475'>475</a>
-<a name='L476'></a><a href='#L476'>476</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L472'></a><a href='#L472'>472</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -607,11 +603,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -862,14 +856,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1025,7 +1017,6 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
 import { isBatchEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
@@ -1091,7 +1082,6 @@ export default function <span class="fstat-no" title="function not covered" >Inv
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
-  const featureFlagProjects = <span class="cstat-no" title="statement not covered" >isEnabled('Projects');</span>
 &nbsp;
   const [openExportModal, setOpenExportModal] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [temporalSearchValue, setTemporalSearchValue] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
@@ -1336,17 +1326,15 @@ export default function <span class="fstat-no" title="function not covered" >Inv
 <span class="cstat-no" title="statement not covered" >      withdrawTooltip = strings.NO_WITHDRAWABLE_QUANTITIES_FOUND;</span>
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (featureFlagProjects) {</span>
-<span class="cstat-no" title="statement not covered" >      topBarButtons.push(</span>
-        &lt;ProjectAssignTopBarButton
-          key={1}
-          totalResultsCount={batches?.length}
-          selectAllRows={selectAllRows}
-          reloadData={reloadData}
-          projectAssignPayloadCreator={<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{ batchIds: selectedRows.map(<span class="fstat-no" title="function not covered" >(r</span>ow) =&gt; <span class="cstat-no" title="statement not covered" >Number(row.id))</span> })</span>}
-        /&gt;
-      );
-    }
+<span class="cstat-no" title="statement not covered" >    topBarButtons.push(</span>
+      &lt;ProjectAssignTopBarButton
+        key={1}
+        totalResultsCount={batches?.length}
+        selectAllRows={selectAllRows}
+        reloadData={reloadData}
+        projectAssignPayloadCreator={<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{ batchIds: selectedRows.map(<span class="fstat-no" title="function not covered" >(r</span>ow) =&gt; <span class="cstat-no" title="statement not covered" >Number(row.id))</span> })</span>}
+      /&gt;
+    );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    topBarButtons.push({</span>
       buttonType: 'passive',
@@ -1495,7 +1483,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-07T19:12:27.125Z
+                at 2024-03-07T22:30:31.813Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
