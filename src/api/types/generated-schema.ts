@@ -48,14 +48,6 @@ export interface paths {
      */
     put: operations["updateSubmission"];
   };
-  "/api/v1/accelerator/globalRoles/users": {
-    /** Gets the list of users that have global roles. */
-    get: operations["listGlobalRoles"];
-  };
-  "/api/v1/accelerator/globalRoles/users/{userId}": {
-    /** Apply the supplied global roles to the user. */
-    post: operations["updateGlobalRoles"];
-  };
   "/api/v1/automations": {
     /** Gets a list of automations for a device or facility. */
     get: operations["listAutomations"];
@@ -154,6 +146,10 @@ export interface paths {
   "/api/v1/facility/{facilityId}/devices": {
     /** Lists the configurations of all the devices at a facility. */
     get: operations["listFacilityDevices_1"];
+  };
+  "/api/v1/globalRoles/users": {
+    /** Gets the list of users that have global roles. */
+    get: operations["listGlobalRoles"];
   };
   "/api/v1/i18n/timeZones": {
     /** Gets a list of supported time zones and their names. */
@@ -714,6 +710,10 @@ export interface paths {
     get: operations["getUserPreferences"];
     /** Updates the current user's preferences. */
     put: operations["updateUserPreferences"];
+  };
+  "/api/v1/users/{userId}/globalRoles": {
+    /** Apply the supplied global roles to the user. */
+    post: operations["updateGlobalRoles"];
   };
   "/api/v1/versions": {
     /** Gets the minimum and recommended versions for Terraware's client applications. */
@@ -3804,7 +3804,7 @@ export interface components {
       timeZone?: string;
     };
     UpdateGlobalRolesRequestPayload: {
-      globalRoles: string[];
+      globalRoles: ("Super-Admin" | "Accelerator Admin" | "TF Expert" | "Read Only")[];
     };
     UpdateNotificationRequestPayload: {
       read: boolean;
@@ -4316,44 +4316,6 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Gets the list of users that have global roles. */
-  listGlobalRoles: {
-    responses: {
-      /** @description The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GlobalRoleUsersListResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Apply the supplied global roles to the user. */
-  updateGlobalRoles: {
-    parameters: {
-      path: {
-        userId: number;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateGlobalRolesRequestPayload"];
-      };
-    };
-    responses: {
-      /** @description The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SuccessResponsePayload"];
-        };
-      };
-      /** @description The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -4902,6 +4864,17 @@ export interface operations {
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets the list of users that have global roles. */
+  listGlobalRoles: {
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GlobalRoleUsersListResponsePayload"];
         };
       };
     };
@@ -7667,6 +7640,33 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Apply the supplied global roles to the user. */
+  updateGlobalRoles: {
+    parameters: {
+      path: {
+        userId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateGlobalRolesRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };

@@ -8,8 +8,8 @@ import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
  * Accelerator "globalRole" related services
  */
 
-const ENDPOINT_GLOBAL_ROLES_USERS = '/api/v1/accelerator/globalRoles/users';
-const ENDPOINT_GLOBAL_ROLES_USER = '/api/v1/accelerator/globalRoles/users/{userId}';
+const ENDPOINT_GLOBAL_ROLES_USERS = '/api/v1/globalRoles/users';
+const ENDPOINT_GLOBAL_ROLES_USER = '/api/v1/users/{userId}/globalRoles';
 
 export type GlobalRoleUsersListResponsePayload =
   paths[typeof ENDPOINT_GLOBAL_ROLES_USERS]['get']['responses'][200]['content']['application/json'];
