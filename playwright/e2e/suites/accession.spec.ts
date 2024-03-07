@@ -120,7 +120,7 @@ export default function AccessionTests() {
 
     await page.getByRole('button', { name: 'Seeds' }).click();
     await page.getByRole('button', { name: 'Accessions' }).click();
-    await page.locator('#row1-estimatedWeightGrams').getByText('495').click();
+    await page.locator('#row1-accessionNumber').getByText('24-1-2-001').click();
     await page.getByRole('button', { name: 'Withdraw' }).click();
     await page.locator('#destinationFacilityId').getByRole('textbox').click();
     await page

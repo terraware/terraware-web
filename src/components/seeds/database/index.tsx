@@ -798,6 +798,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                         selectedRows={selectedRows}
                         setSelectedRows={setSelectedRows}
                         showCheckbox
+                        isClickable={() => false}
                         showTopBar
                         topBarButtons={[
                           <ProjectAssignTopBarButton
