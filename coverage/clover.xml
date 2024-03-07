@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1709771482572" clover="3.2.0">
-  <project timestamp="1709771482572" name="All files">
+<coverage generated="1709771838770" clover="3.2.0">
+  <project timestamp="1709771838771" name="All files">
     <metrics statements="17424" coveredstatements="667" conditionals="11125" coveredconditionals="215" methods="5429" coveredmethods="154" elements="33978" coveredelements="1036" complexity="0" loc="17424" ncloc="17424" packages="143" files="717" classes="717"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="121" coveredconditionals="0" methods="45" coveredmethods="0"/>
@@ -95,29 +95,29 @@
       <file name="features.ts" path="/home/runner/work/terraware-web/terraware-web/src/features.ts">
         <metrics statements="24" coveredstatements="0" conditionals="25" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="23" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="72" count="0" type="stmt"/>
-        <line num="73" count="0" type="stmt"/>
-        <line num="80" count="0" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
         <line num="81" count="0" type="stmt"/>
-        <line num="83" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="84" count="0" type="stmt"/>
-        <line num="87" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="88" count="0" type="stmt"/>
-        <line num="91" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="92" count="0" type="stmt"/>
-        <line num="95" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="97" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="100" count="0" type="stmt"/>
-        <line num="102" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="105" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="90" count="0" type="stmt"/>
+        <line num="92" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="93" count="0" type="stmt"/>
+        <line num="96" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="97" count="0" type="stmt"/>
+        <line num="100" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="101" count="0" type="stmt"/>
+        <line num="104" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="106" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="109" count="0" type="stmt"/>
-        <line num="110" count="0" type="stmt"/>
-        <line num="112" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="113" count="0" type="stmt"/>
-        <line num="116" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="117" count="0" type="stmt"/>
-        <line num="120" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="111" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="114" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="118" count="0" type="stmt"/>
+        <line num="119" count="0" type="stmt"/>
+        <line num="121" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="122" count="0" type="stmt"/>
+        <line num="125" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="126" count="0" type="stmt"/>
+        <line num="129" count="0" type="cond" truecount="0" falsecount="3"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/index.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
