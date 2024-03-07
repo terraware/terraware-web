@@ -1,13 +1,14 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 
 import { Grid, Typography } from '@mui/material';
 import { Separator, TableColumnType } from '@terraware/web-components';
 
 import DeliverablesTable from 'src/components/DeliverablesTable';
-import Page from 'src/components/Page';
 import PageHeader from 'src/components/PageHeader';
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
+import TfMain from 'src/components/common/TfMain';
 import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization, useOrganization } from 'src/providers';
 import strings from 'src/strings';
@@ -62,6 +63,7 @@ const DeliverablesList = (): JSX.Element => {
   const { activeLocale } = useLocalization();
   const { availableProjects } = useProjects();
   const { selectedOrganization } = useOrganization();
+  const contentRef = useRef(null);
 
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number }>({ projectId: undefined });
 
@@ -143,15 +145,20 @@ const DeliverablesList = (): JSX.Element => {
   );
 
   return (
-    <Page title={<PageHeader title={strings.DELIVERABLES} leftComponent={PageHeaderLeftComponent} />}>
+    <TfMain>
+      <PageHeaderWrapper nextElement={contentRef.current}>
+        <PageHeader title={strings.DELIVERABLES} leftComponent={PageHeaderLeftComponent} />
+      </PageHeaderWrapper>
+
       <DeliverablesTable
         columns={columns}
         extraTableFilters={extraTableFilters}
         filterModifiers={filterModifiers}
+        pageHeaderRef={contentRef}
         organizationId={selectedOrganization.id}
         searchAndSort={searchAndSort}
       />
-    </Page>
+    </TfMain>
   );
 };
 

@@ -107,7 +107,12 @@ const DeliverablesList = () => {
       </PageHeaderWrapper>
 
       {/* -1 for "non-organization scoped search" IE admin search */}
-      <DeliverablesTable columns={columns} extraTableFilters={extraTableFilters} organizationId={-1} />
+      <DeliverablesTable
+        columns={columns}
+        extraTableFilters={extraTableFilters}
+        organizationId={-1}
+        pageHeaderRef={contentRef}
+      />
     </AcceleratorMain>
   );
 };
