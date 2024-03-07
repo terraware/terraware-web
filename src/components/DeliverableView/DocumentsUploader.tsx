@@ -4,7 +4,6 @@ import { Box } from '@mui/material';
 import { FileChooser } from '@terraware/web-components';
 
 import StatusChangeConfirmationDialog from 'src/components/DeliverableView/StatusChangeConfirmationDialog';
-import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 
@@ -12,14 +11,18 @@ import FileUploadDialog from './FileUploadDialog';
 import { ViewProps } from './types';
 
 type DocumentUploaderProps = ViewProps & {
+  deliverableStatusesToIgnore: string[];
   maxFiles?: number;
 };
 
-const DocumentsUploader = ({ deliverable, maxFiles }: DocumentUploaderProps): JSX.Element => {
+const DocumentsUploader = ({
+  deliverable,
+  deliverableStatusesToIgnore,
+  maxFiles,
+}: DocumentUploaderProps): JSX.Element => {
   const [files, setFiles] = useState<File[]>([]);
   const [statusChangeConfirmed, setStatusChangeConfirmed] = useState(false);
   const { activeLocale } = useLocalization();
-  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const template = useMemo(() => {
     if (activeLocale && deliverable.templateUrl) {
@@ -29,26 +32,20 @@ const DocumentsUploader = ({ deliverable, maxFiles }: DocumentUploaderProps): JS
     }
   }, [activeLocale, deliverable.templateUrl]);
 
-  // determine if the status change confirmation dialog is needed
   const showStatusChangeDialog = useMemo(() => {
     // if the status change has already been confirmed, don't show the dialog
     if (statusChangeConfirmed) {
       return false;
     }
 
-    // participant view
-    if (!isAcceleratorRoute && !['Not Submitted', 'In Review', 'Needs Translation'].includes(deliverable.status)) {
-      return true;
-    }
-
-    // accelerator view
-    if (isAcceleratorRoute && !['Not Submitted', 'In Review'].includes(deliverable.status)) {
+    // if the deliverable status is *not* in the list of statuses that do not require confirmation, show the dialog
+    if (!deliverableStatusesToIgnore.includes(deliverable.status)) {
       return true;
     }
 
     // default
     return false;
-  }, [deliverable.status, isAcceleratorRoute, statusChangeConfirmed]);
+  }, [deliverable.status, deliverableStatusesToIgnore, statusChangeConfirmed]);
 
   const onCloseDialog = useCallback(() => {
     setStatusChangeConfirmed(false);

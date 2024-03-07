@@ -61,7 +61,13 @@ const DeliverableView = (props: Props): JSX.Element => {
           <Typography marginBottom={theme.spacing(2)} fontSize='20px' lineHeight='28px' fontWeight={600}>
             {strings.DOCUMENTS}
           </Typography>
-          {!documentLimitReached && <DocumentsUploader {...viewProps} maxFiles={MAX_FILES_LIMIT} />}
+          {!documentLimitReached && (
+            <DocumentsUploader
+              {...viewProps}
+              deliverableStatusesToIgnore={['Not Submitted', 'In Review', 'Needs Translation']}
+              maxFiles={MAX_FILES_LIMIT}
+            />
+          )}
           <DocumentsList {...viewProps} />
         </Card>
       </Box>
