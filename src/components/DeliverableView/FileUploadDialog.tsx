@@ -60,8 +60,8 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
     }
     // close the modal and refresh deliverable even in case of error, there may have been partial successes
     onClose();
-    dispatch(requestGetDeliverable(deliverable.id));
-  }, [deliverable.id, dispatch, onClose, snackbar, uploadResult?.status]);
+    dispatch(requestGetDeliverable({ deliverableId: deliverable.id, projectId: deliverable.projectId }));
+  }, [deliverable.id, deliverable.projectId, dispatch, onClose, snackbar, uploadResult?.status]);
 
   const submit = useCallback(() => {
     setValidate(true);

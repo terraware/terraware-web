@@ -19,12 +19,12 @@ import RejectDialog from './RejectDialog';
 const DeliverableViewWrapper = () => {
   const [showApproveDialog, setShowApproveDialog] = useState<boolean>(false);
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
-  const { deliverableId } = useParams<{ deliverableId: string }>();
+  const { deliverableId, projectId } = useParams<{ deliverableId: string; projectId: string }>();
   const { status: requestStatus, update } = useUpdateDeliverable();
   const theme = useTheme();
   const { activeLocale } = useLocalization();
 
-  const { deliverable } = useFetchDeliverable({ deliverableId: Number(deliverableId) });
+  const { deliverable } = useFetchDeliverable({ deliverableId: Number(deliverableId), projectId: Number(projectId) });
 
   const setStatus = useCallback(
     (status: DeliverableStatusType) => {

@@ -47,7 +47,7 @@ export default function useUpdateDeliverable(): Response {
       snackbar.toastError(strings.GENERIC_ERROR);
     } else if (result?.status === 'success') {
       // refresh deliverable data in store
-      dispatch(requestGetDeliverable(result?.data!));
+      dispatch(requestGetDeliverable({ deliverableId: lastRequest.id, projectId: lastRequest.projectId }));
       if (lastRequest.status === 'Approved') {
         snackbar.toastSuccess(strings.DELIVERABLE_APPROVED);
       } else if (lastRequest.status === 'Rejected') {

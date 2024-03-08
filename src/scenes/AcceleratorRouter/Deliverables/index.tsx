@@ -8,7 +8,7 @@ import DeliverablesList from './DeliverablesList';
 const DeliverablesRouter = () => {
   return (
     <Switch>
-      <Route exact path={APP_PATHS.ACCELERATOR_DELIVERABLES_VIEW}>
+      <Route exact path={APP_PATHS.ACCELERATOR_DELIVERABLE_VIEW}>
         <DeliverableViewWrapper />
       </Route>
       <Route exact path={APP_PATHS.ACCELERATOR_DELIVERABLES}>

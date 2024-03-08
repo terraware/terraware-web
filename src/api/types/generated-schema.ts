@@ -29,10 +29,6 @@ export interface paths {
      */
     get: operations["listDeliverables"];
   };
-  "/api/v1/accelerator/deliverables/{deliverableId}": {
-    /** Gets the details of a single deliverable and its submission documents, if any. */
-    get: operations["getDeliverable"];
-  };
   "/api/v1/accelerator/deliverables/{deliverableId}/documents": {
     /** Uploads a new document to satisfy a deliverable. */
     post: operations["uploadDeliverableDocument"];
@@ -42,6 +38,8 @@ export interface paths {
     get: operations["getDeliverableDocument"];
   };
   "/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}": {
+    /** Gets the details of a single deliverable and its submission documents, if any. */
+    get: operations["getDeliverable"];
     /**
      * Updates the state of a submission from a project.
      * @description Only permitted for users with accelerator admin privileges.
@@ -1746,6 +1744,7 @@ export interface components {
       projectName: string;
       /** @enum {string} */
       status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
+      /** Format: uri */
       templateUrl?: string;
       /** @enum {string} */
       type: "Document";
@@ -2380,14 +2379,14 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
       withdrawals: components["schemas"]["GetWithdrawalPayload"][];
     };
+    GlobalRoleUsersListResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      users: components["schemas"]["UserWithGlobalRolesPayload"][];
+    };
     GoalProgressPayloadV1: {
       /** @enum {string} */
       goal: "NoPoverty" | "ZeroHunger" | "GoodHealth" | "QualityEducation" | "GenderEquality" | "CleanWater" | "AffordableEnergy" | "DecentWork" | "Industry" | "ReducedInequalities" | "SustainableCities" | "ResponsibleConsumption" | "ClimateAction" | "LifeBelowWater" | "LifeOnLand" | "Peace" | "Partnerships";
       progress?: string;
-    };
-    GlobalRoleUsersListResponsePayload: {
-      status: components["schemas"]["SuccessOrError"];
-      users: components["schemas"]["UserWithGlobalRolesPayload"][];
     };
     LineString: WithRequired<{
       type: "LineString";
@@ -3360,9 +3359,6 @@ export interface components {
     SimpleSuccessResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
     };
-    SuccessResponsePayload: {
-      status: components["schemas"]["SuccessOrError"];
-    };
     SpeciesLookupCommonNamePayload: {
       /** @description ISO 639-1 two-letter language code indicating the name's language. Some common names in the server's taxonomic database are not tagged with languages; this value will not be present for those names. */
       language?: string;
@@ -3513,6 +3509,9 @@ export interface components {
      * @enum {string}
      */
     SuccessOrError: "ok" | "error";
+    SuccessResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+    };
     SummarizeAccessionSearchRequestPayload: {
       search?: components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"];
     };
@@ -4220,28 +4219,6 @@ export interface operations {
       };
     };
   };
-  /** Gets the details of a single deliverable and its submission documents, if any. */
-  getDeliverable: {
-    parameters: {
-      path: {
-        deliverableId: number;
-      };
-    };
-    responses: {
-      /** @description The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetDeliverableResponsePayload"];
-        };
-      };
-      /** @description The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
   /** Uploads a new document to satisfy a deliverable. */
   uploadDeliverableDocument: {
     parameters: {
@@ -4285,6 +4262,29 @@ export interface operations {
         };
         content: {
           "application/json": string;
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets the details of a single deliverable and its submission documents, if any. */
+  getDeliverable: {
+    parameters: {
+      path: {
+        deliverableId: number;
+        projectId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetDeliverableResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */

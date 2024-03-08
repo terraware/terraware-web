@@ -8,7 +8,7 @@ import DeliverablesList from './DeliverablesList';
 const DeliverablesRouter = (): JSX.Element => {
   return (
     <Switch>
-      <Route path={APP_PATHS.DELIVERABLES_VIEW}>
+      <Route path={APP_PATHS.DELIVERABLE_VIEW}>
         <DeliverableViewWrapper />
       </Route>
       <Route path={'*'}>
