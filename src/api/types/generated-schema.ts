@@ -3496,7 +3496,7 @@ export interface components {
     SubmissionDocumentPayload: {
       /** Format: date-time */
       createdTime: string;
-      description: string;
+      description?: string;
       /** @enum {string} */
       documentStore: "Dropbox" | "Google";
       /** Format: int64 */
