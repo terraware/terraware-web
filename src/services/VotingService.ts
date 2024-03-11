@@ -3,6 +3,7 @@ import {
   EnterVotingRecordRequestPayload,
   EnterVotingRecordResponsePayload,
   ListVotingRecordsResponsePayload,
+  ProjectVotesPayload,
   VotingRecord,
   VotingRecordsData,
 } from 'src/types/Voting';
@@ -17,9 +18,9 @@ const ENDPOINT_VOTING = '/api/v1/accelerator/projects/{projectId}/voting';
 
 const httpVoting = HttpService.root(ENDPOINT_VOTING);
 
-let mockListRecordsResponseData: VotingRecord[] = [];
+let mockListRecordsResponseData: ProjectVotesPayload;
 
-const listRecords = async (projectId: number): Promise<Response2<VotingRecord[]>> =>
+const listRecords = async (_projectId: number): Promise<Response2<ProjectVotesPayload>> =>
   new Promise((resolve) => {
     setTimeout(() => {
       resolve({ data: mockListRecordsResponseData, requestSucceeded: true });
@@ -34,7 +35,7 @@ const listRecordsNEXT = async (projectId: number): Promise<Response & VotingReco
     (response) => ({ votes: response?.votes })
   );
 
-const submitVote = async (projectId: number, record: EnterVotingRecordRequestPayload): Promise<Response> =>
+const submitVote = async (_projectId: number, _record: EnterVotingRecordRequestPayload): Promise<Response> =>
   new Promise((resolve) => {
     setTimeout(() => {
       resolve({ requestSucceeded: true });
@@ -56,10 +57,29 @@ const VotingService = {
 
 export default VotingService;
 
-mockListRecordsResponseData = [
-  { field: 'person 1', value: 'yes' },
-  { field: 'person 2', value: 'no' },
-  { field: 'person 3', value: 'conditional' },
-  { field: 'person 4', value: 'yes' },
-  { field: 'person 5', value: 'no' },
-];
+// TODO: remove mock data once BE is ready
+mockListRecordsResponseData = {
+  projectId: 1,
+  phases: [
+    {
+      cohortPhase: 'phase 1',
+      votes: [
+        { userId: 1, voteOption: 'yes', email: 'person1@example.com', firstName: '', lastName: '' },
+        { userId: 2, voteOption: 'no', email: 'person2@example.com', firstName: '', lastName: '' },
+        { userId: 3, voteOption: 'conditional', email: 'person3@example.com', firstName: '', lastName: '' },
+        { userId: 4, voteOption: 'yes', email: 'person4@example.com', firstName: '', lastName: '' },
+        { userId: 5, voteOption: 'no', email: 'person5@example.com', firstName: '', lastName: '' },
+      ],
+    },
+    {
+      cohortPhase: 'phase 2',
+      votes: [
+        { userId: 1, voteOption: 'yes', email: 'person1@example.com', firstName: '', lastName: '' },
+        { userId: 2, voteOption: 'no', email: 'person2@example.com', firstName: '', lastName: '' },
+        { userId: 3, voteOption: 'yes', email: 'person3@example.com', firstName: '', lastName: '' },
+        { userId: 4, voteOption: 'yes', email: 'person4@example.com', firstName: '', lastName: '' },
+        { userId: 5, voteOption: 'yes', email: 'person5@example.com', firstName: '', lastName: '' },
+      ],
+    },
+  ],
+};
