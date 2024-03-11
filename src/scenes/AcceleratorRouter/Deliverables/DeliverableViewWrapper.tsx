@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Box, useTheme } from '@mui/material';
@@ -9,8 +9,6 @@ import useUpdateDeliverable from 'src/components/DeliverableView/useUpdateDelive
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { useLocalization } from 'src/providers';
-import { requestGetDeliverable } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
-import { useAppDispatch } from 'src/redux/store';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
 
