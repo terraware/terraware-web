@@ -6,16 +6,9 @@ import { Participant } from 'src/types/Participant';
  */
 
 const getParticipants = async (): Promise<Response2<Participant[]>> => {
-  // TODO change this over once BE is done
   return {
     requestSucceeded: true,
-    data: [
-      {
-        id: 1,
-        cohort_id: 12,
-        name: 'CMR_Iroko',
-      },
-    ],
+    data: [],
   };
 };
 

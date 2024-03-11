@@ -28,7 +28,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           type: 'string',
         },
         {
-          key: 'documentCount',
+          key: 'numDocuments',
           name: strings.DOCUMENTS,
           type: 'number',
         },
@@ -38,7 +38,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           type: 'string',
         },
         {
-          key: 'project_name',
+          key: 'projectName',
           name: strings.PROJECT,
           type: 'string',
         },
@@ -63,7 +63,7 @@ const DeliverablesList = () => {
         ? [
             {
               operation: 'field',
-              field: 'participant_id',
+              field: 'participantId',
               type: 'Exact',
               values: [`${participantFilter.participantId}`],
             },
