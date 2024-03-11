@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Box, useTheme } from '@mui/material';
@@ -9,6 +9,8 @@ import useUpdateDeliverable from 'src/components/DeliverableView/useUpdateDelive
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { useLocalization } from 'src/providers';
+import { requestGetDeliverable } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
+import { useAppDispatch } from 'src/redux/store';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
 
@@ -19,12 +21,18 @@ import RejectDialog from './RejectDialog';
 const DeliverableViewWrapper = () => {
   const [showApproveDialog, setShowApproveDialog] = useState<boolean>(false);
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
-  const { deliverableId, projectId } = useParams<{ deliverableId: string; projectId: string }>();
+  const { deliverableId: _deliverableId, projectId: _projectId } = useParams<{
+    deliverableId: string;
+    projectId: string;
+  }>();
   const { status: requestStatus, update } = useUpdateDeliverable();
   const theme = useTheme();
   const { activeLocale } = useLocalization();
 
-  const { deliverable } = useFetchDeliverable({ deliverableId: Number(deliverableId), projectId: Number(projectId) });
+  const deliverableId = Number(_deliverableId);
+  const projectId = Number(_projectId);
+
+  const { deliverable } = useFetchDeliverable({ deliverableId, projectId });
 
   const setStatus = useCallback(
     (status: DeliverableStatusType) => {

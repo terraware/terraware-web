@@ -1,14 +1,11 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { Statuses } from 'src/redux/features/asyncUtils';
 import { requestGetDeliverable } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
-import {
-  selectDeliverable,
-  selectDeliverableFetchRequest,
-} from 'src/redux/features/deliverables/deliverablesSelectors';
+import { selectDeliverableFetchRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Deliverable } from 'src/types/Deliverables';
@@ -33,8 +30,11 @@ export default function useFetchDeliverable({ deliverableId, projectId }: Props)
   const snackbar = useSnackbar();
   const history = useHistory();
   const dispatch = useAppDispatch();
-  const deliverableResult = useAppSelector(selectDeliverableFetchRequest(deliverableId));
-  const deliverableDataResult = useAppSelector(selectDeliverable(deliverableId));
+
+  const [requestId, setRequestId] = useState('');
+  const [deliverable, setDeliverable] = useState<Deliverable>();
+
+  const deliverableResult = useAppSelector(selectDeliverableFetchRequest(requestId));
 
   const goToDeliverables = useCallback(() => {
     history.push(isAcceleratorRoute ? APP_PATHS.ACCELERATOR_DELIVERABLES : APP_PATHS.DELIVERABLES);
@@ -42,7 +42,8 @@ export default function useFetchDeliverable({ deliverableId, projectId }: Props)
 
   useEffect(() => {
     if (!isNaN(deliverableId)) {
-      dispatch(requestGetDeliverable({ deliverableId, projectId }));
+      const request = dispatch(requestGetDeliverable({ deliverableId, projectId }));
+      setRequestId(request.requestId);
     } else {
       goToDeliverables();
     }
@@ -52,14 +53,16 @@ export default function useFetchDeliverable({ deliverableId, projectId }: Props)
     if (deliverableResult?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
       goToDeliverables();
+    } else if (deliverableResult?.status === 'success' && deliverableResult?.data) {
+      setDeliverable(deliverableResult.data);
     }
-  }, [deliverableResult?.status, goToDeliverables, snackbar]);
+  }, [deliverableResult?.status, deliverableResult?.data, goToDeliverables, snackbar]);
 
   return useMemo<Response>(
     () => ({
       status: deliverableResult?.status ?? 'pending',
-      deliverable: deliverableDataResult,
+      deliverable,
     }),
-    [deliverableResult, deliverableDataResult]
+    [deliverableResult, deliverable]
   );
 }

@@ -11,6 +11,7 @@ import { useLocalization } from 'src/providers';
 import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import { selectDeliverablesSearchRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { ListDeliverablesRequestParams } from 'src/services/DeliverablesService';
 import strings from 'src/strings';
 import { DeliverableCategories, DeliverableStatuses, ListDeliverablesElement } from 'src/types/Deliverables';
 import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
@@ -56,7 +57,7 @@ const DeliverablesTable = ({
   const [searchValue, setSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(searchValue, 250);
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>({
-    field: 'deliverableName',
+    field: 'name',
     direction: 'Ascending',
   } as SearchSortOrder);
 
@@ -135,11 +136,16 @@ const DeliverablesTable = ({
   }, [debouncedSearchTerm, filters, extraTableFilters]);
 
   useEffect(() => {
+    const listRequest: ListDeliverablesRequestParams = {};
+    if (organizationId !== -1) {
+      listRequest.organizationId = organizationId;
+    }
+
     const search: SearchNodePayload = getSearchPayload();
     const request = dispatch(
       requestListDeliverables({
         locale: activeLocale,
-        listRequest: { organizationId },
+        listRequest,
         search,
         searchSortOrder,
         searchAndSort,

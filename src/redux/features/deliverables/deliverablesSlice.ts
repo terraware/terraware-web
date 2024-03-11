@@ -35,7 +35,7 @@ export const deliverablesSlice = createSlice({
   initialState: initialStateDeliverables,
   reducers: {},
   extraReducers: (builder) => {
-    buildReducers(requestGetDeliverable, true)(builder);
+    buildReducers(requestGetDeliverable)(builder);
   },
 });
 
