@@ -3,8 +3,34 @@ export type VotingRecord = {
   value: 'yes' | 'no' | 'conditional';
 };
 
+export type UserId = number;
+
+export type ProjectId = number;
+
+export type CohortPhase = string;
+
+export type VoteOption = 'yes' | 'no' | 'conditional';
+
+export type VoteSelection = {
+  userId: UserId;
+  voteOption: VoteOption;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+};
+
+export type CohortVotes = {
+  cohortPhase: CohortPhase;
+  votes: VoteSelection[];
+};
+
+export type ProjectVotesPayload = {
+  projectId: ProjectId;
+  phases: CohortVotes[];
+};
+
 export type ListVotingRecordsResponsePayload = {
-  votes: VotingRecord[];
+  votes: ProjectVotesPayload;
   status: 'ok' | 'error';
 };
 
@@ -23,5 +49,5 @@ export type EnterVotingRecordResponsePayload = {
 };
 
 export type VotingRecordsData = {
-  votes: VotingRecord[] | undefined;
+  votes: ProjectVotesPayload | undefined;
 };
