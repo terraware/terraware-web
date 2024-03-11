@@ -1,3 +1,4 @@
+bbe32316fe Sync up with deliverables backend (#2285)
 fbddf7011e Update deliverable service, redux, types, routes, and hooks according to the new BE types (#2283)
 bd213213fd SW-4972 / SW-4973 Page setup for scoring and voting (#2282)
 19795cb9eb Remove mock cohort modules from accelerator console (#2281)

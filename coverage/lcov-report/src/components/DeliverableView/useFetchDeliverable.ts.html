@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
@@ -128,10 +128,10 @@
 <a name='L63'></a><a href='#L63'>63</a>
 <a name='L64'></a><a href='#L64'>64</a>
 <a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -163,19 +163,14 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -183,6 +178,17 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -193,17 +199,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback, useEffect, useMemo } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 &nbsp;
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { Statuses } from 'src/redux/features/asyncUtils';
 import { requestGetDeliverable } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
-import {
-  selectDeliverable,
-  selectDeliverableFetchRequest,
-} from 'src/redux/features/deliverables/deliverablesSelectors';
+import { selectDeliverableFetchRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Deliverable } from 'src/types/Deliverables';
@@ -228,8 +231,11 @@ export default function <span class="fstat-no" title="function not covered" >use
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
-  const deliverableResult = <span class="cstat-no" title="statement not covered" >useAppSelector(selectDeliverableFetchRequest(deliverableId));</span>
-  const deliverableDataResult = <span class="cstat-no" title="statement not covered" >useAppSelector(selectDeliverable(deliverableId));</span>
+&nbsp;
+  const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
+  const [deliverable, setDeliverable] = <span class="cstat-no" title="statement not covered" >useState&lt;Deliverable&gt;();</span>
+&nbsp;
+  const deliverableResult = <span class="cstat-no" title="statement not covered" >useAppSelector(selectDeliverableFetchRequest(requestId));</span>
 &nbsp;
   const goToDeliverables = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    history.push(isAcceleratorRoute ? APP_PATHS.ACCELERATOR_DELIVERABLES : APP_PATHS.DELIVERABLES);</span>
@@ -237,7 +243,8 @@ export default function <span class="fstat-no" title="function not covered" >use
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!isNaN(deliverableId)) {</span>
-<span class="cstat-no" title="statement not covered" >      dispatch(requestGetDeliverable({ deliverableId, projectId }));</span>
+      const request = <span class="cstat-no" title="statement not covered" >dispatch(requestGetDeliverable({ deliverableId, projectId }));</span>
+<span class="cstat-no" title="statement not covered" >      setRequestId(request.requestId);</span>
     } else {
 <span class="cstat-no" title="statement not covered" >      goToDeliverables();</span>
     }
@@ -247,15 +254,17 @@ export default function <span class="fstat-no" title="function not covered" >use
 <span class="cstat-no" title="statement not covered" >    if (deliverableResult?.status === 'error') {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError(strings.GENERIC_ERROR);</span>
 <span class="cstat-no" title="statement not covered" >      goToDeliverables();</span>
+    } else <span class="cstat-no" title="statement not covered" >if (deliverableResult?.status === 'success' &amp;&amp; deliverableResult?.data) {</span>
+<span class="cstat-no" title="statement not covered" >      setDeliverable(deliverableResult.data);</span>
     }
-  }, [deliverableResult?.status, goToDeliverables, snackbar]);
+  }, [deliverableResult?.status, deliverableResult?.data, goToDeliverables, snackbar]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return useMemo&lt;Response&gt;(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
       status: deliverableResult?.status ?? 'pending',
-      deliverable: deliverableDataResult,
+      deliverable,
     }),
-    [deliverableResult, deliverableDataResult]
+    [deliverableResult, deliverable]
   );
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -265,7 +274,7 @@ export default function <span class="fstat-no" title="function not covered" >use
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-11T16:24:08.787Z
+                at 2024-03-11T22:38:05.406Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
