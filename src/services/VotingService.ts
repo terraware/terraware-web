@@ -13,9 +13,9 @@ import {
 
 // TODO: update endpoints and types once BE is ready
 
-const NEXT_ENDPOINT_VOTING = '/api/v1/accelerator/voting/{projectId}';
+const ENDPOINT_VOTING = '/api/v1/accelerator/projects/{projectId}/voting';
 
-const httpVoting = HttpService.root(NEXT_ENDPOINT_VOTING);
+const httpVoting = HttpService.root(ENDPOINT_VOTING);
 
 let mockListRecordsResponseData: VotingRecord[] = [];
 
