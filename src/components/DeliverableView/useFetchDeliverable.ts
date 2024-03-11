@@ -16,6 +16,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 export type Props = {
   deliverableId: number;
+  projectId: number;
 };
 
 export type Response = {
@@ -27,7 +28,7 @@ export type Response = {
  * Hook to fetch a deliverable.
  * Returns status on request and the fetched deliverable.
  */
-export default function useFetchDeliverable({ deliverableId }: Props): Response {
+export default function useFetchDeliverable({ deliverableId, projectId }: Props): Response {
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const snackbar = useSnackbar();
   const history = useHistory();
@@ -41,11 +42,11 @@ export default function useFetchDeliverable({ deliverableId }: Props): Response 
 
   useEffect(() => {
     if (!isNaN(deliverableId)) {
-      dispatch(requestGetDeliverable(deliverableId));
+      dispatch(requestGetDeliverable({ deliverableId, projectId }));
     } else {
       goToDeliverables();
     }
-  }, [dispatch, deliverableId, goToDeliverables]);
+  }, [dispatch, deliverableId, goToDeliverables, projectId]);
 
   useEffect(() => {
     if (deliverableResult?.status === 'error') {

@@ -6,9 +6,9 @@ import Page from 'src/components/Page';
 import DeliverableView from './DeliverableView';
 
 const DeliverableViewWrapper = () => {
-  const { deliverableId } = useParams<{ deliverableId: string }>();
+  const { deliverableId, projectId } = useParams<{ deliverableId: string; projectId: string }>();
 
-  const { deliverable } = useFetchDeliverable({ deliverableId: Number(deliverableId) });
+  const { deliverable } = useFetchDeliverable({ deliverableId: Number(deliverableId), projectId: Number(projectId) });
 
   if (deliverable) {
     return <DeliverableView deliverable={deliverable} />;

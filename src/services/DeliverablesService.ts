@@ -18,13 +18,12 @@ import { getPromisesResponse } from './utils';
  */
 
 const ENDPOINT_DELIVERABLES = '/api/v1/accelerator/deliverables';
-const ENDPOINT_DELIVERABLE = '/api/v1/accelerator/deliverables/{deliverableId}';
 const ENDPOINT_DELIVERABLE_SUBMISSION = '/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}';
 const ENDPOINT_DELIVERABLE_DOCUMENT_UPLOAD = '/api/v1/accelerator/deliverables/{deliverableId}/documents';
 
 export type ListDeliverablesRequestParams = paths[typeof ENDPOINT_DELIVERABLES]['get']['parameters']['query'];
 export type GetDeliverableResponsePayload =
-  paths[typeof ENDPOINT_DELIVERABLE]['get']['responses'][200]['content']['application/json'];
+  paths[typeof ENDPOINT_DELIVERABLE_SUBMISSION]['get']['responses'][200]['content']['application/json'];
 
 export type UpdateSubmissionRequestPayload =
   paths[typeof ENDPOINT_DELIVERABLE_SUBMISSION]['put']['requestBody']['content']['application/json'];
@@ -32,14 +31,16 @@ export type UpdateSubmissionResponsePayload =
   paths[typeof ENDPOINT_DELIVERABLE_SUBMISSION]['put']['responses'][200]['content']['application/json'];
 
 const httpDeliverables = HttpService.root(ENDPOINT_DELIVERABLES);
-const httpDeliverable = HttpService.root(ENDPOINT_DELIVERABLE);
 const httpDeliverableSubmission = HttpService.root(ENDPOINT_DELIVERABLE_SUBMISSION);
 const httpDocumentUpload = HttpService.root(ENDPOINT_DELIVERABLE_DOCUMENT_UPLOAD);
 
-const get = async (deliverableId: number): Promise<Response & DeliverableData> =>
-  httpDeliverable.get<GetDeliverableResponsePayload, DeliverableData>(
+const get = async (deliverableId: number, projectId: number): Promise<Response & DeliverableData> =>
+  httpDeliverableSubmission.get<GetDeliverableResponsePayload, DeliverableData>(
     {
-      urlReplacements: { '{deliverableId}': `${deliverableId}` },
+      urlReplacements: {
+        '{deliverableId}': `${deliverableId}`,
+        '{projectId}': `${projectId}`,
+      },
     },
     (response) => ({ deliverable: response?.deliverable })
   );

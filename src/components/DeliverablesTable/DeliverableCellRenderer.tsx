@@ -27,8 +27,8 @@ export default function DeliverableCellRenderer(props: RendererProps<TableRowTyp
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const createLinkToDeliverable = (iValue: React.ReactNode | unknown[]) => {
-    const deliverableUrl = isAcceleratorRoute ? APP_PATHS.ACCELERATOR_DELIVERABLES_VIEW : APP_PATHS.DELIVERABLES_VIEW;
-    const to = deliverableUrl.replace(':deliverableId', `${row.id}`);
+    const deliverableUrl = isAcceleratorRoute ? APP_PATHS.ACCELERATOR_DELIVERABLE_VIEW : APP_PATHS.DELIVERABLE_VIEW;
+    const to = deliverableUrl.replace(':deliverableId', `${row.id}`).replace(':projectId', `${row.projectId}`);
     return <Link to={to}>{iValue as React.ReactNode}</Link>;
   };
 
