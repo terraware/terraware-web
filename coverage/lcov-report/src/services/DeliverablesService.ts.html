@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/32</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -179,7 +179,8 @@
 <a name='L114'></a><a href='#L114'>114</a>
 <a name='L115'></a><a href='#L115'>115</a>
 <a name='L116'></a><a href='#L116'>116</a>
-<a name='L117'></a><a href='#L117'>117</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -201,7 +202,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -215,10 +215,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -315,13 +317,12 @@ import { getPromisesResponse } from './utils';
  */
 &nbsp;
 const ENDPOINT_DELIVERABLES = <span class="cstat-no" title="statement not covered" >'/api/v1/accelerator/deliverables';</span>
-const ENDPOINT_DELIVERABLE = <span class="cstat-no" title="statement not covered" >'/api/v1/accelerator/deliverables/{deliverableId}';</span>
 const ENDPOINT_DELIVERABLE_SUBMISSION = <span class="cstat-no" title="statement not covered" >'/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}';</span>
 const ENDPOINT_DELIVERABLE_DOCUMENT_UPLOAD = <span class="cstat-no" title="statement not covered" >'/api/v1/accelerator/deliverables/{deliverableId}/documents';</span>
 &nbsp;
 export type ListDeliverablesRequestParams = paths[typeof ENDPOINT_DELIVERABLES]['get']['parameters']['query'];
 export type GetDeliverableResponsePayload =
-  paths[typeof ENDPOINT_DELIVERABLE]['get']['responses'][200]['content']['application/json'];
+  paths[typeof ENDPOINT_DELIVERABLE_SUBMISSION]['get']['responses'][200]['content']['application/json'];
 &nbsp;
 export type UpdateSubmissionRequestPayload =
   paths[typeof ENDPOINT_DELIVERABLE_SUBMISSION]['put']['requestBody']['content']['application/json'];
@@ -329,14 +330,16 @@ export type UpdateSubmissionResponsePayload =
   paths[typeof ENDPOINT_DELIVERABLE_SUBMISSION]['put']['responses'][200]['content']['application/json'];
 &nbsp;
 const httpDeliverables = <span class="cstat-no" title="statement not covered" >HttpService.root(ENDPOINT_DELIVERABLES);</span>
-const httpDeliverable = <span class="cstat-no" title="statement not covered" >HttpService.root(ENDPOINT_DELIVERABLE);</span>
 const httpDeliverableSubmission = <span class="cstat-no" title="statement not covered" >HttpService.root(ENDPOINT_DELIVERABLE_SUBMISSION);</span>
 const httpDocumentUpload = <span class="cstat-no" title="statement not covered" >HttpService.root(ENDPOINT_DELIVERABLE_DOCUMENT_UPLOAD);</span>
 &nbsp;
-const get = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (deliverableId: number): Promise&lt;Response &amp; DeliverableData&gt; =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  httpDeliverable.get&lt;GetDeliverableResponsePayload, DeliverableData&gt;(</span>
+const get = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (deliverableId: number, projectId: number): Promise&lt;Response &amp; DeliverableData&gt; =&gt;</span>
+<span class="cstat-no" title="statement not covered" >  httpDeliverableSubmission.get&lt;GetDeliverableResponsePayload, DeliverableData&gt;(</span>
     {
-      urlReplacements: { '{deliverableId}': `${deliverableId}` },
+      urlReplacements: {
+        '{deliverableId}': `${deliverableId}`,
+        '{projectId}': `${projectId}`,
+      },
     },
 <span class="fstat-no" title="function not covered" >    (r</span>esponse) =&gt; (<span class="cstat-no" title="statement not covered" >{ deliverable: response?.deliverable })</span>
   );
@@ -418,7 +421,7 @@ export default DeliverablesService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-08T00:11:29.437Z
+                at 2024-03-11T16:24:08.787Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
