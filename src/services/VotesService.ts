@@ -6,7 +6,7 @@ import {
   ProjectVotesResponsePayload,
   UpsertVoteSelection,
   VotingRecordsData,
-} from 'src/types/Voting';
+} from 'src/types/Votes';
 
 /**
  * Accelerator "voting" related services
@@ -62,13 +62,13 @@ const setProjectVotes = async (projectId: number, payload: UpsertVoteSelection):
         entity: payload,
       });
 
-const VotingService = {
+const VotesService = {
   deleteProjectVotes,
   getProjectVotes,
   setProjectVotes,
 };
 
-export default VotingService;
+export default VotesService;
 
 // TODO: remove mock data once BE is ready
 mockListRecordsResponseData = {

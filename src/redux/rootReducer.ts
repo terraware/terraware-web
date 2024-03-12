@@ -49,7 +49,7 @@ import {
   trackingReducer,
 } from './features/tracking/trackingSlice';
 import { userAnalyticsReducer } from './features/user/userAnalyticsSlice';
-import { votingReducer, votingRequestsReducer } from './features/voting/votingSlice';
+import { votesReducer, votesRequestsReducer } from './features/votes/votesSlice';
 
 // assembly of app reducers
 export const reducers = {
@@ -92,8 +92,8 @@ export const reducers = {
   updatePlantingCompleted: updatePlantingCompletedReducer,
   updatePlantingsCompleted: updatePlantingsCompletedReducer,
   userAnalytics: userAnalyticsReducer,
-  voting: votingReducer,
-  votingRequests: votingRequestsReducer,
+  votes: votesReducer,
+  votesRequests: votesRequestsReducer,
 };
 const combinedReducers = combineReducers(reducers);
 

@@ -1,19 +1,19 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { Response2 } from 'src/services/HttpService';
-import VotingService from 'src/services/VotingService';
+import VotesService from 'src/services/VotesService';
 import strings from 'src/strings';
 import {
   DeleteProjectVotesRequestPayload,
   DeleteProjectVotesResponsePayload,
   ProjectVotesResponsePayload,
   UpsertVoteSelection,
-} from 'src/types/Voting';
+} from 'src/types/Votes';
 
 export const requestProjectVotesUpdate = createAsyncThunk(
-  'voting/update',
+  'votes/update',
   async (request: { projectId: number; payload: UpsertVoteSelection }, { rejectWithValue }) => {
-    const response: Response2<ProjectVotesResponsePayload> = await VotingService.setProjectVotes(
+    const response: Response2<ProjectVotesResponsePayload> = await VotesService.setProjectVotes(
       request.projectId,
       request.payload
     );
@@ -27,9 +27,9 @@ export const requestProjectVotesUpdate = createAsyncThunk(
 );
 
 export const requestProjectVotesDelete = createAsyncThunk(
-  'voting/delete',
+  'votes/delete',
   async (request: { projectId: number; payload: DeleteProjectVotesRequestPayload }, { rejectWithValue }) => {
-    const response: Response2<DeleteProjectVotesResponsePayload> = await VotingService.deleteProjectVotes(
+    const response: Response2<DeleteProjectVotesResponsePayload> = await VotesService.deleteProjectVotes(
       request.projectId,
       request.payload
     );

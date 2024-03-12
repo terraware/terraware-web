@@ -1,8 +1,8 @@
 import { ActionReducerMapBuilder, PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import { requestProjectVotesDelete, requestProjectVotesUpdate } from 'src/redux/features/voting/votingAsyncThunks';
-import { ProjectVotesPayload, ProjectVotesResponsePayload } from 'src/types/Voting';
+import { requestProjectVotesDelete, requestProjectVotesUpdate } from 'src/redux/features/votes/votesAsyncThunks';
+import { ProjectVotesPayload, ProjectVotesResponsePayload } from 'src/types/Votes';
 
 // Define a type for the slice state
 type Data = {
@@ -13,8 +13,8 @@ type Data = {
 // Define the initial state
 const initialState: Data = {};
 
-export const votingSlice = createSlice({
-  name: 'votingSlice',
+export const votesSlice = createSlice({
+  name: 'votesSlice',
   initialState,
   reducers: {
     setProjectVotesAction: (state, action: PayloadAction<Data>) => {
@@ -25,16 +25,16 @@ export const votingSlice = createSlice({
   },
 });
 
-export const { setProjectVotesAction } = votingSlice.actions;
-export const votingReducer = votingSlice.reducer;
+export const { setProjectVotesAction } = votesSlice.actions;
+export const votesReducer = votesSlice.reducer;
 
 type ProjectVotesResponsesUnion = ProjectVotesResponsePayload;
 type VotingRequestsState = Record<string, StatusT<ProjectVotesResponsesUnion>>;
 
 const initialVotingRequestsState: VotingRequestsState = {};
 
-export const votingRequestsSlice = createSlice({
-  name: 'votingRequestsSlice',
+export const votesRequestsSlice = createSlice({
+  name: 'votesRequestsSlice',
   initialState: initialVotingRequestsState,
   reducers: {},
   extraReducers: (builder: ActionReducerMapBuilder<VotingRequestsState>) => {
@@ -43,4 +43,4 @@ export const votingRequestsSlice = createSlice({
   },
 });
 
-export const votingRequestsReducer = votingRequestsSlice.reducer;
+export const votesRequestsReducer = votesRequestsSlice.reducer;
