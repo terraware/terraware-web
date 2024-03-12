@@ -74,29 +74,24 @@ const DeliverableViewWrapper = () => {
     [setStatus]
   );
 
-  const optionItems = useMemo(() => {
-    const items: DropdownItem[] = [];
-
-    if (!activeLocale) {
-      return items;
-    }
-
-    if (deliverable?.status !== 'Needs Translation') {
-      items.push({
-        label: strings.formatString(strings.STATUS_WITH_STATUS, strings.NEEDS_TRANSLATION) as string,
-        value: 'needs_translation',
-      });
-    }
-
-    if (deliverable?.status !== 'Not Needed') {
-      items.push({
-        label: strings.formatString(strings.STATUS_WITH_STATUS, strings.NOT_NEEDED) as string,
-        value: 'not_needed',
-      });
-    }
-
-    return items;
-  }, [activeLocale, deliverable?.status]);
+  const optionItems = useMemo(
+    (): DropdownItem[] =>
+      activeLocale
+        ? [
+            {
+              label: strings.formatString(strings.STATUS_WITH_STATUS, strings.NEEDS_TRANSLATION) as string,
+              value: 'needs_translation',
+              disabled: deliverable?.status === 'Needs Translation',
+            },
+            {
+              label: strings.formatString(strings.STATUS_WITH_STATUS, strings.NOT_NEEDED) as string,
+              value: 'not_needed',
+              disabled: deliverable?.status === 'Not Needed',
+            },
+          ]
+        : [],
+    [activeLocale, deliverable?.status]
+  );
 
   const callToAction = useMemo(() => {
     return (
