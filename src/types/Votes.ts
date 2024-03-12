@@ -21,6 +21,7 @@ export type DeleteVoteSelection = {
 
 export type GetProjectVotesResponsePayload = {
   projectId: number;
+  projectName: string;
   phases: PhaseVotes[];
 };
 
