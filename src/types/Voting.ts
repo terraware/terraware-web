@@ -1,33 +1,12 @@
-export type CohortPhase = string;
+type CohortPhase = string;
 
-export type VoteOption = 'yes' | 'no' | 'conditional';
-
-export type VotingRecord = {
-  field: string; // 'person 1', 'person 2', 'person 3'
-  value: 'yes' | 'no' | 'conditional';
-};
-
-export type VoteSelection = {
-  userId: number;
-  voteOption: VoteOption;
-  email?: string;
-  firstName?: string;
-  lastName?: string;
-};
-
-export type CohortVotes = {
+type CohortVotes = {
   cohortPhase: CohortPhase;
   votes: VoteSelection[];
 };
 
-export type ProjectVotesPayload = {
-  projectId: number;
-  phases: CohortVotes[];
-};
-
-export type GetProjectVotesResponsePayload = {
-  votes: ProjectVotesPayload;
-  status: 'ok' | 'error';
+export type DeleteProjectVotesRequestPayload = {
+  options: DeleteVoteSelection;
 };
 
 export type DeleteProjectVotesResponsePayload = {
@@ -40,22 +19,35 @@ export type DeleteVoteSelection = {
   userId: number;
 };
 
-export type DeleteProjectVotesRequestPayload = {
-  options: DeleteVoteSelection;
-};
-
-export type ListVotingRecordsRequestParams = {
+export type ProjectVotesPayload = {
   projectId: number;
+  phases: CohortVotes[];
 };
 
-export type EnterVotingRecordRequestPayload = {
-  voter: string; // User name or ID or email
-  vote: VoteOption;
-  comments: string | null;
-};
-
-export type EnterVotingRecordResponsePayload = {
+export type ProjectVotesResponsePayload = {
+  votes: ProjectVotesPayload;
   status: 'ok' | 'error';
+};
+
+export type UpsertProjectVotesRequestPayload = {
+  votes: UpsertVoteSelection;
+};
+
+export type UpsertVoteSelection = {
+  projectId: number;
+  phase: CohortPhase;
+  userId: number;
+  voteOption: VoteOption;
+};
+
+type VoteOption = 'yes' | 'no' | 'conditional';
+
+type VoteSelection = {
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  userId: number;
+  voteOption: VoteOption;
 };
 
 export type VotingRecordsData = {

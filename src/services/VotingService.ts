@@ -2,11 +2,9 @@ import HttpService, { Response, Response2 } from 'src/services/HttpService';
 import {
   DeleteProjectVotesRequestPayload,
   DeleteProjectVotesResponsePayload,
-  EnterVotingRecordRequestPayload,
-  EnterVotingRecordResponsePayload,
-  GetProjectVotesResponsePayload,
   ProjectVotesPayload,
-  VotingRecord,
+  ProjectVotesResponsePayload,
+  UpsertVoteSelection,
   VotingRecordsData,
 } from 'src/types/Voting';
 
@@ -43,24 +41,24 @@ const getProjectVotes = async (_projectId: number): Promise<Response2<ProjectVot
   });
 
 const getProjectVotesNEXT = async (projectId: number): Promise<Response & VotingRecordsData> =>
-  httpVoting.get<GetProjectVotesResponsePayload, VotingRecordsData>(
+  httpVoting.get<ProjectVotesResponsePayload, VotingRecordsData>(
     {
       urlReplacements: { '{projectId}': `${projectId}` },
     },
     (response) => ({ votes: response?.votes })
   );
 
-const submitVote = async (_projectId: number, _record: EnterVotingRecordRequestPayload): Promise<Response> =>
+const setProjectVotes = async (_projectId: number, _payload: UpsertVoteSelection): Promise<Response> =>
   new Promise((resolve) => {
     setTimeout(() => {
       resolve({ requestSucceeded: true });
     }, 300);
   });
 
-const submitVoteNEXT = async (projectId: number, record: VotingRecord): Promise<Response> =>
-  httpVoting.put2<EnterVotingRecordResponsePayload>({
+const setProjectVotesNEXT = async (projectId: number, payload: UpsertVoteSelection): Promise<Response> =>
+  httpVoting.put2<ProjectVotesResponsePayload>({
     urlReplacements: { '{projectId}': `${projectId}` },
-    entity: record,
+    entity: payload,
   });
 
 const VotingService = {
@@ -68,8 +66,8 @@ const VotingService = {
   deleteProjectVotesNEXT,
   getProjectVotes,
   getProjectVotesNEXT,
-  submitVote,
-  submitVoteNEXT,
+  setProjectVotes,
+  setProjectVotesNEXT,
 };
 
 export default VotingService;
