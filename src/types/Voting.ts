@@ -15,8 +15,8 @@ export type DeleteProjectVotesResponsePayload = components['schemas']['SimpleSuc
 
 export type DeleteVoteSelection = {
   projectId: number;
-  phase: CohortPhase;
-  userId: number;
+  phase?: CohortPhase;
+  userId?: number;
 };
 
 export type ProjectVotesPayload = {
@@ -37,7 +37,7 @@ export type UpsertVoteSelection = {
   projectId: number;
   phase: CohortPhase;
   userId: number;
-  voteOption: VoteOption;
+  voteOption?: VoteOption;
 };
 
 type VoteOption = 'yes' | 'no' | 'conditional';
@@ -47,7 +47,7 @@ type VoteSelection = {
   firstName?: string;
   lastName?: string;
   userId: number;
-  voteOption: VoteOption;
+  voteOption?: VoteOption;
 };
 
 export type VotingRecordsData = {
