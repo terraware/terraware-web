@@ -45,6 +45,7 @@ export default function NavBar({
   const isCheckinRoute = useRouteMatch(APP_PATHS.CHECKIN + '/');
   const isContactUsRoute = useRouteMatch(APP_PATHS.CONTACT_US + '/');
   const isDeliverablesRoute = useRouteMatch(APP_PATHS.DELIVERABLES + '/');
+  const isDeliverableViewRoute = useRouteMatch(APP_PATHS.DELIVERABLE_VIEW + '/');
   const isHomeRoute = useRouteMatch(APP_PATHS.HOME + '/');
   const isPeopleRoute = useRouteMatch(APP_PATHS.PEOPLE + '/');
   const isSpeciesRoute = useRouteMatch(APP_PATHS.SPECIES + '/');
@@ -270,7 +271,7 @@ export default function NavBar({
             icon='iconSubmit'
             selected={!!isDeliverablesRoute}
             onClick={() => {
-              closeAndNavigateTo(isDeliverablesRoute ? '' : APP_PATHS.DELIVERABLES);
+              closeAndNavigateTo(isDeliverablesRoute && !isDeliverableViewRoute ? '' : APP_PATHS.DELIVERABLES);
             }}
             id='deliverables'
           />
