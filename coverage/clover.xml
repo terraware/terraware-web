@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1710266593265" clover="3.2.0">
-  <project timestamp="1710266593265" name="All files">
-    <metrics statements="17399" coveredstatements="667" conditionals="11064" coveredconditionals="215" methods="5422" coveredmethods="154" elements="33885" coveredelements="1036" complexity="0" loc="17399" ncloc="17399" packages="150" files="723" classes="723"/>
+<coverage generated="1710267794620" clover="3.2.0">
+  <project timestamp="1710267794620" name="All files">
+    <metrics statements="17405" coveredstatements="667" conditionals="11070" coveredconditionals="215" methods="5421" coveredmethods="154" elements="33896" coveredelements="1036" complexity="0" loc="17405" ncloc="17405" packages="150" files="723" classes="723"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="121" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -7371,17 +7371,24 @@
       </file>
     </package>
     <package name="src.redux.features">
-      <metrics statements="8" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="4" coveredmethods="0"/>
+      <metrics statements="15" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="4" coveredmethods="0"/>
       <file name="asyncUtils.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/asyncUtils.ts">
-        <metrics statements="8" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <metrics statements="15" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="10" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
-        <line num="20" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="21" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
+        <line num="24" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="30" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.redux.features.accessions">
@@ -7565,7 +7572,7 @@
       </file>
     </package>
     <package name="src.redux.features.deliverables">
-      <metrics statements="50" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="17" coveredmethods="0"/>
+      <metrics statements="49" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="16" coveredmethods="0"/>
       <file name="deliverablesAsyncThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/deliverables/deliverablesAsyncThunks.ts">
         <metrics statements="24" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
@@ -7604,26 +7611,25 @@
         <line num="14" count="0" type="stmt"/>
       </file>
       <file name="deliverablesSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/deliverables/deliverablesSlice.ts">
-        <metrics statements="19" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <metrics statements="18" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="38" count="0" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
         <line num="44" count="0" type="stmt"/>
-        <line num="48" count="0" type="stmt"/>
-        <line num="49" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="60" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
         <line num="66" count="0" type="stmt"/>
-        <line num="68" count="0" type="stmt"/>
-        <line num="73" count="0" type="stmt"/>
-        <line num="74" count="0" type="stmt"/>
-        <line num="78" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.redux.features.draftPlantingSite">

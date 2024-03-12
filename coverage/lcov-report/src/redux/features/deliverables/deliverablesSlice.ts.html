@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -134,14 +134,7 @@
 <a name='L69'></a><a href='#L69'>69</a>
 <a name='L70'></a><a href='#L70'>70</a>
 <a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a>
-<a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a>
-<a name='L77'></a><a href='#L77'>77</a>
-<a name='L78'></a><a href='#L78'>78</a>
-<a name='L79'></a><a href='#L79'>79</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L72'></a><a href='#L72'>72</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -173,30 +166,23 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -221,7 +207,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createSlice } from '@reduxjs/toolkit';
 &nbsp;
-import { StatusT, buildReducers, setStatus } from 'src/redux/features/asyncUtils';
+import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import {
   requestGetDeliverable,
   requestListDeliverables,
@@ -251,30 +237,23 @@ export const deliverablesSearchReducer = <span class="cstat-no" title="statement
  * Can be accessed by a request ID or by a deliverable/project ID string
  */
 const initialStateDeliverables: { [key: number | string]: StatusT&lt;Deliverable&gt; } = <span class="cstat-no" title="statement not covered" >{};</span>
-export const makeDeliverableProjectIdKey = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(d</span>eliverableId: number, projectId: number) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  `d${deliverableId}-p${projectId}`;</span>
+&nbsp;
+type DeliverableProjectIdArg = { deliverableId: number; projectId: number };
+export const deliverableCompositeKeyFn = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(a</span>rg: unknown): string =&gt; {</span>
+  const castArg = <span class="cstat-no" title="statement not covered" >arg as DeliverableProjectIdArg;</span>
+<span class="cstat-no" title="statement not covered" >  if (!(castArg.deliverableId &amp;&amp; castArg.projectId)) {</span>
+<span class="cstat-no" title="statement not covered" >    return '';</span>
+  }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return `d${castArg.deliverableId}-p${castArg.projectId}`;</span>
+};
 &nbsp;
 export const deliverablesSlice = <span class="cstat-no" title="statement not covered" >createSlice({</span>
   name: 'deliverablesSlice',
   initialState: initialStateDeliverables,
   reducers: {},
   extraReducers: <span class="fstat-no" title="function not covered" >(b</span>uilder) =&gt; {
-<span class="cstat-no" title="statement not covered" >    builder</span>
-      .addCase(requestGetDeliverable.pending, setStatus('pending'))
-      .addCase(requestGetDeliverable.fulfilled, <span class="fstat-no" title="function not covered" >(s</span>tate, action) =&gt; {
-<span class="cstat-no" title="statement not covered" >        setStatus('success')(state, action);</span>
-&nbsp;
-        // Additionally store the deliverable at a predictable location so consumers unaware of
-        // the request ID can refresh their data if the deliverable is updated
-        const { deliverableId, projectId } = <span class="cstat-no" title="statement not covered" >action.meta.arg;</span>
-<span class="cstat-no" title="statement not covered" >        if (action.payload) {</span>
-<span class="cstat-no" title="statement not covered" >          state[makeDeliverableProjectIdKey(deliverableId, projectId)] = {</span>
-            status: 'success',
-            data: action.payload,
-          };
-        }
-      })
-      .addCase(requestGetDeliverable.rejected, setStatus('error'));
+<span class="cstat-no" title="statement not covered" >    buildReducers(requestGetDeliverable, true, deliverableCompositeKeyFn)(builder);</span>
   },
 });
 &nbsp;
@@ -304,7 +283,7 @@ export const deliverablesEditReducer = <span class="cstat-no" title="statement n
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-12T18:03:12.759Z
+                at 2024-03-12T18:23:14.107Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
