@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { StatusT, buildReducers, setStatus } from 'src/redux/features/asyncUtils';
+import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import {
   requestGetDeliverable,
   requestListDeliverables,
@@ -30,30 +30,23 @@ export const deliverablesSearchReducer = deliverablesListSlice.reducer;
  * Can be accessed by a request ID or by a deliverable/project ID string
  */
 const initialStateDeliverables: { [key: number | string]: StatusT<Deliverable> } = {};
-export const makeDeliverableProjectIdKey = (deliverableId: number, projectId: number) =>
-  `d${deliverableId}-p${projectId}`;
+
+type DeliverableProjectIdArg = { deliverableId: number; projectId: number };
+export const deliverableCompositeKeyFn = (arg: unknown): string => {
+  const castArg = arg as DeliverableProjectIdArg;
+  if (!(castArg.deliverableId && castArg.projectId)) {
+    return '';
+  }
+
+  return `d${castArg.deliverableId}-p${castArg.projectId}`;
+};
 
 export const deliverablesSlice = createSlice({
   name: 'deliverablesSlice',
   initialState: initialStateDeliverables,
   reducers: {},
   extraReducers: (builder) => {
-    builder
-      .addCase(requestGetDeliverable.pending, setStatus('pending'))
-      .addCase(requestGetDeliverable.fulfilled, (state, action) => {
-        setStatus('success')(state, action);
-
-        // Additionally store the deliverable at a predictable location so consumers unaware of
-        // the request ID can refresh their data if the deliverable is updated
-        const { deliverableId, projectId } = action.meta.arg;
-        if (action.payload) {
-          state[makeDeliverableProjectIdKey(deliverableId, projectId)] = {
-            status: 'success',
-            data: action.payload,
-          };
-        }
-      })
-      .addCase(requestGetDeliverable.rejected, setStatus('error'));
+    buildReducers(requestGetDeliverable, true, deliverableCompositeKeyFn)(builder);
   },
 });
 

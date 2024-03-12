@@ -1,6 +1,6 @@
 import { RootState } from 'src/redux/rootReducer';
 
-import { makeDeliverableProjectIdKey } from './deliverablesSlice';
+import { deliverableCompositeKeyFn } from './deliverablesSlice';
 
 export const selectDeliverablesSearchRequest = (requestId: string) => (state: RootState) =>
   state.deliverablesSearch[requestId];
@@ -8,7 +8,7 @@ export const selectDeliverablesSearchRequest = (requestId: string) => (state: Ro
 export const selectDeliverableFetchRequest = (requestId: string) => (state: RootState) => state.deliverables[requestId];
 
 export const selectDeliverableData = (deliverableId: number, projectId: number) => (state: RootState) =>
-  state.deliverables[makeDeliverableProjectIdKey(deliverableId, projectId)]?.data;
+  state.deliverables[deliverableCompositeKeyFn({ deliverableId, projectId })]?.data;
 
 export const selectDeliverablesEditRequest = (requestId: string) => (state: RootState) =>
   state.deliverablesEdit[requestId];
