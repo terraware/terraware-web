@@ -1,3 +1,4 @@
+8230f9ebf9 SW-4975: FE - Voting mock redux and service layer (#2286)
 66aecd07da Change 'Approve Deliverable' CTA to 'Approve' in the accelerator deliverable view (#2292)
 e773079a6f Enhance useArgAsKey functionality for composite keys (#2289)
 2889e67e98 Fix deliverable refresh on update (#2287)
