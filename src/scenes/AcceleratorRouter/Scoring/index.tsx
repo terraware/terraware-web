@@ -1,19 +1,24 @@
-import { useParams } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 
-import Page from 'src/components/Page';
+import { APP_PATHS } from 'src/constants';
 
-import useScoreList from './useScoreList';
+import ScorecardEditView from './ScorecardEditView';
+import ScorecardView from './ScorecardView';
 
-const Scoring = () => {
-  const pathParams = useParams<{ projectId: string }>();
-  const projectId = Number(pathParams.projectId);
-
-  const scores = useScoreList(projectId);
-  // This goes away when the view is implemented
-  // tslint:disable:no-console
-  console.log(scores);
-
-  return <Page title={`Scoring for project ${projectId}`} />;
+const DeliverablesRouter = () => {
+  return (
+    <Switch>
+      <Route exact path={APP_PATHS.ACCELERATOR_SCORING}>
+        <ScorecardView />
+      </Route>
+      <Route exact path={APP_PATHS.ACCELERATOR_SCORING_EDIT}>
+        <ScorecardEditView />
+      </Route>
+      <Route path={'*'}>
+        <Redirect to={APP_PATHS.ACCELERATOR_SCORING} />
+      </Route>
+    </Switch>
+  );
 };
 
-export default Scoring;
+export default DeliverablesRouter;

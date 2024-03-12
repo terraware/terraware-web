@@ -2,6 +2,7 @@ import strings from 'src/strings';
 
 // This will all be updated with real types when the BE is done
 export type Scorecard = {
+  modifiedTime: string | null;
   phase: string;
   scores: Score[];
 };
@@ -52,5 +53,6 @@ export const getScoreCategory = (value: ScoreCategory): string => {
 };
 
 export type ScoresData = {
+  projectName: string;
   scorecards: Scorecard[];
 };
