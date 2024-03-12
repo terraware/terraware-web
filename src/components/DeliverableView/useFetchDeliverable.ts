@@ -5,7 +5,10 @@ import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { Statuses } from 'src/redux/features/asyncUtils';
 import { requestGetDeliverable } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
-import { selectDeliverableFetchRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
+import {
+  selectDeliverableData,
+  selectDeliverableFetchRequest,
+} from 'src/redux/features/deliverables/deliverablesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Deliverable } from 'src/types/Deliverables';
@@ -35,6 +38,7 @@ export default function useFetchDeliverable({ deliverableId, projectId }: Props)
   const [deliverable, setDeliverable] = useState<Deliverable>();
 
   const deliverableResult = useAppSelector(selectDeliverableFetchRequest(requestId));
+  const deliverableData = useAppSelector(selectDeliverableData(deliverableId, projectId));
 
   const goToDeliverables = useCallback(() => {
     history.push(isAcceleratorRoute ? APP_PATHS.ACCELERATOR_DELIVERABLES : APP_PATHS.DELIVERABLES);
@@ -57,6 +61,12 @@ export default function useFetchDeliverable({ deliverableId, projectId }: Props)
       setDeliverable(deliverableResult.data);
     }
   }, [deliverableResult?.status, deliverableResult?.data, goToDeliverables, snackbar]);
+
+  useEffect(() => {
+    if (deliverableData) {
+      setDeliverable(deliverableData);
+    }
+  }, [deliverableData]);
 
   return useMemo<Response>(
     () => ({
