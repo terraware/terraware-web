@@ -1,5 +1,5 @@
 import { RootState } from 'src/redux/rootReducer';
 
-export const selectProjectVotes = (state: RootState) => state.votes.votes;
+export const selectProjectVotes = (state: RootState, projectId: number) => state.votes[projectId];
 
-export const selectProjectVotesRequest = (state: RootState, requestId: string) => state.votesRequests[requestId];
+export const selectProjectVotesEditRequest = (state: RootState, requestId: string) => state.votesRequests[requestId];
