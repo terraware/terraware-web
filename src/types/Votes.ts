@@ -2,7 +2,7 @@ import { components } from 'src/api/types/generated-schema';
 
 type CohortPhase = string;
 
-type CohortVotes = {
+type PhaseVotes = {
   cohortPhase: CohortPhase;
   votes: VoteSelection[];
 };
@@ -21,7 +21,7 @@ export type DeleteVoteSelection = {
 
 export type ProjectVotesPayload = {
   projectId: number;
-  phases: CohortVotes[];
+  phases: PhaseVotes[];
 };
 
 export type ProjectVotesResponsePayload = {
@@ -30,7 +30,12 @@ export type ProjectVotesResponsePayload = {
 };
 
 export type UpsertProjectVotesRequestPayload = {
-  votes: UpsertVoteSelection;
+  votes: UpsertVoteSelection[];
+};
+
+export type UpsertProjectVotesResponsePayload = {
+  projectId: number;
+  results: UpsertVoteSelection[];
 };
 
 export type UpsertVoteSelection = {

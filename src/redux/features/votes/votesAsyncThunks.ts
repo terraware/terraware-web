@@ -6,14 +6,14 @@ import strings from 'src/strings';
 import {
   DeleteProjectVotesRequestPayload,
   DeleteProjectVotesResponsePayload,
-  ProjectVotesResponsePayload,
-  UpsertVoteSelection,
+  UpsertProjectVotesRequestPayload,
+  UpsertProjectVotesResponsePayload,
 } from 'src/types/Votes';
 
 export const requestProjectVotesUpdate = createAsyncThunk(
   'votes/update',
-  async (request: { projectId: number; payload: UpsertVoteSelection }, { rejectWithValue }) => {
-    const response: Response2<ProjectVotesResponsePayload> = await VotesService.setProjectVotes(
+  async (request: { projectId: number; payload: UpsertProjectVotesRequestPayload }, { rejectWithValue }) => {
+    const response: Response2<UpsertProjectVotesResponsePayload> = await VotesService.setProjectVotes(
       request.projectId,
       request.payload
     );

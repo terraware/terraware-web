@@ -4,7 +4,8 @@ import {
   DeleteProjectVotesResponsePayload,
   ProjectVotesPayload,
   ProjectVotesResponsePayload,
-  UpsertVoteSelection,
+  UpsertProjectVotesRequestPayload,
+  UpsertProjectVotesResponsePayload,
   VotingRecordsData,
 } from 'src/types/Votes';
 
@@ -19,7 +20,7 @@ const ENDPOINT_VOTES = '/api/v1/accelerator/projects/{projectId}/votes';
 
 const httpVoting = HttpService.root(ENDPOINT_VOTES);
 
-let mockListRecordsResponseData: ProjectVotesPayload;
+let mockGetProjectVotesResponseData: ProjectVotesPayload;
 
 const deleteProjectVotes = async (
   projectId: number,
@@ -40,7 +41,7 @@ const getProjectVotes = async (projectId: number): Promise<Response2<ProjectVote
   RETURN_MOCK_VOTING_DATA
     ? new Promise((resolve) => {
         setTimeout(() => {
-          resolve({ data: mockListRecordsResponseData, requestSucceeded: true });
+          resolve({ data: mockGetProjectVotesResponseData, requestSucceeded: true });
         }, 300);
       })
     : httpVoting.get<ProjectVotesResponsePayload, VotingRecordsData>(
@@ -50,7 +51,7 @@ const getProjectVotes = async (projectId: number): Promise<Response2<ProjectVote
         (response) => ({ votes: response?.votes })
       );
 
-const setProjectVotes = async (projectId: number, payload: UpsertVoteSelection): Promise<Response> =>
+const setProjectVotes = async (projectId: number, payload: UpsertProjectVotesRequestPayload): Promise<Response> =>
   RETURN_MOCK_VOTING_DATA
     ? new Promise((resolve) => {
         setTimeout(() => {
@@ -71,7 +72,7 @@ const VotesService = {
 export default VotesService;
 
 // TODO: remove mock data once BE is ready
-mockListRecordsResponseData = {
+mockGetProjectVotesResponseData = {
   projectId: 1,
   phases: [
     {
