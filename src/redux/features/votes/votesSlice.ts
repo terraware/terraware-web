@@ -1,7 +1,11 @@
 import { ActionReducerMapBuilder, PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import { requestProjectVotesDelete, requestProjectVotesUpdate } from 'src/redux/features/votes/votesAsyncThunks';
+import {
+  requestProjectVotesDelete,
+  requestProjectVotesGet,
+  requestProjectVotesUpdate,
+} from 'src/redux/features/votes/votesAsyncThunks';
 import { GetProjectVotesResponse, GetProjectVotesResponsePayload } from 'src/types/Votes';
 
 // Define a type for the slice state
@@ -38,6 +42,7 @@ export const votesRequestsSlice = createSlice({
   initialState: initialVotingRequestsState,
   reducers: {},
   extraReducers: (builder: ActionReducerMapBuilder<VotingRequestsState>) => {
+    buildReducers(requestProjectVotesGet)(builder);
     buildReducers(requestProjectVotesUpdate)(builder);
     buildReducers(requestProjectVotesDelete)(builder);
   },

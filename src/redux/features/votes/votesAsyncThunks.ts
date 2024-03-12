@@ -6,9 +6,20 @@ import strings from 'src/strings';
 import {
   DeleteProjectVotesRequestPayload,
   DeleteProjectVotesResponsePayload,
+  GetProjectVotesResponsePayload,
   UpsertProjectVotesRequestPayload,
   UpsertProjectVotesResponsePayload,
 } from 'src/types/Votes';
+
+export const requestProjectVotesGet = createAsyncThunk('votes/get', async (projectId: number, { rejectWithValue }) => {
+  const response: Response2<GetProjectVotesResponsePayload> = await VotesService.getProjectVotes(projectId);
+
+  if (response.requestSucceeded) {
+    return response.data;
+  }
+
+  return rejectWithValue(strings.GENERIC_ERROR);
+});
 
 export const requestProjectVotesUpdate = createAsyncThunk(
   'votes/update',
