@@ -9,9 +9,7 @@ export type DeleteProjectVotesRequestPayload = {
   options: DeleteVoteSelection;
 };
 
-export type DeleteProjectVotesResponsePayload = {
-  status: 'ok' | 'error';
-};
+export type DeleteProjectVotesResponsePayload = components['schemas']['SimpleSuccessResponsePayload'];
 
 export type DeleteVoteSelection = {
   projectId: number;

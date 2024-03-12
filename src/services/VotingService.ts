@@ -20,10 +20,13 @@ const httpVoting = HttpService.root(ENDPOINT_VOTES);
 
 let mockListRecordsResponseData: ProjectVotesPayload;
 
-const deleteProjectVotes = async (_projectId: number, _payload: DeleteProjectVotesRequestPayload): Promise<Response> =>
+const deleteProjectVotes = async (
+  _projectId: number,
+  _payload: DeleteProjectVotesRequestPayload
+): Promise<DeleteProjectVotesResponsePayload> =>
   new Promise((resolve) => {
     setTimeout(() => {
-      resolve({ requestSucceeded: true });
+      resolve({ status: 'ok' });
     }, 300);
   });
 
