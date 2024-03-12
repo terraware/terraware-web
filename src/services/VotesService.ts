@@ -78,6 +78,7 @@ export default VotesService;
 // TODO: remove mock data once BE is ready
 mockGetProjectVotesResponseData = {
   projectId: 1,
+  projectName: 'Project 1',
   phases: [
     {
       cohortPhase: 'phase 1',
