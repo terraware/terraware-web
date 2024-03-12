@@ -1,18 +1,14 @@
+export type CohortPhase = string;
+
+export type VoteOption = 'yes' | 'no' | 'conditional';
+
 export type VotingRecord = {
   field: string; // 'person 1', 'person 2', 'person 3'
   value: 'yes' | 'no' | 'conditional';
 };
 
-export type UserId = number;
-
-export type ProjectId = number;
-
-export type CohortPhase = string;
-
-export type VoteOption = 'yes' | 'no' | 'conditional';
-
 export type VoteSelection = {
-  userId: UserId;
+  userId: number;
   voteOption: VoteOption;
   email?: string;
   firstName?: string;
@@ -25,7 +21,7 @@ export type CohortVotes = {
 };
 
 export type ProjectVotesPayload = {
-  projectId: ProjectId;
+  projectId: number;
   phases: CohortVotes[];
 };
 
@@ -54,7 +50,7 @@ export type ListVotingRecordsRequestParams = {
 
 export type EnterVotingRecordRequestPayload = {
   voter: string; // User name or ID or email
-  vote: 'yes' | 'no' | 'conditional';
+  vote: VoteOption;
   comments: string | null;
 };
 
