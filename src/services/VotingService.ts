@@ -12,7 +12,8 @@ import {
  * Accelerator "voting" related services
  */
 
-// TODO: update endpoints and types once BE is ready
+// TODO: remove this constant and promises below once BE is ready
+const RETURN_MOCK_VOTING_DATA = true;
 
 const ENDPOINT_VOTES = '/api/v1/accelerator/projects/{projectId}/votes';
 
@@ -21,56 +22,50 @@ const httpVoting = HttpService.root(ENDPOINT_VOTES);
 let mockListRecordsResponseData: ProjectVotesPayload;
 
 const deleteProjectVotes = async (
-  _projectId: number,
-  _payload: DeleteProjectVotesRequestPayload
+  projectId: number,
+  payload: DeleteProjectVotesRequestPayload
 ): Promise<Response2<DeleteProjectVotesResponsePayload>> =>
-  new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({ requestSucceeded: true, data: { status: 'ok' } });
-    }, 300);
-  });
+  RETURN_MOCK_VOTING_DATA
+    ? new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({ data: { status: 'ok' }, requestSucceeded: true });
+        }, 300);
+      })
+    : httpVoting.delete2<DeleteProjectVotesResponsePayload>({
+        urlReplacements: { '{projectId}': `${projectId}` },
+        entity: payload,
+      });
 
-const deleteProjectVotesNEXT = (projectId: number, payload: DeleteProjectVotesRequestPayload) =>
-  httpVoting.delete2<DeleteProjectVotesResponsePayload>({
-    urlReplacements: { '{projectId}': `${projectId}` },
-    entity: payload,
-  });
+const getProjectVotes = async (projectId: number): Promise<Response2<ProjectVotesPayload>> =>
+  RETURN_MOCK_VOTING_DATA
+    ? new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({ data: mockListRecordsResponseData, requestSucceeded: true });
+        }, 300);
+      })
+    : httpVoting.get<ProjectVotesResponsePayload, VotingRecordsData>(
+        {
+          urlReplacements: { '{projectId}': `${projectId}` },
+        },
+        (response) => ({ votes: response?.votes })
+      );
 
-const getProjectVotes = async (_projectId: number): Promise<Response2<ProjectVotesPayload>> =>
-  new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({ data: mockListRecordsResponseData, requestSucceeded: true });
-    }, 300);
-  });
-
-const getProjectVotesNEXT = async (projectId: number): Promise<Response & VotingRecordsData> =>
-  httpVoting.get<ProjectVotesResponsePayload, VotingRecordsData>(
-    {
-      urlReplacements: { '{projectId}': `${projectId}` },
-    },
-    (response) => ({ votes: response?.votes })
-  );
-
-const setProjectVotes = async (_projectId: number, _payload: UpsertVoteSelection): Promise<Response> =>
-  new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({ requestSucceeded: true });
-    }, 300);
-  });
-
-const setProjectVotesNEXT = async (projectId: number, payload: UpsertVoteSelection): Promise<Response> =>
-  httpVoting.put2<ProjectVotesResponsePayload>({
-    urlReplacements: { '{projectId}': `${projectId}` },
-    entity: payload,
-  });
+const setProjectVotes = async (projectId: number, payload: UpsertVoteSelection): Promise<Response> =>
+  RETURN_MOCK_VOTING_DATA
+    ? new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({ requestSucceeded: true });
+        }, 300);
+      })
+    : httpVoting.put2<ProjectVotesResponsePayload>({
+        urlReplacements: { '{projectId}': `${projectId}` },
+        entity: payload,
+      });
 
 const VotingService = {
   deleteProjectVotes,
-  deleteProjectVotesNEXT,
   getProjectVotes,
-  getProjectVotesNEXT,
   setProjectVotes,
-  setProjectVotesNEXT,
 };
 
 export default VotingService;
