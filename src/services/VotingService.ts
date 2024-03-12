@@ -2,7 +2,7 @@ import HttpService, { Response, Response2 } from 'src/services/HttpService';
 import {
   EnterVotingRecordRequestPayload,
   EnterVotingRecordResponsePayload,
-  ListVotingRecordsResponsePayload,
+  GetProjectVotesResponsePayload,
   ProjectVotesPayload,
   VotingRecord,
   VotingRecordsData,
@@ -20,15 +20,15 @@ const httpVoting = HttpService.root(ENDPOINT_VOTES);
 
 let mockListRecordsResponseData: ProjectVotesPayload;
 
-const listRecords = async (_projectId: number): Promise<Response2<ProjectVotesPayload>> =>
+const getProjectVotes = async (_projectId: number): Promise<Response2<ProjectVotesPayload>> =>
   new Promise((resolve) => {
     setTimeout(() => {
       resolve({ data: mockListRecordsResponseData, requestSucceeded: true });
     }, 300);
   });
 
-const listRecordsNEXT = async (projectId: number): Promise<Response & VotingRecordsData> =>
-  httpVoting.get<ListVotingRecordsResponsePayload, VotingRecordsData>(
+const getProjectVotesNEXT = async (projectId: number): Promise<Response & VotingRecordsData> =>
+  httpVoting.get<GetProjectVotesResponsePayload, VotingRecordsData>(
     {
       urlReplacements: { '{projectId}': `${projectId}` },
     },
@@ -49,8 +49,8 @@ const submitVoteNEXT = async (projectId: number, record: VotingRecord): Promise<
   });
 
 const VotingService = {
-  listRecords,
-  listRecordsNEXT,
+  getProjectVotes,
+  getProjectVotesNEXT,
   submitVote,
   submitVoteNEXT,
 };

@@ -29,7 +29,7 @@ export type ProjectVotesPayload = {
   phases: CohortVotes[];
 };
 
-export type ListVotingRecordsResponsePayload = {
+export type GetProjectVotesResponsePayload = {
   votes: ProjectVotesPayload;
   status: 'ok' | 'error';
 };
