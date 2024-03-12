@@ -8,7 +8,7 @@ import {
   DeleteProjectVotesResponsePayload,
   GetProjectVotesResponsePayload,
   UpsertProjectVotesRequestPayload,
-  UpsertProjectVotesResponsePayload,
+  UpsertProjectVotesResponse,
 } from 'src/types/Votes';
 
 export const requestProjectVotesGet = createAsyncThunk('votes/get', async (projectId: number, { rejectWithValue }) => {
@@ -24,7 +24,7 @@ export const requestProjectVotesGet = createAsyncThunk('votes/get', async (proje
 export const requestProjectVotesUpdate = createAsyncThunk(
   'votes/update',
   async (request: { projectId: number; payload: UpsertProjectVotesRequestPayload }, { rejectWithValue }) => {
-    const response: Response2<UpsertProjectVotesResponsePayload> = await VotesService.setProjectVotes(
+    const response: Response2<UpsertProjectVotesResponse> = await VotesService.setProjectVotes(
       request.projectId,
       request.payload
     );
