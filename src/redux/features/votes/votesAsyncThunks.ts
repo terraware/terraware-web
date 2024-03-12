@@ -18,7 +18,7 @@ export const requestProjectVotesUpdate = createAsyncThunk(
       request.payload
     );
 
-    if (response !== null && response.requestSucceeded) {
+    if (response.requestSucceeded) {
       return response.data;
     }
 
@@ -34,7 +34,7 @@ export const requestProjectVotesDelete = createAsyncThunk(
       request.payload
     );
 
-    if (response !== null && response.requestSucceeded) {
+    if (response.requestSucceeded) {
       return response.data;
     }
 
