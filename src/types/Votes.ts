@@ -19,13 +19,13 @@ export type DeleteVoteSelection = {
   userId?: number;
 };
 
-export type ProjectVotesPayload = {
+export type GetProjectVotesResponsePayload = {
   projectId: number;
   phases: PhaseVotes[];
 };
 
-export type ProjectVotesResponsePayload = {
-  votes: ProjectVotesPayload;
+export type GetProjectVotesResponse = {
+  votes: GetProjectVotesResponsePayload;
   status: 'ok' | 'error';
 };
 
@@ -36,6 +36,11 @@ export type UpsertProjectVotesRequestPayload = {
 export type UpsertProjectVotesResponsePayload = {
   projectId: number;
   results: UpsertVoteSelection[];
+};
+
+export type UpsertProjectVotesResponse = {
+  votes: UpsertProjectVotesResponsePayload;
+  status: 'ok' | 'error';
 };
 
 export type UpsertVoteSelection = {
@@ -56,5 +61,5 @@ type VoteSelection = {
 };
 
 export type VotingRecordsData = {
-  votes: ProjectVotesPayload | undefined;
+  votes: GetProjectVotesResponsePayload | undefined;
 };

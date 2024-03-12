@@ -2,12 +2,12 @@ import { ActionReducerMapBuilder, PayloadAction, createSlice } from '@reduxjs/to
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { requestProjectVotesDelete, requestProjectVotesUpdate } from 'src/redux/features/votes/votesAsyncThunks';
-import { ProjectVotesPayload, ProjectVotesResponsePayload } from 'src/types/Votes';
+import { GetProjectVotesResponse, GetProjectVotesResponsePayload } from 'src/types/Votes';
 
 // Define a type for the slice state
 type Data = {
   error?: string;
-  votes?: ProjectVotesPayload;
+  votes?: GetProjectVotesResponsePayload;
 };
 
 // Define the initial state
@@ -28,7 +28,7 @@ export const votesSlice = createSlice({
 export const { setProjectVotesAction } = votesSlice.actions;
 export const votesReducer = votesSlice.reducer;
 
-type ProjectVotesResponsesUnion = ProjectVotesResponsePayload;
+type ProjectVotesResponsesUnion = GetProjectVotesResponse;
 type VotingRequestsState = Record<string, StatusT<ProjectVotesResponsesUnion>>;
 
 const initialVotingRequestsState: VotingRequestsState = {};

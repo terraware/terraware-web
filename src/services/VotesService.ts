@@ -1,9 +1,9 @@
-import HttpService, { Response, Response2 } from 'src/services/HttpService';
+import HttpService, { Response2 } from 'src/services/HttpService';
 import {
   DeleteProjectVotesRequestPayload,
   DeleteProjectVotesResponsePayload,
-  ProjectVotesPayload,
-  ProjectVotesResponsePayload,
+  GetProjectVotesResponse,
+  GetProjectVotesResponsePayload,
   UpsertProjectVotesRequestPayload,
   UpsertProjectVotesResponsePayload,
   VotingRecordsData,
@@ -20,7 +20,8 @@ const ENDPOINT_VOTES = '/api/v1/accelerator/projects/{projectId}/votes';
 
 const httpVoting = HttpService.root(ENDPOINT_VOTES);
 
-let mockGetProjectVotesResponseData: ProjectVotesPayload;
+let mockGetProjectVotesResponseData: GetProjectVotesResponsePayload;
+let mockSetProjectVotesResponseData: UpsertProjectVotesResponsePayload;
 
 const deleteProjectVotes = async (
   projectId: number,
@@ -37,28 +38,31 @@ const deleteProjectVotes = async (
         entity: payload,
       });
 
-const getProjectVotes = async (projectId: number): Promise<Response2<ProjectVotesPayload>> =>
+const getProjectVotes = async (projectId: number): Promise<Response2<GetProjectVotesResponsePayload>> =>
   RETURN_MOCK_VOTING_DATA
     ? new Promise((resolve) => {
         setTimeout(() => {
           resolve({ data: mockGetProjectVotesResponseData, requestSucceeded: true });
         }, 300);
       })
-    : httpVoting.get<ProjectVotesResponsePayload, VotingRecordsData>(
+    : httpVoting.get<GetProjectVotesResponse, VotingRecordsData>(
         {
           urlReplacements: { '{projectId}': `${projectId}` },
         },
         (response) => ({ votes: response?.votes })
       );
 
-const setProjectVotes = async (projectId: number, payload: UpsertProjectVotesRequestPayload): Promise<Response> =>
+const setProjectVotes = async (
+  projectId: number,
+  payload: UpsertProjectVotesRequestPayload
+): Promise<Response2<UpsertProjectVotesResponsePayload>> =>
   RETURN_MOCK_VOTING_DATA
     ? new Promise((resolve) => {
         setTimeout(() => {
-          resolve({ requestSucceeded: true });
+          resolve({ data: mockSetProjectVotesResponseData, requestSucceeded: true });
         }, 300);
       })
-    : httpVoting.put2<ProjectVotesResponsePayload>({
+    : httpVoting.put2<UpsertProjectVotesResponsePayload>({
         urlReplacements: { '{projectId}': `${projectId}` },
         entity: payload,
       });
@@ -95,5 +99,16 @@ mockGetProjectVotesResponseData = {
         { userId: 5, voteOption: 'yes', email: 'person5@example.com', firstName: '', lastName: '' },
       ],
     },
+  ],
+};
+
+mockSetProjectVotesResponseData = {
+  projectId: 1,
+  results: [
+    { projectId: 1, phase: 'phase 1', userId: 1, voteOption: 'yes' },
+    { projectId: 1, phase: 'phase 1', userId: 2, voteOption: 'no' },
+    { projectId: 1, phase: 'phase 1', userId: 3, voteOption: 'conditional' },
+    { projectId: 1, phase: 'phase 1', userId: 4, voteOption: 'yes' },
+    { projectId: 1, phase: 'phase 1', userId: 5, voteOption: 'no' },
   ],
 };
