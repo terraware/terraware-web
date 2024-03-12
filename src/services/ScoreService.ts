@@ -1,6 +1,6 @@
 import { components } from 'src/api/types/generated-schema';
 import { Response } from 'src/services/HttpService';
-import { Score, ScoresData } from 'src/types/Score';
+import { Score, Scorecard, ScoresData } from 'src/types/Score';
 
 /**
  * Accelerator project scoring related services
@@ -21,41 +21,76 @@ export type UpdateScoresResponsePayload = Response & components['schemas']['Simp
 
 // const httpScores = HttpService.root(ENDPOINT_SCORES);
 
-let mockScores: Score[] = [
+let mockScorecards: Scorecard[] = [
   {
-    field: 'Calculated Score',
-    value: null,
-    type: 'system',
-    inputType: 'number',
-    phase: 0,
+    phase: 'Phase 0',
+    scores: [
+      {
+        category: 'Calculated',
+        value: 1.5,
+        type: 'system',
+        inputType: 'number',
+      },
+      {
+        category: 'Carbon',
+        value: 1,
+        type: 'user',
+        inputType: 'dropdown',
+      },
+      {
+        category: 'Carbon',
+        value: 'Good project with good folks ready to do good work... almost perfect',
+        type: 'user',
+        inputType: 'text',
+      },
+      {
+        category: 'Finance',
+        value: 2,
+        type: 'user',
+        inputType: 'dropdown',
+      },
+      {
+        category: 'Finance',
+        value: 'Excellent finances, great opportunity',
+        type: 'user',
+        inputType: 'text',
+      },
+    ],
   },
   {
-    field: 'Carbon Score',
-    value: 1,
-    type: 'user',
-    inputType: 'dropdown',
-    phase: 0,
-  },
-  {
-    field: 'Carbon Qualitative',
-    value: 'Good project with good folks ready to do good work... almost perfect',
-    type: 'user',
-    inputType: 'text',
-    phase: 0,
-  },
-  {
-    field: 'Finance Score',
-    value: null,
-    type: 'user',
-    inputType: 'dropdown',
-    phase: 0,
-  },
-  {
-    field: 'Finance Qualitative',
-    value: null,
-    type: 'user',
-    inputType: 'text',
-    phase: 0,
+    phase: 'Phase 1',
+    scores: [
+      {
+        category: 'Calculated',
+        value: null,
+        type: 'system',
+        inputType: 'number',
+      },
+      {
+        category: 'Carbon',
+        value: null,
+        type: 'user',
+        inputType: 'dropdown',
+      },
+      {
+        category: 'Carbon',
+        value: null,
+        type: 'user',
+        inputType: 'text',
+      },
+      {
+        category: 'Finance',
+        value: null,
+        type: 'user',
+        inputType: 'dropdown',
+      },
+      {
+        category: 'Finance',
+        value: null,
+        type: 'user',
+        inputType: 'text',
+      },
+    ],
   },
 ];
 
@@ -75,7 +110,7 @@ const list = async (projectId: number): Promise<Response & ScoresData> => {
 
   return {
     requestSucceeded: true,
-    scores: mockScores,
+    scorecards: mockScorecards,
   };
 };
 
@@ -99,11 +134,16 @@ const update = async (projectId: number, scores: Score[]): Promise<UpdateScoresR
 
   // This goes away when the BE API is created
   payload.scores.forEach((score: Score) => {
-    mockScores = mockScores.map((_score: Score) => {
-      if (_score.field !== score.field) {
-        return _score;
-      }
-      return score;
+    mockScorecards = mockScorecards.map((scorecard: Scorecard) => {
+      return {
+        ...scorecard,
+        scores: scorecard.scores.map((_score: Score) => {
+          if (_score.category !== score.category && _score.type !== score.type) {
+            return _score;
+          }
+          return score;
+        }),
+      };
     });
   });
 

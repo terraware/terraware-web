@@ -1,14 +1,20 @@
 import strings from 'src/strings';
 
 // This will all be updated with real types when the BE is done
+export type Scorecard = {
+  phase: string;
+  scores: Score[];
+};
 
 export type Score = {
-  field: string;
+  category: ScoreCategory;
   inputType: 'dropdown' | 'text' | 'number';
-  phase: number;
   type: 'user' | 'system';
-  value: ScoreValue | string | null;
+  value: ScoreValue | string | null | number;
 };
+
+export type ScoreCategory = 'Calculated' | 'Carbon' | 'Finance' | 'Forestry' | 'Legal';
+export const ScoreCategories: ScoreCategory[] = ['Calculated', 'Carbon', 'Finance', 'Forestry', 'Legal'];
 
 export type ScoreValue = 2 | 1 | 0 | -1 | -2;
 export const ScoreValues: ScoreValue[] = [2, 1, 0, -1, -2];
@@ -30,6 +36,21 @@ export const getScoreValue = (value: ScoreValue): string => {
   }
 };
 
+export const getScoreCategory = (value: ScoreCategory): string => {
+  switch (value) {
+    case 'Carbon':
+      return strings.CARBON;
+    case 'Finance':
+      return strings.FINANCE;
+    case 'Forestry':
+      return strings.FORESTRY;
+    case 'Legal':
+      return strings.LEGAL;
+    default:
+      return `${value}`;
+  }
+};
+
 export type ScoresData = {
-  scores: Score[];
+  scorecards: Scorecard[];
 };

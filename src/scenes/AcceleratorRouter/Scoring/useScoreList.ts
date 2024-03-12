@@ -5,12 +5,12 @@ import { requestListScores } from 'src/redux/features/scores/scoresAsyncThunks';
 import { selectScoreListRequest } from 'src/redux/features/scores/scoresSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { Score } from 'src/types/Score';
+import { Scorecard } from 'src/types/Score';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export type Response = {
   status: Statuses;
-  scores?: Score[];
+  scorecards?: Scorecard[];
 };
 
 /**
@@ -22,7 +22,7 @@ export default function useScoreList(projectId: number): Response {
   const dispatch = useAppDispatch();
 
   const [requestId, setRequestId] = useState('');
-  const [scores, setScores] = useState<Score[]>();
+  const [scores, setScores] = useState<Scorecard[]>();
 
   const scoreListResult = useAppSelector(selectScoreListRequest(requestId));
 
@@ -36,8 +36,8 @@ export default function useScoreList(projectId: number): Response {
   useEffect(() => {
     if (scoreListResult?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
-    } else if (scoreListResult?.status === 'success' && scoreListResult?.data?.scores) {
-      setScores(scoreListResult.data.scores);
+    } else if (scoreListResult?.status === 'success' && scoreListResult?.data?.scorecards) {
+      setScores(scoreListResult.data.scorecards);
     }
   }, [scoreListResult?.status, scoreListResult?.data, snackbar]);
 
