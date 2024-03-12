@@ -1,3 +1,5 @@
+2889e67e98 Fix deliverable refresh on update (#2287)
+0d79be8dd7 Show menu items to set the deliverable status to the current status, but disable them (#2290)
 bbe32316fe Sync up with deliverables backend (#2285)
 fbddf7011e Update deliverable service, redux, types, routes, and hooks according to the new BE types (#2283)
 bd213213fd SW-4972 / SW-4973 Page setup for scoring and voting (#2282)
