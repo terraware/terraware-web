@@ -1,5 +1,7 @@
 import HttpService, { Response, Response2 } from 'src/services/HttpService';
 import {
+  DeleteProjectVotesRequestPayload,
+  DeleteProjectVotesResponsePayload,
   EnterVotingRecordRequestPayload,
   EnterVotingRecordResponsePayload,
   GetProjectVotesResponsePayload,
@@ -19,6 +21,19 @@ const ENDPOINT_VOTES = '/api/v1/accelerator/projects/{projectId}/votes';
 const httpVoting = HttpService.root(ENDPOINT_VOTES);
 
 let mockListRecordsResponseData: ProjectVotesPayload;
+
+const deleteProjectVotes = async (_projectId: number, _payload: DeleteProjectVotesRequestPayload): Promise<Response> =>
+  new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ requestSucceeded: true });
+    }, 300);
+  });
+
+const deleteProjectVotesNEXT = (projectId: number, payload: DeleteProjectVotesRequestPayload) =>
+  httpVoting.delete2<DeleteProjectVotesResponsePayload>({
+    urlReplacements: { '{projectId}': `${projectId}` },
+    entity: payload,
+  });
 
 const getProjectVotes = async (_projectId: number): Promise<Response2<ProjectVotesPayload>> =>
   new Promise((resolve) => {
@@ -49,6 +64,8 @@ const submitVoteNEXT = async (projectId: number, record: VotingRecord): Promise<
   });
 
 const VotingService = {
+  deleteProjectVotes,
+  deleteProjectVotesNEXT,
   getProjectVotes,
   getProjectVotesNEXT,
   submitVote,

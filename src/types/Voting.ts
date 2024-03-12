@@ -34,6 +34,20 @@ export type GetProjectVotesResponsePayload = {
   status: 'ok' | 'error';
 };
 
+export type DeleteProjectVotesResponsePayload = {
+  status: 'ok' | 'error';
+};
+
+export type DeleteVoteSelection = {
+  projectId: number;
+  phase: CohortPhase;
+  userId: number;
+};
+
+export type DeleteProjectVotesRequestPayload = {
+  options: DeleteVoteSelection;
+};
+
 export type ListVotingRecordsRequestParams = {
   projectId: number;
 };
