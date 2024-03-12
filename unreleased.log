@@ -1,3 +1,4 @@
+66aecd07da Change 'Approve Deliverable' CTA to 'Approve' in the accelerator deliverable view (#2292)
 e773079a6f Enhance useArgAsKey functionality for composite keys (#2289)
 2889e67e98 Fix deliverable refresh on update (#2287)
 0d79be8dd7 Show menu items to set the deliverable status to the current status, but disable them (#2290)
