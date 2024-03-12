@@ -1,3 +1,5 @@
+import { components } from 'src/api/types/generated-schema';
+
 type CohortPhase = string;
 
 type CohortVotes = {
