@@ -30,7 +30,7 @@ export const requestProjectVotesUpdate = createAsyncThunk(
     );
 
     if (response.requestSucceeded) {
-      return response.data;
+      return response?.data?.status === 'ok' ? true : false;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);
@@ -46,7 +46,7 @@ export const requestProjectVotesDelete = createAsyncThunk(
     );
 
     if (response.requestSucceeded) {
-      return response.data;
+      return response?.data?.status === 'ok' ? true : false;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);
