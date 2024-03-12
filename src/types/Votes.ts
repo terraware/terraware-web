@@ -1,8 +1,8 @@
 import { components } from 'src/api/types/generated-schema';
 
-type CohortPhase = string;
+export type CohortPhase = string;
 
-type PhaseVotes = {
+export type PhaseVotes = {
   cohortPhase: CohortPhase;
   votes: VoteSelection[];
 };
@@ -51,9 +51,9 @@ export type UpsertVoteSelection = {
   voteOption?: VoteOption;
 };
 
-type VoteOption = 'yes' | 'no' | 'conditional';
+export type VoteOption = 'yes' | 'no' | 'conditional';
 
-type VoteSelection = {
+export type VoteSelection = {
   email?: string;
   firstName?: string;
   lastName?: string;
