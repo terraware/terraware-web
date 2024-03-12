@@ -23,10 +23,10 @@ let mockListRecordsResponseData: ProjectVotesPayload;
 const deleteProjectVotes = async (
   _projectId: number,
   _payload: DeleteProjectVotesRequestPayload
-): Promise<DeleteProjectVotesResponsePayload> =>
+): Promise<Response2<DeleteProjectVotesResponsePayload>> =>
   new Promise((resolve) => {
     setTimeout(() => {
-      resolve({ status: 'ok' });
+      resolve({ requestSucceeded: true, data: { status: 'ok' } });
     }, 300);
   });
 
