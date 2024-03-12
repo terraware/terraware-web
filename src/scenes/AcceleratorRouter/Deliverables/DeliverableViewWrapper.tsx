@@ -108,7 +108,7 @@ const DeliverableViewWrapper = () => {
         <Button
           disabled={deliverable?.status === 'Approved'}
           id='approveDeliverable'
-          label={strings.APPROVE_DELIVERABLE}
+          label={strings.APPROVE}
           onClick={() => void setShowApproveDialog(true)}
           size='medium'
         />
