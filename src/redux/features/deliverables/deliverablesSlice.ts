@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
+import { StatusT, buildReducers, setStatus } from 'src/redux/features/asyncUtils';
 import {
   requestGetDeliverable,
   requestListDeliverables,
