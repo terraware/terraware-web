@@ -5,6 +5,7 @@ import {
   GetProjectVotesResponse,
   GetProjectVotesResponsePayload,
   UpsertProjectVotesRequestPayload,
+  UpsertProjectVotesResponse,
   UpsertProjectVotesResponsePayload,
   VotingRecordsData,
 } from 'src/types/Votes';
@@ -55,14 +56,14 @@ const getProjectVotes = async (projectId: number): Promise<Response2<GetProjectV
 const setProjectVotes = async (
   projectId: number,
   payload: UpsertProjectVotesRequestPayload
-): Promise<Response2<UpsertProjectVotesResponsePayload>> =>
+): Promise<Response2<UpsertProjectVotesResponse>> =>
   RETURN_MOCK_VOTING_DATA
     ? new Promise((resolve) => {
         setTimeout(() => {
-          resolve({ data: mockSetProjectVotesResponseData, requestSucceeded: true });
+          resolve({ data: { status: 'ok', votes: mockSetProjectVotesResponseData }, requestSucceeded: true });
         }, 300);
       })
-    : httpVoting.put2<UpsertProjectVotesResponsePayload>({
+    : httpVoting.put2<UpsertProjectVotesResponse>({
         urlReplacements: { '{projectId}': `${projectId}` },
         entity: payload,
       });
