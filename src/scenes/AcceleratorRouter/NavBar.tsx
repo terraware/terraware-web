@@ -19,11 +19,14 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
   const { isDesktop } = useDeviceInfo();
   const history = useHistory();
 
-  const isAcceleratorCohortsRoute = useRouteMatch(APP_PATHS.ACCELERATOR_COHORTS);
-  const isAcceleratorDeliverablesRoute = useRouteMatch(APP_PATHS.ACCELERATOR_DELIVERABLES);
-  const isAcceleratorModuleContentRoute = useRouteMatch(APP_PATHS.ACCELERATOR_MODULE_CONTENT);
-  const isAcceleratorOverviewRoute = useRouteMatch(APP_PATHS.ACCELERATOR_OVERVIEW);
-  const isAcceleratorPeopleRoute = useRouteMatch(APP_PATHS.ACCELERATOR_PEOPLE);
+  const isCohortsRoute = useRouteMatch(APP_PATHS.ACCELERATOR_COHORTS);
+  const isDeliverablesRoute = useRouteMatch(APP_PATHS.ACCELERATOR_DELIVERABLES);
+  const isModuleContentRoute = useRouteMatch(APP_PATHS.ACCELERATOR_MODULE_CONTENT);
+  const isOverviewRoute = useRouteMatch(APP_PATHS.ACCELERATOR_OVERVIEW);
+  const isScoringRoute = useRouteMatch(APP_PATHS.ACCELERATOR_SCORING);
+  const isVotingRoute = useRouteMatch(APP_PATHS.ACCELERATOR_VOTING);
+  const isVotingEditRoute = useRouteMatch(APP_PATHS.ACCELERATOR_VOTING_EDIT);
+  const isPeopleRoute = useRouteMatch(APP_PATHS.ACCELERATOR_PEOPLE);
 
   const navigate = (url: string) => {
     history.push(url);
@@ -65,7 +68,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
         id='overview'
         label={strings.OVERVIEW}
         onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_OVERVIEW)}
-        selected={!!isAcceleratorOverviewRoute}
+        selected={!!isOverviewRoute || !!isScoringRoute || !!isVotingRoute || !!isVotingEditRoute}
       />
 
       <NavSection />
@@ -75,7 +78,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
         id='cohorts'
         label={strings.COHORTS}
         onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_COHORTS)}
-        selected={!!isAcceleratorCohortsRoute}
+        selected={!!isCohortsRoute}
       />
 
       <NavItem
@@ -83,7 +86,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
         id='deliverables'
         label={strings.DELIVERABLES}
         onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_DELIVERABLES)}
-        selected={!!isAcceleratorDeliverablesRoute}
+        selected={!!isDeliverablesRoute}
       />
 
       <NavSection />
@@ -93,7 +96,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
         id='people'
         label={strings.PEOPLE}
         onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_PEOPLE)}
-        selected={!!isAcceleratorPeopleRoute}
+        selected={!!isPeopleRoute}
       />
 
       <NavItem
@@ -101,7 +104,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
         id='module-content'
         label={strings.MODULE_CONTENT}
         onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_MODULE_CONTENT)}
-        selected={!!isAcceleratorModuleContentRoute}
+        selected={!!isModuleContentRoute}
       />
 
       <NavFooter>

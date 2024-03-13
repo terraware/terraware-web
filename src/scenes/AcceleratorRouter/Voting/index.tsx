@@ -1,12 +1,24 @@
-import { useParams } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 
-import Page from 'src/components/Page';
+import { APP_PATHS } from 'src/constants';
 
-const Voting = () => {
-  const pathParams = useParams<{ projectId: string }>();
-  const projectId = Number(pathParams.projectId);
+import VotingView from './Voting';
+import VotingEdit from './VotingEdit';
 
-  return <Page title={`Voting for project ${projectId}`} />;
+const VotingRouter = () => {
+  return (
+    <Switch>
+      <Route exact path={APP_PATHS.ACCELERATOR_VOTING}>
+        <VotingView />
+      </Route>
+      <Route exact path={APP_PATHS.ACCELERATOR_VOTING_EDIT}>
+        <VotingEdit />
+      </Route>
+      <Route path={'*'}>
+        <Redirect to={APP_PATHS.ACCELERATOR_OVERVIEW} />
+      </Route>
+    </Switch>
+  );
 };
 
-export default Voting;
+export default VotingRouter;
