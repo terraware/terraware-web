@@ -85,7 +85,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         {organizations && organizations.length > 0 && (
           <>
             <div className={classes.separator} />
-            {isAcceleratorRoute && featureFlagAccelerator && user && <AcceleratorBreadcrumbs />}
+            {featureFlagAccelerator && user && <AcceleratorBreadcrumbs />}
             {!isAcceleratorRoute && <OrganizationsDropdown />}
           </>
         )}

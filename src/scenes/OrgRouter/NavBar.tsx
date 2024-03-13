@@ -10,7 +10,8 @@ import NavSection from 'src/components/common/Navbar/NavSection';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
-import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { NurseryWithdrawalService } from 'src/services';
 import DeliverablesService from 'src/services/DeliverablesService';
 import ReportService, { Reports } from 'src/services/ReportService';
@@ -34,10 +35,10 @@ export default function NavBar({
   const [showNurseryWithdrawals, setShowNurseryWithdrawals] = useState<boolean>(false);
   const [reports, setReports] = useState<Reports>([]);
   const [hasDeliverables, setHasDeliverables] = useState<boolean>(false);
-  const { isDesktop } = useDeviceInfo();
+  const { isDesktop, isMobile } = useDeviceInfo();
   const history = useHistory();
   const featureFlagAccelerator = isEnabled('Accelerator');
-  const { user } = useUser();
+  const { isAllowedViewConsole } = useAcceleratorConsole();
   const { activeLocale } = useLocalization();
 
   const isAccessionDashboardRoute = useRouteMatch(APP_PATHS.SEEDS_DASHBOARD + '/');
@@ -175,12 +176,12 @@ export default function NavBar({
       setShowNavBar={setShowNavBar as React.Dispatch<React.SetStateAction<boolean>>}
       backgroundTransparent={backgroundTransparent}
     >
-      {featureFlagAccelerator && user && (
+      {isMobile && featureFlagAccelerator && isAllowedViewConsole && (
         <NavItem
-          label={strings.ACCELERATOR_ADMIN}
+          label={strings.ACCELERATOR_CONSOLE}
           icon='home'
           onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_OVERVIEW)}
-          id='home'
+          id='console'
         />
       )}
       <NavItem
@@ -265,7 +266,7 @@ export default function NavBar({
       )}
       {hasDeliverables && (
         <>
-          <NavSection title={strings.PARTICIPANTS.toUpperCase()} />
+          <NavSection title={strings.ACCELERATOR.toUpperCase()} />
           <NavItem
             label={strings.DELIVERABLES}
             icon='iconSubmit'
