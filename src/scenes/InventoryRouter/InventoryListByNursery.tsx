@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { CircularProgress, Container, Theme } from '@mui/material';
+import { CircularProgress, Container, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { TableColumnType } from '@terraware/web-components';
 
@@ -69,6 +69,7 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
     direction: 'Ascending',
   });
   const [filters, setFilters] = useForm<InventoryFiltersType>({});
+  const theme = useTheme();
 
   const onSearchSortOrder = (order: SearchSortOrder) => {
     const isClientSorted = BE_SORTED_FIELDS.indexOf(order.field) === -1;
@@ -122,6 +123,16 @@ export default function InventoryListByNursery({ setReportData }: InventoryListB
 
   return (
     <Card flushMobile>
+      <Typography
+        sx={{
+          fontSize: '20px',
+          fontWeight: 600,
+          color: theme.palette.TwClrTxt,
+          marginBottom: theme.spacing(2),
+        }}
+      >
+        {strings.BY_NURSERY}
+      </Typography>
       {showResults ? (
         <InventoryTable
           results={searchResults || []}
