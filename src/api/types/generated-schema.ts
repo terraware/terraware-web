@@ -1742,8 +1742,6 @@ export interface components {
       phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
       /** @description A safeguard flag that must be set to `true` for deleting all voters in a project phase. */
       phaseDelete?: boolean;
-      /** Format: int64 */
-      projectId: number;
       /**
        * Format: int64
        * @description If set to `null`, all voters in the phase will be removed.
@@ -4058,8 +4056,6 @@ export interface components {
     UpsertProjectVotesRequestPayload: {
       /** @enum {string} */
       phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
-      /** Format: int64 */
-      projectId: number;
       votes: components["schemas"]["UpsertVoteSelection"][];
     };
     UpsertProjectVotesResponsePayload: {
