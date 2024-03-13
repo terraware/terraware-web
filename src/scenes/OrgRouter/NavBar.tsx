@@ -34,7 +34,7 @@ export default function NavBar({
   const [showNurseryWithdrawals, setShowNurseryWithdrawals] = useState<boolean>(false);
   const [reports, setReports] = useState<Reports>([]);
   const [hasDeliverables, setHasDeliverables] = useState<boolean>(false);
-  const { isDesktop } = useDeviceInfo();
+  const { isDesktop, isMobile } = useDeviceInfo();
   const history = useHistory();
   const featureFlagAccelerator = isEnabled('Accelerator');
   const { user } = useUser();
@@ -175,6 +175,14 @@ export default function NavBar({
       setShowNavBar={setShowNavBar as React.Dispatch<React.SetStateAction<boolean>>}
       backgroundTransparent={backgroundTransparent}
     >
+      {isMobile && featureFlagAccelerator && user && (
+        <NavItem
+          label={strings.ACCELERATOR_CONSOLE}
+          icon='home'
+          onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_OVERVIEW)}
+          id='console'
+        />
+      )}
       <NavItem
         label={strings.HOME}
         icon='home'
