@@ -38,17 +38,20 @@ const Voting = () => {
 
   // construct the bread crumbs back to originating context
   const crumbs: Crumb[] = useMemo(
-    () => [
-      {
-        name: strings.PROJECTS,
-        to: APP_PATHS.ACCELERATOR_OVERVIEW, // TODO switch to project management page holding the project id
-      },
-      {
-        name: projectName ?? '--',
-        to: APP_PATHS.ACCELERATOR_SCORING.replace(':projectId', `${projectId}`), // TODO switch to project management page holding the project id
-      },
-    ],
-    [projectId, projectName]
+    () =>
+      activeLocale
+        ? [
+            {
+              name: strings.PROJECTS,
+              to: APP_PATHS.ACCELERATOR_OVERVIEW, // TODO switch to project management page holding the project id
+            },
+            {
+              name: projectName ?? '--',
+              to: APP_PATHS.ACCELERATOR_SCORING.replace(':projectId', `${projectId}`), // TODO switch to project management page holding the project id
+            },
+          ]
+        : [],
+    [activeLocale, projectId, projectName]
   );
 
   // vote decision, pick the majority or undefined if no majority
