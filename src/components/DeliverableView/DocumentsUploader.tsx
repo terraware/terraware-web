@@ -1,13 +1,13 @@
 import { useCallback, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
-import { FileChooser } from '@terraware/web-components';
 
 import StatusChangeConfirmationDialog from 'src/components/DeliverableView/StatusChangeConfirmationDialog';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
 
+import FileChooser from '../FileChooser';
 import FileUploadDialog from './FileUploadDialog';
 import { ViewProps } from './types';
 

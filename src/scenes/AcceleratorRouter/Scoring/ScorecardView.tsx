@@ -69,7 +69,12 @@ const ScorecardView = () => {
   return (
     <Grid container spacing={theme.spacing(1)}>
       <Grid item xs={10}>
-        <Page title={`${projectName} ${strings.SCORES}`} crumbs={crumbs} rightComponent={rightComponent}>
+        <Page
+          title={`${projectName} ${strings.SCORES}`}
+          crumbs={crumbs}
+          hierarchicalCrumbs={false}
+          rightComponent={rightComponent}
+        >
           {status === 'pending' && <BusySpinner />}
           <Card style={{ width: '100%' }}>
             <Box display='flex' flexDirection='row' flexGrow={0} margin={theme.spacing(3)} justifyContent='right'>
