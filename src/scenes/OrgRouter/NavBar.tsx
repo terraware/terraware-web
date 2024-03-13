@@ -15,7 +15,7 @@ import { NurseryWithdrawalService } from 'src/services';
 import DeliverablesService from 'src/services/DeliverablesService';
 import ReportService, { Reports } from 'src/services/ReportService';
 import strings from 'src/strings';
-import { isAdmin } from 'src/utils/organization';
+import { isAdmin, isManagerOrHigher } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 type NavBarProps = {
@@ -119,7 +119,7 @@ export default function NavBar({
       });
       setHasDeliverables(!!(response && response.deliverables.length > 0));
     };
-    if (featureFlagAccelerator && isAdmin(selectedOrganization)) {
+    if (featureFlagAccelerator && isManagerOrHigher(selectedOrganization)) {
       fetchDeliverables();
     } else {
       setHasDeliverables(false);
