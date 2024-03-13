@@ -149,12 +149,12 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
       ManagedLocationTypes.filter((locationType: ManagedLocationType) => locationTypes[locationType])
     );
     if (response.requestSucceeded && response.organization) {
-      reloadOrganizations();
-      history.push({ pathname: APP_PATHS.HOME });
       snackbar.pageSuccess(
         isDesktop ? strings.ORGANIZATION_CREATED_MSG_DESKTOP : strings.ORGANIZATION_CREATED_MSG,
         strings.formatString(strings.ORGANIZATION_CREATED_TITLE, response.organization.name)
       );
+      reloadOrganizations();
+      history.push({ pathname: APP_PATHS.HOME });
     } else {
       snackbar.toastError(strings.GENERIC_ERROR, strings.ORGANIZATION_CREATE_FAILED);
     }
