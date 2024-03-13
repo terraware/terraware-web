@@ -1,3 +1,4 @@
+01b8bd5ffe SW-4998 Voting page with mock redux/data (#2295)
 e552a82512 SW-5027 Allow navigating back to deliverables list from detail deliverable view (#2293)
 fa9d13d96f Update README to add link to remote BE instructions (#2288)
 8230f9ebf9 SW-4975: FE - Voting mock redux and service layer (#2286)
