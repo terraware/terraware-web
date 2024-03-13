@@ -5,7 +5,7 @@ import { APP_PATHS } from 'src/constants';
 import ScorecardEditView from './ScorecardEditView';
 import ScorecardView from './ScorecardView';
 
-const DeliverablesRouter = () => {
+const ScoringRouter = () => {
   return (
     <Switch>
       <Route exact path={APP_PATHS.ACCELERATOR_SCORING}>
@@ -21,4 +21,4 @@ const DeliverablesRouter = () => {
   );
 };
 
-export default DeliverablesRouter;
+export default ScoringRouter;

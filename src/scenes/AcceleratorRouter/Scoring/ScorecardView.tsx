@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { BusySpinner, Button } from '@terraware/web-components';
@@ -21,40 +21,49 @@ const ScorecardView = () => {
   const { projectName, scorecards, status } = useScoreList(projectId);
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-
-  // This goes away when the view is implemented
-  // tslint:disable:no-console
-  console.log(scorecards);
+  const history = useHistory();
 
   const goToScoresEdit = useCallback(() => {
-    console.log('go to edit');
-  }, []);
+    history.push({ pathname: APP_PATHS.ACCELERATOR_VOTING_EDIT.replace(':projectId', `${projectId}`) });
+  }, [history, projectId]);
+
+  const goToVoting = useCallback(() => {
+    history.push({ pathname: APP_PATHS.ACCELERATOR_VOTING.replace(':projectId', `${projectId}`) });
+  }, [history, projectId]);
 
   const crumbs: Crumb[] = useMemo(
-    () => [
-      {
-        name: activeLocale ? `${strings.PROJECTS} / ${projectName}` : '',
-        to: APP_PATHS.ACCELERATOR_PROJECT.replace(':projectId', `${projectId}`),
-      },
-    ],
+    () =>
+      activeLocale
+        ? [
+            {
+              name: strings.PROJECTS,
+              to: APP_PATHS.ACCELERATOR_PROJECT_LIST, // TODO switch to project management page holding the project id
+            },
+            {
+              name: projectName || '',
+              to: APP_PATHS.ACCELERATOR_PROJECT.replace(':projectId', `${projectId}`),
+            },
+          ]
+        : [],
     [activeLocale, projectId, projectName]
   );
 
   const rightComponent = useMemo(
-    () => (
-      <Box display='flex' flexDirection='row' flexGrow={0} marginRight={theme.spacing(3)} justifyContent='right'>
-        <Button
-          id='editScores'
-          icon='iconEdit'
-          label={strings.EDIT_SCORES}
-          priority='primary'
-          onClick={goToScoresEdit}
-          size='medium'
-          type='productive'
-        />
-      </Box>
-    ),
-    [goToScoresEdit, theme]
+    () =>
+      activeLocale && (
+        <Box display='flex' flexDirection='row' flexGrow={0} marginRight={theme.spacing(3)} justifyContent='right'>
+          <Button
+            id='editScores'
+            icon='iconEdit'
+            label={strings.EDIT_SCORES}
+            priority='primary'
+            onClick={goToScoresEdit}
+            size='medium'
+            type='productive'
+          />
+        </Box>
+      ),
+    [activeLocale, goToScoresEdit, theme]
   );
 
   return (
@@ -68,7 +77,7 @@ const ScorecardView = () => {
                 id='goToVotes'
                 label={strings.SEE_IC_VOTES}
                 priority='secondary'
-                onClick={goToScoresEdit}
+                onClick={goToVoting}
                 size='medium'
                 type='productive'
               />
