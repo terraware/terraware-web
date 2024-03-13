@@ -10,7 +10,8 @@ import NavSection from 'src/components/common/Navbar/NavSection';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
-import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { NurseryWithdrawalService } from 'src/services';
 import DeliverablesService from 'src/services/DeliverablesService';
 import ReportService, { Reports } from 'src/services/ReportService';
@@ -37,7 +38,7 @@ export default function NavBar({
   const { isDesktop, isMobile } = useDeviceInfo();
   const history = useHistory();
   const featureFlagAccelerator = isEnabled('Accelerator');
-  const { user } = useUser();
+  const { isAllowedViewConsole } = useAcceleratorConsole();
   const { activeLocale } = useLocalization();
 
   const isAccessionDashboardRoute = useRouteMatch(APP_PATHS.SEEDS_DASHBOARD + '/');
@@ -175,7 +176,7 @@ export default function NavBar({
       setShowNavBar={setShowNavBar as React.Dispatch<React.SetStateAction<boolean>>}
       backgroundTransparent={backgroundTransparent}
     >
-      {isMobile && featureFlagAccelerator && user && (
+      {isMobile && featureFlagAccelerator && isAllowedViewConsole && (
         <NavItem
           label={strings.ACCELERATOR_CONSOLE}
           icon='home'
