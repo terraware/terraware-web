@@ -24,6 +24,9 @@ export const useAccessions = (record?: { accessionId?: number }, speciesId?: num
         availableAccessions.find((accession: SearchResponseAccession) => accession.id === `${record.accessionId}`)
       );
     }
+    else{
+      setSelectedAccession(undefined);
+    }
   }, [availableAccessions, record?.accessionId]);
 
   useEffect(() => {
