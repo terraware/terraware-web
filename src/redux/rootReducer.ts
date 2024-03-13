@@ -38,6 +38,7 @@ import {
   updatePlantingCompletedReducer,
   updatePlantingsCompletedReducer,
 } from './features/plantings/plantingsSlice';
+import { scoreListReducer, scoresUpdateReducer } from './features/scores/scoresSlice';
 import { snackbarReducer } from './features/snackbar/snackbarSlice';
 import { speciesReducer } from './features/species/speciesSlice';
 import { subLocationsReducer } from './features/subLocations/subLocationsSlice';
@@ -82,6 +83,8 @@ export const reducers = {
   reportsSettings: reportsSettingsReducer,
   rescheduleObservation: rescheduleObservationReducer,
   scheduleObservation: scheduleObservationReducer,
+  scoreList: scoreListReducer,
+  scoresUpdate: scoresUpdateReducer,
   sitePopulation: sitePopulationReducer,
   siteReportedPlantsResults: siteReportedPlantsReducer,
   snackbar: snackbarReducer,
