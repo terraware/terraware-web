@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import { Grid, Typography, useTheme } from '@mui/material';
-import { Badge } from '@terraware/web-components';
+import { Badge, Textfield } from '@terraware/web-components';
 import { BadgeProps } from '@terraware/web-components/components/Badge';
 
 import { useLocalization } from 'src/providers';
@@ -10,13 +10,13 @@ import { VoteOption } from 'src/types/Votes';
 
 // Vote info component
 export type VoteInfoProps = {
-  style?: Record<string, any>;
+  conditionalInfo?: string;
   title: string | string[];
   // TODO; add condition text
   voteOption?: VoteOption;
 };
 
-const VoteInfo = ({ style, title, voteOption }: VoteInfoProps): JSX.Element => {
+const VoteInfo = ({ conditionalInfo, title, voteOption }: VoteInfoProps): JSX.Element => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
 
@@ -70,14 +70,49 @@ const VoteInfo = ({ style, title, voteOption }: VoteInfoProps): JSX.Element => {
   ]);
 
   return (
-    <Grid alignItems='center' display='flex' flexDirection='row' flexGrow={1}>
+    <>
+      <Row
+        leftChild={
+          <Typography color={theme.palette.TwClrBaseBlack} fontSize='16px' fontWeight={400} lineHeight='24px'>
+            {title}
+          </Typography>
+        }
+        rightChild={badgeProps && <Badge {...badgeProps} />}
+      />
+      {/* This is mostly for the top row alignment where title and badge are aligned by center. */}
+      {voteOption === 'conditional' && !!conditionalInfo && (
+        <Row
+          rightChild={
+            <Textfield
+              display
+              id='vote-conditional-info'
+              label={''}
+              preserveNewlines
+              type='textarea'
+              value={conditionalInfo}
+            />
+          }
+          style={{ marginTop: theme.spacing(1) }}
+        />
+      )}
+    </>
+  );
+};
+
+type Props = {
+  leftChild?: React.ReactNode;
+  rightChild?: React.ReactNode;
+  style?: Record<string, string | number>;
+};
+
+const Row = ({ leftChild, rightChild, style }: Props): JSX.Element => {
+  return (
+    <Grid alignItems='center' display='flex' flexDirection='row' flexGrow={1} sx={style}>
       <Grid item xs={4}>
-        <Typography color={theme.palette.TwClrBaseBlack} fontSize='16px' fontWeight={400} lineHeight='24px'>
-          {title}
-        </Typography>
+        {leftChild}
       </Grid>
       <Grid item xs={8}>
-        {badgeProps && <Badge {...badgeProps} />}
+        {rightChild}
       </Grid>
     </Grid>
   );

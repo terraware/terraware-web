@@ -54,6 +54,7 @@ export type UpsertVoteSelection = {
 export type VoteOption = 'yes' | 'no' | 'conditional';
 
 export type VoteSelection = {
+  conditionalInfo?: string;
   email?: string;
   firstName?: string;
   lastName?: string;
