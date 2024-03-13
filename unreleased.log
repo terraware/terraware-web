@@ -1,3 +1,4 @@
+881135d4ce SW-4974 Implement mock data, redux, service layer, and hooks for listing and updating scores for a project (#2291)
 01b8bd5ffe SW-4998 Voting page with mock redux/data (#2295)
 e552a82512 SW-5027 Allow navigating back to deliverables list from detail deliverable view (#2293)
 fa9d13d96f Update README to add link to remote BE instructions (#2288)
