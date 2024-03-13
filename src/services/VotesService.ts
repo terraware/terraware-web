@@ -1,14 +1,5 @@
-import HttpService, { Response2 } from 'src/services/HttpService';
-import {
-  DeleteProjectVotesRequestPayload,
-  DeleteProjectVotesResponsePayload,
-  GetProjectVotesResponse,
-  GetProjectVotesResponsePayload,
-  UpsertProjectVotesRequestPayload,
-  UpsertProjectVotesResponse,
-  UpsertProjectVotesResponsePayload,
-  VotingRecordsData,
-} from 'src/types/Votes';
+import HttpService, { Response, Response2 } from 'src/services/HttpService';
+import { GetProjectVotesResponsePayload, UpsertProjectVotesRequestPayload, VotingRecordsData } from 'src/types/Votes';
 
 /**
  * Accelerator "voting" related services
@@ -21,55 +12,35 @@ const ENDPOINT_VOTES = '/api/v1/accelerator/projects/{projectId}/votes';
 
 const httpVoting = HttpService.root(ENDPOINT_VOTES);
 
-let mockGetProjectVotesResponseData: GetProjectVotesResponsePayload;
-let mockSetProjectVotesResponseData: UpsertProjectVotesResponsePayload;
+let mockGetProjectVotesResponseData: VotingRecordsData;
 
-const deleteProjectVotes = async (
-  projectId: number,
-  payload: DeleteProjectVotesRequestPayload
-): Promise<Response2<DeleteProjectVotesResponsePayload>> =>
-  RETURN_MOCK_VOTING_DATA
-    ? new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({ data: { status: 'ok' }, requestSucceeded: true });
-        }, 300);
-      })
-    : httpVoting.delete2<DeleteProjectVotesResponsePayload>({
-        urlReplacements: { '{projectId}': `${projectId}` },
-        entity: payload,
-      });
-
-const getProjectVotes = async (projectId: number): Promise<Response2<GetProjectVotesResponsePayload>> =>
+const getProjectVotes = async (projectId: number): Promise<Response2<VotingRecordsData>> =>
   RETURN_MOCK_VOTING_DATA
     ? new Promise((resolve) => {
         setTimeout(() => {
           resolve({ data: mockGetProjectVotesResponseData, requestSucceeded: true });
         }, 300);
       })
-    : httpVoting.get<GetProjectVotesResponse, VotingRecordsData>(
+    : await httpVoting.get<GetProjectVotesResponsePayload, VotingRecordsData>(
         {
           urlReplacements: { '{projectId}': `${projectId}` },
         },
-        (response) => ({ votes: response?.votes })
+        (data) => ({ votes: data })
       );
 
-const setProjectVotes = async (
-  projectId: number,
-  payload: UpsertProjectVotesRequestPayload
-): Promise<Response2<UpsertProjectVotesResponse>> =>
+const setProjectVotes = async (projectId: number, payload: UpsertProjectVotesRequestPayload): Promise<Response> =>
   RETURN_MOCK_VOTING_DATA
-    ? new Promise((resolve) => {
+    ? new Promise<Response>((resolve) => {
         setTimeout(() => {
-          resolve({ data: { status: 'ok', votes: mockSetProjectVotesResponseData }, requestSucceeded: true });
+          resolve({ requestSucceeded: true });
         }, 300);
       })
-    : httpVoting.put2<UpsertProjectVotesResponse>({
+    : await httpVoting.put({
         urlReplacements: { '{projectId}': `${projectId}` },
         entity: payload,
       });
 
 const VotesService = {
-  deleteProjectVotes,
   getProjectVotes,
   setProjectVotes,
 };
@@ -78,47 +49,38 @@ export default VotesService;
 
 // TODO: remove mock data once BE is ready
 mockGetProjectVotesResponseData = {
-  projectId: 1,
-  projectName: 'Project 1',
-  phases: [
-    {
-      cohortPhase: 'phase 1',
-      votes: [
-        { userId: 1, voteOption: 'yes', email: 'person1@example.com', firstName: '', lastName: '' },
-        { userId: 2, voteOption: 'no', email: 'person2@example.com', firstName: '', lastName: '' },
-        {
-          userId: 3,
-          voteOption: 'conditional',
-          email: 'person3@example.com',
-          firstName: '',
-          lastName: '',
-          conditionalInfo:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi.\n\nSed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam.',
-        },
-        { userId: 4, voteOption: 'yes', email: 'person4@example.com', firstName: '', lastName: '' },
-        { userId: 5, voteOption: 'no', email: 'person5@example.com', firstName: '', lastName: '' },
-      ],
-    },
-    {
-      cohortPhase: 'phase 2',
-      votes: [
-        { userId: 1, voteOption: 'yes', email: 'person1@example.com', firstName: '', lastName: '' },
-        { userId: 2, voteOption: 'no', email: 'person2@example.com', firstName: '', lastName: '' },
-        { userId: 3, voteOption: 'yes', email: 'person3@example.com', firstName: '', lastName: '' },
-        { userId: 4, voteOption: 'yes', email: 'person4@example.com', firstName: '', lastName: '' },
-        { userId: 5, voteOption: 'yes', email: 'person5@example.com', firstName: '', lastName: '' },
-      ],
-    },
-  ],
-};
-
-mockSetProjectVotesResponseData = {
-  projectId: 1,
-  results: [
-    { projectId: 1, phase: 'phase 1', userId: 1, voteOption: 'yes' },
-    { projectId: 1, phase: 'phase 1', userId: 2, voteOption: 'no' },
-    { projectId: 1, phase: 'phase 1', userId: 3, voteOption: 'conditional' },
-    { projectId: 1, phase: 'phase 1', userId: 4, voteOption: 'yes' },
-    { projectId: 1, phase: 'phase 1', userId: 5, voteOption: 'no' },
-  ],
+  votes: {
+    projectId: 1,
+    projectName: 'Project 1',
+    phases: [
+      {
+        phase: 'Phase 1 - Feasibility Study',
+        votes: [
+          { userId: 1, voteOption: 'Yes', email: 'person1@example.com', firstName: '', lastName: '' },
+          { userId: 2, voteOption: 'No', email: 'person2@example.com', firstName: '', lastName: '' },
+          {
+            userId: 3,
+            voteOption: 'Conditional',
+            email: 'person3@example.com',
+            firstName: '',
+            lastName: '',
+            conditionalInfo:
+              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi.\n\nSed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam.',
+          },
+          { userId: 4, voteOption: 'Yes', email: 'person4@example.com', firstName: '', lastName: '' },
+          { userId: 5, voteOption: 'No', email: 'person5@example.com', firstName: '', lastName: '' },
+        ],
+      },
+      {
+        phase: 'Phase 2 - Plan and Scale',
+        votes: [
+          { userId: 1, voteOption: 'Yes', email: 'person1@example.com', firstName: '', lastName: '' },
+          { userId: 2, voteOption: 'No', email: 'person2@example.com', firstName: '', lastName: '' },
+          { userId: 3, voteOption: 'Yes', email: 'person3@example.com', firstName: '', lastName: '' },
+          { userId: 4, voteOption: 'Yes', email: 'person4@example.com', firstName: '', lastName: '' },
+          { userId: 5, voteOption: 'Yes', email: 'person5@example.com', firstName: '', lastName: '' },
+        ],
+      },
+    ],
+  },
 };

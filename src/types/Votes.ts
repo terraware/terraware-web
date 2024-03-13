@@ -1,67 +1,19 @@
 import { components } from 'src/api/types/generated-schema';
 
-export type CohortPhase = string;
+export type VoteOption = 'Yes' | 'No' | 'Conditional';
 
-export type PhaseVotes = {
-  cohortPhase: CohortPhase;
-  votes: VoteSelection[];
-};
+export type PhaseVotes = components['schemas']['PhaseVotes'];
 
-export type DeleteProjectVotesRequestPayload = {
-  options: DeleteVoteSelection;
-};
+export type VoteSelection = components['schemas']['VoteSelection'];
 
-export type DeleteProjectVotesResponsePayload = components['schemas']['SimpleSuccessResponsePayload'];
+export type GetProjectVotesResponsePayload = components['schemas']['GetProjectVotesResponsePayload'];
 
-export type DeleteVoteSelection = {
-  projectId: number;
-  phase?: CohortPhase;
-  userId?: number;
-};
+export type GetProjectVotesResponse = Omit<GetProjectVotesResponsePayload, 'status'>;
 
-export type GetProjectVotesResponsePayload = {
-  projectId: number;
-  projectName: string;
-  phases: PhaseVotes[];
-};
+export type UpsertProjectVotesRequestPayload = components['schemas']['UpsertProjectVotesRequestPayload'];
 
-export type GetProjectVotesResponse = {
-  votes: GetProjectVotesResponsePayload;
-  status: 'ok' | 'error';
-};
-
-export type UpsertProjectVotesRequestPayload = {
-  votes: UpsertVoteSelection[];
-};
-
-export type UpsertProjectVotesResponsePayload = {
-  projectId: number;
-  results: UpsertVoteSelection[];
-};
-
-export type UpsertProjectVotesResponse = {
-  votes: UpsertProjectVotesResponsePayload;
-  status: 'ok' | 'error';
-};
-
-export type UpsertVoteSelection = {
-  projectId: number;
-  phase: CohortPhase;
-  userId: number;
-  voteOption?: VoteOption;
-};
-
-export type VoteOption = 'yes' | 'no' | 'conditional';
-
-export type VoteSelection = {
-  conditionalInfo?: string;
-  email?: string;
-  firstName?: string;
-  lastName?: string;
-  userId: number;
-  voteOption?: VoteOption;
-};
+export type UpsertVoteSelection = components['schemas']['UpsertVoteSelection'];
 
 export type VotingRecordsData = {
-  votes: GetProjectVotesResponsePayload | undefined;
+  votes?: Omit<GetProjectVotesResponsePayload, 'status'>;
 };
