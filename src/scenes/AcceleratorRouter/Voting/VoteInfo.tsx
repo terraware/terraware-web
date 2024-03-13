@@ -92,6 +92,7 @@ const VoteInfo = ({ conditionalInfo, title, voteOption }: VoteInfoProps): JSX.El
               value={conditionalInfo}
             />
           }
+          style={{ marginTop: theme.spacing(1) }}
         />
       )}
     </>
@@ -101,11 +102,12 @@ const VoteInfo = ({ conditionalInfo, title, voteOption }: VoteInfoProps): JSX.El
 type Props = {
   leftChild?: React.ReactNode;
   rightChild?: React.ReactNode;
+  style?: Record<string, string | number>;
 };
 
-const Row = ({ leftChild, rightChild }: Props): JSX.Element => {
+const Row = ({ leftChild, rightChild, style }: Props): JSX.Element => {
   return (
-    <Grid alignItems='center' display='flex' flexDirection='row' flexGrow={1}>
+    <Grid alignItems='center' display='flex' flexDirection='row' flexGrow={1} sx={style}>
       <Grid item xs={4}>
         {leftChild}
       </Grid>
