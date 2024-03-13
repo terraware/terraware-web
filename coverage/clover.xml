@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1710370759404" clover="3.2.0">
-  <project timestamp="1710370759404" name="All files">
-    <metrics statements="17640" coveredstatements="667" conditionals="11187" coveredconditionals="215" methods="5492" coveredmethods="154" elements="34319" coveredelements="1036" complexity="0" loc="17640" ncloc="17640" packages="152" files="742" classes="742"/>
+<coverage generated="1710371277106" clover="3.2.0">
+  <project timestamp="1710371277106" name="All files">
+    <metrics statements="17641" coveredstatements="667" conditionals="11187" coveredconditionals="215" methods="5492" coveredmethods="154" elements="34320" coveredelements="1036" complexity="0" loc="17641" ncloc="17641" packages="152" files="742" classes="742"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="121" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -442,8 +442,8 @@
         <line num="149" count="0" type="stmt"/>
         <line num="151" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="152" count="0" type="stmt"/>
-        <line num="156" count="0" type="stmt"/>
-        <line num="157" count="0" type="stmt"/>
+        <line num="153" count="0" type="stmt"/>
+        <line num="154" count="0" type="stmt"/>
         <line num="159" count="0" type="stmt"/>
         <line num="161" count="0" type="stmt"/>
         <line num="164" count="0" type="stmt"/>
@@ -11922,7 +11922,7 @@
       </file>
     </package>
     <package name="src.scenes.InventoryRouter.form">
-      <metrics statements="199" coveredstatements="0" conditionals="170" coveredconditionals="0" methods="70" coveredmethods="0"/>
+      <metrics statements="200" coveredstatements="0" conditionals="170" coveredconditionals="0" methods="70" coveredmethods="0"/>
       <file name="AccessionsDropdown.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/InventoryRouter/form/AccessionsDropdown.tsx">
         <metrics statements="5" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="20" count="0" type="stmt"/>
@@ -12073,7 +12073,7 @@
         <line num="66" count="0" type="stmt"/>
       </file>
       <file name="useAccessions.ts" path="/home/runner/work/terraware-web/terraware-web/src/scenes/InventoryRouter/form/useAccessions.ts">
-        <metrics statements="14" coveredstatements="0" conditionals="7" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <metrics statements="15" coveredstatements="0" conditionals="7" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="9" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
@@ -12085,9 +12085,10 @@
         <line num="22" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="23" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
       </file>
       <file name="useNurseries.ts" path="/home/runner/work/terraware-web/terraware-web/src/scenes/InventoryRouter/form/useNurseries.ts">
         <metrics statements="13" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="5" coveredmethods="0"/>
