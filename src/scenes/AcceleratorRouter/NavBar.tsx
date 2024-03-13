@@ -25,7 +25,6 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
   const isOverviewRoute = useRouteMatch(APP_PATHS.ACCELERATOR_OVERVIEW);
   const isScoringRoute = useRouteMatch(APP_PATHS.ACCELERATOR_SCORING);
   const isVotingRoute = useRouteMatch(APP_PATHS.ACCELERATOR_VOTING);
-  const isVotingEditRoute = useRouteMatch(APP_PATHS.ACCELERATOR_VOTING_EDIT);
   const isPeopleRoute = useRouteMatch(APP_PATHS.ACCELERATOR_PEOPLE);
 
   const navigate = (url: string) => {
@@ -68,7 +67,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
         id='overview'
         label={strings.OVERVIEW}
         onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_OVERVIEW)}
-        selected={!!isOverviewRoute || !!isScoringRoute || !!isVotingRoute || !!isVotingEditRoute}
+        selected={!!isOverviewRoute || !!isScoringRoute || !!isVotingRoute}
       />
 
       <NavSection />

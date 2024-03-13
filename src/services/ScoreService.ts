@@ -11,7 +11,8 @@ import { Score, Scorecard, ScoresData } from 'src/types/Score';
 // const ENDPOINT_SCORES = '/api/v1/accelerator/scores/:projectId';
 
 export type ListScoresResponsePayload = {
-  scores: Score[];
+  projectName: string;
+  scorecards: Scorecard[];
 };
 
 export type UpdateScoresRequestPayload = {
@@ -23,6 +24,7 @@ export type UpdateScoresResponsePayload = Response & components['schemas']['Simp
 
 let mockScorecards: Scorecard[] = [
   {
+    modifiedTime: '1/24/2024',
     phase: 'Phase 0',
     scores: [
       {
@@ -58,6 +60,7 @@ let mockScorecards: Scorecard[] = [
     ],
   },
   {
+    modifiedTime: null,
     phase: 'Phase 1',
     scores: [
       {
@@ -110,6 +113,7 @@ const list = async (projectId: number): Promise<Response & ScoresData> => {
 
   return {
     requestSucceeded: true,
+    projectName: 'Mock Project Name',
     scorecards: mockScorecards,
   };
 };

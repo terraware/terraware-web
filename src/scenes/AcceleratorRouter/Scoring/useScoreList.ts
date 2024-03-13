@@ -10,6 +10,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 export type Response = {
   status: Statuses;
+  projectName?: string;
   scorecards?: Scorecard[];
 };
 
@@ -22,7 +23,8 @@ export default function useScoreList(projectId: number): Response {
   const dispatch = useAppDispatch();
 
   const [requestId, setRequestId] = useState('');
-  const [scores, setScores] = useState<Scorecard[]>();
+  const [projectName, setProjectName] = useState('');
+  const [scorecards, setScorecards] = useState<Scorecard[]>();
 
   const scoreListResult = useAppSelector(selectScoreListRequest(requestId));
 
@@ -37,15 +39,17 @@ export default function useScoreList(projectId: number): Response {
     if (scoreListResult?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     } else if (scoreListResult?.status === 'success' && scoreListResult?.data?.scorecards) {
-      setScores(scoreListResult.data.scorecards);
+      setProjectName(scoreListResult.data.projectName);
+      setScorecards(scoreListResult.data.scorecards);
     }
   }, [scoreListResult?.status, scoreListResult?.data, snackbar]);
 
   return useMemo<Response>(
     () => ({
       status: scoreListResult?.status ?? 'pending',
-      scores,
+      scorecards,
+      projectName,
     }),
-    [scoreListResult, scores]
+    [scoreListResult, scorecards, projectName]
   );
 }
