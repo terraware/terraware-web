@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -114,7 +114,11 @@
 <a name='L49'></a><a href='#L49'>49</a>
 <a name='L50'></a><a href='#L50'>50</a>
 <a name='L51'></a><a href='#L51'>51</a>
-<a name='L52'></a><a href='#L52'>52</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -132,24 +136,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -159,6 +157,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -177,6 +185,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
 export type Response = {
   status: Statuses;
+  projectName?: string;
   scorecards?: Scorecard[];
 };
 &nbsp;
@@ -189,7 +198,8 @@ export default function <span class="fstat-no" title="function not covered" >use
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
 &nbsp;
   const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
-  const [scores, setScores] = <span class="cstat-no" title="statement not covered" >useState&lt;Scorecard[]&gt;();</span>
+  const [projectName, setProjectName] = <span class="cstat-no" title="statement not covered" >useState('');</span>
+  const [scorecards, setScorecards] = <span class="cstat-no" title="statement not covered" >useState&lt;Scorecard[]&gt;();</span>
 &nbsp;
   const scoreListResult = <span class="cstat-no" title="statement not covered" >useAppSelector(selectScoreListRequest(requestId));</span>
 &nbsp;
@@ -204,16 +214,18 @@ export default function <span class="fstat-no" title="function not covered" >use
 <span class="cstat-no" title="statement not covered" >    if (scoreListResult?.status === 'error') {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError(strings.GENERIC_ERROR);</span>
     } else <span class="cstat-no" title="statement not covered" >if (scoreListResult?.status === 'success' &amp;&amp; scoreListResult?.data?.scorecards) {</span>
-<span class="cstat-no" title="statement not covered" >      setScores(scoreListResult.data.scorecards);</span>
+<span class="cstat-no" title="statement not covered" >      setProjectName(scoreListResult.data.projectName);</span>
+<span class="cstat-no" title="statement not covered" >      setScorecards(scoreListResult.data.scorecards);</span>
     }
   }, [scoreListResult?.status, scoreListResult?.data, snackbar]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return useMemo&lt;Response&gt;(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
       status: scoreListResult?.status ?? 'pending',
-      scores,
+      scorecards,
+      projectName,
     }),
-    [scoreListResult, scores]
+    [scoreListResult, scorecards, projectName]
   );
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -223,7 +235,7 @@ export default function <span class="fstat-no" title="function not covered" >use
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-13T16:06:55.858Z
+                at 2024-03-13T16:41:12.730Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
