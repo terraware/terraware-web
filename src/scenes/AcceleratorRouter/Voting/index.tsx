@@ -15,7 +15,7 @@ const VotingRouter = () => {
         <VotingEdit />
       </Route>
       <Route path={'*'}>
-        <Redirect to={APP_PATHS.ACCELERATOR_OVERVIEW} />
+        <Redirect to={APP_PATHS.ACCELERATOR_VOTING} />
       </Route>
     </Switch>
   );

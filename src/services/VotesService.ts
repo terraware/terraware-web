@@ -86,7 +86,15 @@ mockGetProjectVotesResponseData = {
       votes: [
         { userId: 1, voteOption: 'yes', email: 'person1@example.com', firstName: '', lastName: '' },
         { userId: 2, voteOption: 'no', email: 'person2@example.com', firstName: '', lastName: '' },
-        { userId: 3, voteOption: 'conditional', email: 'person3@example.com', firstName: '', lastName: '' },
+        {
+          userId: 3,
+          voteOption: 'conditional',
+          email: 'person3@example.com',
+          firstName: '',
+          lastName: '',
+          conditionalInfo:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi.\n\nSed dignissim lacinia nunc. Curabitur tortor. Pellentesque nibh. Aenean quam.',
+        },
         { userId: 4, voteOption: 'yes', email: 'person4@example.com', firstName: '', lastName: '' },
         { userId: 5, voteOption: 'no', email: 'person5@example.com', firstName: '', lastName: '' },
       ],
