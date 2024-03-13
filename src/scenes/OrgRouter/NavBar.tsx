@@ -175,14 +175,6 @@ export default function NavBar({
       setShowNavBar={setShowNavBar as React.Dispatch<React.SetStateAction<boolean>>}
       backgroundTransparent={backgroundTransparent}
     >
-      {featureFlagAccelerator && user && (
-        <NavItem
-          label={strings.ACCELERATOR_ADMIN}
-          icon='home'
-          onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_OVERVIEW)}
-          id='home'
-        />
-      )}
       <NavItem
         label={strings.HOME}
         icon='home'
@@ -265,7 +257,7 @@ export default function NavBar({
       )}
       {hasDeliverables && (
         <>
-          <NavSection title={strings.PARTICIPANTS.toUpperCase()} />
+          <NavSection title={strings.ACCELERATOR.toUpperCase()} />
           <NavItem
             label={strings.DELIVERABLES}
             icon='iconSubmit'
