@@ -15,6 +15,7 @@ export enum APP_PATHS {
   ACCELERATOR_MODULE_CONTENT = '/accelerator/modules',
   ACCELERATOR_OVERVIEW = '/accelerator/overview',
   ACCELERATOR_PEOPLE = '/accelerator/people',
+  ACCELERATOR_PEOPLE_NEW = '/accelerator/people/new',
   ACCELERATOR_PROJECT = '/accelerator/projects/:projectId',
   ACCELERATOR_PROJECT_LIST = '/accelerator/projects',
   ACCELERATOR_SCORING = '/accelerator/scoring/:projectId',
