@@ -1,3 +1,4 @@
+21e2e937ed SW-5037 In documents table: fix projectName column, create link to the document, fix createdTime column (#2303)
 fcd2fa9897 SW-5026 Admin -> Console, move link to top bar (#2301)
 c614e869d3 SW-5028 Update status strings to title case (#2302)
 7311a2668d Updated translations from Phrase (#2300)
