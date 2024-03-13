@@ -72,7 +72,7 @@ const ScorecardView = () => {
         <Page title={`${projectName} ${strings.SCORES}`} crumbs={crumbs} rightComponent={rightComponent}>
           {status === 'pending' && <BusySpinner />}
           <Card style={{ width: '100%' }}>
-            <Box display='flex' flexDirection='row' flexGrow={0} marginRight={theme.spacing(3)} justifyContent='right'>
+            <Box display='flex' flexDirection='row' flexGrow={0} margin={theme.spacing(3)} justifyContent='right'>
               <Button
                 id='goToVotes'
                 label={strings.SEE_IC_VOTES}
