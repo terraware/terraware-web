@@ -1,3 +1,4 @@
+e1798c47bd SW-4998-refactor Add conditional info to votes display, misc refactor (#2296)
 c401bb4b88 SW-5031 Use latest web-components build which solves the file upload bug (#2298)
 2b46d28a3f SW-4997 Scaffold grid structure for scoring page, start Scorecard component with scorecard header (#2294)
 0698e3a6c7 Updated translations from Phrase (#2297)
