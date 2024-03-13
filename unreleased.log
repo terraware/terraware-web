@@ -1,3 +1,5 @@
+fcd2fa9897 SW-5026 Admin -> Console, move link to top bar (#2301)
+c614e869d3 SW-5028 Update status strings to title case (#2302)
 7311a2668d Updated translations from Phrase (#2300)
 a4586b08ee SW-5029 Allow managers to see deliverables in Terraware side (#2299)
 e1798c47bd SW-4998-refactor Add conditional info to votes display, misc refactor (#2296)
