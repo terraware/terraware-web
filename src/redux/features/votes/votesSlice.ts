@@ -1,12 +1,8 @@
 import { ActionReducerMapBuilder, createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import {
-  requestProjectVotesDelete,
-  requestProjectVotesGet,
-  requestProjectVotesUpdate,
-} from 'src/redux/features/votes/votesAsyncThunks';
-import { GetProjectVotesResponse, GetProjectVotesResponsePayload } from 'src/types/Votes';
+import { requestProjectVotesGet, requestProjectVotesUpdate } from 'src/redux/features/votes/votesAsyncThunks';
+import { GetProjectVotesResponsePayload } from 'src/types/Votes';
 
 // Define a type for the slice state
 type Data = Record<number, StatusT<GetProjectVotesResponsePayload>>;
@@ -25,18 +21,16 @@ export const votesSlice = createSlice({
 
 export const votesReducer = votesSlice.reducer;
 
-type ProjectVotesResponsesUnion = GetProjectVotesResponse;
-type VotingRequestsState = Record<string, StatusT<ProjectVotesResponsesUnion>>;
+type VotingEditRequestsState = Record<string, StatusT<boolean>>;
 
-const initialVotingRequestsState: VotingRequestsState = {};
+const initialVotingEditRequestsState: VotingEditRequestsState = {};
 
 export const votesRequestsSlice = createSlice({
   name: 'votesRequestsSlice',
-  initialState: initialVotingRequestsState,
+  initialState: initialVotingEditRequestsState,
   reducers: {},
-  extraReducers: (builder: ActionReducerMapBuilder<VotingRequestsState>) => {
+  extraReducers: (builder: ActionReducerMapBuilder<VotingEditRequestsState>) => {
     buildReducers(requestProjectVotesUpdate)(builder);
-    buildReducers(requestProjectVotesDelete)(builder);
   },
 });
 
