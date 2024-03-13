@@ -20,9 +20,9 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           type: 'string',
         },
         {
-          key: 'dateUploaded',
+          key: 'createdTime',
           name: strings.DATE_UPLOADED,
-          type: 'string',
+          type: 'date',
         },
       ]
     : [];
