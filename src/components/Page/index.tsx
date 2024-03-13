@@ -11,6 +11,7 @@ export type PageProps = {
   children?: React.ReactNode;
   contentStyle?: Record<string, string | number>;
   crumbs?: Crumb[];
+  hierarchicalCrumbs?: boolean;
   isLoading?: boolean;
   rightComponent?: React.ReactNode;
   title?: React.ReactNode;
@@ -23,6 +24,7 @@ export default function Page({
   children,
   contentStyle,
   crumbs,
+  hierarchicalCrumbs,
   isLoading,
   rightComponent,
   title,
@@ -41,7 +43,7 @@ export default function Page({
   return (
     <TfMain>
       <PageHeaderWrapper nextElement={contentRef.current}>
-        <>{crumbs && <BreadCrumbs crumbs={crumbs} hierarchical={true} />}</>
+        <>{crumbs && <BreadCrumbs crumbs={crumbs} hierarchical={hierarchicalCrumbs ?? true} />}</>
         <Grid container justifyContent='space-between' alignItems='center'>
           {title && typeof title !== 'string' && (
             <Grid item xs={8}>

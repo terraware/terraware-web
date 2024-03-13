@@ -17,6 +17,7 @@ export enum APP_PATHS {
   ACCELERATOR_PEOPLE = '/accelerator/people',
   ACCELERATOR_SCORING = '/accelerator/scoring/:projectId',
   ACCELERATOR_VOTING = '/accelerator/voting/:projectId',
+  ACCELERATOR_VOTING_EDIT = '/accelerator/voting/:projectId/edit',
   ACCESSIONS = '/accessions',
   ACCESSIONS2_NEW = '/accessions/new',
   ACCESSIONS2_ITEM = '/accessions/:accessionId',
