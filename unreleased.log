@@ -1,3 +1,5 @@
+2182144c69 SW-5036 Add missing subheadings to inventory tab views (#2304)
+983ba0d22d SW-2359 Remove extra space in accession change modal (#2306)
 6dd7599a37 Updated translations from Phrase (#2305)
 21e2e937ed SW-5037 In documents table: fix projectName column, create link to the document, fix createdTime column (#2303)
 fcd2fa9897 SW-5026 Admin -> Console, move link to top bar (#2301)
