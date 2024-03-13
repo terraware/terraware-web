@@ -20,6 +20,7 @@ import { getPromisesResponse } from './utils';
 const ENDPOINT_DELIVERABLES = '/api/v1/accelerator/deliverables';
 const ENDPOINT_DELIVERABLE_SUBMISSION = '/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}';
 const ENDPOINT_DELIVERABLE_DOCUMENT_UPLOAD = '/api/v1/accelerator/deliverables/{deliverableId}/documents';
+export const ENDPOINT_DELIVERABLE_DOCUMENT = '/api/v1/accelerator/deliverables/{deliverableId}/documents/{documentId}';
 
 export type ListDeliverablesRequestParams = paths[typeof ENDPOINT_DELIVERABLES]['get']['parameters']['query'];
 export type GetDeliverableResponsePayload =

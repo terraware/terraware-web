@@ -19,21 +19,20 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           name: strings.DESCRIPTION,
           type: 'string',
         },
-        // TODO this might need to be changed up if the link isn't full formed in the BE response
         {
           key: 'link',
           name: strings.LINK,
           type: 'string',
         },
         {
-          key: 'project_name',
+          key: 'projectName',
           name: strings.PROJECT,
           type: 'string',
         },
         {
-          key: 'dateUploaded',
+          key: 'createdTime',
           name: strings.DATE_UPLOADED,
-          type: 'string',
+          type: 'date',
         },
       ]
     : [];
