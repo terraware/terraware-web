@@ -7,6 +7,7 @@ import { Separator } from '@terraware/web-components';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -37,6 +38,11 @@ const useStyles = makeStyles((theme: Theme) => ({
 export default function AcceleratorBreadcrumbs(): JSX.Element | null {
   const classes = useStyles();
   const { isAcceleratorRoute, isAllowedViewConsole } = useAcceleratorConsole();
+  const { activeLocale } = useLocalization();
+
+  if (!activeLocale) {
+    return null;
+  }
 
   if (isAcceleratorRoute) {
     return (
