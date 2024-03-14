@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1710455473968" clover="3.2.0">
-  <project timestamp="1710455473968" name="All files">
-    <metrics statements="17773" coveredstatements="667" conditionals="11272" coveredconditionals="215" methods="5532" coveredmethods="154" elements="34577" coveredelements="1036" complexity="0" loc="17773" ncloc="17773" packages="153" files="750" classes="750"/>
+<coverage generated="1710456153924" clover="3.2.0">
+  <project timestamp="1710456153924" name="All files">
+    <metrics statements="17776" coveredstatements="667" conditionals="11272" coveredconditionals="215" methods="5534" coveredmethods="154" elements="34582" coveredelements="1036" complexity="0" loc="17776" ncloc="17776" packages="153" files="750" classes="750"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="121" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -1390,7 +1390,7 @@
       </file>
     </package>
     <package name="src.components.DeliverableView">
-      <metrics statements="165" coveredstatements="0" conditionals="94" coveredconditionals="0" methods="46" coveredmethods="0"/>
+      <metrics statements="168" coveredstatements="0" conditionals="94" coveredconditionals="0" methods="48" coveredmethods="0"/>
       <file name="DeliverableStatusBadge.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/DeliverableStatusBadge.tsx">
         <metrics statements="17" coveredstatements="0" conditionals="13" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="16" count="0" type="stmt"/>
@@ -1492,24 +1492,27 @@
         <line num="136" count="0" type="stmt"/>
       </file>
       <file name="InternalComment.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/InternalComment.tsx">
-        <metrics statements="17" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="6" coveredmethods="0"/>
-        <line num="19" count="0" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="24" count="0" type="cond" truecount="0" falsecount="2"/>
+        <metrics statements="20" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="8" coveredmethods="0"/>
+        <line num="15" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
+        <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="34" count="0" type="stmt"/>
-        <line num="35" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
-        <line num="73" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="43" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="96" count="0" type="stmt"/>
       </file>
       <file name="Metadata.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/Metadata.tsx">
         <metrics statements="5" coveredstatements="0" conditionals="9" coveredconditionals="0" methods="1" coveredmethods="0"/>
