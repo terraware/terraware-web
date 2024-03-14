@@ -384,7 +384,7 @@ export default function Accession2View(): JSX.Element {
   const overviewGridSize = isMobile ? '100%' : isTablet ? '50%' : overviewItemCount <= 6 ? '33%' : '25%';
 
   const quantityEditable = userCanEdit && (accession?.state === 'Drying' || accession?.state === 'In Storage');
-  const viabilityEditable = userCanEdit && accession?.state !== 'Used Up';
+  const viabilityEditable = userCanEdit && accession?.estimatedCount !== undefined && accession?.state !== 'Used Up';
   const isAwaitingCheckin = accession?.state === 'Awaiting Check-In';
 
   return (
@@ -718,7 +718,7 @@ export default function Accession2View(): JSX.Element {
               <ViabilityTestingPanel
                 accession={accession}
                 reload={reloadData}
-                canAddTest={userCanEdit}
+                canAddTest={viabilityEditable}
                 setNewViabilityTestOpened={setOpenNewViabilityTest}
                 setViewViabilityTestModalOpened={setOpenViewViabilityTestModal}
                 setSelectedTest={setSelectedTest}
