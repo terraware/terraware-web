@@ -23,6 +23,7 @@ interface DeliverablesTableProps {
   pageHeaderRef: RefObject<HTMLDivElement>;
   filterModifiers?: (filters: FilterConfig[]) => FilterConfig[];
   searchAndSort?: SearchAndSortFn<ListDeliverablesElement>;
+  tableId: string;
 }
 
 const fuzzySearchColumns = ['name', 'project_name'];
@@ -38,6 +39,7 @@ const DeliverablesTable = ({
   pageHeaderRef,
   organizationId,
   searchAndSort,
+  tableId,
 }: DeliverablesTableProps) => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
@@ -109,6 +111,7 @@ const DeliverablesTable = ({
       fuzzySearchColumns={fuzzySearchColumns}
       pageHeaderRef={pageHeaderRef}
       rows={deliverables}
+      tableId={tableId}
     />
   );
 };

@@ -157,6 +157,7 @@ const DeliverablesList = (): JSX.Element => {
         pageHeaderRef={contentRef}
         organizationId={selectedOrganization.id}
         searchAndSort={searchAndSort}
+        tableId={'participantDeliverablesTable'}
       />
     </TfMain>
   );

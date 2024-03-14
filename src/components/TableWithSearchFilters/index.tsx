@@ -6,7 +6,7 @@ import { RendererProps, SortOrder, TableColumnType, TableRowType } from '@terraw
 
 import Card from 'src/components/common/Card';
 import SearchFiltersWrapperV2, { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
-import { BaseTable as Table } from 'src/components/common/table';
+import { OrderPreservedTable as Table } from 'src/components/common/table';
 import { useLocalization } from 'src/providers';
 import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import useDebounce from 'src/utils/useDebounce';
@@ -22,6 +22,7 @@ interface TableWithSearchFiltersProps {
   filterModifiers?: (filters: FilterConfig[]) => FilterConfig[];
   fuzzySearchColumns?: string[];
   rows: TableRowType[];
+  tableId: string;
 }
 
 const useStyles = makeStyles(() => ({
@@ -41,6 +42,7 @@ const TableWithSearchFilters = ({
   fuzzySearchColumns,
   pageHeaderRef,
   rows,
+  tableId,
 }: TableWithSearchFiltersProps) => {
   const { activeLocale } = useLocalization();
   const classes = useStyles();
@@ -129,6 +131,7 @@ const TableWithSearchFilters = ({
 
         <Grid item xs={12}>
           <Table
+            id={tableId}
             columns={columns(activeLocale)}
             rows={rows}
             orderBy={searchSortOrder.field}
