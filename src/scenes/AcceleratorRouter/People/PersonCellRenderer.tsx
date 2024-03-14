@@ -29,8 +29,6 @@ export default function PersonCellRenderer(props: RendererProps<TableRowType>): 
     return <Link to={to}>{iValue as React.ReactNode}</Link>;
   };
 
-  console.log(row);
-
   if (column.key === 'email') {
     return (
       <CellRenderer
