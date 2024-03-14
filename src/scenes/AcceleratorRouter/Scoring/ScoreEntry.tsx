@@ -77,9 +77,9 @@ const ScoreControl = ({ disabled, onChange, score }: ScoreControlProps) => {
             <ScoreControlButton
               disabled={disabled}
               key={value}
-              onChange={(value) => {
-                setScoreValue(value);
-                onChange(value);
+              onChange={(_value) => {
+                setScoreValue(_value);
+                onChange(_value);
               }}
               selected={value === scoreValue}
               value={value}
