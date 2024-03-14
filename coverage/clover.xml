@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1710448677015" clover="3.2.0">
-  <project timestamp="1710448677016" name="All files">
-    <metrics statements="17743" coveredstatements="667" conditionals="11240" coveredconditionals="215" methods="5524" coveredmethods="154" elements="34507" coveredelements="1036" complexity="0" loc="17743" ncloc="17743" packages="153" files="749" classes="749"/>
+<coverage generated="1710449172159" clover="3.2.0">
+  <project timestamp="1710449172159" name="All files">
+    <metrics statements="17773" coveredstatements="667" conditionals="11272" coveredconditionals="215" methods="5532" coveredmethods="154" elements="34577" coveredelements="1036" complexity="0" loc="17773" ncloc="17773" packages="153" files="750" classes="750"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="121" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -9120,7 +9120,32 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Scoring">
-      <metrics statements="65" coveredstatements="0" conditionals="34" coveredconditionals="0" methods="20" coveredmethods="0"/>
+      <metrics statements="87" coveredstatements="0" conditionals="60" coveredconditionals="0" methods="27" coveredmethods="0"/>
+      <file name="ScoreEntry.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Scoring/ScoreEntry.tsx">
+        <metrics statements="22" coveredstatements="0" conditionals="26" coveredconditionals="0" methods="7" coveredmethods="0"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="24" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="81" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="104" count="0" type="stmt"/>
+        <line num="105" count="0" type="stmt"/>
+        <line num="106" count="0" type="stmt"/>
+        <line num="107" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="108" count="0" type="stmt"/>
+        <line num="110" count="0" type="stmt"/>
+        <line num="117" count="0" type="stmt"/>
+      </file>
       <file name="Scorecard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Scoring/Scorecard.tsx">
         <metrics statements="7" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="12" count="0" type="stmt"/>
@@ -19615,7 +19640,7 @@
       </file>
     </package>
     <package name="src.types">
-      <metrics statements="188" coveredstatements="21" conditionals="131" coveredconditionals="2" methods="50" coveredmethods="6"/>
+      <metrics statements="196" coveredstatements="21" conditionals="137" coveredconditionals="2" methods="51" coveredmethods="6"/>
       <file name="Accession.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/Accession.ts">
         <metrics statements="35" coveredstatements="5" conditionals="18" coveredconditionals="0" methods="13" coveredmethods="0"/>
         <line num="12" count="1" type="stmt"/>
@@ -19814,24 +19839,32 @@
         <line num="35" count="0" type="stmt"/>
       </file>
       <file name="Score.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/Score.ts">
-        <metrics statements="17" coveredstatements="0" conditionals="11" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
+        <metrics statements="25" coveredstatements="0" conditionals="17" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="20" count="0" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
-        <line num="24" count="0" type="cond" truecount="0" falsecount="6"/>
-        <line num="26" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="cond" truecount="0" falsecount="6"/>
         <line num="28" count="0" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
-        <line num="40" count="0" type="stmt"/>
-        <line num="41" count="0" type="cond" truecount="0" falsecount="5"/>
-        <line num="43" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="43" count="0" type="cond" truecount="0" falsecount="5"/>
         <line num="45" count="0" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
         <line num="49" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="61" count="0" type="cond" truecount="0" falsecount="6"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="81" count="0" type="stmt"/>
+        <line num="87" count="0" type="stmt"/>
+        <line num="93" count="0" type="stmt"/>
       </file>
       <file name="Search.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/Search.ts">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="4"/>
