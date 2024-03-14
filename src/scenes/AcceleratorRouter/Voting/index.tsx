@@ -8,21 +8,19 @@ import VotingView from './VotingView';
 
 const VotingRouter = () => {
   return (
-    <Switch>
-      <Route exact path={APP_PATHS.ACCELERATOR_VOTING}>
-        <VotingProvider>
+    <VotingProvider>
+      <Switch>
+        <Route exact path={APP_PATHS.ACCELERATOR_VOTING}>
           <VotingView />
-        </VotingProvider>
-      </Route>
-      <Route exact path={APP_PATHS.ACCELERATOR_VOTING_EDIT}>
-        <VotingProvider>
+        </Route>
+        <Route exact path={APP_PATHS.ACCELERATOR_VOTING_EDIT}>
           <VotingEdit />
-        </VotingProvider>
-      </Route>
-      <Route path={'*'}>
-        <Redirect to={APP_PATHS.ACCELERATOR_VOTING} />
-      </Route>
-    </Switch>
+        </Route>
+        <Route path={'*'}>
+          <Redirect to={APP_PATHS.ACCELERATOR_VOTING} />
+        </Route>
+      </Switch>
+    </VotingProvider>
   );
 };
 
