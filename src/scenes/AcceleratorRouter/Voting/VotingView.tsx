@@ -7,6 +7,7 @@ import { Button } from '@terraware/web-components';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import { UserVoteView } from './UserVote';
@@ -17,6 +18,7 @@ const VotingView = () => {
   const history = useHistory();
   const location = useStateLocation();
   const { activeLocale } = useLocalization();
+  const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const { phaseVotes, projectId } = useVotingData();
 
@@ -29,9 +31,15 @@ const VotingView = () => {
   const editVotes = useMemo(
     () =>
       activeLocale ? (
-        <Button label={strings.EDIT_VOTES} icon='iconEdit' onClick={goToEditVotes} size='medium' id='editVotes' />
+        <Button
+          label={isMobile ? '' : strings.EDIT_VOTES}
+          icon='iconEdit'
+          onClick={goToEditVotes}
+          size='medium'
+          id='editVotes'
+        />
       ) : null,
-    [activeLocale, goToEditVotes]
+    [activeLocale, isMobile, goToEditVotes]
   );
 
   return (
