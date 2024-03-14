@@ -58,7 +58,7 @@ const ScoreControl = ({ disabled, onChange, score }: ScoreControlProps) => {
   const theme = useTheme();
   const castScoreValue = Number(score.value) as ScoreValue;
   const [scoreValue, setScoreValue] = useState<ScoreValue>(castScoreValue);
-  const scoreLabel = useMemo(() => getScoreValue(scoreValue), [scoreValue]);
+  const scoreLabel = getScoreValue(scoreValue);
   const scoreColors = useMemo(() => getScoreColors(scoreValue, theme), [scoreValue, theme]);
 
   return (
