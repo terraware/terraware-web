@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Box, useTheme } from '@mui/material';
@@ -63,7 +63,6 @@ const PeopleView = () => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
   const history = useHistory();
-  const pageHeaderRef = useRef(null);
 
   const [globalRoleUsers, setGlobalRoleUsers] = useState<UserWithGlobalRoles[]>();
   const [requestId, setRequestId] = useState('');
@@ -114,14 +113,13 @@ const PeopleView = () => {
   );
 
   return (
-    <Page title={strings.PEOPLE} rightComponent={rightComponent} pageHeaderRef={pageHeaderRef}>
+    <Page title={strings.PEOPLE} rightComponent={rightComponent}>
       <TableWithSearchFilters
         cellRenderer={PersonCellRenderer}
         columns={columns}
         defaultSearchOrder={defaultSearchOrder}
         dispatchSearchRequest={dispatchSearchRequest}
         fuzzySearchColumns={fuzzySearchColumns}
-        pageHeaderRef={pageHeaderRef}
         rows={globalRoleUsers || []}
         tableId={'acceleratorPeopleTable'}
       />

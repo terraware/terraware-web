@@ -111,7 +111,6 @@ const DeliverablesList = () => {
         columns={columns}
         extraTableFilters={extraTableFilters}
         organizationId={-1}
-        pageHeaderRef={contentRef}
         tableId={'acceleratorDeliverablesTable'}
       />
     </AcceleratorMain>

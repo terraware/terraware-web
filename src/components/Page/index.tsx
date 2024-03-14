@@ -1,4 +1,4 @@
-import React, { RefObject, useRef } from 'react';
+import React, { useRef } from 'react';
 
 import { CircularProgress, Grid, Typography, useTheme } from '@mui/material';
 
@@ -13,7 +13,6 @@ export type PageProps = {
   crumbs?: Crumb[];
   hierarchicalCrumbs?: boolean;
   isLoading?: boolean;
-  pageHeaderRef?: RefObject<HTMLDivElement>;
   rightComponent?: React.ReactNode;
   title?: React.ReactNode;
 };
@@ -27,7 +26,6 @@ export default function Page({
   crumbs,
   hierarchicalCrumbs,
   isLoading,
-  pageHeaderRef,
   rightComponent,
   title,
 }: PageProps): JSX.Element {
@@ -44,7 +42,7 @@ export default function Page({
 
   return (
     <TfMain>
-      <PageHeaderWrapper nextElement={pageHeaderRef ? pageHeaderRef.current : contentRef.current}>
+      <PageHeaderWrapper nextElement={contentRef.current}>
         <>{crumbs && <BreadCrumbs crumbs={crumbs} hierarchical={hierarchicalCrumbs ?? true} />}</>
         <Grid container justifyContent='space-between' alignItems='center'>
           {title && typeof title !== 'string' && (
@@ -78,7 +76,7 @@ export default function Page({
       <Grid item xs={12}>
         <PageSnackbar />
       </Grid>
-      <Grid container ref={pageHeaderRef ?? contentRef} sx={contentStyle}>
+      <Grid container ref={contentRef} sx={contentStyle}>
         {children}
       </Grid>
     </TfMain>

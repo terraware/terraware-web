@@ -1,4 +1,4 @@
-import React, { RefObject, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Container, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -17,7 +17,6 @@ interface TableWithSearchFiltersProps {
   defaultSearchOrder: SearchSortOrder;
   dispatchSearchRequest: (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => void;
   extraTableFilters?: SearchNodePayload[];
-  pageHeaderRef: RefObject<HTMLDivElement>;
   featuredFilters?: FilterConfig[];
   filterModifiers?: (filters: FilterConfig[]) => FilterConfig[];
   fuzzySearchColumns?: string[];
@@ -40,7 +39,6 @@ const TableWithSearchFilters = ({
   featuredFilters,
   filterModifiers,
   fuzzySearchColumns,
-  pageHeaderRef,
   rows,
   tableId,
 }: TableWithSearchFiltersProps) => {
@@ -117,7 +115,7 @@ const TableWithSearchFilters = ({
   }, [activeLocale, dispatchSearchRequest, getSearchPayload, searchSortOrder]);
 
   return (
-    <Container ref={pageHeaderRef} maxWidth={false} className={classes.mainContainer}>
+    <Container maxWidth={false} className={classes.mainContainer}>
       <Card flushMobile>
         <Grid item xs={12} sx={{ display: 'flex', marginBottom: '16px', alignItems: 'center' }}>
           <SearchFiltersWrapperV2

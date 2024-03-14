@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { Grid, Typography } from '@mui/material';
 import { Separator, TableColumnType } from '@terraware/web-components';
@@ -63,7 +63,6 @@ const DeliverablesList = (): JSX.Element => {
   const { activeLocale } = useLocalization();
   const { availableProjects } = useProjects();
   const { selectedOrganization } = useOrganization();
-  const contentRef = useRef(null);
 
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number }>({ projectId: undefined });
 
@@ -146,7 +145,7 @@ const DeliverablesList = (): JSX.Element => {
 
   return (
     <TfMain>
-      <PageHeaderWrapper nextElement={contentRef.current}>
+      <PageHeaderWrapper>
         <PageHeader title={strings.DELIVERABLES} leftComponent={PageHeaderLeftComponent} />
       </PageHeaderWrapper>
 
@@ -154,7 +153,6 @@ const DeliverablesList = (): JSX.Element => {
         columns={columns}
         extraTableFilters={extraTableFilters}
         filterModifiers={filterModifiers}
-        pageHeaderRef={contentRef}
         organizationId={selectedOrganization.id}
         searchAndSort={searchAndSort}
         tableId={'participantDeliverablesTable'}

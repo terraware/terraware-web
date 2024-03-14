@@ -1,4 +1,4 @@
-import React, { RefObject, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { TableColumnType } from '@terraware/web-components';
 
@@ -20,7 +20,6 @@ interface DeliverablesTableProps {
   columns: (activeLocale: string | null) => TableColumnType[];
   extraTableFilters?: SearchNodePayload[];
   organizationId: number;
-  pageHeaderRef: RefObject<HTMLDivElement>;
   filterModifiers?: (filters: FilterConfig[]) => FilterConfig[];
   searchAndSort?: SearchAndSortFn<ListDeliverablesElement>;
   tableId: string;
@@ -36,7 +35,6 @@ const DeliverablesTable = ({
   columns,
   extraTableFilters,
   filterModifiers,
-  pageHeaderRef,
   organizationId,
   searchAndSort,
   tableId,
@@ -109,7 +107,6 @@ const DeliverablesTable = ({
       featuredFilters={featuredFilters}
       filterModifiers={filterModifiers}
       fuzzySearchColumns={fuzzySearchColumns}
-      pageHeaderRef={pageHeaderRef}
       rows={deliverables}
       tableId={tableId}
     />
