@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 
 import { Box, Button, Typography, useTheme } from '@mui/material';
 
@@ -57,7 +57,7 @@ type ScoreControlProps = {
 const ScoreControl = ({ disabled, onChange, score }: ScoreControlProps) => {
   const theme = useTheme();
   const castScoreValue = Number(score.value) as ScoreValue;
-  const [scoreValue, setScoreValue] = React.useState<ScoreValue>(castScoreValue);
+  const [scoreValue, setScoreValue] = useState<ScoreValue>(castScoreValue);
   const scoreValueLabel = getScoreValue(scoreValue);
   const scoreColors = getScoreColors(scoreValue, theme);
 
