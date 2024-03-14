@@ -82,11 +82,14 @@ const OverviewView = () => {
   const [qualitativeInfo, setQualitativeInfo] = useState(mockQualitativeInfo);
 
   const onChange = (value: unknown) => {
+    // tslint:disable:no-console
     console.log('onChange - value:', value);
   };
 
   const onChangeText = (id: string, value: unknown) => {
+    // tslint:disable:no-console
     console.log('TextArea onChange - id:', id);
+    // tslint:disable:no-console
     console.log('TextArea onChange - value:', value);
     setQualitativeInfo(value as string);
   };
@@ -110,6 +113,7 @@ const OverviewView = () => {
         <Grid item xs={6}>
           {mockScorecard.scores.map((score, index) => (
             <ScoreEntry
+              key={index}
               disabled={true}
               onChange={onChange}
               onChangeText={onChangeText}
@@ -122,6 +126,7 @@ const OverviewView = () => {
         <Grid item xs={6}>
           {mockScorecard2.scores.map((score, index) => (
             <ScoreEntry
+              key={index}
               onChange={onChange}
               onChangeText={onChangeText}
               phase={mockScorecard.phase}
