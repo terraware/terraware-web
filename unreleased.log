@@ -1,3 +1,4 @@
+80543c1cdd SW-4961 Refactor the deliverables table with search and filters into its own component so we can easily resuse for people table (#2311)
 7724893d23 SW-4529 Show org creation success banner after page change (#2310)
 1e04e34ce2 SW-4683 Reset selected accession when species changes (#2309)
 f2d0e27612 SW-5041 Integrate with BE voting types (#2308)
