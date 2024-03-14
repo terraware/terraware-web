@@ -1,12 +1,14 @@
 import { useMemo } from 'react';
 
-import { Grid, Typography, useTheme } from '@mui/material';
+import { Typography, useTheme } from '@mui/material';
 import { Badge, Textfield } from '@terraware/web-components';
 import { BadgeProps } from '@terraware/web-components/components/Badge';
 
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { VoteOption } from 'src/types/Votes';
+
+import VoteRow from './VoteRow';
 
 // Vote info component
 export type VoteInfoProps = {
@@ -71,7 +73,7 @@ const VoteInfo = ({ conditionalInfo, title, voteOption }: VoteInfoProps): JSX.El
 
   return (
     <>
-      <Row
+      <VoteRow
         leftChild={
           <Typography color={theme.palette.TwClrBaseBlack} fontSize='16px' fontWeight={400} lineHeight='24px'>
             {title}
@@ -81,7 +83,7 @@ const VoteInfo = ({ conditionalInfo, title, voteOption }: VoteInfoProps): JSX.El
       />
       {/* This is mostly for the top row alignment where title and badge are aligned by center. */}
       {voteOption === 'Conditional' && !!conditionalInfo && (
-        <Row
+        <VoteRow
           rightChild={
             <Textfield
               display
@@ -96,25 +98,6 @@ const VoteInfo = ({ conditionalInfo, title, voteOption }: VoteInfoProps): JSX.El
         />
       )}
     </>
-  );
-};
-
-type Props = {
-  leftChild?: React.ReactNode;
-  rightChild?: React.ReactNode;
-  style?: Record<string, string | number>;
-};
-
-const Row = ({ leftChild, rightChild, style }: Props): JSX.Element => {
-  return (
-    <Grid alignItems='center' display='flex' flexDirection='row' flexGrow={1} sx={style}>
-      <Grid item xs={4}>
-        {leftChild}
-      </Grid>
-      <Grid item xs={8}>
-        {rightChild}
-      </Grid>
-    </Grid>
   );
 };
 

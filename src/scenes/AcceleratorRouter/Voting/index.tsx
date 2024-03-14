@@ -4,15 +4,20 @@ import { APP_PATHS } from 'src/constants';
 
 import VotingView from './Voting';
 import VotingEdit from './VotingEdit';
+import VotingProvider from './VotingProvider';
 
 const VotingRouter = () => {
   return (
     <Switch>
       <Route exact path={APP_PATHS.ACCELERATOR_VOTING}>
-        <VotingView />
+        <VotingProvider>
+          <VotingView />
+        </VotingProvider>
       </Route>
       <Route exact path={APP_PATHS.ACCELERATOR_VOTING_EDIT}>
-        <VotingEdit />
+        <VotingProvider>
+          <VotingEdit />
+        </VotingProvider>
       </Route>
       <Route path={'*'}>
         <Redirect to={APP_PATHS.ACCELERATOR_VOTING} />

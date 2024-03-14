@@ -4,6 +4,8 @@ export type VoteOption = 'Yes' | 'No' | 'Conditional';
 
 export type PhaseVotes = components['schemas']['PhaseVotes'];
 
+export type Phase = PhaseVotes['phase'];
+
 export type VoteSelection = components['schemas']['VoteSelection'];
 
 export type GetProjectVotesResponsePayload = components['schemas']['GetProjectVotesResponsePayload'];
