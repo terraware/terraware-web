@@ -13,6 +13,7 @@ import {
   draftPlantingSiteSearchReducer,
 } from 'src/redux/features/draftPlantingSite/draftPlantingSiteSlice';
 import {
+  globalRolesUserReducer,
   globalRolesUserUpdateReducer,
   globalRolesUsersListReducer,
 } from 'src/redux/features/globalRoles/globalRolesSlice';
@@ -67,6 +68,7 @@ export const reducers = {
   draftPlantingSiteEdit: draftPlantingSiteEditReducer,
   draftPlantingSiteGet: draftPlantingSiteGetReducer,
   draftPlantingSiteSearch: draftPlantingSiteSearchReducer,
+  globalRolesUser: globalRolesUserReducer,
   globalRolesUsersList: globalRolesUsersListReducer,
   globalRolesUserUpdate: globalRolesUserUpdateReducer,
   message: messageReducer,

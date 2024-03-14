@@ -3,8 +3,21 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import GlobalRolesService from 'src/services/GlobalRolesService';
 import { Response } from 'src/services/HttpService';
 import strings from 'src/strings';
-import { GlobalRole, UserWithGlobalRoles } from 'src/types/GlobalRoles';
+import { UserWithGlobalRoles } from 'src/types/GlobalRoles';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { UserGlobalRole } from 'src/types/User';
+
+export const requestGetGlobalRolesUser = createAsyncThunk(
+  'globalRoles/get-user',
+  async (userId: number, { rejectWithValue }) => {
+    const response = await GlobalRolesService.getUser(userId);
+    if (response) {
+      return response;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
 
 export const requestListGlobalRolesUsers = createAsyncThunk(
   'globalRoles/list',
@@ -29,10 +42,10 @@ export const requestListGlobalRolesUsers = createAsyncThunk(
 
 export const requestUpdateGlobalRolesUser = createAsyncThunk(
   'globalRoles/update-for-user',
-  async (request: { user: UserWithGlobalRoles; globalRole: GlobalRole }, { rejectWithValue }) => {
-    const { user, globalRole } = request;
+  async (request: { user: UserWithGlobalRoles; globalRoles: UserGlobalRole[] }, { rejectWithValue }) => {
+    const { user, globalRoles } = request;
 
-    const response: Response = await GlobalRolesService.update(user, globalRole);
+    const response: Response = await GlobalRolesService.update(user, globalRoles);
     if (response && response.requestSucceeded) {
       return user.id;
     }
