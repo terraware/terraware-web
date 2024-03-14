@@ -17,6 +17,8 @@ import { UserWithGlobalRoles } from 'src/types/GlobalRoles';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import PersonCellRenderer from './PersonCellRenderer';
+
 const fuzzySearchColumns = ['email', 'firstName', 'lastName'];
 const defaultSearchOrder: SearchSortOrder = {
   field: 'email',
@@ -42,10 +44,11 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           type: 'string',
         },
         {
-          key: 'role',
+          key: 'globalRoles',
           name: strings.ROLE,
           type: 'string',
         },
+        // TODO need to get this in the BE response
         {
           key: 'createdTime',
           name: strings.DATE_ADDED,
@@ -113,7 +116,7 @@ const PeopleView = () => {
   return (
     <Page title={strings.PEOPLE} rightComponent={rightComponent} pageHeaderRef={pageHeaderRef}>
       <TableWithSearchFilters
-        // cellRenderer={PersonCellRenderer}
+        cellRenderer={PersonCellRenderer}
         columns={columns}
         defaultSearchOrder={defaultSearchOrder}
         dispatchSearchRequest={dispatchSearchRequest}
