@@ -22,13 +22,12 @@ const Metadata = (props: ViewProps): JSX.Element => {
           marginBottom='16px'
           padding='16px'
         >
-          <InternalComment deliverable={deliverable} />
-
           {deliverable.status !== 'Rejected' && (
             <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
               <DeliverableStatusBadge status={deliverable.status} />
             </div>
           )}
+          <InternalComment deliverable={deliverable} />
         </Box>
       )}
 

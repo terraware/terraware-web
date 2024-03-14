@@ -1,16 +1,23 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Grid, Typography } from '@mui/material';
+import { Box, Grid } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
-import theme from 'src/theme';
 import { Deliverable } from 'src/types/Deliverables';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import useUpdateDeliverable from './useUpdateDeliverable';
+
+const useStyles = makeStyles(() => ({
+  icon: {
+    marginLeft: '-1px',
+    marginTop: '-1px',
+  },
+}));
 
 interface InternalCommentProps {
   deliverable: Deliverable;
@@ -18,6 +25,7 @@ interface InternalCommentProps {
 
 const InternalComment = ({ deliverable }: InternalCommentProps) => {
   const snackbar = useSnackbar();
+  const classes = useStyles();
   const { status, update } = useUpdateDeliverable();
 
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
@@ -42,11 +50,26 @@ const InternalComment = ({ deliverable }: InternalCommentProps) => {
 
   return (
     <>
-      <strong>{strings.INTERNAL_COMMENTS}</strong>{' '}
-      <Typography sx={{ marginLeft: theme.spacing(1) }} component={'span'}>
-        {deliverable.internalComment ?? strings.NO_COMMENTS_ADDED}
-      </Typography>
-      <Button onClick={toggleDialog} icon='iconEdit' type='passive' priority='ghost' size='small' />
+      <Box display='flex' alignItems='center'>
+        <strong>{strings.INTERNAL_COMMENTS}</strong>
+        <Button
+          className={classes.icon}
+          icon='iconEdit'
+          onClick={toggleDialog}
+          priority='ghost'
+          size='small'
+          type='passive'
+        />
+      </Box>
+      <TextField
+        display
+        id='internalComment'
+        label={''}
+        onChange={(value) => setInternalComment(value as string)}
+        preserveNewlines
+        type='textarea'
+        value={deliverable.internalComment ?? strings.NO_COMMENTS_ADDED}
+      />
       <DialogBox
         onClose={toggleDialog}
         open={isDialogOpen}
