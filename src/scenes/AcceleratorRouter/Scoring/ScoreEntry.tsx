@@ -58,7 +58,7 @@ const ScoreControl = ({ disabled, onChange, score }: ScoreControlProps) => {
   const theme = useTheme();
   const castScoreValue = Number(score.value) as ScoreValue;
   const [scoreValue, setScoreValue] = useState<ScoreValue>(castScoreValue);
-  const scoreValueLabel = getScoreValue(scoreValue);
+  const scoreLabel = getScoreValue(scoreValue);
   const scoreColors = getScoreColors(scoreValue, theme);
 
   return (
@@ -87,7 +87,7 @@ const ScoreControl = ({ disabled, onChange, score }: ScoreControlProps) => {
           ))}
         </Box>
         <Typography sx={{ color: scoreColors.text, fontSize: '14px', fontWeight: 500, margin: '4px' }}>
-          {scoreValueLabel}
+          {scoreLabel}
         </Typography>
       </Box>
     </Box>
