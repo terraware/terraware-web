@@ -1,3 +1,5 @@
+import { Theme } from '@mui/material';
+
 import strings from 'src/strings';
 
 // This will all be updated with real types when the BE is done
@@ -31,7 +33,7 @@ export const getScoreValue = (value: ScoreValue): string => {
     case -1:
       return strings.SCORE_VALUE_N1;
     case -2:
-      return strings.SCORE_VALUE_N1;
+      return strings.SCORE_VALUE_N2;
     default:
       return `${value}`;
   }
@@ -49,6 +51,50 @@ export const getScoreCategory = (value: ScoreCategory): string => {
       return strings.LEGAL;
     default:
       return `${value}`;
+  }
+};
+
+export const getScoreColors = (
+  value: ScoreValue,
+  theme: Theme
+): { background: string; border: string; text: string } => {
+  switch (value) {
+    case 2:
+      return {
+        background: theme.palette.TwClrBgSuccess as string,
+        border: theme.palette.TwClrBrdrSuccess as string,
+        text: theme.palette.TwClrTxtSuccess as string,
+      };
+    case 1:
+      return {
+        background: theme.palette.TwClrBgSuccess as string,
+        border: theme.palette.TwClrBrdrSuccess as string,
+        text: theme.palette.TwClrTxtSuccess as string,
+      };
+    case 0:
+      return {
+        background: theme.palette.TwClrBgInfo as string,
+        border: theme.palette.TwClrBrdrInfo as string,
+        text: theme.palette.TwClrTxtInfo as string,
+      };
+    case -1:
+      return {
+        background: theme.palette.TwClrBgWarning as string,
+        border: theme.palette.TwClrBrdrWarning as string,
+        text: theme.palette.TwClrTxtWarning as string,
+      };
+    case -2:
+      return {
+        background: theme.palette.TwClrBgDanger as string,
+        border: theme.palette.TwClrBrdrDanger as string,
+        text: theme.palette.TwClrTxtDanger as string,
+      };
+    default:
+      return {
+        background: theme.palette.TwClrBgInfo as string,
+        border: theme.palette.TwClrBrdrInfo as string,
+        text: theme.palette.TwClrTxtInfo as string,
+      };
   }
 };
 
