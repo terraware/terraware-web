@@ -25,7 +25,7 @@ const getProjectVotes = async (projectId: number): Promise<Response2<VotingRecor
         {
           urlReplacements: { '{projectId}': `${projectId}` },
         },
-        (data) => ({ votes: data })
+        (data) => ({ votes: data?.votes })
       );
 
 const setProjectVotes = async (projectId: number, payload: UpsertProjectVotesRequestPayload): Promise<Response> =>
