@@ -26,21 +26,21 @@ const VoteInfo = ({ conditionalInfo, title, voteOption }: VoteInfoProps): JSX.El
     }
 
     switch (voteOption) {
-      case 'conditional':
+      case 'Conditional':
         return {
           backgroundColor: theme.palette.TwClrBgInfoTertiary,
           borderColor: theme.palette.TwClrBrdrInfo,
           labelColor: theme.palette.TwClrTxtInfo,
           label: strings.CONDITIONAL,
         };
-      case 'no':
+      case 'No':
         return {
           backgroundColor: theme.palette.TwClrBgWarningTertiary,
           borderColor: theme.palette.TwClrBrdrWarning,
           labelColor: theme.palette.TwClrTxtWarning,
           label: strings.NO,
         };
-      case 'yes':
+      case 'Yes':
         return {
           backgroundColor: theme.palette.TwClrBgSuccessTertiary,
           borderColor: theme.palette.TwClrBrdrSuccess,
@@ -80,7 +80,7 @@ const VoteInfo = ({ conditionalInfo, title, voteOption }: VoteInfoProps): JSX.El
         rightChild={badgeProps && <Badge {...badgeProps} />}
       />
       {/* This is mostly for the top row alignment where title and badge are aligned by center. */}
-      {voteOption === 'conditional' && !!conditionalInfo && (
+      {voteOption === 'Conditional' && !!conditionalInfo && (
         <Row
           rightChild={
             <Textfield

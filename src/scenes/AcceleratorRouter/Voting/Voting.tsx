@@ -27,7 +27,7 @@ const Voting = () => {
 
   const pathParams = useParams<{ projectId: string }>();
   const projectId = Number(pathParams.projectId);
-  const phase = query.get('phase') || 'phase 1'; // default to phase 1?
+  const phase = query.get('phase') || 'Phase 1 - Feasibility Study'; // default to phase 1?
 
   const { status, phaseVotes, projectName } = useFetchVotes({ phase, projectId });
 

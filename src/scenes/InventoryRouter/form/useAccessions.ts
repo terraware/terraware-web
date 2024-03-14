@@ -23,6 +23,8 @@ export const useAccessions = (record?: { accessionId?: number }, speciesId?: num
       setSelectedAccession(
         availableAccessions.find((accession: SearchResponseAccession) => accession.id === `${record.accessionId}`)
       );
+    } else {
+      setSelectedAccession(undefined);
     }
   }, [availableAccessions, record?.accessionId]);
 

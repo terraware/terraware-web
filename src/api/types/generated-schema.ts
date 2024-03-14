@@ -46,6 +46,23 @@ export interface paths {
      */
     put: operations["updateSubmission"];
   };
+  "/api/v1/accelerator/projects/{projectId}/votes": {
+    /**
+     * Gets vote selections for a single project.
+     * @description List every vote selection for this project, organized by phases. Each phase will contain a list of eligible voters and their selections.
+     */
+    get: operations["getProjectVotes"];
+    /**
+     * Upserts vote selections for a single project.
+     * @description Update the user's vote for the project phase. If the (user, project, phase) does not exist, a new entry is created. Setting a `voteOption` to `null` removes the vote.
+     */
+    put: operations["upsertProjectVotes"];
+    /**
+     * Remove one or more voters from the project/phase.
+     * @description Remove the voters from the project phase, making them ineligible from voting. This is different from undoing a vote (by setting the `voteOption` to `null`). To remove voters from the entire project phase, set `userId` to `null`, and set `phaseDelete` to `true`
+     */
+    delete: operations["deleteProjectVotes"];
+  };
   "/api/v1/automations": {
     /** Gets a list of automations for a device or facility. */
     get: operations["listAutomations"];
@@ -1720,6 +1737,17 @@ export interface components {
       /** @description Quantity of seeds withdrawn. If this quantity is in weight and the remaining quantity of the accession is in seeds or vice versa, the accession must have a subset weight and count. */
       withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
     };
+    DeleteProjectVotesRequestPayload: {
+      /** @enum {string} */
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      /** @description A safeguard flag that must be set to `true` for deleting all voters in a project phase. */
+      phaseDelete?: boolean;
+      /**
+       * Format: int64
+       * @description If set to `null`, all voters in the phase will be removed.
+       */
+      userId?: number;
+    };
     DeliverablePayload: {
       /** @enum {string} */
       category: "Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files";
@@ -2141,6 +2169,13 @@ export interface components {
     };
     GetProjectResponsePayload: {
       project: components["schemas"]["ProjectPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetProjectVotesResponsePayload: {
+      phases: components["schemas"]["PhaseVotes"][];
+      /** Format: int64 */
+      projectId: number;
+      projectName: string;
       status: components["schemas"]["SuccessOrError"];
     };
     GetReportPayload: {
@@ -2974,6 +3009,11 @@ export interface components {
       lastName?: string;
       /** @enum {string} */
       role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
+    };
+    PhaseVotes: {
+      /** @enum {string} */
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      votes: components["schemas"]["VoteSelection"][];
     };
     PlantingPayload: {
       /** Format: int64 */
@@ -4013,6 +4053,29 @@ export interface components {
       id: number;
       status: components["schemas"]["SuccessOrError"];
     };
+    UpsertProjectVotesRequestPayload: {
+      /** @enum {string} */
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      votes: components["schemas"]["UpsertVoteSelection"][];
+    };
+    UpsertProjectVotesResponsePayload: {
+      /** @enum {string} */
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      /** Format: int64 */
+      projectId: number;
+      results: components["schemas"]["UpsertVoteSelection"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    UpsertVoteSelection: {
+      conditionalInfo?: string;
+      /** Format: int64 */
+      user: number;
+      /**
+       * @description If set to `null`, remove the vote the user has previously selected.
+       * @enum {string}
+       */
+      voteOption?: "No" | "Conditional" | "Yes";
+    };
     UserProfilePayload: {
       /**
        * @description Two-letter code of the user's country.
@@ -4064,6 +4127,17 @@ export interface components {
       recordingDate: string;
       /** Format: int32 */
       seedsGerminated: number;
+    };
+    VoteSelection: {
+      conditionalInfo?: string;
+      /** @description The vote the user has selected. Can be yes/no/conditional or `null` if a vote is not yet selected. */
+      email: string;
+      firstName?: string;
+      lastName?: string;
+      /** Format: int64 */
+      userId: number;
+      /** @enum {string} */
+      voteOption?: "No" | "Conditional" | "Yes";
     };
     WorkersPayloadV1: {
       /** Format: int32 */
@@ -4316,6 +4390,115 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Gets vote selections for a single project.
+   * @description List every vote selection for this project, organized by phases. Each phase will contain a list of eligible voters and their selections.
+   */
+  getProjectVotes: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetProjectVotesResponsePayload"];
+        };
+      };
+      /** @description The request was not permitted. */
+      403: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Upserts vote selections for a single project.
+   * @description Update the user's vote for the project phase. If the (user, project, phase) does not exist, a new entry is created. Setting a `voteOption` to `null` removes the vote.
+   */
+  upsertProjectVotes: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpsertProjectVotesRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpsertProjectVotesResponsePayload"];
+        };
+      };
+      /** @description The request was not permitted. */
+      403: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Remove one or more voters from the project/phase.
+   * @description Remove the voters from the project phase, making them ineligible from voting. This is different from undoing a vote (by setting the `voteOption` to `null`). To remove voters from the entire project phase, set `userId` to `null`, and set `phaseDelete` to `true`
+   */
+  deleteProjectVotes: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DeleteProjectVotesRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The request was not valid. */
+      400: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** @description The request was not permitted. */
+      403: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };

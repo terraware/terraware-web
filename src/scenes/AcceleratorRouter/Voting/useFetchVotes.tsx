@@ -47,7 +47,7 @@ export default function useFetchVotes({ phase, projectId }: Props): Response {
     if (votes?.status === 'error') {
       snackbar.toastError();
     } else if (votes?.status === 'success') {
-      const votesForPhase = votes?.data?.phases.find((data) => data.cohortPhase === phase);
+      const votesForPhase = votes?.data?.phases.find((data) => data.phase === phase);
       if (votesForPhase) {
         setPhaseVotes(votesForPhase);
       } else {

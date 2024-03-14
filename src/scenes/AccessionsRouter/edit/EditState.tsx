@@ -47,27 +47,27 @@ export default function EditState(props: EditStateProps): JSX.Element {
           />
         </Grid>
       </Grid>
-      <Box
-        sx={{
-          background: stateChanged ? '#FDE7C3' : 'initial',
-          borderRadius: '14px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: theme.spacing(2, 1),
-          marginTop: theme.spacing(4),
-          height: '74px',
-        }}
-      >
-        {stateChanged && (
+      {stateChanged && (
+        <Box
+          sx={{
+            background: '#FDE7C3',
+            borderRadius: '14px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: theme.spacing(2, 1),
+            marginTop: theme.spacing(2),
+            height: '74px',
+          }}
+        >
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Icon name='warning' className={classes.messageIcon} size='large' />
             <Typography sx={{ color: theme.palette.TwClrTxt, fontSize: '14px', paddingLeft: 0.5 }}>
               {strings.UPDATE_STATUS_WARNING}
             </Typography>
           </Box>
-        )}
-      </Box>
+        </Box>
+      )}
     </>
   );
 }
