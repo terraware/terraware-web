@@ -1,4 +1,4 @@
-import React, { RefObject, useRef } from 'react';
+import React, { useRef } from 'react';
 
 import { CircularProgress, Grid, Typography, useTheme } from '@mui/material';
 
