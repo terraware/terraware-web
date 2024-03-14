@@ -1,8 +1,7 @@
-import { useCallback, useMemo } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useMemo } from 'react';
 
 import { Box, useTheme } from '@mui/material';
-import { BusySpinner, Button } from '@terraware/web-components';
+import { BusySpinner } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
@@ -11,30 +10,21 @@ import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { VoteOption } from 'src/types/Votes';
-import useQuery from 'src/utils/useQuery';
-import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
-import { getUserDisplayName } from 'src/utils/user';
 
-import VoteInfo from './VoteInfo';
-import useFetchVotes from './useFetchVotes';
+import VoteBadge from './VoteBadge';
+import VoteRowGrid from './VoteRowGrid';
+import { useVotingData } from './VotingContext';
 
-const Voting = () => {
-  const history = useHistory();
-  const query = useQuery();
-  const location = useStateLocation();
+export type Props = {
+  children: React.ReactNode;
+  isForm?: boolean;
+  rightComponent?: React.ReactNode;
+};
+
+const VotingWrapper = ({ children, isForm, rightComponent }: Props): JSX.Element => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-
-  const pathParams = useParams<{ projectId: string }>();
-  const projectId = Number(pathParams.projectId);
-  const phase = query.get('phase') || 'Phase 1 - Feasibility Study'; // default to phase 1?
-
-  const { status, phaseVotes, projectName } = useFetchVotes({ phase, projectId });
-
-  const goToEditVotes = useCallback(() => {
-    // keep query state for edit view
-    history.push(getLocation(APP_PATHS.ACCELERATOR_VOTING_EDIT.replace(':projectId', `${projectId}`), location));
-  }, [history, location, projectId]);
+  const { phaseVotes, projectId, projectName, status } = useVotingData();
 
   // construct the bread crumbs back to originating context
   const crumbs: Crumb[] = useMemo(
@@ -55,6 +45,7 @@ const Voting = () => {
   );
 
   // vote decision, pick the majority or undefined if no majority
+  // this will eventually come from the BE
   const voteDecision = useMemo<VoteOption | undefined>(() => {
     let decision: VoteOption | undefined;
 
@@ -84,23 +75,14 @@ const Voting = () => {
     return decision;
   }, [phaseVotes]);
 
-  // Edit Votes button
-  const editVotes = useMemo(
-    () =>
-      activeLocale ? (
-        <Button label={strings.EDIT_VOTES} icon='iconEdit' onClick={goToEditVotes} size='medium' id='editVotes' />
-      ) : null,
-    [activeLocale, goToEditVotes]
-  );
-
   return (
     <Page
       crumbs={crumbs}
       hierarchicalCrumbs={false}
-      rightComponent={editVotes}
+      rightComponent={rightComponent}
       title={strings.INVESTMENT_COMMITTEE_VOTES}
     >
-      <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+      <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, padding: theme.spacing(isForm ? 0 : 3) }}>
         {status === 'pending' && <BusySpinner withSkrim={true} />}
         <Box
           sx={{
@@ -108,33 +90,15 @@ const Voting = () => {
             borderRadius: theme.spacing(2),
             gap: theme.spacing(8),
             padding: theme.spacing(2),
+            margin: theme.spacing(isForm ? 3 : 0),
           }}
         >
-          <VoteInfo title={strings.VOTING_DECISION} voteOption={voteDecision} />
+          <VoteRowGrid leftChild={strings.VOTING_DECISION} rightChild={<VoteBadge vote={voteDecision} />} />
         </Box>
-        {phaseVotes?.votes.map((vote) => (
-          <Box
-            key={vote.userId}
-            sx={{
-              borderBottom: `1px solid ${theme.palette.TwClrBaseGray050}`,
-              gap: theme.spacing(8),
-              padding: theme.spacing(2),
-              '&:last-child': {
-                borderBottom: 'none',
-                paddingBottom: 0,
-              },
-            }}
-          >
-            <VoteInfo
-              conditionalInfo={vote.conditionalInfo}
-              title={strings.formatString(strings.VOTER, getUserDisplayName(vote))}
-              voteOption={vote.voteOption}
-            />
-          </Box>
-        ))}
+        {children}
       </Card>
     </Page>
   );
 };
 
-export default Voting;
+export default VotingWrapper;

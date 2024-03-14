@@ -1,12 +1,23 @@
-import { useParams } from 'react-router-dom';
+import PageForm from 'src/components/common/PageForm';
 
-import Page from 'src/components/Page';
+import VotingWrapper from './VotingWrapper';
 
-const Voting = () => {
-  const pathParams = useParams<{ projectId: string }>();
-  const projectId = Number(pathParams.projectId);
+const VotingEdit = () => {
+  const onCancel = () => {
+    return;
+  };
 
-  return <Page title={`Voting for project ${projectId}`} />;
+  const onSave = () => {
+    return;
+  };
+
+  return (
+    <VotingWrapper isForm>
+      <PageForm cancelID='cancelSave' onCancel={onCancel} onSave={onSave} saveID='saveVotes'>
+        TODO: Edit WIP
+      </PageForm>
+    </VotingWrapper>
+  );
 };
 
-export default Voting;
+export default VotingEdit;

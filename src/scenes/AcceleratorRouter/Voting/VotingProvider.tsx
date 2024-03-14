@@ -1,32 +1,34 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useCallback, useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
-import { Statuses } from 'src/redux/features/asyncUtils';
 import { requestProjectVotesGet } from 'src/redux/features/votes/votesAsyncThunks';
 import { selectProjectVotes } from 'src/redux/features/votes/votesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { PhaseVotes } from 'src/types/Votes';
+import { Phase, PhaseVotes } from 'src/types/Votes';
+import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import { VotingContext, VotingData } from './VotingContext';
+
 export type Props = {
-  phase: string;
-  projectId: number;
+  children: React.ReactNode;
 };
 
-export type Response = {
-  status: Statuses;
-  phaseVotes?: PhaseVotes;
-  projectName?: string;
-};
-
-export default function useFetchVotes({ phase, projectId }: Props): Response {
+const VotingProvider = ({ children }: Props): JSX.Element => {
   const history = useHistory();
+  const query = useQuery();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
 
-  const [phaseVotes, setPhaseVotes] = useState<PhaseVotes>();
+  const pathParams = useParams<{ projectId: string }>();
+  const projectId = Number(pathParams.projectId);
+  const phase: Phase = (query.get('phase') as Phase) || 'Phase 1 - Feasibility Study'; // default to phase 1?
+
   const votes = useAppSelector((state) => selectProjectVotes(state, projectId));
+
+  const [phaseVotes, setPhaseVotes] = useState<PhaseVotes>();
+  const [votingData, setVotingData] = useState<VotingData>({ projectId });
 
   const goToProjects = useCallback(() => {
     history.push({ pathname: APP_PATHS.ACCELERATOR_OVERVIEW }); // TODO switch to project management lists page
@@ -56,12 +58,17 @@ export default function useFetchVotes({ phase, projectId }: Props): Response {
     }
   }, [goToProjects, phase, snackbar, votes]);
 
-  return useMemo<Response>(
-    () => ({
+  // update votes data in context
+  useEffect(() => {
+    setVotingData({
       phaseVotes,
+      projectId,
       projectName: votes?.data?.projectName,
       status: votes?.status ?? 'pending',
-    }),
-    [phaseVotes, votes?.data?.projectName, votes?.status]
-  );
-}
+    });
+  }, [phaseVotes, projectId, votes?.data?.projectName, votes?.status]);
+
+  return <VotingContext.Provider value={votingData}>{children}</VotingContext.Provider>;
+};
+
+export default VotingProvider;
