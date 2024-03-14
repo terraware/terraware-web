@@ -86,14 +86,11 @@ const PeopleView = () => {
   const dispatchSearchRequest = useCallback(
     (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => {
       // TODO implement search and sort order into redux and service
-      const request = dispatch(requestListGlobalRolesUsers({ locale }));
+      const request = dispatch(requestListGlobalRolesUsers({ locale, search, searchSortOrder }));
       setRequestId(request.requestId);
     },
     [dispatch]
   );
-
-  // tslint:disable:no-console
-  console.log('globalRoleUsers', globalRoleUsers);
 
   const rightComponent = useMemo(
     () =>
@@ -123,6 +120,7 @@ const PeopleView = () => {
         fuzzySearchColumns={fuzzySearchColumns}
         pageHeaderRef={pageHeaderRef}
         rows={globalRoleUsers || []}
+        tableId={'acceleratorPeopleTable'}
       />
     </Page>
   );
