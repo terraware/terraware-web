@@ -46,6 +46,15 @@ export interface paths {
      */
     put: operations["updateSubmission"];
   };
+  "/api/v1/accelerator/projects/{projectId}/scores": {
+    /** Gets vote selections for a single project. */
+    get: operations["getProjectScores"];
+    /**
+     * Upserts vote selections for a single project.
+     * @description Update the scores for the project phase. If the (project, phase, category) does not exist, a new entry is created. Setting a `score` to `null` removes the score.
+     */
+    put: operations["upsertProjectScores"];
+  };
   "/api/v1/accelerator/projects/{projectId}/votes": {
     /**
      * Gets vote selections for a single project.
@@ -2171,12 +2180,16 @@ export interface components {
       project: components["schemas"]["ProjectPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
-    GetProjectVotesResponsePayload: {
-      phases: components["schemas"]["PhaseVotes"][];
+    GetProjectScoresResponsePayload: {
+      phases: components["schemas"]["PhaseScores"][];
       /** Format: int64 */
       projectId: number;
       projectName: string;
       status: components["schemas"]["SuccessOrError"];
+    };
+    GetProjectVotesResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      votes: components["schemas"]["ProjectVotesPayload"];
     };
     GetReportPayload: {
       /** Format: int64 */
@@ -3010,6 +3023,12 @@ export interface components {
       /** @enum {string} */
       role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
     };
+    PhaseScores: {
+      /** @enum {string} */
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      scores: components["schemas"]["Score"][];
+      systemScore?: number;
+    };
     PhaseVotes: {
       /** @enum {string} */
       phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
@@ -3147,6 +3166,12 @@ export interface components {
       isEnabled: boolean;
       /** Format: int64 */
       projectId: number;
+    };
+    ProjectVotesPayload: {
+      phases: components["schemas"]["PhaseVotes"][];
+      /** Format: int64 */
+      projectId: number;
+      projectName: string;
     };
     PutNurseryV1: {
       /** Format: date */
@@ -3307,6 +3332,18 @@ export interface components {
       /** Format: int64 */
       id: number;
       status: components["schemas"]["SuccessOrError"];
+    };
+    Score: {
+      /** @enum {string} */
+      category: "Carbon" | "Finance" | "Forestry" | "Legal" | "Community" | "GIS" | "Climate Impact" | "Expansion Potential" | "Experience and Understanding" | "Operational Capacity" | "Responsiveness and Attention to Detail" | "Values Alignment";
+      /** Format: date-time */
+      modifiedTime: string;
+      qualitative?: string;
+      /**
+       * Format: int32
+       * @description Must be between -2 to 2. If `null`, a score has not been selected.
+       */
+      value?: number;
     };
     /** @description A search criterion. The search will return results that match this criterion. The criterion can be composed of other search criteria to form arbitrary Boolean search expressions. TYPESCRIPT-OVERRIDE-TYPE-WITH-ANY */
     SearchNodePayload: {operation: "and" | "field" | "not" | "or"; [key: string]: any;};
@@ -4053,23 +4090,50 @@ export interface components {
       id: number;
       status: components["schemas"]["SuccessOrError"];
     };
+    UpsertProjectScoresRequestPayload: {
+      /** @enum {string} */
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      scores: components["schemas"]["UpsertScore"][];
+    };
+    UpsertProjectScoresResponsePayload: {
+      /** @enum {string} */
+      phaseId: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      /** Format: int64 */
+      projectId: number;
+      scores: components["schemas"]["Score"][];
+      status: components["schemas"]["SuccessOrError"];
+      systemScore?: number;
+    };
+    UpsertProjectVotesPayload: {
+      /** @enum {string} */
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      /** Format: int64 */
+      projectId: number;
+      results: components["schemas"]["UpsertVoteSelection"][];
+    };
     UpsertProjectVotesRequestPayload: {
       /** @enum {string} */
       phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
       votes: components["schemas"]["UpsertVoteSelection"][];
     };
     UpsertProjectVotesResponsePayload: {
-      /** @enum {string} */
-      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
-      /** Format: int64 */
-      projectId: number;
-      results: components["schemas"]["UpsertVoteSelection"][];
       status: components["schemas"]["SuccessOrError"];
+      votes: components["schemas"]["UpsertProjectVotesPayload"];
+    };
+    UpsertScore: {
+      /** @enum {string} */
+      category: "Carbon" | "Finance" | "Forestry" | "Legal" | "Community" | "GIS" | "Climate Impact" | "Expansion Potential" | "Experience and Understanding" | "Operational Capacity" | "Responsiveness and Attention to Detail" | "Values Alignment";
+      qualitative?: string;
+      /**
+       * Format: int32
+       * @description Must be between -2 to 2. If set to `null`, remove the selected score.
+       */
+      value?: number;
     };
     UpsertVoteSelection: {
       conditionalInfo?: string;
       /** Format: int64 */
-      user: number;
+      userId: number;
       /**
        * @description If set to `null`, remove the vote the user has previously selected.
        * @enum {string}
@@ -4390,6 +4454,58 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets vote selections for a single project. */
+  getProjectScores: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetProjectScoresResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Upserts vote selections for a single project.
+   * @description Update the scores for the project phase. If the (project, phase, category) does not exist, a new entry is created. Setting a `score` to `null` removes the score.
+   */
+  upsertProjectScores: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpsertProjectScoresRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpsertProjectScoresResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
