@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/scenes/AcceleratorRouter/Voting/useFetchVotes.tsx</title>
+    <title>Code coverage report for src/scenes/AcceleratorRouter/Voting/VotingProvider.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../../prettify.css" />
     <link rel="stylesheet" href="../../../../base.css" />
@@ -19,20 +19,20 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/scenes/AcceleratorRouter/Voting</a> useFetchVotes.tsx</h1>
+        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/scenes/AcceleratorRouter/Voting</a> VotingProvider.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -130,13 +130,14 @@
 <a name='L65'></a><a href='#L65'>65</a>
 <a name='L66'></a><a href='#L66'>66</a>
 <a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -156,6 +157,14 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -188,6 +197,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -197,35 +207,41 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback, useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 &nbsp;
 import { APP_PATHS } from 'src/constants';
-import { Statuses } from 'src/redux/features/asyncUtils';
 import { requestProjectVotesGet } from 'src/redux/features/votes/votesAsyncThunks';
 import { selectProjectVotes } from 'src/redux/features/votes/votesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { PhaseVotes } from 'src/types/Votes';
+import { Phase, PhaseVotes } from 'src/types/Votes';
+import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
+import { VotingContext, VotingData } from './VotingContext';
+&nbsp;
 export type Props = {
-  phase: string;
-  projectId: number;
+  children: React.ReactNode;
 };
 &nbsp;
-export type Response = {
-  status: Statuses;
-  phaseVotes?: PhaseVotes;
-  projectName?: string;
-};
-&nbsp;
-export default function <span class="fstat-no" title="function not covered" >useFetchVotes(</span>{ phase, projectId }: Props): Response {
+const VotingProvider = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> children }: Props): JSX.Element =&gt; {</span>
   const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
+  const query = <span class="cstat-no" title="statement not covered" >useQuery();</span>
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
 &nbsp;
-  const [phaseVotes, setPhaseVotes] = <span class="cstat-no" title="statement not covered" >useState&lt;PhaseVotes&gt;();</span>
+  const pathParams = <span class="cstat-no" title="statement not covered" >useParams&lt;{ projectId: string }&gt;();</span>
+  const projectId = <span class="cstat-no" title="statement not covered" >Number(pathParams.projectId);</span>
+  const phase: Phase = <span class="cstat-no" title="statement not covered" >(query.get('phase') as Phase) || 'Phase 1 - Feasibility Study';</span> // default to phase 1?
+&nbsp;
   const votes = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectProjectVotes(state, projectId))</span>;</span>
+&nbsp;
+  const [phaseVotes, setPhaseVotes] = <span class="cstat-no" title="statement not covered" >useState&lt;PhaseVotes&gt;();</span>
+  const [votingData, setVotingData] = <span class="cstat-no" title="statement not covered" >useState&lt;VotingData&gt;({ projectId });</span>
 &nbsp;
   const goToProjects = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    history.push({ pathname: APP_PATHS.ACCELERATOR_OVERVIEW }); </span>// TODO switch to project management lists page
@@ -255,15 +271,20 @@ export default function <span class="fstat-no" title="function not covered" >use
     }
   }, [goToProjects, phase, snackbar, votes]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return useMemo&lt;Response&gt;(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
+  // update votes data in context
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    setVotingData({</span>
       phaseVotes,
+      projectId,
       projectName: votes?.data?.projectName,
       status: votes?.status ?? 'pending',
-    }),
-    [phaseVotes, votes?.data?.projectName, votes?.status]
-  );
-}
+    });
+  }, [phaseVotes, projectId, votes?.data?.projectName, votes?.status]);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return &lt;VotingContext.Provider value={votingData}&gt;{children}&lt;/VotingContext.Provider&gt;;</span>
+};
+&nbsp;
+export default VotingProvider;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -271,7 +292,7 @@ export default function <span class="fstat-no" title="function not covered" >use
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-14T20:02:49.005Z
+                at 2024-03-14T20:13:58.018Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
