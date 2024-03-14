@@ -6,7 +6,7 @@ export type Props = {
   style?: Record<string, string | number>;
 };
 
-const VoteRow = ({ leftChild, rightChild, style }: Props): JSX.Element => {
+const VoteRowGrid = ({ leftChild, rightChild, style }: Props): JSX.Element => {
   return (
     <Grid alignItems='center' display='flex' flexDirection='row' flexGrow={1} sx={style}>
       <Grid item xs={4}>
@@ -19,4 +19,4 @@ const VoteRow = ({ leftChild, rightChild, style }: Props): JSX.Element => {
   );
 };
 
-export default VoteRow;
+export default VoteRowGrid;

@@ -8,13 +8,12 @@ import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
-import { getUserDisplayName } from 'src/utils/user';
 
-import VoteInfo from './VoteInfo';
+import { UserVoteView } from './UserVote';
 import { useVotingData } from './VotingContext';
 import VotingWrapper from './VotingWrapper';
 
-const Voting = () => {
+const VotingView = () => {
   const history = useHistory();
   const location = useStateLocation();
   const { activeLocale } = useLocalization();
@@ -50,15 +49,11 @@ const Voting = () => {
             },
           }}
         >
-          <VoteInfo
-            conditionalInfo={vote.conditionalInfo}
-            title={strings.formatString(strings.VOTER, getUserDisplayName(vote))}
-            voteOption={vote.voteOption}
-          />
+          <UserVoteView vote={vote} />
         </Box>
       ))}
     </VotingWrapper>
   );
 };
 
-export default Voting;
+export default VotingView;

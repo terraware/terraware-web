@@ -2,9 +2,9 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 
-import VotingView from './Voting';
 import VotingEdit from './VotingEdit';
 import VotingProvider from './VotingProvider';
+import VotingView from './VotingView';
 
 const VotingRouter = () => {
   return (

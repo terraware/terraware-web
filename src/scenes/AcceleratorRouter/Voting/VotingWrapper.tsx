@@ -11,7 +11,8 @@ import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { VoteOption } from 'src/types/Votes';
 
-import VoteInfo from './VoteInfo';
+import VoteBadge from './VoteBadge';
+import VoteRowGrid from './VoteRowGrid';
 import { useVotingData } from './VotingContext';
 
 export type Props = {
@@ -92,7 +93,7 @@ const VotingWrapper = ({ children, isForm, rightComponent }: Props): JSX.Element
             margin: theme.spacing(isForm ? 3 : 0),
           }}
         >
-          <VoteInfo title={strings.VOTING_DECISION} voteOption={voteDecision} />
+          <VoteRowGrid leftChild={strings.VOTING_DECISION} rightChild={<VoteBadge vote={voteDecision} />} />
         </Box>
         {children}
       </Card>
