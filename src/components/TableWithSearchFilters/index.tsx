@@ -6,7 +6,7 @@ import { RendererProps, SortOrder, TableColumnType, TableRowType } from '@terraw
 
 import Card from 'src/components/common/Card';
 import SearchFiltersWrapperV2, { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
-import { OrderPreservedTable as Table } from 'src/components/common/table';
+import Table from 'src/components/common/table';
 import { useLocalization } from 'src/providers';
 import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import useDebounce from 'src/utils/useDebounce';
@@ -132,7 +132,7 @@ const TableWithSearchFilters = ({
         <Grid item xs={12}>
           <Table
             id={tableId}
-            columns={columns(activeLocale)}
+            columns={() => columns(activeLocale)}
             rows={rows}
             orderBy={searchSortOrder.field}
             order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
