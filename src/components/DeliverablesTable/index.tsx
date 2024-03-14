@@ -25,7 +25,7 @@ interface DeliverablesTableProps {
   tableId: string;
 }
 
-const fuzzySearchColumns = ['name', 'project_name'];
+const fuzzySearchColumns = ['name', 'projectName'];
 const defaultSearchOrder: SearchSortOrder = {
   field: 'name',
   direction: 'Ascending',
