@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { Box, Button, Typography, useTheme } from '@mui/material';
 
@@ -58,8 +58,8 @@ const ScoreControl = ({ disabled, onChange, score }: ScoreControlProps) => {
   const theme = useTheme();
   const castScoreValue = Number(score.value) as ScoreValue;
   const [scoreValue, setScoreValue] = useState<ScoreValue>(castScoreValue);
-  const scoreLabel = getScoreValue(scoreValue);
-  const scoreColors = getScoreColors(scoreValue, theme);
+  const scoreLabel = useMemo(() => getScoreValue(scoreValue), [scoreValue]);
+  const scoreColors = useMemo(() => getScoreColors(scoreValue, theme), [scoreValue, theme]);
 
   return (
     <Box
