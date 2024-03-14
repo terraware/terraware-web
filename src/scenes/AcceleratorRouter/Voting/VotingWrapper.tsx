@@ -77,12 +77,20 @@ const VotingWrapper = ({ children, isForm, rightComponent }: Props): JSX.Element
 
   return (
     <Page
+      contentStyle={isForm ? { flexGrow: 1 } : {}}
       crumbs={crumbs}
       hierarchicalCrumbs={false}
       rightComponent={rightComponent}
       title={strings.INVESTMENT_COMMITTEE_VOTES}
     >
-      <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, padding: theme.spacing(isForm ? 0 : 3) }}>
+      <Card
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          flexGrow: 1,
+          padding: theme.spacing(isForm ? 0 : 3),
+        }}
+      >
         {status === 'pending' && <BusySpinner withSkrim={true} />}
         <Box
           sx={{
@@ -90,7 +98,7 @@ const VotingWrapper = ({ children, isForm, rightComponent }: Props): JSX.Element
             borderRadius: theme.spacing(2),
             gap: theme.spacing(8),
             padding: theme.spacing(2),
-            margin: theme.spacing(isForm ? 3 : 0),
+            margin: isForm ? theme.spacing(3, 3, 0) : 0,
           }}
         >
           <VoteRowGrid leftChild={strings.VOTING_DECISION} rightChild={<VoteBadge vote={voteDecision} />} />
