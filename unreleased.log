@@ -1,3 +1,4 @@
+0e0ed49f00 SW-5066 Allow all file types in document upload (#2332)
 77a8a2eea6 SW-5062 Pick up photo chooser fix in terraware-web (#2323)
 b81feaaf7b SW-5059 Increase request size limit to 200MB (#2320)
 d51f1d963f Updated translations from Phrase (#2322)
