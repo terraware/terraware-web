@@ -3031,6 +3031,8 @@ export interface components {
     };
     PhaseVotes: {
       /** @enum {string} */
+      decision?: "No" | "Conditional" | "Yes";
+      /** @enum {string} */
       phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
       votes: components["schemas"]["VoteSelection"][];
     };
@@ -4104,21 +4106,10 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
       systemScore?: number;
     };
-    UpsertProjectVotesPayload: {
-      /** @enum {string} */
-      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
-      /** Format: int64 */
-      projectId: number;
-      results: components["schemas"]["UpsertVoteSelection"][];
-    };
     UpsertProjectVotesRequestPayload: {
       /** @enum {string} */
       phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
       votes: components["schemas"]["UpsertVoteSelection"][];
-    };
-    UpsertProjectVotesResponsePayload: {
-      status: components["schemas"]["SuccessOrError"];
-      votes: components["schemas"]["UpsertProjectVotesPayload"];
     };
     UpsertScore: {
       /** @enum {string} */
@@ -4527,7 +4518,7 @@ export interface operations {
           "application/json": components["schemas"]["GetProjectVotesResponsePayload"];
         };
       };
-      /** @description The request was not permitted. */
+      /** @description Attempting to read votes without sufficient privilege */
       403: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -4560,10 +4551,10 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          "application/json": components["schemas"]["UpsertProjectVotesResponsePayload"];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
-      /** @description The request was not permitted. */
+      /** @description Attempting to delete votes without sufficient privilege */
       403: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -4571,6 +4562,12 @@ export interface operations {
       };
       /** @description The requested resource was not found. */
       404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** @description Attempting to upsert a vote in an inactive phase */
+      409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
@@ -4599,13 +4596,13 @@ export interface operations {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
-      /** @description The request was not valid. */
+      /** @description Attempting to delete a phase of votes without safeguard */
       400: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
-      /** @description The request was not permitted. */
+      /** @description Attempting to delete votes without sufficient privilege */
       403: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -4613,6 +4610,12 @@ export interface operations {
       };
       /** @description The requested resource was not found. */
       404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** @description Attempting to delete a vote in an inactive phase */
+      409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
