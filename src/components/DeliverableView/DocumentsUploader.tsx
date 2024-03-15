@@ -66,7 +66,6 @@ const DocumentsUploader = ({
           <FileUploadDialog deliverable={deliverable} files={files} onClose={onCloseDialog} />
         ))}
       <FileChooser
-        acceptFileType='image/*,application/*'
         chooseFileText={strings.CHOOSE_FILE}
         maxFiles={maxFiles}
         multipleSelection
