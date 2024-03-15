@@ -9,8 +9,8 @@ import { Score, ScoreValue, ScoreValues, getScoreCategory, getScoreColors, getSc
 
 type ScoringEntryProps = {
   disabled?: boolean;
-  onChange: (value: ScoreValue) => void;
-  onChangeText: (id: string, value: unknown) => void;
+  onChange?: (score: Score) => void;
+  onChangeText?: (id: string, value: unknown) => void;
   phase: string;
   qualitativeInfo: string;
   score: Score;
@@ -20,6 +20,12 @@ const ScoreEntry = ({ disabled, onChange, onChangeText, phase, score, qualitativ
   const theme = useTheme();
   const scoreCategory = getScoreCategory(score.category);
   const { activeLocale } = useLocalization();
+  const [qualInfo, setQualInfo] = useState(qualitativeInfo);
+
+  const onChangeQualitativeInfo = (id: string, value: unknown) => {
+    setQualInfo(value as string);
+    onChangeText?.(id, value);
+  };
 
   return activeLocale ? (
     <Box sx={{ margin: '16px 0', width: 1 }}>
@@ -39,7 +45,7 @@ const ScoreEntry = ({ disabled, onChange, onChangeText, phase, score, qualitativ
         {disabled ? (
           <Typography sx={{ color: theme.palette.TwClrBaseBlack }}>{qualitativeInfo}</Typography>
         ) : (
-          <TextArea id='qualitative-info' label='' value={qualitativeInfo} onChange={onChangeText} />
+          <TextArea id='qualitative-info' label='' value={qualInfo} onChange={onChangeQualitativeInfo} />
         )}
       </Box>
     </Box>
@@ -50,16 +56,23 @@ export default ScoreEntry;
 
 type ScoreControlProps = {
   disabled?: boolean;
-  onChange: (value: ScoreValue) => void;
+  onChange?: (score: Score) => void;
   score: Score;
 };
 
 const ScoreControl = ({ disabled, onChange, score }: ScoreControlProps) => {
   const theme = useTheme();
-  const castScoreValue = Number(score.value) as ScoreValue;
-  const [scoreValue, setScoreValue] = useState<ScoreValue>(castScoreValue);
+  const castScoreValue = (
+    typeof score.value === 'number' && ScoreValues.includes(score.value as ScoreValue) ? score.value : null
+  ) as ScoreValue | null;
+  const [scoreValue, setScoreValue] = useState<ScoreValue | null>(castScoreValue);
   const scoreLabel = getScoreValue(scoreValue);
   const scoreColors = useMemo(() => getScoreColors(scoreValue, theme), [scoreValue, theme]);
+
+  const onChangeValue = (value: ScoreValue) => {
+    setScoreValue(value);
+    onChange?.({ ...score, value } as Score);
+  };
 
   return (
     <Box
@@ -77,10 +90,7 @@ const ScoreControl = ({ disabled, onChange, score }: ScoreControlProps) => {
             <ScoreControlButton
               disabled={disabled}
               key={value}
-              onChange={(_value) => {
-                setScoreValue(_value);
-                onChange(_value);
-              }}
+              onChange={onChangeValue}
               selected={value === scoreValue}
               value={value}
             />
@@ -96,7 +106,7 @@ const ScoreControl = ({ disabled, onChange, score }: ScoreControlProps) => {
 
 type ScoreControlButtonProps = {
   disabled?: boolean;
-  onChange: (value: ScoreValue) => void;
+  onChange?: (value: ScoreValue) => void;
   selected: boolean;
   value: ScoreValue;
 };
@@ -114,7 +124,7 @@ const ScoreControlButton = ({ disabled, onChange, selected, value }: ScoreContro
         selected
           ? undefined
           : () => {
-              onChange(value);
+              onChange?.(value);
             }
       }
       sx={{

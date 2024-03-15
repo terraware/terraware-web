@@ -22,7 +22,7 @@ export const ScoreCategories: ScoreCategory[] = ['Calculated', 'Carbon', 'Financ
 export type ScoreValue = 2 | 1 | 0 | -1 | -2;
 export const ScoreValues: ScoreValue[] = [2, 1, 0, -1, -2];
 
-export const getScoreValue = (value: ScoreValue): string => {
+export const getScoreValue = (value: ScoreValue | null): string => {
   switch (value) {
     case 2:
       return strings.SCORE_VALUE_P2;
@@ -34,12 +34,14 @@ export const getScoreValue = (value: ScoreValue): string => {
       return strings.SCORE_VALUE_N1;
     case -2:
       return strings.SCORE_VALUE_N2;
+    case null:
+      return strings.SCORE_VALUE_NULL;
     default:
       return `${value}`;
   }
 };
 
-export const getScoreCategory = (value: ScoreCategory): string => {
+export const getScoreCategory = (value: ScoreCategory | null): string => {
   switch (value) {
     case 'Carbon':
       return strings.CARBON;
@@ -55,7 +57,7 @@ export const getScoreCategory = (value: ScoreCategory): string => {
 };
 
 export const getScoreColors = (
-  value: ScoreValue,
+  value: ScoreValue | null,
   theme: Theme
 ): { background: string; border: string; text: string } => {
   switch (value) {
@@ -93,7 +95,7 @@ export const getScoreColors = (
       return {
         background: theme.palette.TwClrBgInfo as string,
         border: theme.palette.TwClrBrdrInfo as string,
-        text: theme.palette.TwClrTxtInfo as string,
+        text: theme.palette.TwClrTxtTertiary as string,
       };
   }
 };
