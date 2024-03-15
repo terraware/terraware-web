@@ -15,8 +15,8 @@ server {
         text/html
         text/plain;
 
-    # Allow large photo uploads. The default maximum request size is 1MB.
-    client_max_body_size 50M;
+    # Allow large file uploads. The default maximum request size is 1MB.
+    client_max_body_size 200M;
 
     location / {
         root   /usr/share/nginx/html;
