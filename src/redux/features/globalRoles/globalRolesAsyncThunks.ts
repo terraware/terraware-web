@@ -7,18 +7,6 @@ import { UserWithGlobalRoles } from 'src/types/GlobalRoles';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { UserGlobalRole } from 'src/types/User';
 
-export const requestGetGlobalRolesUser = createAsyncThunk(
-  'globalRoles/get-user',
-  async (userId: number, { rejectWithValue }) => {
-    const response = await GlobalRolesService.getUser(userId);
-    if (response) {
-      return response;
-    }
-
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
-
 export const requestListGlobalRolesUsers = createAsyncThunk(
   'globalRoles/list',
   async (
