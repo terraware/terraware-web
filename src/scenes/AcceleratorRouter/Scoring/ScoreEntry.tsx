@@ -9,8 +9,8 @@ import { Score, ScoreValue, ScoreValues, getScoreCategory, getScoreColors, getSc
 
 type ScoringEntryProps = {
   disabled?: boolean;
-  onChange: (score: Score) => void;
-  onChangeText: (id: string, value: unknown) => void;
+  onChange?: (score: Score) => void;
+  onChangeText?: (id: string, value: unknown) => void;
   phase: string;
   qualitativeInfo: string;
   score: Score;
@@ -24,7 +24,7 @@ const ScoreEntry = ({ disabled, onChange, onChangeText, phase, score, qualitativ
 
   const onChangeQualitativeInfo = (id: string, value: unknown) => {
     setQualInfo(value as string);
-    onChangeText(id, value);
+    onChangeText?.(id, value);
   };
 
   return activeLocale ? (
@@ -56,7 +56,7 @@ export default ScoreEntry;
 
 type ScoreControlProps = {
   disabled?: boolean;
-  onChange: (score: Score) => void;
+  onChange?: (score: Score) => void;
   score: Score;
 };
 
@@ -71,7 +71,7 @@ const ScoreControl = ({ disabled, onChange, score }: ScoreControlProps) => {
 
   const onChangeValue = (value: ScoreValue) => {
     setScoreValue(value);
-    onChange({ ...score, value } as Score);
+    onChange?.({ ...score, value } as Score);
   };
 
   return (
@@ -106,7 +106,7 @@ const ScoreControl = ({ disabled, onChange, score }: ScoreControlProps) => {
 
 type ScoreControlButtonProps = {
   disabled?: boolean;
-  onChange: (value: ScoreValue) => void;
+  onChange?: (value: ScoreValue) => void;
   selected: boolean;
   value: ScoreValue;
 };
@@ -124,7 +124,7 @@ const ScoreControlButton = ({ disabled, onChange, selected, value }: ScoreContro
         selected
           ? undefined
           : () => {
-              onChange(value);
+              onChange?.(value);
             }
       }
       sx={{

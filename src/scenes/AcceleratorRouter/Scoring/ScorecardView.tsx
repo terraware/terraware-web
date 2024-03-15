@@ -123,8 +123,6 @@ const ScorecardView = () => {
                       <ScoreEntry
                         key={index}
                         disabled={true}
-                        onChange={(score: Score) => {}}
-                        onChangeText={(id: string, value: unknown) => {}}
                         phase={phase0Scorecard?.phase}
                         qualitativeInfo={'Good project with good folks ready to do good work... almost perfect'}
                         score={phase0Scorecard.scores[index]}
@@ -136,8 +134,6 @@ const ScorecardView = () => {
                       <ScoreEntry
                         key={index}
                         disabled={true}
-                        onChange={(score: Score) => {}}
-                        onChangeText={(id: string, value: unknown) => {}}
                         phase={phase1Scorecard?.phase}
                         qualitativeInfo={''}
                         score={phase1Scorecard.scores[index]}
