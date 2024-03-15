@@ -146,11 +146,7 @@ export const searchAndSort = <T extends Record<string, unknown>>(
   let _results = [...results];
 
   if (search) {
-    _results = _results.filter((result: T) => {
-      const m = searchConditionMet(result, search);
-      debugger;
-      return m;
-    });
+    _results = _results.filter((result: T) => searchConditionMet(result, search));
   }
 
   if (sortOrderConfig) {
