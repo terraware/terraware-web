@@ -24,7 +24,7 @@ const ScorecardView = () => {
   const history = useHistory();
 
   const goToScoresEdit = useCallback(() => {
-    history.push({ pathname: APP_PATHS.ACCELERATOR_VOTING_EDIT.replace(':projectId', `${projectId}`) });
+    history.push({ pathname: APP_PATHS.ACCELERATOR_SCORING_EDIT.replace(':projectId', `${projectId}`) });
   }, [history, projectId]);
 
   const goToVoting = useCallback(() => {
