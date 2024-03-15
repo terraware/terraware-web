@@ -10,7 +10,7 @@ import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { ScoreValue, Scorecard as ScorecardType } from 'src/types/Score';
+import { Score, Scorecard as ScorecardType } from 'src/types/Score';
 
 import ScoreEntry from './ScoreEntry';
 import Scorecard from './Scorecard';
@@ -123,7 +123,7 @@ const ScorecardView = () => {
                       <ScoreEntry
                         key={index}
                         disabled={true}
-                        onChange={(value: ScoreValue) => {}}
+                        onChange={(score: Score) => {}}
                         onChangeText={(id: string, value: unknown) => {}}
                         phase={phase0Scorecard?.phase}
                         qualitativeInfo={'Good project with good folks ready to do good work... almost perfect'}
@@ -136,7 +136,7 @@ const ScorecardView = () => {
                       <ScoreEntry
                         key={index}
                         disabled={true}
-                        onChange={(value: ScoreValue) => {}}
+                        onChange={(score: Score) => {}}
                         onChangeText={(id: string, value: unknown) => {}}
                         phase={phase1Scorecard?.phase}
                         qualitativeInfo={''}
