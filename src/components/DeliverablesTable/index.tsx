@@ -6,10 +6,12 @@ import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import { useLocalization } from 'src/providers';
 import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import { selectDeliverablesSearchRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
+import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ListDeliverablesRequestParams } from 'src/services/DeliverablesService';
 import strings from 'src/strings';
 import { DeliverableCategories, DeliverableStatuses, ListDeliverablesElement } from 'src/types/Deliverables';
+import { Project } from 'src/types/Project';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { SearchAndSortFn } from 'src/utils/searchAndSort';
 
@@ -42,14 +44,44 @@ const DeliverablesTable = ({
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
 
+  const projects = useAppSelector(selectProjects);
+
   const [deliverables, setDeliverables] = useState<ListDeliverablesElement[]>([]);
   const [deliverablesSearchRequestId, setDeliverablesSearchRequestId] = useState('');
   const deliverablesSearchRequest = useAppSelector(selectDeliverablesSearchRequest(deliverablesSearchRequestId));
+
+  const getProjectName = useCallback(
+    (projectId: number) => (projects?.find((project: Project) => project.id === projectId) || {}).name || '',
+    [projects]
+  );
 
   const featuredFilters: FilterConfig[] = useMemo(
     () =>
       activeLocale
         ? [
+            {
+              field: 'project_id',
+              options: (projects || [])?.map((project: Project) => `${project.id}`),
+              searchNodeCreator: (values: (number | string | null)[]) => ({
+                field: 'project_id',
+                operation: 'field',
+                type: 'Exact',
+                values: values.map((value: number | string | null): string | null =>
+                  value === null ? value : `${value}`
+                ),
+              }),
+              label: strings.PROJECTS,
+              renderOption: (id: string | number) => getProjectName(Number(id)),
+              notPresentFilterShown: true,
+              notPresentFilterLabel: strings.NO_PROJECT,
+              pillValuesRenderer: (values: unknown[]): string | undefined => {
+                if (values.length === 1 && values[0] === null) {
+                  return strings.NO_PROJECT;
+                }
+
+                return values.map((value: unknown) => getProjectName(Number(value))).join(', ');
+              },
+            },
             {
               field: 'status',
               // These options are strings for now, but may end up as enums when the BE types come through, if that is
@@ -66,7 +98,7 @@ const DeliverablesTable = ({
             },
           ]
         : [],
-    [activeLocale]
+    [activeLocale, getProjectName, projects]
   );
 
   const dispatchSearchRequest = useCallback(
