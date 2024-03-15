@@ -87,7 +87,7 @@ const NewView = () => {
       setEmailError('');
       setUser(searchRequest.data?.user);
     } else if (searchRequest.status === 'error') {
-      setEmailError(strings.USER_DOES_NOT_EXIST);
+      setEmailError(strings.USER_WITH_EMAIL_DOES_NOT_EXIST);
     }
   }, [searchRequest]);
 
