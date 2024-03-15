@@ -9,7 +9,6 @@ import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { VoteOption } from 'src/types/Votes';
 
 import VoteBadge from './VoteBadge';
 import VoteRowGrid from './VoteRowGrid';
@@ -44,36 +43,7 @@ const VotingWrapper = ({ children, isForm, rightComponent }: Props): JSX.Element
     [activeLocale, projectId, projectName]
   );
 
-  // vote decision, pick the majority or undefined if no majority
-  // this will eventually come from the BE
-  const voteDecision = useMemo<VoteOption | undefined>(() => {
-    let decision: VoteOption | undefined;
-
-    // confirm all users have their votes in
-    if (phaseVotes && phaseVotes.votes.every((vote) => !!vote.voteOption)) {
-      // create map of vote-option to number of votes
-      const results = phaseVotes.votes.reduce(
-        (acc, vote) => {
-          if (!acc[vote.voteOption!]) {
-            acc[vote.voteOption!] = 1;
-          } else {
-            acc[vote.voteOption!]++;
-          }
-          return acc;
-        },
-        {} as Record<string, number>
-      );
-
-      // select vote-option with max number of votes, if there is no tie
-      const max = Math.max(...Object.values(results));
-      const winner = Object.keys(results).filter((key) => results[key] === max);
-      if (winner.length === 1) {
-        decision = winner[0] as VoteOption;
-      }
-    }
-
-    return decision;
-  }, [phaseVotes]);
+  const voteDecision = phaseVotes?.decision;
 
   return (
     <Page
