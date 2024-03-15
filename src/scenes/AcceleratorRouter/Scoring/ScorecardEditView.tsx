@@ -153,7 +153,7 @@ const ScorecardEditView = () => {
                       onChange={(_score: Score) => {}}
                       onChangeText={(_id: string, _value: unknown) => {}}
                       phase={phase0Scorecard?.phase}
-                      qualitativeInfo={''}
+                      qualitativeInfo={'Good project with good folks ready to do good work... almost perfect'}
                       score={phase0Scorecard.scores[index]}
                     />
                   )}
