@@ -63,6 +63,11 @@ const searchConditionMet = <T extends Record<string, unknown>>(result: T, condit
       return searchValues.some((value) => resultValue.includes(value));
     } else if (condition.type === 'Fuzzy') {
       return searchValues.some((value) => {
+        // Trigrams don't work with single letter searches
+        if (value.length === 1) {
+          return resultValue.includes(value);
+        }
+
         // Split the search value into trigrams and see if the result field contains sufficient similarity
         const trigrams = splitTrigrams(value);
         const matchingTrigrams = trigrams.filter((trigram: string) => resultValue.includes(trigram));
