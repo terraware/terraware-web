@@ -36,12 +36,15 @@ const httpProjects = HttpService.root(PROJECTS_ENDPOINT);
 /**
  * List all projects
  */
-const listProjects = async (organizationId: number, locale?: string | null): Promise<ProjectsData & Response> => {
+const listProjects = async (organizationId?: number, locale?: string | null): Promise<ProjectsData & Response> => {
+  const params: { organizationId?: string } = {};
+  if (typeof organizationId === 'number') {
+    params.organizationId = organizationId.toString();
+  }
+
   const response: ProjectsData & Response = await httpProjects.get<ListProjectsResponsePayload, ProjectsData>(
     {
-      params: {
-        organizationId: organizationId.toString(),
-      },
+      params,
     },
     (data) => ({
       projects: data?.projects.sort((a, b) => a.name.localeCompare(b.name, locale || undefined)),

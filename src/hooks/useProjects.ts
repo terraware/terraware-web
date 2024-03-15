@@ -6,9 +6,12 @@ import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Project } from 'src/types/Project';
 
+import useAcceleratorConsole from './useAcceleratorConsole';
+
 export const useProjects = (record?: { projectId?: number }) => {
   const dispatch = useAppDispatch();
   const { selectedOrganization } = useOrganization();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const availableProjects = useAppSelector(selectProjects);
 
@@ -27,6 +30,13 @@ export const useProjects = (record?: { projectId?: number }) => {
       void dispatch(requestProjects(selectedOrganization.id));
     }
   }, [availableProjects, dispatch, selectedOrganization.id]);
+
+  // fetch all projects in the accelerator route
+  useEffect(() => {
+    if (isAcceleratorRoute) {
+      void dispatch(requestProjects());
+    }
+  }, [isAcceleratorRoute, dispatch]);
 
   return { availableProjects, selectedProject };
 };
