@@ -4169,7 +4169,7 @@ export interface components {
     };
     UserWithGlobalRolesPayload: {
       /** Format: date-time */
-      createdTime?: string;
+      createdTime: string;
       email: string;
       firstName?: string;
       globalRoles: ("Super-Admin" | "Accelerator Admin" | "TF Expert" | "Read Only")[];
