@@ -70,7 +70,7 @@ const PeopleView = () => {
   const listRequest = useAppSelector(selectGlobalRolesUsersSearchRequest(requestId));
 
   const goToAddPerson = useCallback(() => {
-    history.push({ pathname: APP_PATHS.ACCELERATOR_PEOPLE_NEW });
+    history.push({ pathname: APP_PATHS.ACCELERATOR_PERSON_NEW });
   }, [history]);
 
   useEffect(() => {
