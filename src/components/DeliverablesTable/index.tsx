@@ -3,10 +3,10 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { TableColumnType } from '@terraware/web-components';
 
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
+import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization } from 'src/providers';
 import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import { selectDeliverablesSearchRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
-import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ListDeliverablesRequestParams } from 'src/services/DeliverablesService';
 import strings from 'src/strings';
@@ -43,8 +43,7 @@ const DeliverablesTable = ({
 }: DeliverablesTableProps) => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
-
-  const projects = useAppSelector(selectProjects);
+  const { availableProjects: projects } = useProjects();
 
   const [deliverables, setDeliverables] = useState<ListDeliverablesElement[]>([]);
   const [deliverablesSearchRequestId, setDeliverablesSearchRequestId] = useState('');
@@ -63,7 +62,7 @@ const DeliverablesTable = ({
               field: 'project_id',
               options: (projects || [])?.map((project: Project) => `${project.id}`),
               searchNodeCreator: (values: (number | string | null)[]) => ({
-                field: 'project_id',
+                field: 'projectId',
                 operation: 'field',
                 type: 'Exact',
                 values: values.map((value: number | string | null): string | null =>
