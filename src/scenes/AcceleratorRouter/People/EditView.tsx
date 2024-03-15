@@ -5,6 +5,7 @@ import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
 import { requestUpdateGlobalRolesUser } from 'src/redux/features/globalRoles/globalRolesAsyncThunks';
 import { selectGlobalRolesUserUpdateRequest } from 'src/redux/features/globalRoles/globalRolesSelectors';
+import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { UserWithGlobalRoles } from 'src/types/GlobalRoles';
@@ -13,7 +14,6 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import { usePersonData } from './PersonContext';
 import PersonForm from './PersonForm';
-import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 
 const EditView = () => {
   const dispatch = useAppDispatch();
@@ -49,7 +49,7 @@ const EditView = () => {
     } else if (saveRequest.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [goToViewPerson, saveRequest, snackbar]);
+  }, [dispatch, goToViewPerson, saveRequest, snackbar, userId]);
 
   return (
     <Page title={user?.email || ''} contentStyle={{ display: 'flex', flexDirection: 'column' }}>
