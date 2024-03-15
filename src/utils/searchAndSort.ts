@@ -13,7 +13,8 @@ export type SearchOrderConfig = {
   numberFields?: string[];
 };
 
-const DEFAULT_TRIGRAM_SIMILARITY = 0.3;
+// This is the default used in Postgres
+const TRIGRAM_SIMILARITY_THRESHOLD = 0.3;
 
 export const splitTrigrams = (value: string): string[] => {
   const trigrams = [];
@@ -77,7 +78,7 @@ const searchConditionMet = <T extends Record<string, unknown>>(result: T, condit
         }
 
         const similarity = matchingTrigrams.length / trigrams.length;
-        return similarity > DEFAULT_TRIGRAM_SIMILARITY;
+        return similarity > TRIGRAM_SIMILARITY_THRESHOLD;
       });
     }
   }

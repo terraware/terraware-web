@@ -113,6 +113,108 @@ describe('searchAndSort', () => {
     expect(searchAndSort(results, search)).toEqual(filteredResults);
   });
 
+  it('should filter the results as expected - or with fuzzy search filter - single letter', () => {
+    const results: MockResult[] = [
+      {
+        name: 'Incorporation Documents',
+        projectName: 'Project 1',
+      },
+      {
+        name: 'Budget',
+        projectName: 'Corpotrees',
+      },
+      {
+        name: 'A Document',
+        projectName: 'Project 1',
+      },
+    ];
+
+    const searchValue = 'p';
+
+    const search: SearchNodePayload = {
+      operation: 'or',
+      children: [
+        {
+          operation: 'field',
+          field: 'name',
+          type: 'Fuzzy',
+          values: [searchValue],
+        },
+        {
+          operation: 'field',
+          field: 'projectName',
+          type: 'Fuzzy',
+          values: [searchValue],
+        },
+      ],
+    };
+
+    const filteredResults: MockResult[] = [
+      {
+        name: 'Incorporation Documents',
+        projectName: 'Project 1',
+      },
+      {
+        name: 'Budget',
+        projectName: 'Corpotrees',
+      },
+      {
+        name: 'A Document',
+        projectName: 'Project 1',
+      },
+    ];
+
+    expect(searchAndSort(results, search)).toEqual(filteredResults);
+  });
+
+  it('should filter the results as expected - or with fuzzy search filter - fuzzy similarity', () => {
+    const results: MockResult[] = [
+      {
+        name: 'Incorporation Documents',
+        // This project should match because it is similar enough to the search term
+        projectName: 'Project 1',
+      },
+      {
+        name: 'Budget',
+        projectName: 'Corpotrees',
+      },
+      {
+        name: 'A Document',
+        // This project has matching trigrams, but is below the similarity threshold
+        projectName: 'Propropro',
+      },
+    ];
+
+    const searchValue = 'pronect';
+
+    const search: SearchNodePayload = {
+      operation: 'or',
+      children: [
+        {
+          operation: 'field',
+          field: 'name',
+          type: 'Fuzzy',
+          values: [searchValue],
+        },
+        {
+          operation: 'field',
+          field: 'projectName',
+          type: 'Fuzzy',
+          values: [searchValue],
+        },
+      ],
+    };
+
+    const filteredResults: MockResult[] = [
+      {
+        name: 'Incorporation Documents',
+        projectName: 'Project 1',
+      },
+    ];
+
+    expect(searchAndSort(results, search)).toEqual(filteredResults);
+  });
+
   it('should filter the results as expected - or with exact search filter', () => {
     const results: MockResult[] = [
       {
