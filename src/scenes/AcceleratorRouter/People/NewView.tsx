@@ -50,6 +50,7 @@ const NewView = () => {
   const handeOnChange = useCallback(
     (record: UserWithGlobalRoles) => {
       if (record.email) {
+        setEmailError('');
         setEmail(record.email);
       }
     },
@@ -82,7 +83,6 @@ const NewView = () => {
       return;
     }
 
-    console.log(searchRequest);
     if (searchRequest.status === 'success' && searchRequest.data?.user) {
       setEmailError('');
       setUser(searchRequest.data?.user);
