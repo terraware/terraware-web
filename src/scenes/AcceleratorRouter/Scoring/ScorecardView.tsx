@@ -10,8 +10,9 @@ import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { Scorecard as ScorecardType } from 'src/types/Score';
+import { ScoreValue, Scorecard as ScorecardType } from 'src/types/Score';
 
+import ScoreEntry from './ScoreEntry';
 import Scorecard from './Scorecard';
 import useScoreList from './useScoreList';
 
@@ -66,6 +67,22 @@ const ScorecardView = () => {
     [activeLocale, goToScoresEdit, theme]
   );
 
+  const phase0Scorecard = useMemo(
+    () => scorecards?.find((scorecard: ScorecardType) => scorecard.phase === 'Phase 0'),
+    [scorecards]
+  );
+
+  const phase1Scorecard = useMemo(
+    () => scorecards?.find((scorecard: ScorecardType) => scorecard.phase === 'Phase 1'),
+    [scorecards]
+  );
+
+  const numberOfScores = useMemo(() => {
+    const phase0ScoresLength = phase0Scorecard?.scores?.length || 0;
+    const phase1ScoresLength = phase1Scorecard?.scores?.length || 0;
+    return Math.max(phase0ScoresLength, phase1ScoresLength);
+  }, [phase0Scorecard?.scores?.length, phase1Scorecard?.scores?.length]);
+
   return (
     <Grid container spacing={theme.spacing(1)}>
       <Grid item xs={10}>
@@ -87,18 +104,48 @@ const ScorecardView = () => {
                 type='productive'
               />
             </Box>
+
             <Grid container spacing={theme.spacing(2)}>
               <Grid item xs={6}>
-                <Scorecard
-                  scorecard={(scorecards || []).find((scorecard: ScorecardType) => scorecard.phase === 'Phase 0')}
-                />
+                <Scorecard scorecard={phase0Scorecard} />
               </Grid>
               <Grid item xs={6}>
-                <Scorecard
-                  scorecard={(scorecards || []).find((scorecard: ScorecardType) => scorecard.phase === 'Phase 1')}
-                />
+                <Scorecard scorecard={phase1Scorecard} />
               </Grid>
             </Grid>
+
+            {(phase0Scorecard || phase1Scorecard) &&
+              numberOfScores &&
+              Array.from({ length: numberOfScores }).map((_, index) => (
+                <Grid key={index} container spacing={theme.spacing(2)}>
+                  <Grid item xs={6}>
+                    {phase0Scorecard?.scores?.[index] && (
+                      <ScoreEntry
+                        key={index}
+                        disabled={true}
+                        onChange={(value: ScoreValue) => {}}
+                        onChangeText={(id: string, value: unknown) => {}}
+                        phase={phase0Scorecard?.phase}
+                        qualitativeInfo={'Good project with good folks ready to do good work... almost perfect'}
+                        score={phase0Scorecard.scores[index]}
+                      />
+                    )}
+                  </Grid>
+                  <Grid item xs={6}>
+                    {phase1Scorecard?.scores?.[index] && (
+                      <ScoreEntry
+                        key={index}
+                        disabled={true}
+                        onChange={(value: ScoreValue) => {}}
+                        onChangeText={(id: string, value: unknown) => {}}
+                        phase={phase1Scorecard?.phase}
+                        qualitativeInfo={''}
+                        score={phase1Scorecard.scores[index]}
+                      />
+                    )}
+                  </Grid>
+                </Grid>
+              ))}
           </Card>
         </Page>
       </Grid>
