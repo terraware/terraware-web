@@ -13,6 +13,8 @@ export type SearchOrderConfig = {
   numberFields?: string[];
 };
 
+const DEFAULT_TRIGRAM_SIMILARITY = 0.3;
+
 export const splitTrigrams = (value: string): string[] => {
   const trigrams = [];
   let position;
@@ -61,9 +63,16 @@ const searchConditionMet = <T extends Record<string, unknown>>(result: T, condit
       return searchValues.some((value) => resultValue.includes(value));
     } else if (condition.type === 'Fuzzy') {
       return searchValues.some((value) => {
-        // Split the search value into trigrams and see if the result field contains any trigram
+        // Split the search value into trigrams and see if the result field contains sufficient similarity
         const trigrams = splitTrigrams(value);
-        return trigrams.some((trigram: string) => resultValue.includes(trigram));
+        const matchingTrigrams = trigrams.filter((trigram: string) => resultValue.includes(trigram));
+
+        if (matchingTrigrams.length === 0) {
+          return false;
+        }
+
+        const similarity = matchingTrigrams.length / trigrams.length;
+        return similarity > DEFAULT_TRIGRAM_SIMILARITY;
       });
     }
   }
@@ -132,7 +141,11 @@ export const searchAndSort = <T extends Record<string, unknown>>(
   let _results = [...results];
 
   if (search) {
-    _results = _results.filter((result: T) => searchConditionMet(result, search));
+    _results = _results.filter((result: T) => {
+      const m = searchConditionMet(result, search);
+      debugger;
+      return m;
+    });
   }
 
   if (sortOrderConfig) {
