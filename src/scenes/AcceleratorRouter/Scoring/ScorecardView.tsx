@@ -10,7 +10,7 @@ import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { Score, Scorecard as ScorecardType } from 'src/types/Score';
+import { Scorecard as ScorecardType } from 'src/types/Score';
 
 import ScoreEntry from './ScoreEntry';
 import Scorecard from './Scorecard';
