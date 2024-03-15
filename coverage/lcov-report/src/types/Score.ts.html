@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
@@ -167,7 +167,9 @@
 <a name='L102'></a><a href='#L102'>102</a>
 <a name='L103'></a><a href='#L103'>103</a>
 <a name='L104'></a><a href='#L104'>104</a>
-<a name='L105'></a><a href='#L105'>105</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -192,6 +194,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -295,7 +299,7 @@ export const ScoreCategories: ScoreCategory[] = <span class="cstat-no" title="st
 export type ScoreValue = 2 | 1 | 0 | -1 | -2;
 export const ScoreValues: ScoreValue[] = <span class="cstat-no" title="statement not covered" >[2, 1, 0, -1, -2];</span>
 &nbsp;
-export const getScoreValue = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(v</span>alue: ScoreValue): string =&gt; {</span>
+export const getScoreValue = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(v</span>alue: ScoreValue | null): string =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  switch (value) {</span>
     case 2:
 <span class="cstat-no" title="statement not covered" >      return strings.SCORE_VALUE_P2;</span>
@@ -307,12 +311,14 @@ export const getScoreValue = <span class="cstat-no" title="statement not covered
 <span class="cstat-no" title="statement not covered" >      return strings.SCORE_VALUE_N1;</span>
     case -2:
 <span class="cstat-no" title="statement not covered" >      return strings.SCORE_VALUE_N2;</span>
+    case null:
+<span class="cstat-no" title="statement not covered" >      return strings.SCORE_VALUE_NULL;</span>
     default:
 <span class="cstat-no" title="statement not covered" >      return `${value}`;</span>
   }
 };
 &nbsp;
-export const getScoreCategory = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(v</span>alue: ScoreCategory): string =&gt; {</span>
+export const getScoreCategory = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(v</span>alue: ScoreCategory | null): string =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  switch (value) {</span>
     case 'Carbon':
 <span class="cstat-no" title="statement not covered" >      return strings.CARBON;</span>
@@ -328,7 +334,7 @@ export const getScoreCategory = <span class="cstat-no" title="statement not cove
 };
 &nbsp;
 export const getScoreColors = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span></span>
-  value: ScoreValue,
+  value: ScoreValue | null,
   theme: Theme
 ): { background: string; border: string; text: string } =&gt; {
 <span class="cstat-no" title="statement not covered" >  switch (value) {</span>
@@ -366,7 +372,7 @@ export const getScoreColors = <span class="cstat-no" title="statement not covere
 <span class="cstat-no" title="statement not covered" >      return {</span>
         background: theme.palette.TwClrBgInfo as string,
         border: theme.palette.TwClrBrdrInfo as string,
-        text: theme.palette.TwClrTxtInfo as string,
+        text: theme.palette.TwClrTxtTertiary as string,
       };
   }
 };
@@ -382,7 +388,7 @@ export type ScoresData = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-15T17:31:42.198Z
+                at 2024-03-15T23:36:12.970Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
