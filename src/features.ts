@@ -1,7 +1,12 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName = 'Show Production View' | 'User Detailed Sites' | 'Accelerator' | 'Console';
+export type FeatureName =
+  | 'Show Production View'
+  | 'User Detailed Sites'
+  | 'Participant Project Management'
+  | 'Accelerator'
+  | 'Console';
 
 export type Feature = {
   name: FeatureName;
@@ -42,6 +47,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['User drawn detailed sites'],
+    disclosure: ['This is WIP'],
+  },
+  {
+    name: 'Participant Project Management',
+    preferenceName: 'enableParticipantProjectManagement',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Participant project management for Phase-1 support'],
     disclosure: ['This is WIP'],
   },
   {
