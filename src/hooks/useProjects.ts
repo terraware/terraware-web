@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { useOrganization } from 'src/providers';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
@@ -16,6 +16,11 @@ export const useProjects = (record?: { projectId?: number }) => {
   const availableProjects = useAppSelector(selectProjects);
 
   const [selectedProject, setSelectedProject] = useState<Project>();
+
+  const getProjectName = useCallback(
+    (projectId: number) => (availableProjects?.find((project: Project) => project.id === projectId) || {}).name || '',
+    [availableProjects]
+  );
 
   useEffect(() => {
     if (availableProjects && record?.projectId) {
@@ -38,5 +43,5 @@ export const useProjects = (record?: { projectId?: number }) => {
     }
   }, [isAcceleratorRoute, dispatch]);
 
-  return { availableProjects, selectedProject };
+  return { availableProjects, getProjectName, selectedProject };
 };

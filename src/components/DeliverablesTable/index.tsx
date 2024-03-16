@@ -44,17 +44,12 @@ const DeliverablesTable = ({
 }: DeliverablesTableProps) => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
-  const { availableProjects: projects } = useProjects();
+  const { availableProjects: projects, getProjectName } = useProjects();
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const [deliverables, setDeliverables] = useState<ListDeliverablesElement[]>([]);
   const [deliverablesSearchRequestId, setDeliverablesSearchRequestId] = useState('');
   const deliverablesSearchRequest = useAppSelector(selectDeliverablesSearchRequest(deliverablesSearchRequestId));
-
-  const getProjectName = useCallback(
-    (projectId: number) => (projects?.find((project: Project) => project.id === projectId) || {}).name || '',
-    [projects]
-  );
 
   const featuredFilters: FilterConfig[] = useMemo(() => {
     const filters: FilterConfig[] = [
