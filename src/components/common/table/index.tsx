@@ -147,8 +147,11 @@ export type OrderPreservedTableProps = {
   id: string;
   columns: () => TableColumnType[];
 };
+
+export type OrderPreservedTablePropsFull<T> = Omit<TableProps<T>, 'columns'> & OrderPreservedTableProps;
+
 export default function OrderPreservedTable<T extends TableRowType>(
-  props: Omit<TableProps<T>, 'columns'> & OrderPreservedTableProps
+  props: OrderPreservedTablePropsFull<T>
 ): JSX.Element {
   const { columns, ...tableProps } = props;
   const { activeLocale } = useLocalization();

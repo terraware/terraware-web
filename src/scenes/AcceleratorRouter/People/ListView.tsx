@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Box, useTheme } from '@mui/material';
+import { TableRowType } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
 import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
@@ -18,6 +19,7 @@ import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import PersonCellRenderer from './PersonCellRenderer';
+import RemoveRolesTopBarButton from './RemoveRolesTopBarButton';
 
 const fuzzySearchColumns = ['email', 'firstName', 'lastName'];
 const defaultSearchOrder: SearchSortOrder = {
@@ -64,7 +66,8 @@ const PeopleView = () => {
   const theme = useTheme();
   const history = useHistory();
 
-  const [globalRoleUsers, setGlobalRoleUsers] = useState<UserWithGlobalRoles[]>();
+  const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
+  const [globalRoleUsers, setGlobalRoleUsers] = useState<UserWithGlobalRoles[]>([]);
   const [requestId, setRequestId] = useState('');
 
   const listRequest = useAppSelector(selectGlobalRolesUsersSearchRequest(requestId));
@@ -78,8 +81,8 @@ const PeopleView = () => {
       return;
     }
 
-    if (listRequest.status === 'success') {
-      setGlobalRoleUsers(listRequest.data?.users);
+    if (listRequest.status === 'success' && listRequest.data?.users) {
+      setGlobalRoleUsers(listRequest.data.users);
     } else if (listRequest.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
@@ -93,6 +96,11 @@ const PeopleView = () => {
     },
     [dispatch]
   );
+
+  const onConfirmSelectionRemoveRoles = useCallback(() => {
+    // TODO, need API to remove roles in bulk
+    console.log('confirm');
+  }, []);
 
   const rightComponent = useMemo(
     () =>
@@ -115,13 +123,19 @@ const PeopleView = () => {
   return (
     <Page title={strings.PEOPLE} rightComponent={rightComponent}>
       <TableWithSearchFilters
-        cellRenderer={PersonCellRenderer}
         columns={columns}
         defaultSearchOrder={defaultSearchOrder}
         dispatchSearchRequest={dispatchSearchRequest}
         fuzzySearchColumns={fuzzySearchColumns}
-        rows={globalRoleUsers || []}
-        tableId={'acceleratorPeopleTable'}
+        id={'acceleratorPeopleTable'}
+        isClickable={() => false}
+        selectedRows={selectedRows}
+        setSelectedRows={setSelectedRows}
+        showCheckbox
+        showTopBar
+        Renderer={PersonCellRenderer}
+        rows={globalRoleUsers}
+        topBarButtons={[<RemoveRolesTopBarButton key={1} onConfirm={onConfirmSelectionRemoveRoles} />]}
       />
     </Page>
   );
