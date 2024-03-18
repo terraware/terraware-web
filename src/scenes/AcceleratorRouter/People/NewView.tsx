@@ -61,6 +61,11 @@ const NewView = () => {
       return;
     }
 
+    // Email address must end in @terraformation.com
+    if (!/@terraformation.com$/.exec(debouncedEmail)) {
+      setEmailError(strings.EMAIL_REQUIREMENT_TERRAFORMATION);
+    }
+
     const request = dispatch(requestSearchUserByEmail(debouncedEmail));
     setSearchRequestId(request.requestId);
   }, [debouncedEmail, dispatch]);
