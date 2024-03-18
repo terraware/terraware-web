@@ -8489,7 +8489,59 @@
 <a name='L8424'></a><a href='#L8424'>8424</a>
 <a name='L8425'></a><a href='#L8425'>8425</a>
 <a name='L8426'></a><a href='#L8426'>8426</a>
-<a name='L8427'></a><a href='#L8427'>8427</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L8427'></a><a href='#L8427'>8427</a>
+<a name='L8428'></a><a href='#L8428'>8428</a>
+<a name='L8429'></a><a href='#L8429'>8429</a>
+<a name='L8430'></a><a href='#L8430'>8430</a>
+<a name='L8431'></a><a href='#L8431'>8431</a>
+<a name='L8432'></a><a href='#L8432'>8432</a>
+<a name='L8433'></a><a href='#L8433'>8433</a>
+<a name='L8434'></a><a href='#L8434'>8434</a>
+<a name='L8435'></a><a href='#L8435'>8435</a>
+<a name='L8436'></a><a href='#L8436'>8436</a>
+<a name='L8437'></a><a href='#L8437'>8437</a>
+<a name='L8438'></a><a href='#L8438'>8438</a>
+<a name='L8439'></a><a href='#L8439'>8439</a>
+<a name='L8440'></a><a href='#L8440'>8440</a>
+<a name='L8441'></a><a href='#L8441'>8441</a>
+<a name='L8442'></a><a href='#L8442'>8442</a>
+<a name='L8443'></a><a href='#L8443'>8443</a>
+<a name='L8444'></a><a href='#L8444'>8444</a>
+<a name='L8445'></a><a href='#L8445'>8445</a>
+<a name='L8446'></a><a href='#L8446'>8446</a>
+<a name='L8447'></a><a href='#L8447'>8447</a>
+<a name='L8448'></a><a href='#L8448'>8448</a>
+<a name='L8449'></a><a href='#L8449'>8449</a>
+<a name='L8450'></a><a href='#L8450'>8450</a>
+<a name='L8451'></a><a href='#L8451'>8451</a>
+<a name='L8452'></a><a href='#L8452'>8452</a>
+<a name='L8453'></a><a href='#L8453'>8453</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -17635,6 +17687,10 @@ export interface paths {
      */
     get: operations["listPlantingSubzoneSpecies"];
   };
+  "/api/v1/users": {
+    /** Gets a user by some criteria, for now only email is available */
+    get: operations["searchUsers"];
+  };
   "/api/v1/users/me": {
     /** Gets information about the current user. */
     get: operations["getMyself"];
@@ -17648,13 +17704,13 @@ export interface paths {
   };
   "/api/v1/users/me/preferences": {
     /** Gets the current user's preferences. */
-    get: operations["getUserPreferences_1"];
+    get: operations["getUserPreferences"];
     /** Updates the current user's preferences. */
     put: operations["updateUserPreferences"];
   };
-  "/api/v1/users/user": {
-    /** Gets a user by some criteria, for now only email is available */
-    get: operations["getUserPreferences"];
+  "/api/v1/users/{userId}": {
+    /** Get a user by ID, if they exist, only ordinary users are supported. */
+    get: operations["getUser"];
   };
   "/api/v1/users/{userId}/globalRoles": {
     /** Apply the supplied global roles to the user. */
@@ -24793,6 +24849,29 @@ export interface operations {
       };
     };
   };
+  /** Gets a user by some criteria, for now only email is available */
+  searchUsers: {
+    parameters: {
+      query: {
+        /** @description The email to use when searching for a user */
+        email: string;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetUserResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
   /** Gets information about the current user. */
   getMyself: {
     responses: {
@@ -24835,7 +24914,7 @@ export interface operations {
     };
   };
   /** Gets the current user's preferences. */
-  getUserPreferences_1: {
+  getUserPreferences: {
     parameters: {
       query?: {
         /** @description If present, get the user's per-organization preferences for this organization. If not present, get the user's global preferences. */
@@ -24867,12 +24946,11 @@ export interface operations {
       };
     };
   };
-  /** Gets a user by some criteria, for now only email is available */
-  getUserPreferences: {
+  /** Get a user by ID, if they exist, only ordinary users are supported. */
+  getUser: {
     parameters: {
-      query: {
-        /** @description The email to use when searching for a user */
-        email: string;
+      path: {
+        userId: number;
       };
     };
     responses: {
@@ -25348,7 +25426,7 @@ export interface operations {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-18T16:34:15.701Z
+                at 2024-03-18T16:44:00.384Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

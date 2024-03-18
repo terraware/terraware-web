@@ -1,3 +1,4 @@
+9c689afebe SW-4961 Add 'get user' and 'get user by email' service calls and redux (#2327)
 b4fe436e79 SW-4961 Implement Person edit and view views (#2326)
 b4930de0a1 Update with backend types (#2333)
 cd06b8bd10 Updated translations from Phrase (#2339)
