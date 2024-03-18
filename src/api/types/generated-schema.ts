@@ -722,6 +722,10 @@ export interface paths {
     /** Gets a user by some criteria, for now only email is available */
     get: operations["searchUsers"];
   };
+  "/api/v1/users/globalRoles": {
+    /** Remove global roles from the supplied users. */
+    delete: operations["removeGlobalRoles"];
+  };
   "/api/v1/users/me": {
     /** Gets information about the current user. */
     get: operations["getMyself"];
@@ -3292,6 +3296,9 @@ export interface components {
       speciesName?: string;
       /** @enum {string} */
       status: "Live" | "Dead" | "Existing";
+    };
+    RemoveGlobalRolesRequestPayload: {
+      userIds: number[];
     };
     ReplaceObservationPlotRequestPayload: {
       /** @enum {string} */
@@ -7895,6 +7902,28 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["GetUserResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Remove global roles from the supplied users. */
+  removeGlobalRoles: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RemoveGlobalRolesRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SuccessResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */
