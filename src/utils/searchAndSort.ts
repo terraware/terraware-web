@@ -16,21 +16,18 @@ export type SearchOrderConfig = {
 // This is the default used in Postgres
 const TRIGRAM_SIMILARITY_THRESHOLD = 0.3;
 
-export const splitTrigrams = (value: string): string[] => {
+export const splitTrigrams = (value: string): Set<string> => {
   const trigrams = [];
   let position;
 
   // Remove non-alphanumeric characters
   const _value = value.replace(/[^0-9a-z]/gi, ' ').replace(/\s+/, ' ');
 
-  // Split into words, pad each word with spaces
-  const words = _value.split(' ').map((word) => ` ${word} `);
+  // Split into words, pad each word with spaces, two at the front per Postgres
+  const words = _value.split(' ').map((word) => `  ${word} `);
 
   for (const word of words) {
     position = 3;
-    // For some reason the postgres implementation also includes the first 2 characters of each word
-    trigrams.push(word.substring(0, 2));
-
     // Split the words into trigrams
     for (let i = 0; i < word.length; i += 1) {
       if (position <= word.length) {
@@ -40,7 +37,24 @@ export const splitTrigrams = (value: string): string[] => {
     }
   }
 
-  return trigrams;
+  trigrams.sort();
+  return new Set(trigrams);
+};
+
+export const trigramWordSimilarity = (a: string, b: string) => {
+  // Split the search value and result value into trigrams and compare their similarity
+  const aTrigrams = new Set(splitTrigrams(a));
+  const bTrigrams = new Set(splitTrigrams(b));
+
+  const matches: string[] = [];
+  bTrigrams.forEach((trigram) => {
+    if (aTrigrams.has(trigram)) {
+      matches.push(trigram);
+    }
+  });
+
+  const similarity = matches.length / aTrigrams.size;
+  return similarity;
 };
 
 const searchConditionMet = <T extends Record<string, unknown>>(result: T, condition: SearchNodePayload): boolean => {
@@ -63,22 +77,13 @@ const searchConditionMet = <T extends Record<string, unknown>>(result: T, condit
     if (condition.type === 'Exact') {
       return searchValues.some((value) => resultValue.includes(value));
     } else if (condition.type === 'Fuzzy') {
-      return searchValues.some((value) => {
+      return searchValues.some((searchValue) => {
         // Trigrams don't work with single letter searches
-        if (value.length === 1) {
-          return resultValue.includes(value);
+        if (searchValue.length === 1) {
+          return resultValue.includes(searchValue);
         }
 
-        // Split the search value into trigrams and see if the result field contains sufficient similarity
-        const trigrams = splitTrigrams(value);
-        const matchingTrigrams = trigrams.filter((trigram: string) => resultValue.includes(trigram));
-
-        if (matchingTrigrams.length === 0) {
-          return false;
-        }
-
-        const similarity = matchingTrigrams.length / trigrams.length;
-        return similarity > TRIGRAM_SIMILARITY_THRESHOLD;
+        return trigramWordSimilarity(searchValue, resultValue) > TRIGRAM_SIMILARITY_THRESHOLD;
       });
     }
   }
