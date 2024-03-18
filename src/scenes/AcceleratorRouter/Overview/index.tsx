@@ -45,7 +45,7 @@ const OverviewView = () => {
   const history = useHistory();
   const classes = useStyles();
   const query = useQuery();
-  const tab = query.get('tab') || 'projects_tab';
+  const tab = query.get('tab') || 'projects';
   const location = useStateLocation();
 
   const [activeTab, setActiveTab] = useState<string>(tab);
