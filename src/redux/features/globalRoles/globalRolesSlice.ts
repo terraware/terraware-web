@@ -1,30 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import { UserWithGlobalRolesData } from 'src/services/GlobalRolesService';
 import { GlobalRolesUsersData } from 'src/types/GlobalRoles';
 
-import {
-  requestGetGlobalRolesUser,
-  requestListGlobalRolesUsers,
-  requestUpdateGlobalRolesUser,
-} from './globalRolesAsyncThunks';
-
-/**
- * Single User with global roles
- */
-const initialStateGlobalRolesUser: { [key: string]: StatusT<UserWithGlobalRolesData> } = {};
-
-export const globalRolesUserSlice = createSlice({
-  name: 'globalRolesUserSlice',
-  initialState: initialStateGlobalRolesUser,
-  reducers: {},
-  extraReducers: (builder) => {
-    buildReducers(requestGetGlobalRolesUser, true)(builder);
-  },
-});
-
-export const globalRolesUserReducer = globalRolesUserSlice.reducer;
+import { requestListGlobalRolesUsers, requestUpdateGlobalRolesUser } from './globalRolesAsyncThunks';
 
 /**
  * Users with global roles list

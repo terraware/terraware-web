@@ -27,25 +27,6 @@ export type UserWithGlobalRolesData = {
   user: UserWithGlobalRoles;
 };
 
-const getUser = async (userId: number): Promise<(Response & UserWithGlobalRolesData) | null> => {
-  // return httpGlobalRolesUser.post2<UpdateGlobalRolesResponsePayload>({
-  //   urlReplacements: {
-  //     '{userId}': `${user.id}`,
-  //   },
-  //   entity: payload,
-  // });
-  return {
-    requestSucceeded: true,
-    user: {
-      id: userId,
-      email: 'nick@terraformation.com',
-      firstName: 'Nick',
-      globalRoles: ['Super-Admin', 'Accelerator Admin', 'TF Expert'],
-      lastName: 'Graziano',
-    },
-  };
-};
-
 const list = async (
   locale: string | null,
   search?: SearchNodePayload,
@@ -84,7 +65,6 @@ const update = async (user: UserWithGlobalRoles, globalRoles: UserGlobalRole[]):
 };
 
 const GlobalRolesService = {
-  getUser,
   list,
   update,
 };
