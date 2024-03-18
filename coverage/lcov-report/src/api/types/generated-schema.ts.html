@@ -8462,7 +8462,61 @@
 <a name='L8397'></a><a href='#L8397'>8397</a>
 <a name='L8398'></a><a href='#L8398'>8398</a>
 <a name='L8399'></a><a href='#L8399'>8399</a>
-<a name='L8400'></a><a href='#L8400'>8400</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L8400'></a><a href='#L8400'>8400</a>
+<a name='L8401'></a><a href='#L8401'>8401</a>
+<a name='L8402'></a><a href='#L8402'>8402</a>
+<a name='L8403'></a><a href='#L8403'>8403</a>
+<a name='L8404'></a><a href='#L8404'>8404</a>
+<a name='L8405'></a><a href='#L8405'>8405</a>
+<a name='L8406'></a><a href='#L8406'>8406</a>
+<a name='L8407'></a><a href='#L8407'>8407</a>
+<a name='L8408'></a><a href='#L8408'>8408</a>
+<a name='L8409'></a><a href='#L8409'>8409</a>
+<a name='L8410'></a><a href='#L8410'>8410</a>
+<a name='L8411'></a><a href='#L8411'>8411</a>
+<a name='L8412'></a><a href='#L8412'>8412</a>
+<a name='L8413'></a><a href='#L8413'>8413</a>
+<a name='L8414'></a><a href='#L8414'>8414</a>
+<a name='L8415'></a><a href='#L8415'>8415</a>
+<a name='L8416'></a><a href='#L8416'>8416</a>
+<a name='L8417'></a><a href='#L8417'>8417</a>
+<a name='L8418'></a><a href='#L8418'>8418</a>
+<a name='L8419'></a><a href='#L8419'>8419</a>
+<a name='L8420'></a><a href='#L8420'>8420</a>
+<a name='L8421'></a><a href='#L8421'>8421</a>
+<a name='L8422'></a><a href='#L8422'>8422</a>
+<a name='L8423'></a><a href='#L8423'>8423</a>
+<a name='L8424'></a><a href='#L8424'>8424</a>
+<a name='L8425'></a><a href='#L8425'>8425</a>
+<a name='L8426'></a><a href='#L8426'>8426</a>
+<a name='L8427'></a><a href='#L8427'>8427</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -17594,9 +17648,13 @@ export interface paths {
   };
   "/api/v1/users/me/preferences": {
     /** Gets the current user's preferences. */
-    get: operations["getUserPreferences"];
+    get: operations["getUserPreferences_1"];
     /** Updates the current user's preferences. */
     put: operations["updateUserPreferences"];
+  };
+  "/api/v1/users/user": {
+    /** Gets a user by some criteria, for now only email is available */
+    get: operations["getUserPreferences"];
   };
   "/api/v1/users/{userId}/globalRoles": {
     /** Apply the supplied global roles to the user. */
@@ -24777,7 +24835,7 @@ export interface operations {
     };
   };
   /** Gets the current user's preferences. */
-  getUserPreferences: {
+  getUserPreferences_1: {
     parameters: {
       query?: {
         /** @description If present, get the user's per-organization preferences for this organization. If not present, get the user's global preferences. */
@@ -24805,6 +24863,29 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets a user by some criteria, for now only email is available */
+  getUserPreferences: {
+    parameters: {
+      query: {
+        /** @description The email to use when searching for a user */
+        email: string;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetUserResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -25267,7 +25348,7 @@ export interface operations {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-18T16:26:00.134Z
+                at 2024-03-18T16:34:15.701Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
