@@ -8,7 +8,7 @@ import { selectGlobalRolesUserUpdateRequest } from 'src/redux/features/globalRol
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { UserWithGlobalRoles } from 'src/types/GlobalRoles';
+import { User } from 'src/types/User';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
@@ -31,7 +31,7 @@ const EditView = () => {
   );
 
   const handleOnSave = useCallback(
-    (record: UserWithGlobalRoles) => {
+    (record: User) => {
       const request = dispatch(requestUpdateGlobalRolesUser({ user: record, globalRoles: record.globalRoles }));
       setSaveRequestId(request.requestId);
     },

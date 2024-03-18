@@ -9,7 +9,6 @@ import { requestSearchUserByEmail } from 'src/redux/features/user/usersAsyncThun
 import { selectUserByEmailRequest } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { UserWithGlobalRoles } from 'src/types/GlobalRoles';
 import { User } from 'src/types/User';
 import useDebounce from 'src/utils/useDebounce';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -40,7 +39,7 @@ const NewView = () => {
   );
 
   const handleOnSave = useCallback(
-    (record: UserWithGlobalRoles) => {
+    (record: User) => {
       const request = dispatch(requestUpdateGlobalRolesUser({ user: record, globalRoles: record.globalRoles }));
       setSaveRequestId(request.requestId);
     },
@@ -48,7 +47,7 @@ const NewView = () => {
   );
 
   const handeOnChange = useCallback(
-    (record: UserWithGlobalRoles) => {
+    (record: User) => {
       if (record.email) {
         setEmailError('');
         setEmail(record.email);
