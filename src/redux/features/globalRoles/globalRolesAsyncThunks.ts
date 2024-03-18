@@ -3,9 +3,8 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import GlobalRolesService from 'src/services/GlobalRolesService';
 import { Response } from 'src/services/HttpService';
 import strings from 'src/strings';
-import { UserWithGlobalRoles } from 'src/types/GlobalRoles';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
-import { UserGlobalRole } from 'src/types/User';
+import { User, UserGlobalRole } from 'src/types/User';
 
 export const requestListGlobalRolesUsers = createAsyncThunk(
   'globalRoles/list',
@@ -30,7 +29,7 @@ export const requestListGlobalRolesUsers = createAsyncThunk(
 
 export const requestUpdateGlobalRolesUser = createAsyncThunk(
   'globalRoles/update-for-user',
-  async (request: { user: UserWithGlobalRoles; globalRoles: UserGlobalRole[] }, { rejectWithValue }) => {
+  async (request: { user: User; globalRoles: UserGlobalRole[] }, { rejectWithValue }) => {
     const { user, globalRoles } = request;
 
     const response: Response = await GlobalRolesService.update(user, globalRoles);

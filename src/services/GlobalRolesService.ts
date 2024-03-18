@@ -2,7 +2,7 @@ import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Params, Response } from 'src/services/HttpService';
 import { GlobalRolesUsersData, UserWithGlobalRoles } from 'src/types/GlobalRoles';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
-import { UserGlobalRole } from 'src/types/User';
+import { User, UserGlobalRole } from 'src/types/User';
 import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
 
 /**
@@ -51,7 +51,7 @@ const list = async (
   );
 };
 
-const update = async (user: UserWithGlobalRoles, globalRoles: UserGlobalRole[]): Promise<Response> => {
+const update = async (user: User, globalRoles: UserGlobalRole[]): Promise<Response> => {
   const payload: UpdateGlobalRolesRequestPayload = {
     globalRoles,
   };

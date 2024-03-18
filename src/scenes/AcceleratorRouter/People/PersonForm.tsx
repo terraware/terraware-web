@@ -8,7 +8,7 @@ import PageForm from 'src/components/common/PageForm';
 import { useLocalization, useUser } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { USER_GLOBAL_ROLES, UserWithGlobalRoles, getGlobalRole } from 'src/types/GlobalRoles';
-import { UserGlobalRole } from 'src/types/User';
+import { User, UserGlobalRole } from 'src/types/User';
 import { isAllowed } from 'src/utils/acl';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -16,10 +16,10 @@ type PersonFormProps = {
   busy?: boolean;
   emailEnabled?: boolean;
   emailError?: string;
-  user?: UserWithGlobalRoles;
+  user?: User;
   onCancel: () => void;
-  onChange?: (person: UserWithGlobalRoles) => void;
-  onSave: (person: UserWithGlobalRoles) => void;
+  onChange?: (person: User) => void;
+  onSave: (person: User) => void;
 };
 
 export default function PersonForm(props: PersonFormProps): JSX.Element {
@@ -30,7 +30,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
   const { user: activeUser } = useUser();
   const theme = useTheme();
 
-  const [localRecord, setLocalRecord] = useState<Partial<UserWithGlobalRoles>>({});
+  const [localRecord, setLocalRecord] = useState<Partial<User>>({});
 
   const globalRoleDropdownOptions = useMemo(() => {
     const options = new Map<string, string>([]);
@@ -75,7 +75,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
     }
 
     onSave({
-      ...(localRecord as UserWithGlobalRoles),
+      ...(localRecord as User),
     });
   };
 
@@ -87,7 +87,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
 
   useEffect(() => {
     if (onChange) {
-      onChange(localRecord as UserWithGlobalRoles);
+      onChange(localRecord as User);
     }
   }, [localRecord, onChange]);
 
