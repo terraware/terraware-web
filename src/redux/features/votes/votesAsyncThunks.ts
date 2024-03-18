@@ -17,10 +17,11 @@ export const requestProjectVotesGet = createAsyncThunk('votes/get', async (proje
 
 export const requestProjectVotesUpdate = createAsyncThunk(
   'votes/update',
-  async (request: { projectId: number; payload: UpsertProjectVotesRequestPayload }, { rejectWithValue }) => {
+  async (request: { projectId: number; payload: UpsertProjectVotesRequestPayload }, { dispatch, rejectWithValue }) => {
     const response: Response = await VotesService.setProjectVotes(request.projectId, request.payload);
 
     if (response.requestSucceeded) {
+      dispatch(requestProjectVotesGet(request.projectId));
       return response?.data?.status === 'ok' ? true : false;
     }
 
