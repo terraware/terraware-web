@@ -10,12 +10,19 @@ import Button from 'src/components/common/button/Button';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
-import { requestListGlobalRolesUsers } from 'src/redux/features/globalRoles/globalRolesAsyncThunks';
-import { selectGlobalRolesUsersSearchRequest } from 'src/redux/features/globalRoles/globalRolesSelectors';
+import {
+  requestListGlobalRolesUsers,
+  requestRemoveGlobalRolesForUsers,
+} from 'src/redux/features/globalRoles/globalRolesAsyncThunks';
+import {
+  selectGlobalRolesUsersRemoveRequest,
+  selectGlobalRolesUsersSearchRequest,
+} from 'src/redux/features/globalRoles/globalRolesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { UserWithGlobalRoles } from 'src/types/GlobalRoles';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { User } from 'src/types/User';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import PersonCellRenderer from './PersonCellRenderer';
@@ -50,7 +57,6 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           name: strings.ROLE,
           type: 'string',
         },
-        // TODO need to get this in the BE response
         {
           key: 'createdTime',
           name: strings.DATE_ADDED,
@@ -68,38 +74,32 @@ const PeopleView = () => {
 
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
   const [globalRoleUsers, setGlobalRoleUsers] = useState<UserWithGlobalRoles[]>([]);
-  const [requestId, setRequestId] = useState('');
+  const [listRequestId, setListRequestId] = useState('');
+  const [removeRequestId, setRemoveRequestId] = useState('');
+  const [lastSearchRequest, setLastSearchRequest] = useState<
+    Partial<{ locale: string | null; search: SearchNodePayload; searchSortOrder: SearchSortOrder }>
+  >({});
 
-  const listRequest = useAppSelector(selectGlobalRolesUsersSearchRequest(requestId));
+  const listRequest = useAppSelector(selectGlobalRolesUsersSearchRequest(listRequestId));
+  const removeRequest = useAppSelector(selectGlobalRolesUsersRemoveRequest(removeRequestId));
 
   const goToAddPerson = useCallback(() => {
     history.push({ pathname: APP_PATHS.ACCELERATOR_PERSON_NEW });
   }, [history]);
 
-  useEffect(() => {
-    if (!listRequest) {
-      return;
-    }
-
-    if (listRequest.status === 'success' && listRequest.data?.users) {
-      setGlobalRoleUsers(listRequest.data.users);
-    } else if (listRequest.status === 'error') {
-      snackbar.toastError(strings.GENERIC_ERROR);
-    }
-  }, [listRequest, snackbar]);
-
   const dispatchSearchRequest = useCallback(
-    (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => {
-      // TODO implement search and sort order into redux and service
-      const request = dispatch(requestListGlobalRolesUsers({ locale, search, searchSortOrder }));
-      setRequestId(request.requestId);
+    (locale?: string | null, search?: SearchNodePayload, searchSortOrder?: SearchSortOrder) => {
+      const request = dispatch(requestListGlobalRolesUsers({ locale: locale || null, search, searchSortOrder }));
+      setLastSearchRequest({ locale, search, searchSortOrder });
+      setListRequestId(request.requestId);
     },
     [dispatch]
   );
 
   const onConfirmSelectionRemoveRoles = useCallback(() => {
-    // TODO, need API to remove roles in bulk
-  }, []);
+    const request = dispatch(requestRemoveGlobalRolesForUsers({ users: selectedRows as User[] }));
+    setRemoveRequestId(request.requestId);
+  }, [dispatch, selectedRows]);
 
   const rightComponent = useMemo(
     () =>
@@ -118,6 +118,33 @@ const PeopleView = () => {
       ),
     [activeLocale, goToAddPerson, theme]
   );
+
+  useEffect(() => {
+    if (!listRequest) {
+      return;
+    }
+
+    if (listRequest.status === 'success' && listRequest.data?.users) {
+      setGlobalRoleUsers(listRequest.data.users);
+    } else if (listRequest.status === 'error') {
+      snackbar.toastError(strings.GENERIC_ERROR);
+    }
+  }, [listRequest, snackbar]);
+
+  useEffect(() => {
+    if (!removeRequest) {
+      return;
+    }
+
+    if (removeRequest.status === 'success') {
+      const { locale, search, searchSortOrder } = lastSearchRequest;
+      dispatchSearchRequest(locale || null, search, searchSortOrder);
+      setRemoveRequestId('');
+    } else if (removeRequest.status === 'error') {
+      snackbar.toastError(strings.GENERIC_ERROR);
+      setRemoveRequestId('');
+    }
+  }, [dispatchSearchRequest, lastSearchRequest, snackbar, removeRequest]);
 
   return (
     <Page title={strings.PEOPLE} rightComponent={rightComponent}>
