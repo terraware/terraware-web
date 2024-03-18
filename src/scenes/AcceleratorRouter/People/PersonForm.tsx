@@ -14,20 +14,23 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 type PersonFormProps = {
   busy?: boolean;
-  user: UserWithGlobalRoles;
+  emailEnabled?: boolean;
+  emailError?: string;
+  user?: UserWithGlobalRoles;
   onCancel: () => void;
+  onChange?: (person: UserWithGlobalRoles) => void;
   onSave: (person: UserWithGlobalRoles) => void;
 };
 
 export default function PersonForm(props: PersonFormProps): JSX.Element {
-  const { busy, user, onCancel, onSave } = props;
+  const { busy, emailEnabled, emailError, user, onCancel, onChange, onSave } = props;
 
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
   const { user: activeUser } = useUser();
   const theme = useTheme();
 
-  const [localRecord, setLocalRecord] = useState<UserWithGlobalRoles>(user);
+  const [localRecord, setLocalRecord] = useState<Partial<UserWithGlobalRoles>>({});
 
   const globalRoleDropdownOptions = useMemo(() => {
     const options = new Map<string, string>([]);
@@ -55,26 +58,38 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
   const onAddGlobalRole = useCallback((globalRole: string) => {
     setLocalRecord((prev) => ({
       ...prev,
-      globalRoles: [...prev.globalRoles, globalRole as UserGlobalRole],
+      globalRoles: [...(prev.globalRoles || []), globalRole as UserGlobalRole],
     }));
   }, []);
 
   const onRemoveGlobalRole = useCallback((globalRole: string) => {
     setLocalRecord((prev) => ({
       ...prev,
-      globalRoles: prev.globalRoles.filter((_globalRole) => _globalRole !== globalRole),
+      globalRoles: (prev.globalRoles || []).filter((_globalRole) => _globalRole !== globalRole),
     }));
   }, []);
 
   const onSaveHandler = () => {
+    if (!localRecord.email || emailError) {
+      return;
+    }
+
     onSave({
-      ...localRecord,
+      ...(localRecord as UserWithGlobalRoles),
     });
   };
 
   useEffect(() => {
-    setLocalRecord(user);
+    if (user) {
+      setLocalRecord(user);
+    }
   }, [user]);
+
+  useEffect(() => {
+    if (onChange) {
+      onChange(localRecord as UserWithGlobalRoles);
+    }
+  }, [localRecord, onChange]);
 
   return (
     <PageForm busy={busy} cancelID='cancelEditUser' onCancel={onCancel} onSave={onSaveHandler} saveID='saveUser'>
@@ -92,12 +107,13 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
         <Card style={{ width: '568px', margin: 'auto' }}>
           <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
             <Textfield
+              errorText={emailError}
               id='email'
               label={strings.EMAIL}
               onChange={(value) => updateField('email', value)}
               type='text'
               value={localRecord.email}
-              disabled
+              disabled={!emailEnabled}
             />
           </Grid>
           <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
@@ -128,7 +144,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
               options={globalRoleDropdownOptions}
               placeHolder={strings.SELECT}
               valueRenderer={(v) => v}
-              selectedOptions={localRecord.globalRoles}
+              selectedOptions={localRecord.globalRoles || []}
               label={strings.ROLE}
             />
           </Grid>
