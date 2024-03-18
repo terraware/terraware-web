@@ -64,6 +64,7 @@ const NewView = () => {
     // Email address must end in @terraformation.com
     if (!/@terraformation.com$/.exec(debouncedEmail)) {
       setEmailError(strings.EMAIL_REQUIREMENT_TERRAFORMATION);
+      return;
     }
 
     const request = dispatch(requestSearchUserByEmail(debouncedEmail));
