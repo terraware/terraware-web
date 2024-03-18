@@ -12,8 +12,8 @@ import strings from 'src/strings';
 
 const useStyles = makeStyles((theme: Theme) => ({
   link: {
-    height: '40px',
-    lineHeight: '40px',
+    height: '32px',
+    lineHeight: '32px',
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
   },
@@ -66,7 +66,7 @@ export default function AcceleratorBreadcrumbs(): JSX.Element | null {
             </Link>
           </Grid>
           <Grid item>
-            <Separator height={'40px'} />
+            <Separator />
           </Grid>
         </Grid>
       </div>
