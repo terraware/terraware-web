@@ -1,11 +1,6 @@
 import { User } from 'src/types/User';
-import {
-  GLOBAL_ROLE_ACCELERATOR_ADMIN,
-  GLOBAL_ROLE_READ_ONLY,
-  GLOBAL_ROLE_SUPER_ADMIN,
-  GLOBAL_ROLE_TF_EXPERT,
-  isAllowed,
-} from './acl';
+import { isAllowed } from './acl';
+import { GLOBAL_ROLE_ACCELERATOR_ADMIN, GLOBAL_ROLE_READ_ONLY, GLOBAL_ROLE_SUPER_ADMIN, GLOBAL_ROLE_TF_EXPERT } from 'src/types/GlobalRoles';
 
 describe('isAllowed', () => {
   it('has the correct permissions for a user with the Super Admin global role', () => {

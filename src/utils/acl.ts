@@ -1,3 +1,11 @@
+import {
+  GLOBAL_ROLE_ACCELERATOR_ADMIN,
+  GLOBAL_ROLE_READ_ONLY,
+  GLOBAL_ROLE_SUPER_ADMIN,
+  GLOBAL_ROLE_TF_EXPERT,
+  USER_GLOBAL_ROLES,
+  isUserGlobalRole,
+} from 'src/types/GlobalRoles';
 import { User, UserGlobalRole, UserGlobalRoles } from 'src/types/User';
 import { isArrayOfT } from 'src/types/utils';
 
@@ -13,7 +21,7 @@ import { isArrayOfT } from 'src/types/utils';
 // roles that can assign to an entity but technically can't update it (assign global role is a good example)
 
 type PermissionConsole = 'VIEW_CONSOLE';
-type PermissionGlobalRole = 'READ_GLOBAL_ROLES' | 'ASSIGN_GLOBAL_ROLE_TO_USER';
+type PermissionGlobalRole = 'READ_GLOBAL_ROLES' | 'ASSIGN_GLOBAL_ROLE_TO_USER' | 'ASSIGN_SOME_GLOBAL_ROLES';
 type PermissionCohort = 'CREATE_COHORTS' | 'READ_COHORTS' | 'UPDATE_COHORTS' | 'DELETE_COHORTS';
 type PermissionParticipant =
   | 'CREATE_PARTICIPANTS'
@@ -37,15 +45,6 @@ export type GlobalRolePermission =
 
 type PermissionCheckFn<T = any> = (user: User, permission: GlobalRolePermission, metadata?: T) => boolean;
 
-export const GLOBAL_ROLE_SUPER_ADMIN: UserGlobalRole = 'Super-Admin';
-export const GLOBAL_ROLE_ACCELERATOR_ADMIN: UserGlobalRole = 'Accelerator Admin';
-export const GLOBAL_ROLE_TF_EXPERT: UserGlobalRole = 'TF Expert';
-export const GLOBAL_ROLE_READ_ONLY: UserGlobalRole = 'Read Only';
-const isUserGlobalRole = (input: unknown): input is UserGlobalRole =>
-  [GLOBAL_ROLE_SUPER_ADMIN, GLOBAL_ROLE_ACCELERATOR_ADMIN, GLOBAL_ROLE_TF_EXPERT, GLOBAL_ROLE_READ_ONLY].includes(
-    input as UserGlobalRole
-  );
-
 const SuperAdminPlus: UserGlobalRoles = [GLOBAL_ROLE_SUPER_ADMIN];
 const AcceleratorAdminPlus: UserGlobalRoles = [...SuperAdminPlus, GLOBAL_ROLE_ACCELERATOR_ADMIN];
 const TFExpertPlus: UserGlobalRoles = [...AcceleratorAdminPlus, GLOBAL_ROLE_TF_EXPERT];
@@ -55,6 +54,18 @@ const isSuperAdmin = (user: User): boolean => user.globalRoles.includes(GLOBAL_R
 const isAcceleratorAdmin = (user: User): boolean => user.globalRoles.includes(GLOBAL_ROLE_ACCELERATOR_ADMIN);
 
 // This one is a bit more complicated because the permission is dependent on the role
+export const globalRolesAvailableToSet = (user: User): UserGlobalRole[] => {
+  if (isSuperAdmin(user)) {
+    // Super admin can assign all roles
+    return USER_GLOBAL_ROLES;
+  } else if (isAcceleratorAdmin(user)) {
+    // Accelerator admin can assign all but super admin
+    return [GLOBAL_ROLE_ACCELERATOR_ADMIN, GLOBAL_ROLE_TF_EXPERT, GLOBAL_ROLE_READ_ONLY];
+  } else {
+    return [];
+  }
+};
+
 type AssignGlobalRoleToUserMetadata = { roleToSet: UserGlobalRole };
 const isAllowedAssignGlobalRoleToUser: PermissionCheckFn<AssignGlobalRoleToUserMetadata> = (
   user: User,
@@ -63,27 +74,19 @@ const isAllowedAssignGlobalRoleToUser: PermissionCheckFn<AssignGlobalRoleToUserM
 ): boolean => {
   if (!metadata) {
     return false;
-  } else if (isSuperAdmin(user)) {
-    return true;
-  } else if (isAcceleratorAdmin(user)) {
-    // Accelerator admin can only assign accelerator admin, tf expert, and read only
-    if (
-      ([GLOBAL_ROLE_ACCELERATOR_ADMIN, GLOBAL_ROLE_TF_EXPERT, GLOBAL_ROLE_READ_ONLY] as UserGlobalRole[]).includes(
-        metadata.roleToSet
-      )
-    ) {
-      return true;
-    }
   }
-
-  return false;
+  return globalRolesAvailableToSet(user).includes(metadata.roleToSet);
 };
+
+const isAllowedAssignSomeGlobalRoles: PermissionCheckFn = (user: User): boolean =>
+  globalRolesAvailableToSet(user).length > 0;
 
 // List of permissions and roles that have those permissions
 const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   VIEW_CONSOLE: ReadOnlyPlus,
   READ_GLOBAL_ROLES: AcceleratorAdminPlus,
   ASSIGN_GLOBAL_ROLE_TO_USER: isAllowedAssignGlobalRoleToUser,
+  ASSIGN_SOME_GLOBAL_ROLES: isAllowedAssignSomeGlobalRoles,
   CREATE_COHORTS: AcceleratorAdminPlus,
   READ_COHORTS: TFExpertPlus,
   UPDATE_COHORTS: AcceleratorAdminPlus,

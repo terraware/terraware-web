@@ -1,7 +1,8 @@
 import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Params, Response } from 'src/services/HttpService';
-import { GlobalRole, GlobalRolesUsersData, UserWithGlobalRoles } from 'src/types/GlobalRoles';
+import { GlobalRolesUsersData, UserWithGlobalRoles } from 'src/types/GlobalRoles';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { UserGlobalRole } from 'src/types/User';
 import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
 
 /**
@@ -22,17 +23,27 @@ export type UpdateGlobalRolesResponsePayload =
 const httpGlobalRolesUsers = HttpService.root(ENDPOINT_GLOBAL_ROLES_USERS);
 const httpGlobalRolesUser = HttpService.root(ENDPOINT_GLOBAL_ROLES_USER);
 
-const update = async (user: UserWithGlobalRoles, globalRole: GlobalRole): Promise<Response> => {
-  const payload: UpdateGlobalRolesRequestPayload = {
-    globalRoles: [...user.globalRoles, globalRole],
-  };
+export type UserWithGlobalRolesData = {
+  user: UserWithGlobalRoles;
+};
 
-  return httpGlobalRolesUser.post2<UpdateGlobalRolesResponsePayload>({
-    urlReplacements: {
-      '{userId}': `${user.id}`,
+const getUser = async (userId: number): Promise<(Response & UserWithGlobalRolesData) | null> => {
+  // return httpGlobalRolesUser.post2<UpdateGlobalRolesResponsePayload>({
+  //   urlReplacements: {
+  //     '{userId}': `${user.id}`,
+  //   },
+  //   entity: payload,
+  // });
+  return {
+    requestSucceeded: true,
+    user: {
+      id: userId,
+      email: 'nick@terraformation.com',
+      firstName: 'Nick',
+      globalRoles: ['Super-Admin', 'Accelerator Admin', 'TF Expert'],
+      lastName: 'Graziano',
     },
-    entity: payload,
-  });
+  };
 };
 
 const list = async (
@@ -59,7 +70,21 @@ const list = async (
   );
 };
 
+const update = async (user: UserWithGlobalRoles, globalRoles: UserGlobalRole[]): Promise<Response> => {
+  const payload: UpdateGlobalRolesRequestPayload = {
+    globalRoles,
+  };
+
+  return httpGlobalRolesUser.post2<UpdateGlobalRolesResponsePayload>({
+    urlReplacements: {
+      '{userId}': `${user.id}`,
+    },
+    entity: payload,
+  });
+};
+
 const GlobalRolesService = {
+  getUser,
   list,
   update,
 };

@@ -731,9 +731,13 @@ export interface paths {
   };
   "/api/v1/users/me/preferences": {
     /** Gets the current user's preferences. */
-    get: operations["getUserPreferences"];
+    get: operations["getUserPreferences_1"];
     /** Updates the current user's preferences. */
     put: operations["updateUserPreferences"];
+  };
+  "/api/v1/users/user": {
+    /** Gets a user by some criteria, for now only email is available */
+    get: operations["getUserPreferences"];
   };
   "/api/v1/users/{userId}/globalRoles": {
     /** Apply the supplied global roles to the user. */
@@ -7914,7 +7918,7 @@ export interface operations {
     };
   };
   /** Gets the current user's preferences. */
-  getUserPreferences: {
+  getUserPreferences_1: {
     parameters: {
       query?: {
         /** @description If present, get the user's per-organization preferences for this organization. If not present, get the user's global preferences. */
@@ -7942,6 +7946,29 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets a user by some criteria, for now only email is available */
+  getUserPreferences: {
+    parameters: {
+      query: {
+        /** @description The email to use when searching for a user */
+        email: string;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetUserResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
