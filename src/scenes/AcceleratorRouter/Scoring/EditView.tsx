@@ -10,7 +10,7 @@ import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { Score, ScoreValue } from 'src/types/Score';
+import { Score, ScoreCategory, ScoreValue } from 'src/types/Score';
 
 import PhaseScores from './PhaseScores';
 import { useScoringData } from './ScoringContext';
@@ -43,25 +43,24 @@ const ScorecardEditView = () => {
     goToScorecardView();
   }, [goToScorecardView]);
 
-  const handleOnChange = (key: 'value' | 'qualitative', score: Score, value: ScoreValue | string) => {
+  const handleOnChange = (key: 'value' | 'qualitative', category: ScoreCategory, value: ScoreValue | string) => {
     setScores((prev) =>
-      prev.map((_score: Score) => {
-        if (_score.category !== score.category) {
-          return _score;
+      prev.map((score: Score) => {
+        if (score.category !== category) {
+          return score;
         }
         return {
-          ..._score,
+          ...score,
           [key]: value,
         };
       })
     );
   };
 
-  const handleOnChangeValue = (score: Score, value: ScoreValue) => handleOnChange('value', score, value);
+  const handleOnChangeValue = (category: ScoreCategory, value: ScoreValue) => handleOnChange('value', category, value);
 
-  const handleOnChangeQualitative = (score: Score, value: string) => {
-    handleOnChange('qualitative', score, value);
-  };
+  const handleOnChangeQualitative = (category: ScoreCategory, value: string) =>
+    handleOnChange('qualitative', category, value);
 
   const onSave = useCallback(() => {
     // For now we can only save Phase 1 scores

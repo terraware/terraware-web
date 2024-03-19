@@ -6,7 +6,7 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { PhaseScores as PhaseScoresType, Score, ScoreValue, getPhase } from 'src/types/Score';
+import { PhaseScores as PhaseScoresType, Score, ScoreCategory, ScoreValue, getPhase } from 'src/types/Score';
 import { getLongDate } from 'src/utils/dateFormatter';
 
 import ScoreEntry from './ScoreEntry';
@@ -14,8 +14,8 @@ import ScoreTotal from './ScoreTotal';
 
 interface ScorecardProps {
   editable?: boolean;
-  onChangeValue?: (score: Score, value: ScoreValue) => void;
-  onChangeQualitative?: (score: Score, value: string) => void;
+  onChangeValue?: (category: ScoreCategory, value: ScoreValue) => void;
+  onChangeQualitative?: (category: ScoreCategory, value: string) => void;
   phaseScores?: PhaseScoresType;
 }
 

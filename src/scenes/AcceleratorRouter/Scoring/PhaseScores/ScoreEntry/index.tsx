@@ -5,14 +5,14 @@ import { Box, Typography, useTheme } from '@mui/material';
 import TextArea from 'src/components/common/TextArea';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { Phase, Score, ScoreValue, getPhaseTruncated, getScoreCategory } from 'src/types/Score';
+import { Phase, Score, ScoreCategory, ScoreValue, getPhaseTruncated, getScoreCategory } from 'src/types/Score';
 
 import ValueControl from './ValueControl';
 
 type ScoringEntryProps = {
   disabled?: boolean;
-  onChangeValue?: (score: Score, value: ScoreValue) => void;
-  onChangeQualitative?: (score: Score, value: string) => void;
+  onChangeValue?: (category: ScoreCategory, value: ScoreValue) => void;
+  onChangeQualitative?: (category: ScoreCategory, value: string) => void;
   phase: Phase;
   qualitativeInfo?: string;
   score: Score;
@@ -28,7 +28,7 @@ const ScoreEntry = ({ disabled, onChangeValue, onChangeQualitative, phase, score
 
   const handleOnChangeQualitative = (_: string, value: unknown) => {
     setQualitative(`${value}`);
-    onChangeQualitative?.(score, `${value}`);
+    onChangeQualitative?.(score.category, `${value}`);
   };
 
   useEffect(() => {

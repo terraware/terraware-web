@@ -2,13 +2,13 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
-import { Score, ScoreValue, ScoreValues, getScoreColors, getScoreValueLabel } from 'src/types/Score';
+import { Score, ScoreCategory, ScoreValue, ScoreValues, getScoreColors, getScoreValueLabel } from 'src/types/Score';
 
 import ValueControlButton from './ValueControlButton';
 
 type ScoreControlProps = {
   disabled?: boolean;
-  onChangeValue?: (score: Score, value: ScoreValue) => void;
+  onChangeValue?: (category: ScoreCategory, value: ScoreValue) => void;
   score: Score;
 };
 
@@ -23,7 +23,7 @@ const ValueControl = ({ disabled, onChangeValue, score }: ScoreControlProps) => 
 
   const handleOnChangeValue = (value: ScoreValue) => {
     setScoreValue(value);
-    onChangeValue?.(score, value);
+    onChangeValue?.(score.category, value);
   };
 
   useEffect(() => {
