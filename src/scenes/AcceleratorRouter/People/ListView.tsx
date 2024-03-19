@@ -99,7 +99,6 @@ const PeopleView = () => {
 
   const onConfirmSelectionRemoveRoles = useCallback(() => {
     // TODO, need API to remove roles in bulk
-    console.log('confirm');
   }, []);
 
   const rightComponent = useMemo(

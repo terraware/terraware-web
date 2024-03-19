@@ -45,7 +45,7 @@ function RemoveRolesTopBarButton({ onConfirm }: RemoveRolesTopBarButtonProps) {
             label={strings.REMOVE_ACCESS}
             onClick={_onConfirm}
             key='button-2'
-            id='saveButton'
+            id='remove'
             priority={'primary'}
             type={'destructive'}
           />,
