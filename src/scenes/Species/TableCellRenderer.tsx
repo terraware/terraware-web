@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 
 import { ClickAwayListener, IconButton, Theme, Tooltip } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { TextTruncated } from '@terraware/web-components';
 
 import Link from 'src/components/common/Link';
+import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { SpeciesProblemElement } from 'src/types/Species';
@@ -108,11 +108,8 @@ export default function SpeciesCellRenderer(props: RendererProps<TableRowType>):
         value={
           <TextTruncated
             stringList={(value ?? []) as string[]}
-            maxLengthPx={100}
+            columnWidth={100}
             listSeparator={strings.LIST_SEPARATOR_SECONDARY}
-            moreSeparator={strings.TRUNCATED_TEXT_MORE_SEPARATOR}
-            moreText={strings.TRUNCATED_TEXT_MORE_LINK}
-            textStyle={{ fontSize: '14px' }}
           />
         }
       />
