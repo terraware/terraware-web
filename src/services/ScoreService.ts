@@ -1,164 +1,78 @@
-import { components } from 'src/api/types/generated-schema';
-import { Response } from 'src/services/HttpService';
-import { Score, Scorecard, ScoresData } from 'src/types/Score';
+import { paths } from 'src/api/types/generated-schema';
+import HttpService, { Response, Response2 } from 'src/services/HttpService';
+import { Phase, PhaseScores, Score, ScoreCategories, ScoreCategory, ScorePhases, ScoresData } from 'src/types/Score';
 
 /**
  * Accelerator project scoring related services
  */
 
-// This will all be updated when the backend API is done
+const ENDPOINT_SCORES = '/api/v1/accelerator/projects/{projectId}/scores';
 
-// const ENDPOINT_SCORES = '/api/v1/accelerator/scores/:projectId';
+export type GetProjectScoresResponsePayload =
+  paths[typeof ENDPOINT_SCORES]['get']['responses'][200]['content']['application/json'];
 
-export type ListScoresResponsePayload = {
-  projectName: string;
-  scorecards: Scorecard[];
-};
+export type UpsertProjectScoresRequestPayload =
+  paths[typeof ENDPOINT_SCORES]['put']['requestBody']['content']['application/json'];
+export type UpsertProjectScoresResponsePayload =
+  paths[typeof ENDPOINT_SCORES]['put']['responses'][200]['content']['application/json'];
 
-export type UpdateScoresRequestPayload = {
-  scores: Score[];
-};
-export type UpdateScoresResponsePayload = Response & components['schemas']['SimpleSuccessResponsePayload'];
+const httpScores = HttpService.root(ENDPOINT_SCORES);
 
-// const httpScores = HttpService.root(ENDPOINT_SCORES);
+const get = async (projectId: number): Promise<Response & ScoresData> =>
+  httpScores.get<GetProjectScoresResponsePayload, ScoresData>(
+    {
+      urlReplacements: {
+        '{projectId}': `${projectId}`,
+      },
+    },
+    (response) => ({
+      // Since score phases may not exist, but we need to be able to edit them, fill in the
+      // missing phases with "empty" phase scores
+      phases: ScorePhases.map((expectedPhase: Phase) => {
+        const phase = response?.phases.find((phaseScore: PhaseScores) => phaseScore.phase === expectedPhase) || {
+          phase: expectedPhase,
+          scores: [],
+        };
 
-let mockScorecards: Scorecard[] = [
-  {
-    modifiedTime: '1/24/2024',
-    phase: 'Phase 0',
-    scores: [
-      {
-        category: 'Calculated',
-        value: 1.5,
-        type: 'system',
-        inputType: 'number',
-      },
-      {
-        category: 'Carbon',
-        value: 1,
-        type: 'user',
-        inputType: 'dropdown',
-      },
-      {
-        category: 'Carbon',
-        value: 'Good project with good folks ready to do good work... almost perfect',
-        type: 'user',
-        inputType: 'text',
-      },
-      {
-        category: 'Finance',
-        value: 2,
-        type: 'user',
-        inputType: 'dropdown',
-      },
-      {
-        category: 'Finance',
-        value: 'Excellent finances, great opportunity',
-        type: 'user',
-        inputType: 'text',
-      },
-    ],
-  },
-  {
-    modifiedTime: null,
-    phase: 'Phase 1',
-    scores: [
-      {
-        category: 'Calculated',
-        value: null,
-        type: 'system',
-        inputType: 'number',
-      },
-      {
-        category: 'Carbon',
-        value: null,
-        type: 'user',
-        inputType: 'dropdown',
-      },
-      {
-        category: 'Carbon',
-        value: null,
-        type: 'user',
-        inputType: 'text',
-      },
-      {
-        category: 'Finance',
-        value: null,
-        type: 'user',
-        inputType: 'dropdown',
-      },
-      {
-        category: 'Finance',
-        value: null,
-        type: 'user',
-        inputType: 'text',
-      },
-    ],
-  },
-];
+        return {
+          ...phase,
+          // Since scores may not exist, but we need to be able to edit them, fill in the
+          // missing score categories with "empty" scores
+          scores: ScoreCategories.map((expectedScoreCategory: ScoreCategory): Score => {
+            const score = phase.scores.find((_score: Score) => _score.category === expectedScoreCategory);
+            if (score) {
+              return score;
+            }
+            return {
+              category: expectedScoreCategory,
+              modifiedTime: '',
+            };
+          }),
+        };
+      }),
+    })
+  );
 
-const list = async (projectId: number): Promise<Response & ScoresData> => {
-  // httpScores.get<ListScoresResponsePayload, ScoresData>(
-  //   {
-  //     urlReplacements: {
-  //       '{projectId}': `${projectId}`,
-  //     },
-  //   },
-  //   (response) => ({ scores: response?.scores })
-  // );
-
-  // These are just here until the BE API is implemented and we actually use `projectId` in the request
-  // tslint:disable:no-console
-  console.log('projectId', projectId);
-
-  return {
-    requestSucceeded: true,
-    projectName: 'Mock Project Name',
-    scorecards: mockScorecards,
-  };
-};
-
-const update = async (projectId: number, scores: Score[]): Promise<UpdateScoresResponsePayload> => {
-  const payload: UpdateScoresRequestPayload = {
+const update = async (
+  projectId: number,
+  phase: Phase,
+  scores: Score[]
+): Promise<Response2<UpsertProjectScoresResponsePayload>> => {
+  const payload: UpsertProjectScoresRequestPayload = {
+    phase,
     scores,
   };
 
-  // These are just here until the BE API is implemented and we actually use `projectId` in the request
-  // tslint:disable:no-console
-  console.log('projectId', projectId);
-
-  // httpScores.post2<UpdateScoresResponsePayload>(
-  //   {
-  //     urlReplacements: {
-  //       '{projectId}': `${projectId}`,
-  //     },
-  //   },
-  //   entity: payload,
-  // );
-
-  // This goes away when the BE API is created
-  payload.scores.forEach((score: Score) => {
-    mockScorecards = mockScorecards.map((scorecard: Scorecard) => {
-      return {
-        ...scorecard,
-        scores: scorecard.scores.map((_score: Score) => {
-          if (_score.category !== score.category && _score.type !== score.type) {
-            return _score;
-          }
-          return score;
-        }),
-      };
-    });
+  return httpScores.put2<UpsertProjectScoresResponsePayload>({
+    urlReplacements: {
+      '{projectId}': `${projectId}`,
+    },
+    entity: payload,
   });
-
-  return {
-    requestSucceeded: true,
-    status: 'ok',
-  };
 };
 
 const ScoreService = {
-  list,
+  get,
   update,
 };
 

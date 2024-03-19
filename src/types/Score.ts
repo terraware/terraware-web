@@ -1,28 +1,79 @@
 import { Theme } from '@mui/material';
 
+import { components } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
 
-// This will all be updated with real types when the BE is done
-export type Scorecard = {
-  modifiedTime: string | null;
-  phase: string;
-  scores: Score[];
-};
+export type PhaseScores = components['schemas']['PhaseScores'];
+export type Score = components['schemas']['Score'];
 
-export type Score = {
-  category: ScoreCategory;
-  inputType: 'dropdown' | 'text' | 'number';
-  type: 'user' | 'system';
-  value: ScoreValue | string | null | number;
-};
+export type Phase = PhaseScores['phase'];
+export const ScorePhases: Phase[] = [
+  'Phase 0 - Due Diligence',
+  'Phase 1 - Feasibility Study',
+  'Phase 2 - Plan and Scale',
+  'Phase 3 - Implement and Monitor',
+];
 
-export type ScoreCategory = 'Calculated' | 'Carbon' | 'Finance' | 'Forestry' | 'Legal';
-export const ScoreCategories: ScoreCategory[] = ['Calculated', 'Carbon', 'Finance', 'Forestry', 'Legal'];
+export type ScoreCategory = Score['category'];
+export const ScoreCategories: ScoreCategory[] = [
+  'Carbon',
+  'Climate Impact',
+  'Community',
+  'Finance',
+  'Expansion Potential',
+  'Experience and Understanding',
+  'Forestry',
+  'GIS',
+  'Legal',
+  'Operational Capacity',
+  'Responsiveness and Attention to Detail',
+  'Values Alignment',
+];
 
-export type ScoreValue = 2 | 1 | 0 | -1 | -2;
+export type ScoreValue = Score['value'];
 export const ScoreValues: ScoreValue[] = [2, 1, 0, -1, -2];
 
+export const getPhase = (phase: Phase): string => {
+  switch (phase) {
+    case 'Phase 0 - Due Diligence':
+      return strings.PHASE_0;
+    case 'Phase 1 - Feasibility Study':
+      return strings.PHASE_1;
+    case 'Phase 2 - Plan and Scale':
+      return strings.PHASE_2;
+    case 'Phase 3 - Implement and Monitor':
+      return strings.PHASE_3;
+    default:
+      return phase;
+  }
+};
+
+export const getPhaseTruncated = (phase: Phase): string => {
+  switch (phase) {
+    case 'Phase 0 - Due Diligence':
+      return strings.PHASE_0_TRUNC;
+    case 'Phase 1 - Feasibility Study':
+      return strings.PHASE_1_TRUNC;
+    case 'Phase 2 - Plan and Scale':
+      return strings.PHASE_2_TRUNC;
+    case 'Phase 3 - Implement and Monitor':
+      return strings.PHASE_3_TRUNC;
+    default:
+      return phase;
+  }
+};
+
 export const getScoreValue = (value: ScoreValue | null): string => {
+  switch (value) {
+    case 2:
+    case 1:
+      return `${value}+`;
+    default:
+      return `${value}`;
+  }
+};
+
+export const getScoreValueLabel = (value: ScoreValue | null): string => {
   switch (value) {
     case 2:
       return strings.SCORE_VALUE_P2;
@@ -37,7 +88,7 @@ export const getScoreValue = (value: ScoreValue | null): string => {
     case null:
       return strings.SCORE_VALUE_NULL;
     default:
-      return `${value}`;
+      return strings.NO_SCORE_SELECTED;
   }
 };
 
@@ -45,12 +96,28 @@ export const getScoreCategory = (value: ScoreCategory | null): string => {
   switch (value) {
     case 'Carbon':
       return strings.CARBON;
+    case 'Climate Impact':
+      return strings.CLIMATE_IMPACT;
+    case 'Community':
+      return strings.COMMUNITY;
     case 'Finance':
       return strings.FINANCE;
+    case 'Expansion Potential':
+      return strings.EXPANSION_POTENTIAL;
+    case 'Experience and Understanding':
+      return strings.EXPERIENCE_AND_UNDERSTANDING;
     case 'Forestry':
       return strings.FORESTRY;
+    case 'GIS':
+      return strings.GIS;
     case 'Legal':
       return strings.LEGAL;
+    case 'Operational Capacity':
+      return strings.OPERATION_CAPACITY;
+    case 'Responsiveness and Attention to Detail':
+      return strings.RESPONSIVENESS_AND_ATTENTION_TO_DETAIL;
+    case 'Values Alignment':
+      return strings.VALUES_ALIGNMENT;
     default:
       return `${value}`;
   }
@@ -101,6 +168,5 @@ export const getScoreColors = (
 };
 
 export type ScoresData = {
-  projectName: string;
-  scorecards: Scorecard[];
+  phases?: PhaseScores[];
 };

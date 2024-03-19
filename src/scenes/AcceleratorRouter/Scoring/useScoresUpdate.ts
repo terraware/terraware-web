@@ -1,16 +1,16 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Statuses } from 'src/redux/features/asyncUtils';
-import { selectDeliverablesEditRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
 import { requestListScores, requestUpdateScores } from 'src/redux/features/scores/scoresAsyncThunks';
+import { selectScoresUpdateRequest } from 'src/redux/features/scores/scoresSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { Score } from 'src/types/Score';
+import { Phase, Score } from 'src/types/Score';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export type Response = {
   status?: Statuses;
-  update: (scores: Score[]) => void;
+  update: (phase: Phase, scores: Score[]) => void;
 };
 
 /**
@@ -21,11 +21,11 @@ export default function useScoresUpdate(projectId: number): Response {
   const dispatch = useAppDispatch();
 
   const [requestId, setRequestId] = useState('');
-  const result = useAppSelector(selectDeliverablesEditRequest(requestId));
+  const result = useAppSelector(selectScoresUpdateRequest(requestId));
 
   const update = useCallback(
-    (scores: Score[]) => {
-      const dispatched = dispatch(requestUpdateScores({ projectId, scores }));
+    (phase: Phase, scores: Score[]) => {
+      const dispatched = dispatch(requestUpdateScores({ projectId, phase, scores }));
       setRequestId(dispatched.requestId);
     },
     [dispatch, projectId]
@@ -35,6 +35,7 @@ export default function useScoresUpdate(projectId: number): Response {
     if (result?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     } else if (result?.status === 'success') {
+      snackbar.toastSuccess(strings.CHANGES_SAVED);
       // Refresh scores in store for this project
       dispatch(requestListScores(projectId));
     }
