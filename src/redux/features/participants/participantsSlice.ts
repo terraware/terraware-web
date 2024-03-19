@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import { ParticipantData, ParticipantsData } from 'src/services/ParticipantsService';
+import { Participant } from 'src/types/Participant';
 
 import {
   requestDeleteParticipant,
@@ -29,7 +29,7 @@ export const participantDeleteReducer = participantDeleteSlice.reducer;
 /**
  * Get Participant
  */
-const initialStateParticipant: { [key: string]: StatusT<ParticipantData> } = {};
+const initialStateParticipant: { [key: string]: StatusT<Participant> } = {};
 
 export const participantSlice = createSlice({
   name: 'participantSlice',
@@ -45,7 +45,7 @@ export const participantReducer = participantSlice.reducer;
 /**
  * Participant list
  */
-const initialStateParticipantList: { [key: string]: StatusT<ParticipantsData> } = {};
+const initialStateParticipantList: { [key: string]: StatusT<Participant[]> } = {};
 
 export const participantListSlice = createSlice({
   name: 'participantListSlice',
