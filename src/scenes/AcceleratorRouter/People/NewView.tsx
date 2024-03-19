@@ -13,6 +13,7 @@ import { User } from 'src/types/User';
 import useDebounce from 'src/utils/useDebounce';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import { isTerraformationEmail } from 'src/utils/user';
 
 import PersonForm from './PersonForm';
 
@@ -58,6 +59,12 @@ const NewView = () => {
 
   useEffect(() => {
     if (!debouncedEmail) {
+      return;
+    }
+
+    // Email address must end in @terraformation.com
+    if (!isTerraformationEmail(debouncedEmail)) {
+      setEmailError(strings.EMAIL_REQUIREMENT_TERRAFORMATION);
       return;
     }
 

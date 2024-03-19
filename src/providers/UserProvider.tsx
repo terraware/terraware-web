@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { PreferencesService, UserService } from 'src/services';
 import { User } from 'src/types/User';
 import { GlobalRolePermission, isAllowed as isAllowedACL } from 'src/utils/acl';
+import { isTerraformationEmail } from 'src/utils/user';
 
 import { PreferencesType, ProvidedUserData } from './DataTypes';
 import { UserContext } from './contexts';
@@ -59,7 +60,7 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
 
           (window as any).INIT_GTAG(
             response.user.id.toString(),
-            response.user.email?.toLowerCase()?.endsWith('@terraformation.com') ? 'true' : 'false'
+            isTerraformationEmail(response.user.email) ? 'true' : 'false'
           );
         }
       }

@@ -16,3 +16,6 @@ export const getUserDisplayName = (user?: UserIdentity): string => {
   }
   return user?.email || '';
 };
+
+export const isTerraformationEmail = (input?: string): boolean =>
+  (input || '').toLowerCase().endsWith('@terraformation.com');
