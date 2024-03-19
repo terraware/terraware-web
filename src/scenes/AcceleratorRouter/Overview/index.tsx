@@ -68,7 +68,7 @@ const OverviewView = () => {
 
   return (
     <Page
-      title={strings.ACCELERATOR_CONSOLE}
+      title={strings.OVERVIEW}
       rightComponent={
         isMobile ? (
           <Button id='new-cohort' icon='plus' onClick={goToNewCohort} size='medium' />
