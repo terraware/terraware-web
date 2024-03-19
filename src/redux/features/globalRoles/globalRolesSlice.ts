@@ -4,8 +4,8 @@ import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { GlobalRolesUsersData } from 'src/types/GlobalRoles';
 
 import {
+  requestDeleteGlobalRolesForUsers,
   requestListGlobalRolesUsers,
-  requestRemoveGlobalRolesForUsers,
   requestUpdateGlobalRolesUser,
 } from './globalRolesAsyncThunks';
 
@@ -36,7 +36,7 @@ export const globalRolesUsersRemoveSlice = createSlice({
   initialState: initialStateGlobalRolesUsersRemove,
   reducers: {},
   extraReducers: (builder) => {
-    buildReducers(requestRemoveGlobalRolesForUsers)(builder);
+    buildReducers(requestDeleteGlobalRolesForUsers)(builder);
   },
 });
 

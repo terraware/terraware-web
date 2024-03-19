@@ -11,7 +11,6 @@ import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
 
 const ENDPOINT_GLOBAL_ROLES_USERS = '/api/v1/globalRoles/users';
 const ENDPOINT_USER_GLOBAL_ROLES = '/api/v1/users/{userId}/globalRoles';
-const ENDPOINT_USERS_GLOBAL_ROLES = '/api/v1/users/globalRoles';
 
 export type GlobalRoleUsersListResponsePayload =
   paths[typeof ENDPOINT_GLOBAL_ROLES_USERS]['get']['responses'][200]['content']['application/json'];
@@ -21,14 +20,13 @@ export type UpdateGlobalRolesRequestPayload =
 export type UpdateGlobalRolesResponsePayload =
   paths[typeof ENDPOINT_USER_GLOBAL_ROLES]['post']['responses'][200]['content']['application/json'];
 
-export type RemoveGlobalRolesRequestPayload =
-  paths[typeof ENDPOINT_USERS_GLOBAL_ROLES]['delete']['requestBody']['content']['application/json'];
-export type RemoveGlobalRolesResponsePayload =
-  paths[typeof ENDPOINT_USERS_GLOBAL_ROLES]['delete']['responses'][200]['content']['application/json'];
+export type DeleteGlobalRolesRequestPayload =
+  paths[typeof ENDPOINT_GLOBAL_ROLES_USERS]['delete']['requestBody']['content']['application/json'];
+export type DeleteGlobalRolesResponsePayload =
+  paths[typeof ENDPOINT_GLOBAL_ROLES_USERS]['delete']['responses'][200]['content']['application/json'];
 
 const httpGlobalRolesUsers = HttpService.root(ENDPOINT_GLOBAL_ROLES_USERS);
 const httpUserGlobalRoles = HttpService.root(ENDPOINT_USER_GLOBAL_ROLES);
-const httpUsersGlobalRoles = HttpService.root(ENDPOINT_USERS_GLOBAL_ROLES);
 
 export type UserWithGlobalRolesData = {
   user: UserWithGlobalRoles;
@@ -58,12 +56,12 @@ const list = async (
   );
 };
 
-const remove = async (users: User[]): Promise<Response> => {
-  const payload: RemoveGlobalRolesRequestPayload = {
+const deleteRoles = async (users: User[]): Promise<Response> => {
+  const payload: DeleteGlobalRolesRequestPayload = {
     userIds: users.map((user) => user.id),
   };
 
-  return httpUsersGlobalRoles.delete2<RemoveGlobalRolesResponsePayload>({
+  return httpGlobalRolesUsers.delete2<DeleteGlobalRolesResponsePayload>({
     entity: payload,
   });
 };
@@ -82,8 +80,8 @@ const update = async (user: User, globalRoles: UserGlobalRole[]): Promise<Respon
 };
 
 const GlobalRolesService = {
+  deleteRoles,
   list,
-  remove,
   update,
 };
 
