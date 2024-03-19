@@ -1,3 +1,4 @@
+ed033e19e0 Preserve phase url params in Voting views (#2353)
 8ded2a3138 Updated translations from Phrase (#2350)
 6b2457e91f SW-5053 Updated voting screens to use API data  (#2337)
 22f33c7dc0 SW-5026 Fix separator height and color (#2347)

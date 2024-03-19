@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/42</span>
+                <span class='fraction'>0/43</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/40</span>
+                <span class='fraction'>0/41</span>
             </div>
         
             
@@ -198,7 +198,11 @@
 <a name='L133'></a><a href='#L133'>133</a>
 <a name='L134'></a><a href='#L134'>134</a>
 <a name='L135'></a><a href='#L135'>135</a>
-<a name='L136'></a><a href='#L136'>136</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -217,21 +221,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -345,6 +353,7 @@ import { requestProjectVotesUpdate } from 'src/redux/features/votes/votesAsyncTh
 import { selectProjectVotesEditRequest } from 'src/redux/features/votes/votesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { UpsertVoteSelection, VoteOption } from 'src/types/Votes';
+import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 &nbsp;
@@ -355,6 +364,7 @@ import VotingWrapper from './VotingWrapper';
 const VotingEdit = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
   const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
   const location = <span class="cstat-no" title="statement not covered" >useStateLocation();</span>
+  const query = <span class="cstat-no" title="statement not covered" >useQuery();</span>
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
@@ -366,8 +376,10 @@ const VotingEdit = <span class="cstat-no" title="statement not covered" ><span c
   const result = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectProjectVotesEditRequest(state, requestId))</span>;</span>
 &nbsp;
   const goToVotingView = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    history.push(getLocation(APP_PATHS.ACCELERATOR_VOTING.replace(':projectId', `${projectId}`), location));</span>
-  }, [history, location, projectId]);
+<span class="cstat-no" title="statement not covered" >    history.push(</span>
+      getLocation(APP_PATHS.ACCELERATOR_VOTING.replace(':projectId', `${projectId}`), location, query.toString())
+    );
+  }, [history, location, projectId, query]);
 &nbsp;
   const onSave = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!phaseVotes) {</span>
@@ -475,7 +487,7 @@ export default VotingEdit;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-19T18:44:55.063Z
+                at 2024-03-19T21:26:45.821Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
