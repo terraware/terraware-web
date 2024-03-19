@@ -1,3 +1,5 @@
+b2da90c403 SW-5044: Console: Need a way to filter Deliverables list by Project (#2336)
+6848a651ce SW-4979: Created tabbed views (#2342)
 0e300ac659 SW-5078 Participant CRUD service and redux (#2348)
 a0ba90a071 Updated translations from Phrase (#2343)
 dffb84993c SW-5047 Pull in updated types with the `createdTime` field for the global roles user (#2331)
