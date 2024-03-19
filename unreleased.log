@@ -1,3 +1,4 @@
+244679e374 Updated translations from Phrase (#2358)
 84b1afecb9 Remove activeLocale check from participants empty state component (#2356)
 dd8b592a03 Sync with backend for scoring types (#2354)
 dd424135e2 Update usage of TextTruncated to leverage wrapped component (#2352)
