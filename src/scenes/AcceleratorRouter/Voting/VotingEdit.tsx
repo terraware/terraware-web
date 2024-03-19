@@ -10,6 +10,7 @@ import { requestProjectVotesUpdate } from 'src/redux/features/votes/votesAsyncTh
 import { selectProjectVotesEditRequest } from 'src/redux/features/votes/votesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { UpsertVoteSelection, VoteOption } from 'src/types/Votes';
+import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
@@ -20,6 +21,7 @@ import VotingWrapper from './VotingWrapper';
 const VotingEdit = () => {
   const history = useHistory();
   const location = useStateLocation();
+  const query = useQuery();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const theme = useTheme();
@@ -31,8 +33,10 @@ const VotingEdit = () => {
   const result = useAppSelector((state) => selectProjectVotesEditRequest(state, requestId));
 
   const goToVotingView = useCallback(() => {
-    history.push(getLocation(APP_PATHS.ACCELERATOR_VOTING.replace(':projectId', `${projectId}`), location));
-  }, [history, location, projectId]);
+    history.push(
+      getLocation(APP_PATHS.ACCELERATOR_VOTING.replace(':projectId', `${projectId}`), location, query.toString())
+    );
+  }, [history, location, projectId, query]);
 
   const onSave = () => {
     if (!phaseVotes) {

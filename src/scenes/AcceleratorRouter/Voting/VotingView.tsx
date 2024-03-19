@@ -8,6 +8,7 @@ import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import { UserVoteView } from './UserVote';
@@ -17,6 +18,7 @@ import VotingWrapper from './VotingWrapper';
 const VotingView = () => {
   const history = useHistory();
   const location = useStateLocation();
+  const query = useQuery();
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
@@ -24,8 +26,10 @@ const VotingView = () => {
 
   const goToEditVotes = useCallback(() => {
     // keep query state for edit view
-    history.push(getLocation(APP_PATHS.ACCELERATOR_VOTING_EDIT.replace(':projectId', `${projectId}`), location));
-  }, [history, location, projectId]);
+    history.push(
+      getLocation(APP_PATHS.ACCELERATOR_VOTING_EDIT.replace(':projectId', `${projectId}`), location, query.toString())
+    );
+  }, [history, location, projectId, query]);
 
   // Edit Votes button
   const editVotes = useMemo(
