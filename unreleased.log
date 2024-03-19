@@ -1,3 +1,4 @@
+dd8b592a03 Sync with backend for scoring types (#2354)
 dd424135e2 Update usage of TextTruncated to leverage wrapped component (#2352)
 e07c69ad56 SW-5081 Participants list view with mock data and search (#2351)
 6dea28aa3e SW-5085 Empty state for participants list view (#2349)

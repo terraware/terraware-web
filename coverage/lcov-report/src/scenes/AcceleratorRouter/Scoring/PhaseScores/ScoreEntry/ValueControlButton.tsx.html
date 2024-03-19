@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/scenes/AcceleratorRouter/Scoring/Scorecard.tsx</title>
+    <title>Code coverage report for src/scenes/AcceleratorRouter/Scoring/PhaseScores/ScoreEntry/ValueControlButton.tsx</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../../../prettify.css" />
-    <link rel="stylesheet" href="../../../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.png" />
+    <link rel="stylesheet" href="../../../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../../../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../../../sort-arrow-sprite.png);
+            background-image: url(../../../../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,27 +19,27 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/scenes/AcceleratorRouter/Scoring</a> Scorecard.tsx</h1>
+        <h1><a href="../../../../../../index.html">All files</a> / <a href="index.html">src/scenes/AcceleratorRouter/Scoring/PhaseScores/ScoreEntry</a> ValueControlButton.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
@@ -115,7 +115,11 @@
 <a name='L50'></a><a href='#L50'>50</a>
 <a name='L51'></a><a href='#L51'>51</a>
 <a name='L52'></a><a href='#L52'>52</a>
-<a name='L53'></a><a href='#L53'>53</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -132,8 +136,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -167,58 +169,68 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useMemo } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Button, useTheme } from '@mui/material';
 &nbsp;
-import { Box, Typography, useTheme } from '@mui/material';
+import { ScoreValue, getScoreColors, getScoreValue } from 'src/types/Score';
 &nbsp;
-import strings from 'src/strings';
-import { Score, Scorecard as ScorecardType } from 'src/types/Score';
+type ScoreControlButtonProps = {
+  disabled?: boolean;
+  onChangeValue?: (value: ScoreValue) =&gt; void;
+  selected: boolean;
+  value: ScoreValue;
+};
 &nbsp;
-interface ScorecardProps {
-  scorecard?: ScorecardType;
-}
-&nbsp;
-const Scorecard = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> scorecard }: ScorecardProps) =&gt; {</span>
+const ValueControlButton = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> disabled, onChangeValue, selected, value }: ScoreControlButtonProps) =&gt; {</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
 &nbsp;
-  const calculatedScore = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >scorecard?.scores.find(<span class="fstat-no" title="function not covered" >(s</span>core: Score) =&gt; <span class="cstat-no" title="statement not covered" >score.category === 'Calculated')</span>,</span>
-    [scorecard]
-  );
+  const scoreColors = <span class="cstat-no" title="statement not covered" >getScoreColors(value, theme);</span>
+  const label = <span class="cstat-no" title="statement not covered" >getScoreValue(value);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (!scorecard) {</span>
-<span class="cstat-no" title="statement not covered" >    return null;</span>
-  }
+  const handleOnClick = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    onChangeValue?.(value);</span>
+  };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Box
-      borderRadius={theme.spacing(3)}
-      padding={3}
-      margin={0}
+    &lt;Button
+      disabled={disabled}
+      onClick={handleOnClick}
       sx={{
-        textAlign: 'center',
-        backgroundColor: theme.palette.TwClrBaseGray050,
-        height: '100%',
+        backgroundColor: selected ? scoreColors.background : theme.palette.TwClrBg,
+        borderColor: selected ? scoreColors.border : theme.palette.TwClrBrdrSecondary,
+        borderRadius: '8px',
+        borderWidth: '2px',
+        color: selected ? theme.palette.TwClrBaseWhite : theme.palette.TwClrTxtSecondary,
+        height: 48,
+        margin: '4px',
+        minWidth: '48px',
+        width: 48,
+        '&amp;:hover': {
+          backgroundColor: selected ? scoreColors.background : undefined,
+          borderColor: selected ? scoreColors.border : theme.palette.TwClrBrdrSecondary,
+          borderWidth: '2px',
+          color: selected ? theme.palette.TwClrBaseWhite : theme.palette.TwClrTxtSecondary,
+        },
+        '&amp;.Mui-disabled': {
+          borderColor: selected ? scoreColors.border : theme.palette.TwClrBrdrSecondary,
+          borderWidth: '2px',
+          color: selected ? theme.palette.TwClrBaseWhite : theme.palette.TwClrTxtSecondary,
+          opacity: selected ? 1 : 0.5,
+        },
       }}
+      variant='outlined'
     &gt;
-      &lt;Typography&gt;{scorecard.phase}&lt;/Typography&gt;
-      {calculatedScore &amp;&amp; (
-        &lt;Typography fontSize='20px' fontWeight='600' lineHeight='28px'&gt;{`${strings.SCORE}: ${
-          calculatedScore.value || strings.NOT_COMPLETE
-        }`}&lt;/Typography&gt;
-      )}
-      {scorecard.modifiedTime &amp;&amp; (
-        &lt;Typography
-          fontSize='14px'
-          fontWeight='400'
-          lineHeight='20px'
-        &gt;{`${strings.LAST_UPDATED}: ${scorecard.modifiedTime}`}&lt;/Typography&gt;
-      )}
-    &lt;/Box&gt;
+      {label}
+    &lt;/Button&gt;
   );
 };
 &nbsp;
-export default Scorecard;
+export default ValueControlButton;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -226,16 +238,16 @@ export default Scorecard;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-19T22:13:28.543Z
+                at 2024-03-19T22:28:44.043Z
             </div>
-        <script src="../../../../prettify.js"></script>
+        <script src="../../../../../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../../../sorter.js"></script>
-        <script src="../../../../block-navigation.js"></script>
+        <script src="../../../../../../sorter.js"></script>
+        <script src="../../../../../../block-navigation.js"></script>
     </body>
 </html>
     
