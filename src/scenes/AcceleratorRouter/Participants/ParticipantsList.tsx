@@ -19,6 +19,10 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import ParticipantsCellRenderer from './ParticipantsCellRenderer';
 
+type ParticipantType = Omit<Participant, 'projects'> & {
+  project_name: string[];
+};
+
 const columns = (activeLocale: string | null): TableColumnType[] =>
   activeLocale
     ? [
@@ -53,7 +57,7 @@ export default function ParticipantList(): JSX.Element {
   const snackbar = useSnackbar();
 
   const [hasFilters, setHasFilters] = useState<boolean>(false);
-  const [participants, setParticipants] = useState<Participant[]>([]);
+  const [participants, setParticipants] = useState<ParticipantType[]>([]);
   const [requestId, setRequestId] = useState<string>('');
   const participantsResult = useAppSelector(selectParticipantListRequest(requestId));
 
@@ -68,7 +72,14 @@ export default function ParticipantList(): JSX.Element {
       snackbar.toastError();
     }
     if (participantsResult?.data) {
-      setParticipants(participantsResult.data);
+      setParticipants(
+        participantsResult.data.map(
+          (participant: Participant): ParticipantType => ({
+            ...participant,
+            project_name: participant.projects.flatMap((project) => project.name),
+          })
+        )
+      );
     }
   }, [participantsResult, snackbar]);
 
@@ -100,7 +111,7 @@ export default function ParticipantList(): JSX.Element {
             {
               field: 'cohort_id',
               label: strings.COHORT,
-              options: (participants || [])?.map((participant: Participant) => `${participant.cohort_id}`),
+              options: (participants || [])?.map((participant: ParticipantType) => `${participant.cohort_id}`),
               renderOption: (id: string | number) => cohorts[id] || '',
               searchNodeCreator: (values: (number | string | null)[]) => ({
                 field: 'cohort_id',

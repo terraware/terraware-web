@@ -27,7 +27,10 @@ let mockParticipant: Participant = {
   cohort_id: 1,
   cohort_name: 'Cohort1',
   name: `TST_PART1`,
-  project_name: ['Project1'],
+  projects: [
+    { id: 1, name: 'Project1', organization_id: 1, organization_name: 'Org1' },
+    { id: 7, name: 'Andromeda', organization_id: 2, organization_name: 'Org2' },
+  ],
 };
 
 const get = async (participantId: number): Promise<Response2<ParticipantData>> => {
@@ -64,21 +67,30 @@ const list = async (
             cohort_id: 1,
             cohort_name: 'Cohort1',
             name: 'TST_PART1',
-            project_name: ['Project1'],
+            projects: [
+              { id: 1, name: 'Project1', organization_id: 1, organization_name: 'Org1' },
+              { id: 7, name: 'Andromeda', organization_id: 2, organization_name: 'Org2' },
+            ],
           },
           {
             id: 2,
             cohort_id: 2,
             cohort_name: 'Cohort2',
             name: 'TST_PART2',
-            project_name: ['Project2', 'Project3', 'Project4', 'Project5', 'Project6'],
+            projects: [
+              { id: 2, name: 'Project2', organization_id: 2, organization_name: 'Org2' },
+              { id: 3, name: 'Project3', organization_id: 2, organization_name: 'Org2' },
+              { id: 4, name: 'Project4', organization_id: 2, organization_name: 'Org2' },
+              { id: 5, name: 'Project5', organization_id: 3, organization_name: 'Org3' },
+              { id: 6, name: 'Project6', organization_id: 3, organization_name: 'Org3' },
+            ],
           },
           {
             id: 3,
             cohort_id: 3,
             cohort_name: 'Cohort3',
             name: 'random',
-            project_name: ['Project7', 'Project8'],
+            projects: [{ id: 8, name: 'Project8', organization_id: 1, organization_name: 'Org1' }],
           },
         ],
         search,
