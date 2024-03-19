@@ -1,5 +1,5 @@
 import { Response2 } from 'src/services/HttpService';
-import { Participant, ParticipantCreateRequest } from 'src/types/Participant';
+import { Participant, ParticipantCreateRequest, ParticipantUpdateRequest } from 'src/types/Participant';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
 
@@ -29,7 +29,7 @@ const deleteOne = async (participantId: number): Promise<Response2<number>> => {
   };
 };
 
-let mockParticipant: Participant = {
+const mockParticipant: Participant = {
   id: 1,
   cohort_id: 1,
   cohort_name: 'Cohort1',
@@ -107,8 +107,17 @@ const list = async (
   };
 };
 
-const update = async (participant: Participant): Promise<Response2<number>> => {
-  mockParticipant = participant;
+const update = async (participant: ParticipantUpdateRequest): Promise<Response2<number>> => {
+  mockParticipant.name = participant.name;
+  mockParticipant.cohort_id = participant.cohort_id;
+  mockParticipant.cohort_name = `Cohort${participant.cohort_id}`;
+  mockParticipant.projects = participant.project_ids.map((id, index) => ({
+    id,
+    name: `Project${id}`,
+    organization_id: (index % 2) + 1,
+    organization_name: `Org${(index % 2) + 1}`,
+  }));
+
   return {
     requestSucceeded: true,
     data: participant.id,

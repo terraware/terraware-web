@@ -18,3 +18,5 @@ export type ParticipantCreateRequest = {
   name: string;
   project_ids: number[];
 };
+
+export type ParticipantUpdateRequest = ParticipantCreateRequest & { id: number };
