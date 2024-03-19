@@ -11,8 +11,8 @@ import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import {
+  requestDeleteGlobalRolesForUsers,
   requestListGlobalRolesUsers,
-  requestRemoveGlobalRolesForUsers,
 } from 'src/redux/features/globalRoles/globalRolesAsyncThunks';
 import {
   selectGlobalRolesUsersRemoveRequest,
@@ -75,13 +75,13 @@ const PeopleView = () => {
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
   const [globalRoleUsers, setGlobalRoleUsers] = useState<UserWithGlobalRoles[]>([]);
   const [listRequestId, setListRequestId] = useState('');
-  const [removeRequestId, setRemoveRequestId] = useState('');
+  const [deleteRolesRequestId, setDeleteRolesRequestId] = useState('');
   const [lastSearchRequest, setLastSearchRequest] = useState<
     Partial<{ locale: string | null; search: SearchNodePayload; searchSortOrder: SearchSortOrder }>
   >({});
 
   const listRequest = useAppSelector(selectGlobalRolesUsersSearchRequest(listRequestId));
-  const removeRequest = useAppSelector(selectGlobalRolesUsersRemoveRequest(removeRequestId));
+  const deleteRolesRequest = useAppSelector(selectGlobalRolesUsersRemoveRequest(deleteRolesRequestId));
 
   const goToAddPerson = useCallback(() => {
     history.push({ pathname: APP_PATHS.ACCELERATOR_PERSON_NEW });
@@ -97,8 +97,8 @@ const PeopleView = () => {
   );
 
   const onConfirmSelectionRemoveRoles = useCallback(() => {
-    const request = dispatch(requestRemoveGlobalRolesForUsers({ users: selectedRows as User[] }));
-    setRemoveRequestId(request.requestId);
+    const request = dispatch(requestDeleteGlobalRolesForUsers({ users: selectedRows as User[] }));
+    setDeleteRolesRequestId(request.requestId);
   }, [dispatch, selectedRows]);
 
   const rightComponent = useMemo(
@@ -132,19 +132,19 @@ const PeopleView = () => {
   }, [listRequest, snackbar]);
 
   useEffect(() => {
-    if (!removeRequest) {
+    if (!deleteRolesRequest) {
       return;
     }
 
-    if (removeRequest.status === 'success') {
+    if (deleteRolesRequest.status === 'success') {
       const { locale, search, searchSortOrder } = lastSearchRequest;
       dispatchSearchRequest(locale || null, search, searchSortOrder);
-      setRemoveRequestId('');
-    } else if (removeRequest.status === 'error') {
+      setDeleteRolesRequestId('');
+    } else if (deleteRolesRequest.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
-      setRemoveRequestId('');
+      setDeleteRolesRequestId('');
     }
-  }, [dispatchSearchRequest, lastSearchRequest, snackbar, removeRequest]);
+  }, [dispatchSearchRequest, lastSearchRequest, snackbar, deleteRolesRequest]);
 
   return (
     <Page title={strings.PEOPLE} rightComponent={rightComponent}>

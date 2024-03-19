@@ -174,6 +174,8 @@ export interface paths {
   "/api/v1/globalRoles/users": {
     /** Gets the list of users that have global roles. */
     get: operations["listGlobalRoles"];
+    /** Remove global roles from the supplied users. */
+    delete: operations["deleteGlobalRoles"];
   };
   "/api/v1/i18n/timeZones": {
     /** Gets a list of supported time zones and their names. */
@@ -721,10 +723,6 @@ export interface paths {
   "/api/v1/users": {
     /** Gets a user by some criteria, for now only email is available */
     get: operations["searchUsers"];
-  };
-  "/api/v1/users/globalRoles": {
-    /** Remove global roles from the supplied users. */
-    delete: operations["removeGlobalRoles"];
   };
   "/api/v1/users/me": {
     /** Gets information about the current user. */
@@ -1757,6 +1755,9 @@ export interface components {
       withdrawnByUserId?: number;
       /** @description Quantity of seeds withdrawn. If this quantity is in weight and the remaining quantity of the accession is in seeds or vice versa, the accession must have a subset weight and count. */
       withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
+    };
+    DeleteGlobalRolesRequestPayload: {
+      userIds: number[];
     };
     DeleteProjectVotesRequestPayload: {
       /** @enum {string} */
@@ -3296,9 +3297,6 @@ export interface components {
       speciesName?: string;
       /** @enum {string} */
       status: "Live" | "Dead" | "Existing";
-    };
-    RemoveGlobalRolesRequestPayload: {
-      userIds: number[];
     };
     ReplaceObservationPlotRequestPayload: {
       /** @enum {string} */
@@ -5194,6 +5192,28 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["GlobalRoleUsersListResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Remove global roles from the supplied users. */
+  deleteGlobalRoles: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DeleteGlobalRolesRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -7902,28 +7922,6 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["GetUserResponsePayload"];
-        };
-      };
-      /** @description The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Remove global roles from the supplied users. */
-  removeGlobalRoles: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["RemoveGlobalRolesRequestPayload"];
-      };
-    };
-    responses: {
-      /** @description The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SuccessResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */

@@ -5,7 +5,7 @@ import { GlobalRolesUsersData } from 'src/types/GlobalRoles';
 
 import {
   requestListGlobalRolesUsers,
-  requestRemoveGlobalRolesForUsers,
+  requestDeleteGlobalRolesForUsers,
   requestUpdateGlobalRolesUser,
 } from './globalRolesAsyncThunks';
 
@@ -36,7 +36,7 @@ export const globalRolesUsersRemoveSlice = createSlice({
   initialState: initialStateGlobalRolesUsersRemove,
   reducers: {},
   extraReducers: (builder) => {
-    buildReducers(requestRemoveGlobalRolesForUsers)(builder);
+    buildReducers(requestDeleteGlobalRolesForUsers)(builder);
   },
 });
 

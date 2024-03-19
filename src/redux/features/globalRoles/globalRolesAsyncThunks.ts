@@ -27,12 +27,12 @@ export const requestListGlobalRolesUsers = createAsyncThunk(
   }
 );
 
-export const requestRemoveGlobalRolesForUsers = createAsyncThunk(
-  'globalRoles/remove-for-users',
+export const requestDeleteGlobalRolesForUsers = createAsyncThunk(
+  'globalRoles/delete-for-users',
   async (request: { users: User[] }, { rejectWithValue }) => {
     const { users } = request;
 
-    const response: Response = await GlobalRolesService.remove(users);
+    const response: Response = await GlobalRolesService.deleteRoles(users);
     if (response && response.requestSucceeded) {
       return users.map((user) => user.id);
     }
