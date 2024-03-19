@@ -17,7 +17,3 @@ export type UpsertProjectVotesRequestPayload = components['schemas']['UpsertProj
 export type UpsertVoteSelection = components['schemas']['UpsertVoteSelection'];
 
 export type ProjectVotesPayload = components['schemas']['ProjectVotesPayload'];
-
-export type VotingRecordsData = {
-  votes?: ProjectVotesPayload;
-};
