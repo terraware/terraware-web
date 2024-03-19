@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1710865738149" clover="3.2.0">
-  <project timestamp="1710865738149" name="All files">
-    <metrics statements="18118" coveredstatements="678" conditionals="11428" coveredconditionals="213" methods="5645" coveredmethods="155" elements="35191" coveredelements="1046" complexity="0" loc="18118" ncloc="18118" packages="153" files="760" classes="760"/>
+<coverage generated="1710870886764" clover="3.2.0">
+  <project timestamp="1710870886764" name="All files">
+    <metrics statements="18116" coveredstatements="679" conditionals="11423" coveredconditionals="213" methods="5642" coveredmethods="155" elements="35181" coveredelements="1047" complexity="0" loc="18116" ncloc="18116" packages="153" files="760" classes="760"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="121" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -8797,9 +8797,9 @@
       </file>
     </package>
     <package name="src.redux.features.votes">
-      <metrics statements="20" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="6" coveredmethods="0"/>
+      <metrics statements="21" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="6" coveredmethods="0"/>
       <file name="votesAsyncThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/votes/votesAsyncThunks.ts">
-        <metrics statements="10" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <metrics statements="11" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
         <line num="11" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -8808,8 +8808,9 @@
         <line num="18" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
         <line num="23" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="24" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="27" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
       </file>
       <file name="votesSelectors.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/votes/votesSelectors.ts">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
@@ -18278,7 +18279,7 @@
       </file>
     </package>
     <package name="src.services">
-      <metrics statements="1349" coveredstatements="339" conditionals="476" coveredconditionals="83" methods="381" coveredmethods="68"/>
+      <metrics statements="1346" coveredstatements="340" conditionals="473" coveredconditionals="83" methods="378" coveredmethods="68"/>
       <file name="AccessionService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/AccessionService.ts">
         <metrics statements="56" coveredstatements="39" conditionals="8" coveredconditionals="6" methods="17" coveredmethods="5"/>
         <line num="12" count="1" type="stmt"/>
@@ -18511,7 +18512,7 @@
         <line num="82" count="0" type="stmt"/>
       </file>
       <file name="HttpService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/HttpService.ts">
-        <metrics statements="49" coveredstatements="38" conditionals="19" coveredconditionals="9" methods="21" coveredmethods="13"/>
+        <metrics statements="53" coveredstatements="39" conditionals="20" coveredconditionals="9" methods="23" coveredmethods="13"/>
         <line num="61" count="9" type="stmt"/>
         <line num="62" count="5" type="stmt"/>
         <line num="72" count="14" type="stmt"/>
@@ -18535,32 +18536,36 @@
         <line num="112" count="6" type="stmt"/>
         <line num="114" count="6" type="stmt"/>
         <line num="117" count="30" type="cond" truecount="0" falsecount="1"/>
-        <line num="118" count="4" type="stmt"/>
-        <line num="120" count="4" type="stmt"/>
-        <line num="123" count="30" type="cond" truecount="0" falsecount="1"/>
-        <line num="124" count="0" type="stmt"/>
-        <line num="126" count="0" type="stmt"/>
-        <line num="128" count="0" type="stmt"/>
+        <line num="118" count="0" type="stmt"/>
+        <line num="120" count="0" type="stmt"/>
+        <line num="122" count="0" type="stmt"/>
+        <line num="126" count="30" type="cond" truecount="0" falsecount="1"/>
+        <line num="127" count="4" type="stmt"/>
+        <line num="129" count="4" type="stmt"/>
         <line num="132" count="30" type="cond" truecount="0" falsecount="1"/>
-        <line num="133" count="2" type="stmt"/>
-        <line num="135" count="2" type="stmt"/>
-        <line num="138" count="30" type="cond" truecount="0" falsecount="1"/>
-        <line num="139" count="0" type="stmt"/>
-        <line num="141" count="0" type="stmt"/>
-        <line num="143" count="0" type="stmt"/>
+        <line num="133" count="0" type="stmt"/>
+        <line num="135" count="0" type="stmt"/>
+        <line num="137" count="0" type="stmt"/>
+        <line num="141" count="30" type="cond" truecount="0" falsecount="1"/>
+        <line num="142" count="2" type="stmt"/>
+        <line num="144" count="2" type="stmt"/>
         <line num="147" count="30" type="cond" truecount="0" falsecount="1"/>
-        <line num="148" count="2" type="stmt"/>
-        <line num="150" count="2" type="stmt"/>
-        <line num="155" count="30" type="cond" truecount="0" falsecount="1"/>
-        <line num="156" count="0" type="stmt"/>
-        <line num="158" count="0" type="stmt"/>
-        <line num="160" count="0" type="stmt"/>
-        <line num="166" count="30" type="stmt"/>
-        <line num="172" count="9" type="stmt"/>
-        <line num="174" count="0" type="stmt"/>
-        <line num="177" count="0" type="stmt"/>
-        <line num="199" count="9" type="stmt"/>
-        <line num="201" count="21" type="stmt"/>
+        <line num="148" count="0" type="stmt"/>
+        <line num="150" count="0" type="stmt"/>
+        <line num="152" count="0" type="stmt"/>
+        <line num="156" count="30" type="cond" truecount="0" falsecount="1"/>
+        <line num="157" count="2" type="stmt"/>
+        <line num="159" count="2" type="stmt"/>
+        <line num="164" count="30" type="cond" truecount="0" falsecount="1"/>
+        <line num="165" count="0" type="stmt"/>
+        <line num="167" count="0" type="stmt"/>
+        <line num="169" count="0" type="stmt"/>
+        <line num="175" count="30" type="stmt"/>
+        <line num="181" count="9" type="stmt"/>
+        <line num="183" count="0" type="stmt"/>
+        <line num="186" count="0" type="stmt"/>
+        <line num="208" count="9" type="stmt"/>
+        <line num="210" count="21" type="stmt"/>
       </file>
       <file name="LocationService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/LocationService.ts">
         <metrics statements="11" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="4" coveredmethods="0"/>
@@ -19701,21 +19706,14 @@
         <line num="199" count="1" type="stmt"/>
       </file>
       <file name="VotesService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/VotesService.ts">
-        <metrics statements="14" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="7" coveredmethods="0"/>
-        <line num="9" count="0" type="stmt"/>
-        <line num="11" count="0" type="stmt"/>
+        <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
-        <line num="18" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
-        <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
       </file>
       <file name="index.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/index.ts">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>

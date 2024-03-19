@@ -1,3 +1,4 @@
+6b2457e91f SW-5053 Updated voting screens to use API data  (#2337)
 22f33c7dc0 SW-5026 Fix separator height and color (#2347)
 671716b34f SW-5047 Implement the new 'remove global roles for users' API into the Accelerator->People list view (#2345)
 ab159b55e1 SW-5047 'Remove global roles for users' API (#2344)
