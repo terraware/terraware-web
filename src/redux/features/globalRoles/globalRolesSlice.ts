@@ -3,7 +3,11 @@ import { createSlice } from '@reduxjs/toolkit';
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { GlobalRolesUsersData } from 'src/types/GlobalRoles';
 
-import { requestListGlobalRolesUsers, requestUpdateGlobalRolesUser } from './globalRolesAsyncThunks';
+import {
+  requestListGlobalRolesUsers,
+  requestRemoveGlobalRolesForUsers,
+  requestUpdateGlobalRolesUser,
+} from './globalRolesAsyncThunks';
 
 /**
  * Users with global roles list
@@ -20,6 +24,23 @@ export const globalRolesUsersListSlice = createSlice({
 });
 
 export const globalRolesUsersListReducer = globalRolesUsersListSlice.reducer;
+
+/**
+ * Simple OK/response for requests removing all global roles for a list of users, keeps
+ * state of user ids that was were modified.
+ */
+const initialStateGlobalRolesUsersRemove: { [key: number | string]: StatusT<number[]> } = {};
+
+export const globalRolesUsersRemoveSlice = createSlice({
+  name: 'globalRolesUsersRemoveSlice',
+  initialState: initialStateGlobalRolesUsersRemove,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestRemoveGlobalRolesForUsers)(builder);
+  },
+});
+
+export const globalRolesUsersRemoveReducer = globalRolesUsersRemoveSlice.reducer;
 
 /**
  * Simple OK/response for requests updating a user's global roles, keeps

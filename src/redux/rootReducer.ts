@@ -15,6 +15,7 @@ import {
 import {
   globalRolesUserUpdateReducer,
   globalRolesUsersListReducer,
+  globalRolesUsersRemoveReducer,
 } from 'src/redux/features/globalRoles/globalRolesSlice';
 import { projectsReducer, projectsRequestsReducer } from 'src/redux/features/projects/projectsSlice';
 import { reportsSettingsReducer } from 'src/redux/features/reportsSettings/reportsSettingsSlice';
@@ -74,6 +75,7 @@ export const reducers = {
   draftPlantingSiteGet: draftPlantingSiteGetReducer,
   draftPlantingSiteSearch: draftPlantingSiteSearchReducer,
   globalRolesUsersList: globalRolesUsersListReducer,
+  globalRolesUsersRemove: globalRolesUsersRemoveReducer,
   globalRolesUserUpdate: globalRolesUserUpdateReducer,
   message: messageReducer,
   monitoringPlots: monitoringPlotsReducer,
