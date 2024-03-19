@@ -1,3 +1,4 @@
+e07c69ad56 SW-5081 Participants list view with mock data and search (#2351)
 6dea28aa3e SW-5085 Empty state for participants list view (#2349)
 8f2a6a1a2f SW-5049 Make sure the email address is a terraformation one (#2346)
 ed033e19e0 Preserve phase url params in Voting views (#2353)
