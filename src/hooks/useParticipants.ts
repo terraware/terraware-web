@@ -39,8 +39,8 @@ export const useParticipants = (participantId?: number) => {
       return;
     }
 
-    if (participantListRequest.status === 'success' && participantListRequest.data?.participants) {
-      setAvailableParticipants(participantListRequest.data.participants);
+    if (participantListRequest.status === 'success' && participantListRequest.data) {
+      setAvailableParticipants(participantListRequest.data);
     } else if (participantListRequest.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }

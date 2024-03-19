@@ -1,6 +1,7 @@
 import { Response2 } from 'src/services/HttpService';
 import { Participant } from 'src/types/Participant';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
 
 /**
  * Accelerator "participant" related services
@@ -24,7 +25,9 @@ const deleteOne = async (participantId: number): Promise<Response2<number>> => {
 let mockParticipant: Participant = {
   id: 1,
   cohort_id: 1,
+  cohort_name: 'Cohort1',
   name: `TST_PART1`,
+  project_name: ['Project1'],
 };
 
 const get = async (participantId: number): Promise<Response2<ParticipantData>> => {
@@ -41,21 +44,46 @@ const list = async (
   search?: SearchNodePayload,
   sortOrder?: SearchSortOrder
 ): Promise<Response2<ParticipantsData>> => {
+  let searchOrderConfig: SearchOrderConfig | undefined;
+
+  if (locale && sortOrder) {
+    searchOrderConfig = {
+      locale,
+      sortOrder,
+      numberFields: ['id', 'cohort_id'],
+    };
+  }
+
   return {
     requestSucceeded: true,
     data: {
-      participants: [
-        {
-          id: 1,
-          cohort_id: 1,
-          name: 'TST_PART1',
-        },
-        {
-          id: 2,
-          cohort_id: 1,
-          name: 'TST_PART2',
-        },
-      ],
+      participants: searchAndSort(
+        [
+          {
+            id: 1,
+            cohort_id: 1,
+            cohort_name: 'Cohort1',
+            name: 'TST_PART1',
+            project_name: ['Project1'],
+          },
+          {
+            id: 2,
+            cohort_id: 2,
+            cohort_name: 'Cohort2',
+            name: 'TST_PART2',
+            project_name: ['Project2', 'Project3', 'Project4', 'Project5', 'Project6'],
+          },
+          {
+            id: 3,
+            cohort_id: 3,
+            cohort_name: 'Cohort3',
+            name: 'random',
+            project_name: ['Project7', 'Project8'],
+          },
+        ],
+        search,
+        searchOrderConfig
+      ),
     },
   };
 };
