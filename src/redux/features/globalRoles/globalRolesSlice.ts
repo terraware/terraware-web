@@ -4,8 +4,8 @@ import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { GlobalRolesUsersData } from 'src/types/GlobalRoles';
 
 import {
-  requestListGlobalRolesUsers,
   requestDeleteGlobalRolesForUsers,
+  requestListGlobalRolesUsers,
   requestUpdateGlobalRolesUser,
 } from './globalRolesAsyncThunks';
 
