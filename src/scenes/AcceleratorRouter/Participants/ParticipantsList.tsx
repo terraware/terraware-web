@@ -154,17 +154,12 @@ export default function ParticipantList(): JSX.Element {
 }
 
 const EmptyState = (): JSX.Element | null => {
-  const { activeLocale } = useLocalization();
   const history = useHistory();
   const theme = useTheme();
 
   const goToNewParticipant = () => {
     history.push(APP_PATHS.ACCELERATOR_PARTICIPANTS_NEW);
   };
-
-  if (!activeLocale) {
-    return null;
-  }
 
   return (
     <Box
