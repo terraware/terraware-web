@@ -9,7 +9,7 @@ import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { Participant } from 'src/types/Participant';
 
-export default function ParticipantListView(): JSX.Element {
+export default function ParticipantList(): JSX.Element {
   const theme = useTheme();
   const [participants, setParticipants] = useState<Participant[]>();
 

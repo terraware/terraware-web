@@ -8,7 +8,7 @@ import { Tabs } from '@terraware/web-components';
 import Page from 'src/components/Page';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
-import ParticipantsListView from 'src/scenes/AcceleratorRouter/Participants/ParticipantsListView';
+import ParticipantsList from 'src/scenes/AcceleratorRouter/Participants/ParticipantsList';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useQuery from 'src/utils/useQuery';
@@ -91,7 +91,7 @@ const OverviewView = () => {
             {
               id: 'participants',
               label: strings.PARTICIPANTS,
-              children: <ParticipantsListView />,
+              children: <ParticipantsList />,
             },
             {
               id: 'cohorts',
