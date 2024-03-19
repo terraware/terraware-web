@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import { requestParticipantsList } from 'src/redux/features/participants/participantsAsyncThunks';
-import { selectParticipantsListRequest } from 'src/redux/features/participants/participantsSelectors';
+import { requestListParticipants } from 'src/redux/features/participants/participantsAsyncThunks';
+import { selectParticipantListRequest } from 'src/redux/features/participants/participantsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Participant } from 'src/types/Participant';
@@ -12,12 +12,12 @@ export const useParticipants = (participantId?: number) => {
   const snackbar = useSnackbar();
 
   const [requestId, setRequestId] = useState('');
-  const participantsListRequest = useAppSelector(selectParticipantsListRequest(requestId));
+  const participantListRequest = useAppSelector(selectParticipantListRequest(requestId));
 
   const [availableParticipants, setAvailableParticipants] = useState<Participant[] | undefined>();
   const [selectedParticipant, setSelectedParticipant] = useState<Participant>();
 
-  const isBusy = (participantsListRequest || {}).status === 'pending';
+  const isBusy = (participantListRequest || {}).status === 'pending';
 
   useEffect(() => {
     if (availableParticipants && participantId) {
@@ -29,22 +29,22 @@ export const useParticipants = (participantId?: number) => {
 
   useEffect(() => {
     if (!availableParticipants) {
-      const request = dispatch(requestParticipantsList());
+      const request = dispatch(requestListParticipants({}));
       setRequestId(request.requestId);
     }
   }, [availableParticipants, dispatch]);
 
   useEffect(() => {
-    if (!participantsListRequest) {
+    if (!participantListRequest) {
       return;
     }
 
-    if (participantsListRequest.status === 'success' && participantsListRequest.data) {
-      setAvailableParticipants(participantsListRequest.data);
-    } else if (participantsListRequest.status === 'error') {
+    if (participantListRequest.status === 'success' && participantListRequest.data?.participants) {
+      setAvailableParticipants(participantListRequest.data.participants);
+    } else if (participantListRequest.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [participantsListRequest, snackbar]);
+  }, [participantListRequest, snackbar]);
 
   return { availableParticipants, selectedParticipant, isBusy };
 };
