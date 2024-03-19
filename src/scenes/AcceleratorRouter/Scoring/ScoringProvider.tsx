@@ -33,7 +33,7 @@ const ScoringProvider = ({ children }: Props) => {
   const [scoringData, setScoringData] = useState<ScoringData>({ crumbs: [], projectId });
 
   const scoreListResult = useAppSelector(selectScoreList(projectId));
-  console.log(scoreListResult);
+
   const crumbs: Crumb[] = useMemo(
     () =>
       activeLocale
@@ -60,7 +60,6 @@ const ScoringProvider = ({ children }: Props) => {
     () => phaseScores?.find((phaseScore: PhaseScores) => phaseScore.phase === 'Phase 1 - Feasibility Study'),
     [phaseScores]
   );
-  console.log(phase1Scorecard);
 
   useEffect(() => {
     if (!isNaN(projectId)) {

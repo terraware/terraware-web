@@ -39,7 +39,7 @@ const get = async (projectId: number): Promise<Response & ScoresData> =>
           // Since scores may not exist, but we need to be able to edit them, fill in the
           // missing score categories with "empty" scores
           scores: ScoreCategories.map((expectedScoreCategory: ScoreCategory): Score => {
-            const score = phase.scores.find((score: Score) => score.category === expectedScoreCategory);
+            const score = phase.scores.find((_score: Score) => _score.category === expectedScoreCategory);
             if (score) {
               return score;
             }
