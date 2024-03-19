@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
@@ -151,9 +151,7 @@
 <a name='L86'></a><a href='#L86'>86</a>
 <a name='L87'></a><a href='#L87'>87</a>
 <a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L89'></a><a href='#L89'>89</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -166,7 +164,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -181,7 +178,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -256,7 +252,6 @@ import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
 &nbsp;
 const ENDPOINT_GLOBAL_ROLES_USERS = <span class="cstat-no" title="statement not covered" >'/api/v1/globalRoles/users';</span>
 const ENDPOINT_USER_GLOBAL_ROLES = <span class="cstat-no" title="statement not covered" >'/api/v1/users/{userId}/globalRoles';</span>
-const ENDPOINT_USERS_GLOBAL_ROLES = <span class="cstat-no" title="statement not covered" >'/api/v1/users/globalRoles';</span>
 &nbsp;
 export type GlobalRoleUsersListResponsePayload =
   paths[typeof ENDPOINT_GLOBAL_ROLES_USERS]['get']['responses'][200]['content']['application/json'];
@@ -266,14 +261,13 @@ export type UpdateGlobalRolesRequestPayload =
 export type UpdateGlobalRolesResponsePayload =
   paths[typeof ENDPOINT_USER_GLOBAL_ROLES]['post']['responses'][200]['content']['application/json'];
 &nbsp;
-export type RemoveGlobalRolesRequestPayload =
-  paths[typeof ENDPOINT_USERS_GLOBAL_ROLES]['delete']['requestBody']['content']['application/json'];
-export type RemoveGlobalRolesResponsePayload =
-  paths[typeof ENDPOINT_USERS_GLOBAL_ROLES]['delete']['responses'][200]['content']['application/json'];
+export type DeleteGlobalRolesRequestPayload =
+  paths[typeof ENDPOINT_GLOBAL_ROLES_USERS]['delete']['requestBody']['content']['application/json'];
+export type DeleteGlobalRolesResponsePayload =
+  paths[typeof ENDPOINT_GLOBAL_ROLES_USERS]['delete']['responses'][200]['content']['application/json'];
 &nbsp;
 const httpGlobalRolesUsers = <span class="cstat-no" title="statement not covered" >HttpService.root(ENDPOINT_GLOBAL_ROLES_USERS);</span>
 const httpUserGlobalRoles = <span class="cstat-no" title="statement not covered" >HttpService.root(ENDPOINT_USER_GLOBAL_ROLES);</span>
-const httpUsersGlobalRoles = <span class="cstat-no" title="statement not covered" >HttpService.root(ENDPOINT_USERS_GLOBAL_ROLES);</span>
 &nbsp;
 export type UserWithGlobalRolesData = {
   user: UserWithGlobalRoles;
@@ -303,12 +297,12 @@ const list = <span class="cstat-no" title="statement not covered" ><span class="
   );
 };
 &nbsp;
-const remove = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (users: User[]): Promise&lt;Response&gt; =&gt; {</span>
-  const payload: RemoveGlobalRolesRequestPayload = <span class="cstat-no" title="statement not covered" >{</span>
+const deleteRoles = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (users: User[]): Promise&lt;Response&gt; =&gt; {</span>
+  const payload: DeleteGlobalRolesRequestPayload = <span class="cstat-no" title="statement not covered" >{</span>
     userIds: users.map(<span class="fstat-no" title="function not covered" >(u</span>ser) =&gt; <span class="cstat-no" title="statement not covered" >user.id)</span>,
   };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return httpUsersGlobalRoles.delete2&lt;RemoveGlobalRolesResponsePayload&gt;({</span>
+<span class="cstat-no" title="statement not covered" >  return httpGlobalRolesUsers.delete2&lt;DeleteGlobalRolesResponsePayload&gt;({</span>
     entity: payload,
   });
 };
@@ -327,8 +321,8 @@ const update = <span class="cstat-no" title="statement not covered" ><span class
 };
 &nbsp;
 const GlobalRolesService = <span class="cstat-no" title="statement not covered" >{</span>
+  deleteRoles,
   list,
-  remove,
   update,
 };
 &nbsp;
@@ -340,7 +334,7 @@ export default GlobalRolesService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-19T15:45:09.498Z
+                at 2024-03-19T16:25:50.374Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
