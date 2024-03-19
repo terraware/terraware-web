@@ -1,5 +1,8 @@
 import { RootState } from 'src/redux/rootReducer';
 
+export const selectParticipantCreateRequest = (requestId: string) => (state: RootState) =>
+  state.participantCreate[requestId];
+
 export const selectParticipantDeleteRequest = (requestId: string) => (state: RootState) =>
   state.participantDelete[requestId];
 

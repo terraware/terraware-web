@@ -1,5 +1,5 @@
 import { Response2 } from 'src/services/HttpService';
-import { Participant } from 'src/types/Participant';
+import { Participant, ParticipantCreateRequest } from 'src/types/Participant';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
 
@@ -13,6 +13,13 @@ export type ParticipantsData = {
 
 export type ParticipantData = {
   participant: Participant;
+};
+
+const create = async (request: ParticipantCreateRequest): Promise<Response2<number>> => {
+  return {
+    requestSucceeded: true,
+    data: 1,
+  };
 };
 
 const deleteOne = async (participantId: number): Promise<Response2<number>> => {
@@ -109,6 +116,7 @@ const update = async (participant: Participant): Promise<Response2<number>> => {
 };
 
 const ParticipantsService = {
+  create,
   deleteOne,
   get,
   list,

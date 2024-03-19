@@ -4,11 +4,28 @@ import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { Participant } from 'src/types/Participant';
 
 import {
+  requestCreateParticipant,
   requestDeleteParticipant,
   requestGetParticipant,
   requestListParticipants,
   requestUpdateParticipant,
 } from './participantsAsyncThunks';
+
+/**
+ * Create Participant
+ */
+const initialStateParticipantCreate: { [key: string]: StatusT<number> } = {};
+
+export const participantCreateSlice = createSlice({
+  name: 'participantCreateSlice',
+  initialState: initialStateParticipantCreate,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestCreateParticipant)(builder);
+  },
+});
+
+export const participantCreateReducer = participantCreateSlice.reducer;
 
 /**
  * Delete Participant
