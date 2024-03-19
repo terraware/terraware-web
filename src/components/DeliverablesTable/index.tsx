@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { TableColumnType } from '@terraware/web-components';
 
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
-import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization } from 'src/providers';
 import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
@@ -22,6 +21,7 @@ import DeliverableCellRenderer from './DeliverableCellRenderer';
 interface DeliverablesTableProps {
   columns: (activeLocale: string | null) => TableColumnType[];
   extraTableFilters?: SearchNodePayload[];
+  isAcceleratorRoute?: boolean;
   organizationId: number;
   filterModifiers?: (filters: FilterConfig[]) => FilterConfig[];
   searchAndSort?: SearchAndSortFn<ListDeliverablesElement>;
@@ -38,6 +38,7 @@ const DeliverablesTable = ({
   columns,
   extraTableFilters,
   filterModifiers,
+  isAcceleratorRoute,
   organizationId,
   searchAndSort,
   tableId,
@@ -45,7 +46,6 @@ const DeliverablesTable = ({
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const { availableProjects: projects, getProjectName } = useProjects();
-  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const [deliverables, setDeliverables] = useState<ListDeliverablesElement[]>([]);
   const [deliverablesSearchRequestId, setDeliverablesSearchRequestId] = useState('');

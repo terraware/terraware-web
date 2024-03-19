@@ -110,6 +110,7 @@ const DeliverablesList = () => {
       <DeliverablesTable
         columns={columns}
         extraTableFilters={extraTableFilters}
+        isAcceleratorRoute={true}
         organizationId={-1}
         tableId={'acceleratorDeliverablesTable'}
       />
