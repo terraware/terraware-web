@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { Theme } from '@mui/material';
-import { TextTruncated } from '@terraware/web-components';
 
 import Link from 'src/components/common/Link';
+import TextTruncated from 'src/components/common/TextTruncated';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import { RendererProps } from 'src/components/common/table/types';
@@ -11,8 +11,6 @@ import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { ObservationState, getStatus } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
-
-const COLUMN_WIDTH = 250;
 
 const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies', 'mortalityRate'];
 
@@ -28,17 +26,7 @@ const OrgObservationsRenderer =
 
     const getTruncatedNames = (inputNames: string) => {
       const names = inputNames.split('\r');
-      return (
-        <TextTruncated
-          stringList={names}
-          maxLengthPx={COLUMN_WIDTH}
-          textStyle={{ fontSize: 14 }}
-          showAllStyle={{ padding: theme.spacing(2), fontSize: 14 }}
-          listSeparator={strings.LIST_SEPARATOR}
-          moreSeparator={strings.TRUNCATED_TEXT_MORE_SEPARATOR}
-          moreText={strings.TRUNCATED_TEXT_MORE_LINK}
-        />
-      );
+      return <TextTruncated stringList={names} />;
     };
 
     const createLinkToSiteObservation = (date: string) => {

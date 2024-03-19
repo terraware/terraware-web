@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { Theme, useTheme } from '@mui/material';
+import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Button, TextTruncated } from '@terraware/web-components';
+import { Button } from '@terraware/web-components';
 
+import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { NurseryWithdrawalPurposes } from 'src/types/Batch';
@@ -26,11 +27,9 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const classes = useStyles();
-  const theme = useTheme();
 
   const { column, row, value, index, onRowClick } = props;
   const { OUTPLANT } = NurseryWithdrawalPurposes;
-  const COLUMN_WIDTH = 250;
 
   const rowClick = (event?: React.SyntheticEvent) => {
     if (onRowClick) {
@@ -51,17 +50,7 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
   };
 
   const getTruncated = (inputValues: any) => {
-    return (
-      <TextTruncated
-        stringList={inputValues}
-        maxLengthPx={COLUMN_WIDTH}
-        textStyle={{ fontSize: 14 }}
-        showAllStyle={{ padding: theme.spacing(2), fontSize: 14 }}
-        listSeparator={strings.LIST_SEPARATOR}
-        moreSeparator={strings.TRUNCATED_TEXT_MORE_SEPARATOR}
-        moreText={strings.TRUNCATED_TEXT_MORE_LINK}
-      />
-    );
+    return <TextTruncated stringList={inputValues} />;
   };
 
   if (column.key === 'speciesScientificNames') {

@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { Grid, useTheme } from '@mui/material';
-import { TextTruncated } from '@terraware/web-components';
+import { Grid } from '@mui/material';
 
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import TextTruncated from 'src/components/common/TextTruncated';
 import NurseryFacilitiesService, {
   NurserySummaryPayload,
   NurserySummarySpecies,
@@ -23,7 +23,6 @@ export default function InventorySummaryForNursery({
 }: InventorySummaryForNurseryProps): JSX.Element {
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
-  const theme = useTheme();
 
   const [summary, setSummary] = useState<NurserySummaryPayload | undefined>();
 
@@ -107,19 +106,15 @@ export default function InventorySummaryForNursery({
         valueComponent: (
           <TextTruncated
             stringList={(species || []).map((s: NurserySummarySpecies) => s.scientificName)}
-            maxLengthPx={350}
-            textStyle={{ fontSize: 16 }}
-            showAllStyle={{ padding: theme.spacing(2), fontSize: 16 }}
-            listSeparator={strings.LIST_SEPARATOR}
-            moreSeparator={strings.TRUNCATED_TEXT_MORE_SEPARATOR}
-            moreText={strings.TRUNCATED_TEXT_MORE_LINK}
+            columnWidth={350}
+            fontSize={16}
           />
         ),
         tooltipTitle: '',
         gridColumns,
       },
     ];
-  }, [isMobile, summary, theme]);
+  }, [isMobile, summary]);
 
   return (
     <Grid container spacing={3}>
