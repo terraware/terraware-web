@@ -114,6 +114,15 @@ function RequestsHandler(url: string = '') {
     return await handleRequest(axios.get<I>(replace(url, request), { params, headers }), transform);
   }
 
+  const get2 = async <T extends ServerData>(request: GetRequest = {}): Promise<Response2<T>> => {
+    const { params, headers } = request;
+
+    return await handleRequest<T, { data: T | undefined }>(
+      axios.get<T>(replace(url, request), { params, headers }),
+      (data: T | undefined) => ({ data })
+    );
+  };
+
   const post = async (request: PostRequest = {}): Promise<Response> => {
     const { entity, params, headers } = request;
 
@@ -163,7 +172,7 @@ function RequestsHandler(url: string = '') {
     );
   };
 
-  return { get, post, post2, put, put2, delete: _delete, delete2 };
+  return { get, get2, post, post2, put, put2, delete: _delete, delete2 };
 }
 
 /**

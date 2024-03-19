@@ -47,10 +47,10 @@ export interface paths {
     put: operations["updateSubmission"];
   };
   "/api/v1/accelerator/projects/{projectId}/scores": {
-    /** Gets vote selections for a single project. */
+    /** Gets score selections for a single project. */
     get: operations["getProjectScores"];
     /**
-     * Upserts vote selections for a single project.
+     * Upserts score selections for a single project.
      * @description Update the scores for the project phase. If the (project, phase, category) does not exist, a new entry is created. Setting a `score` to `null` removes the score.
      */
     put: operations["upsertProjectScores"];
@@ -1055,10 +1055,6 @@ export interface components {
     };
     /** @description A change to the non-quantity-related details of a batch. */
     BatchHistoryDetailsEditedPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & ({
-      /** Format: int64 */
-      createdBy?: number;
-      /** Format: date-time */
-      createdTime?: string;
       notes?: string;
       /**
        * Format: int64
@@ -1078,15 +1074,9 @@ export interface components {
       treatmentNotes?: string;
       /** @enum {string} */
       type?: "DetailsEdited";
-      /** Format: int32 */
-      version?: number;
     }), "createdBy" | "createdTime" | "subLocations" | "type" | "version">;
     /** @description A nursery transfer withdrawal from another batch that added seedlings to this batch. */
     BatchHistoryIncomingWithdrawalPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & {
-      /** Format: int64 */
-      createdBy?: number;
-      /** Format: date-time */
-      createdTime?: string;
       /** Format: int64 */
       fromBatchId?: number;
       /** Format: int32 */
@@ -1097,8 +1087,6 @@ export interface components {
       readyQuantityAdded?: number;
       /** @enum {string} */
       type?: "IncomingWithdrawal";
-      /** Format: int32 */
-      version?: number;
       /** Format: int64 */
       withdrawalId?: number;
       /** Format: date */
@@ -1106,10 +1094,6 @@ export interface components {
     }, "createdBy" | "createdTime" | "fromBatchId" | "germinatingQuantityAdded" | "notReadyQuantityAdded" | "readyQuantityAdded" | "type" | "version" | "withdrawalId" | "withdrawnDate">;
     /** @description A withdrawal that removed seedlings from this batch. This does not include the full details of the withdrawal; they can be retrieved using the withdrawal ID. */
     BatchHistoryOutgoingWithdrawalPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & ({
-      /** Format: int64 */
-      createdBy?: number;
-      /** Format: date-time */
-      createdTime?: string;
       /** Format: int32 */
       germinatingQuantityWithdrawn?: number;
       /** Format: int32 */
@@ -1120,8 +1104,6 @@ export interface components {
       readyQuantityWithdrawn?: number;
       /** @enum {string} */
       type?: "OutgoingWithdrawal";
-      /** Format: int32 */
-      version?: number;
       /** Format: int64 */
       withdrawalId?: number;
       /** Format: date */
@@ -1137,10 +1119,6 @@ export interface components {
       version?: number;
     };
     BatchHistoryPhotoCreatedPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & {
-      /** Format: int64 */
-      createdBy?: number;
-      /** Format: date-time */
-      createdTime?: string;
       /**
        * Format: int64
        * @description ID of the photo if it exists. Null if the photo has been deleted.
@@ -1150,19 +1128,11 @@ export interface components {
       type?: "PhotoCreated";
     }, "createdBy" | "createdTime" | "type">;
     BatchHistoryPhotoDeletedPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & {
-      /** Format: int64 */
-      createdBy?: number;
-      /** Format: date-time */
-      createdTime?: string;
       /** @enum {string} */
       type?: "PhotoDeleted";
     }, "createdBy" | "createdTime" | "type">;
     /** @description A manual edit of a batch's remaining quantities. */
     BatchHistoryQuantityEditedPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & {
-      /** Format: int64 */
-      createdBy?: number;
-      /** Format: date-time */
-      createdTime?: string;
       /** Format: int32 */
       germinatingQuantity?: number;
       /** Format: int32 */
@@ -1171,15 +1141,9 @@ export interface components {
       readyQuantity?: number;
       /** @enum {string} */
       type?: "QuantityEdited";
-      /** Format: int32 */
-      version?: number;
     }, "createdBy" | "createdTime" | "germinatingQuantity" | "notReadyQuantity" | "readyQuantity" | "type" | "version">;
     /** @description The new quantities resulting from changing the statuses of seedlings in a batch. The values here are the total quantities remaining after the status change, not the number of seedlings whose statuses were changed. */
     BatchHistoryStatusChangedPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & {
-      /** Format: int64 */
-      createdBy?: number;
-      /** Format: date-time */
-      createdTime?: string;
       /** Format: int32 */
       germinatingQuantity?: number;
       /** Format: int32 */
@@ -1188,8 +1152,6 @@ export interface components {
       readyQuantity?: number;
       /** @enum {string} */
       type?: "StatusChanged";
-      /** Format: int32 */
-      version?: number;
     }, "createdBy" | "createdTime" | "germinatingQuantity" | "notReadyQuantity" | "readyQuantity" | "type" | "version">;
     BatchHistorySubLocationPayload: {
       /**
@@ -2195,9 +2157,6 @@ export interface components {
     };
     GetProjectScoresResponsePayload: {
       phases: components["schemas"]["PhaseScores"][];
-      /** Format: int64 */
-      projectId: number;
-      projectName: string;
       status: components["schemas"]["SuccessOrError"];
     };
     GetProjectVotesResponsePayload: {
@@ -3040,7 +2999,7 @@ export interface components {
       /** @enum {string} */
       phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
       scores: components["schemas"]["Score"][];
-      systemScore?: number;
+      totalScore?: number;
     };
     PhaseVotes: {
       /** @enum {string} */
@@ -3184,9 +3143,6 @@ export interface components {
     };
     ProjectVotesPayload: {
       phases: components["schemas"]["PhaseVotes"][];
-      /** Format: int64 */
-      projectId: number;
-      projectName: string;
     };
     PutNurseryV1: {
       /** Format: date */
@@ -3356,7 +3312,7 @@ export interface components {
       qualitative?: string;
       /**
        * Format: int32
-       * @description Must be between -2 to 2. If `null`, a score has not been selected.
+       * @description If `null`, a score has not been selected.
        */
       value?: number;
     };
@@ -3368,7 +3324,7 @@ export interface components {
        * @description Maximum number of top-level search results to return. The system may impose a limit on this value. A separate system-imposed limit may also be applied to lists of child objects inside the top-level results. Use a value of 0 to return the maximum number of allowed results.
        * @default 25
        */
-      count: number;
+      count?: number;
       /** @description Starting point for search results. If present, a previous search will be continued from where it left off. This should be the value of the cursor that was returned in the response to a previous search. */
       cursor?: string;
       /**
@@ -4110,15 +4066,6 @@ export interface components {
       phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
       scores: components["schemas"]["UpsertScore"][];
     };
-    UpsertProjectScoresResponsePayload: {
-      /** @enum {string} */
-      phaseId: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
-      /** Format: int64 */
-      projectId: number;
-      scores: components["schemas"]["Score"][];
-      status: components["schemas"]["SuccessOrError"];
-      systemScore?: number;
-    };
     UpsertProjectVotesRequestPayload: {
       /** @enum {string} */
       phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
@@ -4130,7 +4077,7 @@ export interface components {
       qualitative?: string;
       /**
        * Format: int32
-       * @description Must be between -2 to 2. If set to `null`, remove the selected score.
+       * @description If set to `null`, remove the selected score.
        */
       value?: number;
     };
@@ -4464,7 +4411,7 @@ export interface operations {
       };
     };
   };
-  /** Gets vote selections for a single project. */
+  /** Gets score selections for a single project. */
   getProjectScores: {
     parameters: {
       path: {
@@ -4487,7 +4434,7 @@ export interface operations {
     };
   };
   /**
-   * Upserts vote selections for a single project.
+   * Upserts score selections for a single project.
    * @description Update the scores for the project phase. If the (project, phase, category) does not exist, a new entry is created. Setting a `score` to `null` removes the score.
    */
   upsertProjectScores: {
@@ -4505,7 +4452,7 @@ export interface operations {
       /** @description The requested operation succeeded. */
       200: {
         content: {
-          "application/json": components["schemas"]["UpsertProjectScoresResponsePayload"];
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
       /** @description The requested resource was not found. */
