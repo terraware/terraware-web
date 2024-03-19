@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1710887324579" clover="3.2.0">
-  <project timestamp="1710887324579" name="All files">
-    <metrics statements="18221" coveredstatements="682" conditionals="11470" coveredconditionals="214" methods="5672" coveredmethods="156" elements="35363" coveredelements="1052" complexity="0" loc="18221" ncloc="18221" packages="156" files="771" classes="771"/>
+<coverage generated="1710888134835" clover="3.2.0">
+  <project timestamp="1710888134835" name="All files">
+    <metrics statements="18218" coveredstatements="682" conditionals="11468" coveredconditionals="214" methods="5672" coveredmethods="156" elements="35358" coveredelements="1052" complexity="0" loc="18218" ncloc="18218" packages="156" files="771" classes="771"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="121" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -9178,7 +9178,7 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Participants">
-      <metrics statements="61" coveredstatements="0" conditionals="34" coveredconditionals="0" methods="23" coveredmethods="0"/>
+      <metrics statements="58" coveredstatements="0" conditionals="32" coveredconditionals="0" methods="23" coveredmethods="0"/>
       <file name="ParticipantsCellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Participants/ParticipantsCellRenderer.tsx">
         <metrics statements="11" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="11" count="0" type="stmt"/>
@@ -9198,7 +9198,7 @@
         <line num="4" count="0" type="stmt"/>
       </file>
       <file name="ParticipantsList.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Participants/ParticipantsList.tsx">
-        <metrics statements="45" coveredstatements="0" conditionals="30" coveredconditionals="0" methods="16" coveredmethods="0"/>
+        <metrics statements="42" coveredstatements="0" conditionals="28" coveredconditionals="0" methods="16" coveredmethods="0"/>
         <line num="26" count="0" type="stmt"/>
         <line num="27" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="47" count="0" type="stmt"/>
@@ -9238,12 +9238,9 @@
         <line num="156" count="0" type="stmt"/>
         <line num="157" count="0" type="stmt"/>
         <line num="158" count="0" type="stmt"/>
-        <line num="159" count="0" type="stmt"/>
+        <line num="160" count="0" type="stmt"/>
         <line num="161" count="0" type="stmt"/>
-        <line num="162" count="0" type="stmt"/>
-        <line num="165" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="166" count="0" type="stmt"/>
-        <line num="169" count="0" type="stmt"/>
+        <line num="164" count="0" type="stmt"/>
       </file>
       <file name="ParticipantsNew.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Participants/ParticipantsNew.tsx">
         <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
