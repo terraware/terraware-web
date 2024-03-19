@@ -6,6 +6,7 @@ import { BusySpinner, Button } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { Participant } from 'src/types/Participant';
 
@@ -36,13 +37,18 @@ export default function ParticipantList(): JSX.Element {
   );
 }
 
-const EmptyState = (): JSX.Element => {
+const EmptyState = (): JSX.Element | null => {
+  const { activeLocale } = useLocalization();
   const history = useHistory();
   const theme = useTheme();
 
   const goToNewParticipant = () => {
     history.push(APP_PATHS.ACCELERATOR_PARTICIPANTS_NEW);
   };
+
+  if (!activeLocale) {
+    return null;
+  }
 
   return (
     <Box
