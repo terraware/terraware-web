@@ -8517,7 +8517,65 @@
 <a name='L8452'></a><a href='#L8452'>8452</a>
 <a name='L8453'></a><a href='#L8453'>8453</a>
 <a name='L8454'></a><a href='#L8454'>8454</a>
-<a name='L8455'></a><a href='#L8455'>8455</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L8455'></a><a href='#L8455'>8455</a>
+<a name='L8456'></a><a href='#L8456'>8456</a>
+<a name='L8457'></a><a href='#L8457'>8457</a>
+<a name='L8458'></a><a href='#L8458'>8458</a>
+<a name='L8459'></a><a href='#L8459'>8459</a>
+<a name='L8460'></a><a href='#L8460'>8460</a>
+<a name='L8461'></a><a href='#L8461'>8461</a>
+<a name='L8462'></a><a href='#L8462'>8462</a>
+<a name='L8463'></a><a href='#L8463'>8463</a>
+<a name='L8464'></a><a href='#L8464'>8464</a>
+<a name='L8465'></a><a href='#L8465'>8465</a>
+<a name='L8466'></a><a href='#L8466'>8466</a>
+<a name='L8467'></a><a href='#L8467'>8467</a>
+<a name='L8468'></a><a href='#L8468'>8468</a>
+<a name='L8469'></a><a href='#L8469'>8469</a>
+<a name='L8470'></a><a href='#L8470'>8470</a>
+<a name='L8471'></a><a href='#L8471'>8471</a>
+<a name='L8472'></a><a href='#L8472'>8472</a>
+<a name='L8473'></a><a href='#L8473'>8473</a>
+<a name='L8474'></a><a href='#L8474'>8474</a>
+<a name='L8475'></a><a href='#L8475'>8475</a>
+<a name='L8476'></a><a href='#L8476'>8476</a>
+<a name='L8477'></a><a href='#L8477'>8477</a>
+<a name='L8478'></a><a href='#L8478'>8478</a>
+<a name='L8479'></a><a href='#L8479'>8479</a>
+<a name='L8480'></a><a href='#L8480'>8480</a>
+<a name='L8481'></a><a href='#L8481'>8481</a>
+<a name='L8482'></a><a href='#L8482'>8482</a>
+<a name='L8483'></a><a href='#L8483'>8483</a>
+<a name='L8484'></a><a href='#L8484'>8484</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -17695,6 +17753,10 @@ export interface paths {
     /** Gets a user by some criteria, for now only email is available */
     get: operations["searchUsers"];
   };
+  "/api/v1/users/globalRoles": {
+    /** Remove global roles from the supplied users. */
+    delete: operations["removeGlobalRoles"];
+  };
   "/api/v1/users/me": {
     /** Gets information about the current user. */
     get: operations["getMyself"];
@@ -20265,6 +20327,9 @@ export interface components {
       speciesName?: string;
       /** @enum {string} */
       status: "Live" | "Dead" | "Existing";
+    };
+    RemoveGlobalRolesRequestPayload: {
+      userIds: number[];
     };
     ReplaceObservationPlotRequestPayload: {
       /** @enum {string} */
@@ -24878,6 +24943,28 @@ export interface operations {
       };
     };
   };
+  /** Remove global roles from the supplied users. */
+  removeGlobalRoles: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["RemoveGlobalRolesRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
   /** Gets information about the current user. */
   getMyself: {
     responses: {
@@ -25432,7 +25519,7 @@ export interface operations {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-19T15:35:50.683Z
+                at 2024-03-19T15:45:09.498Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
