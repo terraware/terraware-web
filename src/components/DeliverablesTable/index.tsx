@@ -119,7 +119,6 @@ const DeliverablesTable = ({
 
   return (
     <TableWithSearchFilters
-      cellRenderer={DeliverableCellRenderer}
       columns={columns}
       defaultSearchOrder={defaultSearchOrder}
       dispatchSearchRequest={dispatchSearchRequest}
@@ -127,8 +126,9 @@ const DeliverablesTable = ({
       featuredFilters={featuredFilters}
       filterModifiers={filterModifiers}
       fuzzySearchColumns={fuzzySearchColumns}
+      id={tableId}
+      Renderer={DeliverableCellRenderer}
       rows={deliverables}
-      tableId={tableId}
     />
   );
 };

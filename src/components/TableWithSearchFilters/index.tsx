@@ -2,17 +2,16 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Container, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { RendererProps, SortOrder, TableColumnType, TableRowType } from '@terraware/web-components';
+import { SortOrder, TableColumnType, TableRowType } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import SearchFiltersWrapperV2, { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
-import Table from 'src/components/common/table';
+import { default as OrderPreservedTable, OrderPreservedTablePropsFull } from 'src/components/common/table';
 import { useLocalization } from 'src/providers';
 import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import useDebounce from 'src/utils/useDebounce';
 
-interface TableWithSearchFiltersProps {
-  cellRenderer?: (props: RendererProps<TableRowType>) => JSX.Element;
+interface TableWithSearchFiltersProps extends Omit<OrderPreservedTablePropsFull<TableRowType>, 'columns' | 'orderBy'> {
   columns: (activeLocale: string | null) => TableColumnType[];
   defaultSearchOrder: SearchSortOrder;
   dispatchSearchRequest: (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => void;
@@ -20,8 +19,6 @@ interface TableWithSearchFiltersProps {
   featuredFilters?: FilterConfig[];
   filterModifiers?: (filters: FilterConfig[]) => FilterConfig[];
   fuzzySearchColumns?: string[];
-  rows: TableRowType[];
-  tableId: string;
 }
 
 const useStyles = makeStyles(() => ({
@@ -30,18 +27,18 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const TableWithSearchFilters = ({
-  cellRenderer,
-  columns,
-  defaultSearchOrder,
-  dispatchSearchRequest,
-  extraTableFilters,
-  featuredFilters,
-  filterModifiers,
-  fuzzySearchColumns,
-  rows,
-  tableId,
-}: TableWithSearchFiltersProps) => {
+const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
+  const {
+    columns,
+    defaultSearchOrder,
+    dispatchSearchRequest,
+    extraTableFilters,
+    featuredFilters,
+    filterModifiers,
+    fuzzySearchColumns,
+    ...tableProps
+  } = props;
+
   const { activeLocale } = useLocalization();
   const classes = useStyles();
 
@@ -128,13 +125,11 @@ const TableWithSearchFilters = ({
         </Grid>
 
         <Grid item xs={12}>
-          <Table
-            id={tableId}
+          <OrderPreservedTable
+            {...tableProps}
             columns={() => columns(activeLocale)}
-            rows={rows}
             orderBy={searchSortOrder.field}
             order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
-            Renderer={cellRenderer}
             sortHandler={onSortChange}
           />
         </Grid>
