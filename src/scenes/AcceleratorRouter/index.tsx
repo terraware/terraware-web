@@ -16,6 +16,7 @@ import Deliverables from './Deliverables';
 import ModuleContent from './Modules';
 import NavBar from './NavBar';
 import Overview from './Overview';
+import Participants from './Participants';
 import People from './People';
 import Scoring from './Scoring';
 import Voting from './Voting';
@@ -100,6 +101,11 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
             {consoleEnabled && (
               <Route path={APP_PATHS.ACCELERATOR_VOTING}>
                 <Voting />
+              </Route>
+            )}
+            {consoleEnabled && (
+              <Route path={APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW}>
+                <Participants />
               </Route>
             )}
             <Route path={'*'}>
