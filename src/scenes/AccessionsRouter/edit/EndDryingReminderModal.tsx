@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
-import { Grid, useTheme } from '@mui/material';
-import { Checkbox } from '@terraware/web-components';
+import { Grid } from '@mui/material';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
+import getDateDisplayValue, { isInTheFuture } from '@terraware/web-components/utils/date';
 
 import DatePicker from 'src/components/common/DatePicker';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
@@ -22,11 +22,9 @@ export interface EndDryingReminderModalProps {
 
 export default function EndDryingReminderModal(props: EndDryingReminderModalProps): JSX.Element {
   const { onClose, open, accession, reload } = props;
-  const [enable, setEnable] = useState<boolean>(!!accession.dryingEndDate);
   const [date, setDate] = useState<string | undefined>(accession.dryingEndDate);
   const [dateError, setDateError] = useState<string>('');
   const [record, setRecord, onChange] = useForm(accession);
-  const theme = useTheme();
   const snackbar = useSnackbar();
 
   useEffect(() => {
@@ -35,14 +33,13 @@ export default function EndDryingReminderModal(props: EndDryingReminderModalProp
 
   const closeModal = () => {
     setRecord(accession);
-    setEnable(!!accession.dryingEndDate);
     setDate(accession.dryingEndDate);
     setDateError('');
     onClose();
   };
 
   const saveState = async () => {
-    if (!validate(date)) {
+    if (!validateDate(date)) {
       return;
     }
     if (record) {
@@ -56,45 +53,28 @@ export default function EndDryingReminderModal(props: EndDryingReminderModalProp
     }
   };
 
-  const onEnable = (id: string, value: boolean) => {
-    setEnable(value);
-    if (!value) {
-      setDate(undefined);
-      onChange('dryingEndDate', undefined);
-    }
-  };
-
-  const validate = (dateValue: string | undefined): boolean => {
+  const validateDate = (newValue?: string | number | undefined) => {
     setDateError('');
 
-    if (!dateValue) {
-      if (!enable) {
-        return true;
-      } else {
-        setDateError(strings.REQUIRED_FIELD);
-        return false;
-      }
-    }
-
-    const dateMs = new Date(dateValue).getTime();
-    const today = new Date(getTodaysDateFormatted()).getTime();
-
-    if (isNaN(dateMs)) {
+    // Invalid dates or blank entries will remove the reminder date
+    if (!newValue) {
       setDateError(strings.INVALID_DATE);
-      return false;
-    } else if (dateMs < today) {
+      return true;
+    } else if (!isInTheFuture(newValue)) {
       setDateError(strings.NO_PAST_DATES);
       return false;
+    } else {
+      return true;
     }
-
-    return true;
   };
 
   const changeDate = (id: string, value?: any) => {
     setDate(value);
-    if (validate(value)) {
-      onChange('dryingEndDate', value);
-    }
+
+    const newDate = value ? getDateDisplayValue(value.getTime()) : null;
+    onChange(id, newDate);
+
+    validateDate(value);
   };
 
   return (
@@ -112,27 +92,17 @@ export default function EndDryingReminderModal(props: EndDryingReminderModalProp
           priority='secondary'
           key='button-1'
         />,
-        <Button id='saveDryingReminder' onClick={saveState} label={strings.SAVE} key='button-2' />,
+        <Button id='saveDryingReminder' onClick={saveState} label={strings.SET_REMINDER} key='button-2' />,
       ]}
     >
       <Grid item xs={12} textAlign='left'>
-        <Grid item xs={12} marginBottom={theme.spacing(1)}>
-          <Checkbox
-            id='enable'
-            name=''
-            label={strings.TURN_ON_END_DRYING_REMINDER}
-            onChange={(value) => onEnable('enable', value)}
-            value={enable}
-          />
-        </Grid>
         <DatePicker
           id='dryingEndDate'
-          label={strings.REMINDER_DATE}
-          aria-label={strings.REMINDER_DATE}
+          label={strings.END_DRYING_REMINDER}
+          aria-label={strings.END_DRYING_REMINDER}
           value={date}
           onChange={(value) => changeDate('dryingEndDate', value)}
           errorText={dateError}
-          disabled={!enable}
         />
       </Grid>
     </DialogBox>
