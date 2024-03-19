@@ -1,3 +1,4 @@
+a07678bec4 SW-5047 Implement top bar button for 'remove global roles' into Accelerator->People table (#2341)
 b2da90c403 SW-5044: Console: Need a way to filter Deliverables list by Project (#2336)
 6848a651ce SW-4979: Created tabbed views (#2342)
 0e300ac659 SW-5078 Participant CRUD service and redux (#2348)

@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/35</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
@@ -204,15 +204,7 @@
 <a name='L139'></a><a href='#L139'>139</a>
 <a name='L140'></a><a href='#L140'>140</a>
 <a name='L141'></a><a href='#L141'>141</a>
-<a name='L142'></a><a href='#L142'>142</a>
-<a name='L143'></a><a href='#L143'>143</a>
-<a name='L144'></a><a href='#L144'>144</a>
-<a name='L145'></a><a href='#L145'>145</a>
-<a name='L146'></a><a href='#L146'>146</a>
-<a name='L147'></a><a href='#L147'>147</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L142'></a><a href='#L142'>142</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -251,7 +243,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -342,8 +334,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -359,17 +349,16 @@
 &nbsp;
 import { Container, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { RendererProps, SortOrder, TableColumnType, TableRowType } from '@terraware/web-components';
+import { SortOrder, TableColumnType, TableRowType } from '@terraware/web-components';
 &nbsp;
 import Card from 'src/components/common/Card';
 import SearchFiltersWrapperV2, { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
-import Table from 'src/components/common/table';
+import { default as OrderPreservedTable, OrderPreservedTablePropsFull } from 'src/components/common/table';
 import { useLocalization } from 'src/providers';
 import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import useDebounce from 'src/utils/useDebounce';
 &nbsp;
-interface TableWithSearchFiltersProps {
-  cellRenderer?: (props: RendererProps&lt;TableRowType&gt;) =&gt; JSX.Element;
+interface TableWithSearchFiltersProps extends Omit&lt;OrderPreservedTablePropsFull&lt;TableRowType&gt;, 'columns' | 'orderBy'&gt; {
   columns: (activeLocale: string | null) =&gt; TableColumnType[];
   defaultSearchOrder: SearchSortOrder;
   dispatchSearchRequest: (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) =&gt; void;
@@ -377,8 +366,6 @@ interface TableWithSearchFiltersProps {
   featuredFilters?: FilterConfig[];
   filterModifiers?: (filters: FilterConfig[]) =&gt; FilterConfig[];
   fuzzySearchColumns?: string[];
-  rows: TableRowType[];
-  tableId: string;
 }
 &nbsp;
 const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
@@ -387,18 +374,18 @@ const useStyles = <span class="cstat-no" title="statement not covered" >makeStyl
   },
 }));
 &nbsp;
-const TableWithSearchFilters = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span></span>
-  cellRenderer,
-  columns,
-  defaultSearchOrder,
-  dispatchSearchRequest,
-  extraTableFilters,
-  featuredFilters,
-  filterModifiers,
-  fuzzySearchColumns,
-  rows,
-  tableId,
-}: TableWithSearchFiltersProps) =&gt; {
+const TableWithSearchFilters = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>rops: TableWithSearchFiltersProps) =&gt; {</span>
+  const {
+    columns,
+    defaultSearchOrder,
+    dispatchSearchRequest,
+    extraTableFilters,
+    featuredFilters,
+    filterModifiers,
+    fuzzySearchColumns,
+    ...tableProps
+  } = <span class="cstat-no" title="statement not covered" >props;</span>
+&nbsp;
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
 &nbsp;
@@ -485,13 +472,11 @@ const TableWithSearchFilters = <span class="cstat-no" title="statement not cover
         &lt;/Grid&gt;
 &nbsp;
         &lt;Grid item xs={12}&gt;
-          &lt;Table
-            id={tableId}
+          &lt;OrderPreservedTable
+            {...tableProps}
             columns={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >columns(activeLocale)}</span>
-            rows={rows}
             orderBy={searchSortOrder.field}
             order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
-            Renderer={cellRenderer}
             sortHandler={onSortChange}
           /&gt;
         &lt;/Grid&gt;
@@ -508,7 +493,7 @@ export default TableWithSearchFilters;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-19T15:27:01.640Z
+                at 2024-03-19T15:35:50.683Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
