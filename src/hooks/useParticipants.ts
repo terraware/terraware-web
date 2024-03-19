@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { requestListParticipants } from 'src/redux/features/participants/participantsAsyncThunks';
 import { selectParticipantListRequest } from 'src/redux/features/participants/participantsSelectors';
@@ -6,6 +6,12 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Participant } from 'src/types/Participant';
 import useSnackbar from 'src/utils/useSnackbar';
+
+export type Response = {
+  availableParticipants?: Participant[];
+  isBusy: boolean;
+  selectedParticipant?: Participant;
+};
 
 export const useParticipants = (participantId?: number) => {
   const dispatch = useAppDispatch();
@@ -46,5 +52,8 @@ export const useParticipants = (participantId?: number) => {
     }
   }, [participantListRequest, snackbar]);
 
-  return { availableParticipants, selectedParticipant, isBusy };
+  return useMemo(
+    () => ({ availableParticipants, selectedParticipant, isBusy }),
+    [availableParticipants, selectedParticipant, isBusy]
+  );
 };
