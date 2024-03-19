@@ -51,12 +51,12 @@ const ScoringProvider = ({ children }: Props) => {
     [activeLocale, projectId, projectName]
   );
 
-  const phase0Scorecard = useMemo(
+  const phase0Scores = useMemo(
     () => phaseScores?.find((phaseScore: PhaseScores) => phaseScore.phase === 'Phase 0 - Due Diligence'),
     [phaseScores]
   );
 
-  const phase1Scorecard = useMemo(
+  const phase1Scores = useMemo(
     () => phaseScores?.find((phaseScore: PhaseScores) => phaseScore.phase === 'Phase 1 - Feasibility Study'),
     [phaseScores]
   );
@@ -89,13 +89,13 @@ const ScoringProvider = ({ children }: Props) => {
   useEffect(() => {
     setScoringData({
       crumbs,
-      phase0Scorecard,
-      phase1Scorecard,
+      phase0Scores,
+      phase1Scores,
       projectId,
       projectName,
       status: scoreListResult?.status ?? 'pending',
     });
-  }, [crumbs, phase0Scorecard, phase1Scorecard, projectId, projectName, scoreListResult]);
+  }, [crumbs, phase0Scores, phase1Scores, projectId, projectName, scoreListResult]);
 
   return <ScoringContext.Provider value={scoringData}>{children}</ScoringContext.Provider>;
 };

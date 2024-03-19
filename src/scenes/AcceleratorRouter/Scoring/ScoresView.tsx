@@ -17,7 +17,7 @@ const ScorecardView = () => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
   const history = useHistory();
-  const { crumbs, phase0Scorecard, phase1Scorecard, projectId, projectName, status } = useScoringData();
+  const { crumbs, phase0Scores, phase1Scores, projectId, projectName, status } = useScoringData();
 
   const goToScoresEdit = useCallback(() => {
     history.push({ pathname: APP_PATHS.ACCELERATOR_SCORING_EDIT.replace(':projectId', `${projectId}`) });
@@ -70,10 +70,10 @@ const ScorecardView = () => {
             {activeLocale && (
               <Grid container spacing={theme.spacing(2)}>
                 <Grid item xs={6}>
-                  <PhaseScores phaseScores={phase0Scorecard} />
+                  <PhaseScores phaseScores={phase0Scores} />
                 </Grid>
                 <Grid item xs={6}>
-                  <PhaseScores phaseScores={phase1Scorecard} />
+                  <PhaseScores phaseScores={phase1Scores} />
                 </Grid>
               </Grid>
             )}

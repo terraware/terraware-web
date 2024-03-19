@@ -26,10 +26,11 @@ const ScorecardEditView = () => {
   const theme = useTheme();
   const history = useHistory();
   const classes = useStyles();
-  const { crumbs, phase0Scorecard, phase1Scorecard, projectId, projectName, status } = useScoringData();
+  const { crumbs, phase0Scores, phase1Scores, projectId, projectName, status } = useScoringData();
   const { update, status: updateStatus } = useScoresUpdate(projectId);
 
   const [scores, setScores] = useState<Score[]>([]);
+  const [updatedScores, setUpdatedScores] = useState<Score[]>([]);
 
   const goToVoting = useCallback(() => {
     history.push({ pathname: APP_PATHS.ACCELERATOR_VOTING.replace(':projectId', `${projectId}`) });
@@ -44,17 +45,16 @@ const ScorecardEditView = () => {
   }, [goToScorecardView]);
 
   const handleOnChange = (key: 'value' | 'qualitative', category: ScoreCategory, value: ScoreValue | string) => {
-    setScores((prev) =>
-      prev.map((score: Score) => {
-        if (score.category !== category) {
-          return score;
-        }
-        return {
-          ...score,
+    const originalScore = scores.find((score: Score) => score.category === category);
+    if (originalScore) {
+      setUpdatedScores((prev) => [
+        ...prev.filter((score: Score) => score.category !== category),
+        {
+          ...originalScore,
           [key]: value,
-        };
-      })
-    );
+        },
+      ]);
+    }
   };
 
   const handleOnChangeValue = (category: ScoreCategory, value: ScoreValue) => handleOnChange('value', category, value);
@@ -63,13 +63,19 @@ const ScorecardEditView = () => {
     handleOnChange('qualitative', category, value);
 
   const onSave = useCallback(() => {
+    if (updatedScores.length === 0) {
+      goToScorecardView();
+      return;
+    }
+
     // For now we can only save Phase 1 scores
-    update('Phase 1 - Feasibility Study', scores);
-  }, [scores, update]);
+    update('Phase 1 - Feasibility Study', updatedScores);
+  }, [goToScorecardView, update, updatedScores]);
 
   useEffect(() => {
-    setScores([...(phase1Scorecard?.scores || [])]);
-  }, [phase1Scorecard]);
+    const localPhase1Scores = [...(phase1Scores?.scores || [])];
+    setScores(localPhase1Scores);
+  }, [phase1Scores]);
 
   useEffect(() => {
     if (updateStatus === 'success') {
@@ -102,14 +108,14 @@ const ScorecardEditView = () => {
           <Grid container spacing={theme.spacing(2)}>
             <Grid item xs={6}>
               <PhaseScores
-                phaseScores={phase0Scorecard}
+                phaseScores={phase0Scores}
                 onChangeValue={handleOnChangeValue}
                 onChangeQualitative={handleOnChangeQualitative}
               />
             </Grid>
             <Grid item xs={6}>
               <PhaseScores
-                phaseScores={phase1Scorecard}
+                phaseScores={phase1Scores}
                 onChangeValue={handleOnChangeValue}
                 onChangeQualitative={handleOnChangeQualitative}
                 editable
