@@ -19,7 +19,7 @@ const LastUpdated = ({ phaseScores }: LastUpdatedProps) => {
       phaseScores?.scores
         .map((score: Score) => score.modifiedTime)
         .sort()
-        .shift(),
+        .pop(),
     [phaseScores]
   );
 
