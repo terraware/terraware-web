@@ -63,10 +63,10 @@ export default function AccessionTests() {
     await expect(page.getByRole('main')).toContainText('Drying');
     await expect(page.getByRole('main')).toContainText('End-drying Reminder Off');
     await page.getByRole('main').getByRole('button').nth(3).click();
-    await page.getByLabel('Reminder Date').fill('2034-01-31');
-    await page.getByRole('button', { name: 'Save' }).click();
+    await page.getByLabel('End-Drying Reminder').fill('2034-01-31');
+    await page.getByRole('button', { name: 'Set Reminder' }).click();
     await page.waitForTimeout(1000); //Wait for modal to close
-    await expect(page.getByRole('main')).toContainText('(2034-01-31)');
+    await expect(page.getByRole('main')).toContainText('2034-01-31');
     await page.locator('a').nth(2).click();
     await page.getByRole('spinbutton').click();
     await page.getByRole('spinbutton').fill('500');

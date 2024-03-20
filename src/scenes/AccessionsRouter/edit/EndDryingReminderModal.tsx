@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
 import { Grid } from '@mui/material';
-import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import getDateDisplayValue, { isInTheFuture } from '@terraware/web-components/utils/date';
 
 import DatePicker from 'src/components/common/DatePicker';
