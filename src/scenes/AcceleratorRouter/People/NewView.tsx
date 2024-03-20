@@ -26,7 +26,7 @@ const NewView = () => {
   const [user, setUser] = useState<User>();
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
-  const debouncedEmail = useDebounce(email, 250);
+  const debouncedEmail = useDebounce(email, 1000);
 
   const [searchRequestId, setSearchRequestId] = useState('');
   const searchRequest = useAppSelector(selectUserByEmailRequest(searchRequestId));
