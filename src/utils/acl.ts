@@ -28,6 +28,7 @@ type PermissionParticipant =
   | 'READ_PARTICIPANTS'
   | 'UPDATE_PARTICIPANTS'
   | 'DELETE_PARTICIPANTS'
+  | 'EXPORT_PARTICIPANTS'
   | 'ASSIGN_PARTICIPANT_TO_COHORT';
 // This name might change, the entity doesn't exist yet. May end up adding extra properties to
 // the "project"" entity or creating a new "project accelerator data" entity
@@ -91,6 +92,7 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   READ_COHORTS: TFExpertPlus,
   UPDATE_COHORTS: AcceleratorAdminPlus,
   DELETE_COHORTS: AcceleratorAdminPlus,
+  EXPORT_PARTICIPANTS: TFExpertPlus,
   CREATE_PARTICIPANTS: AcceleratorAdminPlus,
   READ_PARTICIPANTS: TFExpertPlus,
   UPDATE_PARTICIPANTS: TFExpertPlus,
