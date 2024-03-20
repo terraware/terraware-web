@@ -3,8 +3,21 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Response2 } from 'src/services/HttpService';
 import ParticipantsService, { ParticipantData, ParticipantsData } from 'src/services/ParticipantsService';
 import strings from 'src/strings';
-import { Participant } from 'src/types/Participant';
+import { ParticipantCreateRequest, ParticipantUpdateRequest } from 'src/types/Participant';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+
+export const requestCreateParticipant = createAsyncThunk(
+  'participants/create',
+  async (request: ParticipantCreateRequest, { rejectWithValue }) => {
+    const response: Response2<number> = await ParticipantsService.create(request);
+
+    if (response && response.requestSucceeded) {
+      return response.data;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
 
 export const requestDeleteParticipant = createAsyncThunk(
   'participants/delete',
@@ -52,7 +65,7 @@ export const requestListParticipants = createAsyncThunk(
 
 export const requestUpdateParticipant = createAsyncThunk(
   'participants/update',
-  async (participant: Participant, { dispatch, rejectWithValue }) => {
+  async (participant: ParticipantUpdateRequest, { dispatch, rejectWithValue }) => {
     const response: Response2<number> = await ParticipantsService.update(participant);
 
     if (response && response.requestSucceeded) {

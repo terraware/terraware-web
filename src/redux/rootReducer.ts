@@ -21,6 +21,7 @@ import { projectsReducer, projectsRequestsReducer } from 'src/redux/features/pro
 import { reportsSettingsReducer } from 'src/redux/features/reportsSettings/reportsSettingsSlice';
 import { speciesProjectsReducer } from 'src/redux/features/species/speciesProjectsSlice';
 
+import { acceleratorOrgsReducer } from './features/accelerator/acceleratorSlice';
 import { accessionsReducer } from './features/accessions/accessionsSlice';
 import { appVersionReducer } from './features/appVersion/appVersionSlice';
 import { batchesReducer, batchesRequestsReducer } from './features/batches/batchesSlice';
@@ -34,6 +35,7 @@ import {
   scheduleObservationReducer,
 } from './features/observations/observationsSlice';
 import {
+  participantCreateReducer,
   participantDeleteReducer,
   participantListReducer,
   participantReducer,
@@ -61,6 +63,7 @@ import { votesReducer, votesRequestsReducer } from './features/votes/votesSlice'
 
 // assembly of app reducers
 export const reducers = {
+  acceleratorOrgs: acceleratorOrgsReducer,
   accessions: accessionsReducer,
   appVersion: appVersionReducer,
   batches: batchesReducer,
@@ -81,6 +84,7 @@ export const reducers = {
   monitoringPlots: monitoringPlotsReducer,
   observations: observationsReducer,
   observationsResults: observationsResultsReducer,
+  participantCreate: participantCreateReducer,
   participantDelete: participantDeleteReducer,
   participant: participantReducer,
   participantList: participantListReducer,

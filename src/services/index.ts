@@ -1,5 +1,6 @@
 import SubLocationService from 'src/services/SubLocationService';
 
+import AcceleratorService from './AcceleratorService';
 import AccessionService from './AccessionService';
 import CachedUserService from './CachedUserService';
 import * as DraftPlantingSiteService from './DraftPlantingSiteService';
@@ -14,6 +15,7 @@ import NurseryWithdrawalService from './NurseryWithdrawalService';
 import ObservationsService from './ObservationsService';
 import OrganizationService from './OrganizationService';
 import OrganizationUserService from './OrganizationUserService';
+import ParticipantsService from './ParticipantsService';
 import PlantingsService from './PlantingsService';
 import PreferencesService from './PreferencesService';
 import SearchService from './SearchService';
@@ -26,6 +28,7 @@ import UserService from './UserService';
 export type { Response } from './HttpService';
 
 export {
+  AcceleratorService,
   AccessionService,
   CachedUserService,
   DraftPlantingSiteService,
@@ -40,6 +43,7 @@ export {
   ObservationsService,
   OrganizationService,
   OrganizationUserService,
+  ParticipantsService,
   PlantingsService,
   PreferencesService,
   SearchService,

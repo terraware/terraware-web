@@ -12,3 +12,11 @@ export type Participant = {
   name: string;
   projects: ParticipantProject[];
 };
+
+export type ParticipantCreateRequest = {
+  cohort_id: number;
+  name: string;
+  project_ids: number[];
+};
+
+export type ParticipantUpdateRequest = ParticipantCreateRequest & { id: number };
