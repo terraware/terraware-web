@@ -4,6 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem, Textfield } from '@terraware/web-components';
 
+import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
@@ -101,8 +102,21 @@ export default function ParticipantsView(): JSX.Element {
     );
   }, [goToEdit, isMobile, onOptionItemClick]);
 
+  const crumbs = useMemo<Crumb[]>(
+    () =>
+      activeLocale
+        ? [
+            {
+              name: strings.OVERVIEW,
+              to: `${APP_PATHS.ACCELERATOR_OVERVIEW}?tab=participants`,
+            },
+          ]
+        : [],
+    [activeLocale]
+  );
+
   return (
-    <Page rightComponent={actionMenu} title={participant?.name ?? ''}>
+    <Page crumbs={crumbs} rightComponent={actionMenu} title={participant?.name ?? ''}>
       <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
         {isBusy && <BusySpinner />}
         <Section
