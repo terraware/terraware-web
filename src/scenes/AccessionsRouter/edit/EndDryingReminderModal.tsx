@@ -61,7 +61,7 @@ export default function EndDryingReminderModal(props: EndDryingReminderModalProp
       setDateError(strings.INVALID_DATE);
       return true;
     } else if (!isInTheFuture(newValue)) {
-      setDateError(strings.NO_PAST_DATES);
+      setDateError(strings.DATE_MUST_BE_FUTURE);
       return false;
     } else {
       return true;
