@@ -1661,6 +1661,8 @@ VIABILITY_TESTS,Viability Tests,
 VIABILITY_TREATMENT,Viability Treatment,
 VIEW,View,
 VIEW_ACCESSION,View accession,
+VIEW_LESS,View Less,
+VIEW_MORE,View More,
 VIEW_SITES_ZONES_SUBZONES,"View Sites, Zones, and Subzones on a map.",
 VINE,Vine,A type of plant.
 VOTER,Voter: {0},Displays the name of a person voter.
