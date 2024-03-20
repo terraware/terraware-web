@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1710949035811" clover="3.2.0">
-  <project timestamp="1710949035811" name="All files">
-    <metrics statements="18253" coveredstatements="682" conditionals="11480" coveredconditionals="214" methods="5684" coveredmethods="156" elements="35417" coveredelements="1052" complexity="0" loc="18253" ncloc="18253" packages="157" files="776" classes="776"/>
+<coverage generated="1710965355065" clover="3.2.0">
+  <project timestamp="1710965355065" name="All files">
+    <metrics statements="18257" coveredstatements="682" conditionals="11481" coveredconditionals="214" methods="5685" coveredmethods="156" elements="35423" coveredelements="1052" complexity="0" loc="18257" ncloc="18257" packages="157" files="777" classes="777"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="121" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -9658,7 +9658,18 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Scoring.PhaseScores">
-      <metrics statements="20" coveredstatements="0" conditionals="19" coveredconditionals="0" methods="7" coveredmethods="0"/>
+      <metrics statements="24" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="8" coveredmethods="0"/>
+      <file name="LastUpdated.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Scoring/PhaseScores/LastUpdated.tsx">
+        <metrics statements="8" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="26" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+      </file>
       <file name="ScoreTotal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Scoring/PhaseScores/ScoreTotal.tsx">
         <metrics statements="9" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="13" count="0" type="stmt"/>
@@ -9672,18 +9683,14 @@
         <line num="41" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Scoring/PhaseScores/index.tsx">
-        <metrics statements="11" coveredstatements="0" conditionals="9" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <metrics statements="7" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
+        <line num="24" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="25" count="0" type="stmt"/>
-        <line num="27" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
-        <line num="36" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="40" count="0" type="stmt"/>
-        <line num="65" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Scoring.PhaseScores.ScoreEntry">

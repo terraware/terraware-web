@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
@@ -127,26 +127,7 @@
 <a name='L62'></a><a href='#L62'>62</a>
 <a name='L63'></a><a href='#L63'>63</a>
 <a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a>
-<a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a>
-<a name='L77'></a><a href='#L77'>77</a>
-<a name='L78'></a><a href='#L78'>78</a>
-<a name='L79'></a><a href='#L79'>79</a>
-<a name='L80'></a><a href='#L80'>80</a>
-<a name='L81'></a><a href='#L81'>81</a>
-<a name='L82'></a><a href='#L82'>82</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L65'></a><a href='#L65'>65</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -168,27 +149,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -225,17 +191,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useMemo } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
 import { useRouteMatch } from 'react-router-dom';
 &nbsp;
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 &nbsp;
 import { APP_PATHS } from 'src/constants';
-import { useLocalization } from 'src/providers';
-import strings from 'src/strings';
 import { PhaseScores as PhaseScoresType, Score, ScoreCategory, ScoreValue, getPhase } from 'src/types/Score';
-import { getLongDate } from 'src/utils/dateFormatter';
 &nbsp;
+import LastUpdated from './LastUpdated';
 import ScoreEntry from './ScoreEntry';
 import ScoreTotal from './ScoreTotal';
 &nbsp;
@@ -248,17 +212,7 @@ interface ScorecardProps {
 &nbsp;
 const PhaseScores = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> editable, onChangeValue, onChangeQualitative, phaseScores }: ScorecardProps) =&gt; {</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const isEditing = <span class="cstat-no" title="statement not covered" >useRouteMatch(APP_PATHS.ACCELERATOR_SCORING_EDIT);</span>
-&nbsp;
-  const modifiedTime = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt;
-<span class="cstat-no" title="statement not covered" >      phaseScores?.scores</span>
-        .map(<span class="fstat-no" title="function not covered" >(s</span>core: Score) =&gt; <span class="cstat-no" title="statement not covered" >score.modifiedTime)</span>
-        .sort()
-        .shift(),
-    [phaseScores]
-  );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (!phaseScores) {</span>
 <span class="cstat-no" title="statement not covered" >    return null;</span>
@@ -279,12 +233,7 @@ const PhaseScores = <span class="cstat-no" title="statement not covered" ><span 
 &nbsp;
         &lt;ScoreTotal isEditing={!!isEditing} phaseScores={phaseScores} /&gt;
 &nbsp;
-        {modifiedTime &amp;&amp; activeLocale &amp;&amp; (
-          &lt;Typography fontSize='14px' fontWeight='400' lineHeight='20px'&gt;{`${strings.LAST_UPDATED}: ${getLongDate(
-            modifiedTime,
-            activeLocale
-          )}`}&lt;/Typography&gt;
-        )}
+        &lt;LastUpdated phaseScores={phaseScores} /&gt;
       &lt;/Box&gt;
 &nbsp;
       &lt;Grid container flexDirection={'column'}&gt;
@@ -313,7 +262,7 @@ export default PhaseScores;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-20T15:37:15.258Z
+                at 2024-03-20T20:09:14.508Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
