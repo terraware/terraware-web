@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
+import { Textfield } from '@terraware/web-components';
 
-import TextArea from 'src/components/common/TextArea';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { Phase, Score, ScoreCategory, ScoreValue, getPhaseTruncated, getScoreCategory } from 'src/types/Score';
@@ -24,15 +24,15 @@ const ScoreEntry = ({ disabled, onChangeValue, onChangeQualitative, phase, score
 
   const scoreCategory = getScoreCategory(score.category);
 
-  const [qualitative, setQualitative] = useState(score.qualitative);
+  const [qualitative, setQualitative] = useState(score.qualitative || '');
 
-  const handleOnChangeQualitative = (_: string, value: unknown) => {
+  const handleOnChangeQualitative = (value: unknown) => {
     setQualitative(`${value}`);
     onChangeQualitative?.(score.category, `${value}`);
   };
 
   useEffect(() => {
-    setQualitative(score.qualitative);
+    setQualitative(score.qualitative || '');
   }, [score.qualitative]);
 
   if (!activeLocale) {
@@ -52,24 +52,21 @@ const ScoreEntry = ({ disabled, onChangeValue, onChangeQualitative, phase, score
 
       <ValueControl disabled={disabled} onChangeValue={onChangeValue} score={score} />
 
-      <Box minHeight={'72px'}>
-        {disabled ? (
-          <>
-            <Typography sx={{ color: theme.palette.TwClrTxtSecondary, fontSize: '14px', marginBottom: '4px' }}>
-              {strings.QUALITATIVE_INFO}
-            </Typography>
-            <Typography sx={{ color: theme.palette.TwClrBaseBlack, fontSize: '14px', marginBottom: '4px' }}>
-              {qualitative}
-            </Typography>
-          </>
-        ) : (
-          <TextArea
-            id='qualitative-info'
-            label={strings.QUALITATIVE_INFO}
-            value={qualitative}
-            onChange={handleOnChangeQualitative}
-          />
-        )}
+      <Box minHeight={'136px'}>
+        <Textfield
+          display={disabled}
+          preserveNewlines
+          id='qualitative-info'
+          label={strings.QUALITATIVE_INFO}
+          onChange={handleOnChangeQualitative}
+          type='textarea'
+          value={qualitative}
+          truncateConfig={{
+            maxHeight: 72,
+            showMoreText: strings.VIEW_MORE,
+            showLessText: strings.VIEW_LESS,
+          }}
+        />
       </Box>
     </Box>
   );
