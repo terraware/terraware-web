@@ -81,6 +81,11 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
     });
   };
 
+  /**
+   * The orgProjectsSection is an array of org/projects sections
+   * ordered by the section id. The id is also the index into the array
+   * and has positional relevance in the rendered layout.
+   */
   const onOrgSelect = useCallback(
     (sectionId: number, orgId: number) => {
       const org = acceleratorOrgs?.find((o) => o.id === orgId);
@@ -88,9 +93,15 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
         return;
       }
       setOrgProjectsSections((prev) => {
-        const updated = [...prev];
-        updated[sectionId - 1].org = org;
-        updated[sectionId - 1].selectedProjectIds = [];
+        const updated = [...prev].map((section) =>
+          section.id !== sectionId
+            ? section
+            : {
+                ...section,
+                org,
+                selectedProjects: [],
+              }
+        );
         updateField(
           'project_ids',
           updated.flatMap((data) => data.selectedProjectIds)
@@ -105,8 +116,14 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
   const onProjects = useCallback(
     (sectionId: number, selectedProjectIds: number[]) => {
       setOrgProjectsSections((prev) => {
-        const updated = [...prev];
-        updated[sectionId - 1].selectedProjectIds = [...selectedProjectIds];
+        const updated = [...prev].map((section) =>
+          section.id !== sectionId
+            ? section
+            : {
+                ...section,
+                selectedProjectIds,
+              }
+        );
         updateField(
           'project_ids',
           updated.flatMap((data) => data.selectedProjectIds)
