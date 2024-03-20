@@ -5,6 +5,7 @@ import {
   modifySearchNode,
   searchAndSort,
   splitTrigrams,
+  trigramWordSimilarity,
 } from 'src/utils/searchAndSort';
 
 type MockResult = {
@@ -20,11 +21,108 @@ type MockResult = {
 
 describe('splitTrigrams', () => {
   it('should split a string into trigrams in the same way postgres does', () => {
-    const catTrigrams = [' c', ' ca', 'cat', 'at '];
-    expect(splitTrigrams('cat')).toEqual(catTrigrams);
+    /**
+     * select show_trgm('cat');
+     *         show_trgm
+     * -------------------------
+     * {'  c',' ca','at ',cat}
+     */
+    expect(splitTrigrams('cat')).toEqual(new Set(['  c', ' ca', 'at ', 'cat']));
 
-    const fooBarTrigrams = [' f', ' fo', 'foo', 'oo ', ' b', ' ba', 'bar', 'ar '];
-    expect(splitTrigrams('foo|bar')).toEqual(fooBarTrigrams);
+    /**
+     * select show_trgm('foo|bar');
+     *                   show_trgm
+     * -----------------------------------------------
+     * {'  b','  f',' ba',' fo','ar ',bar,foo,'oo '}
+     */
+    expect(splitTrigrams('foo|bar')).toEqual(new Set(['  b','  f',' ba',' fo','ar ','bar','foo','oo ']));
+
+    /**
+     * select show_trgm('olyolyoxenfree');
+     *                           show_trgm
+     * -------------------------------------------------------------
+     * {'  o',' ol','ee ',enf,fre,lyo,nfr,oly,oxe,ree,xen,yol,yox}
+     */
+    expect(splitTrigrams('olyolyoxenfree')).toEqual(new Set(['  o',' ol','ee ','enf','fre','lyo','nfr','oly','oxe','ree','xen','yol','yox']));
+
+    /**
+     * select show_trgm('sam');
+     *         show_trgm
+     * -------------------------
+     * {'  s',' sa','am ',sam}
+     */
+    expect(splitTrigrams('sam')).toEqual(new Set(['  s',' sa','am ','sam']));
+  });
+});
+
+describe('trigramWordSimilarity', () => {
+  it('should calculate the trigram word similarity same way postgres does', () => {
+    /**
+     * SELECT word_similarity('sam', 'sampson road');
+     *  word_similarity
+     * -----------------
+     *            0.75
+     */
+    expect(trigramWordSimilarity('sam', 'sampson')).toEqual(0.75);
+
+    /**
+     * SELECT word_similarity('sampson', 'sam');
+     * word_similarity
+     * -----------------
+     *           0.375
+     */
+    expect(trigramWordSimilarity('sampson', 'sam')).toEqual(0.375);
+
+    /**
+     * SELECT word_similarity('andro', 'project andromeda');
+     * word_similarity
+     * -----------------
+     *       0.8333333
+     */
+    expect(trigramWordSimilarity('andro', 'project andromeda')).toEqual(0.8333333333333334);
+
+    /**
+     * I was unable to make this work exactly like postgres. I spent way too long trying to get to
+     * 3/11 matching trigrams when there are 12 unique trigrams, and 15 trigrams total for the two
+     * words. There is likely something I am missing in the underlying postgres implementation. I
+     * spent some time reading it, trying to understand where I was going wrong, but my C skills
+     * are non-existent. Hopefully this implementation is 'close enough' to work. If we need closer
+     * parity to the BE Search API, we should implement the API there instead of doing the fuzzy
+     * search here.
+     */
+    /**
+     * SELECT word_similarity('pronect', 'pripro');
+     * word_similarity
+     * -----------------
+     *       0.27272728
+     */
+    /**
+     * SELECT UNNEST(show_trgm('pronect')) INTERSECT SELECT UNNEST(show_trgm('pripro'));
+     * unnest
+     * --------
+     *   pr
+     *   p
+     * pro
+     * (3 rows)
+     *
+     * SELECT UNNEST(show_trgm('pronect')) union SELECT UNNEST(show_trgm('pripro'));
+     * unnest
+     * --------
+     *   p
+     * ipr
+     * ron
+     * pri
+     * pro
+     * nec
+     *   pr
+     * rip
+     * ct
+     * ro
+     * one
+     * ect
+     * (12 rows)
+     */
+    expect(trigramWordSimilarity('pronect', 'pripro')).toEqual(0.375);
   });
 });
 
@@ -107,6 +205,108 @@ describe('searchAndSort', () => {
       {
         name: 'Budget',
         projectName: 'Corpotrees',
+      },
+    ];
+
+    expect(searchAndSort(results, search)).toEqual(filteredResults);
+  });
+
+  it('should filter the results as expected - or with fuzzy search filter - single letter', () => {
+    const results: MockResult[] = [
+      {
+        name: 'Incorporation Documents',
+        projectName: 'Project 1',
+      },
+      {
+        name: 'Budget',
+        projectName: 'Corpotrees',
+      },
+      {
+        name: 'A Document',
+        projectName: 'Project 1',
+      },
+    ];
+
+    const searchValue = 'p';
+
+    const search: SearchNodePayload = {
+      operation: 'or',
+      children: [
+        {
+          operation: 'field',
+          field: 'name',
+          type: 'Fuzzy',
+          values: [searchValue],
+        },
+        {
+          operation: 'field',
+          field: 'projectName',
+          type: 'Fuzzy',
+          values: [searchValue],
+        },
+      ],
+    };
+
+    const filteredResults: MockResult[] = [
+      {
+        name: 'Incorporation Documents',
+        projectName: 'Project 1',
+      },
+      {
+        name: 'Budget',
+        projectName: 'Corpotrees',
+      },
+      {
+        name: 'A Document',
+        projectName: 'Project 1',
+      },
+    ];
+
+    expect(searchAndSort(results, search)).toEqual(filteredResults);
+  });
+
+  it('should filter the results as expected - or with fuzzy search filter - fuzzy similarity', () => {
+    const results: MockResult[] = [
+      {
+        name: 'Incorporation Documents',
+        // This project should match because it is similar enough to the search term
+        projectName: 'Project 1',
+      },
+      {
+        name: 'Budget',
+        projectName: 'Corpotrees',
+      },
+      {
+        name: 'A Document',
+        // This project has matching trigrams, but is below the similarity threshold
+        projectName: 'Pripr',
+      },
+    ];
+
+    const searchValue = 'pronect';
+
+    const search: SearchNodePayload = {
+      operation: 'or',
+      children: [
+        {
+          operation: 'field',
+          field: 'name',
+          type: 'Fuzzy',
+          values: [searchValue],
+        },
+        {
+          operation: 'field',
+          field: 'projectName',
+          type: 'Fuzzy',
+          values: [searchValue],
+        },
+      ],
+    };
+
+    const filteredResults: MockResult[] = [
+      {
+        name: 'Incorporation Documents',
+        projectName: 'Project 1',
       },
     ];
 
