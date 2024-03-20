@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
@@ -138,10 +138,7 @@
 <a name='L73'></a><a href='#L73'>73</a>
 <a name='L74'></a><a href='#L74'>74</a>
 <a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a>
-<a name='L77'></a><a href='#L77'>77</a>
-<a name='L78'></a><a href='#L78'>78</a>
-<a name='L79'></a><a href='#L79'>79</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L76'></a><a href='#L76'>76</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -183,9 +180,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -222,8 +216,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEffect, useState } from 'react';
 &nbsp;
 import { Box, Typography, useTheme } from '@mui/material';
+import { Textfield } from '@terraware/web-components';
 &nbsp;
-import TextArea from 'src/components/common/TextArea';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { Phase, Score, ScoreCategory, ScoreValue, getPhaseTruncated, getScoreCategory } from 'src/types/Score';
@@ -245,15 +239,15 @@ const ScoreEntry = <span class="cstat-no" title="statement not covered" ><span c
 &nbsp;
   const scoreCategory = <span class="cstat-no" title="statement not covered" >getScoreCategory(score.category);</span>
 &nbsp;
-  const [qualitative, setQualitative] = <span class="cstat-no" title="statement not covered" >useState(score.qualitative);</span>
+  const [qualitative, setQualitative] = <span class="cstat-no" title="statement not covered" >useState(score.qualitative || '');</span>
 &nbsp;
-  const handleOnChangeQualitative = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(_</span>: string, value: unknown) =&gt; {</span>
+  const handleOnChangeQualitative = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(v</span>alue: unknown) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setQualitative(`${value}`);</span>
 <span class="cstat-no" title="statement not covered" >    onChangeQualitative?.(score.category, `${value}`);</span>
   };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setQualitative(score.qualitative);</span>
+<span class="cstat-no" title="statement not covered" >    setQualitative(score.qualitative || '');</span>
   }, [score.qualitative]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (!activeLocale) {</span>
@@ -273,24 +267,21 @@ const ScoreEntry = <span class="cstat-no" title="statement not covered" ><span c
 &nbsp;
       &lt;ValueControl disabled={disabled} onChangeValue={onChangeValue} score={score} /&gt;
 &nbsp;
-      &lt;Box minHeight={'72px'}&gt;
-        {disabled ? (
-          &lt;&gt;
-            &lt;Typography sx={{ color: theme.palette.TwClrTxtSecondary, fontSize: '14px', marginBottom: '4px' }}&gt;
-              {strings.QUALITATIVE_INFO}
-            &lt;/Typography&gt;
-            &lt;Typography sx={{ color: theme.palette.TwClrBaseBlack, fontSize: '14px', marginBottom: '4px' }}&gt;
-              {qualitative}
-            &lt;/Typography&gt;
-          &lt;/&gt;
-        ) : (
-          &lt;TextArea
-            id='qualitative-info'
-            label={strings.QUALITATIVE_INFO}
-            value={qualitative}
-            onChange={handleOnChangeQualitative}
-          /&gt;
-        )}
+      &lt;Box minHeight={'136px'}&gt;
+        &lt;Textfield
+          display={disabled}
+          preserveNewlines
+          id='qualitative-info'
+          label={strings.QUALITATIVE_INFO}
+          onChange={handleOnChangeQualitative}
+          type='textarea'
+          value={qualitative}
+          truncateConfig={{
+            maxHeight: 72,
+            showMoreText: strings.VIEW_MORE,
+            showLessText: strings.VIEW_LESS,
+          }}
+        /&gt;
       &lt;/Box&gt;
     &lt;/Box&gt;
   );
@@ -304,7 +295,7 @@ export default ScoreEntry;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-20T21:00:28.653Z
+                at 2024-03-20T21:37:57.776Z
             </div>
         <script src="../../../../../../prettify.js"></script>
         <script>
