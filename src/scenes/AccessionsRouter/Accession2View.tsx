@@ -32,7 +32,6 @@ import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import OverviewItemCard from '../../components/common/OverviewItemCard';
 import PageHeaderWrapper from '../../components/common/PageHeaderWrapper';
-import CheckedInConfirmationModal from './edit/CheckedInConfirmationModal';
 import DeleteAccessionModal from './edit/DeleteAccessionModal';
 import EditLocationModal from './edit/EditLocationModal';
 import EditStateModal from './edit/EditStateModal';
@@ -96,7 +95,6 @@ export default function Accession2View(): JSX.Element {
   const [openDeleteAccession, setOpenDeleteAccession] = useState(false);
   const [openWithdrawModal, setOpenWithdrawModal] = useState(false);
   const [openQuantityModal, setOpenQuantityModal] = useState(false);
-  const [openCheckInConfirmationModal, setOpenCheckInConfirmationModal] = useState(false);
   const [hasPendingTests, setHasPendingTests] = useState(false);
   const [openViabilityModal, setOpenViabilityModal] = useState(false);
   const [openNewViabilityTest, setOpenNewViabilityTest] = useState(false);
@@ -249,7 +247,9 @@ export default function Accession2View(): JSX.Element {
       try {
         await AccessionService.checkInAccession(accession.id);
         reloadData();
-        setOpenCheckInConfirmationModal(true);
+        snackbar.toastSuccess(
+          strings.formatString(strings.ACCESSION_NUMBER_CHECKED_IN, accession.accessionNumber.toString())
+        );
       } catch (e) {
         // swallow error?
         snackbar.toastError();
@@ -420,11 +420,6 @@ export default function Accession2View(): JSX.Element {
             />
           )}
 
-          <CheckedInConfirmationModal
-            open={openCheckInConfirmationModal}
-            onClose={() => setOpenCheckInConfirmationModal(false)}
-            accession={accession}
-          />
           {openEditLocationModal && (
             <EditLocationModal
               open={openEditLocationModal}
