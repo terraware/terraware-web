@@ -594,8 +594,8 @@ export default function Accession2View(): JSX.Element {
               title={strings.END_DRYING_REMINDER}
               contents={
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                  <Box>{dryingRelativeDate || strings.END_DRYING_REMINDER_OFF}</Box>
-                  <Box>{accession?.dryingEndDate ? ` (${accession.dryingEndDate})` : null}</Box>
+                  <Box>{accession?.dryingEndDate || strings.END_DRYING_REMINDER_OFF}</Box>
+                  <Box>{dryingRelativeDate ? ` (${dryingRelativeDate})` : null}</Box>
                 </Box>
               }
             />
