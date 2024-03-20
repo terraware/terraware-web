@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import TextField from '@terraware/web-components/components/Textfield/Textfield';
+import { Textfield } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
@@ -53,7 +53,7 @@ const ScoreEntry = ({ disabled, onChangeValue, onChangeQualitative, phase, score
       <ValueControl disabled={disabled} onChangeValue={onChangeValue} score={score} />
 
       <Box minHeight={'136px'}>
-        <TextField
+        <Textfield
           display={disabled}
           preserveNewlines
           id='qualitative-info'
