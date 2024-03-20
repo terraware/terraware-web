@@ -5,7 +5,7 @@ import { Typography } from '@mui/material';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { PhaseScores, Score } from 'src/types/Score';
-import { getLongDate } from 'src/utils/dateFormatter';
+import { getMediumDate } from 'src/utils/dateFormatter';
 
 interface LastUpdatedProps {
   phaseScores: PhaseScores;
@@ -29,7 +29,7 @@ const LastUpdated = ({ phaseScores }: LastUpdatedProps) => {
   }
 
   return (
-    <Typography fontSize='14px' fontWeight='400' lineHeight='20px'>{`${strings.LAST_UPDATED}: ${getLongDate(
+    <Typography fontSize='14px' fontWeight='400' lineHeight='20px'>{`${strings.LAST_UPDATED}: ${getMediumDate(
       modifiedTime,
       activeLocale
     )}`}</Typography>
