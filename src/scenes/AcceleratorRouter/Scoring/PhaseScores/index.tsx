@@ -1,14 +1,12 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useRouteMatch } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import { APP_PATHS } from 'src/constants';
-import { useLocalization } from 'src/providers';
-import strings from 'src/strings';
 import { PhaseScores as PhaseScoresType, Score, ScoreCategory, ScoreValue, getPhase } from 'src/types/Score';
-import { getLongDate } from 'src/utils/dateFormatter';
 
+import LastUpdated from './LastUpdated';
 import ScoreEntry from './ScoreEntry';
 import ScoreTotal from './ScoreTotal';
 
@@ -21,17 +19,7 @@ interface ScorecardProps {
 
 const PhaseScores = ({ editable, onChangeValue, onChangeQualitative, phaseScores }: ScorecardProps) => {
   const theme = useTheme();
-  const { activeLocale } = useLocalization();
   const isEditing = useRouteMatch(APP_PATHS.ACCELERATOR_SCORING_EDIT);
-
-  const modifiedTime = useMemo(
-    () =>
-      phaseScores?.scores
-        .map((score: Score) => score.modifiedTime)
-        .sort()
-        .shift(),
-    [phaseScores]
-  );
 
   if (!phaseScores) {
     return null;
@@ -52,12 +40,7 @@ const PhaseScores = ({ editable, onChangeValue, onChangeQualitative, phaseScores
 
         <ScoreTotal isEditing={!!isEditing} phaseScores={phaseScores} />
 
-        {modifiedTime && activeLocale && (
-          <Typography fontSize='14px' fontWeight='400' lineHeight='20px'>{`${strings.LAST_UPDATED}: ${getLongDate(
-            modifiedTime,
-            activeLocale
-          )}`}</Typography>
-        )}
+        <LastUpdated phaseScores={phaseScores} />
       </Box>
 
       <Grid container flexDirection={'column'}>
