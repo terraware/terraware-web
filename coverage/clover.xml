@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1710971514172" clover="3.2.0">
-  <project timestamp="1710971514172" name="All files">
-    <metrics statements="18268" coveredstatements="693" conditionals="11487" coveredconditionals="218" methods="5686" coveredmethods="157" elements="35441" coveredelements="1068" complexity="0" loc="18268" ncloc="18268" packages="157" files="777" classes="777"/>
+<coverage generated="1710973203728" clover="3.2.0">
+  <project timestamp="1710973203728" name="All files">
+    <metrics statements="18271" coveredstatements="693" conditionals="11489" coveredconditionals="218" methods="5689" coveredmethods="157" elements="35449" coveredelements="1068" complexity="0" loc="18271" ncloc="18271" packages="157" files="777" classes="777"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="121" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -1600,7 +1600,7 @@
       </file>
     </package>
     <package name="src.components.DeliverablesTable">
-      <metrics statements="42" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="11" coveredmethods="0"/>
+      <metrics statements="45" coveredstatements="0" conditionals="24" coveredconditionals="0" methods="14" coveredmethods="0"/>
       <file name="DeliverableCellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverablesTable/DeliverableCellRenderer.tsx">
         <metrics statements="14" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="14" count="0" type="stmt"/>
@@ -1619,7 +1619,7 @@
         <line num="58" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverablesTable/index.tsx">
-        <metrics statements="28" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="8" coveredmethods="0"/>
+        <metrics statements="31" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="11" coveredmethods="0"/>
         <line num="31" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
         <line num="37" count="0" type="stmt"/>
@@ -1637,17 +1637,20 @@
         <line num="78" count="0" type="stmt"/>
         <line num="82" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="85" count="0" type="stmt"/>
-        <line num="89" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="92" count="0" type="stmt"/>
-        <line num="94" count="0" type="stmt"/>
-        <line num="95" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="96" count="0" type="stmt"/>
+        <line num="87" count="0" type="stmt"/>
+        <line num="88" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="94" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="97" count="0" type="stmt"/>
         <line num="99" count="0" type="stmt"/>
-        <line num="108" count="0" type="stmt"/>
+        <line num="100" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="101" count="0" type="stmt"/>
+        <line num="104" count="0" type="stmt"/>
         <line num="113" count="0" type="stmt"/>
-        <line num="115" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="116" count="0" type="stmt"/>
-        <line num="120" count="0" type="stmt"/>
+        <line num="118" count="0" type="stmt"/>
+        <line num="120" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="121" count="0" type="stmt"/>
+        <line num="125" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.FeatureNotification">
