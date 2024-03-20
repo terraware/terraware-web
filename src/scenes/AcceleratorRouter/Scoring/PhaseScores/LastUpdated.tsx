@@ -25,7 +25,7 @@ const LastUpdated = ({ phaseScores }: LastUpdatedProps) => {
 
   if (!(activeLocale && modifiedTime)) {
     // Empty <p> so the height of the containers matches
-    return <Typography minHeight={'20px'}></Typography>;
+    return <Typography minHeight={'20px'} />;
   }
 
   return (
