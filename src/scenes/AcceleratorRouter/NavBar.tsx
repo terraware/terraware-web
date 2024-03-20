@@ -8,6 +8,7 @@ import NavFooter from 'src/components/common/Navbar/NavFooter';
 import NavItem from 'src/components/common/Navbar/NavItem';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import { APP_PATHS } from 'src/constants';
+import { useUser } from 'src/providers';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -18,6 +19,7 @@ type NavBarProps = {
 export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarProps): JSX.Element | null {
   const { isDesktop } = useDeviceInfo();
   const history = useHistory();
+  const { isAllowed } = useUser();
 
   const isCohortsRoute = useRouteMatch(APP_PATHS.ACCELERATOR_COHORTS);
   const isDeliverablesRoute = useRouteMatch(APP_PATHS.ACCELERATOR_DELIVERABLES);
@@ -26,6 +28,8 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
   const isScoringRoute = useRouteMatch(APP_PATHS.ACCELERATOR_SCORING);
   const isVotingRoute = useRouteMatch(APP_PATHS.ACCELERATOR_VOTING);
   const isPeopleRoute = useRouteMatch(APP_PATHS.ACCELERATOR_PEOPLE);
+
+  const isAllowedViewPeople = isAllowed('READ_GLOBAL_ROLES');
 
   const navigate = (url: string) => {
     history.push(url);
@@ -90,13 +94,15 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
 
       <NavSection />
 
-      <NavItem
-        icon='peopleNav'
-        id='people'
-        label={strings.PEOPLE}
-        onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_PEOPLE)}
-        selected={!!isPeopleRoute}
-      />
+      {isAllowedViewPeople && (
+        <NavItem
+          icon='peopleNav'
+          id='people'
+          label={strings.PEOPLE}
+          onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_PEOPLE)}
+          selected={!!isPeopleRoute}
+        />
+      )}
 
       <NavItem
         icon='iconFolder'
