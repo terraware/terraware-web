@@ -83,6 +83,11 @@ const DeliverablesTable = ({
         }),
         label: strings.PROJECTS,
         renderOption: (id: string | number) => getProjectName(Number(id)),
+        pillValueRenderer: (values: (string | number | null)[]) =>
+          values
+            .map((value: string | number | null) => (value === null ? value : getProjectName(Number(value))))
+            .filter((value) => value)
+            .join(', '),
       });
     }
 
