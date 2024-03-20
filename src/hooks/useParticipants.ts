@@ -34,11 +34,9 @@ export const useParticipants = (participantId?: number) => {
   }, [availableParticipants, participantId]);
 
   useEffect(() => {
-    if (!availableParticipants) {
-      const request = dispatch(requestListParticipants({}));
-      setRequestId(request.requestId);
-    }
-  }, [availableParticipants, dispatch]);
+    const request = dispatch(requestListParticipants({}));
+    setRequestId(request.requestId);
+  }, [dispatch]);
 
   useEffect(() => {
     if (!participantListRequest) {
