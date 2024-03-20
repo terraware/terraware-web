@@ -63,7 +63,6 @@ export default function AccessionTests() {
     await expect(page.getByRole('main')).toContainText('Drying');
     await expect(page.getByRole('main')).toContainText('End-drying Reminder Off');
     await page.getByRole('main').getByRole('button').nth(3).click();
-    await page.getByLabel('Turn on End-drying Reminder').check();
     await page.getByLabel('Reminder Date').fill('2034-01-31');
     await page.getByRole('button', { name: 'Save' }).click();
     await page.waitForTimeout(1000); //Wait for modal to close
