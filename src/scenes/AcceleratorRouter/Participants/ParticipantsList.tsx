@@ -1,11 +1,12 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { BusySpinner, Button, TableColumnType } from '@terraware/web-components';
+import { BusySpinner, Button, DropdownItem, TableColumnType } from '@terraware/web-components';
 
 import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
 import Card from 'src/components/common/Card';
+import OptionsMenu from 'src/components/common/OptionsMenu';
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
@@ -15,6 +16,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Participant } from 'src/types/Participant';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import ParticipantsCellRenderer from './ParticipantsCellRenderer';
@@ -51,8 +53,10 @@ const defaultSearchOrder: SearchSortOrder = {
 };
 
 export default function ParticipantList(): JSX.Element {
+  const history = useHistory();
   const theme = useTheme();
   const { activeLocale } = useLocalization();
+  const { isMobile } = useDeviceInfo();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
 
@@ -92,6 +96,10 @@ export default function ParticipantList(): JSX.Element {
     [dispatch]
   );
 
+  const goToNewParticipant = useCallback(() => {
+    history.push(APP_PATHS.ACCELERATOR_PARTICIPANTS_NEW);
+  }, [history]);
+
   const cohorts = useMemo<Record<string, string>>(
     () =>
       (participants || []).reduce(
@@ -127,16 +135,44 @@ export default function ParticipantList(): JSX.Element {
     [activeLocale, cohorts, participants]
   );
 
+  const actionMenus = useMemo<ReactNode | null>(() => {
+    if (isEmptyState || !activeLocale) {
+      return null;
+    }
+
+    return (
+      <Box>
+        <Button
+          icon='plus'
+          id='new-participant'
+          onClick={goToNewParticipant}
+          priority='secondary'
+          label={isMobile ? '' : strings.ADD_PARTICIPANT}
+          size='small'
+        />
+        <OptionsMenu
+          size='small'
+          onOptionItemClick={(item: DropdownItem) => {
+            if (item.value === 'export-participants') {
+              window.alert('Export WIP');
+            }
+          }}
+          optionItems={[{ label: strings.EXPORT, value: 'export-participants' }]}
+        />
+      </Box>
+    );
+  }, [activeLocale, goToNewParticipant, isEmptyState, isMobile]);
+
   return (
     <Card style={{ display: 'flex', flexDirection: 'column' }}>
       <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
         <Typography color={theme.palette.TwClrTxt} fontSize='20px' fontWeight={600} lineHeight='28px'>
           {strings.PARTICIPANTS}
         </Typography>
-        {!!participants && !isEmptyState && <span>Buttons WIP!</span>}
+        {actionMenus}
       </Box>
       {participantsResult?.status === 'pending' && <BusySpinner />}
-      {isEmptyState && <EmptyState />}
+      {isEmptyState && <EmptyState onClick={goToNewParticipant} />}
       {!isEmptyState && (
         <TableWithSearchFilters
           columns={columns}
@@ -153,13 +189,8 @@ export default function ParticipantList(): JSX.Element {
   );
 }
 
-const EmptyState = (): JSX.Element | null => {
-  const history = useHistory();
+const EmptyState = ({ onClick }: { onClick: () => void }): JSX.Element => {
   const theme = useTheme();
-
-  const goToNewParticipant = () => {
-    history.push(APP_PATHS.ACCELERATOR_PARTICIPANTS_NEW);
-  };
 
   return (
     <Box
@@ -182,13 +213,7 @@ const EmptyState = (): JSX.Element | null => {
         {strings.PARTICIPANTS_EMPTY_STATE}
       </Typography>
       <Box sx={{ margin: 'auto' }}>
-        <Button
-          icon='plus'
-          id='new-participant'
-          label={strings.ADD_PARTICIPANT}
-          onClick={goToNewParticipant}
-          size='medium'
-        />
+        <Button icon='plus' id='new-participant' label={strings.ADD_PARTICIPANT} onClick={onClick} size='medium' />
       </Box>
     </Box>
   );

@@ -67,6 +67,7 @@ ADD_PLANTING_SITE_SIMPLE_SITE,"If your planting site is less than TBD ha, you ar
 ADD_PLANTING_SITE_TITLE,Before You Start,
 ADD_PROJECT,Add Project,
 ADD_PROJECT_SUBTITLE,Organize your data by projects.,
+ADD_PROJECTS_BY_ORGANIZATION,Add Project(s) by Organization,
 ADD_QUANTITY,Add Quantity,
 ADD_SEED_BANK,Add Seed Bank,
 ADD_SEED_BANK_SUBTITLE,How do you process and store your seeds? Set up your seed bank so you can keep track of where your seeds are stored.,
