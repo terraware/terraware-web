@@ -25,6 +25,7 @@ const VotingProvider = ({ children }: Props): JSX.Element => {
   const projectId = Number(pathParams.projectId);
   const phase: Phase = (query.get('phase') as Phase) || 'Phase 1 - Feasibility Study'; // default to phase 1?
 
+  console.log(projectId);
   const votes = useAppSelector((state) => selectProjectVotes(state, projectId));
 
   const [phaseVotes, setPhaseVotes] = useState<PhaseVotes>();

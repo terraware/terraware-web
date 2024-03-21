@@ -2,18 +2,15 @@ import React, { useMemo } from 'react';
 
 import { Typography } from '@mui/material';
 
-import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { PhaseScores, Score } from 'src/types/Score';
-import { getMediumDate } from 'src/utils/dateFormatter';
+import { getISODate } from 'src/utils/dateFormatter';
 
 interface LastUpdatedProps {
   phaseScores: PhaseScores;
 }
 
 const LastUpdated = ({ phaseScores }: LastUpdatedProps) => {
-  const { activeLocale } = useLocalization();
-
   const modifiedTime = useMemo(
     () =>
       phaseScores?.scores
@@ -23,15 +20,14 @@ const LastUpdated = ({ phaseScores }: LastUpdatedProps) => {
     [phaseScores]
   );
 
-  if (!(activeLocale && modifiedTime)) {
+  if (!modifiedTime) {
     // Empty <p> so the height of the containers matches
     return <Typography minHeight={'20px'} />;
   }
 
   return (
-    <Typography fontSize='14px' fontWeight='400' lineHeight='20px'>{`${strings.LAST_UPDATED}: ${getMediumDate(
-      modifiedTime,
-      activeLocale
+    <Typography fontSize='14px' fontWeight='400' lineHeight='20px'>{`${strings.LAST_UPDATED}: ${getISODate(
+      modifiedTime
     )}`}</Typography>
   );
 };
