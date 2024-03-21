@@ -5,8 +5,10 @@ import { Slide, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import ErrorBoundary from 'src/ErrorBoundary';
+import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
+import strings from 'src/strings';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStateLocation from 'src/utils/useStateLocation';
@@ -80,7 +82,7 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
         <ErrorBoundary setShowNavBar={setShowNavBar}>
           <Switch>
             <Route path={APP_PATHS.ACCELERATOR_OVERVIEW}>
-              <Overview />
+              {consoleEnabled ? <Overview /> : <Page title={strings.OVERVIEW} />}
             </Route>
             <Route path={APP_PATHS.ACCELERATOR_COHORTS}>
               <Cohorts />
@@ -92,7 +94,7 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
               <ModuleContent />
             </Route>
             <Route path={APP_PATHS.ACCELERATOR_PEOPLE}>
-              <People />
+              {consoleEnabled ? <People /> : <Page title={strings.PEOPLE} />}
             </Route>
             {consoleEnabled && (
               <Route path={APP_PATHS.ACCELERATOR_SCORING}>

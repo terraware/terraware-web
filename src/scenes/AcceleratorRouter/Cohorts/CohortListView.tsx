@@ -25,10 +25,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontSize: '24px',
     fontWeight: 600,
   },
-  right: {
-    float: 'right',
-    marginRight: theme.spacing(2),
-  },
 }));
 
 const columns = (activeLocale: string | null): TableColumnType[] =>
@@ -74,13 +70,13 @@ const CohortListView = () => {
       title={strings.COHORTS}
       rightComponent={
         canCreateCohorts && (
-          <Grid item xs={4} className={classes.right}>
+          <>
             {isMobile ? (
               <Button id='new-cohort' icon='plus' onClick={goToNewCohort} size='medium' />
             ) : (
               <Button id='new-cohort' label={strings.ADD_COHORT} icon='plus' onClick={goToNewCohort} size='medium' />
             )}
-          </Grid>
+          </>
         )
       }
       contentStyle={{ display: 'flex', flexGrow: 1, flexDirection: 'column' }}
