@@ -22,9 +22,7 @@ const ParticipantProjectProvider = ({ children }: Props) => {
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
   const pathParams = useParams<{ projectId: string }>();
-  console.log(pathParams);
   const projectId = Number(pathParams.projectId);
-  console.log(projectId);
 
   const [participantProject, setParticipantProject] = useState<ParticipantProject>();
   const [participantProjectData, setParticipantProjectData] = useState<ParticipantProjectData>({
@@ -67,7 +65,6 @@ const ParticipantProjectProvider = ({ children }: Props) => {
       return;
     }
 
-    console.log(getParticipantProjectResult);
     if (getParticipantProjectResult?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     } else if (getParticipantProjectResult?.status === 'success' && getParticipantProjectResult?.data) {
