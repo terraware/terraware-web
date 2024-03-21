@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react';
 
-import { Box, Grid, useTheme } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import { BusySpinner, Button } from '@terraware/web-components';
 
-import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import strings from 'src/strings';
 
+import PageWithModuleTimeline from '../PageWithModuleTimeline';
 import { useParticipantProjectData } from './ParticipantProjectContext';
 
 const SingleView = () => {
@@ -33,22 +33,15 @@ const SingleView = () => {
   );
 
   return (
-    <Grid container spacing={theme.spacing(1)}>
-      <Grid item xs={10}>
-        <Page
-          title={`${project?.organizationName || ''} / ${project?.name || ''}`}
-          crumbs={crumbs}
-          hierarchicalCrumbs={false}
-          rightComponent={rightComponent}
-        >
-          {status === 'pending' && <BusySpinner />}
-          <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }} />
-        </Page>
-      </Grid>
-      <Grid item xs={2}>
-        Stubbed module timeline
-      </Grid>
-    </Grid>
+    <PageWithModuleTimeline
+      title={`${project?.organizationName || ''} / ${project?.name || ''}`}
+      crumbs={crumbs}
+      hierarchicalCrumbs={false}
+      rightComponent={rightComponent}
+    >
+      {status === 'pending' && <BusySpinner />}
+      <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }} />
+    </PageWithModuleTimeline>
   );
 };
 
