@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1711044273637" clover="3.2.0">
-  <project timestamp="1711044273638" name="All files">
-    <metrics statements="18520" coveredstatements="693" conditionals="11631" coveredconditionals="218" methods="5780" coveredmethods="157" elements="35931" coveredelements="1068" complexity="0" loc="18520" ncloc="18520" packages="158" files="782" classes="782"/>
+<coverage generated="1711045663938" clover="3.2.0">
+  <project timestamp="1711045663938" name="All files">
+    <metrics statements="18535" coveredstatements="693" conditionals="11635" coveredconditionals="218" methods="5785" coveredmethods="157" elements="35955" coveredelements="1068" complexity="0" loc="18535" ncloc="18535" packages="159" files="787" classes="787"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -7466,12 +7466,12 @@
       <metrics statements="10" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>
       <file name="rootReducer.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/rootReducer.ts">
         <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="65" count="0" type="stmt"/>
-        <line num="118" count="0" type="stmt"/>
-        <line num="123" count="0" type="stmt"/>
-        <line num="124" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="120" count="0" type="stmt"/>
         <line num="125" count="0" type="stmt"/>
-        <line num="128" count="0" type="stmt"/>
+        <line num="126" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="127" count="0" type="stmt"/>
+        <line num="130" count="0" type="stmt"/>
       </file>
       <file name="store.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/store.ts">
         <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
@@ -8273,6 +8273,29 @@
         <line num="259" count="0" type="stmt"/>
         <line num="262" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="265" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.redux.features.participantProjects">
+      <metrics statements="11" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="4" coveredmethods="0"/>
+      <file name="participantProjectsAsyncThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/participantProjects/participantProjectsAsyncThunks.ts">
+        <metrics statements="5" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="12" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+      </file>
+      <file name="participantProjectsSelectors.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/participantProjects/participantProjectsSelectors.ts">
+        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="3" count="0" type="stmt"/>
+        <line num="4" count="0" type="stmt"/>
+      </file>
+      <file name="participantProjectsSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/participantProjects/participantProjectsSlice.ts">
+        <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.redux.features.participants">
@@ -18706,7 +18729,7 @@
       </file>
     </package>
     <package name="src.services">
-      <metrics statements="1358" coveredstatements="340" conditionals="479" coveredconditionals="83" methods="384" coveredmethods="68"/>
+      <metrics statements="1362" coveredstatements="340" conditionals="479" coveredconditionals="83" methods="385" coveredmethods="68"/>
       <file name="AcceleratorService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/AcceleratorService.ts">
         <metrics statements="5" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
@@ -19544,6 +19567,13 @@
         <line num="120" count="0" type="stmt"/>
         <line num="127" count="0" type="stmt"/>
         <line num="133" count="0" type="stmt"/>
+      </file>
+      <file name="ParticipantProjectService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/ParticipantProjectService.ts">
+        <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
       </file>
       <file name="ParticipantsService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/ParticipantsService.ts">
         <metrics statements="18" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="6" coveredmethods="0"/>
@@ -20641,6 +20671,9 @@
         <line num="90" count="0" type="stmt"/>
       </file>
       <file name="Participant.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/Participant.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="ParticipantProject.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/ParticipantProject.ts">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
       <file name="PlantingSite.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/PlantingSite.ts">
