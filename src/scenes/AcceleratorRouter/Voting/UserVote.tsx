@@ -7,7 +7,7 @@ import { Dropdown, Textfield } from '@terraware/web-components';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { VoteOption, VoteSelection } from 'src/types/Votes';
-import { getUserDisplayName } from 'src/utils/user';
+import { UserIdentity, getUserDisplayName } from 'src/utils/user';
 
 import VoteBadge from './VoteBadge';
 import VoteRowGrid from './VoteRowGrid';
@@ -31,9 +31,15 @@ export type UserVoteViewProps = {
 export const UserVoteView = ({ vote }: UserVoteViewProps): JSX.Element => {
   const theme = useTheme();
 
+  const user: UserIdentity = {
+    firstName: vote.firstName,
+    lastName: vote.lastName,
+    email: vote.email,
+  };
+
   return (
     <>
-      <VoteRowGrid leftChild={<UserLabel vote={vote} />} rightChild={<VoteBadge vote={vote.voteOption} />} />
+      <VoteRowGrid leftChild={<UserLabel user={user} />} rightChild={<VoteBadge vote={vote.voteOption} />} />
       {/* This is mostly for the top row alignment where title and badge are aligned by center. */}
       {vote.voteOption === 'Conditional' && !!vote.conditionalInfo && (
         <VoteRowGrid
@@ -61,8 +67,8 @@ export type UserVoteEditProps = {
   conditionalInfo?: string;
   onConditionalInfoChange: (conditionalInfo: string) => void;
   onVoteChange: (vote: VoteOption) => void;
+  user: UserIdentity;
   validate?: boolean;
-  vote: VoteSelection;
   voteOption?: VoteOption;
 };
 
@@ -70,8 +76,8 @@ export const UserVoteEdit = ({
   conditionalInfo,
   onConditionalInfoChange,
   onVoteChange,
+  user,
   validate,
-  vote,
   voteOption,
 }: UserVoteEditProps): JSX.Element => {
   const theme = useTheme();
@@ -94,7 +100,7 @@ export const UserVoteEdit = ({
   return (
     <>
       <VoteRowGrid
-        leftChild={<UserLabel vote={vote} />}
+        leftChild={<UserLabel user={user} />}
         rightChild={
           <Dropdown
             label={''}
@@ -131,15 +137,15 @@ export const UserVoteEdit = ({
  * label showing Voter: <name>
  */
 type UserLabelProps = {
-  vote: VoteSelection;
+  user?: UserIdentity;
 };
 
-const UserLabel = ({ vote }: UserLabelProps): JSX.Element => {
+const UserLabel = ({ user }: UserLabelProps): JSX.Element => {
   const theme = useTheme();
 
   return (
     <Typography color={theme.palette.TwClrBaseBlack} fontSize='16px' fontWeight={400} lineHeight='24px'>
-      {strings.formatString(strings.VOTER, getUserDisplayName(vote))}
+      {strings.formatString(strings.VOTER, getUserDisplayName(user))}
     </Typography>
   );
 };

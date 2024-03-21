@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Box, useTheme } from '@mui/material';
@@ -9,10 +9,11 @@ import { APP_PATHS } from 'src/constants';
 import { requestProjectVotesUpdate } from 'src/redux/features/votes/votesAsyncThunks';
 import { selectProjectVotesEditRequest } from 'src/redux/features/votes/votesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { UpsertVoteSelection, VoteOption } from 'src/types/Votes';
+import { PhaseVotes, UpsertVoteSelection, VoteOption, VoteSelection } from 'src/types/Votes';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import { UserIdentity } from 'src/utils/user';
 
 import { UserVoteEdit } from './UserVote';
 import { useVotingData } from './VotingContext';
@@ -47,11 +48,17 @@ const VotingEdit = () => {
     if (votes.some((vote) => vote.voteOption === 'Conditional' && !vote.conditionalInfo)) {
       return;
     }
+
+    const updatedVotes = votes.filter(({ conditionalInfo, userId, voteOption }) => {
+      const orignal = phaseVotes.votes.find((originalVote) => originalVote.userId === userId)!!;
+      return !(orignal.conditionalInfo === conditionalInfo && orignal.voteOption === voteOption);
+    });
+
     const request = {
       projectId,
       payload: {
         phase: phaseVotes.phase,
-        votes,
+        votes: updatedVotes,
       },
     };
     const dispatched = dispatch(requestProjectVotesUpdate(request));
@@ -90,6 +97,12 @@ const VotingEdit = () => {
     }
   }, [phaseVotes]);
 
+  const getUserIdentity = (voteSelection: VoteSelection): UserIdentity => ({
+    firstName: voteSelection.firstName,
+    lastName: voteSelection.lastName,
+    email: voteSelection.email,
+  });
+
   return (
     <VotingWrapper isForm>
       <PageForm
@@ -125,7 +138,7 @@ const VotingEdit = () => {
                 onConditionalInfoChange={(value) => setVoteValue(index, value, votes[index].voteOption)}
                 onVoteChange={(value) => setVoteValue(index, votes[index].conditionalInfo, value)}
                 validate={validate}
-                vote={vote}
+                user={getUserIdentity(vote)}
                 voteOption={votes[index]?.voteOption}
               />
             </Box>
