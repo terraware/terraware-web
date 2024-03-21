@@ -64,7 +64,7 @@ const OrgProjectsSectionEdit = ({
 
   const projectOptions = useMemo(() => {
     const options = new Map<number, string>([]);
-    section.org?.availableProjects.forEach((project) => {
+    section.org?.projects.forEach((project) => {
       options.set(project.id, project.name);
     });
     return options;

@@ -29,7 +29,7 @@ export type Organization = {
   name: string;
   organizationType?: OrganizationType;
   organizationTypeDetails?: string;
-  role: OrganizationRole;
+  role?: OrganizationRole;
   totalUsers: number;
   timeZone?: string;
   website?: string;
@@ -43,7 +43,7 @@ export const HighOrganizationRolesValues = ['Admin', 'Owner', 'Terraformation Co
 // which could contain a user with a manger role.
 export type OrganizationRole = HighOrganizationRoles | 'Contributor' | 'Manager';
 
-export function roleName(role: OrganizationRole) {
+export function roleName(role?: OrganizationRole) {
   switch (role) {
     case 'Admin':
       return strings.ADMIN;
@@ -55,6 +55,8 @@ export function roleName(role: OrganizationRole) {
       return strings.MANAGER;
     case 'Terraformation Contact':
       return strings.TERRAFORMATION_CONTACT;
+    default:
+      return '--';
   }
 }
 

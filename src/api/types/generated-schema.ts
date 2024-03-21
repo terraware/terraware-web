@@ -46,6 +46,13 @@ export interface paths {
      */
     put: operations["updateSubmission"];
   };
+  "/api/v1/accelerator/organizations": {
+    /**
+     * Lists organizations with the Accelerator internal tag and their projects.
+     * @description By default, only lists tagged organizations that have projects that have not been assigned to participants yet.
+     */
+    get: operations["listAcceleratorOrganizations"];
+  };
   "/api/v1/accelerator/projects/{projectId}/scores": {
     /** Gets score selections for a single project. */
     get: operations["getProjectScores"];
@@ -849,6 +856,19 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
+    AcceleratorOrganizationPayload: {
+      /** Format: int64 */
+      id: number;
+      name: string;
+      projects: components["schemas"]["AcceleratorProjectPayload"][];
+    };
+    AcceleratorProjectPayload: {
+      /** Format: int64 */
+      id: number;
+      name: string;
+      /** Format: int64 */
+      participantId?: number;
+    };
     AccessionHistoryEntryPayload: {
       /** Format: int64 */
       batchId?: number;
@@ -2415,6 +2435,10 @@ export interface components {
       /** @enum {string} */
       type?: "LineString";
     }, "coordinates" | "type">;
+    ListAcceleratorOrganizationsResponsePayload: {
+      organizations: components["schemas"]["AcceleratorOrganizationPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     ListAllFieldValuesRequestPayload: {
       fields: string[];
       /** Format: int64 */
@@ -2950,14 +2974,14 @@ export interface components {
       /** Format: int64 */
       id: number;
       name: string;
-      /**
-       * @description The current user's role in the organization.
-       * @enum {string}
-       */
+      /** @enum {string} */
       organizationType?: "Government" | "NGO" | "Arboreta" | "Academia" | "ForProfit" | "Other";
       organizationTypeDetails?: string;
-      /** @enum {string} */
-      role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
+      /**
+       * @description The current user's role in the organization. Absent if the current user is not a member of the organization but is able to read it thanks to a global role.
+       * @enum {string}
+       */
+      role?: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
       /**
        * @description Time zone name in IANA tz database format
        * @example America/New_York
@@ -4407,6 +4431,26 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Lists organizations with the Accelerator internal tag and their projects.
+   * @description By default, only lists tagged organizations that have projects that have not been assigned to participants yet.
+   */
+  listAcceleratorOrganizations: {
+    parameters: {
+      query?: {
+        /** @description Whether to also include projects that have been assigned to participants. */
+        includeParticipants?: boolean;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListAcceleratorOrganizationsResponsePayload"];
         };
       };
     };

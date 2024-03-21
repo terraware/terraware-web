@@ -32,7 +32,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
   const { activeLocale } = useLocalization();
   const theme = useTheme();
   const { availableCohorts } = useCohorts();
-  const { acceleratorOrgs: allAcceleratorOrgs } = useAcceleratorOrgs();
+  const { acceleratorOrgs: allAcceleratorOrgs } = useAcceleratorOrgs(false);
 
   const [localRecord, setLocalRecord] = useState<T>(participant);
   const [validateFields, setValidateFields] = useState<boolean>(false);
@@ -45,7 +45,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
   const [availableOrgs, setAvailableOrgs] = useState<AcceleratorOrg[]>([]);
 
   const acceleratorOrgs = useMemo<AcceleratorOrg[]>(
-    () => (allAcceleratorOrgs || []).filter((org) => org.availableProjects.length > 0),
+    () => (allAcceleratorOrgs || []).filter((org) => org.projects.length > 0),
     [allAcceleratorOrgs]
   );
 
@@ -141,12 +141,12 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
     }
 
     const sections = acceleratorOrgs
-      .filter((org) => org.availableProjects.some((p) => localRecord.project_ids.some((id) => id === p.id)))
+      .filter((org) => org.projects.some((p) => localRecord.project_ids.some((id) => id === p.id)))
       .sort((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
       .map((org, index) => ({
         id: index + 1,
         org,
-        selectedProjectIds: org.availableProjects
+        selectedProjectIds: org.projects
           .map((p) => p.id)
           .filter((projectId) => localRecord.project_ids.some((id) => id === projectId)),
       }));

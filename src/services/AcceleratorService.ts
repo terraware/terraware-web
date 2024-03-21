@@ -1,48 +1,35 @@
-import { Response2 } from 'src/services/HttpService';
+import { paths } from 'src/api/types/generated-schema';
+import HttpService, { Response } from 'src/services/HttpService';
 import { AcceleratorOrg } from 'src/types/Accelerator';
 
+const ACCELERATOR_ORGS_ENDPOINT = '/api/v1/accelerator/organizations';
+
 export type AcceleratorOrgData = {
-  orgs: AcceleratorOrg[];
+  organizations?: AcceleratorOrg[];
 };
 
-const listAcceleratorOrgs = async (locale?: string | null): Promise<Response2<AcceleratorOrgData>> => {
-  return {
-    requestSucceeded: true,
-    data: {
-      orgs: [...mockData].sort((a, b) => a.name.localeCompare(b.name, locale || undefined)),
+type AcceleratorOrgsResponse =
+  paths[typeof ACCELERATOR_ORGS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+const listAcceleratorOrgs = async (
+  locale?: string | null,
+  includeParticipants?: boolean
+): Promise<Response & AcceleratorOrgData> => {
+  const params: { includeParticipants?: string } = {};
+
+  if (includeParticipants !== undefined) {
+    params.includeParticipants = `${includeParticipants}`;
+  }
+
+  return await HttpService.root(ACCELERATOR_ORGS_ENDPOINT).get<AcceleratorOrgsResponse, AcceleratorOrgData>(
+    {
+      params,
     },
-  };
+    (data) => ({
+      organizations: data?.organizations.sort((a, b) => a.name.localeCompare(b.name, locale || undefined)),
+    })
+  );
 };
-
-const mockData: AcceleratorOrg[] = [
-  {
-    id: 1,
-    name: 'Org1',
-    availableProjects: [
-      { id: 1, name: 'Project1' },
-      { id: 2, name: 'Project2' },
-      { id: 3, name: 'Project3' },
-    ],
-  },
-  {
-    id: 2,
-    name: 'Org2',
-    availableProjects: [
-      { id: 4, name: 'Project4' },
-      { id: 5, name: 'Project5' },
-    ],
-  },
-  {
-    id: 3,
-    name: 'Org3',
-    availableProjects: [
-      { id: 6, name: 'Andromeda' },
-      { id: 7, name: 'Project7' },
-      { id: 8, name: 'Project8' },
-      { id: 9, name: 'Project9' },
-    ],
-  },
-];
 
 const AcceleratorService = {
   listAcceleratorOrgs,
