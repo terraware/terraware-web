@@ -15,6 +15,7 @@ export type ParticipantProject = {
   modifiedTime: string;
   name: string;
   numberOfNativeSpecies: number;
+  organizationName: string;
   perHectareEstimatedBudget?: number;
   phase1Score: number;
   pipeline: string;

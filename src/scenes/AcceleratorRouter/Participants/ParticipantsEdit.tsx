@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { BusySpinner } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
-import useNavigateToParticipants from 'src/hooks/navigation/useNavigateToParticipants';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipants } from 'src/hooks/useParticipants';
 import { requestUpdateParticipant } from 'src/redux/features/participants/participantsAsyncThunks';
 import { selectParticipantUpdateRequest } from 'src/redux/features/participants/participantsSelectors';
@@ -25,7 +25,7 @@ export default function ParticipantsNew(): JSX.Element {
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectParticipantUpdateRequest(requestId));
 
-  const goToParticipantsList = useNavigateToParticipants();
+  const { goToParticipantsList } = useNavigateTo();
 
   const onSave = useCallback(
     (updateRequest: ParticipantUpdateRequest) => {

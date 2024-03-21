@@ -16,6 +16,7 @@ import Deliverables from './Deliverables';
 import ModuleContent from './Modules';
 import NavBar from './NavBar';
 import Overview from './Overview';
+import ParticipantProjects from './ParticipantProjects';
 import Participants from './Participants';
 import People from './People';
 import Scoring from './Scoring';
@@ -106,6 +107,11 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
             {consoleEnabled && (
               <Route path={APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW}>
                 <Participants />
+              </Route>
+            )}
+            {consoleEnabled && (
+              <Route path={APP_PATHS.ACCELERATOR_PROJECT_VIEW}>
+                <ParticipantProjects />
               </Route>
             )}
             <Route path={'*'}>
