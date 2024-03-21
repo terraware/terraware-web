@@ -8,7 +8,7 @@ import Card from 'src/components/common/Card';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useLocalization, useUser } from 'src/providers';
+import { useUser } from 'src/providers';
 import strings from 'src/strings';
 
 import PageWithModuleTimeline from '../PageWithModuleTimeline';
