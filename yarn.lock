@@ -4522,10 +4522,10 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@terraware/web-components@^2.11.0":
-  version "2.11.0"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.11.0.tgz#064646a132657f78442a16dd78bd14173917782a"
-  integrity sha512-hxm2/kHErKXdrv0o7qbH54EtenM9nc73MCbw7JOAFpdClw11EsKavhokSiuCH91QC5h0fh7QELZu3Id1d0iwfg==
+"@terraware/web-components@^2.11.1":
+  version "2.11.1"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.11.1.tgz#6230a19a0168fb70b2f482dbd730f1264fb86d24"
+  integrity sha512-NxSbS6PhKImLlvmM91XWtDwEiLwM/373gdcIqVbZgqGDWiNMtUqH60ycL9fe5zJaSOPRXwOtYX/KjdVPgbnAVA==
   dependencies:
     "@date-io/date-fns" "^2.14.0"
     "@date-io/moment" "^2.16.1"

@@ -41,11 +41,19 @@ const mockParticipant: Participant = {
   ],
 };
 
+const mockEmptyParticipant: Participant = {
+  id: 4,
+  cohort_id: 4,
+  cohort_name: 'Cohort4',
+  name: `empty participant`,
+  projects: [],
+};
+
 const get = async (participantId: number): Promise<Response2<ParticipantData>> => {
   return {
     requestSucceeded: true,
     data: {
-      participant: mockParticipant,
+      participant: participantId === 4 ? mockEmptyParticipant : mockParticipant,
     },
   };
 };
@@ -100,6 +108,13 @@ const list = async (
             cohort_name: 'Cohort3',
             name: 'random',
             projects: [{ id: 8, name: 'Project8', organization_id: 1, organization_name: 'Org1' }],
+          },
+          {
+            id: 4,
+            cohort_id: 4,
+            cohort_name: 'Cohort4',
+            name: 'empty participant',
+            projects: [],
           },
         ],
         search,
