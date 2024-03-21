@@ -113,8 +113,8 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
 
   // reset filters when extraTableFilters change
   useEffect(() => {
-    setFilters((filters) => {
-      const newFilters = { ...filters };
+    setFilters((_filters) => {
+      const newFilters = { ..._filters };
       Object.keys(newFilters)?.forEach((key) => {
         const filter = {
           ...newFilters[key],
