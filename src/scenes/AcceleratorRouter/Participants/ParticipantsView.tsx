@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useEffect, useMemo } from 'react';
+import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
@@ -15,6 +15,8 @@ import { useParticipants } from 'src/hooks/useParticipants';
 import { useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+import RemoveParticipant from './RemoveParticipant';
 
 type ProjectsByOrg = {
   organization_id: number;
@@ -36,13 +38,15 @@ export default function ParticipantsView(): JSX.Element {
   const { isBusy, notFound, selectedParticipant: participant } = useParticipants(participantId);
   const { goToParticipantsList } = useNavigateTo();
 
+  const [showDelete, setShowDelete] = useState<boolean>(false);
+
   const goToEdit = useCallback(() => {
     history.push(APP_PATHS.ACCELERATOR_PARTICIPANTS_EDIT.replace(':participantId', `${participantId}`));
   }, [history, participantId]);
 
   const onOptionItemClick = useCallback((optionItem: DropdownItem) => {
     if (optionItem.value === 'remove-participant') {
-      window.alert('Remove Participant WIP!');
+      setShowDelete(true);
     }
   }, []);
 
@@ -133,7 +137,10 @@ export default function ParticipantsView(): JSX.Element {
     <Page crumbs={crumbs} rightComponent={actionMenu} title={participant?.name ?? ''}>
       <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
         {isBusy && <BusySpinner />}
-        <Section
+        {showDelete && participant !== undefined && (
+          <RemoveParticipant onClose={() => setShowDelete(false)} participant={participant} />
+        )}
+        <DataRow
           leftChild={<Textfield display id='name' label={strings.NAME} type='text' value={participant?.name ?? ''} />}
           rightChild={
             <Textfield
@@ -146,7 +153,7 @@ export default function ParticipantsView(): JSX.Element {
           }
         />
         {projectsByOrg.map((data) => (
-          <Section
+          <DataRow
             key={data.organization_id}
             leftChild={
               <Textfield display id='name' label={strings.ORGANIZATION} type='text' value={data.organization_name} />
@@ -183,7 +190,7 @@ type Props = {
   rightChild: ReactNode;
 };
 
-const Section = ({ leftChild, rightChild }: Props): JSX.Element => {
+const DataRow = ({ leftChild, rightChild }: Props): JSX.Element => {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
