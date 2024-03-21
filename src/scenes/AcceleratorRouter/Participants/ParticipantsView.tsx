@@ -15,6 +15,8 @@ import { useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+import useNavigateToParticipants from './useNavigateToParticipants';
+
 type ProjectsByOrg = {
   organization_id: number;
   organization_name: string;
@@ -33,13 +35,7 @@ export default function ParticipantsView(): JSX.Element {
   const pathParams = useParams<{ participantId: string }>();
   const participantId = Number(pathParams.participantId);
   const { isBusy, notFound, selectedParticipant: participant } = useParticipants(participantId);
-
-  const goToParticipantsList = useCallback(() => {
-    history.push({
-      pathname: APP_PATHS.ACCELERATOR_OVERVIEW,
-      search: 'tab=participants',
-    });
-  }, [history]);
+  const goToParticipantsList = useNavigateToParticipants();
 
   const goToEdit = useCallback(() => {
     history.push(APP_PATHS.ACCELERATOR_PARTICIPANTS_EDIT.replace(':participantId', `${participantId}`));

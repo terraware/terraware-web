@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 
 import Page from 'src/components/Page';
-import { APP_PATHS } from 'src/constants';
 import { requestCreateParticipant } from 'src/redux/features/participants/participantsAsyncThunks';
 import { selectParticipantCreateRequest } from 'src/redux/features/participants/participantsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -11,21 +9,16 @@ import { ParticipantCreateRequest } from 'src/types/Participant';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import ParticipantForm from './ParticipantForm';
+import useNavigateToParticipants from './useNavigateToParticipants';
 
 export default function ParticipantsNew(): JSX.Element {
-  const history = useHistory();
   const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
 
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectParticipantCreateRequest(requestId));
 
-  const goToParticipantsList = useCallback(() => {
-    history.push({
-      pathname: APP_PATHS.ACCELERATOR_OVERVIEW,
-      search: 'tab=participants',
-    });
-  }, [history]);
+  const goToParticipantsList = useNavigateToParticipants();
 
   const onSave = useCallback(
     (createRequest: ParticipantCreateRequest) => {
