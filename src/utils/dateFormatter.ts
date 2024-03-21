@@ -14,11 +14,6 @@ export const getLongDate = (date: string, locale: string | undefined | null): st
     timeZone: 'UTC',
   }).format(new Date(date));
 
-// Fully numeric year, month, day date string depending on locale
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat#using_locales
-export const getMediumDate = (date: string, locale?: string | null): string =>
-  new Intl.DateTimeFormat(locale || 'en-US').format(new Date(date));
-
 export const getShortTime = (dateTime: string, locale: string | undefined | null, timeZone?: string): string =>
   new Intl.DateTimeFormat(locale || 'en-US', { timeStyle: 'short', timeZone: timeZone ?? 'UTC' })
     .format(new Date(dateTime))
