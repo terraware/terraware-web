@@ -137,7 +137,7 @@ export const UserVoteEdit = ({
  * label showing Voter: <name>
  */
 type UserLabelProps = {
-  user?: UserIdentity;
+  user: UserIdentity;
 };
 
 const UserLabel = ({ user }: UserLabelProps): JSX.Element => {
