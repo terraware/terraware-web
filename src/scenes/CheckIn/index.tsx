@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 
 import { Box, Container, Grid, useTheme } from '@mui/material';
@@ -101,9 +101,7 @@ export default function CheckIn(): JSX.Element {
       try {
         setBusy(true);
         await Promise.all(
-          (pendingAccessions || []).map((accession) => {
-            AccessionService.checkInAccession(Number(accession.id));
-          })
+          (pendingAccessions || []).map((accession) => AccessionService.checkInAccession(Number(accession.id)))
         );
         setBusy(false);
         reloadData();
