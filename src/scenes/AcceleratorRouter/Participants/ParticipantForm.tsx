@@ -8,6 +8,7 @@ import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import { useAcceleratorOrgs } from 'src/hooks/useAcceleratorOrgs';
 import { useCohorts } from 'src/hooks/useCohorts';
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { AcceleratorOrg } from 'src/types/Accelerator';
 import { Cohort } from 'src/types/Cohort';
@@ -28,12 +29,14 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
 ): JSX.Element {
   const { busy, participant, onCancel, onSave } = props;
   const { isMobile } = useDeviceInfo();
+  const { activeLocale } = useLocalization();
   const theme = useTheme();
   const { availableCohorts } = useCohorts();
   const { acceleratorOrgs: allAcceleratorOrgs } = useAcceleratorOrgs();
 
   const [localRecord, setLocalRecord] = useState<T>(participant);
   const [validateFields, setValidateFields] = useState<boolean>(false);
+  const [modified, setModified] = useState<boolean>(false);
   // initialize with one org selection enabled
   const [orgProjectsSections, setOrgProjectsSections] = useState<OrgProjectsSection[]>([
     { id: 1, selectedProjectIds: [] },
@@ -52,6 +55,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
   );
 
   const updateField = useCallback((field: keyof T, value: any) => {
+    setModified(true);
     setLocalRecord((prev) => ({
       ...prev,
       [field]: value,
@@ -78,6 +82,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
 
     onSave({
       ...localRecord,
+      project_ids: orgProjectsSections.flatMap((data) => data.selectedProjectIds),
     });
   };
 
@@ -92,6 +97,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
       if (!org) {
         return;
       }
+      setModified(true);
       setOrgProjectsSections((prev) => {
         const updated = [...prev].map((section) =>
           section.id !== sectionId
@@ -102,41 +108,53 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
                 selectedProjects: [],
               }
         );
-        updateField(
-          'project_ids',
-          updated.flatMap((data) => data.selectedProjectIds)
-        );
         setAvailableOrgs((acceleratorOrgs || []).filter((o) => !updated.some((data) => data.org?.id === o.id)));
         return updated;
       });
     },
-    [acceleratorOrgs, updateField]
+    [acceleratorOrgs]
   );
 
-  const onProjects = useCallback(
-    (sectionId: number, selectedProjectIds: number[]) => {
-      setOrgProjectsSections((prev) => {
-        const updated = [...prev].map((section) =>
-          section.id !== sectionId
-            ? section
-            : {
-                ...section,
-                selectedProjectIds,
-              }
-        );
-        updateField(
-          'project_ids',
-          updated.flatMap((data) => data.selectedProjectIds)
-        );
-        return updated;
-      });
-    },
-    [updateField]
-  );
+  const onProjects = useCallback((sectionId: number, selectedProjectIds: number[]) => {
+    setModified(true);
+    setOrgProjectsSections((prev) => {
+      const updated = [...prev].map((section) =>
+        section.id !== sectionId
+          ? section
+          : {
+              ...section,
+              selectedProjectIds,
+            }
+      );
+      return updated;
+    });
+  }, []);
 
   const addOrgProjectsSection = useCallback(() => {
     setOrgProjectsSections((prev) => [...prev, { id: prev.length + 1, selectedProjectIds: [] }]);
   }, []);
+
+  // initialize sections for participant that already had project ids (edit use-case)
+  useEffect(() => {
+    if (modified) {
+      return;
+    }
+
+    const sections = acceleratorOrgs
+      .filter((org) => org.availableProjects.some((p) => localRecord.project_ids.some((id) => id === p.id)))
+      .sort((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
+      .map((org, index) => ({
+        id: index + 1,
+        org,
+        selectedProjectIds: org.availableProjects
+          .map((p) => p.id)
+          .filter((projectId) => localRecord.project_ids.some((id) => id === projectId)),
+      }));
+
+    if (sections.length) {
+      setOrgProjectsSections(sections);
+    }
+  }, [acceleratorOrgs, activeLocale, localRecord.project_ids, modified]);
 
   useEffect(() => {
     // update local record when participant changes

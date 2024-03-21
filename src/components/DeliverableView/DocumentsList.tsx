@@ -6,6 +6,7 @@ import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
 import { TableColumnType } from 'src/components/common/table/types';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useUser } from 'src/providers';
 import { SearchSortOrder } from 'src/types/Search';
 
 import DocumentCellRenderer from './DocumentCellRenderer';
@@ -17,10 +18,14 @@ interface DocumentsListProps extends ViewProps {
 
 const DocumentsList = (props: DocumentsListProps): JSX.Element => {
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const { isAllowed } = useUser();
+
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>({
     field: 'deliverableName',
     direction: 'Ascending',
   } as SearchSortOrder);
+
+  const isAllowedReadSubmissionDocument = isAllowed('READ_SUBMISSION_DOCUMENT');
 
   const onSortChange = (order: SortOrder, orderBy: string) =>
     setSearchSortOrder({
@@ -34,8 +39,9 @@ const DocumentsList = (props: DocumentsListProps): JSX.Element => {
         ...document,
         projectName: props.deliverable.projectName,
         deliverableId: props.deliverable.id,
+        isAllowedRead: isAllowedReadSubmissionDocument,
       })),
-    [props.deliverable]
+    [isAllowedReadSubmissionDocument, props.deliverable]
   );
 
   return (

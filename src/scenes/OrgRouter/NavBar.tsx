@@ -9,7 +9,6 @@ import NavItem from 'src/components/common/Navbar/NavItem';
 import NavSection from 'src/components/common/Navbar/NavSection';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { NurseryWithdrawalService } from 'src/services';
@@ -37,7 +36,6 @@ export default function NavBar({
   const [hasDeliverables, setHasDeliverables] = useState<boolean>(false);
   const { isDesktop, isMobile } = useDeviceInfo();
   const history = useHistory();
-  const featureFlagAccelerator = isEnabled('Accelerator');
   const { isAllowedViewConsole } = useAcceleratorConsole();
   const { activeLocale } = useLocalization();
 
@@ -120,12 +118,12 @@ export default function NavBar({
       });
       setHasDeliverables(!!(response && response.deliverables.length > 0));
     };
-    if (featureFlagAccelerator && isManagerOrHigher(selectedOrganization)) {
+    if (isManagerOrHigher(selectedOrganization)) {
       fetchDeliverables();
     } else {
       setHasDeliverables(false);
     }
-  }, [activeLocale, featureFlagAccelerator, selectedOrganization]);
+  }, [activeLocale, selectedOrganization]);
 
   const getSeedlingsMenuItems = () => {
     const inventoryMenu = (
@@ -176,7 +174,7 @@ export default function NavBar({
       setShowNavBar={setShowNavBar as React.Dispatch<React.SetStateAction<boolean>>}
       backgroundTransparent={backgroundTransparent}
     >
-      {isMobile && featureFlagAccelerator && isAllowedViewConsole && (
+      {isMobile && isAllowedViewConsole && (
         <NavItem
           label={strings.ACCELERATOR_CONSOLE}
           icon='home'

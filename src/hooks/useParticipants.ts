@@ -10,6 +10,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 export type Response = {
   availableParticipants?: Participant[];
   isBusy: boolean;
+  notFound: boolean;
   selectedParticipant?: Participant;
 };
 
@@ -20,6 +21,7 @@ export const useParticipants = (participantId?: number) => {
   const [requestId, setRequestId] = useState('');
   const participantListRequest = useAppSelector(selectParticipantListRequest(requestId));
 
+  const [notFound, setNotFound] = useState<boolean>(false);
   const [availableParticipants, setAvailableParticipants] = useState<Participant[] | undefined>();
   const [selectedParticipant, setSelectedParticipant] = useState<Participant>();
 
@@ -27,7 +29,11 @@ export const useParticipants = (participantId?: number) => {
 
   useEffect(() => {
     if (availableParticipants && participantId) {
-      setSelectedParticipant(availableParticipants.find((participant) => participant.id === participantId));
+      const foundData = availableParticipants.find((participant) => participant.id === participantId);
+      setSelectedParticipant(foundData);
+      if (!foundData) {
+        setNotFound(true);
+      }
     } else {
       setSelectedParticipant(undefined);
     }
@@ -51,7 +57,7 @@ export const useParticipants = (participantId?: number) => {
   }, [participantListRequest, snackbar]);
 
   return useMemo(
-    () => ({ availableParticipants, selectedParticipant, isBusy }),
-    [availableParticipants, selectedParticipant, isBusy]
+    () => ({ availableParticipants, isBusy, notFound, selectedParticipant }),
+    [availableParticipants, isBusy, notFound, selectedParticipant]
   );
 };

@@ -25,9 +25,10 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
   const isDeliverablesRoute = useRouteMatch(APP_PATHS.ACCELERATOR_DELIVERABLES);
   const isModuleContentRoute = useRouteMatch(APP_PATHS.ACCELERATOR_MODULE_CONTENT);
   const isOverviewRoute = useRouteMatch(APP_PATHS.ACCELERATOR_OVERVIEW);
+  const isParticipantsRoute = useRouteMatch(APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW);
+  const isPeopleRoute = useRouteMatch(APP_PATHS.ACCELERATOR_PEOPLE);
   const isScoringRoute = useRouteMatch(APP_PATHS.ACCELERATOR_SCORING);
   const isVotingRoute = useRouteMatch(APP_PATHS.ACCELERATOR_VOTING);
-  const isPeopleRoute = useRouteMatch(APP_PATHS.ACCELERATOR_PEOPLE);
 
   const isAllowedViewPeople = isAllowed('READ_GLOBAL_ROLES');
 
@@ -71,7 +72,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
         id='overview'
         label={strings.OVERVIEW}
         onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_OVERVIEW)}
-        selected={!!isOverviewRoute || !!isScoringRoute || !!isVotingRoute}
+        selected={!!isOverviewRoute || !!isParticipantsRoute || !!isScoringRoute || !!isVotingRoute}
       />
 
       <NavSection />

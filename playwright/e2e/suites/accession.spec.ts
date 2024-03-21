@@ -48,7 +48,6 @@ export default function AccessionTests() {
     await expect(page.getByLabel('Accession Details').getByRole('paragraph')).toContainText('(Owner: Ashtyn)');
     await expect(page.getByLabel('Accession Details')).toContainText('Collected from plants');
     await page.getByRole('button', { name: 'Check In' }).click();
-    await page.getByRole('button', { name: 'Close' }).click();
     await expect(page.getByRole('main')).toContainText('Awaiting Processing');
     await page.getByRole('main').getByRole('button').nth(1).click();
     await page.locator('.textfield-value > .tw-icon').click();

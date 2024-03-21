@@ -5,7 +5,7 @@ import { TableColumnType } from '@terraware/web-components';
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import { useParticipants } from 'src/hooks/useParticipants';
 import { useProjects } from 'src/hooks/useProjects';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import { selectDeliverablesSearchRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -49,12 +49,16 @@ const DeliverablesTable = ({
 }: DeliverablesTableProps) => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
+  const { isAllowed } = useUser();
+  const { selectedOrganization } = useOrganization();
   const { availableProjects: projects, getProjectName } = useProjects();
   const { selectedParticipant } = useParticipants(participantId);
 
   const [deliverables, setDeliverables] = useState<ListDeliverablesElement[]>([]);
   const [deliverablesSearchRequestId, setDeliverablesSearchRequestId] = useState('');
   const deliverablesSearchRequest = useAppSelector(selectDeliverablesSearchRequest(deliverablesSearchRequestId));
+
+  const isAllowedReadDeliverable = isAllowed('READ_DELIVERABLE', selectedOrganization);
 
   const getFilterProjectName = useCallback(
     (projectId: number | string) => {
@@ -131,6 +135,15 @@ const DeliverablesTable = ({
     [dispatch, organizationId, searchAndSort]
   );
 
+  const _deliverables = useMemo(
+    () =>
+      deliverables.map((deliverable) => ({
+        ...deliverable,
+        isAllowedRead: isAllowedReadDeliverable,
+      })),
+    [deliverables, isAllowedReadDeliverable]
+  );
+
   useEffect(() => {
     // TODO do something if the request has an error
     if (deliverablesSearchRequest && deliverablesSearchRequest.data?.deliverables) {
@@ -149,7 +162,7 @@ const DeliverablesTable = ({
       fuzzySearchColumns={fuzzySearchColumns}
       id={tableId}
       Renderer={DeliverableCellRenderer}
-      rows={deliverables}
+      rows={_deliverables}
     />
   );
 };

@@ -12,7 +12,7 @@ import { EditProps } from 'src/components/DeliverableView/types';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
-import { useLocalization, useUser } from 'src/providers';
+import { useLocalization, useOrganization, useUser } from 'src/providers';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -29,8 +29,10 @@ const DeliverableView = (props: Props): JSX.Element => {
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
+  const { selectedOrganization } = useOrganization();
   const theme = useTheme();
-  const canEdit = isAllowed('UPDATE_PROJECT_ACCELERATOR_DATA');
+
+  const canCreateSubmission = isAllowed('CREATE_SUBMISSION', selectedOrganization);
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -47,7 +49,7 @@ const DeliverableView = (props: Props): JSX.Element => {
   }
 
   return (
-    <Page title={<TitleBar {...viewProps} />} rightComponent={canEdit ? props.callToAction : undefined} crumbs={crumbs}>
+    <Page title={<TitleBar {...viewProps} />} rightComponent={props.callToAction} crumbs={crumbs}>
       {props.isBusy && <BusySpinner />}
       <Box display='flex' flexDirection='column' flexGrow={1}>
         <RejectedDeliverableMessage {...viewProps} />
@@ -56,7 +58,9 @@ const DeliverableView = (props: Props): JSX.Element => {
           <Typography marginBottom={theme.spacing(2)} fontSize='20px' lineHeight='28px' fontWeight={600}>
             {strings.DOCUMENTS}
           </Typography>
-          {canEdit && <DocumentsUploader {...viewProps} deliverableStatusesToIgnore={['Not Submitted', 'In Review']} />}
+          {canCreateSubmission && (
+            <DocumentsUploader {...viewProps} deliverableStatusesToIgnore={['Not Submitted', 'In Review']} />
+          )}
           <DocumentsList {...viewProps} />
         </Card>
       </Box>

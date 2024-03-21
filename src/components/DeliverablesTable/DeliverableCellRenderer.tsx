@@ -32,7 +32,7 @@ export default function DeliverableCellRenderer(props: RendererProps<TableRowTyp
     return <Link to={to}>{iValue as React.ReactNode}</Link>;
   };
 
-  if (column.key === 'name') {
+  if (column.key === 'name' && row.isAllowedRead) {
     return (
       <CellRenderer
         index={index}

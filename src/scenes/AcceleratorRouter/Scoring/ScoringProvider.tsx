@@ -40,11 +40,11 @@ const ScoringProvider = ({ children }: Props) => {
         ? [
             {
               name: strings.PROJECTS,
-              to: APP_PATHS.ACCELERATOR_PROJECT_LIST, // TODO switch to project management page holding the project id
+              to: `${APP_PATHS.ACCELERATOR_OVERVIEW}?tab=projects`,
             },
             {
               name: projectName || '',
-              to: APP_PATHS.ACCELERATOR_PROJECT.replace(':projectId', `${projectId}`),
+              to: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`),
             },
           ]
         : [],

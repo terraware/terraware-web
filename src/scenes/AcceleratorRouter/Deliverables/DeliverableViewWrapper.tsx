@@ -8,7 +8,7 @@ import useFetchDeliverable from 'src/components/DeliverableView/useFetchDelivera
 import useUpdateDeliverable from 'src/components/DeliverableView/useUpdateDeliverable';
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
 
@@ -25,6 +25,7 @@ const DeliverableViewWrapper = () => {
   }>();
   const { status: requestStatus, update } = useUpdateDeliverable();
   const theme = useTheme();
+  const { isAllowed } = useUser();
   const { activeLocale } = useLocalization();
 
   const deliverableId = Number(_deliverableId);
@@ -95,27 +96,29 @@ const DeliverableViewWrapper = () => {
 
   const callToAction = useMemo(() => {
     return (
-      <Box display='flex' flexDirection='row' flexGrow={0} marginRight={theme.spacing(3)} justifyContent='right'>
-        <Button
-          disabled={deliverable?.status === 'Rejected'}
-          id='rejectDeliverable'
-          label={strings.REJECT_ACTION}
-          priority='secondary'
-          onClick={() => void setShowRejectDialog(true)}
-          size='medium'
-          type='destructive'
-        />
-        <Button
-          disabled={deliverable?.status === 'Approved'}
-          id='approveDeliverable'
-          label={strings.APPROVE}
-          onClick={() => void setShowApproveDialog(true)}
-          size='medium'
-        />
-        <OptionsMenu onOptionItemClick={onOptionItemClick} optionItems={optionItems} />
-      </Box>
+      isAllowed('UPDATE_SUBMISSION_STATUS') && (
+        <Box display='flex' flexDirection='row' flexGrow={0} marginRight={theme.spacing(3)} justifyContent='right'>
+          <Button
+            disabled={deliverable?.status === 'Rejected'}
+            id='rejectDeliverable'
+            label={strings.REJECT_ACTION}
+            priority='secondary'
+            onClick={() => void setShowRejectDialog(true)}
+            size='medium'
+            type='destructive'
+          />
+          <Button
+            disabled={deliverable?.status === 'Approved'}
+            id='approveDeliverable'
+            label={strings.APPROVE}
+            onClick={() => void setShowApproveDialog(true)}
+            size='medium'
+          />
+          <OptionsMenu onOptionItemClick={onOptionItemClick} optionItems={optionItems} />
+        </Box>
+      )
     );
-  }, [deliverable?.status, onOptionItemClick, optionItems, theme]);
+  }, [deliverable?.status, isAllowed, onOptionItemClick, optionItems, theme]);
 
   if (deliverable) {
     return (
