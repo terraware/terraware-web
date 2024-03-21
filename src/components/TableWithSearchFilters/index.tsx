@@ -111,6 +111,21 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
     dispatchSearchRequest(activeLocale, search, searchSortOrder);
   }, [activeLocale, dispatchSearchRequest, getSearchPayload, searchSortOrder]);
 
+  // reset filters when extraTableFilters change
+  useEffect(() => {
+    setFilters((filters) => {
+      const newFilters = { ...filters };
+      Object.keys(newFilters)?.forEach((key) => {
+        const filter = {
+          ...newFilters[key],
+          values: [],
+        };
+        newFilters[key] = filter;
+      });
+      return newFilters;
+    });
+  }, [extraTableFilters]);
+
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
       <Card flushMobile>
