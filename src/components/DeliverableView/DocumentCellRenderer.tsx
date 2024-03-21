@@ -8,7 +8,7 @@ import { ENDPOINT_DELIVERABLE_DOCUMENT } from 'src/services/DeliverablesService'
 export default function DocumentCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row, index } = props;
 
-  if (column.key === 'link') {
+  if (column.key === 'link' && row.isAllowedRead) {
     return (
       <CellRenderer
         index={index}

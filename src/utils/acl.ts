@@ -6,8 +6,11 @@ import {
   USER_GLOBAL_ROLES,
   isUserGlobalRole,
 } from 'src/types/GlobalRoles';
+import { Organization } from 'src/types/Organization';
 import { User, UserGlobalRole, UserGlobalRoles } from 'src/types/User';
 import { isArrayOfT } from 'src/types/utils';
+
+import { isManagerOrHigher, isMember } from './organization';
 
 // Acceptable permission are:
 // - view (page)
@@ -20,9 +23,14 @@ import { isArrayOfT } from 'src/types/utils';
 // Assign is (under the hood) an update, but we want to call it out specifically because there are some
 // roles that can assign to an entity but technically can't update it (assign global role is a good example)
 
-type PermissionConsole = 'VIEW_CONSOLE';
-type PermissionGlobalRole = 'READ_GLOBAL_ROLES' | 'ASSIGN_GLOBAL_ROLE_TO_USER' | 'ASSIGN_SOME_GLOBAL_ROLES';
 type PermissionCohort = 'CREATE_COHORTS' | 'READ_COHORTS' | 'UPDATE_COHORTS' | 'DELETE_COHORTS';
+type PermissionConsole = 'VIEW_CONSOLE';
+type PermissionDeliverable =
+  | 'CREATE_SUBMISSION'
+  | 'READ_DELIVERABLE'
+  | 'READ_SUBMISSION_DOCUMENT'
+  | 'UPDATE_SUBMISSION_STATUS';
+type PermissionGlobalRole = 'READ_GLOBAL_ROLES' | 'ASSIGN_GLOBAL_ROLE_TO_USER' | 'ASSIGN_SOME_GLOBAL_ROLES';
 type PermissionParticipant =
   | 'CREATE_PARTICIPANTS'
   | 'READ_PARTICIPANTS'
@@ -34,13 +42,14 @@ type PermissionParticipant =
 // the "project"" entity or creating a new "project accelerator data" entity
 type PermissionProjectAcceleratorData =
   | 'READ_PROJECT_ACCELERATOR_DATA'
-  | 'UPDATE_PROJECT_ACCELERATOR_DATA'
+  | 'UPDATE_PARTICIPANT_PROJECT'
   | 'ASSIGN_PROJECT_TO_PARTICIPANT';
 
 export type GlobalRolePermission =
-  | PermissionConsole
-  | PermissionGlobalRole
   | PermissionCohort
+  | PermissionConsole
+  | PermissionDeliverable
+  | PermissionGlobalRole
   | PermissionParticipant
   | PermissionProjectAcceleratorData;
 
@@ -52,7 +61,9 @@ const TFExpertPlus: UserGlobalRoles = [...AcceleratorAdminPlus, GLOBAL_ROLE_TF_E
 const ReadOnlyPlus: UserGlobalRoles = [...TFExpertPlus, GLOBAL_ROLE_READ_ONLY];
 
 const isSuperAdmin = (user: User): boolean => user.globalRoles.includes(GLOBAL_ROLE_SUPER_ADMIN);
-const isAcceleratorAdmin = (user: User): boolean => user.globalRoles.includes(GLOBAL_ROLE_ACCELERATOR_ADMIN);
+const isAcceleratorAdmin = (user: User): boolean =>
+  isSuperAdmin(user) || user.globalRoles.includes(GLOBAL_ROLE_ACCELERATOR_ADMIN);
+const isReadOnlyOrHigher = (user: User): boolean => ReadOnlyPlus.some((role) => user.globalRoles.includes(role));
 
 // This one is a bit more complicated because the permission is dependent on the role
 export const globalRolesAvailableToSet = (user: User): UserGlobalRole[] => {
@@ -82,6 +93,24 @@ const isAllowedAssignGlobalRoleToUser: PermissionCheckFn<AssignGlobalRoleToUserM
 const isAllowedAssignSomeGlobalRoles: PermissionCheckFn = (user: User): boolean =>
   globalRolesAvailableToSet(user).length > 0;
 
+type CreateSubmissionMetadata = { organization: Organization };
+const isAllowedCreateSubmission: PermissionCheckFn<CreateSubmissionMetadata> = (
+  user: User,
+  _: GlobalRolePermission,
+  metadata?: CreateSubmissionMetadata
+): boolean => {
+  return isAcceleratorAdmin(user) || isManagerOrHigher(metadata?.organization);
+};
+
+type ReadSubmissionMetadata = { organization: Organization };
+const isAllowedReadDeliverable: PermissionCheckFn<ReadSubmissionMetadata> = (
+  user: User,
+  _: GlobalRolePermission,
+  metadata?: ReadSubmissionMetadata
+): boolean => {
+  return isReadOnlyOrHigher(user) || isMember(metadata?.organization);
+};
+
 // List of permissions and roles that have those permissions
 const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   VIEW_CONSOLE: ReadOnlyPlus,
@@ -99,8 +128,12 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   DELETE_PARTICIPANTS: AcceleratorAdminPlus,
   ASSIGN_PARTICIPANT_TO_COHORT: TFExpertPlus,
   READ_PROJECT_ACCELERATOR_DATA: ReadOnlyPlus,
-  UPDATE_PROJECT_ACCELERATOR_DATA: TFExpertPlus,
+  UPDATE_PARTICIPANT_PROJECT: TFExpertPlus,
   ASSIGN_PROJECT_TO_PARTICIPANT: TFExpertPlus,
+  CREATE_SUBMISSION: isAllowedCreateSubmission,
+  READ_DELIVERABLE: isAllowedReadDeliverable,
+  READ_SUBMISSION_DOCUMENT: ReadOnlyPlus,
+  UPDATE_SUBMISSION_STATUS: TFExpertPlus,
 };
 
 export const isAllowed: PermissionCheckFn = (

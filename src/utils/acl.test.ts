@@ -24,7 +24,7 @@ describe('isAllowed', () => {
     expect(isAllowed(user, 'DELETE_PARTICIPANTS')).toBeTruthy();
     expect(isAllowed(user, 'ASSIGN_PARTICIPANT_TO_COHORT')).toBeTruthy();
     expect(isAllowed(user, 'READ_PROJECT_ACCELERATOR_DATA')).toBeTruthy();
-    expect(isAllowed(user, 'UPDATE_PROJECT_ACCELERATOR_DATA')).toBeTruthy();
+    expect(isAllowed(user, 'UPDATE_PARTICIPANT_PROJECT')).toBeTruthy();
     expect(isAllowed(user, 'ASSIGN_PROJECT_TO_PARTICIPANT')).toBeTruthy();
 
     // Role to set must be passed for this rule
@@ -56,7 +56,7 @@ describe('isAllowed', () => {
     expect(isAllowed(user, 'DELETE_PARTICIPANTS')).toBeTruthy();
     expect(isAllowed(user, 'ASSIGN_PARTICIPANT_TO_COHORT')).toBeTruthy();
     expect(isAllowed(user, 'READ_PROJECT_ACCELERATOR_DATA')).toBeTruthy();
-    expect(isAllowed(user, 'UPDATE_PROJECT_ACCELERATOR_DATA')).toBeTruthy();
+    expect(isAllowed(user, 'UPDATE_PARTICIPANT_PROJECT')).toBeTruthy();
     expect(isAllowed(user, 'ASSIGN_PROJECT_TO_PARTICIPANT')).toBeTruthy();
 
     // Role to set must be passed for this rule
@@ -82,7 +82,7 @@ describe('isAllowed', () => {
     expect(isAllowed(user, 'UPDATE_PARTICIPANTS')).toBeTruthy();
     expect(isAllowed(user, 'ASSIGN_PARTICIPANT_TO_COHORT')).toBeTruthy();
     expect(isAllowed(user, 'READ_PROJECT_ACCELERATOR_DATA')).toBeTruthy();
-    expect(isAllowed(user, 'UPDATE_PROJECT_ACCELERATOR_DATA')).toBeTruthy();
+    expect(isAllowed(user, 'UPDATE_PARTICIPANT_PROJECT')).toBeTruthy();
     expect(isAllowed(user, 'ASSIGN_PROJECT_TO_PARTICIPANT')).toBeTruthy();
 
     // Not allowed permissions
@@ -124,7 +124,7 @@ describe('isAllowed', () => {
     expect(isAllowed(user, 'UPDATE_PARTICIPANTS')).toBeFalsy();
     expect(isAllowed(user, 'DELETE_PARTICIPANTS')).toBeFalsy();
     expect(isAllowed(user, 'ASSIGN_PARTICIPANT_TO_COHORT')).toBeFalsy();
-    expect(isAllowed(user, 'UPDATE_PROJECT_ACCELERATOR_DATA')).toBeFalsy();
+    expect(isAllowed(user, 'UPDATE_PARTICIPANT_PROJECT')).toBeFalsy();
     expect(isAllowed(user, 'ASSIGN_PROJECT_TO_PARTICIPANT')).toBeFalsy();
 
     // Role to set must be passed for this rule
