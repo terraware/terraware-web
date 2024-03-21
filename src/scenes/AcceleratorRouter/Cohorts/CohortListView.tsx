@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { Grid, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Grid } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -18,18 +17,6 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 
 import CohortCellRenderer from './CohortCellRenderer';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  title: {
-    margin: 0,
-    fontSize: '24px',
-    fontWeight: 600,
-  },
-  right: {
-    float: 'right',
-    marginRight: theme.spacing(2),
-  },
-}));
 
 const columns = (activeLocale: string | null): TableColumnType[] =>
   activeLocale
@@ -51,7 +38,6 @@ const CohortListView = () => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
-  const classes = useStyles();
   const history = useHistory();
   const { isAllowed } = useUser();
   const canCreateCohorts = isAllowed('CREATE_COHORTS');
@@ -74,13 +60,13 @@ const CohortListView = () => {
       title={strings.COHORTS}
       rightComponent={
         canCreateCohorts && (
-          <Grid item xs={4} className={classes.right}>
+          <>
             {isMobile ? (
               <Button id='new-cohort' icon='plus' onClick={goToNewCohort} size='medium' />
             ) : (
               <Button id='new-cohort' label={strings.ADD_COHORT} icon='plus' onClick={goToNewCohort} size='medium' />
             )}
-          </Grid>
+          </>
         )
       }
       contentStyle={{ display: 'flex', flexGrow: 1, flexDirection: 'column' }}
