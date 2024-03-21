@@ -29,6 +29,10 @@ export const isManagerOrHigher = (organization: Organization | undefined) => {
   return organization?.role === 'Manager' || isAdmin(organization);
 };
 
+export const isMember = (organization: Organization | undefined) => {
+  return !!organization;
+};
+
 export const isTfContact = (role: OrganizationRole | undefined) => role === 'Terraformation Contact';
 
 export const isContributor = (roleHolder: Organization | OrganizationUser | undefined) => {

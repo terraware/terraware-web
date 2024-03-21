@@ -10,7 +10,7 @@ import { Organization } from 'src/types/Organization';
 import { User, UserGlobalRole, UserGlobalRoles } from 'src/types/User';
 import { isArrayOfT } from 'src/types/utils';
 
-import { isManagerOrHigher } from './organization';
+import { isManagerOrHigher, isMember } from './organization';
 
 // Acceptable permission are:
 // - view (page)
@@ -25,7 +25,11 @@ import { isManagerOrHigher } from './organization';
 
 type PermissionCohort = 'CREATE_COHORTS' | 'READ_COHORTS' | 'UPDATE_COHORTS' | 'DELETE_COHORTS';
 type PermissionConsole = 'VIEW_CONSOLE';
-type PermissionDeliverable = 'CREATE_SUBMISSION' | 'UPDATE_SUBMISSION_STATUS';
+type PermissionDeliverable =
+  | 'CREATE_SUBMISSION'
+  | 'READ_DELIVERABLE'
+  | 'READ_SUBMISSION_DOCUMENT'
+  | 'UPDATE_SUBMISSION_STATUS';
 type PermissionGlobalRole = 'READ_GLOBAL_ROLES' | 'ASSIGN_GLOBAL_ROLE_TO_USER' | 'ASSIGN_SOME_GLOBAL_ROLES';
 type PermissionParticipant =
   | 'CREATE_PARTICIPANTS'
@@ -59,6 +63,7 @@ const ReadOnlyPlus: UserGlobalRoles = [...TFExpertPlus, GLOBAL_ROLE_READ_ONLY];
 const isSuperAdmin = (user: User): boolean => user.globalRoles.includes(GLOBAL_ROLE_SUPER_ADMIN);
 const isAcceleratorAdmin = (user: User): boolean =>
   isSuperAdmin(user) || user.globalRoles.includes(GLOBAL_ROLE_ACCELERATOR_ADMIN);
+const isReadOnlyOrHigher = (user: User): boolean => ReadOnlyPlus.some((role) => user.globalRoles.includes(role));
 
 // This one is a bit more complicated because the permission is dependent on the role
 export const globalRolesAvailableToSet = (user: User): UserGlobalRole[] => {
@@ -97,6 +102,15 @@ const isAllowedCreateSubmission: PermissionCheckFn<CreateSubmissionMetadata> = (
   return isAcceleratorAdmin(user) || isManagerOrHigher(metadata?.organization);
 };
 
+type ReadSubmissionMetadata = { organization: Organization };
+const isAllowedReadDeliverable: PermissionCheckFn<ReadSubmissionMetadata> = (
+  user: User,
+  _: GlobalRolePermission,
+  metadata?: ReadSubmissionMetadata
+): boolean => {
+  return isReadOnlyOrHigher(user) || isMember(metadata?.organization);
+};
+
 // List of permissions and roles that have those permissions
 const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   VIEW_CONSOLE: ReadOnlyPlus,
@@ -117,6 +131,8 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   UPDATE_PARTICIPANT_PROJECT: TFExpertPlus,
   ASSIGN_PROJECT_TO_PARTICIPANT: TFExpertPlus,
   CREATE_SUBMISSION: isAllowedCreateSubmission,
+  READ_DELIVERABLE: isAllowedReadDeliverable,
+  READ_SUBMISSION_DOCUMENT: ReadOnlyPlus,
   UPDATE_SUBMISSION_STATUS: TFExpertPlus,
 };
 
