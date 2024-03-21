@@ -146,14 +146,7 @@
 <a name='L81'></a><a href='#L81'>81</a>
 <a name='L82'></a><a href='#L82'>82</a>
 <a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a>
-<a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a>
-<a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L84'></a><a href='#L84'>84</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -201,13 +194,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -249,12 +235,12 @@ import { useHistory } from 'react-router-dom';
 import { Box, Grid, useTheme } from '@mui/material';
 import { BusySpinner, Button } from '@terraware/web-components';
 &nbsp;
-import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 &nbsp;
+import PageWithModuleTimeline from '../PageWithModuleTimeline';
 import PhaseScores from './PhaseScores';
 import { useScoringData } from './ScoringContext';
 &nbsp;
@@ -291,44 +277,37 @@ const ScorecardView = <span class="cstat-no" title="statement not covered" ><spa
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Grid container spacing={theme.spacing(1)}&gt;
-      &lt;Grid item xs={10}&gt;
-        &lt;Page
-          title={`${projectName} ${strings.SCORES}`}
-          crumbs={crumbs}
-          hierarchicalCrumbs={false}
-          rightComponent={rightComponent}
-        &gt;
-          {status === 'pending' &amp;&amp; &lt;BusySpinner /&gt;}
-          &lt;Card style={{ width: '100%' }}&gt;
-            &lt;Box display='flex' flexDirection='row' flexGrow={0} margin={theme.spacing(3)} justifyContent='right'&gt;
-              &lt;Button
-                id='goToVotes'
-                label={strings.SEE_IC_VOTES}
-                priority='secondary'
-                onClick={goToVoting}
-                size='medium'
-                type='productive'
-              /&gt;
-            &lt;/Box&gt;
+    &lt;PageWithModuleTimeline
+      title={`${projectName} ${strings.SCORES}`}
+      crumbs={crumbs}
+      hierarchicalCrumbs={false}
+      rightComponent={rightComponent}
+    &gt;
+      {status === 'pending' &amp;&amp; &lt;BusySpinner /&gt;}
+      &lt;Card style={{ width: '100%' }}&gt;
+        &lt;Box display='flex' flexDirection='row' flexGrow={0} margin={theme.spacing(3)} justifyContent='right'&gt;
+          &lt;Button
+            id='goToVotes'
+            label={strings.SEE_IC_VOTES}
+            priority='secondary'
+            onClick={goToVoting}
+            size='medium'
+            type='productive'
+          /&gt;
+        &lt;/Box&gt;
 &nbsp;
-            {activeLocale &amp;&amp; (
-              &lt;Grid container spacing={theme.spacing(2)}&gt;
-                &lt;Grid item xs={6}&gt;
-                  &lt;PhaseScores phaseScores={phase0Scores} /&gt;
-                &lt;/Grid&gt;
-                &lt;Grid item xs={6}&gt;
-                  &lt;PhaseScores phaseScores={phase1Scores} /&gt;
-                &lt;/Grid&gt;
-              &lt;/Grid&gt;
-            )}
-          &lt;/Card&gt;
-        &lt;/Page&gt;
-      &lt;/Grid&gt;
-      &lt;Grid item xs={2}&gt;
-        Stubbed module timeline
-      &lt;/Grid&gt;
-    &lt;/Grid&gt;
+        {activeLocale &amp;&amp; (
+          &lt;Grid container spacing={theme.spacing(2)}&gt;
+            &lt;Grid item xs={6}&gt;
+              &lt;PhaseScores phaseScores={phase0Scores} /&gt;
+            &lt;/Grid&gt;
+            &lt;Grid item xs={6}&gt;
+              &lt;PhaseScores phaseScores={phase1Scores} /&gt;
+            &lt;/Grid&gt;
+          &lt;/Grid&gt;
+        )}
+      &lt;/Card&gt;
+    &lt;/PageWithModuleTimeline&gt;
   );
 };
 &nbsp;
@@ -340,7 +319,7 @@ export default ScorecardView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-21T18:36:17.629Z
+                at 2024-03-21T18:45:05.881Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

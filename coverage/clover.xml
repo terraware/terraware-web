@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1711046178202" clover="3.2.0">
-  <project timestamp="1711046178202" name="All files">
-    <metrics statements="18574" coveredstatements="693" conditionals="11659" coveredconditionals="218" methods="5798" coveredmethods="157" elements="36031" coveredelements="1068" complexity="0" loc="18574" ncloc="18574" packages="159" files="791" classes="791"/>
+<coverage generated="1711046706431" clover="3.2.0">
+  <project timestamp="1711046706432" name="All files">
+    <metrics statements="18577" coveredstatements="693" conditionals="11659" coveredconditionals="218" methods="5799" coveredmethods="157" elements="36035" coveredelements="1068" complexity="0" loc="18577" ncloc="18577" packages="159" files="792" classes="792"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -8951,7 +8951,7 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter">
-      <metrics statements="42" coveredstatements="0" conditionals="28" coveredconditionals="0" methods="16" coveredmethods="0"/>
+      <metrics statements="45" coveredstatements="0" conditionals="28" coveredconditionals="0" methods="17" coveredmethods="0"/>
       <file name="AcceleratorMain.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/AcceleratorMain.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="14" count="0" type="stmt"/>
@@ -8990,6 +8990,12 @@
         <line num="103" count="0" type="stmt"/>
         <line num="112" count="0" type="stmt"/>
         <line num="121" count="0" type="stmt"/>
+      </file>
+      <file name="PageWithModuleTimeline.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/PageWithModuleTimeline.tsx">
+        <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="7" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/index.tsx">
         <metrics statements="9" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="3" coveredmethods="0"/>
