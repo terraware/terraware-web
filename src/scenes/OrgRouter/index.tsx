@@ -8,7 +8,6 @@ import ErrorBoundary from 'src/ErrorBoundary';
 import ProjectsRouter from 'src/components/Projects/Router';
 import ReportsRouter from 'src/components/Reports/Router';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { selectHasObservationsResults } from 'src/redux/features/observations/observationsSelectors';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
@@ -85,7 +84,6 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   const { reloadUserPreferences: reloadPreferences } = useUser();
   const location = useStateLocation();
   const { selectedOrganization } = useOrganization();
-  const featureFlagAccelerator = isEnabled('Accelerator');
   const classes = useStyles();
 
   const species = useAppSelector(selectSpecies);
@@ -294,11 +292,9 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
               <ObservationsRouter />
             </Route>
 
-            {featureFlagAccelerator && (
-              <Route path={APP_PATHS.DELIVERABLES}>
-                <DeliverablesRouter />
-              </Route>
-            )}
+            <Route path={APP_PATHS.DELIVERABLES}>
+              <DeliverablesRouter />
+            </Route>
 
             {!isProduction && (
               <Route exact path={APP_PATHS.OPT_IN}>

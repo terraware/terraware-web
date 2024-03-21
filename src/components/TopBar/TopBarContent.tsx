@@ -67,7 +67,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   const { setShowNavBar } = props;
   const { isDesktop } = useDeviceInfo();
   const { user } = useUser();
-  const { isAcceleratorRoute, featureFlagAccelerator } = useAcceleratorConsole();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const onHandleLogout = () => {
     window.location.href = `/sso/logout`;
@@ -85,7 +85,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         {organizations && organizations.length > 0 && (
           <>
             <div className={classes.separator} />
-            {featureFlagAccelerator && user && <AcceleratorBreadcrumbs />}
+            {user && <AcceleratorBreadcrumbs />}
             {!isAcceleratorRoute && <OrganizationsDropdown />}
           </>
         )}
