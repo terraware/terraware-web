@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 /**
  * Returns <Month> <Year> (eg. July 2023) from yyyy-mm-dd format
  */
@@ -20,9 +18,6 @@ export const getLongDate = (date: string, locale: string | undefined | null): st
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat#using_locales
 export const getMediumDate = (date: string, locale?: string | null): string =>
   new Intl.DateTimeFormat(locale || 'en-US').format(new Date(date));
-
-// YYYY-MM-DD
-export const getISODate = (date: string) => moment(date).format('YYYY-MM-DD');
 
 export const getShortTime = (dateTime: string, locale: string | undefined | null, timeZone?: string): string =>
   new Intl.DateTimeFormat(locale || 'en-US', { timeStyle: 'short', timeZone: timeZone ?? 'UTC' })

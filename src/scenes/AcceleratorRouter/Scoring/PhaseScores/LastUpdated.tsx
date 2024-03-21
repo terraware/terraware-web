@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 
 import { Typography } from '@mui/material';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import strings from 'src/strings';
 import { PhaseScores, Score } from 'src/types/Score';
-import { getISODate } from 'src/utils/dateFormatter';
 
 interface LastUpdatedProps {
   phaseScores: PhaseScores;
@@ -26,7 +26,7 @@ const LastUpdated = ({ phaseScores }: LastUpdatedProps) => {
   }
 
   return (
-    <Typography fontSize='14px' fontWeight='400' lineHeight='20px'>{`${strings.LAST_UPDATED}: ${getISODate(
+    <Typography fontSize='14px' fontWeight='400' lineHeight='20px'>{`${strings.LAST_UPDATED}: ${getDateDisplayValue(
       modifiedTime
     )}`}</Typography>
   );
