@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Grid, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { TableColumnType } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -18,14 +17,6 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 
 import CohortCellRenderer from './CohortCellRenderer';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  title: {
-    margin: 0,
-    fontSize: '24px',
-    fontWeight: 600,
-  },
-}));
 
 const columns = (activeLocale: string | null): TableColumnType[] =>
   activeLocale
@@ -47,7 +38,6 @@ const CohortListView = () => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
-  const classes = useStyles();
   const history = useHistory();
   const { isAllowed } = useUser();
   const canCreateCohorts = isAllowed('CREATE_COHORTS');
