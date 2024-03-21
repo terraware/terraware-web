@@ -107,12 +107,19 @@ export default function ParticipantsView(): JSX.Element {
         {canDeleteParticipants && (
           <OptionsMenu
             onOptionItemClick={onOptionItemClick}
-            optionItems={[{ label: strings.REMOVE, value: 'remove-participant', type: 'destructive' }]}
+            optionItems={[
+              {
+                disabled: participant === undefined || participant.projects.length > 0,
+                label: strings.REMOVE,
+                type: 'destructive',
+                value: 'remove-participant',
+              },
+            ]}
           />
         )}
       </Box>
     );
-  }, [goToEdit, isAllowed, isMobile, onOptionItemClick]);
+  }, [goToEdit, isAllowed, isMobile, onOptionItemClick, participant]);
 
   const crumbs = useMemo<Crumb[]>(
     () =>
