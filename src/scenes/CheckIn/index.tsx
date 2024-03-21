@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 
 import { Box, Container, Grid, useTheme } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { BusySpinner } from '@terraware/web-components';
 
 import PageHeader from 'src/components/PageHeader';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
@@ -13,10 +14,16 @@ import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers/hooks';
 import { SeedBankService } from 'src/services';
+import { AccessionService } from 'src/services';
 import strings from 'src/strings';
+import { Accession } from 'src/types/Accession';
 import { SearchResponseElement } from 'src/types/Search';
+import { isContributor } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation from 'src/utils/useStateLocation';
+
+import CheckInAllConfirmationDialog from './CheckInAllConfirmationDialog';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainContainer: {
@@ -56,8 +63,12 @@ export default function CheckIn(): JSX.Element {
   const location = useStateLocation();
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElement[] | null>();
   const contentRef = useRef(null);
+  const snackbar = useSnackbar();
+  const [checkInAllConfirmationDialogOpen, setCheckInAllConfirmationDialogOpen] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const userCanEdit = !isContributor(selectedOrganization);
 
-  useEffect(() => {
+  const reloadData = useCallback(() => {
     const populatePendingAccessions = async () => {
       if (selectedOrganization) {
         setPendingAccessions(await SeedBankService.getPendingAccessions(selectedOrganization.id));
@@ -65,6 +76,44 @@ export default function CheckIn(): JSX.Element {
     };
     populatePendingAccessions();
   }, [selectedOrganization]);
+
+  useEffect(() => {
+    reloadData();
+  }, [selectedOrganization, reloadData]);
+
+  const checkInAccession = async (accession: Accession) => {
+    if (accession) {
+      try {
+        await AccessionService.checkInAccession(accession.id);
+        reloadData();
+        snackbar.toastSuccess(
+          strings.formatString(strings.ACCESSION_NUMBER_CHECKED_IN, accession.accessionNumber.toString())
+        );
+      } catch (e) {
+        // swallow error?
+        snackbar.toastError();
+      }
+    }
+  };
+
+  const checkInAllAccessions = async () => {
+    if (pendingAccessions) {
+      try {
+        setBusy(true);
+        await Promise.all(
+          (pendingAccessions || []).map((accession) => AccessionService.checkInAccession(Number(accession.id)))
+        );
+        setBusy(false);
+        reloadData();
+        setCheckInAllConfirmationDialogOpen(false);
+        snackbar.toastSuccess(strings.ALL_ACCESSIONS_CHECKED_IN);
+        history.push(APP_PATHS.ACCESSIONS);
+      } catch (e) {
+        setBusy(false);
+        snackbar.toastError();
+      }
+    }
+  };
 
   const transformPendingAccessions = () => {
     const accessionsById: Record<number, SearchResponseElement> = {};
@@ -101,6 +150,12 @@ export default function CheckIn(): JSX.Element {
 
   return (
     <TfMain>
+      <CheckInAllConfirmationDialog
+        open={checkInAllConfirmationDialogOpen}
+        onCancel={() => setCheckInAllConfirmationDialogOpen(false)}
+        onSubmit={checkInAllAccessions}
+      />
+      {busy && <BusySpinner withSkrim={true} />}
       <PageHeaderWrapper nextElement={contentRef.current}>
         <PageHeader
           title={strings.CHECKIN_ACCESSIONS}
@@ -109,6 +164,16 @@ export default function CheckIn(): JSX.Element {
           backUrl={APP_PATHS.ACCESSIONS}
           backName={strings.ACCESSIONS}
           snackbarPageKey={'seeds'}
+          rightComponent={
+            userCanEdit ? (
+              <Button
+                label={strings.CHECK_IN_ALL}
+                onClick={() => setCheckInAllConfirmationDialogOpen(true)}
+                size='medium'
+                id='newAccession'
+              />
+            ) : null
+          }
         />
       </PageHeaderWrapper>
       <Container ref={contentRef} maxWidth={false} className={classes.mainContainer}>
@@ -131,7 +196,7 @@ export default function CheckIn(): JSX.Element {
                       },
                     }}
                   >
-                    <Grid item xs={isMobile ? 16 : 3} marginBottom={isMobile ? theme.spacing(3) : 0}>
+                    <Grid item xs={isMobile ? 16 : 2} marginBottom={isMobile ? theme.spacing(3) : 0}>
                       {isMobile ? (
                         <Box display='flex' justifyContent='space-between'>
                           <TextField
@@ -148,6 +213,15 @@ export default function CheckIn(): JSX.Element {
                             priority='secondary'
                             type='productive'
                           />
+                          {userCanEdit && (
+                            <Button
+                              onClick={() => checkInAccession(result as Accession)}
+                              id='checkInCollection'
+                              label={strings.CHECK_IN}
+                              priority='secondary'
+                              type='productive'
+                            />
+                          )}
                         </Box>
                       ) : (
                         <TextField
@@ -177,7 +251,7 @@ export default function CheckIn(): JSX.Element {
                         display={true}
                       />
                     </Grid>
-                    <Grid item xs={isMobile ? 16 : 3} marginBottom={isMobile ? theme.spacing(3) : 0}>
+                    <Grid item xs={isMobile ? 16 : 2} marginBottom={isMobile ? theme.spacing(3) : 0}>
                       <TextField
                         label={strings.COLLECTED_DATE}
                         id='collected'
@@ -186,7 +260,7 @@ export default function CheckIn(): JSX.Element {
                         display={true}
                       />
                     </Grid>
-                    <Grid item xs={isMobile ? 16 : 3}>
+                    <Grid item xs={isMobile ? 16 : 2}>
                       <TextField
                         label={strings.RECEIVED_DATE}
                         id='received'
@@ -196,7 +270,7 @@ export default function CheckIn(): JSX.Element {
                       />
                     </Grid>
                     {!isMobile && (
-                      <Grid item xs={1}>
+                      <Grid item xs={4}>
                         <Box height='100%' display='flex' alignItems='center' justifyContent='flex-end'>
                           <Button
                             onClick={() => goToAccession(result.id! as string)}
@@ -205,6 +279,15 @@ export default function CheckIn(): JSX.Element {
                             priority='secondary'
                             type='productive'
                           />
+                          {userCanEdit && (
+                            <Button
+                              onClick={() => checkInAccession(result as Accession)}
+                              id='checkInCollection'
+                              label={strings.CHECK_IN}
+                              priority='secondary'
+                              type='productive'
+                            />
+                          )}
                         </Box>
                       </Grid>
                     )}
