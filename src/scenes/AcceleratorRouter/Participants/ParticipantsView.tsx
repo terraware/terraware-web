@@ -10,7 +10,7 @@ import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
-import useNavigateToParticipants from 'src/hooks/navigation/useNavigateToParticipants';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipants } from 'src/hooks/useParticipants';
 import { useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
@@ -34,7 +34,7 @@ export default function ParticipantsView(): JSX.Element {
   const pathParams = useParams<{ participantId: string }>();
   const participantId = Number(pathParams.participantId);
   const { isBusy, notFound, selectedParticipant: participant } = useParticipants(participantId);
-  const goToParticipantsList = useNavigateToParticipants();
+  const { goToParticipantsList } = useNavigateTo();
 
   const goToEdit = useCallback(() => {
     history.push(APP_PATHS.ACCELERATOR_PARTICIPANTS_EDIT.replace(':participantId', `${participantId}`));

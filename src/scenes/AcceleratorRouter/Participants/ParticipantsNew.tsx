@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import Page from 'src/components/Page';
-import useNavigateToParticipants from 'src/hooks/navigation/useNavigateToParticipants';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { requestCreateParticipant } from 'src/redux/features/participants/participantsAsyncThunks';
 import { selectParticipantCreateRequest } from 'src/redux/features/participants/participantsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -18,7 +18,7 @@ export default function ParticipantsNew(): JSX.Element {
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectParticipantCreateRequest(requestId));
 
-  const goToParticipantsList = useNavigateToParticipants();
+  const { goToParticipantsList } = useNavigateTo();
 
   const onSave = useCallback(
     (createRequest: ParticipantCreateRequest) => {

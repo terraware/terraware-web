@@ -5,7 +5,7 @@ import { BusySpinner, Button } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
-import useParticipantProjectsNav from 'src/hooks/navigation/useParticipantProjectsNav';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import strings from 'src/strings';
 
 import { useParticipantProjectData } from './ParticipantProjectContext';
@@ -13,7 +13,7 @@ import { useParticipantProjectData } from './ParticipantProjectContext';
 const SingleView = () => {
   const theme = useTheme();
   const { crumbs, projectId, project, status } = useParticipantProjectData();
-  const { goToParticipantProjectEdit } = useParticipantProjectsNav(projectId);
+  const { goToParticipantProjectEdit } = useNavigateTo();
 
   const rightComponent = useMemo(
     () => (
@@ -23,13 +23,13 @@ const SingleView = () => {
           icon='iconEdit'
           label={strings.EDIT_PROJECT}
           priority='primary'
-          onClick={goToParticipantProjectEdit}
+          onClick={() => goToParticipantProjectEdit(projectId)}
           size='medium'
           type='productive'
         />
       </Box>
     ),
-    [goToParticipantProjectEdit, theme]
+    [goToParticipantProjectEdit, projectId, theme]
   );
 
   return (
