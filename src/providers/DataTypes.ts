@@ -9,7 +9,7 @@ export type PreferencesType = { [key: string]: unknown };
 
 export type ProvidedUserData = {
   bootstrapped: boolean;
-  isAllowed: (permission: GlobalRolePermission) => boolean;
+  isAllowed: (permission: GlobalRolePermission, metadata?: unknown) => boolean;
   reloadUser: () => void;
   reloadUserPreferences: () => void;
   updateUserPreferences: (preferences: PreferencesType) => Promise<boolean>;
