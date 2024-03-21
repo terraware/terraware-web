@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1711062833267" clover="3.2.0">
-  <project timestamp="1711062833267" name="All files">
-    <metrics statements="18626" coveredstatements="698" conditionals="11691" coveredconditionals="220" methods="5817" coveredmethods="157" elements="36134" coveredelements="1075" complexity="0" loc="18626" ncloc="18626" packages="159" files="793" classes="793"/>
+<coverage generated="1711063508222" clover="3.2.0">
+  <project timestamp="1711063508222" name="All files">
+    <metrics statements="18638" coveredstatements="698" conditionals="11693" coveredconditionals="220" methods="5821" coveredmethods="157" elements="36152" coveredelements="1075" complexity="0" loc="18638" ncloc="18638" packages="159" files="794" classes="794"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -9383,7 +9383,14 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Participants">
-      <metrics statements="260" coveredstatements="0" conditionals="163" coveredconditionals="0" methods="96" coveredmethods="0"/>
+      <metrics statements="270" coveredstatements="0" conditionals="165" coveredconditionals="0" methods="99" coveredmethods="0"/>
+      <file name="DownloadParticipants.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Participants/DownloadParticipants.tsx">
+        <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+      </file>
       <file name="OrgProjectsSectionEdit.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Participants/OrgProjectsSectionEdit.tsx">
         <metrics statements="25" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="11" coveredmethods="0"/>
         <line num="23" count="0" type="stmt"/>
@@ -9525,60 +9532,66 @@
         <line num="63" count="0" type="stmt"/>
       </file>
       <file name="ParticipantsList.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Participants/ParticipantsList.tsx">
-        <metrics statements="53" coveredstatements="0" conditionals="42" coveredconditionals="0" methods="18" coveredmethods="0"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="29" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="49" count="0" type="stmt"/>
+        <metrics statements="59" coveredstatements="0" conditionals="44" coveredconditionals="0" methods="19" coveredmethods="0"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="30" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="50" count="0" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
         <line num="57" count="0" type="stmt"/>
         <line num="58" count="0" type="stmt"/>
         <line num="59" count="0" type="stmt"/>
         <line num="60" count="0" type="stmt"/>
         <line num="61" count="0" type="stmt"/>
         <line num="62" count="0" type="stmt"/>
-        <line num="64" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
         <line num="65" count="0" type="stmt"/>
         <line num="66" count="0" type="stmt"/>
         <line num="67" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
         <line num="70" count="0" type="stmt"/>
-        <line num="71" count="0" type="cond" truecount="0" falsecount="3"/>
-        <line num="75" count="0" type="stmt"/>
-        <line num="76" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="77" count="0" type="stmt"/>
-        <line num="79" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="80" count="0" type="stmt"/>
-        <line num="82" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="75" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="80" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="81" count="0" type="stmt"/>
+        <line num="83" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="84" count="0" type="stmt"/>
-        <line num="91" count="0" type="stmt"/>
-        <line num="93" count="0" type="stmt"/>
-        <line num="94" count="0" type="stmt"/>
+        <line num="86" count="0" type="stmt"/>
+        <line num="88" count="0" type="stmt"/>
         <line num="95" count="0" type="stmt"/>
+        <line num="97" count="0" type="stmt"/>
+        <line num="98" count="0" type="stmt"/>
+        <line num="99" count="0" type="stmt"/>
         <line num="100" count="0" type="stmt"/>
         <line num="101" count="0" type="stmt"/>
-        <line num="104" count="0" type="stmt"/>
-        <line num="106" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="108" count="0" type="stmt"/>
-        <line num="109" count="0" type="stmt"/>
-        <line num="116" count="0" type="stmt"/>
-        <line num="118" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="123" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="106" count="0" type="stmt"/>
+        <line num="107" count="0" type="stmt"/>
+        <line num="110" count="0" type="stmt"/>
+        <line num="112" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="114" count="0" type="stmt"/>
+        <line num="115" count="0" type="stmt"/>
+        <line num="122" count="0" type="stmt"/>
         <line num="124" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="125" count="0" type="stmt"/>
+        <line num="129" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="130" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="139" count="0" type="stmt"/>
-        <line num="140" count="0" type="stmt"/>
-        <line num="141" count="0" type="stmt"/>
-        <line num="143" count="0" type="cond" truecount="0" falsecount="7"/>
-        <line num="144" count="0" type="stmt"/>
+        <line num="131" count="0" type="stmt"/>
+        <line num="136" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="145" count="0" type="stmt"/>
+        <line num="146" count="0" type="stmt"/>
         <line num="147" count="0" type="stmt"/>
-        <line num="163" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="164" count="0" type="stmt"/>
-        <line num="174" count="0" type="stmt"/>
-        <line num="200" count="0" type="stmt"/>
-        <line num="201" count="0" type="stmt"/>
-        <line num="202" count="0" type="stmt"/>
-        <line num="204" count="0" type="stmt"/>
+        <line num="149" count="0" type="cond" truecount="0" falsecount="7"/>
+        <line num="150" count="0" type="stmt"/>
+        <line num="153" count="0" type="stmt"/>
+        <line num="169" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="170" count="0" type="stmt"/>
+        <line num="180" count="0" type="stmt"/>
+        <line num="191" count="0" type="stmt"/>
+        <line num="214" count="0" type="stmt"/>
+        <line num="215" count="0" type="stmt"/>
+        <line num="216" count="0" type="stmt"/>
+        <line num="218" count="0" type="stmt"/>
       </file>
       <file name="ParticipantsNew.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Participants/ParticipantsNew.tsx">
         <metrics statements="17" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="4" coveredmethods="0"/>
@@ -18829,7 +18842,7 @@
       </file>
     </package>
     <package name="src.services">
-      <metrics statements="1363" coveredstatements="340" conditionals="481" coveredconditionals="83" methods="385" coveredmethods="68"/>
+      <metrics statements="1365" coveredstatements="340" conditionals="481" coveredconditionals="83" methods="386" coveredmethods="68"/>
       <file name="AcceleratorService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/AcceleratorService.ts">
         <metrics statements="5" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
@@ -19676,26 +19689,28 @@
         <line num="58" count="0" type="stmt"/>
       </file>
       <file name="ParticipantsService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/ParticipantsService.ts">
-        <metrics statements="19" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="6" coveredmethods="0"/>
+        <metrics statements="21" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="18" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
-        <line num="53" count="0" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
-        <line num="68" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="69" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="75" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="76" count="0" type="stmt"/>
-        <line num="127" count="0" type="stmt"/>
-        <line num="128" count="0" type="stmt"/>
-        <line num="129" count="0" type="stmt"/>
-        <line num="130" count="0" type="stmt"/>
-        <line num="131" count="0" type="stmt"/>
+        <line num="83" count="0" type="stmt"/>
+        <line num="134" count="0" type="stmt"/>
+        <line num="135" count="0" type="stmt"/>
+        <line num="136" count="0" type="stmt"/>
+        <line num="137" count="0" type="stmt"/>
         <line num="138" count="0" type="stmt"/>
-        <line num="144" count="0" type="stmt"/>
+        <line num="145" count="0" type="stmt"/>
+        <line num="151" count="0" type="stmt"/>
       </file>
       <file name="PhotoService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/PhotoService.ts">
         <metrics statements="17" coveredstatements="3" conditionals="4" coveredconditionals="0" methods="4" coveredmethods="0"/>
