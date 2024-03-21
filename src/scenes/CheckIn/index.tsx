@@ -174,7 +174,7 @@ export default function CheckIn(): JSX.Element {
                 size='medium'
                 id='newAccession'
               />
-            ) : ( null )
+            ) : null
           }
         />
       </PageHeaderWrapper>
