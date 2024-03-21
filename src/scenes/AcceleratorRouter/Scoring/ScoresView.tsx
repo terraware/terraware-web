@@ -4,12 +4,12 @@ import { useHistory } from 'react-router-dom';
 import { Box, Grid, useTheme } from '@mui/material';
 import { BusySpinner, Button } from '@terraware/web-components';
 
-import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 
+import PageWithModuleTimeline from '../PageWithModuleTimeline';
 import PhaseScores from './PhaseScores';
 import { useScoringData } from './ScoringContext';
 
@@ -46,44 +46,37 @@ const ScorecardView = () => {
   );
 
   return (
-    <Grid container spacing={theme.spacing(1)}>
-      <Grid item xs={10}>
-        <Page
-          title={`${projectName} ${strings.SCORES}`}
-          crumbs={crumbs}
-          hierarchicalCrumbs={false}
-          rightComponent={rightComponent}
-        >
-          {status === 'pending' && <BusySpinner />}
-          <Card style={{ width: '100%' }}>
-            <Box display='flex' flexDirection='row' flexGrow={0} margin={theme.spacing(3)} justifyContent='right'>
-              <Button
-                id='goToVotes'
-                label={strings.SEE_IC_VOTES}
-                priority='secondary'
-                onClick={goToVoting}
-                size='medium'
-                type='productive'
-              />
-            </Box>
+    <PageWithModuleTimeline
+      title={`${projectName} ${strings.SCORES}`}
+      crumbs={crumbs}
+      hierarchicalCrumbs={false}
+      rightComponent={rightComponent}
+    >
+      {status === 'pending' && <BusySpinner />}
+      <Card style={{ width: '100%' }}>
+        <Box display='flex' flexDirection='row' flexGrow={0} margin={theme.spacing(3)} justifyContent='right'>
+          <Button
+            id='goToVotes'
+            label={strings.SEE_IC_VOTES}
+            priority='secondary'
+            onClick={goToVoting}
+            size='medium'
+            type='productive'
+          />
+        </Box>
 
-            {activeLocale && (
-              <Grid container spacing={theme.spacing(2)}>
-                <Grid item xs={6}>
-                  <PhaseScores phaseScores={phase0Scores} />
-                </Grid>
-                <Grid item xs={6}>
-                  <PhaseScores phaseScores={phase1Scores} />
-                </Grid>
-              </Grid>
-            )}
-          </Card>
-        </Page>
-      </Grid>
-      <Grid item xs={2}>
-        Stubbed module timeline
-      </Grid>
-    </Grid>
+        {activeLocale && (
+          <Grid container spacing={theme.spacing(2)}>
+            <Grid item xs={6}>
+              <PhaseScores phaseScores={phase0Scores} />
+            </Grid>
+            <Grid item xs={6}>
+              <PhaseScores phaseScores={phase1Scores} />
+            </Grid>
+          </Grid>
+        )}
+      </Card>
+    </PageWithModuleTimeline>
   );
 };
 
