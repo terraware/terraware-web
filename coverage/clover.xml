@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1711056633789" clover="3.2.0">
-  <project timestamp="1711056633789" name="All files">
-    <metrics statements="18610" coveredstatements="698" conditionals="11684" coveredconditionals="220" methods="5809" coveredmethods="157" elements="36103" coveredelements="1075" complexity="0" loc="18610" ncloc="18610" packages="159" files="793" classes="793"/>
+<coverage generated="1711056861252" clover="3.2.0">
+  <project timestamp="1711056861253" name="All files">
+    <metrics statements="18615" coveredstatements="698" conditionals="11686" coveredconditionals="220" methods="5812" coveredmethods="157" elements="36113" coveredelements="1075" complexity="0" loc="18615" ncloc="18615" packages="159" files="793" classes="793"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -10105,27 +10105,28 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Voting">
-      <metrics statements="131" coveredstatements="0" conditionals="67" coveredconditionals="0" methods="38" coveredmethods="0"/>
+      <metrics statements="136" coveredstatements="0" conditionals="69" coveredconditionals="0" methods="41" coveredmethods="0"/>
       <file name="UserVote.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Voting/UserVote.tsx">
-        <metrics statements="18" coveredstatements="0" conditionals="11" coveredconditionals="0" methods="7" coveredmethods="0"/>
+        <metrics statements="19" coveredstatements="0" conditionals="11" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="77" count="0" type="stmt"/>
-        <line num="78" count="0" type="stmt"/>
-        <line num="79" count="0" type="stmt"/>
-        <line num="81" count="0" type="stmt"/>
-        <line num="82" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
         <line num="83" count="0" type="stmt"/>
-        <line num="86" count="0" type="stmt"/>
-        <line num="94" count="0" type="stmt"/>
-        <line num="101" count="0" type="stmt"/>
-        <line num="116" count="0" type="stmt"/>
-        <line num="137" count="0" type="stmt"/>
-        <line num="138" count="0" type="stmt"/>
-        <line num="140" count="0" type="stmt"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="85" count="0" type="stmt"/>
+        <line num="87" count="0" type="stmt"/>
+        <line num="88" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="92" count="0" type="stmt"/>
+        <line num="100" count="0" type="stmt"/>
+        <line num="107" count="0" type="stmt"/>
+        <line num="122" count="0" type="stmt"/>
+        <line num="143" count="0" type="stmt"/>
+        <line num="144" count="0" type="stmt"/>
+        <line num="146" count="0" type="stmt"/>
       </file>
       <file name="VoteBadge.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Voting/VoteBadge.tsx">
         <metrics statements="14" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="2" coveredmethods="0"/>
@@ -10157,8 +10158,7 @@
         <line num="18" count="0" type="stmt"/>
       </file>
       <file name="VotingEdit.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Voting/VotingEdit.tsx">
-        <metrics statements="41" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="13" coveredmethods="0"/>
-        <line num="21" count="0" type="stmt"/>
+        <metrics statements="45" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="16" coveredmethods="0"/>
         <line num="22" count="0" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
@@ -10166,39 +10166,44 @@
         <line num="26" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="42" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="43" count="0" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="47" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="48" count="0" type="stmt"/>
-        <line num="50" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="43" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="48" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="54" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="57" count="0" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
-        <line num="62" count="0" type="stmt"/>
-        <line num="63" count="0" type="stmt"/>
         <line num="64" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
         <line num="69" count="0" type="stmt"/>
-        <line num="73" count="0" type="stmt"/>
-        <line num="74" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="75" count="0" type="stmt"/>
-        <line num="76" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="77" count="0" type="stmt"/>
-        <line num="81" count="0" type="stmt"/>
-        <line num="82" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="83" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="76" count="0" type="stmt"/>
+        <line num="80" count="0" type="stmt"/>
+        <line num="81" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="83" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="84" count="0" type="stmt"/>
-        <line num="93" count="0" type="stmt"/>
-        <line num="111" count="0" type="stmt"/>
-        <line num="125" count="0" type="stmt"/>
-        <line num="126" count="0" type="stmt"/>
+        <line num="88" count="0" type="stmt"/>
+        <line num="89" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="90" count="0" type="stmt"/>
+        <line num="91" count="0" type="stmt"/>
+        <line num="100" count="0" type="stmt"/>
+        <line num="106" count="0" type="stmt"/>
+        <line num="124" count="0" type="stmt"/>
+        <line num="138" count="0" type="stmt"/>
+        <line num="139" count="0" type="stmt"/>
       </file>
       <file name="VotingProvider.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Voting/VotingProvider.tsx">
         <metrics statements="28" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="7" coveredmethods="0"/>
