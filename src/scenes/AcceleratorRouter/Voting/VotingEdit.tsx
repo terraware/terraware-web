@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Box, useTheme } from '@mui/material';
@@ -9,7 +9,7 @@ import { APP_PATHS } from 'src/constants';
 import { requestProjectVotesUpdate } from 'src/redux/features/votes/votesAsyncThunks';
 import { selectProjectVotesEditRequest } from 'src/redux/features/votes/votesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { PhaseVotes, UpsertVoteSelection, VoteOption, VoteSelection } from 'src/types/Votes';
+import { UpsertVoteSelection, VoteOption, VoteSelection } from 'src/types/Votes';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
