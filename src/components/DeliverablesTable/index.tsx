@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { TableColumnType } from '@terraware/web-components';
 
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
+import { useParticipants } from 'src/hooks/useParticipants';
 import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
@@ -11,6 +12,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ListDeliverablesRequestParams } from 'src/services/DeliverablesService';
 import strings from 'src/strings';
 import { DeliverableCategories, DeliverableStatuses, ListDeliverablesElement } from 'src/types/Deliverables';
+import { ParticipantProject } from 'src/types/Participant';
 import { Project } from 'src/types/Project';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { SearchAndSortFn } from 'src/utils/searchAndSort';
@@ -21,9 +23,10 @@ import DeliverableCellRenderer from './DeliverableCellRenderer';
 interface DeliverablesTableProps {
   columns: (activeLocale: string | null) => TableColumnType[];
   extraTableFilters?: SearchNodePayload[];
+  filterModifiers?: (filters: FilterConfig[]) => FilterConfig[];
   isAcceleratorRoute?: boolean;
   organizationId: number;
-  filterModifiers?: (filters: FilterConfig[]) => FilterConfig[];
+  participantId?: number;
   searchAndSort?: SearchAndSortFn<ListDeliverablesElement>;
   tableId: string;
 }
@@ -40,6 +43,7 @@ const DeliverablesTable = ({
   filterModifiers,
   isAcceleratorRoute,
   organizationId,
+  participantId,
   searchAndSort,
   tableId,
 }: DeliverablesTableProps) => {
@@ -48,12 +52,22 @@ const DeliverablesTable = ({
   const { isAllowed } = useUser();
   const { selectedOrganization } = useOrganization();
   const { availableProjects: projects, getProjectName } = useProjects();
+  const { selectedParticipant } = useParticipants(participantId);
 
   const [deliverables, setDeliverables] = useState<ListDeliverablesElement[]>([]);
   const [deliverablesSearchRequestId, setDeliverablesSearchRequestId] = useState('');
   const deliverablesSearchRequest = useAppSelector(selectDeliverablesSearchRequest(deliverablesSearchRequestId));
 
   const isAllowedReadDeliverable = isAllowed('READ_DELIVERABLE', selectedOrganization);
+
+  const getFilterProjectName = useCallback(
+    (projectId: number | string) => {
+      return participantId
+        ? selectedParticipant?.projects?.find((p) => p.id === Number(projectId))?.name || ''
+        : getProjectName(Number(projectId));
+    },
+    [getProjectName, participantId, selectedParticipant?.projects]
+  );
 
   const featuredFilters: FilterConfig[] = useMemo(() => {
     const filters: FilterConfig[] = [
@@ -78,7 +92,9 @@ const DeliverablesTable = ({
     if (isAcceleratorRoute) {
       filters.unshift({
         field: 'project_id',
-        options: (projects || [])?.map((project: Project) => `${project.id}`),
+        options: (selectedParticipant?.projects || projects || [])?.map(
+          (project: Project | ParticipantProject) => `${project.id}`
+        ),
         searchNodeCreator: (values: (number | string | null)[]) => ({
           field: 'projectId',
           operation: 'field',
@@ -86,17 +102,17 @@ const DeliverablesTable = ({
           values: values.map((value: number | string | null): string | null => (value === null ? value : `${value}`)),
         }),
         label: strings.PROJECTS,
-        renderOption: (id: string | number) => getProjectName(Number(id)),
+        renderOption: (id: string | number) => getFilterProjectName(id),
         pillValueRenderer: (values: (string | number | null)[]) =>
           values
-            .map((value: string | number | null) => (value === null ? value : getProjectName(Number(value))))
+            .map((value: string | number | null) => (value === null ? value : getFilterProjectName(value)))
             .filter((value) => value)
             .join(', '),
       });
     }
 
     return activeLocale ? filters : [];
-  }, [activeLocale, getProjectName, isAcceleratorRoute, projects]);
+  }, [activeLocale, getFilterProjectName, isAcceleratorRoute, projects, selectedParticipant?.projects]);
 
   const dispatchSearchRequest = useCallback(
     (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => {

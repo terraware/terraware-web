@@ -112,6 +112,7 @@ const DeliverablesList = () => {
         extraTableFilters={extraTableFilters}
         isAcceleratorRoute={true}
         organizationId={-1}
+        participantId={participantFilter.participantId}
         tableId={'acceleratorDeliverablesTable'}
       />
     </AcceleratorMain>
