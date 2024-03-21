@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -120,7 +120,13 @@
 <a name='L55'></a><a href='#L55'>55</a>
 <a name='L56'></a><a href='#L56'>56</a>
 <a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -134,22 +140,28 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -189,6 +201,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 export type Response = {
   availableParticipants?: Participant[];
   isBusy: boolean;
+  notFound: boolean;
   selectedParticipant?: Participant;
 };
 &nbsp;
@@ -199,6 +212,7 @@ export const useParticipants = <span class="cstat-no" title="statement not cover
   const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const participantListRequest = <span class="cstat-no" title="statement not covered" >useAppSelector(selectParticipantListRequest(requestId));</span>
 &nbsp;
+  const [notFound, setNotFound] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [availableParticipants, setAvailableParticipants] = <span class="cstat-no" title="statement not covered" >useState&lt;Participant[] | undefined&gt;();</span>
   const [selectedParticipant, setSelectedParticipant] = <span class="cstat-no" title="statement not covered" >useState&lt;Participant&gt;();</span>
 &nbsp;
@@ -206,7 +220,11 @@ export const useParticipants = <span class="cstat-no" title="statement not cover
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (availableParticipants &amp;&amp; participantId) {</span>
-<span class="cstat-no" title="statement not covered" >      setSelectedParticipant(availableParticipants.find(<span class="fstat-no" title="function not covered" >(p</span>articipant) =&gt; <span class="cstat-no" title="statement not covered" >participant.id === participantId)</span>);</span>
+      const foundData = <span class="cstat-no" title="statement not covered" >availableParticipants.find(<span class="fstat-no" title="function not covered" >(p</span>articipant) =&gt; <span class="cstat-no" title="statement not covered" >participant.id === participantId)</span>;</span>
+<span class="cstat-no" title="statement not covered" >      setSelectedParticipant(foundData);</span>
+<span class="cstat-no" title="statement not covered" >      if (!foundData) {</span>
+<span class="cstat-no" title="statement not covered" >        setNotFound(true);</span>
+      }
     } else {
 <span class="cstat-no" title="statement not covered" >      setSelectedParticipant(undefined);</span>
     }
@@ -230,8 +248,8 @@ export const useParticipants = <span class="cstat-no" title="statement not cover
   }, [participantListRequest, snackbar]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{ availableParticipants, selectedParticipant, isBusy })</span>,
-    [availableParticipants, selectedParticipant, isBusy]
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{ availableParticipants, isBusy, notFound, selectedParticipant })</span>,
+    [availableParticipants, isBusy, notFound, selectedParticipant]
   );
 };
 &nbsp;</pre></td></tr></table></pre>
@@ -241,7 +259,7 @@ export const useParticipants = <span class="cstat-no" title="statement not cover
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-21T15:39:11.946Z
+                at 2024-03-21T15:51:45.044Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
