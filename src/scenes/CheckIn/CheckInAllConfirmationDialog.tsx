@@ -7,7 +7,6 @@ import strings from 'src/strings';
 
 export type CheckInAllConfirmationDialogProps = {
   open: boolean;
-  onClose: () => void;
   onCancel: () => void;
   onSubmit: () => void;
 };
@@ -15,7 +14,6 @@ export type CheckInAllConfirmationDialogProps = {
 export default function CheckInAllConfirmationDialog({
   open,
   onCancel,
-  onClose,
   onSubmit,
 }: CheckInAllConfirmationDialogProps): JSX.Element {
   return (
@@ -23,7 +21,7 @@ export default function CheckInAllConfirmationDialog({
       open={open}
       title={strings.CHECK_IN_ALL}
       size='medium'
-      onClose={onClose}
+      onClose={onCancel}
       middleButtons={[
         <Button
           id='cancelCheckInAll'

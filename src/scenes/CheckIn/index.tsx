@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 
 import { Box, Container, Grid, useTheme } from '@mui/material';
@@ -65,7 +65,7 @@ export default function CheckIn(): JSX.Element {
   const contentRef = useRef(null);
   const snackbar = useSnackbar();
   const [checkInAllConfirmationDialogOpen, setCheckInAllConfirmationDialogOpen] = useState(false);
-  const [busyState, setBusyState] = useState(false);
+  const [busy, setBusy] = useState(false);
   const userCanEdit = !isContributor(selectedOrganization);
 
   const reloadData = useCallback(() => {
@@ -99,21 +99,22 @@ export default function CheckIn(): JSX.Element {
   const checkInAllAccessions = async () => {
     if (pendingAccessions) {
       try {
-        setBusyState(true);
+        setBusy(true);
         await Promise.all(
-          pendingAccessions?.map(async (accession) => {
-            await AccessionService.checkInAccession(Number(accession.id));
+          (pendingAccessions || []).map(async (accession) => {
+            AccessionService.checkInAccession(Number(accession.id));
           })
         );
-        setBusyState(false);
+        setBusy(false);
+        reloadData();
+        setCheckInAllConfirmationDialogOpen(false);
         snackbar.toastSuccess(strings.ALL_ACCESSIONS_CHECKED_IN);
         history.push(APP_PATHS.ACCESSIONS);
       } catch (e) {
+        setBusy(false);
         snackbar.toastError();
       }
     }
-    reloadData();
-    setCheckInAllConfirmationDialogOpen(false);
   };
 
   const transformPendingAccessions = () => {
@@ -153,11 +154,10 @@ export default function CheckIn(): JSX.Element {
     <TfMain>
       <CheckInAllConfirmationDialog
         open={checkInAllConfirmationDialogOpen}
-        onClose={() => setCheckInAllConfirmationDialogOpen(false)}
         onCancel={() => setCheckInAllConfirmationDialogOpen(false)}
         onSubmit={checkInAllAccessions}
       />
-      {busyState && <BusySpinner withSkrim={true} />}
+      {busy && <BusySpinner withSkrim={true} />}
       <PageHeaderWrapper nextElement={contentRef.current}>
         <PageHeader
           title={strings.CHECKIN_ACCESSIONS}
@@ -174,9 +174,7 @@ export default function CheckIn(): JSX.Element {
                 size='medium'
                 id='newAccession'
               />
-            ) : (
-              <></>
-            )
+            ) : ( null )
           }
         />
       </PageHeaderWrapper>
