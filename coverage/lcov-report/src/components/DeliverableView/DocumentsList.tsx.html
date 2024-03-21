@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
@@ -121,7 +121,13 @@
 <a name='L56'></a><a href='#L56'>56</a>
 <a name='L57'></a><a href='#L57'>57</a>
 <a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -135,25 +141,31 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -187,6 +199,7 @@ import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
 import { TableColumnType } from 'src/components/common/table/types';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useUser } from 'src/providers';
 import { SearchSortOrder } from 'src/types/Search';
 &nbsp;
 import DocumentCellRenderer from './DocumentCellRenderer';
@@ -198,10 +211,14 @@ interface DocumentsListProps extends ViewProps {
 &nbsp;
 const DocumentsList = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>rops: DocumentsListProps): JSX.Element =&gt; {</span>
   const { isAcceleratorRoute } = <span class="cstat-no" title="statement not covered" >useAcceleratorConsole();</span>
+  const { isAllowed } = <span class="cstat-no" title="statement not covered" >useUser();</span>
+&nbsp;
   const [searchSortOrder, setSearchSortOrder] = <span class="cstat-no" title="statement not covered" >useState&lt;SearchSortOrder&gt;({</span>
     field: 'deliverableName',
     direction: 'Ascending',
   } as SearchSortOrder);
+&nbsp;
+  const isAllowedReadSubmissionDocument = <span class="cstat-no" title="statement not covered" >isAllowed('READ_SUBMISSION_DOCUMENT');</span>
 &nbsp;
   const onSortChange = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(o</span>rder: SortOrder, orderBy: string) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >    setSearchSortOrder({</span>
@@ -215,8 +232,9 @@ const DocumentsList = <span class="cstat-no" title="statement not covered" ><spa
         ...document,
         projectName: props.deliverable.projectName,
         deliverableId: props.deliverable.id,
+        isAllowedRead: isAllowedReadSubmissionDocument,
       })),
-    [props.deliverable]
+    [isAllowedReadSubmissionDocument, props.deliverable]
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
@@ -244,7 +262,7 @@ export default DocumentsList;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-21T18:45:05.881Z
+                at 2024-03-21T19:42:04.190Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
