@@ -65,7 +65,7 @@ export default function AccessionTests() {
     await page.getByRole('button', { name: 'Set Reminder' }).click();
     await page.waitForTimeout(1000); //Wait for modal to close
     await expect(page.getByRole('main')).toContainText('2034-01-31');
-    await page.locator('a').nth(2).click();
+    await page.locator('a').filter({ hasText: 'Add' }).click();
     await page.getByRole('spinbutton').click();
     await page.getByRole('spinbutton').fill('500');
     await page.getByRole('button', { name: 'Add Subset Weight And Count' }).click();
@@ -142,7 +142,7 @@ export default function AccessionTests() {
     await page.getByRole('tab', { name: 'By Nursery' }).click();
     await expect(page.locator('#row1-facility_name')).toContainText(/My New Nursery/);
     await page.getByRole('tab', { name: 'By Batch' }).click();
-    await expect(page.locator('#row1-batchNumber')).toContainText('2-1-001');
+    await expect(page.locator('#row1-batchNumber')).toContainText('2-2-001');
   });
 
   test('Withdraw to Outplant', async ({ page }, testInfo) => {
