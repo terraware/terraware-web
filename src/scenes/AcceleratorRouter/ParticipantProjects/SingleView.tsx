@@ -42,7 +42,7 @@ const SingleView = () => {
           rightComponent={rightComponent}
         >
           {status === 'pending' && <BusySpinner />}
-          <Card style={{ width: '100%' }} />
+          <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }} />
         </Page>
       </Grid>
       <Grid item xs={2}>
