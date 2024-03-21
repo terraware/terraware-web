@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { BusySpinner } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
+import useNavigateToParticipants from 'src/hooks/navigation/useNavigateToParticipants';
 import { useParticipants } from 'src/hooks/useParticipants';
 import { requestUpdateParticipant } from 'src/redux/features/participants/participantsAsyncThunks';
 import { selectParticipantUpdateRequest } from 'src/redux/features/participants/participantsSelectors';
@@ -13,7 +14,6 @@ import { ParticipantUpdateRequest } from 'src/types/Participant';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import ParticipantForm from './ParticipantForm';
-import useNavigateToParticipants from './useNavigateToParticipants';
 
 export default function ParticipantsNew(): JSX.Element {
   const snackbar = useSnackbar();

@@ -10,12 +10,11 @@ import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
+import useNavigateToParticipants from 'src/hooks/navigation/useNavigateToParticipants';
 import { useParticipants } from 'src/hooks/useParticipants';
 import { useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-
-import useNavigateToParticipants from './useNavigateToParticipants';
 
 type ProjectsByOrg = {
   organization_id: number;

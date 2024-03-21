@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import Page from 'src/components/Page';
+import useNavigateToParticipants from 'src/hooks/navigation/useNavigateToParticipants';
 import { requestCreateParticipant } from 'src/redux/features/participants/participantsAsyncThunks';
 import { selectParticipantCreateRequest } from 'src/redux/features/participants/participantsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -9,7 +10,6 @@ import { ParticipantCreateRequest } from 'src/types/Participant';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import ParticipantForm from './ParticipantForm';
-import useNavigateToParticipants from './useNavigateToParticipants';
 
 export default function ParticipantsNew(): JSX.Element {
   const snackbar = useSnackbar();
