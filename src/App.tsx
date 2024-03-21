@@ -66,7 +66,7 @@ function AppContent() {
   const { isDesktop, type } = useDeviceInfo();
   const classes = useStyles({ isDesktop });
   const { isAllowed } = useUser();
-  const { isAcceleratorRoute, featureFlagAccelerator } = useAcceleratorConsole();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const [showNavBar, setShowNavBar] = useState(true);
 
@@ -92,7 +92,7 @@ function AppContent() {
 
       <div className={classes.container}>
         <React.Suspense fallback={<BlockingSpinner />}>
-          {isAcceleratorRoute && featureFlagAccelerator && isAllowed('VIEW_CONSOLE') ? (
+          {isAcceleratorRoute && isAllowed('VIEW_CONSOLE') ? (
             <AcceleratorRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
           ) : (
             <TerrawareRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
