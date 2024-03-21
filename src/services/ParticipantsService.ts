@@ -29,6 +29,13 @@ const deleteOne = async (participantId: number): Promise<Response2<number>> => {
   };
 };
 
+/**
+ * Download csv of participants data.
+ */
+const download = async (search?: SearchNodePayload, sortOrder?: SearchSortOrder): Promise<string | null> => {
+  return 'Id,Participant,Projects Count\r1,TST_PART1,3\r2,random,1\r';
+};
+
 const mockParticipant: Participant = {
   id: 1,
   cohort_id: 1,
@@ -144,6 +151,7 @@ const update = async (participant: ParticipantUpdateRequest): Promise<Response2<
 const ParticipantsService = {
   create,
   deleteOne,
+  download,
   get,
   list,
   update,
