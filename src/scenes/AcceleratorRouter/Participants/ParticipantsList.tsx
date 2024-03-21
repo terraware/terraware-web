@@ -19,6 +19,7 @@ import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import DownloadParticipants from './DownloadParticipants';
 import ParticipantsCellRenderer from './ParticipantsCellRenderer';
 
 type ParticipantType = Omit<Participant, 'projects'> & {
@@ -61,6 +62,9 @@ export default function ParticipantList(): JSX.Element {
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
 
+  const [openDownload, setOpenDownload] = useState<boolean>(false);
+  const [lastSearch, setLastSearch] = useState<SearchNodePayload>();
+  const [lastSort, setLastSort] = useState<SearchSortOrder>();
   const [hasFilters, setHasFilters] = useState<boolean>(false);
   const [participants, setParticipants] = useState<ParticipantType[]>([]);
   const [requestId, setRequestId] = useState<string>('');
@@ -90,6 +94,8 @@ export default function ParticipantList(): JSX.Element {
 
   const dispatchSearchRequest = useCallback(
     (locale: string | null, search: SearchNodePayload, sortOrder: SearchSortOrder) => {
+      setLastSearch(search);
+      setLastSort(sortOrder);
       setHasFilters(search.children.length > 0);
       const request = dispatch(requestListParticipants({ locale, search, sortOrder }));
       setRequestId(request.requestId);
@@ -161,7 +167,7 @@ export default function ParticipantList(): JSX.Element {
             size='small'
             onOptionItemClick={(item: DropdownItem) => {
               if (item.value === 'export-participants') {
-                window.alert('Export WIP');
+                setOpenDownload(true);
               }
             }}
             optionItems={[{ label: strings.EXPORT, value: 'export-participants' }]}
@@ -180,6 +186,14 @@ export default function ParticipantList(): JSX.Element {
         {actionMenus}
       </Box>
       {participantsResult?.status === 'pending' && <BusySpinner />}
+      {openDownload && (
+        <DownloadParticipants
+          onClose={() => setOpenDownload(false)}
+          open={openDownload}
+          search={lastSearch}
+          sort={lastSort}
+        />
+      )}
       {isEmptyState && <EmptyState onClick={goToNewParticipant} />}
       {!isEmptyState && (
         <TableWithSearchFilters
