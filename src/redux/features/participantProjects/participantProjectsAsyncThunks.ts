@@ -8,7 +8,7 @@ export const requestGetParticipantProject = createAsyncThunk(
   'participantProjects/get-one',
   async (participantProjectId: number, { rejectWithValue }) => {
     const response: Response2<ParticipantProjectData> = await ParticipantProjectService.get(participantProjectId);
-
+    console.log(response);
     if (response && response.requestSucceeded) {
       return response.data?.project;
     }

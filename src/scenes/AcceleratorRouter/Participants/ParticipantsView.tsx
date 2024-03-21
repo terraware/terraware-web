@@ -159,7 +159,10 @@ export default function ParticipantsView(): JSX.Element {
                 <Box display='flex' flexDirection='row' flexWrap='wrap' marginTop={theme.spacing(1.5)}>
                   {data.projects.map((project, index) => (
                     <span key={index}>
-                      <Link fontSize='16px' to={APP_PATHS.ACCELERATOR_PROJECT.replace(':projectId', `${project.id}`)}>
+                      <Link
+                        fontSize='16px'
+                        to={APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${project.id}`)}
+                      >
                         {project.name}
                       </Link>
                       {index < data.projects.length - 1 ? ', ' : ''}&nbsp;

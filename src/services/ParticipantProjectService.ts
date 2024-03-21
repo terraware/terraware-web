@@ -32,6 +32,7 @@ const mockParticipantProject: ParticipantProject = {
   modifiedTime: '2024-04-01',
   name: 'Andromeda',
   numberOfNativeSpecies: 2433,
+  organizationName: 'Treemendo.us',
   perHectareEstimatedBudget: undefined,
   phase1Score: 5,
   pipeline: 'Accelerator Projects',
