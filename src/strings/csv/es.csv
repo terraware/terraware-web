@@ -67,6 +67,7 @@ ADD_PLANTING_SITE_SIMPLE_SITE,"Si su terreno de plantación tiene menos de una h
 ADD_PLANTING_SITE_TITLE,Antes de comenzar,
 ADD_PROJECT,Agregar proyecto,
 ADD_PROJECT_SUBTITLE,Organice sus datos por proyectos.,
+ADD_PROJECTS_BY_ORGANIZATION,Añadir proyecto(s) por organización,
 ADD_QUANTITY,Añadir Cantidad,
 ADD_SEED_BANK,Añadir Banco de Semillas,
 ADD_SEED_BANK_SUBTITLE,¿Cómo procesa y almacena sus semillas? Configure su banco de semillas para que pueda monitorear dónde guarda sus semillas.,
@@ -1661,6 +1662,8 @@ VIABILITY_TESTS,Pruebas de viabilidad,
 VIABILITY_TREATMENT,Tratamiento de viabilidad,
 VIEW,Ver,
 VIEW_ACCESSION,Ver accesión,
+VIEW_LESS,Ver menos,
+VIEW_MORE,Ver más,
 VIEW_SITES_ZONES_SUBZONES,"Ver Sitios, Zonas y Subzonas en el mapa.",
 VINE,Enredadera,A type of plant.
 VOTER,Votante: {0},Displays the name of a person voter.
