@@ -11,7 +11,7 @@ import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
 import { useParticipants } from 'src/hooks/useParticipants';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -28,6 +28,7 @@ export default function ParticipantsView(): JSX.Element {
   const history = useHistory();
   const theme = useTheme();
   const { activeLocale } = useLocalization();
+  const { isAllowed } = useUser();
   const { isMobile } = useDeviceInfo();
   const pathParams = useParams<{ participantId: string }>();
   const participantId = Number(pathParams.participantId);
@@ -84,23 +85,41 @@ export default function ParticipantsView(): JSX.Element {
   }, [activeLocale, participant?.projects]);
 
   const actionMenu = useMemo(() => {
+    const canUpdateParticipants = isAllowed('UPDATE_PARTICIPANTS');
+    const canDeleteParticipants = isAllowed('DELETE_PARTICIPANTS');
+
+    if (!canUpdateParticipants && !canDeleteParticipants) {
+      return null;
+    }
+
     return (
       <Box display='flex' justifyContent='right'>
-        <Button
-          id='edit-participant'
-          icon='iconEdit'
-          label={isMobile ? '' : strings.EDIT_PARTICIPANT}
-          onClick={goToEdit}
-          size='medium'
-          priority='primary'
-        />
-        <OptionsMenu
-          onOptionItemClick={onOptionItemClick}
-          optionItems={[{ label: strings.REMOVE, value: 'remove-participant', type: 'destructive' }]}
-        />
+        {canUpdateParticipants && (
+          <Button
+            id='edit-participant'
+            icon='iconEdit'
+            label={isMobile ? '' : strings.EDIT_PARTICIPANT}
+            onClick={goToEdit}
+            size='medium'
+            priority='primary'
+          />
+        )}
+        {canDeleteParticipants && (
+          <OptionsMenu
+            onOptionItemClick={onOptionItemClick}
+            optionItems={[
+              {
+                disabled: participant === undefined || participant.projects.length > 0,
+                label: strings.REMOVE,
+                type: 'destructive',
+                value: 'remove-participant',
+              },
+            ]}
+          />
+        )}
       </Box>
     );
-  }, [goToEdit, isMobile, onOptionItemClick]);
+  }, [goToEdit, isAllowed, isMobile, onOptionItemClick, participant]);
 
   const crumbs = useMemo<Crumb[]>(
     () =>

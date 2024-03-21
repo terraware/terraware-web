@@ -9,7 +9,7 @@ import Card from 'src/components/common/Card';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import { APP_PATHS } from 'src/constants';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { requestListParticipants } from 'src/redux/features/participants/participantsAsyncThunks';
 import { selectParticipantListRequest } from 'src/redux/features/participants/participantsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -56,6 +56,7 @@ export default function ParticipantList(): JSX.Element {
   const history = useHistory();
   const theme = useTheme();
   const { activeLocale } = useLocalization();
+  const { isAllowed } = useUser();
   const { isMobile } = useDeviceInfo();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
@@ -136,32 +137,39 @@ export default function ParticipantList(): JSX.Element {
   );
 
   const actionMenus = useMemo<ReactNode | null>(() => {
-    if (isEmptyState || !activeLocale) {
+    const canCreateParticipants = isAllowed('CREATE_PARTICIPANTS');
+    const canExportParticipants = isAllowed('EXPORT_PARTICIPANTS');
+
+    if (isEmptyState || !activeLocale || !(canCreateParticipants || canExportParticipants)) {
       return null;
     }
 
     return (
       <Box>
-        <Button
-          icon='plus'
-          id='new-participant'
-          onClick={goToNewParticipant}
-          priority='secondary'
-          label={isMobile ? '' : strings.ADD_PARTICIPANT}
-          size='small'
-        />
-        <OptionsMenu
-          size='small'
-          onOptionItemClick={(item: DropdownItem) => {
-            if (item.value === 'export-participants') {
-              window.alert('Export WIP');
-            }
-          }}
-          optionItems={[{ label: strings.EXPORT, value: 'export-participants' }]}
-        />
+        {canCreateParticipants && (
+          <Button
+            icon='plus'
+            id='new-participant'
+            onClick={goToNewParticipant}
+            priority='secondary'
+            label={isMobile ? '' : strings.ADD_PARTICIPANT}
+            size='small'
+          />
+        )}
+        {canExportParticipants && (
+          <OptionsMenu
+            size='small'
+            onOptionItemClick={(item: DropdownItem) => {
+              if (item.value === 'export-participants') {
+                window.alert('Export WIP');
+              }
+            }}
+            optionItems={[{ label: strings.EXPORT, value: 'export-participants' }]}
+          />
+        )}
       </Box>
     );
-  }, [activeLocale, goToNewParticipant, isEmptyState, isMobile]);
+  }, [activeLocale, goToNewParticipant, isAllowed, isEmptyState, isMobile]);
 
   return (
     <Card style={{ display: 'flex', flexDirection: 'column' }}>
@@ -191,6 +199,7 @@ export default function ParticipantList(): JSX.Element {
 
 const EmptyState = ({ onClick }: { onClick: () => void }): JSX.Element => {
   const theme = useTheme();
+  const { isAllowed } = useUser();
 
   return (
     <Box
@@ -212,9 +221,11 @@ const EmptyState = ({ onClick }: { onClick: () => void }): JSX.Element => {
       >
         {strings.PARTICIPANTS_EMPTY_STATE}
       </Typography>
-      <Box sx={{ margin: 'auto' }}>
-        <Button icon='plus' id='new-participant' label={strings.ADD_PARTICIPANT} onClick={onClick} size='medium' />
-      </Box>
+      {isAllowed('CREATE_PARTICIPANTS') && (
+        <Box sx={{ margin: 'auto' }}>
+          <Button icon='plus' id='new-participant' label={strings.ADD_PARTICIPANT} onClick={onClick} size='medium' />
+        </Box>
+      )}
     </Box>
   );
 };
