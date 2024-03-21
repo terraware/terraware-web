@@ -101,7 +101,7 @@ export default function CheckIn(): JSX.Element {
       try {
         setBusy(true);
         await Promise.all(
-          (pendingAccessions || []).map(async (accession) => {
+          (pendingAccessions || []).map((accession) => {
             AccessionService.checkInAccession(Number(accession.id));
           })
         );
