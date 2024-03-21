@@ -40,18 +40,9 @@ const ParticipantProjectProvider = ({ children }: Props) => {
               name: strings.OVERVIEW,
               to: `${APP_PATHS.ACCELERATOR_OVERVIEW}?tab=projects`,
             },
-            {
-              name: strings.PROJECTS,
-              // TODO should this go somewhere else?
-              to: `${APP_PATHS.ACCELERATOR_OVERVIEW}?tab=projects`,
-            },
-            {
-              name: participantProject?.name || '',
-              to: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`),
-            },
           ]
         : [],
-    [activeLocale, projectId, participantProject?.name]
+    [activeLocale]
   );
 
   useEffect(() => {
