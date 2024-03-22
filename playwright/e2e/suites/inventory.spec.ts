@@ -241,8 +241,8 @@ export default function InventoryTests() {
   });
 
   test('Withdraw for Outplanting', async ({ page }, testInfo) => {
-    const logs : string[] = [];
-    page.on("console", (message) => {
+    const logs: string[] = [];
+    page.on('console', (message) => {
       //logs.push(message.text());
       console.log(message.text());
     });
