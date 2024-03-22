@@ -40,6 +40,7 @@ const mockParticipantProject: ParticipantProject = {
   projectHectares: 321,
   region: 'Europe & Central Asia',
   restorableLand: 432,
+  shapeFileUrl: 'https://placekitten.com/900/600',
   totalExpansionPotential: 400,
   votingDecision: 'No',
   whatNeedsToBeTrue:

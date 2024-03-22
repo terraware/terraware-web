@@ -1,3 +1,5 @@
+import { VoteOption } from './Votes';
+
 // These will all change when the BE is done, some of the props might even come from different models
 export type ParticipantProject = {
   country: string;
@@ -23,7 +25,8 @@ export type ParticipantProject = {
   projectHectares: number;
   region: string;
   restorableLand: number;
+  shapeFileUrl: string;
   totalExpansionPotential: number;
-  votingDecision: string;
+  votingDecision: VoteOption;
   whatNeedsToBeTrue: string;
 };
