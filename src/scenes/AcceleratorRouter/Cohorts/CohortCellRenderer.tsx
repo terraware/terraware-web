@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Link from 'src/components/common/Link';
+import TextTruncated from 'src/components/common/TextTruncated';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
@@ -17,6 +18,10 @@ export default function CohortCellRenderer(props: RendererProps<TableRowType>): 
         row={row}
       />
     );
+  }
+
+  if (column.key === 'participantIds') {
+    return <CellRenderer {...props} value={<TextTruncated stringList={(value as string[]) || []} />} />;
   }
 
   return <CellRenderer {...props} />;
