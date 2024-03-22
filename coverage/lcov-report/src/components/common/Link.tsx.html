@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -126,7 +126,20 @@
 <a name='L61'></a><a href='#L61'>61</a>
 <a name='L62'></a><a href='#L62'>62</a>
 <a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -153,7 +166,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -164,6 +178,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -201,6 +219,8 @@ export type LinkProps = {
   onClick?: (e?: MouseEvent | SyntheticEvent) =&gt; void;
   className?: string;
   fontSize?: string | number;
+  fontWeight?: string | number;
+  lineHeight?: string | number;
   target?: string;
   id?: string;
   disabled?: boolean;
@@ -209,6 +229,8 @@ export type LinkProps = {
 &nbsp;
 type StyleProps = {
   fontSize: string | number;
+  fontWeight: string | number;
+  lineHeight: string | number;
 };
 &nbsp;
 const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
@@ -216,7 +238,8 @@ const useStyles = <span class="cstat-no" title="statement not covered" >makeStyl
     color: theme.palette.TwClrTxtBrand,
     fontFamily: 'Inter',
     fontSize: <span class="fstat-no" title="function not covered" >(p</span>rops: StyleProps) =&gt; <span class="cstat-no" title="statement not covered" >props.fontSize,</span>
-    fontWeight: 500,
+    fontWeight: <span class="fstat-no" title="function not covered" >(p</span>rops: StyleProps) =&gt; <span class="cstat-no" title="statement not covered" >props.fontWeight,</span>
+    lineHeight: <span class="fstat-no" title="function not covered" >(p</span>rops: StyleProps) =&gt; <span class="cstat-no" title="statement not covered" >props.lineHeight,</span>
     textDecoration: 'none',
     '&amp;:hover': {
       textDecoration: 'underline',
@@ -225,8 +248,12 @@ const useStyles = <span class="cstat-no" title="statement not covered" >makeStyl
 }));
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >Link(</span>props: LinkProps): JSX.Element {
-  const { to, children, className, onClick, fontSize, target, id, disabled, replace } = <span class="cstat-no" title="statement not covered" >props;</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles({ fontSize: fontSize || '14px' });</span>
+  const { to, children, className, onClick, fontSize, fontWeight, lineHeight, target, id, disabled, replace } = <span class="cstat-no" title="statement not covered" >props;</span>
+  const classes = <span class="cstat-no" title="statement not covered" >useStyles({</span>
+    fontSize: fontSize || '14px',
+    fontWeight: fontWeight || 500,
+    lineHeight: lineHeight || '21px',
+  });
   const classNameToUse = <span class="cstat-no" title="statement not covered" >`${classes.link} ${className || ''}`;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (to) {</span>
@@ -259,7 +286,7 @@ export default function <span class="fstat-no" title="function not covered" >Lin
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-21T23:56:43.956Z
+                at 2024-03-22T00:05:09.663Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
