@@ -241,6 +241,12 @@ export default function InventoryTests() {
   });
 
   test('Withdraw for Outplanting', async ({ page }, testInfo) => {
+    const logs : string[] = [];
+    page.on("console", (message) => {
+      //logs.push(message.text());
+      console.log(message.text());
+    });
+
     await page.goto('http://127.0.0.1:3000');
 
     await waitFor(page, '#home');
