@@ -57,6 +57,7 @@ export default function InventoryTests() {
     await expect(page.getByText('Ready Quantity 100', { exact: true })).toBeVisible();
     await expect(page.getByText('Total Quantity 200')).toBeVisible();
     await expect(page.getByText('Notes Adding some notes')).toBeVisible();
+    page.mouse.wheel(0, 1000);
     await page.getByRole('tab', { name: 'History' }).click();
     await expect(page.getByRole('cell', { name: 'Germinating Quantity, Not' })).toBeVisible();
     await expect(page.getByRole('cell', { name: 'Test User' })).toBeVisible();
@@ -136,7 +137,7 @@ export default function InventoryTests() {
     await page.getByRole('spinbutton').fill('35');
     await page.getByRole('button', { name: 'Save' }).click();
     await page.waitForTimeout(1000); //Wait for modal to close
-    await page.mouse.wheel(0, -10);
+    await page.mouse.wheel(0, -1000);
     await page.getByRole('button', { name: 'Withdraw', exact: true }).click();
     await page.getByLabel('Dead').check();
     await page.locator('#germinatingQuantityWithdrawn').getByRole('spinbutton').click();
@@ -223,7 +224,7 @@ export default function InventoryTests() {
     await expect(page.getByRole('cell', { name: '0', exact: true })).toBeVisible();
     await expect(page.getByRole('cell', { name: 'Nursery', exact: true })).toBeVisible();
 
-    await page.mouse.wheel(0, -10);
+    await page.mouse.wheel(0, -1000);
     await page.getByRole('link', { name: 'Inventory' }).click();
     await page.getByRole('tab', { name: 'By Nursery' }).click();
     await page.getByRole('link', { name: 'Nursery', exact: true }).click();
@@ -284,9 +285,13 @@ export default function InventoryTests() {
     await expect(page.getByText('60 Plants')).toBeVisible();
     await expect(page.getByText('1 Species')).toBeVisible();
     await page.getByText('Total Plants and Species').click();
-    await page.mouse.wheel(0, 1200);
+    await page.mouse.wheel(0, 2000);
 
-    await page.waitForTimeout(1000); //Wait for map to load
+    await page.waitForTimeout(2000); //Wait for map to load
+
+    await page.mouse.wheel(0, 2000);
+
+    await page.waitForTimeout(2000); //Wait for map to load
     await page.getByLabel('Map', { exact: true }).click({
       position: {
         x: 562,
@@ -298,7 +303,7 @@ export default function InventoryTests() {
 
     await page.getByRole('button', { name: 'Withdrawals' }).click();
     await page.getByText('Map').click();
-    await page.waitForTimeout(1000); //Wait for map to load
+    await page.waitForTimeout(2000); //Wait for map to load
     await page.getByLabel('Map', { exact: true }).click({
       position: {
         x: 687,
