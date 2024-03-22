@@ -62,9 +62,16 @@ const CohortListView = () => {
         canCreateCohorts && (
           <>
             {isMobile ? (
-              <Button id='new-cohort' icon='plus' onClick={goToNewCohort} size='medium' />
+              <Button id='new-cohort' icon='plus' onClick={goToNewCohort} size='medium' priority='secondary' />
             ) : (
-              <Button id='new-cohort' label={strings.ADD_COHORT} icon='plus' onClick={goToNewCohort} size='medium' />
+              <Button
+                id='new-cohort'
+                label={strings.ADD_COHORT}
+                icon='plus'
+                onClick={goToNewCohort}
+                size='medium'
+                priority='secondary'
+              />
             )}
           </>
         )
