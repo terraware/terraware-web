@@ -18,6 +18,7 @@ import ProjectFieldCard from './ProjectField/Card';
 import ProjectFieldDisplay from './ProjectField/Display';
 import ProjectFieldLink from './ProjectField/Link';
 import ProjectFieldMeta from './ProjectField/Meta';
+import ProjectFieldTextArea from './ProjectField/TextArea';
 
 const SingleView = () => {
   const theme = useTheme();
@@ -70,92 +71,112 @@ const SingleView = () => {
       rightComponent={rightComponent}
     >
       {status === 'pending' && <BusySpinner />}
-      <Card
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          flexGrow: 1,
-          padding: `${theme.spacing(2)} ${theme.spacing(1)}`,
-        }}
-      >
-        {project && (
-          <Grid container>
-            <ProjectFieldDisplay label={strings.PROJECT_NAME} value={project.name} />
-            <ProjectFieldCard label={strings.PHASE_1_SCORE} value={project.phase1Score} />
-            <ProjectFieldCard
-              label={strings.VOTING_DECISION}
-              value={
-                project.votingDecision ? (
-                  <Box style={{ margin: 'auto', width: 'fit-content' }}>
-                    <VoteBadge vote={project.votingDecision} />
-                  </Box>
-                ) : undefined
-              }
-            />
-            <ProjectFieldLink
-              label={strings.SEE_SCORECARD}
-              value={APP_PATHS.ACCELERATOR_SCORING.replace(':projectId', `${project.id}`)}
-            />
-            <ProjectFieldDisplay label={strings.PIPELINE} value={project.pipeline} rightBorder={!isMobile} />
-            <ProjectFieldDisplay label={strings.DEAL_STAGE} value={project.dealStage} rightBorder={!isMobile} />
-            <ProjectFieldDisplay label={strings.COUNTRY} value={project.country} rightBorder={!isMobile} />
-            <ProjectFieldDisplay label={strings.REGION} value={project.region} />
-            <ProjectFieldDisplay
-              label={strings.LAND_USE_MODEL_TYPE}
-              value={project.landUseModelType}
-              rightBorder={!isMobile}
-            />
-            <ProjectFieldDisplay
-              label={strings.NUMBER_OF_NATIVE_SPECIES}
-              value={project.numberOfNativeSpecies}
-              rightBorder={!isMobile}
-            />
-            <ProjectFieldDisplay
-              label={strings.PROJECT_HECTARES}
-              link={project.shapeFileUrl}
-              value={project.projectHectares}
-              rightBorder={!isMobile}
-            />
-            <ProjectFieldDisplay label={strings.RESTORABLE_LAND} value={project.restorableLand} />
-            <ProjectFieldDisplay
-              label={strings.TOTAL_EXPANSION_POTENTIAL}
-              value={project.totalExpansionPotential}
-              rightBorder={!isMobile}
-            />
-            <ProjectFieldDisplay
-              label={strings.MINIMUM_CARBON_ACCUMULATION}
-              value={project.minimumCarbonAccumulation}
-              rightBorder={!isMobile}
-            />
-            <ProjectFieldDisplay
-              label={strings.MAXIMUM_CARBON_ACCUMULATION}
-              value={project.maximumCarbonAccumulation}
-              rightBorder={!isMobile}
-            />
-            <ProjectFieldDisplay
-              label={strings.PER_HECTARE_ESTIMATED_BUDGET}
-              value={project.perHectareEstimatedBudget}
-            />
-            <ProjectFieldDisplay
-              label={strings.PREVIOUS_PROJECT_COST}
-              value={project.previousProjectCost}
-              rightBorder={!isMobile}
-            />
-            <ProjectFieldMeta
-              date={project.createdTime}
-              dateLabel={strings.CREATED_ON}
-              user={project.createdBy}
-              userLabel={strings.CREATED_BY}
-            />
-            <ProjectFieldMeta
-              date={project.modifiedTime}
-              dateLabel={strings.LAST_MODIFIED_ON}
-              user={project.modifiedBy}
-              userLabel={strings.LAST_MODIFIED_BY}
-            />
-          </Grid>
-        )}
-      </Card>
+
+      {project && (
+        <>
+          <Card
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              flexGrow: 1,
+              marginBottom: theme.spacing(3),
+              padding: `${theme.spacing(2)} ${theme.spacing(1)}`,
+            }}
+          >
+            <Grid container>
+              <ProjectFieldDisplay label={strings.PROJECT_NAME} value={project.name} />
+              <ProjectFieldCard label={strings.PHASE_1_SCORE} value={project.phase1Score} />
+              <ProjectFieldCard
+                label={strings.VOTING_DECISION}
+                value={
+                  project.votingDecision ? (
+                    <Box style={{ margin: 'auto', width: 'fit-content' }}>
+                      <VoteBadge vote={project.votingDecision} />
+                    </Box>
+                  ) : undefined
+                }
+              />
+              <ProjectFieldLink
+                label={strings.SEE_SCORECARD}
+                value={APP_PATHS.ACCELERATOR_SCORING.replace(':projectId', `${project.id}`)}
+              />
+              <ProjectFieldDisplay label={strings.PIPELINE} value={project.pipeline} rightBorder={!isMobile} />
+              <ProjectFieldDisplay label={strings.DEAL_STAGE} value={project.dealStage} rightBorder={!isMobile} />
+              <ProjectFieldDisplay label={strings.COUNTRY} value={project.country} rightBorder={!isMobile} />
+              <ProjectFieldDisplay label={strings.REGION} value={project.region} />
+              <ProjectFieldDisplay
+                label={strings.LAND_USE_MODEL_TYPE}
+                value={project.landUseModelType}
+                rightBorder={!isMobile}
+              />
+              <ProjectFieldDisplay
+                label={strings.NUMBER_OF_NATIVE_SPECIES}
+                value={project.numberOfNativeSpecies}
+                rightBorder={!isMobile}
+              />
+              <ProjectFieldDisplay
+                label={strings.PROJECT_HECTARES}
+                link={project.shapeFileUrl}
+                value={project.projectHectares}
+                rightBorder={!isMobile}
+              />
+              <ProjectFieldDisplay label={strings.RESTORABLE_LAND} value={project.restorableLand} />
+              <ProjectFieldDisplay
+                label={strings.TOTAL_EXPANSION_POTENTIAL}
+                value={project.totalExpansionPotential}
+                rightBorder={!isMobile}
+              />
+              <ProjectFieldDisplay
+                label={strings.MINIMUM_CARBON_ACCUMULATION}
+                value={project.minimumCarbonAccumulation}
+                rightBorder={!isMobile}
+              />
+              <ProjectFieldDisplay
+                label={strings.MAXIMUM_CARBON_ACCUMULATION}
+                value={project.maximumCarbonAccumulation}
+                rightBorder={!isMobile}
+              />
+              <ProjectFieldDisplay
+                label={strings.PER_HECTARE_ESTIMATED_BUDGET}
+                value={project.perHectareEstimatedBudget}
+              />
+              <ProjectFieldDisplay
+                label={strings.PREVIOUS_PROJECT_COST}
+                value={project.previousProjectCost}
+                rightBorder={!isMobile}
+              />
+              <ProjectFieldMeta
+                date={project.createdTime}
+                dateLabel={strings.CREATED_ON}
+                user={project.createdBy}
+                userLabel={strings.CREATED_BY}
+              />
+              <ProjectFieldMeta
+                date={project.modifiedTime}
+                dateLabel={strings.LAST_MODIFIED_ON}
+                user={project.modifiedBy}
+                userLabel={strings.LAST_MODIFIED_BY}
+              />
+            </Grid>
+          </Card>
+          <Card
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              flexGrow: 1,
+              marginBottom: theme.spacing(3),
+              padding: `${theme.spacing(2)} ${theme.spacing(1)}`,
+            }}
+          >
+            <Grid container>
+              <ProjectFieldTextArea label={strings.DEAL_DESCRIPTION} value={project.dealDescription} />
+              <ProjectFieldTextArea label={strings.INVESTMENT_THESIS} value={project.investmentThesis} />
+              <ProjectFieldTextArea label={strings.FAILURE_RISK} value={project.failureRisk} />
+              <ProjectFieldTextArea label={strings.WHAT_NEEDS_TO_BE_TRUE} value={project.whatNeedsToBeTrue} />
+            </Grid>
+          </Card>
+        </>
+      )}
     </PageWithModuleTimeline>
   );
 };
