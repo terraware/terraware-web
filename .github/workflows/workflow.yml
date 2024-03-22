@@ -79,7 +79,7 @@ jobs:
           SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
           SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENTSECRET: dummy
           SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
-          REACT_APP_MAPBOX_TOKEN: ${{secrets.REACT_APP_MAPBOX_TOKEN}}
+          TERRAWARE_MAPBOX_API_TOKEN: ${{secrets.REACT_APP_MAPBOX_TOKEN}}
 
       - name: Install Playwright Browsers
         run: yarn playwright install --with-deps
