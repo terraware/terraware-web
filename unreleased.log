@@ -1,3 +1,4 @@
+d26beeb4c5 Updated translations from Phrase (#2393)
 89e9c05611 SW-4713 Add UI for top fields for participant project data (#2388)
 398e2361d7 SW-4713 Add participant project option menu that includes export, for now a no-op until BE is done (#2387)
 8dd1b60621 SW-5088 Export participants list with mock data (#2385)
