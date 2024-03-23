@@ -164,6 +164,6 @@
     "typescript": "^5.0.0"
   },
   "resolutions": {
-    "fork-ts-checker-webpack-plugin": "^6.5.3"
+    "fork-ts-checker-webpack-plugin": "^9.0.0"
   }
 }
