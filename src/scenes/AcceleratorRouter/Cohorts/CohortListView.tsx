@@ -1,12 +1,10 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { Grid } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Page from 'src/components/Page';
-import Card from 'src/components/common/Card';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useUser } from 'src/providers';
@@ -60,17 +58,7 @@ const CohortListView = () => {
       }
       contentStyle={{ display: 'flex', flexGrow: 1, flexDirection: 'column' }}
     >
-      <Card flushMobile>
-        <Grid container>
-          <Grid item xs={12}>
-            <Grid container spacing={4}>
-              <Grid item xs={12}>
-                <CohortsTable columns={() => columns(activeLocale)} />
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Card>
+      <CohortsTable columns={() => columns(activeLocale)} />
     </Page>
   );
 };
