@@ -1,10 +1,14 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
+import { useHistory } from 'react-router-dom';
 
+import { Box, Typography, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 
 import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
-import { useLocalization } from 'src/providers';
+import Button from 'src/components/common/button/Button';
+import { APP_PATHS } from 'src/constants';
+import { useLocalization, useUser } from 'src/providers';
 import { requestCohorts } from 'src/redux/features/cohorts/cohortsAsyncThunks';
 import { selectCohorts } from 'src/redux/features/cohorts/cohortsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -45,6 +49,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
 const CohortsTable = ({ filterModifiers, extraTableFilters }: CohortTableProps) => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
+  const history = useHistory();
 
   const cohorts = useAppSelector(selectCohorts);
 
@@ -60,14 +65,27 @@ const CohortsTable = ({ filterModifiers, extraTableFilters }: CohortTableProps) 
     return activeLocale ? filters : [];
   }, [activeLocale]);
 
+  const goToNewCohort = () => {
+    const newProjectLocation = {
+      pathname: APP_PATHS.ACCELERATOR_COHORTS_NEW,
+    };
+    history.push(newProjectLocation);
+  };
+
   const dispatchSearchRequest = useCallback(
-    (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => {
+    (locale: string | null, search?: SearchNodePayload, searchSortOrder?: SearchSortOrder) => {
       dispatch(requestCohorts({ locale, depth: 'Cohort', search, searchSortOrder }));
     },
     [dispatch]
   );
 
-  return (
+  useEffect(() => {
+    dispatchSearchRequest(activeLocale);
+  }, [activeLocale, dispatchSearchRequest]);
+
+  return !cohorts?.length ? (
+    <EmptyState onClick={goToNewCohort} />
+  ) : (
     <TableWithSearchFilters
       columns={() => columns(activeLocale)}
       defaultSearchOrder={defaultSearchOrder}
@@ -84,3 +102,36 @@ const CohortsTable = ({ filterModifiers, extraTableFilters }: CohortTableProps) 
 };
 
 export default CohortsTable;
+
+const EmptyState = ({ onClick }: { onClick: () => void }): JSX.Element => {
+  const theme = useTheme();
+  const { isAllowed } = useUser();
+
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        flexGrow: 0,
+        margin: 'auto',
+        padding: theme.spacing(3, 3, 8),
+        textAlign: 'center',
+      }}
+    >
+      <Typography
+        color={theme.palette.TwClrTxt}
+        fontSize='16px'
+        fontWeight={400}
+        lineHeight='24px'
+        marginBottom={theme.spacing(2)}
+      >
+        {strings.COHORTS_EMPTY_STATE}
+      </Typography>
+      {isAllowed('CREATE_COHORTS') && (
+        <Box sx={{ margin: 'auto' }}>
+          <Button icon='plus' id='new-cohort' label={strings.ADD_COHORT} onClick={onClick} size='medium' />
+        </Box>
+      )}
+    </Box>
+  );
+};
