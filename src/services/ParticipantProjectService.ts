@@ -47,6 +47,10 @@ let mockParticipantProject: ParticipantProject = {
     'SAI and the local community will need to like the carbon estimates and deal arrangement that TF offers. Our estimates of reforestable area and carbon will need to be roughly true when ground-truthed). The larger project',
 };
 
+const download = async (participantProjectId: number): Promise<string | null> => {
+  return `Id,Project Name,Phase 1 Score\r${participantProjectId},Andromeda,0.5\r`;
+};
+
 const get = async (participantProjectId: number): Promise<Response2<ParticipantProjectData>> => {
   return {
     requestSucceeded: true,
@@ -68,9 +72,10 @@ const update = async (participantProject: ParticipantProject): Promise<Response2
   };
 };
 
-const ParticipantsService = {
+const ParticipantProjectsService = {
+  download,
   get,
   update,
 };
 
-export default ParticipantsService;
+export default ParticipantProjectsService;
