@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Box, Grid, useTheme } from '@mui/material';
+import { Grid, useTheme } from '@mui/material';
 
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
@@ -9,17 +9,17 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { requestUpdateParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
 import { selectParticipantProjectUpdateRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import VoteBadge from 'src/scenes/AcceleratorRouter/Voting/VoteBadge';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { useParticipantProjectData } from '../ParticipantProjectContext';
-import ProjectFieldCard from '../ProjectField/Card';
 import ProjectFieldDisplay from '../ProjectField/Display';
 import ProjectFieldMeta from '../ProjectField/Meta';
+import PhaseScoreCard from '../ProjectField/PhaseScoreCard';
 import ProjectFieldTextAreaEdit from '../ProjectField/TextAreaEdit';
 import ProjectFieldTextfield from '../ProjectField/Textfield';
+import VotingDecisionCard from '../ProjectField/VotingDecisionCard';
 import EditNameConfirm from './EditNameConfirm';
 
 const EditView = () => {
@@ -107,17 +107,8 @@ const EditView = () => {
                   onChange={onChange}
                   value={record.name}
                 />
-                <ProjectFieldCard label={strings.PHASE_1_SCORE} value={record.phase1Score} />
-                <ProjectFieldCard
-                  label={strings.VOTING_DECISION}
-                  value={
-                    project.votingDecision ? (
-                      <Box style={{ margin: 'auto', width: 'fit-content' }}>
-                        <VoteBadge vote={project.votingDecision} />
-                      </Box>
-                    ) : undefined
-                  }
-                />
+                <PhaseScoreCard project={project} />
+                <VotingDecisionCard project={project} />
                 <ProjectFieldDisplay value={false} />
                 {/* TODO this will be multiselect with values from backend */}
                 <ProjectFieldTextfield
