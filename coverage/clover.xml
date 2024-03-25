@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1711081459110" clover="3.2.0">
-  <project timestamp="1711081459110" name="All files">
-    <metrics statements="18666" coveredstatements="698" conditionals="11711" coveredconditionals="220" methods="5831" coveredmethods="157" elements="36208" coveredelements="1075" complexity="0" loc="18666" ncloc="18666" packages="160" files="801" classes="801"/>
+<coverage generated="1711395948372" clover="3.2.0">
+  <project timestamp="1711395948372" name="All files">
+    <metrics statements="18670" coveredstatements="698" conditionals="11713" coveredconditionals="220" methods="5832" coveredmethods="157" elements="36215" coveredelements="1075" complexity="0" loc="18670" ncloc="18670" packages="160" files="801" classes="801"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -9031,7 +9031,7 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Cohorts">
-      <metrics statements="122" coveredstatements="0" conditionals="51" coveredconditionals="0" methods="32" coveredmethods="0"/>
+      <metrics statements="126" coveredstatements="0" conditionals="53" coveredconditionals="0" methods="33" coveredmethods="0"/>
       <file name="CohortCellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Cohorts/CohortCellRenderer.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="9" count="0" type="stmt"/>
@@ -9100,7 +9100,7 @@
         <line num="122" count="0" type="stmt"/>
       </file>
       <file name="CohortListView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Cohorts/CohortListView.tsx">
-        <metrics statements="17" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <metrics statements="21" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="37" count="0" type="stmt"/>
@@ -9117,7 +9117,11 @@
         <line num="54" count="0" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
         <line num="58" count="0" type="stmt"/>
-        <line num="82" count="0" type="stmt"/>
+        <line num="91" count="0" type="stmt"/>
+        <line num="108" count="0" type="stmt"/>
+        <line num="109" count="0" type="stmt"/>
+        <line num="110" count="0" type="stmt"/>
+        <line num="112" count="0" type="stmt"/>
       </file>
       <file name="CohortNewView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Cohorts/CohortNewView.tsx">
         <metrics statements="26" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="5" coveredmethods="0"/>
