@@ -13,7 +13,7 @@ export type ParticipantProjectData = {
   project: ParticipantProject;
 };
 
-const mockParticipantProject: ParticipantProject = {
+let mockParticipantProject: ParticipantProject = {
   country: 'Tunisia',
   createdBy: 'Weese Ritherspoon',
   createdTime: '2024-03-02',
@@ -56,8 +56,21 @@ const get = async (participantProjectId: number): Promise<Response2<ParticipantP
   };
 };
 
+const update = async (participantProject: ParticipantProject): Promise<Response2<number>> => {
+  mockParticipantProject = {
+    ...mockParticipantProject,
+    ...participantProject,
+  };
+
+  return {
+    requestSucceeded: true,
+    data: participantProject.id,
+  };
+};
+
 const ParticipantsService = {
   get,
+  update,
 };
 
 export default ParticipantsService;
