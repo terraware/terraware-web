@@ -20,10 +20,11 @@ export const requestGetParticipantProject = createAsyncThunk(
 
 export const requestUpdateParticipantProject = createAsyncThunk(
   'participantProjects/update',
-  async (participantProject: ParticipantProject, { rejectWithValue }) => {
+  async (participantProject: ParticipantProject, { rejectWithValue, dispatch }) => {
     const response: Response2<number> = await ParticipantProjectService.update(participantProject);
 
-    if (response && response.requestSucceeded) {
+    if (response && response.requestSucceeded && response.data) {
+      dispatch(requestGetParticipantProject(response.data));
       return response.data;
     }
 
