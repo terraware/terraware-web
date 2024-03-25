@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { Grid } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -76,7 +76,9 @@ const CohortListView = () => {
           <Grid item xs={12}>
             <Grid container spacing={4}>
               <Grid item xs={12}>
-                {cohorts && (
+                {!cohorts?.length ? (
+                  <EmptyState onClick={goToNewCohort} />
+                ) : (
                   <Table
                     id='cohorts-table'
                     columns={() => columns(activeLocale)}
@@ -95,3 +97,36 @@ const CohortListView = () => {
 };
 
 export default CohortListView;
+
+const EmptyState = ({ onClick }: { onClick: () => void }): JSX.Element => {
+  const theme = useTheme();
+  const { isAllowed } = useUser();
+
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        flexGrow: 0,
+        margin: 'auto',
+        padding: theme.spacing(3, 3, 8),
+        textAlign: 'center',
+      }}
+    >
+      <Typography
+        color={theme.palette.TwClrTxt}
+        fontSize='16px'
+        fontWeight={400}
+        lineHeight='24px'
+        marginBottom={theme.spacing(2)}
+      >
+        {strings.COHORTS_EMPTY_STATE}
+      </Typography>
+      {isAllowed('CREATE_COHORTS') && (
+        <Box sx={{ margin: 'auto' }}>
+          <Button icon='plus' id='new-cohort' label={strings.ADD_COHORT} onClick={onClick} size='medium' />
+        </Box>
+      )}
+    </Box>
+  );
+};
