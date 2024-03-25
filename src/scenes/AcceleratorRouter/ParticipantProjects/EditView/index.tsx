@@ -46,7 +46,6 @@ const EditView = () => {
   }, [record, dispatch]);
 
   const handleOnSave = useCallback(() => {
-    // TODO if project.name is edited, we need to have confirmation modal
     if (record?.name !== project?.name) {
       setConfirmModalOpen(true);
       return;
