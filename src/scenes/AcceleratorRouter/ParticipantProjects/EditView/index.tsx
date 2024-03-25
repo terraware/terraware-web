@@ -9,17 +9,18 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { requestUpdateParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
 import { selectParticipantProjectUpdateRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import VoteBadge from 'src/scenes/AcceleratorRouter/Voting/VoteBadge';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import VoteBadge from '../Voting/VoteBadge';
-import { useParticipantProjectData } from './ParticipantProjectContext';
-import ProjectFieldCard from './ProjectField/Card';
-import ProjectFieldDisplay from './ProjectField/Display';
-import ProjectFieldMeta from './ProjectField/Meta';
-import ProjectFieldTextAreaEdit from './ProjectField/TextAreaEdit';
-import ProjectFieldTextfield from './ProjectField/Textfield';
+import { useParticipantProjectData } from '../ParticipantProjectContext';
+import ProjectFieldCard from '../ProjectField/Card';
+import ProjectFieldDisplay from '../ProjectField/Display';
+import ProjectFieldMeta from '../ProjectField/Meta';
+import ProjectFieldTextAreaEdit from '../ProjectField/TextAreaEdit';
+import ProjectFieldTextfield from '../ProjectField/Textfield';
+import EditNameConfirm from './EditNameConfirm';
 
 const EditView = () => {
   const dispatch = useAppDispatch();
@@ -30,6 +31,8 @@ const EditView = () => {
 
   const [requestId, setRequestId] = useState<string>('');
   const participantProjectUpdateRequest = useAppSelector(selectParticipantProjectUpdateRequest(requestId));
+
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
 
   // TODO we should probably remove non-editable fields like phaseScore and votingDecision,
   // but these also may not come from the model itself so we will wait until BE is done
@@ -44,10 +47,16 @@ const EditView = () => {
 
   const handleOnSave = useCallback(() => {
     // TODO if project.name is edited, we need to have confirmation modal
+    if (record?.name !== project?.name) {
+      setConfirmModalOpen(true);
+      return;
+    }
+
     saveParticipantProject();
-  }, [saveParticipantProject]);
+  }, [project, record, saveParticipantProject]);
 
   const handleOnCancel = useCallback(() => goToParticipantProject(projectId), [goToParticipantProject, projectId]);
+  const handleOnCloseModal = useCallback(() => setConfirmModalOpen(false), []);
 
   useEffect(() => {
     if (!participantProjectUpdateRequest) {
@@ -241,6 +250,13 @@ const EditView = () => {
           </>
         )}
       </PageForm>
+      {confirmModalOpen && (
+        <EditNameConfirm
+          onClose={handleOnCloseModal}
+          onConfirm={saveParticipantProject}
+          organizationName={project?.organizationName || ''}
+        />
+      )}
     </Page>
   );
 };
