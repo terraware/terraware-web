@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1711406232079" clover="3.2.0">
-  <project timestamp="1711406232079" name="All files">
-    <metrics statements="18670" coveredstatements="698" conditionals="11713" coveredconditionals="220" methods="5832" coveredmethods="157" elements="36215" coveredelements="1075" complexity="0" loc="18670" ncloc="18670" packages="160" files="801" classes="801"/>
+<coverage generated="1711406876341" clover="3.2.0">
+  <project timestamp="1711406876341" name="All files">
+    <metrics statements="18673" coveredstatements="698" conditionals="11717" coveredconditionals="220" methods="5833" coveredmethods="157" elements="36223" coveredelements="1075" complexity="0" loc="18673" ncloc="18673" packages="160" files="802" classes="802"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -9373,18 +9373,18 @@
       </file>
       <file name="SingleView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/SingleView.tsx">
         <metrics statements="12" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="4" coveredmethods="0"/>
-        <line num="22" count="0" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="30" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
-        <line num="65" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/index.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -9393,7 +9393,7 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.ParticipantProjects.ProjectField">
-      <metrics statements="22" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="7" coveredmethods="0"/>
+      <metrics statements="25" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="8" coveredmethods="0"/>
       <file name="Card.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/ProjectField/Card.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
@@ -9413,10 +9413,10 @@
         <line num="12" count="0" type="stmt"/>
       </file>
       <file name="GridEntryWrapper.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/ProjectField/GridEntryWrapper.tsx">
-        <metrics statements="3" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="10" count="0" type="stmt"/>
-        <line num="11" count="0" type="stmt"/>
+        <metrics statements="3" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="12" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
       </file>
       <file name="Link.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/ProjectField/Link.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -9429,6 +9429,12 @@
         <line num="16" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
+      </file>
+      <file name="TextArea.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/ProjectField/TextArea.tsx">
+        <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/ProjectField/index.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
