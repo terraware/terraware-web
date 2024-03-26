@@ -34,7 +34,7 @@ let mockParticipantProject: ParticipantProject = {
   numberOfNativeSpecies: 2433,
   organizationName: 'Treemendo.us',
   perHectareEstimatedBudget: undefined,
-  phase1Score: 5,
+  phase1Score: 0.5,
   pipeline: 'Accelerator Projects',
   previousProjectCost: undefined,
   projectHectares: 321,

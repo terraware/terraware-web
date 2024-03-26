@@ -20,7 +20,7 @@ const ScoreTotal = ({ isEditing, phaseScores }: ScoreTotalProps) => {
 
   if (!isEditing) {
     return (
-      <Typography fontSize='20px' fontWeight='600' lineHeight='28px'>{`${strings.SCORE}: ${
+      <Typography fontSize='20px' fontWeight='600' lineHeight='28px'>{`${strings.TOTAL_AVERAGE_SCORE}: ${
         isPhaseScoreComplete ? phaseScores.totalScore : strings.NOT_COMPLETE
       }`}</Typography>
     );
@@ -29,7 +29,7 @@ const ScoreTotal = ({ isEditing, phaseScores }: ScoreTotalProps) => {
   if (isPhaseScoreComplete) {
     return (
       <>
-        <Typography fontSize='20px' fontWeight='600' lineHeight='28px'>{`${strings.SCORE}: ${
+        <Typography fontSize='20px' fontWeight='600' lineHeight='28px'>{`${strings.TOTAL_AVERAGE_SCORE}: ${
           phaseScores.totalScore || 0
         }`}</Typography>
         <Typography fontSize='14px' fontWeight='500' lineHeight='20px' color={theme.palette.TwClrTxtSuccess}>

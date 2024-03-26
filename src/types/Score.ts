@@ -64,13 +64,10 @@ export const getPhaseTruncated = (phase: Phase): string => {
 };
 
 export const getScoreValue = (value: ScoreValue | null): string => {
-  switch (value) {
-    case 2:
-    case 1:
-      return `${value}+`;
-    default:
-      return `${value}`;
+  if (value && value > 0) {
+    return `${value}+`;
   }
+  return `${value}`;
 };
 
 export const getScoreValueLabel = (value: ScoreValue | null): string => {
@@ -85,10 +82,8 @@ export const getScoreValueLabel = (value: ScoreValue | null): string => {
       return strings.SCORE_VALUE_N1;
     case -2:
       return strings.SCORE_VALUE_N2;
-    case null:
-      return strings.SCORE_VALUE_NULL;
     default:
-      return strings.NO_SCORE_SELECTED;
+      return strings.SCORE_VALUE_NULL;
   }
 };
 
@@ -127,7 +122,9 @@ export const getScoreColors = (
   value: ScoreValue | null,
   theme: Theme
 ): { background: string; border: string; text: string } => {
-  switch (value) {
+  const _value = Math.round(value || 0);
+
+  switch (_value) {
     case 2:
       return {
         background: theme.palette.TwClrBgSuccess as string,
