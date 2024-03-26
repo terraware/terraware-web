@@ -1,3 +1,4 @@
+import { CohortPhaseType } from './Cohort';
 import { VoteOption } from './Votes';
 
 // These will all change when the BE is done, some of the props might even come from different models
@@ -29,4 +30,17 @@ export type ParticipantProject = {
   totalExpansionPotential: number;
   votingDecision: VoteOption;
   whatNeedsToBeTrue: string;
+};
+
+export type ParticipantProjectSearchResult = {
+  cohortId: number;
+  cohortName: string;
+  country: string;
+  id: number;
+  landUseModelType: string;
+  name: string;
+  participantName: string;
+  phase: CohortPhaseType;
+  region: string;
+  restorableLand: number;
 };
