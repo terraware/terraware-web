@@ -21,7 +21,6 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
   const history = useHistory();
   const { isAllowed } = useUser();
 
-  const isCohortsRoute = useRouteMatch(APP_PATHS.ACCELERATOR_COHORTS);
   const isDeliverablesRoute = useRouteMatch(APP_PATHS.ACCELERATOR_DELIVERABLES);
   const isModuleContentRoute = useRouteMatch(APP_PATHS.ACCELERATOR_MODULE_CONTENT);
   const isOverviewRoute = useRouteMatch(APP_PATHS.ACCELERATOR_OVERVIEW);
