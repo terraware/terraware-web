@@ -2,12 +2,12 @@ import React from 'react';
 
 import { Grid, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import getDateDisplayValue from '@terraware/web-components/utils/date';
 import { isValid } from 'date-fns';
 
 import DatePicker from 'src/components/common/DatePicker';
 import strings from 'src/strings';
 import { FieldNodePayload } from 'src/types/Search';
-import { getIsoDateUtc } from 'src/utils/dateFormatter';
 
 const useStyles = makeStyles((theme: Theme) => ({
   box: {
@@ -39,7 +39,7 @@ export default function DateRange(props: Props): JSX.Element {
 
   const onChangeDate = (id: string, value?: string | null) => {
     const newValues = [startDate, endDate];
-    const date = value && isValid(value) ? getIsoDateUtc(new Date(value)) : null;
+    const date = value && isValid(value) ? getDateDisplayValue(value) : null;
     if (id === 'startDate' && date) {
       setStartDate(date);
       newValues[0] = date;
