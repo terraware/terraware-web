@@ -3,9 +3,9 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 
 import CohortEditView from './CohortEditView';
-import CohortListView from './CohortListView';
 import CohortNewView from './CohortNewView';
 import CohortView from './CohortView';
+import CohortsListView from './CohortsListView';
 
 const CohortsRouter = () => {
   return (
@@ -20,7 +20,7 @@ const CohortsRouter = () => {
         <CohortView />
       </Route>
       <Route exact path={APP_PATHS.ACCELERATOR_COHORTS}>
-        <CohortListView />
+        <CohortsListView />
       </Route>
       <Route path={'*'}>
         <Redirect to={APP_PATHS.ACCELERATOR_COHORTS} />

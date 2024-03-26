@@ -19,7 +19,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import CohortCellRenderer from './CohortCellRenderer';
 
-interface CohortTableProps {
+interface CohortsListViewProps {
   extraTableFilters?: SearchNodePayload[];
   filterModifiers?: (filters: FilterConfig[]) => FilterConfig[];
 }
@@ -46,7 +46,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
       ]
     : [];
 
-const CohortsTable = ({ filterModifiers, extraTableFilters }: CohortTableProps) => {
+const CohortsListView = ({ filterModifiers, extraTableFilters }: CohortsListViewProps) => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const history = useHistory();
@@ -125,7 +125,7 @@ const CohortsTable = ({ filterModifiers, extraTableFilters }: CohortTableProps) 
   );
 };
 
-export default CohortsTable;
+export default CohortsListView;
 
 const EmptyState = ({ onClick }: { onClick: () => void }): JSX.Element => {
   const theme = useTheme();

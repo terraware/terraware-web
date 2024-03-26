@@ -12,7 +12,7 @@ import strings from 'src/strings';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
-import CohortsTable from '../Cohorts/CohortsTable';
+import CohortsListView from '../Cohorts/CohortsListView';
 
 const useStyles = makeStyles((theme: Theme) => ({
   tabs: {
@@ -83,7 +83,7 @@ const OverviewView = () => {
       {
         id: 'cohorts',
         label: strings.COHORTS,
-        children: <CohortsTable />,
+        children: <CohortsListView />,
       },
     ];
   }, [activeLocale, isAllowed]);
