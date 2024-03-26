@@ -7,12 +7,11 @@ import { Tabs } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
 import { useLocalization, useUser } from 'src/providers';
+import CohortsListView from 'src/scenes/AcceleratorRouter/Cohorts/CohortsListView';
 import ParticipantsList from 'src/scenes/AcceleratorRouter/Participants/ParticipantsList';
 import strings from 'src/strings';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
-
-import CohortsListView from '../Cohorts/CohortsListView';
 
 const useStyles = makeStyles((theme: Theme) => ({
   tabs: {
