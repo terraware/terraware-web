@@ -32,7 +32,14 @@ export default function Card({ busy, children, flushMobile, rightComponent, styl
       {busy && <BusySpinner />}
       {(title || rightComponent) && (
         <Box
-          sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', margin: theme.spacing(1, 0) }}
+          sx={{
+            alignItems: 'center',
+            display: 'flex',
+            flexDirection: 'row',
+            minHeight: '42px',
+            justifyContent: 'space-between',
+            marginBottom: theme.spacing(2),
+          }}
         >
           <Typography color={theme.palette.TwClrTxt} fontSize='20px' fontWeight={600} lineHeight='28px'>
             {title || ''}

@@ -6,6 +6,7 @@ import { Button, DropdownItem, TableColumnType } from '@terraware/web-components
 
 import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
 import Card from 'src/components/common/Card';
+import ExportCsvModal from 'src/components/common/ExportCsvModal';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import { APP_PATHS } from 'src/constants';
@@ -13,13 +14,13 @@ import { useLocalization, useUser } from 'src/providers';
 import { requestListParticipants } from 'src/redux/features/participants/participantsAsyncThunks';
 import { selectParticipantListRequest } from 'src/redux/features/participants/participantsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { ParticipantsService } from 'src/services';
 import strings from 'src/strings';
 import { Participant } from 'src/types/Participant';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import DownloadParticipants from './DownloadParticipants';
 import ParticipantsCellRenderer from './ParticipantsCellRenderer';
 
 type ParticipantType = Omit<Participant, 'projects'> & {
@@ -171,14 +172,11 @@ export default function ParticipantList(): JSX.Element {
 
   return (
     <>
-      {openDownload && (
-        <DownloadParticipants
-          onClose={() => setOpenDownload(false)}
-          open={openDownload}
-          search={lastSearch}
-          sort={lastSort}
-        />
-      )}
+      <ExportCsvModal
+        onClose={() => setOpenDownload(false)}
+        onExport={() => ParticipantsService.download(lastSearch, lastSort)}
+        open={openDownload}
+      />
       {isEmptyState && <EmptyState onClick={goToNewParticipant} />}
       {!isEmptyState && (
         <TableWithSearchFilters

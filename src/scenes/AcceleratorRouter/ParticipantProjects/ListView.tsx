@@ -1,13 +1,16 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { TableColumnType } from '@terraware/web-components';
+import { DropdownItem, TableColumnType } from '@terraware/web-components';
 
 import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
+import ExportCsvModal from 'src/components/common/ExportCsvModal';
+import OptionsMenu from 'src/components/common/OptionsMenu';
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { requestListParticipantProjects } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
 import { selectParticipantProjectsListRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { ParticipantProjectService } from 'src/services';
 import strings from 'src/strings';
 import { ParticipantProjectSearchResult } from 'src/types/ParticipantProject';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
@@ -69,9 +72,13 @@ const defaultSearchOrder: SearchSortOrder = {
 
 export default function ListView(): JSX.Element {
   const { activeLocale } = useLocalization();
+  const { isAllowed } = useUser();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
 
+  const [openDownload, setOpenDownload] = useState<boolean>(false);
+  const [lastSearch, setLastSearch] = useState<SearchNodePayload>();
+  const [lastSort, setLastSort] = useState<SearchSortOrder>();
   const [projects, setProjects] = useState<ParticipantProjectSearchResult[]>([]);
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectParticipantProjectsListRequest(requestId));
@@ -88,6 +95,8 @@ export default function ListView(): JSX.Element {
   const dispatchSearchRequest = useCallback(
     (locale: string | null, search: SearchNodePayload, sortOrder: SearchSortOrder) => {
       if (locale) {
+        setLastSearch(search);
+        setLastSort(sortOrder);
         const request = dispatch(requestListParticipantProjects({ search, sortOrder }));
         setRequestId(request.requestId);
       }
@@ -135,18 +144,46 @@ export default function ListView(): JSX.Element {
     [activeLocale, cohorts, projects]
   );
 
+  const actionMenus = useMemo<ReactNode | null>(() => {
+    const canExport = isAllowed('EXPORT_PARTICIPANTS');
+
+    if (!activeLocale || !canExport) {
+      return null;
+    }
+
+    return (
+      <OptionsMenu
+        size='small'
+        onOptionItemClick={(item: DropdownItem) => {
+          if (item.value === 'export') {
+            setOpenDownload(true);
+          }
+        }}
+        optionItems={[{ label: strings.EXPORT, value: 'export' }]}
+      />
+    );
+  }, [activeLocale, isAllowed]);
+
   return (
-    <TableWithSearchFilters
-      busy={result?.status === 'pending'}
-      columns={columns}
-      defaultSearchOrder={defaultSearchOrder}
-      dispatchSearchRequest={dispatchSearchRequest}
-      featuredFilters={featuredFilters}
-      fuzzySearchColumns={fuzzySearchColumns}
-      id='accelerator-participan-projects-table'
-      Renderer={CellRenderer}
-      rows={projects}
-      title={strings.PROJECTS}
-    />
+    <>
+      <ExportCsvModal
+        onClose={() => setOpenDownload(false)}
+        onExport={() => ParticipantProjectService.downloadList(lastSearch, lastSort)}
+        open={openDownload}
+      />
+      <TableWithSearchFilters
+        busy={result?.status === 'pending'}
+        columns={columns}
+        defaultSearchOrder={defaultSearchOrder}
+        dispatchSearchRequest={dispatchSearchRequest}
+        featuredFilters={featuredFilters}
+        fuzzySearchColumns={fuzzySearchColumns}
+        id='accelerator-participan-projects-table'
+        Renderer={CellRenderer}
+        rightComponent={actionMenus}
+        rows={projects}
+        title={strings.PROJECTS}
+      />
+    </>
   );
 }
