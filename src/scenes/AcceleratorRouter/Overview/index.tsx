@@ -8,6 +8,7 @@ import { Tabs } from '@terraware/web-components';
 import Page from 'src/components/Page';
 import { useLocalization, useUser } from 'src/providers';
 import CohortsListView from 'src/scenes/AcceleratorRouter/Cohorts/CohortsListView';
+import ParticipantProjectsList from 'src/scenes/AcceleratorRouter/ParticipantProjects/ListView';
 import ParticipantsList from 'src/scenes/AcceleratorRouter/Participants/ParticipantsList';
 import strings from 'src/strings';
 import useQuery from 'src/utils/useQuery';
@@ -68,7 +69,7 @@ const OverviewView = () => {
       {
         id: 'projects',
         label: strings.PROJECTS,
-        children: <TabPlaceholder name={strings.PROJECTS} />,
+        children: <ParticipantProjectsList />,
       },
       ...(canReadParticipants
         ? [

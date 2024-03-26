@@ -12,3 +12,11 @@ export const CohortPhases: CohortPhaseType[] = [
   'Phase 2 - Plan and Scale',
   'Phase 3 - Implement and Monitor',
 ];
+
+/**
+ * Get string value of phase number.
+ */
+export const getPhaseNumber = (phase: CohortPhaseType): string => {
+  const match = phase.match(/^Phase (\d+) /);
+  return match?.[1] ?? '';
+};

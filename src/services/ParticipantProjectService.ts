@@ -85,7 +85,7 @@ const list = async (
     searchOrderConfig = {
       locale,
       sortOrder,
-      numberFields: ['id', 'cohort_id', 'participant_id'],
+      numberFields: ['id', 'cohortId', 'restorableLand'],
     };
   }
 

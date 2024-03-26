@@ -69,7 +69,6 @@ export default function ParticipantList(): JSX.Element {
   const [requestId, setRequestId] = useState<string>('');
   const participantsResult = useAppSelector(selectParticipantListRequest(requestId));
 
-  // TODO: check for non-empty filters
   const isEmptyState = useMemo<boolean>(
     () => participantsResult?.status === 'success' && participants.length === 0 && !hasFilters,
     [hasFilters, participants, participantsResult]
