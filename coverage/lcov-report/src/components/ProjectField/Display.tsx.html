@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/scenes/AcceleratorRouter/ParticipantProjects/ProjectField/index.tsx</title>
+    <title>Code coverage report for src/components/ProjectField/Display.tsx</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../../../../prettify.css" />
-    <link rel="stylesheet" href="../../../../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../../../../favicon.png" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../../../../sort-arrow-sprite.png);
+            background-image: url(../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../../index.html">All files</a> / <a href="index.html">src/scenes/AcceleratorRouter/ParticipantProjects/ProjectField</a> index.tsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/ProjectField</a> Display.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
@@ -96,23 +96,7 @@
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L34'></a><a href='#L34'>34</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -124,8 +108,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -133,41 +115,53 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { isValidElement } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
 &nbsp;
-import { Typography } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 &nbsp;
-type DisplayFieldValue = string | number | null | undefined | JSX.Element | false;
+import Link from 'src/components/common/Link';
+import strings from 'src/strings';
 &nbsp;
-export interface ProjectFieldProps {
-  label?: string;
-  link?: string;
-  value?: DisplayFieldValue;
-  rightBorder?: boolean;
-  user?: string;
-  date?: string;
-}
+import { ProjectFieldProps, renderFieldValue } from '.';
+import GridEntryWrapper from './GridEntryWrapper';
 &nbsp;
-type EditFieldValue = string | number | undefined;
-&nbsp;
-export interface ProjectFieldEditProps {
-  id: string;
-  label: string;
-  onChange: (id: string, value: string) =&gt; void;
-  value?: EditFieldValue;
-}
-&nbsp;
-export const renderFieldValue = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(v</span>alue: DisplayFieldValue): JSX.Element =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  if (isValidElement(value)) {</span>
-<span class="cstat-no" title="statement not covered" >    return value;</span>
-  }
+const ProjectFieldDisplay = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> label, link, rightBorder, value }: ProjectFieldProps) =&gt; {</span>
+  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}&gt;
-      {([undefined, null] as DisplayFieldValue[]).includes(value) ? 'N/A' : value}
-    &lt;/Typography&gt;
+    &lt;GridEntryWrapper rightBorder={rightBorder}&gt;
+      &lt;Box paddingX={theme.spacing(2)}&gt;
+        &lt;Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={600} marginBottom={theme.spacing(1)}&gt;
+          {label}
+        &lt;/Typography&gt;
+        {value !== false ? renderFieldValue(value) : null}
+        {link &amp;&amp; (
+          &lt;Box marginTop={theme.spacing(1)}&gt;
+            &lt;Link to={link} fontSize={'16px'} fontWeight={400} lineHeight={'24px'}&gt;
+              {strings.SEE_SHAPE_FILE}
+            &lt;/Link&gt;
+          &lt;/Box&gt;
+        )}
+      &lt;/Box&gt;
+    &lt;/GridEntryWrapper&gt;
   );
 };
+&nbsp;
+export default ProjectFieldDisplay;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -175,16 +169,16 @@ export const renderFieldValue = <span class="cstat-no" title="statement not cove
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-26T20:11:29.266Z
+                at 2024-03-26T21:02:04.897Z
             </div>
-        <script src="../../../../../prettify.js"></script>
+        <script src="../../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../../../../sorter.js"></script>
-        <script src="../../../../../block-navigation.js"></script>
+        <script src="../../../sorter.js"></script>
+        <script src="../../../block-navigation.js"></script>
     </body>
 </html>
     

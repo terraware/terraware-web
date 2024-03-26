@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/scenes/AcceleratorRouter/ParticipantProjects/ProjectField/TextAreaEdit.tsx</title>
+    <title>Code coverage report for src/components/ProjectField/GridEntryWrapper.tsx</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../../../../prettify.css" />
-    <link rel="stylesheet" href="../../../../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../../../../favicon.png" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../../../../sort-arrow-sprite.png);
+            background-image: url(../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../../index.html">All files</a> / <a href="index.html">src/scenes/AcceleratorRouter/ParticipantProjects/ProjectField</a> TextAreaEdit.tsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/ProjectField</a> GridEntryWrapper.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
@@ -94,17 +94,10 @@
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a>
-<a name='L38'></a><a href='#L38'>38</a>
-<a name='L39'></a><a href='#L39'>39</a>
-<a name='L40'></a><a href='#L40'>40</a>
-<a name='L41'></a><a href='#L41'>41</a>
-<a name='L42'></a><a href='#L42'>42</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -117,18 +110,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -144,48 +125,37 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
 &nbsp;
-import { Box, useTheme } from '@mui/material';
-import { Textfield } from '@terraware/web-components';
+import { Grid, useTheme } from '@mui/material';
 &nbsp;
-import { ProjectFieldEditProps } from '.';
-import GridEntryWrapper from './GridEntryWrapper';
+export interface GridEntryWrapperProps {
+  children: JSX.Element;
+  height?: string;
+  md?: number;
+  rightBorder?: boolean;
+}
 &nbsp;
-const ProjectFieldTextAreaEdit = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> id, label, onChange, value }: ProjectFieldEditProps) =&gt; {</span>
+const GridEntryWrapper = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> children, height, md, rightBorder }: GridEntryWrapperProps) =&gt; {</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
 &nbsp;
-  const handleOnChange = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (_</span>value: unknown) =&gt; {
-<span class="cstat-no" title="statement not covered" >      onChange(id, _value as string);</span>
-    },
-    [id, onChange]
-  );
-&nbsp;
-  const styles: Record&lt;string, Record&lt;string, unknown&gt;&gt; = <span class="cstat-no" title="statement not covered" >{</span>
-    textarea: {
-      height: '120px',
-    },
-  };
-&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;GridEntryWrapper md={6} height={'144px'}&gt;
-      &lt;Box paddingX={theme.spacing(2)}&gt;
-        &lt;Textfield
-          id={id}
-          label={label}
-          onChange={handleOnChange}
-          value={value || ''}
-          styles={styles}
-          type='textarea'
-        /&gt;
-      &lt;/Box&gt;
-    &lt;/GridEntryWrapper&gt;
+    &lt;Grid
+      item
+      xs={12}
+      md={md || 3}
+      height={height || '100px'}
+      margin={`${theme.spacing(2)} 0`}
+      sx={{
+        borderRight: rightBorder ? `1px solid ${theme.palette.TwClrBaseGray100}` : 0,
+      }}
+    &gt;
+      {children}
+    &lt;/Grid&gt;
   );
 };
 &nbsp;
-export default ProjectFieldTextAreaEdit;
+export default GridEntryWrapper;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -193,16 +163,16 @@ export default ProjectFieldTextAreaEdit;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-26T20:11:29.266Z
+                at 2024-03-26T21:02:04.897Z
             </div>
-        <script src="../../../../../prettify.js"></script>
+        <script src="../../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../../../../sorter.js"></script>
-        <script src="../../../../../block-navigation.js"></script>
+        <script src="../../../sorter.js"></script>
+        <script src="../../../block-navigation.js"></script>
     </body>
 </html>
     
