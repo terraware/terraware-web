@@ -130,8 +130,6 @@ const CohortsListView = ({ filterModifiers, extraTableFilters }: CohortsListView
   );
 };
 
-export default CohortsListView;
-
 const EmptyState = ({ onClick }: { onClick: () => void }): JSX.Element => {
   const theme = useTheme();
   const { isAllowed } = useUser();
@@ -166,3 +164,5 @@ const EmptyState = ({ onClick }: { onClick: () => void }): JSX.Element => {
     </Card>
   );
 };
+
+export default CohortsListView;
