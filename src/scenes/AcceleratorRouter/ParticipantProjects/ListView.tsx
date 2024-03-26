@@ -130,14 +130,6 @@ export default function ListView(): JSX.Element {
               pillValueRenderer: (values: (string | number | null)[]) =>
                 values.map((value) => cohorts[value || ''] || '').join(', '),
               renderOption: (id: string | number) => cohorts[id] || '',
-              searchNodeCreator: (values: (number | string | null)[]) => ({
-                field: 'cohortId',
-                operation: 'field',
-                type: 'Exact',
-                values: values.map((value: number | string | null): string | null =>
-                  value === null ? value : `${value}`
-                ),
-              }),
             },
             {
               field: 'phase',
@@ -147,14 +139,6 @@ export default function ListView(): JSX.Element {
               pillValueRenderer: (values: (string | number | null)[]) =>
                 values.map((value) => phases[value || ''] || '').join(', '),
               renderOption: (phase: string | number) => phases[phase] || '',
-              searchNodeCreator: (values: (number | string | null)[]) => ({
-                field: 'phase',
-                operation: 'field',
-                type: 'Exact',
-                values: values.map((value: number | string | null): string | null =>
-                  value === null ? value : `${value}`
-                ),
-              }),
             },
           ]
         : [],
