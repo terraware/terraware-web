@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/59</span>
+                <span class='fraction'>0/58</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/44</span>
+                <span class='fraction'>0/42</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/59</span>
+                <span class='fraction'>0/58</span>
             </div>
         
             
@@ -305,10 +305,7 @@
 <a name='L240'></a><a href='#L240'>240</a>
 <a name='L241'></a><a href='#L241'>241</a>
 <a name='L242'></a><a href='#L242'>242</a>
-<a name='L243'></a><a href='#L243'>243</a>
-<a name='L244'></a><a href='#L244'>244</a>
-<a name='L245'></a><a href='#L245'>245</a>
-<a name='L246'></a><a href='#L246'>246</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L243'></a><a href='#L243'>243</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -364,7 +361,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -491,14 +487,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -526,6 +518,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -557,7 +551,7 @@
 import { useHistory } from 'react-router-dom';
 &nbsp;
 import { Box, Typography, useTheme } from '@mui/material';
-import { BusySpinner, Button, DropdownItem, TableColumnType } from '@terraware/web-components';
+import { Button, DropdownItem, TableColumnType } from '@terraware/web-components';
 &nbsp;
 import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
 import Card from 'src/components/common/Card';
@@ -610,7 +604,6 @@ const defaultSearchOrder: SearchSortOrder = <span class="cstat-no" title="statem
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >ParticipantList(</span>): JSX.Element {
   const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
-  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const { isAllowed } = <span class="cstat-no" title="statement not covered" >useUser();</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
@@ -733,14 +726,7 @@ export default function <span class="fstat-no" title="function not covered" >Par
   }, [activeLocale, goToNewParticipant, isAllowed, isEmptyState, isMobile]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Card style={{ display: 'flex', flexDirection: 'column' }}&gt;
-      &lt;Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}&gt;
-        &lt;Typography color={theme.palette.TwClrTxt} fontSize='20px' fontWeight={600} lineHeight='28px'&gt;
-          {strings.PARTICIPANTS}
-        &lt;/Typography&gt;
-        {actionMenus}
-      &lt;/Box&gt;
-      {participantsResult?.status === 'pending' &amp;&amp; &lt;BusySpinner /&gt;}
+    &lt;&gt;
       {openDownload &amp;&amp; (
         &lt;DownloadParticipants
           onClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setOpenDownload(false)}</span>
@@ -752,6 +738,7 @@ export default function <span class="fstat-no" title="function not covered" >Par
       {isEmptyState &amp;&amp; &lt;EmptyState onClick={goToNewParticipant} /&gt;}
       {!isEmptyState &amp;&amp; (
         &lt;TableWithSearchFilters
+          busy={participantsResult?.status === 'pending'}
           columns={columns}
           defaultSearchOrder={defaultSearchOrder}
           dispatchSearchRequest={dispatchSearchRequest}
@@ -759,10 +746,12 @@ export default function <span class="fstat-no" title="function not covered" >Par
           fuzzySearchColumns={fuzzySearchColumns}
           id='accelerator-participants-table'
           Renderer={ParticipantsCellRenderer}
+          rightComponent={actionMenus}
           rows={participants}
+          title={strings.PARTICIPANTS}
         /&gt;
       )}
-    &lt;/Card&gt;
+    &lt;/&gt;
   );
 }
 &nbsp;
@@ -771,31 +760,33 @@ const EmptyState = <span class="cstat-no" title="statement not covered" ><span c
   const { isAllowed } = <span class="cstat-no" title="statement not covered" >useUser();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        flexGrow: 0,
-        margin: 'auto',
-        padding: theme.spacing(3, 3, 8),
-        textAlign: 'center',
-      }}
-    &gt;
-      &lt;Typography
-        color={theme.palette.TwClrTxt}
-        fontSize='16px'
-        fontWeight={400}
-        lineHeight='24px'
-        marginBottom={theme.spacing(2)}
+    &lt;Card style={{ display: 'flex', flexDirection: 'column' }} title={strings.PARTICIPANTS}&gt;
+      &lt;Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          flexGrow: 0,
+          margin: 'auto',
+          padding: theme.spacing(3, 3, 8),
+          textAlign: 'center',
+        }}
       &gt;
-        {strings.PARTICIPANTS_EMPTY_STATE}
-      &lt;/Typography&gt;
-      {isAllowed('CREATE_PARTICIPANTS') &amp;&amp; (
-        &lt;Box sx={{ margin: 'auto' }}&gt;
-          &lt;Button icon='plus' id='new-participant' label={strings.ADD_PARTICIPANT} onClick={onClick} size='medium' /&gt;
-        &lt;/Box&gt;
-      )}
-    &lt;/Box&gt;
+        &lt;Typography
+          color={theme.palette.TwClrTxt}
+          fontSize='16px'
+          fontWeight={400}
+          lineHeight='24px'
+          marginBottom={theme.spacing(2)}
+        &gt;
+          {strings.PARTICIPANTS_EMPTY_STATE}
+        &lt;/Typography&gt;
+        {isAllowed('CREATE_PARTICIPANTS') &amp;&amp; (
+          &lt;Box sx={{ margin: 'auto' }}&gt;
+            &lt;Button icon='plus' id='new-participant' label={strings.ADD_PARTICIPANT} onClick={onClick} size='medium' /&gt;
+          &lt;/Box&gt;
+        )}
+      &lt;/Box&gt;
+    &lt;/Card&gt;
   );
 };
 &nbsp;</pre></td></tr></table></pre>
@@ -805,7 +796,7 @@ const EmptyState = <span class="cstat-no" title="statement not covered" ><span c
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-26T19:59:02.485Z
+                at 2024-03-26T20:11:29.266Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
