@@ -89,10 +89,6 @@ const CohortsListView = ({ filterModifiers, extraTableFilters }: CohortsListView
     [dispatch]
   );
 
-  useEffect(() => {
-    dispatchSearchRequest(activeLocale);
-  }, [activeLocale, dispatchSearchRequest]);
-
   const actionMenus = useMemo<ReactNode | null>(() => {
     const canCreateCohorts = isAllowed('CREATE_COHORTS');
 
