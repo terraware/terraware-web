@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
@@ -316,16 +316,7 @@
 <a name='L251'></a><a href='#L251'>251</a>
 <a name='L252'></a><a href='#L252'>252</a>
 <a name='L253'></a><a href='#L253'>253</a>
-<a name='L254'></a><a href='#L254'>254</a>
-<a name='L255'></a><a href='#L255'>255</a>
-<a name='L256'></a><a href='#L256'>256</a>
-<a name='L257'></a><a href='#L257'>257</a>
-<a name='L258'></a><a href='#L258'>258</a>
-<a name='L259'></a><a href='#L259'>259</a>
-<a name='L260'></a><a href='#L260'>260</a>
-<a name='L261'></a><a href='#L261'>261</a>
-<a name='L262'></a><a href='#L262'>262</a>
-<a name='L263'></a><a href='#L263'>263</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L254'></a><a href='#L254'>254</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -404,15 +395,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -589,7 +571,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useState } from 'react';
 &nbsp;
-import { Box, Grid, useTheme } from '@mui/material';
+import { Grid, useTheme } from '@mui/material';
 &nbsp;
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
@@ -598,17 +580,17 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { requestUpdateParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
 import { selectParticipantProjectUpdateRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import VoteBadge from 'src/scenes/AcceleratorRouter/Voting/VoteBadge';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
 import { useParticipantProjectData } from '../ParticipantProjectContext';
-import ProjectFieldCard from '../ProjectField/Card';
 import ProjectFieldDisplay from '../ProjectField/Display';
 import ProjectFieldMeta from '../ProjectField/Meta';
+import PhaseScoreCard from '../ProjectField/PhaseScoreCard';
 import ProjectFieldTextAreaEdit from '../ProjectField/TextAreaEdit';
 import ProjectFieldTextfield from '../ProjectField/Textfield';
+import VotingDecisionCard from '../ProjectField/VotingDecisionCard';
 import EditNameConfirm from './EditNameConfirm';
 &nbsp;
 const EditView = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -696,17 +678,8 @@ const EditView = <span class="cstat-no" title="statement not covered" ><span cla
                   onChange={onChange}
                   value={record.name}
                 /&gt;
-                &lt;ProjectFieldCard label={strings.PHASE_1_SCORE} value={record.phase1Score} /&gt;
-                &lt;ProjectFieldCard
-                  label={strings.VOTING_DECISION}
-                  value={
-                    project.votingDecision ? (
-                      &lt;Box style={{ margin: 'auto', width: 'fit-content' }}&gt;
-                        &lt;VoteBadge vote={project.votingDecision} /&gt;
-                      &lt;/Box&gt;
-                    ) : undefined
-                  }
-                /&gt;
+                &lt;PhaseScoreCard project={project} /&gt;
+                &lt;VotingDecisionCard project={project} /&gt;
                 &lt;ProjectFieldDisplay value={false} /&gt;
                 {/* TODO this will be multiselect with values from backend */}
                 &lt;ProjectFieldTextfield
@@ -856,7 +829,7 @@ export default EditView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-26T14:43:50.323Z
+                at 2024-03-26T14:52:12.419Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

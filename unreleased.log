@@ -1,3 +1,4 @@
+106330b7ad SW-4713 Use score coloring for the phase1Score in participant project views (#2401)
 3653bd076e Make the scoring colors work for average scores, change copy for phase score header (#2400)
 9e86e424d8 SW-5110 Update accelerator org service and components to use new types (#2389)
 6a277b8b49 SW-4713 Add confirm dialog when the participant project name is edited (#2399)
