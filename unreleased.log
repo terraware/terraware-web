@@ -1,3 +1,4 @@
+39595b687b SW-4981: Move cohorts from nav into tabbed view (#2416)
 ee3de81f71 Updated translations from Phrase (#2417)
 97b84a632f SW-4990: Add new columns as needed (#2392)
 945adbcbc8 SW-5065 Used locale agnostic date processing for date filter (#2415)
