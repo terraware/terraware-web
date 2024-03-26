@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback, useEffect, useMemo } from 'react';
+import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Box, Card, Typography, useTheme } from '@mui/material';
@@ -58,8 +58,9 @@ const CohortsListView = ({ filterModifiers, extraTableFilters }: CohortsListView
   const { isAllowed } = useUser();
   const { isMobile } = useDeviceInfo();
 
+  const [hasFilters, setHasFilters] = useState<boolean>(false);
   const cohorts = useAppSelector(selectCohorts);
-  const isEmptyState = !cohorts?.length;
+  const isEmptyState = useMemo<boolean>(() => cohorts?.length === 0 && !hasFilters, [cohorts?.length, hasFilters]);
 
   const featuredFilters: FilterConfig[] = useMemo(() => {
     const filters: FilterConfig[] = [
@@ -81,7 +82,8 @@ const CohortsListView = ({ filterModifiers, extraTableFilters }: CohortsListView
   }, [history]);
 
   const dispatchSearchRequest = useCallback(
-    (locale: string | null, search?: SearchNodePayload, searchSortOrder?: SearchSortOrder) => {
+    (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => {
+      setHasFilters(search.children.length > 0);
       dispatch(requestCohorts({ locale, depth: 'Cohort', search, searchSortOrder }));
     },
     [dispatch]
