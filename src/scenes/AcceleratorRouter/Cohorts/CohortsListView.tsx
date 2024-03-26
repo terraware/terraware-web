@@ -43,6 +43,11 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           name: strings.PHASE,
           type: 'string',
         },
+        {
+          key: 'participantIds',
+          name: strings.PARTICIPANTS,
+          type: 'string',
+        },
       ]
     : [];
 
