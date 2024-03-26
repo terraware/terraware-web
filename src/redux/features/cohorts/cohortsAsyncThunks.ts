@@ -10,15 +10,26 @@ import CohortService, {
 import { Response2 } from 'src/services/HttpService';
 import strings from 'src/strings';
 import { Cohort, CreateCohortRequestPayload, UpdateCohortRequestPayload } from 'src/types/Cohort';
+import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 
 export const requestCohorts = createAsyncThunk(
   'cohorts/list',
-  async (request: { locale: string | null; depth?: ListCohortsRequestDepth }, { dispatch, rejectWithValue }) => {
-    const response: Response2<Cohort[]> = await CohortService.listCohorts(request.locale, request.depth);
+  async (
+    request: {
+      locale: string | null;
+      depth?: ListCohortsRequestDepth;
+      search?: SearchNodePayload;
+      searchSortOrder?: SearchSortOrder;
+    },
+    { dispatch, rejectWithValue }
+  ) => {
+    const { depth, locale, search, searchSortOrder } = request;
 
-    if (response !== null && response.requestSucceeded && response?.data !== undefined) {
-      dispatch(setCohortsAction({ error: response.error, cohorts: response.data }));
-      return response.data;
+    const response = await CohortService.listCohorts(locale, search, searchSortOrder, depth);
+
+    if (response !== null && response.requestSucceeded && response?.cohorts !== undefined) {
+      dispatch(setCohortsAction({ error: response.error, cohorts: response.cohorts }));
+      return response.cohorts;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);

@@ -1,9 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import { ParticipantProject } from 'src/types/ParticipantProject';
+import { ParticipantProject, ParticipantProjectSearchResult } from 'src/types/ParticipantProject';
 
-import { requestGetParticipantProject } from './participantProjectsAsyncThunks';
+import {
+  requestGetParticipantProject,
+  requestListParticipantProjects,
+  requestUpdateParticipantProject,
+} from './participantProjectsAsyncThunks';
 
 /**
  * Get Participant Project
@@ -20,3 +24,35 @@ export const participantProjectSlice = createSlice({
 });
 
 export const participantProjectReducer = participantProjectSlice.reducer;
+
+/**
+ * Get Participant Project
+ */
+const initialStateParticipantProjectUpdate: { [key: string]: StatusT<number> } = {};
+
+export const participantProjectUpdateSlice = createSlice({
+  name: 'participantProjectUpdateSlice',
+  initialState: initialStateParticipantProjectUpdate,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestUpdateParticipantProject, true)(builder);
+  },
+});
+
+export const participantProjectUpdateReducer = participantProjectUpdateSlice.reducer;
+
+/**
+ * List Participant Projects
+ */
+const initialStateParticipantProjectsList: { [key: string]: StatusT<ParticipantProjectSearchResult[]> } = {};
+
+export const participantProjectsListSlice = createSlice({
+  name: 'participantProjectsListSlice',
+  initialState: initialStateParticipantProjectsList,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestListParticipantProjects)(builder);
+  },
+});
+
+export const participantProjectsListReducer = participantProjectsListSlice.reducer;

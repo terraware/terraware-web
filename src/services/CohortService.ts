@@ -1,6 +1,12 @@
 import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response, Response2 } from 'src/services/HttpService';
 import { Cohort, CreateCohortRequestPayload, UpdateCohortRequestPayload } from 'src/types/Cohort';
+import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
+
+export type CohortsData = {
+  cohorts: Cohort[] | undefined;
+};
 
 /**
  * Cohort related services
@@ -28,13 +34,26 @@ const httpCohorts = HttpService.root(COHORTS_ENDPOINT);
 /**
  * List all cohorts
  */
+
 const listCohorts = async (
   locale: string | null,
+  search?: SearchNodePayload,
+  searchSortOrder?: SearchSortOrder,
   depth: ListCohortsRequestDepth = 'Cohort'
-): Promise<Response2<Cohort[]>> =>
-  httpCohorts.get<ListCohortsResponsePayload, { data: Cohort[] | undefined }>({ params: { depth } }, (response) => ({
-    data: response?.cohorts?.sort((a, b) => a.name.localeCompare(b.name, locale || undefined)),
+): Promise<(CohortsData & Response) | null> => {
+  let searchOrderConfig: SearchOrderConfig;
+  if (searchSortOrder) {
+    searchOrderConfig = {
+      locale,
+      sortOrder: searchSortOrder,
+      numberFields: ['id', 'participantIds'],
+    };
+  }
+
+  return httpCohorts.get<ListCohortsResponsePayload, CohortsData>({ params: { depth } }, (response) => ({
+    cohorts: searchAndSort(response?.cohorts || [], search, searchOrderConfig),
   }));
+};
 
 /**
  * Create a cohort

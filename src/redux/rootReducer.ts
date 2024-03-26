@@ -34,7 +34,11 @@ import {
   rescheduleObservationReducer,
   scheduleObservationReducer,
 } from './features/observations/observationsSlice';
-import { participantProjectReducer } from './features/participantProjects/participantProjectsSlice';
+import {
+  participantProjectReducer,
+  participantProjectUpdateReducer,
+  participantProjectsListReducer,
+} from './features/participantProjects/participantProjectsSlice';
 import {
   participantCreateReducer,
   participantDeleteReducer,
@@ -89,6 +93,8 @@ export const reducers = {
   participantDelete: participantDeleteReducer,
   participant: participantReducer,
   participantProject: participantProjectReducer,
+  participantProjectsList: participantProjectsListReducer,
+  participantProjectUpdate: participantProjectUpdateReducer,
   participantList: participantListReducer,
   participantUpdate: participantUpdateReducer,
   plantingSiteObservationsResults: plantingSiteObservationsResultsReducer,

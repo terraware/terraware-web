@@ -1,16 +1,20 @@
 import { ReactNode } from 'react';
 
-import { Box, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
+import { BusySpinner } from '@terraware/web-components';
 
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 export type CardProps = {
+  busy?: boolean;
   children?: ReactNode;
-  style?: object;
   flushMobile?: boolean;
+  rightComponent?: ReactNode;
+  style?: object;
+  title?: string;
 };
 
-export default function Card({ children, style, flushMobile }: CardProps): JSX.Element {
+export default function Card({ busy, children, flushMobile, rightComponent, style, title }: CardProps): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const flush = isMobile && flushMobile;
@@ -25,6 +29,17 @@ export default function Card({ children, style, flushMobile }: CardProps): JSX.E
         backgroundColor: theme.palette.TwClrBg,
       }}
     >
+      {busy && <BusySpinner />}
+      {(title || rightComponent) && (
+        <Box
+          sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', margin: theme.spacing(1, 0) }}
+        >
+          <Typography color={theme.palette.TwClrTxt} fontSize='20px' fontWeight={600} lineHeight='28px'>
+            {title || ''}
+          </Typography>
+          {rightComponent}
+        </Box>
+      )}
       {children}
     </Box>
   );

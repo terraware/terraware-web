@@ -1,11 +1,5 @@
-type NamedIdentifiableObject = {
-  id: number;
-  name: string;
-};
+import { components } from 'src/api/types/generated-schema';
 
-export type AcceleratorOrgProject = NamedIdentifiableObject;
+export type AcceleratorOrg = components['schemas']['AcceleratorOrganizationPayload'];
 
-export type AcceleratorOrg = NamedIdentifiableObject & {
-  // available for Participant membership
-  availableProjects: AcceleratorOrgProject[];
-};
+export type AcceleratorOrgProject = AcceleratorOrg['projects'][0];
