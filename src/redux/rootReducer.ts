@@ -37,6 +37,7 @@ import {
 import {
   participantProjectReducer,
   participantProjectUpdateReducer,
+  participantProjectsListReducer,
 } from './features/participantProjects/participantProjectsSlice';
 import {
   participantCreateReducer,
@@ -92,6 +93,7 @@ export const reducers = {
   participantDelete: participantDeleteReducer,
   participant: participantReducer,
   participantProject: participantProjectReducer,
+  participantProjectsList: participantProjectsListReducer,
   participantProjectUpdate: participantProjectUpdateReducer,
   participantList: participantListReducer,
   participantUpdate: participantUpdateReducer,
