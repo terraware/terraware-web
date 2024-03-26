@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem } from '@terraware/web-components';
@@ -12,6 +12,7 @@ import { useUser } from 'src/providers';
 import strings from 'src/strings';
 
 import PageWithModuleTimeline from '../PageWithModuleTimeline';
+import Export from './Export';
 import { useParticipantProjectData } from './ParticipantProjectContext';
 import ProjectFieldDisplay from './ProjectField/Display';
 import ProjectFieldLink from './ProjectField/Link';
@@ -27,9 +28,11 @@ const SingleView = () => {
   const { crumbs, projectId, project, status } = useParticipantProjectData();
   const { goToParticipantProjectEdit } = useNavigateTo();
 
+  const [exportModalOpen, setExportModalOpen] = useState(false);
+
   const onOptionItemClick = useCallback((item: DropdownItem) => {
     if (item.value === 'export-participant-project') {
-      // TODO when BE is done
+      setExportModalOpen(true);
     }
   }, []);
 
@@ -168,6 +171,14 @@ const SingleView = () => {
           </Card>
         </>
       )}
+
+      <Export
+        projectId={projectId}
+        onClose={() => {
+          setExportModalOpen(false);
+        }}
+        open={exportModalOpen}
+      />
     </PageWithModuleTimeline>
   );
 };
