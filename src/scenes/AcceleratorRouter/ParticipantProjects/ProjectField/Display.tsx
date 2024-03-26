@@ -17,7 +17,7 @@ const ProjectFieldDisplay = ({ label, link, rightBorder, value }: ProjectFieldPr
         <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={600} marginBottom={theme.spacing(1)}>
           {label}
         </Typography>
-        {renderFieldValue(value)}
+        {value !== false ? renderFieldValue(value) : null}
         {link && (
           <Box marginTop={theme.spacing(1)}>
             <Link to={link} fontSize={'16px'} fontWeight={400} lineHeight={'24px'}>

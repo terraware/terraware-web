@@ -18,7 +18,7 @@ import ProjectFieldCard from './ProjectField/Card';
 import ProjectFieldDisplay from './ProjectField/Display';
 import ProjectFieldLink from './ProjectField/Link';
 import ProjectFieldMeta from './ProjectField/Meta';
-import ProjectFieldTextArea from './ProjectField/TextArea';
+import ProjectFieldTextAreaDisplay from './ProjectField/TextAreaDisplay';
 
 const SingleView = () => {
   const theme = useTheme();
@@ -169,10 +169,10 @@ const SingleView = () => {
             }}
           >
             <Grid container>
-              <ProjectFieldTextArea label={strings.DEAL_DESCRIPTION} value={project.dealDescription} />
-              <ProjectFieldTextArea label={strings.INVESTMENT_THESIS} value={project.investmentThesis} />
-              <ProjectFieldTextArea label={strings.FAILURE_RISK} value={project.failureRisk} />
-              <ProjectFieldTextArea label={strings.WHAT_NEEDS_TO_BE_TRUE} value={project.whatNeedsToBeTrue} />
+              <ProjectFieldTextAreaDisplay label={strings.DEAL_DESCRIPTION} value={project.dealDescription} />
+              <ProjectFieldTextAreaDisplay label={strings.INVESTMENT_THESIS} value={project.investmentThesis} />
+              <ProjectFieldTextAreaDisplay label={strings.FAILURE_RISK} value={project.failureRisk} />
+              <ProjectFieldTextAreaDisplay label={strings.WHAT_NEEDS_TO_BE_TRUE} value={project.whatNeedsToBeTrue} />
             </Grid>
           </Card>
         </>

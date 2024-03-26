@@ -5,7 +5,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { ProjectFieldProps } from '.';
 import GridEntryWrapper from './GridEntryWrapper';
 
-const ProjectFieldTextArea = ({ label, value }: ProjectFieldProps) => {
+const ProjectFieldTextAreaDisplay = ({ label, value }: ProjectFieldProps) => {
   const theme = useTheme();
 
   return (
@@ -22,4 +22,4 @@ const ProjectFieldTextArea = ({ label, value }: ProjectFieldProps) => {
   );
 };
 
-export default ProjectFieldTextArea;
+export default ProjectFieldTextAreaDisplay;
