@@ -4,6 +4,7 @@ import { Container, Grid, useTheme } from '@mui/material';
 import { Dropdown, Textfield } from '@terraware/web-components';
 
 import PageForm from 'src/components/common/PageForm';
+// import ProjectFieldMeta from 'src/components/ProjectField/Meta';
 import { useLocalization } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { CreateCohortRequestPayload, UpdateCohortRequestPayload } from 'src/types/Cohort';
@@ -92,7 +93,7 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
           paddingLeft: theme.spacing(isMobile ? 0 : 4),
           paddingRight: theme.spacing(isMobile ? 0 : 4),
           paddingTop: theme.spacing(5),
-          width: isMobile ? '100%' : '700px',
+          width: '100%',
         }}
       >
         <Grid
@@ -102,29 +103,47 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
             borderRadius: theme.spacing(4),
             padding: theme.spacing(3),
           }}
-          width={isMobile ? '100%' : '700px'}
+          width={'100%'}
         >
-          <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
-            <Textfield
-              errorText={validateFields && !localRecord?.name ? strings.REQUIRED_FIELD : ''}
-              id='name'
-              label={strings.NAME}
-              onChange={(value) => updateField('name', value)}
-              required
-              type='text'
-              value={localRecord.name}
-            />
+          <Grid container spacing={theme.spacing(3)} width={'100%'}>
+            <Grid item xs={isMobile ? 12 : 4} sx={{ marginTop: theme.spacing(2) }}>
+              <Textfield
+                errorText={validateFields && !localRecord?.name ? strings.REQUIRED_FIELD : ''}
+                id='name'
+                label={strings.NAME}
+                onChange={(value) => updateField('name', value)}
+                required
+                type='text'
+                value={localRecord.name}
+              />
+            </Grid>
+            <Grid item xs={isMobile ? 12 : 4} sx={{ marginTop: theme.spacing(2) }}>
+              <Dropdown
+                fullWidth={true}
+                label={strings.CURRENT_PHASE}
+                onChange={(value) => updateField('phase', value)}
+                options={currentPhaseDropdownOptions}
+                required
+                selectedValue={localRecord.phase}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
-            <Dropdown
-              fullWidth={true}
-              label={strings.CURRENT_PHASE}
-              onChange={(value) => updateField('phase', value)}
-              options={currentPhaseDropdownOptions}
-              required
-              selectedValue={localRecord.phase}
+
+          {/* TODO: uncomment this section once createdTime & modifiedTime are available in Cohort records */}
+          {/* <Grid container>
+            <ProjectFieldMeta
+              date={cohort.createdTime || 'Mar 2, 2024'}
+              dateLabel={strings.CREATED_ON}
+              user={cohort.createdBy || 'Weese Ritherspoon'}
+              userLabel={strings.CREATED_BY}
             />
-          </Grid>
+            <ProjectFieldMeta
+              date={cohort.modifiedTime || 'Mar 2, 2024'}
+              dateLabel={strings.LAST_MODIFIED_ON}
+              user={cohort.modifiedBy || 'Weese Ritherspoon'}
+              userLabel={strings.LAST_MODIFIED_BY}
+            />
+          </Grid> */}
         </Grid>
       </Container>
     </PageForm>

@@ -3,6 +3,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Grid, useTheme } from '@mui/material';
 
 import Page from 'src/components/Page';
+import ProjectFieldDisplay from 'src/components/ProjectField/Display';
+import ProjectFieldMeta from 'src/components/ProjectField/Meta';
+import PhaseScoreCard from 'src/components/ProjectField/PhaseScoreCard';
+import ProjectFieldTextAreaEdit from 'src/components/ProjectField/TextAreaEdit';
+import ProjectFieldTextfield from 'src/components/ProjectField/Textfield';
+import VotingDecisionCard from 'src/components/ProjectField/VotingDecisionCard';
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import useNavigateTo from 'src/hooks/useNavigateTo';
@@ -14,12 +20,6 @@ import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { useParticipantProjectData } from '../ParticipantProjectContext';
-import ProjectFieldDisplay from '../ProjectField/Display';
-import ProjectFieldMeta from '../ProjectField/Meta';
-import PhaseScoreCard from '../ProjectField/PhaseScoreCard';
-import ProjectFieldTextAreaEdit from '../ProjectField/TextAreaEdit';
-import ProjectFieldTextfield from '../ProjectField/Textfield';
-import VotingDecisionCard from '../ProjectField/VotingDecisionCard';
 import EditNameConfirm from './EditNameConfirm';
 
 const EditView = () => {

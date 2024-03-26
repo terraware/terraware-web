@@ -2,12 +2,12 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
 
-import { Grid } from '@mui/material';
+import { Grid, useTheme } from '@mui/material';
 
 import { Crumb } from 'src/components/BreadCrumbs';
-import Page from 'src/components/Page';
+import ProjectFieldDisplay from 'src/components/ProjectField/Display';
+// import ProjectFieldMeta from 'src/components/ProjectField/Meta';
 import Card from 'src/components/common/Card';
-import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useUser } from 'src/providers';
@@ -17,12 +17,15 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
+import PageWithModuleTimeline from '../PageWithModuleTimeline';
+
 const CohortView = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const location = useStateLocation();
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
+  const theme = useTheme();
   const canEdit = isAllowed('UPDATE_COHORTS');
   const pathParams = useParams<{ cohortId: string }>();
   const cohortId = Number(pathParams.cohortId);
@@ -59,18 +62,47 @@ const CohortView = () => {
   );
 
   return (
-    <Page crumbs={crumbs} title={cohort?.name || ''} rightComponent={rightComponent}>
-      <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, borderRadius: '24px' }}>
-        <Grid container spacing={3}>
-          <Grid item xs={4}>
-            <TextField label={strings.NAME} id='name' type='text' value={cohort?.name} display={true} />
-          </Grid>
-          <Grid item xs={8}>
-            <TextField label={strings.PHASE} id='phase' type='text' value={cohort?.phase} display={true} />
-          </Grid>
-        </Grid>
-      </Card>
-    </Page>
+    <PageWithModuleTimeline
+      crumbs={crumbs}
+      hierarchicalCrumbs={false}
+      rightComponent={rightComponent}
+      title={cohort?.name || ''}
+    >
+      {cohort && (
+        <>
+          <Card
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              flexGrow: 1,
+              marginBottom: theme.spacing(3),
+              padding: `${theme.spacing(2)} ${theme.spacing(1)}`,
+            }}
+          >
+            <Grid container>
+              <ProjectFieldDisplay label={strings.COHORT_NAME} value={cohort.name} rightBorder={true} />
+              <ProjectFieldDisplay label={strings.PHASE} value={cohort.phase} rightBorder={true} />
+            </Grid>
+
+            {/* TODO: uncomment this section once createdTime & modifiedTime are available in Cohort records */}
+            {/* <Grid container>
+              <ProjectFieldMeta
+                date={cohort.createdTime}
+                dateLabel={strings.CREATED_ON}
+                user={cohort.createdBy}
+                userLabel={strings.CREATED_BY}
+              />
+              <ProjectFieldMeta
+                date={cohort.modifiedTime}
+                dateLabel={strings.LAST_MODIFIED_ON}
+                user={cohort.modifiedBy}
+                userLabel={strings.LAST_MODIFIED_BY}
+              />
+            </Grid> */}
+          </Card>
+        </>
+      )}
+    </PageWithModuleTimeline>
   );
 };
 
