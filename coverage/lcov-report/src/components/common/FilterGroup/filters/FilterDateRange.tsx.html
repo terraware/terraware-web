@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
@@ -151,25 +151,9 @@
 <a name='L86'></a><a href='#L86'>86</a>
 <a name='L87'></a><a href='#L87'>87</a>
 <a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -181,14 +165,34 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -243,7 +247,8 @@
 &nbsp;
 import { Grid, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { format, isValid } from 'date-fns';
+import getDateDisplayValue from '@terraware/web-components/utils/date';
+import { isValid } from 'date-fns';
 &nbsp;
 import DatePicker from 'src/components/common/DatePicker';
 import strings from 'src/strings';
@@ -279,13 +284,14 @@ export default function <span class="fstat-no" title="function not covered" >Dat
 &nbsp;
   const onChangeDate = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>d: string, value?: string | null) =&gt; {</span>
     const newValues = <span class="cstat-no" title="statement not covered" >[startDate, endDate];</span>
-<span class="cstat-no" title="statement not covered" >    if (id === 'startDate' &amp;&amp; value) {</span>
-<span class="cstat-no" title="statement not covered" >      setStartDate(value);</span>
-<span class="cstat-no" title="statement not covered" >      newValues[0] = value &amp;&amp; isValid(value) ? format(value as unknown as Date, 'yyyy-MM-dd') : null;</span>
+    const date = <span class="cstat-no" title="statement not covered" >value &amp;&amp; isValid(value) ? getDateDisplayValue(value) : null;</span>
+<span class="cstat-no" title="statement not covered" >    if (id === 'startDate' &amp;&amp; date) {</span>
+<span class="cstat-no" title="statement not covered" >      setStartDate(date);</span>
+<span class="cstat-no" title="statement not covered" >      newValues[0] = date;</span>
     }
-<span class="cstat-no" title="statement not covered" >    if (id === 'endDate' &amp;&amp; value) {</span>
-<span class="cstat-no" title="statement not covered" >      setEndDate(value);</span>
-<span class="cstat-no" title="statement not covered" >      newValues[1] = value &amp;&amp; isValid(value) ? format(value as unknown as Date, 'yyyy-MM-dd') : null;</span>
+<span class="cstat-no" title="statement not covered" >    if (id === 'endDate' &amp;&amp; date) {</span>
+<span class="cstat-no" title="statement not covered" >      setEndDate(date);</span>
+<span class="cstat-no" title="statement not covered" >      newValues[1] = date;</span>
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (newValues[0] || newValues[1]) {</span>
@@ -334,7 +340,7 @@ export default function <span class="fstat-no" title="function not covered" >Dat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-26T21:02:04.897Z
+                at 2024-03-26T23:09:41.311Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
