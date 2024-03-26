@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, useCallback, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Box, Card, Typography, useTheme } from '@mui/material';
