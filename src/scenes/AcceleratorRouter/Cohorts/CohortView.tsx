@@ -62,8 +62,6 @@ const CohortView = () => {
     [activeLocale]
   );
 
-  console.log('CohortView - cohort:', cohort);
-
   return (
     <PageWithModuleTimeline
       crumbs={crumbs}
