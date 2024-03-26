@@ -19,5 +19,9 @@ export default function CohortCellRenderer(props: RendererProps<TableRowType>): 
     );
   }
 
+  if (column.key === 'participantIds') {
+    return <CellRenderer {...props} value={(value as string[])?.length?.toString() || '0'} />;
+  }
+
   return <CellRenderer {...props} />;
 }

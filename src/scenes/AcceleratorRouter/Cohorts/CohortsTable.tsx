@@ -19,7 +19,6 @@ import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import CohortCellRenderer from './CohortCellRenderer';
 
 interface CohortTableProps {
-  columns: (activeLocale: string | null) => TableColumnType[];
   extraTableFilters?: SearchNodePayload[];
   filterModifiers?: (filters: FilterConfig[]) => FilterConfig[];
 }
@@ -41,6 +40,11 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
         {
           key: 'phase',
           name: strings.PHASE,
+          type: 'string',
+        },
+        {
+          key: 'participantIds',
+          name: strings.PARTICIPANTS,
           type: 'string',
         },
       ]
