@@ -4,12 +4,11 @@ import { Container, Grid, useTheme } from '@mui/material';
 import { Dropdown, Textfield } from '@terraware/web-components';
 
 import PageForm from 'src/components/common/PageForm';
+// import ProjectFieldMeta from 'src/components/ProjectField/Meta';
 import { useLocalization } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { CreateCohortRequestPayload, UpdateCohortRequestPayload } from 'src/types/Cohort';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-
-// import CohortFieldMeta from './CohortField/Meta';
 
 type CohortFormProps<T extends CreateCohortRequestPayload | UpdateCohortRequestPayload> = {
   busy?: boolean;
@@ -132,13 +131,13 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
 
           {/* TODO: uncomment this section once createdTime & modifiedTime are available in Cohort records */}
           {/* <Grid container>
-            <CohortFieldMeta
+            <ProjectFieldMeta
               date={cohort.createdTime || 'Mar 2, 2024'}
               dateLabel={strings.CREATED_ON}
               user={cohort.createdBy || 'Weese Ritherspoon'}
               userLabel={strings.CREATED_BY}
             />
-            <CohortFieldMeta
+            <ProjectFieldMeta
               date={cohort.modifiedTime || 'Mar 2, 2024'}
               dateLabel={strings.LAST_MODIFIED_ON}
               user={cohort.modifiedBy || 'Weese Ritherspoon'}

@@ -4,6 +4,12 @@ import { Box, Grid, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
+import ProjectFieldDisplay from 'src/components/ProjectField/Display';
+import ProjectFieldLink from 'src/components/ProjectField/Link';
+import ProjectFieldMeta from 'src/components/ProjectField/Meta';
+import PhaseScoreCard from 'src/components/ProjectField/PhaseScoreCard';
+import ProjectFieldTextAreaDisplay from 'src/components/ProjectField/TextAreaDisplay';
+import VotingDecisionCard from 'src/components/ProjectField/VotingDecisionCard';
 import Card from 'src/components/common/Card';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
@@ -14,12 +20,6 @@ import strings from 'src/strings';
 import PageWithModuleTimeline from '../PageWithModuleTimeline';
 import Export from './Export';
 import { useParticipantProjectData } from './ParticipantProjectContext';
-import ProjectFieldDisplay from './ProjectField/Display';
-import ProjectFieldLink from './ProjectField/Link';
-import ProjectFieldMeta from './ProjectField/Meta';
-import PhaseScoreCard from './ProjectField/PhaseScoreCard';
-import ProjectFieldTextAreaDisplay from './ProjectField/TextAreaDisplay';
-import VotingDecisionCard from './ProjectField/VotingDecisionCard';
 
 const SingleView = () => {
   const theme = useTheme();

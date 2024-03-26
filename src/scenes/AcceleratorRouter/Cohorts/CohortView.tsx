@@ -5,6 +5,8 @@ import { useParams } from 'react-router-dom';
 import { Grid, useTheme } from '@mui/material';
 
 import { Crumb } from 'src/components/BreadCrumbs';
+import ProjectFieldDisplay from 'src/components/ProjectField/Display';
+// import ProjectFieldMeta from 'src/components/ProjectField/Meta';
 import Card from 'src/components/common/Card';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
@@ -16,9 +18,6 @@ import strings from 'src/strings';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import PageWithModuleTimeline from '../PageWithModuleTimeline';
-import CohortFieldDisplay from './CohortField/Display';
-
-// import CohortFieldMeta from './CohortField/Meta';
 
 const CohortView = () => {
   const dispatch = useAppDispatch();
@@ -81,19 +80,19 @@ const CohortView = () => {
             }}
           >
             <Grid container>
-              <CohortFieldDisplay label={strings.COHORT_NAME} value={cohort.name} rightBorder={true} />
-              <CohortFieldDisplay label={strings.PHASE} value={cohort.phase} rightBorder={true} />
+              <ProjectFieldDisplay label={strings.COHORT_NAME} value={cohort.name} rightBorder={true} />
+              <ProjectFieldDisplay label={strings.PHASE} value={cohort.phase} rightBorder={true} />
             </Grid>
 
             {/* TODO: uncomment this section once createdTime & modifiedTime are available in Cohort records */}
             {/* <Grid container>
-              <CohortFieldMeta
+              <ProjectFieldMeta
                 date={cohort.createdTime}
                 dateLabel={strings.CREATED_ON}
                 user={cohort.createdBy}
                 userLabel={strings.CREATED_BY}
               />
-              <CohortFieldMeta
+              <ProjectFieldMeta
                 date={cohort.modifiedTime}
                 dateLabel={strings.LAST_MODIFIED_ON}
                 user={cohort.modifiedBy}
