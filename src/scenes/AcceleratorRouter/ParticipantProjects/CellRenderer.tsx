@@ -6,7 +6,7 @@ import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
-import { CohortPhaseType, getPhaseNumber } from 'src/types/Cohort';
+import { CohortPhaseType, getPhaseString } from 'src/types/Cohort';
 
 const useStyles = makeStyles(() => ({
   text: {
@@ -31,7 +31,7 @@ export default function ParticipantProjectsCellRenderer(props: RendererProps<Tab
   }
 
   if (column.key === 'phase') {
-    return <CellRenderer {...props} value={getPhaseNumber(value as CohortPhaseType)} />;
+    return <CellRenderer {...props} value={getPhaseString(value as CohortPhaseType)} />;
   }
 
   return <CellRenderer {...props} />;

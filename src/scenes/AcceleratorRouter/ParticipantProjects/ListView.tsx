@@ -9,7 +9,6 @@ import { requestListParticipantProjects } from 'src/redux/features/participantPr
 import { selectParticipantProjectsListRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { getPhaseNumber } from 'src/types/Cohort';
 import { ParticipantProjectSearchResult } from 'src/types/ParticipantProject';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -106,18 +105,6 @@ export default function ListView(): JSX.Element {
     [projects]
   );
 
-  const phases = useMemo<Record<string, string>>(
-    () =>
-      (projects || []).reduce(
-        (acc, project) => {
-          acc[project.phase] = getPhaseNumber(project.phase);
-          return acc;
-        },
-        {} as Record<string, string>
-      ),
-    [projects]
-  );
-
   const featuredFilters: FilterConfig[] = useMemo(
     () =>
       activeLocale
@@ -136,13 +123,10 @@ export default function ListView(): JSX.Element {
               id: 'phase',
               label: strings.PHASE,
               options: (projects || [])?.map((project: ParticipantProjectSearchResult) => `${project.phase}`),
-              pillValueRenderer: (values: (string | number | null)[]) =>
-                values.map((value) => phases[value || ''] || '').join(', '),
-              renderOption: (phase: string | number) => phases[phase] || '',
             },
           ]
         : [],
-    [activeLocale, cohorts, phases, projects]
+    [activeLocale, cohorts, projects]
   );
 
   return (
