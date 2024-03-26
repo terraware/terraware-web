@@ -18,8 +18,3 @@ export const getShortTime = (dateTime: string, locale: string | undefined | null
   new Intl.DateTimeFormat(locale || 'en-US', { timeStyle: 'short', timeZone: timeZone ?? 'UTC' })
     .format(new Date(dateTime))
     .toLowerCase();
-
-/**
- * Returns yyyy-mm-dd from a Date object in UTC timezone
- */
-export const getIsoDateUtc = (date: Date): string => date.toISOString().split('T')[0];
