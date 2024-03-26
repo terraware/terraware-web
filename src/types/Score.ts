@@ -122,48 +122,45 @@ export const getScoreColors = (
   value: ScoreValue | null,
   theme: Theme
 ): { background: string; border: string; text: string } => {
-  const defaultColors = {
-    background: theme.palette.TwClrBgInfo as string,
-    border: theme.palette.TwClrBrdrInfo as string,
-    text: theme.palette.TwClrTxtTertiary as string,
-  };
+  let _value = Math.round(value || 0);
 
-  if (!value && value !== 0) {
-    return defaultColors;
-  }
-
-  if (1 <= value) {
-    return {
-      background: theme.palette.TwClrBgSuccess as string,
-      border: theme.palette.TwClrBrdrSuccess as string,
-      text: theme.palette.TwClrTxtSuccess as string,
-    };
-  } else if (0 <= value && value < 1) {
-    return {
-      background: theme.palette.TwClrBgSuccess as string,
-      border: theme.palette.TwClrBrdrSuccess as string,
-      text: theme.palette.TwClrTxtSuccess as string,
-    };
-  } else if (0 === value) {
-    return {
-      background: theme.palette.TwClrBgInfo as string,
-      border: theme.palette.TwClrBrdrInfo as string,
-      text: theme.palette.TwClrTxtInfo as string,
-    };
-  } else if (-1 <= value && value < 0) {
-    return {
-      background: theme.palette.TwClrBgWarning as string,
-      border: theme.palette.TwClrBrdrWarning as string,
-      text: theme.palette.TwClrTxtWarning as string,
-    };
-  } else if (value < -1) {
-    return {
-      background: theme.palette.TwClrBgDanger as string,
-      border: theme.palette.TwClrBrdrDanger as string,
-      text: theme.palette.TwClrTxtDanger as string,
-    };
-  } else {
-    return defaultColors;
+  switch (_value) {
+    case 2:
+      return {
+        background: theme.palette.TwClrBgSuccess as string,
+        border: theme.palette.TwClrBrdrSuccess as string,
+        text: theme.palette.TwClrTxtSuccess as string,
+      };
+    case 1:
+      return {
+        background: theme.palette.TwClrBgSuccess as string,
+        border: theme.palette.TwClrBrdrSuccess as string,
+        text: theme.palette.TwClrTxtSuccess as string,
+      };
+    case 0:
+      return {
+        background: theme.palette.TwClrBgInfo as string,
+        border: theme.palette.TwClrBrdrInfo as string,
+        text: theme.palette.TwClrTxtInfo as string,
+      };
+    case -1:
+      return {
+        background: theme.palette.TwClrBgWarning as string,
+        border: theme.palette.TwClrBrdrWarning as string,
+        text: theme.palette.TwClrTxtWarning as string,
+      };
+    case -2:
+      return {
+        background: theme.palette.TwClrBgDanger as string,
+        border: theme.palette.TwClrBrdrDanger as string,
+        text: theme.palette.TwClrTxtDanger as string,
+      };
+    default:
+      return {
+        background: theme.palette.TwClrBgInfo as string,
+        border: theme.palette.TwClrBrdrInfo as string,
+        text: theme.palette.TwClrTxtTertiary as string,
+      };
   }
 };
 
