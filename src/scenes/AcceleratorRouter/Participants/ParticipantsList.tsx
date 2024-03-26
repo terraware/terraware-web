@@ -2,7 +2,7 @@ import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { BusySpinner, Button, DropdownItem, TableColumnType } from '@terraware/web-components';
+import { Button, DropdownItem, TableColumnType } from '@terraware/web-components';
 
 import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
 import Card from 'src/components/common/Card';
@@ -55,7 +55,6 @@ const defaultSearchOrder: SearchSortOrder = {
 
 export default function ParticipantList(): JSX.Element {
   const history = useHistory();
-  const theme = useTheme();
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
   const { isMobile } = useDeviceInfo();
@@ -178,14 +177,7 @@ export default function ParticipantList(): JSX.Element {
   }, [activeLocale, goToNewParticipant, isAllowed, isEmptyState, isMobile]);
 
   return (
-    <Card style={{ display: 'flex', flexDirection: 'column' }}>
-      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-        <Typography color={theme.palette.TwClrTxt} fontSize='20px' fontWeight={600} lineHeight='28px'>
-          {strings.PARTICIPANTS}
-        </Typography>
-        {actionMenus}
-      </Box>
-      {participantsResult?.status === 'pending' && <BusySpinner />}
+    <>
       {openDownload && (
         <DownloadParticipants
           onClose={() => setOpenDownload(false)}
@@ -197,6 +189,7 @@ export default function ParticipantList(): JSX.Element {
       {isEmptyState && <EmptyState onClick={goToNewParticipant} />}
       {!isEmptyState && (
         <TableWithSearchFilters
+          busy={participantsResult?.status === 'pending'}
           columns={columns}
           defaultSearchOrder={defaultSearchOrder}
           dispatchSearchRequest={dispatchSearchRequest}
@@ -204,10 +197,12 @@ export default function ParticipantList(): JSX.Element {
           fuzzySearchColumns={fuzzySearchColumns}
           id='accelerator-participants-table'
           Renderer={ParticipantsCellRenderer}
+          rightComponent={actionMenus}
           rows={participants}
+          title={strings.PARTICIPANTS}
         />
       )}
-    </Card>
+    </>
   );
 }
 
@@ -216,30 +211,32 @@ const EmptyState = ({ onClick }: { onClick: () => void }): JSX.Element => {
   const { isAllowed } = useUser();
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        flexGrow: 0,
-        margin: 'auto',
-        padding: theme.spacing(3, 3, 8),
-        textAlign: 'center',
-      }}
-    >
-      <Typography
-        color={theme.palette.TwClrTxt}
-        fontSize='16px'
-        fontWeight={400}
-        lineHeight='24px'
-        marginBottom={theme.spacing(2)}
+    <Card style={{ display: 'flex', flexDirection: 'column' }} title={strings.PARTICIPANTS}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          flexGrow: 0,
+          margin: 'auto',
+          padding: theme.spacing(3, 3, 8),
+          textAlign: 'center',
+        }}
       >
-        {strings.PARTICIPANTS_EMPTY_STATE}
-      </Typography>
-      {isAllowed('CREATE_PARTICIPANTS') && (
-        <Box sx={{ margin: 'auto' }}>
-          <Button icon='plus' id='new-participant' label={strings.ADD_PARTICIPANT} onClick={onClick} size='medium' />
-        </Box>
-      )}
-    </Box>
+        <Typography
+          color={theme.palette.TwClrTxt}
+          fontSize='16px'
+          fontWeight={400}
+          lineHeight='24px'
+          marginBottom={theme.spacing(2)}
+        >
+          {strings.PARTICIPANTS_EMPTY_STATE}
+        </Typography>
+        {isAllowed('CREATE_PARTICIPANTS') && (
+          <Box sx={{ margin: 'auto' }}>
+            <Button icon='plus' id='new-participant' label={strings.ADD_PARTICIPANT} onClick={onClick} size='medium' />
+          </Box>
+        )}
+      </Box>
+    </Card>
   );
 };

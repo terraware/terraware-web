@@ -12,6 +12,7 @@ import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/
 import useDebounce from 'src/utils/useDebounce';
 
 interface TableWithSearchFiltersProps extends Omit<OrderPreservedTablePropsFull<TableRowType>, 'columns' | 'orderBy'> {
+  busy?: boolean;
   columns: (activeLocale: string | null) => TableColumnType[];
   defaultSearchOrder: SearchSortOrder;
   dispatchSearchRequest: (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => void;
@@ -19,6 +20,8 @@ interface TableWithSearchFiltersProps extends Omit<OrderPreservedTablePropsFull<
   featuredFilters?: FilterConfig[];
   filterModifiers?: (filters: FilterConfig[]) => FilterConfig[];
   fuzzySearchColumns?: string[];
+  rightComponent?: React.ReactNode;
+  title?: string;
 }
 
 const useStyles = makeStyles(() => ({
@@ -30,12 +33,15 @@ const useStyles = makeStyles(() => ({
 const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
   const {
     columns,
+    busy,
     defaultSearchOrder,
     dispatchSearchRequest,
     extraTableFilters,
     featuredFilters,
     filterModifiers,
     fuzzySearchColumns,
+    rightComponent,
+    title,
     ...tableProps
   } = props;
 
@@ -128,7 +134,7 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
 
   return (
     <Container maxWidth={false} className={classes.mainContainer}>
-      <Card flushMobile>
+      <Card busy={busy} flushMobile rightComponent={rightComponent} title={title}>
         <Grid item xs={12} sx={{ display: 'flex', marginBottom: '16px', alignItems: 'center' }}>
           <SearchFiltersWrapperV2
             search={searchValue}
