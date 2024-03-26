@@ -122,7 +122,7 @@ export const getScoreColors = (
   value: ScoreValue | null,
   theme: Theme
 ): { background: string; border: string; text: string } => {
-  let _value = Math.round(value || 0);
+  const _value = Math.round(value || 0);
 
   switch (_value) {
     case 2:
