@@ -1598,6 +1598,7 @@ TOOLTIP_VIABILITY_TEST_SUBSTRATE,"La superficie o el material del que un organis
 TOOLTIP_VIABILITY_TEST_TREATMENT,"Los agentes y técnicas biológicos, físicos y químicos utilizados para romper la latencia y/o acelerar la germinación.",
 TOTAL,Total,
 TOTAL_ACTIVE_ACCESSIONS,Total de accesiones activas,
+TOTAL_AVERAGE_SCORE,Puntuación promedio total,
 TOTAL_ESTIMATED_PERCENTAGE_VIABILITY,Estimación total de viabilidad en %,
 TOTAL_ESTIMATED_VIABILITY,Viabilidad total estimada,
 TOTAL_EXPANSION_POTENTIAL,Potencial de expansión en total (ha),
