@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem } from '@terraware/web-components';
@@ -12,13 +12,14 @@ import { useUser } from 'src/providers';
 import strings from 'src/strings';
 
 import PageWithModuleTimeline from '../PageWithModuleTimeline';
-import VoteBadge from '../Voting/VoteBadge';
+import Export from './Export';
 import { useParticipantProjectData } from './ParticipantProjectContext';
-import ProjectFieldCard from './ProjectField/Card';
 import ProjectFieldDisplay from './ProjectField/Display';
 import ProjectFieldLink from './ProjectField/Link';
 import ProjectFieldMeta from './ProjectField/Meta';
-import ProjectFieldTextArea from './ProjectField/TextArea';
+import PhaseScoreCard from './ProjectField/PhaseScoreCard';
+import ProjectFieldTextAreaDisplay from './ProjectField/TextAreaDisplay';
+import VotingDecisionCard from './ProjectField/VotingDecisionCard';
 
 const SingleView = () => {
   const theme = useTheme();
@@ -27,9 +28,11 @@ const SingleView = () => {
   const { crumbs, projectId, project, status } = useParticipantProjectData();
   const { goToParticipantProjectEdit } = useNavigateTo();
 
+  const [exportModalOpen, setExportModalOpen] = useState(false);
+
   const onOptionItemClick = useCallback((item: DropdownItem) => {
     if (item.value === 'export-participant-project') {
-      // TODO when BE is done
+      setExportModalOpen(true);
     }
   }, []);
 
@@ -85,17 +88,8 @@ const SingleView = () => {
           >
             <Grid container>
               <ProjectFieldDisplay label={strings.PROJECT_NAME} value={project.name} />
-              <ProjectFieldCard label={strings.PHASE_1_SCORE} value={project.phase1Score} />
-              <ProjectFieldCard
-                label={strings.VOTING_DECISION}
-                value={
-                  project.votingDecision ? (
-                    <Box style={{ margin: 'auto', width: 'fit-content' }}>
-                      <VoteBadge vote={project.votingDecision} />
-                    </Box>
-                  ) : undefined
-                }
-              />
+              <PhaseScoreCard project={project} />
+              <VotingDecisionCard project={project} />
               <ProjectFieldLink
                 label={strings.SEE_SCORECARD}
                 value={APP_PATHS.ACCELERATOR_SCORING.replace(':projectId', `${project.id}`)}
@@ -169,14 +163,22 @@ const SingleView = () => {
             }}
           >
             <Grid container>
-              <ProjectFieldTextArea label={strings.DEAL_DESCRIPTION} value={project.dealDescription} />
-              <ProjectFieldTextArea label={strings.INVESTMENT_THESIS} value={project.investmentThesis} />
-              <ProjectFieldTextArea label={strings.FAILURE_RISK} value={project.failureRisk} />
-              <ProjectFieldTextArea label={strings.WHAT_NEEDS_TO_BE_TRUE} value={project.whatNeedsToBeTrue} />
+              <ProjectFieldTextAreaDisplay label={strings.DEAL_DESCRIPTION} value={project.dealDescription} />
+              <ProjectFieldTextAreaDisplay label={strings.INVESTMENT_THESIS} value={project.investmentThesis} />
+              <ProjectFieldTextAreaDisplay label={strings.FAILURE_RISK} value={project.failureRisk} />
+              <ProjectFieldTextAreaDisplay label={strings.WHAT_NEEDS_TO_BE_TRUE} value={project.whatNeedsToBeTrue} />
             </Grid>
           </Card>
         </>
       )}
+
+      <Export
+        projectId={projectId}
+        onClose={() => {
+          setExportModalOpen(false);
+        }}
+        open={exportModalOpen}
+      />
     </PageWithModuleTimeline>
   );
 };

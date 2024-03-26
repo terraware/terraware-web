@@ -1,5 +1,7 @@
 import { Response2 } from 'src/services/HttpService';
-import { ParticipantProject } from 'src/types/ParticipantProject';
+import { ParticipantProject, ParticipantProjectSearchResult } from 'src/types/ParticipantProject';
+import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
 
 /**
  * Accelerator "participant project" related services
@@ -11,6 +13,10 @@ export type ParticipantProjectsData = {
 
 export type ParticipantProjectData = {
   project: ParticipantProject;
+};
+
+export type ParticipantProjectSearchData = {
+  projects: ParticipantProjectSearchResult[];
 };
 
 let mockParticipantProject: ParticipantProject = {
@@ -34,7 +40,7 @@ let mockParticipantProject: ParticipantProject = {
   numberOfNativeSpecies: 2433,
   organizationName: 'Treemendo.us',
   perHectareEstimatedBudget: undefined,
-  phase1Score: 5,
+  phase1Score: 0.5,
   pipeline: 'Accelerator Projects',
   previousProjectCost: undefined,
   projectHectares: 321,
@@ -47,11 +53,87 @@ let mockParticipantProject: ParticipantProject = {
     'SAI and the local community will need to like the carbon estimates and deal arrangement that TF offers. Our estimates of reforestable area and carbon will need to be roughly true when ground-truthed). The larger project',
 };
 
+const download = async (participantProjectId: number): Promise<string | null> => {
+  return `Id,Project Name,Phase 1 Score\r${participantProjectId},Andromeda,0.5\r`;
+};
+
 const get = async (participantProjectId: number): Promise<Response2<ParticipantProjectData>> => {
   return {
     requestSucceeded: true,
     data: {
       project: mockParticipantProject,
+    },
+  };
+};
+
+const downloadList = async (search?: SearchNodePayload, sortOrder?: SearchSortOrder): Promise<string | null> => {
+  return (
+    'Project Name,Participant,Cohort,Phase,Country,Region,Restorable Land,Land Use Model Type\r' +
+    'Andromeda,Cartwheel,Cohort 1,Phase 0 - Due Diligence,Ghana,Sub-Saharan Africa,500,Native Forest'
+  );
+};
+
+const list = async (
+  // TODO: remove locale if we are using BE search API
+  locale?: string | null,
+  search?: SearchNodePayload,
+  sortOrder?: SearchSortOrder
+): Promise<Response2<ParticipantProjectSearchData>> => {
+  let searchOrderConfig: SearchOrderConfig | undefined;
+
+  if (locale && sortOrder) {
+    searchOrderConfig = {
+      locale,
+      sortOrder,
+      numberFields: ['id', 'cohort_id', 'participant_id'],
+    };
+  }
+
+  return {
+    requestSucceeded: true,
+    data: {
+      projects: searchAndSort(
+        [
+          {
+            cohortId: 1,
+            cohortName: 'Cohort 1',
+            country: 'Ghana',
+            id: 1,
+            landUseModelType: 'Native Forest',
+            name: 'Andromeda',
+            participantName: 'Cartwheel',
+            phase: 'Phase 0 - Due Diligence',
+            region: 'Sub-Saharan Africa',
+            restorableLand: 500,
+          },
+          {
+            cohortId: 2,
+            cohortName: 'Cohort 2',
+            country: 'Philippines',
+            id: 2,
+            landUseModelType: 'Native Forest',
+            name: 'Platypuses',
+            participantName: 'Canis Major Dwarf',
+            phase: 'Phase 1 - Feasibility Study',
+            region: 'East Asia & Pacific',
+            restorableLand: 900,
+          },
+          {
+            cohortId: 3,
+            cohortName: 'Cohort 3',
+            country: 'Brazil',
+            id: 3,
+            landUseModelType: 'Native Forest',
+            name: 'Quokkas',
+            participantName: 'Cosmos Redshift 7',
+            phase: 'Phase 2 - Plan and Scale',
+            region: 'Latin America & Caribbean',
+            restorableLand: 990,
+          },
+        ],
+        search,
+        searchOrderConfig
+      ),
     },
   };
 };
@@ -68,9 +150,12 @@ const update = async (participantProject: ParticipantProject): Promise<Response2
   };
 };
 
-const ParticipantsService = {
+const ParticipantProjectsService = {
+  download,
+  downloadList,
   get,
+  list,
   update,
 };
 
-export default ParticipantsService;
+export default ParticipantProjectsService;

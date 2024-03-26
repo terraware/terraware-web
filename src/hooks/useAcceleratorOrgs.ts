@@ -12,7 +12,7 @@ export type Response = {
   isBusy: boolean;
 };
 
-export const useAcceleratorOrgs = (cohortId?: number): Response => {
+export const useAcceleratorOrgs = (includeParticipants?: boolean): Response => {
   const { activeLocale } = useLocalization();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
@@ -21,9 +21,9 @@ export const useAcceleratorOrgs = (cohortId?: number): Response => {
   const result = useAppSelector(selectAcceleratorOrgsRequest(requestId));
 
   useEffect(() => {
-    const request = dispatch(requestAcceleratorOrgs({ locale: activeLocale }));
+    const request = dispatch(requestAcceleratorOrgs({ locale: activeLocale, includeParticipants }));
     setRequestId(request.requestId);
-  }, [activeLocale, dispatch]);
+  }, [activeLocale, dispatch, includeParticipants]);
 
   useEffect(() => {
     if (result?.status === 'error') {

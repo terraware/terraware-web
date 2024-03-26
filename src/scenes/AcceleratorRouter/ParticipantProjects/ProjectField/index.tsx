@@ -2,25 +2,34 @@ import React, { isValidElement } from 'react';
 
 import { Typography } from '@mui/material';
 
-type FieldValue = string | number | null | undefined | JSX.Element;
+type DisplayFieldValue = string | number | null | undefined | JSX.Element | false;
 
 export interface ProjectFieldProps {
   label?: string;
   link?: string;
-  value?: FieldValue;
+  value?: DisplayFieldValue;
   rightBorder?: boolean;
   user?: string;
   date?: string;
 }
 
-export const renderFieldValue = (value: FieldValue): JSX.Element => {
+type EditFieldValue = string | number | undefined;
+
+export interface ProjectFieldEditProps {
+  id: string;
+  label: string;
+  onChange: (id: string, value: string) => void;
+  value?: EditFieldValue;
+}
+
+export const renderFieldValue = (value: DisplayFieldValue): JSX.Element => {
   if (isValidElement(value)) {
     return value;
   }
 
   return (
     <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
-      {([undefined, null] as FieldValue[]).includes(value) ? 'N/A' : value}
+      {([undefined, null] as DisplayFieldValue[]).includes(value) ? 'N/A' : value}
     </Typography>
   );
 };

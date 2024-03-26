@@ -1,18 +1,21 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import AcceleratorService, { AcceleratorOrgData } from 'src/services/AcceleratorService';
-import { Response2 } from 'src/services/HttpService';
+import { Response } from 'src/services/HttpService';
 import strings from 'src/strings';
 
 export const requestAcceleratorOrgs = createAsyncThunk(
   'acceleratorOrgs/list',
-  async (request: { locale?: string | null }, { rejectWithValue }) => {
-    const { locale } = request;
+  async (request: { locale?: string | null; includeParticipants?: boolean }, { rejectWithValue }) => {
+    const { locale, includeParticipants } = request;
 
-    const response: Response2<AcceleratorOrgData> = await AcceleratorService.listAcceleratorOrgs(locale);
+    const response: Response & AcceleratorOrgData = await AcceleratorService.listAcceleratorOrgs(
+      locale,
+      includeParticipants
+    );
 
     if (response && response.requestSucceeded) {
-      return response.data?.orgs;
+      return response.organizations;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);
