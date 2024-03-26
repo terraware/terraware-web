@@ -78,14 +78,6 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
       <NavSection />
 
       <NavItem
-        icon='iconBusinessNetwork'
-        id='cohorts'
-        label={strings.COHORTS}
-        onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_COHORTS)}
-        selected={!!isCohortsRoute}
-      />
-
-      <NavItem
         icon='iconSubmit'
         id='deliverables'
         label={strings.DELIVERABLES}

@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { ReactNode, useCallback, useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, Card, Typography, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 
 import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
@@ -15,11 +15,11 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { CohortPhases } from 'src/types/Cohort';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import CohortCellRenderer from './CohortCellRenderer';
 
 interface CohortTableProps {
-  columns: (activeLocale: string | null) => TableColumnType[];
   extraTableFilters?: SearchNodePayload[];
   filterModifiers?: (filters: FilterConfig[]) => FilterConfig[];
 }
@@ -50,8 +50,11 @@ const CohortsTable = ({ filterModifiers, extraTableFilters }: CohortTableProps) 
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const history = useHistory();
+  const { isAllowed } = useUser();
+  const { isMobile } = useDeviceInfo();
 
   const cohorts = useAppSelector(selectCohorts);
+  const isEmptyState = !cohorts?.length;
 
   const featuredFilters: FilterConfig[] = useMemo(() => {
     const filters: FilterConfig[] = [
@@ -65,12 +68,12 @@ const CohortsTable = ({ filterModifiers, extraTableFilters }: CohortTableProps) 
     return activeLocale ? filters : [];
   }, [activeLocale]);
 
-  const goToNewCohort = () => {
+  const goToNewCohort = useCallback(() => {
     const newProjectLocation = {
       pathname: APP_PATHS.ACCELERATOR_COHORTS_NEW,
     };
     history.push(newProjectLocation);
-  };
+  }, [history]);
 
   const dispatchSearchRequest = useCallback(
     (locale: string | null, search?: SearchNodePayload, searchSortOrder?: SearchSortOrder) => {
@@ -83,7 +86,26 @@ const CohortsTable = ({ filterModifiers, extraTableFilters }: CohortTableProps) 
     dispatchSearchRequest(activeLocale);
   }, [activeLocale, dispatchSearchRequest]);
 
-  return !cohorts?.length ? (
+  const actionMenus = useMemo<ReactNode | null>(() => {
+    const canCreateCohorts = isAllowed('CREATE_COHORTS');
+
+    if (isEmptyState || !activeLocale || !canCreateCohorts) {
+      return null;
+    }
+
+    return (
+      <Button
+        icon='plus'
+        id='new-participant'
+        onClick={goToNewCohort}
+        priority='secondary'
+        label={isMobile ? '' : strings.ADD_COHORT}
+        size='small'
+      />
+    );
+  }, [activeLocale, goToNewCohort, isAllowed, isEmptyState, isMobile]);
+
+  return isEmptyState ? (
     <EmptyState onClick={goToNewCohort} />
   ) : (
     <TableWithSearchFilters
@@ -96,7 +118,9 @@ const CohortsTable = ({ filterModifiers, extraTableFilters }: CohortTableProps) 
       fuzzySearchColumns={fuzzySearchColumns}
       id='cohortsTable'
       Renderer={CohortCellRenderer}
+      rightComponent={actionMenus}
       rows={cohorts || []}
+      title={strings.COHORTS}
     />
   );
 };
@@ -108,30 +132,32 @@ const EmptyState = ({ onClick }: { onClick: () => void }): JSX.Element => {
   const { isAllowed } = useUser();
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        flexGrow: 0,
-        margin: 'auto',
-        padding: theme.spacing(3, 3, 8),
-        textAlign: 'center',
-      }}
-    >
-      <Typography
-        color={theme.palette.TwClrTxt}
-        fontSize='16px'
-        fontWeight={400}
-        lineHeight='24px'
-        marginBottom={theme.spacing(2)}
+    <Card style={{ display: 'flex', flexDirection: 'column' }} title={strings.COHORTS}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          flexGrow: 0,
+          margin: 'auto',
+          padding: theme.spacing(3, 3, 8),
+          textAlign: 'center',
+        }}
       >
-        {strings.COHORTS_EMPTY_STATE}
-      </Typography>
-      {isAllowed('CREATE_COHORTS') && (
-        <Box sx={{ margin: 'auto' }}>
-          <Button icon='plus' id='new-cohort' label={strings.ADD_COHORT} onClick={onClick} size='medium' />
-        </Box>
-      )}
-    </Box>
+        <Typography
+          color={theme.palette.TwClrTxt}
+          fontSize='16px'
+          fontWeight={400}
+          lineHeight='24px'
+          marginBottom={theme.spacing(2)}
+        >
+          {strings.COHORTS_EMPTY_STATE}
+        </Typography>
+        {isAllowed('CREATE_COHORTS') && (
+          <Box sx={{ margin: 'auto' }}>
+            <Button icon='plus' id='new-participant' label={strings.ADD_COHORT} onClick={onClick} size='medium' />
+          </Box>
+        )}
+      </Box>
+    </Card>
   );
 };
