@@ -58,7 +58,11 @@ const COHORT_ID_EXISTS_PREDICATE: SearchNodePayload = {
   },
 };
 
-const getSearchParams = (search: SearchNodePayload, sortOrder: SearchSortOrder): SearchRequestPayload => {
+const getSearchParams = (
+  search?: SearchNodePayload,
+  sortOrder?: SearchSortOrder,
+  isCsv?: boolean
+): SearchRequestPayload => {
   const searchParams: SearchRequestPayload = {
     prefix: 'projects',
     fields: [
@@ -71,14 +75,14 @@ const getSearchParams = (search: SearchNodePayload, sortOrder: SearchSortOrder):
       'country_name',
       'country_region',
       'acceleratorDetails_confirmedReforestableLand',
-      'acceleratorDetails_confirmedReforestableLand(raw)',
+      ...(isCsv ? [] : ['acceleratorDetails_confirmedReforestableLand(raw)']),
       'landUseModelTypes.landUseModelType',
     ],
     search: {
       operation: 'and',
-      children: [search, COHORT_ID_EXISTS_PREDICATE],
+      children: search ? [search, COHORT_ID_EXISTS_PREDICATE] : [COHORT_ID_EXISTS_PREDICATE],
     },
-    sortOrder: [sortOrder],
+    sortOrder: [sortOrder ?? { field: 'name' }],
     count: 0,
   };
 
@@ -98,12 +102,12 @@ const get = async (participantProjectId: number): Promise<Response2<ParticipantP
   };
 };
 
-const downloadList = async (search: SearchNodePayload, sortOrder: SearchSortOrder): Promise<string | null> =>
-  await SearchService.searchCsv(getSearchParams(search, sortOrder));
+const downloadList = async (search?: SearchNodePayload, sortOrder?: SearchSortOrder): Promise<string | null> =>
+  await SearchService.searchCsv(getSearchParams(search, sortOrder, true));
 
 const list = async (
-  search: SearchNodePayload,
-  sortOrder: SearchSortOrder
+  search?: SearchNodePayload,
+  sortOrder?: SearchSortOrder
 ): Promise<ParticipantProjectSearchResult[] | null> => {
   const response: SearchResponseElement[] | null = await SearchService.search(getSearchParams(search, sortOrder));
 
