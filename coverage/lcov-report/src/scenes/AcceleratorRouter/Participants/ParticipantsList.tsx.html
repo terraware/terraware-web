@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/42</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/58</span>
+                <span class='fraction'>0/57</span>
             </div>
         
             
@@ -298,14 +298,7 @@
 <a name='L233'></a><a href='#L233'>233</a>
 <a name='L234'></a><a href='#L234'>234</a>
 <a name='L235'></a><a href='#L235'>235</a>
-<a name='L236'></a><a href='#L236'>236</a>
-<a name='L237'></a><a href='#L237'>237</a>
-<a name='L238'></a><a href='#L238'>238</a>
-<a name='L239'></a><a href='#L239'>239</a>
-<a name='L240'></a><a href='#L240'>240</a>
-<a name='L241'></a><a href='#L241'>241</a>
-<a name='L242'></a><a href='#L242'>242</a>
-<a name='L243'></a><a href='#L243'>243</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L236'></a><a href='#L236'>236</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -376,7 +369,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -433,15 +425,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -618,7 +604,6 @@ export default function <span class="fstat-no" title="function not covered" >Par
   const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const participantsResult = <span class="cstat-no" title="statement not covered" >useAppSelector(selectParticipantListRequest(requestId));</span>
 &nbsp;
-  // TODO: check for non-empty filters
   const isEmptyState = <span class="cstat-no" title="statement not covered" >useMemo&lt;boolean&gt;(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >participantsResult?.status === 'success' &amp;&amp; participants.length === 0 &amp;&amp; !hasFilters,</span>
     [hasFilters, participants, participantsResult]
@@ -675,15 +660,9 @@ export default function <span class="fstat-no" title="function not covered" >Par
               field: 'cohort_id',
               label: strings.COHORT,
               options: (participants || [])?.map(<span class="fstat-no" title="function not covered" >(p</span>articipant: ParticipantType) =&gt; <span class="cstat-no" title="statement not covered" >`${participant.cohort_id}`)</span>,
+              pillValueRenderer: <span class="fstat-no" title="function not covered" >(v</span>alues: (string | number | null)[]) =&gt;
+<span class="cstat-no" title="statement not covered" >                values.map(<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >cohorts[value || ''] || '')</span>.join(', '),</span>
               renderOption: <span class="fstat-no" title="function not covered" >(i</span>d: string | number) =&gt; <span class="cstat-no" title="statement not covered" >cohorts[id] || '',</span>
-              searchNodeCreator: <span class="fstat-no" title="function not covered" >(v</span>alues: (number | string | null)[]) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
-                field: 'cohort_id',
-                operation: 'field',
-                type: 'Exact',
-                values: values.map(<span class="fstat-no" title="function not covered" >(v</span>alue: number | string | null): string | null =&gt;
-<span class="cstat-no" title="statement not covered" >                  value === null ? value : `${value}`</span>
-                ),
-              }),
             },
           ]
         : [],
@@ -796,7 +775,7 @@ const EmptyState = <span class="cstat-no" title="statement not covered" ><span c
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-27T18:18:28.746Z
+                at 2024-03-27T23:25:23.621Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

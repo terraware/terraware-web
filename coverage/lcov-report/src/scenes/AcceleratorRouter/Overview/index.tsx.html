@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/28</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
@@ -162,33 +162,7 @@
 <a name='L97'></a><a href='#L97'>97</a>
 <a name='L98'></a><a href='#L98'>98</a>
 <a name='L99'></a><a href='#L99'>99</a>
-<a name='L100'></a><a href='#L100'>100</a>
-<a name='L101'></a><a href='#L101'>101</a>
-<a name='L102'></a><a href='#L102'>102</a>
-<a name='L103'></a><a href='#L103'>103</a>
-<a name='L104'></a><a href='#L104'>104</a>
-<a name='L105'></a><a href='#L105'>105</a>
-<a name='L106'></a><a href='#L106'>106</a>
-<a name='L107'></a><a href='#L107'>107</a>
-<a name='L108'></a><a href='#L108'>108</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L100'></a><a href='#L100'>100</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -205,7 +179,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -287,6 +271,7 @@ import { Tabs } from '@terraware/web-components';
 import Page from 'src/components/Page';
 import { useLocalization, useUser } from 'src/providers';
 import CohortsListView from 'src/scenes/AcceleratorRouter/Cohorts/CohortsListView';
+import ParticipantProjectsList from 'src/scenes/AcceleratorRouter/ParticipantProjects/ListView';
 import ParticipantsList from 'src/scenes/AcceleratorRouter/Participants/ParticipantsList';
 import strings from 'src/strings';
 import useQuery from 'src/utils/useQuery';
@@ -309,15 +294,6 @@ const useStyles = <span class="cstat-no" title="statement not covered" >makeStyl
     },
   },
 }));
-&nbsp;
-// TODO: remove this component and replace it with the actual content
-const TabPlaceholder = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> name }: { name: string }) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Box display='flex' alignItems='center' justifyContent='center' flex={1} sx={{ minHeight: '400px' }}&gt;
-      {name} tab content
-    &lt;/Box&gt;
-  );
-};
 &nbsp;
 const OverviewView = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
   const { isAllowed } = <span class="cstat-no" title="statement not covered" >useUser();</span>
@@ -347,7 +323,7 @@ const OverviewView = <span class="cstat-no" title="statement not covered" ><span
       {
         id: 'projects',
         label: strings.PROJECTS,
-        children: &lt;TabPlaceholder name={strings.PROJECTS} /&gt;,
+        children: &lt;ParticipantProjectsList /&gt;,
       },
       ...(canReadParticipants
         ? [
@@ -391,7 +367,7 @@ export default OverviewView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-27T18:18:28.746Z
+                at 2024-03-27T23:25:23.621Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
