@@ -49,30 +49,16 @@ let mockParticipantProject: ParticipantProject = {
     'SAI and the local community will need to like the carbon estimates and deal arrangement that TF offers. Our estimates of reforestable area and carbon will need to be roughly true when ground-truthed). The larger project',
 };
 
-const download = async (participantProjectId: number): Promise<string | null> => {
-  return `Id,Project Name,Phase 1 Score\r${participantProjectId},Andromeda,0.5\r`;
+const COHORT_ID_EXISTS_PREDICATE: SearchNodePayload = {
+  operation: 'not',
+  child: {
+    operation: 'field',
+    field: 'participant_cohort_id',
+    values: [null],
+  },
 };
 
-const get = async (participantProjectId: number): Promise<Response2<ParticipantProjectData>> => {
-  return {
-    requestSucceeded: true,
-    data: {
-      project: mockParticipantProject,
-    },
-  };
-};
-
-const downloadList = async (search?: SearchNodePayload, sortOrder?: SearchSortOrder): Promise<string | null> => {
-  return (
-    'Project Name,Participant,Cohort,Phase,Country,Region,Restorable Land,Land Use Model Type\r' +
-    'Andromeda,Cartwheel,Cohort 1,Phase 0 - Due Diligence,Ghana,Sub-Saharan Africa,500,Native Forest'
-  );
-};
-
-const list = async (
-  search: SearchNodePayload,
-  sortOrder: SearchSortOrder
-): Promise<ParticipantProjectSearchResult[] | null> => {
+const getSearchParams = (search: SearchNodePayload, sortOrder: SearchSortOrder): SearchRequestPayload => {
   const searchParams: SearchRequestPayload = {
     prefix: 'projects',
     fields: [
@@ -88,48 +74,72 @@ const list = async (
       'acceleratorDetails_confirmedReforestableLand(raw)',
       'landUseModelTypes.landUseModelType',
     ],
-    search,
+    search: {
+      operation: 'and',
+      children: [search, COHORT_ID_EXISTS_PREDICATE],
+    },
     sortOrder: [sortOrder],
     count: 0,
   };
 
-  const response: SearchResponseElement[] | null = await SearchService.search(searchParams);
+  return searchParams;
+};
+
+const download = async (participantProjectId: number): Promise<string | null> => {
+  return `Id,Project Name,Phase 1 Score\r${participantProjectId},Andromeda,0.5\r`;
+};
+
+const get = async (participantProjectId: number): Promise<Response2<ParticipantProjectData>> => {
+  return {
+    requestSucceeded: true,
+    data: {
+      project: mockParticipantProject,
+    },
+  };
+};
+
+const downloadList = async (search: SearchNodePayload, sortOrder: SearchSortOrder): Promise<string | null> =>
+  await SearchService.searchCsv(getSearchParams(search, sortOrder));
+
+const list = async (
+  search: SearchNodePayload,
+  sortOrder: SearchSortOrder
+): Promise<ParticipantProjectSearchResult[] | null> => {
+  const response: SearchResponseElement[] | null = await SearchService.search(getSearchParams(search, sortOrder));
 
   if (!response) {
     return null;
   }
 
-  return response
-    .filter((result: SearchResponseElement) => !!result.participant_cohort_id)
-    .map((result: SearchResponseElement) => {
-      const {
-        id,
-        name,
-        participant_name,
-        participant_cohort_id,
-        participant_cohort_name,
-        participant_cohort_phase,
-        country_name,
-        country_region,
-        acceleratorDetails_confirmedReforestableLand,
-      } = result;
+  return response.map((result: SearchResponseElement) => {
+    const {
+      id,
+      name,
+      participant_name,
+      participant_cohort_id,
+      participant_cohort_name,
+      participant_cohort_phase,
+      country_name,
+      country_region,
+      acceleratorDetails_confirmedReforestableLand,
+    } = result;
 
-      type LandUse = { landUseModelType: string };
+    type LandUse = { landUseModelType: string };
 
-      return {
-        cohortName: participant_cohort_name,
-        country: country_name,
-        id: Number(id),
-        landUseModelType: ((result.landUseModelTypes || []) as LandUse[]).map((type: LandUse) => type.landUseModelType),
-        name,
-        participant_cohort_id: Number(participant_cohort_id),
-        participant_cohort_phase,
-        participantName: participant_name,
-        region: country_region,
-        restorableLand: acceleratorDetails_confirmedReforestableLand,
-        restorableLandRaw: Number(result['acceleratorDetails_confirmedReforestableLand(raw)']),
-      } as ParticipantProjectSearchResult;
-    });
+    return {
+      cohortName: participant_cohort_name,
+      country: country_name,
+      id: Number(id),
+      landUseModelType: ((result.landUseModelTypes || []) as LandUse[]).map((type: LandUse) => type.landUseModelType),
+      name,
+      participant_cohort_id: Number(participant_cohort_id),
+      participant_cohort_phase,
+      participantName: participant_name,
+      region: country_region,
+      restorableLand: acceleratorDetails_confirmedReforestableLand,
+      restorableLandRaw: Number(result['acceleratorDetails_confirmedReforestableLand(raw)']),
+    } as ParticipantProjectSearchResult;
+  });
 };
 
 const update = async (participantProject: ParticipantProject): Promise<Response2<number>> => {
