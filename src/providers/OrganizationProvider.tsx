@@ -5,7 +5,7 @@ import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { store } from 'src/redux/store';
 import { OrganizationService, PreferencesService } from 'src/services';
-import { AcceleratorOrganization, Organization } from 'src/types/Organization';
+import { Organization } from 'src/types/Organization';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
@@ -32,7 +32,6 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   const [orgPreferenceForId, setOrgPreferenceForId] = useState<number>(defaultSelectedOrg.id);
   const [orgAPIRequestStatus, setOrgAPIRequestStatus] = useState<APIRequestStatus>(APIRequestStatus.AWAITING);
   const [organizations, setOrganizations] = useState<Organization[]>();
-  const [acceleratorOrganizations, setAcceleratorOrganizations] = useState<AcceleratorOrganization[]>();
   const history = useHistory();
   const query = useQuery();
   const location = useStateLocation();
@@ -67,17 +66,6 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     await populateOrganizations();
   }, []);
 
-  const reloadAcceleratorOrganizations = useCallback(async () => {
-    const populateAcceleratorOrganizations = async () => {
-      const response = await OrganizationService.getAcceleratorOrganizations();
-      if (!response.error) {
-        setAcceleratorOrganizations(response.organizations);
-      }
-    };
-
-    await populateAcceleratorOrganizations();
-  }, []);
-
   const reloadOrgPreferences = useCallback(() => {
     const getOrgPreferences = async () => {
       if (selectedOrganization) {
@@ -95,17 +83,12 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   }, [selectedOrganization]);
 
   useEffect(() => {
-    reloadAcceleratorOrganizations();
-  }, [reloadAcceleratorOrganizations]);
-
-  useEffect(() => {
     reloadOrganizations();
   }, [reloadOrganizations]);
 
   useEffect(() => {
     setOrganizationData((prev) => ({
       ...prev,
-      acceleratorOrganizations: acceleratorOrganizations ?? [],
       selectedOrganization: selectedOrganization || defaultSelectedOrg,
       organizations: organizations ?? [],
       orgPreferences,
@@ -113,15 +96,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
       orgPreferenceForId,
       reloadOrgPreferences,
     }));
-  }, [
-    selectedOrganization,
-    organizations,
-    orgPreferences,
-    bootstrapped,
-    orgPreferenceForId,
-    reloadOrgPreferences,
-    acceleratorOrganizations,
-  ]);
+  }, [selectedOrganization, organizations, orgPreferences, bootstrapped, orgPreferenceForId, reloadOrgPreferences]);
 
   useEffect(() => {
     reloadOrgPreferences();
@@ -185,12 +160,10 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   }
 
   const [organizationData, setOrganizationData] = useState<ProvidedOrganizationData>({
-    acceleratorOrganizations: acceleratorOrganizations ?? [],
     selectedOrganization: selectedOrganization || defaultSelectedOrg,
     setSelectedOrganization,
     organizations: organizations ?? [],
     orgPreferences,
-    reloadAcceleratorOrganizations,
     reloadOrganizations,
     reloadOrgPreferences,
     bootstrapped,

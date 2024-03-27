@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { TableColumnType } from '@terraware/web-components';
 
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
+import { useAcceleratorOrgs } from 'src/hooks/useAcceleratorOrgs';
 import { useParticipants } from 'src/hooks/useParticipants';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
@@ -10,8 +11,8 @@ import { selectDeliverablesSearchRequest } from 'src/redux/features/deliverables
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ListDeliverablesRequestParams } from 'src/services/DeliverablesService';
 import strings from 'src/strings';
+import { AcceleratorOrgProject } from 'src/types/Accelerator';
 import { DeliverableCategories, DeliverableStatuses, ListDeliverablesElement } from 'src/types/Deliverables';
-import { AcceleratorOrganization, AcceleratorProject } from 'src/types/Organization';
 import { Project } from 'src/types/Project';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { SearchAndSortFn } from 'src/utils/searchAndSort';
@@ -49,14 +50,13 @@ const DeliverablesTable = ({
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
-  const { acceleratorOrganizations, selectedOrganization } = useOrganization();
+  const { selectedOrganization } = useOrganization();
+  const { acceleratorOrgs } = useAcceleratorOrgs(true);
   const { selectedParticipant } = useParticipants(participantId);
 
   const acceleratorProjects = useMemo(() => {
-    return acceleratorOrganizations.reduce((acc: AcceleratorProject[], org: AcceleratorOrganization) => {
-      return org.projects ? [...acc, ...org.projects] : acc;
-    }, []);
-  }, [acceleratorOrganizations]);
+    return acceleratorOrgs?.flatMap((org) => org.projects);
+  }, [acceleratorOrgs]);
 
   const [deliverables, setDeliverables] = useState<ListDeliverablesElement[]>([]);
   const [deliverablesSearchRequestId, setDeliverablesSearchRequestId] = useState('');
@@ -97,7 +97,7 @@ const DeliverablesTable = ({
       filters.unshift({
         field: 'project_id',
         options: (selectedParticipant?.projects || acceleratorProjects || [])?.map(
-          (project: Project | AcceleratorProject) => `${project.id}`
+          (project: Project | AcceleratorOrgProject) => `${project.id}`
         ),
         searchNodeCreator: (values: (number | string | null)[]) => ({
           field: 'projectId',

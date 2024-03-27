@@ -1,10 +1,5 @@
 import { paths } from 'src/api/types/generated-schema';
-import {
-  AcceleratorOrganization,
-  ManagedLocationType,
-  Organization,
-  OrganizationRoleInfo,
-} from 'src/types/Organization';
+import { ManagedLocationType, Organization, OrganizationRoleInfo } from 'src/types/Organization';
 import { InitializedTimeZone } from 'src/types/TimeZones';
 import { isAdmin } from 'src/utils/organization';
 
@@ -19,12 +14,6 @@ import PreferencesService from './PreferencesService';
 /**
  * Types exported from service
  */
-export type AcceleratorOrganizationsData = {
-  organizations: AcceleratorOrganization[];
-};
-
-export type AcceleratorOrganizationsResponse = Response & AcceleratorOrganizationsData;
-
 export type OrganizationsData = {
   organizations: Organization[];
 };
@@ -47,13 +36,9 @@ export type UpdateOptions = {
 };
 
 // endpoint
-const ACCELERATOR_ORGANIZATIONS_ENDPOINT = '/api/v1/accelerator/organizations';
 const ORGANIZATIONS_ENDPOINT = '/api/v1/organizations';
 const ORGANIZATION_ENDPOINT = '/api/v1/organizations/{organizationId}';
 const ORGANIZATION_ROLES_ENDPOINT = '/api/v1/organizations/{organizationId}/roles';
-
-type AcceleratorOrganizationsServerResponse =
-  paths[typeof ACCELERATOR_ORGANIZATIONS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 type OrganizationsServerResponse =
   paths[typeof ORGANIZATIONS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -69,35 +54,9 @@ type UpdateOrganizationRequestPayload =
 type OrganizationRolesServerResponse =
   paths[typeof ORGANIZATION_ROLES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
-const httpAcceleratorOrganizations = HttpService.root(ACCELERATOR_ORGANIZATIONS_ENDPOINT);
 const httpOrganizations = HttpService.root(ORGANIZATIONS_ENDPOINT);
 const httpOrganization = HttpService.root(ORGANIZATION_ENDPOINT);
 const httpOrganizationRoles = HttpService.root(ORGANIZATION_ROLES_ENDPOINT);
-
-/** get accelerator organizations */
-const getAcceleratorOrganizations = async (): Promise<AcceleratorOrganizationsResponse> => {
-  const response: AcceleratorOrganizationsResponse = await httpAcceleratorOrganizations.get<
-    AcceleratorOrganizationsServerResponse,
-    AcceleratorOrganizationsData
-  >(
-    {
-      params: {
-        includeParticipants: 'true',
-      },
-    },
-    (data) => ({ organizations: data?.organizations ?? [] })
-  );
-
-  if (!response.requestSucceeded) {
-    if (response.statusCode === 401) {
-      response.error = 'NotAuthenticated';
-    } else {
-      response.error = 'GenericError';
-    }
-  }
-
-  return response;
-};
 
 /**
  * get organizations
@@ -267,7 +226,6 @@ const initializeTimeZone = async (organization: Organization, timeZone: string):
  * Exported functions
  */
 const OrganizationService = {
-  getAcceleratorOrganizations,
   getOrganizations,
   getOrganizationRoles,
   createOrganization,

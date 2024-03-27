@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { AcceleratorOrganization, Organization } from 'src/types/Organization';
+import { Organization } from 'src/types/Organization';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import { User } from 'src/types/User';
 import { GlobalRolePermission } from 'src/utils/acl';
@@ -18,12 +18,10 @@ export type ProvidedUserData = {
 };
 
 export type ProvidedOrganizationData = {
-  acceleratorOrganizations: AcceleratorOrganization[];
   selectedOrganization: Organization;
   setSelectedOrganization: React.Dispatch<React.SetStateAction<Organization | undefined>>;
   organizations: Organization[];
   orgPreferences: PreferencesType;
-  reloadAcceleratorOrganizations: () => void;
   reloadOrganizations: (selectedOrgId?: number) => void;
   reloadOrgPreferences: () => void;
   bootstrapped: boolean;
