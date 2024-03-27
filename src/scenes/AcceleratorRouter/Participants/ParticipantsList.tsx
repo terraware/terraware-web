@@ -47,7 +47,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
       ]
     : [];
 
-const fuzzySearchColumns = ['name', 'project_name', 'cohort_name'];
+const fuzzySearchColumns = ['name', 'projects.name', 'cohort_name'];
 const defaultSearchOrder: SearchSortOrder = {
   field: 'name',
   direction: 'Ascending',
@@ -78,6 +78,7 @@ export default function ParticipantList(): JSX.Element {
   useEffect(() => {
     if (participantsResult?.status === 'error') {
       snackbar.toastError();
+      return;
     }
     if (participantsResult?.data) {
       setParticipants(
@@ -129,15 +130,9 @@ export default function ParticipantList(): JSX.Element {
               field: 'cohort_id',
               label: strings.COHORT,
               options: (participants || [])?.map((participant: ParticipantType) => `${participant.cohort_id}`),
+              pillValueRenderer: (values: (string | number | null)[]) =>
+                values.map((value) => cohorts[value || ''] || '').join(', '),
               renderOption: (id: string | number) => cohorts[id] || '',
-              searchNodeCreator: (values: (number | string | null)[]) => ({
-                field: 'cohort_id',
-                operation: 'field',
-                type: 'Exact',
-                values: values.map((value: number | string | null): string | null =>
-                  value === null ? value : `${value}`
-                ),
-              }),
             },
           ]
         : [],
