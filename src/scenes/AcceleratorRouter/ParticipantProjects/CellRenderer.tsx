@@ -3,6 +3,7 @@ import React from 'react';
 import { makeStyles } from '@mui/styles';
 
 import Link from 'src/components/common/Link';
+import TextTruncated from 'src/components/common/TextTruncated';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
@@ -30,8 +31,16 @@ export default function ParticipantProjectsCellRenderer(props: RendererProps<Tab
     return <CellRenderer {...props} value={createLinkToProject()} className={classes.text} />;
   }
 
-  if (column.key === 'phase') {
+  if (column.key === 'participant_cohort_phase') {
     return <CellRenderer {...props} value={getPhaseString(value as CohortPhaseType)} />;
+  }
+
+  if (column.key === 'restorableLandRaw') {
+    return <CellRenderer {...props} value={row.restorableLand} />;
+  }
+
+  if (column.key === 'landUseModelType') {
+    return <CellRenderer {...props} value={<TextTruncated stringList={value as string[]} />} />;
   }
 
   return <CellRenderer {...props} />;

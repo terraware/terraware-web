@@ -1,12 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { Response2 } from 'src/services/HttpService';
-import ParticipantProjectService, {
-  ParticipantProjectData,
-  ParticipantProjectSearchData,
-} from 'src/services/ParticipantProjectService';
+import ParticipantProjectService, { ParticipantProjectData } from 'src/services/ParticipantProjectService';
 import strings from 'src/strings';
-import { ParticipantProject } from 'src/types/ParticipantProject';
+import { ParticipantProject, ParticipantProjectSearchResult } from 'src/types/ParticipantProject';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 
 export const requestGetParticipantProject = createAsyncThunk(
@@ -23,22 +20,17 @@ export const requestGetParticipantProject = createAsyncThunk(
 );
 
 export type ListRequest = {
-  locale?: string | null;
-  search?: SearchNodePayload;
-  sortOrder?: SearchSortOrder;
+  search: SearchNodePayload;
+  sortOrder: SearchSortOrder;
 };
 
 export const requestListParticipantProjects = createAsyncThunk(
   'participantProjects/list',
-  async ({ locale, search, sortOrder }: ListRequest, { rejectWithValue }) => {
-    const response: Response2<ParticipantProjectSearchData> = await ParticipantProjectService.list(
-      locale,
-      search,
-      sortOrder
-    );
+  async ({ search, sortOrder }: ListRequest, { rejectWithValue }) => {
+    const response: ParticipantProjectSearchResult[] | null = await ParticipantProjectService.list(search, sortOrder);
 
-    if (response && response.requestSucceeded) {
-      return response.data?.projects;
+    if (response) {
+      return response;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);

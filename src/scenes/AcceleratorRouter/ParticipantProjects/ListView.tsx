@@ -34,7 +34,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           type: 'string',
         },
         {
-          key: 'phase',
+          key: 'participant_cohort_phase',
           name: strings.PHASE,
           type: 'string',
         },
@@ -49,7 +49,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           type: 'string',
         },
         {
-          key: 'restorableLand',
+          key: 'restorableLandRaw',
           name: strings.RESTORABLE_LAND,
           type: 'string',
         },
@@ -87,8 +87,10 @@ export default function ListView(): JSX.Element {
 
   const dispatchSearchRequest = useCallback(
     (locale: string | null, search: SearchNodePayload, sortOrder: SearchSortOrder) => {
-      const request = dispatch(requestListParticipantProjects({ locale, search, sortOrder }));
-      setRequestId(request.requestId);
+      if (locale) {
+        const request = dispatch(requestListParticipantProjects({ search, sortOrder }));
+        setRequestId(request.requestId);
+      }
     },
     [dispatch]
   );
@@ -97,7 +99,7 @@ export default function ListView(): JSX.Element {
     () =>
       (projects || []).reduce(
         (acc, project) => {
-          acc[project.cohortId] = project.cohortName;
+          acc[project.participant_cohort_id] = project.cohortName;
           return acc;
         },
         {} as Record<string, string>
@@ -110,19 +112,23 @@ export default function ListView(): JSX.Element {
       activeLocale
         ? [
             {
-              field: 'cohortId',
-              id: 'cohortId',
+              field: 'participant_cohort_id',
+              id: 'participant_cohort_id',
               label: strings.COHORT,
-              options: (projects || [])?.map((project: ParticipantProjectSearchResult) => `${project.cohortId}`),
+              options: (projects || [])?.map(
+                (project: ParticipantProjectSearchResult) => `${project.participant_cohort_id}`
+              ),
               pillValueRenderer: (values: (string | number | null)[]) =>
                 values.map((value) => cohorts[value || ''] || '').join(', '),
               renderOption: (id: string | number) => cohorts[id] || '',
             },
             {
-              field: 'phase',
-              id: 'phase',
+              field: 'participant_cohort_phase',
+              id: 'participant_cohort_phase',
               label: strings.PHASE,
-              options: (projects || [])?.map((project: ParticipantProjectSearchResult) => `${project.phase}`),
+              options: (projects || [])?.map(
+                (project: ParticipantProjectSearchResult) => `${project.participant_cohort_phase}`
+              ),
             },
           ]
         : [],
