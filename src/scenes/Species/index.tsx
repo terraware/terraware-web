@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
+import { BusySpinner } from '@terraware/web-components';
+
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
@@ -29,9 +31,14 @@ const SpeciesRouter = () => {
   }, [species, reloadSpecies]);
 
   const getSpeciesView = useCallback((): JSX.Element => {
+    if (species === undefined) {
+      return <BusySpinner withSkrim />;
+    }
+
     if ((species || []).length > 0) {
       return <SpeciesListView reloadData={reloadSpecies} species={species || []} />;
     }
+
     return <EmptyStatePage pageName={'Species'} reloadData={reloadSpecies} />;
   }, [species, reloadSpecies]);
 

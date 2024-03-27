@@ -3,7 +3,7 @@ import { useHistory } from 'react-router';
 
 import { Grid, Popover, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { BusySpinner, DropdownItem, SortOrder } from '@terraware/web-components';
+import { DropdownItem, SortOrder } from '@terraware/web-components';
 import { PillList, PillListItem, Tooltip } from '@terraware/web-components';
 import _ from 'lodash';
 
@@ -137,7 +137,6 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const [searchValue, setSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(searchValue, 250);
   const [results, setResults] = useState<SpeciesSearchResultRow[]>();
-  const [isBusy, setIsBusy] = useState<boolean>(false);
   const query = useQuery();
   const history = useHistory();
 
@@ -308,9 +307,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         count: 1000,
       };
 
-      setIsBusy(true);
       const data = await SearchService.searchValues(searchParams);
-      setIsBusy(false);
 
       const result = (data || {}) as FieldOptionsMap;
 
@@ -654,7 +651,6 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
 
   return (
     <TfMain>
-      {isBusy && <BusySpinner withSkrim={true} />}
       <CheckDataModal
         open={checkDataModalOpen}
         onClose={() => setCheckDataModalOpen(false)}
