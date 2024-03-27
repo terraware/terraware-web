@@ -12,7 +12,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ListDeliverablesRequestParams } from 'src/services/DeliverablesService';
 import strings from 'src/strings';
 import { DeliverableCategories, DeliverableStatuses, ListDeliverablesElement } from 'src/types/Deliverables';
-import { ParticipantProject } from 'src/types/Participant';
+import { ParticipantProjectSearchResult } from 'src/types/Participant';
 import { Project } from 'src/types/Project';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { SearchAndSortFn } from 'src/utils/searchAndSort';
@@ -93,7 +93,7 @@ const DeliverablesTable = ({
       filters.unshift({
         field: 'project_id',
         options: (selectedParticipant?.projects || projects || [])?.map(
-          (project: Project | ParticipantProject) => `${project.id}`
+          (project: Project | ParticipantProjectSearchResult) => `${project.id}`
         ),
         searchNodeCreator: (values: (number | string | null)[]) => ({
           field: 'projectId',

@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
@@ -6,30 +6,57 @@ import { APP_PATHS } from 'src/constants';
 export default function useNavigateTo() {
   const history = useHistory();
 
-  return {
-    goToParticipantsList: useCallback(() => {
+  const goToParticipant = useCallback(
+    (participantId: number) => {
       history.push({
-        pathname: APP_PATHS.ACCELERATOR_OVERVIEW,
-        search: 'tab=participants',
+        pathname: APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW.replace(':participantId', `${participantId}`),
       });
-    }, [history]),
-    goToParticipantProject: useCallback(
-      (projectId: number) => {
-        history.push({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`) });
-      },
-      [history]
-    ),
-    goToParticipantProjectEdit: useCallback(
-      (projectId: number) => {
-        history.push({ pathname: APP_PATHS.ACCELERATOR_PROJECT_EDIT.replace(':projectId', `${projectId}`) });
-      },
-      [history]
-    ),
-    goToParticipantProjectList: useCallback(() => {
-      history.push({
-        pathname: APP_PATHS.ACCELERATOR_OVERVIEW,
-        search: 'tab=projects',
-      });
-    }, [history]),
-  };
+    },
+    [history]
+  );
+
+  const goToParticipantsList = useCallback(() => {
+    history.push({
+      pathname: APP_PATHS.ACCELERATOR_OVERVIEW,
+      search: 'tab=participants',
+    });
+  }, [history]);
+
+  const goToParticipantProject = useCallback(
+    (projectId: number) => {
+      history.push({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`) });
+    },
+    [history]
+  );
+
+  const goToParticipantProjectEdit = useCallback(
+    (projectId: number) => {
+      history.push({ pathname: APP_PATHS.ACCELERATOR_PROJECT_EDIT.replace(':projectId', `${projectId}`) });
+    },
+    [history]
+  );
+
+  const goToParticipantProjectList = useCallback(() => {
+    history.push({
+      pathname: APP_PATHS.ACCELERATOR_OVERVIEW,
+      search: 'tab=projects',
+    });
+  }, [history]);
+
+  return useMemo(
+    () => ({
+      goToParticipant,
+      goToParticipantsList,
+      goToParticipantProject,
+      goToParticipantProjectEdit,
+      goToParticipantProjectList,
+    }),
+    [
+      goToParticipant,
+      goToParticipantsList,
+      goToParticipantProject,
+      goToParticipantProjectEdit,
+      goToParticipantProjectList,
+    ]
+  );
 }

@@ -18,7 +18,7 @@ export default function ParticipantsNew(): JSX.Element {
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectParticipantCreateRequest(requestId));
 
-  const { goToParticipantsList } = useNavigateTo();
+  const { goToParticipant, goToParticipantsList } = useNavigateTo();
 
   const onSave = useCallback(
     (createRequest: ParticipantCreateRequest) => {
@@ -31,8 +31,8 @@ export default function ParticipantsNew(): JSX.Element {
   const participant = useMemo<ParticipantCreateRequest>(
     () => ({
       name: '',
-      cohort_id: 0,
-      project_ids: [],
+      cohortId: 0,
+      projectIds: [],
     }),
     []
   );
@@ -41,10 +41,10 @@ export default function ParticipantsNew(): JSX.Element {
     if (result?.status === 'error') {
       snackbar.toastError();
     } else if (result?.status === 'success') {
-      goToParticipantsList();
+      goToParticipant(result!.data!.id);
       snackbar.toastSuccess(strings.CHANGES_SAVED);
     }
-  }, [goToParticipantsList, result?.status, snackbar]);
+  }, [goToParticipant, result, snackbar]);
 
   return (
     <Page title={strings.ADD_PARTICIPANT} contentStyle={{ display: 'flex', flexDirection: 'column' }}>

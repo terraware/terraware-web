@@ -1,22 +1,22 @@
-export type ParticipantProject = {
+import { components } from 'src/api/types/generated-schema';
+
+export type Participant = components['schemas']['ParticipantPayload'];
+
+export type ParticipantProject = components['schemas']['ParticipantProjectPayload'];
+
+export type ParticipantCreateRequest = components['schemas']['CreateParticipantRequestPayload'];
+
+export type ParticipantUpdateRequest = components['schemas']['UpdateParticipantRequestPayload'];
+
+export type ParticipantProjectSearchResult = {
   id: number;
   name: string;
-  organization_id: number;
-  organization_name: string;
 };
 
-export type Participant = {
+export type ParticipantSearchResult = {
   id: number;
+  name: string;
   cohort_id: number;
   cohort_name: string;
-  name: string;
-  projects: ParticipantProject[];
+  projects: ParticipantProjectSearchResult[];
 };
-
-export type ParticipantCreateRequest = {
-  cohort_id: number;
-  name: string;
-  project_ids: number[];
-};
-
-export type ParticipantUpdateRequest = ParticipantCreateRequest & { id: number };

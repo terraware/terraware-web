@@ -53,6 +53,27 @@ export interface paths {
      */
     get: operations["listAcceleratorOrganizations"];
   };
+  "/api/v1/accelerator/participants": {
+    /** Creates a new participant. */
+    post: operations["createParticipant"];
+  };
+  "/api/v1/accelerator/participants/{participantId}": {
+    /** Gets information about a participant and its assigned projects. */
+    get: operations["getParticipant"];
+    /** Updates a participant's information. */
+    put: operations["updateParticipant"];
+    /** Deletes a participant that has no projects. */
+    delete: operations["deleteParticipant"];
+  };
+  "/api/v1/accelerator/projects/{projectId}": {
+    /**
+     * Gets the accelerator-related details for a project.
+     * @description Does not include information such as project name that's available via the non-accelerator projects API.
+     */
+    get: operations["getProjectAcceleratorDetails"];
+    /** Updates the accelerator-related details for a project. */
+    put: operations["updateProjectAcceleratorDetails"];
+  };
   "/api/v1/accelerator/projects/{projectId}/scores": {
     /** Gets score selections for a single project. */
     get: operations["getProjectScores"];
@@ -1632,6 +1653,16 @@ export interface components {
       id: number;
       status: components["schemas"]["SuccessOrError"];
     };
+    CreateParticipantRequestPayload: {
+      /**
+       * Format: int64
+       * @description Assign the participant to this cohort. If null, the participant will not be assigned to any cohort initially.
+       */
+      cohortId?: number;
+      name: string;
+      /** @description Assign these projects to the new participant. If projects are already assigned to other participants, they will be reassigned to the new one. */
+      projectIds?: number[];
+    };
     CreatePlantingSiteRequestPayload: {
       boundary?: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
       description?: string;
@@ -2136,6 +2167,10 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
       user: components["schemas"]["OrganizationUserPayload"];
     };
+    GetParticipantResponsePayload: {
+      participant: components["schemas"]["ParticipantPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetPlantingSiteReportedPlantsResponsePayload: {
       site: components["schemas"]["PlantingSiteReportedPlantsPayload"];
       status: components["schemas"]["SuccessOrError"];
@@ -2170,6 +2205,10 @@ export interface components {
       /** Format: int32 */
       totalTreesPlanted?: number;
       workers: components["schemas"]["WorkersPayloadV1"];
+    };
+    GetProjectAcceleratorDetailsResponsePayload: {
+      details: components["schemas"]["ProjectAcceleratorDetailsPayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetProjectResponsePayload: {
       project: components["schemas"]["ProjectPayload"];
@@ -3019,6 +3058,25 @@ export interface components {
       /** @enum {string} */
       role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
     };
+    ParticipantPayload: {
+      /** Format: int64 */
+      cohortId?: number;
+      cohortName?: string;
+      /** @enum {string} */
+      cohortPhase?: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      /** Format: int64 */
+      id: number;
+      name: string;
+      projects: components["schemas"]["ParticipantProjectPayload"][];
+    };
+    ParticipantProjectPayload: {
+      /** Format: int64 */
+      organizationId: number;
+      organizationName: string;
+      /** Format: int64 */
+      projectId: number;
+      projectName: string;
+    };
     PhaseScores: {
       /** @enum {string} */
       phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
@@ -3151,6 +3209,32 @@ export interface components {
       /** @enum {string} */
       type?: "Polygon";
     }, "coordinates" | "type">;
+    ProjectAcceleratorDetailsPayload: {
+      applicationReforestableLand?: number;
+      confirmedReforestableLand?: number;
+      countryCode?: string;
+      dealDescription?: string;
+      /** @enum {string} */
+      dealStage?: "Phase 0 (Doc Review)" | "Phase 1" | "Phase 2" | "Phase 3" | "Graduated, Finished Planting" | "Non Graduate" | "Application Submitted" | "Project Lead Screening Review" | "Screening Questions Ready for Review" | "Carbon Pre-Check" | "Submission Requires Follow Up" | "Carbon Eligible" | "Closed Lost" | "Issue Active" | "Issue Pending" | "Issue Reesolved";
+      failureRisk?: string;
+      investmentThesis?: string;
+      landUseModelTypes: ("Native Forest" | "Monoculture" | "Sustainable Timber" | "Other Timber" | "Mangroves" | "Agroforestry" | "Silvopasture" | "Other Land-Use Model")[];
+      maxCarbonAccumulation?: number;
+      minCarbonAccumulation?: number;
+      /** Format: int32 */
+      numCommunities?: number;
+      /** Format: int32 */
+      numNativeSpecies?: number;
+      /** @enum {string} */
+      pipeline?: "Accelerator Projects" | "Carbon Supply" | "Carbon Waitlist";
+      /** Format: int64 */
+      projectId: number;
+      projectLead?: string;
+      /** @enum {string} */
+      region?: "Antarctica" | ("East Asia  & Pacific") | ("Europe & Central Asia") | ("Latin America & Caribbean") | ("Middle East & North Africa") | "North America" | "Oceania" | "South Asia" | "Sub-Saharan Africa";
+      totalExpansionPotential?: number;
+      whatNeedsToBeTrue?: string;
+    };
     ProjectPayload: {
       description?: string;
       /** Format: int64 */
@@ -3913,6 +3997,16 @@ export interface components {
       /** @enum {string} */
       role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
     };
+    UpdateParticipantRequestPayload: {
+      /**
+       * Format: int64
+       * @description Assign the participant to this cohort. If null, remove the participant from its current cohort, if any.
+       */
+      cohortId?: number;
+      name: string;
+      /** @description Set the participant's list of assigned projects to this. If projects are currently assigned to the participant but aren't included in this list, they will be removed from the participant. */
+      projectIds: number[];
+    };
     UpdatePlantingSiteRequestPayload: {
       /** @description Site boundary. Ignored if this is a detailed planting site. */
       boundary?: components["schemas"]["MultiPolygon"];
@@ -3933,6 +4027,28 @@ export interface components {
     UpdatePlotObservationRequestPayload: {
       /** @description Observed coordinates, if any, up to one per position. */
       coordinates: components["schemas"]["ObservationMonitoringPlotCoordinatesPayload"][];
+    };
+    UpdateProjectAcceleratorDetailsRequestPayload: {
+      applicationReforestableLand?: number;
+      confirmedReforestableLand?: number;
+      countryCode?: string;
+      dealDescription?: string;
+      /** @enum {string} */
+      dealStage?: "Phase 0 (Doc Review)" | "Phase 1" | "Phase 2" | "Phase 3" | "Graduated, Finished Planting" | "Non Graduate" | "Application Submitted" | "Project Lead Screening Review" | "Screening Questions Ready for Review" | "Carbon Pre-Check" | "Submission Requires Follow Up" | "Carbon Eligible" | "Closed Lost" | "Issue Active" | "Issue Pending" | "Issue Reesolved";
+      failureRisk?: string;
+      investmentThesis?: string;
+      landUseModelTypes: ("Native Forest" | "Monoculture" | "Sustainable Timber" | "Other Timber" | "Mangroves" | "Agroforestry" | "Silvopasture" | "Other Land-Use Model")[];
+      maxCarbonAccumulation?: number;
+      minCarbonAccumulation?: number;
+      /** Format: int32 */
+      numCommunities?: number;
+      /** Format: int32 */
+      numNativeSpecies?: number;
+      /** @enum {string} */
+      pipeline?: "Accelerator Projects" | "Carbon Supply" | "Carbon Waitlist";
+      projectLead?: string;
+      totalExpansionPotential?: number;
+      whatNeedsToBeTrue?: string;
     };
     UpdateProjectRequestPayload: {
       description?: string;
@@ -4451,6 +4567,151 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["ListAcceleratorOrganizationsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Creates a new participant. */
+  createParticipant: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateParticipantRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetParticipantResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets information about a participant and its assigned projects. */
+  getParticipant: {
+    parameters: {
+      path: {
+        participantId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetParticipantResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Updates a participant's information. */
+  updateParticipant: {
+    parameters: {
+      path: {
+        participantId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateParticipantRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Deletes a participant that has no projects. */
+  deleteParticipant: {
+    parameters: {
+      path: {
+        participantId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** @description There are projects associated with the participant. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Gets the accelerator-related details for a project.
+   * @description Does not include information such as project name that's available via the non-accelerator projects API.
+   */
+  getProjectAcceleratorDetails: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetProjectAcceleratorDetailsResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Updates the accelerator-related details for a project. */
+  updateProjectAcceleratorDetails: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateProjectAcceleratorDetailsRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };

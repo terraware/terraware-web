@@ -4,11 +4,11 @@ import { Dropdown, DropdownItem } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { Participant } from 'src/types/Participant';
+import { ParticipantSearchResult } from 'src/types/Participant';
 
 type ParticipantsDropdownProps<T extends { participantId?: number } | undefined> = {
   allowUnselect?: boolean;
-  availableParticipants: Participant[] | undefined;
+  availableParticipants: ParticipantSearchResult[] | undefined;
   label?: string | undefined;
   record: T;
   setRecord: (setFn: (previousValue: T) => T) => void;
