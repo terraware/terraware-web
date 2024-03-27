@@ -28,8 +28,13 @@ export const defaultSelectedOrg: Organization = {
 };
 
 export const OrganizationContext = createContext<ProvidedOrganizationData>({
+  acceleratorOrganizations: [],
   organizations: [],
   orgPreferences: {},
+  reloadAcceleratorOrganizations: (selectedOrgId?: number) => {
+    // default no-op implementation
+    return;
+  },
   reloadOrganizations: (selectedOrgId?: number) => {
     // default no-op implementation
     return;

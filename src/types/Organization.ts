@@ -3,6 +3,10 @@ import strings from 'src/strings';
 
 import { Facility } from './Facility';
 
+export type AcceleratorOrganization = components['schemas']['AcceleratorOrganizationPayload'];
+
+export type AcceleratorProject = components['schemas']['AcceleratorProjectPayload'];
+
 export type ManagedLocationType = 'SeedBank' | 'Nursery' | 'PlantingSite';
 
 export const ManagedLocationTypes: ManagedLocationType[] = ['SeedBank', 'Nursery', 'PlantingSite'];
