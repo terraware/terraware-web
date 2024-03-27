@@ -8,6 +8,7 @@ import { Tabs } from '@terraware/web-components';
 import Page from 'src/components/Page';
 import { useLocalization, useUser } from 'src/providers';
 import CohortsListView from 'src/scenes/AcceleratorRouter/Cohorts/CohortsListView';
+import ParticipantProjectsList from 'src/scenes/AcceleratorRouter/ParticipantProjects/ListView';
 import ParticipantsList from 'src/scenes/AcceleratorRouter/Participants/ParticipantsList';
 import strings from 'src/strings';
 import useQuery from 'src/utils/useQuery';
@@ -30,15 +31,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
   },
 }));
-
-// TODO: remove this component and replace it with the actual content
-const TabPlaceholder = ({ name }: { name: string }) => {
-  return (
-    <Box display='flex' alignItems='center' justifyContent='center' flex={1} sx={{ minHeight: '400px' }}>
-      {name} tab content
-    </Box>
-  );
-};
 
 const OverviewView = () => {
   const { isAllowed } = useUser();
@@ -68,7 +60,7 @@ const OverviewView = () => {
       {
         id: 'projects',
         label: strings.PROJECTS,
-        children: <TabPlaceholder name={strings.PROJECTS} />,
+        children: <ParticipantProjectsList />,
       },
       ...(canReadParticipants
         ? [

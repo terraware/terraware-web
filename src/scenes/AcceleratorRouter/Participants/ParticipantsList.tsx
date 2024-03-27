@@ -69,7 +69,6 @@ export default function ParticipantList(): JSX.Element {
   const [requestId, setRequestId] = useState<string>('');
   const participantsResult = useAppSelector(selectParticipantListRequest(requestId));
 
-  // TODO: check for non-empty filters
   const isEmptyState = useMemo<boolean>(
     () => participantsResult?.status === 'success' && participants.length === 0 && !hasFilters,
     [hasFilters, participants, participantsResult]
@@ -126,15 +125,9 @@ export default function ParticipantList(): JSX.Element {
               field: 'cohort_id',
               label: strings.COHORT,
               options: (participants || [])?.map((participant: ParticipantType) => `${participant.cohort_id}`),
+              pillValueRenderer: (values: (string | number | null)[]) =>
+                values.map((value) => cohorts[value || ''] || '').join(', '),
               renderOption: (id: string | number) => cohorts[id] || '',
-              searchNodeCreator: (values: (number | string | null)[]) => ({
-                field: 'cohort_id',
-                operation: 'field',
-                type: 'Exact',
-                values: values.map((value: number | string | null): string | null =>
-                  value === null ? value : `${value}`
-                ),
-              }),
             },
           ]
         : [],
