@@ -136,19 +136,17 @@ export default function ListView(): JSX.Element {
   );
 
   return (
-    <>
-      <TableWithSearchFilters
-        busy={result?.status === 'pending'}
-        columns={columns}
-        defaultSearchOrder={defaultSearchOrder}
-        dispatchSearchRequest={dispatchSearchRequest}
-        featuredFilters={featuredFilters}
-        fuzzySearchColumns={fuzzySearchColumns}
-        id='accelerator-participan-projects-table'
-        Renderer={CellRenderer}
-        rows={projects}
-        title={strings.PROJECTS}
-      />
-    </>
+    <TableWithSearchFilters
+      busy={result?.status === 'pending'}
+      columns={columns}
+      defaultSearchOrder={defaultSearchOrder}
+      dispatchSearchRequest={dispatchSearchRequest}
+      featuredFilters={featuredFilters}
+      fuzzySearchColumns={fuzzySearchColumns}
+      id='accelerator-participan-projects-table'
+      Renderer={CellRenderer}
+      rows={projects}
+      title={strings.PROJECTS}
+    />
   );
 }
