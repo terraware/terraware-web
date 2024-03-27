@@ -32,15 +32,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-// TODO: remove this component and replace it with the actual content
-const TabPlaceholder = ({ name }: { name: string }) => {
-  return (
-    <Box display='flex' alignItems='center' justifyContent='center' flex={1} sx={{ minHeight: '400px' }}>
-      {name} tab content
-    </Box>
-  );
-};
-
 const OverviewView = () => {
   const { isAllowed } = useUser();
   const { activeLocale } = useLocalization();
