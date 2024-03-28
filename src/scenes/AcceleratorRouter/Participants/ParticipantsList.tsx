@@ -6,6 +6,7 @@ import { Button, DropdownItem, TableColumnType } from '@terraware/web-components
 
 import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
 import Card from 'src/components/common/Card';
+import ExportCsvModal from 'src/components/common/ExportCsvModal';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import { APP_PATHS } from 'src/constants';
@@ -13,16 +14,16 @@ import { useLocalization, useUser } from 'src/providers';
 import { requestListParticipants } from 'src/redux/features/participants/participantsAsyncThunks';
 import { selectParticipantListRequest } from 'src/redux/features/participants/participantsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { ParticipantsService } from 'src/services';
 import strings from 'src/strings';
-import { Participant } from 'src/types/Participant';
+import { ParticipantSearchResult } from 'src/types/Participant';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import DownloadParticipants from './DownloadParticipants';
 import ParticipantsCellRenderer from './ParticipantsCellRenderer';
 
-type ParticipantType = Omit<Participant, 'projects'> & {
+type ParticipantType = Omit<ParticipantSearchResult, 'projects'> & {
   project_name: string[];
 };
 
@@ -47,7 +48,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
       ]
     : [];
 
-const fuzzySearchColumns = ['name', 'project_name', 'cohort_name'];
+const fuzzySearchColumns = ['name', 'projects.name', 'cohort_name'];
 const defaultSearchOrder: SearchSortOrder = {
   field: 'name',
   direction: 'Ascending',
@@ -69,7 +70,6 @@ export default function ParticipantList(): JSX.Element {
   const [requestId, setRequestId] = useState<string>('');
   const participantsResult = useAppSelector(selectParticipantListRequest(requestId));
 
-  // TODO: check for non-empty filters
   const isEmptyState = useMemo<boolean>(
     () => participantsResult?.status === 'success' && participants.length === 0 && !hasFilters,
     [hasFilters, participants, participantsResult]
@@ -78,11 +78,12 @@ export default function ParticipantList(): JSX.Element {
   useEffect(() => {
     if (participantsResult?.status === 'error') {
       snackbar.toastError();
+      return;
     }
     if (participantsResult?.data) {
       setParticipants(
         participantsResult.data.map(
-          (participant: Participant): ParticipantType => ({
+          (participant: ParticipantSearchResult): ParticipantType => ({
             ...participant,
             project_name: participant.projects.flatMap((project) => project.name),
           })
@@ -93,10 +94,13 @@ export default function ParticipantList(): JSX.Element {
 
   const dispatchSearchRequest = useCallback(
     (locale: string | null, search: SearchNodePayload, sortOrder: SearchSortOrder) => {
+      if (!locale) {
+        return;
+      }
       setLastSearch(search);
       setLastSort(sortOrder);
       setHasFilters(search.children.length > 0);
-      const request = dispatch(requestListParticipants({ locale, search, sortOrder }));
+      const request = dispatch(requestListParticipants({ search, sortOrder }));
       setRequestId(request.requestId);
     },
     [dispatch]
@@ -126,15 +130,9 @@ export default function ParticipantList(): JSX.Element {
               field: 'cohort_id',
               label: strings.COHORT,
               options: (participants || [])?.map((participant: ParticipantType) => `${participant.cohort_id}`),
+              pillValueRenderer: (values: (string | number | null)[]) =>
+                values.map((value) => cohorts[value || ''] || '').join(', '),
               renderOption: (id: string | number) => cohorts[id] || '',
-              searchNodeCreator: (values: (number | string | null)[]) => ({
-                field: 'cohort_id',
-                operation: 'field',
-                type: 'Exact',
-                values: values.map((value: number | string | null): string | null =>
-                  value === null ? value : `${value}`
-                ),
-              }),
             },
           ]
         : [],
@@ -178,14 +176,11 @@ export default function ParticipantList(): JSX.Element {
 
   return (
     <>
-      {openDownload && (
-        <DownloadParticipants
-          onClose={() => setOpenDownload(false)}
-          open={openDownload}
-          search={lastSearch}
-          sort={lastSort}
-        />
-      )}
+      <ExportCsvModal
+        onClose={() => setOpenDownload(false)}
+        onExport={() => ParticipantsService.download(lastSearch, lastSort)}
+        open={openDownload}
+      />
       {isEmptyState && <EmptyState onClick={goToNewParticipant} />}
       {!isEmptyState && (
         <TableWithSearchFilters

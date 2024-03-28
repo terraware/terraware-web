@@ -4,6 +4,7 @@ import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { CohortPhaseType, getPhaseString } from 'src/types/Cohort';
 
 export default function CohortCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row, index, value } = props;
@@ -21,6 +22,10 @@ export default function CohortCellRenderer(props: RendererProps<TableRowType>): 
 
   if (column.key === 'participantIds') {
     return <CellRenderer {...props} value={(value as string[])?.length?.toString() || '0'} />;
+  }
+
+  if (column.key === 'phase') {
+    return <CellRenderer {...props} value={getPhaseString(value as CohortPhaseType)} />;
   }
 
   return <CellRenderer {...props} />;

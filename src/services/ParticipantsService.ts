@@ -1,152 +1,85 @@
-import { Response2 } from 'src/services/HttpService';
-import { Participant, ParticipantCreateRequest, ParticipantUpdateRequest } from 'src/types/Participant';
-import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
-import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
+import HttpService, { Response, Response2, ServerData } from 'src/services/HttpService';
+import {
+  Participant,
+  ParticipantCreateRequest,
+  ParticipantSearchResult,
+  ParticipantUpdateRequest,
+} from 'src/types/Participant';
+import { SearchNodePayload, SearchRequestPayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+
+import SearchService from './SearchService';
+
+const PARTICIPANT_ENDPOINT = '/api/v1/accelerator/participants/{participantId}';
+const CREATE_ENDPOINT = '/api/v1/accelerator/participants';
 
 /**
  * Accelerator "participant" related services
  */
 
-export type ParticipantsData = {
-  participants: Participant[];
-};
-
-export type ParticipantData = {
+export type ParticipantData = ServerData & {
   participant: Participant;
 };
 
-const create = async (request: ParticipantCreateRequest): Promise<Response2<number>> => {
-  return {
-    requestSucceeded: true,
-    data: 1,
+// utility to map search/sort into search params for participants
+const getSearchParams = (search?: SearchNodePayload, sortOrder?: SearchSortOrder): SearchRequestPayload => {
+  const searchParams: SearchRequestPayload = {
+    prefix: 'projects.participant',
+    fields: ['cohort_id', 'cohort_name', 'id', 'name', 'projects.id', 'projects.name'],
+    search: search ?? { operation: 'and', children: [] },
+    sortOrder: [sortOrder ?? { field: 'name' }],
+    count: 0,
   };
+
+  return searchParams;
 };
 
-const deleteOne = async (participantId: number): Promise<Response2<number>> => {
-  return {
-    requestSucceeded: true,
-    data: participantId,
-  };
-};
+const create = async (entity: ParticipantCreateRequest): Promise<Response2<ParticipantData>> =>
+  await HttpService.root(CREATE_ENDPOINT).post({ entity });
+
+const deleteOne = async (participantId: number): Promise<Response> =>
+  await HttpService.root(PARTICIPANT_ENDPOINT).delete({
+    urlReplacements: { '{participantId}': `${participantId}` },
+  });
 
 /**
  * Download csv of participants data.
  */
-const download = async (search?: SearchNodePayload, sortOrder?: SearchSortOrder): Promise<string | null> => {
-  return 'Id,Participant,Projects Count\r1,TST_PART1,3\r2,random,1\r';
-};
+const download = async (search?: SearchNodePayload, sortOrder?: SearchSortOrder): Promise<string | null> =>
+  await SearchService.searchCsv(getSearchParams(search, sortOrder));
 
-const mockParticipant: Participant = {
-  id: 1,
-  cohort_id: 1,
-  cohort_name: 'Cohort1',
-  name: `TST_PART1`,
-  projects: [
-    { id: 1, name: 'Project1', organization_id: 1, organization_name: 'Org1' },
-    { id: 7, name: 'Andromeda', organization_id: 2, organization_name: 'Org2' },
-    { id: 8, name: 'Project8', organization_id: 1, organization_name: 'Org1' },
-  ],
-};
-
-const mockEmptyParticipant: Participant = {
-  id: 4,
-  cohort_id: 4,
-  cohort_name: 'Cohort4',
-  name: `empty participant`,
-  projects: [],
-};
-
-const get = async (participantId: number): Promise<Response2<ParticipantData>> => {
-  return {
-    requestSucceeded: true,
-    data: {
-      participant: participantId === 4 ? mockEmptyParticipant : mockParticipant,
-    },
-  };
-};
+const get = async (participantId: number): Promise<Response2<ParticipantData>> =>
+  await HttpService.root(PARTICIPANT_ENDPOINT).get2<ParticipantData>({
+    urlReplacements: { '{participantId}': `${participantId}` },
+  });
 
 const list = async (
-  locale?: string | null,
   search?: SearchNodePayload,
   sortOrder?: SearchSortOrder
-): Promise<Response2<ParticipantsData>> => {
-  let searchOrderConfig: SearchOrderConfig | undefined;
+): Promise<ParticipantSearchResult[] | null> => {
+  const response: SearchResponseElement[] | null = await SearchService.search(getSearchParams(search, sortOrder));
 
-  if (locale && sortOrder) {
-    searchOrderConfig = {
-      locale,
-      sortOrder,
-      numberFields: ['id', 'cohort_id'],
-    };
+  if (!response) {
+    return null;
   }
 
-  return {
-    requestSucceeded: true,
-    data: {
-      participants: searchAndSort(
-        [
-          {
-            id: 1,
-            cohort_id: 1,
-            cohort_name: 'Cohort1',
-            name: 'TST_PART1',
-            projects: [
-              { id: 1, name: 'Project1', organization_id: 1, organization_name: 'Org1' },
-              { id: 7, name: 'Andromeda', organization_id: 2, organization_name: 'Org2' },
-              { id: 8, name: 'Project8', organization_id: 1, organization_name: 'Org1' },
-            ],
-          },
-          {
-            id: 2,
-            cohort_id: 2,
-            cohort_name: 'Cohort2',
-            name: 'TST_PART2',
-            projects: [
-              { id: 2, name: 'Project2', organization_id: 2, organization_name: 'Org2' },
-              { id: 3, name: 'Project3', organization_id: 2, organization_name: 'Org2' },
-              { id: 4, name: 'Project4', organization_id: 2, organization_name: 'Org2' },
-              { id: 5, name: 'Project5', organization_id: 3, organization_name: 'Org3' },
-              { id: 6, name: 'Project6', organization_id: 3, organization_name: 'Org3' },
-            ],
-          },
-          {
-            id: 3,
-            cohort_id: 3,
-            cohort_name: 'Cohort3',
-            name: 'random',
-            projects: [{ id: 8, name: 'Project8', organization_id: 1, organization_name: 'Org1' }],
-          },
-          {
-            id: 4,
-            cohort_id: 4,
-            cohort_name: 'Cohort4',
-            name: 'empty participant',
-            projects: [],
-          },
-        ],
-        search,
-        searchOrderConfig
-      ),
-    },
-  };
+  return response.map((result: SearchResponseElement) => {
+    const { cohort_id, cohort_name, id, name, projects } = result;
+
+    return {
+      cohort_id,
+      cohort_name,
+      id,
+      name,
+      projects: projects || [],
+    } as ParticipantSearchResult;
+  });
 };
 
-const update = async (participant: ParticipantUpdateRequest): Promise<Response2<number>> => {
-  mockParticipant.name = participant.name;
-  mockParticipant.cohort_id = participant.cohort_id;
-  mockParticipant.cohort_name = `Cohort${participant.cohort_id}`;
-  mockParticipant.projects = participant.project_ids.map((id, index) => ({
-    id,
-    name: `Project${id}`,
-    organization_id: (index % 2) + 1,
-    organization_name: `Org${(index % 2) + 1}`,
-  }));
-
-  return {
-    requestSucceeded: true,
-    data: participant.id,
-  };
-};
+const update = async (participantId: number, entity: ParticipantUpdateRequest): Promise<Response> =>
+  await HttpService.root(PARTICIPANT_ENDPOINT).put({
+    urlReplacements: { '{participantId}': `${participantId}` },
+    entity,
+  });
 
 const ParticipantsService = {
   create,

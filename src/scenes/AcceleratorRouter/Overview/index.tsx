@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useMemo } from 'react';
 
 import { Box, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -8,10 +7,10 @@ import { Tabs } from '@terraware/web-components';
 import Page from 'src/components/Page';
 import { useLocalization, useUser } from 'src/providers';
 import CohortsListView from 'src/scenes/AcceleratorRouter/Cohorts/CohortsListView';
+import ParticipantProjectsList from 'src/scenes/AcceleratorRouter/ParticipantProjects/ListView';
 import ParticipantsList from 'src/scenes/AcceleratorRouter/Participants/ParticipantsList';
 import strings from 'src/strings';
-import useQuery from 'src/utils/useQuery';
-import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import useStickyTabs from 'src/utils/useStickyTabs';
 
 const useStyles = makeStyles((theme: Theme) => ({
   tabs: {
@@ -31,33 +30,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-// TODO: remove this component and replace it with the actual content
-const TabPlaceholder = ({ name }: { name: string }) => {
-  return (
-    <Box display='flex' alignItems='center' justifyContent='center' flex={1} sx={{ minHeight: '400px' }}>
-      {name} tab content
-    </Box>
-  );
-};
-
 const OverviewView = () => {
   const { isAllowed } = useUser();
   const { activeLocale } = useLocalization();
-  const history = useHistory();
   const classes = useStyles();
-  const query = useQuery();
-  const tab = query.get('tab') || 'projects';
-  const location = useStateLocation();
-
-  const [activeTab, setActiveTab] = useState<string>(tab);
-
-  const onTabChange = useCallback(
-    (newTab: string) => {
-      query.set('tab', newTab);
-      history.push(getLocation(location.pathname, location, query.toString()));
-    },
-    [history, location, query]
-  );
 
   const tabs = useMemo(() => {
     if (!activeLocale) {
@@ -68,7 +44,7 @@ const OverviewView = () => {
       {
         id: 'projects',
         label: strings.PROJECTS,
-        children: <TabPlaceholder name={strings.PROJECTS} />,
+        children: <ParticipantProjectsList />,
       },
       ...(canReadParticipants
         ? [
@@ -87,13 +63,11 @@ const OverviewView = () => {
     ];
   }, [activeLocale, isAllowed]);
 
-  useEffect(() => {
-    if (tabs.some((data) => data.id === tab)) {
-      setActiveTab(tab);
-    } else if (tabs.length) {
-      setActiveTab(tabs[0].id);
-    }
-  }, [tab, tabs]);
+  const { activeTab, onTabChange } = useStickyTabs({
+    defaultTab: 'projects',
+    tabs,
+    viewIdentifier: 'accelerator-overview',
+  });
 
   return (
     <Page title={strings.OVERVIEW}>

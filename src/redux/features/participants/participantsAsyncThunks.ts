@@ -1,18 +1,18 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { Response2 } from 'src/services/HttpService';
-import ParticipantsService, { ParticipantData, ParticipantsData } from 'src/services/ParticipantsService';
+import { Response, Response2 } from 'src/services/HttpService';
+import ParticipantsService, { ParticipantData } from 'src/services/ParticipantsService';
 import strings from 'src/strings';
-import { ParticipantCreateRequest, ParticipantUpdateRequest } from 'src/types/Participant';
+import { ParticipantCreateRequest, ParticipantSearchResult, ParticipantUpdateRequest } from 'src/types/Participant';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 
 export const requestCreateParticipant = createAsyncThunk(
   'participants/create',
   async (request: ParticipantCreateRequest, { rejectWithValue }) => {
-    const response: Response2<number> = await ParticipantsService.create(request);
+    const response: Response2<ParticipantData> = await ParticipantsService.create(request);
 
     if (response && response.requestSucceeded) {
-      return response.data;
+      return response.data?.participant;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);
@@ -25,7 +25,7 @@ export const requestDeleteParticipant = createAsyncThunk(
     const response: Response2<number> = await ParticipantsService.deleteOne(participantId);
 
     if (response && response.requestSucceeded) {
-      return participantId;
+      return true;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);
@@ -47,16 +47,13 @@ export const requestGetParticipant = createAsyncThunk(
 
 export const requestListParticipants = createAsyncThunk(
   'participants/list',
-  async (
-    request: { locale?: string | null; search?: SearchNodePayload; sortOrder?: SearchSortOrder },
-    { rejectWithValue }
-  ) => {
-    const { locale, search, sortOrder } = request;
+  async (request: { search?: SearchNodePayload; sortOrder?: SearchSortOrder }, { rejectWithValue }) => {
+    const { search, sortOrder } = request;
 
-    const response: Response2<ParticipantsData> = await ParticipantsService.list(locale, search, sortOrder);
+    const response: ParticipantSearchResult[] | null = await ParticipantsService.list(search, sortOrder);
 
-    if (response && response.requestSucceeded) {
-      return response.data?.participants;
+    if (response) {
+      return response;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);
@@ -65,12 +62,21 @@ export const requestListParticipants = createAsyncThunk(
 
 export const requestUpdateParticipant = createAsyncThunk(
   'participants/update',
-  async (participant: ParticipantUpdateRequest, { dispatch, rejectWithValue }) => {
-    const response: Response2<number> = await ParticipantsService.update(participant);
+  async (
+    {
+      participantId,
+      request,
+    }: {
+      participantId: number;
+      request: ParticipantUpdateRequest;
+    },
+    { dispatch, rejectWithValue }
+  ) => {
+    const response: Response = await ParticipantsService.update(participantId, request);
 
     if (response && response.requestSucceeded) {
-      dispatch(requestGetParticipant(participant.id));
-      return participant.id;
+      dispatch(requestGetParticipant(participantId));
+      return true;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);

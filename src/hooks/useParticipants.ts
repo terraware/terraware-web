@@ -4,14 +4,14 @@ import { requestListParticipants } from 'src/redux/features/participants/partici
 import { selectParticipantListRequest } from 'src/redux/features/participants/participantsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { Participant } from 'src/types/Participant';
+import { ParticipantSearchResult } from 'src/types/Participant';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export type Response = {
-  availableParticipants?: Participant[];
+  availableParticipants?: ParticipantSearchResult[];
   isBusy: boolean;
   notFound: boolean;
-  selectedParticipant?: Participant;
+  selectedParticipant?: ParticipantSearchResult;
 };
 
 export const useParticipants = (participantId?: number) => {
@@ -22,8 +22,8 @@ export const useParticipants = (participantId?: number) => {
   const participantListRequest = useAppSelector(selectParticipantListRequest(requestId));
 
   const [notFound, setNotFound] = useState<boolean>(false);
-  const [availableParticipants, setAvailableParticipants] = useState<Participant[] | undefined>();
-  const [selectedParticipant, setSelectedParticipant] = useState<Participant>();
+  const [availableParticipants, setAvailableParticipants] = useState<ParticipantSearchResult[] | undefined>();
+  const [selectedParticipant, setSelectedParticipant] = useState<ParticipantSearchResult>();
 
   const isBusy = (participantListRequest || {}).status === 'pending';
 

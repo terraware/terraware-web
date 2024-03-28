@@ -11,14 +11,15 @@ import PhaseScoreCard from 'src/components/ProjectField/PhaseScoreCard';
 import ProjectFieldTextAreaDisplay from 'src/components/ProjectField/TextAreaDisplay';
 import VotingDecisionCard from 'src/components/ProjectField/VotingDecisionCard';
 import Card from 'src/components/common/Card';
+import ExportCsvModal from 'src/components/common/ExportCsvModal';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useUser } from 'src/providers';
+import ParticipantProjectService from 'src/services/ParticipantProjectService';
 import strings from 'src/strings';
 
 import PageWithModuleTimeline from '../PageWithModuleTimeline';
-import Export from './Export';
 import { useParticipantProjectData } from './ParticipantProjectContext';
 
 const SingleView = () => {
@@ -172,8 +173,8 @@ const SingleView = () => {
         </>
       )}
 
-      <Export
-        projectId={projectId}
+      <ExportCsvModal
+        onExport={() => ParticipantProjectService.download(projectId)}
         onClose={() => {
           setExportModalOpen(false);
         }}

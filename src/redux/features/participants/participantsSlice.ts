@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import { Participant } from 'src/types/Participant';
+import { Participant, ParticipantSearchResult } from 'src/types/Participant';
 
 import {
   requestCreateParticipant,
@@ -14,7 +14,7 @@ import {
 /**
  * Create Participant
  */
-const initialStateParticipantCreate: { [key: string]: StatusT<number> } = {};
+const initialStateParticipantCreate: { [key: string]: StatusT<Participant> } = {};
 
 export const participantCreateSlice = createSlice({
   name: 'participantCreateSlice',
@@ -30,7 +30,7 @@ export const participantCreateReducer = participantCreateSlice.reducer;
 /**
  * Delete Participant
  */
-const initialStateParticipantDelete: { [key: string]: StatusT<number> } = {};
+const initialStateParticipantDelete: { [key: string]: StatusT<boolean> } = {};
 
 export const participantDeleteSlice = createSlice({
   name: 'participantDeleteSlice',
@@ -62,7 +62,7 @@ export const participantReducer = participantSlice.reducer;
 /**
  * Participant list
  */
-const initialStateParticipantList: { [key: string]: StatusT<Participant[]> } = {};
+const initialStateParticipantList: { [key: string]: StatusT<ParticipantSearchResult[]> } = {};
 
 export const participantListSlice = createSlice({
   name: 'participantListSlice',
@@ -78,7 +78,7 @@ export const participantListReducer = participantListSlice.reducer;
 /**
  * Participant update
  */
-const initialStateParticipantUpdate: { [key: string]: StatusT<number> } = {};
+const initialStateParticipantUpdate: { [key: string]: StatusT<boolean> } = {};
 
 export const participantUpdateSlice = createSlice({
   name: 'participantUpdateSlice',

@@ -12,13 +12,14 @@ import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { AcceleratorOrg } from 'src/types/Accelerator';
 import { Cohort } from 'src/types/Cohort';
-import { ParticipantCreateRequest, ParticipantUpdateRequest } from 'src/types/Participant';
+import { ParticipantCreateRequest, ParticipantProject, ParticipantUpdateRequest } from 'src/types/Participant';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import OrgProjectsSectionEdit, { OrgProjectsSection } from './OrgProjectsSectionEdit';
 
 type ParticipantFormProps<T extends ParticipantCreateRequest | ParticipantUpdateRequest> = {
   busy?: boolean;
+  existingProjects?: ParticipantProject[];
   participant: T;
   onCancel: () => void;
   onSave: (participant: T) => void;
@@ -27,7 +28,7 @@ type ParticipantFormProps<T extends ParticipantCreateRequest | ParticipantUpdate
 export default function ParticipantForm<T extends ParticipantCreateRequest | ParticipantUpdateRequest>(
   props: ParticipantFormProps<T>
 ): JSX.Element {
-  const { busy, participant, onCancel, onSave } = props;
+  const { busy, existingProjects, participant, onCancel, onSave } = props;
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
   const theme = useTheme();
@@ -44,10 +45,30 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
   // orgs available for selection in the dropdowns, does not included already selected orgs
   const [availableOrgs, setAvailableOrgs] = useState<AcceleratorOrg[]>([]);
 
-  const acceleratorOrgs = useMemo<AcceleratorOrg[]>(
-    () => (allAcceleratorOrgs || []).filter((org) => org.projects.length > 0),
-    [allAcceleratorOrgs]
-  );
+  const acceleratorOrgs = useMemo<AcceleratorOrg[]>(() => {
+    const orgs = (allAcceleratorOrgs || [])
+      .filter((org) => org.projects.length > 0)
+      .reduce(
+        (acc, org) => {
+          return { ...acc, [org.id]: org };
+        },
+        {} as Record<string, AcceleratorOrg>
+      );
+
+    // update accelerator orgs with values from already assigned project info
+    (existingProjects ?? []).forEach((project) => {
+      const { organizationId: id, organizationName: name, projectId, projectName } = project;
+      if (!orgs[id]) {
+        orgs[id] = { id, name, projects: [{ id: projectId, name: projectName }] };
+      } else {
+        if (!orgs[id].projects.find((orgProject) => orgProject.id === projectId)) {
+          orgs[id].projects.push({ id: projectId, name: projectName });
+        }
+      }
+    });
+
+    return Object.values(orgs);
+  }, [allAcceleratorOrgs, existingProjects]);
 
   const cohortOptions = useMemo(
     () => (availableCohorts || []).map((cohort: Cohort) => ({ label: cohort.name, value: cohort.id })),
@@ -67,7 +88,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
       return false;
     }
 
-    if (!localRecord.cohort_id) {
+    if (!localRecord.cohortId) {
       return false;
     }
 
@@ -82,7 +103,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
 
     onSave({
       ...localRecord,
-      project_ids: orgProjectsSections.flatMap((data) => data.selectedProjectIds),
+      projectIds: orgProjectsSections.flatMap((data) => data.selectedProjectIds),
     });
   };
 
@@ -141,20 +162,23 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
     }
 
     const sections = acceleratorOrgs
-      .filter((org) => org.projects.some((p) => localRecord.project_ids.some((id) => id === p.id)))
+      .filter((org) => org.projects.some((p) => (localRecord.projectIds ?? []).some((id) => id === p.id)))
       .sort((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
       .map((org, index) => ({
         id: index + 1,
         org,
         selectedProjectIds: org.projects
           .map((p) => p.id)
-          .filter((projectId) => localRecord.project_ids.some((id) => id === projectId)),
+          .filter((projectId) => (localRecord.projectIds ?? []).some((id) => id === projectId)),
       }));
 
     if (sections.length) {
+      setModified(true);
       setOrgProjectsSections(sections);
+      // remove the orgs as being available for selection (since they already has projects selected prior to edit)
+      setAvailableOrgs(acceleratorOrgs.filter((org) => !sections.some((section) => section.org.id === org.id)));
     }
-  }, [acceleratorOrgs, activeLocale, localRecord.project_ids, modified]);
+  }, [acceleratorOrgs, activeLocale, localRecord.projectIds, modified]);
 
   useEffect(() => {
     // update local record when participant changes
@@ -204,13 +228,13 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
           </Grid>
           <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
             <Dropdown
-              errorText={validateFields && !localRecord?.cohort_id ? strings.REQUIRED_FIELD : ''}
+              errorText={validateFields && !localRecord?.cohortId ? strings.REQUIRED_FIELD : ''}
               fullWidth={true}
               label={strings.COHORT}
-              onChange={(value) => updateField('cohort_id', value)}
+              onChange={(value) => updateField('cohortId', value)}
               options={cohortOptions}
               required
-              selectedValue={localRecord.cohort_id}
+              selectedValue={localRecord.cohortId}
             />
           </Grid>
         </Grid>

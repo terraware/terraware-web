@@ -33,14 +33,15 @@ export type ParticipantProject = {
 };
 
 export type ParticipantProjectSearchResult = {
-  cohortId: number;
   cohortName: string;
   country: string;
   id: number;
-  landUseModelType: string;
+  landUseModelType: string[];
   name: string;
+  participant_cohort_id: number;
+  participant_cohort_phase: CohortPhaseType;
   participantName: string;
-  phase: CohortPhaseType;
   region: string;
-  restorableLand: number;
+  restorableLand: string;
+  restorableLandRaw: number;
 };
