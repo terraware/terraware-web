@@ -6,7 +6,6 @@ type DisplayFieldValue = string | number | null | undefined | JSX.Element | fals
 
 export interface ProjectFieldProps {
   label?: string;
-  link?: string;
   value?: DisplayFieldValue;
   rightBorder?: boolean;
   user?: string;

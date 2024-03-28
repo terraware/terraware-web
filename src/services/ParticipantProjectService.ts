@@ -1,4 +1,5 @@
-import { Response2 } from 'src/services/HttpService';
+import { paths } from 'src/api/types/generated-schema';
+import HttpService, { Response, Response2, ServerData } from 'src/services/HttpService';
 import SearchService from 'src/services/SearchService';
 import { ParticipantProject, ParticipantProjectSearchResult } from 'src/types/ParticipantProject';
 import { SearchNodePayload, SearchRequestPayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
@@ -11,43 +12,18 @@ export type ParticipantProjectsData = {
   projects: ParticipantProject[];
 };
 
-export type ParticipantProjectData = {
-  project: ParticipantProject;
+export type ParticipantProjectData = ServerData & {
+  details: ParticipantProject | undefined;
 };
 
-let mockParticipantProject: ParticipantProject = {
-  country: 'Tunisia',
-  createdBy: 'Weese Ritherspoon',
-  createdTime: '2024-03-02',
-  dealDescription:
-    'PT Solusi Alam Indonesia (SAI) is a for-profit company that focuses on sustainable land-based business activities in Indonesia. Their objective in joining the Accelerator is to find funders for a forest carbon project',
-  dealStage: 'Phase 1',
-  id: 1,
-  investmentThesis:
-    'A relatively large project for this cohort, with potential for high carbon gains given the vegetation type (mangrove, peatland forest, and tropical rainforest) but likely the most logistically challenging site given the island’s',
-  failureRisk:
-    'The largest risk may be that SAI or the local community decides that they can get a better deal from another developer (they are eager to receive carbon revenue after a failed past experience with South Pole).',
-  landUseModelType: 'Native Forest',
-  maximumCarbonAccumulation: 400,
-  minimumCarbonAccumulation: 200,
-  modifiedBy: 'Weese Ritherspoon',
-  modifiedTime: '2024-04-01',
-  name: 'Andromeda',
-  numberOfNativeSpecies: 2433,
-  organizationName: 'Treemendo.us',
-  perHectareEstimatedBudget: undefined,
-  phase1Score: 0.5,
-  pipeline: 'Accelerator Projects',
-  previousProjectCost: undefined,
-  projectHectares: 321,
-  region: 'Europe & Central Asia',
-  restorableLand: 432,
-  shapeFileUrl: 'https://placekitten.com/900/600',
-  totalExpansionPotential: 400,
-  votingDecision: 'No',
-  whatNeedsToBeTrue:
-    'SAI and the local community will need to like the carbon estimates and deal arrangement that TF offers. Our estimates of reforestable area and carbon will need to be roughly true when ground-truthed). The larger project',
-};
+const ENDPOINT_PARTICIPANT_PROJECT = '/api/v1/accelerator/projects/{projectId}';
+
+type UpdateProjectAcceleratorDetailsRequestPayload =
+  paths[typeof ENDPOINT_PARTICIPANT_PROJECT]['put']['requestBody']['content']['application/json'];
+type UpdateProjectAcceleratorDetailsResponsePayload =
+  paths[typeof ENDPOINT_PARTICIPANT_PROJECT]['put']['responses'][200]['content']['application/json'];
+
+const httpParticipantProject = HttpService.root(ENDPOINT_PARTICIPANT_PROJECT);
 
 const COHORT_ID_EXISTS_PREDICATE: SearchNodePayload = {
   operation: 'not',
@@ -93,14 +69,12 @@ const download = async (participantProjectId: number): Promise<string | null> =>
   return `Id,Project Name,Phase 1 Score\r${participantProjectId},Andromeda,0.5\r`;
 };
 
-const get = async (participantProjectId: number): Promise<Response2<ParticipantProjectData>> => {
-  return {
-    requestSucceeded: true,
-    data: {
-      project: mockParticipantProject,
+const get = async (participantProjectId: number): Promise<Response2<ParticipantProjectData>> =>
+  httpParticipantProject.get2<ParticipantProjectData>({
+    urlReplacements: {
+      '{projectId}': `${participantProjectId}`,
     },
-  };
-};
+  });
 
 const downloadList = async (search?: SearchNodePayload, sortOrder?: SearchSortOrder): Promise<string | null> =>
   await SearchService.searchCsv(getSearchParams(search, sortOrder, true));
@@ -146,16 +120,15 @@ const list = async (
   });
 };
 
-const update = async (participantProject: ParticipantProject): Promise<Response2<number>> => {
-  mockParticipantProject = {
-    ...mockParticipantProject,
-    ...participantProject,
-  };
+const update = async (participantProject: ParticipantProject): Promise<Response> => {
+  const { projectId, ...payload } = participantProject;
 
-  return {
-    requestSucceeded: true,
-    data: participantProject.id,
-  };
+  return httpParticipantProject.put2<UpdateProjectAcceleratorDetailsResponsePayload>({
+    urlReplacements: {
+      '{projectId}': `${participantProject.projectId}`,
+    },
+    entity: payload as UpdateProjectAcceleratorDetailsRequestPayload,
+  });
 };
 
 const ParticipantProjectsService = {

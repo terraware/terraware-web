@@ -12,7 +12,7 @@ export const requestGetParticipantProject = createAsyncThunk(
     const response: Response2<ParticipantProjectData> = await ParticipantProjectService.get(participantProjectId);
 
     if (response && response.requestSucceeded) {
-      return response.data?.project;
+      return response.data?.details;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);
@@ -43,7 +43,6 @@ export const requestUpdateParticipantProject = createAsyncThunk(
     const response: Response2<number> = await ParticipantProjectService.update(participantProject);
 
     if (response && response.requestSucceeded && response.data) {
-      dispatch(requestGetParticipantProject(response.data));
       return response.data;
     }
 

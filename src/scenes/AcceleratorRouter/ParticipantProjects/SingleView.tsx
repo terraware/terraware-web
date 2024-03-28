@@ -6,13 +6,13 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import ProjectFieldDisplay from 'src/components/ProjectField/Display';
 import ProjectFieldLink from 'src/components/ProjectField/Link';
-import ProjectFieldMeta from 'src/components/ProjectField/Meta';
 import PhaseScoreCard from 'src/components/ProjectField/PhaseScoreCard';
 import ProjectFieldTextAreaDisplay from 'src/components/ProjectField/TextAreaDisplay';
 import VotingDecisionCard from 'src/components/ProjectField/VotingDecisionCard';
 import Card from 'src/components/common/Card';
 import ExportCsvModal from 'src/components/common/ExportCsvModal';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useUser } from 'src/providers';
@@ -20,13 +20,17 @@ import ParticipantProjectService from 'src/services/ParticipantProjectService';
 import strings from 'src/strings';
 
 import PageWithModuleTimeline from '../PageWithModuleTimeline';
+import { useScoringData } from '../Scoring/ScoringContext';
+import { useVotingData } from '../Voting/VotingContext';
 import { useParticipantProjectData } from './ParticipantProjectContext';
 
 const SingleView = () => {
   const theme = useTheme();
   const { isAllowed } = useUser();
   const { isMobile } = useDeviceInfo();
-  const { crumbs, projectId, project, status } = useParticipantProjectData();
+  const { crumbs, projectId, participantProject, project, organization, status } = useParticipantProjectData();
+  const { phase1Scores } = useScoringData();
+  const { phaseVotes } = useVotingData();
   const { goToParticipantProjectEdit } = useNavigateTo();
 
   const [exportModalOpen, setExportModalOpen] = useState(false);
@@ -69,7 +73,7 @@ const SingleView = () => {
 
   return (
     <PageWithModuleTimeline
-      title={`${project?.organizationName || ''} / ${project?.name || ''}`}
+      title={`${organization?.name || ''} / ${project?.name || ''}`}
       crumbs={crumbs}
       hierarchicalCrumbs={false}
       rightComponent={rightComponent}
@@ -88,70 +92,90 @@ const SingleView = () => {
             }}
           >
             <Grid container>
-              <ProjectFieldDisplay label={strings.PROJECT_NAME} value={project.name} />
-              <PhaseScoreCard project={project} />
-              <VotingDecisionCard project={project} />
+              <ProjectFieldDisplay label={strings.PROJECT_NAME} value={project?.name} />
+              <PhaseScoreCard phaseScores={phase1Scores} />
+              <VotingDecisionCard phaseVotes={phaseVotes} />
               <ProjectFieldLink
                 label={strings.SEE_SCORECARD}
                 value={APP_PATHS.ACCELERATOR_SCORING.replace(':projectId', `${project.id}`)}
               />
-              <ProjectFieldDisplay label={strings.PIPELINE} value={project.pipeline} rightBorder={!isMobile} />
-              <ProjectFieldDisplay label={strings.DEAL_STAGE} value={project.dealStage} rightBorder={!isMobile} />
-              <ProjectFieldDisplay label={strings.COUNTRY} value={project.country} rightBorder={!isMobile} />
-              <ProjectFieldDisplay label={strings.REGION} value={project.region} />
+              <ProjectFieldDisplay
+                label={strings.PROJECT_ABBREVIATED_NAME}
+                value={participantProject?.abbreviatedName}
+                rightBorder={!isMobile}
+              />
+              <ProjectFieldDisplay
+                label={strings.PROJECT_LEAD}
+                value={participantProject?.projectLead}
+                rightBorder={!isMobile}
+              />
+              <ProjectFieldDisplay
+                label={strings.COUNTRY}
+                value={participantProject?.countryCode}
+                rightBorder={!isMobile}
+              />
+              <ProjectFieldDisplay label={strings.REGION} value={participantProject?.region} />
               <ProjectFieldDisplay
                 label={strings.LAND_USE_MODEL_TYPE}
-                value={project.landUseModelType}
+                value={<TextTruncated fontSize={24} stringList={participantProject?.landUseModelTypes || []} />}
                 rightBorder={!isMobile}
               />
               <ProjectFieldDisplay
                 label={strings.NUMBER_OF_NATIVE_SPECIES}
-                value={project.numberOfNativeSpecies}
+                value={participantProject?.numNativeSpecies}
                 rightBorder={!isMobile}
               />
               <ProjectFieldDisplay
-                label={strings.PROJECT_HECTARES}
-                link={project.shapeFileUrl}
-                value={project.projectHectares}
+                label={strings.APPLICATION_RESTORABLE_LAND}
+                value={participantProject?.applicationReforestableLand}
                 rightBorder={!isMobile}
               />
-              <ProjectFieldDisplay label={strings.RESTORABLE_LAND} value={project.restorableLand} />
+              <ProjectFieldDisplay
+                label={strings.CONFIRMED_RESTORABLE_LAND}
+                value={participantProject?.confirmedReforestableLand}
+              />
               <ProjectFieldDisplay
                 label={strings.TOTAL_EXPANSION_POTENTIAL}
-                value={project.totalExpansionPotential}
+                value={participantProject?.totalExpansionPotential}
                 rightBorder={!isMobile}
               />
               <ProjectFieldDisplay
                 label={strings.MINIMUM_CARBON_ACCUMULATION}
-                value={project.minimumCarbonAccumulation}
+                value={participantProject?.minCarbonAccumulation}
                 rightBorder={!isMobile}
               />
               <ProjectFieldDisplay
                 label={strings.MAXIMUM_CARBON_ACCUMULATION}
-                value={project.maximumCarbonAccumulation}
+                value={participantProject?.maxCarbonAccumulation}
                 rightBorder={!isMobile}
               />
               <ProjectFieldDisplay
                 label={strings.PER_HECTARE_ESTIMATED_BUDGET}
-                value={project.perHectareEstimatedBudget}
+                value={participantProject?.perHectareBudget}
               />
               <ProjectFieldDisplay
-                label={strings.PREVIOUS_PROJECT_COST}
-                value={project.previousProjectCost}
+                label={strings.NUMBER_OF_COMMUNITIES_WITHIN_PROJECT_AREA}
+                value={participantProject?.numCommunities}
                 rightBorder={!isMobile}
               />
-              <ProjectFieldMeta
-                date={project.createdTime}
+              <ProjectFieldDisplay
+                label={strings.DEAL_STAGE}
+                value={participantProject?.dealStage}
+                rightBorder={!isMobile}
+              />
+              {/* TODO need to know where this is supposed to come from, participant project details or project */}
+              {/* <ProjectFieldMeta
+                date={project?.createdTime}
                 dateLabel={strings.CREATED_ON}
-                user={project.createdBy}
+                user={project?.createdBy}
                 userLabel={strings.CREATED_BY}
               />
               <ProjectFieldMeta
-                date={project.modifiedTime}
+                date={project?.modifiedTime}
                 dateLabel={strings.LAST_MODIFIED_ON}
-                user={project.modifiedBy}
+                user={project?.modifiedBy}
                 userLabel={strings.LAST_MODIFIED_BY}
-              />
+              /> */}
             </Grid>
           </Card>
           <Card
@@ -164,10 +188,19 @@ const SingleView = () => {
             }}
           >
             <Grid container>
-              <ProjectFieldTextAreaDisplay label={strings.DEAL_DESCRIPTION} value={project.dealDescription} />
-              <ProjectFieldTextAreaDisplay label={strings.INVESTMENT_THESIS} value={project.investmentThesis} />
-              <ProjectFieldTextAreaDisplay label={strings.FAILURE_RISK} value={project.failureRisk} />
-              <ProjectFieldTextAreaDisplay label={strings.WHAT_NEEDS_TO_BE_TRUE} value={project.whatNeedsToBeTrue} />
+              <ProjectFieldTextAreaDisplay
+                label={strings.DEAL_DESCRIPTION}
+                value={participantProject?.dealDescription}
+              />
+              <ProjectFieldTextAreaDisplay
+                label={strings.INVESTMENT_THESIS}
+                value={participantProject?.investmentThesis}
+              />
+              <ProjectFieldTextAreaDisplay label={strings.FAILURE_RISK} value={participantProject?.failureRisk} />
+              <ProjectFieldTextAreaDisplay
+                label={strings.WHAT_NEEDS_TO_BE_TRUE}
+                value={participantProject?.whatNeedsToBeTrue}
+              />
             </Grid>
           </Card>
         </>

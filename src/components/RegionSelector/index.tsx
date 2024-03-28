@@ -64,7 +64,7 @@ export default function RegionSelector({
   const onChangeCountrySubdivision = (newValue: string) => {
     if (countries && selectedCountryCode && onChangeCountrySubdivisionCode) {
       const selectedCountry = getCountryByCode(countries, selectedCountryCode);
-      const found = selectedCountry?.subdivisions.find(
+      const found = (selectedCountry?.subdivisions || []).find(
         (subdivision: Subdivision) => subdivision.code.toString() === newValue
       );
       if (found) {
@@ -104,7 +104,7 @@ export default function RegionSelector({
   const subdivisionOptions = () => {
     const country = getSelectedCountry();
     if (country) {
-      return country.subdivisions.map((subd) => toDropdownItem(subd));
+      return (country.subdivisions || []).map((subd) => toDropdownItem(subd));
     }
     return [];
   };

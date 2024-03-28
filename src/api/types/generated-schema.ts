@@ -3210,6 +3210,7 @@ export interface components {
       type?: "Polygon";
     }, "coordinates" | "type">;
     ProjectAcceleratorDetailsPayload: {
+      abbreviatedName?: string;
       applicationReforestableLand?: number;
       confirmedReforestableLand?: number;
       countryCode?: string;
@@ -3225,13 +3226,14 @@ export interface components {
       numCommunities?: number;
       /** Format: int32 */
       numNativeSpecies?: number;
+      perHectareBudget?: number;
       /** @enum {string} */
       pipeline?: "Accelerator Projects" | "Carbon Supply" | "Carbon Waitlist";
       /** Format: int64 */
       projectId: number;
       projectLead?: string;
       /** @enum {string} */
-      region?: "Antarctica" | ("East Asia  & Pacific") | ("Europe & Central Asia") | ("Latin America & Caribbean") | ("Middle East & North Africa") | "North America" | "Oceania" | "South Asia" | "Sub-Saharan Africa";
+      region?: "Antarctica" | ("East Asia & Pacific") | ("Europe & Central Asia") | ("Latin America & Caribbean") | ("Middle East & North Africa") | "North America" | "Oceania" | "South Asia" | "Sub-Saharan Africa";
       totalExpansionPotential?: number;
       whatNeedsToBeTrue?: string;
     };
@@ -4029,6 +4031,7 @@ export interface components {
       coordinates: components["schemas"]["ObservationMonitoringPlotCoordinatesPayload"][];
     };
     UpdateProjectAcceleratorDetailsRequestPayload: {
+      abbreviatedName?: string;
       applicationReforestableLand?: number;
       confirmedReforestableLand?: number;
       countryCode?: string;
@@ -4044,6 +4047,7 @@ export interface components {
       numCommunities?: number;
       /** Format: int32 */
       numNativeSpecies?: number;
+      perHectareBudget?: number;
       /** @enum {string} */
       pipeline?: "Accelerator Projects" | "Carbon Supply" | "Carbon Waitlist";
       projectLead?: string;
