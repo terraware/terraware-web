@@ -33,6 +33,7 @@ const ParticipantProjectProvider = ({ children }: Props) => {
   const [participantProjectData, setParticipantProjectData] = useState<ParticipantProjectData>({
     crumbs: [],
     projectId,
+    // tslint:disable-next-line:no-empty
     reload: () => {},
   });
 
@@ -102,8 +103,8 @@ const ParticipantProjectProvider = ({ children }: Props) => {
     setParticipantProjectData({
       crumbs,
       organization,
-      participantProject: participantProject,
-      project: project,
+      participantProject,
+      project,
       projectId,
       status: getParticipantProjectResult?.status ?? 'pending',
       reload,

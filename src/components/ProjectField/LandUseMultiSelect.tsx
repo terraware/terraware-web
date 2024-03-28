@@ -12,7 +12,7 @@ type LandUseMultiSelectProps = Omit<ProjectFieldEditProps, 'onChange' | 'value'>
 
 const LandUseMultiSelect = ({ id, label, onChange, value }: LandUseMultiSelectProps) => {
   const options = useMemo(
-    (): Map<string, string> => new Map(LAND_USE_MODEL_TYPES.map((value) => [getLandUseModelType(value), value])),
+    (): Map<string, string> => new Map(LAND_USE_MODEL_TYPES.map((_value) => [getLandUseModelType(_value), _value])),
     []
   );
 

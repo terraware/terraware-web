@@ -10,9 +10,9 @@ import ProjectFieldSelect from './Select';
 const RegionSelect = ({ id, label, onChange, value }: ProjectFieldEditProps) => {
   const options = useMemo(
     (): DropdownItem[] =>
-      REGIONS.map((value) => ({
-        label: getRegion(value),
-        value,
+      REGIONS.map((_value) => ({
+        label: getRegion(_value),
+        value: _value,
       })),
     []
   );
