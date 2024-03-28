@@ -20,8 +20,8 @@ export const removeDoubleQuotes = (str: string): string | null => {
   const pattern = /^"([^"]*)"$/;
   const match = pattern.exec(str);
   if (match) {
-      return match[1]; // Return the string inside the double quotes
+    return match[1]; // Return the string inside the double quotes
   } else {
-      return null; // Return null if the string is not properly double-quoted
+    return null; // Return null if the string is not properly double-quoted
   }
-}
+};

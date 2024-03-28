@@ -1,4 +1,3 @@
-import { removeDoubleQuotes } from './search'
 import {
   SearchNodePayload,
   SearchSortOrder,
@@ -7,6 +6,8 @@ import {
   isNotNodePayload,
   isOrNodePayload,
 } from 'src/types/Search';
+
+import { removeDoubleQuotes } from './search';
 
 export type SearchOrderConfig = {
   locale: string | null;
@@ -79,16 +80,15 @@ const searchConditionMet = <T extends Record<string, unknown>>(result: T, condit
       return searchValues.some((value) => resultValue.includes(value));
     } else if (condition.type === 'Fuzzy') {
       return searchValues.some((searchValue) => {
-        const exactValue = removeDoubleQuotes(searchValue)
-        if (exactValue != null) {
-          return resultValue.includes(exactValue)
-        } else {
-          // Trigrams don't work with single letter searches
-          if (searchValue.length === 1) {
-            return resultValue.includes(searchValue);
-          }
-          return trigramWordSimilarity(searchValue, resultValue) > TRIGRAM_SIMILARITY_THRESHOLD;
+        const exactValue = removeDoubleQuotes(searchValue);
+        if (exactValue !== null) {
+          return resultValue.includes(exactValue);
         }
+        // Trigrams don't work with single letter searches
+        if (searchValue.length === 1) {
+          return resultValue.includes(searchValue);
+        }
+        return trigramWordSimilarity(searchValue, resultValue) > TRIGRAM_SIMILARITY_THRESHOLD;
       });
     }
   }
