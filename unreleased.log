@@ -1,3 +1,4 @@
+33fb6c64d1 SW-4982 Create hook for centralizing "sticky tabs" logic (#2404)
 a99aeb9173 SW-5090 Remove Participants mock data/flows, sync with BE types (#2422)
 aa99327390 SW-5115 Export Participant Projects from the list view (#2414)
 3fe9cd43ea SW-5116 Participant Projects Table with results from Search API (#2413)
