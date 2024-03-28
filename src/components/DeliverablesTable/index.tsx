@@ -54,9 +54,7 @@ const DeliverablesTable = ({
   const { acceleratorOrgs } = useAcceleratorOrgs(true);
   const { selectedParticipant } = useParticipants(participantId);
 
-  const acceleratorProjects = useMemo(() => {
-    return acceleratorOrgs?.flatMap((org) => org.projects);
-  }, [acceleratorOrgs]);
+  const acceleratorProjects = useMemo(() => acceleratorOrgs?.flatMap((org) => org.projects), [acceleratorOrgs]);
 
   const [deliverables, setDeliverables] = useState<ListDeliverablesElement[]>([]);
   const [deliverablesSearchRequestId, setDeliverablesSearchRequestId] = useState('');
@@ -66,9 +64,11 @@ const DeliverablesTable = ({
 
   const getFilterProjectName = useCallback(
     (projectId: number | string) => {
-      return participantId
-        ? selectedParticipant?.projects?.find((p) => p.id === Number(projectId))?.name || ''
-        : acceleratorProjects?.find((p) => p.id === Number(projectId))?.name || '';
+      return (
+        (participantId
+          ? selectedParticipant?.projects?.find((p) => p.id === Number(projectId))?.name
+          : acceleratorProjects?.find((p) => p.id === Number(projectId))?.name) || ''
+      );
     },
     [acceleratorProjects, participantId, selectedParticipant?.projects]
   );
