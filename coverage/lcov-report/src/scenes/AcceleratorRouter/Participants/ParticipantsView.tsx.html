@@ -283,8 +283,7 @@
 <a name='L218'></a><a href='#L218'>218</a>
 <a name='L219'></a><a href='#L219'>219</a>
 <a name='L220'></a><a href='#L220'>220</a>
-<a name='L221'></a><a href='#L221'>221</a>
-<a name='L222'></a><a href='#L222'>222</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L221'></a><a href='#L221'>221</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -339,7 +338,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -518,7 +516,7 @@ import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useParticipants } from 'src/hooks/useParticipants';
+import { useParticipant } from 'src/hooks/useParticipant';
 import { useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -526,8 +524,8 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import RemoveParticipant from './RemoveParticipant';
 &nbsp;
 type ProjectsByOrg = {
-  organization_id: number;
-  organization_name: string;
+  organizationId: number;
+  organizationName: string;
   projects: {
     id: number;
     name: string;
@@ -542,7 +540,7 @@ export default function <span class="fstat-no" title="function not covered" >Par
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const pathParams = <span class="cstat-no" title="statement not covered" >useParams&lt;{ participantId: string }&gt;();</span>
   const participantId = <span class="cstat-no" title="statement not covered" >Number(pathParams.participantId);</span>
-  const { isBusy, notFound, selectedParticipant: participant } = <span class="cstat-no" title="statement not covered" >useParticipants(participantId);</span>
+  const { isBusy, isError, participant } = <span class="cstat-no" title="statement not covered" >useParticipant(participantId);</span>
   const { goToParticipantsList } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
 &nbsp;
   const [showDelete, setShowDelete] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
@@ -558,24 +556,23 @@ export default function <span class="fstat-no" title="function not covered" >Par
   }, []);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (isNaN(participantId) || notFound) {</span>
+<span class="cstat-no" title="statement not covered" >    if (isNaN(participantId) || isError) {</span>
 <span class="cstat-no" title="statement not covered" >      goToParticipantsList();</span>
     }
-  }, [goToParticipantsList, notFound, participantId]);
+  }, [goToParticipantsList, isError, participantId]);
 &nbsp;
-  // TODO remove after BE types sync
   const projectsByOrg = <span class="cstat-no" title="statement not covered" >useMemo&lt;ProjectsByOrg[]&gt;(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const orgMap: Record&lt;number, ProjectsByOrg&gt; = <span class="cstat-no" title="statement not covered" >(participant?.projects || []).reduce(</span>
 <span class="fstat-no" title="function not covered" >      (a</span>cc, curr) =&gt; {
-        const { id, name, organization_id, organization_name } = <span class="cstat-no" title="statement not covered" >curr;</span>
-<span class="cstat-no" title="statement not covered" >        if (!acc[organization_id]) {</span>
-<span class="cstat-no" title="statement not covered" >          acc[organization_id] = {</span>
-            organization_id,
-            organization_name,
+        const { projectId: id, projectName: name, organizationId, organizationName } = <span class="cstat-no" title="statement not covered" >curr;</span>
+<span class="cstat-no" title="statement not covered" >        if (!acc[organizationId]) {</span>
+<span class="cstat-no" title="statement not covered" >          acc[organizationId] = {</span>
+            organizationId,
+            organizationName,
             projects: [{ id, name }],
           };
         } else {
-<span class="cstat-no" title="statement not covered" >          acc[organization_id].projects.push({ id, name });</span>
+<span class="cstat-no" title="statement not covered" >          acc[organizationId].projects.push({ id, name });</span>
         }
 <span class="cstat-no" title="statement not covered" >        return acc;</span>
       },
@@ -583,7 +580,7 @@ export default function <span class="fstat-no" title="function not covered" >Par
     );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return Object.values(orgMap)</span>
-      .sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.organization_name.localeCompare(b.organization_name, activeLocale || undefined))</span>
+      .sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.organizationName.localeCompare(b.organizationName, activeLocale || undefined))</span>
       .map(<span class="fstat-no" title="function not covered" >(d</span>ata) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
         ...data,
         projects: data.projects.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; <span class="cstat-no" title="statement not covered" >a.name.localeCompare(b.name, activeLocale || undefined))</span>,
@@ -655,15 +652,15 @@ export default function <span class="fstat-no" title="function not covered" >Par
               id='cohort-name'
               label={strings.COHORT}
               type='text'
-              value={participant?.cohort_name ?? ''}
+              value={participant?.cohortName ?? ''}
             /&gt;
           }
         /&gt;
         {projectsByOrg.map(<span class="fstat-no" title="function not covered" >(d</span>ata) =&gt; (
 <span class="cstat-no" title="statement not covered" >          &lt;DataRow</span>
-            key={data.organization_id}
+            key={data.organizationId}
             leftChild={
-              &lt;Textfield display id='name' label={strings.ORGANIZATION} type='text' value={data.organization_name} /&gt;
+              &lt;Textfield display id='name' label={strings.ORGANIZATION} type='text' value={data.organizationName} /&gt;
             }
             rightChild={
               &lt;Box display='flex' flexDirection='column'&gt;
@@ -733,7 +730,7 @@ const DataRow = <span class="cstat-no" title="statement not covered" ><span clas
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-27T23:39:57.796Z
+                at 2024-03-28T13:03:50.761Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -141,7 +141,13 @@
 <a name='L76'></a><a href='#L76'>76</a>
 <a name='L77'></a><a href='#L77'>77</a>
 <a name='L78'></a><a href='#L78'>78</a>
-<a name='L79'></a><a href='#L79'>79</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -191,9 +197,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -207,6 +210,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -221,19 +233,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createAsyncThunk } from '@reduxjs/toolkit';
 &nbsp;
-import { Response2 } from 'src/services/HttpService';
-import ParticipantsService, { ParticipantData, ParticipantsData } from 'src/services/ParticipantsService';
+import { Response, Response2 } from 'src/services/HttpService';
+import ParticipantsService, { ParticipantData } from 'src/services/ParticipantsService';
 import strings from 'src/strings';
-import { ParticipantCreateRequest, ParticipantUpdateRequest } from 'src/types/Participant';
+import { ParticipantCreateRequest, ParticipantSearchResult, ParticipantUpdateRequest } from 'src/types/Participant';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 &nbsp;
 export const requestCreateParticipant = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
   'participants/create',
 <span class="fstat-no" title="function not covered" >  as</span>ync (request: ParticipantCreateRequest, { rejectWithValue }) =&gt; {
-    const response: Response2&lt;number&gt; = <span class="cstat-no" title="statement not covered" >await ParticipantsService.create(request);</span>
+    const response: Response2&lt;ParticipantData&gt; = <span class="cstat-no" title="statement not covered" >await ParticipantsService.create(request);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (response &amp;&amp; response.requestSucceeded) {</span>
-<span class="cstat-no" title="statement not covered" >      return response.data;</span>
+<span class="cstat-no" title="statement not covered" >      return response.data?.participant;</span>
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return rejectWithValue(strings.GENERIC_ERROR);</span>
@@ -246,7 +258,7 @@ export const requestDeleteParticipant = <span class="cstat-no" title="statement 
     const response: Response2&lt;number&gt; = <span class="cstat-no" title="statement not covered" >await ParticipantsService.deleteOne(participantId);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (response &amp;&amp; response.requestSucceeded) {</span>
-<span class="cstat-no" title="statement not covered" >      return participantId;</span>
+<span class="cstat-no" title="statement not covered" >      return true;</span>
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return rejectWithValue(strings.GENERIC_ERROR);</span>
@@ -268,16 +280,13 @@ export const requestGetParticipant = <span class="cstat-no" title="statement not
 &nbsp;
 export const requestListParticipants = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
   'participants/list',
-<span class="fstat-no" title="function not covered" >  as</span>ync (
-    request: { locale?: string | null; search?: SearchNodePayload; sortOrder?: SearchSortOrder },
-    { rejectWithValue }
-  ) =&gt; {
-    const { locale, search, sortOrder } = <span class="cstat-no" title="statement not covered" >request;</span>
+<span class="fstat-no" title="function not covered" >  as</span>ync (request: { search?: SearchNodePayload; sortOrder?: SearchSortOrder }, { rejectWithValue }) =&gt; {
+    const { search, sortOrder } = <span class="cstat-no" title="statement not covered" >request;</span>
 &nbsp;
-    const response: Response2&lt;ParticipantsData&gt; = <span class="cstat-no" title="statement not covered" >await ParticipantsService.list(locale, search, sortOrder);</span>
+    const response: ParticipantSearchResult[] | null = <span class="cstat-no" title="statement not covered" >await ParticipantsService.list(search, sortOrder);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (response &amp;&amp; response.requestSucceeded) {</span>
-<span class="cstat-no" title="statement not covered" >      return response.data?.participants;</span>
+<span class="cstat-no" title="statement not covered" >    if (response) {</span>
+<span class="cstat-no" title="statement not covered" >      return response;</span>
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return rejectWithValue(strings.GENERIC_ERROR);</span>
@@ -286,12 +295,21 @@ export const requestListParticipants = <span class="cstat-no" title="statement n
 &nbsp;
 export const requestUpdateParticipant = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
   'participants/update',
-<span class="fstat-no" title="function not covered" >  as</span>ync (participant: ParticipantUpdateRequest, { dispatch, rejectWithValue }) =&gt; {
-    const response: Response2&lt;number&gt; = <span class="cstat-no" title="statement not covered" >await ParticipantsService.update(participant);</span>
+<span class="fstat-no" title="function not covered" >  as</span>ync (
+    {
+      participantId,
+      request,
+    }: {
+      participantId: number;
+      request: ParticipantUpdateRequest;
+    },
+    { dispatch, rejectWithValue }
+  ) =&gt; {
+    const response: Response = <span class="cstat-no" title="statement not covered" >await ParticipantsService.update(participantId, request);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (response &amp;&amp; response.requestSucceeded) {</span>
-<span class="cstat-no" title="statement not covered" >      dispatch(requestGetParticipant(participant.id));</span>
-<span class="cstat-no" title="statement not covered" >      return participant.id;</span>
+<span class="cstat-no" title="statement not covered" >      dispatch(requestGetParticipant(participantId));</span>
+<span class="cstat-no" title="statement not covered" >      return true;</span>
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return rejectWithValue(strings.GENERIC_ERROR);</span>
@@ -304,7 +322,7 @@ export const requestUpdateParticipant = <span class="cstat-no" title="statement 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-27T23:39:57.796Z
+                at 2024-03-28T13:03:50.761Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

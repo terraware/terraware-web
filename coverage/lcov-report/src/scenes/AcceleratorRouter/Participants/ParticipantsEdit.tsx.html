@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -178,7 +178,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -200,6 +199,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -218,7 +218,7 @@ import { BusySpinner } from '@terraware/web-components';
 &nbsp;
 import Page from 'src/components/Page';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useParticipants } from 'src/hooks/useParticipants';
+import { useParticipant } from 'src/hooks/useParticipant';
 import { requestUpdateParticipant } from 'src/redux/features/participants/participantsAsyncThunks';
 import { selectParticipantUpdateRequest } from 'src/redux/features/participants/participantsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -233,45 +233,44 @@ export default function <span class="fstat-no" title="function not covered" >Par
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const pathParams = <span class="cstat-no" title="statement not covered" >useParams&lt;{ participantId: string }&gt;();</span>
   const participantId = <span class="cstat-no" title="statement not covered" >Number(pathParams.participantId);</span>
-  const { isBusy, notFound, selectedParticipant } = <span class="cstat-no" title="statement not covered" >useParticipants(participantId);</span>
+  const { isBusy, isError, participant } = <span class="cstat-no" title="statement not covered" >useParticipant(participantId);</span>
 &nbsp;
   const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const result = <span class="cstat-no" title="statement not covered" >useAppSelector(selectParticipantUpdateRequest(requestId));</span>
 &nbsp;
-  const { goToParticipantsList } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
+  const { goToParticipant, goToParticipantsList } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
 &nbsp;
   const onSave = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (u</span>pdateRequest: ParticipantUpdateRequest) =&gt; {
-      const request = <span class="cstat-no" title="statement not covered" >dispatch(requestUpdateParticipant(updateRequest));</span>
+      const request = <span class="cstat-no" title="statement not covered" >dispatch(requestUpdateParticipant({ participantId, request: updateRequest }));</span>
 <span class="cstat-no" title="statement not covered" >      setRequestId(request.requestId);</span>
     },
-    [dispatch]
+    [dispatch, participantId]
   );
 &nbsp;
-  const participant = <span class="cstat-no" title="statement not covered" >useMemo&lt;ParticipantUpdateRequest&gt;(</span>
+  const updateData = <span class="cstat-no" title="statement not covered" >useMemo&lt;ParticipantUpdateRequest&gt;(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
-      id: selectedParticipant?.id ?? 0,
-      name: selectedParticipant?.name ?? '',
-      cohort_id: selectedParticipant?.cohort_id ?? 0,
-      project_ids: selectedParticipant?.projects.map(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; <span class="cstat-no" title="statement not covered" >project.id)</span> ?? [],
+      name: participant?.name ?? '',
+      cohortId: participant?.cohortId ?? 0,
+      projectIds: participant?.projects.map(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; <span class="cstat-no" title="statement not covered" >project.projectId)</span> ?? [],
     }),
-    [selectedParticipant]
+    [participant]
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (isNaN(participantId) || notFound) {</span>
+<span class="cstat-no" title="statement not covered" >    if (isNaN(participantId) || isError) {</span>
 <span class="cstat-no" title="statement not covered" >      goToParticipantsList();</span>
     }
-  }, [goToParticipantsList, notFound, participantId]);
+  }, [goToParticipantsList, isError, participantId]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (result?.status === 'error') {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError();</span>
     } else <span class="cstat-no" title="statement not covered" >if (result?.status === 'success') {</span>
-<span class="cstat-no" title="statement not covered" >      goToParticipantsList();</span>
+<span class="cstat-no" title="statement not covered" >      goToParticipant(participantId);</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastSuccess(strings.CHANGES_SAVED);</span>
     }
-  }, [goToParticipantsList, result?.status, snackbar]);
+  }, [goToParticipant, participantId, result?.status, snackbar]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Page title={participant?.name ?? ''} contentStyle={{ display: 'flex', flexDirection: 'column' }}&gt;
@@ -280,7 +279,8 @@ export default function <span class="fstat-no" title="function not covered" >Par
         busy={result?.status === 'pending'}
         onCancel={goToParticipantsList}
         onSave={onSave}
-        participant={participant}
+        participant={updateData}
+        existingProjects={participant?.projects}
       /&gt;
     &lt;/Page&gt;
   );
@@ -292,7 +292,7 @@ export default function <span class="fstat-no" title="function not covered" >Par
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-27T23:39:57.796Z
+                at 2024-03-28T13:03:50.761Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
