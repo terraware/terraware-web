@@ -3,16 +3,16 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { TableColumnType } from '@terraware/web-components';
 
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
+import { useAcceleratorOrgs } from 'src/hooks/useAcceleratorOrgs';
 import { useParticipants } from 'src/hooks/useParticipants';
-import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import { selectDeliverablesSearchRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ListDeliverablesRequestParams } from 'src/services/DeliverablesService';
 import strings from 'src/strings';
+import { AcceleratorOrgProject } from 'src/types/Accelerator';
 import { DeliverableCategories, DeliverableStatuses, ListDeliverablesElement } from 'src/types/Deliverables';
-import { ParticipantProjectSearchResult } from 'src/types/Participant';
 import { Project } from 'src/types/Project';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { SearchAndSortFn } from 'src/utils/searchAndSort';
@@ -51,8 +51,10 @@ const DeliverablesTable = ({
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
   const { selectedOrganization } = useOrganization();
-  const { availableProjects: projects, getProjectName } = useProjects();
+  const { acceleratorOrgs } = useAcceleratorOrgs(true);
   const { selectedParticipant } = useParticipants(participantId);
+
+  const acceleratorProjects = useMemo(() => acceleratorOrgs?.flatMap((org) => org.projects), [acceleratorOrgs]);
 
   const [deliverables, setDeliverables] = useState<ListDeliverablesElement[]>([]);
   const [deliverablesSearchRequestId, setDeliverablesSearchRequestId] = useState('');
@@ -62,11 +64,13 @@ const DeliverablesTable = ({
 
   const getFilterProjectName = useCallback(
     (projectId: number | string) => {
-      return participantId
-        ? selectedParticipant?.projects?.find((p) => p.id === Number(projectId))?.name || ''
-        : getProjectName(Number(projectId));
+      return (
+        (participantId
+          ? selectedParticipant?.projects?.find((p) => p.id === Number(projectId))?.name
+          : acceleratorProjects?.find((p) => p.id === Number(projectId))?.name) || ''
+      );
     },
-    [getProjectName, participantId, selectedParticipant?.projects]
+    [acceleratorProjects, participantId, selectedParticipant?.projects]
   );
 
   const featuredFilters: FilterConfig[] = useMemo(() => {
@@ -92,8 +96,8 @@ const DeliverablesTable = ({
     if (isAcceleratorRoute) {
       filters.unshift({
         field: 'project_id',
-        options: (selectedParticipant?.projects || projects || [])?.map(
-          (project: Project | ParticipantProjectSearchResult) => `${project.id}`
+        options: (selectedParticipant?.projects || acceleratorProjects || [])?.map(
+          (project: Project | AcceleratorOrgProject) => `${project.id}`
         ),
         searchNodeCreator: (values: (number | string | null)[]) => ({
           field: 'projectId',
@@ -112,7 +116,7 @@ const DeliverablesTable = ({
     }
 
     return activeLocale ? filters : [];
-  }, [activeLocale, getFilterProjectName, isAcceleratorRoute, projects, selectedParticipant?.projects]);
+  }, [acceleratorProjects, activeLocale, getFilterProjectName, isAcceleratorRoute, selectedParticipant?.projects]);
 
   const dispatchSearchRequest = useCallback(
     (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => {
