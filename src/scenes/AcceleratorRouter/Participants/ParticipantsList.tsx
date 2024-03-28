@@ -16,14 +16,14 @@ import { selectParticipantListRequest } from 'src/redux/features/participants/pa
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ParticipantsService } from 'src/services';
 import strings from 'src/strings';
-import { Participant } from 'src/types/Participant';
+import { ParticipantSearchResult } from 'src/types/Participant';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import ParticipantsCellRenderer from './ParticipantsCellRenderer';
 
-type ParticipantType = Omit<Participant, 'projects'> & {
+type ParticipantType = Omit<ParticipantSearchResult, 'projects'> & {
   project_name: string[];
 };
 
@@ -48,7 +48,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
       ]
     : [];
 
-const fuzzySearchColumns = ['name', 'project_name', 'cohort_name'];
+const fuzzySearchColumns = ['name', 'projects.name', 'cohort_name'];
 const defaultSearchOrder: SearchSortOrder = {
   field: 'name',
   direction: 'Ascending',
@@ -78,11 +78,12 @@ export default function ParticipantList(): JSX.Element {
   useEffect(() => {
     if (participantsResult?.status === 'error') {
       snackbar.toastError();
+      return;
     }
     if (participantsResult?.data) {
       setParticipants(
         participantsResult.data.map(
-          (participant: Participant): ParticipantType => ({
+          (participant: ParticipantSearchResult): ParticipantType => ({
             ...participant,
             project_name: participant.projects.flatMap((project) => project.name),
           })
@@ -93,10 +94,13 @@ export default function ParticipantList(): JSX.Element {
 
   const dispatchSearchRequest = useCallback(
     (locale: string | null, search: SearchNodePayload, sortOrder: SearchSortOrder) => {
+      if (!locale) {
+        return;
+      }
       setLastSearch(search);
       setLastSort(sortOrder);
       setHasFilters(search.children.length > 0);
-      const request = dispatch(requestListParticipants({ locale, search, sortOrder }));
+      const request = dispatch(requestListParticipants({ search, sortOrder }));
       setRequestId(request.requestId);
     },
     [dispatch]

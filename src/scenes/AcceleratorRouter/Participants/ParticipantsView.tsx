@@ -11,7 +11,7 @@ import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useParticipants } from 'src/hooks/useParticipants';
+import { useParticipant } from 'src/hooks/useParticipant';
 import { useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -19,8 +19,8 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import RemoveParticipant from './RemoveParticipant';
 
 type ProjectsByOrg = {
-  organization_id: number;
-  organization_name: string;
+  organizationId: number;
+  organizationName: string;
   projects: {
     id: number;
     name: string;
@@ -35,7 +35,7 @@ export default function ParticipantsView(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const pathParams = useParams<{ participantId: string }>();
   const participantId = Number(pathParams.participantId);
-  const { isBusy, notFound, selectedParticipant: participant } = useParticipants(participantId);
+  const { isBusy, isError, participant } = useParticipant(participantId);
   const { goToParticipantsList } = useNavigateTo();
 
   const [showDelete, setShowDelete] = useState<boolean>(false);
@@ -51,24 +51,23 @@ export default function ParticipantsView(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    if (isNaN(participantId) || notFound) {
+    if (isNaN(participantId) || isError) {
       goToParticipantsList();
     }
-  }, [goToParticipantsList, notFound, participantId]);
+  }, [goToParticipantsList, isError, participantId]);
 
-  // TODO remove after BE types sync
   const projectsByOrg = useMemo<ProjectsByOrg[]>(() => {
     const orgMap: Record<number, ProjectsByOrg> = (participant?.projects || []).reduce(
       (acc, curr) => {
-        const { id, name, organization_id, organization_name } = curr;
-        if (!acc[organization_id]) {
-          acc[organization_id] = {
-            organization_id,
-            organization_name,
+        const { projectId: id, projectName: name, organizationId, organizationName } = curr;
+        if (!acc[organizationId]) {
+          acc[organizationId] = {
+            organizationId,
+            organizationName,
             projects: [{ id, name }],
           };
         } else {
-          acc[organization_id].projects.push({ id, name });
+          acc[organizationId].projects.push({ id, name });
         }
         return acc;
       },
@@ -76,7 +75,7 @@ export default function ParticipantsView(): JSX.Element {
     );
 
     return Object.values(orgMap)
-      .sort((a, b) => a.organization_name.localeCompare(b.organization_name, activeLocale || undefined))
+      .sort((a, b) => a.organizationName.localeCompare(b.organizationName, activeLocale || undefined))
       .map((data) => ({
         ...data,
         projects: data.projects.sort((a, b) => a.name.localeCompare(b.name, activeLocale || undefined)),
@@ -148,15 +147,15 @@ export default function ParticipantsView(): JSX.Element {
               id='cohort-name'
               label={strings.COHORT}
               type='text'
-              value={participant?.cohort_name ?? ''}
+              value={participant?.cohortName ?? ''}
             />
           }
         />
         {projectsByOrg.map((data) => (
           <DataRow
-            key={data.organization_id}
+            key={data.organizationId}
             leftChild={
-              <Textfield display id='name' label={strings.ORGANIZATION} type='text' value={data.organization_name} />
+              <Textfield display id='name' label={strings.ORGANIZATION} type='text' value={data.organizationName} />
             }
             rightChild={
               <Box display='flex' flexDirection='column'>

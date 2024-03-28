@@ -5,7 +5,7 @@ import { BusySpinner } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useParticipants } from 'src/hooks/useParticipants';
+import { useParticipant } from 'src/hooks/useParticipant';
 import { requestUpdateParticipant } from 'src/redux/features/participants/participantsAsyncThunks';
 import { selectParticipantUpdateRequest } from 'src/redux/features/participants/participantsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -20,45 +20,44 @@ export default function ParticipantsNew(): JSX.Element {
   const dispatch = useAppDispatch();
   const pathParams = useParams<{ participantId: string }>();
   const participantId = Number(pathParams.participantId);
-  const { isBusy, notFound, selectedParticipant } = useParticipants(participantId);
+  const { isBusy, isError, participant } = useParticipant(participantId);
 
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectParticipantUpdateRequest(requestId));
 
-  const { goToParticipantsList } = useNavigateTo();
+  const { goToParticipant, goToParticipantsList } = useNavigateTo();
 
   const onSave = useCallback(
     (updateRequest: ParticipantUpdateRequest) => {
-      const request = dispatch(requestUpdateParticipant(updateRequest));
+      const request = dispatch(requestUpdateParticipant({ participantId, request: updateRequest }));
       setRequestId(request.requestId);
     },
-    [dispatch]
+    [dispatch, participantId]
   );
 
-  const participant = useMemo<ParticipantUpdateRequest>(
+  const updateData = useMemo<ParticipantUpdateRequest>(
     () => ({
-      id: selectedParticipant?.id ?? 0,
-      name: selectedParticipant?.name ?? '',
-      cohort_id: selectedParticipant?.cohort_id ?? 0,
-      project_ids: selectedParticipant?.projects.map((project) => project.id) ?? [],
+      name: participant?.name ?? '',
+      cohortId: participant?.cohortId ?? 0,
+      projectIds: participant?.projects.map((project) => project.projectId) ?? [],
     }),
-    [selectedParticipant]
+    [participant]
   );
 
   useEffect(() => {
-    if (isNaN(participantId) || notFound) {
+    if (isNaN(participantId) || isError) {
       goToParticipantsList();
     }
-  }, [goToParticipantsList, notFound, participantId]);
+  }, [goToParticipantsList, isError, participantId]);
 
   useEffect(() => {
     if (result?.status === 'error') {
       snackbar.toastError();
     } else if (result?.status === 'success') {
-      goToParticipantsList();
+      goToParticipant(participantId);
       snackbar.toastSuccess(strings.CHANGES_SAVED);
     }
-  }, [goToParticipantsList, result?.status, snackbar]);
+  }, [goToParticipant, participantId, result?.status, snackbar]);
 
   return (
     <Page title={participant?.name ?? ''} contentStyle={{ display: 'flex', flexDirection: 'column' }}>
@@ -67,7 +66,8 @@ export default function ParticipantsNew(): JSX.Element {
         busy={result?.status === 'pending'}
         onCancel={goToParticipantsList}
         onSave={onSave}
-        participant={participant}
+        participant={updateData}
+        existingProjects={participant?.projects}
       />
     </Page>
   );
