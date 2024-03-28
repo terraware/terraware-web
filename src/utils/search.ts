@@ -12,3 +12,16 @@ export const regexMatch = (input: string, stringToMatch: string): boolean => {
   const regex = new RegExp(escapeRegExp(stringToMatch), 'i');
   return !!input.match(regex);
 };
+
+/**
+ *   Return inner string if a string is double-quoted, otherwsie null
+ */
+export const removeDoubleQuotes = (str: string): string | null => {
+  const pattern = /^"([^"]*)"$/;
+  const match = pattern.exec(str);
+  if (match) {
+      return match[1]; // Return the string inside the double quotes
+  } else {
+      return null; // Return null if the string is not properly double-quoted
+  }
+}
