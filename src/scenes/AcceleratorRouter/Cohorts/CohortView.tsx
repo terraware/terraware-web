@@ -50,13 +50,16 @@ const CohortView = () => {
     [activeLocale, canEdit, goToEditCohort]
   );
 
-  const crumbs: Crumb[] = useMemo(
-    () => [
-      {
-        name: activeLocale ? strings.COHORTS : '',
-        to: APP_PATHS.ACCELERATOR_COHORTS,
-      },
-    ],
+  const crumbs = useMemo<Crumb[]>(
+    () =>
+      activeLocale
+        ? [
+            {
+              name: strings.OVERVIEW,
+              to: `${APP_PATHS.ACCELERATOR_OVERVIEW}?tab=cohorts`,
+            },
+          ]
+        : [],
     [activeLocale]
   );
 
