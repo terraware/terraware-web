@@ -4,7 +4,6 @@ import { Container, Grid, useTheme } from '@mui/material';
 import { Dropdown, Textfield } from '@terraware/web-components';
 
 import PageForm from 'src/components/common/PageForm';
-// import ProjectFieldMeta from 'src/components/ProjectField/Meta';
 import { useLocalization } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { CreateCohortRequestPayload, UpdateCohortRequestPayload } from 'src/types/Cohort';
@@ -128,22 +127,6 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
               />
             </Grid>
           </Grid>
-
-          {/* TODO: uncomment this section once createdTime & modifiedTime are available in Cohort records */}
-          {/* <Grid container>
-            <ProjectFieldMeta
-              date={cohort.createdTime || 'Mar 2, 2024'}
-              dateLabel={strings.CREATED_ON}
-              user={cohort.createdBy || 'Weese Ritherspoon'}
-              userLabel={strings.CREATED_BY}
-            />
-            <ProjectFieldMeta
-              date={cohort.modifiedTime || 'Mar 2, 2024'}
-              dateLabel={strings.LAST_MODIFIED_ON}
-              user={cohort.modifiedBy || 'Weese Ritherspoon'}
-              userLabel={strings.LAST_MODIFIED_BY}
-            />
-          </Grid> */}
         </Grid>
       </Container>
     </PageForm>

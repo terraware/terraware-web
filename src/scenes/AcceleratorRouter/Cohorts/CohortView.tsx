@@ -6,7 +6,6 @@ import { Grid, useTheme } from '@mui/material';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import ProjectFieldDisplay from 'src/components/ProjectField/Display';
-// import ProjectFieldMeta from 'src/components/ProjectField/Meta';
 import Card from 'src/components/common/Card';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
@@ -83,22 +82,6 @@ const CohortView = () => {
               <ProjectFieldDisplay label={strings.COHORT_NAME} value={cohort.name} rightBorder={true} />
               <ProjectFieldDisplay label={strings.PHASE} value={cohort.phase} rightBorder={true} />
             </Grid>
-
-            {/* TODO: uncomment this section once createdTime & modifiedTime are available in Cohort records */}
-            {/* <Grid container>
-              <ProjectFieldMeta
-                date={cohort.createdTime}
-                dateLabel={strings.CREATED_ON}
-                user={cohort.createdBy}
-                userLabel={strings.CREATED_BY}
-              />
-              <ProjectFieldMeta
-                date={cohort.modifiedTime}
-                dateLabel={strings.LAST_MODIFIED_ON}
-                user={cohort.modifiedBy}
-                userLabel={strings.LAST_MODIFIED_BY}
-              />
-            </Grid> */}
           </Card>
         </>
       )}
