@@ -7,7 +7,7 @@ import {
   isOrNodePayload,
 } from 'src/types/Search';
 
-import { removeDoubleQuotes } from './search';
+import { regexMatch, removeDoubleQuotes } from './search';
 
 export type SearchOrderConfig = {
   locale: string | null;
@@ -78,7 +78,7 @@ const searchConditionMet = <T extends Record<string, unknown>>(result: T, condit
 
     const exactValues = searchValues.map(removeDoubleQuotes).filter((value) => value !== null);
     if (exactValues.length) {
-      return exactValues.some((value) => resultValue === value);
+      return exactValues.some((value) => regexMatch(resultValue, value));
     }
 
     if (condition.type === 'Exact') {
