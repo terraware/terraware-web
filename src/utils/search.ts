@@ -14,6 +14,14 @@ export const regexMatch = (input: string, stringToMatch: string): boolean => {
 };
 
 /**
+ * Checks an exact sequence of words or characters within a given string
+ */
+export const phraseMatch = (input: string, word: string): boolean => {
+  const regex = new RegExp("\\b" + word + "\\b", "i");
+  return !!input.match(regex)
+}
+
+/**
  *   Return inner string if a string is double-quoted, otherwsie null
  */
 export const removeDoubleQuotes = (str: string): string | null => {
