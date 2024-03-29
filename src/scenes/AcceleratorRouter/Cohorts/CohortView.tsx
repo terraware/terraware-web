@@ -50,7 +50,7 @@ const CohortView = () => {
     [activeLocale, canEdit, goToEditCohort]
   );
 
-  const crumbs = useMemo<Crumb[]>(
+  const crumbs: Crumb[] = useMemo(
     () =>
       activeLocale
         ? [
