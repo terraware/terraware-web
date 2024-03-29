@@ -3238,9 +3238,17 @@ export interface components {
       whatNeedsToBeTrue?: string;
     };
     ProjectPayload: {
+      /** Format: int64 */
+      createdBy?: number;
+      /** Format: date-time */
+      createdTime?: string;
       description?: string;
       /** Format: int64 */
       id: number;
+      /** Format: int64 */
+      modifiedBy?: number;
+      /** Format: date-time */
+      modifiedTime?: string;
       name: string;
       /** Format: int64 */
       organizationId: number;

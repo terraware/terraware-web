@@ -10,11 +10,14 @@ import { requestGetParticipantProject } from 'src/redux/features/participantProj
 import { selectParticipantProjectRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
 import { selectProject } from 'src/redux/features/projects/projectsSelectors';
 import { requestProject } from 'src/redux/features/projects/projectsThunks';
+import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
+import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { AcceleratorOrg } from 'src/types/Accelerator';
 import { ParticipantProject } from 'src/types/ParticipantProject';
 import useSnackbar from 'src/utils/useSnackbar';
+import { getUserDisplayName } from 'src/utils/user';
 
 import { ParticipantProjectContext, ParticipantProjectData } from './ParticipantProjectContext';
 
@@ -39,6 +42,10 @@ const ParticipantProjectProvider = ({ children }: Props) => {
 
   const getParticipantProjectResult = useAppSelector(selectParticipantProjectRequest(projectId));
   const project = useAppSelector(selectProject(projectId));
+
+  const createdByUser = useAppSelector(selectUser(project?.createdBy));
+  const modifiedByUser = useAppSelector(selectUser(project?.modifiedBy));
+  const [projectMeta, setProjectMeta] = useState<{ createdByUserName?: string; modifiedByUserName?: string }>({});
 
   const [organization, setOrganization] = useState<AcceleratorOrg>();
   const [orgRequestId, setOrgRequestId] = useState('');
@@ -76,6 +83,22 @@ const ParticipantProjectProvider = ({ children }: Props) => {
   }, [activeLocale, dispatch, project?.organizationId]);
 
   useEffect(() => {
+    const userIds = new Set([project?.createdBy, project?.modifiedBy]);
+    userIds.forEach((userId) => {
+      if (userId) {
+        dispatch(requestGetUser(userId));
+      }
+    });
+  }, [dispatch, project?.createdBy, project?.modifiedBy]);
+
+  useEffect(() => {
+    setProjectMeta({
+      createdByUserName: getUserDisplayName(createdByUser),
+      modifiedByUserName: getUserDisplayName(modifiedByUser),
+    });
+  }, [createdByUser, modifiedByUser]);
+
+  useEffect(() => {
     if (!getParticipantProjectResult) {
       return;
     }
@@ -106,10 +129,11 @@ const ParticipantProjectProvider = ({ children }: Props) => {
       participantProject,
       project,
       projectId,
+      projectMeta,
       status: getParticipantProjectResult?.status ?? 'pending',
       reload,
     });
-  }, [crumbs, getParticipantProjectResult, organization, participantProject, project, projectId, reload]);
+  }, [crumbs, getParticipantProjectResult, organization, participantProject, project, projectId, projectMeta, reload]);
 
   return (
     <ParticipantProjectContext.Provider value={participantProjectData}>{children}</ParticipantProjectContext.Provider>

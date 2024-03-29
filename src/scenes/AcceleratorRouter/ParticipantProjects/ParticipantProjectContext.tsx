@@ -12,6 +12,10 @@ export type ParticipantProjectData = {
   participantProject?: ParticipantProject;
   projectId: number;
   project?: Project;
+  projectMeta?: {
+    createdByUserName?: string;
+    modifiedByUserName?: string;
+  };
   status?: Statuses;
   reload: () => void;
 };
