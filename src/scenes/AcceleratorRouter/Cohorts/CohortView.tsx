@@ -51,15 +51,12 @@ const CohortView = () => {
   );
 
   const crumbs: Crumb[] = useMemo(
-    () =>
-      activeLocale
-        ? [
-            {
-              name: strings.OVERVIEW,
-              to: `${APP_PATHS.ACCELERATOR_OVERVIEW}?tab=cohorts`,
-            },
-          ]
-        : [],
+    () => [
+      {
+        name: activeLocale ? strings.OVERVIEW : '',
+        to: `${APP_PATHS.ACCELERATOR_OVERVIEW}?tab=cohorts`,
+      },
+    ],
     [activeLocale]
   );
 
