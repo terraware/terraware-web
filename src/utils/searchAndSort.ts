@@ -76,14 +76,15 @@ const searchConditionMet = <T extends Record<string, unknown>>(result: T, condit
       .filter((value: string | null): value is string => value !== null)
       .map((value) => value.toLowerCase());
 
+    const exactValues = searchValues.map(removeDoubleQuotes).filter((value) => value !== null);
+    if (exactValues.length) {
+      return exactValues.some((value) => resultValue === value);
+    }
+
     if (condition.type === 'Exact') {
       return searchValues.some((value) => resultValue.includes(value));
     } else if (condition.type === 'Fuzzy') {
       return searchValues.some((searchValue) => {
-        const exactValue = removeDoubleQuotes(searchValue);
-        if (exactValue !== null) {
-          return resultValue.includes(exactValue);
-        }
         // Trigrams don't work with single letter searches
         if (searchValue.length === 1) {
           return resultValue.includes(searchValue);
