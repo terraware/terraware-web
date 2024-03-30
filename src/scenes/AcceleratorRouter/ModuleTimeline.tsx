@@ -30,7 +30,9 @@ const AltStepIcon = ({ activeStep, index }: AltStepIconProps) => {
         width: 24,
       }}
     >
-      <Typography variant='caption'>{stepNumber}</Typography>
+      <Typography variant='caption' sx={{ fontSize: '14px' }}>
+        {stepNumber}
+      </Typography>
     </Box>
   );
 };
