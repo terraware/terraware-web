@@ -37,9 +37,14 @@ const AltStepIcon = ({ activeStep, index }: AltStepIconProps) => {
   );
 };
 
+type ModuleTimelineStep = {
+  description: string;
+  label: string;
+};
+
 type ModuleTimelineProps = {
   activeStep: number;
-  steps: Array<{ label: string; description: string }>;
+  steps: ModuleTimelineStep[];
   title: string;
 };
 
