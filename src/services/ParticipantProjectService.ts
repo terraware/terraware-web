@@ -1,8 +1,13 @@
 import { paths } from 'src/api/types/generated-schema';
 import HttpService, { Response, Response2, ServerData } from 'src/services/HttpService';
 import SearchService from 'src/services/SearchService';
+import strings from 'src/strings';
+import { AcceleratorOrg } from 'src/types/Accelerator';
 import { ParticipantProject, ParticipantProjectSearchResult } from 'src/types/ParticipantProject';
+import { Project, ProjectMeta } from 'src/types/Project';
+import { PhaseScores } from 'src/types/Score';
 import { SearchNodePayload, SearchRequestPayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { PhaseVotes } from 'src/types/Votes';
 
 /**
  * Accelerator "participant project" related services
@@ -65,8 +70,54 @@ const getSearchParams = (
   return searchParams;
 };
 
-const download = async (participantProjectId: number): Promise<string | null> => {
-  return `Id,Project Name,Phase 1 Score\r${participantProjectId},Andromeda,0.5\r`;
+const download = async ({
+  participantProject,
+  phase1Scores,
+  phaseVotes,
+  project,
+  projectId,
+  projectMeta,
+  organization,
+}: {
+  participantProject?: ParticipantProject;
+  phase1Scores?: PhaseScores;
+  phaseVotes?: PhaseVotes;
+  project?: Project;
+  projectId: number;
+  projectMeta?: ProjectMeta;
+  organization?: AcceleratorOrg;
+}): Promise<string | null> => {
+  const exportData = new Map<string, string | number | null | undefined>([
+    [strings.ORGANIZATION_NAME, organization?.name],
+    [strings.PROJECT_ID, projectId],
+    [strings.PROJECT_NAME, project?.name],
+    [strings.PHASE_1_SCORE, phase1Scores?.totalScore],
+    [strings.VOTING_DECISION, phaseVotes?.decision],
+    [strings.PROJECT_ABBREVIATED_NAME, participantProject?.abbreviatedName],
+    [strings.PROJECT_LEAD, participantProject?.projectLead],
+    [strings.COUNTRY, participantProject?.countryCode],
+    [strings.REGION, participantProject?.region],
+    [strings.LAND_USE_MODEL_TYPE, (participantProject?.landUseModelTypes || []).join(', ')],
+    [strings.NUMBER_OF_NATIVE_SPECIES, participantProject?.numNativeSpecies],
+    [strings.APPLICATION_RESTORABLE_LAND, participantProject?.applicationReforestableLand],
+    [strings.CONFIRMED_RESTORABLE_LAND, participantProject?.confirmedReforestableLand],
+    [strings.TOTAL_EXPANSION_POTENTIAL, participantProject?.totalExpansionPotential],
+    [strings.MINIMUM_CARBON_ACCUMULATION, participantProject?.minCarbonAccumulation],
+    [strings.MAXIMUM_CARBON_ACCUMULATION, participantProject?.maxCarbonAccumulation],
+    [strings.PER_HECTARE_ESTIMATED_BUDGET, participantProject?.perHectareBudget],
+    [strings.NUMBER_OF_COMMUNITIES_WITHIN_PROJECT_AREA, participantProject?.numCommunities],
+    [strings.CREATED_ON, project?.createdTime],
+    [strings.CREATED_BY, projectMeta?.createdByUserName],
+    [strings.LAST_MODIFIED_ON, project?.modifiedTime],
+    [strings.LAST_MODIFIED_BY, projectMeta?.modifiedByUserName],
+  ]);
+
+  const headersRow = Array.from(exportData.keys()).join(',');
+  // Wrap each value in double quotes and escape double quotes to handle values with commas
+  const valuesRow = `"${Array.from(exportData.values())
+    .map((value) => ([undefined, null].includes(value as null | undefined) ? '' : `${value}`.replace(/"/g, '""')))
+    .join('","')}"`;
+  return `${headersRow}\r${valuesRow}\r`;
 };
 
 const get = async (participantProjectId: number): Promise<Response2<ParticipantProjectData>> =>

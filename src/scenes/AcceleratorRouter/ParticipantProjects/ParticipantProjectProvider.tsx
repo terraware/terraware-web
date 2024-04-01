@@ -16,6 +16,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { AcceleratorOrg } from 'src/types/Accelerator';
 import { ParticipantProject } from 'src/types/ParticipantProject';
+import { ProjectMeta } from 'src/types/Project';
 import useSnackbar from 'src/utils/useSnackbar';
 import { getUserDisplayName } from 'src/utils/user';
 
@@ -45,7 +46,7 @@ const ParticipantProjectProvider = ({ children }: Props) => {
 
   const createdByUser = useAppSelector(selectUser(project?.createdBy));
   const modifiedByUser = useAppSelector(selectUser(project?.modifiedBy));
-  const [projectMeta, setProjectMeta] = useState<{ createdByUserName?: string; modifiedByUserName?: string }>({});
+  const [projectMeta, setProjectMeta] = useState<ProjectMeta>({});
 
   const [organization, setOrganization] = useState<AcceleratorOrg>();
   const [orgRequestId, setOrgRequestId] = useState('');

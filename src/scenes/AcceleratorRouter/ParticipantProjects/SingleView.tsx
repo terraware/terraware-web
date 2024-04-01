@@ -170,7 +170,7 @@ const SingleView = () => {
                 dateLabel={strings.CREATED_ON}
                 userId={project?.createdBy}
                 userName={projectMeta?.createdByUserName}
-                userLabel={strings.BY}
+                userLabel={strings.CREATED_BY}
               />
               <ProjectFieldMeta
                 date={project?.modifiedTime}
@@ -210,7 +210,17 @@ const SingleView = () => {
       )}
 
       <ExportCsvModal
-        onExport={() => ParticipantProjectService.download(projectId)}
+        onExport={() =>
+          ParticipantProjectService.download({
+            participantProject,
+            phase1Scores,
+            phaseVotes,
+            project,
+            projectId,
+            projectMeta,
+            organization,
+          })
+        }
         onClose={() => {
           setExportModalOpen(false);
         }}

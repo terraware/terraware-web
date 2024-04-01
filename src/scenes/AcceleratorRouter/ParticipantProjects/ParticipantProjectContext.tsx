@@ -4,7 +4,7 @@ import { Crumb } from 'src/components/BreadCrumbs';
 import { Statuses } from 'src/redux/features/asyncUtils';
 import { AcceleratorOrg } from 'src/types/Accelerator';
 import { ParticipantProject } from 'src/types/ParticipantProject';
-import { Project } from 'src/types/Project';
+import { Project, ProjectMeta } from 'src/types/Project';
 
 export type ParticipantProjectData = {
   crumbs: Crumb[];
@@ -12,10 +12,7 @@ export type ParticipantProjectData = {
   participantProject?: ParticipantProject;
   projectId: number;
   project?: Project;
-  projectMeta?: {
-    createdByUserName?: string;
-    modifiedByUserName?: string;
-  };
+  projectMeta?: ProjectMeta;
   status?: Statuses;
   reload: () => void;
 };
