@@ -13,6 +13,7 @@ import VotingDecisionCard from 'src/components/ProjectField/VotingDecisionCard';
 import Card from 'src/components/common/Card';
 import ExportCsvModal from 'src/components/common/ExportCsvModal';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
@@ -20,7 +21,6 @@ import { useUser } from 'src/providers';
 import ParticipantProjectService from 'src/services/ParticipantProjectService';
 import strings from 'src/strings';
 
-import PageWithModuleTimeline from '../PageWithModuleTimeline';
 import { useScoringData } from '../Scoring/ScoringContext';
 import { useVotingData } from '../Voting/VotingContext';
 import { useParticipantProjectData } from './ParticipantProjectContext';

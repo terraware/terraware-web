@@ -7,6 +7,7 @@ import { Grid, useTheme } from '@mui/material';
 import { Crumb } from 'src/components/BreadCrumbs';
 import ProjectFieldDisplay from 'src/components/ProjectField/Display';
 import Card from 'src/components/common/Card';
+import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useUser } from 'src/providers';
@@ -15,8 +16,6 @@ import { selectCohort } from 'src/redux/features/cohorts/cohortsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
-
-import PageWithModuleTimeline from '../PageWithModuleTimeline';
 
 const CohortView = () => {
   const dispatch = useAppDispatch();
