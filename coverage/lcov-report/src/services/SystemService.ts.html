@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>7/14</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">58.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>7/12</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -154,32 +154,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -189,7 +177,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -220,18 +220,18 @@ export type AppVersion = {
 export type AppVersionResponse = Response &amp; AppVersion;
 &nbsp;
 // endpoint
-const CLOCK_ENDPOINT = <span class="cstat-no" title="statement not covered" >'/api/v1/seedbank/clock';</span>
-const APP_VERSION = <span class="cstat-no" title="statement not covered" >'/build-version.txt';</span>
+const CLOCK_ENDPOINT = '/api/v1/seedbank/clock';
+const APP_VERSION = '/build-version.txt';
 &nbsp;
 type ClockServerResponse = paths[typeof CLOCK_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 &nbsp;
-const httpClock = <span class="cstat-no" title="statement not covered" >HttpService.root(CLOCK_ENDPOINT);</span>
-const httpAppVersion = <span class="cstat-no" title="statement not covered" >HttpService.root(APP_VERSION);</span>
+const httpClock = HttpService.root(CLOCK_ENDPOINT);
+const httpAppVersion = HttpService.root(APP_VERSION);
 &nbsp;
 /**
  * get server time
  */
-const getClock = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (): Promise&lt;ClockResponse&gt; =&gt; {</span>
+const getClock = <span class="fstat-no" title="function not covered" >as</span>ync (): Promise&lt;ClockResponse&gt; =&gt; {
   const response: ClockResponse = <span class="cstat-no" title="statement not covered" >await httpClock.get&lt;ClockServerResponse, Clock&gt;({}, <span class="fstat-no" title="function not covered" >(d</span>ata) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
     localTime: Date.now(),
     serverTime: data?.currentTime ? Date.parse(data.currentTime) : null,
@@ -243,7 +243,7 @@ const getClock = <span class="cstat-no" title="statement not covered" ><span cla
 /**
  * get app version
  */
-const getLatestAppVersion = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (): Promise&lt;AppVersionResponse&gt; =&gt; {</span>
+const getLatestAppVersion = <span class="fstat-no" title="function not covered" >as</span>ync (): Promise&lt;AppVersionResponse&gt; =&gt; {
   const params = <span class="cstat-no" title="statement not covered" >{ timestamp: Date.now().toString() };</span>
   const response: AppVersionResponse = <span class="cstat-no" title="statement not covered" >await httpAppVersion.get&lt;any, AppVersion&gt;({ params }, <span class="fstat-no" title="function not covered" >(v</span>ersion) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
     version: version ?? '',
@@ -255,7 +255,7 @@ const getLatestAppVersion = <span class="cstat-no" title="statement not covered"
 /**
  * Exported functions
  */
-const SystemService = <span class="cstat-no" title="statement not covered" >{</span>
+const SystemService = {
   getClock,
   getLatestAppVersion,
 };
@@ -268,7 +268,7 @@ export default SystemService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-01T15:26:13.096Z
+                at 2024-04-01T15:34:45.021Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
