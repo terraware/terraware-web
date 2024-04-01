@@ -26,6 +26,7 @@ import { accessionsReducer } from './features/accessions/accessionsSlice';
 import { appVersionReducer } from './features/appVersion/appVersionSlice';
 import { batchesReducer, batchesRequestsReducer } from './features/batches/batchesSlice';
 import { messageReducer } from './features/message/messageSlice';
+import { moduleListReducer, moduleReducer } from './features/modules/modulesSlice';
 import {
   observationsReducer,
   observationsResultsReducer,
@@ -86,6 +87,8 @@ export const reducers = {
   globalRolesUsersRemove: globalRolesUsersRemoveReducer,
   globalRolesUserUpdate: globalRolesUserUpdateReducer,
   message: messageReducer,
+  module: moduleReducer,
+  moduleList: moduleListReducer,
   monitoringPlots: monitoringPlotsReducer,
   observations: observationsReducer,
   observationsResults: observationsResultsReducer,
