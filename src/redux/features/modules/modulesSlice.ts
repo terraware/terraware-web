@@ -35,4 +35,4 @@ export const moduleListSlice = createSlice({
   },
 });
 
-export const moduleListReducer = moduleSlice.reducer;
+export const moduleListReducer = moduleListSlice.reducer;
