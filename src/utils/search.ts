@@ -9,10 +9,12 @@ function escapeRegExp(input: string) {
  * Checks an exact sequence of words or characters within a given string
  */
 const phraseMatch = (input: string, word: string): boolean => {
-  if (word.length == 0) return false;
-  const regex = new RegExp("\\b" + word + "\\b", "i");
-  return !!input.match(regex)
-}
+  if (word.length === 0) {
+    return false;
+  }
+  const regex = new RegExp('\\b' + word + '\\b', 'i');
+  return !!input.match(regex);
+};
 
 /**
  * Check if a string matches a regex pattern
@@ -21,7 +23,6 @@ const regexMatch = (input: string, stringToMatch: string): boolean => {
   const regex = new RegExp(escapeRegExp(stringToMatch), 'i');
   return !!input.match(regex);
 };
-
 
 /**
  *   Return inner string if a string is double-quoted, otherwsie null
@@ -36,8 +37,4 @@ const removeDoubleQuotes = (str: string): string | null => {
   }
 };
 
-export {
-  phraseMatch,
-  regexMatch,
-  removeDoubleQuotes
-}
+export { phraseMatch, regexMatch, removeDoubleQuotes };
