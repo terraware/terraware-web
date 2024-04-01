@@ -7,6 +7,8 @@ import {
   isOrNodePayload,
 } from 'src/types/Search';
 
+import { phraseMatch, removeDoubleQuotes } from './search';
+
 export type SearchOrderConfig = {
   locale: string | null;
   sortOrder: SearchSortOrder;
@@ -74,6 +76,11 @@ const searchConditionMet = <T extends Record<string, unknown>>(result: T, condit
       .filter((value: string | null): value is string => value !== null)
       .map((value) => value.toLowerCase());
 
+    const exactValues = searchValues.map(removeDoubleQuotes).filter((value) => value !== null);
+    if (exactValues.length) {
+      return exactValues.some((value) => value !== null && phraseMatch(resultValue, value));
+    }
+
     if (condition.type === 'Exact') {
       return searchValues.some((value) => resultValue.includes(value));
     } else if (condition.type === 'Fuzzy') {
@@ -82,7 +89,6 @@ const searchConditionMet = <T extends Record<string, unknown>>(result: T, condit
         if (searchValue.length === 1) {
           return resultValue.includes(searchValue);
         }
-
         return trigramWordSimilarity(searchValue, resultValue) > TRIGRAM_SIMILARITY_THRESHOLD;
       });
     }
