@@ -2,13 +2,10 @@ import React from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
-import Link from 'src/components/common/Link';
-import strings from 'src/strings';
-
 import { ProjectFieldProps, renderFieldValue } from '.';
 import GridEntryWrapper from './GridEntryWrapper';
 
-const ProjectFieldDisplay = ({ label, link, rightBorder, value }: ProjectFieldProps) => {
+const ProjectFieldDisplay = ({ label, rightBorder, value }: ProjectFieldProps) => {
   const theme = useTheme();
 
   return (
@@ -18,13 +15,6 @@ const ProjectFieldDisplay = ({ label, link, rightBorder, value }: ProjectFieldPr
           {label}
         </Typography>
         {value !== false ? renderFieldValue(value) : null}
-        {link && (
-          <Box marginTop={theme.spacing(1)}>
-            <Link to={link} fontSize={'16px'} fontWeight={400} lineHeight={'24px'}>
-              {strings.SEE_SHAPE_FILE}
-            </Link>
-          </Box>
-        )}
       </Box>
     </GridEntryWrapper>
   );

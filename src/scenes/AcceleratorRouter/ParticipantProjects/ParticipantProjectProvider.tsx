@@ -1,13 +1,18 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
+import { requestAcceleratorOrgs } from 'src/redux/features/accelerator/acceleratorAsyncThunks';
+import { selectAcceleratorOrgsRequest } from 'src/redux/features/accelerator/acceleratorSelectors';
 import { requestGetParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
 import { selectParticipantProjectRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
+import { selectProject } from 'src/redux/features/projects/projectsSelectors';
+import { requestProject } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { AcceleratorOrg } from 'src/types/Accelerator';
 import { ParticipantProject } from 'src/types/ParticipantProject';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -28,9 +33,16 @@ const ParticipantProjectProvider = ({ children }: Props) => {
   const [participantProjectData, setParticipantProjectData] = useState<ParticipantProjectData>({
     crumbs: [],
     projectId,
+    // tslint:disable-next-line:no-empty
+    reload: () => {},
   });
 
   const getParticipantProjectResult = useAppSelector(selectParticipantProjectRequest(projectId));
+  const project = useAppSelector(selectProject(projectId));
+
+  const [organization, setOrganization] = useState<AcceleratorOrg>();
+  const [orgRequestId, setOrgRequestId] = useState('');
+  const getOrgsResult = useAppSelector(selectAcceleratorOrgsRequest(orgRequestId));
 
   const crumbs: Crumb[] = useMemo(
     () =>
@@ -45,11 +57,23 @@ const ParticipantProjectProvider = ({ children }: Props) => {
     [activeLocale]
   );
 
+  const reload = useCallback(() => {
+    void dispatch(requestGetParticipantProject(projectId));
+    void dispatch(requestProject(projectId));
+  }, [dispatch, projectId]);
+
   useEffect(() => {
     if (!isNaN(projectId)) {
-      void dispatch(requestGetParticipantProject(projectId));
+      reload();
     }
-  }, [dispatch, projectId]);
+  }, [dispatch, projectId, reload]);
+
+  useEffect(() => {
+    if (project?.organizationId) {
+      const request = dispatch(requestAcceleratorOrgs({ locale: activeLocale }));
+      setOrgRequestId(request.requestId);
+    }
+  }, [activeLocale, dispatch, project?.organizationId]);
 
   useEffect(() => {
     if (!getParticipantProjectResult) {
@@ -64,13 +88,28 @@ const ParticipantProjectProvider = ({ children }: Props) => {
   }, [getParticipantProjectResult, snackbar]);
 
   useEffect(() => {
+    if (!getOrgsResult || !project) {
+      return;
+    }
+
+    if (getOrgsResult?.status === 'error') {
+      snackbar.toastError(strings.GENERIC_ERROR);
+    } else if (getOrgsResult?.status === 'success' && getOrgsResult?.data) {
+      setOrganization(getOrgsResult.data.find((org) => org.id === project.organizationId));
+    }
+  }, [getOrgsResult, project, snackbar]);
+
+  useEffect(() => {
     setParticipantProjectData({
       crumbs,
+      organization,
+      participantProject,
+      project,
       projectId,
-      project: participantProject,
       status: getParticipantProjectResult?.status ?? 'pending',
+      reload,
     });
-  }, [crumbs, participantProject, projectId, getParticipantProjectResult]);
+  }, [crumbs, getParticipantProjectResult, organization, participantProject, project, projectId, reload]);
 
   return (
     <ParticipantProjectContext.Provider value={participantProjectData}>{children}</ParticipantProjectContext.Provider>

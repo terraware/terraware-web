@@ -4,6 +4,7 @@ import { Statuses } from 'src/redux/features/asyncUtils';
 import { PhaseVotes } from 'src/types/Votes';
 
 export type VotingData = {
+  // This is defaults to Phase 1 votes
   phaseVotes?: PhaseVotes;
   projectId: number;
   projectName?: string;

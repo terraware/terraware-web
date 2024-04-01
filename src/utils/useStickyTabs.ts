@@ -35,7 +35,7 @@ const useStickyTabs = ({ defaultTab, tabs, viewIdentifier }: StickyTabsProps) =>
   const query = useQuery();
   const tab = query.get('tab');
 
-  const [activeTab, setActiveTab] = useState<string>('');
+  const [activeTab, setActiveTab] = useState<string>(defaultTab);
 
   const onTabChange = useCallback(
     (newTab: string) => {
