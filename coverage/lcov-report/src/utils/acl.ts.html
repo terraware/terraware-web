@@ -219,7 +219,29 @@
 <a name='L154'></a><a href='#L154'>154</a>
 <a name='L155'></a><a href='#L155'>155</a>
 <a name='L156'></a><a href='#L156'>156</a>
-<a name='L157'></a><a href='#L157'>157</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a>
+<a name='L168'></a><a href='#L168'>168</a>
+<a name='L169'></a><a href='#L169'>169</a>
+<a name='L170'></a><a href='#L170'>170</a>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -287,6 +309,8 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -315,6 +339,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -324,6 +352,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -333,7 +365,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -389,17 +431,15 @@ import { isArrayOfT } from 'src/types/utils';
 &nbsp;
 import { isManagerOrHigher, isMember } from './organization';
 &nbsp;
-// Acceptable permission are:
-// - view (page)
-// - create (entity)
-// - read (entity)
-// - update (entity)
-// - delete (entity)
-// - assign (entity-&gt;entity)
-//
-// Assign is (under the hood) an update, but we want to call it out specifically because there are some
-// roles that can assign to an entity but technically can't update it (assign global role is a good example)
+/**
+ * The main structure of the ACL functionality is a list of permissions with either an array of global roles
+ * that have access OR a function that is executed to determine if there is access. In some instances
+ * we need to look at some additional data in order to determine if the action is allowed, see `ASSIGN_GLOBAL_ROLE_TO_USER`.
+ */
 &nbsp;
+/**
+ * We split the permissions up loosely by the entity that the user is being authorized to interact with or view
+ */
 type PermissionCohort = 'CREATE_COHORTS' | 'READ_COHORTS' | 'UPDATE_COHORTS' | 'DELETE_COHORTS';
 type PermissionConsole = 'VIEW_CONSOLE';
 type PermissionDeliverable =
@@ -415,12 +455,12 @@ type PermissionParticipant =
   | 'DELETE_PARTICIPANTS'
   | 'EXPORT_PARTICIPANTS'
   | 'ASSIGN_PARTICIPANT_TO_COHORT';
-// This name might change, the entity doesn't exist yet. May end up adding extra properties to
-// the "project"" entity or creating a new "project accelerator data" entity
-type PermissionProjectAcceleratorData =
-  | 'READ_PROJECT_ACCELERATOR_DATA'
+type PermissionParticipantProject =
+  | 'READ_PARTICIPANT_PROJECT'
   | 'UPDATE_PARTICIPANT_PROJECT'
-  | 'ASSIGN_PROJECT_TO_PARTICIPANT';
+  | 'ASSIGN_PROJECT_TO_PARTICIPANT'
+  | 'VIEW_PARTICIPANT_PROJECT_SCORING_VOTING'
+  | 'EXPORT_PARTICIPANT_PROJECT';
 &nbsp;
 export type GlobalRolePermission =
   | PermissionCohort
@@ -428,10 +468,13 @@ export type GlobalRolePermission =
   | PermissionDeliverable
   | PermissionGlobalRole
   | PermissionParticipant
-  | PermissionProjectAcceleratorData;
+  | PermissionParticipantProject;
 &nbsp;
 type PermissionCheckFn&lt;T = any&gt; = (user: User, permission: GlobalRolePermission, metadata?: T) =&gt; boolean;
 &nbsp;
+/**
+ * Many of the permissions are "XYZ role _or higher_", so these RolePlus arrays are used in many cases
+ */
 const SuperAdminPlus: UserGlobalRoles = [GLOBAL_ROLE_SUPER_ADMIN];
 const AcceleratorAdminPlus: UserGlobalRoles = [...SuperAdminPlus, GLOBAL_ROLE_ACCELERATOR_ADMIN];
 const TFExpertPlus: UserGlobalRoles = [...AcceleratorAdminPlus, GLOBAL_ROLE_TF_EXPERT];
@@ -442,7 +485,9 @@ const isAcceleratorAdmin = (user: User): boolean =&gt;
   isSuperAdmin(user) || user.globalRoles.includes(GLOBAL_ROLE_ACCELERATOR_ADMIN);
 const isReadOnlyOrHigher = <span class="fstat-no" title="function not covered" >(u</span>ser: User): boolean =&gt; <span class="cstat-no" title="statement not covered" >ReadOnlyPlus.some(<span class="fstat-no" title="function not covered" >(r</span>ole) =&gt; <span class="cstat-no" title="statement not covered" >user.globalRoles.includes(role))</span>;</span>
 &nbsp;
-// This one is a bit more complicated because the permission is dependent on the role
+/**
+ * Functions related to authorization around global roles
+ */
 export const globalRolesAvailableToSet = (user: User): UserGlobalRole[] =&gt; {
   if (isSuperAdmin(user)) {
     // Super admin can assign all roles
@@ -470,6 +515,10 @@ const isAllowedAssignGlobalRoleToUser: PermissionCheckFn&lt;AssignGlobalRoleToUs
 const isAllowedAssignSomeGlobalRoles: PermissionCheckFn = <span class="fstat-no" title="function not covered" >(u</span>ser: User): boolean =&gt;
 <span class="cstat-no" title="statement not covered" >  globalRolesAvailableToSet(user).length &gt; 0;</span>
 &nbsp;
+/**
+ * Function related to creation of deliverable submissions, since the permission also applies to
+ * org roles, we need to check the passed-in organization
+ */
 type CreateSubmissionMetadata = { organization: Organization };
 const isAllowedCreateSubmission: PermissionCheckFn&lt;CreateSubmissionMetadata&gt; = <span class="fstat-no" title="function not covered" >(</span>
   user: User,
@@ -479,6 +528,10 @@ const isAllowedCreateSubmission: PermissionCheckFn&lt;CreateSubmissionMetadata&g
 <span class="cstat-no" title="statement not covered" >  return isAcceleratorAdmin(user) || isManagerOrHigher(metadata?.organization);</span>
 };
 &nbsp;
+/**
+ * Function related to reading of deliverables, since the permission also applies to
+ * org roles, we need to check the passed-in organization
+ */
 type ReadSubmissionMetadata = { organization: Organization };
 const isAllowedReadDeliverable: PermissionCheckFn&lt;ReadSubmissionMetadata&gt; = <span class="fstat-no" title="function not covered" >(</span>
   user: User,
@@ -488,31 +541,41 @@ const isAllowedReadDeliverable: PermissionCheckFn&lt;ReadSubmissionMetadata&gt; 
 <span class="cstat-no" title="statement not covered" >  return isReadOnlyOrHigher(user) || isMember(metadata?.organization);</span>
 };
 &nbsp;
-// List of permissions and roles that have those permissions
+/**
+ * This is the main ACL entrypoint where all permissions are indicated through a global role
+ * array or a function that returns a boolean
+ */
 const ACL: Record&lt;GlobalRolePermission, UserGlobalRoles | PermissionCheckFn&gt; = {
-  VIEW_CONSOLE: ReadOnlyPlus,
-  READ_GLOBAL_ROLES: AcceleratorAdminPlus,
   ASSIGN_GLOBAL_ROLE_TO_USER: isAllowedAssignGlobalRoleToUser,
+  ASSIGN_PARTICIPANT_TO_COHORT: TFExpertPlus,
+  ASSIGN_PROJECT_TO_PARTICIPANT: TFExpertPlus,
   ASSIGN_SOME_GLOBAL_ROLES: isAllowedAssignSomeGlobalRoles,
   CREATE_COHORTS: AcceleratorAdminPlus,
-  READ_COHORTS: TFExpertPlus,
-  UPDATE_COHORTS: AcceleratorAdminPlus,
-  DELETE_COHORTS: AcceleratorAdminPlus,
-  EXPORT_PARTICIPANTS: TFExpertPlus,
   CREATE_PARTICIPANTS: AcceleratorAdminPlus,
-  READ_PARTICIPANTS: TFExpertPlus,
-  UPDATE_PARTICIPANTS: TFExpertPlus,
-  DELETE_PARTICIPANTS: AcceleratorAdminPlus,
-  ASSIGN_PARTICIPANT_TO_COHORT: TFExpertPlus,
-  READ_PROJECT_ACCELERATOR_DATA: ReadOnlyPlus,
-  UPDATE_PARTICIPANT_PROJECT: TFExpertPlus,
-  ASSIGN_PROJECT_TO_PARTICIPANT: TFExpertPlus,
   CREATE_SUBMISSION: isAllowedCreateSubmission,
+  DELETE_COHORTS: AcceleratorAdminPlus,
+  DELETE_PARTICIPANTS: AcceleratorAdminPlus,
+  EXPORT_PARTICIPANTS: ReadOnlyPlus,
+  EXPORT_PARTICIPANT_PROJECT: ReadOnlyPlus,
+  READ_COHORTS: TFExpertPlus,
   READ_DELIVERABLE: isAllowedReadDeliverable,
+  READ_GLOBAL_ROLES: AcceleratorAdminPlus,
+  READ_PARTICIPANTS: TFExpertPlus,
+  READ_PARTICIPANT_PROJECT: ReadOnlyPlus,
   READ_SUBMISSION_DOCUMENT: ReadOnlyPlus,
+  UPDATE_COHORTS: AcceleratorAdminPlus,
+  UPDATE_PARTICIPANTS: TFExpertPlus,
+  UPDATE_PARTICIPANT_PROJECT: TFExpertPlus,
   UPDATE_SUBMISSION_STATUS: TFExpertPlus,
+  VIEW_CONSOLE: ReadOnlyPlus,
+  VIEW_PARTICIPANT_PROJECT_SCORING_VOTING: TFExpertPlus,
 };
 &nbsp;
+/**
+ * This is the main function that checks the permission, there is also a function of the same name within
+ * the UserProvider that offers the same signature, but with the `user` already being baked in. That is
+ * the function you want to use in most cases.
+ */
 export const isAllowed: PermissionCheckFn = (
   user: User,
   permission: GlobalRolePermission,
@@ -538,7 +601,7 @@ export const isAllowed: PermissionCheckFn = (
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-01T15:34:45.021Z
+                at 2024-04-01T18:56:33.602Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

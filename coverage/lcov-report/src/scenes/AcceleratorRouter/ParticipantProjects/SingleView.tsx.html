@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
@@ -296,7 +296,22 @@
 <a name='L231'></a><a href='#L231'>231</a>
 <a name='L232'></a><a href='#L232'>232</a>
 <a name='L233'></a><a href='#L233'>233</a>
-<a name='L234'></a><a href='#L234'>234</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L234'></a><a href='#L234'>234</a>
+<a name='L235'></a><a href='#L235'>235</a>
+<a name='L236'></a><a href='#L236'>236</a>
+<a name='L237'></a><a href='#L237'>237</a>
+<a name='L238'></a><a href='#L238'>238</a>
+<a name='L239'></a><a href='#L239'>239</a>
+<a name='L240'></a><a href='#L240'>240</a>
+<a name='L241'></a><a href='#L241'>241</a>
+<a name='L242'></a><a href='#L242'>242</a>
+<a name='L243'></a><a href='#L243'>243</a>
+<a name='L244'></a><a href='#L244'>244</a>
+<a name='L245'></a><a href='#L245'>245</a>
+<a name='L246'></a><a href='#L246'>246</a>
+<a name='L247'></a><a href='#L247'>247</a>
+<a name='L248'></a><a href='#L248'>248</a>
+<a name='L249'></a><a href='#L249'>249</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -339,6 +354,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -371,7 +390,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -568,6 +598,10 @@ const SingleView = <span class="cstat-no" title="statement not covered" ><span c
 &nbsp;
   const [exportModalOpen, setExportModalOpen] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
 &nbsp;
+  const isAllowedEdit = <span class="cstat-no" title="statement not covered" >isAllowed('UPDATE_PARTICIPANT_PROJECT');</span>
+  const isAllowedExport = <span class="cstat-no" title="statement not covered" >isAllowed('EXPORT_PARTICIPANT_PROJECT');</span>
+  const isAllowedViewScoreAndVoting = <span class="cstat-no" title="statement not covered" >isAllowed('VIEW_PARTICIPANT_PROJECT_SCORING_VOTING');</span>
+&nbsp;
   const onOptionItemClick = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(i</span>tem: DropdownItem) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (item.value === 'export-participant-project') {</span>
 <span class="cstat-no" title="statement not covered" >      setExportModalOpen(true);</span>
@@ -577,7 +611,7 @@ const SingleView = <span class="cstat-no" title="statement not covered" ><span c
   const rightComponent = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; (
 <span class="cstat-no" title="statement not covered" >      &lt;Box display='flex' flexDirection='row' flexGrow={0} marginRight={theme.spacing(3)} justifyContent='right'&gt;</span>
-        {isAllowed('UPDATE_PARTICIPANT_PROJECT') &amp;&amp; (
+        {isAllowedEdit &amp;&amp; (
           &lt;Button
             id='editProject'
             icon='iconEdit'
@@ -589,19 +623,21 @@ const SingleView = <span class="cstat-no" title="statement not covered" ><span c
           /&gt;
         )}
 &nbsp;
-        &lt;OptionsMenu
-          onOptionItemClick={onOptionItemClick}
-          optionItems={[
-            {
-              label: strings.EXPORT,
-              type: 'passive',
-              value: 'export-participant-project',
-            },
-          ]}
-        /&gt;
+        {isAllowedExport &amp;&amp; (
+          &lt;OptionsMenu
+            onOptionItemClick={onOptionItemClick}
+            optionItems={[
+              {
+                label: strings.EXPORT,
+                type: 'passive',
+                value: 'export-participant-project',
+              },
+            ]}
+          /&gt;
+        )}
       &lt;/Box&gt;
     ),
-    [goToParticipantProjectEdit, isAllowed, projectId, onOptionItemClick, theme]
+    [goToParticipantProjectEdit, isAllowedEdit, isAllowedExport, projectId, onOptionItemClick, theme]
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
@@ -626,8 +662,17 @@ const SingleView = <span class="cstat-no" title="statement not covered" ><span c
           &gt;
             &lt;Grid container&gt;
               &lt;ProjectFieldDisplay label={strings.PROJECT_NAME} value={project?.name} /&gt;
-              &lt;PhaseScoreCard phaseScores={phase1Scores} /&gt;
-              &lt;VotingDecisionCard phaseVotes={phaseVotes} /&gt;
+              {isAllowedViewScoreAndVoting ? (
+                &lt;&gt;
+                  &lt;PhaseScoreCard phaseScores={phase1Scores} /&gt;
+                  &lt;VotingDecisionCard phaseVotes={phaseVotes} /&gt;
+                &lt;/&gt;
+              ) : (
+                &lt;&gt;
+                  &lt;ProjectFieldDisplay value={false} /&gt;
+                  &lt;ProjectFieldDisplay value={false} /&gt;
+                &lt;/&gt;
+              )}
               &lt;ProjectFieldLink
                 label={strings.SEE_SCORECARD}
                 value={APP_PATHS.ACCELERATOR_SCORING.replace(':projectId', `${project.id}`)}
@@ -769,7 +814,7 @@ export default SingleView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-01T15:34:45.021Z
+                at 2024-04-01T18:56:33.602Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
