@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
@@ -130,7 +130,18 @@
 <a name='L65'></a><a href='#L65'>65</a>
 <a name='L66'></a><a href='#L66'>66</a>
 <a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -149,6 +160,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -200,19 +216,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
 &nbsp;
 import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 &nbsp;
 import Link from 'src/components/common/Link';
+import { APP_PATHS } from 'src/constants';
 &nbsp;
 import FluidEntryWrapper from './FluidEntryWrapper';
 &nbsp;
 interface ProjectFieldMetaProps {
-  date: string;
+  date?: string;
   dateLabel: string;
-  user: string;
+  userId?: number;
+  userName?: string;
   userLabel: string;
 }
 &nbsp;
-const ProjectFieldMeta = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> date, dateLabel, user, userLabel }: ProjectFieldMetaProps) =&gt; {</span>
+const ProjectFieldMeta = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> date, dateLabel, userId, userName, userLabel }: ProjectFieldMetaProps) =&gt; {</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
@@ -225,7 +244,7 @@ const ProjectFieldMeta = <span class="cstat-no" title="statement not covered" ><
               lineHeight={'24px'}
               marginBottom={theme.spacing(1)}
               component={'span'}
-              marginRight={theme.spacing(1)}
+              marginRight={theme.spacing(0.5)}
             &gt;
               {dateLabel}
             &lt;/Typography&gt;
@@ -236,7 +255,7 @@ const ProjectFieldMeta = <span class="cstat-no" title="statement not covered" ><
               marginBottom={theme.spacing(1)}
               component={'span'}
             &gt;
-              {date}
+              {getDateDisplayValue(date || '')}
             &lt;/Typography&gt;
           &lt;/Box&gt;
           &lt;Box&gt;
@@ -246,15 +265,20 @@ const ProjectFieldMeta = <span class="cstat-no" title="statement not covered" ><
               fontWeight={400}
               marginBottom={theme.spacing(1)}
               component={'span'}
-              marginRight={theme.spacing(1)}
+              marginRight={theme.spacing(0.5)}
             &gt;
               {userLabel}
             &lt;/Typography&gt;
             {/* // TODO this will depend on what the BE returns, if we get a user object we can
             // do name and ID here but if they are spread into the project entity the structure
             // will be different */}
-            &lt;Link to={'https://google.com'} fontSize={'16px'} fontWeight={400} lineHeight={'24px'}&gt;
-              {user}
+            &lt;Link
+              to={APP_PATHS.PEOPLE_VIEW.replace(':userId', `${userId}`)}
+              fontSize={'16px'}
+              fontWeight={400}
+              lineHeight={'24px'}
+            &gt;
+              {userName}
             &lt;/Link&gt;
           &lt;/Box&gt;
         &lt;/Grid&gt;
@@ -271,7 +295,7 @@ export default ProjectFieldMeta;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-01T15:15:48.992Z
+                at 2024-04-01T15:26:13.096Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
