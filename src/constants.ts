@@ -41,6 +41,8 @@ export enum APP_PATHS {
   ERROR_FAILED_TO_FETCH_ORG_DATA = '/error/cannot-fetch-org-data',
   HOME = '/home',
   MONITORING = '/monitoring',
+  MODULES_FOR_PROJECT = '/modules/project/:projectId',
+  MODULES_FOR_PROJECT_CONTENT = '/modules/project/:projectId/content/:moduleId',
   MONITORING_SEED_BANK = '/monitoring/:seedBankId',
   NURSERIES = '/nurseries',
   NURSERIES_EDIT = '/nurseries/:nurseryId/edit',
