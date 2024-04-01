@@ -1,3 +1,4 @@
+7949fe4b0d SW-5140 Added double-quotations for Phrase Match search (#2423)
 cf17d1dded SW-5096: FE - Vertical Stepper Component (#2429)
 1c40bc3d1f SW-5122 Stubbed out module list view (#2435)
 cf2aeaf279 Add Module service and redux for 'get one' and 'get list' (#2434)
