@@ -15,6 +15,7 @@ import VotingDecisionCard from 'src/components/ProjectField/VotingDecisionCard';
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useUser } from 'src/providers';
 import { requestUpdateParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
 import { selectParticipantProjectUpdateRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
 import { requestProjectUpdate } from 'src/redux/features/projects/projectsAsyncThunks';
@@ -38,21 +39,24 @@ const EditView = () => {
   const { phase1Scores } = useScoringData();
   const { phaseVotes } = useVotingData();
   const { goToParticipantProject } = useNavigateTo();
+  const { isAllowed } = useUser();
 
+  const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
+
+  // Participant project (accelerator data) form record and update request
   const [participantProjectRequestId, setParticipantProjectRequestId] = useState<string>('');
   const participantProjectUpdateRequest = useAppSelector(
     selectParticipantProjectUpdateRequest(participantProjectRequestId)
   );
-  const [projectRequestId, setProjectRequestId] = useState<string>('');
-  const projectUpdateRequest = useAppSelector((state) => selectProjectRequest(state, projectRequestId));
-
-  const [confirmProjectNameModalOpen, setConfirmProjectNameModalOpen] = useState(false);
-
-  // TODO we should probably remove non-editable fields like phaseScore and votingDecision,
-  // but these also may not come from the model itself so we will wait until BE is done
   const [participantProjectRecord, setParticipantProjectRecord, onChangeParticipantProject] =
     useForm(participantProject);
+
+  // Project (terraware data) form record and update request
+  const [projectRequestId, setProjectRequestId] = useState<string>('');
+  const projectUpdateRequest = useAppSelector((state) => selectProjectRequest(state, projectRequestId));
   const [projectRecord, setProjectRecord, onChangeProject] = useForm(project);
+
+  const [confirmProjectNameModalOpen, setConfirmProjectNameModalOpen] = useState(false);
 
   const saveParticipantProject = useCallback(() => {
     if (participantProjectRecord) {
@@ -119,6 +123,12 @@ const EditView = () => {
       setParticipantProjectRecord(participantProject);
     }
   }, [participantProject, setParticipantProjectRecord]);
+
+  useEffect(() => {
+    if (!isAllowedEdit) {
+      goToParticipantProject(projectId);
+    }
+  }, [goToParticipantProject, isAllowedEdit, projectId]);
 
   return (
     <Page title={`${organization?.name || ''} / ${project?.name || ''}`} crumbs={crumbs} hierarchicalCrumbs={false}>

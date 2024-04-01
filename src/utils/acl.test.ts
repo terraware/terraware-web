@@ -23,7 +23,7 @@ describe('isAllowed', () => {
     expect(isAllowed(user, 'UPDATE_PARTICIPANTS')).toBeTruthy();
     expect(isAllowed(user, 'DELETE_PARTICIPANTS')).toBeTruthy();
     expect(isAllowed(user, 'ASSIGN_PARTICIPANT_TO_COHORT')).toBeTruthy();
-    expect(isAllowed(user, 'READ_PROJECT_ACCELERATOR_DATA')).toBeTruthy();
+    expect(isAllowed(user, 'READ_PARTICIPANT_PROJECT')).toBeTruthy();
     expect(isAllowed(user, 'UPDATE_PARTICIPANT_PROJECT')).toBeTruthy();
     expect(isAllowed(user, 'ASSIGN_PROJECT_TO_PARTICIPANT')).toBeTruthy();
 
@@ -55,7 +55,7 @@ describe('isAllowed', () => {
     expect(isAllowed(user, 'UPDATE_PARTICIPANTS')).toBeTruthy();
     expect(isAllowed(user, 'DELETE_PARTICIPANTS')).toBeTruthy();
     expect(isAllowed(user, 'ASSIGN_PARTICIPANT_TO_COHORT')).toBeTruthy();
-    expect(isAllowed(user, 'READ_PROJECT_ACCELERATOR_DATA')).toBeTruthy();
+    expect(isAllowed(user, 'READ_PARTICIPANT_PROJECT')).toBeTruthy();
     expect(isAllowed(user, 'UPDATE_PARTICIPANT_PROJECT')).toBeTruthy();
     expect(isAllowed(user, 'ASSIGN_PROJECT_TO_PARTICIPANT')).toBeTruthy();
 
@@ -81,7 +81,7 @@ describe('isAllowed', () => {
     expect(isAllowed(user, 'READ_PARTICIPANTS')).toBeTruthy();
     expect(isAllowed(user, 'UPDATE_PARTICIPANTS')).toBeTruthy();
     expect(isAllowed(user, 'ASSIGN_PARTICIPANT_TO_COHORT')).toBeTruthy();
-    expect(isAllowed(user, 'READ_PROJECT_ACCELERATOR_DATA')).toBeTruthy();
+    expect(isAllowed(user, 'READ_PARTICIPANT_PROJECT')).toBeTruthy();
     expect(isAllowed(user, 'UPDATE_PARTICIPANT_PROJECT')).toBeTruthy();
     expect(isAllowed(user, 'ASSIGN_PROJECT_TO_PARTICIPANT')).toBeTruthy();
 
@@ -111,7 +111,7 @@ describe('isAllowed', () => {
 
     // Allowed permissions
     expect(isAllowed(user, 'VIEW_CONSOLE')).toBeTruthy();
-    expect(isAllowed(user, 'READ_PROJECT_ACCELERATOR_DATA')).toBeTruthy();
+    expect(isAllowed(user, 'READ_PARTICIPANT_PROJECT')).toBeTruthy();
 
     // Not allowed permissions
     expect(isAllowed(user, 'READ_GLOBAL_ROLES')).toBeFalsy();

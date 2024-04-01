@@ -37,6 +37,10 @@ const SingleView = () => {
 
   const [exportModalOpen, setExportModalOpen] = useState(false);
 
+  const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
+  const isAllowedExport = isAllowed('EXPORT_PARTICIPANT_PROJECT');
+  const isAllowedViewScoreAndVoting = isAllowed('VIEW_PARTICIPANT_PROJECT_SCORING_VOTING');
+
   const onOptionItemClick = useCallback((item: DropdownItem) => {
     if (item.value === 'export-participant-project') {
       setExportModalOpen(true);
@@ -46,7 +50,7 @@ const SingleView = () => {
   const rightComponent = useMemo(
     () => (
       <Box display='flex' flexDirection='row' flexGrow={0} marginRight={theme.spacing(3)} justifyContent='right'>
-        {isAllowed('UPDATE_PARTICIPANT_PROJECT') && (
+        {isAllowedEdit && (
           <Button
             id='editProject'
             icon='iconEdit'
@@ -58,19 +62,21 @@ const SingleView = () => {
           />
         )}
 
-        <OptionsMenu
-          onOptionItemClick={onOptionItemClick}
-          optionItems={[
-            {
-              label: strings.EXPORT,
-              type: 'passive',
-              value: 'export-participant-project',
-            },
-          ]}
-        />
+        {isAllowedExport && (
+          <OptionsMenu
+            onOptionItemClick={onOptionItemClick}
+            optionItems={[
+              {
+                label: strings.EXPORT,
+                type: 'passive',
+                value: 'export-participant-project',
+              },
+            ]}
+          />
+        )}
       </Box>
     ),
-    [goToParticipantProjectEdit, isAllowed, projectId, onOptionItemClick, theme]
+    [goToParticipantProjectEdit, isAllowedEdit, isAllowedExport, projectId, onOptionItemClick, theme]
   );
 
   return (
@@ -95,8 +101,17 @@ const SingleView = () => {
           >
             <Grid container>
               <ProjectFieldDisplay label={strings.PROJECT_NAME} value={project?.name} />
-              <PhaseScoreCard phaseScores={phase1Scores} />
-              <VotingDecisionCard phaseVotes={phaseVotes} />
+              {isAllowedViewScoreAndVoting ? (
+                <>
+                  <PhaseScoreCard phaseScores={phase1Scores} />
+                  <VotingDecisionCard phaseVotes={phaseVotes} />
+                </>
+              ) : (
+                <>
+                  <ProjectFieldDisplay value={false} />
+                  <ProjectFieldDisplay value={false} />
+                </>
+              )}
               <ProjectFieldLink
                 label={strings.SEE_SCORECARD}
                 value={APP_PATHS.ACCELERATOR_SCORING.replace(':projectId', `${project.id}`)}
