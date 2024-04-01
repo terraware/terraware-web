@@ -1,3 +1,4 @@
+cf2aeaf279 Add Module service and redux for 'get one' and 'get list' (#2434)
 c60c64662c SW-5136 Participant Project permissions (#2432)
 85007a1be5 SW-5137 Add feature flag for 'Participant Experience' (#2433)
 279237241c SW-4713 Implement CSV export for Participant Project data (#2426)
