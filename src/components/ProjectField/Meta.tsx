@@ -1,19 +1,22 @@
 import React from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import Link from 'src/components/common/Link';
+import { APP_PATHS } from 'src/constants';
 
 import FluidEntryWrapper from './FluidEntryWrapper';
 
 interface ProjectFieldMetaProps {
-  date: string;
+  date?: string;
   dateLabel: string;
-  user: string;
+  userId?: number;
+  userName?: string;
   userLabel: string;
 }
 
-const ProjectFieldMeta = ({ date, dateLabel, user, userLabel }: ProjectFieldMetaProps) => {
+const ProjectFieldMeta = ({ date, dateLabel, userId, userName, userLabel }: ProjectFieldMetaProps) => {
   const theme = useTheme();
 
   return (
@@ -26,7 +29,7 @@ const ProjectFieldMeta = ({ date, dateLabel, user, userLabel }: ProjectFieldMeta
               lineHeight={'24px'}
               marginBottom={theme.spacing(1)}
               component={'span'}
-              marginRight={theme.spacing(1)}
+              marginRight={theme.spacing(0.5)}
             >
               {dateLabel}
             </Typography>
@@ -37,7 +40,7 @@ const ProjectFieldMeta = ({ date, dateLabel, user, userLabel }: ProjectFieldMeta
               marginBottom={theme.spacing(1)}
               component={'span'}
             >
-              {date}
+              {getDateDisplayValue(date || '')}
             </Typography>
           </Box>
           <Box>
@@ -47,15 +50,20 @@ const ProjectFieldMeta = ({ date, dateLabel, user, userLabel }: ProjectFieldMeta
               fontWeight={400}
               marginBottom={theme.spacing(1)}
               component={'span'}
-              marginRight={theme.spacing(1)}
+              marginRight={theme.spacing(0.5)}
             >
               {userLabel}
             </Typography>
             {/* // TODO this will depend on what the BE returns, if we get a user object we can
             // do name and ID here but if they are spread into the project entity the structure
             // will be different */}
-            <Link to={'https://google.com'} fontSize={'16px'} fontWeight={400} lineHeight={'24px'}>
-              {user}
+            <Link
+              to={APP_PATHS.PEOPLE_VIEW.replace(':userId', `${userId}`)}
+              fontSize={'16px'}
+              fontWeight={400}
+              lineHeight={'24px'}
+            >
+              {userName}
             </Link>
           </Box>
         </Grid>

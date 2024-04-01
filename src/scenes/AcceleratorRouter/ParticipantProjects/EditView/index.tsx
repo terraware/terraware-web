@@ -6,6 +6,7 @@ import Page from 'src/components/Page';
 import CountrySelect from 'src/components/ProjectField/CountrySelect';
 import ProjectFieldDisplay from 'src/components/ProjectField/Display';
 import LandUseMultiSelect from 'src/components/ProjectField/LandUseMultiSelect';
+import ProjectFieldMeta from 'src/components/ProjectField/Meta';
 import PhaseScoreCard from 'src/components/ProjectField/PhaseScoreCard';
 import RegionSelect from 'src/components/ProjectField/RegionSelect';
 import ProjectFieldTextAreaEdit from 'src/components/ProjectField/TextAreaEdit';
@@ -32,7 +33,8 @@ const EditView = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const snackbar = useSnackbar();
-  const { crumbs, projectId, participantProject, project, organization, reload } = useParticipantProjectData();
+  const { crumbs, participantProject, project, projectId, projectMeta, organization, reload } =
+    useParticipantProjectData();
   const { phase1Scores } = useScoringData();
   const { phaseVotes } = useVotingData();
   const { goToParticipantProject } = useNavigateTo();
@@ -225,19 +227,20 @@ const EditView = () => {
               value={participantProject?.numCommunities}
             />
             <ProjectFieldDisplay label={strings.DEAL_STAGE} value={participantProject?.dealStage} />
-            {/* TODO need to know where this is supposed to come from, participant project details or project */}
-            {/* <ProjectFieldMeta
+            <ProjectFieldMeta
               date={project?.createdTime}
               dateLabel={strings.CREATED_ON}
-              user={project?.createdBy}
-              userLabel={strings.CREATED_BY}
+              userId={project?.createdBy}
+              userName={projectMeta?.createdByUserName}
+              userLabel={strings.BY}
             />
             <ProjectFieldMeta
               date={project?.modifiedTime}
               dateLabel={strings.LAST_MODIFIED_ON}
-              user={project?.modifiedBy}
-              userLabel={strings.LAST_MODIFIED_BY}
-            /> */}
+              userId={project?.modifiedBy}
+              userName={projectMeta?.modifiedByUserName}
+              userLabel={strings.BY}
+            />
           </Grid>
         </Card>
         <Card
