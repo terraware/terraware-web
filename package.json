@@ -80,7 +80,6 @@
     "react-redux": "^8.0.5",
     "react-responsive": "^9.0.0-beta.6",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^5.0.1",
     "styled-components": "^6.0.0",
     "utm": "^1.1.1",
     "web-vitals": "^3.1.1",
@@ -151,6 +150,7 @@
     "playwright": "^1.40.1",
     "prettier": "^3.0.3",
     "prop-types": "^15.8.1",
+    "react-scripts": "^5.0.1",
     "react-test-renderer": "17.0.2",
     "sass": "^1.38.0",
     "start-server-and-test": "^2.0.3",
@@ -161,7 +161,8 @@
     "tslint-plugin-cypress": "^1.0.4",
     "tslint-react": "^5.0.0",
     "tslint-react-hooks": "^2.2.2",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "webpack-dev-middleware": "^5.3.4"
   },
   "resolutions": {
     "@babel/traverse": "7.24.1",
