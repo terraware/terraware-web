@@ -3,6 +3,7 @@ import HttpService, { Response, Response2 } from 'src/services/HttpService';
 import SearchService from 'src/services/SearchService';
 import { CreateProjectRequest, Project, UpdateProjectRequest } from 'src/types/Project';
 import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
+import { removeDoubleQuotes } from 'src/utils/search';
 
 /**
  * Projects related services
@@ -58,12 +59,23 @@ const listProjects = async (organizationId?: number, locale?: string | null): Pr
  * Search projects
  */
 const searchProjects = async (organizationId: number, query?: string): Promise<Project[] | null> => {
+  const phraseMatchQuery = query ? removeDoubleQuotes(query) : null;
   const searchField: OrNodePayload | null = query
     ? {
         operation: 'or',
         children: [
-          { operation: 'field', field: 'name', type: 'Fuzzy', values: [query] },
-          { operation: 'field', field: 'description', type: 'Fuzzy', values: [query] },
+          {
+            operation: 'field',
+            field: 'name',
+            type: phraseMatchQuery ? 'PhraseMatch' : 'Fuzzy',
+            values: [phraseMatchQuery || query],
+          },
+          {
+            operation: 'field',
+            field: 'description',
+            type: phraseMatchQuery ? 'PhraseMatch' : 'Fuzzy',
+            values: [phraseMatchQuery || query],
+          },
         ],
       }
     : null;

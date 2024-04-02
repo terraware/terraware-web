@@ -29,6 +29,7 @@ import {
   SearchSortOrder,
 } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
+import { removeDoubleQuotes } from 'src/utils/search';
 import useDebounce from 'src/utils/useDebounce';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
@@ -147,30 +148,31 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   };
 
   const getSearchChildren = useCallback(() => {
+    const phraseMatchQuery = removeDoubleQuotes(debouncedSearchTerm);
     const finalSearchValueChildren: SearchNodePayload[] = [];
     const searchValueChildren: FieldNodePayload[] = [];
     if (debouncedSearchTerm) {
       const fromNurseryNode: FieldNodePayload = {
         operation: 'field',
         field: 'facility_name',
-        type: 'Fuzzy',
-        values: [debouncedSearchTerm],
+        type: phraseMatchQuery ? 'PhraseMatch' : 'Fuzzy',
+        values: [phraseMatchQuery || debouncedSearchTerm],
       };
       searchValueChildren.push(fromNurseryNode);
 
       const destinationNurseryNode: FieldNodePayload = {
         operation: 'field',
         field: 'destinationName',
-        type: 'Fuzzy',
-        values: [debouncedSearchTerm],
+        type: phraseMatchQuery ? 'PhraseMatch' : 'Fuzzy',
+        values: [phraseMatchQuery || debouncedSearchTerm],
       };
       searchValueChildren.push(destinationNurseryNode);
 
       const speciesNameNode: FieldNodePayload = {
         operation: 'field',
         field: 'batchWithdrawals.batch_species_scientificName',
-        type: 'Fuzzy',
-        values: [debouncedSearchTerm],
+        type: phraseMatchQuery ? 'PhraseMatch' : 'Fuzzy',
+        values: [phraseMatchQuery || debouncedSearchTerm],
       };
       searchValueChildren.push(speciesNameNode);
     }

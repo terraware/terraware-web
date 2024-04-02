@@ -5,6 +5,7 @@ import { makeStyles } from '@mui/styles';
 
 import strings from 'src/strings';
 import { FieldNodePayload } from 'src/types/Search';
+import { removeDoubleQuotes } from 'src/utils/search';
 
 const useStyles = makeStyles((theme: Theme) => ({
   box: {
@@ -30,12 +31,13 @@ export default function Search(props: Props): JSX.Element {
 
   const onSearch = (searchVal: string) => {
     if (searchVal && searchVal !== '') {
-      const values = [searchVal];
+      const phraseMatchQuery = removeDoubleQuotes(searchVal);
+      const values = [phraseMatchQuery || searchVal];
 
       const newFilter: FieldNodePayload = {
         field: props.field,
         values,
-        type: 'Fuzzy',
+        type: phraseMatchQuery ? 'PhraseMatch' : 'Fuzzy',
         operation: 'field',
       };
 

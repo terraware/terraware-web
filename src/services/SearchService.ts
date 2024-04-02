@@ -4,7 +4,12 @@ import {
   SearchNodePayload,
   SearchResponseElement,
   SearchValuesResponseElement,
+  isAndNodePayload,
+  isFieldNodePayload,
+  isNotNodePayload,
+  isOrNodePayload,
 } from 'src/types/Search';
+import { removeDoubleQuotes } from 'src/utils/search';
 
 import HttpService, { Response } from './HttpService';
 

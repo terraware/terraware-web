@@ -9,6 +9,7 @@ import SearchFiltersWrapperV2, { FilterConfig } from 'src/components/common/Sear
 import { default as OrderPreservedTable, OrderPreservedTablePropsFull } from 'src/components/common/table';
 import { useLocalization } from 'src/providers';
 import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { removeDoubleQuotes } from 'src/utils/search';
 import useDebounce from 'src/utils/useDebounce';
 
 interface TableWithSearchFiltersProps extends Omit<OrderPreservedTablePropsFull<TableRowType>, 'columns' | 'orderBy'> {
@@ -64,12 +65,13 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
 
     // Apply search field to search API payload
     if (debouncedSearchTerm && fuzzySearchColumns) {
+      const phraseMatchQuery = removeDoubleQuotes(debouncedSearchTerm);
       const fuzzySearchValueChildren = fuzzySearchColumns.map(
         (field: string): FieldNodePayload => ({
           operation: 'field',
           field,
-          type: 'Fuzzy',
-          values: [debouncedSearchTerm],
+          type: phraseMatchQuery ? 'PhraseMatch' : 'Fuzzy',
+          values: [phraseMatchQuery || debouncedSearchTerm],
         })
       );
 
