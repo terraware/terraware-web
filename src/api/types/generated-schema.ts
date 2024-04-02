@@ -3239,6 +3239,10 @@ export interface components {
     };
     ProjectPayload: {
       /** Format: int64 */
+      cohortId?: number;
+      /** @enum {string} */
+      cohortPhase?: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      /** Format: int64 */
       createdBy?: number;
       /** Format: date-time */
       createdTime?: string;
@@ -3252,6 +3256,8 @@ export interface components {
       name: string;
       /** Format: int64 */
       organizationId: number;
+      /** Format: int64 */
+      participantId?: number;
     };
     ProjectReportSettingsPayload: {
       /** @description If true, reports are enabled for this project. */

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
+import { useProjectData } from 'src/providers/Project/ProjectContext';
 import { requestProjectVotesGet } from 'src/redux/features/votes/votesAsyncThunks';
 import { selectProjectVotes } from 'src/redux/features/votes/votesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -20,10 +21,9 @@ const VotingProvider = ({ children }: Props): JSX.Element => {
   const query = useQuery();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
+  const { project, projectId } = useProjectData();
 
-  const pathParams = useParams<{ projectId: string }>();
-  const projectId = Number(pathParams.projectId);
-  const phase: Phase = (query.get('phase') as Phase) || 'Phase 1 - Feasibility Study'; // default to phase 1?
+  const phase: Phase = (query.get('phase') as Phase) || project?.cohortPhase || 'Phase 1 - Feasibility Study'; // default to phase 1?
 
   const votes = useAppSelector((state) => selectProjectVotes(state, projectId));
 
