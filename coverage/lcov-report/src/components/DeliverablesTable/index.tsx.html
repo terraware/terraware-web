@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/45</span>
+                <span class='fraction'>0/49</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/42</span>
+                <span class='fraction'>0/45</span>
             </div>
         
             
@@ -237,7 +237,15 @@
 <a name='L172'></a><a href='#L172'>172</a>
 <a name='L173'></a><a href='#L173'>173</a>
 <a name='L174'></a><a href='#L174'>174</a>
-<a name='L175'></a><a href='#L175'>175</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a>
+<a name='L179'></a><a href='#L179'>179</a>
+<a name='L180'></a><a href='#L180'>180</a>
+<a name='L181'></a><a href='#L181'>181</a>
+<a name='L182'></a><a href='#L182'>182</a>
+<a name='L183'></a><a href='#L183'>183</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -298,6 +306,14 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -473,6 +489,14 @@ const DeliverablesTable = <span class="cstat-no" title="statement not covered" >
   const [deliverablesSearchRequestId, setDeliverablesSearchRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const deliverablesSearchRequest = <span class="cstat-no" title="statement not covered" >useAppSelector(selectDeliverablesSearchRequest(deliverablesSearchRequestId));</span>
 &nbsp;
+  const projectsFilterOptions = <span class="cstat-no" title="statement not covered" >useMemo(</span>
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt;
+<span class="cstat-no" title="statement not covered" >      (acceleratorProjects || []).filter(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >        deliverables.find(<span class="fstat-no" title="function not covered" >(d</span>eliverable) =&gt; <span class="cstat-no" title="statement not covered" >deliverable.projectId === project.id)</span></span>
+      ),
+    [acceleratorProjects, deliverables]
+  );
+&nbsp;
   const isAllowedReadDeliverable = <span class="cstat-no" title="statement not covered" >isAllowed('READ_DELIVERABLE', selectedOrganization);</span>
 &nbsp;
   const getFilterProjectName = <span class="cstat-no" title="statement not covered" >useCallback(</span>
@@ -480,10 +504,10 @@ const DeliverablesTable = <span class="cstat-no" title="statement not covered" >
 <span class="cstat-no" title="statement not covered" >      return (</span>
         (participantId
           ? selectedParticipant?.projects?.find(<span class="fstat-no" title="function not covered" >(p</span>) =&gt; <span class="cstat-no" title="statement not covered" >p.id === Number(projectId))</span>?.name
-          : acceleratorProjects?.find(<span class="fstat-no" title="function not covered" >(p</span>) =&gt; <span class="cstat-no" title="statement not covered" >p.id === Number(projectId))</span>?.name) || ''
+          : projectsFilterOptions?.find(<span class="fstat-no" title="function not covered" >(p</span>) =&gt; <span class="cstat-no" title="statement not covered" >p.id === Number(projectId))</span>?.name) || ''
       );
     },
-    [acceleratorProjects, participantId, selectedParticipant?.projects]
+    [participantId, projectsFilterOptions, selectedParticipant?.projects]
   );
 &nbsp;
   const featuredFilters: FilterConfig[] = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -509,7 +533,7 @@ const DeliverablesTable = <span class="cstat-no" title="statement not covered" >
 <span class="cstat-no" title="statement not covered" >    if (isAcceleratorRoute) {</span>
 <span class="cstat-no" title="statement not covered" >      filters.unshift({</span>
         field: 'project_id',
-        options: (selectedParticipant?.projects || acceleratorProjects || [])?.map(
+        options: (selectedParticipant?.projects || projectsFilterOptions || [])?.map(
 <span class="fstat-no" title="function not covered" >          (p</span>roject: Project | AcceleratorOrgProject) =&gt; <span class="cstat-no" title="statement not covered" >`${project.id}`</span>
         ),
         searchNodeCreator: <span class="fstat-no" title="function not covered" >(v</span>alues: (number | string | null)[]) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
@@ -529,7 +553,7 @@ const DeliverablesTable = <span class="cstat-no" title="statement not covered" >
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return activeLocale ? filters : [];</span>
-  }, [acceleratorProjects, activeLocale, getFilterProjectName, isAcceleratorRoute, selectedParticipant?.projects]);
+  }, [activeLocale, getFilterProjectName, isAcceleratorRoute, projectsFilterOptions, selectedParticipant?.projects]);
 &nbsp;
   const dispatchSearchRequest = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (l</span>ocale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) =&gt; {
@@ -592,7 +616,7 @@ export default DeliverablesTable;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-02T20:25:34.895Z
+                at 2024-04-02T20:46:57.960Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
