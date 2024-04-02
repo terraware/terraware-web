@@ -1,3 +1,8 @@
+744c1d5245 Bump undici from 5.28.2 to 5.28.3 (#2175)
+9bd6226ac7 Bump ip from 2.0.0 to 2.0.1 (#2178)
+71fe102e4b Bump follow-redirects from 1.15.2 to 1.15.6 (#2324)
+a2b4fb9f1c Bump express from 4.18.2 to 4.19.2 (#2407)
+f84d594d62 Bump webpack-dev-middleware from 5.3.3 to 5.3.4 (#2381)
 7949fe4b0d SW-5140 Added double-quotations for Phrase Match search (#2423)
 cf17d1dded SW-5096: FE - Vertical Stepper Component (#2429)
 1c40bc3d1f SW-5122 Stubbed out module list view (#2435)
