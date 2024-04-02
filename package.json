@@ -164,6 +164,7 @@
     "typescript": "^5.0.0"
   },
   "resolutions": {
+    "@babel/traverse": "7.24.1",
     "fork-ts-checker-webpack-plugin": "^6.5.3"
   }
 }
