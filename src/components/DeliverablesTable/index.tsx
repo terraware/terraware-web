@@ -60,6 +60,14 @@ const DeliverablesTable = ({
   const [deliverablesSearchRequestId, setDeliverablesSearchRequestId] = useState('');
   const deliverablesSearchRequest = useAppSelector(selectDeliverablesSearchRequest(deliverablesSearchRequestId));
 
+  const projectOptions = useMemo(
+    () =>
+      (acceleratorProjects || []).filter((project) =>
+        deliverables.find((deliverable) => deliverable.projectId === project.id)
+      ),
+    [acceleratorProjects, deliverables]
+  );
+
   const isAllowedReadDeliverable = isAllowed('READ_DELIVERABLE', selectedOrganization);
 
   const getFilterProjectName = useCallback(
@@ -67,10 +75,10 @@ const DeliverablesTable = ({
       return (
         (participantId
           ? selectedParticipant?.projects?.find((p) => p.id === Number(projectId))?.name
-          : acceleratorProjects?.find((p) => p.id === Number(projectId))?.name) || ''
+          : projectOptions?.find((p) => p.id === Number(projectId))?.name) || ''
       );
     },
-    [acceleratorProjects, participantId, selectedParticipant?.projects]
+    [participantId, projectOptions, selectedParticipant?.projects]
   );
 
   const featuredFilters: FilterConfig[] = useMemo(() => {
@@ -96,7 +104,7 @@ const DeliverablesTable = ({
     if (isAcceleratorRoute) {
       filters.unshift({
         field: 'project_id',
-        options: (selectedParticipant?.projects || acceleratorProjects || [])?.map(
+        options: (selectedParticipant?.projects || projectOptions || [])?.map(
           (project: Project | AcceleratorOrgProject) => `${project.id}`
         ),
         searchNodeCreator: (values: (number | string | null)[]) => ({
@@ -116,7 +124,7 @@ const DeliverablesTable = ({
     }
 
     return activeLocale ? filters : [];
-  }, [acceleratorProjects, activeLocale, getFilterProjectName, isAcceleratorRoute, selectedParticipant?.projects]);
+  }, [activeLocale, getFilterProjectName, isAcceleratorRoute, projectOptions, selectedParticipant?.projects]);
 
   const dispatchSearchRequest = useCallback(
     (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => {
