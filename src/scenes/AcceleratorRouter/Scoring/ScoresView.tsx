@@ -5,11 +5,11 @@ import { Box, Grid, useTheme } from '@mui/material';
 import { BusySpinner, Button } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
+import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 
-import PageWithModuleTimeline from '../PageWithModuleTimeline';
 import PhaseScores from './PhaseScores';
 import { useScoringData } from './ScoringContext';
 
