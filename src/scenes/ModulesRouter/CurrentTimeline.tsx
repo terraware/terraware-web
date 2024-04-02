@@ -57,7 +57,7 @@ const CurrentTimeline = () => {
                       width={'45px'}
                       marginX={theme.spacing(2)}
                       marginTop={theme.spacing(3)}
-                    ></Box>
+                    />
                   </Grid>
                 ) : null}
                 <Grid

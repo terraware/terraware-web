@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
-
 import Card from 'src/components/common/Card';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { useProject } from 'src/providers';
