@@ -60,7 +60,7 @@ const DeliverablesTable = ({
   const [deliverablesSearchRequestId, setDeliverablesSearchRequestId] = useState('');
   const deliverablesSearchRequest = useAppSelector(selectDeliverablesSearchRequest(deliverablesSearchRequestId));
 
-  const projectOptions = useMemo(
+  const projectsFilterOptions = useMemo(
     () =>
       (acceleratorProjects || []).filter((project) =>
         deliverables.find((deliverable) => deliverable.projectId === project.id)
@@ -75,10 +75,10 @@ const DeliverablesTable = ({
       return (
         (participantId
           ? selectedParticipant?.projects?.find((p) => p.id === Number(projectId))?.name
-          : projectOptions?.find((p) => p.id === Number(projectId))?.name) || ''
+          : projectsFilterOptions?.find((p) => p.id === Number(projectId))?.name) || ''
       );
     },
-    [participantId, projectOptions, selectedParticipant?.projects]
+    [participantId, projectsFilterOptions, selectedParticipant?.projects]
   );
 
   const featuredFilters: FilterConfig[] = useMemo(() => {
@@ -104,7 +104,7 @@ const DeliverablesTable = ({
     if (isAcceleratorRoute) {
       filters.unshift({
         field: 'project_id',
-        options: (selectedParticipant?.projects || projectOptions || [])?.map(
+        options: (selectedParticipant?.projects || projectsFilterOptions || [])?.map(
           (project: Project | AcceleratorOrgProject) => `${project.id}`
         ),
         searchNodeCreator: (values: (number | string | null)[]) => ({
@@ -124,7 +124,7 @@ const DeliverablesTable = ({
     }
 
     return activeLocale ? filters : [];
-  }, [activeLocale, getFilterProjectName, isAcceleratorRoute, projectOptions, selectedParticipant?.projects]);
+  }, [activeLocale, getFilterProjectName, isAcceleratorRoute, projectsFilterOptions, selectedParticipant?.projects]);
 
   const dispatchSearchRequest = useCallback(
     (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => {
