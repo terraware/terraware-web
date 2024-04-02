@@ -1,3 +1,5 @@
+8693e7edfd Use the project's cohort phase to determine the active votes (#2441)
+5e4583f24a SW-5122 Create ModuleEntry component and make UI for individual modules in the list view (#2444)
 09f3912523 Bump semver from 5.7.1 to 5.7.2 (#1539)
 f382e7148c Bump word-wrap from 1.2.3 to 1.2.5 (#2446)
 5db710dfa3 SW-5094: Deliverables list table should be filtering on the available list of options based on the table (#2445)

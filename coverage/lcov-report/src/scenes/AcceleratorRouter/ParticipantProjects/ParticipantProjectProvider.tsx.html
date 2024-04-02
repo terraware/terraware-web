@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/53</span>
+                <span class='fraction'>0/51</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/28</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/52</span>
+                <span class='fraction'>0/50</span>
             </div>
         
             
@@ -204,12 +204,7 @@
 <a name='L139'></a><a href='#L139'>139</a>
 <a name='L140'></a><a href='#L140'>140</a>
 <a name='L141'></a><a href='#L141'>141</a>
-<a name='L142'></a><a href='#L142'>142</a>
-<a name='L143'></a><a href='#L143'>143</a>
-<a name='L144'></a><a href='#L144'>144</a>
-<a name='L145'></a><a href='#L145'>145</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L142'></a><a href='#L142'>142</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -240,7 +235,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -250,7 +244,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -277,6 +270,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -352,17 +346,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
 &nbsp;
 import { Crumb } from 'src/components/BreadCrumbs';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
+import { useProjectData } from 'src/providers/Project/ProjectContext';
 import { requestAcceleratorOrgs } from 'src/redux/features/accelerator/acceleratorAsyncThunks';
 import { selectAcceleratorOrgsRequest } from 'src/redux/features/accelerator/acceleratorSelectors';
 import { requestGetParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
 import { selectParticipantProjectRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
-import { selectProject } from 'src/redux/features/projects/projectsSelectors';
-import { requestProject } from 'src/redux/features/projects/projectsThunks';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -383,8 +375,7 @@ const ParticipantProjectProvider = <span class="cstat-no" title="statement not c
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-  const pathParams = <span class="cstat-no" title="statement not covered" >useParams&lt;{ projectId: string }&gt;();</span>
-  const projectId = <span class="cstat-no" title="statement not covered" >Number(pathParams.projectId);</span>
+  const { project, projectId } = <span class="cstat-no" title="statement not covered" >useProjectData();</span>
 &nbsp;
   const [participantProject, setParticipantProject] = <span class="cstat-no" title="statement not covered" >useState&lt;ParticipantProject&gt;();</span>
   const [participantProjectData, setParticipantProjectData] = <span class="cstat-no" title="statement not covered" >useState&lt;ParticipantProjectData&gt;({</span>
@@ -395,7 +386,6 @@ const ParticipantProjectProvider = <span class="cstat-no" title="statement not c
   });
 &nbsp;
   const getParticipantProjectResult = <span class="cstat-no" title="statement not covered" >useAppSelector(selectParticipantProjectRequest(projectId));</span>
-  const project = <span class="cstat-no" title="statement not covered" >useAppSelector(selectProject(projectId));</span>
 &nbsp;
   const createdByUser = <span class="cstat-no" title="statement not covered" >useAppSelector(selectUser(project?.createdBy));</span>
   const modifiedByUser = <span class="cstat-no" title="statement not covered" >useAppSelector(selectUser(project?.modifiedBy));</span>
@@ -419,8 +409,9 @@ const ParticipantProjectProvider = <span class="cstat-no" title="statement not c
   );
 &nbsp;
   const reload = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    void dispatch(requestGetParticipantProject(projectId));</span>
-<span class="cstat-no" title="statement not covered" >    void dispatch(requestProject(projectId));</span>
+<span class="cstat-no" title="statement not covered" >    if (projectId !== -1) {</span>
+<span class="cstat-no" title="statement not covered" >      void dispatch(requestGetParticipantProject(projectId));</span>
+    }
   }, [dispatch, projectId]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -502,7 +493,7 @@ export default ParticipantProjectProvider;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-02T21:04:43.435Z
+                at 2024-04-02T23:30:53.851Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
