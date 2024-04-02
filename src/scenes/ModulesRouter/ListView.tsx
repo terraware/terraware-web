@@ -40,7 +40,7 @@ export default function ListView(): JSX.Element {
   return (
     <PageWithModuleTimeline title={strings.ALL_MODULES}>
       <Card style={{ width: '100%' }}>
-        <CurrentTimeline />
+        <CurrentTimeline cohortPhase={project?.cohortPhase} />
 
         <Box paddingY={theme.spacing(2)} borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}>
           <Typography>{phaseDescription}</Typography>
