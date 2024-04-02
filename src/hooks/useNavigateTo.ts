@@ -6,6 +6,18 @@ import { APP_PATHS } from 'src/constants';
 export default function useNavigateTo() {
   const history = useHistory();
 
+  const goToModule = useCallback(
+    (projectId: number, moduleId: number) => {
+      history.push({
+        pathname: APP_PATHS.MODULES_FOR_PROJECT_CONTENT.replace(':projectId', `${projectId}`).replace(
+          ':moduleId',
+          `${moduleId}`
+        ),
+      });
+    },
+    [history]
+  );
+
   const goToParticipant = useCallback(
     (participantId: number) => {
       history.push({
@@ -45,6 +57,7 @@ export default function useNavigateTo() {
 
   return useMemo(
     () => ({
+      goToModule,
       goToParticipant,
       goToParticipantsList,
       goToParticipantProject,
@@ -52,6 +65,7 @@ export default function useNavigateTo() {
       goToParticipantProjectList,
     }),
     [
+      goToModule,
       goToParticipant,
       goToParticipantsList,
       goToParticipantProject,
