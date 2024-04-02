@@ -1,3 +1,4 @@
+5fd9ce9aa7 SW-5122 Create CurrentTimeline component which houses phase information in the module list header (#2437)
 58755d921f Move PageWithModuleTimeline to src/components/common (#2436)
 b725b341b3 Add package resolution for @babel/traverse @ 7.24.1 (#2440)
 4a19146280 Bump dependencies: axios & start-server-and-test dependencies (#2439)
