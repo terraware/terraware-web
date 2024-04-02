@@ -1,3 +1,4 @@
+b725b341b3 Add package resolution for @babel/traverse @ 7.24.1 (#2440)
 4a19146280 Bump dependencies: axios & start-server-and-test dependencies (#2439)
 744c1d5245 Bump undici from 5.28.2 to 5.28.3 (#2175)
 9bd6226ac7 Bump ip from 2.0.0 to 2.0.1 (#2178)
