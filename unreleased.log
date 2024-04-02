@@ -1,3 +1,4 @@
+09f3912523 Bump semver from 5.7.1 to 5.7.2 (#1539)
 f382e7148c Bump word-wrap from 1.2.3 to 1.2.5 (#2446)
 5db710dfa3 SW-5094: Deliverables list table should be filtering on the available list of options based on the table (#2445)
 401596dd58 Upgrade webpack-dev-middleware to ^5.3.4 per CVE-2024-29180 (#2443)
