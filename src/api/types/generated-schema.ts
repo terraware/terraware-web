@@ -2020,8 +2020,8 @@ export interface components {
     } & Omit<components["schemas"]["SearchNodePayload"], "operation"> & ({
       field?: string;
       /** @enum {string} */
-      type?: "Exact" | "ExactOrFuzzy" | "Fuzzy" | "Range";
-      /** @description List of values to match. For exact and fuzzy searches, a list of at least one value to search for; the list may include null to match accessions where the field does not have a value. For range searches, the list must contain exactly two values, the minimum and maximum; one of the values may be null to search for all values above a minimum or below a maximum. */
+      type?: "Exact" | "ExactOrFuzzy" | "Fuzzy" | "PhraseMatch" | "Range";
+      /** @description List of values to match. For exact, fuzzy and phrase match searches, a list of at least one value to search for; the list may include null to match accessions where the field does not have a value. For range searches, the list must contain exactly two values, the minimum and maximum; one of the values may be null to search for all values above a minimum or below a maximum. */
       values?: (string | null)[];
     }), "field" | "type" | "values">;
     FieldValuesPayload: {
@@ -3239,6 +3239,10 @@ export interface components {
     };
     ProjectPayload: {
       /** Format: int64 */
+      cohortId?: number;
+      /** @enum {string} */
+      cohortPhase?: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      /** Format: int64 */
       createdBy?: number;
       /** Format: date-time */
       createdTime?: string;
@@ -3252,6 +3256,8 @@ export interface components {
       name: string;
       /** Format: int64 */
       organizationId: number;
+      /** Format: int64 */
+      participantId?: number;
     };
     ProjectReportSettingsPayload: {
       /** @description If true, reports are enabled for this project. */
