@@ -93,7 +93,7 @@ export const UserVoteEdit = ({
       { label: strings.YES, value: 'Yes' },
       { label: strings.NO, value: 'No' },
       { label: strings.CONDITIONAL, value: 'Conditional' },
-      { label: strings.NOT_COMPLETE, value: undefined },
+      { label: '', value: undefined },
     ];
   }, [activeLocale]);
 
