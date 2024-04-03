@@ -84,7 +84,7 @@ export const UserVoteEdit = ({
   const classes = useStyles();
   const { activeLocale } = useLocalization();
 
-  const voteOptions : DropdownItem[] = useMemo(() => {
+  const voteOptions: DropdownItem[] = useMemo(() => {
     if (!activeLocale) {
       return [];
     }
