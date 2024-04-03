@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { BusySpinner } from '@terraware/web-components';
+
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { selectProject } from 'src/redux/features/projects/projectsSelectors';
 import { requestProject } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -15,6 +18,7 @@ const ProjectProvider = ({ children }: Props) => {
   const dispatch = useAppDispatch();
   const pathParams = useParams<{ projectId: string }>();
   const pathProjectId = Number(pathParams.projectId);
+  const { goToParticipantProjectList } = useNavigateTo();
 
   const [projectId, setProjectId] = useState<number>(-1);
   const project = useAppSelector(selectProject(projectId));
@@ -32,11 +36,13 @@ const ProjectProvider = ({ children }: Props) => {
   }, [dispatch, projectId]);
 
   useEffect(() => {
-    if (!isNaN(pathProjectId)) {
+    if (pathProjectId === -1) {
+      goToParticipantProjectList();
+    } else if (!isNaN(pathProjectId)) {
       setProjectId(pathProjectId);
       reload();
     }
-  }, [dispatch, pathProjectId, reload]);
+  }, [dispatch, goToParticipantProjectList, pathProjectId, reload]);
 
   useEffect(() => {
     setProjectData({
@@ -45,6 +51,10 @@ const ProjectProvider = ({ children }: Props) => {
       reload,
     });
   }, [project, projectId, reload]);
+
+  if (projectData.projectId === -1) {
+    return <BusySpinner withSkrim />;
+  }
 
   return <ProjectContext.Provider value={projectData}>{children}</ProjectContext.Provider>;
 };
