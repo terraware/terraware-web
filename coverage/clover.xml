@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1712182561118" clover="3.2.0">
-  <project timestamp="1712182561118" name="All files">
-    <metrics statements="19241" coveredstatements="915" conditionals="11972" coveredconditionals="228" methods="6014" coveredmethods="162" elements="37227" coveredelements="1305" complexity="0" loc="19241" ncloc="19241" packages="167" files="837" classes="837"/>
+<coverage generated="1712183612979" clover="3.2.0">
+  <project timestamp="1712183612979" name="All files">
+    <metrics statements="19241" coveredstatements="915" conditionals="11974" coveredconditionals="228" methods="6014" coveredmethods="162" elements="37229" coveredelements="1305" complexity="0" loc="19241" ncloc="19241" packages="167" files="837" classes="837"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -10608,9 +10608,9 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Voting">
-      <metrics statements="135" coveredstatements="0" conditionals="70" coveredconditionals="0" methods="41" coveredmethods="0"/>
+      <metrics statements="135" coveredstatements="0" conditionals="72" coveredconditionals="0" methods="41" coveredmethods="0"/>
       <file name="UserVote.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Voting/UserVote.tsx">
-        <metrics statements="19" coveredstatements="0" conditionals="11" coveredconditionals="0" methods="7" coveredmethods="0"/>
+        <metrics statements="19" coveredstatements="0" conditionals="13" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
@@ -10763,8 +10763,8 @@
         <line num="26" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
         <line num="31" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="46" count="0" type="stmt"/>
-        <line num="48" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Voting/index.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
