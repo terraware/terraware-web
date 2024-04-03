@@ -8,6 +8,7 @@ export type SearchNodePayload = AndNodePayload | FieldNodePayload | NotNodePaylo
 export type FieldValuesPayload = { [key: string]: components['schemas']['FieldValuesPayload'] };
 export type SearchCriteria = { [key: string]: SearchNodePayload };
 export type SearchSortOrder = components['schemas']['SearchSortOrderElement'];
+export type SearchType = components['schemas']['FieldNodePayload']['type'];
 export type SearchResponseElement = components['schemas']['SearchResponsePayload']['results'][0];
 export type SearchResponseElementWithId = SearchResponseElement & { id: string };
 export type SearchValuesResponseElement = components['schemas']['SearchValuesResponsePayload']['results'];

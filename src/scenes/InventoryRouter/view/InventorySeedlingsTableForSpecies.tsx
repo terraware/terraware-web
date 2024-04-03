@@ -8,7 +8,7 @@ import InventorySeedlingsTable, {
 import { NurseryBatchService } from 'src/services';
 import strings from 'src/strings';
 import { FieldNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
-import { removeDoubleQuotes } from 'src/utils/search';
+import { parseSearchTerm } from 'src/utils/search';
 
 interface InventorySeedlingsTableForSpeciesProps
   extends Omit<
@@ -47,13 +47,13 @@ export default function InventorySeedlingsTableForSpecies(props: InventorySeedli
   const speciesId = props.speciesId;
 
   const getFuzzySearchFields = useCallback((debouncedSearchTerm: string): FieldNodePayload[] => {
-    const phraseMatchQuery = removeDoubleQuotes(debouncedSearchTerm);
+    const { type, values } = parseSearchTerm(debouncedSearchTerm);
     return [
       {
         operation: 'field',
         field: 'facility_name',
-        type: phraseMatchQuery ? 'PhraseMatch' : 'Fuzzy',
-        values: [phraseMatchQuery || debouncedSearchTerm],
+        type,
+        values,
       },
     ];
   }, []);

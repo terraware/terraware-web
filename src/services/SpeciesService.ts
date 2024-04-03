@@ -2,7 +2,7 @@ import { paths } from 'src/api/types/generated-schema';
 import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
 import { FieldNodePayload, SearchRequestPayload, SearchResponseElement } from 'src/types/Search';
 import { Species, SpeciesDetails, SuggestedSpecies } from 'src/types/Species';
-import { removeDoubleQuotes } from 'src/utils/search';
+import { parseSearchTerm } from 'src/utils/search';
 
 import HttpService, { Response, ServerData } from './HttpService';
 import SearchService from './SearchService';
@@ -318,21 +318,21 @@ const suggestSpecies = async (organizationId: number, query: string): Promise<Su
 
   if (query) {
     const searchValueChildren: FieldNodePayload[] = [];
-    const phraseMatchQuery = removeDoubleQuotes(query);
+    const { type, values } = parseSearchTerm(query);
 
     const nameNode: FieldNodePayload = {
       operation: 'field',
       field: 'scientificName',
-      type: phraseMatchQuery ? 'PhraseMatch' : 'Fuzzy',
-      values: [phraseMatchQuery || query],
+      type,
+      values,
     };
     searchValueChildren.push(nameNode);
 
     const commonNameNode: FieldNodePayload = {
       operation: 'field',
       field: 'commonName',
-      type: phraseMatchQuery ? 'PhraseMatch' : 'Fuzzy',
-      values: [phraseMatchQuery || query],
+      type,
+      values,
     };
     searchValueChildren.push(commonNameNode);
 

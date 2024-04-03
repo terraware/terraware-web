@@ -31,7 +31,7 @@ import { FieldNodePayload, FieldOptionsMap, SearchRequestPayload, SearchSortOrde
 import { Species } from 'src/types/Species';
 import { isContributor } from 'src/utils/organization';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
-import { removeDoubleQuotes } from 'src/utils/search';
+import { parseSearchTerm } from 'src/utils/search';
 import useDebounce from 'src/utils/useDebounce';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
@@ -364,29 +364,29 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     }
 
     if (debouncedSearchTerm) {
-      const phraseMatchQuery = removeDoubleQuotes(debouncedSearchTerm);
+      const { type, values } = parseSearchTerm(debouncedSearchTerm);
       const searchValueChildren: FieldNodePayload[] = [];
       const nameNode: FieldNodePayload = {
         operation: 'field',
         field: 'scientificName',
-        type: phraseMatchQuery ? 'PhraseMatch' : 'Fuzzy',
-        values: [phraseMatchQuery || debouncedSearchTerm],
+        type,
+        values,
       };
       searchValueChildren.push(nameNode);
 
       const commonNameNode: FieldNodePayload = {
         operation: 'field',
         field: 'commonName',
-        type: phraseMatchQuery ? 'PhraseMatch' : 'Fuzzy',
-        values: [phraseMatchQuery || debouncedSearchTerm],
+        type,
+        values,
       };
       searchValueChildren.push(commonNameNode);
 
       const familyNode: FieldNodePayload = {
         operation: 'field',
         field: 'familyName',
-        type: phraseMatchQuery ? 'PhraseMatch' : 'Fuzzy',
-        values: [phraseMatchQuery || debouncedSearchTerm],
+        type,
+        values,
       };
       searchValueChildren.push(familyNode);
       params.search.children.push({

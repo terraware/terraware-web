@@ -5,7 +5,6 @@ import {
   SearchResponseElement,
   SearchValuesResponseElement,
 } from 'src/types/Search';
-import { removeDoubleQuotes } from 'src/utils/search';
 
 import HttpService, { Response } from './HttpService';
 

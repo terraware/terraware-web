@@ -8,7 +8,7 @@ import {
   SearchSortOrder,
 } from 'src/types/Search';
 import { OrganizationUser } from 'src/types/User';
-import { removeDoubleQuotes } from 'src/utils/search';
+import { parseSearchTerm } from 'src/utils/search';
 import { getUserDisplayName } from 'src/utils/user';
 
 import HttpService, { Response } from './HttpService';
@@ -307,34 +307,34 @@ const getAllBatches = async (
   }
 
   if (query) {
-    const phraseMatchQuery = removeDoubleQuotes(query);
+    const { type, values } = parseSearchTerm(query);
     const searchValueChildren: FieldNodePayload[] = [];
     searchValueChildren.push({
       operation: 'field',
       field: 'batchNumber',
-      type: phraseMatchQuery ? 'PhraseMatch' : 'Fuzzy',
-      values: [phraseMatchQuery || query],
+      type,
+      values,
     });
 
     searchValueChildren.push({
       operation: 'field',
       field: 'species_scientificName',
-      type: phraseMatchQuery ? 'PhraseMatch' : 'Fuzzy',
-      values: [phraseMatchQuery || query],
+      type,
+      values,
     });
 
     searchValueChildren.push({
       operation: 'field',
       field: 'species_commonName',
-      type: phraseMatchQuery ? 'PhraseMatch' : 'Fuzzy',
-      values: [phraseMatchQuery || query],
+      type,
+      values,
     });
 
     searchValueChildren.push({
       operation: 'field',
       field: 'facility_name',
-      type: phraseMatchQuery ? 'PhraseMatch' : 'Fuzzy',
-      values: [phraseMatchQuery || query],
+      type,
+      values,
     });
 
     params.search.children.push({
