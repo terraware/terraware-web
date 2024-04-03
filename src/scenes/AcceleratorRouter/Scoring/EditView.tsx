@@ -28,7 +28,7 @@ const ScorecardEditView = () => {
   const history = useHistory();
   const classes = useStyles();
   const { crumbs, hasData, phase0Scores, phase1Scores, projectId, projectName, status } = useScoringData();
-  const { update, status: updateStatus, listStatus } = useScoresUpdate(projectId);
+  const { update, status: updateStatus } = useScoresUpdate(projectId);
   const { goToParticipantProject } = useNavigateTo();
 
   const [scores, setScores] = useState<Score[]>([]);
@@ -83,10 +83,10 @@ const ScorecardEditView = () => {
   }, [phase1Scores]);
 
   useEffect(() => {
-    if (updateStatus === 'success' && listStatus === 'success') {
+    if (updateStatus === 'success') {
       goToScorecardView();
     }
-  }, [updateStatus, goToScorecardView, listStatus]);
+  }, [updateStatus, goToScorecardView]);
 
   return (
     <Page title={`Edit Scoring for project ${projectName}`} crumbs={crumbs} hierarchicalCrumbs={false}>

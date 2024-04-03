@@ -9,7 +9,6 @@ import { Phase, Score } from 'src/types/Score';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export type Response = {
-  listStatus?: Statuses;
   status?: Statuses;
   update: (phase: Phase, scores: Score[]) => void;
 };
@@ -47,8 +46,9 @@ export default function useScoresUpdate(projectId: number): Response {
 
   return useMemo<Response>(
     () => ({
-      listStatus: scoreListResult?.status,
-      status: result?.status,
+      // Update is considered successful if both update and refresh list are successful.
+      // This is to help with provider data state.
+      status: result?.status === 'success' ? scoreListResult?.status : result?.status,
       update,
     }),
     [scoreListResult?.status, result?.status, update]
