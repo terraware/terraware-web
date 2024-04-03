@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1712180721240" clover="3.2.0">
-  <project timestamp="1712180721240" name="All files">
-    <metrics statements="19235" coveredstatements="915" conditionals="11968" coveredconditionals="228" methods="6012" coveredmethods="162" elements="37215" coveredelements="1305" complexity="0" loc="19235" ncloc="19235" packages="167" files="837" classes="837"/>
+<coverage generated="1712182561118" clover="3.2.0">
+  <project timestamp="1712182561118" name="All files">
+    <metrics statements="19241" coveredstatements="915" conditionals="11972" coveredconditionals="228" methods="6014" coveredmethods="162" elements="37227" coveredelements="1305" complexity="0" loc="19241" ncloc="19241" packages="167" files="837" classes="837"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -6438,9 +6438,9 @@
       </file>
     </package>
     <package name="src.components.common.SearchFiltersWrapperV2">
-      <metrics statements="56" coveredstatements="0" conditionals="38" coveredconditionals="0" methods="32" coveredmethods="0"/>
+      <metrics statements="58" coveredstatements="0" conditionals="40" coveredconditionals="0" methods="32" coveredmethods="0"/>
       <file name="FeaturedFilters.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/SearchFiltersWrapperV2/FeaturedFilters.tsx">
-        <metrics statements="13" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="10" coveredmethods="0"/>
+        <metrics statements="15" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="10" coveredmethods="0"/>
         <line num="19" count="0" type="stmt"/>
         <line num="23" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="26" count="0" type="stmt"/>
@@ -6452,8 +6452,10 @@
         <line num="45" count="0" type="stmt"/>
         <line num="52" count="0" type="stmt"/>
         <line num="59" count="0" type="stmt"/>
-        <line num="60" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
+        <line num="60" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="72" count="0" type="stmt"/>
       </file>
       <file name="IconFilters.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/SearchFiltersWrapperV2/IconFilters.tsx">
         <metrics statements="19" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="11" coveredmethods="0"/>
@@ -10558,21 +10560,25 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Scoring.PhaseScores.ScoreEntry">
-      <metrics statements="32" coveredstatements="0" conditionals="24" coveredconditionals="0" methods="10" coveredmethods="0"/>
+      <metrics statements="36" coveredstatements="0" conditionals="26" coveredconditionals="0" methods="12" coveredmethods="0"/>
       <file name="ValueControl.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Scoring/PhaseScores/ScoreEntry/ValueControl.tsx">
-        <metrics statements="12" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <metrics statements="16" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="22" count="0" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
-        <line num="26" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
       </file>
       <file name="ValueControlButton.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Scoring/PhaseScores/ScoreEntry/ValueControlButton.tsx">
         <metrics statements="7" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="2" coveredmethods="0"/>

@@ -1,3 +1,5 @@
+3f9aed3952 SW-5151 Fix the expand/contract of scoring buttons' boundary (#2458)
+c789ffbee9 SW-5126 Fix use of featured filter's search node payload generator (#2420)
 f9010776c9 SW-5155 Copy over pdd-web services (#2454)
 37f1b93c34 SW-5159 Fix participant project view redirecting back to participant project list even when there are votes (#2456)
 a733fd87a8 SW-5158 Show participant name in participant project details header (#2457)
