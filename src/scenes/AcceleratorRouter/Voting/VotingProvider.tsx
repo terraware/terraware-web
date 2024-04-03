@@ -52,11 +52,9 @@ const VotingProvider = ({ children }: Props): JSX.Element => {
       const votesForPhase = votes?.data?.phases.find((data) => data.phase === phase);
       if (votesForPhase) {
         setPhaseVotes(votesForPhase);
-      } else {
-        goToProjects();
       }
     }
-  }, [goToProjects, phase, snackbar, votes]);
+  }, [phase, snackbar, votes]);
 
   // update votes data in context
   useEffect(() => {
