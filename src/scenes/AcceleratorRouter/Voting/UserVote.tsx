@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Dropdown, Textfield } from '@terraware/web-components';
+import { Dropdown, DropdownItem, Textfield } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
@@ -84,16 +84,16 @@ export const UserVoteEdit = ({
   const classes = useStyles();
   const { activeLocale } = useLocalization();
 
-  const voteOptions = useMemo(() => {
+  const voteOptions : DropdownItem[] = useMemo(() => {
     if (!activeLocale) {
       return [];
     }
 
     return [
+      { label: strings.SELECT_VOTE, value: undefined, fontStyle: 'italic' },
       { label: strings.YES, value: 'Yes' },
       { label: strings.NO, value: 'No' },
       { label: strings.CONDITIONAL, value: 'Conditional' },
-      { label: '', value: undefined },
     ];
   }, [activeLocale]);
 
