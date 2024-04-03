@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1712101711647" clover="3.2.0">
-  <project timestamp="1712101711647" name="All files">
-    <metrics statements="19154" coveredstatements="914" conditionals="11951" coveredconditionals="228" methods="5986" coveredmethods="162" elements="37091" coveredelements="1304" complexity="0" loc="19154" ncloc="19154" packages="165" files="828" classes="828"/>
+<coverage generated="1712154652605" clover="3.2.0">
+  <project timestamp="1712154652605" name="All files">
+    <metrics statements="19148" coveredstatements="914" conditionals="11951" coveredconditionals="228" methods="5986" coveredmethods="162" elements="37085" coveredelements="1304" complexity="0" loc="19148" ncloc="19148" packages="165" files="828" classes="828"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -7312,7 +7312,7 @@
       </file>
     </package>
     <package name="src.hooks">
-      <metrics statements="159" coveredstatements="25" conditionals="52" coveredconditionals="6" methods="55" coveredmethods="11"/>
+      <metrics statements="153" coveredstatements="25" conditionals="52" coveredconditionals="6" methods="55" coveredmethods="11"/>
       <file name="useAcceleratorConsole.ts" path="/home/runner/work/terraware-web/terraware-web/src/hooks/useAcceleratorConsole.ts">
         <metrics statements="5" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
@@ -7388,22 +7388,16 @@
         <line num="26" count="0" type="stmt"/>
       </file>
       <file name="useNavigateTo.ts" path="/home/runner/work/terraware-web/terraware-web/src/hooks/useNavigateTo.ts">
-        <metrics statements="15" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="0"/>
+        <metrics statements="9" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
         <line num="9" count="0" type="stmt"/>
-        <line num="11" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="39" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="59" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
       </file>
       <file name="useParticipant.ts" path="/home/runner/work/terraware-web/terraware-web/src/hooks/useParticipant.ts">
         <metrics statements="13" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="4" coveredmethods="0"/>
