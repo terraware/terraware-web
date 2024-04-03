@@ -63,10 +63,10 @@ const VotingProvider = ({ children }: Props): JSX.Element => {
     setVotingData({
       phaseVotes,
       projectId,
-      projectName: 'Participant Project Name', // TODO: Change this when participant project name is available
+      projectName: project?.name,
       status: votes?.status ?? 'pending',
     });
-  }, [phaseVotes, projectId, votes?.status]);
+  }, [phaseVotes, projectId, project?.name, votes?.status]);
 
   return <VotingContext.Provider value={votingData}>{children}</VotingContext.Provider>;
 };
