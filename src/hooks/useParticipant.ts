@@ -21,8 +21,10 @@ export const useParticipant = (participantId: number) => {
   const result = useAppSelector(selectParticipantGetRequest(requestId));
 
   useEffect(() => {
-    const request = dispatch(requestGetParticipant(participantId));
-    setRequestId(request.requestId);
+    if (participantId !== -1) {
+      const request = dispatch(requestGetParticipant(participantId));
+      setRequestId(request.requestId);
+    }
   }, [dispatch, participantId]);
 
   useEffect(() => {

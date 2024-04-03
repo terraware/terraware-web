@@ -29,7 +29,7 @@ const SingleView = () => {
   const theme = useTheme();
   const { isAllowed } = useUser();
   const { isMobile } = useDeviceInfo();
-  const { crumbs, participantProject, project, projectId, projectMeta, organization, status } =
+  const { crumbs, participant, participantProject, project, projectId, projectMeta, organization, status } =
     useParticipantProjectData();
   const { phase1Scores } = useScoringData();
   const { phaseVotes } = useVotingData();
@@ -81,7 +81,7 @@ const SingleView = () => {
 
   return (
     <PageWithModuleTimeline
-      title={`${organization?.name || ''} / ${project?.name || ''}`}
+      title={`${participant?.name || ''} / ${project?.name || ''}`}
       crumbs={crumbs}
       hierarchicalCrumbs={false}
       rightComponent={rightComponent}
