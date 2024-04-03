@@ -22,6 +22,7 @@ photo_data
 
 # Generated Types
 src/api/types/generated-schema.ts
+src/types/documentProducer/generated-schema.ts
 
 # Misc
 .DS_Store

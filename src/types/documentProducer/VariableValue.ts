@@ -1,0 +1,172 @@
+import { components, operations } from './generated-schema';
+
+export type VariableValuesListResponse = components['schemas']['ListVariableValuesResponsePayload'];
+
+export type VariableValue = VariableValuesListResponse['values'][0];
+
+export type VariableValueValue = VariableValuesListResponse['values'][0]['values'][0];
+
+export type DateVariableValue = components['schemas']['ExistingDateValuePayload'];
+export const isDateVariableValue = (input: unknown): input is DateVariableValue =>
+  !!(input as DateVariableValue).dateValue;
+
+export type DeletedVariableValue = components['schemas']['ExistingDeletedValuePayload'];
+export type ImageVariableValue = components['schemas']['ExistingImageValuePayload'];
+
+export type LinkVariableValue = components['schemas']['ExistingLinkValuePayload'];
+export const isLinkVariableValue = (input: unknown): input is LinkVariableValue => !!(input as LinkVariableValue).url;
+
+export type NumberVariableValue = components['schemas']['ExistingNumberValuePayload'];
+export const isNumberVariableValue = (input: unknown): input is NumberVariableValue =>
+  !!(input as NumberVariableValue).numberValue;
+
+export type SectionTextVariableValue = components['schemas']['ExistingSectionTextValuePayload'];
+export type SectionVariableVariableValue = components['schemas']['ExistingSectionVariableValuePayload'];
+
+export type SelectVariableValue = components['schemas']['ExistingSelectValuePayload'];
+export const isSelectVariableValue = (input: unknown): input is SelectVariableValue =>
+  !!(input as SelectVariableValue).optionValues;
+
+export type TableVariableValue = components['schemas']['ExistingTableValuePayload'];
+export const isTableVariableValue = (input: unknown): input is TableVariableValue =>
+  (input as TableVariableValue).type === 'Table';
+
+export type TextVariableValue = components['schemas']['ExistingTextValuePayload'];
+export const isTextVariableValue = (input: unknown): input is TextVariableValue =>
+  !!(input as TextVariableValue).textValue;
+
+export type ExistingVariableValueUnion =
+  | DateVariableValue
+  | DeletedVariableValue
+  | ImageVariableValue
+  | LinkVariableValue
+  | NumberVariableValue
+  | SectionTextVariableValue
+  | SectionVariableVariableValue
+  | SelectVariableValue
+  | TableVariableValue
+  | TextVariableValue;
+
+// This is supposed to be SectionVariableWithValues & VariableValueValue but the types don't exactly line up
+export type CombinedInjectedValue = {
+  rowValueId?: number;
+  citation?: string;
+  values: ExistingVariableValueUnion[];
+  id: number;
+  listPosition: number;
+  type:
+    | 'Deleted'
+    | 'Date'
+    | 'Image'
+    | 'Link'
+    | 'Number'
+    | 'SectionText'
+    | 'SectionVariable'
+    | 'Select'
+    | 'Table'
+    | 'Text';
+  variableId: number;
+  usageType?: 'Injection' | 'Reference';
+};
+
+export type VariableValueTextValue = components['schemas']['ExistingTextValuePayload'];
+
+export type VariableValueNumberValue = components['schemas']['ExistingNumberValuePayload'];
+
+export type VariableValueImageValue = components['schemas']['ExistingImageValuePayload'];
+
+export type VariableValueTableValue = components['schemas']['ExistingTableValuePayload'];
+
+export type UpdateVariableValueOperation = components['schemas']['UpdateValueOperationPayload'];
+
+export type VariableValueSelectValue = components['schemas']['ExistingSelectValuePayload'];
+
+export type VariableValueDateValue = components['schemas']['ExistingDateValuePayload'];
+
+export type VariableValueLinkValue = components['schemas']['ExistingLinkValuePayload'];
+
+export type UpdateVariableValueRequestWithDocId = components['schemas']['UpdateValueOperationPayload'] & {
+  docId: number;
+};
+
+export type NewTextValuePayload = components['schemas']['NewTextValuePayload'];
+
+export type NewNumberValuePayload = components['schemas']['NewNumberValuePayload'];
+
+export type NewSelectValuePayload = components['schemas']['NewSelectValuePayload'];
+
+export type NewDateValuePayload = components['schemas']['NewDateValuePayload'];
+
+export type NewLinkValuePayload = components['schemas']['NewLinkValuePayload'];
+
+export type NewImageValuePayload = components['schemas']['NewImageValuePayload'];
+
+export type UpdateVariableValuesRequestWithDocId = UpdateVariableValuesRequestPayload & {
+  docId: number;
+};
+
+export type UpdateTextVariableValueRequestWithDocId = Omit<
+  components['schemas']['UpdateValueOperationPayload'],
+  'value'
+> & {
+  docId: number;
+  value: NewTextValuePayload | NewNumberValuePayload | NewImageValuePayload | NewSelectValuePayload;
+};
+
+export type DeleteVariableValueOperation = components['schemas']['DeleteValueOperationPayload'];
+
+export type DeleteVariableValueRequestWithDocId = components['schemas']['DeleteValueOperationPayload'] & {
+  docId: number;
+};
+
+export type NewValuePayload = components['schemas']['NewValuePayload'];
+
+export type UpdateVariableValuesRequestPayload = components['schemas']['UpdateVariableValuesRequestPayload'];
+
+export type AppendVariableValueOperation = components['schemas']['AppendValueOperationPayload'];
+
+export type AppendVariableRequestWithDocId = components['schemas']['UpdateValueOperationPayload'] & {
+  docId: number;
+};
+
+export type Operation =
+  | components['schemas']['AppendValueOperationPayload']
+  | components['schemas']['DeleteValueOperationPayload']
+  | components['schemas']['ReplaceValuesOperationPayload']
+  | components['schemas']['UpdateValueOperationPayload'];
+
+export type OriginalUploadImageValue = Required<
+  operations['uploadImageValue']
+>['requestBody']['content']['application/json'];
+
+// Change type for file attribute from string to File, because that is how we process it in the frontend
+export type UploadImageValueRequestPayload = Omit<OriginalUploadImageValue, 'file'> & { file: File };
+
+export type UploadImageValueRequestPayloadWithDocId = UploadImageValueRequestPayload & {
+  docId: number;
+};
+
+export type AppendVariableValueRequestWithDocId = Omit<
+  components['schemas']['AppendValueOperationPayload'],
+  'value'
+> & {
+  docId: number;
+  value:
+    | NewTextValuePayload
+    | NewNumberValuePayload
+    | NewSelectValuePayload
+    | NewDateValuePayload
+    | NewLinkValuePayload;
+};
+
+export type NewSectionTextValuePayload = components['schemas']['NewSectionTextValuePayload'];
+
+export type NewSectionVariableValuePayload = components['schemas']['NewSectionVariableValuePayload'];
+
+export type ReplaceSectionValuesOperationPayload = Omit<
+  components['schemas']['ReplaceValuesOperationPayload'],
+  'values'
+> & {
+  docId: number;
+  values: (NewSectionTextValuePayload | NewSectionVariableValuePayload)[];
+};
