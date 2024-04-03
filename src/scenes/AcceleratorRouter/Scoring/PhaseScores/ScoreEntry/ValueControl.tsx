@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
@@ -14,12 +14,26 @@ type ScoreControlProps = {
 
 const ValueControl = ({ disabled, onChangeValue, score }: ScoreControlProps) => {
   const theme = useTheme();
+  const ref = useRef<HTMLDivElement>(null);
 
   const [scoreValue, setScoreValue] = useState<ScoreValue | null>(score.value);
 
   const scoreLabel = getScoreValueLabel(scoreValue);
 
   const scoreColors = useMemo(() => getScoreColors(scoreValue, theme), [scoreValue, theme]);
+
+  const labelsForWidthCalculation = useMemo(
+    () => (
+      <Box display='block' visibility='hidden' position='absolute' top='-5000' ref={ref}>
+        {ScoreValues.map((value) => (
+          <Typography key={value} sx={{ color: 'white', fontSize: '14px', fontWeight: 500, margin: '4px' }}>
+            {getScoreValueLabel(value)}
+          </Typography>
+        ))}
+      </Box>
+    ),
+    [ref]
+  );
 
   const handleOnChangeValue = (value: ScoreValue) => {
     setScoreValue(value);
@@ -40,8 +54,8 @@ const ValueControl = ({ disabled, onChangeValue, score }: ScoreControlProps) => 
         padding: '12px',
       }}
     >
-      <Box display='flex' flexDirection='column'>
-        <Box display='flex' justifyContent='space-evenly'>
+      <Box display='flex' flexDirection='column' minWidth={Math.max(ref.current?.clientWidth ?? 0, 300)}>
+        <Box display='flex' justifyContent='space-between'>
           {ScoreValues.map((value) => (
             <ValueControlButton
               disabled={disabled}
@@ -56,6 +70,7 @@ const ValueControl = ({ disabled, onChangeValue, score }: ScoreControlProps) => 
           {scoreLabel}
         </Typography>
       </Box>
+      {labelsForWidthCalculation}
     </Box>
   );
 };
