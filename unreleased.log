@@ -1,3 +1,5 @@
+37f1b93c34 SW-5159 Fix participant project view redirecting back to participant project list even when there are votes (#2456)
+a733fd87a8 SW-5158 Show participant name in participant project details header (#2457)
 fb5350b29c SW-5142 Parsed search terms to use PhraseMatch when double-quoted (#2447)
 fe4fbf65c7 SW-5016 Updates to Accessions field names (#2452)
 a37a25328e SW-5154 Create the document producer feature flag (#2450)
