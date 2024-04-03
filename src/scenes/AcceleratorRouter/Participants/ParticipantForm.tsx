@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { Dropdown, Textfield } from '@terraware/web-components';
+import _ from 'lodash';
 
 import AddLink from 'src/components/common/AddLink';
 import Card from 'src/components/common/Card';
@@ -50,7 +51,10 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
       .filter((org) => org.projects.length > 0)
       .reduce(
         (acc, org) => {
-          return { ...acc, [org.id]: org };
+          // The org by default is immutable (from redux store).
+          // The local copy of org will be merged with existing participant projects' data,
+          // and needs to be mutable, hence the clone.
+          return { ...acc, [org.id]: _.cloneDeep(org) };
         },
         {} as Record<string, AcceleratorOrg>
       );
