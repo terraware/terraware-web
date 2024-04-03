@@ -97,6 +97,9 @@ export const UserVoteEdit = ({
     ];
   }, [activeLocale]);
 
+  const selectedOption : DropdownItem | undefined = useMemo(() =>
+    voteOptions.find((option) => voteOption ? option.value === voteOption : option.value === undefined), [voteOption])
+
   return (
     <>
       <VoteRowGrid
@@ -106,7 +109,7 @@ export const UserVoteEdit = ({
             label={''}
             onChange={(value) => onVoteChange(value as VoteOption)}
             options={voteOptions}
-            selectedValue={voteOption ?? strings.SELECT_VOTE}
+            selectedValue={selectedOption}
           />
         }
       />
