@@ -97,8 +97,10 @@ export const UserVoteEdit = ({
     ];
   }, [activeLocale]);
 
-  const selectedOption : DropdownItem | undefined = useMemo(() =>
-    voteOptions.find((option) => voteOption ? option.value === voteOption : option.value === undefined), [voteOption])
+  const selectedOption: DropdownItem | undefined = useMemo(
+    () => voteOptions.find((option) => option.value === voteOption),
+    [voteOption]
+  );
 
   return (
     <>
