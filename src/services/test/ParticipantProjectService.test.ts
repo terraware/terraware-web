@@ -16,7 +16,7 @@ jest.mock('src/strings', () => {
     PROJECT_NAME: 'Project Name',
     PHASE_1_SCORE: 'Phase 1 Score',
     VOTING_DECISION: 'Voting Decision',
-    PROJECT_ABBREVIATED_NAME: 'Project Abbreviated Name',
+    FILE_NAMING: 'File Naming',
     PROJECT_LEAD: 'Project Lead',
     COUNTRY: 'Country',
     REGION: 'Region',
@@ -39,13 +39,13 @@ jest.mock('src/strings', () => {
 describe('ParticipantProjectService', () => {
   it('should export the data as expected', async () => {
     const participantProject: ParticipantProject = {
-      abbreviatedName: 'PROJ_123',
       applicationReforestableLand: undefined,
       confirmedReforestableLand: undefined,
       countryCode: 'AF',
       dealDescription: 'Great deal',
       dealStage: undefined,
       failureRisk: undefined,
+      fileNaming: 'PROJ_123',
       investmentThesis: undefined,
       landUseModelTypes: ['Monoculture', 'Other Timber'],
       maxCarbonAccumulation: undefined,
@@ -128,7 +128,7 @@ describe('ParticipantProjectService', () => {
     });
 
     const expected =
-      `Organization Name,Project ID,Project Name,Phase 1 Score,Voting Decision,Project Abbreviated Name,Project Lead,Country,Region,Land Use Model Type,Number of Native Species,Application Restorable Land,Confirmed Restorable Land,Total Expansion Potential (ha),Minimum Carbon Accumulation (CO2/ha/yr),Maximum Carbon Accumulation (CO2/ha/yr),Per Hectare Estimated Budget,Number of Communities Within Project Area,Created on,Created by,Last modified on,Last modified by\r` +
+      `Organization Name,Project ID,Project Name,Phase 1 Score,Voting Decision,File Naming,Project Lead,Country,Region,Land Use Model Type,Number of Native Species,Application Restorable Land,Confirmed Restorable Land,Total Expansion Potential (ha),Minimum Carbon Accumulation (CO2/ha/yr),Maximum Carbon Accumulation (CO2/ha/yr),Per Hectare Estimated Budget,Number of Communities Within Project Area,Created on,Created by,Last modified on,Last modified by\r` +
       `"The tree farm","1","Project ""1234""","2","Yes","PROJ_123","test lead","AF","South Asia","Monoculture, Other Timber","","","","","","","","","2024-03-08T21:30:27.294915Z","Weese Ritherspoon","2024-03-29T17:41:09.530803Z","Donny Jepp"\r`;
     expect(result).toBe(expected);
   });

@@ -159,10 +159,10 @@ const EditView = () => {
             <VotingDecisionCard phaseVotes={phaseVotes} />
             <ProjectFieldDisplay value={false} />
             <ProjectFieldTextfield
-              id={'abbreviatedName'}
-              label={strings.PROJECT_ABBREVIATED_NAME}
+              id={'fileNaming'}
+              label={strings.FILE_NAMING}
               onChange={onChangeParticipantProject}
-              value={participantProject?.abbreviatedName}
+              value={participantProject?.fileNaming}
             />
             <ProjectFieldTextfield
               id={'projectLead'}
