@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1712165107648" clover="3.2.0">
-  <project timestamp="1712165107648" name="All files">
-    <metrics statements="19148" coveredstatements="914" conditionals="11951" coveredconditionals="228" methods="5986" coveredmethods="162" elements="37085" coveredelements="1304" complexity="0" loc="19148" ncloc="19148" packages="165" files="828" classes="828"/>
+<coverage generated="1712168157101" clover="3.2.0">
+  <project timestamp="1712168157101" name="All files">
+    <metrics statements="19147" coveredstatements="914" conditionals="11953" coveredconditionals="228" methods="5985" coveredmethods="162" elements="37085" coveredelements="1304" complexity="0" loc="19147" ncloc="19147" packages="165" files="828" classes="828"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -11325,7 +11325,7 @@
       </file>
     </package>
     <package name="src.scenes.AccessionsRouter.properties">
-      <metrics statements="199" coveredstatements="0" conditionals="122" coveredconditionals="0" methods="82" coveredmethods="0"/>
+      <metrics statements="198" coveredstatements="0" conditionals="124" coveredconditionals="0" methods="81" coveredmethods="0"/>
       <file name="Accession2Address.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AccessionsRouter/properties/Accession2Address.tsx">
         <metrics statements="52" coveredstatements="0" conditionals="47" coveredconditionals="0" methods="18" coveredmethods="0"/>
         <line num="24" count="0" type="stmt"/>
@@ -11420,20 +11420,19 @@
         <line num="112" count="0" type="stmt"/>
       </file>
       <file name="Accession2PlantSiteDetails.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AccessionsRouter/properties/Accession2PlantSiteDetails.tsx">
-        <metrics statements="13" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="7" coveredmethods="0"/>
+        <metrics statements="12" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="20" count="0" type="stmt"/>
         <line num="21" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="22" count="0" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
         <line num="25" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="27" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="42" count="0" type="stmt"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="68" count="0" type="stmt"/>
-        <line num="79" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
       </file>
       <file name="CollectedReceivedDate2.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AccessionsRouter/properties/CollectedReceivedDate2.tsx">
         <metrics statements="25" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="7" coveredmethods="0"/>
