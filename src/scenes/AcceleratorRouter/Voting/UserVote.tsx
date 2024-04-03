@@ -106,7 +106,7 @@ export const UserVoteEdit = ({
             label={''}
             onChange={(value) => onVoteChange(value as VoteOption)}
             options={voteOptions}
-            selectedValue={voteOption}
+            selectedValue={voteOption ?? strings.SELECT_VOTE}
           />
         }
       />
