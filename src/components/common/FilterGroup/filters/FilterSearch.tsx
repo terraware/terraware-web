@@ -5,6 +5,7 @@ import { makeStyles } from '@mui/styles';
 
 import strings from 'src/strings';
 import { FieldNodePayload } from 'src/types/Search';
+import { parseSearchTerm } from 'src/utils/search';
 
 const useStyles = makeStyles((theme: Theme) => ({
   box: {
@@ -30,13 +31,13 @@ export default function Search(props: Props): JSX.Element {
 
   const onSearch = (searchVal: string) => {
     if (searchVal && searchVal !== '') {
-      const values = [searchVal];
+      const { type, values } = parseSearchTerm(searchVal);
 
       const newFilter: FieldNodePayload = {
         field: props.field,
-        values,
-        type: 'Fuzzy',
         operation: 'field',
+        type,
+        values,
       };
 
       props.onChange(newFilter);

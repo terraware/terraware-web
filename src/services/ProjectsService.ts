@@ -3,6 +3,7 @@ import HttpService, { Response, Response2 } from 'src/services/HttpService';
 import SearchService from 'src/services/SearchService';
 import { CreateProjectRequest, Project, UpdateProjectRequest } from 'src/types/Project';
 import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
+import { parseSearchTerm } from 'src/utils/search';
 
 /**
  * Projects related services
@@ -59,13 +60,26 @@ const listProjects = async (organizationId?: number, locale?: string | null): Pr
  */
 const searchProjects = async (organizationId: number, query?: string): Promise<Project[] | null> => {
   const searchField: OrNodePayload | null = query
-    ? {
-        operation: 'or',
-        children: [
-          { operation: 'field', field: 'name', type: 'Fuzzy', values: [query] },
-          { operation: 'field', field: 'description', type: 'Fuzzy', values: [query] },
-        ],
-      }
+    ? (() => {
+        const { type, values } = parseSearchTerm(query);
+        return {
+          operation: 'or',
+          children: [
+            {
+              operation: 'field',
+              field: 'name',
+              type,
+              values,
+            },
+            {
+              operation: 'field',
+              field: 'description',
+              type,
+              values,
+            },
+          ],
+        };
+      })()
     : null;
 
   const searchParams: SearchRequestPayload = {

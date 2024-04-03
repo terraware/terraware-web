@@ -22,6 +22,7 @@ import strings from 'src/strings';
 import { CreateProjectRequest } from 'src/types/Project';
 import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { getAllNurseries } from 'src/utils/organization';
+import { parseSearchTerm } from 'src/utils/search';
 
 import { EntitySpecificFilterConfig } from './ProjectEntityFilter';
 
@@ -129,17 +130,17 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
     []
   );
 
-  const getSearchFields = useCallback(
-    (debouncedSearchTerm: string): FieldNodePayload[] => [
+  const getSearchFields = useCallback((debouncedSearchTerm: string): FieldNodePayload[] => {
+    const { type, values } = parseSearchTerm(debouncedSearchTerm);
+    return [
       {
         operation: 'field',
         field: 'batchNumber',
-        type: 'Fuzzy',
-        values: [debouncedSearchTerm],
+        type,
+        values,
       },
-    ],
-    []
-  );
+    ];
+  }, []);
 
   const {
     entities,

@@ -19,6 +19,7 @@ import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
 import { OrganizationUser } from 'src/types/User';
 import { isTfContact } from 'src/utils/organization';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
+import { parseSearchTerm } from 'src/utils/search';
 import useDebounce from 'src/utils/useDebounce';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -87,12 +88,23 @@ export default function PeopleListView(): JSX.Element {
 
   const search = useCallback(
     async (searchTerm: string, skipTfContact = false) => {
+      const { type, values } = parseSearchTerm(searchTerm);
       const searchField: OrNodePayload | null = searchTerm
         ? {
             operation: 'or',
             children: [
-              { operation: 'field', field: 'user_firstName', type: 'Fuzzy', values: [searchTerm] },
-              { operation: 'field', field: 'user_lastName', type: 'Fuzzy', values: [searchTerm] },
+              {
+                operation: 'field',
+                field: 'user_firstName',
+                type,
+                values,
+              },
+              {
+                operation: 'field',
+                field: 'user_lastName',
+                type,
+                values,
+              },
             ],
           }
         : null;

@@ -4,6 +4,7 @@ import { Facility, FacilityType } from 'src/types/Facility';
 import { Organization } from 'src/types/Organization';
 import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
 import { getAllNurseries, getAllSeedBanks } from 'src/utils/organization';
+import { parseSearchTerm } from 'src/utils/search';
 
 import HttpService, { Response } from './HttpService';
 import SearchService from './SearchService';
@@ -114,13 +115,26 @@ const updateFacility = async (facility: Facility): Promise<Response> => {
 const getFacilities = async ({ type, organizationId, query }: FacilitySearchParams): Promise<Facilities> => {
   const typeVal = type === 'Seed Bank' ? strings.SEED_BANK : strings.NURSERY;
   const searchField: OrNodePayload | null = query
-    ? {
-        operation: 'or',
-        children: [
-          { operation: 'field', field: 'name', type: 'Fuzzy', values: [query] },
-          { operation: 'field', field: 'description', type: 'Fuzzy', values: [query] },
-        ],
-      }
+    ? (() => {
+        const { type: searchType, values } = parseSearchTerm(query);
+        return {
+          operation: 'or',
+          children: [
+            {
+              operation: 'field',
+              field: 'name',
+              searchType,
+              values,
+            },
+            {
+              operation: 'field',
+              field: 'description',
+              searchType,
+              values,
+            },
+          ],
+        };
+      })()
     : null;
 
   const params: SearchRequestPayload = {

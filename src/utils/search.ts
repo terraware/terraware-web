@@ -1,9 +1,23 @@
+import { SearchType } from 'src/types/Search';
+
 /**
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions#escaping
  */
 function escapeRegExp(input: string) {
   return input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
+
+/**
+ * Parse the text search term and return the query and the type of search, Fuzzy or PhraseMatch.
+ */
+const parseSearchTerm = (searchTerm: string): { type: SearchType; values: string[] } => {
+  const phraseMatchQuery = removeDoubleQuotes(searchTerm);
+
+  return {
+    type: phraseMatchQuery ? 'PhraseMatch' : 'Fuzzy',
+    values: [phraseMatchQuery || searchTerm],
+  };
+};
 
 /**
  * Checks an exact sequence of words or characters within a given string
@@ -37,4 +51,4 @@ const removeDoubleQuotes = (str: string): string | null => {
   }
 };
 
-export { phraseMatch, regexMatch, removeDoubleQuotes };
+export { parseSearchTerm, phraseMatch, regexMatch, removeDoubleQuotes };
