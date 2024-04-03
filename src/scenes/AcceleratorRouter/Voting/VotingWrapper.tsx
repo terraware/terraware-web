@@ -36,7 +36,7 @@ const VotingWrapper = ({ children, isForm, rightComponent }: Props): JSX.Element
             },
             {
               name: projectName ?? '--',
-              to: APP_PATHS.PROJECT_VIEW.replace(':projectId', `${projectId}`),
+              to: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`),
             },
             {
               name: strings.SCORES,
