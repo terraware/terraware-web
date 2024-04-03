@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">15.78% </span>
+                <span class="strong">15.3% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>15/95</span>
+                <span class='fraction'>15/98</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">15.78% </span>
+                <span class="strong">15.3% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>15/95</span>
+                <span class='fraction'>15/98</span>
             </div>
         
             
@@ -504,7 +504,12 @@
 <a name='L439'></a><a href='#L439'>439</a>
 <a name='L440'></a><a href='#L440'>440</a>
 <a name='L441'></a><a href='#L441'>441</a>
-<a name='L442'></a><a href='#L442'>442</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L442'></a><a href='#L442'>442</a>
+<a name='L443'></a><a href='#L443'>443</a>
+<a name='L444'></a><a href='#L444'>444</a>
+<a name='L445'></a><a href='#L445'>445</a>
+<a name='L446'></a><a href='#L446'>446</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -694,6 +699,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -798,6 +804,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -873,6 +880,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -957,6 +965,7 @@ import {
   SearchResponseElement,
   SearchSortOrder,
 } from 'src/types/Search';
+import { parseSearchTerm } from 'src/utils/search';
 &nbsp;
 import HttpService, { Response } from './HttpService';
 import SearchService from './SearchService';
@@ -1134,27 +1143,28 @@ const searchInventory = <span class="fstat-no" title="function not covered" >as<
   const searchValueChildren: FieldNodePayload[] = <span class="cstat-no" title="statement not covered" >[];</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (query) {</span>
+    const { type, values } = <span class="cstat-no" title="statement not covered" >parseSearchTerm(query);</span>
     const scientificNameNode: FieldNodePayload = <span class="cstat-no" title="statement not covered" >{</span>
       operation: 'field',
       field: 'species_scientificName',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     };
 <span class="cstat-no" title="statement not covered" >    searchValueChildren.push(scientificNameNode);</span>
 &nbsp;
     const commonNameNode: FieldNodePayload = <span class="cstat-no" title="statement not covered" >{</span>
       operation: 'field',
       field: 'species_commonName',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     };
 <span class="cstat-no" title="statement not covered" >    searchValueChildren.push(commonNameNode);</span>
 &nbsp;
     const facilityNameNode: FieldNodePayload = <span class="cstat-no" title="statement not covered" >{</span>
       operation: 'field',
       field: forSpecificFacilities ? 'facility_name' : 'facilityInventories.facility_name',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     };
 <span class="cstat-no" title="statement not covered" >    searchValueChildren.push(facilityNameNode);</span>
   }
@@ -1238,19 +1248,20 @@ const searchInventoryByNursery = <span class="fstat-no" title="function not cove
   const searchValueChildren: FieldNodePayload[] = <span class="cstat-no" title="statement not covered" >[];</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (query) {</span>
+    const { type, values } = <span class="cstat-no" title="statement not covered" >parseSearchTerm(query);</span>
     const scientificNameNode: FieldNodePayload = <span class="cstat-no" title="statement not covered" >{</span>
       operation: 'field',
       field: 'facilityInventories.species_scientificName',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     };
 <span class="cstat-no" title="statement not covered" >    searchValueChildren.push(scientificNameNode);</span>
 &nbsp;
     const facilityNameNode: FieldNodePayload = <span class="cstat-no" title="statement not covered" >{</span>
       operation: 'field',
       field: 'facility_name',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     };
 <span class="cstat-no" title="statement not covered" >    searchValueChildren.push(facilityNameNode);</span>
   }
@@ -1315,27 +1326,28 @@ const downloadInventory = <span class="fstat-no" title="function not covered" >a
   const searchValueChildren: FieldNodePayload[] = <span class="cstat-no" title="statement not covered" >[];</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (query) {</span>
+    const { type, values } = <span class="cstat-no" title="statement not covered" >parseSearchTerm(query);</span>
     const scientificNameNode: FieldNodePayload = <span class="cstat-no" title="statement not covered" >{</span>
       operation: 'field',
       field: 'species_scientificName',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     };
 <span class="cstat-no" title="statement not covered" >    searchValueChildren.push(scientificNameNode);</span>
 &nbsp;
     const commonNameNode: FieldNodePayload = <span class="cstat-no" title="statement not covered" >{</span>
       operation: 'field',
       field: 'species_commonName',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     };
 <span class="cstat-no" title="statement not covered" >    searchValueChildren.push(commonNameNode);</span>
 &nbsp;
     const facilityNameNode: FieldNodePayload = <span class="cstat-no" title="statement not covered" >{</span>
       operation: 'field',
       field: forSpecificFacilities ? 'facility_name' : 'facilityInventories.facility_name',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     };
 <span class="cstat-no" title="statement not covered" >    searchValueChildren.push(facilityNameNode);</span>
   }
@@ -1393,7 +1405,7 @@ export default NurseryInventoryService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-03T18:15:56.524Z
+                at 2024-04-03T20:51:07.887Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -1,3 +1,4 @@
+fb5350b29c SW-5142 Parsed search terms to use PhraseMatch when double-quoted (#2447)
 fe4fbf65c7 SW-5016 Updates to Accessions field names (#2452)
 a37a25328e SW-5154 Create the document producer feature flag (#2450)
 8f0b43be47 SW-5144 Fix initial value for accession remaining quantity changed description text (#2451)
