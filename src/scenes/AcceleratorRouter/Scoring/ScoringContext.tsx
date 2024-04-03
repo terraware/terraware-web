@@ -6,6 +6,7 @@ import { PhaseScores } from 'src/types/Score';
 
 export type ScoringData = {
   crumbs: Crumb[];
+  hasData?: boolean;
   phase0Scores?: PhaseScores;
   phase1Scores?: PhaseScores;
   projectId: number;

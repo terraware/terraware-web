@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Box, Grid, useTheme } from '@mui/material';
@@ -17,7 +17,7 @@ const ScorecardView = () => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
   const history = useHistory();
-  const { crumbs, phase0Scores, phase1Scores, projectId, projectName, status } = useScoringData();
+  const { crumbs, hasData, phase0Scores, phase1Scores, projectId, projectName, status } = useScoringData();
 
   const goToScoresEdit = useCallback(() => {
     history.push({ pathname: APP_PATHS.ACCELERATOR_SCORING_EDIT.replace(':projectId', `${projectId}`) });
@@ -45,6 +45,12 @@ const ScorecardView = () => {
     [activeLocale, goToScoresEdit, theme]
   );
 
+  useEffect(() => {
+    if (hasData === false) {
+      goToScoresEdit();
+    }
+  }, [goToScoresEdit, hasData]);
+
   return (
     <PageWithModuleTimeline
       title={`${projectName} ${strings.SCORES}`}
@@ -53,29 +59,31 @@ const ScorecardView = () => {
       rightComponent={rightComponent}
     >
       {status === 'pending' && <BusySpinner />}
-      <Card style={{ width: '100%' }}>
-        <Box display='flex' flexDirection='row' flexGrow={0} margin={theme.spacing(3)} justifyContent='right'>
-          <Button
-            id='goToVotes'
-            label={strings.SEE_IC_VOTES}
-            priority='secondary'
-            onClick={goToVoting}
-            size='medium'
-            type='productive'
-          />
-        </Box>
+      {hasData && (
+        <Card style={{ width: '100%' }}>
+          <Box display='flex' flexDirection='row' flexGrow={0} margin={theme.spacing(3)} justifyContent='right'>
+            <Button
+              id='goToVotes'
+              label={strings.SEE_IC_VOTES}
+              priority='secondary'
+              onClick={goToVoting}
+              size='medium'
+              type='productive'
+            />
+          </Box>
 
-        {activeLocale && (
-          <Grid container spacing={theme.spacing(2)}>
-            <Grid item xs={6}>
-              <PhaseScores phaseScores={phase0Scores} />
+          {activeLocale && (
+            <Grid container spacing={theme.spacing(2)}>
+              <Grid item xs={6}>
+                <PhaseScores phaseScores={phase0Scores} />
+              </Grid>
+              <Grid item xs={6}>
+                <PhaseScores phaseScores={phase1Scores} />
+              </Grid>
             </Grid>
-            <Grid item xs={6}>
-              <PhaseScores phaseScores={phase1Scores} />
-            </Grid>
-          </Grid>
-        )}
-      </Card>
+          )}
+        </Card>
+      )}
     </PageWithModuleTimeline>
   );
 };

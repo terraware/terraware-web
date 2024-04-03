@@ -2,13 +2,14 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Statuses } from 'src/redux/features/asyncUtils';
 import { requestListScores, requestUpdateScores } from 'src/redux/features/scores/scoresAsyncThunks';
-import { selectScoresUpdateRequest } from 'src/redux/features/scores/scoresSelectors';
+import { selectScoreListByRequest, selectScoresUpdateRequest } from 'src/redux/features/scores/scoresSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Phase, Score } from 'src/types/Score';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export type Response = {
+  listStatus?: Statuses;
   status?: Statuses;
   update: (phase: Phase, scores: Score[]) => void;
 };
@@ -21,7 +22,9 @@ export default function useScoresUpdate(projectId: number): Response {
   const dispatch = useAppDispatch();
 
   const [requestId, setRequestId] = useState('');
+  const [listRequestId, setListRequestId] = useState('');
   const result = useAppSelector(selectScoresUpdateRequest(requestId));
+  const scoreListResult = useAppSelector(selectScoreListByRequest(listRequestId));
 
   const update = useCallback(
     (phase: Phase, scores: Score[]) => {
@@ -37,15 +40,17 @@ export default function useScoresUpdate(projectId: number): Response {
     } else if (result?.status === 'success') {
       snackbar.toastSuccess(strings.CHANGES_SAVED);
       // Refresh scores in store for this project
-      dispatch(requestListScores(projectId));
+      const dispatched = dispatch(requestListScores(projectId));
+      setListRequestId(dispatched.requestId);
     }
   }, [dispatch, projectId, result, snackbar]);
 
   return useMemo<Response>(
     () => ({
+      listStatus: scoreListResult?.status,
       status: result?.status,
       update,
     }),
-    [result?.status, update]
+    [scoreListResult?.status, result?.status, update]
   );
 }

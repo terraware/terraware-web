@@ -9,6 +9,7 @@ import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import strings from 'src/strings';
 import { Score, ScoreCategory, ScoreValue } from 'src/types/Score';
 
@@ -26,8 +27,9 @@ const ScorecardEditView = () => {
   const theme = useTheme();
   const history = useHistory();
   const classes = useStyles();
-  const { crumbs, phase0Scores, phase1Scores, projectId, projectName, status } = useScoringData();
-  const { update, status: updateStatus } = useScoresUpdate(projectId);
+  const { crumbs, hasData, phase0Scores, phase1Scores, projectId, projectName, status } = useScoringData();
+  const { update, status: updateStatus, listStatus } = useScoresUpdate(projectId);
+  const { goToParticipantProject } = useNavigateTo();
 
   const [scores, setScores] = useState<Score[]>([]);
   const [updatedScores, setUpdatedScores] = useState<Score[]>([]);
@@ -41,8 +43,12 @@ const ScorecardEditView = () => {
   }, [history, projectId]);
 
   const onCancel = useCallback(() => {
-    goToScorecardView();
-  }, [goToScorecardView]);
+    if (hasData === false) {
+      goToParticipantProject(projectId);
+    } else {
+      goToScorecardView();
+    }
+  }, [hasData, goToParticipantProject, goToScorecardView, projectId]);
 
   const handleOnChange = (key: 'value' | 'qualitative', category: ScoreCategory, value: ScoreValue | string) => {
     const originalScore = scores.find((score: Score) => score.category === category);
@@ -50,7 +56,7 @@ const ScorecardEditView = () => {
       setUpdatedScores((prev) => [
         ...prev.filter((score: Score) => score.category !== category),
         {
-          ...originalScore,
+          ...(prev.find((score: Score) => score.category === category) || originalScore),
           [key]: value,
         },
       ]);
@@ -67,7 +73,6 @@ const ScorecardEditView = () => {
       goToScorecardView();
       return;
     }
-
     // For now we can only save Phase 1 scores
     update('Phase 1 - Feasibility Study', updatedScores);
   }, [goToScorecardView, update, updatedScores]);
@@ -78,10 +83,10 @@ const ScorecardEditView = () => {
   }, [phase1Scores]);
 
   useEffect(() => {
-    if (updateStatus === 'success') {
+    if (updateStatus === 'success' && listStatus === 'success') {
       goToScorecardView();
     }
-  }, [updateStatus, goToScorecardView]);
+  }, [updateStatus, goToScorecardView, listStatus]);
 
   return (
     <Page title={`Edit Scoring for project ${projectName}`} crumbs={crumbs} hierarchicalCrumbs={false}>
