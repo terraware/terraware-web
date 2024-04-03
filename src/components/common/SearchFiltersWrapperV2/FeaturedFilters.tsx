@@ -56,15 +56,18 @@ const FeaturedFilters = ({ filters, setCurrentFilters, currentFilters }: Feature
               setFilters={(fs: MultiSelectFilters) => {
                 // Since the multi select should stay unaware of our Search API structure, convert the values back
                 // to search nodes
-                const nextFilters: Record<string, SearchNodePayload> = Object.keys(fs).reduce(
-                  (acc, curr) => ({
-                    ...acc,
-                    [curr]: filter.searchNodeCreator
-                      ? filter.searchNodeCreator(fs[curr])
-                      : defaultSearchNodeCreator(curr, fs[curr]),
-                  }),
-                  {}
-                );
+                const nextFilters: Record<string, SearchNodePayload> = Object.keys(fs).reduce((acc, curr) => {
+                  if (filter.field === curr) {
+                    return {
+                      ...acc,
+                      [curr]: filter.searchNodeCreator
+                        ? filter.searchNodeCreator(fs[curr])
+                        : defaultSearchNodeCreator(curr, fs[curr]),
+                    };
+                  } else {
+                    return acc;
+                  }
+                }, {});
 
                 setCurrentFilters(nextFilters);
               }}
