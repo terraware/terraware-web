@@ -349,7 +349,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
             <Grid item xs={12} textAlign='left'>
               <Textfield
                 id='notes'
-                value={remainingQuantityNotes}
+                value={record?.notes}
                 onChange={(value) => onChangeRemainingQuantityNotes(value as string)}
                 type='textarea'
                 label={strings.NOTES}
