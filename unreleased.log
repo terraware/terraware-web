@@ -1,3 +1,4 @@
+c9f345fe98 SW-5145 Fix participants edit crash (#2449)
 be1ed030f6 Fix useNavigateTo double memoization (#2448)
 18db1b9fb8 SW-5122 Use the cohort phase instead of hardcoding the phase in the phase timeline (#2442)
 8693e7edfd Use the project's cohort phase to determine the active votes (#2441)
