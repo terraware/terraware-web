@@ -22,8 +22,6 @@ export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDet
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
-  const gridSize = () => (isMobile ? 12 : 6);
-
   if (!isOpen) {
     return (
       <Grid item xs={12} marginTop={theme.spacing(2)}>
@@ -51,7 +49,7 @@ export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDet
         />
       </Grid>
       <Grid item xs={12} display='flex' flexDirection={isMobile ? 'column' : 'row'} marginTop={theme.spacing(2)}>
-        <Grid item xs={gridSize()} sx={{ marginRight: isMobile ? 0 : theme.spacing(2) }}>
+        <Grid item xs={isMobile ? 12 : 7} sx={{ marginRight: isMobile ? 0 : theme.spacing(2) }}>
           <Textfield
             id='plantsCollectedFrom'
             value={record.plantsCollectedFrom}
@@ -61,13 +59,13 @@ export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDet
             label={strings.NUMBER_PLANTS_COLLECTED_FROM}
           />
         </Grid>
-        <Grid item xs={gridSize()} sx={{ marginTop: isMobile ? theme.spacing(2) : 0 }}>
+        <Grid item xs={isMobile ? 12 : 5} sx={{ marginTop: isMobile ? theme.spacing(2) : 0 }}>
           <Textfield
             id='plantId'
             value={record.plantId}
             onChange={(value) => onChange('plantId', value)}
             type='text'
-            label={strings.PLANT_ID + ' ' + strings.IF_APPLICABLE}
+            label={strings.PLANT_ID}
             tooltipTitle={strings.TOOLTIP_ACCESSIONS_ADD_PLANT_ID}
           />
         </Grid>
