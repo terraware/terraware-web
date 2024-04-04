@@ -1,17 +1,16 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { DropdownItem } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
 import { LocationService } from 'src/services';
 import { Country } from 'src/types/Country';
-import { Region, getRegionLabel, getRegionValue } from 'src/types/ParticipantProject';
+import { Region, getRegionLabel } from 'src/types/ParticipantProject';
 
 import { ProjectFieldEditProps } from '.';
 import ProjectFieldSelect from './Select';
 
-export type Props = Omit<ProjectFieldEditProps, 'onChange'> & {
-  onChange: (countryCode?: string, region?: string) => void;
+export type Props = ProjectFieldEditProps & {
   region?: Region;
 };
 
@@ -19,14 +18,6 @@ const CountrySelect = ({ id, label, onChange, region, value }: Props) => {
   const { activeLocale } = useLocalization();
 
   const [countries, setCountries] = useState<Country[]>([]);
-
-  const handleChange = useCallback(
-    (_: string, country: string) => {
-      const _region = getRegionValue(countries.find((obj) => obj.code === country)?.region ?? '');
-      onChange(country, _region);
-    },
-    [countries, onChange]
-  );
 
   const options = useMemo(
     (): DropdownItem[] =>
@@ -54,11 +45,13 @@ const CountrySelect = ({ id, label, onChange, region, value }: Props) => {
 
   useEffect(() => {
     if (value && !countries.some(({ code }) => code === value)) {
-      onChange(undefined, region);
+      onChange('countryCode', '');
     }
-  }, [countries, onChange, region, value]);
+  }, [countries, onChange, value]);
 
-  return <ProjectFieldSelect id={id} label={label} onChange={handleChange} value={value} options={options} />;
+  return (
+    <ProjectFieldSelect disabled={!region} id={id} label={label} onChange={onChange} options={options} value={value} />
+  );
 };
 
 export default CountrySelect;

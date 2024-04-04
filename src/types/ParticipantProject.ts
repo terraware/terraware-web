@@ -75,6 +75,3 @@ export const REGIONS = (): RegionLabel[] => [
 
 export const getRegionLabel = (input: Region): string =>
   REGIONS().find((obj) => obj.region === input)?.label ?? (input as string);
-
-export const getRegionValue = (input: string): Region | undefined =>
-  REGIONS().find((obj) => obj.label === input)?.region;
