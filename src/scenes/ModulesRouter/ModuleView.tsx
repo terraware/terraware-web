@@ -76,7 +76,6 @@ const ModuleContentView = () => {
   const moduleId = Number(pathParams.moduleId);
   const projectId = Number(pathParams.projectId);
   const module = useAppSelector(selectModule(moduleId));
-  console.log('ModuleView - module:', module);
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -130,7 +129,7 @@ const ModuleContentView = () => {
                   </ModuleContentSection>
 
                   {module.contents.map((content) => (
-                    <ModuleContentSection>
+                    <ModuleContentSection key={content.id}>
                       <Link fontSize='16px' to='#'>
                         {content.title}
                       </Link>
@@ -152,6 +151,7 @@ const ModuleContentView = () => {
               <Grid item>
                 {module.events.map((event) => (
                   <ModuleFieldDisplay
+                    key={event.id}
                     onClickButton={() => goToModuleEvent(projectId, event.id, module.id)}
                     label={event.name}
                     value={event.eventTime ? getLongDateTime(event.eventTime.replace('PST', ''), activeLocale) : ''}
