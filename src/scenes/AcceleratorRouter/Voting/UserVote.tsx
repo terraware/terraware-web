@@ -97,7 +97,7 @@ export const UserVoteEdit = ({
     ];
   }, [activeLocale]);
 
-  const selectedOption: DropdownItem = useMemo(() => {
+  const getSelectedOption = (voteOption?: VoteOption) : DropdownItem => {
     switch (voteOption) {
       case 'Yes':
         return voteOptions[1];
@@ -108,7 +108,7 @@ export const UserVoteEdit = ({
       default:
         return voteOptions[0];
     }
-  }, [voteOption, voteOptions]);
+  };
 
   return (
     <>
@@ -119,7 +119,7 @@ export const UserVoteEdit = ({
             label={''}
             onChange={(value) => onVoteChange(value as VoteOption)}
             options={voteOptions}
-            selectedValue={selectedOption}
+            selectedValue={getSelectedOption(voteOption)}
           />
         }
       />
