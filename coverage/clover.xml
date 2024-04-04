@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1712249908305" clover="3.2.0">
-  <project timestamp="1712249908305" name="All files">
-    <metrics statements="19260" coveredstatements="915" conditionals="12001" coveredconditionals="228" methods="6024" coveredmethods="162" elements="37285" coveredelements="1305" complexity="0" loc="19260" ncloc="19260" packages="167" files="837" classes="837"/>
+<coverage generated="1712251554912" clover="3.2.0">
+  <project timestamp="1712251554912" name="All files">
+    <metrics statements="19260" coveredstatements="915" conditionals="12003" coveredconditionals="228" methods="6024" coveredmethods="162" elements="37287" coveredelements="1305" complexity="0" loc="19260" ncloc="19260" packages="167" files="837" classes="837"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -3518,7 +3518,7 @@
       </file>
     </package>
     <package name="src.components.ProjectField">
-      <metrics statements="98" coveredstatements="0" conditionals="30" coveredconditionals="0" methods="36" coveredmethods="0"/>
+      <metrics statements="98" coveredstatements="0" conditionals="32" coveredconditionals="0" methods="36" coveredmethods="0"/>
       <file name="Card.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectField/Card.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
@@ -3644,7 +3644,7 @@
         <line num="34" count="0" type="stmt"/>
       </file>
       <file name="Textfield.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectField/Textfield.tsx">
-        <metrics statements="10" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <metrics statements="10" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="9" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
@@ -3663,10 +3663,10 @@
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectField/index.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="24" count="0" type="stmt"/>
-        <line num="25" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="26" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="29" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.ProjectNewView">
