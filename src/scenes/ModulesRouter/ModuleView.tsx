@@ -94,7 +94,7 @@ const ModuleContentView = () => {
   return (
     <PageWithModuleTimeline crumbs={crumbs} hierarchicalCrumbs={false} title={<ModuleViewTitle module={module} />}>
       <Card
-        style={{
+        sx={{
           borderRadius: '24px',
           boxShadow: 'none',
           display: 'flex',
@@ -152,8 +152,8 @@ const ModuleContentView = () => {
                 {module.events.map((event) => (
                   <ModuleFieldDisplay
                     key={event.id}
-                    onClickButton={() => goToModuleEvent(projectId, event.id, module.id)}
                     label={event.name}
+                    onClickButton={() => goToModuleEvent(projectId, event.id, module.id)}
                     value={event.eventTime ? getLongDateTime(event.eventTime.replace('PST', ''), activeLocale) : ''}
                   />
                 ))}
