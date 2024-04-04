@@ -91,9 +91,9 @@ export const UserVoteEdit = ({
 
     return [
       { label: strings.SELECT_VOTE, value: undefined, fontStyle: 'italic' },
-      { label: strings.YES, value: 'Yes' as VoteOption },
-      { label: strings.NO, value: 'No' as VoteOption },
-      { label: strings.CONDITIONAL, value: 'Conditional' as VoteOption },
+      { label: strings.YES, value: 'Yes' },
+      { label: strings.NO, value: 'No' },
+      { label: strings.CONDITIONAL, value: 'Conditional' },
     ];
   }, [activeLocale]);
 
