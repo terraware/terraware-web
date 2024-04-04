@@ -32,10 +32,10 @@ type NonOutplantWithdrawalTableProps = {
 const columns = (): TableColumnType[] => [
   { key: 'batchNumber', name: strings.BATCH, type: 'string' },
   { key: 'name', name: strings.SPECIES, type: 'string' },
-  { key: 'germinating', name: strings.GERMINATING, type: 'number' },
-  { key: 'notReady', name: strings.NOT_READY, type: 'number' },
-  { key: 'ready', name: strings.READY, type: 'number' },
-  { key: 'total', name: strings.TOTAL, type: 'number' },
+  { key: 'germinating', name: strings.GERMINATING, type: 'number', alignment: 'right' },
+  { key: 'notReady', name: strings.NOT_READY, type: 'number', alignment: 'right' },
+  { key: 'ready', name: strings.READY, type: 'number', alignment: 'right' },
+  { key: 'total', name: strings.TOTAL, type: 'number', alignment: 'right' },
 ];
 
 export default function NonOutplantWithdrawalTable({

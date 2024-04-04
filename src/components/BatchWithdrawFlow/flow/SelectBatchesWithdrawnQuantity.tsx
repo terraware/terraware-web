@@ -72,18 +72,21 @@ const defaultTableColumns = (): TableColumnType[] => [
     key: 'germinatingQuantityWithdrawn',
     name: strings.GERMINATING_QUANTITY,
     type: 'string',
+    alignment: 'right',
   },
   {
     key: 'notReadyQuantityWithdrawn',
     name: strings.NOT_READY_QUANTITY,
     type: 'string',
+    alignment: 'right',
   },
-  { key: 'readyQuantityWithdrawn', name: strings.READY_QUANTITY, type: 'string' },
-  { key: 'totalQuantity', name: strings.TOTAL_QUANTITY, type: 'string' },
+  { key: 'readyQuantityWithdrawn', name: strings.READY_QUANTITY, type: 'string', alignment: 'right' },
+  { key: 'totalQuantity', name: strings.TOTAL_QUANTITY, type: 'string', alignment: 'right' },
   {
     key: 'totalWithdraw',
     name: strings.TOTAL_WITHDRAW,
     type: 'string',
+    alignment: 'right',
   },
 ];
 
@@ -107,8 +110,9 @@ const outplantTableColumns = (): TableColumnType[] => [
     key: 'readyQuantity',
     name: strings.READY_QUANTITY,
     type: 'string',
+    alignment: 'right',
   },
-  { key: 'outplantReadyQuantityWithdrawn', name: strings.WITHDRAW, type: 'string' },
+  { key: 'outplantReadyQuantityWithdrawn', name: strings.WITHDRAW, type: 'string', alignment: 'right' },
 ];
 
 const { OUTPLANT } = NurseryWithdrawalPurposes;

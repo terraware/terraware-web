@@ -39,6 +39,7 @@ const seedBankColumn = (): TableColumnType => ({
   key: 'activeAccessions',
   name: strings.ACTIVE_ACCESSIONS,
   type: 'number',
+  alignment: 'right',
 });
 
 const nurseryColumn = (): TableColumnType => ({
@@ -46,6 +47,7 @@ const nurseryColumn = (): TableColumnType => ({
   name: strings.BATCHES,
   type: 'number',
   tooltipTitle: strings.BATCHES_COLUMN_TOOLTIP,
+  alignment: 'right',
 });
 
 export default function SubLocations({

@@ -25,7 +25,7 @@ const columns = (): TableColumnType[] => [
   { key: 'batchNumber', name: strings.BATCH, type: 'string' },
   { key: 'name', name: strings.SPECIES, type: 'string' },
   { key: 'toSubzone', name: strings.TO_SUBZONE, type: 'string' },
-  { key: 'total', name: strings.QUANTITY, type: 'string' },
+  { key: 'total', name: strings.QUANTITY, type: 'string', alignment: 'right' },
 ];
 
 export default function OutplantWithdrawalTable({

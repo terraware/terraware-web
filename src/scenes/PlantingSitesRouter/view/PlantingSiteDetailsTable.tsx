@@ -42,6 +42,7 @@ const columns = (): TableColumnType[] => [
     name: strings.TARGET_PLANTING_DENSITY,
     tooltipTitle: strings.TARGET_PLANTING_DENSITY_TOOLTIP,
     type: 'number',
+    alignment: 'right',
   },
   {
     key: 'plantingCompleted',
@@ -53,11 +54,13 @@ const columns = (): TableColumnType[] => [
     key: 'plantingSubzones',
     name: strings.SUBZONES,
     type: 'number',
+    alignment: 'right',
   },
   {
     key: 'monitoringPlots',
     name: strings.MONITORING_PLOTS,
     type: 'number',
+    alignment: 'right',
   },
   {
     key: 'completedTime',

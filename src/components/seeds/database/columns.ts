@@ -78,90 +78,105 @@ function columns(): DatabaseColumn[] {
       name: strings.AGE_MONTHS,
       type: 'string',
       filter: { type: 'number_range' },
+      alignment: 'right',
     },
     {
       key: 'ageYears',
       name: strings.AGE_YEARS,
       type: 'string',
       filter: { type: 'number_range' },
+      alignment: 'right',
     },
     {
       key: 'totalWithdrawnCount',
       name: strings.TOTAL_WITHDRAWN_COUNT,
       type: 'number',
       filter: { type: 'number_range' },
+      alignment: 'right',
     },
     {
       key: 'totalWithdrawnWeightMilligrams',
       name: strings.TOTAL_WITHDRAWN_WEIGHT_MILLIGRAMS,
       type: 'number',
       filter: { type: 'number_range' },
+      alignment: 'right',
     },
     {
       key: 'totalWithdrawnWeightGrams',
       name: strings.TOTAL_WITHDRAWN_WEIGHT_GRAMS,
       type: 'number',
       filter: { type: 'number_range' },
+      alignment: 'right',
     },
     {
       key: 'totalWithdrawnWeightKilograms',
       name: strings.TOTAL_WITHDRAWN_WEIGHT_KILOGRAMS,
       type: 'number',
       filter: { type: 'number_range' },
+      alignment: 'right',
     },
     {
       key: 'totalWithdrawnWeightOunces',
       name: strings.TOTAL_WITHDRAWN_WEIGHT_OUNCES,
       type: 'number',
       filter: { type: 'number_range' },
+      alignment: 'right',
     },
     {
       key: 'totalWithdrawnWeightPounds',
       name: strings.TOTAL_WITHDRAWN_WEIGHT_POUNDS,
       type: 'number',
       filter: { type: 'number_range' },
+      alignment: 'right',
     },
     {
       key: 'totalViabilityPercent',
       name: strings.VIABILITY,
       type: 'number',
       filter: { type: 'number_range' },
+      alignment: 'right',
     },
     {
       key: 'estimatedWeightMilligrams',
       name: strings.WEIGHT_MILLIGRAMS,
       type: 'string',
       filter: { type: 'number_range' },
+      alignment: 'right',
     },
     {
       key: 'estimatedWeightGrams',
       name: strings.WEIGHT_GRAMS,
       type: 'string',
       filter: { type: 'number_range' },
+      alignment: 'right',
     },
     {
       key: 'estimatedWeightKilograms',
       name: strings.WEIGHT_KILOGRAMS,
       type: 'string',
       filter: { type: 'number_range' },
+      alignment: 'right',
     },
     {
       key: 'estimatedWeightOunces',
       name: strings.WEIGHT_OUNCES,
       type: 'string',
       filter: { type: 'number_range' },
+      alignment: 'right',
     },
     {
       key: 'estimatedWeightPounds',
       name: strings.WEIGHT_POUNDS,
       type: 'string',
       filter: { type: 'number_range' },
+      alignment: 'right',
     },
     {
       key: 'estimatedCount',
       name: strings.COUNT,
       type: 'string',
       filter: { type: 'number_range' },
+      alignment: 'right',
     },
   ];
 }
@@ -232,11 +247,3 @@ const seedStoragePreset: Preset = {
 export const searchPresets = (preferredWeightSystem: string) => {
   return [defaultPreset(preferredWeightSystem), generalInventoryPreset, seedStoragePreset];
 };
-
-export const RIGHT_ALIGNED_COLUMNS = [
-  'ageMonths',
-  'ageYears',
-  'estimatedWeightGrams',
-  'estimatedCount',
-  'totalViabilityPercent',
-];

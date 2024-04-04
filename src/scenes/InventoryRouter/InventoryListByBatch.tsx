@@ -59,15 +59,29 @@ const columns = (): TableColumnType[] => [
     name: strings.GERMINATING,
     type: 'string',
     tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
+    alignment: 'right',
   },
   {
     key: 'notReadyQuantity',
     name: strings.NOT_READY,
     type: 'string',
     tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
+    alignment: 'right',
   },
-  { key: 'readyQuantity', name: strings.READY, type: 'string', tooltipTitle: strings.TOOLTIP_READY_QUANTITY },
-  { key: 'totalQuantity', name: strings.TOTAL, type: 'string', tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY },
+  {
+    key: 'readyQuantity',
+    name: strings.READY,
+    type: 'string',
+    tooltipTitle: strings.TOOLTIP_READY_QUANTITY,
+    alignment: 'right',
+  },
+  {
+    key: 'totalQuantity',
+    name: strings.TOTAL,
+    type: 'string',
+    tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY,
+    alignment: 'right',
+  },
   { key: 'quantitiesMenu', name: '', type: 'string' },
 ];
 
