@@ -55,17 +55,17 @@ const DeliverablesList = () => {
   const { availableParticipants } = useParticipants();
   const contentRef = useRef(null);
 
-  const [participantFilter, setParticipantFilter] = useState<{ participantId?: number }>({ participantId: undefined });
+  const [participantFilter, setParticipantFilter] = useState<{ id?: number }>({ id: undefined });
 
   const extraTableFilters: SearchNodePayload[] = useMemo(
     () =>
-      participantFilter.participantId
+      participantFilter.id
         ? [
             {
               operation: 'field',
               field: 'participantId',
               type: 'Exact',
-              values: [`${participantFilter.participantId}`],
+              values: [`${participantFilter.id}`],
             },
           ]
         : [],
@@ -112,7 +112,7 @@ const DeliverablesList = () => {
         extraTableFilters={extraTableFilters}
         isAcceleratorRoute={true}
         organizationId={-1}
-        participantId={participantFilter.participantId}
+        participantId={participantFilter.id}
         tableId={'acceleratorDeliverablesTable'}
       />
     </AcceleratorMain>

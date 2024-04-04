@@ -6,7 +6,7 @@ import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { ParticipantSearchResult } from 'src/types/Participant';
 
-type ParticipantsDropdownProps<T extends { participantId?: number } | undefined> = {
+type ParticipantsDropdownProps<T extends { id?: number } | undefined> = {
   allowUnselect?: boolean;
   availableParticipants: ParticipantSearchResult[] | undefined;
   label?: string | undefined;
@@ -14,7 +14,7 @@ type ParticipantsDropdownProps<T extends { participantId?: number } | undefined>
   setRecord: (setFn: (previousValue: T) => T) => void;
 };
 
-function ParticipantsDropdown<T extends { participantId?: number } | undefined>({
+function ParticipantsDropdown<T extends { id?: number } | undefined>({
   allowUnselect,
   availableParticipants,
   label,
@@ -50,7 +50,7 @@ function ParticipantsDropdown<T extends { participantId?: number } | undefined>(
     <Dropdown
       id='participantId'
       label={label === '' ? label : strings.PARTICIPANT}
-      selectedValue={record?.participantId}
+      selectedValue={record?.id}
       options={participantOptions}
       onChange={(participantId: string) => {
         setRecord((previousValue: T): T => {
@@ -58,7 +58,7 @@ function ParticipantsDropdown<T extends { participantId?: number } | undefined>(
             if (previousValue) {
               return {
                 ...previousValue,
-                participantId: undefined,
+                id: undefined,
               };
             } else {
               return previousValue;
@@ -67,7 +67,7 @@ function ParticipantsDropdown<T extends { participantId?: number } | undefined>(
 
           return {
             ...previousValue,
-            participantId: Number(participantId),
+            id: Number(participantId),
           };
         });
       }}
