@@ -100,10 +100,12 @@ const listNurseryWithdrawals = async (
   searchCriteria: SearchNodePayload[],
   sortOrder?: SearchSortOrder
 ): Promise<SearchResponseElement[] | null> => {
+  const createdTimeOrder = { direction: sortOrder?.direction, field: 'createdTime' };
   const searchParams: SearchRequestPayload = {
     prefix: 'nurseryWithdrawals',
     fields: [
       'id',
+      'createdTime',
       'delivery_id',
       'withdrawnDate',
       'purpose',
@@ -117,7 +119,7 @@ const listNurseryWithdrawals = async (
       'batchWithdrawals.batch_project_name',
     ],
     search: SearchService.convertToSearchNodePayload(searchCriteria, organizationId),
-    sortOrder: sortOrder ? [sortOrder] : [{ field: 'id', direction: 'Ascending' }],
+    sortOrder: sortOrder ? [sortOrder, createdTimeOrder] : [{ field: 'id', direction: 'Ascending' }],
     count: 1000,
   };
   const deletedSpecies = [{ batch_species_scientificName: strings.DELETED_SPECIES }];
