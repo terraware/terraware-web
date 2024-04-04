@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1712248062889" clover="3.2.0">
-  <project timestamp="1712248062889" name="All files">
-    <metrics statements="19257" coveredstatements="915" conditionals="11997" coveredconditionals="228" methods="6023" coveredmethods="162" elements="37277" coveredelements="1305" complexity="0" loc="19257" ncloc="19257" packages="167" files="837" classes="837"/>
+<coverage generated="1712248737065" clover="3.2.0">
+  <project timestamp="1712248737065" name="All files">
+    <metrics statements="19260" coveredstatements="915" conditionals="12001" coveredconditionals="228" methods="6024" coveredmethods="162" elements="37285" coveredelements="1305" complexity="0" loc="19260" ncloc="19260" packages="167" files="837" classes="837"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -3324,11 +3324,11 @@
       <metrics statements="5" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="1" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Page/index.tsx">
         <metrics statements="5" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="32" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="35" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="37" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.PageHeader">
@@ -5257,7 +5257,7 @@
       </file>
     </package>
     <package name="src.components.common">
-      <metrics statements="440" coveredstatements="0" conditionals="378" coveredconditionals="0" methods="147" coveredmethods="0"/>
+      <metrics statements="440" coveredstatements="0" conditionals="380" coveredconditionals="0" methods="147" coveredmethods="0"/>
       <file name="AddLink.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/AddLink.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
@@ -5785,14 +5785,14 @@
         <line num="51" count="0" type="stmt"/>
       </file>
       <file name="TfMain.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/TfMain.tsx">
-        <metrics statements="7" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <metrics statements="7" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="13" count="0" type="stmt"/>
         <line num="20" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="23" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="34" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="52" count="0" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="56" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
       <file name="Timestamp.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/Timestamp.tsx">
         <metrics statements="8" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="3" coveredmethods="0"/>
@@ -6356,7 +6356,7 @@
       </file>
     </package>
     <package name="src.components.common.PageWithModuleTimeline">
-      <metrics statements="11" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="4" coveredmethods="0"/>
+      <metrics statements="14" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="5" coveredmethods="0"/>
       <file name="ModuleTimeline.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/PageWithModuleTimeline/ModuleTimeline.tsx">
         <metrics statements="7" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="16" count="0" type="stmt"/>
@@ -6368,11 +6368,14 @@
         <line num="61" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/PageWithModuleTimeline/index.tsx">
-        <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="9" count="0" type="stmt"/>
-        <line num="10" count="0" type="stmt"/>
-        <line num="12" count="0" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
+        <metrics statements="7" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.common.ProgressCircle">
