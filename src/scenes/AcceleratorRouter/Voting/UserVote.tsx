@@ -97,10 +97,18 @@ export const UserVoteEdit = ({
     ];
   }, [activeLocale]);
 
-  const selectedOption: DropdownItem = useMemo(
-    () => voteOptions.find((option) => option.value === voteOption) || voteOptions[0],
-    [voteOption]
-  );
+  const selectedOption: DropdownItem = useMemo(() => {
+    switch (voteOption) {
+      case 'Yes':
+        return voteOptions[1];
+      case 'No':
+        return voteOptions[2];
+      case 'Conditional':
+        return voteOptions[3];
+      default:
+        return voteOptions[0];
+    }
+  }, [voteOption, voteOptions]);
 
   return (
     <>
