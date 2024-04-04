@@ -1,3 +1,4 @@
+55e71b63ef SW-2605 Display remaining quantities for single batch withdrawal (#2469)
 92fbd3a329 Patch spelling (#2470)
 fdc49105ed SW-4795 Apply "font-variant-numeric: tabular-nums" to all table columns in Terraware, and right-align all number table columns (#2468)
 31d8621b74 SW-2175 Allow accession quantity to be editable in every state (#2466)

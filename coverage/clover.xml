@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1712244406215" clover="3.2.0">
-  <project timestamp="1712244406215" name="All files">
+<coverage generated="1712244960567" clover="3.2.0">
+  <project timestamp="1712244960567" name="All files">
     <metrics statements="19257" coveredstatements="915" conditionals="11997" coveredconditionals="228" methods="6023" coveredmethods="162" elements="37277" coveredelements="1305" complexity="0" loc="19257" ncloc="19257" packages="167" files="837" classes="837"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="46" coveredmethods="0"/>
@@ -1334,13 +1334,13 @@
         <line num="669" count="0" type="stmt"/>
         <line num="687" count="0" type="stmt"/>
         <line num="717" count="0" type="stmt"/>
-        <line num="744" count="0" type="stmt"/>
-        <line num="759" count="0" type="stmt"/>
-        <line num="773" count="0" type="stmt"/>
-        <line num="783" count="0" type="stmt"/>
-        <line num="795" count="0" type="stmt"/>
+        <line num="749" count="0" type="stmt"/>
+        <line num="770" count="0" type="stmt"/>
+        <line num="785" count="0" type="stmt"/>
+        <line num="797" count="0" type="stmt"/>
         <line num="810" count="0" type="stmt"/>
-        <line num="820" count="0" type="stmt"/>
+        <line num="825" count="0" type="stmt"/>
+        <line num="835" count="0" type="stmt"/>
       </file>
       <file name="WithdrawalBatchesCellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/BatchWithdrawFlow/flow/WithdrawalBatchesCellRenderer.tsx">
         <metrics statements="30" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="7" coveredmethods="0"/>
