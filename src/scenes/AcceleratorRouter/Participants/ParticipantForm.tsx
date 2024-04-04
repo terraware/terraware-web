@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
-import { Dropdown, Textfield } from '@terraware/web-components';
+import { Dropdown, Message, Textfield } from '@terraware/web-components';
 import _ from 'lodash';
 
 import AddLink from 'src/components/common/AddLink';
@@ -40,9 +40,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [modified, setModified] = useState<boolean>(false);
   // initialize with one org selection enabled
-  const [orgProjectsSections, setOrgProjectsSections] = useState<OrgProjectsSection[]>([
-    { id: 1, selectedProjectIds: [] },
-  ]);
+  const [orgProjectsSections, setOrgProjectsSections] = useState<OrgProjectsSection[]>([]);
   // orgs available for selection in the dropdowns, does not included already selected orgs
   const [availableOrgs, setAvailableOrgs] = useState<AcceleratorOrg[]>([]);
 
@@ -181,6 +179,9 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
       setOrgProjectsSections(sections);
       // remove the orgs as being available for selection (since they already has projects selected prior to edit)
       setAvailableOrgs(acceleratorOrgs.filter((org) => !sections.some((section) => section.org.id === org.id)));
+    } else if (acceleratorOrgs.length) {
+      // allow initial selection
+      setOrgProjectsSections([{ id: 1, selectedProjectIds: [] }]);
     }
   }, [acceleratorOrgs, activeLocale, localRecord.projectIds, modified]);
 
@@ -242,6 +243,11 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
             />
           </Grid>
         </Grid>
+        {orgProjectsSections.length === 0 && (
+          <Grid item xs={12} marginTop={2}>
+            <Message body={strings.ACCELERATOR_ORGS_EMPTY_WARNING} priority='warning' type='page' />
+          </Grid>
+        )}
         {orgProjectsSections.map((section, index) => (
           <OrgProjectsSectionEdit
             availableOrgs={availableOrgs}
