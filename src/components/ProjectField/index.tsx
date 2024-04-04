@@ -13,6 +13,10 @@ export interface ProjectFieldProps {
   date?: string;
 }
 
+export type ProjectIdFieldProps = ProjectFieldProps & {
+  id: string;
+};
+
 type EditFieldValue = string | number | undefined;
 
 export interface ProjectFieldEditProps {
