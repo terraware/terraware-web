@@ -902,13 +902,7 @@
 <a name='L837'></a><a href='#L837'>837</a>
 <a name='L838'></a><a href='#L838'>838</a>
 <a name='L839'></a><a href='#L839'>839</a>
-<a name='L840'></a><a href='#L840'>840</a>
-<a name='L841'></a><a href='#L841'>841</a>
-<a name='L842'></a><a href='#L842'>842</a>
-<a name='L843'></a><a href='#L843'>843</a>
-<a name='L844'></a><a href='#L844'>844</a>
-<a name='L845'></a><a href='#L845'>845</a>
-<a name='L846'></a><a href='#L846'>846</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L840'></a><a href='#L840'>840</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1653,13 +1647,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2495,10 +2483,7 @@ export default function <span class="fstat-no" title="function not covered" >Sel
                     &lt;Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}&gt;
                       &lt;Textfield
                         label={strings
-                          .formatString(
-                            strings.GERMINATING_QUANTITY_REMAINING,
-                            String(batches[0]['germinatingQuantity(raw)'])
-                          )
+                          .formatString(strings.GERMINATING_QUANTITY_REMAINING, String(batches[0].germinatingQuantity))
                           .toString()}
                         id='germinatingQuantityWithdrawn'
                         onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: unknown) =&gt; <span class="cstat-no" title="statement not covered" >setGerminatingQuantityWithdrawn(value as number)}</span>
@@ -2507,7 +2492,7 @@ export default function <span class="fstat-no" title="function not covered" >Sel
                         tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
                         className={classes.germinatingQuantityWithdrawn}
                         errorText={fieldsErrors.germinatingQuantityWithdrawn}
-                        required={true}
+                        required
                       /&gt;
                     &lt;/Grid&gt;
                   &lt;/Grid&gt;
@@ -2516,10 +2501,7 @@ export default function <span class="fstat-no" title="function not covered" >Sel
                     &lt;Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={isMobile ? 0 : 1}&gt;
                       &lt;Textfield
                         label={strings
-                          .formatString(
-                            strings.NOT_READY_QUANTITY_REMAINING,
-                            String(batches[0]['notReadyQuantity(raw)'])
-                          )
+                          .formatString(strings.NOT_READY_QUANTITY_REMAINING, String(batches[0].notReadyQuantity))
                           .toString()}
                         id='notReadyQuantityWithdrawn'
                         onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: unknown) =&gt; <span class="cstat-no" title="statement not covered" >setNotReadyQuantityWithdrawn(value as number)}</span>
@@ -2528,7 +2510,7 @@ export default function <span class="fstat-no" title="function not covered" >Sel
                         tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
                         className={classes.notReadyQuantityWithdrawn}
                         errorText={fieldsErrors.notReadyQuantityWithdrawn}
-                        required={true}
+                        required
                       /&gt;
                     &lt;/Grid&gt;
                     &lt;Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? 0 : 1}&gt;
@@ -2546,7 +2528,7 @@ export default function <span class="fstat-no" title="function not covered" >Sel
                     &lt;Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={1}&gt;
                       &lt;Textfield
                         label={strings
-                          .formatString(strings.READY_QUANTITY_REMAINING, String(batches[0]['readyQuantity(raw)']))
+                          .formatString(strings.READY_QUANTITY_REMAINING, String(batches[0].readyQuantity))
                           .toString()}
                         id='readyQuantityWithdrawn'
                         onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: unknown) =&gt; <span class="cstat-no" title="statement not covered" >setReadyQuantityWithdrawn(value as number)}</span>
@@ -2555,7 +2537,7 @@ export default function <span class="fstat-no" title="function not covered" >Sel
                         tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
                         className={classes.readyQuantityWithdrawn}
                         errorText={fieldsErrors.readyQuantityWithdrawn}
-                        required={true}
+                        required
                       /&gt;
                     &lt;/Grid&gt;
                     &lt;Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? 0 : 1}&gt;
@@ -2605,7 +2587,7 @@ export default function <span class="fstat-no" title="function not covered" >Sel
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-04T16:38:56.486Z
+                at 2024-04-04T16:55:38.990Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
