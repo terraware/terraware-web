@@ -740,10 +740,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}>
                       <Textfield
                         label={strings
-                          .formatString(
-                            strings.GERMINATING_QUANTITY_REMAINING,
-                            String(batches[0]['germinatingQuantity'])
-                          )
+                          .formatString(strings.GERMINATING_QUANTITY_REMAINING, String(batches[0].germinatingQuantity))
                           .toString()}
                         id='germinatingQuantityWithdrawn'
                         onChange={(value: unknown) => setGerminatingQuantityWithdrawn(value as number)}
@@ -761,7 +758,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={isMobile ? 0 : 1}>
                       <Textfield
                         label={strings
-                          .formatString(strings.NOT_READY_QUANTITY_REMAINING, String(batches[0]['notReadyQuantity']))
+                          .formatString(strings.NOT_READY_QUANTITY_REMAINING, String(batches[0].notReadyQuantity))
                           .toString()}
                         id='notReadyQuantityWithdrawn'
                         onChange={(value: unknown) => setNotReadyQuantityWithdrawn(value as number)}
@@ -788,7 +785,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={1}>
                       <Textfield
                         label={strings
-                          .formatString(strings.READY_QUANTITY_REMAINING, String(batches[0]['readyQuantity']))
+                          .formatString(strings.READY_QUANTITY_REMAINING, String(batches[0].readyQuantity))
                           .toString()}
                         id='readyQuantityWithdrawn'
                         onChange={(value: unknown) => setReadyQuantityWithdrawn(value as number)}
