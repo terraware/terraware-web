@@ -383,7 +383,7 @@ export default function Accession2View(): JSX.Element {
 
   const overviewGridSize = isMobile ? '100%' : isTablet ? '50%' : overviewItemCount <= 6 ? '33%' : '25%';
 
-  const quantityEditable = userCanEdit;
+  const quantityEditable = userCanEdit && accession?.state !== 'Used Up';
   const viabilityEditable = userCanEdit && accession?.estimatedCount !== undefined && accession?.state !== 'Used Up';
   const isAwaitingCheckin = accession?.state === 'Awaiting Check-In';
 
