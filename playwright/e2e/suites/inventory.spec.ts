@@ -59,6 +59,7 @@ export default function InventoryTests() {
     await expect(page.getByText('Notes Adding some notes')).toBeVisible();
     page.mouse.wheel(0, 1000);
     await page.getByRole('tab', { name: 'History' }).click();
+    page.mouse.wheel(0, 1000);
     await expect(page.getByRole('cell', { name: 'Germinating Quantity, Not' })).toBeVisible();
     await expect(page.getByRole('cell', { name: 'Test User' })).toBeVisible();
     await page.getByRole('tab', { name: 'Details' }).click();
