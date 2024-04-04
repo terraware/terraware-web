@@ -14,12 +14,12 @@ const EditNameConfirm = ({ onClose, onConfirm, organizationName }: Props): JSX.E
   return (
     <Confirm
       closeButtonText={strings.CANCEL}
-      confirmButtonText={strings.SAVE}
+      confirmButtonText={strings.SAVE_ANYWAY}
       confirmButtonType='productive'
       message={strings.formatString(strings.EDIT_PROJECT_NAME_CONFIRMATION, organizationName)}
       onClose={onClose}
       onConfirm={onConfirm}
-      title={strings.SAVE_PROJECT_NAME}
+      title={strings.EDIT_PROJECT_NAME}
     />
   );
 };
