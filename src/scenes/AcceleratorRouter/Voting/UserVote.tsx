@@ -98,7 +98,7 @@ export const UserVoteEdit = ({
   }, [activeLocale]);
 
   const selectedOption: DropdownItem = useMemo(
-    () => voteOptions.find((option) => (option.value === voteOption)) || voteOptions[0],
+    () => voteOptions.find((option) => option.value === voteOption) || voteOptions[0],
     [voteOption]
   );
 
