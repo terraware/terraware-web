@@ -5,7 +5,7 @@ import { DropdownItem } from '@terraware/web-components';
 import { useLocalization } from 'src/providers';
 import { LocationService } from 'src/services';
 import { Country } from 'src/types/Country';
-import { Region, getRegionLabel, getRegionValue } from 'src/types/ParticipantProject';
+import { Region, getRegionValue } from 'src/types/ParticipantProject';
 
 import { ProjectFieldEditProps } from '.';
 import ProjectFieldSelect from './Select';
@@ -30,14 +30,11 @@ const CountrySelect = ({ id, label, onChange, region, value }: Props) => {
 
   const options = useMemo(
     (): DropdownItem[] =>
-      countries
-        // BE returns localized regions, hence the check against the label
-        .filter((country) => !region || getRegionLabel(region) === country.region)
-        .map((country) => ({
-          label: country.name,
-          value: country.code,
-        })),
-    [countries, region]
+      countries.map((country) => ({
+        label: country.name,
+        value: country.code,
+      })),
+    [countries]
   );
 
   useEffect(() => {
