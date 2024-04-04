@@ -48,7 +48,7 @@ const ModuleFieldDisplay = ({
           {label}
         </Typography>
         <Typography marginBottom={theme.spacing(1)}>{value}</Typography>
-        {onClickButton && <Button label='More Info' onClick={onClickButton} priority='secondary' />}
+        {onClickButton && <Button label={strings.MORE_INFO} onClick={onClickButton} priority='secondary' />}
       </Box>
     </Grid>
   );
