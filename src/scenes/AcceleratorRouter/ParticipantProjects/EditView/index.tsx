@@ -8,7 +8,7 @@ import ProjectFieldDisplay from 'src/components/ProjectField/Display';
 import LandUseMultiSelect from 'src/components/ProjectField/LandUseMultiSelect';
 import ProjectFieldMeta from 'src/components/ProjectField/Meta';
 import PhaseScoreCard from 'src/components/ProjectField/PhaseScoreCard';
-import RegionSelect from 'src/components/ProjectField/RegionSelect';
+import RegionDisplay from 'src/components/ProjectField/RegionDisplay';
 import ProjectFieldTextAreaEdit from 'src/components/ProjectField/TextAreaEdit';
 import ProjectFieldTextfield from 'src/components/ProjectField/Textfield';
 import VotingDecisionCard from 'src/components/ProjectField/VotingDecisionCard';
@@ -185,12 +185,7 @@ const EditView = () => {
               region={participantProjectRecord?.region}
               value={participantProjectRecord?.countryCode}
             />
-            <RegionSelect
-              id={'region'}
-              label={strings.REGION}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.region}
-            />
+            <RegionDisplay label={strings.REGION} value={participantProjectRecord?.region} />
             <LandUseMultiSelect
               id={'landUseModelTypes'}
               label={strings.LAND_USE_MODEL_TYPE}
