@@ -1,3 +1,4 @@
+b37d9f1cf3 SW-5160 Allow viewing participant project details even if there are no voters (#2465)
 02cfaf07aa SW-5150 Use Dropdown Option as selected option (#2464)
 a2bd1882e2 I had the wrong project view in there! (#2462)
 c640a8d712 SW-5150 Updated Vote Edit Dropdown to be blank instead of Not Complete (#2455)

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1712192796670" clover="3.2.0">
-  <project timestamp="1712192796670" name="All files">
-    <metrics statements="19241" coveredstatements="915" conditionals="11974" coveredconditionals="228" methods="6014" coveredmethods="162" elements="37229" coveredelements="1305" complexity="0" loc="19241" ncloc="19241" packages="167" files="837" classes="837"/>
+<coverage generated="1712235849035" clover="3.2.0">
+  <project timestamp="1712235849035" name="All files">
+    <metrics statements="19240" coveredstatements="915" conditionals="11981" coveredconditionals="228" methods="6014" coveredmethods="162" elements="37235" coveredelements="1305" complexity="0" loc="19240" ncloc="19240" packages="167" files="837" classes="837"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -10608,7 +10608,7 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Voting">
-      <metrics statements="135" coveredstatements="0" conditionals="72" coveredconditionals="0" methods="41" coveredmethods="0"/>
+      <metrics statements="134" coveredstatements="0" conditionals="79" coveredconditionals="0" methods="41" coveredmethods="0"/>
       <file name="UserVote.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Voting/UserVote.tsx">
         <metrics statements="19" coveredstatements="0" conditionals="13" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
@@ -10709,7 +10709,7 @@
         <line num="139" count="0" type="stmt"/>
       </file>
       <file name="VotingProvider.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Voting/VotingProvider.tsx">
-        <metrics statements="27" coveredstatements="0" conditionals="13" coveredconditionals="0" methods="7" coveredmethods="0"/>
+        <metrics statements="26" coveredstatements="0" conditionals="13" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="19" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
@@ -10733,13 +10733,12 @@
         <line num="52" count="0" type="stmt"/>
         <line num="53" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="54" count="0" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
-        <line num="62" count="0" type="stmt"/>
-        <line num="63" count="0" type="stmt"/>
-        <line num="71" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
       </file>
       <file name="VotingView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Voting/VotingView.tsx">
-        <metrics statements="14" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <metrics statements="14" coveredstatements="0" conditionals="7" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="18" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
@@ -10751,12 +10750,12 @@
         <line num="27" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
-        <line num="37" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="37" count="0" type="cond" truecount="0" falsecount="5"/>
         <line num="49" count="0" type="stmt"/>
         <line num="52" count="0" type="stmt"/>
       </file>
       <file name="VotingWrapper.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Voting/VotingWrapper.tsx">
-        <metrics statements="8" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <metrics statements="8" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="23" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
