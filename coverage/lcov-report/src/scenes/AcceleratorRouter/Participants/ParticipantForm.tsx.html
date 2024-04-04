@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/91</span>
+                <span class='fraction'>0/93</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/48</span>
+                <span class='fraction'>0/52</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/79</span>
+                <span class='fraction'>0/81</span>
             </div>
         
             
@@ -330,7 +330,13 @@
 <a name='L265'></a><a href='#L265'>265</a>
 <a name='L266'></a><a href='#L266'>266</a>
 <a name='L267'></a><a href='#L267'>267</a>
-<a name='L268'></a><a href='#L268'>268</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L268'></a><a href='#L268'>268</a>
+<a name='L269'></a><a href='#L269'>269</a>
+<a name='L270'></a><a href='#L270'>270</a>
+<a name='L271'></a><a href='#L271'>271</a>
+<a name='L272'></a><a href='#L272'>272</a>
+<a name='L273'></a><a href='#L273'>273</a>
+<a name='L274'></a><a href='#L274'>274</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -374,8 +380,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -509,6 +513,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -568,6 +575,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -600,7 +612,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useMemo, useState } from 'react';
 &nbsp;
 import { Box, Grid, useTheme } from '@mui/material';
-import { Dropdown, Textfield } from '@terraware/web-components';
+import { Dropdown, Message, Textfield } from '@terraware/web-components';
 import _ from 'lodash';
 &nbsp;
 import AddLink from 'src/components/common/AddLink';
@@ -639,9 +651,7 @@ export default function <span class="fstat-no" title="function not covered" >Par
   const [validateFields, setValidateFields] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [modified, setModified] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   // initialize with one org selection enabled
-  const [orgProjectsSections, setOrgProjectsSections] = <span class="cstat-no" title="statement not covered" >useState&lt;OrgProjectsSection[]&gt;([</span>
-    { id: 1, selectedProjectIds: [] },
-  ]);
+  const [orgProjectsSections, setOrgProjectsSections] = <span class="cstat-no" title="statement not covered" >useState&lt;OrgProjectsSection[]&gt;([]);</span>
   // orgs available for selection in the dropdowns, does not included already selected orgs
   const [availableOrgs, setAvailableOrgs] = <span class="cstat-no" title="statement not covered" >useState&lt;AcceleratorOrg[]&gt;([]);</span>
 &nbsp;
@@ -780,6 +790,9 @@ export default function <span class="fstat-no" title="function not covered" >Par
 <span class="cstat-no" title="statement not covered" >      setOrgProjectsSections(sections);</span>
       // remove the orgs as being available for selection (since they already has projects selected prior to edit)
 <span class="cstat-no" title="statement not covered" >      setAvailableOrgs(acceleratorOrgs.filter(<span class="fstat-no" title="function not covered" >(o</span>rg) =&gt; <span class="cstat-no" title="statement not covered" >!sections.some(<span class="fstat-no" title="function not covered" >(s</span>ection) =&gt; <span class="cstat-no" title="statement not covered" >section.org.id === org.id)</span>)</span>);</span>
+    } else <span class="cstat-no" title="statement not covered" >if (acceleratorOrgs.length) {</span>
+      // allow initial selection
+<span class="cstat-no" title="statement not covered" >      setOrgProjectsSections([{ id: 1, selectedProjectIds: [] }]);</span>
     }
   }, [acceleratorOrgs, activeLocale, localRecord.projectIds, modified]);
 &nbsp;
@@ -841,6 +854,11 @@ export default function <span class="fstat-no" title="function not covered" >Par
             /&gt;
           &lt;/Grid&gt;
         &lt;/Grid&gt;
+        {orgProjectsSections.length === 0 &amp;&amp; (
+          &lt;Grid item xs={12} marginTop={2}&gt;
+            &lt;Message body={strings.ACCELERATOR_ORGS_EMPTY_WARNING} priority='warning' type='page' /&gt;
+          &lt;/Grid&gt;
+        )}
         {orgProjectsSections.map(<span class="fstat-no" title="function not covered" >(s</span>ection, index) =&gt; (
 <span class="cstat-no" title="statement not covered" >          &lt;OrgProjectsSectionEdit</span>
             availableOrgs={availableOrgs}
@@ -871,7 +889,7 @@ export default function <span class="fstat-no" title="function not covered" >Par
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-04T22:12:47.827Z
+                at 2024-04-04T23:42:23.997Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
