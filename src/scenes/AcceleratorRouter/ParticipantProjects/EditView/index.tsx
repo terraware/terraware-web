@@ -34,7 +34,7 @@ const EditView = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const snackbar = useSnackbar();
-  const { crumbs, participantProject, project, projectId, projectMeta, organization, reload } =
+  const { crumbs, participant, participantProject, project, projectId, projectMeta, organization, reload } =
     useParticipantProjectData();
   const { phase1Scores } = useScoringData();
   const { phaseVotes } = useVotingData();
@@ -131,7 +131,7 @@ const EditView = () => {
   }, [goToParticipantProject, isAllowedEdit, projectId]);
 
   return (
-    <Page title={`${organization?.name || ''} / ${project?.name || ''}`} crumbs={crumbs} hierarchicalCrumbs={false}>
+    <Page title={`${participant?.name || ''} / ${project?.name || ''}`} crumbs={crumbs} hierarchicalCrumbs={false}>
       <PageForm
         busy={participantProjectUpdateRequest?.status === 'pending'}
         cancelID='cancelNewParticipantProject'
