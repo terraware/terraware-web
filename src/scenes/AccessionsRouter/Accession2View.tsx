@@ -383,7 +383,7 @@ export default function Accession2View(): JSX.Element {
 
   const overviewGridSize = isMobile ? '100%' : isTablet ? '50%' : overviewItemCount <= 6 ? '33%' : '25%';
 
-  const quantityEditable = userCanEdit && (accession?.state === 'Drying' || accession?.state === 'In Storage');
+  const quantityEditable = userCanEdit;
   const viabilityEditable = userCanEdit && accession?.estimatedCount !== undefined && accession?.state !== 'Used Up';
   const isAwaitingCheckin = accession?.state === 'Awaiting Check-In';
 
@@ -620,7 +620,6 @@ export default function Accession2View(): JSX.Element {
             handleEdit={() => setOpenQuantityModal(true)}
             hideEditIcon={accession?.remainingQuantity?.quantity === undefined && !isMobile}
             title={strings.QUANTITY}
-            titleInfoTooltip={!quantityEditable && strings.EDIT_QUANTITY_DISABLED}
             contents={
               accession?.remainingQuantity?.quantity !== undefined ? (
                 <Box display='flex' flexDirection='column'>
