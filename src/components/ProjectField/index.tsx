@@ -1,6 +1,7 @@
 import React, { isValidElement } from 'react';
 
 import { Typography } from '@mui/material';
+import { Props } from '@terraware/web-components/components/Textfield/Textfield';
 
 type DisplayFieldValue = string | number | null | undefined | JSX.Element | false;
 
@@ -18,6 +19,8 @@ export interface ProjectFieldEditProps {
   id: string;
   label: string;
   onChange: (id: string, value: string) => void;
+  // Defaults to 'text'
+  type?: Props['type'];
   value?: EditFieldValue;
 }
 

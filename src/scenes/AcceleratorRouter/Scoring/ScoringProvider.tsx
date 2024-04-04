@@ -61,6 +61,16 @@ const ScoringProvider = ({ children }: Props) => {
     [phaseScores]
   );
 
+  const hasData = useMemo<boolean | undefined>(
+    () =>
+      scoreListResult?.status === 'success' && (phase0Scores || phase1Scores)
+        ? [phase0Scores, phase1Scores].filter(
+            (data) => data?.scores.some((score) => score.qualitative !== undefined || score.value !== undefined)
+          ).length > 0
+        : undefined,
+    [phase0Scores, phase1Scores, scoreListResult?.status]
+  );
+
   useEffect(() => {
     if (!isNaN(projectId)) {
       void dispatch(requestProject(projectId));
@@ -83,19 +93,22 @@ const ScoringProvider = ({ children }: Props) => {
       snackbar.toastError(strings.GENERIC_ERROR);
     } else if (scoreListResult?.status === 'success' && scoreListResult?.data?.phases) {
       setPhaseScores(scoreListResult.data.phases);
+    } else if (scoreListResult?.status === 'pending') {
+      setPhaseScores([]);
     }
   }, [scoreListResult, snackbar]);
 
   useEffect(() => {
     setScoringData({
       crumbs,
+      hasData,
       phase0Scores,
       phase1Scores,
       projectId,
       projectName,
       status: scoreListResult?.status ?? 'pending',
     });
-  }, [crumbs, phase0Scores, phase1Scores, projectId, projectName, scoreListResult]);
+  }, [crumbs, hasData, phase0Scores, phase1Scores, projectId, projectName, scoreListResult?.status]);
 
   return <ScoringContext.Provider value={scoringData}>{children}</ScoringContext.Provider>;
 };

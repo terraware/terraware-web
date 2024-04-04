@@ -34,7 +34,7 @@ const EditView = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const snackbar = useSnackbar();
-  const { crumbs, participantProject, project, projectId, projectMeta, organization, reload } =
+  const { crumbs, participant, participantProject, project, projectId, projectMeta, organization, reload } =
     useParticipantProjectData();
   const { phase1Scores } = useScoringData();
   const { phaseVotes } = useVotingData();
@@ -131,7 +131,7 @@ const EditView = () => {
   }, [goToParticipantProject, isAllowedEdit, projectId]);
 
   return (
-    <Page title={`${organization?.name || ''} / ${project?.name || ''}`} crumbs={crumbs} hierarchicalCrumbs={false}>
+    <Page title={`${participant?.name || ''} / ${project?.name || ''}`} crumbs={crumbs} hierarchicalCrumbs={false}>
       <PageForm
         busy={participantProjectUpdateRequest?.status === 'pending'}
         cancelID='cancelNewParticipantProject'
@@ -159,10 +159,10 @@ const EditView = () => {
             <VotingDecisionCard phaseVotes={phaseVotes} />
             <ProjectFieldDisplay value={false} />
             <ProjectFieldTextfield
-              id={'abbreviatedName'}
-              label={strings.PROJECT_ABBREVIATED_NAME}
+              id={'fileNaming'}
+              label={strings.FILE_NAMING}
               onChange={onChangeParticipantProject}
-              value={participantProject?.abbreviatedName}
+              value={participantProject?.fileNaming}
             />
             <ProjectFieldTextfield
               id={'projectLead'}
@@ -192,48 +192,56 @@ const EditView = () => {
               id={'numNativeSpecies'}
               label={strings.NUMBER_OF_NATIVE_SPECIES}
               onChange={onChangeParticipantProject}
+              type={'number'}
               value={participantProject?.numNativeSpecies}
             />
             <ProjectFieldTextfield
               id={'applicationReforestableLand'}
               label={strings.APPLICATION_RESTORABLE_LAND}
               onChange={onChangeParticipantProject}
+              type={'number'}
               value={participantProject?.applicationReforestableLand}
             />
             <ProjectFieldTextfield
               id={'confirmedReforestableLand'}
               label={strings.CONFIRMED_RESTORABLE_LAND}
               onChange={onChangeParticipantProject}
+              type={'number'}
               value={participantProject?.confirmedReforestableLand}
             />
             <ProjectFieldTextfield
               id={'totalExpansionPotential'}
               label={strings.TOTAL_EXPANSION_POTENTIAL}
               onChange={onChangeParticipantProject}
+              type={'number'}
               value={participantProject?.totalExpansionPotential}
             />
             <ProjectFieldTextfield
               id={'minCarbonAccumulation'}
               label={strings.MINIMUM_CARBON_ACCUMULATION}
               onChange={onChangeParticipantProject}
+              type={'number'}
               value={participantProject?.minCarbonAccumulation}
             />
             <ProjectFieldTextfield
               id={'maxCarbonAccumulation'}
               label={strings.MAXIMUM_CARBON_ACCUMULATION}
               onChange={onChangeParticipantProject}
+              type={'number'}
               value={participantProject?.maxCarbonAccumulation}
             />
             <ProjectFieldTextfield
               id={'perHectareBudget'}
               label={strings.PER_HECTARE_ESTIMATED_BUDGET}
               onChange={onChangeParticipantProject}
+              type={'number'}
               value={participantProject?.perHectareBudget}
             />
             <ProjectFieldTextfield
               id={'numCommunities'}
               label={strings.NUMBER_OF_COMMUNITIES_WITHIN_PROJECT_AREA}
               onChange={onChangeParticipantProject}
+              type={'number'}
               value={participantProject?.numCommunities}
             />
             <ProjectFieldDisplay label={strings.DEAL_STAGE} value={participantProject?.dealStage} />

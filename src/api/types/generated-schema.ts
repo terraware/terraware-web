@@ -3217,7 +3217,11 @@ export interface components {
       dealDescription?: string;
       /** @enum {string} */
       dealStage?: "Phase 0 (Doc Review)" | "Phase 1" | "Phase 2" | "Phase 3" | "Graduated, Finished Planting" | "Non Graduate" | "Application Submitted" | "Project Lead Screening Review" | "Screening Questions Ready for Review" | "Carbon Pre-Check" | "Submission Requires Follow Up" | "Carbon Eligible" | "Closed Lost" | "Issue Active" | "Issue Pending" | "Issue Reesolved";
+      dropboxFolderPath?: string;
       failureRisk?: string;
+      fileNaming?: string;
+      /** Format: uri */
+      googleFolderUrl?: string;
       investmentThesis?: string;
       landUseModelTypes: ("Native Forest" | "Monoculture" | "Sustainable Timber" | "Other Timber" | "Mangroves" | "Agroforestry" | "Silvopasture" | "Other Land-Use Model")[];
       maxCarbonAccumulation?: number;
@@ -4052,7 +4056,11 @@ export interface components {
       dealDescription?: string;
       /** @enum {string} */
       dealStage?: "Phase 0 (Doc Review)" | "Phase 1" | "Phase 2" | "Phase 3" | "Graduated, Finished Planting" | "Non Graduate" | "Application Submitted" | "Project Lead Screening Review" | "Screening Questions Ready for Review" | "Carbon Pre-Check" | "Submission Requires Follow Up" | "Carbon Eligible" | "Closed Lost" | "Issue Active" | "Issue Pending" | "Issue Reesolved";
+      dropboxFolderPath?: string;
       failureRisk?: string;
+      fileNaming?: string;
+      /** Format: uri */
+      googleFolderUrl?: string;
       investmentThesis?: string;
       landUseModelTypes: ("Native Forest" | "Monoculture" | "Sustainable Timber" | "Other Timber" | "Mangroves" | "Agroforestry" | "Silvopasture" | "Other Land-Use Model")[];
       maxCarbonAccumulation?: number;

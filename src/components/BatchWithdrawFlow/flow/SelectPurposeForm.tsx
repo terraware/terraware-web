@@ -739,7 +739,9 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}>
                       <Textfield
-                        label={strings.GERMINATING_QUANTITY_REQUIRED}
+                        label={strings
+                          .formatString(strings.GERMINATING_QUANTITY_REMAINING, String(batches[0].germinatingQuantity))
+                          .toString()}
                         id='germinatingQuantityWithdrawn'
                         onChange={(value: unknown) => setGerminatingQuantityWithdrawn(value as number)}
                         type='number'
@@ -747,6 +749,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
                         className={classes.germinatingQuantityWithdrawn}
                         errorText={fieldsErrors.germinatingQuantityWithdrawn}
+                        required
                       />
                     </Grid>
                   </Grid>
@@ -754,7 +757,9 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={isMobile ? 0 : 1}>
                       <Textfield
-                        label={strings.NOT_READY_QUANTITY_REQUIRED}
+                        label={strings
+                          .formatString(strings.NOT_READY_QUANTITY_REMAINING, String(batches[0].notReadyQuantity))
+                          .toString()}
                         id='notReadyQuantityWithdrawn'
                         onChange={(value: unknown) => setNotReadyQuantityWithdrawn(value as number)}
                         type='number'
@@ -762,6 +767,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
                         className={classes.notReadyQuantityWithdrawn}
                         errorText={fieldsErrors.notReadyQuantityWithdrawn}
+                        required
                       />
                     </Grid>
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? 0 : 1}>
@@ -778,7 +784,9 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}>
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={1}>
                       <Textfield
-                        label={strings.READY_QUANTITY_REQUIRED}
+                        label={strings
+                          .formatString(strings.READY_QUANTITY_REMAINING, String(batches[0].readyQuantity))
+                          .toString()}
                         id='readyQuantityWithdrawn'
                         onChange={(value: unknown) => setReadyQuantityWithdrawn(value as number)}
                         type='number'
@@ -786,6 +794,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
                         className={classes.readyQuantityWithdrawn}
                         errorText={fieldsErrors.readyQuantityWithdrawn}
+                        required
                       />
                     </Grid>
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? 0 : 1}>

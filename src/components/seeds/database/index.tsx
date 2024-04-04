@@ -47,7 +47,7 @@ import EditColumns from './EditColumns';
 import Filters from './Filters';
 import ImportAccessionsModal from './ImportAccessionsModal';
 import SearchCellRenderer from './TableCellRenderer';
-import { RIGHT_ALIGNED_COLUMNS, columnsIndexed } from './columns';
+import { columnsIndexed } from './columns';
 
 interface StyleProps {
   isMobile: boolean;
@@ -119,9 +119,6 @@ const useStyles = makeStyles((theme: Theme) => ({
       fontSize: '14px',
     },
   },
-  rightAligned: {
-    textAlign: 'right',
-  },
 }));
 
 const filterSelectFields = (fields: string[]): string[] => {
@@ -182,11 +179,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const columns = columnsIndexed();
   const displayColumnDetails = displayColumnNames.map((name) => {
     const detail = { ...columns[name] };
-
-    // set the classname for right aligned columns
-    if (RIGHT_ALIGNED_COLUMNS.indexOf(name) !== -1) {
-      detail.className = classes.rightAligned;
-    }
 
     return detail;
   });

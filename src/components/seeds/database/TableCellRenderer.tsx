@@ -10,8 +10,6 @@ import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { SearchResponseElement } from 'src/types/Search';
 
-import { RIGHT_ALIGNED_COLUMNS } from './columns';
-
 const statusStyles = makeStyles((theme: Theme) => ({
   flex: {
     display: 'flex',
@@ -24,9 +22,6 @@ const statusStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     alignItems: 'center',
     color: theme.palette.neutral[600],
-  },
-  rightAligned: {
-    textAlign: 'right',
   },
 }));
 
@@ -83,12 +78,8 @@ export default function SearchCellRenderer(props: RendererProps<SearchResponseEl
   }
 
   if (column.key === 'totalViabilityPercent' && value !== undefined) {
-    return (
-      <CellRenderer index={index} column={column} value={`${value}%`} row={row} className={classes.rightAligned} />
-    );
+    return <CellRenderer index={index} column={column} value={`${value}%`} row={row} />;
   }
 
-  const className = RIGHT_ALIGNED_COLUMNS.indexOf(column.key) !== -1 ? classes.rightAligned : '';
-
-  return <CellRenderer {...props} className={className} />;
+  return <CellRenderer {...props} />;
 }

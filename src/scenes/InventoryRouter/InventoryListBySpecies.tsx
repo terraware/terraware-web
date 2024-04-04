@@ -50,17 +50,27 @@ const columns = (): TableColumnType[] => [
   {
     key: 'germinatingQuantity',
     name: strings.GERMINATING,
-    type: 'string',
+    type: 'number',
     tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
   },
   {
     key: 'notReadyQuantity',
     name: strings.NOT_READY,
-    type: 'string',
+    type: 'number',
     tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
   },
-  { key: 'readyQuantity', name: strings.READY, type: 'string', tooltipTitle: strings.TOOLTIP_READY_QUANTITY },
-  { key: 'totalQuantity', name: strings.TOTAL, type: 'string', tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY },
+  {
+    key: 'readyQuantity',
+    name: strings.READY,
+    type: 'number',
+    tooltipTitle: strings.TOOLTIP_READY_QUANTITY,
+  },
+  {
+    key: 'totalQuantity',
+    name: strings.TOTAL,
+    type: 'number',
+    tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY,
+  },
 ];
 
 type InventoryListBySpeciesProps = {
