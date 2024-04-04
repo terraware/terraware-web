@@ -77,7 +77,7 @@ const ParticipantProjectProvider = ({ children }: Props) => {
 
   useEffect(() => {
     if (project?.organizationId) {
-      const request = dispatch(requestAcceleratorOrgs({ locale: activeLocale }));
+      const request = dispatch(requestAcceleratorOrgs({ locale: activeLocale, includeParticipants: true }));
       setOrgRequestId(request.requestId);
     }
   }, [activeLocale, dispatch, project?.organizationId]);
