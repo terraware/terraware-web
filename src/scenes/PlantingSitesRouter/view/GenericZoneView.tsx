@@ -45,7 +45,6 @@ const columns = (): TableColumnType[] => [
     key: 'monitoringPlots',
     name: strings.MONITORING_PLOTS,
     type: 'number',
-    alignment: 'right',
   },
 ];
 

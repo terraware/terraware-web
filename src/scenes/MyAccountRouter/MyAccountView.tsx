@@ -87,7 +87,7 @@ function addRoleNames(organizations: Organization[]): PersonOrganization[] {
 const columns = (): TableColumnType[] => [
   { key: 'name', name: strings.ORGANIZATION_NAME, type: 'string' },
   { key: 'description', name: strings.DESCRIPTION, type: 'string' },
-  { key: 'totalUsers', name: strings.PEOPLE, type: 'string', alignment: 'right' },
+  { key: 'totalUsers', name: strings.PEOPLE, type: 'number' },
   { key: 'roleName', name: strings.ROLE, type: 'string' },
 ];
 

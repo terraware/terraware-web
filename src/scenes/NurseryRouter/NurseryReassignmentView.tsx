@@ -39,7 +39,7 @@ const columns = (): TableColumnType[] => [
   { key: 'zoneName', name: strings.ZONE, type: 'string' },
   { key: 'originalSubzone', name: strings.ORIGINAL_SUBZONE, type: 'string' },
   { key: 'newSubzone', name: strings.NEW_SUBZONE, type: 'string' },
-  { key: 'reassign', name: strings.REASSIGN, type: 'string', alignment: 'right' },
+  { key: 'reassign', name: strings.REASSIGN, type: 'number' },
   { key: 'notes', name: strings.NOTES, type: 'string' },
 ];
 

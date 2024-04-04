@@ -71,22 +71,19 @@ const defaultTableColumns = (): TableColumnType[] => [
   {
     key: 'germinatingQuantityWithdrawn',
     name: strings.GERMINATING_QUANTITY,
-    type: 'string',
-    alignment: 'right',
+    type: 'number',
   },
   {
     key: 'notReadyQuantityWithdrawn',
     name: strings.NOT_READY_QUANTITY,
-    type: 'string',
-    alignment: 'right',
+    type: 'number',
   },
-  { key: 'readyQuantityWithdrawn', name: strings.READY_QUANTITY, type: 'string', alignment: 'right' },
-  { key: 'totalQuantity', name: strings.TOTAL_QUANTITY, type: 'string', alignment: 'right' },
+  { key: 'readyQuantityWithdrawn', name: strings.READY_QUANTITY, type: 'number' },
+  { key: 'totalQuantity', name: strings.TOTAL_QUANTITY, type: 'number' },
   {
     key: 'totalWithdraw',
     name: strings.TOTAL_WITHDRAW,
-    type: 'string',
-    alignment: 'right',
+    type: 'number',
   },
 ];
 

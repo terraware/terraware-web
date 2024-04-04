@@ -48,7 +48,6 @@ const columnsWithoutZones = (): TableColumnType[] => [
     key: 'totalSeedlingsSent',
     name: strings.TOTAL_SEEDLINGS_SENT,
     type: 'number',
-    alignment: 'right',
   },
 ];
 
@@ -84,13 +83,11 @@ const columnsWithZones = (): TableColumnType[] => [
     name: strings.TARGET_PLANTING_DENSITY,
     tooltipTitle: strings.TARGET_PLANTING_DENSITY_TOOLTIP,
     type: 'number',
-    alignment: 'right',
   },
   {
     key: 'totalSeedlingsSent',
     name: strings.TOTAL_SEEDLINGS_SENT,
     type: 'number',
-    alignment: 'right',
   },
 ];
 

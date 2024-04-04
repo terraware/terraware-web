@@ -50,30 +50,26 @@ const columns = (): TableColumnType[] => [
   {
     key: 'germinatingQuantity',
     name: strings.GERMINATING,
-    type: 'string',
+    type: 'number',
     tooltipTitle: strings.TOOLTIP_GERMINATING_QUANTITY,
-    alignment: 'right',
   },
   {
     key: 'notReadyQuantity',
     name: strings.NOT_READY,
-    type: 'string',
+    type: 'number',
     tooltipTitle: strings.TOOLTIP_NOT_READY_QUANTITY,
-    alignment: 'right',
   },
   {
     key: 'readyQuantity',
     name: strings.READY,
-    type: 'string',
+    type: 'number',
     tooltipTitle: strings.TOOLTIP_READY_QUANTITY,
-    alignment: 'right',
   },
   {
     key: 'totalQuantity',
     name: strings.TOTAL,
-    type: 'string',
+    type: 'number',
     tooltipTitle: strings.TOOLTIP_TOTAL_QUANTITY,
-    alignment: 'right',
   },
 ];
 

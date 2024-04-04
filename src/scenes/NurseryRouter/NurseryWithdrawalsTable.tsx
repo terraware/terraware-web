@@ -42,7 +42,7 @@ const columns = (): TableColumnType[] => [
   { key: 'project_names', name: strings.PROJECTS, type: 'string' },
   { key: 'plantingSubzoneNames', name: strings.TO_SUBZONE, type: 'string' },
   { key: 'speciesScientificNames', name: strings.SPECIES, type: 'string' },
-  { key: 'totalWithdrawn', name: strings.TOTAL_QUANTITY, type: 'number', alignment: 'right' },
+  { key: 'totalWithdrawn', name: strings.TOTAL_QUANTITY, type: 'number' },
   { key: 'hasReassignments', name: '', type: 'string' },
 ];
 
