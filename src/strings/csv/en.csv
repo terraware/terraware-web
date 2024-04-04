@@ -476,6 +476,7 @@ FERN,Fern,
 FIELD_NOTES,Field Notes,
 FIELD_NOTES_PLACEHOLDER,"Important notes about seeds, fruits, or plants",
 FILE_NAME,File Name,
+FILE_NAMING,File Naming,"Describes a piece of text that is used when naming new files; this isn't just the name of a particular file."
 FILE_SELECTED,File Selected,
 FILL_OUT_ALL_FIELDS,Please fill out all required fields.,
 FILLED_SEEDS,Filled Seeds,

@@ -93,7 +93,7 @@ const download = async ({
     [strings.PROJECT_NAME, project?.name],
     [strings.PHASE_1_SCORE, phase1Scores?.totalScore],
     [strings.VOTING_DECISION, phaseVotes?.decision],
-    [strings.PROJECT_ABBREVIATED_NAME, participantProject?.abbreviatedName],
+    [strings.FILE_NAMING, participantProject?.fileNaming],
     [strings.PROJECT_LEAD, participantProject?.projectLead],
     [strings.COUNTRY, participantProject?.countryCode],
     [strings.REGION, participantProject?.region],

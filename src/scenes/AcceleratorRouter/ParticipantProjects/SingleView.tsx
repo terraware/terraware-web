@@ -117,8 +117,8 @@ const SingleView = () => {
                 value={APP_PATHS.ACCELERATOR_SCORING.replace(':projectId', `${project.id}`)}
               />
               <ProjectFieldDisplay
-                label={strings.PROJECT_ABBREVIATED_NAME}
-                value={participantProject?.abbreviatedName}
+                label={strings.FILE_NAMING}
+                value={participantProject?.fileNaming}
                 rightBorder={!isMobile}
               />
               <ProjectFieldDisplay
