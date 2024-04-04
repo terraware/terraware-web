@@ -52,21 +52,19 @@ const VotingProvider = ({ children }: Props): JSX.Element => {
       const votesForPhase = votes?.data?.phases.find((data) => data.phase === phase);
       if (votesForPhase) {
         setPhaseVotes(votesForPhase);
-      } else {
-        goToProjects();
       }
     }
-  }, [goToProjects, phase, snackbar, votes]);
+  }, [phase, snackbar, votes]);
 
   // update votes data in context
   useEffect(() => {
     setVotingData({
       phaseVotes,
       projectId,
-      projectName: 'Participant Project Name', // TODO: Change this when participant project name is available
+      projectName: project?.name,
       status: votes?.status ?? 'pending',
     });
-  }, [phaseVotes, projectId, votes?.status]);
+  }, [phaseVotes, projectId, project?.name, votes?.status]);
 
   return <VotingContext.Provider value={votingData}>{children}</VotingContext.Provider>;
 };

@@ -18,6 +18,7 @@ import strings from 'src/strings';
 import { CreateProjectRequest } from 'src/types/Project';
 import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { PlantingSiteSearchResult } from 'src/types/Tracking';
+import { parseSearchTerm } from 'src/utils/search';
 
 type SelectPlantingSitesProps = {
   project: CreateProjectRequest;
@@ -92,17 +93,17 @@ export default function SelectPlantingSites(props: SelectPlantingSitesProps): JS
     []
   );
 
-  const getSearchFields = useCallback(
-    (debouncedSearchTerm: string): FieldNodePayload[] => [
+  const getSearchFields = useCallback((debouncedSearchTerm: string): FieldNodePayload[] => {
+    const { type, values } = parseSearchTerm(debouncedSearchTerm);
+    return [
       {
         operation: 'field',
         field: 'name',
-        type: 'Fuzzy',
-        values: [debouncedSearchTerm],
+        type,
+        values,
       },
-    ],
-    []
-  );
+    ];
+  }, []);
 
   const {
     entities,

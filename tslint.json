@@ -56,6 +56,10 @@
     "jsx-boolean-value": false
   },
   "linterOptions": {
-    "exclude": ["src/api/types/generated-schema.ts", "src/api/types/generated-schema-seedbank.ts"]
+    "exclude": [
+      "src/api/types/generated-schema.ts",
+      "src/api/types/generated-schema-seedbank.ts",
+      "src/types/documentProducer/generated-schema.ts"
+    ]
   }
 }

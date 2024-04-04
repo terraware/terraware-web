@@ -8,6 +8,7 @@ import InventorySeedlingsTable, {
 import { NurseryBatchService } from 'src/services';
 import strings from 'src/strings';
 import { FieldNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { parseSearchTerm } from 'src/utils/search';
 
 interface InventorySeedlingsTableForSpeciesProps
   extends Omit<
@@ -59,17 +60,17 @@ const columns = (): TableColumnType[] => [
 export default function InventorySeedlingsTableForSpecies(props: InventorySeedlingsTableForSpeciesProps): JSX.Element {
   const speciesId = props.speciesId;
 
-  const getFuzzySearchFields = useCallback(
-    (debouncedSearchTerm: string): FieldNodePayload[] => [
+  const getFuzzySearchFields = useCallback((debouncedSearchTerm: string): FieldNodePayload[] => {
+    const { type, values } = parseSearchTerm(debouncedSearchTerm);
+    return [
       {
         operation: 'field',
         field: 'facility_name',
-        type: 'Fuzzy',
-        values: [debouncedSearchTerm],
+        type,
+        values,
       },
-    ],
-    []
-  );
+    ];
+  }, []);
 
   const getBatchesSearch = useCallback(
     async (

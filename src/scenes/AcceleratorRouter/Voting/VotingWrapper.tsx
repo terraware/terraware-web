@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import { Box, useTheme } from '@mui/material';
-import { BusySpinner } from '@terraware/web-components';
+import { BusySpinner, ErrorBox } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
@@ -36,7 +36,11 @@ const VotingWrapper = ({ children, isForm, rightComponent }: Props): JSX.Element
             },
             {
               name: projectName ?? '--',
-              to: APP_PATHS.ACCELERATOR_SCORING.replace(':projectId', `${projectId}`), // TODO switch to project management page holding the project id
+              to: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`),
+            },
+            {
+              name: strings.SCORES,
+              to: APP_PATHS.ACCELERATOR_SCORING.replace(':projectId', `${projectId}`),
             },
           ]
         : [],
@@ -53,28 +57,32 @@ const VotingWrapper = ({ children, isForm, rightComponent }: Props): JSX.Element
       rightComponent={rightComponent}
       title={strings.INVESTMENT_COMMITTEE_VOTES}
     >
-      <Card
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          flexGrow: 1,
-          padding: theme.spacing(isForm ? 0 : 3),
-        }}
-      >
-        {status === 'pending' && <BusySpinner withSkrim={true} />}
-        <Box
-          sx={{
-            background: theme.palette.TwClrBaseGray050,
-            borderRadius: theme.spacing(2),
-            gap: theme.spacing(8),
-            padding: theme.spacing(2),
-            margin: isForm ? theme.spacing(3, 3, 0) : 0,
+      {phaseVotes && phaseVotes.votes.length > 0 ? (
+        <Card
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            flexGrow: 1,
+            padding: theme.spacing(isForm ? 0 : 3),
           }}
         >
-          <VoteRowGrid leftChild={strings.VOTING_DECISION} rightChild={<VoteBadge vote={voteDecision} />} />
-        </Box>
-        {children}
-      </Card>
+          {status === 'pending' && <BusySpinner withSkrim={true} />}
+          <Box
+            sx={{
+              background: theme.palette.TwClrBaseGray050,
+              borderRadius: theme.spacing(2),
+              gap: theme.spacing(8),
+              padding: theme.spacing(2),
+              margin: isForm ? theme.spacing(3, 3, 0) : 0,
+            }}
+          >
+            <VoteRowGrid leftChild={strings.VOTING_DECISION} rightChild={<VoteBadge vote={voteDecision} />} />
+          </Box>
+          {children}
+        </Card>
+      ) : (
+        <ErrorBox title={strings.NO_VOTERS} text={strings.NO_VOTERS_FOR_PROJECT} />
+      )}
     </Page>
   );
 };

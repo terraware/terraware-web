@@ -34,7 +34,7 @@ const VotingView = () => {
   // Edit Votes button
   const editVotes = useMemo(
     () =>
-      activeLocale ? (
+      activeLocale && phaseVotes && phaseVotes.votes.length > 0 ? (
         <Button
           label={isMobile ? '' : strings.EDIT_VOTES}
           icon='iconEdit'
@@ -43,7 +43,7 @@ const VotingView = () => {
           id='editVotes'
         />
       ) : null,
-    [activeLocale, isMobile, goToEditVotes]
+    [activeLocale, isMobile, goToEditVotes, phaseVotes]
   );
 
   return (

@@ -10,6 +10,7 @@ import {
   SearchResponseElement,
   SearchSortOrder,
 } from 'src/types/Search';
+import { parseSearchTerm } from 'src/utils/search';
 
 import HttpService, { Response } from './HttpService';
 import SearchService from './SearchService';
@@ -187,27 +188,28 @@ const searchInventory = async ({
   const searchValueChildren: FieldNodePayload[] = [];
 
   if (query) {
+    const { type, values } = parseSearchTerm(query);
     const scientificNameNode: FieldNodePayload = {
       operation: 'field',
       field: 'species_scientificName',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     };
     searchValueChildren.push(scientificNameNode);
 
     const commonNameNode: FieldNodePayload = {
       operation: 'field',
       field: 'species_commonName',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     };
     searchValueChildren.push(commonNameNode);
 
     const facilityNameNode: FieldNodePayload = {
       operation: 'field',
       field: forSpecificFacilities ? 'facility_name' : 'facilityInventories.facility_name',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     };
     searchValueChildren.push(facilityNameNode);
   }
@@ -291,19 +293,20 @@ const searchInventoryByNursery = async ({
   const searchValueChildren: FieldNodePayload[] = [];
 
   if (query) {
+    const { type, values } = parseSearchTerm(query);
     const scientificNameNode: FieldNodePayload = {
       operation: 'field',
       field: 'facilityInventories.species_scientificName',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     };
     searchValueChildren.push(scientificNameNode);
 
     const facilityNameNode: FieldNodePayload = {
       operation: 'field',
       field: 'facility_name',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     };
     searchValueChildren.push(facilityNameNode);
   }
@@ -368,27 +371,28 @@ const downloadInventory = async ({
   const searchValueChildren: FieldNodePayload[] = [];
 
   if (query) {
+    const { type, values } = parseSearchTerm(query);
     const scientificNameNode: FieldNodePayload = {
       operation: 'field',
       field: 'species_scientificName',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     };
     searchValueChildren.push(scientificNameNode);
 
     const commonNameNode: FieldNodePayload = {
       operation: 'field',
       field: 'species_commonName',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     };
     searchValueChildren.push(commonNameNode);
 
     const facilityNameNode: FieldNodePayload = {
       operation: 'field',
       field: forSpecificFacilities ? 'facility_name' : 'facilityInventories.facility_name',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     };
     searchValueChildren.push(facilityNameNode);
   }

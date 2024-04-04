@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import { APP_PATHS } from 'src/constants';
+import { useParticipant } from 'src/hooks/useParticipant';
 import { useLocalization } from 'src/providers';
 import { useProjectData } from 'src/providers/Project/ProjectContext';
 import { requestAcceleratorOrgs } from 'src/redux/features/accelerator/acceleratorAsyncThunks';
@@ -29,6 +30,7 @@ const ParticipantProjectProvider = ({ children }: Props) => {
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
   const { project, projectId } = useProjectData();
+  const { participant } = useParticipant(project?.participantId ?? -1);
 
   const [participantProject, setParticipantProject] = useState<ParticipantProject>();
   const [participantProjectData, setParticipantProjectData] = useState<ParticipantProjectData>({
@@ -124,6 +126,7 @@ const ParticipantProjectProvider = ({ children }: Props) => {
     setParticipantProjectData({
       crumbs,
       organization,
+      participant,
       participantProject,
       project,
       projectId,
@@ -131,7 +134,17 @@ const ParticipantProjectProvider = ({ children }: Props) => {
       status: getParticipantProjectResult?.status ?? 'pending',
       reload,
     });
-  }, [crumbs, getParticipantProjectResult, organization, participantProject, project, projectId, projectMeta, reload]);
+  }, [
+    crumbs,
+    getParticipantProjectResult,
+    organization,
+    participant,
+    participantProject,
+    project,
+    projectId,
+    projectMeta,
+    reload,
+  ]);
 
   return (
     <ParticipantProjectContext.Provider value={participantProjectData}>{children}</ParticipantProjectContext.Provider>
