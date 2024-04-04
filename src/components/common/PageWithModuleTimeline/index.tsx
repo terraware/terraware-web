@@ -1,18 +1,29 @@
 import React from 'react';
 
 import { Grid, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
 import Page, { PageProps } from 'src/components/Page';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import ModuleTimeline from './ModuleTimeline';
 
+const useStyles = makeStyles(() => ({
+  container: {
+    paddingTop: 0,
+    paddingLeft: 0,
+  },
+}));
+
 const PageWithModuleTimeline = (props: PageProps) => {
+  const classes = useStyles();
   const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
 
   return (
     <Grid container spacing={theme.spacing(1)}>
       <Grid item xs style={{ flexGrow: 1 }}>
-        <Page {...props} />
+        <Page {...props} containerClassName={isMobile ? '' : classes.container} />
       </Grid>
       <Grid item>
         <ModuleTimeline activeStep={mockPhase.activeModule} steps={mockPhase.modules} title={mockPhase.title} />
