@@ -9,6 +9,7 @@ import TfMain from 'src/components/common/TfMain';
 
 export type PageProps = {
   children?: React.ReactNode;
+  containerClassName?: string;
   contentStyle?: Record<string, string | number>;
   crumbs?: Crumb[];
   hierarchicalCrumbs?: boolean;
@@ -22,6 +23,7 @@ export type PageProps = {
  */
 export default function Page({
   children,
+  containerClassName,
   contentStyle,
   crumbs,
   hierarchicalCrumbs,
@@ -41,7 +43,7 @@ export default function Page({
   }
 
   return (
-    <TfMain>
+    <TfMain className={containerClassName}>
       <PageHeaderWrapper nextElement={contentRef.current}>
         <>{crumbs && <BreadCrumbs crumbs={crumbs} hierarchical={hierarchicalCrumbs ?? true} />}</>
         <Grid container justifyContent='space-between' alignItems='center'>
