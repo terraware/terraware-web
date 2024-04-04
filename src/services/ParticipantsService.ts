@@ -2,6 +2,7 @@ import HttpService, { Response, Response2, ServerData } from 'src/services/HttpS
 import {
   Participant,
   ParticipantCreateRequest,
+  ParticipantProjectSearchResult,
   ParticipantSearchResult,
   ParticipantUpdateRequest,
 } from 'src/types/Participant';
@@ -66,11 +67,14 @@ const list = async (
     const { cohort_id, cohort_name, id, name, projects } = result;
 
     return {
-      cohort_id,
+      cohort_id: cohort_id ? Number(cohort_id) : null,
       cohort_name,
-      id,
+      id: Number(id),
       name,
-      projects: projects || [],
+      projects: ((projects || []) as ParticipantProjectSearchResult[]).map((project) => ({
+        ...project,
+        id: Number(project.id),
+      })),
     } as ParticipantSearchResult;
   });
 };
