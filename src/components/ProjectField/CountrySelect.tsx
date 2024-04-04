@@ -1,32 +1,49 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { DropdownItem } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
 import { LocationService } from 'src/services';
 import { Country } from 'src/types/Country';
+import { Region, getRegionLabel, getRegionValue } from 'src/types/ParticipantProject';
 
 import { ProjectFieldEditProps } from '.';
 import ProjectFieldSelect from './Select';
 
-const CountrySelect = ({ id, label, onChange, value }: ProjectFieldEditProps) => {
+export type Props = Omit<ProjectFieldEditProps, 'onChange'> & {
+  onChange: (countryCode?: string, region?: string) => void;
+  region?: Region;
+};
+
+const CountrySelect = ({ id, label, onChange, region, value }: Props) => {
   const { activeLocale } = useLocalization();
 
   const [countries, setCountries] = useState<Country[]>([]);
 
+  const handleChange = useCallback(
+    (_: string, country: string) => {
+      const _region = getRegionValue(countries.find((obj) => obj.code === country)?.region ?? '');
+      onChange(country, _region);
+    },
+    [countries, onChange]
+  );
+
   const options = useMemo(
     (): DropdownItem[] =>
-      countries.map((country) => ({
-        label: country.name,
-        value: country.code,
-      })),
-    [countries]
+      countries
+        // BE returns localized regions, hence the check against the label
+        .filter((country) => !region || getRegionLabel(region) === country.region)
+        .map((country) => ({
+          label: country.name,
+          value: country.code,
+        })),
+    [countries, region]
   );
 
   useEffect(() => {
     if (activeLocale) {
       const populateCountries = async () => {
-        const response = await LocationService.getCountries();
+        const response = await LocationService.getCountriesWithRegion();
         if (response) {
           setCountries(response);
         }
@@ -35,7 +52,13 @@ const CountrySelect = ({ id, label, onChange, value }: ProjectFieldEditProps) =>
     }
   }, [activeLocale]);
 
-  return <ProjectFieldSelect id={id} label={label} onChange={onChange} value={value} options={options} />;
+  useEffect(() => {
+    if (value && !countries.some(({ code }) => code === value)) {
+      onChange(undefined, region);
+    }
+  }, [countries, onChange, region, value]);
+
+  return <ProjectFieldSelect id={id} label={label} onChange={handleChange} value={value} options={options} />;
 };
 
 export default CountrySelect;
