@@ -2,11 +2,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import { APP_PATHS } from 'src/constants';
+import { useAcceleratorOrgs } from 'src/hooks/useAcceleratorOrgs';
 import { useParticipant } from 'src/hooks/useParticipant';
 import { useLocalization } from 'src/providers';
 import { useProjectData } from 'src/providers/Project/ProjectContext';
-import { requestAcceleratorOrgs } from 'src/redux/features/accelerator/acceleratorAsyncThunks';
-import { selectAcceleratorOrgsRequest } from 'src/redux/features/accelerator/acceleratorSelectors';
 import { requestGetParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
 import { selectParticipantProjectRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
@@ -31,6 +30,7 @@ const ParticipantProjectProvider = ({ children }: Props) => {
   const { activeLocale } = useLocalization();
   const { project, projectId } = useProjectData();
   const { participant } = useParticipant(project?.participantId ?? -1);
+  const { acceleratorOrgs } = useAcceleratorOrgs(true);
 
   const [participantProject, setParticipantProject] = useState<ParticipantProject>();
   const [participantProjectData, setParticipantProjectData] = useState<ParticipantProjectData>({
@@ -47,8 +47,6 @@ const ParticipantProjectProvider = ({ children }: Props) => {
   const [projectMeta, setProjectMeta] = useState<ProjectMeta>({});
 
   const [organization, setOrganization] = useState<AcceleratorOrg>();
-  const [orgRequestId, setOrgRequestId] = useState('');
-  const getOrgsResult = useAppSelector(selectAcceleratorOrgsRequest(orgRequestId));
 
   const crumbs: Crumb[] = useMemo(
     () =>
@@ -74,13 +72,6 @@ const ParticipantProjectProvider = ({ children }: Props) => {
       reload();
     }
   }, [dispatch, projectId, reload]);
-
-  useEffect(() => {
-    if (project?.organizationId) {
-      const request = dispatch(requestAcceleratorOrgs({ locale: activeLocale }));
-      setOrgRequestId(request.requestId);
-    }
-  }, [activeLocale, dispatch, project?.organizationId]);
 
   useEffect(() => {
     const userIds = new Set([project?.createdBy, project?.modifiedBy]);
@@ -111,16 +102,12 @@ const ParticipantProjectProvider = ({ children }: Props) => {
   }, [getParticipantProjectResult, snackbar]);
 
   useEffect(() => {
-    if (!getOrgsResult || !project) {
+    if (!acceleratorOrgs || !project?.organizationId) {
       return;
     }
 
-    if (getOrgsResult?.status === 'error') {
-      snackbar.toastError(strings.GENERIC_ERROR);
-    } else if (getOrgsResult?.status === 'success' && getOrgsResult?.data) {
-      setOrganization(getOrgsResult.data.find((org) => org.id === project.organizationId));
-    }
-  }, [getOrgsResult, project, snackbar]);
+    setOrganization(acceleratorOrgs.find((org) => org.id === project.organizationId));
+  }, [acceleratorOrgs, project?.organizationId]);
 
   useEffect(() => {
     setParticipantProjectData({
