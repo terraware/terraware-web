@@ -5,7 +5,7 @@ import { DropdownItem } from '@terraware/web-components';
 import { useLocalization } from 'src/providers';
 import { LocationService } from 'src/services';
 import { Country } from 'src/types/Country';
-import { Region } from 'src/types/ParticipantProject';
+import { Region, getRegionValue } from 'src/types/ParticipantProject';
 
 import { ProjectFieldEditProps } from '.';
 import ProjectFieldSelect from './Select';
@@ -22,7 +22,7 @@ const CountrySelect = ({ id, label, onChange, region, value }: Props) => {
 
   const handleChange = useCallback(
     (_: string, country: string) => {
-      const _region = countries.find((obj) => obj.code === country)?.region;
+      const _region = getRegionValue(countries.find((obj) => obj.code === country)?.region ?? '');
       onChange(country, _region);
     },
     [countries, onChange]

@@ -55,3 +55,26 @@ export const getLandUseModelType = (input: LandUseModelType): string => {
 };
 
 export type Region = ParticipantProject['region'];
+
+export type RegionLabel = {
+  region: Region;
+  label: string;
+};
+
+export const REGIONS = (): RegionLabel[] => [
+  { region: 'Antarctica', label: strings.REGION_ANTARCTICA },
+  { region: 'East Asia & Pacific', label: strings.REGION_EAST_ASIA_PACIFIC },
+  { region: 'Europe & Central Asia', label: strings.REGION_EUROPE_CENTRAL_ASIA },
+  { region: 'Latin America & Caribbean', label: strings.REGION_LATIN_AMERICA_CARIBBEAN },
+  { region: 'Middle East & North Africa', label: strings.REGION_MIDDLE_EAST_NORTH_AFRICA },
+  { region: 'North America', label: strings.REGION_NORTH_AMERICA },
+  { region: 'Oceania', label: strings.REGION_OCEANIA },
+  { region: 'South Asia', label: strings.REGION_SOUTH_ASIA },
+  { region: 'Sub-Saharan Africa', label: strings.REGION_SUB_SAHARAN_AFRICA },
+];
+
+export const getRegionLabel = (input: Region): string =>
+  REGIONS().find((obj) => obj.region === input)?.label ?? (input as string);
+
+export const getRegionValue = (input: string): Region | undefined =>
+  REGIONS().find((obj) => obj.label === input)?.region;
