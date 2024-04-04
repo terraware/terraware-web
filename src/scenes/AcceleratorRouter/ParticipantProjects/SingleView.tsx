@@ -185,7 +185,7 @@ const SingleView = () => {
                 dateLabel={strings.CREATED_ON}
                 userId={project?.createdBy}
                 userName={projectMeta?.createdByUserName}
-                userLabel={strings.CREATED_BY}
+                userLabel={strings.BY}
               />
               <ProjectFieldMeta
                 date={project?.modifiedTime}
