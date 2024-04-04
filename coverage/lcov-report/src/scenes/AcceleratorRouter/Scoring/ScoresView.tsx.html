@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
@@ -146,7 +146,15 @@
 <a name='L81'></a><a href='#L81'>81</a>
 <a name='L82'></a><a href='#L82'>82</a>
 <a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -194,6 +202,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -229,7 +243,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback, useMemo } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback, useEffect, useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 &nbsp;
 import { Box, Grid, useTheme } from '@mui/material';
@@ -248,7 +264,7 @@ const ScorecardView = <span class="cstat-no" title="statement not covered" ><spa
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
-  const { crumbs, phase0Scores, phase1Scores, projectId, projectName, status } = <span class="cstat-no" title="statement not covered" >useScoringData();</span>
+  const { crumbs, hasData, phase0Scores, phase1Scores, projectId, projectName, status } = <span class="cstat-no" title="statement not covered" >useScoringData();</span>
 &nbsp;
   const goToScoresEdit = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    history.push({ pathname: APP_PATHS.ACCELERATOR_SCORING_EDIT.replace(':projectId', `${projectId}`) });</span>
@@ -276,6 +292,12 @@ const ScorecardView = <span class="cstat-no" title="statement not covered" ><spa
     [activeLocale, goToScoresEdit, theme]
   );
 &nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (hasData === false) {</span>
+<span class="cstat-no" title="statement not covered" >      goToScoresEdit();</span>
+    }
+  }, [goToScoresEdit, hasData]);
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;PageWithModuleTimeline
       title={`${projectName} ${strings.SCORES}`}
@@ -284,29 +306,31 @@ const ScorecardView = <span class="cstat-no" title="statement not covered" ><spa
       rightComponent={rightComponent}
     &gt;
       {status === 'pending' &amp;&amp; &lt;BusySpinner /&gt;}
-      &lt;Card style={{ width: '100%' }}&gt;
-        &lt;Box display='flex' flexDirection='row' flexGrow={0} margin={theme.spacing(3)} justifyContent='right'&gt;
-          &lt;Button
-            id='goToVotes'
-            label={strings.SEE_IC_VOTES}
-            priority='secondary'
-            onClick={goToVoting}
-            size='medium'
-            type='productive'
-          /&gt;
-        &lt;/Box&gt;
+      {hasData &amp;&amp; (
+        &lt;Card style={{ width: '100%' }}&gt;
+          &lt;Box display='flex' flexDirection='row' flexGrow={0} margin={theme.spacing(3)} justifyContent='right'&gt;
+            &lt;Button
+              id='goToVotes'
+              label={strings.SEE_IC_VOTES}
+              priority='secondary'
+              onClick={goToVoting}
+              size='medium'
+              type='productive'
+            /&gt;
+          &lt;/Box&gt;
 &nbsp;
-        {activeLocale &amp;&amp; (
-          &lt;Grid container spacing={theme.spacing(2)}&gt;
-            &lt;Grid item xs={6}&gt;
-              &lt;PhaseScores phaseScores={phase0Scores} /&gt;
+          {activeLocale &amp;&amp; (
+            &lt;Grid container spacing={theme.spacing(2)}&gt;
+              &lt;Grid item xs={6}&gt;
+                &lt;PhaseScores phaseScores={phase0Scores} /&gt;
+              &lt;/Grid&gt;
+              &lt;Grid item xs={6}&gt;
+                &lt;PhaseScores phaseScores={phase1Scores} /&gt;
+              &lt;/Grid&gt;
             &lt;/Grid&gt;
-            &lt;Grid item xs={6}&gt;
-              &lt;PhaseScores phaseScores={phase1Scores} /&gt;
-            &lt;/Grid&gt;
-          &lt;/Grid&gt;
-        )}
-      &lt;/Card&gt;
+          )}
+        &lt;/Card&gt;
+      )}
     &lt;/PageWithModuleTimeline&gt;
   );
 };
@@ -319,7 +343,7 @@ export default ScorecardView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-04T13:04:08.443Z
+                at 2024-04-04T13:08:59.492Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

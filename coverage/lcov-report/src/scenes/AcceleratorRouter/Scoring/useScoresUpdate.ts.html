@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -114,7 +114,12 @@
 <a name='L49'></a><a href='#L49'>49</a>
 <a name='L50'></a><a href='#L50'>50</a>
 <a name='L51'></a><a href='#L51'>51</a>
-<a name='L52'></a><a href='#L52'>52</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -138,27 +143,32 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -169,7 +179,7 @@
 &nbsp;
 import { Statuses } from 'src/redux/features/asyncUtils';
 import { requestListScores, requestUpdateScores } from 'src/redux/features/scores/scoresAsyncThunks';
-import { selectScoresUpdateRequest } from 'src/redux/features/scores/scoresSelectors';
+import { selectScoreListByRequest, selectScoresUpdateRequest } from 'src/redux/features/scores/scoresSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Phase, Score } from 'src/types/Score';
@@ -188,7 +198,9 @@ export default function <span class="fstat-no" title="function not covered" >use
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
 &nbsp;
   const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
+  const [listRequestId, setListRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const result = <span class="cstat-no" title="statement not covered" >useAppSelector(selectScoresUpdateRequest(requestId));</span>
+  const scoreListResult = <span class="cstat-no" title="statement not covered" >useAppSelector(selectScoreListByRequest(listRequestId));</span>
 &nbsp;
   const update = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (p</span>hase: Phase, scores: Score[]) =&gt; {
@@ -204,16 +216,19 @@ export default function <span class="fstat-no" title="function not covered" >use
     } else <span class="cstat-no" title="statement not covered" >if (result?.status === 'success') {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastSuccess(strings.CHANGES_SAVED);</span>
       // Refresh scores in store for this project
-<span class="cstat-no" title="statement not covered" >      dispatch(requestListScores(projectId));</span>
+      const dispatched = <span class="cstat-no" title="statement not covered" >dispatch(requestListScores(projectId));</span>
+<span class="cstat-no" title="statement not covered" >      setListRequestId(dispatched.requestId);</span>
     }
   }, [dispatch, projectId, result, snackbar]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return useMemo&lt;Response&gt;(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
-      status: result?.status,
+      // Update is considered successful if both update and refresh list are successful.
+      // This is to help with provider data state.
+      status: result?.status === 'success' ? scoreListResult?.status : result?.status,
       update,
     }),
-    [result?.status, update]
+    [scoreListResult?.status, result?.status, update]
   );
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -223,7 +238,7 @@ export default function <span class="fstat-no" title="function not covered" >use
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-04T13:04:08.443Z
+                at 2024-04-04T13:08:59.492Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
