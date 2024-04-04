@@ -2,6 +2,8 @@ key_name,en,comment
 ACCELERATOR,Accelerator,
 ACCELERATOR_ADMIN,Accelerator Admin,
 ACCELERATOR_CONSOLE,Accelerator Console,
+ACCELERATOR_ORGS_TOOLTIP,Accelerator organizations with projects unassigned to a Participant.,
+ACCELERATOR_ORGS_EMPTY_WARNING,There are no accelerator organizations with projects unassigned to a Participant.,
 ACCEPT,Accept,
 ACCESSION,Accession,
 ACCESSION_BY_STATUS,Accession by Status,
