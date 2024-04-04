@@ -97,7 +97,7 @@ export const UserVoteEdit = ({
     ];
   }, [activeLocale]);
 
-  const getSelectedOption = (voteOption?: VoteOption) : DropdownItem => {
+  const getSelectedOption = (voteOption?: VoteOption): DropdownItem => {
     switch (voteOption) {
       case 'Yes':
         return voteOptions[1];
