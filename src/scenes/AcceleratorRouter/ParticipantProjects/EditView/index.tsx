@@ -192,48 +192,56 @@ const EditView = () => {
               id={'numNativeSpecies'}
               label={strings.NUMBER_OF_NATIVE_SPECIES}
               onChange={onChangeParticipantProject}
+              type={'number'}
               value={participantProject?.numNativeSpecies}
             />
             <ProjectFieldTextfield
               id={'applicationReforestableLand'}
               label={strings.APPLICATION_RESTORABLE_LAND}
               onChange={onChangeParticipantProject}
+              type={'number'}
               value={participantProject?.applicationReforestableLand}
             />
             <ProjectFieldTextfield
               id={'confirmedReforestableLand'}
               label={strings.CONFIRMED_RESTORABLE_LAND}
               onChange={onChangeParticipantProject}
+              type={'number'}
               value={participantProject?.confirmedReforestableLand}
             />
             <ProjectFieldTextfield
               id={'totalExpansionPotential'}
               label={strings.TOTAL_EXPANSION_POTENTIAL}
               onChange={onChangeParticipantProject}
+              type={'number'}
               value={participantProject?.totalExpansionPotential}
             />
             <ProjectFieldTextfield
               id={'minCarbonAccumulation'}
               label={strings.MINIMUM_CARBON_ACCUMULATION}
               onChange={onChangeParticipantProject}
+              type={'number'}
               value={participantProject?.minCarbonAccumulation}
             />
             <ProjectFieldTextfield
               id={'maxCarbonAccumulation'}
               label={strings.MAXIMUM_CARBON_ACCUMULATION}
               onChange={onChangeParticipantProject}
+              type={'number'}
               value={participantProject?.maxCarbonAccumulation}
             />
             <ProjectFieldTextfield
               id={'perHectareBudget'}
               label={strings.PER_HECTARE_ESTIMATED_BUDGET}
               onChange={onChangeParticipantProject}
+              type={'number'}
               value={participantProject?.perHectareBudget}
             />
             <ProjectFieldTextfield
               id={'numCommunities'}
               label={strings.NUMBER_OF_COMMUNITIES_WITHIN_PROJECT_AREA}
               onChange={onChangeParticipantProject}
+              type={'number'}
               value={participantProject?.numCommunities}
             />
             <ProjectFieldDisplay label={strings.DEAL_STAGE} value={participantProject?.dealStage} />

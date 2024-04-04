@@ -40,7 +40,7 @@ const ProjectFieldMeta = ({ date, dateLabel, userId, userName, userLabel }: Proj
               marginBottom={theme.spacing(1)}
               component={'span'}
             >
-              {getDateDisplayValue(date || '')}
+              {date ? getDateDisplayValue(date) : ''}
             </Typography>
           </Box>
           <Box>

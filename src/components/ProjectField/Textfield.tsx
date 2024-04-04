@@ -6,7 +6,7 @@ import { Textfield } from '@terraware/web-components';
 import { ProjectFieldEditProps } from '.';
 import GridEntryWrapper from './GridEntryWrapper';
 
-const ProjectFieldTextfield = ({ id, label, onChange, value }: ProjectFieldEditProps) => {
+const ProjectFieldTextfield = ({ id, label, onChange, type, value }: ProjectFieldEditProps) => {
   const theme = useTheme();
 
   const [localValue, setLocalValue] = useState<string | undefined>();
@@ -28,7 +28,7 @@ const ProjectFieldTextfield = ({ id, label, onChange, value }: ProjectFieldEditP
   return (
     <GridEntryWrapper>
       <Box paddingX={theme.spacing(2)}>
-        <Textfield id={id} label={label} onChange={handleOnChange} value={localValue} type='text' />
+        <Textfield id={id} label={label} onChange={handleOnChange} value={localValue} type={type || 'text'} />
       </Box>
     </GridEntryWrapper>
   );
