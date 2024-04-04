@@ -620,6 +620,7 @@ export default function Accession2View(): JSX.Element {
             handleEdit={() => setOpenQuantityModal(true)}
             hideEditIcon={accession?.remainingQuantity?.quantity === undefined && !isMobile}
             title={strings.QUANTITY}
+            titleInfoTooltip={!quantityEditable && strings.EDIT_QUANTITY_DISABLED}
             contents={
               accession?.remainingQuantity?.quantity !== undefined ? (
                 <Box display='flex' flexDirection='column'>
