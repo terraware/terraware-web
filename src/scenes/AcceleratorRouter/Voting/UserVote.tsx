@@ -97,19 +97,6 @@ export const UserVoteEdit = ({
     ];
   }, [activeLocale]);
 
-  const getSelectedOption = (voteOption?: VoteOption): DropdownItem => {
-    switch (voteOption) {
-      case 'Yes':
-        return voteOptions[1];
-      case 'No':
-        return voteOptions[2];
-      case 'Conditional':
-        return voteOptions[3];
-      default:
-        return voteOptions[0];
-    }
-  };
-
   return (
     <>
       <VoteRowGrid
@@ -119,7 +106,7 @@ export const UserVoteEdit = ({
             label={''}
             onChange={(value) => onVoteChange(value as VoteOption)}
             options={voteOptions}
-            selectedValue={getSelectedOption(voteOption)}
+            selectedValue={voteOption ?? undefined}
           />
         }
       />
