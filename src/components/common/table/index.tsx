@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { TableColumnType, TableRowType, Table as WebComponentsTable } from '@terraware/web-components';
 import { LocalizationProps, Props, TextAlignment } from '@terraware/web-components/components/table';
@@ -56,7 +56,7 @@ interface TableProps<T> extends Omit<Props<T>, keyof LocalizationProps> {
 }
 
 export function BaseTable<T extends TableRowType>(props: TableProps<T>): JSX.Element {
-  const addAlignment = () => {
+  const addAlignment = useMemo(() => {
     return props.columns.map((col) => {
       if (col.type === 'number') {
         return { ...col, alignment: 'right' as TextAlignment };
@@ -64,7 +64,8 @@ export function BaseTable<T extends TableRowType>(props: TableProps<T>): JSX.Ele
         return col;
       }
     });
-  };
+  }, [props.columns]);
+
   return WebComponentsTable({
     ...props,
     booleanFalseText: strings.NO,
@@ -73,7 +74,7 @@ export function BaseTable<T extends TableRowType>(props: TableProps<T>): JSX.Ele
     renderNumSelectedText,
     ...(props.showPagination !== false ? { renderPaginationText } : {}),
     enhancedTopBarSelectionConfig,
-    columns: addAlignment(),
+    columns: addAlignment,
   });
 }
 
