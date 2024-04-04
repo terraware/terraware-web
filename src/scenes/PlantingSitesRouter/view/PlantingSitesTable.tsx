@@ -47,8 +47,8 @@ const columns = (): TableColumnType[] => [
     name: strings.PROJECT,
     type: 'string',
   },
-  { key: 'numPlantingZones', name: strings.PLANTING_ZONES, type: 'string' },
-  { key: 'numPlantingSubzones', name: strings.SUBZONES, type: 'string' },
+  { key: 'numPlantingZones', name: strings.PLANTING_ZONES, type: 'number' },
+  { key: 'numPlantingSubzones', name: strings.SUBZONES, type: 'number' },
   { key: 'timeZone', name: strings.TIME_ZONE, type: 'string' },
   // TODO: update with BE prop
   { key: 'draft', name: '', type: 'string' }, // don't show column header name

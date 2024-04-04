@@ -76,13 +76,13 @@ function columns(): DatabaseColumn[] {
     {
       key: 'ageMonths',
       name: strings.AGE_MONTHS,
-      type: 'string',
+      type: 'number',
       filter: { type: 'number_range' },
     },
     {
       key: 'ageYears',
       name: strings.AGE_YEARS,
-      type: 'string',
+      type: 'number',
       filter: { type: 'number_range' },
     },
     {
@@ -130,37 +130,37 @@ function columns(): DatabaseColumn[] {
     {
       key: 'estimatedWeightMilligrams',
       name: strings.WEIGHT_MILLIGRAMS,
-      type: 'string',
+      type: 'number',
       filter: { type: 'number_range' },
     },
     {
       key: 'estimatedWeightGrams',
       name: strings.WEIGHT_GRAMS,
-      type: 'string',
+      type: 'number',
       filter: { type: 'number_range' },
     },
     {
       key: 'estimatedWeightKilograms',
       name: strings.WEIGHT_KILOGRAMS,
-      type: 'string',
+      type: 'number',
       filter: { type: 'number_range' },
     },
     {
       key: 'estimatedWeightOunces',
       name: strings.WEIGHT_OUNCES,
-      type: 'string',
+      type: 'number',
       filter: { type: 'number_range' },
     },
     {
       key: 'estimatedWeightPounds',
       name: strings.WEIGHT_POUNDS,
-      type: 'string',
+      type: 'number',
       filter: { type: 'number_range' },
     },
     {
       key: 'estimatedCount',
       name: strings.COUNT,
-      type: 'string',
+      type: 'number',
       filter: { type: 'number_range' },
     },
   ];
@@ -232,11 +232,3 @@ const seedStoragePreset: Preset = {
 export const searchPresets = (preferredWeightSystem: string) => {
   return [defaultPreset(preferredWeightSystem), generalInventoryPreset, seedStoragePreset];
 };
-
-export const RIGHT_ALIGNED_COLUMNS = [
-  'ageMonths',
-  'ageYears',
-  'estimatedWeightGrams',
-  'estimatedCount',
-  'totalViabilityPercent',
-];
