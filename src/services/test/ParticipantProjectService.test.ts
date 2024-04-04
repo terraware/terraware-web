@@ -128,7 +128,7 @@ describe('ParticipantProjectService', () => {
     });
 
     const expected =
-      `Organization Name,Project ID,Project Name,Phase 1 Score,Voting Decision,File Naming,Project Lead,Country,Region,Land Use Model Type,Number of Native Species,Application Restorable Land,Confirmed Restorable Land,Total Expansion Potential (ha),Minimum Carbon Accumulation (CO2/ha/yr),Maximum Carbon Accumulation (CO2/ha/yr),Per Hectare Estimated Budget,Number of Communities Within Project Area,Created on,Created by,Last modified on,Last modified by\r` +
+      `Organization Name,Project ID,Project Name,Phase 1 Score,Voting Decision,File Naming,Project Lead,Country,Region,Land Use Model Type,Number of Native Species,Application Restorable Land (ha),Confirmed Restorable Land (ha),Total Expansion Potential (ha),Minimum Carbon Accumulation (CO2/ha/yr),Maximum Carbon Accumulation (CO2/ha/yr),Per Hectare Estimated Budget,Number of Communities Within Project Area,Created on,Created by,Last modified on,Last modified by\r` +
       `"The tree farm","1","Project ""1234""","2","Yes","PROJ_123","test lead","AF","South Asia","Monoculture, Other Timber","","","","","","","","","2024-03-08T21:30:27.294915Z","Weese Ritherspoon","2024-03-29T17:41:09.530803Z","Donny Jepp"\r`;
     expect(result).toBe(expected);
   });
