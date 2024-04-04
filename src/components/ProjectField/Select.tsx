@@ -7,11 +7,10 @@ import { ProjectFieldEditProps } from '.';
 import GridEntryWrapper from './GridEntryWrapper';
 
 type ProjectFieldSelectProps = ProjectFieldEditProps & {
-  disabled?: boolean;
   options: DropdownItem[];
 };
 
-const ProjectFieldSelect = ({ disabled, id, label, onChange, value, options }: ProjectFieldSelectProps) => {
+const ProjectFieldSelect = ({ id, label, onChange, value, options }: ProjectFieldSelectProps) => {
   const theme = useTheme();
 
   const [localValue, setLocalValue] = useState<string | undefined>();
@@ -32,7 +31,6 @@ const ProjectFieldSelect = ({ disabled, id, label, onChange, value, options }: P
     <GridEntryWrapper>
       <Box paddingX={theme.spacing(2)}>
         <Dropdown
-          disabled={disabled}
           id={id}
           label={label}
           selectedValue={localValue}

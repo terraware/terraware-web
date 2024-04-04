@@ -58,6 +58,14 @@ const EditView = () => {
 
   const [confirmProjectNameModalOpen, setConfirmProjectNameModalOpen] = useState(false);
 
+  const onChangeCountry = useCallback(
+    (countryCode?: string, region?: string) => {
+      onChangeParticipantProject('countryCode', countryCode);
+      onChangeParticipantProject('region', region);
+    },
+    [onChangeParticipantProject]
+  );
+
   const saveParticipantProject = useCallback(() => {
     if (participantProjectRecord) {
       const dispatched = dispatch(requestUpdateParticipantProject(participantProjectRecord));
@@ -170,18 +178,18 @@ const EditView = () => {
               onChange={onChangeParticipantProject}
               value={participantProjectRecord?.projectLead}
             />
+            <CountrySelect
+              id={'countryCode'}
+              label={strings.COUNTRY}
+              onChange={onChangeCountry}
+              region={participantProjectRecord?.region}
+              value={participantProjectRecord?.countryCode}
+            />
             <RegionSelect
               id={'region'}
               label={strings.REGION}
               onChange={onChangeParticipantProject}
               value={participantProjectRecord?.region}
-            />
-            <CountrySelect
-              id={'countryCode'}
-              label={strings.COUNTRY}
-              onChange={onChangeParticipantProject}
-              region={participantProjectRecord?.region}
-              value={participantProjectRecord?.countryCode}
             />
             <LandUseMultiSelect
               id={'landUseModelTypes'}
