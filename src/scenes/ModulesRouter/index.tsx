@@ -5,7 +5,7 @@ import { APP_PATHS } from 'src/constants';
 import ProjectProvider from 'src/providers/Project/ProjectProvider';
 
 import ListView from './ListView';
-import ModuleEvent from './ModuleEvent';
+import ModuleEventView from './ModuleEventView';
 import ModuleView from './ModuleView';
 
 const ModulesRouter = () => {
@@ -21,7 +21,7 @@ const ModulesRouter = () => {
         </Route>
 
         <Route exact path={APP_PATHS.MODULES_FOR_PROJECT_EVENT}>
-          <ModuleEvent />
+          <ModuleEventView />
         </Route>
       </Switch>
     </ProjectProvider>
