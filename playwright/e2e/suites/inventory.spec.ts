@@ -196,7 +196,7 @@ export default function InventoryTests() {
     await expect(page.getByText('1 batch for a total of 150')).toBeVisible();
     await page.getByRole('button', { name: 'Withdrawals' }).click();
     await page.getByRole('tab', { name: 'Withdrawal History' }).click();
-    await page.locator('#row2-withdrawnDate').click();
+    await page.locator('#row1-withdrawnDate').click();
     await expect(page.getByText('Purpose Nursery Transfer')).toBeVisible();
     await expect(page.getByText('Quantity 150')).toBeVisible();
     await expect(page.getByText('Destination Nursery')).toBeVisible();
