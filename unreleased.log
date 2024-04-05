@@ -1,3 +1,4 @@
+7e1fa69dc5 SW-4795 Bump web-components version to correctly show right-aligned table headers (#2486)
 f213e321ca  SW-5186 Batches at Nursery table view: Withdrawn column is not populated (#2488)
 56c3c0ff0d SW-5153 Show tooltip/message about accelerator orgs in create participant workflow (#2483)
 1482fd0151 SW-5167 Fix country/region selection dependency (#2481)
