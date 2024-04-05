@@ -111,6 +111,8 @@ const NURSERY_BATCHES_FIELDS = [
   'subLocations.subLocation_name',
   'totalQuantity',
   'totalQuantity(raw)',
+  'totalQuantityWithdrawn',
+  'totalQuantityWithdrawn(raw)',
   'version',
   'project_name',
   'project_id',
