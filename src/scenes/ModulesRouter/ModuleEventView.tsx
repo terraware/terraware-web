@@ -120,7 +120,9 @@ const ModuleEventView = () => {
               <Box marginBottom={theme.spacing(2)}>
                 <Button
                   label={strings.formatString(strings.JOIN_EVENT_NAME, event.name)?.toString()}
-                  onClick={() => {}}
+                  onClick={() => {
+                    // do something
+                  }}
                 />
               </Box>
 
