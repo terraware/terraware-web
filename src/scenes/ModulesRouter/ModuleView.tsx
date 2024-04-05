@@ -2,7 +2,6 @@ import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
-import { Button } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Link from 'src/components/common/Link';
@@ -16,43 +15,8 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { getLongDate, getLongDateTime } from 'src/utils/dateFormatter';
 
+import ModuleFieldDisplay from './ModuleFieldDisplay';
 import ModuleViewTitle from './ModuleViewTitle';
-
-const ModuleFieldDisplay = ({
-  label,
-  leftBorder = true,
-  onClickButton,
-  value,
-}: {
-  label: string;
-  leftBorder?: boolean;
-  onClickButton?: () => void;
-  value: string;
-}) => {
-  const theme = useTheme();
-
-  return (
-    <Grid
-      item
-      xs={12}
-      md={3}
-      marginBottom={`${theme.spacing(3)}`}
-      sx={{
-        borderLeft: leftBorder ? `1px solid ${theme.palette.TwClrBaseGray100}` : 0,
-        minWidth: '300px',
-        textWrap: 'nowrap',
-      }}
-    >
-      <Box paddingX={theme.spacing(2)}>
-        <Typography fontSize={'20px'} lineHeight={'28px'} fontWeight={600} marginBottom={theme.spacing(1)}>
-          {label}
-        </Typography>
-        <Typography marginBottom={theme.spacing(1)}>{value}</Typography>
-        {onClickButton && <Button label={strings.MORE_INFO} onClick={onClickButton} priority='secondary' />}
-      </Box>
-    </Grid>
-  );
-};
 
 const ModuleContentSection = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -135,10 +99,7 @@ const ModuleContentView = () => {
                       </Link>
                       {content.dueDate && (
                         <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={400}>
-                          {strings.formatString(
-                            strings.DUE,
-                            getLongDate(content.dueDate.replace('PST', ''), activeLocale)
-                          )}
+                          {strings.formatString(strings.DUE, getLongDate(content.dueDate, activeLocale))}
                         </Typography>
                       )}
                     </ModuleContentSection>
@@ -154,7 +115,7 @@ const ModuleContentView = () => {
                     key={event.id}
                     label={event.name}
                     onClickButton={() => goToModuleEvent(projectId, event.id, module.id)}
-                    value={event.eventTime ? getLongDateTime(event.eventTime.replace('PST', ''), activeLocale) : ''}
+                    value={event.eventTime ? getLongDateTime(event.eventTime, activeLocale) : ''}
                   />
                 ))}
               </Grid>

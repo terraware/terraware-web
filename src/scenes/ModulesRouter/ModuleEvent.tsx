@@ -20,18 +20,19 @@ const ModuleEvent = () => {
   const moduleId = Number(pathParams.moduleId);
   const projectId = Number(pathParams.projectId);
   const module = useAppSelector(selectModule(moduleId));
-  const event = module?.events.find((e) => e.id === eventId);
+  const event = useMemo(() => module?.events.find((e) => e.id === eventId), [eventId, module]);
 
   const crumbs: Crumb[] = useMemo(
     () => [
       {
         name: activeLocale ? 'Module' : '',
-        to: APP_PATHS.MODULES_FOR_PROJECT_CONTENT.replace(':projectId', `${projectId}`)
-          .replace(':moduleId', `${moduleId}`)
-          .replace(':eventId', `${eventId}`),
+        to: APP_PATHS.MODULES_FOR_PROJECT_CONTENT.replace(':projectId', `${projectId}`).replace(
+          ':moduleId',
+          `${moduleId}`
+        ),
       },
     ],
-    [activeLocale, eventId, moduleId, projectId]
+    [activeLocale, moduleId, projectId]
   );
 
   return (

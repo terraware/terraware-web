@@ -16,12 +16,8 @@ export const getLongDate = (date: string, locale: string | undefined | null): st
 
 export const getLongDateTime = (date: string, locale: string | undefined | null): string =>
   new Intl.DateTimeFormat(locale || 'en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-    hour: 'numeric',
-    hour12: true,
-    timeZoneName: 'short',
+    dateStyle: 'long',
+    timeStyle: 'medium',
   }).format(new Date(date));
 
 export const getShortTime = (dateTime: string, locale: string | undefined | null, timeZone?: string): string =>
