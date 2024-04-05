@@ -19,7 +19,14 @@ import ModuleViewTitle from './ModuleViewTitle';
 
 // I think we'll likely add another endpoint to fetch module events separately,
 // but not sure if we'll consider including the event data in the module response
-const MOCK_EVENT_DATA: Record<string, Record<string, string>> = {
+const MOCK_EVENT_DATA: Record<
+  string,
+  {
+    additionalLinks?: { label: string }[];
+    description: string;
+    links: { label: string }[];
+  }
+> = {
   '1:1 Session': {
     description: `
       <div>
@@ -27,6 +34,8 @@ const MOCK_EVENT_DATA: Record<string, Record<string, string>> = {
         <p>Please ensure to complete all the Stakeholders & Co-Benefits questions for the Feasibility Study by Friday 3rd November.</p>
       </div>
     `,
+    links: [{ label: '1:1 Session Slides' }, { label: '1:1 Session Recording' }],
+    additionalLinks: [{ label: 'Preparation Materials' }, { label: 'Additional Resources' }],
   },
   'Live Session': {
     description: `
@@ -48,6 +57,7 @@ const MOCK_EVENT_DATA: Record<string, Record<string, string>> = {
         <p>Damien Kuhn is an agronomist and forestry engineer from AgroParisTech, where he specialized in environmental economics. He has spent the past 16 years working on forestry and climate projects across Africa, Latin America, and Southeast Asia. As former COO of Kinomé, he developed partnerships worldwide and managing a portfolio of community-based forestry projects. He has also been an advisor to governments and companies on their climate, forestry, and agricultural strategies, including as lead expert for four countries' Nationally Determined Contributions under the Paris Climate Accords.</p>
       </div>
     `,
+    links: [{ label: 'Live Session Slides' }, { label: 'Live Session Recording' }],
   },
 };
 
@@ -114,21 +124,17 @@ const ModuleEventView = () => {
                 />
               </Box>
 
-              <Box marginBottom={theme.spacing(2)}>
-                <Link fontSize='16px' to='#'>
-                  {strings.formatString(strings.MODULE_EVENT_NAME_SLIDES, event.name)?.toString()}
-                </Link>
-              </Box>
+              {mockEventData?.links?.map((link, index) => (
+                <Box key={index} marginBottom={theme.spacing(2)}>
+                  <Link fontSize='16px' to='#'>
+                    {link.label}
+                  </Link>
+                </Box>
+              ))}
 
-              <Box marginBottom={theme.spacing(2)}>
-                <Link fontSize='16px' to='#'>
-                  {strings.formatString(strings.MODULE_EVENT_NAME_RECORDING, event.name)?.toString()}
-                </Link>
-              </Box>
+              {eventIsLiveSession && <Box dangerouslySetInnerHTML={{ __html: mockEventData?.description || '' }} />}
 
-              {eventIsLiveSession ? (
-                <Box dangerouslySetInnerHTML={{ __html: mockEventData?.description || '' }} />
-              ) : (
+              {mockEventData?.additionalLinks?.length && (
                 <>
                   <hr
                     style={{
@@ -138,17 +144,13 @@ const ModuleEventView = () => {
                     }}
                   />
 
-                  <Box marginBottom={theme.spacing(2)}>
-                    <Link fontSize='16px' to='#'>
-                      {strings.PREPARATION_MATERIALS}
-                    </Link>
-                  </Box>
-
-                  <Box marginBottom={theme.spacing(2)}>
-                    <Link fontSize='16px' to='#'>
-                      {strings.ADDITIONAL_RESOURCES}
-                    </Link>
-                  </Box>
+                  {mockEventData?.additionalLinks?.map((link, index) => (
+                    <Box key={index} marginBottom={theme.spacing(2)}>
+                      <Link fontSize='16px' to='#'>
+                        {link.label}
+                      </Link>
+                    </Box>
+                  ))}
                 </>
               )}
             </Grid>
