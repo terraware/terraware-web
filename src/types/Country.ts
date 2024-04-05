@@ -1,11 +1,11 @@
 export type Country = {
-  code: number;
+  code: string;
   name: string;
   region?: string;
   subdivisions?: Subdivision[];
 };
 
 export type Subdivision = {
-  code: number;
+  code: string;
   name: string;
 };

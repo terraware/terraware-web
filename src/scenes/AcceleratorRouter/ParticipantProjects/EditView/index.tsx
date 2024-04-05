@@ -8,7 +8,7 @@ import ProjectFieldDisplay from 'src/components/ProjectField/Display';
 import LandUseMultiSelect from 'src/components/ProjectField/LandUseMultiSelect';
 import ProjectFieldMeta from 'src/components/ProjectField/Meta';
 import PhaseScoreCard from 'src/components/ProjectField/PhaseScoreCard';
-import RegionSelect from 'src/components/ProjectField/RegionSelect';
+import RegionDisplay from 'src/components/ProjectField/RegionDisplay';
 import ProjectFieldTextAreaEdit from 'src/components/ProjectField/TextAreaEdit';
 import ProjectFieldTextfield from 'src/components/ProjectField/Textfield';
 import VotingDecisionCard from 'src/components/ProjectField/VotingDecisionCard';
@@ -57,6 +57,14 @@ const EditView = () => {
   const [projectRecord, setProjectRecord, onChangeProject] = useForm(project);
 
   const [confirmProjectNameModalOpen, setConfirmProjectNameModalOpen] = useState(false);
+
+  const onChangeCountry = useCallback(
+    (countryCode?: string, region?: string) => {
+      onChangeParticipantProject('countryCode', countryCode);
+      onChangeParticipantProject('region', region);
+    },
+    [onChangeParticipantProject]
+  );
 
   const saveParticipantProject = useCallback(() => {
     if (participantProjectRecord) {
@@ -162,89 +170,85 @@ const EditView = () => {
               id={'fileNaming'}
               label={strings.FILE_NAMING}
               onChange={onChangeParticipantProject}
-              value={participantProject?.fileNaming}
+              value={participantProjectRecord?.fileNaming}
             />
             <ProjectFieldTextfield
               id={'projectLead'}
               label={strings.PROJECT_LEAD}
               onChange={onChangeParticipantProject}
-              value={participantProject?.projectLead}
+              value={participantProjectRecord?.projectLead}
             />
             <CountrySelect
               id={'countryCode'}
               label={strings.COUNTRY}
-              onChange={onChangeParticipantProject}
-              value={participantProject?.countryCode}
+              onChange={onChangeCountry}
+              region={participantProjectRecord?.region}
+              value={participantProjectRecord?.countryCode}
             />
-            <RegionSelect
-              id={'region'}
-              label={strings.REGION}
-              onChange={onChangeParticipantProject}
-              value={participantProject?.region}
-            />
+            <RegionDisplay label={strings.REGION} value={participantProjectRecord?.region} />
             <LandUseMultiSelect
               id={'landUseModelTypes'}
               label={strings.LAND_USE_MODEL_TYPE}
               onChange={onChangeParticipantProject}
-              value={participantProject?.landUseModelTypes}
+              value={participantProjectRecord?.landUseModelTypes}
             />
             <ProjectFieldTextfield
               id={'numNativeSpecies'}
               label={strings.NUMBER_OF_NATIVE_SPECIES}
               onChange={onChangeParticipantProject}
               type={'number'}
-              value={participantProject?.numNativeSpecies}
+              value={participantProjectRecord?.numNativeSpecies}
             />
             <ProjectFieldTextfield
               id={'applicationReforestableLand'}
               label={strings.APPLICATION_RESTORABLE_LAND}
               onChange={onChangeParticipantProject}
               type={'number'}
-              value={participantProject?.applicationReforestableLand}
+              value={participantProjectRecord?.applicationReforestableLand}
             />
             <ProjectFieldTextfield
               id={'confirmedReforestableLand'}
               label={strings.CONFIRMED_RESTORABLE_LAND}
               onChange={onChangeParticipantProject}
               type={'number'}
-              value={participantProject?.confirmedReforestableLand}
+              value={participantProjectRecord?.confirmedReforestableLand}
             />
             <ProjectFieldTextfield
               id={'totalExpansionPotential'}
               label={strings.TOTAL_EXPANSION_POTENTIAL}
               onChange={onChangeParticipantProject}
               type={'number'}
-              value={participantProject?.totalExpansionPotential}
+              value={participantProjectRecord?.totalExpansionPotential}
             />
             <ProjectFieldTextfield
               id={'minCarbonAccumulation'}
               label={strings.MINIMUM_CARBON_ACCUMULATION}
               onChange={onChangeParticipantProject}
               type={'number'}
-              value={participantProject?.minCarbonAccumulation}
+              value={participantProjectRecord?.minCarbonAccumulation}
             />
             <ProjectFieldTextfield
               id={'maxCarbonAccumulation'}
               label={strings.MAXIMUM_CARBON_ACCUMULATION}
               onChange={onChangeParticipantProject}
               type={'number'}
-              value={participantProject?.maxCarbonAccumulation}
+              value={participantProjectRecord?.maxCarbonAccumulation}
             />
             <ProjectFieldTextfield
               id={'perHectareBudget'}
               label={strings.PER_HECTARE_ESTIMATED_BUDGET}
               onChange={onChangeParticipantProject}
               type={'number'}
-              value={participantProject?.perHectareBudget}
+              value={participantProjectRecord?.perHectareBudget}
             />
             <ProjectFieldTextfield
               id={'numCommunities'}
               label={strings.NUMBER_OF_COMMUNITIES_WITHIN_PROJECT_AREA}
               onChange={onChangeParticipantProject}
               type={'number'}
-              value={participantProject?.numCommunities}
+              value={participantProjectRecord?.numCommunities}
             />
-            <ProjectFieldDisplay label={strings.DEAL_STAGE} value={participantProject?.dealStage} />
+            <ProjectFieldDisplay label={strings.DEAL_STAGE} value={participantProjectRecord?.dealStage} />
             <ProjectFieldMeta
               date={project?.createdTime}
               dateLabel={strings.CREATED_ON}
@@ -275,25 +279,25 @@ const EditView = () => {
               id={'dealDescription'}
               label={strings.DEAL_DESCRIPTION}
               onChange={onChangeParticipantProject}
-              value={participantProject?.dealDescription}
+              value={participantProjectRecord?.dealDescription}
             />
             <ProjectFieldTextAreaEdit
               id={'investmentThesis'}
               label={strings.INVESTMENT_THESIS}
               onChange={onChangeParticipantProject}
-              value={participantProject?.investmentThesis}
+              value={participantProjectRecord?.investmentThesis}
             />
             <ProjectFieldTextAreaEdit
               id={'failureRisk'}
               label={strings.FAILURE_RISK}
               onChange={onChangeParticipantProject}
-              value={participantProject?.failureRisk}
+              value={participantProjectRecord?.failureRisk}
             />
             <ProjectFieldTextAreaEdit
               id={'whatNeedsToBeTrue'}
               label={strings.WHAT_NEEDS_TO_BE_TRUE}
               onChange={onChangeParticipantProject}
-              value={participantProject?.whatNeedsToBeTrue}
+              value={participantProjectRecord?.whatNeedsToBeTrue}
             />
           </Grid>
         </Card>

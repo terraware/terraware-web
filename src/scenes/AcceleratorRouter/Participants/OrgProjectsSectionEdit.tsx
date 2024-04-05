@@ -85,6 +85,7 @@ const OrgProjectsSectionEdit = ({
           onChange={onOrgChange}
           options={orgOptions}
           selectedValue={section.org?.id}
+          tooltipTitle={strings.ACCELERATOR_ORGS_TOOLTIP}
         />
       </Grid>
       <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
