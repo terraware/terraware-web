@@ -79,6 +79,7 @@ jobs:
           SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
           SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENTSECRET: dummy
           SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
+          TERRAWARE_MAPBOX_API_TOKEN: ${{ secrets.REACT_APP_MAPBOX_TOKEN }}
 
       - name: Install Playwright Browsers
         run: yarn playwright install --with-deps
@@ -93,6 +94,7 @@ jobs:
           REACT_APP_TERRAWARE_FE_BUILD_VERSION: ${{ env.APP_VERSION }}
 
       - name: save screenshots of e2e test failures
+        if: failure()
         uses: actions/upload-artifact@v3
         with:
           name: playwright-report
