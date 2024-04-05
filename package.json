@@ -71,6 +71,7 @@
     "luxon": "^3.3.0",
     "mapbox-gl": "^2.13.0",
     "moment": "^2.30.1",
+    "package.json": "^2.0.1",
     "re-reselect": "^4.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -83,7 +84,8 @@
     "styled-components": "^6.0.0",
     "utm": "^1.1.1",
     "web-vitals": "^3.1.1",
-    "worker-loader": "^3.0.8"
+    "worker-loader": "^3.0.8",
+    "yarn.lock": "^0.0.1-security"
   },
   "eslintConfig": {
     "extends": [
