@@ -11,6 +11,7 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { requestGetModule } from 'src/redux/features/modules/modulesAsyncThunks';
 import { selectModule } from 'src/redux/features/modules/modulesSelectors';
+import { selectProject } from 'src/redux/features/projects/projectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { getLongDate, getLongDateTime } from 'src/utils/dateFormatter';
@@ -40,6 +41,7 @@ const ModuleContentView = () => {
   const moduleId = Number(pathParams.moduleId);
   const projectId = Number(pathParams.projectId);
   const module = useAppSelector(selectModule(moduleId));
+  const project = useAppSelector(selectProject(projectId));
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -56,7 +58,11 @@ const ModuleContentView = () => {
   }, [dispatch, moduleId]);
 
   return (
-    <PageWithModuleTimeline crumbs={crumbs} hierarchicalCrumbs={false} title={<ModuleViewTitle module={module} />}>
+    <PageWithModuleTimeline
+      crumbs={crumbs}
+      hierarchicalCrumbs={false}
+      title={<ModuleViewTitle module={module} project={project} />}
+    >
       <Card
         sx={{
           borderRadius: '24px',

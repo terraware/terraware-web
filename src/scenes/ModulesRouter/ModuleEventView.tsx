@@ -11,6 +11,7 @@ import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { requestGetModule } from 'src/redux/features/modules/modulesAsyncThunks';
 import { selectModule } from 'src/redux/features/modules/modulesSelectors';
+import { selectProject } from 'src/redux/features/projects/projectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { getLongDateTime } from 'src/utils/dateFormatter';
@@ -72,6 +73,7 @@ const ModuleEventView = () => {
   const module = useAppSelector(selectModule(moduleId));
   const event = useMemo(() => module?.events.find((e) => e.id === eventId), [eventId, module]);
   const mockEventData = event?.name ? MOCK_EVENT_DATA?.[event.name] : undefined;
+  const project = useAppSelector(selectProject(projectId));
   const eventIsLiveSession = event?.name === strings.LIVE_SESSION;
 
   const crumbs: Crumb[] = useMemo(
@@ -92,7 +94,11 @@ const ModuleEventView = () => {
   }, [dispatch, moduleId]);
 
   return (
-    <PageWithModuleTimeline crumbs={crumbs} hierarchicalCrumbs={false} title={<ModuleViewTitle module={module} />}>
+    <PageWithModuleTimeline
+      crumbs={crumbs}
+      hierarchicalCrumbs={false}
+      title={<ModuleViewTitle module={module} project={project} />}
+    >
       <Card
         style={{
           borderRadius: '24px',
