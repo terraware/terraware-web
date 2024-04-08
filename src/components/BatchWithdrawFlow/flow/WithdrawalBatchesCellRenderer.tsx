@@ -12,6 +12,11 @@ import { useUser } from 'src/providers';
 import { useNumberFormatter } from 'src/utils/useNumber';
 
 const useStyles = makeStyles(() => ({
+  quantityContainer: {
+    '& .textfield .textfield-value input': {
+      textAlign: 'right',
+    },
+  },
   text: {
     fontSize: '14px',
     '& > p': {
@@ -24,6 +29,7 @@ const useStyles = makeStyles(() => ({
 
     '& label': {
       whiteSpace: 'break-spaces',
+      textAlign: 'left',
     },
   },
   cell: {
@@ -53,7 +59,12 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
   const createQuantityInput = (id: string, valueProperty: string) => {
     if (onRowClick) {
       return (
-        <Box display='flex' alignItems={row.error[id] ? 'start' : 'center'}>
+        <Box
+          display='flex'
+          alignItems={row.error[id] ? 'start' : 'center'}
+          justifyContent='end'
+          className={classes.quantityContainer}
+        >
           <Textfield
             id={id}
             type='number'
@@ -75,16 +86,23 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
   const createReadyOutplantInput = (iValue: React.ReactNode | unknown[]) => {
     if (onRowClick) {
       return (
-        <Textfield
-          id='readyQuantityWithdrawn'
-          type='number'
-          onChange={(newValue) => onRowClick(newValue as string)}
-          value={row.readyQuantityWithdrawn}
-          label={''}
-          errorText={row.error.readyQuantityWithdrawn}
-          className={classes.input}
-          min={0}
-        />
+        <Box
+          display='flex'
+          alignItems={row.error.readyQuantityWithdrawn ? 'start' : 'center'}
+          justifyContent='end'
+          className={classes.quantityContainer}
+        >
+          <Textfield
+            id='readyQuantityWithdrawn'
+            type='number'
+            onChange={(newValue) => onRowClick(newValue as string)}
+            value={row.readyQuantityWithdrawn}
+            label={''}
+            errorText={row.error.readyQuantityWithdrawn}
+            className={classes.input}
+            min={0}
+          />
+        </Box>
       );
     }
   };
