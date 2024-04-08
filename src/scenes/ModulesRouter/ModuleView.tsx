@@ -15,7 +15,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { getLongDate, getLongDateTime } from 'src/utils/dateFormatter';
 
-import ModuleFieldDisplay from './ModuleFieldDisplay';
+import ModuleEventCard from './ModuleEventCard';
 import ModuleViewTitle from './ModuleViewTitle';
 
 const ModuleContentSection = ({ children }: { children: React.ReactNode }) => {
@@ -111,7 +111,7 @@ const ModuleContentView = () => {
             {module.events.length && (
               <Grid item>
                 {module.events.map((event) => (
-                  <ModuleFieldDisplay
+                  <ModuleEventCard
                     key={event.id}
                     label={event.name}
                     onClickButton={() => goToModuleEvent(projectId, event.id, module.id)}
