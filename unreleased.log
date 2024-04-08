@@ -1,3 +1,4 @@
+e6524ce360 SW-4795 Fix withdrawal tables right alignments (#2493)
 a0711a4bb4 SW-4643 - Add nursery inventory e2e tests (#2487)
 7e1fa69dc5 SW-4795 Bump web-components version to correctly show right-aligned table headers (#2486)
 f213e321ca  SW-5186 Batches at Nursery table view: Withdrawn column is not populated (#2488)
