@@ -1,6 +1,10 @@
-import { User } from 'src/types/User';
+export type UserIdentity = {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+};
 
-export const getUserDisplayName = (user?: User): string => {
+export const getUserDisplayName = (user?: UserIdentity): string => {
   if (user?.firstName && user?.lastName) {
     return `${user.firstName} ${user.lastName}`;
   }
@@ -12,3 +16,6 @@ export const getUserDisplayName = (user?: User): string => {
   }
   return user?.email || '';
 };
+
+export const isTerraformationEmail = (input?: string): boolean =>
+  (input || '').toLowerCase().endsWith('@terraformation.com');

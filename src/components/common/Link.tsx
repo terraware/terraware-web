@@ -1,14 +1,17 @@
 import React, { MouseEvent, ReactNode, SyntheticEvent } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { makeStyles } from '@mui/styles';
+
 import { Link as MuiLink, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
 export type LinkProps = {
   children: ReactNode;
-  to?: string;
+  to?: string | { pathname: string | undefined } | undefined;
   onClick?: (e?: MouseEvent | SyntheticEvent) => void;
   className?: string;
   fontSize?: string | number;
+  fontWeight?: string | number;
+  lineHeight?: string | number;
   target?: string;
   id?: string;
   disabled?: boolean;
@@ -17,6 +20,8 @@ export type LinkProps = {
 
 type StyleProps = {
   fontSize: string | number;
+  fontWeight: string | number;
+  lineHeight: string | number;
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -24,7 +29,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: theme.palette.TwClrTxtBrand,
     fontFamily: 'Inter',
     fontSize: (props: StyleProps) => props.fontSize,
-    fontWeight: 500,
+    fontWeight: (props: StyleProps) => props.fontWeight,
+    lineHeight: (props: StyleProps) => props.lineHeight,
     textDecoration: 'none',
     '&:hover': {
       textDecoration: 'underline',
@@ -33,8 +39,12 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export default function Link(props: LinkProps): JSX.Element {
-  const { to, children, className, onClick, fontSize, target, id, disabled, replace } = props;
-  const classes = useStyles({ fontSize: fontSize || '14px' });
+  const { to, children, className, onClick, fontSize, fontWeight, lineHeight, target, id, disabled, replace } = props;
+  const classes = useStyles({
+    fontSize: fontSize || '14px',
+    fontWeight: fontWeight || 500,
+    lineHeight: lineHeight || '21px',
+  });
   const classNameToUse = `${classes.link} ${className || ''}`;
 
   if (to) {
@@ -50,7 +60,6 @@ export default function Link(props: LinkProps): JSX.Element {
       component='button'
       className={classNameToUse}
       onClick={onClick}
-      target={target}
       id={id}
       disabled={disabled}
       sx={{

@@ -4,19 +4,27 @@ import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePag
 import PageHeader from 'src/components/seeds/PageHeader';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import AddSpeciesModal from '../Species/AddSpeciesModal';
 import ImportSpeciesModal, { downloadCsvTemplate } from '../Species/ImportSpeciesModal';
 import TfMain from '../common/TfMain';
+
 import { Container, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import useSnackbar from 'src/utils/useSnackbar';
-import { IconName } from 'src/components/common/icon/icons';
-import { isContributor } from 'src/utils/organization';
+
+import PageHeader from 'src/components/PageHeader';
 import EmptyMessage from 'src/components/common/EmptyMessage';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import ImportInventoryModal, { downloadInventoryCsvTemplate } from '../Inventory/ImportInventoryModal';
-import PlantingSiteTypeSelect from '../PlantingSites/PlantingSiteTypeSelect';
+import { IconName } from 'src/components/common/icon/icons';
+import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePages/EmptyStateContent';
+import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers/hooks';
+import ImportInventoryModal, { downloadInventoryCsvTemplate } from 'src/scenes/InventoryRouter/ImportInventoryModal';
+import PlantingSiteTypeSelect from 'src/scenes/PlantingSitesRouter/edit/PlantingSiteTypeSelect';
+import strings from 'src/strings';
+import { isContributor } from 'src/utils/organization';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useSnackbar from 'src/utils/useSnackbar';
+
+import ImportSpeciesModal, { downloadCsvTemplate } from '../../scenes/Species/ImportSpeciesModal';
+import TfMain from '../common/TfMain';
 
 interface StyleProps {
   isMobile: boolean;
@@ -58,7 +66,7 @@ type PageContent = {
 
 type EmptyStatePageProps = {
   backgroundImageVisible?: boolean;
-  pageName: 'Species' | 'SeedBanks' | 'Nurseries' | 'Inventory' | 'PlantingSites';
+  pageName: 'Species' | 'SeedBanks' | 'Nurseries' | 'Inventory' | 'PlantingSites' | 'Projects';
   reloadData?: () => void;
 };
 
@@ -88,7 +96,6 @@ export default function EmptyStatePage({
     downloadInventoryCsvTemplate();
   };
 
-  const [addSpeciesModalOpened, setAddSpeciesModalOpened] = useState(false);
   const [importSpeciesModalOpened, setImportSpeciesModalOpened] = useState(false);
   const [importInventoryModalOpened, setImportInventoryModalOpened] = useState(false);
   const [plantingSiteTypeSelectOpen, setPlantingSiteTypeSelectOpen] = useState(false);
@@ -117,7 +124,7 @@ export default function EmptyStatePage({
         buttonText: strings.ADD_SPECIES,
         buttonIcon: 'plus',
         onClickButton: () => {
-          setAddSpeciesModalOpened(true);
+          history.push(APP_PATHS.SPECIES_NEW);
         },
       },
     ],
@@ -205,6 +212,20 @@ export default function EmptyStatePage({
     linkLocation: APP_PATHS.NURSERIES_NEW,
   };
 
+  const NO_PROJECTS_CONTENT: PageContent = {
+    title1: strings.PROJECTS,
+    title2: strings.ADD_A_PROJECT,
+    subtitle: strings.ADD_PROJECT_SUBTITLE,
+    listItems: [
+      {
+        icon: 'blobbyIconFolder',
+      },
+    ],
+    buttonText: strings.ADD_PROJECT,
+    buttonIcon: 'plus',
+    linkLocation: APP_PATHS.PROJECTS_NEW,
+  };
+
   const pageContent = (): PageContent => {
     const contributor = selectedOrganization && isContributor(selectedOrganization);
 
@@ -219,25 +240,14 @@ export default function EmptyStatePage({
         return NO_INVENTORY_CONTENT;
       case 'PlantingSites':
         return NO_PLANTING_SITES_CONTENT;
+      case 'Projects':
+        return NO_PROJECTS_CONTENT;
       default:
         return NO_SEEDBANKS_CONTENT;
     }
   };
 
   const content = pageContent();
-
-  const onCloseEditSpeciesModal = (saved: boolean, snackbarMessage?: string) => {
-    if (saved) {
-      if (reloadData) {
-        reloadData();
-      }
-      navigate({ pathname: APP_PATHS.SPECIES, search: '?checkData' });
-    }
-    setAddSpeciesModalOpened(false);
-    if (snackbarMessage) {
-      snackbar.toastSuccess(snackbarMessage);
-    }
-  };
 
   const onCloseImportSpeciesModal = (saved: boolean, snackbarMessage?: string) => {
     if (saved) {
@@ -273,7 +283,6 @@ export default function EmptyStatePage({
     <TfMain backgroundImageVisible={backgroundImageVisible}>
       {selectedOrganization && (
         <>
-          <AddSpeciesModal open={addSpeciesModalOpened} onClose={onCloseEditSpeciesModal} />
           <ImportSpeciesModal open={importSpeciesModalOpened} onClose={onCloseImportSpeciesModal} />
           <ImportInventoryModal open={importInventoryModalOpened} onClose={onCloseImportInventoryModal} />
         </>

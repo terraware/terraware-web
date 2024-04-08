@@ -11,15 +11,17 @@ Here's how to set that up using Docker Desktop on MacOS.
 1. Generate a self-signed certificate. The following command should work. You'll only need
    to do this once.
 
-   openssl req \
-    -x509 \
-    -nodes \
-    -days 3650 \
-    -subj "/C=US/ST=HI/O=Terraformation/CN=localhost" \
-    -addext "subjectAltName=DNS:localhost" \
-    -newkey rsa:2048 \
-    -keyout self-signed.key \
-    -out self-signed.crt
+```shell
+openssl req \
+--x509 \
+--nodes \
+--days 3650 \
+--subj "/C=US/ST=HI/O=Terraformation/CN=localhost" \
+--addext "subjectAltName=DNS:localhost" \
+--newkey rsa:2048 \
+--keyout self-signed.key \
+--out self-signed.crt
+```
 
 2. Figure out the server URL you want to use, e.g., `https://terraware.io` for production.
 3. Set `REACT_APP_TERRAWARE_API` to that URL in the `.env` file in the repo root directory.

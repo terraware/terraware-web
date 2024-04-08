@@ -1,10 +1,12 @@
-import { useCallback, useEffect, useState } from 'react';
-import { Table as WebComponentsTable, TableColumnType, TableRowType } from '@terraware/web-components';
-import strings from 'src/strings';
-import { LocalizationProps, Props } from '@terraware/web-components/components/table';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+
+import { TableColumnType, TableRowType, Table as WebComponentsTable } from '@terraware/web-components';
+import { LocalizationProps, Props, TextAlignment } from '@terraware/web-components/components/table';
+import _ from 'lodash';
+
 import { useLocalization, useOrganization } from 'src/providers';
 import { PreferencesService } from 'src/services';
-import _ from 'lodash';
+import strings from 'src/strings';
 
 function renderPaginationText(from: number, to: number, total: number): string {
   if (total > 0) {
@@ -18,11 +20,52 @@ function renderNumSelectedText(numSelected: number): string {
   return strings.formatString(strings.ROWS_SELECTED, numSelected) as string;
 }
 
+const enhancedTopBarSelectionConfig = {
+  renderEnhancedNumSelectedText: (selectedCount: number, pageCount: number): string => {
+    switch (true) {
+      case selectedCount === 1 && pageCount === 1: {
+        return strings.formatString<string>(strings.TABLE_SELECTED_ROW, `${selectedCount}`) as string;
+      }
+      case selectedCount > 1 && pageCount === 1: {
+        return strings.formatString<string>(strings.TABLE_SELECTED_ROWS, `${selectedCount}`) as string;
+      }
+      case selectedCount === 1 && pageCount > 1: {
+        return strings.formatString<string>(
+          strings.TABLE_SELECTED_ROW_ACROSS_PAGES,
+          `${selectedCount}`,
+          `${pageCount}`
+        ) as string;
+      }
+      case selectedCount > 1 && pageCount > 1: {
+        return strings.formatString<string>(
+          strings.TABLE_SELECTED_ROWS_ACROSS_PAGES,
+          `${selectedCount}`,
+          `${pageCount}`
+        ) as string;
+      }
+    }
+    return '';
+  },
+  renderSelectAllText: (rowsCount: number): string =>
+    strings.formatString(strings.TABLE_SELECT_ALL_ROWS, `${rowsCount}`) as string,
+  renderSelectNoneText: (): string => strings.TABLE_SELECT_NONE,
+};
+
 interface TableProps<T> extends Omit<Props<T>, keyof LocalizationProps> {
   showPagination?: boolean;
 }
 
 export function BaseTable<T extends TableRowType>(props: TableProps<T>): JSX.Element {
+  const addAlignment = useMemo(() => {
+    return props.columns.map((col) => {
+      if (col.type === 'number') {
+        return { ...col, alignment: 'right' as TextAlignment };
+      } else {
+        return col;
+      }
+    });
+  }, [props.columns]);
+
   return WebComponentsTable({
     ...props,
     booleanFalseText: strings.NO,
@@ -30,6 +73,8 @@ export function BaseTable<T extends TableRowType>(props: TableProps<T>): JSX.Ele
     editText: strings.EDIT,
     renderNumSelectedText,
     ...(props.showPagination !== false ? { renderPaginationText } : {}),
+    enhancedTopBarSelectionConfig,
+    columns: addAlignment,
   });
 }
 
@@ -113,8 +158,11 @@ export type OrderPreservedTableProps = {
   id: string;
   columns: () => TableColumnType[];
 };
+
+export type OrderPreservedTablePropsFull<T> = Omit<TableProps<T>, 'columns'> & OrderPreservedTableProps;
+
 export default function OrderPreservedTable<T extends TableRowType>(
-  props: Omit<TableProps<T>, 'columns'> & OrderPreservedTableProps
+  props: OrderPreservedTablePropsFull<T>
 ): JSX.Element {
   const { columns, ...tableProps } = props;
   const { activeLocale } = useLocalization();

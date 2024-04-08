@@ -1,6 +1,7 @@
 import strings from 'src/strings';
-import Button from '../common/button/Button';
+
 import DialogBox from '../common/DialogBox/DialogBox';
+import Button from '../common/button/Button';
 
 export interface CannotEditReportDialogProps {
   open: boolean;

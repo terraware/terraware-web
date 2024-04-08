@@ -1,18 +1,21 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+
 import { Box, Grid, Typography } from '@mui/material';
-import strings from 'src/strings';
-import { SubLocationService } from 'src/services';
-import { DEFAULT_SUB_LOCATIONS, PartialSubLocation } from 'src/types/Facility';
-import { useLocalization } from 'src/providers';
+import { Button } from '@terraware/web-components';
+import { TopBarButton } from '@terraware/web-components/components/table';
+import _ from 'lodash';
+
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
-import { useNumberFormatter } from 'src/utils/useNumber';
-import SubLocationsCellRenderer from './SubLocationsCellRenderer';
-import { TopBarButton } from '@terraware/web-components/components/table';
-import { Button } from '@terraware/web-components';
+import { useLocalization } from 'src/providers';
+import { SubLocationService } from 'src/services';
+import strings from 'src/strings';
+import { DEFAULT_SUB_LOCATIONS, PartialSubLocation } from 'src/types/Facility';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { useNumberFormatter } from 'src/utils/useNumber';
+
 import AddEditSubLocationModal from './AddEditSubLocationModal';
-import _ from 'lodash';
+import SubLocationsCellRenderer from './SubLocationsCellRenderer';
 
 export type FacilityType = 'seedbank' | 'nursery';
 

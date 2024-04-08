@@ -1,15 +1,18 @@
-import { Typography, Grid, Box } from '@mui/material';
 import React from 'react';
-import strings from 'src/strings';
-import Checkbox from '../../common/Checkbox';
-import Divisor from '../../common/Divisor';
-import RadioButton from '../../common/RadioButton';
-import { orderedColumnNames, columnsIndexed, Preset, searchPresets } from './columns';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+import { Box, Grid, Typography } from '@mui/material';
+import { IconTooltip } from '@terraware/web-components';
+
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { useUser } from 'src/providers';
-import { IconTooltip } from '@terraware/web-components';
+import strings from 'src/strings';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+import Checkbox from '../../common/Checkbox';
+import Divisor from '../../common/Divisor';
+import RadioButton from '../../common/RadioButton';
+import { Preset, columnsIndexed, orderedColumnNames, searchPresets } from './columns';
 
 export interface Props {
   open: boolean;
@@ -62,6 +65,8 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
     return 4;
   };
 
+  const userSections = sections(userPreferences.preferredWeightSystem as string);
+
   return (
     <DialogBox
       scrolled
@@ -104,7 +109,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
           </Grid>
         </Grid>
 
-        {sections(userPreferences.preferredWeightSystem as string).map(({ name, tooltip, options }) => (
+        {userSections.map(({ name, tooltip, options }) => (
           <React.Fragment key={name}>
             <Divisor />
             <Typography component='p'>
@@ -180,7 +185,11 @@ function sections(system?: string): Section[] {
   const columnsSections = [
     {
       name: strings.GENERAL,
-      options: [[{ ...columns.accessionNumber, disabled: true }], [{ ...columns.state, disabled: true }]],
+      options: [
+        [{ ...columns.accessionNumber, disabled: true }],
+        [{ ...columns.state, disabled: true }],
+        [{ ...columns.project_name, disabled: true }],
+      ],
     },
     {
       name: strings.STORING,

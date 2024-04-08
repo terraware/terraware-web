@@ -1,12 +1,10 @@
 import { useMemo } from 'react';
-import { useOrganization, useTimeZones, useUser } from 'src/providers';
-import { SearchResponseElement } from 'src/types/Search';
-import { Facility } from 'src/types/Facility';
-import { TimeZoneDescription } from 'src/types/TimeZones';
 
-type Location = {
-  timeZone?: string;
-};
+import { useOrganization, useTimeZones, useUser } from 'src/providers';
+import { Facility } from 'src/types/Facility';
+import { SearchResponseElement } from 'src/types/Search';
+import { TimeZoneDescription } from 'src/types/TimeZones';
+import { Location } from 'src/types/Tracking';
 
 const DEFAULT_UTC = { id: 'Etc/UTC', longName: 'Coordinated Universal Time' };
 

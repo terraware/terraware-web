@@ -1,5 +1,6 @@
 import { paths } from 'src/api/types/generated-schema';
 import { ListReport, Report, ReportFile, ReportPhoto } from 'src/types/Report';
+
 import HttpService, { Response } from './HttpService';
 import PhotoService from './PhotoService';
 import { getPromisesResponse } from './utils';

@@ -1,4 +1,5 @@
 import { User } from 'src/types/User';
+import { isTerraformationEmail } from 'src/utils/user';
 
 /**
  * Cached current user and preferences.
@@ -13,7 +14,7 @@ const setUser = (user: User) => {
   const { email } = user;
   currentUser = {
     ...user,
-    isTerraformation: !!email?.match(/@terraformation.com$/),
+    isTerraformation: isTerraformationEmail(email),
   };
 };
 

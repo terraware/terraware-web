@@ -1,7 +1,8 @@
 import { paths } from 'src/api/types/generated-schema';
-import HttpService, { Response } from './HttpService';
 import { OrganizationRole } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
+
+import HttpService, { Response } from './HttpService';
 
 /**
  * Service for organization user related functionality

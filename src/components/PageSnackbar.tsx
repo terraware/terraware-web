@@ -1,14 +1,17 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+
 import { Snackbar as SnackbarUI } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Message, Button } from '@terraware/web-components';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { Snackbar } from 'src/types/Snackbar';
+import { Button, Message } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
+
+import DetectAppVersion from 'src/components/common/DetectAppVersion';
+import { sendMessage } from 'src/redux/features/message/messageSlice';
 import { selectSnackbar } from 'src/redux/features/snackbar/snackbarSelectors';
 import { clearSnackbar } from 'src/redux/features/snackbar/snackbarSlice';
-import { sendMessage } from 'src/redux/features/message/messageSlice';
-import { useDeviceInfo } from '@terraware/web-components/utils';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { Snackbar } from 'src/types/Snackbar';
 import { SNACKBAR_PAGE_CLOSE_KEY } from 'src/utils/useSnackbar';
 
 interface StyleProps {
@@ -40,9 +43,7 @@ export type PageSnackbarProps = {
 export default function PageSnackbar({ pageKey }: PageSnackbarProps): JSX.Element {
   const { pathname } = useLocation();
   const dispatch = useAppDispatch();
-  const [originalPathname] = useState<string>(pathname);
   const [snackbar, setSnackbar] = useState<Snackbar | null>();
-  const [routeChanged, setRouteChanged] = useState<boolean>(false);
   const snackbarData = useAppSelector(selectSnackbar('page'));
 
   const handleClose = useCallback(() => {
@@ -54,17 +55,11 @@ export default function PageSnackbar({ pageKey }: PageSnackbarProps): JSX.Elemen
   }, [snackbarData]);
 
   useEffect(() => {
-    if (routeChanged) {
-      setRouteChanged(false);
+    if (!!pathname) {
+      // clear page messages on route change
       handleClose();
     }
-  }, [routeChanged, handleClose]);
-
-  useEffect(() => {
-    if (!!pathname) {
-      setRouteChanged(true);
-    }
-  }, [pathname, originalPathname]);
+  }, [handleClose, pathname]);
 
   const sendCloseMessage = () => {
     if (snackbar?.onCloseMessage) {
@@ -86,6 +81,7 @@ export default function PageSnackbar({ pageKey }: PageSnackbarProps): JSX.Elemen
 
   return (
     <>
+      <DetectAppVersion />
       <SnackbarMessage snack={snackbar} onClose={handleMessageClose} />
     </>
   );

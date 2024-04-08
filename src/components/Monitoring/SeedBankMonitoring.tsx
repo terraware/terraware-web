@@ -1,14 +1,17 @@
-import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
-import EmptyMessage from '../common/EmptyMessage';
+
+import { Grid, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+
+import { useOrganization } from 'src/providers/hooks';
 import strings from 'src/strings';
-import { isAdmin } from 'src/utils/organization';
 import { Facility } from 'src/types/Facility';
+import { isAdmin } from 'src/utils/organization';
+
+import EmptyMessage from '../common/EmptyMessage';
 import EmptyStateContent from '../emptyStatePages/EmptyStateContent';
 import SensorKitSetup from './SensorKitSetup';
 import SeedBankDashboard from './dashboard/SeedBankDashboard';
-import { Grid, Theme } from '@mui/material';
-import { useOrganization } from 'src/providers/hooks';
 
 const useStyles = makeStyles((theme: Theme) => ({
   placeholder: {

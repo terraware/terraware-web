@@ -1,7 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Box, Theme, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import 'mapbox-gl/dist/mapbox-gl.css';
 import ReactMapGL, {
   AttributionControl,
   FullscreenControl,
@@ -11,28 +8,36 @@ import ReactMapGL, {
   Popup,
   Source,
 } from 'react-map-gl';
-import {
-  MapControl,
-  MapSource,
-  MapEntityId,
-  MapEntityOptions,
-  MapOptions,
-  MapPopupRenderer,
-  MapGeometry,
-  MapViewStyles,
-} from 'src/types/Map';
-import { MapService } from 'src/services';
-import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
+
+import { Box, Theme, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { Icon } from '@terraware/web-components';
 
 /**
  * The following is needed to deal with a mapbox bug
  * See: https://docs.mapbox.com/mapbox-gl-js/guides/install/#transpiling
  */
 import mapboxgl from 'mapbox-gl';
-import MapBanner from './MapBanner';
+import 'mapbox-gl/dist/mapbox-gl.css';
+
 import { useIsVisible } from 'src/hooks/useIsVisible';
+import { MapService } from 'src/services';
+import {
+  MapControl,
+  MapEntityId,
+  MapEntityOptions,
+  MapGeometry,
+  MapOptions,
+  MapPopupRenderer,
+  MapViewStyles,
+  PopupInfo,
+} from 'src/types/Map';
 import useSnackbar from 'src/utils/useSnackbar';
-import { Icon } from '@terraware/web-components';
+
+import MapBanner from './MapBanner';
+import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
+import { getMapDrawingLayer } from './utils';
+
 const mapboxImpl: any = mapboxgl;
 // @tslint
 // eslint-disable-next-line import/no-webpack-loader-syntax
@@ -83,13 +88,6 @@ export type MapImage = {
 const navControlStyle = {
   marginRight: '5px',
   marginBottom: '20px',
-};
-
-type PopupInfo = {
-  lng: number;
-  lat: number;
-  properties: any;
-  sourceId: string;
 };
 
 export type MapProps = {
@@ -169,19 +167,6 @@ export default function Map(props: MapProps): JSX.Element {
     },
     [mapImages, snackbar]
   );
-
-  const getFillColor = (source: MapSource, type: 'highlight' | 'select' | 'hover' | 'default') => {
-    switch (type) {
-      case 'highlight':
-        return source.highlightFillColor || source.fillColor;
-      case 'select':
-        return source.selectFillColor || source.fillColor;
-      case 'hover':
-        return source.hoverFillColor || source.fillColor;
-      default:
-        return source.fillColor;
-    }
-  };
 
   const onMapError = useCallback(
     (event: any) => {
@@ -267,11 +252,10 @@ export default function Map(props: MapProps): JSX.Element {
         if (!foundSource || !foundSource.data) {
           return;
         }
-        const feature = foundSource.data.features.find((featureData: any) => featureData.id === entity.id);
-        if (!feature) {
-          return;
-        }
-        coordinates.push(feature.geometry.coordinates);
+        const features = foundSource.data.features.filter((featureData: any) => featureData.id === entity.id);
+        features.forEach((feature: any) => {
+          coordinates.push(feature.geometry.coordinates);
+        });
       });
       if (coordinates.length > 0) {
         const bbox = MapService.getBoundingBox([coordinates]);
@@ -392,69 +376,8 @@ export default function Map(props: MapProps): JSX.Element {
           .flatMap((f) => f);
 
         return {
-          id: source.id,
-          isInteractive: source.isInteractive,
-          data: {
-            type: 'FeatureCollection',
-            features,
-          },
-          layer: {
-            id: `${source.id}-fill`,
-            type: 'fill',
-            paint: {
-              'fill-color': [
-                // Use a case-expression to decide which color to use for fill
-                // see https://docs.mapbox.com/mapbox-gl-js/style-spec/expressions/#case
-                // and, https://docs.mapbox.com/mapbox-gl-js/api/map/#map#setfeaturestate
-                // if highlight, use highlight color
-                // else if selected, use select color
-                // else if hover, user hover color
-                // else use default fill color
-                'case',
-                ['boolean', ['feature-state', 'highlight'], false],
-                getFillColor(source, 'highlight'),
-                ['boolean', ['feature-state', 'select'], false],
-                getFillColor(source, 'select'),
-                ['boolean', ['feature-state', 'hover'], false],
-                getFillColor(source, 'hover'),
-                getFillColor(source, 'default'),
-              ],
-            },
-          },
-          layerOutline: {
-            id: `${source.id}-outline`,
-            type: 'line',
-            paint: {
-              'line-color': source.lineColor,
-              'line-width': source.lineWidth,
-            },
-          },
-          textAnnotation: source.annotation
-            ? {
-                id: `${source.id}-annotation`,
-                type: 'symbol',
-                paint: {
-                  'text-color': source.annotation.textColor,
-                },
-                layout: {
-                  'text-allow-overlap': false,
-                  'text-ignore-placement': false,
-                  'text-field': ['get', source.annotation.textField],
-                  'text-anchor': 'center',
-                  'text-size': source.annotation.textSize,
-                },
-              }
-            : null,
-          patternFill: source.patternFill
-            ? {
-                id: `${source.id}-pattern`,
-                type: 'fill',
-                paint: {
-                  'fill-pattern': source.patternFill.imageName,
-                  'fill-opacity': source.patternFill.opacityExpression ?? 1.0,
-                },
-              }
-            : null,
+          data: { type: 'FeatureCollection', features },
+          ...getMapDrawingLayer(source, source.id),
         };
       })
       .filter((g) => g);

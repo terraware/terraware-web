@@ -1,6 +1,8 @@
 import { Dispatch } from 'redux';
-import { SystemService } from 'src/services';
+
 import { RootState } from 'src/redux/rootReducer';
+import { SystemService } from 'src/services';
+
 import { setVersionAction } from './appVersionSlice';
 
 export const requestAppVersion = () => {

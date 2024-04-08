@@ -8,6 +8,98 @@
 type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 
 export interface paths {
+  "/api/v1/accelerator/cohorts": {
+    /** Gets the list of cohorts. */
+    get: operations["listCohorts"];
+    /** Creates a new cohort. */
+    post: operations["createCohort"];
+  };
+  "/api/v1/accelerator/cohorts/{cohortId}": {
+    /** Gets information about a single cohort. */
+    get: operations["getCohort"];
+    /** Updates the information within a single cohort. */
+    put: operations["updateCohort"];
+    /** Deletes a single cohort. */
+    delete: operations["deleteCohort"];
+  };
+  "/api/v1/accelerator/deliverables": {
+    /**
+     * Lists the deliverables for accelerator projects
+     * @description The list may optionally be filtered based on certain criteria as specified in the query string. If no filter parameters are supplied, lists all the deliverables in all the participants and projects that are visible to the user. For users with accelerator admin privileges, this will be the full list of all deliverables for all accelerator projects.
+     */
+    get: operations["listDeliverables"];
+  };
+  "/api/v1/accelerator/deliverables/{deliverableId}/documents": {
+    /** Uploads a new document to satisfy a deliverable. */
+    post: operations["uploadDeliverableDocument"];
+  };
+  "/api/v1/accelerator/deliverables/{deliverableId}/documents/{documentId}": {
+    /** Gets a single submission document from a deliverable. */
+    get: operations["getDeliverableDocument"];
+  };
+  "/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}": {
+    /** Gets the details of a single deliverable and its submission documents, if any. */
+    get: operations["getDeliverable"];
+    /**
+     * Updates the state of a submission from a project.
+     * @description Only permitted for users with accelerator admin privileges.
+     */
+    put: operations["updateSubmission"];
+  };
+  "/api/v1/accelerator/organizations": {
+    /**
+     * Lists organizations with the Accelerator internal tag and their projects.
+     * @description By default, only lists tagged organizations that have projects that have not been assigned to participants yet.
+     */
+    get: operations["listAcceleratorOrganizations"];
+  };
+  "/api/v1/accelerator/participants": {
+    /** Creates a new participant. */
+    post: operations["createParticipant"];
+  };
+  "/api/v1/accelerator/participants/{participantId}": {
+    /** Gets information about a participant and its assigned projects. */
+    get: operations["getParticipant"];
+    /** Updates a participant's information. */
+    put: operations["updateParticipant"];
+    /** Deletes a participant that has no projects. */
+    delete: operations["deleteParticipant"];
+  };
+  "/api/v1/accelerator/projects/{projectId}": {
+    /**
+     * Gets the accelerator-related details for a project.
+     * @description Does not include information such as project name that's available via the non-accelerator projects API.
+     */
+    get: operations["getProjectAcceleratorDetails"];
+    /** Updates the accelerator-related details for a project. */
+    put: operations["updateProjectAcceleratorDetails"];
+  };
+  "/api/v1/accelerator/projects/{projectId}/scores": {
+    /** Gets score selections for a single project. */
+    get: operations["getProjectScores"];
+    /**
+     * Upserts score selections for a single project.
+     * @description Update the scores for the project phase. If the (project, phase, category) does not exist, a new entry is created. Setting a `score` to `null` removes the score.
+     */
+    put: operations["upsertProjectScores"];
+  };
+  "/api/v1/accelerator/projects/{projectId}/votes": {
+    /**
+     * Gets vote selections for a single project.
+     * @description List every vote selection for this project, organized by phases. Each phase will contain a list of eligible voters and their selections.
+     */
+    get: operations["getProjectVotes"];
+    /**
+     * Upserts vote selections for a single project.
+     * @description Update the user's vote for the project phase. If the (user, project, phase) does not exist, a new entry is created. Setting a `voteOption` to `null` removes the vote.
+     */
+    put: operations["upsertProjectVotes"];
+    /**
+     * Remove one or more voters from the project/phase.
+     * @description Remove the voters from the project phase, making them ineligible from voting. This is different from undoing a vote (by setting the `voteOption` to `null`). To remove voters from the entire project phase, set `userId` to `null`, and set `phaseDelete` to `true`
+     */
+    delete: operations["deleteProjectVotes"];
+  };
   "/api/v1/automations": {
     /** Gets a list of automations for a device or facility. */
     get: operations["listAutomations"];
@@ -106,6 +198,12 @@ export interface paths {
   "/api/v1/facility/{facilityId}/devices": {
     /** Lists the configurations of all the devices at a facility. */
     get: operations["listFacilityDevices_1"];
+  };
+  "/api/v1/globalRoles/users": {
+    /** Gets the list of users that have global roles. */
+    get: operations["listGlobalRoles"];
+    /** Remove global roles from the supplied users. */
+    delete: operations["deleteGlobalRoles"];
   };
   "/api/v1/i18n/timeZones": {
     /** Gets a list of supported time zones and their names. */
@@ -301,6 +399,12 @@ export interface paths {
     /** Lists an organization's reports. */
     get: operations["listReports"];
   };
+  "/api/v1/reports/settings": {
+    /** Gets the report settings for an organization. */
+    get: operations["getReportSettings"];
+    /** Updates the report settings for an organization. */
+    put: operations["updateReportSettings"];
+  };
   "/api/v1/reports/{id}": {
     /** Retrieves the contents of a report. */
     get: operations["getReport"];
@@ -371,6 +475,10 @@ export interface paths {
      * @description If a sublist field has multiple values, they are separated with line breaks in the exported file.
      */
     post: operations["search_1"];
+  };
+  "/api/v1/search/values": {
+    /** Search for distinct values from data matching a set of search criteria. */
+    post: operations["searchDistinctValues"];
   };
   "/api/v1/seedbank/accessions/{id}": {
     /** Deletes an existing accession. */
@@ -518,6 +626,18 @@ export interface paths {
     /** Reassigns some of the seedlings from a delivery to a different planting subzone. */
     post: operations["reassignDelivery"];
   };
+  "/api/v1/tracking/draftSites": {
+    /** Saves a draft of an in-progress planting site. */
+    post: operations["createDraftPlantingSite"];
+  };
+  "/api/v1/tracking/draftSites/{id}": {
+    /** Gets the details of a saved draft of a planting site. */
+    get: operations["getDraftPlantingSite"];
+    /** Updates an existing draft of an in-progress planting site. */
+    put: operations["updateDraftPlantingSite"];
+    /** Deletes an existing draft of an in-progress planting site. */
+    delete: operations["deleteDraftPlantingSite"];
+  };
   "/api/v1/tracking/mapbox/token": {
     /**
      * Gets an API token to use for displaying Mapbox maps.
@@ -628,6 +748,10 @@ export interface paths {
      */
     get: operations["listPlantingSubzoneSpecies"];
   };
+  "/api/v1/users": {
+    /** Gets a user by some criteria, for now only email is available */
+    get: operations["searchUsers"];
+  };
   "/api/v1/users/me": {
     /** Gets information about the current user. */
     get: operations["getMyself"];
@@ -644,6 +768,14 @@ export interface paths {
     get: operations["getUserPreferences"];
     /** Updates the current user's preferences. */
     put: operations["updateUserPreferences"];
+  };
+  "/api/v1/users/{userId}": {
+    /** Get a user by ID, if they exist, only ordinary users are supported. */
+    get: operations["getUser"];
+  };
+  "/api/v1/users/{userId}/globalRoles": {
+    /** Apply the supplied global roles to the user. */
+    post: operations["updateGlobalRoles"];
   };
   "/api/v1/versions": {
     /** Gets the minimum and recommended versions for Terraware's client applications. */
@@ -745,7 +877,22 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
+    AcceleratorOrganizationPayload: {
+      /** Format: int64 */
+      id: number;
+      name: string;
+      projects: components["schemas"]["AcceleratorProjectPayload"][];
+    };
+    AcceleratorProjectPayload: {
+      /** Format: int64 */
+      id: number;
+      name: string;
+      /** Format: int64 */
+      participantId?: number;
+    };
     AccessionHistoryEntryPayload: {
+      /** Format: int64 */
+      batchId?: number;
       /** Format: date */
       date: string;
       /**
@@ -949,10 +1096,6 @@ export interface components {
     };
     /** @description A change to the non-quantity-related details of a batch. */
     BatchHistoryDetailsEditedPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & ({
-      /** Format: int64 */
-      createdBy?: number;
-      /** Format: date-time */
-      createdTime?: string;
       notes?: string;
       /**
        * Format: int64
@@ -972,15 +1115,9 @@ export interface components {
       treatmentNotes?: string;
       /** @enum {string} */
       type?: "DetailsEdited";
-      /** Format: int32 */
-      version?: number;
     }), "createdBy" | "createdTime" | "subLocations" | "type" | "version">;
     /** @description A nursery transfer withdrawal from another batch that added seedlings to this batch. */
     BatchHistoryIncomingWithdrawalPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & {
-      /** Format: int64 */
-      createdBy?: number;
-      /** Format: date-time */
-      createdTime?: string;
       /** Format: int64 */
       fromBatchId?: number;
       /** Format: int32 */
@@ -991,8 +1128,6 @@ export interface components {
       readyQuantityAdded?: number;
       /** @enum {string} */
       type?: "IncomingWithdrawal";
-      /** Format: int32 */
-      version?: number;
       /** Format: int64 */
       withdrawalId?: number;
       /** Format: date */
@@ -1000,10 +1135,6 @@ export interface components {
     }, "createdBy" | "createdTime" | "fromBatchId" | "germinatingQuantityAdded" | "notReadyQuantityAdded" | "readyQuantityAdded" | "type" | "version" | "withdrawalId" | "withdrawnDate">;
     /** @description A withdrawal that removed seedlings from this batch. This does not include the full details of the withdrawal; they can be retrieved using the withdrawal ID. */
     BatchHistoryOutgoingWithdrawalPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & ({
-      /** Format: int64 */
-      createdBy?: number;
-      /** Format: date-time */
-      createdTime?: string;
       /** Format: int32 */
       germinatingQuantityWithdrawn?: number;
       /** Format: int32 */
@@ -1014,8 +1145,6 @@ export interface components {
       readyQuantityWithdrawn?: number;
       /** @enum {string} */
       type?: "OutgoingWithdrawal";
-      /** Format: int32 */
-      version?: number;
       /** Format: int64 */
       withdrawalId?: number;
       /** Format: date */
@@ -1031,10 +1160,6 @@ export interface components {
       version?: number;
     };
     BatchHistoryPhotoCreatedPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & {
-      /** Format: int64 */
-      createdBy?: number;
-      /** Format: date-time */
-      createdTime?: string;
       /**
        * Format: int64
        * @description ID of the photo if it exists. Null if the photo has been deleted.
@@ -1044,19 +1169,11 @@ export interface components {
       type?: "PhotoCreated";
     }, "createdBy" | "createdTime" | "type">;
     BatchHistoryPhotoDeletedPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & {
-      /** Format: int64 */
-      createdBy?: number;
-      /** Format: date-time */
-      createdTime?: string;
       /** @enum {string} */
       type?: "PhotoDeleted";
     }, "createdBy" | "createdTime" | "type">;
     /** @description A manual edit of a batch's remaining quantities. */
     BatchHistoryQuantityEditedPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & {
-      /** Format: int64 */
-      createdBy?: number;
-      /** Format: date-time */
-      createdTime?: string;
       /** Format: int32 */
       germinatingQuantity?: number;
       /** Format: int32 */
@@ -1065,15 +1182,9 @@ export interface components {
       readyQuantity?: number;
       /** @enum {string} */
       type?: "QuantityEdited";
-      /** Format: int32 */
-      version?: number;
     }, "createdBy" | "createdTime" | "germinatingQuantity" | "notReadyQuantity" | "readyQuantity" | "type" | "version">;
     /** @description The new quantities resulting from changing the statuses of seedlings in a batch. The values here are the total quantities remaining after the status change, not the number of seedlings whose statuses were changed. */
     BatchHistoryStatusChangedPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"] & {
-      /** Format: int64 */
-      createdBy?: number;
-      /** Format: date-time */
-      createdTime?: string;
       /** Format: int32 */
       germinatingQuantity?: number;
       /** Format: int32 */
@@ -1082,8 +1193,6 @@ export interface components {
       readyQuantity?: number;
       /** @enum {string} */
       type?: "StatusChanged";
-      /** Format: int32 */
-      version?: number;
     }, "createdBy" | "createdTime" | "germinatingQuantity" | "notReadyQuantity" | "readyQuantity" | "type" | "version">;
     BatchHistorySubLocationPayload: {
       /**
@@ -1100,6 +1209,8 @@ export interface components {
        * @description If this batch was created via a seed withdrawal, the ID of the seed accession it came from.
        */
       accessionId?: number;
+      /** @description If this batch was created via a seed withdrawal, the accession number associated to the seed accession it came from. */
+      accessionNumber?: string;
       /** Format: date */
       addedDate: string;
       batchNumber: string;
@@ -1191,6 +1302,22 @@ export interface components {
        * @description Number of seedlings to move from one status to the next.
        */
       quantity: number;
+    };
+    CohortListResponsePayload: {
+      cohorts: components["schemas"]["CohortPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    CohortPayload: {
+      /** Format: int64 */
+      id: number;
+      name: string;
+      participantIds?: number[];
+      /** @enum {string} */
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+    };
+    CohortResponsePayload: {
+      cohort: components["schemas"]["CohortPayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     CompletePlotObservationRequestPayload: {
       conditions: ("AnimalDamage" | "FastGrowth" | "FavorableWeather" | "Fungus" | "Pests" | "SeedProduction" | "UnfavorableWeather")[];
@@ -1300,6 +1427,11 @@ export interface components {
       treatment?: "Soak" | "Scarify" | "Chemical" | "Stratification" | "Other" | "Light";
       treatmentNotes?: string;
     };
+    CreateCohortRequestPayload: {
+      name: string;
+      /** @enum {string} */
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+    };
     CreateDeviceRequestPayload: {
       /**
        * @description Protocol-specific address of device, e.g., an IP address or a Bluetooth device ID.
@@ -1356,6 +1488,41 @@ export interface components {
        * @description Level of diagnostic information to log.
        */
       verbosity?: number;
+    };
+    CreateDraftPlantingSiteRequestPayload: {
+      /** @description In-progress state of the draft. This includes map data and other information needed by the client. It is treated as opaque data by the server. */
+      data: {
+        [key: string]: unknown;
+      };
+      description?: string;
+      name: string;
+      /**
+       * Format: int32
+       * @description If the user has started defining planting subzones, the number of subzones defined so far.
+       */
+      numPlantingSubzones?: number;
+      /**
+       * Format: int32
+       * @description If the user has started defining planting zones, the number of zones defined so far.
+       */
+      numPlantingZones?: number;
+      /** Format: int64 */
+      organizationId: number;
+      /**
+       * Format: int64
+       * @description If the draft is associated with a project, its ID.
+       */
+      projectId?: number;
+      /**
+       * @description Time zone name in IANA tz database format
+       * @example America/New_York
+       */
+      timeZone?: string;
+    };
+    CreateDraftPlantingSiteResponsePayload: {
+      /** Format: int64 */
+      id: number;
+      status: components["schemas"]["SuccessOrError"];
     };
     CreateFacilityRequestPayload: {
       /** Format: date */
@@ -1486,12 +1653,23 @@ export interface components {
       id: number;
       status: components["schemas"]["SuccessOrError"];
     };
+    CreateParticipantRequestPayload: {
+      /**
+       * Format: int64
+       * @description Assign the participant to this cohort. If null, the participant will not be assigned to any cohort initially.
+       */
+      cohortId?: number;
+      name: string;
+      /** @description Assign these projects to the new participant. If projects are already assigned to other participants, they will be reassigned to the new one. */
+      projectIds?: number[];
+    };
     CreatePlantingSiteRequestPayload: {
-      boundary?: components["schemas"]["MultiPolygon"];
+      boundary?: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
       description?: string;
       name: string;
       /** Format: int64 */
       organizationId: number;
+      plantingSeasons?: components["schemas"]["NewPlantingSeasonPayload"][];
       /** Format: int64 */
       projectId?: number;
       /**
@@ -1590,6 +1768,49 @@ export interface components {
       withdrawnByUserId?: number;
       /** @description Quantity of seeds withdrawn. If this quantity is in weight and the remaining quantity of the accession is in seeds or vice versa, the accession must have a subset weight and count. */
       withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
+    };
+    DeleteGlobalRolesRequestPayload: {
+      userIds: number[];
+    };
+    DeleteProjectVotesRequestPayload: {
+      /** @enum {string} */
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      /** @description A safeguard flag that must be set to `true` for deleting all voters in a project phase. */
+      phaseDelete?: boolean;
+      /**
+       * Format: int64
+       * @description If set to `null`, all voters in the phase will be removed.
+       */
+      userId?: number;
+    };
+    DeliverablePayload: {
+      /** @enum {string} */
+      category: "Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files";
+      /** @description Optional description of the deliverable in HTML form. */
+      descriptionHtml?: string;
+      documents: components["schemas"]["SubmissionDocumentPayload"][];
+      /** @description If the deliverable has been reviewed, the user-visible feedback from the review. */
+      feedback?: string;
+      /** Format: int64 */
+      id: number;
+      /** @description Internal-only comment on the submission. Only present if the current user has accelerator admin privileges. */
+      internalComment?: string;
+      name: string;
+      /** Format: int64 */
+      organizationId: number;
+      organizationName: string;
+      /** Format: int64 */
+      participantId: number;
+      participantName: string;
+      /** Format: int64 */
+      projectId: number;
+      projectName: string;
+      /** @enum {string} */
+      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
+      /** Format: uri */
+      templateUrl?: string;
+      /** @enum {string} */
+      type: "Document";
     };
     /** @description If the withdrawal was an outplanting to a planting site, the delivery that was created. Not present for other withdrawal purposes. */
     DeliveryPayload: {
@@ -1715,6 +1936,47 @@ export interface components {
        */
       lastRespondedTime?: string;
     };
+    DraftPlantingSitePayload: {
+      /**
+       * Format: int64
+       * @description ID of the user who created this draft. Only that user is allowed to modify or delete the draft.
+       */
+      createdBy: number;
+      /** Format: date-time */
+      createdTime: string;
+      /** @description In-progress state of the draft. This includes map data and other information needed by the client. It is treated as opaque data by the server. */
+      data: {
+        [key: string]: unknown;
+      };
+      description?: string;
+      /** Format: int64 */
+      id: number;
+      /** Format: date-time */
+      modifiedTime: string;
+      name: string;
+      /**
+       * Format: int32
+       * @description If the user has started defining planting subzones, the number of subzones defined so far.
+       */
+      numPlantingSubzones?: number;
+      /**
+       * Format: int32
+       * @description If the user has started defining planting zones, the number of zones defined so far.
+       */
+      numPlantingZones?: number;
+      /** Format: int64 */
+      organizationId: number;
+      /**
+       * Format: int64
+       * @description If the draft is associated with a project, its ID.
+       */
+      projectId?: number;
+      /**
+       * @description Time zone name in IANA tz database format
+       * @example America/New_York
+       */
+      timeZone?: string;
+    };
     ErrorDetails: {
       message: string;
     };
@@ -1758,8 +2020,8 @@ export interface components {
     } & Omit<components["schemas"]["SearchNodePayload"], "operation"> & ({
       field?: string;
       /** @enum {string} */
-      type?: "Exact" | "ExactOrFuzzy" | "Fuzzy" | "Range";
-      /** @description List of values to match. For exact and fuzzy searches, a list of at least one value to search for; the list may include null to match accessions where the field does not have a value. For range searches, the list must contain exactly two values, the minimum and maximum; one of the values may be null to search for all values above a minimum or below a maximum. */
+      type?: "Exact" | "ExactOrFuzzy" | "Fuzzy" | "PhraseMatch" | "Range";
+      /** @description List of values to match. For exact, fuzzy and phrase match searches, a list of at least one value to search for; the list may include null to match accessions where the field does not have a value. For range searches, the list must contain exactly two values, the minimum and maximum; one of the values may be null to search for all values above a minimum or below a maximum. */
       values?: (string | null)[];
     }), "field" | "type" | "values">;
     FieldValuesPayload: {
@@ -1808,6 +2070,10 @@ export interface components {
       currentTime: string;
       status: components["schemas"]["SuccessOrError"];
     };
+    GetDeliverableResponsePayload: {
+      deliverable: components["schemas"]["DeliverablePayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetDeliveryResponsePayload: {
       delivery: components["schemas"]["DeliveryPayload"];
       status: components["schemas"]["SuccessOrError"];
@@ -1823,6 +2089,10 @@ export interface components {
     };
     GetDeviceResponsePayload: {
       device: components["schemas"]["DeviceConfig"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetDraftPlantingSiteResponsePayload: {
+      site: components["schemas"]["DraftPlantingSitePayload"];
       status: components["schemas"]["SuccessOrError"];
     };
     GetFacilityResponse: {
@@ -1870,6 +2140,8 @@ export interface components {
       selected: boolean;
       /** Format: int64 */
       totalPlantsPropagated: number;
+      /** Format: int64 */
+      totalPlantsPropagatedForProject?: number;
       workers: components["schemas"]["WorkersPayloadV1"];
     };
     GetNurseryWithdrawalResponsePayload: {
@@ -1894,6 +2166,10 @@ export interface components {
     GetOrganizationUserResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
       user: components["schemas"]["OrganizationUserPayload"];
+    };
+    GetParticipantResponsePayload: {
+      participant: components["schemas"]["ParticipantPayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetPlantingSiteReportedPlantsResponsePayload: {
       site: components["schemas"]["PlantingSiteReportedPlantsPayload"];
@@ -1930,9 +2206,21 @@ export interface components {
       totalTreesPlanted?: number;
       workers: components["schemas"]["WorkersPayloadV1"];
     };
+    GetProjectAcceleratorDetailsResponsePayload: {
+      details: components["schemas"]["ProjectAcceleratorDetailsPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetProjectResponsePayload: {
       project: components["schemas"]["ProjectPayload"];
       status: components["schemas"]["SuccessOrError"];
+    };
+    GetProjectScoresResponsePayload: {
+      phases: components["schemas"]["PhaseScores"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetProjectVotesResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      votes: components["schemas"]["ProjectVotesPayload"];
     };
     GetReportPayload: {
       /** Format: int64 */
@@ -1947,6 +2235,9 @@ export interface components {
       modifiedByUserId?: number;
       /** Format: date-time */
       modifiedTime?: string;
+      /** Format: int64 */
+      projectId?: number;
+      projectName?: string;
       /** Format: int32 */
       quarter: number;
       /** @enum {string} */
@@ -1982,6 +2273,15 @@ export interface components {
       report: components["schemas"]["GetReportPayloadV1"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetReportSettingsResponsePayload: {
+      /** @description If false, settings have not been configured yet and the values in the rest of the payload are the defaults. */
+      isConfigured: boolean;
+      /** @description If true, organization-level reports are enabled. */
+      organizationEnabled: boolean;
+      /** @description Per-project report settings. */
+      projects: components["schemas"]["ProjectReportSettingsPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetSeedBankV1: {
       /** Format: date */
       buildCompletedDate?: string;
@@ -1999,6 +2299,8 @@ export interface components {
       selected: boolean;
       /** Format: int64 */
       totalSeedsStored: number;
+      /** Format: int64 */
+      totalSeedsStoredForProject?: number;
       workers: components["schemas"]["WorkersPayloadV1"];
     };
     GetSpeciesProblemResponsePayload: {
@@ -2156,6 +2458,10 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
       withdrawals: components["schemas"]["GetWithdrawalPayload"][];
     };
+    GlobalRoleUsersListResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      users: components["schemas"]["UserWithGlobalRolesPayload"][];
+    };
     GoalProgressPayloadV1: {
       /** @enum {string} */
       goal: "NoPoverty" | "ZeroHunger" | "GoodHealth" | "QualityEducation" | "GenderEquality" | "CleanWater" | "AffordableEnergy" | "DecentWork" | "Industry" | "ReducedInequalities" | "SustainableCities" | "ResponsibleConsumption" | "ClimateAction" | "LifeBelowWater" | "LifeOnLand" | "Peace" | "Partnerships";
@@ -2168,6 +2474,10 @@ export interface components {
       /** @enum {string} */
       type?: "LineString";
     }, "coordinates" | "type">;
+    ListAcceleratorOrganizationsResponsePayload: {
+      organizations: components["schemas"]["AcceleratorOrganizationPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     ListAllFieldValuesRequestPayload: {
       fields: string[];
       /** Format: int64 */
@@ -2189,6 +2499,37 @@ export interface components {
     };
     ListBatchPhotosResponsePayload: {
       photos: components["schemas"]["BatchPhotoPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListDeliverablesElement: {
+      /** @enum {string} */
+      category: "Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files";
+      /** @description Optional description of the deliverable in HTML form. */
+      descriptionHtml?: string;
+      /** Format: int64 */
+      id: number;
+      name: string;
+      /**
+       * Format: int32
+       * @description Number of documents submitted for this deliverable. Only valid for deliverables of type Document.
+       */
+      numDocuments?: number;
+      /** Format: int64 */
+      organizationId: number;
+      organizationName: string;
+      /** Format: int64 */
+      participantId: number;
+      participantName: string;
+      /** Format: int64 */
+      projectId: number;
+      projectName: string;
+      /** @enum {string} */
+      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
+      /** @enum {string} */
+      type: "Document";
+    };
+    ListDeliverablesResponsePayload: {
+      deliverables: components["schemas"]["ListDeliverablesElement"][];
       status: components["schemas"]["SuccessOrError"];
     };
     ListDeviceConfigsResponse: {
@@ -2300,6 +2641,9 @@ export interface components {
       modifiedByUserId?: number;
       /** Format: date-time */
       modifiedTime?: string;
+      /** Format: int64 */
+      projectId?: number;
+      projectName?: string;
       /** Format: int32 */
       quarter: number;
       /** @enum {string} */
@@ -2361,6 +2705,12 @@ export interface components {
       /** @enum {string} */
       type?: "MultiPolygon";
     }, "coordinates" | "type">;
+    NewPlantingSeasonPayload: {
+      /** Format: date */
+      endDate: string;
+      /** Format: date */
+      startDate: string;
+    };
     /** @description Search criterion that matches results that do not match a set of search criteria. */
     NotNodePayload: WithRequired<{
       operation: "not";
@@ -2663,14 +3013,14 @@ export interface components {
       /** Format: int64 */
       id: number;
       name: string;
-      /**
-       * @description The current user's role in the organization.
-       * @enum {string}
-       */
+      /** @enum {string} */
       organizationType?: "Government" | "NGO" | "Arboreta" | "Academia" | "ForProfit" | "Other";
       organizationTypeDetails?: string;
-      /** @enum {string} */
-      role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
+      /**
+       * @description The current user's role in the organization. Absent if the current user is not a member of the organization but is able to read it thanks to a global role.
+       * @enum {string}
+       */
+      role?: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
       /**
        * @description Time zone name in IANA tz database format
        * @example America/New_York
@@ -2708,6 +3058,38 @@ export interface components {
       /** @enum {string} */
       role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
     };
+    ParticipantPayload: {
+      /** Format: int64 */
+      cohortId?: number;
+      cohortName?: string;
+      /** @enum {string} */
+      cohortPhase?: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      /** Format: int64 */
+      id: number;
+      name: string;
+      projects: components["schemas"]["ParticipantProjectPayload"][];
+    };
+    ParticipantProjectPayload: {
+      /** Format: int64 */
+      organizationId: number;
+      organizationName: string;
+      /** Format: int64 */
+      projectId: number;
+      projectName: string;
+    };
+    PhaseScores: {
+      /** @enum {string} */
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      scores: components["schemas"]["Score"][];
+      totalScore?: number;
+    };
+    PhaseVotes: {
+      /** @enum {string} */
+      decision?: "No" | "Conditional" | "Yes";
+      /** @enum {string} */
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      votes: components["schemas"]["VoteSelection"][];
+    };
     PlantingPayload: {
       /** Format: int64 */
       id: number;
@@ -2725,16 +3107,26 @@ export interface components {
       /** @enum {string} */
       type: "Delivery" | "Reassignment From" | "Reassignment To";
     };
+    PlantingSeasonPayload: {
+      /** Format: date */
+      endDate: string;
+      /** Format: int64 */
+      id: number;
+      /** Format: date */
+      startDate: string;
+    };
     PlantingSitePayload: {
       /** @description Area of planting site in hectares. Only present if the site has planting zones. */
       areaHa?: number;
       boundary?: components["schemas"]["MultiPolygon"];
       description?: string;
+      exclusion?: components["schemas"]["MultiPolygon"];
       /** Format: int64 */
       id: number;
       name: string;
       /** Format: int64 */
       organizationId: number;
+      plantingSeasons: components["schemas"]["PlantingSeasonPayload"][];
       plantingZones?: components["schemas"]["PlantingZonePayload"][];
       /** Format: int64 */
       projectId?: number;
@@ -2817,13 +3209,68 @@ export interface components {
       /** @enum {string} */
       type?: "Polygon";
     }, "coordinates" | "type">;
+    ProjectAcceleratorDetailsPayload: {
+      abbreviatedName?: string;
+      applicationReforestableLand?: number;
+      confirmedReforestableLand?: number;
+      countryCode?: string;
+      dealDescription?: string;
+      /** @enum {string} */
+      dealStage?: "Phase 0 (Doc Review)" | "Phase 1" | "Phase 2" | "Phase 3" | "Graduated, Finished Planting" | "Non Graduate" | "Application Submitted" | "Project Lead Screening Review" | "Screening Questions Ready for Review" | "Carbon Pre-Check" | "Submission Requires Follow Up" | "Carbon Eligible" | "Closed Lost" | "Issue Active" | "Issue Pending" | "Issue Reesolved";
+      dropboxFolderPath?: string;
+      failureRisk?: string;
+      fileNaming?: string;
+      /** Format: uri */
+      googleFolderUrl?: string;
+      investmentThesis?: string;
+      landUseModelTypes: ("Native Forest" | "Monoculture" | "Sustainable Timber" | "Other Timber" | "Mangroves" | "Agroforestry" | "Silvopasture" | "Other Land-Use Model")[];
+      maxCarbonAccumulation?: number;
+      minCarbonAccumulation?: number;
+      /** Format: int32 */
+      numCommunities?: number;
+      /** Format: int32 */
+      numNativeSpecies?: number;
+      perHectareBudget?: number;
+      /** @enum {string} */
+      pipeline?: "Accelerator Projects" | "Carbon Supply" | "Carbon Waitlist";
+      /** Format: int64 */
+      projectId: number;
+      projectLead?: string;
+      /** @enum {string} */
+      region?: "Antarctica" | ("East Asia & Pacific") | ("Europe & Central Asia") | ("Latin America & Caribbean") | ("Middle East & North Africa") | "North America" | "Oceania" | "South Asia" | "Sub-Saharan Africa";
+      totalExpansionPotential?: number;
+      whatNeedsToBeTrue?: string;
+    };
     ProjectPayload: {
+      /** Format: int64 */
+      cohortId?: number;
+      /** @enum {string} */
+      cohortPhase?: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      /** Format: int64 */
+      createdBy?: number;
+      /** Format: date-time */
+      createdTime?: string;
       description?: string;
       /** Format: int64 */
       id: number;
+      /** Format: int64 */
+      modifiedBy?: number;
+      /** Format: date-time */
+      modifiedTime?: string;
       name: string;
       /** Format: int64 */
       organizationId: number;
+      /** Format: int64 */
+      participantId?: number;
+    };
+    ProjectReportSettingsPayload: {
+      /** @description If true, reports are enabled for this project. */
+      isEnabled: boolean;
+      /** Format: int64 */
+      projectId: number;
+    };
+    ProjectVotesPayload: {
+      phases: components["schemas"]["PhaseVotes"][];
     };
     PutNurseryV1: {
       /** Format: date */
@@ -2985,6 +3432,18 @@ export interface components {
       id: number;
       status: components["schemas"]["SuccessOrError"];
     };
+    Score: {
+      /** @enum {string} */
+      category: "Carbon" | "Finance" | "Forestry" | "Legal" | "Community" | "GIS" | "Climate Impact" | "Expansion Potential" | "Experience and Understanding" | "Operational Capacity" | "Responsiveness and Attention to Detail" | "Values Alignment";
+      /** Format: date-time */
+      modifiedTime: string;
+      qualitative?: string;
+      /**
+       * Format: int32
+       * @description If `null`, a score has not been selected.
+       */
+      value?: number;
+    };
     /** @description A search criterion. The search will return results that match this criterion. The criterion can be composed of other search criteria to form arbitrary Boolean search expressions. TYPESCRIPT-OVERRIDE-TYPE-WITH-ANY */
     SearchNodePayload: {operation: "and" | "field" | "not" | "or"; [key: string]: any;};
     SearchRequestPayload: {
@@ -2993,7 +3452,7 @@ export interface components {
        * @description Maximum number of top-level search results to return. The system may impose a limit on this value. A separate system-imposed limit may also be applied to lists of child objects inside the top-level results. Use a value of 0 to return the maximum number of allowed results.
        * @default 25
        */
-      count: number;
+      count?: number;
       /** @description Starting point for search results. If present, a previous search will be continued from where it left off. This should be the value of the cursor that was returned in the response to a previous search. */
       cursor?: string;
       /**
@@ -3027,6 +3486,11 @@ export interface components {
        */
       direction?: "Ascending" | "Descending";
       field: string;
+    };
+    SearchValuesResponsePayload: {
+      results: {
+        [key: string]: components["schemas"]["FieldValuesPayload"];
+      };
     };
     SeedCountSummaryPayload: {
       /**
@@ -3205,11 +3669,25 @@ export interface components {
       id: number;
       name: string;
     };
+    SubmissionDocumentPayload: {
+      /** Format: date-time */
+      createdTime: string;
+      description?: string;
+      /** @enum {string} */
+      documentStore: "Dropbox" | "Google";
+      /** Format: int64 */
+      id: number;
+      name: string;
+      originalName?: string;
+    };
     /**
      * @description Indicates of success or failure of the requested operation.
      * @enum {string}
      */
     SuccessOrError: "ok" | "error";
+    SuccessResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+    };
     SummarizeAccessionSearchRequestPayload: {
       search?: components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"];
     };
@@ -3334,6 +3812,8 @@ export interface components {
       receivedDate?: string;
       /** @description Quantity of seeds remaining in the accession. If this is different than the existing value, it is considered a new observation, and the new value will override any previously-calculated remaining quantities. */
       remainingQuantity?: components["schemas"]["SeedQuantityPayload"];
+      /** @description Notes associated with remaining quantity updates if any. */
+      remainingQuantityNotes?: string;
       /** Format: int64 */
       speciesId?: number;
       /** @enum {string} */
@@ -3393,6 +3873,11 @@ export interface components {
       /** Format: int32 */
       version: number;
     };
+    UpdateCohortRequestPayload: {
+      name: string;
+      /** @enum {string} */
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+    };
     UpdateDeviceRequestPayload: {
       /**
        * @description Protocol-specific address of device, e.g., an IP address or a Bluetooth device ID.
@@ -3445,6 +3930,34 @@ export interface components {
        */
       verbosity?: number;
     };
+    UpdateDraftPlantingSiteRequestPayload: {
+      /** @description In-progress state of the draft. This includes map data and other information needed by the client. It is treated as opaque data by the server. */
+      data: {
+        [key: string]: unknown;
+      };
+      description?: string;
+      name: string;
+      /**
+       * Format: int32
+       * @description If the user has started defining planting subzones, the number of subzones defined so far.
+       */
+      numPlantingSubzones?: number;
+      /**
+       * Format: int32
+       * @description If the user has started defining planting zones, the number of zones defined so far.
+       */
+      numPlantingZones?: number;
+      /**
+       * Format: int64
+       * @description If the draft is associated with a project, its ID.
+       */
+      projectId?: number;
+      /**
+       * @description Time zone name in IANA tz database format
+       * @example America/New_York
+       */
+      timeZone?: string;
+    };
     UpdateFacilityRequestPayload: {
       /** Format: date */
       buildCompletedDate?: string;
@@ -3464,6 +3977,9 @@ export interface components {
        * @example America/New_York
        */
       timeZone?: string;
+    };
+    UpdateGlobalRolesRequestPayload: {
+      globalRoles: ("Super-Admin" | "Accelerator Admin" | "TF Expert" | "Read Only")[];
     };
     UpdateNotificationRequestPayload: {
       read: boolean;
@@ -3501,11 +4017,22 @@ export interface components {
       /** @enum {string} */
       role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
     };
+    UpdateParticipantRequestPayload: {
+      /**
+       * Format: int64
+       * @description Assign the participant to this cohort. If null, remove the participant from its current cohort, if any.
+       */
+      cohortId?: number;
+      name: string;
+      /** @description Set the participant's list of assigned projects to this. If projects are currently assigned to the participant but aren't included in this list, they will be removed from the participant. */
+      projectIds: number[];
+    };
     UpdatePlantingSiteRequestPayload: {
       /** @description Site boundary. Ignored if this is a detailed planting site. */
       boundary?: components["schemas"]["MultiPolygon"];
       description?: string;
       name: string;
+      plantingSeasons?: components["schemas"]["UpdatedPlantingSeasonPayload"][];
       /** Format: int64 */
       projectId?: number;
       /**
@@ -3521,6 +4048,34 @@ export interface components {
       /** @description Observed coordinates, if any, up to one per position. */
       coordinates: components["schemas"]["ObservationMonitoringPlotCoordinatesPayload"][];
     };
+    UpdateProjectAcceleratorDetailsRequestPayload: {
+      abbreviatedName?: string;
+      applicationReforestableLand?: number;
+      confirmedReforestableLand?: number;
+      countryCode?: string;
+      dealDescription?: string;
+      /** @enum {string} */
+      dealStage?: "Phase 0 (Doc Review)" | "Phase 1" | "Phase 2" | "Phase 3" | "Graduated, Finished Planting" | "Non Graduate" | "Application Submitted" | "Project Lead Screening Review" | "Screening Questions Ready for Review" | "Carbon Pre-Check" | "Submission Requires Follow Up" | "Carbon Eligible" | "Closed Lost" | "Issue Active" | "Issue Pending" | "Issue Reesolved";
+      dropboxFolderPath?: string;
+      failureRisk?: string;
+      fileNaming?: string;
+      /** Format: uri */
+      googleFolderUrl?: string;
+      investmentThesis?: string;
+      landUseModelTypes: ("Native Forest" | "Monoculture" | "Sustainable Timber" | "Other Timber" | "Mangroves" | "Agroforestry" | "Silvopasture" | "Other Land-Use Model")[];
+      maxCarbonAccumulation?: number;
+      minCarbonAccumulation?: number;
+      /** Format: int32 */
+      numCommunities?: number;
+      /** Format: int32 */
+      numNativeSpecies?: number;
+      perHectareBudget?: number;
+      /** @enum {string} */
+      pipeline?: "Accelerator Projects" | "Carbon Supply" | "Carbon Waitlist";
+      projectLead?: string;
+      totalExpansionPotential?: number;
+      whatNeedsToBeTrue?: string;
+    };
     UpdateProjectRequestPayload: {
       description?: string;
       name: string;
@@ -3528,8 +4083,22 @@ export interface components {
     UpdateReportPhotoRequestPayload: {
       caption?: string;
     };
+    UpdateReportSettingsRequestPayload: {
+      /** @description If true, enable organization-level reports. */
+      organizationEnabled: boolean;
+      /** Format: int64 */
+      organizationId: number;
+      /** @description Per-project report settings. If a project is missing from this list, its settings will revert to the defaults. */
+      projects: components["schemas"]["ProjectReportSettingsPayload"][];
+    };
     UpdateSubLocationRequestPayload: {
       name: string;
+    };
+    UpdateSubmissionRequestPayload: {
+      feedback?: string;
+      internalComment?: string;
+      /** @enum {string} */
+      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
     };
     UpdateUserPreferencesRequestPayload: {
       /**
@@ -3603,6 +4172,22 @@ export interface components {
       /** @description Quantity of seeds withdrawn. For viability testing withdrawals, this is always the same as the test's "seedsTested" value. Otherwise, it is a user-supplied value. If this quantity is in weight and the remaining quantity of the accession is in seeds or vice versa, the accession must have a subset weight and count. */
       withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
     };
+    UpdatedPlantingSeasonPayload: {
+      /** Format: date */
+      endDate: string;
+      /**
+       * Format: int64
+       * @description If present, the start and end dates of an existing planting season will be updated. Otherwise a new planting season will be created.
+       */
+      id?: number;
+      /** Format: date */
+      startDate: string;
+    };
+    UploadDeliverableDocumentResponsePayload: {
+      /** Format: int64 */
+      documentId: number;
+      status: components["schemas"]["SuccessOrError"];
+    };
     UploadFileResponsePayload: {
       /**
        * Format: int64
@@ -3642,6 +4227,36 @@ export interface components {
       id: number;
       status: components["schemas"]["SuccessOrError"];
     };
+    UpsertProjectScoresRequestPayload: {
+      /** @enum {string} */
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      scores: components["schemas"]["UpsertScore"][];
+    };
+    UpsertProjectVotesRequestPayload: {
+      /** @enum {string} */
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      votes: components["schemas"]["UpsertVoteSelection"][];
+    };
+    UpsertScore: {
+      /** @enum {string} */
+      category: "Carbon" | "Finance" | "Forestry" | "Legal" | "Community" | "GIS" | "Climate Impact" | "Expansion Potential" | "Experience and Understanding" | "Operational Capacity" | "Responsiveness and Attention to Detail" | "Values Alignment";
+      qualitative?: string;
+      /**
+       * Format: int32
+       * @description If set to `null`, remove the selected score.
+       */
+      value?: number;
+    };
+    UpsertVoteSelection: {
+      conditionalInfo?: string;
+      /** Format: int64 */
+      userId: number;
+      /**
+       * @description If set to `null`, remove the vote the user has previously selected.
+       * @enum {string}
+       */
+      voteOption?: "No" | "Conditional" | "Yes";
+    };
     UserProfilePayload: {
       /**
        * @description Two-letter code of the user's country.
@@ -3652,6 +4267,7 @@ export interface components {
       /** @description If true, the user wants to receive all the notifications for their organizations via email. This does not apply to certain kinds of notifications such as "You've been added to a new organization." */
       emailNotificationsEnabled: boolean;
       firstName?: string;
+      globalRoles: ("Super-Admin" | "Accelerator Admin" | "TF Expert" | "Read Only")[];
       /**
        * Format: int64
        * @description User's unique ID. This should not be shown to the user, but is a required input to some API endpoints.
@@ -3669,6 +4285,16 @@ export interface components {
        */
       timeZone?: string;
     };
+    UserWithGlobalRolesPayload: {
+      /** Format: date-time */
+      createdTime: string;
+      email: string;
+      firstName?: string;
+      globalRoles: ("Super-Admin" | "Accelerator Admin" | "TF Expert" | "Read Only")[];
+      /** Format: int64 */
+      id: number;
+      lastName?: string;
+    };
     VersionsEntryPayload: {
       appName: string;
       minimumVersion: string;
@@ -3684,6 +4310,17 @@ export interface components {
       recordingDate: string;
       /** Format: int32 */
       seedsGerminated: number;
+    };
+    VoteSelection: {
+      conditionalInfo?: string;
+      /** @description The vote the user has selected. Can be yes/no/conditional or `null` if a vote is not yet selected. */
+      email: string;
+      firstName?: string;
+      lastName?: string;
+      /** Format: int64 */
+      userId: number;
+      /** @enum {string} */
+      voteOption?: "No" | "Conditional" | "Yes";
     };
     WorkersPayloadV1: {
       /** Format: int32 */
@@ -3707,6 +4344,577 @@ export type external = Record<string, never>;
 
 export interface operations {
 
+  /** Gets the list of cohorts. */
+  listCohorts: {
+    parameters: {
+      query: {
+        /** @description If specified, retrieve associated entities to the supplied depth. For example, 'participant' depth will return the participants associated to the cohort. */
+        depth: "Cohort" | "Participant";
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CohortListResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Creates a new cohort. */
+  createCohort: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateCohortRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The cohort was created successfully. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CohortResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets information about a single cohort. */
+  getCohort: {
+    parameters: {
+      query: {
+        /** @description If specified, retrieve associated entities to the supplied depth. For example, 'participant' depth will return the participants associated to the cohort. */
+        depth: "Cohort" | "Participant";
+      };
+      path: {
+        cohortId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CohortResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Updates the information within a single cohort. */
+  updateCohort: {
+    parameters: {
+      path: {
+        cohortId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateCohortRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CohortResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Deletes a single cohort. */
+  deleteCohort: {
+    parameters: {
+      path: {
+        cohortId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Lists the deliverables for accelerator projects
+   * @description The list may optionally be filtered based on certain criteria as specified in the query string. If no filter parameters are supplied, lists all the deliverables in all the participants and projects that are visible to the user. For users with accelerator admin privileges, this will be the full list of all deliverables for all accelerator projects.
+   */
+  listDeliverables: {
+    parameters: {
+      query?: {
+        /** @description List deliverables for projects belonging to this organization. Ignored if participantId or projectId is specified. */
+        organizationId?: number;
+        /** @description List deliverables for all projects in this participant. Ignored if projectId is specified. */
+        participantId?: number;
+        /** @description List deliverables for this project only. */
+        projectId?: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListDeliverablesResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Uploads a new document to satisfy a deliverable. */
+  uploadDeliverableDocument: {
+    parameters: {
+      path: {
+        deliverableId: number;
+      };
+    };
+    requestBody?: {
+      content: {
+        "multipart/form-data": {
+          description: string;
+          /** Format: binary */
+          file: string;
+          projectId: string;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadDeliverableDocumentResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets a single submission document from a deliverable. */
+  getDeliverableDocument: {
+    parameters: {
+      path: {
+        deliverableId: number;
+        documentId: number;
+      };
+    };
+    responses: {
+      /** @description If the current user has permission to view the document, redirects to the document on the document store. Depending on the document store, the redirect URL may or may not be valid for only a limited time. */
+      307: {
+        headers: {
+          /** @description URL of document in document store. */
+          Location?: unknown;
+        };
+        content: {
+          "application/json": string;
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets the details of a single deliverable and its submission documents, if any. */
+  getDeliverable: {
+    parameters: {
+      path: {
+        deliverableId: number;
+        projectId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetDeliverableResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Updates the state of a submission from a project.
+   * @description Only permitted for users with accelerator admin privileges.
+   */
+  updateSubmission: {
+    parameters: {
+      path: {
+        deliverableId: number;
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateSubmissionRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Lists organizations with the Accelerator internal tag and their projects.
+   * @description By default, only lists tagged organizations that have projects that have not been assigned to participants yet.
+   */
+  listAcceleratorOrganizations: {
+    parameters: {
+      query?: {
+        /** @description Whether to also include projects that have been assigned to participants. */
+        includeParticipants?: boolean;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListAcceleratorOrganizationsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Creates a new participant. */
+  createParticipant: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateParticipantRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetParticipantResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets information about a participant and its assigned projects. */
+  getParticipant: {
+    parameters: {
+      path: {
+        participantId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetParticipantResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Updates a participant's information. */
+  updateParticipant: {
+    parameters: {
+      path: {
+        participantId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateParticipantRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Deletes a participant that has no projects. */
+  deleteParticipant: {
+    parameters: {
+      path: {
+        participantId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** @description There are projects associated with the participant. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Gets the accelerator-related details for a project.
+   * @description Does not include information such as project name that's available via the non-accelerator projects API.
+   */
+  getProjectAcceleratorDetails: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetProjectAcceleratorDetailsResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Updates the accelerator-related details for a project. */
+  updateProjectAcceleratorDetails: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateProjectAcceleratorDetailsRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets score selections for a single project. */
+  getProjectScores: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetProjectScoresResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Upserts score selections for a single project.
+   * @description Update the scores for the project phase. If the (project, phase, category) does not exist, a new entry is created. Setting a `score` to `null` removes the score.
+   */
+  upsertProjectScores: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpsertProjectScoresRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Gets vote selections for a single project.
+   * @description List every vote selection for this project, organized by phases. Each phase will contain a list of eligible voters and their selections.
+   */
+  getProjectVotes: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetProjectVotesResponsePayload"];
+        };
+      };
+      /** @description Attempting to read votes without sufficient privilege */
+      403: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Upserts vote selections for a single project.
+   * @description Update the user's vote for the project phase. If the (user, project, phase) does not exist, a new entry is created. Setting a `voteOption` to `null` removes the vote.
+   */
+  upsertProjectVotes: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpsertProjectVotesRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description Attempting to delete votes without sufficient privilege */
+      403: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** @description Attempting to upsert a vote in an inactive phase */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Remove one or more voters from the project/phase.
+   * @description Remove the voters from the project phase, making them ineligible from voting. This is different from undoing a vote (by setting the `voteOption` to `null`). To remove voters from the entire project phase, set `userId` to `null`, and set `phaseDelete` to `true`
+   */
+  deleteProjectVotes: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DeleteProjectVotesRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description Attempting to delete a phase of votes without safeguard */
+      400: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** @description Attempting to delete votes without sufficient privilege */
+      403: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** @description Attempting to delete a vote in an inactive phase */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
   /** Gets a list of automations for a device or facility. */
   listAutomations: {
     parameters: {
@@ -4248,6 +5456,39 @@ export interface operations {
         };
       };
       /** @description The facility does not exist or is not accessible by the current user. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets the list of users that have global roles. */
+  listGlobalRoles: {
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GlobalRoleUsersListResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Remove global roles from the supplied users. */
+  deleteGlobalRoles: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DeleteGlobalRolesRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
@@ -5243,6 +6484,38 @@ export interface operations {
       };
     };
   };
+  /** Gets the report settings for an organization. */
+  getReportSettings: {
+    parameters: {
+      query: {
+        organizationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetReportSettingsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Updates the report settings for an organization. */
+  updateReportSettings: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateReportSettingsRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
   /** Retrieves the contents of a report. */
   getReport: {
     parameters: {
@@ -5583,6 +6856,22 @@ export interface operations {
       };
     };
   };
+  /** Search for distinct values from data matching a set of search criteria. */
+  searchDistinctValues: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SearchRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SearchValuesResponsePayload"];
+        };
+      };
+    };
+  };
   /** Deletes an existing accession. */
   delete: {
     parameters: {
@@ -5848,6 +7137,8 @@ export interface operations {
       query: {
         /** @description Organization whose species should be listed. */
         organizationId: string;
+        /** @description Only list species that are currently used in the organization's inventory, accessions or planting sites. */
+        inUse?: string;
       };
     };
     responses: {
@@ -6177,10 +7468,6 @@ export interface operations {
    */
   deleteSpecies: {
     parameters: {
-      query: {
-        /** @description Organization from which the species should be deleted. */
-        organizationId: string;
-      };
       path: {
         speciesId: number;
       };
@@ -6311,6 +7598,75 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["ReassignDeliveryRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Saves a draft of an in-progress planting site. */
+  createDraftPlantingSite: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateDraftPlantingSiteRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateDraftPlantingSiteResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets the details of a saved draft of a planting site. */
+  getDraftPlantingSite: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetDraftPlantingSiteResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Updates an existing draft of an in-progress planting site. */
+  updateDraftPlantingSite: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateDraftPlantingSiteRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Deletes an existing draft of an in-progress planting site. */
+  deleteDraftPlantingSite: {
+    parameters: {
+      path: {
+        id: number;
       };
     };
     responses: {
@@ -6831,6 +8187,29 @@ export interface operations {
       };
     };
   };
+  /** Gets a user by some criteria, for now only email is available */
+  searchUsers: {
+    parameters: {
+      query: {
+        /** @description The email to use when searching for a user */
+        email: string;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetUserResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
   /** Gets information about the current user. */
   getMyself: {
     responses: {
@@ -6901,6 +8280,55 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Get a user by ID, if they exist, only ordinary users are supported. */
+  getUser: {
+    parameters: {
+      path: {
+        userId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetUserResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Apply the supplied global roles to the user. */
+  updateGlobalRoles: {
+    parameters: {
+      path: {
+        userId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateGlobalRolesRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };

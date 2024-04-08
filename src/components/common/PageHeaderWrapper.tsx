@@ -1,10 +1,15 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
+
 import { Box, useTheme } from '@mui/material';
 import { keyframes } from '@mui/system';
+
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
 import useDebounce from '../../utils/useDebounce';
 
 const TOP_BAR_HEIGHT = 64;
 const DEBOUNCE_TIME = 500;
+const LEFT_NAV_WIDTH = 220;
 
 /**
  * children The child component which is the page header
@@ -26,6 +31,7 @@ export default function PageHeaderWrapper({ children, nextElement, nextElementIn
   const debouncedSticky = useDebounce(sticky, DEBOUNCE_TIME);
   const debouncedScrollDown = useDebounce(scrollDown, DEBOUNCE_TIME);
   const lastDebouncedSticky = useRef(false);
+  const { isMobile, isTablet } = useDeviceInfo();
 
   useLayoutEffect(() => {
     if (ref.current) {
@@ -112,8 +118,9 @@ export default function PageHeaderWrapper({ children, nextElement, nextElementIn
     top: debouncedSticky ? (debouncedScrollDown ? `${TOP_BAR_HEIGHT - height}px` : `${TOP_BAR_HEIGHT}px`) : undefined,
     visibility: debouncedSticky && debouncedScrollDown ? 'hidden' : 'visible',
     animation: anim,
-    width: '-webkit-fill-available',
     zIndex: debouncedSticky ? 100 : undefined,
+    width: '100%',
+    maxWidth: isMobile || isTablet ? '100vw' : `calc(100vw - ${LEFT_NAV_WIDTH}px)`,
   };
 
   return (

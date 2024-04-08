@@ -1,7 +1,9 @@
 import _ from 'lodash';
+
 import { paths } from 'src/api/types/generated-schema';
 import { PartialSubLocation, SubLocation } from 'src/types/Facility';
 import { Id } from 'src/types/Id';
+
 import HttpService, { Response } from './HttpService';
 import { getPromisesResponse } from './utils';
 

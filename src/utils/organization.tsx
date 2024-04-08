@@ -1,3 +1,4 @@
+import { defaultSelectedOrg } from 'src/providers/contexts';
 import { Facility, FacilityType } from 'src/types/Facility';
 import { HighOrganizationRolesValues, Organization, OrganizationRole } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
@@ -28,6 +29,10 @@ export const isManagerOrHigher = (organization: Organization | undefined) => {
   return organization?.role === 'Manager' || isAdmin(organization);
 };
 
+export const isMember = (organization: Organization | undefined) => {
+  return !!organization;
+};
+
 export const isTfContact = (role: OrganizationRole | undefined) => role === 'Terraformation Contact';
 
 export const isContributor = (roleHolder: Organization | OrganizationUser | undefined) => {
@@ -42,4 +47,16 @@ export const getNurseryById = (organization: Organization, id: number): Facility
   const allNurseries = getAllNurseries(organization);
   const found = allNurseries.filter((nurs) => nurs.id.toString() === id.toString());
   return found[0];
+};
+
+export const isPlaceholderOrg = (id: number | undefined) => !id || id === defaultSelectedOrg.id;
+
+export const selectedOrgHasFacilityType = (organization: Organization, facilityType: FacilityType): boolean => {
+  if (!isPlaceholderOrg(organization?.id) && organization?.facilities) {
+    return organization.facilities.some((facility: any) => {
+      return facility.type === facilityType;
+    });
+  } else {
+    return false;
+  }
 };

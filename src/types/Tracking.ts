@@ -4,17 +4,26 @@ import { components } from 'src/api/types/generated-schema';
 export type PlantingSite = components['schemas']['PlantingSitePayload'];
 export type PlantingZone = components['schemas']['PlantingZonePayload'];
 export type PlantingSubzone = components['schemas']['PlantingSubzonePayload'];
-export type PlantingSiteSearchResult = {
-  boundary?: components['schemas']['MultiPolygon'];
-  id: number;
-  name: string;
-  numPlantingZones: number;
-  numPlantingSubzones: number;
-  'totalPlants(raw)': number;
-};
 
 // geometry and types of geometries
 export type MultiPolygon = components['schemas']['MultiPolygon'];
+
+// Search API always returns strings
+export type PlantingSiteSearchResult = {
+  boundary?: MultiPolygon;
+  id: string;
+  name: string;
+  description?: string;
+  isDraft?: boolean;
+  numPlantingSubzones: string;
+  'numPlantingSubzones(raw)': number;
+  numPlantingZones: string;
+  'numPlantingZones(raw)': number;
+  project_id: number;
+  project_name: string;
+  timeZone?: string;
+  'totalPlants(raw)': number;
+};
 
 // delivery and plantings
 export type Delivery = components['schemas']['DeliveryPayload'];
@@ -27,4 +36,32 @@ export type PlantingSiteReportedPlants = components['schemas']['PlantingSiteRepo
 export type MonitoringPlotSearchResult = {
   id: number;
   fullName: string;
+};
+
+// planting seasons
+export type PlantingSeason = components['schemas']['PlantingSeasonPayload'];
+export type UpdatedPlantingSeason = components['schemas']['UpdatedPlantingSeasonPayload'];
+
+export type Location = {
+  timeZone?: string;
+};
+
+export type MinimalPlantingSubzone = Omit<PlantingSubzone, 'areaHa'>;
+
+export type MinimalPlantingZone = Omit<PlantingZone, 'areaHa' | 'plantingSubzones'> & {
+  plantingSubzones: MinimalPlantingSubzone[];
+};
+
+/**
+ * A minimal planting site representing basic details for view/edit purposes.
+ */
+export type MinimalPlantingSite = Location & {
+  boundary?: MultiPolygon;
+  description?: string;
+  id: number;
+  name: string;
+  organizationId: number;
+  plantingSeasons: PlantingSeason[];
+  plantingZones?: MinimalPlantingZone[];
+  projectId?: number;
 };

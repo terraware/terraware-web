@@ -1,10 +1,12 @@
 import { paths } from 'src/api/types/generated-schema';
-import HttpService, { Response } from './HttpService';
-import { Delivery, PlantingSite, PlantingSiteReportedPlants } from 'src/types/Tracking';
 import { PlantingSiteZone, Population } from 'src/types/PlantingSite';
-import SearchService from './SearchService';
 import { SearchNodePayload, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
+import { Delivery, PlantingSite, PlantingSiteReportedPlants } from 'src/types/Tracking';
 import { MonitoringPlotSearchResult, PlantingSiteSearchResult } from 'src/types/Tracking';
+
+import { isArray } from '../types/utils';
+import HttpService, { Response } from './HttpService';
+import SearchService from './SearchService';
 
 /**
  * Tracking related services
@@ -247,7 +249,7 @@ const getReportedPlants = async (plantingSiteId: number): Promise<SiteReportedPl
  */
 async function searchPlantingSites(
   organizationId: number,
-  searchField?: SearchNodePayload,
+  searchField?: SearchNodePayload | SearchNodePayload[],
   sortOrder?: SearchSortOrder
 ): Promise<PlantingSiteSearchResult[] | null> {
   const defaultSortOrder = {
@@ -258,11 +260,15 @@ async function searchPlantingSites(
   const params: SearchRequestPayload = {
     fields: [
       'boundary',
+      'description',
       'id',
       'name',
-      'numPlantingZones',
       'numPlantingSubzones',
-      'description',
+      'numPlantingSubzones(raw)',
+      'numPlantingZones',
+      'numPlantingZones(raw)',
+      'project_name',
+      'project_id',
       'timeZone',
       'totalPlants(raw)',
     ],
@@ -282,7 +288,13 @@ async function searchPlantingSites(
   };
 
   if (searchField) {
-    params.search.children.push(searchField);
+    if (isArray(searchField)) {
+      for (const field of searchField) {
+        params.search.children.push(field);
+      }
+    } else {
+      params.search.children.push(searchField);
+    }
   }
 
   return (await SearchService.search(params)) as PlantingSiteSearchResult[];
@@ -329,18 +341,18 @@ async function searchMonitoringPlots(
  * Exported functions
  */
 const TrackingService = {
-  listPlantingSites,
   createPlantingSite,
-  getPlantingSite,
-  updatePlantingSite,
   deletePlantingSite,
   getDelivery,
-  reassignPlantings,
-  getTotalPlantsInZones,
-  getTotalPlantsInSite,
+  getPlantingSite,
   getReportedPlants,
-  searchPlantingSites,
+  getTotalPlantsInSite,
+  getTotalPlantsInZones,
+  listPlantingSites,
+  reassignPlantings,
   searchMonitoringPlots,
+  searchPlantingSites,
+  updatePlantingSite,
 };
 
 export default TrackingService;

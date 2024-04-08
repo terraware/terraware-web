@@ -13,14 +13,15 @@ import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
 import useSnackbar from 'src/utils/useSnackbar';
 import SubmitConfirmationDialog from 'src/components/Reports/SubmitConfirmationDialog';
 import { useOrganization, useUser } from 'src/providers';
+
 import produce from 'immer';
-import CannotEditReportDialog from './InvalidUserModal';
-import useReportFiles from 'src/components/Reports/useReportFiles';
+
+import CannotEditReportDialog from 'src/components/Reports/InvalidUserModal';
 import {
   buildCompletedDateValid,
   buildStartedDateValid,
   operationStartedDateValid,
-} from 'src/components/Reports/LocationSection';
+} from 'src/components/Reports/LocationSelection/util';
 import { overWordLimit } from 'src/utils/text';
 import { makeStyles } from '@mui/styles';
 
@@ -33,11 +34,8 @@ const useStyles = makeStyles((theme) => ({
 export default function ReportEdit(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
   const { reportId } = useParams<{ reportId: string }>();
-  const reportIdInt = reportId ? parseInt(reportId, 10) : undefined;
   const { user } = useUser();
-
   const theme = useTheme();
-
   const classes = useStyles();
 
   const navigate = useNavigate();
@@ -45,18 +43,23 @@ export default function ReportEdit(): JSX.Element {
   const snackbar = useSnackbar();
 
   const [showInvalidUserModal, setShowInvalidUserModal] = useState(false);
-
   const [photos, setPhotos] = useState<File[]>([]);
-
   const [photoIdsToRemove, setPhotoIdsToRemove] = useState<number[]>([]);
-
   const [report, setReport] = useState<Report>();
-
   const [validateFields, setValidateFields] = useState(false);
-
   const [busyState, setBusyState] = useState(false);
-
   const [idInView, setIdInView] = useState('');
+  const [newReportFiles, setNewReportFiles] = useState<File[]>([]);
+  const [updatedReportFiles, setUpdatedReportFiles] = useState<ReportFile[]>([]);
+  const [showAnnual, setShowAnnual] = useState(false);
+  const [confirmSubmitDialogOpen, setConfirmSubmitDialogOpen] = useState(false);
+  const [currentUserEditing, setCurrentUserEditing] = useState(true);
+
+  const initialReportFiles = useReportFiles(report, setUpdatedReportFiles);
+
+  const reportIdInt = parseInt(reportId, 10);
+  const reportName = `Report (${report?.year}-Q${report?.quarter}) ` + (report?.projectName ?? '');
+
   useEffect(() => {
     const el = document.getElementById(idInView);
     if (el) {
@@ -78,17 +81,11 @@ export default function ReportEdit(): JSX.Element {
     };
 
     if (reportIdInt) {
-      getReport();
+      void getReport();
     } else {
       snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
     }
   }, [reportIdInt, snackbar]);
-
-  const [newReportFiles, setNewReportFiles] = useState<File[]>([]);
-
-  const [updatedReportFiles, setUpdatedReportFiles] = useState<ReportFile[]>([]);
-
-  const initialReportFiles = useReportFiles(report, setUpdatedReportFiles);
 
   const updateFiles = async () => {
     if (reportIdInt) {
@@ -104,7 +101,6 @@ export default function ReportEdit(): JSX.Element {
     }
   };
 
-  const [currentUserEditing, setCurrentUserEditing] = useState(true);
   useEffect(() => {
     const getReport = async () => {
       if (reportIdInt) {
@@ -130,10 +126,6 @@ export default function ReportEdit(): JSX.Element {
       setShowInvalidUserModal(true);
     }
   }, [report, user, showInvalidUserModal, currentUserEditing]);
-
-  const [showAnnual, setShowAnnual] = useState(false);
-
-  const [confirmSubmitDialogOpen, setConfirmSubmitDialogOpen] = useState(false);
 
   const updatePhotos = async (iReportId: number) => {
     await ReportService.uploadReportPhotos(iReportId, photos);
@@ -508,7 +500,7 @@ export default function ReportEdit(): JSX.Element {
       {busyState && <BusySpinner withSkrim={true} />}
       <Box padding={theme.spacing(3)}>
         <Typography fontSize='24px' fontWeight={600}>
-          {report ? `Report (${report?.year}-Q${report?.quarter})` : ''}
+          {reportName}
         </Typography>
       </Box>
       {report && (

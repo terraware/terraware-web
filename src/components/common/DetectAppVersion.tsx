@@ -1,7 +1,9 @@
+import { useEffect } from 'react';
+
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, Message } from '@terraware/web-components';
-import { useEffect } from 'react';
+
 import { selectIsAppVersionStale } from 'src/redux/features/appVersion/appVersionSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';

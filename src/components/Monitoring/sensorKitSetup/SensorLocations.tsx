@@ -1,14 +1,17 @@
-import { makeStyles } from '@mui/styles';
-import { Grid, Theme } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+
+import { Grid, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+
+import { updateDevice } from 'src/api/device/device';
 import strings from 'src/strings';
-import { Facility } from 'src/types/Facility';
 import { Device } from 'src/types/Device';
+import { Facility } from 'src/types/Facility';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
 import Select from '../../common/Select/Select';
 import FlowStep, { FlowError } from './FlowStep';
-import { updateDevice } from 'src/api/device/device';
 import { LOCATIONS } from './Locations';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   location: {

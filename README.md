@@ -88,12 +88,10 @@ ALTER DATABASE terraware RENAME TO terrawareTEMP;
 To run the end-to-end tests:
 
 ```shell
-yarn server:reset  # start server and reset database state
-yarn start:dev     # start the frontend
-yarn cy            # run the tests in interactive mode
-# OR
-yarn cy:run && yarn e2e:report  # run the tests on the command line and generate a report
-yarn docker:stop   # don't forget to stop the server when you're done
+yarn server:reset   # start server and reset database state
+yarn start:dev      # start the frontend
+yarn playwright:run # run the tests on the command line and generate a report
+yarn docker:stop    # don't forget to stop the server when you're done
 ```
 
 ## Connecting to the Database
@@ -111,3 +109,4 @@ To exit the PostgreSQL client, type `\quit` or hit control-D.
 - The API Swagger documentation [link](http://localhost:8080/docs)
 - Github deployment information [link](https://github.com/terraware/terraware-web/actions/workflows/workflow.yml)
 - PostgreSQL command line client docs [link](https://www.postgresql.org/docs/current/app-psql.html)
+- Remote backend instructions (running a local FE with staging/production BE) [link](https://github.com/terraware/terraware-web/tree/main/remote-backend#readme)

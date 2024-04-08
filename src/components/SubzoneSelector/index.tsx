@@ -1,9 +1,11 @@
 import React, { useMemo } from 'react';
+
 import { Box, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Autocomplete } from '@terraware/web-components';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
+
 import strings from 'src/strings';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles(() => ({
   horizontal: {
@@ -104,7 +106,7 @@ export default function SubzoneSelector(props: SubzoneSelectorProps): JSX.Elemen
     if (!selectedZone?.plantingSubzones) {
       return [];
     }
-    return selectedZone.plantingSubzones
+    return [...selectedZone.plantingSubzones]
       .sort((a, b) => a.fullName.localeCompare(b.fullName, undefined, { numeric: true }))
       .map((subzone) => subzoneToDropdownItem(subzone));
   }, [selectedZone]);

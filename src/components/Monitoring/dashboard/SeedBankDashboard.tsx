@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+
 import { makeStyles } from '@mui/styles';
 import strings from 'src/strings';
 import { Facility } from 'src/types/Facility';
@@ -18,7 +19,9 @@ import { timePeriods } from './Common';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { TimeZoneDescription } from 'src/types/TimeZones';
+
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
+
 
 const useStyles = makeStyles((theme: Theme) => ({
   graphContainer: {

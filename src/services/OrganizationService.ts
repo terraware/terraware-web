@@ -1,10 +1,11 @@
 import { paths } from 'src/api/types/generated-schema';
-import HttpService, { Response } from './HttpService';
-import CachedUserService from './CachedUserService';
-import PreferencesService from './PreferencesService';
-import { ManagedLocationType, OrganizationRoleInfo, Organization } from 'src/types/Organization';
+import { ManagedLocationType, Organization, OrganizationRoleInfo } from 'src/types/Organization';
 import { InitializedTimeZone } from 'src/types/TimeZones';
 import { isAdmin } from 'src/utils/organization';
+
+import CachedUserService from './CachedUserService';
+import HttpService, { Response } from './HttpService';
+import PreferencesService from './PreferencesService';
 
 /**
  * Service for organization related functionality

@@ -1,11 +1,14 @@
-import { Grid, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
+
+import { Grid, useTheme } from '@mui/material';
+import { Dropdown } from '@terraware/web-components';
+
+import { LocationService } from 'src/services';
 import strings from 'src/strings';
 import { Country, Subdivision } from 'src/types/Country';
-import { LocationService } from 'src/services';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { Dropdown } from '@terraware/web-components';
+
 import { useLocalization } from '../../providers';
 
 type RegionSelectorProps = {
@@ -61,7 +64,7 @@ export default function RegionSelector({
   const onChangeCountrySubdivision = (newValue: string) => {
     if (countries && selectedCountryCode && onChangeCountrySubdivisionCode) {
       const selectedCountry = getCountryByCode(countries, selectedCountryCode);
-      const found = selectedCountry?.subdivisions.find(
+      const found = (selectedCountry?.subdivisions || []).find(
         (subdivision: Subdivision) => subdivision.code.toString() === newValue
       );
       if (found) {
@@ -101,7 +104,7 @@ export default function RegionSelector({
   const subdivisionOptions = () => {
     const country = getSelectedCountry();
     if (country) {
-      return country.subdivisions.map((subd) => toDropdownItem(subd));
+      return (country.subdivisions || []).map((subd) => toDropdownItem(subd));
     }
     return [];
   };

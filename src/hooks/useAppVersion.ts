@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
+
 import { requestAppVersion } from 'src/redux/features/appVersion/appVersionThunks';
+
 import { useAppDispatch } from './../redux/store';
 
 const ONE_MINUTE_INTERVAL_MS = 60 * 1000;

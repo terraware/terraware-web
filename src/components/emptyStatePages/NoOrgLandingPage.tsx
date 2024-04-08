@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import AddNewOrganizationModal from 'src/components/AddNewOrganizationModal';
-import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePages/EmptyStateContent';
-import strings from 'src/strings';
+
 import { Container, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+
+import AddNewOrganizationModal from 'src/components/AddNewOrganizationModal';
 import PageSnackbar from 'src/components/PageSnackbar';
+import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePages/EmptyStateContent';
+import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 interface StyleProps {

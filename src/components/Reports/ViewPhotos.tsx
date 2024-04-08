@@ -1,12 +1,14 @@
-import { Box, Theme, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
-import useSnackbar from 'src/utils/useSnackbar';
-import ReportService, { REPORT_PHOTO_ENDPOINT } from 'src/services/ReportService';
-import { Button, ViewPhotosDialog } from '@terraware/web-components';
+
+import { Box, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { ReportPhoto } from 'src/types/Report';
+import { Button, ViewPhotosDialog } from '@terraware/web-components';
+
+import ReportService, { REPORT_PHOTO_ENDPOINT } from 'src/services/ReportService';
 import strings from 'src/strings';
+import { ReportPhoto } from 'src/types/Report';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useSnackbar from 'src/utils/useSnackbar';
 
 type PhotosSectionProps = {
   reportId: number;

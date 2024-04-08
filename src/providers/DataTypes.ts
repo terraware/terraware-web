@@ -1,17 +1,20 @@
 import React from 'react';
+
+import { Organization } from 'src/types/Organization';
+import { TimeZoneDescription } from 'src/types/TimeZones';
 import { User } from 'src/types/User';
-import { Organization } from '../types/Organization';
-import { TimeZoneDescription } from '../types/TimeZones';
+import { GlobalRolePermission } from 'src/utils/acl';
 
 export type PreferencesType = { [key: string]: unknown };
 
 export type ProvidedUserData = {
-  user?: User;
-  reloadUser: () => void;
   bootstrapped: boolean;
-  userPreferences: PreferencesType;
+  isAllowed: (permission: GlobalRolePermission, metadata?: unknown) => boolean;
+  reloadUser: () => void;
   reloadUserPreferences: () => void;
   updateUserPreferences: (preferences: PreferencesType) => Promise<boolean>;
+  user?: User;
+  userPreferences: PreferencesType;
 };
 
 export type ProvidedOrganizationData = {

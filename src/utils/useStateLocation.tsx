@@ -1,5 +1,6 @@
-import { Location, LocationDescriptor } from 'history';
 import { useLocation } from 'react-router-dom';
+
+import { Location, LocationDescriptor } from 'history';
 
 type State = {
   from?: string;

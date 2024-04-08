@@ -1,5 +1,6 @@
 import { ProgressCircle as WebComponentsProgressCircle } from '@terraware/web-components';
 import { Props } from '@terraware/web-components/components/ProgressCircle/ProgressCircle';
+
 import strings from 'src/strings';
 
 function renderPercentText(percent: number): string {

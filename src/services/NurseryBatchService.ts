@@ -1,7 +1,5 @@
 import { paths } from 'src/api/types/generated-schema';
-import HttpService, { Response } from './HttpService';
 import { Batch, BatchHistoryItem, CreateBatchRequestPayload } from 'src/types/Batch';
-import SearchService from './SearchService';
 import {
   FieldNodePayload,
   SearchNodePayload,
@@ -9,10 +7,14 @@ import {
   SearchResponseElement,
   SearchSortOrder,
 } from 'src/types/Search';
-import { getPromisesResponse } from './utils';
-import PhotoService from './PhotoService';
-import { User } from 'src/types/User';
+import { OrganizationUser } from 'src/types/User';
+import { parseSearchTerm } from 'src/utils/search';
 import { getUserDisplayName } from 'src/utils/user';
+
+import HttpService, { Response } from './HttpService';
+import PhotoService from './PhotoService';
+import SearchService from './SearchService';
+import { getPromisesResponse } from './utils';
 
 /**
  * Nursery related services
@@ -27,26 +29,30 @@ const BATCH_HISTORY_ENDPOINT = '/api/v1/nursery/batches/{batchId}/history';
 export const BATCH_PHOTO_ENDPOINT = '/api/v1/nursery/batches/{batchId}/photos/{photoId}';
 
 const DEFAULT_BATCH_FIELDS = [
-  'id',
-  'batchNumber',
-  'germinatingQuantity',
-  'notReadyQuantity',
-  'readyQuantity',
-  'totalQuantity',
-  'totalQuantityWithdrawn',
-  'germinatingQuantity(raw)',
-  'notReadyQuantity(raw)',
-  'readyQuantity(raw)',
-  'totalQuantity(raw)',
-  'totalQuantityWithdrawn(raw)',
-  'facility_id',
-  'facility_name',
-  'readyByDate',
-  'addedDate',
-  'version',
   'accession_id',
   'accession_accessionNumber',
+  'addedDate',
+  'batchNumber',
+  'facility_id',
+  'facility_name',
+  'germinatingQuantity',
+  'germinatingQuantity(raw)',
+  'id',
   'notes',
+  'notReadyQuantity',
+  'notReadyQuantity(raw)',
+  'project_name',
+  'project_id',
+  'readyByDate',
+  'readyQuantity',
+  'readyQuantity(raw)',
+  'subLocations.subLocation_id',
+  'subLocations.subLocation_name',
+  'totalQuantity',
+  'totalQuantityWithdrawn',
+  'totalQuantity(raw)',
+  'totalQuantityWithdrawn(raw)',
+  'version',
 ];
 
 const REPORT_BATCH_FIELDS = [
@@ -59,6 +65,17 @@ const REPORT_BATCH_FIELDS = [
   'readyQuantity',
   'totalQuantity',
 ];
+
+export type NurseryBatchesReportSearchResponseElement = SearchResponseElement & {
+  batchNumber: string;
+  species_scientificName: string;
+  species_commonName: string;
+  facility_name: string;
+  germinatingQuantity: string;
+  notReadyQuantity: string;
+  readyQuantity: string;
+  totalQuantity: string;
+};
 
 const EXPORT_BATCH_FIELDS = [
   'batchNumber',
@@ -77,6 +94,7 @@ const NURSERY_BATCHES_FIELDS = [
   'addedDate',
   'batchNumber',
   'facility_id',
+  'facility_name',
   'germinatingQuantity',
   'germinatingQuantity(raw)',
   'id',
@@ -93,7 +111,11 @@ const NURSERY_BATCHES_FIELDS = [
   'subLocations.subLocation_name',
   'totalQuantity',
   'totalQuantity(raw)',
+  'totalQuantityWithdrawn',
+  'totalQuantityWithdrawn(raw)',
   'version',
+  'project_name',
+  'project_id',
 ];
 
 export type NurseryBatchesSearchResponseElement = SearchResponseElement & {
@@ -117,19 +139,18 @@ export type NurseryBatchesSearchResponseElement = SearchResponseElement & {
   subLocations?: { subLocation_id: string; subLocation_name: string }[];
   totalQuantity: string;
   'totalQuantity(raw)': string;
-  totalWithdrawn: string;
   version: string;
+  project_name?: string;
 };
 
-export type BatchId = {
-  batchId: number | null;
-};
 export type BatchData = {
   batch: Batch | null;
 };
+
 export type BatchHistoryData = {
   history: BatchHistoryItem[] | null;
 };
+
 export type BatchPhotosIds = {
   photoIds?: { id: number }[];
 };
@@ -155,15 +176,35 @@ const httpBatch = HttpService.root(BATCH_ID_ENDPOINT);
 const httpBatchHistory = HttpService.root(BATCH_HISTORY_ENDPOINT);
 const httpBatchPhoto = HttpService.root(BATCH_PHOTO_ENDPOINT);
 
+export const SEARCH_FIELDS_NON_EMPTY_BATCHES: SearchNodePayload[] = [
+  {
+    operation: 'or',
+    children: [
+      {
+        operation: 'field',
+        field: 'totalQuantity',
+        type: 'Range',
+        values: [1, null],
+      },
+      {
+        operation: 'field',
+        field: 'germinatingQuantity',
+        type: 'Range',
+        values: [1, null],
+      },
+    ],
+  },
+];
+
 /**
  * Create a batch
  */
-const createBatch = async (batch: CreateBatchRequestPayload): Promise<Response & BatchId> => {
+const createBatch = async (batch: CreateBatchRequestPayload): Promise<Response & BatchData> => {
   const response: Response = await HttpService.root(BATCHES_ENDPOINT).post({ entity: batch });
 
   return {
     ...response,
-    batchId: response?.data?.batch?.id ?? null,
+    batch: response?.data?.batch ?? null,
   };
 };
 
@@ -207,6 +248,8 @@ const getBatches = async (organizationId: number, batchIds: number[]): Promise<S
   return searchResponse;
 };
 
+export type SearchResponseBatches = NurseryBatchesSearchResponseElement | NurseryBatchesReportSearchResponseElement;
+
 /**
  * Get all batches
  */
@@ -214,9 +257,11 @@ const getAllBatches = async (
   organizationId: number,
   searchSortOrder?: SearchSortOrder,
   facilityIds?: number[],
+  subLocationIds?: number[],
   query?: string,
-  isCsvExport?: boolean
-): Promise<SearchResponseElement[] | null> => {
+  isCsvExport?: boolean,
+  searchFields?: SearchNodePayload[]
+): Promise<SearchResponseBatches[] | null> => {
   const params: SearchRequestPayload = {
     prefix: 'batches',
     search: {
@@ -248,34 +293,50 @@ const getAllBatches = async (
     } as SearchNodePayload);
   }
 
+  if (subLocationIds && subLocationIds.length > 0) {
+    params.search.children.push({
+      operation: 'field',
+      field: 'subLocations.subLocation_id',
+      type: 'Exact',
+      values: subLocationIds.map((id) => id.toString()),
+    } as SearchNodePayload);
+  }
+
+  if (searchFields) {
+    for (const field of searchFields) {
+      params.search.children.push(field);
+    }
+  }
+
   if (query) {
+    const { type, values } = parseSearchTerm(query);
     const searchValueChildren: FieldNodePayload[] = [];
     searchValueChildren.push({
       operation: 'field',
       field: 'batchNumber',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     });
 
     searchValueChildren.push({
       operation: 'field',
       field: 'species_scientificName',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     });
 
     searchValueChildren.push({
       operation: 'field',
       field: 'species_commonName',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     });
 
     searchValueChildren.push({
       operation: 'field',
       field: 'facility_name',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     });
 
     params.search.children.push({
@@ -385,10 +446,12 @@ const deleteBatch = async (batchId: number): Promise<Response> => {
   });
 };
 
+export type UpdateBatchRequestPayloadWithId = UpdateBatchRequestPayload & { id: number };
+
 /**
  * Update a batch by id
  */
-export const updateBatch = async (batch: Batch): Promise<Response & BatchData> => {
+export const updateBatch = async (batch: UpdateBatchRequestPayloadWithId): Promise<Response & BatchData> => {
   const entity: UpdateBatchRequestPayload = {
     notes: batch.notes,
     readyByDate: batch.readyByDate,
@@ -398,6 +461,7 @@ export const updateBatch = async (batch: Batch): Promise<Response & BatchData> =
     substrateNotes: batch.substrateNotes,
     treatment: batch.treatment,
     treatmentNotes: batch.treatmentNotes,
+    projectId: batch.projectId,
   };
 
   const response: Response = await httpBatch.put({
@@ -496,7 +560,7 @@ const getBatchHistory = async (
   batchId: number,
   search?: string,
   filter?: Record<string, any>,
-  users?: Record<number, User>
+  users?: Record<number, OrganizationUser>
 ): Promise<Response & BatchHistoryData> => {
   const response: Response & BatchHistoryData = await httpBatchHistory.get<
     GetBatchHistoryResponsePayload,

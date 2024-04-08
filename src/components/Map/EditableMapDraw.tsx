@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Feature, Geometry, MultiPolygon } from 'geojson';
 import { MapRef, useControl } from 'react-map-gl';
-import { GeolocateControl, ScaleControl } from 'mapbox-gl';
+
 import MapboxDraw, {
   DrawCreateEvent,
   DrawMode,
@@ -10,6 +9,8 @@ import MapboxDraw, {
   DrawUpdateEvent,
 } from '@mapbox/mapbox-gl-draw';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
+import { Feature, Geometry, MultiPolygon } from 'geojson';
+import { GeolocateControl, ScaleControl } from 'mapbox-gl';
 
 /**
  * Flattened representation of the editor's current state. This is based on a combination of factors

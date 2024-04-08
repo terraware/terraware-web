@@ -1,12 +1,15 @@
-import { makeStyles } from '@mui/styles';
-import { Grid, Theme } from '@mui/material';
 import React from 'react';
-import strings from 'src/strings';
+
+import { Grid, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+
 import Button from 'src/components/common/button/Button';
+import strings from 'src/strings';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+import ErrorBox from '../../common/ErrorBox/ErrorBox';
 import Expandable from '../../common/Expandable';
 import Icon from '../../common/icon/Icon';
-import ErrorBox from '../../common/ErrorBox/ErrorBox';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 interface StyleProps {
   isMobile: boolean;

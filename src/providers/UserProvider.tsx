@@ -1,11 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { User } from 'src/types/User';
-import { PreferencesService, UserService } from 'src/services';
-import { UserContext } from './contexts';
-import { PreferencesType, ProvidedUserData } from './DataTypes';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { updateGtmInstrumented } from 'src/redux/features/user/userAnalyticsSlice';
+
 import { selectUserAnalytics } from 'src/redux/features/user/userAnalyticsSelectors';
+import { updateGtmInstrumented } from 'src/redux/features/user/userAnalyticsSlice';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { PreferencesService, UserService } from 'src/services';
+import { User } from 'src/types/User';
+import { GlobalRolePermission, isAllowed as isAllowedACL } from 'src/utils/acl';
+import { isTerraformationEmail } from 'src/utils/user';
+
+import { PreferencesType, ProvidedUserData } from './DataTypes';
+import { UserContext } from './contexts';
 
 export type UserProviderProps = {
   children?: React.ReactNode;
@@ -43,7 +47,7 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
       if (response.requestSucceeded) {
         setUser(response.user!);
         if (response.user && !userAnalyticsState?.gtmInstrumented && (window as any).INIT_GTAG) {
-          await dispatch(updateGtmInstrumented({ gtmInstrumented: true }));
+          dispatch(updateGtmInstrumented({ gtmInstrumented: true }));
 
           // Put the language in the "lang" attribute of the <html> tag before initializing Google
           // Analytics because the cookie consent UI code will look there to determine which
@@ -56,7 +60,7 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
 
           (window as any).INIT_GTAG(
             response.user.id.toString(),
-            response.user.email?.toLowerCase()?.endsWith('@terraformation.com') ? 'true' : 'false'
+            isTerraformationEmail(response.user.email) ? 'true' : 'false'
           );
         }
       }
@@ -65,12 +69,24 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
     populateUser();
   }, [setUser, userAnalyticsState?.gtmInstrumented, dispatch]);
 
+  const isAllowed = useCallback(
+    (permission: GlobalRolePermission, metadata?: unknown): boolean => {
+      if (!(userPreferences && user)) {
+        return false;
+      }
+
+      return isAllowedACL(user, permission, metadata);
+    },
+    [user, userPreferences]
+  );
+
   const [userData, setUserData] = useState<ProvidedUserData>({
     reloadUser,
     bootstrapped: false,
     userPreferences: {},
     reloadUserPreferences,
     updateUserPreferences,
+    isAllowed,
   });
 
   useEffect(() => {
@@ -90,8 +106,9 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
       userPreferences: userPreferences ?? {},
       reloadUserPreferences,
       bootstrapped: Boolean(userPreferences && user),
+      isAllowed,
     }));
-  }, [user, userPreferences, reloadUserPreferences]);
+  }, [isAllowed, user, userPreferences, reloadUserPreferences]);
 
   return <UserContext.Provider value={userData}>{children}</UserContext.Provider>;
 }

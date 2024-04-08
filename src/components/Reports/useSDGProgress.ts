@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import { Report, SDG } from 'src/types/Report';
 
 export default function useSDGProgress(report: Report): [string[], React.Dispatch<React.SetStateAction<string>>[]] {

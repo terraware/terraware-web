@@ -1,4 +1,5 @@
 import { paths } from 'src/api/types/generated-schema';
+
 import HttpService, { Response } from './HttpService';
 
 /**

@@ -1,11 +1,13 @@
-import { Dropdown, DropdownItem, PopoverMenu } from '@terraware/web-components';
-import { findLocaleDetails, useSupportedLocales } from '../strings/locales';
-import { LocalizationContext } from '../providers/contexts';
-import { UserService } from 'src/services';
-import { useUser } from '../providers';
-import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { Dropdown, DropdownItem, PopoverMenu } from '@terraware/web-components';
+
+import { UserService } from 'src/services';
 import strings from 'src/strings';
+
+import { useUser } from '../providers';
+import { LocalizationContext } from '../providers/contexts';
+import { findLocaleDetails, useSupportedLocales } from '../strings/locales';
 
 type LocaleSelectorProps = {
   transparent?: boolean;

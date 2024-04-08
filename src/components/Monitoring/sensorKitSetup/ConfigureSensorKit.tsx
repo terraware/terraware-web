@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+
+import { markSensorKitConfigured } from 'src/api/facility/facility';
 import strings from 'src/strings';
 import { Facility } from 'src/types/Facility';
+
 import FlowStep, { FlowError } from './FlowStep';
-import { markSensorKitConfigured } from 'src/api/facility/facility';
 
 type ConfigureSensorKitProps = {
   seedBank: Facility;

@@ -1,13 +1,15 @@
+import { useEffect, useState } from 'react';
+
 import { Snackbar as SnackbarUI } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { Message } from '@terraware/web-components';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { useEffect, useState } from 'react';
+
 import { selectSnackbar } from 'src/redux/features/snackbar/snackbarSelectors';
 import { clearSnackbar } from 'src/redux/features/snackbar/snackbarSlice';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Snackbar } from 'src/types/Snackbar';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const useStyles = makeStyles((theme: Theme) => ({
   mainSnackbar: {

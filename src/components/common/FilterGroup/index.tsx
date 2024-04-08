@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
-import { FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
+
 import { Box, Theme, Typography, useTheme } from '@mui/material';
-import strings from 'src/strings';
-import MultipleSelection from './filters/FilterMultipleSelection';
-import SingleSelection from './filters/FilterSingleSelection';
-import Search from './filters/FilterSearch';
-import DateRange from './filters/FilterDateRange';
-import FilterNumberRange from './filters/FilterNumberRange';
-import FilterCountWeight from './filters/FilterCountWeight';
-import { Option } from '@terraware/web-components/components/table/types';
 import { makeStyles } from '@mui/styles';
 import { Button } from '@terraware/web-components';
+import { Option } from '@terraware/web-components/components/table/types';
+
+import strings from 'src/strings';
+import { FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+
 import FilterBoolean from './filters/FilterBoolean';
+import FilterCountWeight from './filters/FilterCountWeight';
+import DateRange from './filters/FilterDateRange';
+import MultipleSelection from './filters/FilterMultipleSelection';
+import FilterNumberRange from './filters/FilterNumberRange';
+import Search from './filters/FilterSearch';
+import SingleSelection from './filters/FilterSingleSelection';
 
 interface StyleProps {
   isMobile?: boolean;
@@ -52,10 +55,11 @@ export type FilterGroupProps = {
   onConfirm: (filters: Record<string, SearchNodePayload>) => void;
   onCancel: () => void;
   noScroll?: boolean;
+  optionsRenderer?: (filterName: string, values: FieldValuesPayload) => Option[] | undefined;
 };
 
 export default function FilterGroup(props: FilterGroupProps): JSX.Element {
-  const { initialFilters, fields, values, onConfirm, onCancel, noScroll } = props;
+  const { initialFilters, fields, values, onConfirm, onCancel, noScroll, optionsRenderer } = props;
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const classes = useStyles({ isMobile });
@@ -96,79 +100,83 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
       </Box>
 
       <Box flex='1 1 auto' overflow={noScroll ? 'visible' : 'auto'} maxHeight='380px'>
-        {fields.map((f, index) => (
-          <Box key={f.name}>
-            {index > 0 && <hr className={classes.divider} />}
-            {f.showLabel !== false ? (
-              <Typography fontSize='14px' fontWeight={600} margin={theme.spacing(2, 2, 0, 2)}>
-                {f.label}
-              </Typography>
-            ) : null}
-            {f.type === 'multiple_selection' && (
-              <MultipleSelection
-                field={f.name}
-                values={filters[f.name]?.values ?? []}
-                onChange={(filter) => onFilterChange(f.name, filter)}
-                options={getOptions(f.name, values || {})}
-              />
-            )}
-            {f.type === 'single_selection' && (
-              <SingleSelection
-                field={f.name}
-                value={filters[f.name]?.values[0]}
-                onChange={(filter) => onFilterChange(f.name, filter)}
-                options={getOptions(f.name, values || {})}
-                isBoolean={false}
-              />
-            )}
-            {f.type === 'search' && (
-              <Search
-                field={f.name}
-                autoFocus={false}
-                onChange={(filter) => onFilterChange(f.name, filter)}
-                onDelete={() => onDeleteFilter(f.name)}
-                value={filters[f.name]?.values[0]}
-              />
-            )}
-            {f.type === 'date_range' && (
-              <DateRange
-                field={f.name}
-                onChange={(filter) => onFilterChange(f.name, filter)}
-                onDelete={() => onDeleteFilter(f.name)}
-                values={filters[f.name]?.values ?? []}
-              />
-            )}
-            {f.type === 'number_range' && (
-              <FilterNumberRange
-                field={f.name}
-                onChange={(filter) => onFilterChange(f.name, filter)}
-                onDelete={() => onDeleteFilter(f.name)}
-                values={filters[f.name]?.values ?? []}
-              />
-            )}
-            {f.type === 'count_weight' && (
-              <FilterCountWeight
-                field={f.name}
-                onChange={(filter) => onFilterChange(f.name, filter)}
-                payloads={filters[f.name]?.children ?? []}
-              />
-            )}
-            {f.type === 'boolean' && (
-              <FilterBoolean
-                field={f.name}
-                label={f.label}
-                value={filters[f.name]?.values[0] === 'true'}
-                onChange={(filter) => onFilterChange(f.name, filter)}
-              />
-            )}
-          </Box>
-        ))}
+        {fields.map((f, index) => {
+          const options: Option[] | undefined = optionsRenderer && optionsRenderer(f.name, values || {});
+
+          return (
+            <Box key={f.name}>
+              {index > 0 && <hr className={classes.divider} />}
+              {f.showLabel !== false ? (
+                <Typography fontSize='14px' fontWeight={600} margin={theme.spacing(2, 2, 0, 2)}>
+                  {f.label}
+                </Typography>
+              ) : null}
+              {f.type === 'multiple_selection' && (
+                <MultipleSelection
+                  field={f.name}
+                  values={filters[f.name]?.values ?? []}
+                  onChange={(filter) => onFilterChange(f.name, filter)}
+                  options={options ?? getOptions(f.name, values || {})}
+                />
+              )}
+              {f.type === 'single_selection' && (
+                <SingleSelection
+                  field={f.name}
+                  value={filters[f.name]?.values[0]}
+                  onChange={(filter) => onFilterChange(f.name, filter)}
+                  options={getOptions(f.name, values || {})}
+                  isBoolean={false}
+                />
+              )}
+              {f.type === 'search' && (
+                <Search
+                  field={f.name}
+                  autoFocus={false}
+                  onChange={(filter) => onFilterChange(f.name, filter)}
+                  onDelete={() => onDeleteFilter(f.name)}
+                  value={filters[f.name]?.values[0]}
+                />
+              )}
+              {f.type === 'date_range' && (
+                <DateRange
+                  field={f.name}
+                  onChange={(filter) => onFilterChange(f.name, filter)}
+                  onDelete={() => onDeleteFilter(f.name)}
+                  values={filters[f.name]?.values ?? []}
+                />
+              )}
+              {f.type === 'number_range' && (
+                <FilterNumberRange
+                  field={f.name}
+                  onChange={(filter) => onFilterChange(f.name, filter)}
+                  onDelete={() => onDeleteFilter(f.name)}
+                  values={filters[f.name]?.values ?? []}
+                />
+              )}
+              {f.type === 'count_weight' && (
+                <FilterCountWeight
+                  field={f.name}
+                  onChange={(filter) => onFilterChange(f.name, filter)}
+                  payloads={filters[f.name]?.children ?? []}
+                />
+              )}
+              {f.type === 'boolean' && (
+                <FilterBoolean
+                  field={f.name}
+                  label={f.label}
+                  value={filters[f.name]?.values[0] === 'true'}
+                  onChange={(filter) => onFilterChange(f.name, filter)}
+                />
+              )}
+            </Box>
+          );
+        })}
       </Box>
 
       <Box
         display='flex'
         flexDirection={isMobile ? 'column-reverse' : 'row'}
-        justifyContent='space-between'
+        justifyContent='flex-end'
         width='100%'
         borderTop={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
         borderRadius={theme.spacing(0, 0, 1, 1)}

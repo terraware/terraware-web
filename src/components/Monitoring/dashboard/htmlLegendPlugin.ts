@@ -1,4 +1,5 @@
 import { Chart } from 'chart.js';
+
 import strings from 'src/strings';
 
 export const getOrCreateLegendList = (chart: any, id: string) => {

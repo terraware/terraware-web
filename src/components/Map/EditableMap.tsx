@@ -1,13 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import ReactMapGL, { FullscreenControl, LngLatBoundsLike, MapRef } from 'react-map-gl';
-import EditableMapDraw, { MapEditorMode } from 'src/components/Map/EditableMapDraw';
-import useMapboxToken from 'src/utils/useMapboxToken';
+
 import { Box, Typography, useTheme } from '@mui/material';
-import { useIsVisible } from 'src/hooks/useIsVisible';
 import bbox from '@turf/bbox';
 import { MultiPolygon } from 'geojson';
+
+import EditableMapDraw, { MapEditorMode } from 'src/components/Map/EditableMapDraw';
+import { useIsVisible } from 'src/hooks/useIsVisible';
 import strings from 'src/strings';
 import { MapViewStyles } from 'src/types/Map';
+import useMapboxToken from 'src/utils/useMapboxToken';
+
 import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
 
 export type EditableMapProps = {
@@ -79,15 +82,7 @@ export default function EditableMap({ boundary, onBoundaryChanged, style }: Edit
   };
 
   return (
-    <Box
-      ref={containerRef}
-      display='flex'
-      flexDirection='column'
-      flexGrow={1}
-      height='100%'
-      width='100%'
-      sx={{ minHeight: 250, position: 'relative' }}
-    >
+    <Box ref={containerRef} display='flex' flexDirection='column' flexGrow={1}>
       {firstVisible && (
         <>
           <Typography fontSize='16px' margin={theme.spacing(1, 0)} minHeight='4em'>
@@ -100,12 +95,11 @@ export default function EditableMap({ boundary, onBoundaryChanged, style }: Edit
             mapboxAccessToken={token}
             mapStyle={MapViewStyles[mapViewStyle]}
             style={{
-              position: 'relative',
-              width: '100%',
-              height: '100%',
               display: 'flex',
               flexGrow: '1',
               flexDirection: 'column',
+              height: 'auto',
+              minHeight: '436px',
               ...style,
             }}
             initialViewState={initialViewState}

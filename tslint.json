@@ -4,8 +4,7 @@
     "tslint-eslint-rules",
     "tslint-react",
     "tslint-config-prettier",
-    "tslint-react-hooks",
-    "tslint-plugin-cypress"
+    "tslint-react-hooks"
   ],
   "jsRules": {},
   "rules": {
@@ -57,6 +56,10 @@
     "jsx-boolean-value": false
   },
   "linterOptions": {
-    "exclude": ["src/api/types/generated-schema.ts", "src/api/types/generated-schema-seedbank.ts"]
+    "exclude": [
+      "src/api/types/generated-schema.ts",
+      "src/api/types/generated-schema-seedbank.ts",
+      "src/types/documentProducer/generated-schema.ts"
+    ]
   }
 }

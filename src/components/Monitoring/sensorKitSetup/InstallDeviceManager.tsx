@@ -1,14 +1,17 @@
-import { makeStyles } from '@mui/styles';
-import ProgressCircle from 'src/components/common/ProgressCircle/ProgressCircle';
 import React, { useCallback, useEffect, useState } from 'react';
-import strings from 'src/strings';
-import { Facility } from 'src/types/Facility';
-import { DeviceManager } from 'src/types/DeviceManager';
-import FlowStep, { FlowError } from './FlowStep';
+
+import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+
 import { connectDeviceManager, getDeviceManager } from 'src/api/deviceManager/deviceManager';
 import getHelpEmail from 'src/components/common/HelpEmail';
-import { Theme } from '@mui/material';
+import ProgressCircle from 'src/components/common/ProgressCircle/ProgressCircle';
+import strings from 'src/strings';
+import { DeviceManager } from 'src/types/DeviceManager';
+import { Facility } from 'src/types/Facility';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+import FlowStep, { FlowError } from './FlowStep';
 
 interface StyleProps {
   isMobile: boolean;

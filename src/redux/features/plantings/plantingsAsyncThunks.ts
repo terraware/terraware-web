@@ -1,7 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { PlantingsService, Response } from 'src/services';
-import { UpdatePlantingSubzonePayload } from 'src/types/PlantingSite';
 import strings from 'src/strings';
+import { UpdatePlantingSubzonePayload } from 'src/types/PlantingSite';
 
 export type UpdateRequest = {
   subzoneId: number;

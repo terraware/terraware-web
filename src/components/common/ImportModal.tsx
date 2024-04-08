@@ -1,16 +1,19 @@
+import React, { useEffect, useRef, useState } from 'react';
+
 import { Box, useTheme } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React, { useEffect, useRef, useState } from 'react';
-import { Facility } from 'src/types/Facility';
-import { UploadResponse, GetUploadStatusResponsePayload, ResolveResponse, UploadFileResponse } from 'src/types/File';
-import strings from 'src/strings';
-import Button from './button/Button';
-import DialogBox from './DialogBox/DialogBox';
-import Icon from './icon/Icon';
-import ProgressCircle from './ProgressCircle/ProgressCircle';
+
 import Link from 'src/components/common/Link';
 import { useOrganization } from 'src/providers/hooks';
+import strings from 'src/strings';
+import { Facility } from 'src/types/Facility';
+import { GetUploadStatusResponsePayload, ResolveResponse, UploadFileResponse, UploadResponse } from 'src/types/File';
+
+import DialogBox from './DialogBox/DialogBox';
+import ProgressCircle from './ProgressCircle/ProgressCircle';
+import Button from './button/Button';
+import Icon from './icon/Icon';
 
 const useStyles = makeStyles((theme: Theme) => ({
   spacing: {

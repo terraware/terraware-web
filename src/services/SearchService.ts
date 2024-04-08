@@ -1,6 +1,12 @@
 import { paths } from 'src/api/types/generated-schema';
-import { SearchNodePayload, SearchCriteria, SearchResponseElement } from 'src/types/Search';
-import HttpService from './HttpService';
+import {
+  SearchCriteria,
+  SearchNodePayload,
+  SearchResponseElement,
+  SearchValuesResponseElement,
+} from 'src/types/Search';
+
+import HttpService, { Response } from './HttpService';
 
 /**
  * Service for user related functionality
@@ -8,6 +14,7 @@ import HttpService from './HttpService';
 
 // endpoint
 const SEARCH_ENDPOINT = '/api/v1/search';
+const SEARCH_VALUES_ENDPOINT = '/api/v1/search/values';
 
 /*
  * Types exported from service
@@ -29,7 +36,14 @@ export type RawSearchRequestPayload =
 export type SearchResponsePayload =
   paths[typeof SEARCH_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
+export type RawSearchValuesRequestPayload =
+  paths[typeof SEARCH_VALUES_ENDPOINT]['post']['requestBody']['content']['application/json'];
+
+export type SearchValuesResponsePayload =
+  paths[typeof SEARCH_VALUES_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+
 const httpSearch = HttpService.root(SEARCH_ENDPOINT);
+const httpSearchValues = HttpService.root(SEARCH_VALUES_ENDPOINT);
 
 /**
  * Converts a list of search criteria to an AndNodePayload that includes a filter for
@@ -57,11 +71,23 @@ function convertToSearchNodePayload(
   };
 }
 
-async function search(entity: RawSearchRequestPayload): Promise<SearchResponseElement[] | null> {
+async function search<T extends SearchResponseElement>(entity: RawSearchRequestPayload): Promise<T[] | null> {
   try {
     const response: SearchResponsePayload = (await httpSearch.post({ entity })).data;
-    return response.results;
+    return response.results as T[] | null;
   } catch {
+    return null;
+  }
+}
+
+async function searchValues<T extends SearchValuesResponseElement>(
+  entity: RawSearchValuesRequestPayload
+): Promise<T | null> {
+  const serverResponse: Response = await httpSearchValues.post({ entity });
+  if (serverResponse.requestSucceeded) {
+    const response: SearchValuesResponsePayload | null = serverResponse.data?.results ?? null;
+    return response as T | null;
+  } else {
     return null;
   }
 }
@@ -84,6 +110,7 @@ async function searchCsv(entity: RawSearchRequestPayload): Promise<any> {
 const SearchService = {
   convertToSearchNodePayload,
   search,
+  searchValues,
   searchCsv,
 };
 

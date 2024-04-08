@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
+
 import { Box, Theme, Typography, useTheme } from '@mui/material';
-import { Button, MultiSelect } from '@terraware/web-components';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import strings from 'src/strings';
 import { makeStyles } from '@mui/styles';
+import { Button, MultiSelect } from '@terraware/web-components';
+
+import strings from 'src/strings';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+import Checkbox from '../Checkbox';
 
 interface StyleProps {
   isMobile?: boolean;
@@ -20,33 +24,54 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type FilterMultiSelectProps<T> = {
+  filterKey: string;
+  initialSelection: (T | null)[];
   label: string;
-  initialSelection: T[];
+  notPresentFilterLabel?: string;
+  notPresentFilterShown?: boolean;
+  onBlur?: () => void;
+  onFocus?: () => void;
   onCancel: () => void;
-  onConfirm: (finalSelection: T[]) => void;
+  onConfirm: (finalSelection: (T | null)[]) => void;
   options: T[];
+  optionsVisible?: boolean | undefined;
   renderOption: (item: T) => string;
 };
 
 export default function FilterMultiSelect<T>(props: FilterMultiSelectProps<T>): JSX.Element {
-  const { label, initialSelection, onCancel, onConfirm, options, renderOption } = props;
+  const {
+    filterKey,
+    initialSelection,
+    label,
+    notPresentFilterLabel,
+    notPresentFilterShown,
+    onCancel,
+    onConfirm,
+    options,
+    optionsVisible,
+    renderOption,
+    onBlur,
+    onFocus,
+  } = props;
+
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const classes = useStyles({ isMobile });
 
   const [selection, setSelection] = useState(initialSelection);
-  const [multiSelectOptions, setMultiSelectOptions] = useState<Map<T, string>>(new Map());
+  const [multiSelectOptions, setMultiSelectOptions] = useState<Map<T | null, string>>(new Map());
+  const [isNotPresentFilterSelected, setIsNotPresentFilterSelected] = useState<boolean>(selection[0] === null);
 
   useEffect(() => {
     const optionsMap = new Map<T, string>(options.map((option) => [option, renderOption(option)]));
     setMultiSelectOptions(optionsMap);
   }, [options, renderOption]);
 
-  const onAdd = (item: T) => {
+  const onAdd = (item: T | null) => {
     setSelection([...selection, item]);
   };
 
-  const onRemove = (item: T) => {
+  const onRemove = (item: T | null) => {
     const index = selection.findIndex((x) => item === x);
     const newSelection = [...selection];
     newSelection.splice(index, 1);
@@ -94,7 +119,7 @@ export default function FilterMultiSelect<T>(props: FilterMultiSelectProps<T>): 
           background: theme.palette.TwClrBg,
         }}
       >
-        <MultiSelect
+        <MultiSelect<T | null, string>
           className={classes.multiSelectStyle}
           fullWidth={true}
           onAdd={onAdd}
@@ -103,12 +128,36 @@ export default function FilterMultiSelect<T>(props: FilterMultiSelectProps<T>): 
           placeHolder={strings.SELECT}
           valueRenderer={(v) => v}
           selectedOptions={selection}
+          disabled={isNotPresentFilterSelected}
+          optionsVisible={optionsVisible}
+          onBlur={onBlur}
+          onFocus={onFocus}
         />
+
+        {notPresentFilterShown && (
+          <Box width='100%' sx={{ marginTop: theme.spacing(2) }}>
+            <Checkbox
+              id={`not-preset-${String(filterKey)}`}
+              name={`not-preset-${String(filterKey)}`}
+              label={notPresentFilterLabel}
+              onChange={() => {
+                const nextIsNotPresentFilterSelected = !isNotPresentFilterSelected;
+                if (nextIsNotPresentFilterSelected) {
+                  setSelection([null]);
+                } else {
+                  setSelection([]);
+                }
+                setIsNotPresentFilterSelected(nextIsNotPresentFilterSelected);
+              }}
+              value={isNotPresentFilterSelected}
+            />
+          </Box>
+        )}
       </Box>
       <Box
         display='flex'
         flexDirection={isMobile ? 'column-reverse' : 'row'}
-        justifyContent='space-between'
+        justifyContent='flex-end'
         width='100%'
         borderTop={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
         borderRadius={theme.spacing(0, 0, 1, 1)}

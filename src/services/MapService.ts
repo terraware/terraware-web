@@ -1,10 +1,8 @@
 import { paths } from 'src/api/types/generated-schema';
-import { MultiPolygon, PlantingSite } from 'src/types/Tracking';
 import { MapBoundingBox, MapData, MapEntity, MapGeometry, MapSourceBaseData } from 'src/types/Map';
-import HttpService, { Response } from './HttpService';
 import {
-  ObservationMonitoringPlotResultsPayload,
   ObservationMonitoringPlotResults,
+  ObservationMonitoringPlotResultsPayload,
   ObservationPlantingSubzoneResults,
   ObservationPlantingZoneResults,
   ObservationResults,
@@ -12,6 +10,9 @@ import {
   SubzoneAggregation,
   ZoneAggregation,
 } from 'src/types/Observations';
+import { MinimalPlantingSite, MultiPolygon, PlantingSite } from 'src/types/Tracking';
+
+import HttpService, { Response } from './HttpService';
 
 /**
  * Map related service
@@ -141,7 +142,7 @@ const getPolygons = (boundary?: MultiPolygon): MapGeometry => {
 /**
  * Transform planting site geometry data into UI model
  */
-const extractPlantingSite = (site: PlantingSite): MapSourceBaseData => {
+const extractPlantingSite = (site: MinimalPlantingSite): MapSourceBaseData => {
   const { id, name, description, boundary } = site;
 
   return {
@@ -159,7 +160,7 @@ const extractPlantingSite = (site: PlantingSite): MapSourceBaseData => {
 /**
  * Transform zones geometry data into UI model
  */
-const extractPlantingZones = (site: PlantingSite): MapSourceBaseData => {
+const extractPlantingZones = (site: MinimalPlantingSite): MapSourceBaseData => {
   const zonesData =
     site.plantingZones?.map((zone) => {
       const { id, name, boundary } = zone;
@@ -179,7 +180,7 @@ const extractPlantingZones = (site: PlantingSite): MapSourceBaseData => {
 /**
  * Transform subzones geometry data into UI model
  */
-const extractSubzones = (site: PlantingSite): MapSourceBaseData => {
+const extractSubzones = (site: MinimalPlantingSite): MapSourceBaseData => {
   const allPlantingSubzonesData =
     site.plantingZones?.flatMap((zone) => {
       const { plantingSubzones } = zone;

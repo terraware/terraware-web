@@ -1,6 +1,8 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+
 import { selectPlantings } from 'src/redux/features/plantings/plantingsSelectors';
+import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+
 import { selectPlantingSiteObservations } from './observationsSelectors';
 
 export const selectUpcomingObservations = createSelector(

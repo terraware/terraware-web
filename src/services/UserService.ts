@@ -1,10 +1,11 @@
 import { paths } from 'src/api/types/generated-schema';
-import HttpService, { Response } from './HttpService';
-import CachedUserService from './CachedUserService';
-import PreferencesService from './PreferencesService';
-import { User } from 'src/types/User';
 import { InitializedTimeZone } from 'src/types/TimeZones';
+import { User } from 'src/types/User';
 import { InitializedUnits } from 'src/units';
+
+import CachedUserService from './CachedUserService';
+import HttpService, { Response } from './HttpService';
+import PreferencesService from './PreferencesService';
 
 /**
  * Service for user related functionality
@@ -31,11 +32,18 @@ type CachedTimeZone = {
 
 // endpoint
 const CURRENT_USER_ENDPOINT = '/api/v1/users/me';
+const ENDPOINT_USER = '/api/v1/users/{userId}';
+const ENDPOINT_USERS = '/api/v1/users';
 
 type UserServerResponse = paths[typeof CURRENT_USER_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type UpdateUserPayloadType = paths[typeof CURRENT_USER_ENDPOINT]['put']['requestBody']['content']['application/json'];
 
+type GetUserResponsePayload = paths[typeof ENDPOINT_USER]['get']['responses'][200]['content']['application/json'];
+type SearchUserResponsePayload = paths[typeof ENDPOINT_USERS]['get']['responses'][200]['content']['application/json'];
+
 const httpCurrentUser = HttpService.root(CURRENT_USER_ENDPOINT);
+const httpUser = HttpService.root(ENDPOINT_USER);
+const httpUsers = HttpService.root(ENDPOINT_USERS);
 
 const cachedTimeZone: CachedTimeZone = {
   cachedOn: 0,
@@ -50,14 +58,15 @@ const getUser = async (): Promise<UserResponse> => {
   const response: UserResponse = await httpCurrentUser.get<UserServerResponse, UserData>({}, (data) => ({
     user: data?.user
       ? {
-          id: data.user.id,
-          email: data.user.email,
-          firstName: data.user.firstName,
-          lastName: data.user.lastName,
-          emailNotificationsEnabled: data.user.emailNotificationsEnabled,
-          timeZone: data.user.timeZone,
-          locale: data.user.locale,
           countryCode: data.user.countryCode,
+          email: data.user.email,
+          emailNotificationsEnabled: data.user.emailNotificationsEnabled,
+          firstName: data.user.firstName,
+          globalRoles: data.user.globalRoles,
+          id: data.user.id,
+          lastName: data.user.lastName,
+          locale: data.user.locale,
+          timeZone: data.user.timeZone,
         }
       : undefined,
   }));
@@ -68,6 +77,24 @@ const getUser = async (): Promise<UserResponse> => {
 
   return response;
 };
+
+const get = async (userId: number): Promise<UserResponse> =>
+  httpUser.get<GetUserResponsePayload, UserData>(
+    {
+      urlReplacements: {
+        '{userId}': `${userId}`,
+      },
+    },
+    (data) => ({ user: data?.user })
+  );
+
+const getUserByEmail = async (email: string): Promise<UserResponse> =>
+  httpUsers.get<SearchUserResponsePayload, UserData>(
+    {
+      params: { email },
+    },
+    (data) => ({ user: data?.user })
+  );
 
 /**
  * update current/active user
@@ -170,8 +197,10 @@ const initializeUnits = async (units: string): Promise<InitializedUnits> => {
  * Exported functions
  */
 const UserService = {
+  get,
   getInitializedTimeZone,
   getUser,
+  getUserByEmail,
   initializeTimeZone,
   initializeUnits,
   updateUser,

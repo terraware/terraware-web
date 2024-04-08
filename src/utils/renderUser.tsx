@@ -1,6 +1,6 @@
-import { User } from 'src/types/User';
+import { OrganizationUser, User } from 'src/types/User';
 
-export const renderUser = (userSel: User, accUser: User, contributor: boolean): string => {
+export const renderUser = (userSel: User | OrganizationUser, accUser: User, contributor: boolean): string => {
   const firstName = contributor ? accUser.firstName : userSel?.firstName;
   const lastName = contributor ? accUser.lastName : userSel?.lastName;
   const email = contributor ? accUser.email : userSel?.email;

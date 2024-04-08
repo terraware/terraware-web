@@ -1,6 +1,7 @@
-import axios from '..';
-import { DeviceManager } from 'src/types/DeviceManager';
 import { paths } from 'src/api/types/generated-schema';
+import { DeviceManager } from 'src/types/DeviceManager';
+
+import axios from '..';
 import addQueryParams from '../helpers/addQueryParams';
 
 const DEVICE_MANAGERS_ENDPOINT = '/api/v1/devices/managers';

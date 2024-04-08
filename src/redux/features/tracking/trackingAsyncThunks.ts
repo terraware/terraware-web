@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import strings from 'src/strings';
+
 import { TrackingService } from 'src/services';
+import strings from 'src/strings';
 import { MonitoringPlotSearchResult } from 'src/types/Tracking';
 
 export type MonitoringPlotsRequest = {

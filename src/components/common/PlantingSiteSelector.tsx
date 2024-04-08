@@ -1,7 +1,9 @@
-import { Dropdown } from '@terraware/web-components';
-import { useAppSelector } from 'src/redux/store';
-import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+
+import { Dropdown } from '@terraware/web-components';
+
+import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
+import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 
 type PlantingSiteSelectorProps = {

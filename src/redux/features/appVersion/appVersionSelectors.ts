@@ -1,5 +1,6 @@
-import { RootState } from 'src/redux/rootReducer';
 import { createSelector } from '@reduxjs/toolkit';
+
+import { RootState } from 'src/redux/rootReducer';
 
 export const selectAppVersion = (state: RootState) => state.appVersion.version;
 const currentAppVersion = process.env.REACT_APP_TERRAWARE_FE_BUILD_VERSION;

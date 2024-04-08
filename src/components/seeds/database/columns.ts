@@ -1,5 +1,6 @@
-import strings from 'src/strings';
 import { DatabaseColumn } from '@terraware/web-components/components/table/types';
+
+import strings from 'src/strings';
 
 function columns(): DatabaseColumn[] {
   return [
@@ -33,6 +34,12 @@ function columns(): DatabaseColumn[] {
       name: strings.SPECIES,
       type: 'string',
       filter: { type: 'search' },
+    },
+    {
+      key: 'project_name',
+      name: strings.PROJECT,
+      type: 'string',
+      filter: { type: 'multiple_selection' },
     },
     {
       key: 'species_commonName',
@@ -69,13 +76,13 @@ function columns(): DatabaseColumn[] {
     {
       key: 'ageMonths',
       name: strings.AGE_MONTHS,
-      type: 'string',
+      type: 'number',
       filter: { type: 'number_range' },
     },
     {
       key: 'ageYears',
       name: strings.AGE_YEARS,
-      type: 'string',
+      type: 'number',
       filter: { type: 'number_range' },
     },
     {
@@ -123,37 +130,37 @@ function columns(): DatabaseColumn[] {
     {
       key: 'estimatedWeightMilligrams',
       name: strings.WEIGHT_MILLIGRAMS,
-      type: 'string',
+      type: 'number',
       filter: { type: 'number_range' },
     },
     {
       key: 'estimatedWeightGrams',
       name: strings.WEIGHT_GRAMS,
-      type: 'string',
+      type: 'number',
       filter: { type: 'number_range' },
     },
     {
       key: 'estimatedWeightKilograms',
       name: strings.WEIGHT_KILOGRAMS,
-      type: 'string',
+      type: 'number',
       filter: { type: 'number_range' },
     },
     {
       key: 'estimatedWeightOunces',
       name: strings.WEIGHT_OUNCES,
-      type: 'string',
+      type: 'number',
       filter: { type: 'number_range' },
     },
     {
       key: 'estimatedWeightPounds',
       name: strings.WEIGHT_POUNDS,
-      type: 'string',
+      type: 'number',
       filter: { type: 'number_range' },
     },
     {
       key: 'estimatedCount',
       name: strings.COUNT,
-      type: 'string',
+      type: 'number',
       filter: { type: 'number_range' },
     },
   ];
@@ -185,6 +192,7 @@ export const defaultPreset = (system?: string): Preset => {
     fields: [
       'accessionNumber',
       'speciesName',
+      'project_name',
       'state',
       'collectionSiteName',
       'collectedDate',
@@ -197,22 +205,30 @@ export const defaultPreset = (system?: string): Preset => {
 
 const generalInventoryPreset: Preset = {
   name: 'General Inventory',
-  fields: ['accessionNumber', 'speciesName', 'collectionSiteName', 'collectionSiteLandowner', 'state', 'collectedDate'],
+  fields: [
+    'accessionNumber',
+    'speciesName',
+    'project_name',
+    'collectionSiteName',
+    'collectionSiteLandowner',
+    'state',
+    'collectedDate',
+  ],
 };
 
 const seedStoragePreset: Preset = {
   name: 'Seed Storage Status',
-  fields: ['accessionNumber', 'speciesName', 'state', 'collectedDate', 'facility_name', 'subLocation_name'],
+  fields: [
+    'accessionNumber',
+    'speciesName',
+    'project_name',
+    'state',
+    'collectedDate',
+    'facility_name',
+    'subLocation_name',
+  ],
 };
 
 export const searchPresets = (preferredWeightSystem: string) => {
   return [defaultPreset(preferredWeightSystem), generalInventoryPreset, seedStoragePreset];
 };
-
-export const RIGHT_ALIGNED_COLUMNS = [
-  'ageMonths',
-  'ageYears',
-  'estimatedWeightGrams',
-  'estimatedCount',
-  'totalViabilityPercent',
-];

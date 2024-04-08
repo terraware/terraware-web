@@ -1,21 +1,24 @@
-import { makeStyles } from '@mui/styles';
+import React, { useCallback, useEffect, useState } from 'react';
+
 import { Theme } from '@mui/material';
 import { Container, Grid } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
-import strings from 'src/strings';
-import { Facility } from 'src/types/Facility';
-import { DeviceManager } from 'src/types/DeviceManager';
-import { Device } from 'src/types/Device';
-import { listFacilityDevicesById } from 'src/api/facility/facility';
+import { makeStyles } from '@mui/styles';
+
 import { listDeviceManagers } from 'src/api/deviceManager/deviceManager';
+import { listFacilityDevicesById } from 'src/api/facility/facility';
+import strings from 'src/strings';
+import { Device } from 'src/types/Device';
+import { DeviceManager } from 'src/types/DeviceManager';
+import { Facility } from 'src/types/Facility';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+import ConfigureSensorKit from './sensorKitSetup/ConfigureSensorKit';
+import DetectSensors from './sensorKitSetup/DetectSensors';
+import InstallDeviceManager from './sensorKitSetup/InstallDeviceManager';
+import { LOCATIONS } from './sensorKitSetup/Locations';
 import SelectPVSystem from './sensorKitSetup/SelectPVSystem';
 import SensorKitID from './sensorKitSetup/SensorKitID';
-import InstallDeviceManager from './sensorKitSetup/InstallDeviceManager';
-import DetectSensors from './sensorKitSetup/DetectSensors';
 import SensorLocations from './sensorKitSetup/SensorLocations';
-import ConfigureSensorKit from './sensorKitSetup/ConfigureSensorKit';
-import { LOCATIONS } from './sensorKitSetup/Locations';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 interface StyleProps {
   isMobile: boolean;

@@ -1,13 +1,16 @@
-import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
+
+import { makeStyles } from '@mui/styles';
+
+import { createDevice, listDeviceTemplates } from 'src/api/device/device';
+import { listFacilityDevicesById } from 'src/api/facility/facility';
 import strings from 'src/strings';
-import { Facility } from 'src/types/Facility';
 import { DeviceTemplate } from 'src/types/Device';
+import { Facility } from 'src/types/Facility';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
 import Select from '../../common/Select/Select';
 import FlowStep, { FlowError } from './FlowStep';
-import { listDeviceTemplates, createDevice } from 'src/api/device/device';
-import { listFacilityDevicesById } from 'src/api/facility/facility';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 interface StyleProps {
   isMobile: boolean;

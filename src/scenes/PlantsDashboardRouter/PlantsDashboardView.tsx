@@ -1,0 +1,306 @@
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { useDeviceInfo } from '@terraware/web-components/utils';
+
+import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
+import { APP_PATHS } from 'src/constants';
+import { useLocalization, useOrganization } from 'src/providers';
+import { selectLatestObservation } from 'src/redux/features/observations/observationsSelectors';
+import { requestObservations, requestObservationsResults } from 'src/redux/features/observations/observationsThunks';
+import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
+import { requestSpecies } from 'src/redux/features/species/speciesThunks';
+import { selectSitePopulationZones } from 'src/redux/features/tracking/sitePopulationSelector';
+import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
+import {
+  requestPlantingSitesSearchResults,
+  requestSitePopulation,
+  requestSiteReportedPlants,
+} from 'src/redux/features/tracking/trackingThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import ObservedNumberOfSpeciesCard from 'src/scenes/PlantsDashboardRouter/components/ObservedNumberOfSpeciesCard';
+import PlantingSiteDensityCard from 'src/scenes/PlantsDashboardRouter/components/PlantingSiteDensityCard';
+import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
+import strings from 'src/strings';
+import { PlantingSite } from 'src/types/Tracking';
+import { getShortDate } from 'src/utils/dateFormatter';
+import { isAfter } from 'src/utils/dateUtils';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+
+import EmptyMessage from '../../components/common/EmptyMessage';
+import FormattedNumber from '../../components/common/FormattedNumber';
+import HectaresPlantedCard from './components/HectaresPlantedCard';
+import HighestAndLowestMortalityRateSpeciesCard from './components/HighestAndLowestMortalityRateSpeciesCard';
+import HighestAndLowestMortalityRateZonesCard from './components/HighestAndLowestMortalityRateZonesCard';
+import LiveDeadPlantsPerSpeciesCard from './components/LiveDeadPlantsPerSpeciesCard';
+import NumberOfSpeciesPlantedCard from './components/NumberOfSpeciesPlantedCard';
+import PlantingDensityPerZoneCard from './components/PlantingDensityPerZoneCard';
+import PlantingProgressPerZoneCard from './components/PlantingProgressPerZoneCard';
+import PlantingSiteProgressCard from './components/PlantingSiteProgressCard';
+import PlantsReportedPerSpeciesCard from './components/PlantsReportedPerSpeciesCard';
+import TotalMortalityRateCard from './components/TotalMoratlityRateCard';
+import TotalReportedPlantsCard from './components/TotalReportedPlantsCard';
+import ZoneLevelDataMap from './components/ZoneLevelDataMap';
+
+export default function PlantsDashboardView(): JSX.Element {
+  const org = useOrganization();
+  const { isMobile } = useDeviceInfo();
+  const dispatch = useAppDispatch();
+  const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState(-1);
+  const [plantsDashboardPreferences, setPlantsDashboardPreferences] = useState<Record<string, unknown>>();
+  const locale = useLocalization();
+  const navigate = useNavigate();
+  const theme = useTheme();
+
+  const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSiteId(site.id), [setSelectedPlantingSiteId]);
+  const onPreferences = useCallback(
+    (preferences: Record<string, unknown>) => setPlantsDashboardPreferences(preferences),
+    [setPlantsDashboardPreferences]
+  );
+
+  const defaultTimeZone = useDefaultTimeZone();
+  const latestObservation = useAppSelector((state) =>
+    selectLatestObservation(state, selectedPlantingSiteId, defaultTimeZone.get().id)
+  );
+
+  useEffect(() => {
+    dispatch(requestObservations(org.selectedOrganization.id));
+    dispatch(requestObservationsResults(org.selectedOrganization.id));
+    dispatch(requestSpecies(org.selectedOrganization.id));
+    dispatch(requestPlantings(org.selectedOrganization.id));
+    dispatch(requestPlantingSitesSearchResults(org.selectedOrganization.id));
+  }, [dispatch, org.selectedOrganization.id]);
+
+  useEffect(() => {
+    if (selectedPlantingSiteId !== -1) {
+      dispatch(requestSitePopulation(org.selectedOrganization.id, selectedPlantingSiteId));
+      dispatch(requestSiteReportedPlants(selectedPlantingSiteId));
+    }
+  }, [dispatch, org.selectedOrganization.id, selectedPlantingSiteId]);
+
+  const sectionHeader = (title: string) => (
+    <Grid item xs={12}>
+      <Typography fontSize='20px' fontWeight={600}>
+        {title}
+      </Typography>
+    </Grid>
+  );
+
+  const renderMortalityRate = () => (
+    <>
+      {sectionHeader(strings.MORTALITY_RATE)}
+      <Grid item xs={isMobile ? 12 : 3}>
+        <TotalMortalityRateCard plantingSiteId={selectedPlantingSiteId} />
+      </Grid>
+      <Grid item xs={isMobile ? 12 : 3}>
+        <HighestAndLowestMortalityRateZonesCard plantingSiteId={selectedPlantingSiteId} />
+      </Grid>
+      <Grid item xs={isMobile ? 12 : 3}>
+        <HighestAndLowestMortalityRateSpeciesCard plantingSiteId={selectedPlantingSiteId} />
+      </Grid>
+      <Grid item xs={isMobile ? 12 : 3}>
+        <LiveDeadPlantsPerSpeciesCard plantingSiteId={selectedPlantingSiteId} />
+      </Grid>
+    </>
+  );
+
+  const renderTotalPlantsAndSpecies = () => (
+    <>
+      {sectionHeader(strings.TOTAL_PLANTS_AND_SPECIES)}
+      <Grid item xs={isMobile ? 12 : 4}>
+        <TotalReportedPlantsCard plantingSiteId={selectedPlantingSiteId} />
+      </Grid>
+      {hasObservations ? (
+        <Grid item xs={isMobile ? 12 : 4}>
+          <ObservedNumberOfSpeciesCard plantingSiteId={selectedPlantingSiteId} />
+        </Grid>
+      ) : (
+        <Grid item xs={isMobile ? 12 : 4}>
+          <PlantsReportedPerSpeciesCard plantingSiteId={selectedPlantingSiteId} />
+        </Grid>
+      )}
+      <Grid item xs={isMobile ? 12 : 4}>
+        <NumberOfSpeciesPlantedCard plantingSiteId={selectedPlantingSiteId} />
+      </Grid>
+    </>
+  );
+
+  const hasObservations = !!latestObservation;
+
+  const populationResults = useAppSelector((state) => selectSitePopulationZones(state));
+  const hasReportedPlants = useMemo(() => {
+    const population =
+      populationResults
+        ?.flatMap((zone) => zone.plantingSubzones)
+        ?.flatMap((sz) => sz.populations)
+        ?.filter((pop) => pop !== undefined)
+        ?.reduce((acc, pop) => +pop['totalPlants(raw)'] + acc, 0) ?? 0;
+    return population > 0;
+  }, [populationResults]);
+
+  const plantingSiteResult = useAppSelector((state) => selectPlantingSite(state, selectedPlantingSiteId));
+  const sitePlantingComplete = useMemo(() => {
+    return (
+      plantingSiteResult?.plantingZones
+        ?.flatMap((zone) => zone.plantingSubzones)
+        ?.every((sz) => sz.plantingCompleted) ?? false
+    );
+  }, [plantingSiteResult]);
+
+  const hasObservationsSinceSitePlantingComplete = useMemo(() => {
+    return (
+      plantingSiteResult?.plantingZones
+        ?.flatMap((zone) => zone.plantingSubzones)
+        ?.every((sz) => sz.plantingCompleted && isAfter(latestObservation?.completedTime, sz.plantingCompletedTime)) ??
+      false
+    );
+  }, [plantingSiteResult, latestObservation?.completedTime]);
+
+  const renderPlantingProgressAndDensity = () => (
+    <>
+      {sectionHeader(
+        hasObservationsSinceSitePlantingComplete ? strings.PLANTING_DENSITY : strings.PLANTING_PROGRESS_AND_DENSITY
+      )}
+      {!hasObservations && (
+        <>
+          <Grid item xs={isMobile ? 12 : 4}>
+            <PlantingSiteProgressCard plantingSiteId={selectedPlantingSiteId} />
+          </Grid>
+          <Grid item xs={isMobile ? 12 : 4}>
+            <PlantingProgressPerZoneCard plantingSiteId={selectedPlantingSiteId} />
+          </Grid>
+          <Grid item xs={isMobile ? 12 : 4}>
+            <PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} />
+          </Grid>
+        </>
+      )}
+      {hasObservations && !sitePlantingComplete && (
+        <>
+          <Grid item xs={isMobile ? 12 : 6}>
+            <PlantingSiteProgressCard plantingSiteId={selectedPlantingSiteId} />
+          </Grid>
+          <Grid item xs={isMobile ? 12 : 6}>
+            <HectaresPlantedCard plantingSiteId={selectedPlantingSiteId} />
+          </Grid>
+          <Grid item xs={isMobile ? 12 : 6}>
+            <PlantingProgressPerZoneCard plantingSiteId={selectedPlantingSiteId} />
+          </Grid>
+          <Grid item xs={isMobile ? 12 : 6}>
+            <PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} />
+          </Grid>
+        </>
+      )}
+      {hasObservations && sitePlantingComplete && (
+        <>
+          <Grid item xs={isMobile ? 12 : 4}>
+            {hasObservationsSinceSitePlantingComplete ? (
+              <PlantingSiteDensityCard plantingSiteId={selectedPlantingSiteId} />
+            ) : (
+              <PlantingSiteProgressCard plantingSiteId={selectedPlantingSiteId} />
+            )}
+          </Grid>
+          <Grid item xs={isMobile ? 12 : 4}>
+            <PlantingDensityPerZoneCard plantingSiteId={selectedPlantingSiteId} />
+          </Grid>
+          <Grid item xs={isMobile ? 12 : 4}>
+            <HectaresPlantedCard plantingSiteId={selectedPlantingSiteId} />
+          </Grid>
+        </>
+      )}
+    </>
+  );
+
+  const renderZoneLevelData = () => (
+    <>
+      {sectionHeader(strings.ZONE_LEVEL_DATA)}
+      <Grid item xs={12}>
+        <ZoneLevelDataMap plantingSiteId={selectedPlantingSiteId} />
+      </Grid>
+    </>
+  );
+
+  const renderSimpleSiteMap = () => (
+    <>
+      {sectionHeader(strings.SITE_MAP)}
+      <Grid item xs={12}>
+        <Box
+          sx={{
+            background: theme.palette.TwClrBg,
+            borderRadius: '24px',
+            padding: theme.spacing(3),
+            gap: theme.spacing(3),
+          }}
+        >
+          <SimplePlantingSiteMap plantingSiteId={selectedPlantingSiteId} />
+        </Box>
+      </Grid>
+    </>
+  );
+
+  const hasPolygons =
+    !!plantingSiteResult && !!plantingSiteResult.boundary && plantingSiteResult.boundary.coordinates?.length > 0;
+
+  const hasPlantingZones =
+    !!plantingSiteResult && !!plantingSiteResult.plantingZones && plantingSiteResult.plantingZones.length > 0;
+
+  const getObservationHectares = () => {
+    const numMonitoringPlots =
+      latestObservation?.plantingZones.flatMap((pz) => pz.plantingSubzones.flatMap((psz) => psz.monitoringPlots))
+        ?.length ?? 0;
+    const monitoringPlotHa = 0.0625;
+    const totalHa = numMonitoringPlots * monitoringPlotHa;
+    return totalHa;
+  };
+
+  const getDashboardSubhead = () => {
+    if (selectedPlantingSiteId === -1) {
+      return strings.FIRST_ADD_PLANTING_SITE;
+    }
+    if (latestObservation?.completedTime) {
+      return strings.formatString(
+        strings.DASHBOARD_HEADER_TEXT,
+        <b>
+          <FormattedNumber value={getObservationHectares()} />
+        </b>,
+        <>{getShortDate(latestObservation.completedTime, locale.activeLocale)}</>
+      ) as string;
+    }
+  };
+
+  return (
+    <PlantsPrimaryPage
+      title={strings.DASHBOARD}
+      text={getDashboardSubhead()}
+      onSelect={onSelect}
+      pagePath={APP_PATHS.PLANTING_SITE_DASHBOARD}
+      lastVisitedPreferenceName='plants.dashboard.lastVisitedPlantingSite'
+      plantsSitePreferences={plantsDashboardPreferences}
+      setPlantsSitePreferences={onPreferences}
+    >
+      {selectedPlantingSiteId !== -1 ? (
+        <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
+          {!hasObservations && renderTotalPlantsAndSpecies()}
+          {hasReportedPlants && (
+            <>
+              {renderPlantingProgressAndDensity()}
+              {hasObservations && renderMortalityRate()}
+            </>
+          )}
+          {hasObservations && renderTotalPlantsAndSpecies()}
+          {hasPlantingZones && renderZoneLevelData()}
+          {hasPolygons && !hasPlantingZones && renderSimpleSiteMap()}
+        </Grid>
+      ) : (
+        <Box sx={{ margin: '0 auto', maxWidth: '800px', padding: '48px', width: isMobile ? 'auto' : '800px' }}>
+          <EmptyMessage
+            title={strings.NO_PLANTING_SITES_TITLE}
+            text={strings.NO_PLANTING_SITES_DESCRIPTION}
+            buttonText={strings.GO_TO_PLANTING_SITES}
+            onClick={() => navigate(APP_PATHS.PLANTING_SITES)}
+          />
+        </Box>
+      )}
+    </PlantsPrimaryPage>
+  );
+}

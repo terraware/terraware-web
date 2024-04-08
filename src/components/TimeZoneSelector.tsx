@@ -1,7 +1,9 @@
 import React, { useMemo } from 'react';
+
 import { Autocomplete, Textfield } from '@terraware/web-components';
-import strings from 'src/strings';
+
 import { useTimeZones } from 'src/providers';
+import strings from 'src/strings';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 
 export type TimeZoneSelectorProps = {

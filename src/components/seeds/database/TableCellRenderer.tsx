@@ -1,11 +1,14 @@
+import React from 'react';
+
 import { FiberManualRecord } from '@mui/icons-material';
 import { TableCell, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import React from 'react';
-import { SearchResponseElement } from 'src/types/Search';
+
+import Link from 'src/components/common/Link';
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
-import { RIGHT_ALIGNED_COLUMNS } from './columns';
+import { APP_PATHS } from 'src/constants';
+import { SearchResponseElement } from 'src/types/Search';
 
 const statusStyles = makeStyles((theme: Theme) => ({
   flex: {
@@ -19,9 +22,6 @@ const statusStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     alignItems: 'center',
     color: theme.palette.neutral[600],
-  },
-  rightAligned: {
-    textAlign: 'right',
   },
 }));
 
@@ -43,22 +43,31 @@ export default function SearchCellRenderer(props: RendererProps<SearchResponseEl
     );
   }
 
-  if (column.key === 'remainingQuantity' && value) {
-    const units = row.remainingUnits;
+  if (column.key === 'accessionNumber') {
+    return (
+      <CellRenderer
+        index={index}
+        column={column}
+        value={<Link to={APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', `${row.id}`)}>{`${value}`}</Link>}
+        row={row}
+      />
+    );
+  }
 
-    return <CellRenderer index={index} column={column} value={`${value} ${units}`} row={row} />;
+  const numberCell = (units: unknown) => (
+    <CellRenderer index={index} column={column} value={`${value} ${units}`} row={row} />
+  );
+
+  if (column.key === 'remainingQuantity' && value) {
+    return numberCell(row.remainingUnits);
   }
 
   if (column.key === 'totalQuantity' && value) {
-    const units = row.totalUnits;
-
-    return <CellRenderer index={index} column={column} value={`${value} ${units}`} row={row} />;
+    return numberCell(row.totalUnits);
   }
 
   if (column.key === 'withdrawalQuantity' && value) {
-    const units = row.withdrawalUnits;
-
-    return <CellRenderer index={index} column={column} value={`${value} ${units}`} row={row} />;
+    return numberCell(row.withdrawalUnits);
   }
 
   if (
@@ -69,12 +78,8 @@ export default function SearchCellRenderer(props: RendererProps<SearchResponseEl
   }
 
   if (column.key === 'totalViabilityPercent' && value !== undefined) {
-    return (
-      <CellRenderer index={index} column={column} value={`${value}%`} row={row} className={classes.rightAligned} />
-    );
+    return <CellRenderer index={index} column={column} value={`${value}%`} row={row} />;
   }
 
-  const className = RIGHT_ALIGNED_COLUMNS.indexOf(column.key) !== -1 ? classes.rightAligned : '';
-
-  return <CellRenderer {...props} className={className} />;
+  return <CellRenderer {...props} />;
 }

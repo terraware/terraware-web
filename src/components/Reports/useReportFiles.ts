@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Report, ReportFile } from 'src/types/Report';
+
 import ReportService from 'src/services/ReportService';
+import { Report, ReportFile } from 'src/types/Report';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export default function useReportFiles(

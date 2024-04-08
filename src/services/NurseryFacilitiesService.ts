@@ -1,5 +1,5 @@
-import HttpService, { Response } from './HttpService';
 import { paths } from '../api/types/generated-schema';
+import HttpService, { Response } from './HttpService';
 
 const ENDPOINT_NURSERY_FACILITY_SUMMARY = '/api/v1/nursery/facilities/{facilityId}/summary';
 

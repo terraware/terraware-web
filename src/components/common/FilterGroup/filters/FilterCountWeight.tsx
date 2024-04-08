@@ -1,13 +1,15 @@
-import { Grid } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import { Theme } from '@mui/material';
 import React from 'react';
-import { AndNodePayload, FieldNodePayload, OrNodePayload, SearchNodePayload } from 'src/types/Search';
+
+import { Grid } from '@mui/material';
+import { Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+
 import Checkbox from 'src/components/common/Checkbox';
 import Divisor from 'src/components/common/Divisor';
 import Dropdown from 'src/components/common/Dropdown';
 import TextField from 'src/components/common/TextField';
 import strings from 'src/strings';
+import { AndNodePayload, FieldNodePayload, OrNodePayload, SearchNodePayload } from 'src/types/Search';
 import { weightUnits } from 'src/units';
 
 const useStyles = makeStyles((theme: Theme) => ({

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+
 import { Divider, List, ListItem, ListSubheader, Popover, Theme, Typography } from '@mui/material';
-import Icon from 'src/components/common/icon/Icon';
 import { makeStyles } from '@mui/styles';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { Button, Tooltip } from '@terraware/web-components';
+
+import Icon from 'src/components/common/icon/Icon';
 import strings from 'src/strings';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 interface StyleProps {
   isMobile?: boolean;

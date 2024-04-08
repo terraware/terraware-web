@@ -1,8 +1,10 @@
-import { createCachedSelector } from 're-reselect';
 import { createSelector } from '@reduxjs/toolkit';
+import { createCachedSelector } from 're-reselect';
+
 import { RootState } from 'src/redux/rootReducer';
-import { ObservationResults, ObservationPlantingZoneResults } from 'src/types/Observations';
-import { selectMergedPlantingSiteObservations, ALL_STATES } from './observationsSelectors';
+import { ObservationPlantingZoneResults, ObservationResults } from 'src/types/Observations';
+
+import { ALL_STATES, selectMergedPlantingSiteObservations } from './observationsSelectors';
 import { searchResultZones } from './utils';
 
 // search observation details (search planting zone name only)

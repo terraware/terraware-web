@@ -1,6 +1,9 @@
 import { createContext } from 'react';
+
+import { Organization } from 'src/types/Organization';
+import { GlobalRolePermission } from 'src/utils/acl';
+
 import { ProvidedLocalizationData, ProvidedOrganizationData, ProvidedUserData } from './DataTypes';
-import { Organization } from '../types/Organization';
 
 export const UserContext = createContext<ProvidedUserData>({
   reloadUser: () => {
@@ -14,6 +17,7 @@ export const UserContext = createContext<ProvidedUserData>({
   userPreferences: {},
   bootstrapped: false,
   updateUserPreferences: () => Promise.resolve(true),
+  isAllowed: (_: GlobalRolePermission, __?: unknown) => false,
 });
 
 export const defaultSelectedOrg: Organization = {
@@ -38,6 +42,7 @@ export const OrganizationContext = createContext<ProvidedOrganizationData>({
     // no-op
     return;
   },
+
   selectedOrganization: defaultSelectedOrg,
   bootstrapped: false,
   orgPreferenceForId: -1,

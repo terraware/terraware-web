@@ -1,17 +1,23 @@
 import React from 'react';
+
 import { useNavigate } from 'react-router-dom';
-import { IconButton, Theme, Grid } from '@mui/material';
+
+import { Grid, IconButton, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Svg } from '@terraware/web-components';
-import Icon from '../common/icon/Icon';
-import NotificationsDropdown from '../NotificationsDropdown';
-import OrganizationsDropdown from '../OrganizationsDropdown';
-import UserMenu from '../UserMenu';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import SmallDeviceUserMenu from '../SmallDeviceUserMenu';
-import { useOrganization } from 'src/providers/hooks';
+
+import AcceleratorBreadcrumbs from 'src/components/TopBar/AcceleratorBreadcrumbs';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useOrganization, useUser } from 'src/providers/hooks';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+import NotificationsDropdown from '../NotificationsDropdown';
+import OrganizationsDropdown from '../OrganizationsDropdown';
+import SmallDeviceUserMenu from '../SmallDeviceUserMenu';
+import UserMenu from '../UserMenu';
+import Icon from '../common/icon/Icon';
 
 const useStyles = makeStyles((theme: Theme) => ({
   logo: {
@@ -23,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   separator: {
     width: '1px',
     height: '32px',
-    backgroundColor: theme.palette.TwClrBaseGray300,
+    backgroundColor: theme.palette.TwClrBrdrTertiary,
     marginRight: '16px',
     marginLeft: '16px',
   },
@@ -61,6 +67,8 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   const { selectedOrganization, organizations, reloadOrganizations } = useOrganization();
   const { setShowNavBar } = props;
   const { isDesktop } = useDeviceInfo();
+  const { user } = useUser();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const onHandleLogout = () => {
     window.location.href = `/sso/logout`;
@@ -74,13 +82,16 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
             <Svg.Logo className={classes.logo} />
           </Link>
         </div>
+
         {organizations && organizations.length > 0 && (
           <>
             <div className={classes.separator} />
-            <OrganizationsDropdown />
+            {user && <AcceleratorBreadcrumbs />}
+            {!isAcceleratorRoute && <OrganizationsDropdown />}
           </>
         )}
       </div>
+
       <div className={classes.right}>
         <NotificationsDropdown
           organizationId={selectedOrganization.id !== -1 ? selectedOrganization.id : undefined}

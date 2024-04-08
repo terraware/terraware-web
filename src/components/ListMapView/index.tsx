@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+
 import { Box, useTheme } from '@mui/material';
+
 import Card from 'src/components/common/Card';
 import ListMapSelector, { View } from 'src/components/common/ListMapSelector';
 
@@ -31,9 +33,6 @@ export default function ListMapView({ search, list, map, onView, style, initialV
   return (
     <Card
       style={{
-        display: 'flex',
-        flexDirection: 'column',
-        flexGrow: 1,
         ...style,
       }}
       flushMobile
@@ -42,7 +41,10 @@ export default function ListMapView({ search, list, map, onView, style, initialV
         {search}
         <ListMapSelector defaultView={initialView} view={view} onView={updateView} />
       </Box>
-      <Box display='flex' flexGrow={1} marginTop={theme.spacing(2)}>
+      <Box
+        marginTop={theme.spacing(2)}
+        sx={view === 'map' ? { display: 'flex', flexDirection: 'column', flexGrow: 1 } : undefined}
+      >
         <Box flexGrow={1} flexDirection='column' display={view === 'list' ? 'flex' : 'none'}>
           {list}
         </Box>

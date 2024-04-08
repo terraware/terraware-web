@@ -1,7 +1,7 @@
-import { SeedBankService } from 'src/services';
-import { Facility } from 'src/types/Facility';
 import ImportModal from 'src/components/common/ImportModal';
+import { SeedBankService } from 'src/services';
 import strings from 'src/strings';
+import { Facility } from 'src/types/Facility';
 
 export type ImportAccessionsModalProps = {
   open: boolean;

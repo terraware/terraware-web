@@ -1,5 +1,14 @@
-import { Box, Theme, Typography, useTheme } from '@mui/material';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
+
+import { Box, Theme, Typography, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+
+import Button from 'src/components/common/button/Button';
+import stopPropagation from 'src/utils/stopPropagationEvent';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+import Link from './Link';
 import Icon from './icon/Icon';
 import { IconName } from './icon/icons';
 import { useNavigate } from 'react-router-dom';
@@ -72,10 +81,11 @@ export interface PageCardProps {
   linkText: string;
   link: string;
   linkStyle: LinkStyle;
+  id?: string;
 }
 
 export default function PageCard(props: PageCardProps): JSX.Element {
-  const { name, isNameBold, icon, description, linkText, link, linkStyle } = props;
+  const { name, isNameBold, icon, description, id, linkText, link, linkStyle } = props;
   const classes = useStyles({ linkStyle });
   const theme = useTheme();
   const navigate = useNavigate();
@@ -95,7 +105,7 @@ export default function PageCard(props: PageCardProps): JSX.Element {
   };
 
   return (
-    <Box className={`${classes.container} ${isMobile ? '' : 'min-height'}`} onClick={goToPage}>
+    <Box className={`${classes.container} ${isMobile ? '' : 'min-height'}`} onClick={goToPage} id={id ?? ''}>
       <div className={classes.title}>
         <Icon name={icon} size='medium' className={classes.icon} />
         <Typography

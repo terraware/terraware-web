@@ -1,6 +1,8 @@
 import { useState } from 'react';
+
 import { Story } from '@storybook/react';
-import ListMapSelector, { View, ListMapSelectorProps } from 'src/components/common/ListMapSelector';
+
+import ListMapSelector, { ListMapSelectorProps, View } from 'src/components/common/ListMapSelector';
 
 const ListMapSelectorTemplate: Story<ListMapSelectorProps> = (args) => {
   const [view, setView] = useState<View>(args.defaultView);

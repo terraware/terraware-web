@@ -1,8 +1,9 @@
 import { paths } from 'src/api/types/generated-schema';
 import { Country } from 'src/types/Country';
+import { SearchResponseElement } from 'src/types/Search';
+
 import HttpService, { Response } from './HttpService';
 import SearchService, { RawSearchRequestPayload } from './SearchService';
-import { SearchResponseElement } from 'src/types/Search';
 
 const TIMEZONES_ENDPOINT = '/api/v1/i18n/timeZones';
 
@@ -54,12 +55,33 @@ const getCountries = async (): Promise<Country[] | null> => {
   );
 };
 
+const getCountriesWithRegion = async (): Promise<Country[] | null> => {
+  const params: RawSearchRequestPayload = {
+    prefix: 'country',
+    fields: ['code', 'name', 'region'],
+    sortOrder: [{ field: 'name' }],
+    count: 1000,
+  };
+  const response: SearchResponseElement[] | null = await SearchService.search(params);
+
+  return (
+    response?.map((result: SearchResponseElement) => {
+      return {
+        code: result.code,
+        name: result.name,
+        region: result.region,
+      } as Country;
+    }) ?? null
+  );
+};
+
 /**
  * Exported functions
  */
 const LocationService = {
   getTimeZones,
   getCountries,
+  getCountriesWithRegion,
 };
 
 export default LocationService;

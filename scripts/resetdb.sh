@@ -12,6 +12,7 @@ restore_dump() {
     fi
 }
 
+rm -rf $HOME/docker/volumes/postgres/data
 docker-compose down --volumes
 docker-compose up -d postgres
 
@@ -19,13 +20,13 @@ docker-compose up -d postgres
 # initialized; it's not enough to just wait for the server to accept connections
 # because the Postgres Docker image's init scripts start and then stop the database.
 
-attempts_remaining=30
+attempts_remaining=45
 while [ $attempts_remaining -gt 0 ]; do
     if docker-compose logs postgres | grep -q "PostgreSQL init process complete"; then
         break
     fi
 
-    attempts_remaining=`expr $attempts_remaining - 1`
+    ((attempts_remaining=attempts_remaining-1))
     sleep 1
 done
 

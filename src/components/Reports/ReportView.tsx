@@ -8,20 +8,17 @@ import { Report } from 'src/types/Report';
 import ReportService from 'src/services/ReportService';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@terraware/web-components';
-import BackToLink from 'src/components/common/BackToLink';
-import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
-import useSnackbar from 'src/utils/useSnackbar';
+
 import ConcurrentEditorWarningDialog from 'src/components/Reports/ConcurrentEditorWarningDialog';
+import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
 import useReportFiles from 'src/components/Reports/useReportFiles';
+import BackToLink from 'src/components/common/BackToLink';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useSnackbar from 'src/utils/useSnackbar';
 
 export default function ReportView(): JSX.Element {
   const { reportId } = useParams<{ reportId: string }>();
-
-  const reportIdInt = reportId ? parseInt(reportId, 10) : undefined;
-
   const theme = useTheme();
-
   const { isMobile } = useDeviceInfo();
 
   const navigate = useNavigate();
@@ -29,35 +26,19 @@ export default function ReportView(): JSX.Element {
   const snackbar = useSnackbar();
 
   const [report, setReport] = useState<Report>();
-
-  useEffect(() => {
-    if (reportIdInt) {
-      const getReport = async () => {
-        const result = await ReportService.getReport(reportIdInt);
-        if (result.requestSucceeded) {
-          setReport(result.report);
-        } else {
-          snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
-        }
-      };
-
-      getReport();
-    }
-  }, [reportIdInt, snackbar]);
-
   const [showAnnual, setShowAnnual] = useState(false);
-
   const [confirmEditDialogOpen, setConfirmEditDialogOpen] = useState(false);
 
   const initialReportFiles = useReportFiles(report);
 
-  const startEdit = () => {
-    if (report?.lockedByUserId) {
-      setConfirmEditDialogOpen(true);
-    } else {
-      confirmEdit();
+  const reportIdInt = parseInt(reportId, 10);
+  const reportName = `Report (${report?.year}-Q${report?.quarter}) ` + (report?.projectName ?? '');
+
+  useEffect(() => {
+    if (reportIdInt) {
+      void getReport();
     }
-  };
+  }, [reportIdInt, snackbar]);
 
   const confirmEdit = async () => {
     // lock the report
@@ -70,6 +51,14 @@ export default function ReportView(): JSX.Element {
       } else {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_EDIT);
       }
+    }
+  };
+
+  const startEdit = () => {
+    if (report?.lockedByUserId) {
+      setConfirmEditDialogOpen(true);
+    } else {
+      void confirmEdit();
     }
   };
 
@@ -105,7 +94,7 @@ export default function ReportView(): JSX.Element {
           padding={theme.spacing(4, 3)}
         >
           <Typography fontSize='24px' fontWeight={600}>
-            {report ? `Report (${report?.year}-Q${report?.quarter})` : ''}
+            {reportName}
           </Typography>
           <Box
             display='flex'

@@ -1,6 +1,19 @@
 // flattened info for shapes relating to planting site data
 import React from 'react';
-import mapboxgl from 'mapbox-gl';
+import { LayerProps } from 'react-map-gl';
+
+import { Feature, FeatureCollection, GeoJsonProperties, MultiPolygon, Polygon } from 'geojson';
+import mapboxgl, { Expression } from 'mapbox-gl';
+
+export type GeometryFeature = Feature<Polygon | MultiPolygon, GeoJsonProperties>;
+
+export type PopupInfo = {
+  id?: string | number;
+  lng: number;
+  lat: number;
+  properties: any;
+  sourceId: string;
+};
 
 export type MapGeometry = number[][][][];
 
@@ -48,7 +61,7 @@ export type MapAnnotation = {
 
 export type MapPatternFill = {
   imageName: string;
-  opacityExpression?: any[];
+  opacityExpression?: Expression;
 };
 
 /**
@@ -66,18 +79,21 @@ export type MapSourceBaseData = {
   entities: MapEntity[];
 };
 
-export type MapSource = MapSourceBaseData & {
-  fillColor: string;
-  lineColor: string;
-  lineWidth: number;
-  isInteractive?: boolean;
-  // property name to render as a polygon annotation
+export type MapSourceRenderProperties = {
   annotation?: MapAnnotation;
+  fillColor: string;
   highlightFillColor?: string;
   hoverFillColor?: string;
-  selectFillColor?: string;
+  isInteractive?: boolean;
+  lineColor: string;
+  lineWidth: number;
   patternFill?: MapPatternFill;
+  selectFillColor?: string;
+  selectLineColor?: string;
+  selectLineWidth?: number;
 };
+
+export type MapSource = MapSourceBaseData & MapSourceRenderProperties;
 
 export type MapBoundingBox = {
   lowerLeft: [number, number];
@@ -93,10 +109,10 @@ export type MapOptions = {
  * Render a popup based on properties
  */
 export type MapPopupRenderer = {
-  render: (properties: MapSourceProperties) => JSX.Element | null;
-  style?: object;
-  className?: string;
   anchor?: mapboxgl.Anchor;
+  className?: string;
+  render: (properties: MapSourceProperties, onClose?: () => void) => JSX.Element | null;
+  style?: object;
 };
 
 /**
@@ -111,8 +127,9 @@ export type MapEntityId = {
  * map entity options
  */
 export type MapEntityOptions = {
-  highlight?: MapEntityId[];
   focus?: MapEntityId[];
+  highlight?: MapEntityId[];
+  select?: MapEntityId[];
 };
 
 /**
@@ -144,4 +161,33 @@ export type MapViewStyle = 'Outdoors' | 'Satellite';
 export const MapViewStyles: Record<MapViewStyle, string> = {
   Outdoors: 'mapbox://styles/mapbox/outdoors-v12?optimize=true',
   Satellite: 'mapbox://styles/mapbox/satellite-v9?optimize=true',
+};
+
+export type ReadOnlyBoundary = {
+  data: FeatureCollection;
+  selectedId?: number;
+  id: string;
+  isInteractive?: boolean;
+};
+
+export type RenderableReadOnlyBoundary = ReadOnlyBoundary & {
+  renderProperties: MapSourceRenderProperties;
+};
+
+// TODO: integrate exclusions as a first class MapObject (not there yet)
+export type RenderableObject = MapObject | 'exclusions' | 'draft-zone' | 'draft-subzone';
+
+export type MapDrawingLayer = {
+  id: string;
+  isInteractive?: boolean;
+  layer: LayerProps;
+  layerOutline: LayerProps;
+  patternFill: LayerProps | null;
+  textAnnotation: LayerProps | null;
+};
+
+export type MapErrorLayer = {
+  errorFill: LayerProps;
+  errorLine: LayerProps;
+  errorText: LayerProps;
 };

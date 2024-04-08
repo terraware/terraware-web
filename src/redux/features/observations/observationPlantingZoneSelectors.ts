@@ -1,8 +1,10 @@
-import { createCachedSelector } from 're-reselect';
 import { createSelector } from '@reduxjs/toolkit';
+import { createCachedSelector } from 're-reselect';
+
 import { RootState } from 'src/redux/rootReducer';
 import { ObservationPlantingZoneResults } from 'src/types/Observations';
-import { SearchParams, DetailsParams, selectObservationDetails } from './observationDetailsSelectors';
+
+import { DetailsParams, SearchParams, selectObservationDetails } from './observationDetailsSelectors';
 import { searchResultPlots } from './utils';
 
 export type ZoneParams = DetailsParams & {

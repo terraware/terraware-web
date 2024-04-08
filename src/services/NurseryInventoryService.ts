@@ -1,16 +1,19 @@
 import { paths } from 'src/api/types/generated-schema';
-import HttpService, { Response } from './HttpService';
-import { SpeciesInventorySummary } from 'src/types/Inventory';
 import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
-import SearchService from './SearchService';
+import { SpeciesInventorySummary } from 'src/types/Inventory';
 import {
   AndNodePayload,
   FieldNodePayload,
   OrNodePayload,
+  SearchNodePayload,
   SearchRequestPayload,
   SearchResponseElement,
   SearchSortOrder,
 } from 'src/types/Search';
+import { parseSearchTerm } from 'src/utils/search';
+
+import HttpService, { Response } from './HttpService';
+import SearchService from './SearchService';
 
 /**
  * Nursery related services
@@ -31,7 +34,12 @@ export const BE_SORTED_FIELDS = [
   'totalQuantity',
 ];
 
-export const INVENTORY_FIELDS = [...BE_SORTED_FIELDS, 'species_commonName', 'totalQuantity(raw)'];
+export const INVENTORY_FIELDS = [
+  ...BE_SORTED_FIELDS,
+  'germinatingQuantity(raw)',
+  'species_commonName',
+  'totalQuantity(raw)',
+];
 
 export const FACILITY_SPECIFIC_FIELDS = [
   'species_id',
@@ -71,7 +79,10 @@ export type SearchInventoryParams = {
   searchSortOrder?: SearchSortOrder;
   query?: string;
   facilityIds?: number[];
+  subLocationIds?: number[];
+  speciesIds?: number[];
   isCsvExport?: boolean;
+  showEmptyBatches?: boolean;
 };
 
 type GetSummaryResponsePayload =
@@ -177,27 +188,28 @@ const searchInventory = async ({
   const searchValueChildren: FieldNodePayload[] = [];
 
   if (query) {
+    const { type, values } = parseSearchTerm(query);
     const scientificNameNode: FieldNodePayload = {
       operation: 'field',
       field: 'species_scientificName',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     };
     searchValueChildren.push(scientificNameNode);
 
     const commonNameNode: FieldNodePayload = {
       operation: 'field',
       field: 'species_commonName',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     };
     searchValueChildren.push(commonNameNode);
 
     const facilityNameNode: FieldNodePayload = {
       operation: 'field',
       field: forSpecificFacilities ? 'facility_name' : 'facilityInventories.facility_name',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     };
     searchValueChildren.push(facilityNameNode);
   }
@@ -241,20 +253,30 @@ const searchInventoryByNursery = async ({
   organizationId,
   searchSortOrder,
   facilityIds,
+  speciesIds,
   query,
   isCsvExport,
 }: SearchInventoryParams): Promise<SearchResponseElement[] | null> => {
+  const exportedFields = [
+    'facility_name',
+    'facilityInventories.species_scientificName',
+    'germinatingQuantity',
+    'notReadyQuantity',
+    'readyQuantity',
+    'totalQuantity',
+  ];
+  const nonExportedFields = [
+    'facility_id',
+    'facilityInventories.species_id',
+    'facilityInventories.batches.id',
+    'germinatingQuantity(raw)',
+    'totalQuantity(raw)',
+  ];
+  const fields = isCsvExport ? exportedFields : exportedFields.concat(nonExportedFields);
+
   const params: SearchRequestPayload = {
     prefix: 'facilities.facilityInventoryTotals',
-    fields: [
-      'facility_id',
-      'facility_name',
-      'facilityInventories.species_scientificName',
-      'germinatingQuantity',
-      'notReadyQuantity',
-      'readyQuantity',
-      'totalQuantity',
-    ],
+    fields,
     sortOrder: searchSortOrder ? [searchSortOrder] : undefined,
     search: {
       operation: 'and',
@@ -271,19 +293,20 @@ const searchInventoryByNursery = async ({
   const searchValueChildren: FieldNodePayload[] = [];
 
   if (query) {
+    const { type, values } = parseSearchTerm(query);
     const scientificNameNode: FieldNodePayload = {
       operation: 'field',
       field: 'facilityInventories.species_scientificName',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     };
     searchValueChildren.push(scientificNameNode);
 
     const facilityNameNode: FieldNodePayload = {
       operation: 'field',
       field: 'facility_name',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     };
     searchValueChildren.push(facilityNameNode);
   }
@@ -301,8 +324,16 @@ const searchInventoryByNursery = async ({
     params.search.children.push({
       operation: 'field',
       field: 'facility_id',
-      values: facilityIds,
-    });
+      values: facilityIds.map((f) => f.toString()),
+    } as SearchNodePayload);
+  }
+
+  if (speciesIds?.length) {
+    params.search.children.push({
+      operation: 'field',
+      field: 'facilityInventories.species_id',
+      values: speciesIds.map((s) => s.toString()),
+    } as SearchNodePayload);
   }
 
   return isCsvExport ? await SearchService.searchCsv(params) : await SearchService.search(params);
@@ -340,27 +371,28 @@ const downloadInventory = async ({
   const searchValueChildren: FieldNodePayload[] = [];
 
   if (query) {
+    const { type, values } = parseSearchTerm(query);
     const scientificNameNode: FieldNodePayload = {
       operation: 'field',
       field: 'species_scientificName',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     };
     searchValueChildren.push(scientificNameNode);
 
     const commonNameNode: FieldNodePayload = {
       operation: 'field',
       field: 'species_commonName',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     };
     searchValueChildren.push(commonNameNode);
 
     const facilityNameNode: FieldNodePayload = {
       operation: 'field',
       field: forSpecificFacilities ? 'facility_name' : 'facilityInventories.facility_name',
-      type: 'Fuzzy',
-      values: [query],
+      type,
+      values,
     };
     searchValueChildren.push(facilityNameNode);
   }

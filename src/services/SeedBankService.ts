@@ -1,9 +1,20 @@
 import { paths } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
+import { AccessionState } from 'src/types/Accession';
+import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
+import {
+  SearchCriteria,
+  SearchNodePayload,
+  SearchRequestPayload,
+  SearchResponseElement,
+  SearchResponseElementWithId,
+  SearchSortOrder,
+  SearchValuesResponseElement,
+} from 'src/types/Search';
+import { UnitType } from 'src/units';
+
 import HttpService, { Response } from './HttpService';
 import SearchService from './SearchService';
-import { SearchCriteria, SearchRequestPayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
-import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
 
 /**
  * Seed bank related services
@@ -11,16 +22,12 @@ import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/Fi
 
 const SUMMARY_ENDPOINT = '/api/v1/seedbank/summary';
 const ACCESSIONS_ENDPOINT = '/api/v2/seedbank/accessions';
-const FIELD_VALUES_ENDPOINT = '/api/v1/seedbank/values';
 const ACCESSIONS_TEMPLATE_ENDPOINT = '/api/v2/seedbank/accessions/uploads/template';
 const ACCESSIONS_UPLOADS_ENDPOINT = '/api/v2/seedbank/accessions/uploads';
 const ACCESSIONS_UPLOAD_STATUS_ENDPOINT = '/api/v2/seedbank/accessions/uploads/{uploadId}';
 const ACCESSIONS_UPLOAD_RESOLVE_ENDPOINT = '/api/v2/seedbank/accessions/uploads/{uploadId}/resolve';
 
-type ValuesPostRequestBody = paths[typeof FIELD_VALUES_ENDPOINT]['post']['requestBody']['content']['application/json'];
-type ValuesPostResponse = paths[typeof FIELD_VALUES_ENDPOINT]['post']['responses'][200]['content']['application/json'];
-
-export type FieldValuesMap = ValuesPostResponse['results'];
+export type FieldValuesMap = SearchValuesResponseElement;
 export const DEFAULT_SEED_SEARCH_FILTERS = {};
 export const DEFAULT_SEED_SEARCH_SORT_ORDER = { field: 'receivedDate', direction: 'Descending' } as SearchSortOrder;
 export type AccessionsUploadTemplate = {
@@ -53,6 +60,30 @@ export type AccessionsSearchParams = {
   sortOrder?: SearchSortOrder;
 };
 
+export type SearchResponseAccession = {
+  id: string;
+  accessionNumber: string;
+  estimatedCount?: string;
+  'estimatedCount(raw)'?: string;
+  remainingQuantity?: string;
+  'remainingQuantity(raw)'?: string;
+  remainingUnits?: UnitType;
+  speciesName: string;
+  state: AccessionState;
+};
+
+const SEARCH_FIELDS_ACCESSIONS = [
+  'id',
+  'accessionNumber',
+  'estimatedCount',
+  'estimatedCount(raw)',
+  'remainingQuantity',
+  'remainingQuantity(raw)',
+  'remainingUnits',
+  'speciesName',
+  'state',
+];
+
 /**
  * Seed bank summary
  */
@@ -83,12 +114,12 @@ const createAccession = async (entity: AccessionPostRequestBody): Promise<Create
 /**
  * Search accessions
  */
-const searchAccessions = async ({
+const searchAccessions = async <T extends SearchResponseElement>({
   organizationId,
   fields,
   searchCriteria,
   sortOrder,
-}: AccessionsSearchParams): Promise<SearchResponseElement[] | null> => {
+}: AccessionsSearchParams): Promise<T[] | null> => {
   const params: SearchRequestPayload = {
     prefix: 'facilities.accessions',
     fields,
@@ -100,7 +131,7 @@ const searchAccessions = async ({
     params.sortOrder = [sortOrder];
   }
 
-  return await SearchService.search(params);
+  return SearchService.search<T>(params);
 };
 
 /**
@@ -115,13 +146,13 @@ const searchFieldValues = async (
   organizationId: number
 ): Promise<FieldValuesMap | null> => {
   try {
-    const formattedSearch = SearchService.convertToSearchNodePayload(searchCriteria, organizationId);
-    const entity: ValuesPostRequestBody = {
+    const params: SearchRequestPayload = {
+      prefix: 'facilities.accessions',
       fields,
-      search: formattedSearch,
+      search: SearchService.convertToSearchNodePayload(searchCriteria ?? {}, organizationId),
+      count: 1000,
     };
-    const apiResponse: Response = await HttpService.root(FIELD_VALUES_ENDPOINT).post({ entity });
-    return apiResponse.data.results;
+    return await SearchService.searchValues(params);
   } catch {
     return null;
   }
@@ -143,7 +174,7 @@ const getCollectors = async (organizationId: number): Promise<string[] | undefin
 /**
  * Get accessions awaiting check-in
  */
-const getPendingAccessions = async (organizationId: number): Promise<SearchResponseElement[] | null> => {
+const getPendingAccessions = async (organizationId: number): Promise<SearchResponseElementWithId[] | null> => {
   const searchParams: SearchRequestPayload = {
     prefix: 'facilities.accessions',
     fields: ['accessionNumber', 'speciesName', 'collectionSiteName', 'collectedDate', 'receivedDate', 'id'],
@@ -224,6 +255,38 @@ const resolveAccessionsUpload = async (uploadId: number, overwriteExisting: bool
   });
 };
 
+const getAccessionForSpecies = (
+  organizationId: number,
+  speciesId: number
+): Promise<SearchResponseAccession[] | null> => {
+  const searchCriteria: { [key: string]: SearchNodePayload } = {};
+
+  searchCriteria.excludeUsedUp = {
+    operation: 'not',
+    child: {
+      operation: 'field',
+      field: 'state',
+      type: 'Exact',
+      values: [strings.USED_UP],
+    },
+  };
+
+  if (speciesId !== -1) {
+    searchCriteria.speciesIds = {
+      operation: 'field',
+      field: 'species_id',
+      type: 'Exact',
+      values: [speciesId.toString()],
+    };
+  }
+
+  return SeedBankService.searchAccessions({
+    organizationId,
+    fields: SEARCH_FIELDS_ACCESSIONS,
+    searchCriteria,
+  });
+};
+
 /**
  * Exported functions
  */
@@ -238,6 +301,7 @@ const SeedBankService = {
   uploadAccessions,
   getAccessionsUploadStatus,
   resolveAccessionsUpload,
+  getAccessionForSpecies,
 };
 
 export default SeedBankService;

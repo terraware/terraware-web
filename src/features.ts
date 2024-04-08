@@ -1,7 +1,12 @@
-import env from 'src/utils/useEnvironment';
 import { CachedUserService } from 'src/services';
+import env from 'src/utils/useEnvironment';
 
-export type FeatureName = 'Show Production View' | 'Nursery Updates';
+export type FeatureName =
+  | 'Show Production View'
+  | 'User Detailed Sites'
+  | 'Console'
+  | 'Participant Experience'
+  | 'Document Producer';
 
 export type Feature = {
   name: FeatureName;
@@ -36,12 +41,39 @@ export const OPT_IN_FEATURES: Feature[] = [
     set: env().forceProductionView,
   },
   {
-    name: 'Nursery Updates',
-    preferenceName: 'enableNurseryV2',
+    name: 'User Detailed Sites',
+    preferenceName: 'enableUserDetailedSites',
     active: true,
     enabled: false,
     allowInternalProduction: false,
-    description: ['Updates to Nursery Feature.'],
+    description: ['User drawn detailed sites'],
+    disclosure: ['This is WIP'],
+  },
+  {
+    name: 'Console',
+    preferenceName: 'enableConsole',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Participant project management with scoring and voting for accelerator support'],
+    disclosure: ['This is WIP'],
+  },
+  {
+    name: 'Participant Experience',
+    preferenceName: 'enableParticipantExperience',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Participant-facing functionality related to the Terraware Accelerator'],
+    disclosure: ['This is WIP'],
+  },
+  {
+    name: 'Document Producer',
+    preferenceName: 'enableDocumentProducer',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Terraware Accelerator Console access to the document producer tool'],
     disclosure: ['This is WIP'],
   },
 ];

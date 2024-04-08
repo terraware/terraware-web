@@ -1,11 +1,14 @@
 import React, { useCallback, useMemo, useState } from 'react';
+
 import { Box, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { MapViewStyle } from 'src/types/Map';
 import { DropdownItem, PopoverMenu } from '@terraware/web-components';
-import { useMapPortalContainer } from './MapRenderUtils';
+
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
+import { MapViewStyle } from 'src/types/Map';
+
+import { useMapPortalContainer } from './MapRenderUtils';
 
 export const useMapViewStyle = (): [MapViewStyle, (style: MapViewStyle) => void] => {
   const [mapViewStyle, setMapViewStyle] = useState<MapViewStyle>(

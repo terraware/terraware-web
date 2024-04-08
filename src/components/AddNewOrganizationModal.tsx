@@ -2,8 +2,13 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Box, Grid, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Checkbox, Dropdown } from '@terraware/web-components';
-import { OrganizationService } from 'src/services';
+import { useDeviceInfo } from '@terraware/web-components/utils';
+
+import RegionSelector from 'src/components/RegionSelector';
+import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import Button from 'src/components/common/button/Button';
+import { useLocalization, useOrganization } from 'src/providers/hooks';
+import { OrganizationService } from 'src/services';
 import strings from 'src/strings';
 import {
   ManagedLocationType,
@@ -14,17 +19,13 @@ import {
   managedLocationTypeLabel,
   organizationTypeLabel,
 } from 'src/types/Organization';
+import { TimeZoneDescription } from 'src/types/TimeZones';
 import useForm from 'src/utils/useForm';
-import TextField from './common/Textfield/Textfield';
+import useSnackbar from 'src/utils/useSnackbar';
+
 import { APP_PATHS } from '../constants';
 import DialogBox from './common/ScrollableDialogBox';
 import { useNavigate } from 'react-router-dom';
-import useSnackbar from 'src/utils/useSnackbar';
-import { useOrganization, useLocalization } from 'src/providers/hooks';
-import { TimeZoneDescription } from 'src/types/TimeZones';
-import TimeZoneSelector from 'src/components/TimeZoneSelector';
-import RegionSelector from 'src/components/RegionSelector';
-import { useDeviceInfo } from '@terraware/web-components/utils';
 
 const useStyles = makeStyles((theme: Theme) => ({
   otherDetails: {
@@ -146,12 +147,12 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
       ManagedLocationTypes.filter((locationType: ManagedLocationType) => locationTypes[locationType])
     );
     if (response.requestSucceeded && response.organization) {
+      reloadOrganizations();
+      history.push({ pathname: APP_PATHS.HOME });
       snackbar.pageSuccess(
         isDesktop ? strings.ORGANIZATION_CREATED_MSG_DESKTOP : strings.ORGANIZATION_CREATED_MSG,
         strings.formatString(strings.ORGANIZATION_CREATED_TITLE, response.organization.name)
       );
-      reloadOrganizations();
-      navigate({ pathname: APP_PATHS.HOME });
     } else {
       snackbar.toastError(strings.GENERIC_ERROR, strings.ORGANIZATION_CREATE_FAILED);
     }
