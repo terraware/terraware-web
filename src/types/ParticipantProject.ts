@@ -7,7 +7,6 @@ import { CohortPhaseType } from './Cohort';
 export type ParticipantProject = components['schemas']['ProjectAcceleratorDetailsPayload'];
 
 export type ParticipantProjectSearchResult = {
-  'acceleratorDetails_confirmedReforestableLand(raw)': number;
   acceleratorDetails_confirmedReforestableLand: string;
   country_name: string;
   country_region: string;

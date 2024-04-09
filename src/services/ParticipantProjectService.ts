@@ -56,7 +56,6 @@ const getSearchParams = (
       'country_name',
       'country_region',
       'acceleratorDetails_confirmedReforestableLand',
-      ...(isCsv ? [] : ['acceleratorDetails_confirmedReforestableLand(raw)']),
       'landUseModelTypes.landUseModelType',
     ],
     search: {
@@ -157,9 +156,6 @@ const list = async (
 
     return {
       acceleratorDetails_confirmedReforestableLand,
-      'acceleratorDetails_confirmedReforestableLand(raw)': Number(
-        result['acceleratorDetails_confirmedReforestableLand(raw)']
-      ),
       country_name,
       country_region,
       id: Number(id),
