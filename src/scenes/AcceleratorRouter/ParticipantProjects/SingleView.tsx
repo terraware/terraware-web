@@ -149,7 +149,7 @@ const SingleView = () => {
                 value={
                   countries && participantProject?.countryCode
                     ? getCountryByCode(countries, participantProject?.countryCode)?.name
-                    : ''
+                    : participantProject?.countryCode
                 }
                 rightBorder={!isMobile}
               />
