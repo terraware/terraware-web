@@ -3897,9 +3897,9 @@
     defer-to-connect "^2.0.1"
 
 "@terraware/web-components@^2.12.6-rc.0":
-  version "2.12.6-rc.0"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.12.6-rc.0.tgz#164a5fa054e3d01943d752dc36154aab5a558d10"
-  integrity sha512-QuZJjPNO6kDPJWOGNatO4c1IXTWifV7AjCrlin1ziTMyCDSDX4lYDbw0nsiG8Wttd18bxy72qYgyZN9liABrOw==
+  version "2.12.6"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.12.6.tgz#0503646937ef09f0715b2f2bbf989cfb6e8f2a61"
+  integrity sha512-9EkdUxxXUqgmST+y9AgzQXyrxK/d7cbLWCCiY+ObHyk8IO+Uourv8/lqcarahPILRb3auAQFpK8kmVn1FFIXHA==
   dependencies:
     "@date-io/date-fns" "^2.14.0"
     "@date-io/moment" "^2.16.1"
@@ -3917,8 +3917,8 @@
     luxon "^3.3.0"
     moment "^2.29.4"
     moment-timezone "^0.5.43"
-    react "^18.2.0"
-    react-dom "^18.2.0"
+    react "^17.0.2"
+    react-dom "^17.0.2"
     react-intersection-observer "^9.5.2"
     react-multi-carousel "^2.8.2"
     react-responsive "^9.0.2"
@@ -13959,6 +13959,7 @@ string-natural-compare@^3.0.1:
   integrity sha512-n3sPwynL1nwKi3WJ6AIsClwBMa0zTi54fn2oLU6ndfTSIO05xaznjSf15PcBZU6FNWbmN5Q6cxT4V5hGvB4taw==
 
 "string-width-cjs@npm:string-width@^4.2.0", string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3:
+  name string-width-cjs
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
@@ -14046,6 +14047,7 @@ stringify-object@^3.3.0:
     is-regexp "^1.0.0"
 
 "strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+  name strip-ansi-cjs
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
@@ -15678,6 +15680,7 @@ worker-loader@^3.0.8:
     schema-utils "^3.0.0"
 
 "wrap-ansi-cjs@npm:wrap-ansi@^7.0.0", wrap-ansi@^7.0.0:
+  name wrap-ansi-cjs
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
   integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==

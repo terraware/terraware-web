@@ -2,8 +2,6 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 
-import ReactDOM from 'react-dom';
-
 import { ThemeProvider } from '@mui/material';
 import App from './App';
 import AppError from './AppError';
