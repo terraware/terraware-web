@@ -1,3 +1,4 @@
+1751b33bb9 SW-5175: Project: Deal Stage field should show "Phase 1" instead of N/A (#2498)
 4cb754d09d SW-5176 Reconcile 'accession collecting site' labels across create/edit/view flows (#2497)
 e6524ce360 SW-4795 Fix withdrawal tables right alignments (#2493)
 a0711a4bb4 SW-4643 - Add nursery inventory e2e tests (#2487)
