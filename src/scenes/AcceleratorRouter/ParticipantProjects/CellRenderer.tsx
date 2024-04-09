@@ -35,11 +35,11 @@ export default function ParticipantProjectsCellRenderer(props: RendererProps<Tab
     return <CellRenderer {...props} value={getPhaseString(value as CohortPhaseType)} />;
   }
 
-  if (column.key === 'restorableLandRaw') {
-    return <CellRenderer {...props} value={row.restorableLand} />;
+  if (column.key === 'acceleratorDetails_confirmedReforestableLand') {
+    return <CellRenderer {...props} value={row.acceleratorDetails_confirmedReforestableLand} />;
   }
 
-  if (column.key === 'landUseModelType') {
+  if (column.key === 'landUseModelTypes.landUseModelType') {
     return <CellRenderer {...props} value={<TextTruncated stringList={value as string[]} />} />;
   }
 
