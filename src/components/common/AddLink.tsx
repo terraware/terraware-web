@@ -1,6 +1,6 @@
 import { Box, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Icon } from '@terraware/web-components';
+import { Icon, IconTooltip } from '@terraware/web-components';
 
 import Link from 'src/components/common/Link';
 
@@ -18,15 +18,16 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 type AddLinkProps = {
-  text: string;
+  disabled?: boolean;
   id?: string;
   large?: boolean;
   onClick: (args: any) => void;
-  disabled?: boolean;
+  text: string;
+  tooltipTitle?: string;
 };
 
 export default function AddLink(props: AddLinkProps): JSX.Element {
-  const { text, id, large, onClick, disabled } = props;
+  const { disabled, id, large, onClick, text, tooltipTitle } = props;
   const classes = useStyles();
 
   return (
@@ -37,6 +38,7 @@ export default function AddLink(props: AddLinkProps): JSX.Element {
           className={`${classes.addIcon} ${large ? classes.largeIcon : ''} ${disabled ? classes.disabledIcon : ''}`}
         />
         <span>&nbsp;{text}</span>
+        {tooltipTitle && <IconTooltip title={tooltipTitle} />}
       </Box>
     </Link>
   );
