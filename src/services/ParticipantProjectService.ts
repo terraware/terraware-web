@@ -123,7 +123,7 @@ const get = async (participantProjectId: number): Promise<Response2<ParticipantP
   });
 
 const downloadList = async (search?: SearchNodePayload, sortOrder?: SearchSortOrder): Promise<string | null> =>
-  await SearchService.searchCsv(getSearchParams(search, sortOrder, true));
+  await SearchService.searchCsv(getSearchParams(search, sortOrder));
 
 const list = async (
   search?: SearchNodePayload,
