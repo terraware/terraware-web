@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1712693823398" clover="3.2.0">
-  <project timestamp="1712693823398" name="All files">
-    <metrics statements="19267" coveredstatements="916" conditionals="12007" coveredconditionals="228" methods="6034" coveredmethods="162" elements="37308" coveredelements="1306" complexity="0" loc="19267" ncloc="19267" packages="167" files="838" classes="838"/>
+<coverage generated="1712697947616" clover="3.2.0">
+  <project timestamp="1712697947616" name="All files">
+    <metrics statements="19267" coveredstatements="916" conditionals="12012" coveredconditionals="228" methods="6034" coveredmethods="162" elements="37313" coveredelements="1306" complexity="0" loc="19267" ncloc="19267" packages="167" files="838" classes="838"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -5267,13 +5267,13 @@
       </file>
     </package>
     <package name="src.components.common">
-      <metrics statements="440" coveredstatements="0" conditionals="380" coveredconditionals="0" methods="147" coveredmethods="0"/>
+      <metrics statements="440" coveredstatements="0" conditionals="382" coveredconditionals="0" methods="147" coveredmethods="0"/>
       <file name="AddLink.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/AddLink.tsx">
-        <metrics statements="4" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <metrics statements="4" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
       </file>
       <file name="Autocomplete.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/Autocomplete.tsx">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -9871,7 +9871,7 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Participants">
-      <metrics statements="281" coveredstatements="0" conditionals="177" coveredconditionals="0" methods="103" coveredmethods="0"/>
+      <metrics statements="281" coveredstatements="0" conditionals="180" coveredconditionals="0" methods="103" coveredmethods="0"/>
       <file name="OrgProjectsSectionEdit.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Participants/OrgProjectsSectionEdit.tsx">
         <metrics statements="25" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="11" coveredmethods="0"/>
         <line num="23" count="0" type="stmt"/>
@@ -9901,7 +9901,7 @@
         <line num="98" count="0" type="stmt"/>
       </file>
       <file name="ParticipantForm.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Participants/ParticipantForm.tsx">
-        <metrics statements="81" coveredstatements="0" conditionals="52" coveredconditionals="0" methods="40" coveredmethods="0"/>
+        <metrics statements="81" coveredstatements="0" conditionals="55" coveredconditionals="0" methods="40" coveredmethods="0"/>
         <line num="32" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
