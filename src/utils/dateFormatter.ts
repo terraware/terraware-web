@@ -14,6 +14,12 @@ export const getLongDate = (date: string, locale: string | undefined | null): st
     timeZone: 'UTC',
   }).format(new Date(date));
 
+export const getLongDateTime = (date: string, locale: string | undefined | null): string =>
+  new Intl.DateTimeFormat(locale || 'en-US', {
+    dateStyle: 'long',
+    timeStyle: 'medium',
+  }).format(new Date(date));
+
 export const getShortTime = (dateTime: string, locale: string | undefined | null, timeZone?: string): string =>
   new Intl.DateTimeFormat(locale || 'en-US', { timeStyle: 'short', timeZone: timeZone ?? 'UTC' })
     .format(new Date(dateTime))

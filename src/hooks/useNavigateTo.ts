@@ -17,6 +17,14 @@ export default function useNavigateTo() {
         });
       },
 
+      goToModuleEvent: (projectId: number, eventId: number, moduleId: number) => {
+        history.push({
+          pathname: APP_PATHS.MODULES_FOR_PROJECT_EVENT.replace(':projectId', `${projectId}`)
+            .replace(':moduleId', `${moduleId}`)
+            .replace(':eventId', `${eventId}`),
+        });
+      },
+
       goToParticipant: (participantId: number) => {
         history.push({
           pathname: APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW.replace(':participantId', `${participantId}`),

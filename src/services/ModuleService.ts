@@ -29,7 +29,7 @@ const mockModules: Module[] = [
     contents: [
       {
         content: '',
-        dueDate: '2024-03-21T00:00:00PST',
+        dueDate: '2024-03-21T07:00:00.000Z',
         id: 1,
         moduleId: 6,
         title: 'Module 6 Feasibility Questions',
@@ -70,13 +70,13 @@ const mockModules: Module[] = [
     ],
     events: [
       {
-        eventTime: '2024-03-16T15:00:00PST',
+        eventTime: '2024-03-16T22:00:00.000Z',
         id: 1,
         moduleId: 6,
         name: 'Live Session',
       },
       {
-        eventTime: '2024-03-14T15:00:00PST',
+        eventTime: '2024-03-14T22:00:00.000Z',
         id: 2,
         moduleId: 6,
         name: '1:1 Session',
@@ -105,7 +105,7 @@ const mockModules: Module[] = [
     contents: [
       {
         content: '',
-        dueDate: '2024-03-21T00:00:00PST',
+        dueDate: '2024-03-21T07:00:00.000Z',
         id: 1,
         moduleId: 6,
         title: 'Module 6 Feasibility Questions',
@@ -146,13 +146,13 @@ const mockModules: Module[] = [
     ],
     events: [
       {
-        eventTime: '2024-03-16T15:00:00PST',
+        eventTime: '2024-03-16T22:00:00.000Z',
         id: 1,
         moduleId: 6,
         name: 'Live Session',
       },
       {
-        eventTime: '2024-03-14T15:00:00PST',
+        eventTime: '2024-03-14T22:00:00.000Z',
         id: 2,
         moduleId: 6,
         name: '1:1 Session',
@@ -179,7 +179,7 @@ const mockModules: Module[] = [
     contents: [
       {
         content: '',
-        dueDate: '2024-03-21T00:00:00PST',
+        dueDate: '2024-03-21T07:00:00.000Z',
         id: 1,
         moduleId: 6,
         title: 'Module 6 Feasibility Questions',
@@ -220,13 +220,13 @@ const mockModules: Module[] = [
     ],
     events: [
       {
-        eventTime: '2024-03-16T15:00:00PST',
+        eventTime: '2024-03-16T22:00:00.000Z',
         id: 1,
         moduleId: 6,
         name: 'Live Session',
       },
       {
-        eventTime: '2024-03-14T15:00:00PST',
+        eventTime: '2024-03-14T22:00:00.000Z',
         id: 2,
         moduleId: 6,
         name: '1:1 Session',

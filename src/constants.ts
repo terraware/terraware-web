@@ -43,6 +43,7 @@ export enum APP_PATHS {
   MONITORING = '/monitoring',
   MODULES_FOR_PROJECT = '/modules/project/:projectId',
   MODULES_FOR_PROJECT_CONTENT = '/modules/project/:projectId/content/:moduleId',
+  MODULES_FOR_PROJECT_EVENT = '/modules/project/:projectId/content/:moduleId/event/:eventId',
   MONITORING_SEED_BANK = '/monitoring/:seedBankId',
   NURSERIES = '/nurseries',
   NURSERIES_EDIT = '/nurseries/:nurseryId/edit',
