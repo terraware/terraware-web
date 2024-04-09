@@ -1,4 +1,4 @@
-import { Module } from 'src/types/Module';
+import { Module, ModuleEvent } from 'src/types/Module';
 
 import { Response2 } from './HttpService';
 
@@ -9,6 +9,53 @@ export type ModulesData = {
 export type ModuleData = {
   module: Module | undefined;
 };
+
+export type ModuleEventData = {
+  event: ModuleEvent | undefined;
+};
+
+const mockEvents: ModuleEvent[] = [
+  {
+    eventTime: '2024-03-16T22:00:00.000Z',
+    id: 1,
+    moduleId: 6,
+    name: 'Live Session',
+    description: `
+      <div>
+        <h3>Details</h3>
+        <p>The workshop will take place on Monday, September 18th and cover the following topics:</p>
+        <ol>
+          <li>Welcomes</li>
+          <li>Participant Introductions</li>
+          <li>Breakout Rooms</li>
+          <li>Shared Ideas</li>
+          <li>Send off</li>
+          <li>Conclusion and next steps for this week</li>
+        </ol>
+        <h3>Key Speakers</h3>
+        <strong>Maddy Bell, Terraformation Accelerator Program Manager</strong>
+        <p>Madeleine Bell is the Program Manager of Terraformation's Seed to Carbon Forest Accelerator. Prior to Terraformation, she spent the past 4 years working on a solar-thermal desalination technology, and supporting communities and corporations at the frontline of the global water crisis. Given this pattern, it looks like her life is going to revolve around scaling solutions to address climate change, which seems a good way to spend it.</p>
+        <strong>Damien Kuhn, VP Forestry Partnerships and Development, Terraformation</strong>
+        <p>Damien Kuhn is an agronomist and forestry engineer from AgroParisTech, where he specialized in environmental economics. He has spent the past 16 years working on forestry and climate projects across Africa, Latin America, and Southeast Asia. As former COO of Kinomé, he developed partnerships worldwide and managing a portfolio of community-based forestry projects. He has also been an advisor to governments and companies on their climate, forestry, and agricultural strategies, including as lead expert for four countries' Nationally Determined Contributions under the Paris Climate Accords.</p>
+      </div>
+    `,
+    links: [{ label: 'Live Session Slides' }, { label: 'Live Session Recording' }],
+  },
+  {
+    eventTime: '2024-03-14T22:00:00.000Z',
+    id: 2,
+    moduleId: 6,
+    name: '1:1 Session',
+    description: `
+      <div>
+        <p>This week's one-on-one session will focus on reviewing Budget Template.</p>
+        <p>Please ensure to complete all the Stakeholders & Co-Benefits questions for the Feasibility Study by Friday 3rd November.</p>
+      </div>
+    `,
+    links: [{ label: '1:1 Session Slides' }, { label: '1:1 Session Recording' }],
+    additionalLinks: [{ label: 'Preparation Materials' }, { label: 'Additional Resources' }],
+  },
+];
 
 const mockModules: Module[] = [
   {
@@ -260,8 +307,22 @@ const get = async (moduleId: number): Promise<Response2<ModuleData | null>> => {
   };
 };
 
+/**
+ * Get module event data for a specific module event.
+ */
+const getEvent = async (eventId: number): Promise<Response2<ModuleEventData | null>> => {
+  const event = mockEvents.find((_event) => _event.id === eventId);
+  return {
+    requestSucceeded: true,
+    data: {
+      event,
+    },
+  };
+};
+
 const ModuleService = {
   get,
+  getEvent,
   list,
 };
 

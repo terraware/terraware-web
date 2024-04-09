@@ -17,8 +17,11 @@ export type ModuleContent = {
 };
 
 export type ModuleEvent = {
+  additionalLinks?: { label: string }[];
+  description?: string;
   eventTime: string;
   id: number;
+  links?: { label: string }[];
   moduleId: number;
   name: string;
 };
