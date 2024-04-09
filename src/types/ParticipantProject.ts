@@ -7,17 +7,17 @@ import { CohortPhaseType } from './Cohort';
 export type ParticipantProject = components['schemas']['ProjectAcceleratorDetailsPayload'];
 
 export type ParticipantProjectSearchResult = {
-  cohortName: string;
-  country: string;
+  'acceleratorDetails_confirmedReforestableLand(raw)': number;
+  acceleratorDetails_confirmedReforestableLand: string;
+  country_name: string;
+  country_region: string;
   id: number;
-  landUseModelType: string[];
+  'landUseModelTypes.landUseModelType': string[];
   name: string;
   participant_cohort_id: number;
+  participant_cohort_name: string;
   participant_cohort_phase: CohortPhaseType;
-  participantName: string;
-  region: string;
-  restorableLand: string;
-  restorableLandRaw: number;
+  participant_name: string;
 };
 
 export type LandUseModelType = ParticipantProject['landUseModelTypes'][0];

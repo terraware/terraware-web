@@ -156,17 +156,21 @@ const list = async (
     type LandUse = { landUseModelType: string };
 
     return {
-      cohortName: participant_cohort_name,
-      country: country_name,
+      acceleratorDetails_confirmedReforestableLand,
+      'acceleratorDetails_confirmedReforestableLand(raw)': Number(
+        result['acceleratorDetails_confirmedReforestableLand(raw)']
+      ),
+      country_name,
+      country_region,
       id: Number(id),
-      landUseModelType: ((result.landUseModelTypes || []) as LandUse[]).map((type: LandUse) => type.landUseModelType),
+      'landUseModelTypes.landUseModelType': ((result.landUseModelTypes || []) as LandUse[]).map(
+        (type: LandUse) => type.landUseModelType
+      ),
       name,
       participant_cohort_id: Number(participant_cohort_id),
+      participant_cohort_name,
       participant_cohort_phase,
-      participantName: participant_name,
-      region: country_region,
-      restorableLand: acceleratorDetails_confirmedReforestableLand,
-      restorableLandRaw: Number(result['acceleratorDetails_confirmedReforestableLand(raw)']),
+      participant_name,
     } as ParticipantProjectSearchResult;
   });
 };
