@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">21.42% </span>
+                <span class="strong">25% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>3/14</span>
+                <span class='fraction'>3/12</span>
             </div>
         
             
@@ -252,11 +252,7 @@
 <a name='L187'></a><a href='#L187'>187</a>
 <a name='L188'></a><a href='#L188'>188</a>
 <a name='L189'></a><a href='#L189'>189</a>
-<a name='L190'></a><a href='#L190'>190</a>
-<a name='L191'></a><a href='#L191'>191</a>
-<a name='L192'></a><a href='#L192'>192</a>
-<a name='L193'></a><a href='#L193'>193</a>
-<a name='L194'></a><a href='#L194'>194</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L190'></a><a href='#L190'>190</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -298,12 +294,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -417,8 +408,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -490,11 +482,7 @@ const COHORT_ID_EXISTS_PREDICATE: SearchNodePayload = {
   },
 };
 &nbsp;
-const getSearchParams = <span class="fstat-no" title="function not covered" >(</span>
-  search?: SearchNodePayload,
-  sortOrder?: SearchSortOrder,
-  isCsv?: boolean
-): SearchRequestPayload =&gt; {
+const getSearchParams = <span class="fstat-no" title="function not covered" >(s</span>earch?: SearchNodePayload, sortOrder?: SearchSortOrder): SearchRequestPayload =&gt; {
   const searchParams: SearchRequestPayload = <span class="cstat-no" title="statement not covered" >{</span>
     prefix: 'projects',
     fields: [
@@ -507,7 +495,6 @@ const getSearchParams = <span class="fstat-no" title="function not covered" >(</
       'country_name',
       'country_region',
       'acceleratorDetails_confirmedReforestableLand',
-      ...(isCsv ? [] : ['acceleratorDetails_confirmedReforestableLand(raw)']),
       'landUseModelTypes.landUseModelType',
     ],
     search: {
@@ -579,7 +566,7 @@ const get = <span class="fstat-no" title="function not covered" >as</span>ync (p
   });
 &nbsp;
 const downloadList = <span class="fstat-no" title="function not covered" >as</span>ync (search?: SearchNodePayload, sortOrder?: SearchSortOrder): Promise&lt;string | null&gt; =&gt;
-<span class="cstat-no" title="statement not covered" >  await SearchService.searchCsv(getSearchParams(search, sortOrder, true));</span>
+<span class="cstat-no" title="statement not covered" >  await SearchService.searchCsv(getSearchParams(search, sortOrder));</span>
 &nbsp;
 const list = <span class="fstat-no" title="function not covered" >as</span>ync (
   search?: SearchNodePayload,
@@ -607,17 +594,18 @@ const list = <span class="fstat-no" title="function not covered" >as</span>ync (
     type LandUse = { landUseModelType: string };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return {</span>
-      cohortName: participant_cohort_name,
-      country: country_name,
+      acceleratorDetails_confirmedReforestableLand,
+      country_name,
+      country_region,
       id: Number(id),
-      landUseModelType: ((result.landUseModelTypes || []) as LandUse[]).map(<span class="fstat-no" title="function not covered" >(t</span>ype: LandUse) =&gt; <span class="cstat-no" title="statement not covered" >type.landUseModelType)</span>,
+      'landUseModelTypes.landUseModelType': ((result.landUseModelTypes || []) as LandUse[]).map(
+<span class="fstat-no" title="function not covered" >        (t</span>ype: LandUse) =&gt; <span class="cstat-no" title="statement not covered" >type.landUseModelType</span>
+      ),
       name,
       participant_cohort_id: Number(participant_cohort_id),
+      participant_cohort_name,
       participant_cohort_phase,
-      participantName: participant_name,
-      region: country_region,
-      restorableLand: acceleratorDetails_confirmedReforestableLand,
-      restorableLandRaw: Number(result['acceleratorDetails_confirmedReforestableLand(raw)']),
+      participant_name,
     } as ParticipantProjectSearchResult;
   });
 };
@@ -649,7 +637,7 @@ export default ParticipantProjectsService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-09T20:01:43.329Z
+                at 2024-04-09T20:17:02.823Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
