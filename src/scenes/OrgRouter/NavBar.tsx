@@ -33,18 +33,19 @@ export default function NavBar({
   const { selectedOrganization } = useOrganization();
   const [showNurseryWithdrawals, setShowNurseryWithdrawals] = useState<boolean>(false);
   const [reports, setReports] = useState<Reports>([]);
-const [hasDeliverables, setHasDeliverables] = useState<boolean>(false);
-  const { isDesktop } = useDeviceInfo();
+  const [hasDeliverables, setHasDeliverables] = useState<boolean>(false);
+  const { isDesktop, isMobile } = useDeviceInfo();
   const navigate = useNavigate();
 
   const { isAllowedViewConsole } = useAcceleratorConsole();
   const { activeLocale } = useLocalization();
 
-
   const isAccessionDashboardRoute = useMatch(APP_PATHS.SEEDS_DASHBOARD + '/');
   const isAccessionsRoute = useMatch(APP_PATHS.ACCESSIONS + '/');
   const isCheckinRoute = useMatch(APP_PATHS.CHECKIN + '/');
   const isContactUsRoute = useMatch(APP_PATHS.CONTACT_US + '/');
+  const isDeliverablesRoute = useMatch(APP_PATHS.DELIVERABLES + '/');
+  const isDeliverableViewRoute = useMatch(APP_PATHS.DELIVERABLE_VIEW + '/');
   const isHomeRoute = useMatch(APP_PATHS.HOME + '/');
   const isPeopleRoute = useMatch(APP_PATHS.PEOPLE + '/');
   const isSpeciesRoute = useMatch(APP_PATHS.SPECIES + '/');
@@ -62,18 +63,7 @@ const [hasDeliverables, setHasDeliverables] = useState<boolean>(false);
   const isObservationsRoute = useMatch(APP_PATHS.OBSERVATIONS + '/');
   const isProjectsRoute = useMatch(APP_PATHS.PROJECTS + '/');
 
-  const navigateTo = (url: string) => {
-    navigate(url);
-  };
-
-  const closeAndNavigateTo = (path: string) => {
-    closeNavBar();
-    if (path) {
-      navigateTo(path);
-    }
-  };
-
-  const closeNavBar = () => {
+  const closeNavBar = useCallback(() => {
     if (!isDesktop) {
       setShowNavBar(false);
     }
@@ -83,10 +73,10 @@ const [hasDeliverables, setHasDeliverables] = useState<boolean>(false);
     (path: string) => {
       closeNavBar();
       if (path) {
-        history.push(path);
+        navigate(path);
       }
     },
-    [closeNavBar, history]
+    [closeNavBar, navigate]
   );
 
   const checkNurseryWithdrawals = useCallback(() => {

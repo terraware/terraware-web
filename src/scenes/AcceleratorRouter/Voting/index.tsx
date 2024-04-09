@@ -1,4 +1,4 @@
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 import ProjectProvider from 'src/providers/Project/ProjectProvider';
@@ -11,17 +11,11 @@ const VotingRouter = () => {
   return (
     <ProjectProvider>
       <VotingProvider>
-        <Switch>
-          <Route exact path={APP_PATHS.ACCELERATOR_VOTING}>
-            <VotingView />
-          </Route>
-          <Route exact path={APP_PATHS.ACCELERATOR_VOTING_EDIT}>
-            <VotingEdit />
-          </Route>
-          <Route path={'*'}>
-            <Redirect to={APP_PATHS.ACCELERATOR_VOTING} />
-          </Route>
-        </Switch>
+        <Routes>
+          <Route path={APP_PATHS.ACCELERATOR_VOTING} element={<VotingView />} />
+          <Route path={APP_PATHS.ACCELERATOR_VOTING_EDIT} element={<VotingEdit />} />
+          <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_VOTING} />} />
+        </Routes>
       </VotingProvider>
     </ProjectProvider>
   );

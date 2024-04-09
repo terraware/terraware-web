@@ -1,6 +1,4 @@
-import { useLocation } from 'react-router-dom';
-
-import { Location, LocationDescriptor } from 'history';
+import { Location, useLocation } from 'react-router-dom';
 
 type State = {
   from?: string;
@@ -13,14 +11,16 @@ export default function useStateLocation(): StateLocation {
   return location;
 }
 
-export function getLocation(pathname: string, location: StateLocation, search?: string): LocationDescriptor<State> {
+export function getLocation(pathname: string, location: StateLocation, search?: string): Location<State> {
   if (location.state?.from) {
     return {
       pathname,
       state: {
         from: location.state.from,
       },
-      search,
+      search: search || '',
+      key: '',
+      hash: '#',
     };
   } else {
     return {
@@ -28,7 +28,9 @@ export function getLocation(pathname: string, location: StateLocation, search?: 
       state: {
         from: location.pathname,
       },
-      search,
+      search: search || '',
+      key: '',
+      hash: '#',
     };
   }
 }

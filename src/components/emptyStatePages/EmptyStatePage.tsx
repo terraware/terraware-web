@@ -124,7 +124,7 @@ export default function EmptyStatePage({
         buttonText: strings.ADD_SPECIES,
         buttonIcon: 'plus',
         onClickButton: () => {
-          history.push(APP_PATHS.SPECIES_NEW);
+          navigate(APP_PATHS.SPECIES_NEW);
         },
       },
     ],

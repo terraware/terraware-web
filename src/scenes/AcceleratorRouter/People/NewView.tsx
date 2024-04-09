@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
@@ -19,7 +19,7 @@ import PersonForm from './PersonForm';
 
 const NewView = () => {
   const dispatch = useAppDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useStateLocation();
   const snackbar = useSnackbar();
 
@@ -35,8 +35,8 @@ const NewView = () => {
   const saveRequest = useAppSelector(selectGlobalRolesUserUpdateRequest(saveRequestId));
 
   const goToPeople = useCallback(
-    () => history.push(getLocation(APP_PATHS.ACCELERATOR_PEOPLE, location)),
-    [history, location]
+    () => navigate(getLocation(APP_PATHS.ACCELERATOR_PEOPLE, location)),
+    [navigate, location]
   );
 
   const handleOnSave = useCallback(

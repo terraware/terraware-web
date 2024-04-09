@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
@@ -22,12 +22,12 @@ const MINIMAL_USER_ROUTES: string[] = [
 
 export default function TerrawareRouter(props: TerrawareRouterProps) {
   const { organizations } = useOrganization();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useStateLocation();
 
   useEffect(() => {
     if (organizations?.length === 0 && MINIMAL_USER_ROUTES.indexOf(location.pathname) === -1) {
-      history.push(APP_PATHS.WELCOME);
+      navigate(APP_PATHS.WELCOME);
     }
   }, [history, location, organizations]);
 

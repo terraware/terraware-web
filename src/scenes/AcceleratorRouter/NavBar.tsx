@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useMatch, useNavigate } from 'react-router-dom';
 
 import { NavSection } from '@terraware/web-components';
 
@@ -18,22 +18,18 @@ type NavBarProps = {
 };
 export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarProps): JSX.Element | null {
   const { isDesktop } = useDeviceInfo();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isAllowed } = useUser();
 
-  const isDeliverablesRoute = useRouteMatch(APP_PATHS.ACCELERATOR_DELIVERABLES);
-  const isModuleContentRoute = useRouteMatch(APP_PATHS.ACCELERATOR_MODULE_CONTENT);
-  const isOverviewRoute = useRouteMatch(APP_PATHS.ACCELERATOR_OVERVIEW);
-  const isParticipantsRoute = useRouteMatch(APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW);
-  const isPeopleRoute = useRouteMatch(APP_PATHS.ACCELERATOR_PEOPLE);
-  const isScoringRoute = useRouteMatch(APP_PATHS.ACCELERATOR_SCORING);
-  const isVotingRoute = useRouteMatch(APP_PATHS.ACCELERATOR_VOTING);
+  const isDeliverablesRoute = useMatch(APP_PATHS.ACCELERATOR_DELIVERABLES);
+  const isModuleContentRoute = useMatch(APP_PATHS.ACCELERATOR_MODULE_CONTENT);
+  const isOverviewRoute = useMatch(APP_PATHS.ACCELERATOR_OVERVIEW);
+  const isParticipantsRoute = useMatch(APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW);
+  const isPeopleRoute = useMatch(APP_PATHS.ACCELERATOR_PEOPLE);
+  const isScoringRoute = useMatch(APP_PATHS.ACCELERATOR_SCORING);
+  const isVotingRoute = useMatch(APP_PATHS.ACCELERATOR_VOTING);
 
   const isAllowedViewPeople = isAllowed('READ_GLOBAL_ROLES');
-
-  const navigate = (url: string) => {
-    history.push(url);
-  };
 
   const closeAndNavigateTo = (path: string) => {
     closeNavBar();

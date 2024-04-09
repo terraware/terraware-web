@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { APP_PATHS } from 'src/constants';
@@ -20,20 +20,12 @@ const SeedBanksRouter = () => {
   }, [selectedOrganization]);
 
   return (
-    <Switch>
-      <Route exact path={APP_PATHS.SEED_BANKS_NEW}>
-        <SeedBankView />
-      </Route>
-      <Route exact path={APP_PATHS.SEED_BANKS_EDIT}>
-        <SeedBankView />
-      </Route>
-      <Route path={APP_PATHS.SEED_BANKS_VIEW}>
-        <SeedBankDetailsView />
-      </Route>
-      <Route exact path={APP_PATHS.SEED_BANKS}>
-        {getSeedBanksView()}
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path={APP_PATHS.SEED_BANKS_NEW} element={<SeedBankView />} />
+      <Route path={APP_PATHS.SEED_BANKS_EDIT} element={<SeedBankView />} />
+      <Route path={APP_PATHS.SEED_BANKS_VIEW} element={<SeedBankDetailsView />} />
+      <Route path={APP_PATHS.SEED_BANKS} element={getSeedBanksView()} />
+    </Routes>
   );
 };
 

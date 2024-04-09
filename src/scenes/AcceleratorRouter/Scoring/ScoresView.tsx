@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { BusySpinner, Button } from '@terraware/web-components';
@@ -16,15 +16,15 @@ import { useScoringData } from './ScoringContext';
 const ScorecardView = () => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { crumbs, hasData, phase0Scores, phase1Scores, projectId, projectName, status } = useScoringData();
 
   const goToScoresEdit = useCallback(() => {
-    history.push({ pathname: APP_PATHS.ACCELERATOR_SCORING_EDIT.replace(':projectId', `${projectId}`) });
+    navigate({ pathname: APP_PATHS.ACCELERATOR_SCORING_EDIT.replace(':projectId', `${projectId}`) });
   }, [history, projectId]);
 
   const goToVoting = useCallback(() => {
-    history.push({ pathname: APP_PATHS.ACCELERATOR_VOTING.replace(':projectId', `${projectId}`) });
+    navigate({ pathname: APP_PATHS.ACCELERATOR_VOTING.replace(':projectId', `${projectId}`) });
   }, [history, projectId]);
 
   const rightComponent = useMemo(

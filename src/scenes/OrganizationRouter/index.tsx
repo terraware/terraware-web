@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
@@ -10,15 +10,15 @@ const OrganizationRouter = () => {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
 
   return (
-    <Switch>
-      <Route exact path={APP_PATHS.ORGANIZATION_EDIT}>
-        <EditOrganizationView organization={selectedOrganization} reloadOrganizationData={reloadOrganizations} />
-      </Route>
-
-      <Route exact path={APP_PATHS.ORGANIZATION}>
-        <OrganizationView />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route
+        path={APP_PATHS.ORGANIZATION_EDIT}
+        element={
+          <EditOrganizationView organization={selectedOrganization} reloadOrganizationData={reloadOrganizations} />
+        }
+      />
+      <Route path={APP_PATHS.ORGANIZATION} element={<OrganizationView />} />
+    </Routes>
   );
 };
 

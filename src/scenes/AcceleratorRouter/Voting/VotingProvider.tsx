@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 import { useProjectData } from 'src/providers/Project/ProjectContext';
@@ -17,7 +17,7 @@ export type Props = {
 };
 
 const VotingProvider = ({ children }: Props): JSX.Element => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const query = useQuery();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
@@ -31,7 +31,7 @@ const VotingProvider = ({ children }: Props): JSX.Element => {
   const [votingData, setVotingData] = useState<VotingData>({ projectId });
 
   const goToProjects = useCallback(() => {
-    history.push({ pathname: APP_PATHS.ACCELERATOR_OVERVIEW }); // TODO switch to project management lists page
+    navigate({ pathname: APP_PATHS.ACCELERATOR_OVERVIEW }); // TODO switch to project management lists page
   }, [history]);
 
   // Redirect to project management list page if projectId is invalid.

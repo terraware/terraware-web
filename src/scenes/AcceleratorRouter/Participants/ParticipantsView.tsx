@@ -1,5 +1,5 @@
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem, Textfield } from '@terraware/web-components';
@@ -28,7 +28,7 @@ type ProjectsByOrg = {
 };
 
 export default function ParticipantsView(): JSX.Element {
-  const history = useHistory();
+  const navigate = useNavigate();
   const theme = useTheme();
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
@@ -41,7 +41,7 @@ export default function ParticipantsView(): JSX.Element {
   const [showDelete, setShowDelete] = useState<boolean>(false);
 
   const goToEdit = useCallback(() => {
-    history.push(APP_PATHS.ACCELERATOR_PARTICIPANTS_EDIT.replace(':participantId', `${participantId}`));
+    navigate(APP_PATHS.ACCELERATOR_PARTICIPANTS_EDIT.replace(':participantId', `${participantId}`));
   }, [history, participantId]);
 
   const onOptionItemClick = useCallback((optionItem: DropdownItem) => {

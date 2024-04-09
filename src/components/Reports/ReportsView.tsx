@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Container, Grid, List, ListItem, Tab, Typography, useTheme } from '@mui/material';
@@ -48,7 +48,7 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const reportsSettings = useAppSelector(selectReportsSettings);
 
@@ -80,11 +80,11 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
     (newValue: string) => {
       switch (newValue) {
         case 'reports': {
-          history.push(APP_PATHS.REPORTS);
+          navigate(APP_PATHS.REPORTS);
           break;
         }
         case 'settings': {
-          history.push(APP_PATHS.REPORTS_SETTINGS);
+          navigate(APP_PATHS.REPORTS_SETTINGS);
         }
       }
 

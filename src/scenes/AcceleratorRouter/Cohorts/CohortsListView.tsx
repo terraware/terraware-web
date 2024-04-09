@@ -1,5 +1,5 @@
 import React, { ReactNode, useCallback, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Card, Typography, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -54,7 +54,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
 const CohortsListView = ({ filterModifiers, extraTableFilters }: CohortsListViewProps) => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isAllowed } = useUser();
   const { isMobile } = useDeviceInfo();
 
@@ -78,7 +78,7 @@ const CohortsListView = ({ filterModifiers, extraTableFilters }: CohortsListView
     const newProjectLocation = {
       pathname: APP_PATHS.ACCELERATOR_COHORTS_NEW,
     };
-    history.push(newProjectLocation);
+    navigate(newProjectLocation);
   }, [history]);
 
   const dispatchSearchRequest = useCallback(

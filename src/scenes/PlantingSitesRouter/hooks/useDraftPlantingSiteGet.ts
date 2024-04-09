@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 import { Statuses } from 'src/redux/features/asyncUtils';
@@ -25,13 +25,13 @@ export type Response = {
  */
 export default function useDraftPlantingSiteGet({ draftId }: Props): Response {
   const snackbar = useSnackbar();
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const draftResult = useAppSelector(selectDraftPlantingSiteGet(draftId));
 
   const goToPlantingSites = useCallback(() => {
-    history.push(APP_PATHS.PLANTING_SITES);
-  }, [history]);
+    navigate(APP_PATHS.PLANTING_SITES);
+  }, [navigate]);
 
   useEffect(() => {
     if (!isNaN(draftId)) {

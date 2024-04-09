@@ -1,4 +1,4 @@
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 
@@ -7,14 +7,10 @@ import DeliverablesList from './DeliverablesList';
 
 const DeliverablesRouter = (): JSX.Element => {
   return (
-    <Switch>
-      <Route path={APP_PATHS.DELIVERABLE_VIEW}>
-        <DeliverableViewWrapper />
-      </Route>
-      <Route path={'*'}>
-        <DeliverablesList />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path={APP_PATHS.DELIVERABLE_VIEW} element={<DeliverableViewWrapper />} />
+      <Route path={'*'} element={<DeliverablesList />} />
+    </Routes>
   );
 };
 

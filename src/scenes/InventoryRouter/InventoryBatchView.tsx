@@ -70,7 +70,7 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
   const { batchId } = useParams<{ batchId: string }>();
   const { speciesId } = useParams<{ speciesId: string }>();
   const { nurseryId } = useParams<{ nurseryId: string }>();
-  const batch = useAppSelector(selectBatch(batchId));
+  const batch = batchId ? useAppSelector(selectBatch(batchId)) : undefined;
   const tab = initializeTab(query.get('tab'));
   const [activeTab, setActiveTab] = useState<string>(tab);
   const navigate = useNavigate();
@@ -129,7 +129,9 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
   );
 
   const fetchBatch = useCallback(() => {
-    dispatch(requestFetchBatch({ batchId }));
+    if (batchId) {
+      dispatch(requestFetchBatch({ batchId }));
+    }
   }, [batchId, dispatch]);
 
   useEffect(() => {
@@ -154,8 +156,8 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
             origin === 'Species'
               ? APP_PATHS.INVENTORY_ITEM_FOR_SPECIES.replace(':speciesId', speciesId || '')
               : origin === 'Nursery'
-              ? APP_PATHS.INVENTORY_ITEM_FOR_NURSERY.replace(':nurseryId', nurseryId || '')
-              : `${APP_PATHS.INVENTORY}?tab=batches_by_batch`
+                ? APP_PATHS.INVENTORY_ITEM_FOR_NURSERY.replace(':nurseryId', nurseryId || '')
+                : `${APP_PATHS.INVENTORY}?tab=batches_by_batch`
           }
         />
         <Grid
@@ -194,7 +196,7 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
               {getNurseryLabel()}
             </Typography>
           </Box>
-          {isWithdrawable && (
+          {isWithdrawable && batchId && (
             <Box margin={isMobile ? theme.spacing(2, 2, 0, 2) : 0} display='flex' flexGrow={isMobile ? 1 : 0}>
               <Button
                 className={isMobile ? classes.fullWidth : ''}

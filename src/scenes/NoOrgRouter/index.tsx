@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import NoOrgLandingPage from 'src/components/emptyStatePages/NoOrgLandingPage';
 import { APP_PATHS } from 'src/constants';
@@ -13,23 +13,12 @@ const NoOrgRouter = () => {
   const { reloadUserPreferences: reloadPreferences } = useUser();
 
   return (
-    <Switch>
-      <Route path={APP_PATHS.MY_ACCOUNT}>
-        <MyAccountRouter />
-      </Route>
-
-      <Route exact path={APP_PATHS.WELCOME}>
-        <NoOrgLandingPage />
-      </Route>
-      {!isProduction && (
-        <Route exact path={APP_PATHS.OPT_IN}>
-          <OptInFeaturesView refresh={reloadPreferences} />
-        </Route>
-      )}
-      <Route path='*'>
-        <Redirect to={APP_PATHS.WELCOME} />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path={APP_PATHS.MY_ACCOUNT} element={<MyAccountRouter />} />
+      <Route path={APP_PATHS.WELCOME} element={<NoOrgLandingPage />} />
+      {!isProduction && <Route path={APP_PATHS.OPT_IN} element={<OptInFeaturesView refresh={reloadPreferences} />} />}
+      <Route path='*' element={<Navigate to={APP_PATHS.WELCOME} />} />
+    </Routes>
   );
 };
 

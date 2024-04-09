@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
@@ -10,20 +10,26 @@ const MonitoringRouter = () => {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
 
   return (
-    <Switch>
-      <Route exact path={APP_PATHS.MONITORING}>
-        <MonitoringView
-          hasSeedBanks={selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')}
-          reloadData={reloadOrganizations}
-        />
-      </Route>
-      <Route exact path={APP_PATHS.MONITORING_SEED_BANK}>
-        <MonitoringView
-          hasSeedBanks={selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')}
-          reloadData={reloadOrganizations}
-        />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route
+        path={APP_PATHS.MONITORING}
+        element={
+          <MonitoringView
+            hasSeedBanks={selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')}
+            reloadData={reloadOrganizations}
+          />
+        }
+      />
+      <Route
+        path={APP_PATHS.MONITORING_SEED_BANK}
+        element={
+          <MonitoringView
+            hasSeedBanks={selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')}
+            reloadData={reloadOrganizations}
+          />
+        }
+      />
+    </Routes>
   );
 };
 

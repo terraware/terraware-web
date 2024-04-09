@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { Slide, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -80,46 +80,24 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
         } scrollable-content`}
       >
         <ErrorBoundary setShowNavBar={setShowNavBar}>
-          <Switch>
-            <Route path={APP_PATHS.ACCELERATOR_OVERVIEW}>
-              {consoleEnabled ? <Overview /> : <Page title={strings.OVERVIEW} />}
-            </Route>
-            <Route path={APP_PATHS.ACCELERATOR_COHORTS}>
-              <Cohorts />
-            </Route>
-            <Route path={APP_PATHS.ACCELERATOR_DELIVERABLES}>
-              <Deliverables />
-            </Route>
-            <Route path={APP_PATHS.ACCELERATOR_MODULE_CONTENT}>
-              <ModuleContent />
-            </Route>
-            <Route path={APP_PATHS.ACCELERATOR_PEOPLE}>
-              {consoleEnabled ? <People /> : <Page title={strings.PEOPLE} />}
-            </Route>
-            {consoleEnabled && (
-              <Route path={APP_PATHS.ACCELERATOR_SCORING}>
-                <Scoring />
-              </Route>
-            )}
-            {consoleEnabled && (
-              <Route path={APP_PATHS.ACCELERATOR_VOTING}>
-                <Voting />
-              </Route>
-            )}
-            {consoleEnabled && (
-              <Route path={APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW}>
-                <Participants />
-              </Route>
-            )}
-            {consoleEnabled && (
-              <Route path={APP_PATHS.ACCELERATOR_PROJECT_VIEW}>
-                <ParticipantProjects />
-              </Route>
-            )}
-            <Route path={'*'}>
-              <Redirect to={APP_PATHS.ACCELERATOR_OVERVIEW} />
-            </Route>
-          </Switch>
+          <Routes>
+            <Route
+              path={APP_PATHS.ACCELERATOR_OVERVIEW}
+              element={consoleEnabled ? <Overview /> : <Page title={strings.OVERVIEW} />}
+            />
+            <Route path={APP_PATHS.ACCELERATOR_COHORTS} element={<Cohorts />} />
+            <Route path={APP_PATHS.ACCELERATOR_DELIVERABLES} element={<Deliverables />} />
+            <Route path={APP_PATHS.ACCELERATOR_MODULE_CONTENT} element={<ModuleContent />} />
+            <Route
+              path={APP_PATHS.ACCELERATOR_PEOPLE}
+              element={consoleEnabled ? <People /> : <Page title={strings.PEOPLE} />}
+            />
+            {consoleEnabled && <Route path={APP_PATHS.ACCELERATOR_SCORING} element={<Scoring />} />}
+            {consoleEnabled && <Route path={APP_PATHS.ACCELERATOR_VOTING} element={<Voting />} />}
+            {consoleEnabled && <Route path={APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW} element={<Participants />} />}
+            {consoleEnabled && <Route path={APP_PATHS.ACCELERATOR_PROJECT_VIEW} element={<ParticipantProjects />} />}
+            <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_OVERVIEW} />} />
+          </Routes>
         </ErrorBoundary>
       </div>
     </>

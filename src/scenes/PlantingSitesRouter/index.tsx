@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Route, Routes } from 'react-router-dom';
+
 import { CircularProgress } from '@mui/material';
 
 import { APP_PATHS } from 'src/constants';
@@ -41,11 +42,10 @@ export default function PlantingSites({ reloadTracking }: PlantingSitesProps): J
         path={APP_PATHS.PLANTING_SITES_NEW}
         element={<PlantingSiteCreate reloadPlantingSites={reloadTracking} />}
       />
-            {userDrawnDetailedSites && (
+      {userDrawnDetailedSites && (
         <Route path={APP_PATHS.PLANTING_SITES_DRAFT_VIEW} element={<PlantingSitesDraftRouter />} />
-
       )}
-      <Route path={APP_PATHS.PLANTING_SITES_VIEW} element={<PlantingSitesWrapper reloadTracking={reloadTracking} />} />
+      <Route path={APP_PATHS.PLANTING_SITES_VIEW} element={<PlantingSitesRouter reloadTracking={reloadTracking} />} />
       <Route path={'*'} element={<PlantingSitesList />} />
     </Routes>
   );
@@ -98,10 +98,10 @@ export function PlantingSitesRouter({ reloadTracking }: PlantingSitesProps): JSX
 export function PlantingSitesDraftRouter(): JSX.Element {
   return (
     <Routes>
-      <Route path={APP_PATHS.PLANTING_SITES_DRAFT_ZONE_VIEW} element={<PlantingSiteDraftZoneView />}/>
-      <Route path={APP_PATHS.PLANTING_SITES_DRAFT_NEW} element={<PlantingSiteDraftCreate />}/>
-      <Route path={APP_PATHS.PLANTING_SITES_DRAFT_EDIT} element={ <PlantingSiteDraftEdit />}/>
-      <Route path={APP_PATHS.PLANTING_SITES_DRAFT_VIEW} element={<PlantingSiteDraftView />}/>
+      <Route path={APP_PATHS.PLANTING_SITES_DRAFT_ZONE_VIEW} element={<PlantingSiteDraftZoneView />} />
+      <Route path={APP_PATHS.PLANTING_SITES_DRAFT_NEW} element={<PlantingSiteDraftCreate />} />
+      <Route path={APP_PATHS.PLANTING_SITES_DRAFT_EDIT} element={<PlantingSiteDraftEdit />} />
+      <Route path={APP_PATHS.PLANTING_SITES_DRAFT_VIEW} element={<PlantingSiteDraftView />} />
     </Routes>
   );
 }

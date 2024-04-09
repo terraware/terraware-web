@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Tab } from '@terraware/web-components';
 
@@ -31,7 +31,7 @@ const writeTabToSession = (viewIdentifier: string, tab: string): void => {
 
 const useStickyTabs = ({ defaultTab, tabs, viewIdentifier }: StickyTabsProps) => {
   const location = useStateLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const query = useQuery();
   const tab = query.get('tab');
 
@@ -40,7 +40,7 @@ const useStickyTabs = ({ defaultTab, tabs, viewIdentifier }: StickyTabsProps) =>
   const onTabChange = useCallback(
     (newTab: string) => {
       query.set('tab', newTab);
-      history.push(getLocation(location.pathname, location, query.toString()));
+      navigate(getLocation(location.pathname, location, query.toString()));
       writeTabToSession(viewIdentifier, newTab);
     },
     [history, location, query, viewIdentifier]

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem, TableColumnType } from '@terraware/web-components';
@@ -74,7 +74,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   const { isMobile, isDesktop } = useDeviceInfo();
   const theme = useTheme();
   const snackbar = useSnackbar();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [openExportModal, setOpenExportModal] = useState<boolean>(false);
   const [temporalSearchValue, setTemporalSearchValue] = useState<string>('');
@@ -212,14 +212,14 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     const batch = batches.find((b) => b.batchNumber === openBatchNumber);
     if (batch) {
       if (origin === 'Nursery') {
-        history.push({
+        navigate({
           pathname: APP_PATHS.INVENTORY_BATCH_FOR_NURSERY.replace(':nurseryId', `${originId}`).replace(
             ':batchId',
             `${batch.id}`
           ),
         });
       } else {
-        history.push({
+        navigate({
           pathname: APP_PATHS.INVENTORY_BATCH_FOR_SPECIES.replace(':speciesId', `${originId}`).replace(
             ':batchId',
             `${batch.id}`
@@ -227,7 +227,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
         });
       }
     }
-  }, [batches, history, openBatchNumber, origin, originId]);
+  }, [batches, navigate, openBatchNumber, origin, originId]);
 
   useEffect(() => {
     setFilteredBatches(filterEmptyBatches(batches));
@@ -261,7 +261,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
 
   const onBatchSelected = (batch: any, fromColumn?: string) => {
     if (fromColumn === 'withdraw') {
-      history.push({
+      navigate({
         pathname: APP_PATHS.BATCH_WITHDRAW,
         search: `?batchId=${batch.id.toString()}&source=${window.location.pathname}`,
       });
@@ -276,7 +276,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
         to = APP_PATHS.INVENTORY_BATCH_FOR_SPECIES.replace(':speciesId', `${originId}`);
       }
 
-      history.push(to.replace(':batchId', batch.id));
+      navigate(to.replace(':batchId', batch.id));
     }
   };
 
@@ -286,7 +286,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   };
 
   const bulkWithdrawSelectedRows = () => {
-    history.push({
+    navigate({
       pathname: APP_PATHS.BATCH_WITHDRAW,
       search: getSelectedRowsAsQueryParams(),
     });

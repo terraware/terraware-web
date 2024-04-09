@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import ProjectEditView from 'src/components/ProjectEditView';
 import ProjectNewView from 'src/components/ProjectNewView';
@@ -27,19 +27,11 @@ export default function ProjectsRouter({
   };
 
   return (
-    <Switch>
-      <Route exact path={APP_PATHS.PROJECTS}>
-        {getProjectsView()}
-      </Route>
-      <Route exact path={APP_PATHS.PROJECTS_NEW}>
-        <ProjectNewView reloadData={reloadProjects} />
-      </Route>
-      <Route exact path={APP_PATHS.PROJECT_VIEW}>
-        <ProjectView />
-      </Route>
-      <Route exact path={APP_PATHS.PROJECT_EDIT}>
-        <ProjectEditView />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path={APP_PATHS.PROJECTS} element={getProjectsView()} />
+      <Route path={APP_PATHS.PROJECTS_NEW} element={<ProjectNewView reloadData={reloadProjects} />} />
+      <Route path={APP_PATHS.PROJECT_VIEW} element={<ProjectView />} />
+      <Route path={APP_PATHS.PROJECT_EDIT} element={<ProjectEditView />} />
+    </Routes>
   );
 }

@@ -90,7 +90,7 @@ export default function GenericZoneView({
     navigate(APP_PATHS.PLANTING_SITES);
   }
 
-  if (!plantingZone) {
+  if (!plantingZone && plantingSiteId) {
     navigate(siteViewUrl.replace(':plantingSiteId', plantingSiteId));
   }
 

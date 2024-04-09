@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import { Grid, useTheme } from '@mui/material';
 
@@ -17,7 +17,7 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { usePersonData } from './PersonContext';
 
 const SingleView = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useStateLocation();
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
@@ -27,7 +27,7 @@ const SingleView = () => {
   const canEdit = isAllowed('ASSIGN_SOME_GLOBAL_ROLES');
 
   const goToEditPerson = useCallback(
-    () => history.push(getLocation(APP_PATHS.ACCELERATOR_PERSON_EDIT.replace(':userId', `${userId}`), location)),
+    () => navigate(getLocation(APP_PATHS.ACCELERATOR_PERSON_EDIT.replace(':userId', `${userId}`), location)),
     [history, location, userId]
   );
 

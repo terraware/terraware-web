@@ -1,4 +1,4 @@
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 
@@ -9,23 +9,13 @@ import CohortsListView from './CohortsListView';
 
 const CohortsRouter = () => {
   return (
-    <Switch>
-      <Route exact path={APP_PATHS.ACCELERATOR_COHORTS_EDIT}>
-        <CohortEditView />
-      </Route>
-      <Route exact path={APP_PATHS.ACCELERATOR_COHORTS_NEW}>
-        <CohortNewView />
-      </Route>
-      <Route exact path={APP_PATHS.ACCELERATOR_COHORTS_VIEW}>
-        <CohortView />
-      </Route>
-      <Route exact path={APP_PATHS.ACCELERATOR_COHORTS}>
-        <CohortsListView />
-      </Route>
-      <Route path={'*'}>
-        <Redirect to={APP_PATHS.ACCELERATOR_COHORTS} />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path={APP_PATHS.ACCELERATOR_COHORTS_EDIT} element={<CohortEditView />} />
+      <Route path={APP_PATHS.ACCELERATOR_COHORTS_NEW} element={<CohortNewView />} />
+      <Route path={APP_PATHS.ACCELERATOR_COHORTS_VIEW} element={<CohortView />} />
+      <Route path={APP_PATHS.ACCELERATOR_COHORTS} element={<CohortsListView />} />
+      <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_COHORTS} />} />
+    </Routes>
   );
 };
 

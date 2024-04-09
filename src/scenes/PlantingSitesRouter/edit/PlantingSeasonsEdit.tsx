@@ -106,7 +106,7 @@ export default function PlantingSeasonsEdit(props: Props): JSX.Element {
   // Planting seasons whose end dates have passed. We don't show these in the edit UI, but we need
   // to check whether they overlap with any date ranges the user enters.
   const pastPlantingSeasons: ValidPlantingSeason[] = useMemo(() => {
-    const todayString = today.toISODate();
+    const todayString = today.toISODate() || today;
     return props.plantingSeasons.filter((season) => season.endDate < todayString);
   }, [props.plantingSeasons, today]);
 
@@ -195,10 +195,12 @@ export default function PlantingSeasonsEdit(props: Props): JSX.Element {
   useEffect(() => {
     if (!loaded) {
       const todayString = today.toISODate();
-      const entries = props.plantingSeasons.filter((entry) => entry.endDate >= todayString);
+      if (todayString) {
+        const entries = props.plantingSeasons.filter((entry) => entry.endDate >= todayString);
 
-      setRows(entries);
-      setLoaded(true);
+        setRows(entries);
+        setLoaded(true);
+      }
     }
   }, [props.plantingSeasons, today, loaded, setLoaded, setRows]);
 

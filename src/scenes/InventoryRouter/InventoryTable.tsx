@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -48,7 +48,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   } = props;
 
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
-  const history = useHistory();
+  const navigate = useNavigate();
   const { sessionFilters, setSessionFilters } = useSessionFilters(origin.toLowerCase());
   const [withdrawTooltip, setWithdrawTooltip] = useState<string>();
 
@@ -91,7 +91,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
         : selectedRows.filter((r) => r.species_id).map((row) => `batchId=${row.batchId}`);
     const searchParams = origin === 'Species' ? speciesIds.join('&') : batchIds.join('&');
 
-    history.push({
+    navigate({
       pathname: path,
       search: `?${searchParams}&source=${window.location.pathname}`,
     });

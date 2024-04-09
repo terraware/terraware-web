@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { Box, Grid, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Checkbox, Dropdown } from '@terraware/web-components';
@@ -25,7 +27,6 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import { APP_PATHS } from '../constants';
 import DialogBox from './common/ScrollableDialogBox';
-import { useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) => ({
   otherDetails: {
@@ -148,7 +149,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
     );
     if (response.requestSucceeded && response.organization) {
       reloadOrganizations();
-      history.push({ pathname: APP_PATHS.HOME });
+      navigate({ pathname: APP_PATHS.HOME });
       snackbar.pageSuccess(
         isDesktop ? strings.ORGANIZATION_CREATED_MSG_DESKTOP : strings.ORGANIZATION_CREATED_MSG,
         strings.formatString(strings.ORGANIZATION_CREATED_TITLE, response.organization.name)

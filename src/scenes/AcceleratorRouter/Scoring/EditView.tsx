@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -25,7 +25,7 @@ const useStyles = makeStyles(() => ({
 
 const ScorecardEditView = () => {
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const classes = useStyles();
   const { crumbs, hasData, phase0Scores, phase1Scores, projectId, projectName, status } = useScoringData();
   const { update, status: updateStatus } = useScoresUpdate(projectId);
@@ -35,11 +35,11 @@ const ScorecardEditView = () => {
   const [updatedScores, setUpdatedScores] = useState<Score[]>([]);
 
   const goToVoting = useCallback(() => {
-    history.push({ pathname: APP_PATHS.ACCELERATOR_VOTING.replace(':projectId', `${projectId}`) });
+    navigate({ pathname: APP_PATHS.ACCELERATOR_VOTING.replace(':projectId', `${projectId}`) });
   }, [history, projectId]);
 
   const goToScorecardView = useCallback(() => {
-    history.push({ pathname: APP_PATHS.ACCELERATOR_SCORING.replace(':projectId', `${projectId}`) });
+    navigate({ pathname: APP_PATHS.ACCELERATOR_SCORING.replace(':projectId', `${projectId}`) });
   }, [history, projectId]);
 
   const onCancel = useCallback(() => {

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
@@ -18,7 +18,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 export default function InventoryCreateView(): JSX.Element {
   const dispatch = useAppDispatch();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const snackbar = useSnackbar();
   const { userPreferences } = useUser();
   const originInventoryViewType: InventoryListType =
@@ -54,13 +54,13 @@ export default function InventoryCreateView(): JSX.Element {
   );
 
   const goToInventory = useCallback(() => {
-    history.push(inventoryLocation);
+    navigate(inventoryLocation);
   }, [history, inventoryLocation]);
 
   useEffect(() => {
     if (batchesRequest?.status === 'success') {
       setBusy(false);
-      history.replace(inventoryLocation);
+      navigate(inventoryLocation, { replace: true });
 
       const batchId = batchesRequest?.data?.batch?.id;
       const facilityId = batchesRequest?.data?.batch?.facilityId;
@@ -69,18 +69,18 @@ export default function InventoryCreateView(): JSX.Element {
       // we can assume the batchId, facilityId and speciesId will be valid upon a successful create
 
       if (originInventoryViewType === InventoryListTypes.BATCHES_BY_NURSERY) {
-        history.push({
+        navigate({
           pathname: APP_PATHS.INVENTORY_BATCH_FOR_NURSERY.replace(':nurseryId', `${facilityId}`).replace(
             ':batchId',
             `${batchId}`
           ),
         });
       } else if (originInventoryViewType === InventoryListTypes.BATCHES_BY_BATCH) {
-        history.push({
+        navigate({
           pathname: APP_PATHS.INVENTORY_BATCH.replace(':batchId', `${batchId}`),
         });
       } else {
-        history.push({
+        navigate({
           pathname: APP_PATHS.INVENTORY_BATCH_FOR_SPECIES.replace(':speciesId', `${speciesId}`).replace(
             ':batchId',
             `${batchId}`

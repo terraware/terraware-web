@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, useTheme } from '@mui/material';
 
@@ -20,7 +20,7 @@ import { useVotingData } from './VotingContext';
 import VotingWrapper from './VotingWrapper';
 
 const VotingEdit = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useStateLocation();
   const query = useQuery();
   const dispatch = useAppDispatch();
@@ -34,7 +34,7 @@ const VotingEdit = () => {
   const result = useAppSelector((state) => selectProjectVotesEditRequest(state, requestId));
 
   const goToVotingView = useCallback(() => {
-    history.push(
+    navigate(
       getLocation(APP_PATHS.ACCELERATOR_VOTING.replace(':projectId', `${projectId}`), location, query.toString())
     );
   }, [history, location, projectId, query]);

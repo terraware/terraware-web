@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, List, ListItem, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -55,7 +55,7 @@ export default function GenericSiteView<T extends MinimalPlantingSite>({
   const { isMobile } = useDeviceInfo();
   const classes = useStyles();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const tz = useLocationTimeZone().get(plantingSite);
   const [plantingSeasons, setPlantingSeasons] = useState<PlantingSeason[]>([]);
   const [search, setSearch] = useState<string>('');
@@ -75,7 +75,7 @@ export default function GenericSiteView<T extends MinimalPlantingSite>({
       const editPlantingSiteLocation = {
         pathname: editUrl.replace(':plantingSiteId', `${plantingSite.id}`),
       };
-      history.push(editPlantingSiteLocation);
+      navigate(editPlantingSiteLocation);
     }
   };
 
@@ -83,8 +83,12 @@ export default function GenericSiteView<T extends MinimalPlantingSite>({
     if (plantingSite.plantingSeasons) {
       // Only show upcoming planting seasons.
       const today = DateTime.fromJSDate(new Date(), { zone: tz.id }).toISODate();
-      const upcomingSeasons = plantingSite.plantingSeasons.filter((plantingSeason) => plantingSeason.endDate >= today);
-      setPlantingSeasons(upcomingSeasons);
+      if (today) {
+        const upcomingSeasons = plantingSite.plantingSeasons.filter(
+          (plantingSeason) => plantingSeason.endDate >= today
+        );
+        setPlantingSeasons(upcomingSeasons);
+      }
     }
   }, [plantingSite, tz.id]);
 

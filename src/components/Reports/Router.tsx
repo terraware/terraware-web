@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import ReportSettingsEdit from 'src/components/Reports/ReportSettingsEdit';
 import ReportsView from 'src/components/Reports/ReportsView';
@@ -15,27 +15,13 @@ const ReportsRouter = (): JSX.Element | null => {
   }
 
   return (
-    <Switch>
-      <Route exact path={APP_PATHS.REPORTS}>
-        <ReportsView tab={'reports'} />
-      </Route>
-
-      <Route exact path={APP_PATHS.REPORTS_SETTINGS}>
-        <ReportsView tab={'settings'} />
-      </Route>
-
-      <Route exact path={APP_PATHS.REPORTS_SETTINGS_EDIT}>
-        <ReportSettingsEdit />
-      </Route>
-
-      <Route path={APP_PATHS.REPORTS_EDIT}>
-        <ReportEdit />
-      </Route>
-
-      <Route path={APP_PATHS.REPORTS_VIEW}>
-        <ReportView />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path={APP_PATHS.REPORTS} element={<ReportsView tab={'reports'} />} />
+      <Route path={APP_PATHS.REPORTS_SETTINGS} element={<ReportsView tab={'settings'} />} />
+      <Route path={APP_PATHS.REPORTS_SETTINGS_EDIT} element={<ReportSettingsEdit />} />
+      <Route path={APP_PATHS.REPORTS_EDIT} element={<ReportEdit />} />
+      <Route path={APP_PATHS.REPORTS_VIEW} element={<ReportView />} />
+    </Routes>
   );
 };
 

@@ -486,7 +486,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   }, [onApplyFilters]);
 
   const onNewSpecies = () => {
-    history.push(APP_PATHS.SPECIES_NEW);
+    navigate(APP_PATHS.SPECIES_NEW);
   };
 
   const clearSearch = () => {

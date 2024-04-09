@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Container, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -28,12 +28,12 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const PreSetupView = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
 
   const goToSettings = () => {
-    history.push({
+    navigate({
       pathname: APP_PATHS.REPORTS_SETTINGS_EDIT,
     });
   };

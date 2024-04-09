@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -57,17 +57,17 @@ const NurseryRouter = () => {
   }, [plantingSites]);
 
   return (
-    <Switch>
-      <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS}>
-        <NurseryPlantingsAndWithdrawalsView reloadTracking={reloadTracking} />
-      </Route>
-      <Route exact path={APP_PATHS.NURSERY_WITHDRAWALS_DETAILS}>
-        <NurseryWithdrawalsDetailsView species={species || []} plantingSubzoneNames={plantingSubzoneNames} />
-      </Route>
-      <Route exact path={APP_PATHS.NURSERY_REASSIGNMENT}>
-        <NurseryReassignmentView />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route
+        path={APP_PATHS.NURSERY_WITHDRAWALS}
+        element={<NurseryPlantingsAndWithdrawalsView reloadTracking={reloadTracking} />}
+      />
+      <Route
+        path={APP_PATHS.NURSERY_WITHDRAWALS_DETAILS}
+        element={<NurseryWithdrawalsDetailsView species={species || []} plantingSubzoneNames={plantingSubzoneNames} />}
+      />
+      <Route path={APP_PATHS.NURSERY_REASSIGNMENT} element={<NurseryReassignmentView />} />
+    </Routes>
   );
 };
 

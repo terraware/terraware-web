@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 import Accession2CreateView from 'src/scenes/AccessionsRouter/Accession2CreateView';
@@ -12,17 +12,11 @@ interface AccessionsRouterProps {
 
 const AccessionsRouter = ({ setWithdrawalCreated }: AccessionsRouterProps) => {
   return (
-    <Switch>
-      <Route exact path={APP_PATHS.ACCESSIONS}>
-        <AccessionsView setWithdrawalCreated={setWithdrawalCreated} />
-      </Route>
-      <Route exact path={APP_PATHS.ACCESSIONS2_NEW}>
-        <Accession2CreateView />
-      </Route>
-      <Route path={APP_PATHS.ACCESSIONS2_ITEM}>
-        <Accession2View />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path={APP_PATHS.ACCESSIONS} element={<AccessionsView setWithdrawalCreated={setWithdrawalCreated} />} />
+      <Route path={APP_PATHS.ACCESSIONS2_NEW} element={<Accession2CreateView />} />
+      <Route path={APP_PATHS.ACCESSIONS2_ITEM} element={<Accession2View />} />
+    </Routes>
   );
 };
 

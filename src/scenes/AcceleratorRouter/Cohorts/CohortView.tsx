@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { useHistory } from 'react-router';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Grid, useTheme } from '@mui/material';
 
@@ -19,7 +18,7 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 const CohortView = () => {
   const dispatch = useAppDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useStateLocation();
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
@@ -34,11 +33,11 @@ const CohortView = () => {
     void dispatch(requestCohort({ cohortId }));
   }, [cohortId, dispatch]);
 
-  const goToEditCohort = useCallback(
-    () =>
-      history.push(getLocation(APP_PATHS.ACCELERATOR_COHORTS_EDIT.replace(':cohortId', pathParams.cohortId), location)),
-    [history, location, pathParams.cohortId]
-  );
+  const goToEditCohort = useCallback(() => {
+    if (pathParams.cohortId) {
+      navigate(getLocation(APP_PATHS.ACCELERATOR_COHORTS_EDIT.replace(':cohortId', pathParams.cohortId), location));
+    }
+  }, [history, location, pathParams.cohortId]);
 
   const rightComponent = useMemo(
     () =>

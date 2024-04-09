@@ -107,7 +107,7 @@ export default function CheckIn(): JSX.Element {
         reloadData();
         setCheckInAllConfirmationDialogOpen(false);
         snackbar.toastSuccess(strings.ALL_ACCESSIONS_CHECKED_IN);
-        history.push(APP_PATHS.ACCESSIONS);
+        navigate(APP_PATHS.ACCESSIONS);
       } catch (e) {
         setBusy(false);
         snackbar.toastError();

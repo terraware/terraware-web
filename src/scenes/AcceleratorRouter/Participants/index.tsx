@@ -1,4 +1,4 @@
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 
@@ -8,20 +8,12 @@ import ParticipantsView from './ParticipantsView';
 
 const ParticipantsRouter = () => {
   return (
-    <Switch>
-      <Route exact path={APP_PATHS.ACCELERATOR_PARTICIPANTS_NEW}>
-        <ParticipantsNew />
-      </Route>
-      <Route exact path={APP_PATHS.ACCELERATOR_PARTICIPANTS_EDIT}>
-        <ParticipantsEdit />
-      </Route>
-      <Route exact path={APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW}>
-        <ParticipantsView />
-      </Route>
-      <Route path={'*'}>
-        <Redirect to={APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW} />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path={APP_PATHS.ACCELERATOR_PARTICIPANTS_NEW} element={<ParticipantsNew />} />
+      <Route path={APP_PATHS.ACCELERATOR_PARTICIPANTS_EDIT} element={<ParticipantsEdit />} />
+      <Route path={APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW} element={<ParticipantsView />} />
+      <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW} />} />
+    </Routes>
   );
 };
 

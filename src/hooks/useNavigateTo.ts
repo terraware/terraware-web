@@ -1,15 +1,15 @@
 import { useMemo } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 
 export default function useNavigateTo() {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return useMemo(
     () => ({
       goToModule: (projectId: number, moduleId: number) => {
-        history.push({
+        navigate({
           pathname: APP_PATHS.MODULES_FOR_PROJECT_CONTENT.replace(':projectId', `${projectId}`).replace(
             ':moduleId',
             `${moduleId}`
@@ -18,33 +18,33 @@ export default function useNavigateTo() {
       },
 
       goToParticipant: (participantId: number) => {
-        history.push({
+        navigate({
           pathname: APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW.replace(':participantId', `${participantId}`),
         });
       },
 
       goToParticipantsList: () => {
-        history.push({
+        navigate({
           pathname: APP_PATHS.ACCELERATOR_OVERVIEW,
           search: 'tab=participants',
         });
       },
 
       goToParticipantProject: (projectId: number) => {
-        history.push({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`) });
+        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`) });
       },
 
       goToParticipantProjectEdit: (projectId: number) => {
-        history.push({ pathname: APP_PATHS.ACCELERATOR_PROJECT_EDIT.replace(':projectId', `${projectId}`) });
+        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_EDIT.replace(':projectId', `${projectId}`) });
       },
 
       goToParticipantProjectList: () => {
-        history.push({
+        navigate({
           pathname: APP_PATHS.ACCELERATOR_OVERVIEW,
           search: 'tab=projects',
         });
       },
     }),
-    [history]
+    [navigate]
   );
 }

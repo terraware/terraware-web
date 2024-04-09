@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Typography } from '@mui/material';
 
@@ -20,7 +19,7 @@ export default function ProjectEditView(): JSX.Element {
   const dispatch = useAppDispatch();
 
   const snackbar = useSnackbar();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useStateLocation();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = Number(pathParams.projectId);
@@ -43,10 +42,11 @@ export default function ProjectEditView(): JSX.Element {
     [dispatch, projectId]
   );
 
-  const goToProject = useCallback(
-    () => history.push(getLocation(APP_PATHS.PROJECT_VIEW.replace(':projectId', pathParams.projectId), location)),
-    [history, location, pathParams.projectId]
-  );
+  const goToProject = useCallback(() => {
+    if (pathParams.projectId) {
+      navigate(getLocation(APP_PATHS.PROJECT_VIEW.replace(':projectId', pathParams.projectId), location));
+    }
+  }, [navigate, location, pathParams.projectId]);
 
   useEffect(() => {
     if (!projectUpdateRequest) {
