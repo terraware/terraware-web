@@ -24,7 +24,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import ParticipantsCellRenderer from './ParticipantsCellRenderer';
 
 type ParticipantType = Omit<ParticipantSearchResult, 'projects'> & {
-  project_name: string[];
+  'projects.name': string[];
 };
 
 const columns = (activeLocale: string | null): TableColumnType[] =>
@@ -36,7 +36,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           type: 'string',
         },
         {
-          key: 'project_name',
+          key: 'projects.name',
           name: strings.PROJECT,
           type: 'string',
         },
@@ -85,7 +85,7 @@ export default function ParticipantList(): JSX.Element {
         participantsResult.data.map(
           (participant: ParticipantSearchResult): ParticipantType => ({
             ...participant,
-            project_name: participant.projects.flatMap((project) => project.name),
+            'projects.name': participant.projects.flatMap((project) => project.name),
           })
         )
       );
