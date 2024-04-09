@@ -248,7 +248,6 @@ const EditView = () => {
               type={'number'}
               value={participantProjectRecord?.numCommunities}
             />
-            <ProjectFieldDisplay label={strings.DEAL_STAGE} value={participantProjectRecord?.dealStage} />
             <ProjectFieldMeta
               date={project?.createdTime}
               dateLabel={strings.CREATED_ON}

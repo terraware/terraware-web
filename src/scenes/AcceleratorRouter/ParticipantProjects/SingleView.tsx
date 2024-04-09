@@ -175,11 +175,6 @@ const SingleView = () => {
                 value={participantProject?.numCommunities}
                 rightBorder={!isMobile}
               />
-              <ProjectFieldDisplay
-                label={strings.DEAL_STAGE}
-                value={participantProject?.dealStage}
-                rightBorder={!isMobile}
-              />
               <ProjectFieldMeta
                 date={project?.createdTime}
                 dateLabel={strings.CREATED_ON}
