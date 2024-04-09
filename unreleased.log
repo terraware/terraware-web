@@ -1,3 +1,4 @@
+d9203d5084 SW-5191: Sorting Project tables in Console Overview crashes (Follow-up to fix Participants table sort) (#2499)
 530c88bcd3 SW-5125: FE - Full Module View (#2467)
 0577249d66 SW-5192 Add participant flow UX tweaks when there are no additional accelerator orgs to select from (#2496)
 9662bce36c SW-5178: Project: Country abbreviation appears in Detail View instead of full country name (#2494)
