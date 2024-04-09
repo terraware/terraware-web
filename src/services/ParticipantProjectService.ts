@@ -39,11 +39,7 @@ const COHORT_ID_EXISTS_PREDICATE: SearchNodePayload = {
   },
 };
 
-const getSearchParams = (
-  search?: SearchNodePayload,
-  sortOrder?: SearchSortOrder,
-  isCsv?: boolean
-): SearchRequestPayload => {
+const getSearchParams = (search?: SearchNodePayload, sortOrder?: SearchSortOrder): SearchRequestPayload => {
   const searchParams: SearchRequestPayload = {
     prefix: 'projects',
     fields: [
