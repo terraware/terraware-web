@@ -27,6 +27,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import { APP_PATHS } from '../constants';
 import DialogBox from './common/ScrollableDialogBox';
+import TextField from './common/Textfield/Textfield';
 
 const useStyles = makeStyles((theme: Theme) => ({
   otherDetails: {

@@ -29,7 +29,7 @@ export default function TerrawareRouter(props: TerrawareRouterProps) {
     if (organizations?.length === 0 && MINIMAL_USER_ROUTES.indexOf(location.pathname) === -1) {
       navigate(APP_PATHS.WELCOME);
     }
-  }, [history, location, organizations]);
+  }, [navigate, location, organizations]);
 
   return organizations.length === 0 ? <NoOrgRouter /> : <OrgRouter {...props} />;
 }

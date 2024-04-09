@@ -90,7 +90,7 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
 
       setSelectedTab(newValue as ReportsViewTabs);
     },
-    [history]
+    [navigate]
   );
 
   const tabHeaderProps = useMemo(

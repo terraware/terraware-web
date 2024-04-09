@@ -31,10 +31,19 @@ export default function ReportView(): JSX.Element {
 
   const initialReportFiles = useReportFiles(report);
 
-  const reportIdInt = parseInt(reportId, 10);
+  const reportIdInt = reportId ? parseInt(reportId, 10) : -1;
   const reportName = `Report (${report?.year}-Q${report?.quarter}) ` + (report?.projectName ?? '');
 
   useEffect(() => {
+    const getReport = async () => {
+      const result = await ReportService.getReport(reportIdInt);
+      if (result.requestSucceeded) {
+        setReport(result.report);
+      } else {
+        snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
+      }
+    };
+
     if (reportIdInt) {
       void getReport();
     }

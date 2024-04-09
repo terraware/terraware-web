@@ -37,7 +37,7 @@ const VotingEdit = () => {
     navigate(
       getLocation(APP_PATHS.ACCELERATOR_VOTING.replace(':projectId', `${projectId}`), location, query.toString())
     );
-  }, [history, location, projectId, query]);
+  }, [navigate, location, projectId, query]);
 
   const onSave = () => {
     if (!phaseVotes) {

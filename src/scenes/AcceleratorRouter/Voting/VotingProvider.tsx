@@ -32,7 +32,7 @@ const VotingProvider = ({ children }: Props): JSX.Element => {
 
   const goToProjects = useCallback(() => {
     navigate({ pathname: APP_PATHS.ACCELERATOR_OVERVIEW }); // TODO switch to project management lists page
-  }, [history]);
+  }, [navigate]);
 
   // Redirect to project management list page if projectId is invalid.
   // Otherwise fetch the votes.

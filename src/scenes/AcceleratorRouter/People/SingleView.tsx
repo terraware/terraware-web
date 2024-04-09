@@ -28,7 +28,7 @@ const SingleView = () => {
 
   const goToEditPerson = useCallback(
     () => navigate(getLocation(APP_PATHS.ACCELERATOR_PERSON_EDIT.replace(':userId', `${userId}`), location)),
-    [history, location, userId]
+    [navigate, location, userId]
   );
 
   const rightComponent = useMemo(

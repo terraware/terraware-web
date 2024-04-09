@@ -108,7 +108,7 @@ export default function ParticipantList(): JSX.Element {
 
   const goToNewParticipant = useCallback(() => {
     navigate(APP_PATHS.ACCELERATOR_PARTICIPANTS_NEW);
-  }, [history]);
+  }, [navigate]);
 
   const cohorts = useMemo<Record<string, string>>(
     () =>

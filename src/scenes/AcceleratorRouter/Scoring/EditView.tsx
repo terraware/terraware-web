@@ -36,11 +36,11 @@ const ScorecardEditView = () => {
 
   const goToVoting = useCallback(() => {
     navigate({ pathname: APP_PATHS.ACCELERATOR_VOTING.replace(':projectId', `${projectId}`) });
-  }, [history, projectId]);
+  }, [navigate, projectId]);
 
   const goToScorecardView = useCallback(() => {
     navigate({ pathname: APP_PATHS.ACCELERATOR_SCORING.replace(':projectId', `${projectId}`) });
-  }, [history, projectId]);
+  }, [navigate, projectId]);
 
   const onCancel = useCallback(() => {
     if (hasData === false) {

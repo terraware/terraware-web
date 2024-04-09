@@ -29,7 +29,7 @@ const VotingView = () => {
     navigate(
       getLocation(APP_PATHS.ACCELERATOR_VOTING_EDIT.replace(':projectId', `${projectId}`), location, query.toString())
     );
-  }, [history, location, projectId, query]);
+  }, [navigate, location, projectId, query]);
 
   // Edit Votes button
   const editVotes = useMemo(

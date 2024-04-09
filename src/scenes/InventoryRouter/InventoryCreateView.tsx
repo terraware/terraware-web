@@ -55,7 +55,7 @@ export default function InventoryCreateView(): JSX.Element {
 
   const goToInventory = useCallback(() => {
     navigate(inventoryLocation);
-  }, [history, inventoryLocation]);
+  }, [navigate, inventoryLocation]);
 
   useEffect(() => {
     if (batchesRequest?.status === 'success') {
@@ -92,7 +92,7 @@ export default function InventoryCreateView(): JSX.Element {
       snackbar.toastError(strings.GENERIC_ERROR);
       setDoValidateBatch(false);
     }
-  }, [batchesRequest, history, inventoryLocation, originInventoryViewType, snackbar]);
+  }, [batchesRequest, navigate, inventoryLocation, originInventoryViewType, snackbar]);
 
   return (
     <TfMain>

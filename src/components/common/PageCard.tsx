@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -11,12 +11,6 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Link from './Link';
 import Icon from './icon/Icon';
 import { IconName } from './icon/icons';
-import { useNavigate } from 'react-router-dom';
-import Button from 'src/components/common/button/Button';
-import { makeStyles } from '@mui/styles';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
-import stopPropagation from 'src/utils/stopPropagationEvent';
-import Link from './Link';
 
 export type LinkStyle = 'plain' | 'button';
 

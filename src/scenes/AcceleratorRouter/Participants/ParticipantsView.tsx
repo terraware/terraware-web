@@ -42,7 +42,7 @@ export default function ParticipantsView(): JSX.Element {
 
   const goToEdit = useCallback(() => {
     navigate(APP_PATHS.ACCELERATOR_PARTICIPANTS_EDIT.replace(':participantId', `${participantId}`));
-  }, [history, participantId]);
+  }, [navigate, participantId]);
 
   const onOptionItemClick = useCallback((optionItem: DropdownItem) => {
     if (optionItem.value === 'remove-participant') {

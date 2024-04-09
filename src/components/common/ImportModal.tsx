@@ -127,7 +127,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
   const [error, setError] = useState<JSX.Element>();
   const [loading, setLoading] = useState(false);
   const [fileStatus, setFileStatus] = useState<GetUploadStatusResponsePayload>();
-  const [uploadInterval, setUploadInterval] = useState<NodeJS.Timer>();
+  const [uploadInterval, setUploadInterval] = useState<ReturnType<typeof setInterval>>();
   const [completed, setCompleted] = useState(false);
   const [warning, setWarning] = useState(false);
   const [uploadId, setUploadId] = useState<number>();

@@ -42,7 +42,7 @@ export default function useFetchDeliverable({ deliverableId, projectId }: Props)
 
   const goToDeliverables = useCallback(() => {
     navigate(isAcceleratorRoute ? APP_PATHS.ACCELERATOR_DELIVERABLES : APP_PATHS.DELIVERABLES);
-  }, [history, isAcceleratorRoute]);
+  }, [navigate, isAcceleratorRoute]);
 
   useEffect(() => {
     if (!isNaN(deliverableId)) {

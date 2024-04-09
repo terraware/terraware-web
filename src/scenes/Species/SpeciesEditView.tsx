@@ -66,7 +66,7 @@ export default function SpeciesEditView(): JSX.Element {
     if (selectedOrganization && speciesId) {
       getSpecies();
     }
-  }, [speciesId, selectedOrganization, history]);
+  }, [speciesId, selectedOrganization, navigate]);
 
   useEffect(() => {
     setRecord({

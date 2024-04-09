@@ -1,11 +1,21 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
-import { Box, Card, CircularProgress, Container, Grid, useTheme } from '@mui/material';
+import { Box, CircularProgress, Container, Grid, useTheme } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Link, useNavigate } from 'react-router-dom';
-import SeedBankService, { DEFAULT_SEED_SEARCH_FILTERS, FieldValuesMap } from 'src/services/SeedBankService';
-import { SearchNodePayload, SearchResponseElement, SearchCriteria, SearchSortOrder } from 'src/types/Search';
+import { DropdownItem, Message } from '@terraware/web-components';
+import { DatabaseColumn } from '@terraware/web-components/components/table/types';
+import _ from 'lodash';
+
+import PageHeader from 'src/components/PageHeader';
+import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton';
+import Card from 'src/components/common/Card';
+import EmptyMessage from 'src/components/common/EmptyMessage';
+import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
+import OptionsMenu from 'src/components/common/OptionsMenu';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import { BaseTable as Table } from 'src/components/common/table';
 import { SortOrder as Order } from 'src/components/common/table/sort';
@@ -17,10 +27,11 @@ import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { PreferencesService } from 'src/services';
+import SeedBankService, { DEFAULT_SEED_SEARCH_FILTERS, FieldValuesMap } from 'src/services/SeedBankService';
 import strings from 'src/strings';
 import { Facility } from 'src/types/Facility';
 import { Project } from 'src/types/Project';
-import { SearchResponseElementWithId } from 'src/types/Search';
+import { SearchCriteria, SearchNodePayload, SearchResponseElementWithId, SearchSortOrder } from 'src/types/Search';
 import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { isAdmin } from 'src/utils/organization';
@@ -37,12 +48,6 @@ import Filters from './Filters';
 import ImportAccessionsModal from './ImportAccessionsModal';
 import SearchCellRenderer from './TableCellRenderer';
 import { columnsIndexed } from './columns';
-import { DropdownItem, Message } from '@terraware/web-components';
-import TfMain from 'src/components/common/TfMain';
-import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import PageHeader from 'src/components/PageHeader';
-import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton';
-import EmptyMessage from 'src/components/common/EmptyMessage';
 
 interface StyleProps {
   isMobile: boolean;
@@ -357,9 +362,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
       query.delete('facilityId');
     }
 
-
-if ((facilityId && selectedOrganization) || subLocationName) {
-      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+    if ((facilityId && selectedOrganization) || subLocationName) {
+      navigate(getLocation(location.pathname, location, query.toString()), {replace: true});
       setSearchCriteria(newSearchCriteria);
 
       // add seed bank and sub-location columns to show the filtered values as needed
@@ -751,7 +755,7 @@ if ((facilityId && selectedOrganization) || subLocationName) {
         </PageHeaderWrapper>
         <Container ref={contentRef} maxWidth={false} className={classes.mainContainer}>
           {selectedOrganization && unfilteredResults ? (
-            <Card flushMobile>
+            <Card>
               {isOnboarded ? (
                 <>
                   <Box

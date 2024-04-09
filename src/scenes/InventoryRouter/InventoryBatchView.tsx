@@ -70,7 +70,7 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
   const { batchId } = useParams<{ batchId: string }>();
   const { speciesId } = useParams<{ speciesId: string }>();
   const { nurseryId } = useParams<{ nurseryId: string }>();
-  const batch = batchId ? useAppSelector(selectBatch(batchId)) : undefined;
+  const batch = useAppSelector(selectBatch(batchId || -1)) 
   const tab = initializeTab(query.get('tab'));
   const [activeTab, setActiveTab] = useState<string>(tab);
   const navigate = useNavigate();

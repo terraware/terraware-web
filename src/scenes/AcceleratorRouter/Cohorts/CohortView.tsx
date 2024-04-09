@@ -37,7 +37,7 @@ const CohortView = () => {
     if (pathParams.cohortId) {
       navigate(getLocation(APP_PATHS.ACCELERATOR_COHORTS_EDIT.replace(':cohortId', pathParams.cohortId), location));
     }
-  }, [history, location, pathParams.cohortId]);
+  }, [navigate, location, pathParams.cohortId]);
 
   const rightComponent = useMemo(
     () =>

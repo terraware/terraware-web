@@ -24,6 +24,7 @@ import {
 } from 'src/components/Reports/LocationSelection/util';
 import { overWordLimit } from 'src/utils/text';
 import { makeStyles } from '@mui/styles';
+import useReportFiles from './useReportFiles';
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -57,7 +58,7 @@ export default function ReportEdit(): JSX.Element {
 
   const initialReportFiles = useReportFiles(report, setUpdatedReportFiles);
 
-  const reportIdInt = parseInt(reportId, 10);
+  const reportIdInt = reportId ? parseInt(reportId, 10) : -1;
   const reportName = `Report (${report?.year}-Q${report?.quarter}) ` + (report?.projectName ?? '');
 
   useEffect(() => {
@@ -90,7 +91,7 @@ export default function ReportEdit(): JSX.Element {
   const updateFiles = async () => {
     if (reportIdInt) {
       await Promise.all(
-        initialReportFiles?.map((f) => {
+        initialReportFiles?.map((f: { id: number; filename: string; }) => {
           if (!updatedReportFiles?.includes(f)) {
             return ReportService.deleteReportFile(reportIdInt, f.id);
           }

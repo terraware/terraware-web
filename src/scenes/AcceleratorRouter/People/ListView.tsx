@@ -85,7 +85,7 @@ const PeopleView = () => {
 
   const goToAddPerson = useCallback(() => {
     navigate({ pathname: APP_PATHS.ACCELERATOR_PERSON_NEW });
-  }, [history]);
+  }, [navigate]);
 
   const dispatchSearchRequest = useCallback(
     (locale?: string | null, search?: SearchNodePayload, searchSortOrder?: SearchSortOrder) => {

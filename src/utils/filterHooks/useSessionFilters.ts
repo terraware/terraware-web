@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { replace } from 'lodash';
-
 import {
   FiltersType,
   getFiltersFromQuery,
@@ -31,9 +29,9 @@ export const useSessionFilters = (viewIdentifier: string, writeToQuery = true) =
 
       resetQuery(query, viewIdentifier);
       writeFiltersToQuery(query, viewIdentifier, filters);
-      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+      navigate(getLocation(location.pathname, location, query.toString()), {replace: true});
     },
-    [history, location, query, viewIdentifier]
+    [navigate, location, query, viewIdentifier]
   );
 
   // Query overrides session, pull filters from query and session, write merged filters back to session
@@ -55,10 +53,10 @@ export const useSessionFilters = (viewIdentifier: string, writeToQuery = true) =
     writeFiltersToSession(viewIdentifier, mergedFilters);
 
     writeFiltersToQuery(query, viewIdentifier, mergedFilters);
-    navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+    navigate(getLocation(location.pathname, location, query.toString()));
 
     setIsInitialized(true);
-  }, [history, isInitialized, location, query, viewIdentifier]);
+  }, [navigate, isInitialized, location, query, viewIdentifier]);
 
   useEffect(() => {
     if (isInitialized) {

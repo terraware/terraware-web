@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
-import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePages/EmptyStateContent';
-import PageHeader from 'src/components/seeds/PageHeader';
-import { APP_PATHS } from 'src/constants';
-import strings from 'src/strings';
-import ImportSpeciesModal, { downloadCsvTemplate } from '../Species/ImportSpeciesModal';
-import TfMain from '../common/TfMain';
 
 import { Container, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';

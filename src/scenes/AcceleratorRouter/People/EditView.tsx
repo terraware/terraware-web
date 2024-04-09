@@ -27,7 +27,7 @@ const EditView = () => {
 
   const goToViewPerson = useCallback(
     () => navigate(getLocation(APP_PATHS.ACCELERATOR_PERSON.replace(':userId', `${userId}`), location)),
-    [history, location, userId]
+    [navigate, location, userId]
   );
 
   const handleOnSave = useCallback(

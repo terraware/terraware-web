@@ -79,7 +79,7 @@ const CohortsListView = ({ filterModifiers, extraTableFilters }: CohortsListView
       pathname: APP_PATHS.ACCELERATOR_COHORTS_NEW,
     };
     navigate(newProjectLocation);
-  }, [history]);
+  }, [navigate]);
 
   const dispatchSearchRequest = useCallback(
     (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => {
