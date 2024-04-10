@@ -29,7 +29,6 @@ const ModuleEventView = () => {
   const module = useAppSelector(selectModule(moduleId));
   const event = useAppSelector(selectModuleEvent(eventId));
   const project = useAppSelector(selectProject(projectId));
-  const eventIsLiveSession = event?.name === strings.LIVE_SESSION;
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -81,8 +80,6 @@ const ModuleEventView = () => {
                   {event.eventTime ? getLongDateTime(event.eventTime, activeLocale) : ''}
                 </Typography>
 
-                {!eventIsLiveSession && <Box dangerouslySetInnerHTML={{ __html: event?.description || '' }} />}
-
                 <Box marginBottom={theme.spacing(2)}>
                   <Button
                     label={strings.formatString(strings.JOIN_EVENT_NAME, event.name)?.toString()}
@@ -113,18 +110,18 @@ const ModuleEventView = () => {
 
             <Grid container spacing={theme.spacing(1)}>
               <Grid item xs sx={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
-                {eventIsLiveSession && <Box dangerouslySetInnerHTML={{ __html: event?.description || '' }} />}
+                <hr
+                  style={{
+                    border: 'none',
+                    borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+                    margin: `${theme.spacing(3)} 0`,
+                  }}
+                />
+
+                <Box dangerouslySetInnerHTML={{ __html: event?.description || '' }} />
 
                 {event?.additionalLinks?.length && (
                   <>
-                    <hr
-                      style={{
-                        border: 'none',
-                        borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-                        marginBottom: theme.spacing(2),
-                      }}
-                    />
-
                     {event?.additionalLinks?.map((link, index) => (
                       <Box key={index} marginBottom={theme.spacing(2)}>
                         <Link fontSize='16px' to='#'>
