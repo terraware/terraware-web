@@ -4,7 +4,6 @@ import { MenuItem, MenuList, Popover, Typography, useTheme } from '@mui/material
 import { Button, Tooltip } from '@terraware/web-components';
 
 import strings from 'src/strings';
-
 import { NurseryWithdrawalPurposes } from 'src/types/Batch';
 
 export type WithdrawalHistoryMenuProps = {
@@ -14,7 +13,7 @@ export type WithdrawalHistoryMenuProps = {
 };
 
 export default function WithdrawalHistoryMenu(props: WithdrawalHistoryMenuProps): JSX.Element {
-  const { withdrawal, reassign , undo} = props;
+  const { withdrawal, reassign, undo } = props;
   const theme = useTheme();
   const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLButtonElement | null>(null);
   const openMenu = Boolean(menuAnchorEl);
@@ -30,7 +29,7 @@ export default function WithdrawalHistoryMenu(props: WithdrawalHistoryMenuProps)
 
   const openUndoWithdrawalHandler = (event: any) => {
     closeMenuHandler();
-    undo()
+    undo();
   };
 
   return (
@@ -45,17 +44,15 @@ export default function WithdrawalHistoryMenu(props: WithdrawalHistoryMenuProps)
         }}
       >
         <MenuList sx={{ padding: theme.spacing(2, 0) }}>
-          { withdrawal.purpose === OUTPLANT && withdrawal.plantingSubzoneNames && withdrawal.hasReassignments === 'false' && 
-          <MenuItem
-            id='reassign'
-            onClick={reassign}
-            sx={{ padding: theme.spacing(1, 2) }}
-          >
-            <Typography color={theme.palette.TwClrBaseGray800} paddingLeft={1}>
-              {strings.REASSIGN}
-            </Typography>
-          </MenuItem>
-           }
+          {withdrawal.purpose === OUTPLANT &&
+            withdrawal.plantingSubzoneNames &&
+            withdrawal.hasReassignments === 'false' && (
+              <MenuItem id='reassign' onClick={reassign} sx={{ padding: theme.spacing(1, 2) }}>
+                <Typography color={theme.palette.TwClrBaseGray800} paddingLeft={1}>
+                  {strings.REASSIGN}
+                </Typography>
+              </MenuItem>
+            )}
           <MenuItem
             id='undoWithdrawal'
             onClick={(event) => openUndoWithdrawalHandler(event)}
