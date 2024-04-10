@@ -21,6 +21,18 @@ const mockEvents: ModuleEvent[] = [
     id: 1,
     moduleId: 6,
     name: 'Live Session',
+    links: [{ label: 'Live Session Slides' }, { label: 'Live Session Recording' }],
+    callDescription: `
+      <div>
+        <p>Clicking "Join" will open up a browser window to join a Zoom video call.</p>
+        <p>For this Live Session you will need:</p>
+        <ul>
+          <li>An internet connection – broadband wired or wireless (3G or 4G/LTE)</li>
+          <li>Speakers and a microphone – built-in, USB plug-in, or wireless Bluetooth</li>
+          <li>A webcam or HD webcam - built-in, USB plug-in</li>
+        </ul>
+      </div>
+    `,
     description: `
       <div>
         <h3>Details</h3>
@@ -40,7 +52,6 @@ const mockEvents: ModuleEvent[] = [
         <p>Damien Kuhn is an agronomist and forestry engineer from AgroParisTech, where he specialized in environmental economics. He has spent the past 16 years working on forestry and climate projects across Africa, Latin America, and Southeast Asia. As former COO of Kinomé, he developed partnerships worldwide and managing a portfolio of community-based forestry projects. He has also been an advisor to governments and companies on their climate, forestry, and agricultural strategies, including as lead expert for four countries' Nationally Determined Contributions under the Paris Climate Accords.</p>
       </div>
     `,
-    links: [{ label: 'Live Session Slides' }, { label: 'Live Session Recording' }],
   },
   {
     eventTime: '2024-03-14T22:00:00.000Z',
@@ -48,14 +59,25 @@ const mockEvents: ModuleEvent[] = [
     id: 2,
     moduleId: 6,
     name: '1:1 Session',
+    links: [{ label: '1:1 Session Slides' }, { label: '1:1 Session Recording' }],
+    additionalLinks: [{ label: 'Preparation Materials' }, { label: 'Additional Resources' }],
+    callDescription: `
+      <div>
+        <p>Clicking "Join" will open up a browser window to join a Zoom video call.</p>
+        <p>For this Live Session you will need:</p>
+        <ul>
+          <li>An internet connection – broadband wired or wireless (3G or 4G/LTE)</li>
+          <li>Speakers and a microphone – built-in, USB plug-in, or wireless Bluetooth</li>
+          <li>A webcam or HD webcam - built-in, USB plug-in</li>
+        </ul>
+      </div>
+    `,
     description: `
       <div>
         <p>This week's one-on-one session will focus on reviewing Budget Template.</p>
         <p>Please ensure to complete all the Stakeholders & Co-Benefits questions for the Feasibility Study by Friday 3rd November.</p>
       </div>
     `,
-    links: [{ label: '1:1 Session Slides' }, { label: '1:1 Session Recording' }],
-    additionalLinks: [{ label: 'Preparation Materials' }, { label: 'Additional Resources' }],
   },
 ];
 

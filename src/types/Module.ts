@@ -18,6 +18,7 @@ export type ModuleContent = {
 
 export type ModuleEvent = {
   additionalLinks?: { label: string }[];
+  callDescription?: string;
   description?: string;
   eventTime: string;
   eventURL?: string;

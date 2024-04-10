@@ -59,7 +59,7 @@ const ModuleEventView = () => {
       title={<ModuleViewTitle module={module} project={project} />}
     >
       <Card
-        style={{
+        sx={{
           borderRadius: '24px',
           boxShadow: 'none',
           display: 'flex',
@@ -70,60 +70,73 @@ const ModuleEventView = () => {
         }}
       >
         {event && (
-          <Grid container spacing={theme.spacing(1)}>
-            <Grid item xs style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
-              <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
-                {event.name}
-              </Typography>
+          <>
+            <Grid container spacing={theme.spacing(1)}>
+              <Grid item xs={6} sx={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
+                <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
+                  {event.name}
+                </Typography>
 
-              <Typography marginBottom={theme.spacing(1)}>
-                {event.eventTime ? getLongDateTime(event.eventTime, activeLocale) : ''}
-              </Typography>
+                <Typography marginBottom={theme.spacing(1)}>
+                  {event.eventTime ? getLongDateTime(event.eventTime, activeLocale) : ''}
+                </Typography>
 
-              {!eventIsLiveSession && <Box dangerouslySetInnerHTML={{ __html: event?.description || '' }} />}
+                {!eventIsLiveSession && <Box dangerouslySetInnerHTML={{ __html: event?.description || '' }} />}
 
-              <Box marginBottom={theme.spacing(2)}>
-                <Button
-                  label={strings.formatString(strings.JOIN_EVENT_NAME, event.name)?.toString()}
-                  onClick={() => {
-                    if (event.eventURL) {
-                      window.open(event.eventURL, '_blank', 'noopener noreferrer');
-                    }
-                  }}
-                />
-              </Box>
-
-              {event?.links?.map((link, index) => (
-                <Box key={index} marginBottom={theme.spacing(2)}>
-                  <Link fontSize='16px' to='#'>
-                    {link.label}
-                  </Link>
-                </Box>
-              ))}
-
-              {eventIsLiveSession && <Box dangerouslySetInnerHTML={{ __html: event?.description || '' }} />}
-
-              {event?.additionalLinks?.length && (
-                <>
-                  <hr
-                    style={{
-                      border: 'none',
-                      borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-                      marginBottom: theme.spacing(2),
+                <Box marginBottom={theme.spacing(2)}>
+                  <Button
+                    label={strings.formatString(strings.JOIN_EVENT_NAME, event.name)?.toString()}
+                    onClick={() => {
+                      if (event.eventURL) {
+                        window.open(event.eventURL, '_blank', 'noopener noreferrer');
+                      }
                     }}
                   />
+                </Box>
 
-                  {event?.additionalLinks?.map((link, index) => (
-                    <Box key={index} marginBottom={theme.spacing(2)}>
-                      <Link fontSize='16px' to='#'>
-                        {link.label}
-                      </Link>
-                    </Box>
-                  ))}
-                </>
-              )}
+                {event?.links?.map((link, index) => (
+                  <Box key={index} marginBottom={theme.spacing(2)}>
+                    <Link fontSize='16px' to='#'>
+                      {link.label}
+                    </Link>
+                  </Box>
+                ))}
+              </Grid>
+
+              <Grid item xs={6} sx={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
+                <Box
+                  dangerouslySetInnerHTML={{ __html: event?.callDescription || '' }}
+                  sx={{ backgroundColor: theme.palette.TwClrBgSecondary, borderRadius: '8px', padding: '16px' }}
+                />
+              </Grid>
             </Grid>
-          </Grid>
+
+            <Grid container spacing={theme.spacing(1)}>
+              <Grid item xs sx={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
+                {eventIsLiveSession && <Box dangerouslySetInnerHTML={{ __html: event?.description || '' }} />}
+
+                {event?.additionalLinks?.length && (
+                  <>
+                    <hr
+                      style={{
+                        border: 'none',
+                        borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+                        marginBottom: theme.spacing(2),
+                      }}
+                    />
+
+                    {event?.additionalLinks?.map((link, index) => (
+                      <Box key={index} marginBottom={theme.spacing(2)}>
+                        <Link fontSize='16px' to='#'>
+                          {link.label}
+                        </Link>
+                      </Box>
+                    ))}
+                  </>
+                )}
+              </Grid>
+            </Grid>
+          </>
         )}
       </Card>
     </PageWithModuleTimeline>
