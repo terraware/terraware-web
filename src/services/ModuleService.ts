@@ -74,6 +74,7 @@ const mockEvents: ModuleEvent[] = [
     `,
     description: `
       <div>
+        <h3>Details</h3>
         <p>This week's one-on-one session will focus on reviewing Budget Template.</p>
         <p>Please ensure to complete all the Stakeholders & Co-Benefits questions for the Feasibility Study by Friday 3rd November.</p>
       </div>
