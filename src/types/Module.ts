@@ -13,17 +13,18 @@ export type ModuleContent = {
   dueDate: string | null;
   id: number;
   moduleId: number;
+  url: string;
   title: string;
 };
 
 export type ModuleEvent = {
-  additionalLinks?: { label: string }[];
+  additionalLinks?: { label: string; url: string }[];
   callDescription?: string;
   description?: string;
   eventTime: string;
   eventURL?: string;
   id: number;
-  links?: { label: string }[];
+  links?: { label: string; url: string }[];
   moduleId: number;
   name: string;
 };

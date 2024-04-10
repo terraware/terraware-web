@@ -100,7 +100,14 @@ const ModuleContentView = () => {
 
                   {module.contents.map((content) => (
                     <ModuleContentSection key={content.id}>
-                      <Link fontSize='16px' to='#'>
+                      <Link
+                        fontSize='16px'
+                        onClick={() => {
+                          if (content.url) {
+                            window.open(content.url, '_blank', 'noopener noreferrer');
+                          }
+                        }}
+                      >
                         {content.title}
                       </Link>
                       {content.dueDate && (

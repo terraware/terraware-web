@@ -21,7 +21,10 @@ const mockEvents: ModuleEvent[] = [
     id: 1,
     moduleId: 6,
     name: 'Live Session',
-    links: [{ label: 'Live Session Slides' }, { label: 'Live Session Recording' }],
+    links: [
+      { label: 'Live Session Slides', url: 'https://google.com/' },
+      { label: 'Live Session Recording', url: 'https://google.com/' },
+    ],
     callDescription: `
       <div>
         <p>Clicking "Join" will open up a browser window to join a Zoom video call.</p>
@@ -59,8 +62,14 @@ const mockEvents: ModuleEvent[] = [
     id: 2,
     moduleId: 6,
     name: '1:1 Session',
-    links: [{ label: '1:1 Session Slides' }, { label: '1:1 Session Recording' }],
-    additionalLinks: [{ label: 'Preparation Materials' }, { label: 'Additional Resources' }],
+    links: [
+      { label: '1:1 Session Slides', url: 'https://google.com/' },
+      { label: '1:1 Session Recording', url: 'https://google.com/' },
+    ],
+    additionalLinks: [
+      { label: 'Preparation Materials', url: 'https://google.com/' },
+      { label: 'Additional Resources', url: 'https://google.com/' },
+    ],
     callDescription: `
       <div>
         <p>Clicking "Join" will open up a browser window to join a Zoom video call.</p>
@@ -105,6 +114,7 @@ const mockModules: Module[] = [
         id: 1,
         moduleId: 6,
         title: 'Module 6 Feasibility Questions',
+        url: 'https://google.com/',
       },
       {
         content: '',
@@ -112,6 +122,7 @@ const mockModules: Module[] = [
         id: 2,
         moduleId: 6,
         title: 'Preparation Materials',
+        url: 'https://google.com/',
       },
       {
         content: '',
@@ -119,6 +130,7 @@ const mockModules: Module[] = [
         id: 3,
         moduleId: 6,
         title: 'Live Session Slides',
+        url: 'https://google.com/',
       },
       {
         content: `
@@ -138,6 +150,7 @@ const mockModules: Module[] = [
         id: 4,
         moduleId: 6,
         title: 'Additional Resources',
+        url: 'https://google.com/',
       },
     ],
     events: [
@@ -181,6 +194,7 @@ const mockModules: Module[] = [
         id: 1,
         moduleId: 6,
         title: 'Module 6 Feasibility Questions',
+        url: 'https://google.com/',
       },
       {
         content: '',
@@ -188,6 +202,7 @@ const mockModules: Module[] = [
         id: 2,
         moduleId: 6,
         title: 'Preparation Materials',
+        url: 'https://google.com/',
       },
       {
         content: '',
@@ -195,6 +210,7 @@ const mockModules: Module[] = [
         id: 3,
         moduleId: 6,
         title: 'Live Session Slides',
+        url: 'https://google.com/',
       },
       {
         content: `
@@ -214,6 +230,7 @@ const mockModules: Module[] = [
         id: 4,
         moduleId: 6,
         title: 'Additional Resources',
+        url: 'https://google.com/',
       },
     ],
     events: [
@@ -255,6 +272,7 @@ const mockModules: Module[] = [
         id: 1,
         moduleId: 6,
         title: 'Module 6 Feasibility Questions',
+        url: 'https://google.com/',
       },
       {
         content: '',
@@ -262,6 +280,7 @@ const mockModules: Module[] = [
         id: 2,
         moduleId: 6,
         title: 'Preparation Materials',
+        url: 'https://google.com/',
       },
       {
         content: '',
@@ -269,6 +288,7 @@ const mockModules: Module[] = [
         id: 3,
         moduleId: 6,
         title: 'Live Session Slides',
+        url: 'https://google.com/',
       },
       {
         content: `
@@ -288,6 +308,7 @@ const mockModules: Module[] = [
         id: 4,
         moduleId: 6,
         title: 'Additional Resources',
+        url: 'https://google.com/',
       },
     ],
     events: [

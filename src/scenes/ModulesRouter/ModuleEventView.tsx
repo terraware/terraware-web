@@ -93,7 +93,14 @@ const ModuleEventView = () => {
 
                 {event?.links?.map((link, index) => (
                   <Box key={index} marginBottom={theme.spacing(2)}>
-                    <Link fontSize='16px' to='#'>
+                    <Link
+                      fontSize='16px'
+                      onClick={() => {
+                        if (link.url) {
+                          window.open(link.url, '_blank', 'noopener noreferrer');
+                        }
+                      }}
+                    >
                       {link.label}
                     </Link>
                   </Box>
@@ -124,7 +131,14 @@ const ModuleEventView = () => {
                   <>
                     {event?.additionalLinks?.map((link, index) => (
                       <Box key={index} marginBottom={theme.spacing(2)}>
-                        <Link fontSize='16px' to='#'>
+                        <Link
+                          fontSize='16px'
+                          onClick={() => {
+                            if (link.url) {
+                              window.open(link.url, '_blank', 'noopener noreferrer');
+                            }
+                          }}
+                        >
                           {link.label}
                         </Link>
                       </Box>
