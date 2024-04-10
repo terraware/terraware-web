@@ -128,6 +128,7 @@ export default function EditableMapDraw({ boundary, onBoundaryChanged, setMode, 
       const initialMode = boundary ? 'simple_select' : 'draw_polygon';
 
       setDrawMode(initialMode);
+      // @ts-ignore
       setMapRef(map);
 
       return new MapboxDraw({ defaultMode: initialMode, ...defaultProps, ...otherProps });

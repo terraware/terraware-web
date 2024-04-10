@@ -447,7 +447,7 @@ export default function Map(props: MapProps): JSX.Element {
           mapStyle={MapViewStyles[mapViewStyle]}
           initialViewState={{
             bounds: hasEntities ? [options.bbox.lowerLeft, options.bbox.upperRight] : undefined,
-            fitBoundsOptions: hasEntities ? { padding: 20, linear: true } : undefined,
+            fitBoundsOptions: hasEntities ? { padding: 20 } : undefined,
           }}
           interactiveLayerIds={layerIds}
           onError={onMapError}
