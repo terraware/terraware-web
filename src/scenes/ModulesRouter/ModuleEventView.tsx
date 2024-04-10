@@ -103,7 +103,7 @@ const ModuleEventView = () => {
               <Grid item xs={6} sx={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
                 <Box
                   dangerouslySetInnerHTML={{ __html: event?.callDescription || '' }}
-                  sx={{ backgroundColor: theme.palette.TwClrBgSecondary, borderRadius: '8px', padding: '16px' }}
+                  sx={{ backgroundColor: theme.palette.TwClrBgSecondary, borderRadius: '8px', padding: '8px 16px' }}
                 />
               </Grid>
             </Grid>
