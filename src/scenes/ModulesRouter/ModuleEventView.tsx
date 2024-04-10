@@ -69,85 +69,81 @@ const ModuleEventView = () => {
         }}
       >
         {event && (
-          <>
-            <Grid container spacing={theme.spacing(1)}>
-              <Grid item xs={6} sx={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
-                <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
-                  {event.name}
-                </Typography>
+          <Grid container spacing={theme.spacing(1)}>
+            <Grid item xs={6} style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
+              <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
+                {event.name}
+              </Typography>
 
-                <Typography marginBottom={theme.spacing(1)}>
-                  {event.eventTime ? getLongDateTime(event.eventTime, activeLocale) : ''}
-                </Typography>
+              <Typography marginBottom={theme.spacing(1)}>
+                {event.eventTime ? getLongDateTime(event.eventTime, activeLocale) : ''}
+              </Typography>
 
-                <Box marginBottom={theme.spacing(2)}>
-                  <Button
-                    label={strings.formatString(strings.JOIN_EVENT_NAME, event.name)?.toString()}
-                    onClick={() => {
-                      if (event.eventURL) {
-                        window.open(event.eventURL, '_blank', 'noopener noreferrer');
-                      }
-                    }}
-                  />
-                </Box>
-
-                {event?.links?.map((link, index) => (
-                  <Box key={index} marginBottom={theme.spacing(2)}>
-                    <Link
-                      fontSize='16px'
-                      onClick={() => {
-                        if (link.url) {
-                          window.open(link.url, '_blank', 'noopener noreferrer');
-                        }
-                      }}
-                    >
-                      {link.label}
-                    </Link>
-                  </Box>
-                ))}
-              </Grid>
-
-              <Grid item xs={6} sx={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
-                <Box
-                  dangerouslySetInnerHTML={{ __html: event?.callDescription || '' }}
-                  sx={{ backgroundColor: theme.palette.TwClrBgSecondary, borderRadius: '8px', padding: '8px 16px' }}
-                />
-              </Grid>
-            </Grid>
-
-            <Grid container spacing={theme.spacing(1)}>
-              <Grid item xs sx={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
-                <hr
-                  style={{
-                    border: 'none',
-                    borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-                    margin: `${theme.spacing(3)} 0`,
+              <Box marginBottom={theme.spacing(2)}>
+                <Button
+                  label={strings.formatString(strings.JOIN_EVENT_NAME, event.name)?.toString()}
+                  onClick={() => {
+                    if (event.eventURL) {
+                      window.open(event.eventURL, '_blank', 'noopener noreferrer');
+                    }
                   }}
                 />
+              </Box>
 
-                <Box dangerouslySetInnerHTML={{ __html: event?.description || '' }} />
-
-                {event?.additionalLinks?.length && (
-                  <>
-                    {event?.additionalLinks?.map((link, index) => (
-                      <Box key={index} marginBottom={theme.spacing(2)}>
-                        <Link
-                          fontSize='16px'
-                          onClick={() => {
-                            if (link.url) {
-                              window.open(link.url, '_blank', 'noopener noreferrer');
-                            }
-                          }}
-                        >
-                          {link.label}
-                        </Link>
-                      </Box>
-                    ))}
-                  </>
-                )}
-              </Grid>
+              {event?.links?.map((link, index) => (
+                <Box key={index} marginBottom={theme.spacing(2)}>
+                  <Link
+                    fontSize='16px'
+                    onClick={() => {
+                      if (link.url) {
+                        window.open(link.url, '_blank', 'noopener noreferrer');
+                      }
+                    }}
+                  >
+                    {link.label}
+                  </Link>
+                </Box>
+              ))}
             </Grid>
-          </>
+
+            <Grid item xs={6} style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
+              <Box
+                dangerouslySetInnerHTML={{ __html: event?.callDescription || '' }}
+                sx={{ backgroundColor: theme.palette.TwClrBgSecondary, borderRadius: '8px', padding: '8px 16px' }}
+              />
+            </Grid>
+
+            <Grid item xs style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
+              <hr
+                style={{
+                  border: 'none',
+                  borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+                  margin: `${theme.spacing(3)} 0`,
+                }}
+              />
+
+              <Box dangerouslySetInnerHTML={{ __html: event?.description || '' }} />
+
+              {event?.additionalLinks?.length && (
+                <>
+                  {event?.additionalLinks?.map((link, index) => (
+                    <Box key={index} marginBottom={theme.spacing(2)}>
+                      <Link
+                        fontSize='16px'
+                        onClick={() => {
+                          if (link.url) {
+                            window.open(link.url, '_blank', 'noopener noreferrer');
+                          }
+                        }}
+                      >
+                        {link.label}
+                      </Link>
+                    </Box>
+                  ))}
+                </>
+              )}
+            </Grid>
+          </Grid>
         )}
       </Card>
     </PageWithModuleTimeline>
