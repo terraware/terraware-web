@@ -8,6 +8,7 @@ import { Button } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import BackToLink from 'src/components/common/BackToLink';
+import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
@@ -24,6 +25,7 @@ import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
+import UndoWithdrawalModal from './UndoWithdrawalModal';
 import NonOutplantWithdrawalContent from './WithdrawalDetails/NonOutplantWithdrawalContent';
 import ReassignmentTabPanelContent from './WithdrawalDetails/ReassignmentTabPanelContent';
 import WithdrawalTabPanelContent from './WithdrawalDetails/WithdrawalTabPanelContent';
@@ -66,7 +68,7 @@ export default function NurseryWithdrawalsDetailsView({
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
   const snackbar = useSnackbar();
-  const { OUTPLANT } = NurseryWithdrawalPurposes;
+  const { OUTPLANT, NURSERY_TRANSFER } = NurseryWithdrawalPurposes;
   const query = useQuery();
   const history = useHistory();
   const location = useStateLocation();
@@ -78,6 +80,7 @@ export default function NurseryWithdrawalsDetailsView({
   const [withdrawalSummary, setWithdrawalSummary] = useState<WithdrawalSummary | undefined>(undefined);
   const [delivery, setDelivery] = useState<Delivery | undefined>(undefined);
   const [batches, setBatches] = useState<Batch[] | undefined>(undefined);
+  const [undoWithdrawalModalOpened, setUndoWithdrawalModalOpened] = useState(false);
   useEffect(() => {
     const updateWithdrawal = async () => {
       const withdrawalResponse = await NurseryWithdrawalService.getNurseryWithdrawal(Number(withdrawalId));
@@ -161,6 +164,9 @@ export default function NurseryWithdrawalsDetailsView({
 
   return (
     <TfMain>
+      {undoWithdrawalModalOpened && (
+        <UndoWithdrawalModal onClose={() => setUndoWithdrawalModalOpened(false)} row={withdrawalSummary} />
+      )}
       <PageHeaderWrapper nextElement={contentRef.current} nextElementInitialMargin={-24}>
         <Box marginBottom={theme.spacing(4)}>
           <Box>
@@ -180,15 +186,26 @@ export default function NurseryWithdrawalsDetailsView({
             <Typography color={theme.palette.TwClrTxt} fontSize='24px' lineHeight='32px' fontWeight={600}>
               {withdrawal?.withdrawnDate}
             </Typography>
-            {withdrawal?.purpose === OUTPLANT && hasSubzones && (
-              <Button
-                size='medium'
-                priority='secondary'
-                onClick={handleReassign}
-                label={strings.REASSIGN}
-                disabled={withdrawalSummary?.hasReassignments}
-              />
-            )}
+
+            <Box>
+              {withdrawal?.purpose === OUTPLANT && hasSubzones && (
+                <Box sx={{ display: 'inline', paddingLeft: 1 }}>
+                  <Button
+                    size='medium'
+                    priority='secondary'
+                    onClick={handleReassign}
+                    label={strings.REASSIGN}
+                    disabled={withdrawalSummary?.hasReassignments}
+                  />
+                </Box>
+              )}
+              {withdrawal?.purpose !== NURSERY_TRANSFER && (
+                <OptionsMenu
+                  onOptionItemClick={() => setUndoWithdrawalModalOpened(true)}
+                  optionItems={[{ label: strings.UNDO_WITHDRAWAL, value: 'undo' }]}
+                />
+              )}
+            </Box>
           </Box>
           <PageSnackbar />
         </Box>

@@ -43,7 +43,7 @@ const columns = (): TableColumnType[] => [
   { key: 'plantingSubzoneNames', name: strings.TO_SUBZONE, type: 'string' },
   { key: 'speciesScientificNames', name: strings.SPECIES, type: 'string' },
   { key: 'totalWithdrawn', name: strings.TOTAL_QUANTITY, type: 'number' },
-  { key: 'hasReassignments', name: '', type: 'string' },
+  { key: 'menu', name: '', type: 'string' },
 ];
 
 export default function NurseryWithdrawalsTable(): JSX.Element {
