@@ -27,12 +27,12 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           type: 'string',
         },
         {
-          key: 'participantName',
+          key: 'participant_name',
           name: strings.PARTICIPANT,
           type: 'string',
         },
         {
-          key: 'cohortName',
+          key: 'participant_cohort_name',
           name: strings.COHORT,
           type: 'string',
         },
@@ -42,22 +42,22 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           type: 'string',
         },
         {
-          key: 'country',
+          key: 'country_name',
           name: strings.COUNTRY,
           type: 'string',
         },
         {
-          key: 'region',
+          key: 'country_region',
           name: strings.REGION,
           type: 'string',
         },
         {
-          key: 'restorableLandRaw',
+          key: 'acceleratorDetails_confirmedReforestableLand',
           name: strings.RESTORABLE_LAND,
           type: 'string',
         },
         {
-          key: 'landUseModelType',
+          key: 'landUseModelTypes.landUseModelType',
           name: strings.LAND_USE_MODEL_TYPE,
           type: 'string',
         },
@@ -108,7 +108,7 @@ export default function ListView(): JSX.Element {
     () =>
       (projects || []).reduce(
         (acc, project) => {
-          acc[project.participant_cohort_id] = project.cohortName;
+          acc[project.participant_cohort_id] = project.participant_cohort_name;
           return acc;
         },
         {} as Record<string, string>
@@ -178,7 +178,7 @@ export default function ListView(): JSX.Element {
         dispatchSearchRequest={dispatchSearchRequest}
         featuredFilters={featuredFilters}
         fuzzySearchColumns={fuzzySearchColumns}
-        id='accelerator-participan-projects-table'
+        id='accelerator-participant-projects-table'
         Renderer={CellRenderer}
         rightComponent={actionMenus}
         rows={projects}

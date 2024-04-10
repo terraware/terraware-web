@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem } from '@terraware/web-components';
@@ -17,15 +17,19 @@ import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline
 import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useUser } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
+import { LocationService } from 'src/services';
 import ParticipantProjectService from 'src/services/ParticipantProjectService';
 import strings from 'src/strings';
+import { Country } from 'src/types/Country';
+import { getCountryByCode } from 'src/utils/country';
 
 import { useScoringData } from '../Scoring/ScoringContext';
 import { useVotingData } from '../Voting/VotingContext';
 import { useParticipantProjectData } from './ParticipantProjectContext';
 
 const SingleView = () => {
+  const { activeLocale } = useLocalization();
   const theme = useTheme();
   const { isAllowed } = useUser();
   const { isMobile } = useDeviceInfo();
@@ -35,6 +39,7 @@ const SingleView = () => {
   const { phaseVotes } = useVotingData();
   const { goToParticipantProjectEdit } = useNavigateTo();
 
+  const [countries, setCountries] = useState<Country[]>();
   const [exportModalOpen, setExportModalOpen] = useState(false);
 
   const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
@@ -78,6 +83,19 @@ const SingleView = () => {
     ),
     [goToParticipantProjectEdit, isAllowedEdit, isAllowedExport, projectId, onOptionItemClick, theme]
   );
+
+  useEffect(() => {
+    if (activeLocale) {
+      const populateCountries = async () => {
+        const response = await LocationService.getCountries();
+        if (response) {
+          setCountries(response);
+        }
+      };
+
+      populateCountries();
+    }
+  }, [activeLocale]);
 
   return (
     <PageWithModuleTimeline
@@ -128,7 +146,11 @@ const SingleView = () => {
               />
               <ProjectFieldDisplay
                 label={strings.COUNTRY}
-                value={participantProject?.countryCode}
+                value={
+                  countries && participantProject?.countryCode
+                    ? getCountryByCode(countries, participantProject?.countryCode)?.name
+                    : participantProject?.countryCode
+                }
                 rightBorder={!isMobile}
               />
               <ProjectFieldDisplay label={strings.REGION} value={participantProject?.region} />
@@ -173,11 +195,6 @@ const SingleView = () => {
               <ProjectFieldDisplay
                 label={strings.NUMBER_OF_COMMUNITIES_WITHIN_PROJECT_AREA}
                 value={participantProject?.numCommunities}
-                rightBorder={!isMobile}
-              />
-              <ProjectFieldDisplay
-                label={strings.DEAL_STAGE}
-                value={participantProject?.dealStage}
                 rightBorder={!isMobile}
               />
               <ProjectFieldMeta
