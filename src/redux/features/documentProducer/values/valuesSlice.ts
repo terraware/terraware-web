@@ -12,7 +12,7 @@ type VariableValuesListState = Record<string, StatusT<VariableValue[]>>;
 
 const initialVariableValuesListState: VariableValuesListState = {};
 
-export const variableValuesListSlice = createSlice({
+const variableValuesListSlice = createSlice({
   name: 'variableValuesListSlice',
   initialState: initialVariableValuesListState,
   reducers: {},
@@ -21,8 +21,6 @@ export const variableValuesListSlice = createSlice({
   },
 });
 
-export const variableValuesListReducer = variableValuesListSlice.reducer;
-
 /**
  * Variable Values Update
  */
@@ -30,7 +28,7 @@ type VariableValuesUpdateState = Record<string, StatusT<number>>;
 
 const initialVariableValuesUpdateState: VariableValuesUpdateState = {};
 
-export const variableValuesUpdateSlice = createSlice({
+const variableValuesUpdateSlice = createSlice({
   name: 'variableValuesUpdateSlice',
   initialState: initialVariableValuesUpdateState,
   reducers: {},
@@ -39,8 +37,6 @@ export const variableValuesUpdateSlice = createSlice({
   },
 });
 
-export const variableValuesUpdateReducer = variableValuesUpdateSlice.reducer;
-
 /**
  * Upload Variable Value Image
  */
@@ -48,7 +44,7 @@ type VariableValuesImageUploadState = Record<string, StatusT<number>>;
 
 const initialVariableValuesImageUploadState: VariableValuesImageUploadState = {};
 
-export const variableValuesImageUploadSlice = createSlice({
+const variableValuesImageUploadSlice = createSlice({
   name: 'variableValuesImageUploadSlice',
   initialState: initialVariableValuesImageUploadState,
   reducers: {},
@@ -57,4 +53,8 @@ export const variableValuesImageUploadSlice = createSlice({
   },
 });
 
-export const variableValuesImageUploadReducer = variableValuesImageUploadSlice.reducer;
+export const documentProducerVariableValuesReducers = {
+  documentProducerVariableValuesImageUpload: variableValuesImageUploadSlice.reducer,
+  documentProducerVariableValuesList: variableValuesListSlice.reducer,
+  documentProducerVariableValuesUpdate: variableValuesUpdateSlice.reducer,
+};

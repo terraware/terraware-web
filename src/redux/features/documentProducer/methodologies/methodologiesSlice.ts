@@ -29,4 +29,7 @@ const methodologiesSlice = createSlice({
 });
 
 export const { setMethodologies } = methodologiesSlice.actions;
-export const methodologiesReducer = methodologiesSlice.reducer;
+
+export const documentProducerMethodologiesReducers = {
+  documentProducerMethodologies: methodologiesSlice.reducer,
+};

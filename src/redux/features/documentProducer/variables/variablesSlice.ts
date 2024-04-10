@@ -9,7 +9,7 @@ type VariablesState = Record<string, StatusT<Variable[]>>;
 
 const initialVariablesState: VariablesState = {};
 
-export const variablesSlice = createSlice({
+const variablesSlice = createSlice({
   name: 'variablesSlice',
   initialState: initialVariablesState,
   reducers: {},
@@ -18,4 +18,6 @@ export const variablesSlice = createSlice({
   },
 });
 
-export const variablesReducer = variablesSlice.reducer;
+export const documentProducerVariablesReducers = {
+  documentProducerVariables: variablesSlice.reducer,
+};

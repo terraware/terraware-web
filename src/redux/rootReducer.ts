@@ -25,19 +25,7 @@ import { acceleratorOrgsReducer } from './features/accelerator/acceleratorSlice'
 import { accessionsReducer } from './features/accessions/accessionsSlice';
 import { appVersionReducer } from './features/appVersion/appVersionSlice';
 import { batchesReducer, batchesRequestsReducer } from './features/batches/batchesSlice';
-import {
-  documentListHistoryReducer,
-  documentListReducer,
-  documentReducer,
-  documentRequestsReducer,
-} from './features/documentProducer/documents/documentsSlice';
-import { methodologiesReducer } from './features/documentProducer/methodologies/methodologiesSlice';
-import {
-  variableValuesImageUploadReducer,
-  variableValuesListReducer,
-  variableValuesUpdateReducer,
-} from './features/documentProducer/values/valuesSlice';
-import { variablesReducer } from './features/documentProducer/variables/variablesSlice';
+import documentProducerReducers from './features/documentProducer';
 import { messageReducer } from './features/message/messageSlice';
 import { moduleListReducer, moduleReducer } from './features/modules/modulesSlice';
 import {
@@ -92,15 +80,7 @@ export const reducers = {
   deliverablesEdit: deliverablesEditReducer,
   deliverablesSearch: deliverablesSearchReducer,
   deliverables: deliverablesReducer,
-  documentProducerDocumentList: documentListReducer,
-  documentProducerDocumentListHistory: documentListHistoryReducer,
-  documentProducerDocument: documentReducer,
-  documentProducerDocumentRequests: documentRequestsReducer,
-  documentProducerMethodologies: methodologiesReducer,
-  documentProducerVariables: variablesReducer,
-  documentProducerVariableValuesImageUpload: variableValuesImageUploadReducer,
-  documentProducerVariableValuesList: variableValuesListReducer,
-  documentProducerVariableValuesUpdate: variableValuesUpdateReducer,
+  ...documentProducerReducers,
   draftPlantingSiteCreate: draftPlantingSiteCreateReducer,
   draftPlantingSiteEdit: draftPlantingSiteEditReducer,
   draftPlantingSiteGet: draftPlantingSiteGetReducer,

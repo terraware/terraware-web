@@ -23,7 +23,7 @@ import { Document } from 'src/types/documentProducer/Document';
 type DocumentListState = Record<string, StatusT<Document[]>>;
 const initialDocumentListState: DocumentListState = {};
 
-export const documentListSlice = createSlice({
+const documentListSlice = createSlice({
   name: 'documentListSlice',
   initialState: initialDocumentListState,
   reducers: {},
@@ -32,15 +32,13 @@ export const documentListSlice = createSlice({
   },
 });
 
-export const documentListReducer = documentListSlice.reducer;
-
 /**
  * Get Document
  */
 type DocumentState = Record<string, StatusT<Document>>;
 const initialDocumentState: DocumentState = {};
 
-export const documentSlice = createSlice({
+const documentSlice = createSlice({
   name: 'documentSlice',
   initialState: initialDocumentState,
   reducers: {},
@@ -48,8 +46,6 @@ export const documentSlice = createSlice({
     buildReducers(requestGetDocument, true)(builder);
   },
 });
-
-export const documentReducer = documentSlice.reducer;
 
 /**
  * Get Document History
@@ -60,7 +56,7 @@ type DocumentListHistoryState = Record<
 >;
 const initialDocumentListHistoryState: DocumentListHistoryState = {};
 
-export const documentListHistorySlice = createSlice({
+const documentListHistorySlice = createSlice({
   name: 'documentListHistorySlice',
   initialState: initialDocumentListHistoryState,
   reducers: {},
@@ -69,15 +65,13 @@ export const documentListHistorySlice = createSlice({
   },
 });
 
-export const documentListHistoryReducer = documentListHistorySlice.reducer;
-
 /**
  * Document operations
  */
 type DocumentRequestsState = Record<string, StatusT<number>>;
 const initialDocumentRequestsState: DocumentRequestsState = {};
 
-export const documentRequestsSlice = createSlice({
+const documentRequestsSlice = createSlice({
   name: 'documentRequestsSlice',
   initialState: initialDocumentRequestsState,
   reducers: {},
@@ -89,4 +83,9 @@ export const documentRequestsSlice = createSlice({
   },
 });
 
-export const documentRequestsReducer = documentRequestsSlice.reducer;
+export const documentProducerDocumentsReducers = {
+  documentProducerDocumentList: documentListSlice.reducer,
+  documentProducerDocumentListHistory: documentListHistorySlice.reducer,
+  documentProducerDocument: documentSlice.reducer,
+  documentProducerDocumentRequests: documentRequestsSlice.reducer,
+};
