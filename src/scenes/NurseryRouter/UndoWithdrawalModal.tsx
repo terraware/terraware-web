@@ -14,7 +14,7 @@ export default function UndoWithdrawalModal(props: UndoWithdrawalModalProps): JS
   const { onClose } = props;
   const snackbar = useSnackbar();
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
     // TODO backend
     // const response = await NurseryWithdrawalService.undoNurseryWithdrawal();
     // if (response.requestSucceeded) {
