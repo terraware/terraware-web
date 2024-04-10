@@ -104,7 +104,16 @@ const ModuleContentView = () => {
                         {content.title}
                       </Link>
                       {content.dueDate && (
-                        <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={400}>
+                        <Typography
+                          component='span'
+                          fontSize={'16px'}
+                          fontWeight={600}
+                          lineHeight={'24px'}
+                          sx={{
+                            color: theme.palette.TwClrTxtWarning,
+                            marginLeft: '8px',
+                          }}
+                        >
                           {strings.formatString(strings.DUE, getLongDate(content.dueDate, activeLocale))}
                         </Typography>
                       )}
