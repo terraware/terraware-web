@@ -86,7 +86,9 @@ const ModuleEventView = () => {
                 <Button
                   label={strings.formatString(strings.JOIN_EVENT_NAME, event.name)?.toString()}
                   onClick={() => {
-                    // do something
+                    if (event.eventURL) {
+                      window.open(event.eventURL, '_blank', 'noopener noreferrer');
+                    }
                   }}
                 />
               </Box>

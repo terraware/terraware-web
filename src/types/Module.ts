@@ -20,6 +20,7 @@ export type ModuleEvent = {
   additionalLinks?: { label: string }[];
   description?: string;
   eventTime: string;
+  eventURL?: string;
   id: number;
   links?: { label: string }[];
   moduleId: number;

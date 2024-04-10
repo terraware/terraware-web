@@ -17,6 +17,7 @@ export type ModuleEventData = {
 const mockEvents: ModuleEvent[] = [
   {
     eventTime: '2024-03-16T22:00:00.000Z',
+    eventURL: 'https://google.com/',
     id: 1,
     moduleId: 6,
     name: 'Live Session',
@@ -43,6 +44,7 @@ const mockEvents: ModuleEvent[] = [
   },
   {
     eventTime: '2024-03-14T22:00:00.000Z',
+    eventURL: 'https://google.com/',
     id: 2,
     moduleId: 6,
     name: '1:1 Session',
