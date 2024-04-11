@@ -1,6 +1,6 @@
 import { ActionReducerMapBuilder, AsyncThunk, CaseReducers } from '@reduxjs/toolkit';
 
-export type Statuses = 'pending' | 'success' | 'error';
+export type Statuses = 'error' | 'partial-success' | 'pending' | 'success';
 
 export type StatusT<T> = { status: Statuses; data?: T };
 

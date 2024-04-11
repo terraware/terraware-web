@@ -6,12 +6,14 @@ import { makeStyles } from '@mui/styles';
 
 import ErrorBoundary from 'src/ErrorBoundary';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStateLocation from 'src/utils/useStateLocation';
 
 import Cohorts from './Cohorts';
 import Deliverables from './Deliverables';
+import DocumentsRouter from './Documents';
 import ModuleContent from './Modules';
 import NavBar from './NavBar';
 import Overview from './Overview';
@@ -54,6 +56,7 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
   const { type } = useDeviceInfo();
   const classes = useStyles();
   const location = useStateLocation();
+  const documentProducerEnabled = isEnabled('Document Producer');
 
   const viewHasBackgroundImage = useCallback((): boolean => {
     return location.pathname.startsWith(APP_PATHS.ACCELERATOR_OVERVIEW);
@@ -104,6 +107,11 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
             <Route path={APP_PATHS.ACCELERATOR_PROJECT_VIEW}>
               <ParticipantProjects />
             </Route>
+            {documentProducerEnabled && (
+              <Route path={APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}>
+                <DocumentsRouter />
+              </Route>
+            )}
             <Route path={'*'}>
               <Redirect to={APP_PATHS.ACCELERATOR_OVERVIEW} />
             </Route>

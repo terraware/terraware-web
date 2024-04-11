@@ -1,0 +1,216 @@
+import { useCallback, useEffect, useState } from 'react';
+
+import { CellRenderer, RendererProps, TableColumnType } from '@terraware/web-components';
+
+import EditVariable from 'src/components/DocumentProducer/EditVariable';
+import PageContent from 'src/components/DocumentProducer/PageContent';
+import TableContent from 'src/components/DocumentProducer/TableContent';
+import Link from 'src/components/common/Link';
+import { requestListVariablesValues } from 'src/redux/features/documentProducer/values/valuesThunks';
+import { selectVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
+import { requestListVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
+import { useSelectorProcessor } from 'src/redux/hooks/useSelectorProcessor';
+import { RootState } from 'src/redux/rootReducer';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
+import { Document } from 'src/types/documentProducer/Document';
+import {
+  SectionVariableWithValues,
+  SelectOptionPayload,
+  VariableWithValues,
+} from 'src/types/documentProducer/Variable';
+import {
+  VariableValueDateValue,
+  VariableValueLinkValue,
+  VariableValueNumberValue,
+  VariableValueSelectValue,
+  VariableValueTextValue,
+} from 'src/types/documentProducer/VariableValue';
+
+const tableColumns: TableColumnType[] = [
+  { key: 'name', name: strings.NAME, type: 'string' },
+  { key: 'type', name: strings.TYPE, type: 'string' },
+  { key: 'values', name: strings.VALUE, type: 'string' },
+  { key: 'instances', name: strings.INSTANCES, type: 'string' },
+];
+
+type TableRow = VariableWithValues & { instances: number };
+
+const tableCellRenderer = (props: RendererProps<any>): JSX.Element => {
+  const { value, column, row } = props;
+
+  if (column.key === 'name') {
+    if (props.value) {
+      return <CellRenderer {...props} value={<Link>{value?.toString()}</Link>} />;
+    }
+  }
+
+  const getOptionValue = (optionId: number) => {
+    const found = row.options.find((opt: SelectOptionPayload) => opt.id === optionId);
+    if (found) {
+      return found.name;
+    }
+  };
+
+  if (column.key === 'values') {
+    if (props.value && Array.isArray(props.value) && props.value.length) {
+      if (row.type === 'Text') {
+        const variableTextValue = props.value[0] as VariableValueTextValue;
+        return <CellRenderer {...props} value={variableTextValue.textValue} />;
+      }
+      if (row.type === 'Number') {
+        const variableNumberValue = props.value[0] as VariableValueNumberValue;
+        return <CellRenderer {...props} value={variableNumberValue.numberValue} />;
+      }
+      if (row.type === 'Select') {
+        const variableSelectValue = props.value[0] as VariableValueSelectValue;
+        return <CellRenderer {...props} value={getOptionValue(variableSelectValue.optionValues[0])} />;
+      }
+      if (row.type === 'Date') {
+        const variableDateValue = props.value[0] as VariableValueDateValue;
+        return <CellRenderer {...props} value={variableDateValue.dateValue} />;
+      }
+      if (row.type === 'Link') {
+        const variableLinkValue = props.value[0] as VariableValueLinkValue;
+        return <CellRenderer {...props} value={variableLinkValue.url} />;
+      }
+    }
+    // Default (type not found): Render an empty cell
+    return <CellRenderer {...props} value='' />;
+  }
+
+  return <CellRenderer {...props} />;
+};
+
+export type DocumentVariablesProps = {
+  document: Document;
+  setSelectedTab?: (tab: string) => void;
+};
+
+const DocumentVariablesTab = ({ document: doc, setSelectedTab }: DocumentVariablesProps): JSX.Element => {
+  const dispatch = useAppDispatch();
+  const [tableRows, setTableRows] = useState<TableRow[]>([]);
+  const [variables, setVariables] = useState<VariableWithValues[]>([]);
+  const [sectionVariables, setSectionVariables] = useState<SectionVariableWithValues[]>([]);
+  const [searchValue, setSearchValue] = useState<string>('');
+  const [openEditVariableModal, setOpenEditVariableModal] = useState<boolean>(false);
+  const [selectedVariableId, setSelectedVariableId] = useState<number>();
+  const onSearch = (str: string) => setSearchValue(str);
+
+  const variablesResult = useAppSelector((state: RootState) =>
+    selectVariablesWithValues(state, doc.variableManifestId, doc.id)
+  );
+
+  useSelectorProcessor(variablesResult, (data) => {
+    setSectionVariables(data.filter((d: any) => d.type === 'Section'));
+  });
+
+  useSelectorProcessor(variablesResult, (data) => {
+    setVariables(data.filter((d: any) => d.type !== 'Section' && d.type !== 'Image' && d.type !== 'Table'));
+  });
+
+  useEffect(() => {
+    dispatch(requestListVariables(doc.variableManifestId));
+    dispatch(requestListVariablesValues(doc.id));
+  }, [dispatch, doc.variableManifestId, doc.id]);
+
+  const containingSections = useCallback(
+    (variableId?: number) => (acc: string[], currentVal: SectionVariableWithValues) => {
+      const newAcc = [...acc];
+      if (
+        currentVal.parentSectionNumber &&
+        currentVal?.values?.some((val) => val.type === 'SectionVariable' && val.variableId === variableId)
+      ) {
+        newAcc.push(currentVal.parentSectionNumber);
+      }
+      currentVal.children.forEach((childSection) => {
+        const childContainingSections = containingSections(variableId)([], childSection as SectionVariableWithValues);
+        newAcc.push(...childContainingSections);
+      });
+
+      return newAcc;
+    },
+    []
+  );
+
+  useEffect(() => {
+    setTableRows(
+      variables.map((v) => ({ ...v, instances: sectionVariables.reduce(containingSections(v.id), []).length }))
+    );
+  }, [variables, sectionVariables, containingSections]);
+
+  const [sectionsUsed, setSectionsUsed] = useState<string[]>([]);
+  useEffect(() => {
+    const sectionNumbers = sectionVariables.reduce(containingSections(selectedVariableId), []);
+    setSectionsUsed(sectionNumbers);
+  }, [selectedVariableId, sectionVariables, containingSections]);
+
+  const onSectionClicked = useCallback(
+    (sectionNumber: string) => {
+      setOpenEditVariableModal(false);
+      setSelectedVariableId(-1);
+      if (setSelectedTab) {
+        setSelectedTab(strings.DOCUMENT);
+        setTimeout(() => {
+          // do find and scroll async to allow tab-switching to occur first
+          const relevantSection = document.getElementById(sectionNumber);
+          relevantSection?.scrollIntoView({ behavior: 'smooth' });
+        }, 0);
+      }
+    },
+    [setSelectedTab]
+  );
+
+  const onUpdate = () => {
+    dispatch(requestListVariables(doc.variableManifestId));
+    dispatch(requestListVariablesValues(doc.id));
+  };
+
+  const props = {
+    searchProps: {
+      onSearch,
+      searchValue,
+    },
+    tableProps: {
+      tableRows,
+      tableSelectable: false,
+      tableOrderBy: 'date',
+      tableColumns,
+      tableCellRenderer,
+      tableReloadData: () => onUpdate(),
+      tableOnSelect: (selected: any) => {
+        setSelectedVariableId(selected.id);
+        setOpenEditVariableModal(true);
+      },
+    },
+  };
+
+  const onFinish = (updated: boolean) => {
+    if (updated) {
+      dispatch(requestListVariablesValues(doc.id));
+    }
+  };
+
+  return (
+    <>
+      {openEditVariableModal && (
+        <EditVariable
+          onFinish={(updated: boolean) => {
+            setOpenEditVariableModal(false);
+            onFinish(updated);
+          }}
+          manifestId={doc.variableManifestId}
+          documentId={doc.id}
+          variableId={selectedVariableId || -1}
+          sectionsUsed={sectionsUsed}
+          onSectionClicked={onSectionClicked}
+        />
+      )}
+      <PageContent styles={{ marginTop: 0 }}>
+        <TableContent {...props} />
+      </PageContent>
+    </>
+  );
+};
+
+export default DocumentVariablesTab;
