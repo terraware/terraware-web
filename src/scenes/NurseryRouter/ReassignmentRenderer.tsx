@@ -2,9 +2,9 @@ import React from 'react';
 
 import { Box, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Autocomplete, Textfield } from '@terraware/web-components';
+import { Autocomplete, DropdownItem, Textfield } from '@terraware/web-components';
 
-import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
+import CellRenderer from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import strings from 'src/strings';
 import { NumericFormatter } from 'src/types/Number';
@@ -27,73 +27,93 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export type SubzoneInfo = {
-  id: string;
+  id: number;
   name: string;
+};
+
+export type ZoneInfo = {
+  id: number;
+  name: string;
+  subzones: SubzoneInfo[];
 };
 
 export type Reassignment = {
   plantingId: number;
-  newSubzone?: SubzoneInfo;
-  quantity?: string;
+  newSubzoneId?: number;
+  newZoneId?: number;
+  quantity?: number;
   notes?: string;
-  error: object;
+  error?: string;
+};
+
+export type ReassignmentRowType = {
+  numPlants: number;
+  species: string;
+  siteName: string;
+  originalZone: ZoneInfo;
+  originalSubzone: SubzoneInfo;
+  reassignment: Reassignment;
 };
 
 export type ReassignmentRendererProps = {
-  subzones: SubzoneInfo[];
+  zones: ZoneInfo[];
   setReassignment: (reassignment: Reassignment) => void;
   numericFormatter: NumericFormatter;
 };
 
-export default function ReassignmentRenderer({
-  subzones,
-  setReassignment,
-  numericFormatter,
-}: ReassignmentRendererProps) {
-  return function ReassignmentlCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
+export default function ReassignmentRenderer({ zones, setReassignment, numericFormatter }: ReassignmentRendererProps) {
+  return function ReassignmentlCellRenderer(props: RendererProps<ReassignmentRowType>): JSX.Element {
     const classes = useStyles();
     const { column, row } = props;
-    const { subzone, reassignment, numPlants } = row;
-    const { plantingId, newSubzone, error, quantity, notes } = reassignment;
+    const { numPlants, originalZone, originalSubzone, reassignment } = row;
+    const { plantingId, newSubzoneId, newZoneId, error, quantity, notes } = reassignment;
 
-    const updateReassignment = (id: string, value: unknown) => {
-      reassignment[id] = value;
-      setReassignment(reassignment);
-    };
+    const zoneOptions: DropdownItem[] = zones
+      .filter((zone) => zone.subzones.some((subzone) => subzone.id !== originalSubzone.id))
+      .map((zone) => ({ label: zone.name, value: zone.id }));
 
-    const otherSubzones = subzones
-      .filter((otherSubzone) => subzone.id !== otherSubzone.id)
-      .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
-      .map((otherSubzone) => ({ ...otherSubzone, value: otherSubzone.id, label: otherSubzone.name }));
+    const subzoneOptions: DropdownItem[] = newZoneId
+      ? zones
+          .find((zone) => zone.id === newZoneId)!!
+          .subzones.filter((subzone) => subzone.id !== originalSubzone.id)
+          .map((subzone) => ({
+            value: subzone.id,
+            label: subzone.name,
+          }))
+      : [];
+
+    const selectedZone = zoneOptions.find((option) => option.value === newZoneId);
+    const selectedSubzone = subzoneOptions.find((option) => option.value === newSubzoneId);
 
     const onUpdateQuantity = (value: any) => {
       if (value === '') {
-        updateReassignment('quantity', undefined);
+        setReassignment({ ...reassignment, quantity: undefined });
         return;
       }
       const quantityValue = Number(value);
-      if (isNaN(quantityValue) || quantityValue < 0 || quantityValue > numPlants?.toString()) {
-        reassignment.error.quantity = strings.INVALID_VALUE;
+      if (isNaN(quantityValue) || quantityValue < 0 || quantityValue > numPlants) {
+        reassignment.error = strings.INVALID_VALUE;
       } else {
-        reassignment.error.quantity = '';
+        reassignment.error = undefined;
       }
-      updateReassignment('quantity', quantityValue);
+      setReassignment({ ...reassignment, quantity: quantityValue });
     };
 
-    if (column.key === 'newSubzone') {
+    if (column.key === 'newZone') {
       const value = (
         <Autocomplete
-          id={`newSubzone_${plantingId}`}
-          selected={newSubzone}
-          onChange={(newSubzoneValue: any) => {
-            if (newSubzoneValue.value) {
-              updateReassignment('newSubzone', newSubzoneValue);
+          id={`newZone_${plantingId}`}
+          selected={selectedZone ?? undefined}
+          onChange={(newZoneValue: any) => {
+            if (newZoneValue.value) {
+              setReassignment({ ...reassignment, newZoneId: newZoneValue.value, newSubzoneId: undefined });
             }
           }}
           isEqual={(option: any, selected: any) => option?.value === selected?.value}
           label={''}
           placeholder={strings.SELECT}
-          options={otherSubzones}
+          disabled={selectedSubzone !== undefined}
+          options={zoneOptions}
           freeSolo={false}
           hideClearIcon={true}
           className={classes.subzone}
@@ -103,20 +123,42 @@ export default function ReassignmentRenderer({
       return <CellRenderer {...props} value={value} className={classes.cell} />;
     }
 
+    if (column.key === 'newSubzone') {
+      const value = (
+        <Autocomplete
+          id={`newSubzone_${plantingId}`}
+          selected={selectedSubzone ?? undefined}
+          onChange={(newSubzoneValue: any) => {
+            setReassignment({ ...reassignment, newSubzoneId: newSubzoneValue.value });
+          }}
+          isEqual={(option: any, selected: any) => option?.value === selected?.value}
+          label={''}
+          placeholder={strings.SELECT}
+          disabled={subzoneOptions.length === 0}
+          options={subzoneOptions}
+          freeSolo={false}
+          hideClearIcon={false}
+          className={classes.subzone}
+        />
+      );
+
+      return <CellRenderer {...props} value={value} className={classes.cell} />;
+    }
+
     if (column.key === 'reassign') {
       const value = (
-        <Box display='flex' alignItems={error.quantity ? 'start' : 'center'}>
+        <Box display='flex' alignItems={error ? 'start' : 'center'}>
           <Textfield
             id={`quantity_${plantingId}`}
             type='number'
             min={0}
             onChange={onUpdateQuantity}
-            value={quantity}
+            value={quantity?.toString()}
             label={''}
-            errorText={error.quantity}
+            errorText={error}
             className={classes.input}
           />
-          <Typography paddingLeft={1} paddingTop={error.quantity ? '10px' : 0}>
+          <Typography paddingLeft={1} paddingTop={error ? '10px' : 0}>
             / {numericFormatter.format(numPlants)}
           </Typography>
         </Box>
@@ -130,7 +172,7 @@ export default function ReassignmentRenderer({
         <Textfield
           id={`notes_${plantingId}`}
           type='text'
-          onChange={(text: any) => updateReassignment('notes', text)}
+          onChange={(text: any) => setReassignment({ ...reassignment, notes: text })}
           value={notes}
           label={''}
           className={classes.text}
@@ -141,7 +183,11 @@ export default function ReassignmentRenderer({
     }
 
     if (column.key === 'originalSubzone') {
-      return <CellRenderer {...props} value={subzone.name} />;
+      return <CellRenderer {...props} value={originalSubzone.name} />;
+    }
+
+    if (column.key === 'originalZone') {
+      return <CellRenderer {...props} value={originalZone.name} />;
     }
 
     return <CellRenderer {...props} />;
