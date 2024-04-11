@@ -13,9 +13,9 @@ interface AccessionsRouterProps {
 const AccessionsRouter = ({ setWithdrawalCreated }: AccessionsRouterProps) => {
   return (
     <Routes>
-      <Route path={APP_PATHS.ACCESSIONS} element={<AccessionsView setWithdrawalCreated={setWithdrawalCreated} />} />
-      <Route path={APP_PATHS.ACCESSIONS2_NEW} element={<Accession2CreateView />} />
-      <Route path={APP_PATHS.ACCESSIONS2_ITEM} element={<Accession2View />} />
+      <Route path='/*' element={<AccessionsView setWithdrawalCreated={setWithdrawalCreated} />} />
+      <Route path='/new' element={<Accession2CreateView />} />
+      <Route path='/:accessionId' element={<Accession2View />} />
     </Routes>
   );
 };

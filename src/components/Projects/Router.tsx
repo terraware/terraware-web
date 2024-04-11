@@ -28,10 +28,10 @@ export default function ProjectsRouter({
 
   return (
     <Routes>
-      <Route path={APP_PATHS.PROJECTS} element={getProjectsView()} />
-      <Route path={APP_PATHS.PROJECTS_NEW} element={<ProjectNewView reloadData={reloadProjects} />} />
-      <Route path={APP_PATHS.PROJECT_VIEW} element={<ProjectView />} />
-      <Route path={APP_PATHS.PROJECT_EDIT} element={<ProjectEditView />} />
+      <Route path={'/*'} element={getProjectsView()} />
+      <Route path={'/new'} element={<ProjectNewView reloadData={reloadProjects} />} />
+      <Route path={'/:projectId'} element={<ProjectView />} />
+      <Route path={'/:projectId/edit'} element={<ProjectEditView />} />
     </Routes>
   );
 }

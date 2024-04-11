@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { Slide, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -214,15 +214,15 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
             <Route path={APP_PATHS.SEEDS_DASHBOARD} element={<SeedsDashboard />} />
             <Route path={APP_PATHS.CHECKIN} element={<CheckIn />} />
             <Route
-              path={APP_PATHS.ACCESSIONS}
+              path={APP_PATHS.ACCESSIONS + '/*'}
               element={<AccessionsRouter setWithdrawalCreated={setWithdrawalCreated} />}
             />
-            <Route path={APP_PATHS.MONITORING} element={<MonitoringRouter />} />
-            <Route path={APP_PATHS.SPECIES} element={<SpeciesRouter />} />
-            <Route path={APP_PATHS.ORGANIZATION} element={<OrganizationRouter />} />
-            <Route path={APP_PATHS.PEOPLE} element={<PeopleRouter />} />
+            <Route path={APP_PATHS.MONITORING + '/*'} element={<MonitoringRouter />} />
+            <Route path={APP_PATHS.SPECIES + '/*'} element={<SpeciesRouter />} />
+            <Route path={APP_PATHS.ORGANIZATION + '/*'} element={<OrganizationRouter />} />
+            <Route path={APP_PATHS.PEOPLE + '/*'} element={<PeopleRouter />} />
             <Route
-              path={APP_PATHS.PROJECTS}
+              path={APP_PATHS.PROJECTS + '/*'}
               element={
                 <ProjectsRouter
                   reloadProjects={reloadProjects}
@@ -231,11 +231,11 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
                 />
               }
             />
-            <Route path={APP_PATHS.SEED_BANKS} element={<SeedBanksRouter />} />
-            <Route path={APP_PATHS.NURSERIES} element={<NurseriesRouter />} />
-            <Route path={APP_PATHS.PLANTS_DASHBOARD} element={<PlantsDashboardRouter />} />
+            <Route path={APP_PATHS.SEED_BANKS + '/*'} element={<SeedBanksRouter />} />
+            <Route path={APP_PATHS.NURSERIES + '/*'} element={<NurseriesRouter />} />
+            <Route path={APP_PATHS.PLANTS_DASHBOARD + '/*'} element={<PlantsDashboardRouter />} />
             <Route
-              path={APP_PATHS.INVENTORY}
+              path={APP_PATHS.INVENTORY + '/*'}
               element={<InventoryRouter setWithdrawalCreated={setWithdrawalCreated} />}
             />
             <Route
@@ -243,19 +243,20 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
               element={<BatchBulkWithdrawView withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />}
             />
             <Route path={APP_PATHS.PLANTING_SITES} element={<PlantingSites reloadTracking={reloadPlantingSites} />} />
-            <Route path={'/nursery'} element={<NurseryRouter />} />
+            <Route path={'/nursery/*'} element={<NurseryRouter />} />
             <Route path={APP_PATHS.CONTACT_US} element={<ContactUsView />} />
-            <Route path={APP_PATHS.MY_ACCOUNT} element={<MyAccountRouter />} />
-            <Route path={APP_PATHS.REPORTS} element={<ReportsRouter />} />
-            <Route path={APP_PATHS.OBSERVATIONS} element={<ObservationsRouter />} />
-            <Route path={APP_PATHS.DELIVERABLES} element={<DeliverablesRouter />} />
-            <Route path={APP_PATHS.MODULES_FOR_PROJECT} element={<ModulesRouter />} />
+            <Route path={APP_PATHS.MY_ACCOUNT + '/*'} element={<MyAccountRouter />} />
+            <Route path={APP_PATHS.REPORTS + '/*'} element={<ReportsRouter />} />
+            <Route path={APP_PATHS.OBSERVATIONS + '/*'} element={<ObservationsRouter />} />
+            <Route path={APP_PATHS.DELIVERABLES + '/*'} element={<DeliverablesRouter />} />
+            <Route path={APP_PATHS.MODULES_FOR_PROJECT + '/*'} element={<ModulesRouter />} />
 
             {!isProduction && (
               <Route path={APP_PATHS.OPT_IN} element={<OptInFeaturesView refresh={reloadPreferences} />} />
             )}
-
-            <RedirectsRouter />
+            {/* 
+            <Route path='*' element={<RedirectsRouter />} /> */}
+            <Route path='*' element={<Navigate to={APP_PATHS.HOME} />} />
           </Routes>
         </ErrorBoundary>
       </div>

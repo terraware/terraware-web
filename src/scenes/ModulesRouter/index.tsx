@@ -10,7 +10,7 @@ const ModulesRouter = () => {
   return (
     <ProjectProvider>
       <Routes>
-        <Route path={APP_PATHS.MODULES_FOR_PROJECT} element={<ListView />} />
+        <Route path={'/project/:projectId'} element={<ListView />} />
       </Routes>
     </ProjectProvider>
   );

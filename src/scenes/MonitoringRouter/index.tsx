@@ -12,7 +12,7 @@ const MonitoringRouter = () => {
   return (
     <Routes>
       <Route
-        path={APP_PATHS.MONITORING}
+        path={'*'}
         element={
           <MonitoringView
             hasSeedBanks={selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')}
@@ -21,7 +21,7 @@ const MonitoringRouter = () => {
         }
       />
       <Route
-        path={APP_PATHS.MONITORING_SEED_BANK}
+        path={'/:seedBankId'}
         element={
           <MonitoringView
             hasSeedBanks={selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank')}

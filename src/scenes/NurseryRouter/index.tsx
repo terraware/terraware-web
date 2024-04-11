@@ -58,15 +58,12 @@ const NurseryRouter = () => {
 
   return (
     <Routes>
+      <Route path={'/withdrawals'} element={<NurseryPlantingsAndWithdrawalsView reloadTracking={reloadTracking} />} />
       <Route
-        path={APP_PATHS.NURSERY_WITHDRAWALS}
-        element={<NurseryPlantingsAndWithdrawalsView reloadTracking={reloadTracking} />}
-      />
-      <Route
-        path={APP_PATHS.NURSERY_WITHDRAWALS_DETAILS}
+        path={'/withdrawals/:withdrawalsId'}
         element={<NurseryWithdrawalsDetailsView species={species || []} plantingSubzoneNames={plantingSubzoneNames} />}
       />
-      <Route path={APP_PATHS.NURSERY_REASSIGNMENT} element={<NurseryReassignmentView />} />
+      <Route path={'/reassignment/:deliveryId'} element={<NurseryReassignmentView />} />
     </Routes>
   );
 };

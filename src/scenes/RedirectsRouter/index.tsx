@@ -8,7 +8,7 @@ const RedirectsRouter = () => {
     <Routes>
       {/* Redirects. Invalid paths will redirect to the closest valid path. */}
       {/* In alphabetical order for easy reference with APP_PATHS, except for /home which must go last */}
-      <Route path={APP_PATHS.ACCESSIONS + '/'} element={<Navigate to={APP_PATHS.ACCESSIONS} />} />
+      {/* <Route path={APP_PATHS.ACCESSIONS + '/*'} element={<Navigate to={APP_PATHS.ACCESSIONS} />} /> */}
       <Route path={APP_PATHS.CHECKIN + '/'} element={<Navigate to={APP_PATHS.CHECKIN} />} />
       <Route path={APP_PATHS.CONTACT_US + '/'} element={<Navigate to={APP_PATHS.CONTACT_US} />} />
       <Route path={APP_PATHS.ORGANIZATION + '/'} element={<Navigate to={APP_PATHS.ORGANIZATION} />} />

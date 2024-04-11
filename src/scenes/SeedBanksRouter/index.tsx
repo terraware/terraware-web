@@ -21,10 +21,10 @@ const SeedBanksRouter = () => {
 
   return (
     <Routes>
-      <Route path={APP_PATHS.SEED_BANKS_NEW} element={<SeedBankView />} />
-      <Route path={APP_PATHS.SEED_BANKS_EDIT} element={<SeedBankView />} />
-      <Route path={APP_PATHS.SEED_BANKS_VIEW} element={<SeedBankDetailsView />} />
-      <Route path={APP_PATHS.SEED_BANKS} element={getSeedBanksView()} />
+      <Route path={'/new'} element={<SeedBankView />} />
+      <Route path={'/:seedbankId/edit'} element={<SeedBankView />} />
+      <Route path={':/seednankId'} element={<SeedBankDetailsView />} />
+      <Route path={'/*'} element={getSeedBanksView()} />
     </Routes>
   );
 };

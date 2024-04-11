@@ -9,10 +9,10 @@ import PersonDetailsView from 'src/scenes/PeopleRouter/PersonDetailsView';
 const PeopleRouter = () => {
   return (
     <Routes>
-      <Route path={APP_PATHS.PEOPLE_NEW} element={<NewPersonView />} />
-      <Route path={APP_PATHS.PEOPLE_EDIT} element={<NewPersonView />} />
-      <Route path={APP_PATHS.PEOPLE_VIEW} element={<PersonDetailsView />} />
-      <Route path={APP_PATHS.PEOPLE} element={<PeopleListView />} />
+      <Route path={'/new'} element={<NewPersonView />} />
+      <Route path={'/:personId/edit'} element={<NewPersonView />} />
+      <Route path={'/:personId'} element={<PersonDetailsView />} />
+      <Route path={'/*'} element={<PeopleListView />} />
     </Routes>
   );
 };

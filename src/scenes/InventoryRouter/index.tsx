@@ -37,7 +37,7 @@ const InventoryRouter = ({ setWithdrawalCreated }: InventoryRouterProps) => {
   return (
     <Routes>
       <Route
-        path={APP_PATHS.INVENTORY}
+        path={'/*'}
         element={
           <InventoryV2View
             hasNurseries={selectedOrgHasFacilityType(selectedOrganization, 'Nursery')}
@@ -45,28 +45,22 @@ const InventoryRouter = ({ setWithdrawalCreated }: InventoryRouterProps) => {
           />
         }
       />
-      <Route path={APP_PATHS.INVENTORY_NEW} element={<InventoryCreateView />} />
+      <Route path={'/new'} element={<InventoryCreateView />} />
       <Route
-        path={APP_PATHS.INVENTORY_WITHDRAW}
+        path={'/withdraw'}
         element={<SpeciesBulkWithdrawView withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />}
       />
+      <Route path={'/batch/:batchId'} element={<InventoryBatchView origin='Batches' species={species || []} />} />
       <Route
-        path={APP_PATHS.INVENTORY_BATCH}
-        element={<InventoryBatchView origin='Batches' species={species || []} />}
-      />
-      <Route
-        path={APP_PATHS.INVENTORY_BATCH_FOR_NURSERY}
+        path={'/nursery/:nurseryId/batch/:batchId'}
         element={<InventoryBatchView origin='Nursery' species={species || []} />}
       />
       <Route
-        path={APP_PATHS.INVENTORY_BATCH_FOR_SPECIES}
+        path={'/species/:speciesId/batch/:batchId'}
         element={<InventoryBatchView origin='Species' species={species || []} />}
       />
-      <Route path={APP_PATHS.INVENTORY_ITEM_FOR_NURSERY} element={<InventoryForNurseryView />} />
-      <Route
-        path={APP_PATHS.INVENTORY_ITEM_FOR_SPECIES}
-        element={<InventoryForSpeciesView species={species || []} />}
-      />
+      <Route path={'/nursery/:nurseryId'} element={<InventoryForNurseryView />} />
+      <Route path={'/:speciesId'} element={<InventoryForSpeciesView species={species || []} />} />
     </Routes>
   );
 };

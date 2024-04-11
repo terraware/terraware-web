@@ -44,10 +44,10 @@ const SpeciesRouter = () => {
 
   return (
     <Routes>
-      <Route path={APP_PATHS.SPECIES_NEW} element={<SpeciesAddView reloadData={reloadSpecies} />} />
-      <Route path={APP_PATHS.SPECIES} element={getSpeciesView()} />
-      <Route path={APP_PATHS.SPECIES_EDIT} element={<SpeciesEditView />} />
-      <Route path={APP_PATHS.SPECIES_DETAILS} element={<SpeciesDetailView reloadData={reloadSpecies} />} />
+      <Route path={'/new'} element={<SpeciesAddView reloadData={reloadSpecies} />} />
+      <Route path={'/speciesId'} element={<SpeciesDetailView reloadData={reloadSpecies} />} />
+      <Route path={'/speciesId/edit'} element={<SpeciesEditView />} />
+      <Route path={'/*'} element={getSpeciesView()} />
     </Routes>
   );
 };

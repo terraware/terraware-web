@@ -21,10 +21,10 @@ const NurseriesRouter = () => {
 
   return (
     <Routes>
-      <Route path={APP_PATHS.NURSERIES_NEW} element={<NurseryView />} />
-      <Route path={APP_PATHS.NURSERIES_EDIT} element={<NurseryView />} />
-      <Route path={APP_PATHS.NURSERIES_VIEW} element={<NurseryDetailsView />} />
-      <Route path={APP_PATHS.NURSERIES} element={getNurseriesView()} />
+      <Route path={'/new'} element={<NurseryView />} />
+      <Route path={'/:nurseryId/edit'} element={<NurseryView />} />
+      <Route path={'/:nurseryId'} element={<NurseryDetailsView />} />
+      <Route path={'/*'} element={getNurseriesView()} />
     </Routes>
   );
 };

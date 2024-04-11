@@ -16,11 +16,11 @@ const ReportsRouter = (): JSX.Element | null => {
 
   return (
     <Routes>
-      <Route path={APP_PATHS.REPORTS} element={<ReportsView tab={'reports'} />} />
-      <Route path={APP_PATHS.REPORTS_SETTINGS} element={<ReportsView tab={'settings'} />} />
-      <Route path={APP_PATHS.REPORTS_SETTINGS_EDIT} element={<ReportSettingsEdit />} />
-      <Route path={APP_PATHS.REPORTS_EDIT} element={<ReportEdit />} />
-      <Route path={APP_PATHS.REPORTS_VIEW} element={<ReportView />} />
+      <Route path={'/*'} element={<ReportsView tab={'reports'} />} />
+      <Route path={'/settings'} element={<ReportsView tab={'settings'} />} />
+      <Route path={'/settings/edit'} element={<ReportSettingsEdit />} />
+      <Route path={':reportId/edit'} element={<ReportEdit />} />
+      <Route path={'/:reportId'} element={<ReportView />} />
     </Routes>
   );
 };

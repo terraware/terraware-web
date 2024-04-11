@@ -11,10 +11,10 @@ const MyAccountRouter = () => {
   return (
     <Routes>
       <Route
-        path={APP_PATHS.MY_ACCOUNT_EDIT}
+        path={'/edit'}
         element={<MyAccountView organizations={organizations} edit={true} reloadData={reloadOrganizations} />}
       />
-      <Route path={APP_PATHS.MY_ACCOUNT} element={<MyAccountView organizations={organizations} edit={false} />} />
+      <Route path={'/*'} element={<MyAccountView organizations={organizations} edit={false} />} />
     </Routes>
   );
 };

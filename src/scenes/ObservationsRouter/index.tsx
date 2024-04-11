@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
+
 import { CircularProgress } from '@mui/material';
 
 import { FilterField } from 'src/components/common/FilterGroup';
@@ -123,21 +124,25 @@ const ObservationsInnerRouter = (): JSX.Element => {
 
   return (
     <Routes>
-      {scheduleObservationsEnabled && (
-        <Route path={APP_PATHS.RESCHEDULE_OBSERVATION} element={<RescheduleObservation />} />
-      )}
-      {scheduleObservationsEnabled && <Route path={APP_PATHS.SCHEDULE_OBSERVATION} element={<ScheduleObservation />} />}
-      <Route path={APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS} element={<ObservationMonitoringPlotDetails />} />
-      <Route path={APP_PATHS.OBSERVATION_PLANTING_ZONE_DETAILS} element={<ObservationPlantingZoneDetails />} />
+      {scheduleObservationsEnabled && <Route path={'schedule/:observationId'} element={<RescheduleObservation />} />}
+      {scheduleObservationsEnabled && <Route path={'/schedule'} element={<ScheduleObservation />} />}
       <Route
-        path={APP_PATHS.OBSERVATION_DETAILS}
+        path={'/:plantingSiteId/results/:observationId/zone/:plantingZoneId/plot/:monitoringPlotId'}
+        element={<ObservationMonitoringPlotDetails />}
+      />
+      <Route
+        path={'/:plantingSiteId/results/:observationId/zone/:plantingZoneId'}
+        element={<ObservationPlantingZoneDetails />}
+      />
+      <Route
+        path={'/:plantingSiteId/results/:observationId'}
         element={<ObservationDetails {...searchProps} setFilterOptions={setFilterOptionsCallback} />}
       />
       <Route
-        path={APP_PATHS.OBSERVATIONS_SITE}
+        path={'/:plantingSiteId'}
         element={<ObservationsHome {...searchProps} setFilterOptions={setFilterOptionsCallback} />}
       />
-      <Route path={'*'} element={<ObservationsHome {...searchProps} setFilterOptions={setFilterOptionsCallback} />} />
+      <Route path={'/*'} element={<ObservationsHome {...searchProps} setFilterOptions={setFilterOptionsCallback} />} />
     </Routes>
   );
 };

@@ -7,8 +7,8 @@ import PlantsDashboardView from 'src/scenes/PlantsDashboardRouter/PlantsDashboar
 const PlantsDashboardRouter = () => {
   return (
     <Routes>
-      <Route path={APP_PATHS.PLANTS_DASHBOARD} element={<PlantsDashboardView />} />
-      <Route path={APP_PATHS.PLANTING_SITE_DASHBOARD} element={<PlantsDashboardView />} />
+      <Route path='/*' element={<PlantsDashboardView />} />
+      <Route path={'/:plantingSiteId'} element={<PlantsDashboardView />} />
     </Routes>
   );
 };

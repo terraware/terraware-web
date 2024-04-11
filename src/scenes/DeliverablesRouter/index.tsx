@@ -8,7 +8,7 @@ import DeliverablesList from './DeliverablesList';
 const DeliverablesRouter = (): JSX.Element => {
   return (
     <Routes>
-      <Route path={APP_PATHS.DELIVERABLE_VIEW} element={<DeliverableViewWrapper />} />
+      <Route path={'/:deliverableId/submissions/:projectId'} element={<DeliverableViewWrapper />} />
       <Route path={'*'} element={<DeliverablesList />} />
     </Routes>
   );
