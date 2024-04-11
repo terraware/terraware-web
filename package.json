@@ -164,6 +164,9 @@
   },
   "resolutions": {
     "@babel/traverse": "7.24.1",
-    "fork-ts-checker-webpack-plugin": "^6.5.3"
+    "fork-ts-checker-webpack-plugin": "^6.5.3",
+    "wrap-ansi": "7.0.0",
+    "string-width": "4.1.0",
+    "strip-ansi": "6.0.0"
   }
 }
