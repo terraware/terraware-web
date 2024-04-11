@@ -79,7 +79,6 @@ export default function DocumentsView(): JSX.Element {
   }, [dispatch]);
 
   useEffect(() => {
-    console.log('documentsResponse', documentsResponse);
     if (!documentsResponse) {
       return;
     }
