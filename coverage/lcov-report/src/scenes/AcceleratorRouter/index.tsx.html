@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -180,22 +180,7 @@
 <a name='L115'></a><a href='#L115'>115</a>
 <a name='L116'></a><a href='#L116'>116</a>
 <a name='L117'></a><a href='#L117'>117</a>
-<a name='L118'></a><a href='#L118'>118</a>
-<a name='L119'></a><a href='#L119'>119</a>
-<a name='L120'></a><a href='#L120'>120</a>
-<a name='L121'></a><a href='#L121'>121</a>
-<a name='L122'></a><a href='#L122'>122</a>
-<a name='L123'></a><a href='#L123'>123</a>
-<a name='L124'></a><a href='#L124'>124</a>
-<a name='L125'></a><a href='#L125'>125</a>
-<a name='L126'></a><a href='#L126'>126</a>
-<a name='L127'></a><a href='#L127'>127</a>
-<a name='L128'></a><a href='#L128'>128</a>
-<a name='L129'></a><a href='#L129'>129</a>
-<a name='L130'></a><a href='#L130'>130</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L118'></a><a href='#L118'>118</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -251,21 +236,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -328,10 +304,7 @@ import { Slide, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 &nbsp;
 import ErrorBoundary from 'src/ErrorBoundary';
-import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
-import strings from 'src/strings';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStateLocation from 'src/utils/useStateLocation';
@@ -380,7 +353,6 @@ const AcceleratorRouter = <span class="cstat-no" title="statement not covered" >
   const { type } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const location = <span class="cstat-no" title="statement not covered" >useStateLocation();</span>
-  const consoleEnabled = <span class="cstat-no" title="statement not covered" >isEnabled('Console');</span>
 &nbsp;
   const viewHasBackgroundImage = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span>: boolean =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    return location.pathname.startsWith(APP_PATHS.ACCELERATOR_OVERVIEW);</span>
@@ -405,7 +377,7 @@ const AcceleratorRouter = <span class="cstat-no" title="statement not covered" >
         &lt;ErrorBoundary setShowNavBar={setShowNavBar}&gt;
           &lt;Switch&gt;
             &lt;Route path={APP_PATHS.ACCELERATOR_OVERVIEW}&gt;
-              {consoleEnabled ? &lt;Overview /&gt; : &lt;Page title={strings.OVERVIEW} /&gt;}
+              &lt;Overview /&gt;
             &lt;/Route&gt;
             &lt;Route path={APP_PATHS.ACCELERATOR_COHORTS}&gt;
               &lt;Cohorts /&gt;
@@ -417,28 +389,20 @@ const AcceleratorRouter = <span class="cstat-no" title="statement not covered" >
               &lt;ModuleContent /&gt;
             &lt;/Route&gt;
             &lt;Route path={APP_PATHS.ACCELERATOR_PEOPLE}&gt;
-              {consoleEnabled ? &lt;People /&gt; : &lt;Page title={strings.PEOPLE} /&gt;}
+              &lt;People /&gt;
             &lt;/Route&gt;
-            {consoleEnabled &amp;&amp; (
-              &lt;Route path={APP_PATHS.ACCELERATOR_SCORING}&gt;
-                &lt;Scoring /&gt;
-              &lt;/Route&gt;
-            )}
-            {consoleEnabled &amp;&amp; (
-              &lt;Route path={APP_PATHS.ACCELERATOR_VOTING}&gt;
-                &lt;Voting /&gt;
-              &lt;/Route&gt;
-            )}
-            {consoleEnabled &amp;&amp; (
-              &lt;Route path={APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW}&gt;
-                &lt;Participants /&gt;
-              &lt;/Route&gt;
-            )}
-            {consoleEnabled &amp;&amp; (
-              &lt;Route path={APP_PATHS.ACCELERATOR_PROJECT_VIEW}&gt;
-                &lt;ParticipantProjects /&gt;
-              &lt;/Route&gt;
-            )}
+            &lt;Route path={APP_PATHS.ACCELERATOR_SCORING}&gt;
+              &lt;Scoring /&gt;
+            &lt;/Route&gt;
+            &lt;Route path={APP_PATHS.ACCELERATOR_VOTING}&gt;
+              &lt;Voting /&gt;
+            &lt;/Route&gt;
+            &lt;Route path={APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW}&gt;
+              &lt;Participants /&gt;
+            &lt;/Route&gt;
+            &lt;Route path={APP_PATHS.ACCELERATOR_PROJECT_VIEW}&gt;
+              &lt;ParticipantProjects /&gt;
+            &lt;/Route&gt;
             &lt;Route path={'*'}&gt;
               &lt;Redirect to={APP_PATHS.ACCELERATOR_OVERVIEW} /&gt;
             &lt;/Route&gt;
@@ -457,7 +421,7 @@ export default AcceleratorRouter;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-10T18:52:03.132Z
+                at 2024-04-11T00:50:20.023Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
