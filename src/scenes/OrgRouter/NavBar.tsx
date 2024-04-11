@@ -9,10 +9,13 @@ import NavItem from 'src/components/common/Navbar/NavItem';
 import NavSection from 'src/components/common/Navbar/NavSection';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { NurseryWithdrawalService } from 'src/services';
 import DeliverablesService from 'src/services/DeliverablesService';
+import ModuleService from 'src/services/ModuleService';
+import ProjectsService from 'src/services/ProjectsService';
 import ReportService, { Reports } from 'src/services/ReportService';
 import strings from 'src/strings';
 import { isAdmin, isManagerOrHigher } from 'src/utils/organization';
@@ -33,6 +36,7 @@ export default function NavBar({
   const { selectedOrganization } = useOrganization();
   const [showNurseryWithdrawals, setShowNurseryWithdrawals] = useState<boolean>(false);
   const [reports, setReports] = useState<Reports>([]);
+  const [moduleProjectId, setModuleProjectId] = useState<number | undefined>(undefined);
   const [hasDeliverables, setHasDeliverables] = useState<boolean>(false);
   const { isDesktop, isMobile } = useDeviceInfo();
   const history = useHistory();
@@ -61,6 +65,7 @@ export default function NavBar({
   const isReportsRoute = useRouteMatch(APP_PATHS.REPORTS + '/');
   const isObservationsRoute = useRouteMatch(APP_PATHS.OBSERVATIONS + '/');
   const isProjectsRoute = useRouteMatch(APP_PATHS.PROJECTS + '/');
+  const isModulesRoute = useRouteMatch(APP_PATHS.MODULES_FOR_PROJECT + '/');
 
   const closeNavBar = useCallback(() => {
     if (!isDesktop) {
@@ -107,6 +112,31 @@ export default function NavBar({
       // not open to contributors, will get a 403
       reportSearch();
     }
+  }, [selectedOrganization]);
+
+  useEffect(() => {
+    const checkHasModules = async () => {
+      const projectsResult = await ProjectsService.listProjects(selectedOrganization.id);
+      if (!projectsResult.projects) {
+        return;
+      }
+      const projectIds = projectsResult.projects
+        .filter((project) => project.participantId)
+        .map((project) => project.id);
+
+      const moduleResults = await Promise.all(
+        projectIds.map(async (id) => ({ id, result: await ModuleService.list(id) }))
+      );
+      const moduleProjectResult = moduleResults.find((result) => !!result.result);
+
+      if (!moduleProjectResult) {
+        return;
+      }
+
+      setModuleProjectId(moduleProjectResult.id);
+    };
+
+    checkHasModules();
   }, [selectedOrganization]);
 
   useEffect(() => {
@@ -167,6 +197,22 @@ export default function NavBar({
         />
       ) : null,
     [closeAndNavigateTo, isReportsRoute, reports.length, selectedOrganization.canSubmitReports]
+  );
+
+  const modulesMenu = useMemo<JSX.Element | null>(
+    () =>
+      moduleProjectId ? (
+        <NavItem
+          icon='iconModule'
+          label={strings.MODULES}
+          selected={!!isModulesRoute}
+          onClick={() => {
+            closeAndNavigateTo(APP_PATHS.MODULES_FOR_PROJECT.replace(':projectId', moduleProjectId.toString()));
+          }}
+          id='reports-list'
+        />
+      ) : null,
+    [closeAndNavigateTo, isModulesRoute, moduleProjectId]
   );
 
   return (
@@ -256,9 +302,10 @@ export default function NavBar({
           )}
         </SubNavbar>
       </NavItem>
-      {!hasDeliverables && reportsMenu && (
+      {!hasDeliverables && ((isEnabled('Participant Experience') && modulesMenu) || reportsMenu) && (
         <>
-          <NavSection />
+          <NavSection title={strings.ACCELERATOR.toUpperCase()} />
+          {isEnabled('Participant Experience') ? modulesMenu : null}
           {reportsMenu}
         </>
       )}
@@ -274,6 +321,7 @@ export default function NavBar({
             }}
             id='deliverables'
           />
+          {isEnabled('Participant Experience') ? modulesMenu : null}
           {reportsMenu}
         </>
       )}
