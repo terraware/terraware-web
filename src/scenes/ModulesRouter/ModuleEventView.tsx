@@ -8,10 +8,9 @@ import { Crumb } from 'src/components/BreadCrumbs';
 import Link from 'src/components/common/Link';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { APP_PATHS } from 'src/constants';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useProject } from 'src/providers';
 import { requestGetModule, requestGetModuleEvent } from 'src/redux/features/modules/modulesAsyncThunks';
 import { selectModule, selectModuleEvent } from 'src/redux/features/modules/modulesSelectors';
-import { selectProject } from 'src/redux/features/projects/projectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { getLongDateTime } from 'src/utils/dateFormatter';
@@ -22,13 +21,12 @@ const ModuleEventView = () => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const theme = useTheme();
+  const { project, projectId } = useProject();
   const pathParams = useParams<{ eventId: string; moduleId: string; projectId: string }>();
   const eventId = Number(pathParams.eventId);
   const moduleId = Number(pathParams.moduleId);
-  const projectId = Number(pathParams.projectId);
   const module = useAppSelector(selectModule(moduleId));
   const event = useAppSelector(selectModuleEvent(eventId));
-  const project = useAppSelector(selectProject(projectId));
 
   const crumbs: Crumb[] = useMemo(
     () => [
