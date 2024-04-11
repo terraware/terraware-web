@@ -103,7 +103,7 @@ export default function ReassignmentRenderer({ zones, setReassignment, numericFo
       const value = (
         <Autocomplete
           id={`newZone_${plantingId}`}
-          selected={selectedZone ?? undefined}
+          selected={selectedZone}
           onChange={(newZoneValue: any) => {
             if (newZoneValue.value) {
               setReassignment({ ...reassignment, newZoneId: newZoneValue.value, newSubzoneId: undefined });
@@ -127,7 +127,7 @@ export default function ReassignmentRenderer({ zones, setReassignment, numericFo
       const value = (
         <Autocomplete
           id={`newSubzone_${plantingId}`}
-          selected={selectedSubzone ?? undefined}
+          selected={selectedSubzone}
           onChange={(newSubzoneValue: any) => {
             setReassignment({ ...reassignment, newSubzoneId: newSubzoneValue.value });
           }}
