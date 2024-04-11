@@ -1,3 +1,4 @@
+a63481b4e2 SW-5125: FE - Full Module View (Follow-ups) (#2500)
 6b7488db4b SW-5195 Removed console feature flag (#2505)
 d4877717c7 SW-5156 Move Documents, Methodologies, Values, and Variables redux from pdd-web into the app (#2489)
 9aa1717419 SW-4462 Bump web-components version to pick up dropdown/flash issue fix (#2485)
