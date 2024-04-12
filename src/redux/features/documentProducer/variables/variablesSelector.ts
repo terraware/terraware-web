@@ -160,10 +160,10 @@ const associateValues = (
 };
 
 export const selectVariablesWithValues = createCachedSelector(
-  (state: RootState, manifestId: number | string, pddId: number) =>
+  (state: RootState, manifestId: number | string, documentId: number) =>
     (state.documentProducerVariables as any)[manifestId],
-  (state: RootState, manifestId: number | string, pddId: number) =>
-    (state.documentProducerVariableValuesList as any)[pddId],
+  (state: RootState, manifestId: number | string, documentId: number) =>
+    (state.documentProducerVariableValuesList as any)[documentId],
   (variableList, valueList) => {
     if (variableList?.data && valueList?.data) {
       let topLevelSectionPosition = 0;
@@ -181,4 +181,4 @@ export const selectVariablesWithValues = createCachedSelector(
       return [];
     }
   }
-)((state: RootState, manifestId: number | string, pddId: number) => `${pddId}-${manifestId}`);
+)((state: RootState, manifestId: number | string, documentId: number) => `${documentId}-${manifestId}`);
