@@ -65,7 +65,7 @@ export default function NavBar({
   const isReportsRoute = useRouteMatch(APP_PATHS.REPORTS + '/');
   const isObservationsRoute = useRouteMatch(APP_PATHS.OBSERVATIONS + '/');
   const isProjectsRoute = useRouteMatch(APP_PATHS.PROJECTS + '/');
-  const isModulesRoute = useRouteMatch(APP_PATHS.MODULES_FOR_PROJECT + '/');
+  const isProjectModulesRoute = useRouteMatch(APP_PATHS.PROJECT_MODULES + '/');
 
   const featureFlagParticipantExperience = isEnabled('Participant Experience');
 
@@ -212,14 +212,14 @@ export default function NavBar({
         <NavItem
           icon='iconModule'
           label={strings.MODULES}
-          selected={!!isModulesRoute}
+          selected={!!isProjectModulesRoute}
           onClick={() => {
-            closeAndNavigateTo(APP_PATHS.MODULES_FOR_PROJECT.replace(':projectId', moduleProjectId.toString()));
+            closeAndNavigateTo(APP_PATHS.PROJECT_MODULE.replace(':projectId', moduleProjectId.toString()));
           }}
           id='reports-list'
         />
       ) : null,
-    [closeAndNavigateTo, featureFlagParticipantExperience, isModulesRoute, moduleProjectId]
+    [closeAndNavigateTo, featureFlagParticipantExperience, isProjectModulesRoute, moduleProjectId]
   );
 
   const acceleratorSectionTitle = useMemo<string>(
