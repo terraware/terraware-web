@@ -298,7 +298,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
               <DeliverablesRouter />
             </Route>
 
-            <Route path={APP_PATHS.MODULES_FOR_PROJECT}>
+            <Route path={APP_PATHS.PROJECT_MODULES}>
               <ModulesRouter />
             </Route>
 

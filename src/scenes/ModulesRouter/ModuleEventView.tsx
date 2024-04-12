@@ -32,10 +32,7 @@ const ModuleEventView = () => {
     () => [
       {
         name: activeLocale ? 'Module' : '',
-        to: APP_PATHS.MODULES_FOR_PROJECT_CONTENT.replace(':projectId', `${projectId}`).replace(
-          ':moduleId',
-          `${moduleId}`
-        ),
+        to: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
       },
     ],
     [activeLocale, moduleId, projectId]
