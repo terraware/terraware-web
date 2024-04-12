@@ -24,25 +24,24 @@ const ModuleEventView = () => {
   const { project, projectId } = useProject();
   const pathParams = useParams<{ eventId: string; moduleId: string; projectId: string }>();
   const eventId = Number(pathParams.eventId);
-  const moduleId = Number(pathParams.moduleId);
-  const module = useAppSelector(selectModule(moduleId));
   const event = useAppSelector(selectModuleEvent(eventId));
+  const moduleId = event?.moduleId || -1;
+  const module = useAppSelector(selectModule(moduleId));
 
   const crumbs: Crumb[] = useMemo(
     () => [
       {
         name: activeLocale ? 'Module' : '',
-        to: APP_PATHS.MODULES_FOR_PROJECT_CONTENT.replace(':projectId', `${projectId}`).replace(
-          ':moduleId',
-          `${moduleId}`
-        ),
+        to: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
       },
     ],
     [activeLocale, moduleId, projectId]
   );
 
   useEffect(() => {
-    void dispatch(requestGetModule(moduleId));
+    if (moduleId) {
+      void dispatch(requestGetModule(moduleId));
+    }
   }, [dispatch, moduleId]);
 
   useEffect(() => {

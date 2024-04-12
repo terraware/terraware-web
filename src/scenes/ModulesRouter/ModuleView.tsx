@@ -45,7 +45,7 @@ const ModuleContentView = () => {
     () => [
       {
         name: activeLocale ? strings.ALL_MODULES : '',
-        to: APP_PATHS.MODULES_FOR_PROJECT.replace(':projectId', `${projectId}`),
+        to: APP_PATHS.PROJECT_MODULES.replace(':projectId', `${projectId}`),
       },
     ],
     [activeLocale, projectId]

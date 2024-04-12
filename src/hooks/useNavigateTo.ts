@@ -20,15 +20,12 @@ export default function useNavigateTo() {
 
       goToModule: (projectId: number, moduleId: number) =>
         history.push({
-          pathname: APP_PATHS.MODULES_FOR_PROJECT_CONTENT.replace(':projectId', `${projectId}`).replace(
-            ':moduleId',
-            `${moduleId}`
-          ),
+          pathname: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
         }),
 
       goToModuleEvent: (projectId: number, eventId: number, moduleId: number) =>
         history.push({
-          pathname: APP_PATHS.MODULES_FOR_PROJECT_EVENT.replace(':projectId', `${projectId}`)
+          pathname: APP_PATHS.PROJECT_MODULE_EVENT.replace(':projectId', `${projectId}`)
             .replace(':moduleId', `${moduleId}`)
             .replace(':eventId', `${eventId}`),
         }),
