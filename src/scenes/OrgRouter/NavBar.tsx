@@ -11,6 +11,7 @@ import Navbar from 'src/components/common/Navbar/Navbar';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useModules } from 'src/hooks/useModules';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { NurseryWithdrawalService } from 'src/services';
 import DeliverablesService from 'src/services/DeliverablesService';
@@ -18,7 +19,6 @@ import ReportService, { Reports } from 'src/services/ReportService';
 import strings from 'src/strings';
 import { isAdmin, isManagerOrHigher } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { useModules } from 'src/hooks/useModules';
 
 type NavBarProps = {
   backgroundTransparent?: boolean;
@@ -116,12 +116,12 @@ export default function NavBar({
 
   useEffect(() => {
     const getModuleProjectId = async () => {
-      const moduleProject = projectModules.find(({id, modules}) => modules !== undefined);
+      const moduleProject = projectModules.find(({ id, modules }) => modules !== undefined);
 
       if (!moduleProject) {
         return;
       }
-    
+
       setModuleProjectId(moduleProject.id);
     };
 

@@ -6,4 +6,5 @@ export const selectModuleEvent = (eventId: number) => (state: RootState) => stat
 
 export const selectProjectModuleList = (projectId: number) => (state: RootState) => state.moduleList[projectId]?.data;
 
-export const selectAllModuleList = (projectIds: number[]) => (state: RootState) => projectIds.map((projectId) => ({id: projectId, modules: state.moduleList[projectId]?.data}));
+export const selectAllModuleList = (projectIds: number[]) => (state: RootState) =>
+  projectIds.map((projectId) => ({ id: projectId, modules: state.moduleList[projectId]?.data }));
