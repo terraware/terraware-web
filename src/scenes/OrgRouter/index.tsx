@@ -242,6 +242,12 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
               <PeopleRouter />
             </Route>
 
+            {/* modules router *must* come before the projects router,
+            or else the path will be picked up by the projects router */}
+            <Route path={APP_PATHS.PROJECT_MODULES}>
+              <ModulesRouter />
+            </Route>
+
             <Route path={APP_PATHS.PROJECTS}>
               <ProjectsRouter
                 reloadProjects={reloadProjects}
@@ -296,10 +302,6 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
 
             <Route path={APP_PATHS.DELIVERABLES}>
               <DeliverablesRouter />
-            </Route>
-
-            <Route path={APP_PATHS.PROJECT_MODULES}>
-              <ModulesRouter />
             </Route>
 
             {!isProduction && (
