@@ -9,7 +9,9 @@ import NavItem from 'src/components/common/Navbar/NavItem';
 import NavSection from 'src/components/common/Navbar/NavSection';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useModules } from 'src/hooks/useModules';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { NurseryWithdrawalService } from 'src/services';
 import DeliverablesService from 'src/services/DeliverablesService';
@@ -33,11 +35,13 @@ export default function NavBar({
   const { selectedOrganization } = useOrganization();
   const [showNurseryWithdrawals, setShowNurseryWithdrawals] = useState<boolean>(false);
   const [reports, setReports] = useState<Reports>([]);
+  const [moduleProjectId, setModuleProjectId] = useState<number | undefined>(undefined);
   const [hasDeliverables, setHasDeliverables] = useState<boolean>(false);
   const { isDesktop, isMobile } = useDeviceInfo();
   const history = useHistory();
   const { isAllowedViewConsole } = useAcceleratorConsole();
   const { activeLocale } = useLocalization();
+  const { projectModules } = useModules();
 
   const isAccessionDashboardRoute = useRouteMatch(APP_PATHS.SEEDS_DASHBOARD + '/');
   const isAccessionsRoute = useRouteMatch(APP_PATHS.ACCESSIONS + '/');
@@ -61,6 +65,9 @@ export default function NavBar({
   const isReportsRoute = useRouteMatch(APP_PATHS.REPORTS + '/');
   const isObservationsRoute = useRouteMatch(APP_PATHS.OBSERVATIONS + '/');
   const isProjectsRoute = useRouteMatch(APP_PATHS.PROJECTS + '/');
+  const isModulesRoute = useRouteMatch(APP_PATHS.MODULES_FOR_PROJECT + '/');
+
+  const featureFlagParticipantExperience = isEnabled('Participant Experience');
 
   const closeNavBar = useCallback(() => {
     if (!isDesktop) {
@@ -110,6 +117,20 @@ export default function NavBar({
   }, [selectedOrganization]);
 
   useEffect(() => {
+    const getModuleProjectId = async () => {
+      const moduleProject = projectModules.find(({ id, modules }) => modules !== undefined);
+
+      if (!moduleProject) {
+        return;
+      }
+
+      setModuleProjectId(moduleProject.id);
+    };
+
+    getModuleProjectId();
+  }, [projectModules]);
+
+  useEffect(() => {
     const fetchDeliverables = async () => {
       // TODO I think we should pull this out of redux
       // using a direct service call, without redux, to keep with existing pattern in the nav bars
@@ -153,6 +174,22 @@ export default function NavBar({
     return showNurseryWithdrawals ? [inventoryMenu, withdrawalLogMenu] : [inventoryMenu];
   };
 
+  const deliverablesMenu = useMemo<JSX.Element | null>(
+    () =>
+      hasDeliverables ? (
+        <NavItem
+          label={strings.DELIVERABLES}
+          icon='iconSubmit'
+          selected={!!isDeliverablesRoute}
+          onClick={() => {
+            closeAndNavigateTo(isDeliverablesRoute && !isDeliverableViewRoute ? '' : APP_PATHS.DELIVERABLES);
+          }}
+          id='deliverables'
+        />
+      ) : null,
+    [closeAndNavigateTo, isDeliverablesRoute, isDeliverableViewRoute, hasDeliverables]
+  );
+
   const reportsMenu = useMemo<JSX.Element | null>(
     () =>
       reports.length > 0 && selectedOrganization.canSubmitReports ? (
@@ -167,6 +204,27 @@ export default function NavBar({
         />
       ) : null,
     [closeAndNavigateTo, isReportsRoute, reports.length, selectedOrganization.canSubmitReports]
+  );
+
+  const modulesMenu = useMemo<JSX.Element | null>(
+    () =>
+      featureFlagParticipantExperience && moduleProjectId ? (
+        <NavItem
+          icon='iconModule'
+          label={strings.MODULES}
+          selected={!!isModulesRoute}
+          onClick={() => {
+            closeAndNavigateTo(APP_PATHS.MODULES_FOR_PROJECT.replace(':projectId', moduleProjectId.toString()));
+          }}
+          id='reports-list'
+        />
+      ) : null,
+    [closeAndNavigateTo, featureFlagParticipantExperience, isModulesRoute, moduleProjectId]
+  );
+
+  const acceleratorSectionTitle = useMemo<string>(
+    () => (deliverablesMenu || modulesMenu ? strings.ACCELERATOR.toUpperCase() : ''),
+    [deliverablesMenu, modulesMenu]
   );
 
   return (
@@ -256,27 +314,16 @@ export default function NavBar({
           )}
         </SubNavbar>
       </NavItem>
-      {!hasDeliverables && reportsMenu && (
+
+      {(deliverablesMenu || modulesMenu || reportsMenu) && (
         <>
-          <NavSection />
+          <NavSection title={acceleratorSectionTitle} />
+          {deliverablesMenu}
+          {modulesMenu}
           {reportsMenu}
         </>
       )}
-      {hasDeliverables && (
-        <>
-          <NavSection title={strings.ACCELERATOR.toUpperCase()} />
-          <NavItem
-            label={strings.DELIVERABLES}
-            icon='iconSubmit'
-            selected={!!isDeliverablesRoute}
-            onClick={() => {
-              closeAndNavigateTo(isDeliverablesRoute && !isDeliverableViewRoute ? '' : APP_PATHS.DELIVERABLES);
-            }}
-            id='deliverables'
-          />
-          {reportsMenu}
-        </>
-      )}
+
       {isAdmin(selectedOrganization) && (
         <>
           <NavSection title={strings.SETTINGS.toUpperCase()} />
