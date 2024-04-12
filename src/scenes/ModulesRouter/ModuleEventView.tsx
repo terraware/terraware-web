@@ -24,9 +24,9 @@ const ModuleEventView = () => {
   const { project, projectId } = useProject();
   const pathParams = useParams<{ eventId: string; moduleId: string; projectId: string }>();
   const eventId = Number(pathParams.eventId);
-  const moduleId = Number(pathParams.moduleId);
-  const module = useAppSelector(selectModule(moduleId));
   const event = useAppSelector(selectModuleEvent(eventId));
+  const moduleId = event?.moduleId || -1;
+  const module = useAppSelector(selectModule(moduleId));
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -39,7 +39,9 @@ const ModuleEventView = () => {
   );
 
   useEffect(() => {
-    void dispatch(requestGetModule(moduleId));
+    if (moduleId) {
+      void dispatch(requestGetModule(moduleId));
+    }
   }, [dispatch, moduleId]);
 
   useEffect(() => {

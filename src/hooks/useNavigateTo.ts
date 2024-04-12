@@ -25,9 +25,10 @@ export default function useNavigateTo() {
 
       goToModuleEvent: (projectId: number, eventId: number, moduleId: number) =>
         history.push({
-          pathname: APP_PATHS.PROJECT_MODULE_EVENT.replace(':projectId', `${projectId}`)
-            .replace(':moduleId', `${moduleId}`)
-            .replace(':eventId', `${eventId}`),
+          pathname: APP_PATHS.PROJECT_MODULE_EVENT.replace(':projectId', `${projectId}`).replace(
+            ':eventId',
+            `${eventId}`
+          ),
         }),
 
       goToParticipant: (participantId: number) =>

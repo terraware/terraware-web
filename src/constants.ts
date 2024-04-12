@@ -77,7 +77,7 @@ export enum APP_PATHS {
   PROJECT_EDIT = '/projects/:projectId/edit',
   PROJECT_MODULE = '/projects/:projectId/modules/:moduleId',
   PROJECT_MODULE_ADDITIONAL_RESOURCES = '/projects/:projectId/modules/:moduleId/additionalResources',
-  PROJECT_MODULE_EVENT = '/projects/:projectId/modules/:moduleId/event/:eventId',
+  PROJECT_MODULE_EVENT = '/projects/:projectId/event/:eventId',
   PROJECT_MODULE_PREPARATION_MATERIALS = '/projects/:projectId/modules/:moduleId/preparationMaterials',
   PROJECT_MODULES = '/projects/:projectId/modules',
   PROJECT_VIEW = '/projects/:projectId',
