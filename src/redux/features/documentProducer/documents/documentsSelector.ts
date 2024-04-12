@@ -73,7 +73,7 @@ export const searchHistory = createCachedSelector(
           data: response.data.map(
             (event: DocumentHistorySavedPayload | DocumentHistoryCreatedPayload | DocumentHistoryEditedPayload) => ({
               ...event,
-              pddId: id,
+              documentId: id,
             })
           ),
         };

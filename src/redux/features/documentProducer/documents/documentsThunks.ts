@@ -77,8 +77,8 @@ export const requestUpgradeManifest = createAsyncThunk(
   }
 );
 
-export const requestListHistory = createAsyncThunk('listHistory', async (pddId: number, { rejectWithValue }) => {
-  const response = await DocumentService.listHistory(pddId);
+export const requestListHistory = createAsyncThunk('listHistory', async (documentId: number, { rejectWithValue }) => {
+  const response = await DocumentService.listHistory(documentId);
   if (response.requestSucceeded && response.data?.history) {
     return response.data.history as (
       | DocumentHistoryEditedPayload
