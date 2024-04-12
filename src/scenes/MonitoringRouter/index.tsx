@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 import MonitoringView from 'src/scenes/MonitoringRouter/MonitoringView';
 import { selectedOrgHasFacilityType } from 'src/utils/organization';

@@ -6,7 +6,6 @@ import ProjectNewView from 'src/components/ProjectNewView';
 import ProjectView from 'src/components/ProjectView';
 import Projects from 'src/components/Projects';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
-import { APP_PATHS } from 'src/constants';
 
 export type ProjectsRouterProps = {
   isPlaceholderOrg: () => boolean;

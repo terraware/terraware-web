@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 
-import { Box, CssBaseline, StyledEngineProvider, Theme, useTheme } from '@mui/material';
+import { Box, CssBaseline, StyledEngineProvider, useTheme } from '@mui/material';
 
 import AppBootstrap from 'src/AppBootstrap';
 import ToastSnackbar from 'src/components/ToastSnackbar';

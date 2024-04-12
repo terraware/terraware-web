@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 import MyAccountView from 'src/scenes/MyAccountRouter/MyAccountView';
 

@@ -4,7 +4,6 @@ import { Route, Routes } from 'react-router-dom';
 import { BusySpinner } from '@terraware/web-components';
 
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
-import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';

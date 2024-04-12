@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import { APP_PATHS } from 'src/constants';
 import Accession2CreateView from 'src/scenes/AccessionsRouter/Accession2CreateView';
 import Accession2View from 'src/scenes/AccessionsRouter/Accession2View';
 import AccessionsView from 'src/scenes/AccessionsRouter/AccessionsView';

@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';

@@ -2,7 +2,6 @@ import React, { useCallback } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
-import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 import NurseriesListView from 'src/scenes/NurseriesRouter/NurseriesListView';
 import NurseryDetailsView from 'src/scenes/NurseriesRouter/NurseryDetailsView';

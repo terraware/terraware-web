@@ -5,7 +5,6 @@ import { CircularProgress } from '@mui/material';
 
 import { FilterField } from 'src/components/common/FilterGroup';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
-import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
   selectObservationsResults,

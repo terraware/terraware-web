@@ -2,7 +2,6 @@ import React, { useCallback } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
-import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 import SeedBankDetailsView from 'src/scenes/SeedBanksRouter/SeedBankDetailsView';
 import SeedBankView from 'src/scenes/SeedBanksRouter/SeedBankView';

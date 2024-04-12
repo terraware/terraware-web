@@ -4,7 +4,6 @@ import { Route, Routes } from 'react-router-dom';
 import ReportSettingsEdit from 'src/components/Reports/ReportSettingsEdit';
 import ReportsView from 'src/components/Reports/ReportsView';
 import { ReportEdit, ReportView } from 'src/components/Reports/index';
-import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 
 const ReportsRouter = (): JSX.Element | null => {
