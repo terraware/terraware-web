@@ -22,6 +22,7 @@ const BATCH_WITHDRAWALS_ENDPOINT = '/api/v1/nursery/withdrawals';
 const WITHDRAWAL_PHOTOS_ENDPOINT = '/api/v1/nursery/withdrawals/{withdrawalId}/photos';
 const NURSERY_WITHDRAWAL_ENDPOINT = '/api/v1/nursery/withdrawals/{withdrawalId}';
 const NURSERY_WITHDRAWAL_LIST_PHOTOS_ENDPOINT = '/api/v1/nursery/withdrawals/{withdrawalId}/photos';
+const UNDO_WITHDRAWAL_ENDPOINT = '/api/v1/nursery/withdrawals/{withdrawalId}/undo';
 
 /**
  * Exported types
@@ -268,6 +269,15 @@ const parsePlantingSubzones = (value: string): string[] =>
     .map((s) => s.trim()) // return trimmed value and filter out empty values
     .filter((x) => x);
 
+const undoNurseryWithdrawal = async (withdrawalId: number): Promise<Response> => {
+  const serverResponse: Response = await HttpService.root(UNDO_WITHDRAWAL_ENDPOINT).post({
+    urlReplacements: {
+      '{withdrawalId}': withdrawalId.toString(),
+    },
+  });
+
+  return serverResponse;
+};
 /**
  * Exported functions
  */
@@ -279,6 +289,7 @@ const NurseryWithdrawalService = {
   getNurseryWithdrawal,
   getWithdrawalPhotosList,
   getFilterOptions,
+  undoNurseryWithdrawal,
 };
 
 export default NurseryWithdrawalService;

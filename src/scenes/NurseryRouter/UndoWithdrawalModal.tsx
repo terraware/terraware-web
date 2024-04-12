@@ -2,6 +2,7 @@ import React from 'react';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
+import { NurseryWithdrawalService } from 'src/services';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -11,18 +12,17 @@ export interface UndoWithdrawalModalProps {
 }
 
 export default function UndoWithdrawalModal(props: UndoWithdrawalModalProps): JSX.Element {
-  const { onClose } = props;
+  const { onClose, row } = props;
   const snackbar = useSnackbar();
 
-  const onSubmit = () => {
-    // TODO backend
-    // const response = await NurseryWithdrawalService.undoNurseryWithdrawal();
-    // if (response.requestSucceeded) {
-    snackbar.toastSuccess(strings.WITHDRAWAL_UNDONE_DESCRIPTION, strings.WITHDRAWAL_UNDONE);
-    onClose();
-    // } else {
-    //   snackbar.toastError();
-    // }
+  const onSubmit = async () => {
+    const response = await NurseryWithdrawalService.undoNurseryWithdrawal(row.id);
+    if (response.requestSucceeded) {
+      snackbar.toastSuccess(strings.WITHDRAWAL_UNDONE_DESCRIPTION, strings.WITHDRAWAL_UNDONE);
+      onClose();
+    } else {
+      snackbar.toastError();
+    }
   };
 
   return (
