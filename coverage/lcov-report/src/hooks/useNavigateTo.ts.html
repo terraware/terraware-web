@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -121,7 +121,10 @@
 <a name='L56'></a><a href='#L56'>56</a>
 <a name='L57'></a><a href='#L57'>57</a>
 <a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -137,6 +140,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -155,23 +159,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -189,50 +195,53 @@ export default function <span class="fstat-no" title="function not covered" >use
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
-      goToModule: <span class="fstat-no" title="function not covered" >(p</span>rojectId: number, moduleId: number) =&gt; {
+      goToDocuments: <span class="fstat-no" title="function not covered" >()</span> =&gt;
+<span class="cstat-no" title="statement not covered" >        history.push({</span>
+          pathname: APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS,
+        }),
+&nbsp;
+      goToDocumentNew: <span class="fstat-no" title="function not covered" >()</span> =&gt;
+<span class="cstat-no" title="statement not covered" >        history.push({</span>
+          pathname: APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_NEW,
+        }),
+&nbsp;
+      goToModule: <span class="fstat-no" title="function not covered" >(p</span>rojectId: number, moduleId: number) =&gt;
 <span class="cstat-no" title="statement not covered" >        history.push({</span>
           pathname: APP_PATHS.MODULES_FOR_PROJECT_CONTENT.replace(':projectId', `${projectId}`).replace(
             ':moduleId',
             `${moduleId}`
           ),
-        });
-      },
+        }),
 &nbsp;
-      goToModuleEvent: <span class="fstat-no" title="function not covered" >(p</span>rojectId: number, eventId: number, moduleId: number) =&gt; {
+      goToModuleEvent: <span class="fstat-no" title="function not covered" >(p</span>rojectId: number, eventId: number, moduleId: number) =&gt;
 <span class="cstat-no" title="statement not covered" >        history.push({</span>
           pathname: APP_PATHS.MODULES_FOR_PROJECT_EVENT.replace(':projectId', `${projectId}`)
             .replace(':moduleId', `${moduleId}`)
             .replace(':eventId', `${eventId}`),
-        });
-      },
+        }),
 &nbsp;
-      goToParticipant: <span class="fstat-no" title="function not covered" >(p</span>articipantId: number) =&gt; {
+      goToParticipant: <span class="fstat-no" title="function not covered" >(p</span>articipantId: number) =&gt;
 <span class="cstat-no" title="statement not covered" >        history.push({</span>
           pathname: APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW.replace(':participantId', `${participantId}`),
-        });
-      },
+        }),
 &nbsp;
-      goToParticipantsList: <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+      goToParticipantsList: <span class="fstat-no" title="function not covered" >()</span> =&gt;
 <span class="cstat-no" title="statement not covered" >        history.push({</span>
           pathname: APP_PATHS.ACCELERATOR_OVERVIEW,
           search: 'tab=participants',
-        });
-      },
+        }),
 &nbsp;
-      goToParticipantProject: <span class="fstat-no" title="function not covered" >(p</span>rojectId: number) =&gt; {
-<span class="cstat-no" title="statement not covered" >        history.push({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`) });</span>
-      },
+      goToParticipantProject: <span class="fstat-no" title="function not covered" >(p</span>rojectId: number) =&gt;
+<span class="cstat-no" title="statement not covered" >        history.push({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`) }),</span>
 &nbsp;
-      goToParticipantProjectEdit: <span class="fstat-no" title="function not covered" >(p</span>rojectId: number) =&gt; {
-<span class="cstat-no" title="statement not covered" >        history.push({ pathname: APP_PATHS.ACCELERATOR_PROJECT_EDIT.replace(':projectId', `${projectId}`) });</span>
-      },
+      goToParticipantProjectEdit: <span class="fstat-no" title="function not covered" >(p</span>rojectId: number) =&gt;
+<span class="cstat-no" title="statement not covered" >        history.push({ pathname: APP_PATHS.ACCELERATOR_PROJECT_EDIT.replace(':projectId', `${projectId}`) }),</span>
 &nbsp;
-      goToParticipantProjectList: <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+      goToParticipantProjectList: <span class="fstat-no" title="function not covered" >()</span> =&gt;
 <span class="cstat-no" title="statement not covered" >        history.push({</span>
           pathname: APP_PATHS.ACCELERATOR_OVERVIEW,
           search: 'tab=projects',
-        });
-      },
+        }),
     }),
     [history]
   );
@@ -244,7 +253,7 @@ export default function <span class="fstat-no" title="function not covered" >use
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-11T22:46:45.155Z
+                at 2024-04-12T14:44:47.139Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
