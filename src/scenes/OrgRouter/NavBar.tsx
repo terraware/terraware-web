@@ -67,6 +67,8 @@ export default function NavBar({
   const isProjectsRoute = useRouteMatch(APP_PATHS.PROJECTS + '/');
   const isModulesRoute = useRouteMatch(APP_PATHS.MODULES_FOR_PROJECT + '/');
 
+  const featureFlagParticipantExperience = isEnabled('Participant Experience');
+
   const closeNavBar = useCallback(() => {
     if (!isDesktop) {
       setShowNavBar(false);
@@ -172,6 +174,22 @@ export default function NavBar({
     return showNurseryWithdrawals ? [inventoryMenu, withdrawalLogMenu] : [inventoryMenu];
   };
 
+  const deliverablesMenu = useMemo<JSX.Element | null>(
+    () =>
+      hasDeliverables ? (
+        <NavItem
+          label={strings.DELIVERABLES}
+          icon='iconSubmit'
+          selected={!!isDeliverablesRoute}
+          onClick={() => {
+            closeAndNavigateTo(isDeliverablesRoute && !isDeliverableViewRoute ? '' : APP_PATHS.DELIVERABLES);
+          }}
+          id='deliverables'
+        />
+      ) : null,
+    [closeAndNavigateTo, isDeliverablesRoute, isDeliverableViewRoute, hasDeliverables]
+  );
+
   const reportsMenu = useMemo<JSX.Element | null>(
     () =>
       reports.length > 0 && selectedOrganization.canSubmitReports ? (
@@ -190,7 +208,7 @@ export default function NavBar({
 
   const modulesMenu = useMemo<JSX.Element | null>(
     () =>
-      moduleProjectId ? (
+      featureFlagParticipantExperience && moduleProjectId ? (
         <NavItem
           icon='iconModule'
           label={strings.MODULES}
@@ -201,7 +219,12 @@ export default function NavBar({
           id='reports-list'
         />
       ) : null,
-    [closeAndNavigateTo, isModulesRoute, moduleProjectId]
+    [closeAndNavigateTo, featureFlagParticipantExperience, isModulesRoute, moduleProjectId]
+  );
+
+  const acceleratorSectionTitle = useMemo<string>(
+    () => (deliverablesMenu || modulesMenu ? strings.ACCELERATOR.toUpperCase() : ''),
+    [deliverablesMenu, modulesMenu]
   );
 
   return (
@@ -291,29 +314,16 @@ export default function NavBar({
           )}
         </SubNavbar>
       </NavItem>
-      {!hasDeliverables && ((isEnabled('Participant Experience') && modulesMenu) || reportsMenu) && (
+
+      {(deliverablesMenu || modulesMenu || reportsMenu) && (
         <>
-          <NavSection title={strings.ACCELERATOR.toUpperCase()} />
-          {isEnabled('Participant Experience') ? modulesMenu : null}
+          <NavSection title={acceleratorSectionTitle} />
+          {deliverablesMenu}
+          {modulesMenu}
           {reportsMenu}
         </>
       )}
-      {hasDeliverables && (
-        <>
-          <NavSection title={strings.ACCELERATOR.toUpperCase()} />
-          <NavItem
-            label={strings.DELIVERABLES}
-            icon='iconSubmit'
-            selected={!!isDeliverablesRoute}
-            onClick={() => {
-              closeAndNavigateTo(isDeliverablesRoute && !isDeliverableViewRoute ? '' : APP_PATHS.DELIVERABLES);
-            }}
-            id='deliverables'
-          />
-          {isEnabled('Participant Experience') ? modulesMenu : null}
-          {reportsMenu}
-        </>
-      )}
+
       {isAdmin(selectedOrganization) && (
         <>
           <NavSection title={strings.SETTINGS.toUpperCase()} />
