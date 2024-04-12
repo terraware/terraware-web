@@ -6,7 +6,7 @@ import Card from 'src/components/common/Card';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { useProject } from 'src/providers';
 import { requestListModules } from 'src/redux/features/modules/modulesAsyncThunks';
-import { selectModuleList } from 'src/redux/features/modules/modulesSelectors';
+import { selectProjectModuleList } from 'src/redux/features/modules/modulesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 
@@ -19,7 +19,7 @@ export default function ListView(): JSX.Element {
 
   const { project, projectId } = useProject();
 
-  const modules = useAppSelector(selectModuleList(projectId));
+  const modules = useAppSelector(selectProjectModuleList(projectId));
   // tslint:disable:no-console
   console.log(project, modules);
 

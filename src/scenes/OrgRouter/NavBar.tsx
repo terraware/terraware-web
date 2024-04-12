@@ -14,12 +14,11 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { NurseryWithdrawalService } from 'src/services';
 import DeliverablesService from 'src/services/DeliverablesService';
-import ModuleService from 'src/services/ModuleService';
-import ProjectsService from 'src/services/ProjectsService';
 import ReportService, { Reports } from 'src/services/ReportService';
 import strings from 'src/strings';
 import { isAdmin, isManagerOrHigher } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { useModules } from 'src/hooks/useModules';
 
 type NavBarProps = {
   backgroundTransparent?: boolean;
@@ -42,6 +41,7 @@ export default function NavBar({
   const history = useHistory();
   const { isAllowedViewConsole } = useAcceleratorConsole();
   const { activeLocale } = useLocalization();
+  const { projectModules } = useModules();
 
   const isAccessionDashboardRoute = useRouteMatch(APP_PATHS.SEEDS_DASHBOARD + '/');
   const isAccessionsRoute = useRouteMatch(APP_PATHS.ACCESSIONS + '/');
@@ -115,29 +115,18 @@ export default function NavBar({
   }, [selectedOrganization]);
 
   useEffect(() => {
-    const checkHasModules = async () => {
-      const projectsResult = await ProjectsService.listProjects(selectedOrganization.id);
-      if (!projectsResult.projects) {
+    const getModuleProjectId = async () => {
+      const moduleProject = projectModules.find(({id, modules}) => modules !== undefined);
+
+      if (!moduleProject) {
         return;
       }
-      const projectIds = projectsResult.projects
-        .filter((project) => project.participantId)
-        .map((project) => project.id);
-
-      const moduleResults = await Promise.all(
-        projectIds.map(async (id) => ({ id, result: await ModuleService.list(id) }))
-      );
-      const moduleProjectResult = moduleResults.find((result) => !!result.result);
-
-      if (!moduleProjectResult) {
-        return;
-      }
-
-      setModuleProjectId(moduleProjectResult.id);
+    
+      setModuleProjectId(moduleProject.id);
     };
 
-    checkHasModules();
-  }, [selectedOrganization]);
+    getModuleProjectId();
+  }, [projectModules]);
 
   useEffect(() => {
     const fetchDeliverables = async () => {
