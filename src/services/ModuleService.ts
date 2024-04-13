@@ -66,10 +66,6 @@ const mockEvents: ModuleEvent[] = [
       { label: '1:1 Session Slides', url: 'https://google.com/' },
       { label: '1:1 Session Recording', url: 'https://google.com/' },
     ],
-    additionalLinks: [
-      { label: 'Preparation Materials', url: 'https://google.com/' },
-      { label: 'Additional Resources', url: 'https://google.com/' },
-    ],
     callDescription: `
       <div>
         <p>Clicking "Join" will open up a browser window to join a Zoom video call.</p>
@@ -86,6 +82,8 @@ const mockEvents: ModuleEvent[] = [
         <h3>Details</h3>
         <p>This week's one-on-one session will focus on reviewing Budget Template.</p>
         <p>Please ensure to complete all the Stakeholders & Co-Benefits questions for the Feasibility Study by Friday 3rd November.</p>
+        <p><a href="#">Preparation Materials</a></p>
+        <p><a href="#">Additional Resources</a></p>
       </div>
     `,
   },

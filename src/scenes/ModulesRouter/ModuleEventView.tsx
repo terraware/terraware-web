@@ -143,25 +143,6 @@ const ModuleEventView = () => {
               />
 
               <Box dangerouslySetInnerHTML={{ __html: event?.description || '' }} />
-
-              {event?.additionalLinks?.length && (
-                <>
-                  {event?.additionalLinks?.map((link, index) => (
-                    <Box key={index} marginBottom={theme.spacing(2)}>
-                      <Link
-                        fontSize='16px'
-                        onClick={() => {
-                          if (link.url) {
-                            window.open(link.url, '_blank', 'noopener noreferrer');
-                          }
-                        }}
-                      >
-                        {link.label}
-                      </Link>
-                    </Box>
-                  ))}
-                </>
-              )}
             </Grid>
           </Grid>
         )}
