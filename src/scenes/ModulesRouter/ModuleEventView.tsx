@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
@@ -7,7 +7,7 @@ import { Button } from '@terraware/web-components';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Link from 'src/components/common/Link';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
-import { APP_PATHS } from 'src/constants';
+import { APP_PATHS, ONE_MINUTE_INTERVAL_MS } from 'src/constants';
 import { useLocalization, useProject } from 'src/providers';
 import { requestGetModule, requestGetModuleEvent } from 'src/redux/features/modules/modulesAsyncThunks';
 import { selectModule, selectModuleEvent } from 'src/redux/features/modules/modulesSelectors';
@@ -16,6 +16,8 @@ import strings from 'src/strings';
 import { getLongDateTime } from 'src/utils/dateFormatter';
 
 import ModuleViewTitle from './ModuleViewTitle';
+
+const FIFTEEN_MINUTE_INTERVAL_MS = 15 * 60 * 1000;
 
 const ModuleEventView = () => {
   const dispatch = useAppDispatch();
@@ -27,6 +29,7 @@ const ModuleEventView = () => {
   const event = useAppSelector(selectModuleEvent(eventId));
   const moduleId = event?.moduleId || -1;
   const module = useAppSelector(selectModule(moduleId));
+  const [now, setNow] = useState(new Date());
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -37,6 +40,25 @@ const ModuleEventView = () => {
     ],
     [activeLocale, moduleId, projectId]
   );
+
+  const isEventStartingSoon = useMemo(() => {
+    if (event) {
+      const eventTime = new Date(event.eventTime);
+      const diff = eventTime.getTime() - now.getTime();
+      return diff < FIFTEEN_MINUTE_INTERVAL_MS;
+    }
+
+    return false;
+  }, [event, now]);
+
+  // update the current time every minute
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setNow(new Date());
+    }, ONE_MINUTE_INTERVAL_MS);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     if (moduleId) {
@@ -78,6 +100,7 @@ const ModuleEventView = () => {
 
               <Box marginBottom={theme.spacing(2)}>
                 <Button
+                  disabled={!isEventStartingSoon}
                   label={strings.formatString(strings.JOIN_EVENT_NAME, event.name)?.toString()}
                   onClick={() => {
                     if (event.eventURL) {

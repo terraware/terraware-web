@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
@@ -6,7 +6,7 @@ import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Link from 'src/components/common/Link';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
-import { APP_PATHS } from 'src/constants';
+import { APP_PATHS, ONE_MINUTE_INTERVAL_MS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useProject } from 'src/providers';
 import { requestGetModule } from 'src/redux/features/modules/modulesAsyncThunks';
@@ -40,6 +40,7 @@ const ModuleContentView = () => {
   const pathParams = useParams<{ moduleId: string; projectId: string }>();
   const moduleId = Number(pathParams.moduleId);
   const module = useAppSelector(selectModule(moduleId));
+  const [now, setNow] = useState(new Date());
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -50,6 +51,29 @@ const ModuleContentView = () => {
     ],
     [activeLocale, projectId]
   );
+
+  const getDueDateLabelColor = useCallback(
+    (dueDate: string) => {
+      const due = new Date(dueDate);
+
+      // if due date is in the past, item is overdue
+      if (due < now) {
+        return theme.palette.TwClrTxtDanger;
+      }
+
+      return theme.palette.TwClrTxtWarning;
+    },
+    [now, theme]
+  );
+
+  // update the current time every minute
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setNow(new Date());
+    }, ONE_MINUTE_INTERVAL_MS);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     void dispatch(requestGetModule(moduleId));
@@ -115,7 +139,7 @@ const ModuleContentView = () => {
                           fontWeight={600}
                           lineHeight={'24px'}
                           sx={{
-                            color: theme.palette.TwClrTxtWarning,
+                            color: getDueDateLabelColor(content.dueDate),
                             marginLeft: '8px',
                           }}
                         >
