@@ -48,10 +48,30 @@ const deleteOne = async (participantId: number): Promise<Response> =>
 const download = async (search?: SearchNodePayload, sortOrder?: SearchSortOrder): Promise<string | null> =>
   await SearchService.searchCsv(getSearchParams(search, sortOrder));
 
-const get = async (participantId: number): Promise<Response2<ParticipantData>> =>
-  await HttpService.root(PARTICIPANT_ENDPOINT).get2<ParticipantData>({
+// Mocked currentModuleId attached to the participant
+// The location of this data may change in the future when the BE is done
+export type ParticipantWithCurrentModule = Participant & { currentModuleId: number };
+export type ParticipantDataWithCurrentModule = ServerData & { participant: ParticipantWithCurrentModule };
+
+const get = async (participantId: number): Promise<Response2<ParticipantDataWithCurrentModule>> => {
+  const response = await HttpService.root(PARTICIPANT_ENDPOINT).get2<ParticipantDataWithCurrentModule>({
     urlReplacements: { '{participantId}': `${participantId}` },
   });
+
+  if (!(response.requestSucceeded && response.data?.participant)) {
+    return response;
+  }
+
+  return {
+    ...response,
+    data: {
+      participant: {
+        ...response.data.participant,
+        currentModuleId: 1,
+      },
+    },
+  };
+};
 
 const list = async (
   search?: SearchNodePayload,
