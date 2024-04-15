@@ -1,22 +1,15 @@
 import React from 'react';
 
-import { Container } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
-import PageHeader from 'src/components/PageHeader';
 import isEnabled from 'src/features';
-import { useUser } from 'src/providers/hooks';
-import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import ParticipantHomeView from './ParticipantHomeView';
 import TerrawareHomeView from './TerrawareHomeView';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  mainContainer: {
-    padding: 0,
-  },
   main: {
     [theme.breakpoints.down('xl')]: {
       background:
@@ -44,7 +37,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export default function Home(): JSX.Element {
-  const { user } = useUser();
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
   const featureFlagParticipantExperience = isEnabled('Participant Experience');
@@ -53,13 +45,7 @@ export default function Home(): JSX.Element {
 
   return (
     <main className={classes.main}>
-      <PageHeader
-        title={user?.firstName ? strings.formatString(strings.WELCOME_PERSON, user.firstName) : strings.WELCOME}
-        subtitle=''
-      />
-      <Container maxWidth={false} className={classes.mainContainer}>
-        {featureFlagParticipantExperience && isParticipant ? <ParticipantHomeView /> : <TerrawareHomeView />}
-      </Container>
+      {featureFlagParticipantExperience && isParticipant ? <ParticipantHomeView /> : <TerrawareHomeView />}
     </main>
   );
 }
