@@ -9,6 +9,7 @@ const WelcomeBanner = () => {
   const theme = useTheme();
 
   const handleOnClick = () => {
+    // tslint:disable:no-console
     console.log('close');
   };
 
