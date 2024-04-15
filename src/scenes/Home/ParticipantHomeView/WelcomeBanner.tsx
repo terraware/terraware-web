@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
-import Close from '@terraware/web-components/components/svg/Close';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import DialogCloseButton from 'src/components/common/DialogCloseButton';
 
