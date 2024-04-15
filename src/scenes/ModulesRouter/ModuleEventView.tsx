@@ -7,7 +7,7 @@ import { Button } from '@terraware/web-components';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Link from 'src/components/common/Link';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
-import { APP_PATHS, ONE_MINUTE_INTERVAL_MS } from 'src/constants';
+import { APP_PATHS, FIFTEEN_MINUTE_INTERVAL_MS, ONE_MINUTE_INTERVAL_MS } from 'src/constants';
 import { useLocalization, useProject } from 'src/providers';
 import { requestGetModule, requestGetModuleEvent } from 'src/redux/features/modules/modulesAsyncThunks';
 import { selectModule, selectModuleEvent } from 'src/redux/features/modules/modulesSelectors';
@@ -16,8 +16,6 @@ import strings from 'src/strings';
 import { getLongDateTime } from 'src/utils/dateFormatter';
 
 import ModuleViewTitle from './ModuleViewTitle';
-
-const FIFTEEN_MINUTE_INTERVAL_MS = 15 * 60 * 1000;
 
 const ModuleEventView = () => {
   const dispatch = useAppDispatch();
