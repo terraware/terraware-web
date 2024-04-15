@@ -214,7 +214,7 @@ export default function NavBar({
           label={strings.MODULES}
           selected={!!isProjectModulesRoute}
           onClick={() => {
-            closeAndNavigateTo(APP_PATHS.PROJECT_MODULE.replace(':projectId', moduleProjectId.toString()));
+            closeAndNavigateTo(APP_PATHS.PROJECT_MODULES.replace(':projectId', moduleProjectId.toString()));
           }}
           id='reports-list'
         />
