@@ -6,6 +6,7 @@ import { makeStyles } from '@mui/styles';
 
 import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS } from 'src/constants';
+import strings from 'src/strings';
 import { NurseryWithdrawalPurposes } from 'src/types/Batch';
 import { NurseryWithdrawalPurpose, purposeLabel } from 'src/types/Batch';
 
@@ -60,8 +61,7 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
     const nurseryWithdrawalDetailLocation = APP_PATHS.NURSERY_WITHDRAWALS_DETAILS.replace(':withdrawalId', id);
     return (
       <p>
-        {' '}
-        Undo{' '}
+        {`${strings.UNDO} `}
         <Link to={nurseryWithdrawalDetailLocation} className={`${classes.link}`}>
           {date as React.ReactNode}
         </Link>
