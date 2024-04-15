@@ -118,6 +118,7 @@ const listNurseryWithdrawals = async (
       'hasReassignments',
       'batchWithdrawals.batch_project_id',
       'batchWithdrawals.batch_project_name',
+      'undoesWithdrawalId',
     ],
     search: SearchService.convertToSearchNodePayload(searchCriteria, organizationId),
     sortOrder: sortOrder ? [sortOrder, createdTimeOrder] : [{ field: 'id', direction: 'Ascending' }],

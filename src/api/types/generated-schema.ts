@@ -1137,7 +1137,7 @@ export interface components {
       /** Format: int32 */
       notReadyQuantityWithdrawn?: number;
       /** @enum {string} */
-      purpose?: "Nursery Transfer" | "Dead" | "Out Plant" | "Other";
+      purpose?: "Nursery Transfer" | "Dead" | "Out Plant" | "Other" | "Undo";
       /** Format: int32 */
       readyQuantityWithdrawn?: number;
       /** @enum {string} */
@@ -2774,7 +2774,17 @@ export interface components {
       id: number;
       notes?: string;
       /** @enum {string} */
-      purpose: "Nursery Transfer" | "Dead" | "Out Plant" | "Other";
+      purpose: "Nursery Transfer" | "Dead" | "Out Plant" | "Other" | "Undo";
+      /**
+       * Format: int64
+       * @description If purpose is "Undo", the ID of the withdrawal this one undoes.
+       */
+      undoesWithdrawalId?: number;
+      /**
+       * Format: int64
+       * @description If this withdrawal was undone, the ID of the withdrawal that undid it.
+       */
+      undoneByWithdrawalId?: number;
       /** Format: date */
       withdrawnDate: string;
     };
@@ -3091,7 +3101,7 @@ export interface components {
       /** Format: int64 */
       speciesId: number;
       /** @enum {string} */
-      type: "Delivery" | "Reassignment From" | "Reassignment To";
+      type: "Delivery" | "Reassignment From" | "Reassignment To" | "Undo";
     };
     PlantingSeasonPayload: {
       /** Format: date */

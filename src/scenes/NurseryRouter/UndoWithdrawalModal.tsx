@@ -9,15 +9,19 @@ import useSnackbar from 'src/utils/useSnackbar';
 export interface UndoWithdrawalModalProps {
   onClose: () => void;
   row: any;
+  reload?: () => void;
 }
 
 export default function UndoWithdrawalModal(props: UndoWithdrawalModalProps): JSX.Element {
-  const { onClose, row } = props;
+  const { onClose, row, reload } = props;
   const snackbar = useSnackbar();
 
   const onSubmit = async () => {
     const response = await NurseryWithdrawalService.undoNurseryWithdrawal(row.id);
     if (response.requestSucceeded) {
+      if (reload) {
+        reload();
+      }
       snackbar.toastSuccess(strings.WITHDRAWAL_UNDONE_DESCRIPTION, strings.WITHDRAWAL_UNDONE);
       onClose();
     } else {

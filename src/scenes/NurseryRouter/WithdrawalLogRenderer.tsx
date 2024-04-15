@@ -19,6 +19,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: theme.palette.TwClrTxtBrand,
     textDecoration: 'none',
   },
+  undone: {
+    textDecoration: 'line-through',
+  },
   text: {
     fontSize: '14px',
   },
@@ -27,8 +30,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const classes = useStyles();
 
-  const { column, row, value, index, onRowClick } = props;
-  const { NURSERY_TRANSFER } = NurseryWithdrawalPurposes;
+  const { column, row, value, index, onRowClick, reloadData } = props;
+  const { NURSERY_TRANSFER, UNDO } = NurseryWithdrawalPurposes;
 
   const rowClick = (event?: React.SyntheticEvent) => {
     if (onRowClick) {
@@ -44,9 +47,25 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
       row.id.toString()
     );
     return (
-      <Link to={nurseryWithdrawalDetailLocation} className={classes.link}>
+      <Link
+        to={nurseryWithdrawalDetailLocation}
+        className={`${classes.link} ${row.purpose === 'Undo Withdrawal' ? classes.undone : ''}`}
+      >
         {iValue as React.ReactNode}
       </Link>
+    );
+  };
+
+  const createLinkToUndoneNurseryWithdrawalDetail = (date: string, id: string) => {
+    const nurseryWithdrawalDetailLocation = APP_PATHS.NURSERY_WITHDRAWALS_DETAILS.replace(':withdrawalId', id);
+    return (
+      <p>
+        {' '}
+        Undo{' '}
+        <Link to={nurseryWithdrawalDetailLocation} className={`${classes.link}`}>
+          {date as React.ReactNode}
+        </Link>
+      </p>
     );
   };
 
@@ -67,7 +86,7 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
   }
 
   if (column.key === 'menu') {
-    if (row.purpose !== NURSERY_TRANSFER) {
+    if (row.purpose !== NURSERY_TRANSFER && row.purpose !== UNDO) {
       return (
         <CellRenderer
           index={index}
@@ -76,7 +95,11 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
           value={
             <>
               {undoWithdrawalModalOpened && (
-                <UndoWithdrawalModal onClose={() => setUndoWithdrawalModalOpened(false)} row={row} />
+                <UndoWithdrawalModal
+                  onClose={() => setUndoWithdrawalModalOpened(false)}
+                  row={row}
+                  reload={reloadData}
+                />
               )}
               <WithdrawalHistoryMenu
                 reassign={rowClick}
@@ -92,7 +115,16 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
   }
 
   if (column.key === 'purpose') {
-    return <CellRenderer {...props} value={purposeLabel(value as NurseryWithdrawalPurpose)} />;
+    if (value !== 'Undo Withdrawal') {
+      return <CellRenderer {...props} value={purposeLabel(value as NurseryWithdrawalPurpose)} />;
+    } else {
+      return (
+        <CellRenderer
+          {...props}
+          value={createLinkToUndoneNurseryWithdrawalDetail(row.undoesWithdrawalDate, row.undoesWithdrawalId)}
+        />
+      );
+    }
   }
 
   return <CellRenderer {...props} />;

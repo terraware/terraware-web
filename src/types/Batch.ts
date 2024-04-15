@@ -13,6 +13,7 @@ export const NurseryWithdrawalPurposes: { [key: string]: NurseryWithdrawalPurpos
   OUTPLANT: 'Out Plant',
   NURSERY_TRANSFER: 'Nursery Transfer',
   DEAD: 'Dead',
+  UNDO: 'Undo',
   OTHER: 'Other',
 };
 
@@ -30,6 +31,8 @@ export const purposeLabel = (purpose: NurseryWithdrawalPurpose): string => {
       return strings.NURSERY_TRANSFER;
     case 'Dead':
       return strings.DEAD;
+    case 'Undo':
+      return strings.UNDO;
     default:
       return strings.OTHER;
   }
