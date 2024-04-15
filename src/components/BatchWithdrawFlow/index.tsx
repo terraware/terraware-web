@@ -10,7 +10,7 @@ import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers/hooks';
 import { NurseryBatchService, NurseryWithdrawalService } from 'src/services';
 import strings from 'src/strings';
-import { NurseryWithdrawal, NurseryWithdrawalPurposes, NurseryWithdrawalRequest } from 'src/types/Batch';
+import { NurseryWithdrawal, NurseryWithdrawalRequest, NurseryWithdrawalRequestPurposes } from 'src/types/Batch';
 import { SearchResponseElement } from 'src/types/Search';
 import { isContributor } from 'src/utils/organization';
 import useForm from 'src/utils/useForm';
@@ -32,7 +32,7 @@ type BatchWithdrawFlowProps = {
 export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { batchIds, sourcePage, withdrawalCreatedCallback } = props;
-  const { OUTPLANT, NURSERY_TRANSFER } = NurseryWithdrawalPurposes;
+  const { OUTPLANT, NURSERY_TRANSFER } = NurseryWithdrawalRequestPurposes;
   const [flowState, setFlowState] = useState<FlowStates>('purpose');
   const [record, setRecord] = useForm<NurseryWithdrawalRequest>({
     batchWithdrawals: [],

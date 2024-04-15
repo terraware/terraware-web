@@ -21,7 +21,15 @@ export const NurseryWithdrawalPurposesValues = Object.values(NurseryWithdrawalPu
 
 export type NurseryTransfer = components['schemas']['CreateNurseryTransferRequestPayload'];
 export type NurseryWithdrawalRequest = components['schemas']['CreateNurseryWithdrawalRequestPayload'];
+export type NurseryWithdrawalRequestPurpose = NurseryWithdrawalRequest['purpose'];
 export type BatchWithdrawalPayload = components['schemas']['BatchWithdrawalPayload'];
+
+export const NurseryWithdrawalRequestPurposes: { [key: string]: NurseryWithdrawalRequestPurpose } = {
+  OUTPLANT: 'Out Plant',
+  NURSERY_TRANSFER: 'Nursery Transfer',
+  DEAD: 'Dead',
+  OTHER: 'Other',
+};
 
 export const purposeLabel = (purpose: NurseryWithdrawalPurpose): string => {
   switch (purpose) {
