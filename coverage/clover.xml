@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1713301508100" clover="3.2.0">
-  <project timestamp="1713301508101" name="All files">
-    <metrics statements="21054" coveredstatements="918" conditionals="13160" coveredconditionals="228" methods="6618" coveredmethods="162" elements="40832" coveredelements="1308" complexity="0" loc="21054" ncloc="21054" packages="197" files="920" classes="920"/>
+<coverage generated="1713308917822" clover="3.2.0">
+  <project timestamp="1713308917822" name="All files">
+    <metrics statements="21058" coveredstatements="918" conditionals="13160" coveredconditionals="228" methods="6618" coveredmethods="162" elements="40836" coveredelements="1308" complexity="0" loc="21058" ncloc="21058" packages="197" files="920" classes="920"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -6146,7 +6146,7 @@
       </file>
     </package>
     <package name="src.components.common">
-      <metrics statements="441" coveredstatements="0" conditionals="384" coveredconditionals="0" methods="147" coveredmethods="0"/>
+      <metrics statements="441" coveredstatements="0" conditionals="384" coveredconditionals="0" methods="146" coveredmethods="0"/>
       <file name="AddLink.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/AddLink.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
@@ -6215,10 +6215,10 @@
         <line num="34" count="0" type="stmt"/>
       </file>
       <file name="DialogCloseButton.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/DialogCloseButton.tsx">
-        <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="8" count="0" type="stmt"/>
+        <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
       </file>
       <file name="Divisor.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/Divisor.tsx">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -7253,12 +7253,12 @@
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/PageWithModuleTimeline/index.tsx">
         <metrics statements="7" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="11" count="0" type="stmt"/>
-        <line num="18" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.common.ProgressCircle">
@@ -14445,12 +14445,7 @@
       </file>
     </package>
     <package name="src.scenes.Home">
-      <metrics statements="23" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="6" coveredmethods="0"/>
-      <file name="ParticipantHomeView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/ParticipantHomeView.tsx">
-        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="3" count="0" type="stmt"/>
-        <line num="4" count="0" type="stmt"/>
-      </file>
+      <metrics statements="21" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="5" coveredmethods="0"/>
       <file name="TerrawareHomeView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/TerrawareHomeView.tsx">
         <metrics statements="15" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="13" count="0" type="stmt"/>
@@ -14480,7 +14475,7 @@
       </file>
     </package>
     <package name="src.scenes.Home.ParticipantHomeView">
-      <metrics statements="9" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="0"/>
+      <metrics statements="15" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="0"/>
       <file name="Header.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/ParticipantHomeView/Header.tsx">
         <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
@@ -14491,10 +14486,19 @@
         <line num="22" count="0" type="stmt"/>
         <line num="37" count="0" type="stmt"/>
       </file>
-      <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/ParticipantHomeView/index.tsx">
-        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="7" count="0" type="stmt"/>
+      <file name="WelcomeBanner.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/ParticipantHomeView/WelcomeBanner.tsx">
+        <metrics statements="5" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+      </file>
+      <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/ParticipantHomeView/index.tsx">
+        <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.InventoryRouter">
