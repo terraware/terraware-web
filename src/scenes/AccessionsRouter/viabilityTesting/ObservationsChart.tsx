@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import { useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Chart } from 'chart.js';
-import moment from 'moment-timezone';
+import { DateTime } from 'luxon';
 
 import { ViabilityTestResult } from 'src/types/Accession';
 
@@ -44,7 +44,7 @@ export default function ObservationsChart({ observations }: Props): JSX.Element 
         // 2023-01-26T00:00:00 EAT.
         const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         const data = observations.reverse().map((entry) => ({
-          x: moment.tz(entry.recordingDate, localTimeZone).toDate(),
+          x: DateTime.fromISO(entry.recordingDate).setZone(localTimeZone).toJSDate(),
           y: entry.seedsGerminated,
         }));
 

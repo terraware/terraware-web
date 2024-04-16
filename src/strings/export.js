@@ -140,7 +140,7 @@ async function convertCsvFile(csvPath, targetDir) {
  */
 function generateGibberish(english) {
   const overrides = {
-    MONITORING_DATE_FORMAT: 'kk:mm d Mo',
+    MONITORING_DATE_FORMAT: 'HH:mm d MMM',
   };
 
   const encoder = new TextEncoder();

@@ -4,8 +4,8 @@ import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Dropdown } from '@terraware/web-components';
 import { Chart } from 'chart.js';
-import 'chartjs-adapter-date-fns';
-import moment from 'moment';
+import 'chartjs-adapter-luxon';
+import { DateTime } from 'luxon';
 
 import { getTimeseriesHistory } from 'src/api/timeseries/timeseries';
 import { useLocalization } from 'src/providers';
@@ -360,7 +360,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
                     let label = '';
 
                     if (context.parsed.x !== null) {
-                      label += moment(context.parsed.x).format('YYYY-MM-DDTHH:mm');
+                      label += DateTime.fromMillis(context.parsed.x).toFormat('yyyy-MM-ddTHH:mm');
                     }
                     if (context.parsed.y !== null) {
                       label += ', ' + context.parsed.y;
@@ -383,8 +383,8 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
         const endTime = timePeriodParams.end;
         if (selectedLocation) {
           const response = await getTimeseriesHistory(
-            startTime.format(),
-            endTime.format(),
+            startTime.toISO(),
+            endTime.toISO(),
             [
               { deviceId: selectedLocation.id, timeseriesName: 'temperature' },
               { deviceId: selectedLocation.id, timeseriesName: 'humidity' },
