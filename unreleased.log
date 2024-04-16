@@ -1,3 +1,4 @@
+0ab5ddbc38 Fix the inventory playwright tests (#2517)
 e3e94ddf29 SW-5129 Fix APP_ROUTES changes (#2510)
 23807fc734 SW-5129 Added module tab to nav bar (#2506)
 016159c026 SW-5206: Update module routes (#2508)
