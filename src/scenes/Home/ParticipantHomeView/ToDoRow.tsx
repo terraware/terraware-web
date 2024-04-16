@@ -1,5 +1,7 @@
 import { Grid, Typography, useTheme } from '@mui/material';
 
+import TextTruncated from 'src/components/common/TextTruncated';
+
 import { ToDoType } from './ToDo';
 import ToDoCta from './ToDoCta';
 import ToDoDate from './ToDoDate';
@@ -32,9 +34,8 @@ const ToDoRow = ({ toDo }: ToDoRowProps) => {
         </Typography>
       </Grid>
       <Grid item>
-        <Typography fontSize={'16px'} fontWeight={500} lineHeight={'24px'} component={'span'}>
-          {toDo.name}
-        </Typography>
+        {/* TODO this will need a new component to make the truncated text fluid */}
+        <TextTruncated fontSize={16} stringList={[toDo.name]} />
       </Grid>
       <Grid item marginLeft={'auto'}>
         <ToDoCta toDo={toDo} />
