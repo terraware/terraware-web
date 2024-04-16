@@ -7,6 +7,7 @@ import { makeStyles } from '@mui/styles';
 import ErrorBoundary from 'src/ErrorBoundary';
 import ProjectsRouter from 'src/components/Projects/Router';
 import ReportsRouter from 'src/components/Reports/Router';
+import { LEFT_NAV_WIDTH } from 'src/components/common/PageHeaderWrapper';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
@@ -65,7 +66,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   contentWithNavBar: {
     '& > div, & > main': {
-      paddingLeft: '220px',
+      paddingLeft: LEFT_NAV_WIDTH,
     },
   },
   navBarOpened: {

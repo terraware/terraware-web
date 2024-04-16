@@ -3,6 +3,7 @@ import React from 'react';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import DialogCloseButton from 'src/components/common/DialogCloseButton';
+import strings from 'src/strings';
 
 const WelcomeBanner = () => {
   const theme = useTheme();
@@ -22,22 +23,26 @@ const WelcomeBanner = () => {
         position: 'relative',
       }}
     >
-      <Grid container columnSpacing={theme.spacing(1)}>
-        <Grid item xs={3}>
+      <Grid container columnSpacing={theme.spacing(2)} paddingRight={0} justifyContent={'flex-start'}>
+        <Grid item xs={2}>
           <img
-            src='https://source.unsplash.com/random/160x100/?cat'
-            alt='a kitten'
-            style={{ width: '100%', maxHeight: '200px' }}
+            src='/assets/accelerator-welcome@2x.png'
+            // TODO this might change
+            alt='Welcome to the Terraformation Accelerator'
+            width='100%'
+            height='100px'
+            style={{
+              objectFit: 'cover',
+              objectPosition: '0% 50%',
+            }}
           />
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs={9}>
           <Typography fontSize={'24px'} fontWeight={600} lineHeight={'32px'}>
-            Welcome to your Accelerator Program Experience!
+            {strings.ACCELERATOR_WELCOME_HEADER}
           </Typography>
           <Typography fontSize={'16px'} fontWeight={400} lineHeight={'24px'}>
-            This will serve as your source of information for the Terraformation accelerator program. Review your To Do
-            list below to see the tasks you need to review and complete before their due dates. See all of your tasks
-            for the current phase by clicking Deliverables in the left menu.
+            {strings.ACCELERATOR_WELCOME_CONTENT}
           </Typography>
         </Grid>
 
