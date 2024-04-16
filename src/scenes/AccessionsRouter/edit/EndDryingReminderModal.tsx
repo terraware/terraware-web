@@ -101,12 +101,13 @@ export default function EndDryingReminderModal(props: EndDryingReminderModalProp
     >
       <Grid item xs={12} textAlign='left'>
         <DatePicker
+          aria-label={strings.END_DRYING_REMINDER}
+          defaultTimeZone={timeZoneId}
+          errorText={dateError}
           id='dryingEndDate'
           label={strings.END_DRYING_REMINDER}
-          aria-label={strings.END_DRYING_REMINDER}
-          value={date}
           onChange={(value) => changeDate('dryingEndDate', value)}
-          errorText={dateError}
+          value={date}
         />
       </Grid>
     </DialogBox>
