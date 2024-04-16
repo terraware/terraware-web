@@ -1,3 +1,4 @@
+1c312a3a28 SW-5129 Fixed routing issue caused by wrong routes (#2512)
 0ab5ddbc38 Fix the inventory playwright tests (#2517)
 e3e94ddf29 SW-5129 Fix APP_ROUTES changes (#2510)
 23807fc734 SW-5129 Added module tab to nav bar (#2506)
