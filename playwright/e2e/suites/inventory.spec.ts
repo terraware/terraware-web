@@ -166,7 +166,7 @@ export default function InventoryTests() {
     await expect(page.locator('#row1-total')).toContainText('15');
     await page.getByRole('link', { name: 'Withdrawal Log' }).click();
     await expect(page.locator('#row1-speciesScientificNames')).toContainText('Coconut');
-    await expect(page.getByRole('cell', { name: '15' })).toBeVisible();
+    await expect(page.getByRole('cell', { name: '15', exact: true })).toBeVisible();
   });
 
   test('Transfer Nurseries', async ({ page }, testInfo) => {
@@ -301,8 +301,8 @@ export default function InventoryTests() {
     await page.waitForTimeout(2000); //Wait for map to load
     await page.getByLabel('Map', { exact: true }).click({
       position: {
-        x: 562,
-        y: 245,
+        x: 526,
+        y: 172,
       },
     });
     await expect(page.getByRole('cell', { name: '60 Plants' })).toBeVisible();
@@ -313,8 +313,8 @@ export default function InventoryTests() {
     await page.waitForTimeout(2000); //Wait for map to load
     await page.getByLabel('Map', { exact: true }).click({
       position: {
-        x: 687,
-        y: 276,
+        x: 526,
+        y: 172,
       },
     });
 
