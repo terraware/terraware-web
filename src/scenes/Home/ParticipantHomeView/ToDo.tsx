@@ -1,4 +1,4 @@
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 
 import strings from 'src/strings';
 
@@ -12,6 +12,7 @@ export type ToDoType = {
   dueDate: string;
   eventId?: number;
   name: string;
+  moduleId: number;
   projectId: number;
   section: 'todo' | 'upcoming';
   status: 'Overdue' | 'Not Submitted' | 'Event';
@@ -23,6 +24,7 @@ const MOCK_TODOS: ToDoType[] = [
     deliverableId: 1,
     dueDate: 'Tuesday, March 1',
     name: 'Feasibility Questions - Kick-Off',
+    moduleId: 1,
     projectId: 1,
     section: 'todo',
     status: 'Overdue',
@@ -32,6 +34,7 @@ const MOCK_TODOS: ToDoType[] = [
     deliverableId: 2,
     dueDate: 'Tuesday, March 10',
     name: 'Feasibility Questions - Introduction to Carbon Projects',
+    moduleId: 1,
     projectId: 1,
     section: 'todo',
     status: 'Not Submitted',
@@ -41,6 +44,7 @@ const MOCK_TODOS: ToDoType[] = [
     dueDate: 'Monday, March 5 at 15:00 PM',
     eventId: 1,
     name: 'Introduction to Carbon Projects',
+    moduleId: 1,
     projectId: 1,
     section: 'upcoming',
     status: 'Event',
@@ -50,6 +54,7 @@ const MOCK_TODOS: ToDoType[] = [
     deliverableId: 3,
     dueDate: 'Tuesday, March 17',
     name: 'Feasibility Questions - Legal Eligibility',
+    moduleId: 1,
     projectId: 1,
     section: 'upcoming',
     status: 'Not Submitted',
@@ -59,6 +64,7 @@ const MOCK_TODOS: ToDoType[] = [
     deliverableId: 4,
     dueDate: 'Tuesday, March 21',
     name: 'Feasibility Questions - Proposed Restoration Activies and some more text',
+    moduleId: 1,
     projectId: 1,
     section: 'upcoming',
     status: 'Not Submitted',
@@ -68,6 +74,7 @@ const MOCK_TODOS: ToDoType[] = [
     dueDate: 'Tuesday, March 23',
     eventId: 2,
     name: 'Proposed Restoration Activities Part 1',
+    moduleId: 1,
     projectId: 1,
     section: 'upcoming',
     status: 'Event',

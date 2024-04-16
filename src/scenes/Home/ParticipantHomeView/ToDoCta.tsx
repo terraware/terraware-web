@@ -26,9 +26,9 @@ const ToDoCta = ({ toDo }: ToDoCtaProps) => {
   const { goToDeliverable, goToModuleEvent } = useNavigateTo();
 
   const handleOnClick = useCallback(() => {
-    if (toDo.type === 'Deliverable') {
+    if (toDo.deliverableId) {
       goToDeliverable(toDo.deliverableId, toDo.projectId);
-    } else {
+    } else if (toDo.eventId) {
       goToModuleEvent(toDo.projectId, toDo.eventId, toDo.moduleId);
     }
   }, [goToDeliverable, goToModuleEvent, toDo]);

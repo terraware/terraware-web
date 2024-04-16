@@ -28,8 +28,8 @@ const ToDoSection = ({ toDos, section }: ToDoSectionProps) => {
           padding: theme.spacing(1),
         }}
       />
-      {toDos.map((toDo) => (
-        <ToDoRow toDo={toDo} />
+      {toDos.map((toDo, index) => (
+        <ToDoRow toDo={toDo} key={index} />
       ))}
     </Box>
   );
