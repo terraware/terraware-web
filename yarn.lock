@@ -2064,17 +2064,10 @@
   resolved "https://registry.yarnpkg.com/@date-io/core/-/core-2.16.0.tgz#7871bfc1d9bca9aa35ad444a239505589d0f22f6"
   integrity sha512-DYmSzkr+jToahwWrsiRA2/pzMEtz9Bq1euJwoOuYwuwIYXnZFtHajY2E6a1VNVDc9jP8YUXK1BvnZH9mmT19Zg==
 
-"@date-io/core@^2.17.0":
-  version "2.17.0"
-  resolved "https://registry.yarnpkg.com/@date-io/core/-/core-2.17.0.tgz#360a4d0641f069776ed22e457876e8a8a58c205e"
-  integrity sha512-+EQE8xZhRM/hsY0CDTVyayMDDY5ihc4MqXCrPxooKw19yAzUIC6uUqsZeaOFNL9YKTNxYKrJP5DFgE8o5xRCOw==
-
-"@date-io/date-fns@^2.14.0":
-  version "2.17.0"
-  resolved "https://registry.yarnpkg.com/@date-io/date-fns/-/date-fns-2.17.0.tgz#1d9d0a02e0137524331819c9576a4e8e19a6142b"
-  integrity sha512-L0hWZ/mTpy3Gx/xXJ5tq5CzHo0L7ry6KEO9/w/JWiFWFLZgiNVo3ex92gOl3zmzjHqY/3Ev+5sehAr8UnGLEng==
-  dependencies:
-    "@date-io/core" "^2.17.0"
+"@date-io/core@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@date-io/core/-/core-3.0.0.tgz#9fd2375383b5791b7211dfce3e576211f9ddce5e"
+  integrity sha512-S3j+IAQVBYNkQzchVVhX40eBkGDreBpScy9RXwTS5j2+k07+62pMVPisQ44Gq76Rqy5AOG/EZXCwBpY/jbemvA==
 
 "@date-io/date-fns@^2.15.0":
   version "2.16.0"
@@ -2097,19 +2090,19 @@
   dependencies:
     "@date-io/core" "^2.16.0"
 
+"@date-io/luxon@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@date-io/luxon/-/luxon-3.0.0.tgz#6c56a332f34ccce7a79f6b625b91e6938b0eb6da"
+  integrity sha512-AnTb5TowMOgBQfWDCL94jdWHGLWQ/ToFy6Z13/iPD219A3WQmcQpEoS/RDVcB1fiyknC+wLE2M4t12WTHOmQxw==
+  dependencies:
+    "@date-io/core" "^3.0.0"
+
 "@date-io/moment@^2.15.0":
   version "2.16.1"
   resolved "https://registry.yarnpkg.com/@date-io/moment/-/moment-2.16.1.tgz#ec6e0daa486871e0e6412036c6f806842a0eeed4"
   integrity sha512-JkxldQxUqZBfZtsaCcCMkm/dmytdyq5pS1RxshCQ4fHhsvP5A7gSqPD22QbVXMcJydi3d3v1Y8BQdUKEuGACZQ==
   dependencies:
     "@date-io/core" "^2.16.0"
-
-"@date-io/moment@^2.16.1":
-  version "2.17.0"
-  resolved "https://registry.yarnpkg.com/@date-io/moment/-/moment-2.17.0.tgz#04d2487d9d15d468b2e7903b87268fa1c89b56cb"
-  integrity sha512-e4nb4CDZU4k0WRVhz1Wvl7d+hFsedObSauDHKtZwU9kt7gdYEAzKgnrSCTHsEaXrDumdrkCYTeZ0Tmyk7uV4tw==
-  dependencies:
-    "@date-io/core" "^2.17.0"
 
 "@discoveryjs/json-ext@^0.5.3":
   version "0.5.7"
@@ -4538,13 +4531,12 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@terraware/web-components@^2.13.0":
-  version "2.13.0"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.13.0.tgz#d1ff43477dec2503a0508be8f9be8f738efe7711"
-  integrity sha512-X4G+0D9rnFydqw6vOMChNG1nlM25jBlhnjDSo/Z8WQAF1hKaooy7qyoLc8DRbIXu3587letUdwFoAnIL1szhLg==
+"@terraware/web-components@2.15.0":
+  version "2.15.0"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.15.0.tgz#0df6b0dd8acb28dcd1ec5a2b80c5c8b48883c8a6"
+  integrity sha512-gWrIbFJsERCrJQjje6hqlVz2PsFq4iDE8Dvz1D16Q3yySlftvAxCEOqPQ+IUPU+d7829rJCXQPSo3gAmUNGqxQ==
   dependencies:
-    "@date-io/date-fns" "^2.14.0"
-    "@date-io/moment" "^2.16.1"
+    "@date-io/luxon" "^3.0.0"
     "@dnd-kit/core" "^6.0.7"
     "@dnd-kit/sortable" "^7.0.2"
     "@emotion/react" "^11.11.3"
@@ -4555,10 +4547,7 @@
     "@mui/styles" "^5.15.3"
     "@mui/x-date-pickers" "^5.0.20"
     classnames "^2.3.2"
-    date-fns "^2.29.3"
     luxon "^3.3.0"
-    moment "^2.29.4"
-    moment-timezone "^0.5.43"
     react "^17.0.2"
     react-dom "^17.0.2"
     react-intersection-observer "^9.5.2"
@@ -6739,10 +6728,10 @@ chart.js@^4.2.0:
   dependencies:
     "@kurkle/color" "^0.3.0"
 
-chartjs-adapter-date-fns@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/chartjs-adapter-date-fns/-/chartjs-adapter-date-fns-3.0.0.tgz#c25f63c7f317c1f96f9a7c44bd45eeedb8a478e5"
-  integrity sha512-Rs3iEB3Q5pJ973J93OBTpnP7qoGwvq3nUnoMdtxO+9aoJof7UFcRbWcIDteXuYd1fgAvct/32T9qaLyLuZVwCg==
+chartjs-adapter-luxon@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/chartjs-adapter-luxon/-/chartjs-adapter-luxon-1.3.1.tgz#8ad8be7cc1521bacd6cd2ff4b013669d4dd49364"
+  integrity sha512-yxHov3X8y+reIibl1o+j18xzrcdddCLqsXhriV2+aQ4hCR66IYFchlRXUvrJVoxglJ380pgytU7YWtoqdIgqhg==
 
 chartjs-plugin-annotation@^3.0.1:
   version "3.0.1"
@@ -7453,9 +7442,11 @@ data-urls@^2.0.0:
     whatwg-url "^8.0.0"
 
 date-fns@^2.29.3:
-  version "2.29.3"
-  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.29.3.tgz#27402d2fc67eb442b511b70bbdf98e6411cd68a8"
-  integrity sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==
+  version "2.30.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.30.0.tgz#f367e644839ff57894ec6ac480de40cae4b0f4d0"
+  integrity sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==
+  dependencies:
+    "@babel/runtime" "^7.21.0"
 
 debug@2.6.9, debug@^2.6.0, debug@^2.6.9:
   version "2.6.9"
@@ -11776,18 +11767,6 @@ mkdirp@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
-
-moment-timezone@^0.5.43:
-  version "0.5.45"
-  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.45.tgz#cb685acd56bac10e69d93c536366eb65aa6bcf5c"
-  integrity sha512-HIWmqA86KcmCAhnMAN0wuDOARV/525R2+lOLotuGFzn4HO+FH+/645z2wx0Dt3iDv6/p61SIvKnDstISainhLQ==
-  dependencies:
-    moment "^2.29.4"
-
-moment@^2.29.4, moment@^2.30.1:
-  version "2.30.1"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.30.1.tgz#f8c91c07b7a786e30c59926df530b4eac96974ae"
-  integrity sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==
 
 mri@^1.2.0:
   version "1.2.0"

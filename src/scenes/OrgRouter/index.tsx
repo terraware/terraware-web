@@ -9,6 +9,7 @@ import ProjectsRouter from 'src/components/Projects/Router';
 import ReportsRouter from 'src/components/Reports/Router';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
+import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
 import { selectHasObservationsResults } from 'src/redux/features/observations/observationsSelectors';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
@@ -211,7 +212,9 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
           <Switch>
             {/* Routes, in order of their appearance down the side NavBar */}
             <Route exact path={APP_PATHS.HOME}>
-              <Home />
+              <ParticipantProvider>
+                <Home />
+              </ParticipantProvider>
             </Route>
 
             <Route exact path={APP_PATHS.SEEDS_DASHBOARD}>
