@@ -7,6 +7,17 @@ export type DismissibleWrapperProps = {
   children: (onClose: () => void) => JSX.Element;
 };
 
+/**
+ * A wrapper that hooks up to user preferences to show or not show contents, passes
+ * an onClose function to the children which is used to dismiss the content forever
+ *
+ * Usage:
+ * <DismissibleWrapper dontShowAgainPreferenceName={'dont-show-my-component'}>
+ *   {(onClose) => (
+ *     <MyComponent onClose={onClose} />
+ *   )}
+ * </DismissibleWrapper>
+ */
 export default function DismissibleWrapper(props: DismissibleWrapperProps): JSX.Element | null {
   const { children, dontShowAgainPreferenceName } = props;
   const { userPreferences, updateUserPreferences } = useUser();
