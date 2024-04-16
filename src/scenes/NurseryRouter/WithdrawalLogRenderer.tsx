@@ -32,7 +32,7 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
   const classes = useStyles();
 
   const { column, row, value, index, onRowClick, reloadData } = props;
-  const { NURSERY_TRANSFER, UNDO } = NurseryWithdrawalPurposes;
+  const { NURSERY_TRANSFER } = NurseryWithdrawalPurposes;
 
   const rowClick = (event?: React.SyntheticEvent) => {
     if (onRowClick) {
@@ -50,7 +50,7 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
     return (
       <Link
         to={nurseryWithdrawalDetailLocation}
-        className={`${classes.link} ${row.purpose === 'Undo Withdrawal' ? classes.undone : ''}`}
+        className={`${classes.link} ${row.undoesWithdrawalId ? classes.undone : ''}`}
       >
         {iValue as React.ReactNode}
       </Link>
@@ -86,7 +86,7 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
   }
 
   if (column.key === 'menu') {
-    if (row.purpose !== NURSERY_TRANSFER && row.purpose !== UNDO) {
+    if (row.purpose !== NURSERY_TRANSFER && !row.undoesWithdrawalId) {
       return (
         <CellRenderer
           index={index}
@@ -115,7 +115,7 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
   }
 
   if (column.key === 'purpose') {
-    if (value !== 'Undo Withdrawal') {
+    if (!row.undoesWithdrawalId) {
       return <CellRenderer {...props} value={purposeLabel(value as NurseryWithdrawalPurpose)} />;
     } else {
       return (

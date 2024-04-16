@@ -153,7 +153,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   useEffect(() => {
     const withdrawalsWithUndoDate: SearchResponseElement[] = [];
     searchResults?.reduce((acc, withdrawal) => {
-      if (withdrawal.purpose === 'Undo Withdrawal') {
+      if (withdrawal.undoesWithdrawalId) {
         acc.push({
           ...withdrawal,
           undoesWithdrawalDate: getWithdrawalBy(withdrawal?.undoesWithdrawalId)?.withdrawnDate,

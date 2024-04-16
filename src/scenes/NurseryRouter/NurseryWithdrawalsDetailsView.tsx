@@ -68,7 +68,7 @@ export default function NurseryWithdrawalsDetailsView({
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
   const snackbar = useSnackbar();
-  const { OUTPLANT, NURSERY_TRANSFER, UNDO } = NurseryWithdrawalPurposes;
+  const { OUTPLANT, NURSERY_TRANSFER } = NurseryWithdrawalPurposes;
   const query = useQuery();
   const history = useHistory();
   const location = useStateLocation();
@@ -209,7 +209,7 @@ export default function NurseryWithdrawalsDetailsView({
                     />
                   </Box>
                 )}
-                {withdrawal?.purpose !== NURSERY_TRANSFER && withdrawal?.purpose !== UNDO && (
+                {withdrawal?.purpose !== NURSERY_TRANSFER && !withdrawal?.undoesWithdrawalId && (
                   <OptionsMenu
                     onOptionItemClick={() => setUndoWithdrawalModalOpened(true)}
                     optionItems={[{ label: strings.UNDO_WITHDRAWAL, value: 'undo' }]}
