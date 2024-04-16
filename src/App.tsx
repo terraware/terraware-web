@@ -17,8 +17,6 @@ import { store } from 'src/redux/store';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-import { LEFT_NAV_WIDTH } from './components/common/PageHeaderWrapper';
-
 const AcceleratorRouter = React.lazy(() => import('src/scenes/AcceleratorRouter'));
 const TerrawareRouter = React.lazy(() => import('src/scenes/TerrawareRouter'));
 
@@ -45,10 +43,11 @@ const useStyles = makeStyles((theme: Theme) => ({
             `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0.4)} 100%)`
           : null,
       backgroundAttachment: 'fixed',
+      paddingRight: (props: StyleProps) => (props.isDesktop ? '8px' : undefined),
       marginTop: (props: StyleProps) => (props.isDesktop ? '96px' : '0px'),
       paddingTop: (props: StyleProps) => (props.isDesktop ? '0px' : '24px'),
       overflowY: 'auto',
-      width: (props: StyleProps) => (props.isDesktop ? LEFT_NAV_WIDTH : '300px'),
+      width: (props: StyleProps) => (props.isDesktop ? '210px' : '300px'),
       zIndex: 1000,
       '&::-webkit-scrollbar-thumb': {
         backgroundColor: theme.palette.TwClrBgGhostActive,

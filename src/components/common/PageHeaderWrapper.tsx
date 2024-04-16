@@ -9,7 +9,7 @@ import useDebounce from '../../utils/useDebounce';
 
 const TOP_BAR_HEIGHT = 64;
 const DEBOUNCE_TIME = 500;
-export const LEFT_NAV_WIDTH = 200;
+const LEFT_NAV_WIDTH = 220;
 
 /**
  * children The child component which is the page header

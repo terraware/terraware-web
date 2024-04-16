@@ -5,7 +5,6 @@ import { Slide, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import ErrorBoundary from 'src/ErrorBoundary';
-import { LEFT_NAV_WIDTH } from 'src/components/common/PageHeaderWrapper';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import { getRgbaFromHex } from 'src/utils/color';
@@ -39,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   contentWithNavBar: {
     '& > div, & > main': {
-      paddingLeft: LEFT_NAV_WIDTH,
+      paddingLeft: '220px',
     },
   },
   navBarOpened: {
