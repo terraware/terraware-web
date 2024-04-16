@@ -4,6 +4,7 @@ import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import isEnabled from 'src/features';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import ParticipantHomeView from './ParticipantHomeView';
@@ -38,14 +39,13 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function Home(): JSX.Element {
   const { isMobile } = useDeviceInfo();
+  const { orgHasParticipants } = useParticipantData();
   const classes = useStyles({ isMobile });
   const featureFlagParticipantExperience = isEnabled('Participant Experience');
 
-  const isParticipant = false;
-
   return (
     <main className={classes.main}>
-      {featureFlagParticipantExperience && isParticipant ? <ParticipantHomeView /> : <TerrawareHomeView />}
+      {featureFlagParticipantExperience && orgHasParticipants ? <ParticipantHomeView /> : <TerrawareHomeView />}
     </main>
   );
 }
