@@ -86,7 +86,7 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
   }
 
   if (column.key === 'menu') {
-    if (row.purpose !== NURSERY_TRANSFER && !row.undoesWithdrawalId) {
+    if (row.purpose !== NURSERY_TRANSFER && !row.undoesWithdrawalId && !row.undoneByWithdrawalId) {
       return (
         <CellRenderer
           index={index}

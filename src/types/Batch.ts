@@ -40,7 +40,7 @@ export const purposeLabel = (purpose: NurseryWithdrawalPurpose): string => {
     case 'Dead':
       return strings.DEAD;
     case 'Undo':
-      return strings.UNDO;
+      return strings.UNDO_WITHDRAWAL;
     default:
       return strings.OTHER;
   }
