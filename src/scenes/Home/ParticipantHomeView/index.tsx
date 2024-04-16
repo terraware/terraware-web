@@ -6,6 +6,7 @@ import DismissibleWrapper from 'src/components/common/DismissibleWrapper';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 
 import Header from './Header';
+import ToDo from './ToDo';
 import WelcomeBanner from './WelcomeBanner';
 
 const ParticipantHomeView = () => {
@@ -13,10 +14,11 @@ const ParticipantHomeView = () => {
 
   return (
     <PageWithModuleTimeline>
-      <Grid display={'flex'} flexDirection={'column'}>
+      <Grid display={'flex'} flexDirection={'column'} flexGrow={1}>
         <Grid item>
           <Header />
         </Grid>
+
         <DismissibleWrapper dontShowAgainPreferenceName={'dont-show-accelerator-welcome-banner'}>
           {(onClose) => (
             <Grid item marginTop={theme.spacing(2)}>
@@ -24,6 +26,10 @@ const ParticipantHomeView = () => {
             </Grid>
           )}
         </DismissibleWrapper>
+
+        <Grid item marginTop={theme.spacing(2)}>
+          <ToDo />
+        </Grid>
       </Grid>
     </PageWithModuleTimeline>
   );
