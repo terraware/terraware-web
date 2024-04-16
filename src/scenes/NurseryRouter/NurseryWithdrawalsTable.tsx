@@ -59,7 +59,6 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
 
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>();
-  const [searchResultsWithUndoDate, setSearchResultsWithUndoDate] = useState<SearchResponseElement[] | null>();
   const [searchValue, setSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(searchValue, 250);
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>({
@@ -141,30 +140,6 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     };
     void getApiSearchResults();
   }, [selectedOrganization]);
-
-  const getWithdrawalBy = useCallback(
-    (withddrawalId: unknown) => {
-      const found = searchResults?.find((withdrawal) => withdrawal.id === withddrawalId);
-      return found;
-    },
-    [searchResults]
-  );
-
-  useEffect(() => {
-    const withdrawalsWithUndoDate: SearchResponseElement[] = [];
-    searchResults?.reduce((acc, withdrawal) => {
-      if (withdrawal.undoesWithdrawalId) {
-        acc.push({
-          ...withdrawal,
-          undoesWithdrawalDate: getWithdrawalBy(withdrawal?.undoesWithdrawalId)?.withdrawnDate,
-        });
-      } else {
-        acc.push(withdrawal);
-      }
-      return acc;
-    }, withdrawalsWithUndoDate);
-    setSearchResultsWithUndoDate(withdrawalsWithUndoDate);
-  }, [searchResults, getWithdrawalBy]);
 
   const onWithdrawalClicked = (withdrawal: any) => {
     history.push({
@@ -319,7 +294,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         <Table
           id='withdrawal-log'
           columns={columns}
-          rows={searchResultsWithUndoDate || []}
+          rows={searchResults || []}
           Renderer={WithdrawalLogRenderer}
           orderBy={searchSortOrder.field}
           order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
