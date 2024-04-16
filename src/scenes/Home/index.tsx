@@ -1,21 +1,15 @@
 import React from 'react';
 
-import { Container, Grid } from '@mui/material';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
-import PageHeader from 'src/components/PageHeader';
-import PageCard from 'src/components/common/PageCard';
-import { APP_PATHS } from 'src/constants';
-import { useOrganization, useUser } from 'src/providers/hooks';
-import strings from 'src/strings';
-import { isAdmin } from 'src/utils/organization';
+import isEnabled from 'src/features';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+import ParticipantHomeView from './ParticipantHomeView';
+import TerrawareHomeView from './TerrawareHomeView';
+
 const useStyles = makeStyles((theme: Theme) => ({
-  mainContainer: {
-    padding: 0,
-  },
   main: {
     [theme.breakpoints.down('xl')]: {
       background:
@@ -43,97 +37,15 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export default function Home(): JSX.Element {
-  const { selectedOrganization } = useOrganization();
-  const { user } = useUser();
-  const { isTablet, isMobile } = useDeviceInfo();
+  const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
+  const featureFlagParticipantExperience = isEnabled('Participant Experience');
 
-  const primaryGridSize = () => {
-    if (isMobile) {
-      return 12;
-    }
-    return 6;
-  };
-
-  const secondaryGridSize = () => {
-    if (isMobile) {
-      return 12;
-    }
-    if (isTablet) {
-      return 6;
-    }
-    return 4;
-  };
+  const isParticipant = false;
 
   return (
     <main className={classes.main}>
-      <PageHeader
-        title={user?.firstName ? strings.formatString(strings.WELCOME_PERSON, user.firstName) : strings.WELCOME}
-        subtitle=''
-      />
-      <Container maxWidth={false} className={classes.mainContainer}>
-        <Grid container spacing={3} sx={{ padding: 0 }}>
-          {isAdmin(selectedOrganization) && (
-            <>
-              <Grid item xs={primaryGridSize()}>
-                <PageCard
-                  id='peopleHomeCard'
-                  name={strings.PEOPLE}
-                  icon='person'
-                  description={strings.PEOPLE_CARD_DESCRIPTION}
-                  link={APP_PATHS.PEOPLE}
-                  linkText={strings.formatString(strings.GO_TO, strings.PEOPLE) as string}
-                  linkStyle={'plain'}
-                />
-              </Grid>
-              <Grid item xs={primaryGridSize()}>
-                <PageCard
-                  id='seedbankHomeCard'
-                  name={strings.SEED_BANKS}
-                  icon='seedbankNav'
-                  description={strings.SEED_BANKS_CARD_DESCRIPTION}
-                  link={APP_PATHS.SEED_BANKS}
-                  linkText={strings.formatString(strings.GO_TO, strings.SEED_BANKS) as string}
-                  linkStyle={'plain'}
-                />
-              </Grid>
-            </>
-          )}
-          <Grid item xs={secondaryGridSize()}>
-            <PageCard
-              id='speciesHomeCard'
-              name={strings.SPECIES}
-              icon='species'
-              description={strings.SPECIES_CARD_DESCRIPTION}
-              link={APP_PATHS.SPECIES}
-              linkText={strings.formatString(strings.GO_TO, strings.SPECIES) as string}
-              linkStyle={'plain'}
-            />
-          </Grid>
-          <Grid item xs={secondaryGridSize()}>
-            <PageCard
-              id='accessionsHomeCard'
-              name={strings.ACCESSIONS}
-              icon='seeds'
-              description={strings.ACCESSIONS_CARD_DESCRIPTION}
-              link={APP_PATHS.ACCESSIONS}
-              linkText={strings.formatString(strings.GO_TO, strings.ACCESSIONS) as string}
-              linkStyle={'plain'}
-            />
-          </Grid>
-          <Grid item xs={secondaryGridSize()}>
-            <PageCard
-              id='monitoringHomeCard'
-              name={strings.MONITORING}
-              icon='monitoringNav'
-              description={strings.MONITORING_CARD_DESCRIPTION}
-              link={APP_PATHS.MONITORING}
-              linkText={strings.formatString(strings.GO_TO, strings.MONITORING) as string}
-              linkStyle={'plain'}
-            />
-          </Grid>
-        </Grid>
-      </Container>
+      {featureFlagParticipantExperience && isParticipant ? <ParticipantHomeView /> : <TerrawareHomeView />}
     </main>
   );
 }
