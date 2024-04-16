@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
+import { ParticipantWithCurrentModule } from 'src/services/ParticipantsService';
 import { Participant, ParticipantSearchResult } from 'src/types/Participant';
 
 import {
@@ -46,7 +47,7 @@ export const participantDeleteReducer = participantDeleteSlice.reducer;
 /**
  * Get Participant
  */
-const initialStateParticipant: { [key: string]: StatusT<Participant> } = {};
+const initialStateParticipant: { [key: string]: StatusT<ParticipantWithCurrentModule> } = {};
 
 export const participantSlice = createSlice({
   name: 'participantSlice',

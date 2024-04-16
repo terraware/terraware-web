@@ -1,7 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { Response, Response2 } from 'src/services/HttpService';
-import ParticipantsService, { ParticipantData } from 'src/services/ParticipantsService';
+import ParticipantsService, {
+  ParticipantData,
+  ParticipantDataWithCurrentModule,
+} from 'src/services/ParticipantsService';
 import strings from 'src/strings';
 import { ParticipantCreateRequest, ParticipantSearchResult, ParticipantUpdateRequest } from 'src/types/Participant';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
@@ -35,7 +38,7 @@ export const requestDeleteParticipant = createAsyncThunk(
 export const requestGetParticipant = createAsyncThunk(
   'participants/get-one',
   async (participantId: number, { rejectWithValue }) => {
-    const response: Response2<ParticipantData> = await ParticipantsService.get(participantId);
+    const response: Response2<ParticipantDataWithCurrentModule> = await ParticipantsService.get(participantId);
 
     if (response && response.requestSucceeded) {
       return response.data?.participant;
