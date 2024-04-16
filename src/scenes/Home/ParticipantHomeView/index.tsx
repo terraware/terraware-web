@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Grid, useTheme } from '@mui/material';
 
+import DismissableWrapper from 'src/components/common/DismissableWrapper';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 
 import Header from './Header';
@@ -16,9 +17,13 @@ const ParticipantHomeView = () => {
         <Grid item>
           <Header />
         </Grid>
-        <Grid item marginTop={theme.spacing(2)}>
-          <WelcomeBanner />
-        </Grid>
+        <DismissableWrapper dontShowAgainPreferenceName={'dont-show-accelerator-welcome-banner'}>
+          {(onClose) => (
+            <Grid item marginTop={theme.spacing(2)}>
+              <WelcomeBanner onClose={onClose} />
+            </Grid>
+          )}
+        </DismissableWrapper>
       </Grid>
     </PageWithModuleTimeline>
   );
