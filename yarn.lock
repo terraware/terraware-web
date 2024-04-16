@@ -2104,13 +2104,6 @@
   dependencies:
     "@date-io/core" "^2.16.0"
 
-"@date-io/moment@^2.16.1":
-  version "2.17.0"
-  resolved "https://registry.yarnpkg.com/@date-io/moment/-/moment-2.17.0.tgz#04d2487d9d15d468b2e7903b87268fa1c89b56cb"
-  integrity sha512-e4nb4CDZU4k0WRVhz1Wvl7d+hFsedObSauDHKtZwU9kt7gdYEAzKgnrSCTHsEaXrDumdrkCYTeZ0Tmyk7uV4tw==
-  dependencies:
-    "@date-io/core" "^2.17.0"
-
 "@discoveryjs/json-ext@^0.5.3":
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz#1d572bfbbe14b7704e0ba0f39b74815b84870d70"
@@ -4538,10 +4531,10 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@terraware/web-components@2.14.0":
-  version "2.14.0"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.14.0.tgz#5c69c819cd6bcb4d9d9ef87914218340a2f987a2"
-  integrity sha512-JWfXkaDqExTDs8S3dS7qH/MRgaWO2fM5KNmw3eH+pYtlI+uhMEsLJzFaAo9FY+QTK4mIJs62c91iZw+NknmMzg==
+"@terraware/web-components@2.14.1-rc.2":
+  version "2.14.1-rc.2"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.14.1-rc.2.tgz#5e2708b1faef35ef9d508368bd9e21164224c04b"
+  integrity sha512-MLDhbHWeJabSGxyTpRDkAWxKcPcRiZ3hbZDJkEq54GwXrcJYkZYbDDHkU7QjdflgCjZF+xX023ladGFpdzv6dg==
   dependencies:
     "@date-io/luxon" "^3.0.0"
     "@dnd-kit/core" "^6.0.7"

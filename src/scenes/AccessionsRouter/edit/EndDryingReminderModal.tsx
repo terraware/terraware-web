@@ -6,11 +6,14 @@ import getDateDisplayValue, { isInTheFuture } from '@terraware/web-components/ut
 import DatePicker from 'src/components/common/DatePicker';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
+import { useOrganization } from 'src/providers';
 import AccessionService from 'src/services/AccessionService';
 import strings from 'src/strings';
 import { Accession } from 'src/types/Accession';
+import { getSeedBank } from 'src/utils/organization';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 export interface EndDryingReminderModalProps {
   open: boolean;
@@ -25,6 +28,8 @@ export default function EndDryingReminderModal(props: EndDryingReminderModalProp
   const [dateError, setDateError] = useState<string>('');
   const [record, setRecord, onChange] = useForm(accession);
   const snackbar = useSnackbar();
+  const { selectedOrganization } = useOrganization();
+  const timeZoneId = useLocationTimeZone().get(getSeedBank(selectedOrganization, accession.facilityId))?.id;
 
   useEffect(() => {
     setRecord(accession);
@@ -70,7 +75,7 @@ export default function EndDryingReminderModal(props: EndDryingReminderModalProp
   const changeDate = (id: string, value?: any) => {
     setDate(value);
 
-    const newDate = value ? getDateDisplayValue(value.getTime()) : null;
+    const newDate = value ? getDateDisplayValue(value.getTime(), timeZoneId) : null;
     onChange(id, newDate);
 
     validateDate(value);

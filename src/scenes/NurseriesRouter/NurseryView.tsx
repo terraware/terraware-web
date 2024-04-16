@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import DatePicker from 'src/components/common/DatePicker';
@@ -137,11 +138,11 @@ export default function NurseryView(): JSX.Element {
     });
   };
 
-  const onUpdateDate = (field: string, value: any) => {
+  const onUpdateDate = (field: string, value?: Date | null) => {
     setRecord((previousRecord: Facility): Facility => {
       return {
         ...previousRecord,
-        [field]: value,
+        [field]: value ? getDateDisplayValue(value, timeZoneId) : value,
       };
     });
   };
@@ -221,7 +222,7 @@ export default function NurseryView(): JSX.Element {
                 id={'buildStartedDate'}
                 label={strings.FACILITY_BUILD_START_DATE}
                 maxDate={record.buildCompletedDate}
-                onChange={(value) => onUpdateDate('buildStartedDate', value)}
+                onChange={(value?: Date | null) => onUpdateDate('buildStartedDate', value)}
                 value={record.buildStartedDate ?? ''}
               />
             </Grid>
@@ -243,7 +244,7 @@ export default function NurseryView(): JSX.Element {
                 label={strings.FACILITY_BUILD_COMPLETION_DATE}
                 maxDate={record.operationStartedDate}
                 minDate={record.buildStartedDate}
-                onChange={(value) => onUpdateDate('buildCompletedDate', value)}
+                onChange={(value?: Date | null) => onUpdateDate('buildCompletedDate', value)}
                 value={record.buildCompletedDate ?? ''}
               />
             </Grid>
@@ -264,7 +265,7 @@ export default function NurseryView(): JSX.Element {
                 id={'operationStartedDate'}
                 label={strings.FACILITY_OPERATION_START_DATE}
                 minDate={record.buildCompletedDate}
-                onChange={(value) => onUpdateDate('operationStartedDate', value)}
+                onChange={(value?: Date | null) => onUpdateDate('operationStartedDate', value)}
                 value={record.operationStartedDate ?? ''}
               />
             </Grid>
