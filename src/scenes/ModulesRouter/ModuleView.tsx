@@ -8,10 +8,9 @@ import Link from 'src/components/common/Link';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useProject } from 'src/providers';
 import { requestGetModule } from 'src/redux/features/modules/modulesAsyncThunks';
 import { selectModule } from 'src/redux/features/modules/modulesSelectors';
-import { selectProject } from 'src/redux/features/projects/projectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { getLongDate, getLongDateTime } from 'src/utils/dateFormatter';
@@ -37,17 +36,16 @@ const ModuleContentView = () => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
   const { goToModuleEvent } = useNavigateTo();
+  const { project, projectId } = useProject();
   const pathParams = useParams<{ moduleId: string; projectId: string }>();
   const moduleId = Number(pathParams.moduleId);
-  const projectId = Number(pathParams.projectId);
   const module = useAppSelector(selectModule(moduleId));
-  const project = useAppSelector(selectProject(projectId));
 
   const crumbs: Crumb[] = useMemo(
     () => [
       {
         name: activeLocale ? strings.ALL_MODULES : '',
-        to: APP_PATHS.MODULES_FOR_PROJECT.replace(':projectId', `${projectId}`),
+        to: APP_PATHS.PROJECT_MODULES.replace(':projectId', `${projectId}`),
       },
     ],
     [activeLocale, projectId]
@@ -100,11 +98,27 @@ const ModuleContentView = () => {
 
                   {module.contents.map((content) => (
                     <ModuleContentSection key={content.id}>
-                      <Link fontSize='16px' to='#'>
+                      <Link
+                        fontSize='16px'
+                        onClick={() => {
+                          if (content.url) {
+                            window.open(content.url, '_blank', 'noopener noreferrer');
+                          }
+                        }}
+                      >
                         {content.title}
                       </Link>
                       {content.dueDate && (
-                        <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={400}>
+                        <Typography
+                          component='span'
+                          fontSize={'16px'}
+                          fontWeight={600}
+                          lineHeight={'24px'}
+                          sx={{
+                            color: theme.palette.TwClrTxtWarning,
+                            marginLeft: '8px',
+                          }}
+                        >
                           {strings.formatString(strings.DUE, getLongDate(content.dueDate, activeLocale))}
                         </Typography>
                       )}

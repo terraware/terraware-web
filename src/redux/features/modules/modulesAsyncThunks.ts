@@ -13,6 +13,19 @@ export const requestGetModule = createAsyncThunk('modules/get', async (moduleId:
   return rejectWithValue(strings.GENERIC_ERROR);
 });
 
+export const requestGetModuleEvent = createAsyncThunk(
+  'modules/getEvent',
+  async (eventId: number, { rejectWithValue }) => {
+    const response = await ModuleService.getEvent(eventId);
+
+    if (response !== null && response.requestSucceeded && response?.data?.event !== undefined) {
+      return response.data.event;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
 export const requestListModules = createAsyncThunk('modules/list', async (projectId: number, { rejectWithValue }) => {
   const response = await ModuleService.list(projectId);
 

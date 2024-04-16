@@ -1,3 +1,6 @@
+import { getDateDisplayValue } from '@terraware/web-components/utils';
+import { DateTime } from 'luxon';
+
 /**
  * Returns <Month> <Year> (eg. July 2023) from yyyy-mm-dd format
  */
@@ -24,3 +27,10 @@ export const getShortTime = (dateTime: string, locale: string | undefined | null
   new Intl.DateTimeFormat(locale || 'en-US', { timeStyle: 'short', timeZone: timeZone ?? 'UTC' })
     .format(new Date(dateTime))
     .toLowerCase();
+
+export const getDateTimeDisplayValue = (timestamp: number): string => {
+  const dateTime = DateTime.fromMillis(timestamp);
+  // returns {ISO} {TIME}, eg. 2023-09-05 3:31 PM
+  // DateTime has pre-supported formats but none satisfy our requirements
+  return `${getDateDisplayValue(timestamp)} ${dateTime.toLocaleString(DateTime.TIME_SIMPLE)}`;
+};

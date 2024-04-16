@@ -5,16 +5,15 @@ import { Slide, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import ErrorBoundary from 'src/ErrorBoundary';
-import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
-import strings from 'src/strings';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStateLocation from 'src/utils/useStateLocation';
 
 import Cohorts from './Cohorts';
 import Deliverables from './Deliverables';
+import DocumentsRouter from './Documents';
 import ModuleContent from './Modules';
 import NavBar from './NavBar';
 import Overview from './Overview';
@@ -57,7 +56,7 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
   const { type } = useDeviceInfo();
   const classes = useStyles();
   const location = useStateLocation();
-  const consoleEnabled = isEnabled('Console');
+  const documentProducerEnabled = isEnabled('Document Producer');
 
   const viewHasBackgroundImage = useCallback((): boolean => {
     return location.pathname.startsWith(APP_PATHS.ACCELERATOR_OVERVIEW);
@@ -82,7 +81,7 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
         <ErrorBoundary setShowNavBar={setShowNavBar}>
           <Switch>
             <Route path={APP_PATHS.ACCELERATOR_OVERVIEW}>
-              {consoleEnabled ? <Overview /> : <Page title={strings.OVERVIEW} />}
+              <Overview />
             </Route>
             <Route path={APP_PATHS.ACCELERATOR_COHORTS}>
               <Cohorts />
@@ -94,26 +93,23 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
               <ModuleContent />
             </Route>
             <Route path={APP_PATHS.ACCELERATOR_PEOPLE}>
-              {consoleEnabled ? <People /> : <Page title={strings.PEOPLE} />}
+              <People />
             </Route>
-            {consoleEnabled && (
-              <Route path={APP_PATHS.ACCELERATOR_SCORING}>
-                <Scoring />
-              </Route>
-            )}
-            {consoleEnabled && (
-              <Route path={APP_PATHS.ACCELERATOR_VOTING}>
-                <Voting />
-              </Route>
-            )}
-            {consoleEnabled && (
-              <Route path={APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW}>
-                <Participants />
-              </Route>
-            )}
-            {consoleEnabled && (
-              <Route path={APP_PATHS.ACCELERATOR_PROJECT_VIEW}>
-                <ParticipantProjects />
+            <Route path={APP_PATHS.ACCELERATOR_SCORING}>
+              <Scoring />
+            </Route>
+            <Route path={APP_PATHS.ACCELERATOR_VOTING}>
+              <Voting />
+            </Route>
+            <Route path={APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW}>
+              <Participants />
+            </Route>
+            <Route path={APP_PATHS.ACCELERATOR_PROJECT_VIEW}>
+              <ParticipantProjects />
+            </Route>
+            {documentProducerEnabled && (
+              <Route path={APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}>
+                <DocumentsRouter />
               </Route>
             )}
             <Route path={'*'}>

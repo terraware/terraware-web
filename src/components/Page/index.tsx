@@ -1,11 +1,21 @@
 import React, { useRef } from 'react';
 
 import { CircularProgress, Grid, Typography, useTheme } from '@mui/material';
+import { Button, IconName } from '@terraware/web-components';
 
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
+
+export type ButtonType = {
+  title: string;
+  onClick: () => void;
+};
+
+export type PrimaryButtonType = ButtonType & {
+  icon?: IconName;
+};
 
 export type PageProps = {
   children?: React.ReactNode;
@@ -14,6 +24,7 @@ export type PageProps = {
   crumbs?: Crumb[];
   hierarchicalCrumbs?: boolean;
   isLoading?: boolean;
+  primaryButton?: PrimaryButtonType;
   rightComponent?: React.ReactNode;
   title?: React.ReactNode;
 };
@@ -28,6 +39,7 @@ export default function Page({
   crumbs,
   hierarchicalCrumbs,
   isLoading,
+  primaryButton,
   rightComponent,
   title,
 }: PageProps): JSX.Element {
@@ -71,6 +83,18 @@ export default function Page({
           {rightComponent && (
             <Grid item xs={4} sx={{ textAlign: 'right' }}>
               {rightComponent}
+            </Grid>
+          )}
+
+          {primaryButton && (
+            <Grid item xs={4} sx={{ textAlign: 'right' }}>
+              <Button
+                id={`${primaryButton.title}_id}`}
+                icon={primaryButton.icon}
+                label={primaryButton.title}
+                onClick={primaryButton.onClick}
+                size='medium'
+              />
             </Grid>
           )}
         </Grid>

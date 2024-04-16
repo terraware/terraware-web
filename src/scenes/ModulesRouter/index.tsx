@@ -12,15 +12,15 @@ const ModulesRouter = () => {
   return (
     <ProjectProvider>
       <Switch>
-        <Route exact path={APP_PATHS.MODULES_FOR_PROJECT}>
+        <Route exact path={APP_PATHS.PROJECT_MODULES}>
           <ListView />
         </Route>
 
-        <Route exact path={APP_PATHS.MODULES_FOR_PROJECT_CONTENT}>
+        <Route exact path={APP_PATHS.PROJECT_MODULE}>
           <ModuleView />
         </Route>
 
-        <Route exact path={APP_PATHS.MODULES_FOR_PROJECT_EVENT}>
+        <Route exact path={APP_PATHS.PROJECT_MODULE_EVENT}>
           <ModuleEventView />
         </Route>
       </Switch>

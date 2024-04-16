@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { Module } from 'src/types/Module';
+import { Module, ModuleEvent } from 'src/types/Module';
 
 import { StatusT, buildReducers } from '../asyncUtils';
-import { requestGetModule, requestListModules } from './modulesAsyncThunks';
+import { requestGetModule, requestGetModuleEvent, requestListModules } from './modulesAsyncThunks';
 
 /**
  * Get Module
@@ -20,6 +20,23 @@ export const moduleSlice = createSlice({
 });
 
 export const moduleReducer = moduleSlice.reducer;
+
+/**
+ * Get Module Event
+ */
+
+const initialStateModuleEvent: { [key: string]: StatusT<ModuleEvent> } = {};
+
+export const moduleEventSlice = createSlice({
+  name: 'moduleEventSlice',
+  initialState: initialStateModuleEvent,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestGetModuleEvent, true)(builder);
+  },
+});
+
+export const moduleEventReducer = moduleEventSlice.reducer;
 
 /**
  * List Modules
