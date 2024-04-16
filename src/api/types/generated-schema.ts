@@ -327,6 +327,13 @@ export interface paths {
      */
     get: operations["getWithdrawalPhoto"];
   };
+  "/api/v1/nursery/withdrawals/{withdrawalId}/undo": {
+    /**
+     * Undoes a withdrawal.
+     * @description The withdrawal's plants will be returned to their original batches. Nursery transfers may not be undone. If the withdrawal was an outplanting to a planting site, the plants will be removed from the planting site's plant totals. This does not delete the original withdrawal.
+     */
+    post: operations["undoBatchWithdrawal"];
+  };
   "/api/v1/organizations": {
     /**
      * Lists all organizations.
@@ -528,10 +535,6 @@ export interface paths {
   "/api/v1/seedbank/values": {
     /** List the values of a set of search fields for a set of accessions matching certain filter criteria. */
     post: operations["listFieldValues"];
-  };
-  "/api/v1/seedbank/values/all": {
-    /** List the possible values of a set of search fields. */
-    post: operations["listAllFieldValues"];
   };
   "/api/v1/species": {
     /** Lists all the species available in an organization. */
@@ -1006,12 +1009,6 @@ export interface components {
       /** @enum {string} */
       role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
     };
-    AllFieldValuesPayload: {
-      /** @description If true, the list of values is too long to return in its entirety and "values" is a partial list. */
-      partial: boolean;
-      /** @description All the values this field could possibly have, whether or not any accessions have them. For fields that allow the user to enter arbitrary values, this is equivalent to querying the list of values without any filter criteria, that is, it's a list of all the user-entered values. */
-      values: string[];
-    };
     /** @description Search criterion that matches results that meet all of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x AND y AND z. */
     AndNodePayload: WithRequired<{
       operation: "and";
@@ -1140,7 +1137,7 @@ export interface components {
       /** Format: int32 */
       notReadyQuantityWithdrawn?: number;
       /** @enum {string} */
-      purpose?: "Nursery Transfer" | "Dead" | "Out Plant" | "Other";
+      purpose?: "Nursery Transfer" | "Dead" | "Out Plant" | "Other" | "Undo";
       /** Format: int32 */
       readyQuantityWithdrawn?: number;
       /** @enum {string} */
@@ -2478,17 +2475,6 @@ export interface components {
       organizations: components["schemas"]["AcceleratorOrganizationPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
-    ListAllFieldValuesRequestPayload: {
-      fields: string[];
-      /** Format: int64 */
-      organizationId: number;
-    };
-    ListAllFieldValuesResponsePayload: {
-      results: {
-        [key: string]: components["schemas"]["AllFieldValuesPayload"];
-      };
-      status: components["schemas"]["SuccessOrError"];
-    };
     ListAssignedPlotsResponsePayload: {
       plots: components["schemas"]["AssignedPlotPayload"][];
       status: components["schemas"]["SuccessOrError"];
@@ -2788,7 +2774,17 @@ export interface components {
       id: number;
       notes?: string;
       /** @enum {string} */
-      purpose: "Nursery Transfer" | "Dead" | "Out Plant" | "Other";
+      purpose: "Nursery Transfer" | "Dead" | "Out Plant" | "Other" | "Undo";
+      /**
+       * Format: int64
+       * @description If purpose is "Undo", the ID of the withdrawal this one undoes.
+       */
+      undoesWithdrawalId?: number;
+      /**
+       * Format: int64
+       * @description If this withdrawal was undone, the ID of the withdrawal that undid it.
+       */
+      undoneByWithdrawalId?: number;
       /** Format: date */
       withdrawnDate: string;
     };
@@ -3105,7 +3101,7 @@ export interface components {
       /** Format: int64 */
       speciesId: number;
       /** @enum {string} */
-      type: "Delivery" | "Reassignment From" | "Reassignment To";
+      type: "Delivery" | "Reassignment From" | "Reassignment To" | "Undo";
     };
     PlantingSeasonPayload: {
       /** Format: date */
@@ -3210,7 +3206,6 @@ export interface components {
       type?: "Polygon";
     }, "coordinates" | "type">;
     ProjectAcceleratorDetailsPayload: {
-      abbreviatedName?: string;
       applicationReforestableLand?: number;
       confirmedReforestableLand?: number;
       countryCode?: string;
@@ -4049,17 +4044,20 @@ export interface components {
       coordinates: components["schemas"]["ObservationMonitoringPlotCoordinatesPayload"][];
     };
     UpdateProjectAcceleratorDetailsRequestPayload: {
-      abbreviatedName?: string;
       applicationReforestableLand?: number;
       confirmedReforestableLand?: number;
       countryCode?: string;
       dealDescription?: string;
       /** @enum {string} */
       dealStage?: "Phase 0 (Doc Review)" | "Phase 1" | "Phase 2" | "Phase 3" | "Graduated, Finished Planting" | "Non Graduate" | "Application Submitted" | "Project Lead Screening Review" | "Screening Questions Ready for Review" | "Carbon Pre-Check" | "Submission Requires Follow Up" | "Carbon Eligible" | "Closed Lost" | "Issue Active" | "Issue Pending" | "Issue Reesolved";
+      /** @description Path on Dropbox to use for sensitive document storage. Ignored if the user does not have permission to update project document settings. */
       dropboxFolderPath?: string;
       failureRisk?: string;
       fileNaming?: string;
-      /** Format: uri */
+      /**
+       * Format: uri
+       * @description URL of Google Drive folder to use for non-sensitive document storage. Ignored if the user does not have permission to update project document settings.
+       */
       googleFolderUrl?: string;
       investmentThesis?: string;
       landUseModelTypes: ("Native Forest" | "Monoculture" | "Sustainable Timber" | "Other Timber" | "Mangroves" | "Agroforestry" | "Silvopasture" | "Other Land-Use Model")[];
@@ -6114,6 +6112,37 @@ export interface operations {
     };
   };
   /**
+   * Undoes a withdrawal.
+   * @description The withdrawal's plants will be returned to their original batches. Nursery transfers may not be undone. If the withdrawal was an outplanting to a planting site, the plants will be removed from the planting site's plant totals. This does not delete the original withdrawal.
+   */
+  undoBatchWithdrawal: {
+    parameters: {
+      path: {
+        withdrawalId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The withdrawal does not exist. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** @description The withdrawal is not eligible for undo, e.g., because it has already been undone or because it is a nursery transfer. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
    * Lists all organizations.
    * @description Lists all organizations the user can access.
    */
@@ -7111,22 +7140,6 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["ListFieldValuesResponsePayload"];
-        };
-      };
-    };
-  };
-  /** List the possible values of a set of search fields. */
-  listAllFieldValues: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ListAllFieldValuesRequestPayload"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListAllFieldValuesResponsePayload"];
         };
       };
     };
