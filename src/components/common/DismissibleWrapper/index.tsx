@@ -2,12 +2,12 @@ import { useMemo, useState } from 'react';
 
 import { useUser } from 'src/providers';
 
-export type DismissableWrapperProps = {
+export type DismissibleWrapperProps = {
   dontShowAgainPreferenceName: string;
   children: (onClose: () => void) => JSX.Element;
 };
 
-export default function DismissableWrapper(props: DismissableWrapperProps): JSX.Element | null {
+export default function DismissibleWrapper(props: DismissibleWrapperProps): JSX.Element | null {
   const { children, dontShowAgainPreferenceName } = props;
   const { userPreferences, updateUserPreferences } = useUser();
 
