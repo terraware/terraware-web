@@ -8,42 +8,50 @@ export default function useNavigateTo() {
 
   return useMemo(
     () => ({
-      goToModule: (projectId: number, moduleId: number) => {
+      goToDocuments: () =>
         navigate({
-          pathname: APP_PATHS.MODULES_FOR_PROJECT_CONTENT.replace(':projectId', `${projectId}`).replace(
-            ':moduleId',
-            `${moduleId}`
-          ),
-        });
-      },
+          pathname: APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS,
+        }),
 
-      goToParticipant: (participantId: number) => {
+      goToDocumentNew: () =>
+        navigate({
+          pathname: APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_NEW,
+        }),
+
+      goToModule: (projectId: number, moduleId: number) =>
+        navigate({
+          pathname: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
+        }),
+
+      goToModuleEvent: (projectId: number, eventId: number, moduleId: number) =>
+        navigate({
+          pathname: APP_PATHS.PROJECT_MODULE_EVENT.replace(':projectId', `${projectId}`)
+            .replace(':moduleId', `${moduleId}`)
+            .replace(':eventId', `${eventId}`),
+        }),
+
+      goToParticipant: (participantId: number) =>
         navigate({
           pathname: APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW.replace(':participantId', `${participantId}`),
-        });
-      },
+        }),
 
-      goToParticipantsList: () => {
+      goToParticipantsList: () =>
         navigate({
           pathname: APP_PATHS.ACCELERATOR_OVERVIEW,
           search: 'tab=participants',
-        });
-      },
+        }),
 
-      goToParticipantProject: (projectId: number) => {
-        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`) });
-      },
+      goToParticipantProject: (projectId: number) =>
+        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`) }),
 
-      goToParticipantProjectEdit: (projectId: number) => {
-        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_EDIT.replace(':projectId', `${projectId}`) });
-      },
+      goToParticipantProjectEdit: (projectId: number) =>
+        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_EDIT.replace(':projectId', `${projectId}`) }),
 
-      goToParticipantProjectList: () => {
+      goToParticipantProjectList: () =>
         navigate({
           pathname: APP_PATHS.ACCELERATOR_OVERVIEW,
           search: 'tab=projects',
-        });
-      },
+        }),
     }),
     [navigate]
   );

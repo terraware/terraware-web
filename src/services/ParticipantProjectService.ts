@@ -39,11 +39,7 @@ const COHORT_ID_EXISTS_PREDICATE: SearchNodePayload = {
   },
 };
 
-const getSearchParams = (
-  search?: SearchNodePayload,
-  sortOrder?: SearchSortOrder,
-  isCsv?: boolean
-): SearchRequestPayload => {
+const getSearchParams = (search?: SearchNodePayload, sortOrder?: SearchSortOrder): SearchRequestPayload => {
   const searchParams: SearchRequestPayload = {
     prefix: 'projects',
     fields: [
@@ -56,7 +52,6 @@ const getSearchParams = (
       'country_name',
       'country_region',
       'acceleratorDetails_confirmedReforestableLand',
-      ...(isCsv ? [] : ['acceleratorDetails_confirmedReforestableLand(raw)']),
       'landUseModelTypes.landUseModelType',
     ],
     search: {
@@ -128,7 +123,7 @@ const get = async (participantProjectId: number): Promise<Response2<ParticipantP
   });
 
 const downloadList = async (search?: SearchNodePayload, sortOrder?: SearchSortOrder): Promise<string | null> =>
-  await SearchService.searchCsv(getSearchParams(search, sortOrder, true));
+  await SearchService.searchCsv(getSearchParams(search, sortOrder));
 
 const list = async (
   search?: SearchNodePayload,
@@ -156,17 +151,18 @@ const list = async (
     type LandUse = { landUseModelType: string };
 
     return {
-      cohortName: participant_cohort_name,
-      country: country_name,
+      acceleratorDetails_confirmedReforestableLand,
+      country_name,
+      country_region,
       id: Number(id),
-      landUseModelType: ((result.landUseModelTypes || []) as LandUse[]).map((type: LandUse) => type.landUseModelType),
+      'landUseModelTypes.landUseModelType': ((result.landUseModelTypes || []) as LandUse[]).map(
+        (type: LandUse) => type.landUseModelType
+      ),
       name,
       participant_cohort_id: Number(participant_cohort_id),
+      participant_cohort_name,
       participant_cohort_phase,
-      participantName: participant_name,
-      region: country_region,
-      restorableLand: acceleratorDetails_confirmedReforestableLand,
-      restorableLandRaw: Number(result['acceleratorDetails_confirmedReforestableLand(raw)']),
+      participant_name,
     } as ParticipantProjectSearchResult;
   });
 };

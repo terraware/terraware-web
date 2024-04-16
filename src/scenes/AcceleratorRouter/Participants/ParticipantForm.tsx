@@ -243,7 +243,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
             />
           </Grid>
         </Grid>
-        {orgProjectsSections.length === 0 && (
+        {orgProjectsSections.length === 0 && acceleratorOrgs.length === 0 && (
           <Grid item xs={12} marginTop={2}>
             <Message body={strings.ACCELERATOR_ORGS_EMPTY_WARNING} priority='warning' type='page' />
           </Grid>
@@ -257,13 +257,17 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
             section={section}
           />
         ))}
-        {orgProjectsSections.length < acceleratorOrgs.length && (
+        {acceleratorOrgs.length > 0 && (
           <Box display='flex' marginTop={theme.spacing(2)}>
             <AddLink
+              disabled={orgProjectsSections.length === acceleratorOrgs.length}
               id='add-org-project'
               large={true}
               onClick={addOrgProjectsSection}
               text={strings.ADD_PROJECTS_BY_ORGANIZATION}
+              tooltipTitle={
+                orgProjectsSections.length === acceleratorOrgs.length ? strings.ACCELERATOR_ORGS_EXHAUSTED_WARNING : ''
+              }
             />
           </Box>
         )}

@@ -30,7 +30,7 @@ export default function ParticipantsCellRenderer(props: RendererProps<TableRowTy
     return <CellRenderer {...props} value={createLinkToParticipant()} className={classes.text} />;
   }
 
-  if (column.key === 'project_name') {
+  if (column.key === 'projects.name') {
     return <CellRenderer {...props} value={<TextTruncated stringList={value as string[]} />} />;
   }
 

@@ -50,15 +50,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     disclosure: ['This is WIP'],
   },
   {
-    name: 'Console',
-    preferenceName: 'enableConsole',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Participant project management with scoring and voting for accelerator support'],
-    disclosure: ['This is WIP'],
-  },
-  {
     name: 'Participant Experience',
     preferenceName: 'enableParticipantExperience',
     active: true,

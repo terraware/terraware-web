@@ -137,7 +137,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
           <Textfield
             id='collectionSiteName'
             type='text'
-            label={strings.COLLECTING_SITE}
+            label={strings.COLLECTION_SITE}
             value={record?.collectionSiteName}
             onChange={(value) => onChange('collectionSiteName', value)}
             tooltipTitle={strings.TOOLTIP_ACCESSIONS_ADD_COLLECTING_SITE}

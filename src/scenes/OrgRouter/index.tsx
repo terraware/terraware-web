@@ -220,6 +220,9 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
             <Route path={APP_PATHS.SPECIES + '/*'} element={<SpeciesRouter />} />
             <Route path={APP_PATHS.ORGANIZATION + '/*'} element={<OrganizationRouter />} />
             <Route path={APP_PATHS.PEOPLE + '/*'} element={<PeopleRouter />} />
+            {/* modules router *must* come before the projects router,
+            or else the path will be picked up by the projects router */}
+            <Route path={APP_PATHS.PROJECT_MODULES} element={<ModulesRouter />} />
             <Route
               path={APP_PATHS.PROJECTS + '/*'}
               element={
@@ -248,7 +251,6 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
             <Route path={APP_PATHS.REPORTS + '/*'} element={<ReportsRouter />} />
             <Route path={APP_PATHS.OBSERVATIONS + '/*'} element={<ObservationsRouter />} />
             <Route path={APP_PATHS.DELIVERABLES + '/*'} element={<DeliverablesRouter />} />
-            <Route path={APP_PATHS.MODULES_FOR_PROJECT + '/*'} element={<ModulesRouter />} />
 
             {!isProduction && (
               <Route path={APP_PATHS.OPT_IN} element={<OptInFeaturesView refresh={reloadPreferences} />} />

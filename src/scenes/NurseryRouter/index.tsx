@@ -47,7 +47,7 @@ const NurseryRouter = () => {
     for (const plantingSite of plantingSites ?? []) {
       for (const plantingZone of plantingSite.plantingZones ?? []) {
         for (const subzone of plantingZone.plantingSubzones ?? []) {
-          subzones[subzone.id] = subzone.name;
+          subzones[subzone.id] = plantingZone.name + '-' + subzone.name;
         }
       }
     }

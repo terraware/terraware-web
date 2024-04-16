@@ -25,8 +25,9 @@ import { acceleratorOrgsReducer } from './features/accelerator/acceleratorSlice'
 import { accessionsReducer } from './features/accessions/accessionsSlice';
 import { appVersionReducer } from './features/appVersion/appVersionSlice';
 import { batchesReducer, batchesRequestsReducer } from './features/batches/batchesSlice';
+import documentProducerReducers from './features/documentProducer';
 import { messageReducer } from './features/message/messageSlice';
-import { moduleListReducer, moduleReducer } from './features/modules/modulesSlice';
+import { moduleEventReducer, moduleListReducer, moduleReducer } from './features/modules/modulesSlice';
 import {
   observationsReducer,
   observationsResultsReducer,
@@ -79,6 +80,7 @@ export const reducers = {
   deliverablesEdit: deliverablesEditReducer,
   deliverablesSearch: deliverablesSearchReducer,
   deliverables: deliverablesReducer,
+  ...documentProducerReducers,
   draftPlantingSiteCreate: draftPlantingSiteCreateReducer,
   draftPlantingSiteEdit: draftPlantingSiteEditReducer,
   draftPlantingSiteGet: draftPlantingSiteGetReducer,
@@ -88,6 +90,7 @@ export const reducers = {
   globalRolesUserUpdate: globalRolesUserUpdateReducer,
   message: messageReducer,
   module: moduleReducer,
+  moduleEvent: moduleEventReducer,
   moduleList: moduleListReducer,
   monitoringPlots: monitoringPlotsReducer,
   observations: observationsReducer,

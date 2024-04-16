@@ -5,16 +5,15 @@ import { Slide, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import ErrorBoundary from 'src/ErrorBoundary';
-import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
-import strings from 'src/strings';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStateLocation from 'src/utils/useStateLocation';
 
 import Cohorts from './Cohorts';
 import Deliverables from './Deliverables';
+import DocumentsRouter from './Documents';
 import ModuleContent from './Modules';
 import NavBar from './NavBar';
 import Overview from './Overview';
@@ -57,7 +56,7 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
   const { type } = useDeviceInfo();
   const classes = useStyles();
   const location = useStateLocation();
-  const consoleEnabled = isEnabled('Console');
+  const documentProducerEnabled = isEnabled('Document Producer');
 
   const viewHasBackgroundImage = useCallback((): boolean => {
     return location.pathname.startsWith(APP_PATHS.ACCELERATOR_OVERVIEW);
@@ -81,21 +80,20 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
       >
         <ErrorBoundary setShowNavBar={setShowNavBar}>
           <Routes>
-            <Route
-              path={APP_PATHS.ACCELERATOR_OVERVIEW}
-              element={consoleEnabled ? <Overview /> : <Page title={strings.OVERVIEW} />}
-            />
+            <Route path={APP_PATHS.ACCELERATOR_OVERVIEW} element={<Overview />} />
+
             <Route path={APP_PATHS.ACCELERATOR_COHORTS} element={<Cohorts />} />
             <Route path={APP_PATHS.ACCELERATOR_DELIVERABLES} element={<Deliverables />} />
             <Route path={APP_PATHS.ACCELERATOR_MODULE_CONTENT} element={<ModuleContent />} />
-            <Route
-              path={APP_PATHS.ACCELERATOR_PEOPLE}
-              element={consoleEnabled ? <People /> : <Page title={strings.PEOPLE} />}
-            />
-            {consoleEnabled && <Route path={APP_PATHS.ACCELERATOR_SCORING} element={<Scoring />} />}
-            {consoleEnabled && <Route path={APP_PATHS.ACCELERATOR_VOTING} element={<Voting />} />}
-            {consoleEnabled && <Route path={APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW} element={<Participants />} />}
-            {consoleEnabled && <Route path={APP_PATHS.ACCELERATOR_PROJECT_VIEW} element={<ParticipantProjects />} />}
+            <Route path={APP_PATHS.ACCELERATOR_PEOPLE} element={<People />} />
+            <Route path={APP_PATHS.ACCELERATOR_SCORING} element={<Scoring />} />
+            <Route path={APP_PATHS.ACCELERATOR_VOTING} element={<Voting />} />
+            <Route path={APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW} element={<Participants />} />
+            <Route path={APP_PATHS.ACCELERATOR_PROJECT_VIEW} element={<ParticipantProjects />} />
+
+            {documentProducerEnabled && (
+              <Route path={APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS} element={<DocumentsRouter />} />
+            )}
             <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_OVERVIEW} />} />
           </Routes>
         </ErrorBoundary>
