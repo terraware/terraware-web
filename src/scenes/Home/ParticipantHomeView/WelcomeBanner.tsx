@@ -5,13 +5,12 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import DialogCloseButton from 'src/components/common/DialogCloseButton';
 import strings from 'src/strings';
 
-const WelcomeBanner = () => {
-  const theme = useTheme();
+interface WelcomeBannerProps {
+  onClose: () => void;
+}
 
-  const handleOnClick = () => {
-    // tslint:disable:no-console
-    console.log('close');
-  };
+const WelcomeBanner = ({ onClose }: WelcomeBannerProps) => {
+  const theme = useTheme();
 
   return (
     <Box
@@ -47,7 +46,7 @@ const WelcomeBanner = () => {
         </Grid>
 
         <DialogCloseButton
-          onClick={handleOnClick}
+          onClick={onClose}
           sx={{
             color: theme.palette.TwClrIcn,
             margin: 0,
