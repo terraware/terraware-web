@@ -121,7 +121,6 @@ const listNurseryWithdrawals = async (
       'undoesWithdrawalId',
       'undoneByWithdrawalId',
       'undoesWithdrawalDate',
-      'undoneByWithdrawalDate',
     ],
     search: SearchService.convertToSearchNodePayload(searchCriteria, organizationId),
     sortOrder: sortOrder ? [sortOrder, createdTimeOrder] : [{ field: 'id', direction: 'Ascending' }],

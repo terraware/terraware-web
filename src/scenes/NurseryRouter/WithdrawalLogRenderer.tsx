@@ -110,8 +110,9 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
           }
         />
       );
+    } else {
+      return <CellRenderer index={index} column={column} row={row} value='' />;
     }
-    return <CellRenderer index={index} column={column} row={row} value='' />;
   }
 
   if (column.key === 'purpose') {
