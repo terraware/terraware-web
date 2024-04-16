@@ -651,6 +651,7 @@ IUCN_LEAST_CONCERN,Least Concern (LC),IUCN conservation category. Keep the two-l
 IUCN_NEAR_THREATENED,Near Threatened (NT),IUCN conservation category. Keep the two-letter code as is; only translate the description.
 IUCN_NOT_EVALUATED,Not Evaluated (NE),IUCN conservation category. Keep the two-letter code as is; only translate the description.
 IUCN_VULNERABLE,Vulnerable (VU),IUCN conservation category. Keep the two-letter code as is; only translate the description.
+JOIN,Join,
 JOIN_EVENT_NAME,Join {0},
 KEEP_ORIGINAL,Keep Original,
 KEY_BELONGS_TO_ANOTHER_SEED_BANK,Key is associated with another seed bank.,
@@ -1638,6 +1639,7 @@ TITLE_REQUEST_FEATURE,Request a Feature,
 TITLE_TEST_APP,Test our Mobile App,
 TITLE_WELCOME,Welcome to Terraware,
 TO,To,
+TODO,To Do,
 TOOLTIP_ACCESSIONS_ADD_COLLECTING_SITE,The place where seeds were collected. It is recommended to name these referencing stable landmarks or features that do not change.,
 TOOLTIP_ACCESSIONS_ADD_PLANT_ID,The unique identifier given to a plant for tracking or conservation purposes. Ideally seeds from a plant with a plant ID are kept separate from other plants (not pooled together) in collections and accessions.,
 TOOLTIP_ACCESSIONS_COLLECTION_SOURCE,The type of plant population where seeds are collected.,
