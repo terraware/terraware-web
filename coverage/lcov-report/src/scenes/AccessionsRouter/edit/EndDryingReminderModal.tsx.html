@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/37</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/37</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
@@ -172,7 +172,13 @@
 <a name='L107'></a><a href='#L107'>107</a>
 <a name='L108'></a><a href='#L108'>108</a>
 <a name='L109'></a><a href='#L109'>109</a>
-<a name='L110'></a><a href='#L110'>110</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -194,6 +200,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -251,6 +262,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -289,11 +301,14 @@ import getDateDisplayValue, { isInTheFuture } from '@terraware/web-components/ut
 import DatePicker from 'src/components/common/DatePicker';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
+import { useOrganization } from 'src/providers';
 import AccessionService from 'src/services/AccessionService';
 import strings from 'src/strings';
 import { Accession } from 'src/types/Accession';
+import { getSeedBank } from 'src/utils/organization';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 &nbsp;
 export interface EndDryingReminderModalProps {
   open: boolean;
@@ -308,6 +323,8 @@ export default function <span class="fstat-no" title="function not covered" >End
   const [dateError, setDateError] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const [record, setRecord, onChange] = <span class="cstat-no" title="statement not covered" >useForm(accession);</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
+  const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
+  const timeZoneId = <span class="cstat-no" title="statement not covered" >useLocationTimeZone().get(getSeedBank(selectedOrganization, accession.facilityId))?.id;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setRecord(accession);</span>
@@ -353,7 +370,7 @@ export default function <span class="fstat-no" title="function not covered" >End
   const changeDate = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>d: string, value?: any) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setDate(value);</span>
 &nbsp;
-    const newDate = <span class="cstat-no" title="statement not covered" >value ? getDateDisplayValue(value.getTime()) : null;</span>
+    const newDate = <span class="cstat-no" title="statement not covered" >value ? getDateDisplayValue(value.getTime(), timeZoneId) : null;</span>
 <span class="cstat-no" title="statement not covered" >    onChange(id, newDate);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    validateDate(value);</span>
@@ -379,12 +396,13 @@ export default function <span class="fstat-no" title="function not covered" >End
     &gt;
       &lt;Grid item xs={12} textAlign='left'&gt;
         &lt;DatePicker
+          aria-label={strings.END_DRYING_REMINDER}
+          defaultTimeZone={timeZoneId}
+          errorText={dateError}
           id='dryingEndDate'
           label={strings.END_DRYING_REMINDER}
-          aria-label={strings.END_DRYING_REMINDER}
-          value={date}
           onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >changeDate('dryingEndDate', value)}</span>
-          errorText={dateError}
+          value={date}
         /&gt;
       &lt;/Grid&gt;
     &lt;/DialogBox&gt;
@@ -397,7 +415,7 @@ export default function <span class="fstat-no" title="function not covered" >End
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-16T15:48:10.755Z
+                at 2024-04-16T20:34:59.208Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
