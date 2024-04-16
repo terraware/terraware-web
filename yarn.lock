@@ -4531,10 +4531,10 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@terraware/web-components@2.14.1-rc.2":
-  version "2.14.1-rc.2"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.14.1-rc.2.tgz#5e2708b1faef35ef9d508368bd9e21164224c04b"
-  integrity sha512-MLDhbHWeJabSGxyTpRDkAWxKcPcRiZ3hbZDJkEq54GwXrcJYkZYbDDHkU7QjdflgCjZF+xX023ladGFpdzv6dg==
+"@terraware/web-components@2.14.1-rc.3":
+  version "2.14.1-rc.3"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-2.14.1-rc.3.tgz#fb8268da845369c1b2388ad43863569491fbd3c6"
+  integrity sha512-zWZ6ypgrri8OCuxh7NKmNtOqWha9m1+rDTXPHurT0xm2uL2jxD511xf3PuNZnFc/gw5YPlV1pax/VLWxWyH/SA==
   dependencies:
     "@date-io/luxon" "^3.0.0"
     "@dnd-kit/core" "^6.0.7"
