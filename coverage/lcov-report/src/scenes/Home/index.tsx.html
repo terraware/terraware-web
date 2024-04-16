@@ -125,38 +125,38 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -171,6 +171,7 @@ import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 &nbsp;
 import isEnabled from 'src/features';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 &nbsp;
 import ParticipantHomeView from './ParticipantHomeView';
@@ -205,14 +206,13 @@ const useStyles = <span class="cstat-no" title="statement not covered" >makeStyl
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >Home(</span>): JSX.Element {
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
+  const { orgHasParticipants } = <span class="cstat-no" title="statement not covered" >useParticipantData();</span>
   const classes = <span class="cstat-no" title="statement not covered" >useStyles({ isMobile });</span>
   const featureFlagParticipantExperience = <span class="cstat-no" title="statement not covered" >isEnabled('Participant Experience');</span>
 &nbsp;
-  const isParticipant = <span class="cstat-no" title="statement not covered" >false;</span>
-&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;main className={classes.main}&gt;
-      {featureFlagParticipantExperience &amp;&amp; isParticipant ? &lt;ParticipantHomeView /&gt; : &lt;TerrawareHomeView /&gt;}
+      {featureFlagParticipantExperience &amp;&amp; orgHasParticipants ? &lt;ParticipantHomeView /&gt; : &lt;TerrawareHomeView /&gt;}
     &lt;/main&gt;
   );
 }
@@ -223,7 +223,7 @@ export default function <span class="fstat-no" title="function not covered" >Hom
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-16T15:23:45.947Z
+                at 2024-04-16T15:39:18.254Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
