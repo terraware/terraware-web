@@ -14,7 +14,7 @@ const ParticipantHomeView = () => {
 
   return (
     <PageWithModuleTimeline>
-      <Grid display={'flex'} flexDirection={'column'} width={'100%'}>
+      <Grid display={'flex'} flexDirection={'column'} flexGrow={1}>
         <Grid item>
           <Header />
         </Grid>

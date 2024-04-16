@@ -16,15 +16,15 @@ const ToDoSection = ({ toDos, section }: ToDoSectionProps) => {
   }
 
   return (
-    <Box marginTop={theme.spacing(2)}>
+    <Box display={'flex'} flexDirection={'column'} marginTop={theme.spacing(2)}>
       <Typography fontSize={'20px'} fontWeight={600} lineHeight={'28px'}>
         {section}
       </Typography>
       <Box
+        flexGrow={1}
         sx={{
           borderBottom: `1px solid ${theme.palette.TwClrBaseGray100}`,
           height: '1px',
-          width: '100%',
           padding: theme.spacing(1),
         }}
       />
