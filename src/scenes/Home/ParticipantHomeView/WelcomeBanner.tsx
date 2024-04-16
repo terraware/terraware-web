@@ -28,7 +28,7 @@ const WelcomeBanner = () => {
           <img
             src='/assets/accelerator-welcome@2x.png'
             // TODO this might change
-            alt='Welcome to the Terraformation Accelerator'
+            alt={strings.ACCELERATOR_WELCOME_ALT}
             width='100%'
             height='100px'
             style={{
