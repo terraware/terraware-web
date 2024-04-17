@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
@@ -153,13 +153,7 @@
 <a name='L88'></a><a href='#L88'>88</a>
 <a name='L89'></a><a href='#L89'>89</a>
 <a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a>
-<a name='L92'></a><a href='#L92'>92</a>
-<a name='L93'></a><a href='#L93'>93</a>
-<a name='L94'></a><a href='#L94'>94</a>
-<a name='L95'></a><a href='#L95'>95</a>
-<a name='L96'></a><a href='#L96'>96</a>
-<a name='L97'></a><a href='#L97'>97</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L91'></a><a href='#L91'>91</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -226,12 +220,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -250,7 +239,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -264,7 +252,7 @@ import DatePicker from 'src/components/common/DatePicker';
 import strings from 'src/strings';
 &nbsp;
 interface Props {
-  onChange: (id: string, value: string) =&gt; void;
+  onChange: (id: string, value: string | null) =&gt; void;
   id: string;
   validate?: boolean;
   timeZone: string;
@@ -322,18 +310,13 @@ export default function <span class="fstat-no" title="function not covered" >Col
 <span class="cstat-no" title="statement not covered" >    setDateValue(newValue);</span>
 &nbsp;
     const date = <span class="cstat-no" title="statement not covered" >newValue ? getDateDisplayValue(newValue.getTime(), timeZone) : null;</span>
-<span class="cstat-no" title="statement not covered" >    if (date) {</span>
-<span class="cstat-no" title="statement not covered" >      onChange(id, date);</span>
-    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    onChange(id, date);</span>
   };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    validateDate(dateValue);</span>
   }, [validate, dateValue, validateDate]);
-&nbsp;
-  const onErrorHandler = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(n</span>ewValue: any) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setDateValue(newValue);</span>
-  };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Grid item xs={12} sx={datePickerStyle}&gt;
@@ -346,7 +329,6 @@ export default function <span class="fstat-no" title="function not covered" >Col
         errorText={validate ? dateError : ''}
         maxDate={maxDate}
         defaultTimeZone={timeZone}
-        onError={<span class="fstat-no" title="function not covered" >(r</span>eason, newValue) =&gt; <span class="cstat-no" title="statement not covered" >onErrorHandler(newValue)}</span>
       /&gt;
     &lt;/Grid&gt;
   );
@@ -358,7 +340,7 @@ export default function <span class="fstat-no" title="function not covered" >Col
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-17T20:35:48.344Z
+                at 2024-04-17T21:30:52.921Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
