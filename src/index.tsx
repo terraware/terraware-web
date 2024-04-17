@@ -1,15 +1,16 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import './index.css';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
 import { ThemeProvider } from '@mui/material';
+
 import App from './App';
 import AppError from './AppError';
 import { APP_PATHS } from './constants';
 import './index.css';
+import './index.css';
 import reportWebVitals from './reportWebVitals';
 import strings from './strings';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import theme from './theme';
 
 const root = createRoot(document.getElementById('root')!);

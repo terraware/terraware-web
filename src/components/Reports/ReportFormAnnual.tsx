@@ -283,8 +283,8 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
             validate && !report.annualDetails?.projectSummary
               ? strings.REQUIRED_FIELD
               : validate && overWordLimit(projectSummary, 100)
-              ? strings.OVER_WORD_LIMIT
-              : ''
+                ? strings.OVER_WORD_LIMIT
+                : ''
           }
         />
         {editable && (
@@ -600,10 +600,10 @@ function ReportField(props: ReportFieldProps): JSX.Element {
           pageSize === 'quarter'
             ? classes.quarterPage
             : pageSize === 'half'
-            ? classes.halfPage
-            : pageSize === 'full'
-            ? classes.fullPage
-            : ''
+              ? classes.halfPage
+              : pageSize === 'full'
+                ? classes.fullPage
+                : ''
         }
       />
     </>

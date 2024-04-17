@@ -1,19 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { BusySpinner, FormButton } from '@terraware/web-components';
-import TfMain from 'src/components/common/TfMain';
-import PageForm from 'src/components/common/PageForm';
-import strings from 'src/strings';
-import ReportForm from 'src/components/Reports/ReportForm';
-import { Box, Typography, useTheme } from '@mui/material';
-import ReportService from 'src/services/ReportService';
-import { Report, ReportFile } from 'src/types/Report';
 import { useNavigate, useParams } from 'react-router-dom';
-import { APP_PATHS } from 'src/constants';
-import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
-import useSnackbar from 'src/utils/useSnackbar';
-import SubmitConfirmationDialog from 'src/components/Reports/SubmitConfirmationDialog';
-import { useOrganization, useUser } from 'src/providers';
 
+import { Box, Typography, useTheme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { BusySpinner, FormButton } from '@terraware/web-components';
 import produce from 'immer';
 
 import CannotEditReportDialog from 'src/components/Reports/InvalidUserModal';
@@ -22,8 +12,19 @@ import {
   buildStartedDateValid,
   operationStartedDateValid,
 } from 'src/components/Reports/LocationSelection/util';
+import ReportForm from 'src/components/Reports/ReportForm';
+import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
+import SubmitConfirmationDialog from 'src/components/Reports/SubmitConfirmationDialog';
+import PageForm from 'src/components/common/PageForm';
+import TfMain from 'src/components/common/TfMain';
+import { APP_PATHS } from 'src/constants';
+import { useOrganization, useUser } from 'src/providers';
+import ReportService from 'src/services/ReportService';
+import strings from 'src/strings';
+import { Report, ReportFile } from 'src/types/Report';
 import { overWordLimit } from 'src/utils/text';
-import { makeStyles } from '@mui/styles';
+import useSnackbar from 'src/utils/useSnackbar';
+
 import useReportFiles from './useReportFiles';
 
 const useStyles = makeStyles((theme) => ({
@@ -91,7 +92,7 @@ export default function ReportEdit(): JSX.Element {
   const updateFiles = async () => {
     if (reportIdInt) {
       await Promise.all(
-        initialReportFiles?.map((f: { id: number; filename: string; }) => {
+        initialReportFiles?.map((f: { id: number; filename: string }) => {
           if (!updatedReportFiles?.includes(f)) {
             return ReportService.deleteReportFile(reportIdInt, f.id);
           }

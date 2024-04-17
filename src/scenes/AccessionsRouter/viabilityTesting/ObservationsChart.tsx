@@ -48,7 +48,7 @@ export default function ObservationsChart({ observations }: Props): JSX.Element 
           y: entry.seedsGerminated,
         }));
 
-      // @ts-ignore
+        // @ts-ignore
         chartRef.current = await newChart(activeLocale, ctx, {
           type: 'line',
           data: {

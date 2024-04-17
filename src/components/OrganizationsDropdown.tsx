@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-
 import { useNavigate } from 'react-router';
 
 import { makeStyles } from '@mui/styles';
 import { DropdownItem, PopoverMenu } from '@terraware/web-components';
+
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers/hooks';
 import strings from 'src/strings';

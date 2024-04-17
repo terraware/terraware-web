@@ -124,8 +124,8 @@ export default function EditableMap({
             .flatMap((poly: MultiPolygon | null) => poly!.coordinates),
         }) as LngLatBoundsLike)
       : editableBoundary
-      ? (bbox(editableBoundary) as LngLatBoundsLike)
-      : undefined,
+        ? (bbox(editableBoundary) as LngLatBoundsLike)
+        : undefined,
     fitBoundsOptions: {
       animate: false,
       padding: 25,

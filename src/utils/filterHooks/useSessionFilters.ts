@@ -29,7 +29,7 @@ export const useSessionFilters = (viewIdentifier: string, writeToQuery = true) =
 
       resetQuery(query, viewIdentifier);
       writeFiltersToQuery(query, viewIdentifier, filters);
-      navigate(getLocation(location.pathname, location, query.toString()), {replace: true});
+      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
     },
     [navigate, location, query, viewIdentifier]
   );

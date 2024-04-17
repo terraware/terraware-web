@@ -386,8 +386,8 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
             readyQuantityWithdrawn: isSingleOutplant
               ? withdrawnQuantity || 0
               : isSingleBatch
-              ? readyQuantityWithdrawn || 0
-              : 0,
+                ? readyQuantityWithdrawn || 0
+                : 0,
           })
         ),
     });

@@ -214,8 +214,8 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
     const getChartData = async () => {
       if (selectedPVBatteryPeriod) {
         const timePeriodParams = getTimePeriodParams(selectedPVBatteryPeriod, timeZone);
-        const startTime = timePeriodParams.start
-        const endTime = timePeriodParams.end
+        const startTime = timePeriodParams.start;
+        const endTime = timePeriodParams.end;
         if (BMU && startTime.isValid && endTime.isValid) {
           const response = await getTimeseriesHistory(
             startTime.toISO(),

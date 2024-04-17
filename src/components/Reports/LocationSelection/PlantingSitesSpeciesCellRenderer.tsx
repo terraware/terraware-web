@@ -94,8 +94,8 @@ function TableCellInput(props: TableCellInputProps): JSX.Element {
             newValue === ''
               ? ''
               : isPercentage
-              ? Math.max(0, Math.min(100, Math.floor(newValue as number)))
-              : Math.max(0, Math.floor(newValue as number))
+                ? Math.max(0, Math.min(100, Math.floor(newValue as number)))
+                : Math.max(0, Math.floor(newValue as number))
           }`
         )
       }

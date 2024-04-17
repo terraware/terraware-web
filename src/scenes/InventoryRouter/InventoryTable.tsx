@@ -146,8 +146,8 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
 
   const getResultsSpeciesNames = useCallback(() => {
     return results
-      .map(
-        (result: SearchResponseElement & { facilityInventories?: string }) => result.facilityInventories?.split('\r')
+      .map((result: SearchResponseElement & { facilityInventories?: string }) =>
+        result.facilityInventories?.split('\r')
       )
       .flat()
       .filter((species) => !!species) as string[];

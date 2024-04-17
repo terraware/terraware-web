@@ -17,6 +17,7 @@ import {
   useTheme,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+
 import { APP_PATHS } from 'src/constants';
 import { useUser } from 'src/providers';
 import { useOrganization } from 'src/providers/hooks';

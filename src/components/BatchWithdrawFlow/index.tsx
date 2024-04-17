@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+
+import { Typography } from '@mui/material';
 import { BusySpinner, theme } from '@terraware/web-components';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 

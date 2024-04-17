@@ -128,8 +128,8 @@ export default function CountWithdrawal(props: CountWithdrawalProps): JSX.Elemen
                   accession.remainingQuantity?.units === 'Seeds'
                     ? accession.remainingQuantity?.quantity
                     : accession.estimatedCount
-                    ? `${strings.APPROX_SYMBOL}${accession.estimatedCount}`
-                    : 'Unknown '
+                      ? `${strings.APPROX_SYMBOL}${accession.estimatedCount}`
+                      : 'Unknown '
                 }${strings.CT}`
               )
               .toString()}

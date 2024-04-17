@@ -202,8 +202,8 @@ export default function WeightWithdrawal(props: WeightWithdrawalProps): JSX.Elem
                     accession.remainingQuantity?.units !== 'Seeds'
                       ? accession.remainingQuantity?.quantity
                       : accession.estimatedWeight?.quantity
-                      ? accession.estimatedWeight?.quantity
-                      : 'Unknown '
+                        ? accession.estimatedWeight?.quantity
+                        : 'Unknown '
                   }${accession.estimatedWeight?.units ? unitAbbv()[accession.estimatedWeight?.units] : ''}`
                 )
                 .toString()}
@@ -221,8 +221,8 @@ export default function WeightWithdrawal(props: WeightWithdrawalProps): JSX.Elem
                     ? unitAbbv()[accession.estimatedWeight?.units]
                     : ''
                   : accession.remainingQuantity?.units
-                  ? unitAbbv()[accession.remainingQuantity?.units]
-                  : ''}
+                    ? unitAbbv()[accession.remainingQuantity?.units]
+                    : ''}
               </Box>
             </Box>
           </Box>

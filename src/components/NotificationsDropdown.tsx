@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-
-import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router';
-import { NotificationsService } from 'src/services';
+import { Link } from 'react-router-dom';
 
 import { Badge, IconButton, List, ListItem, ListItemIcon, ListItemText, Popover, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -10,6 +8,7 @@ import { Button, Tooltip } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
+import { NotificationsService } from 'src/services';
 import { NotificationsResponse } from 'src/services/NotificationsService';
 import strings from 'src/strings';
 import { Notification } from 'src/types/Notifications';

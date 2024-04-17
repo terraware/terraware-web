@@ -363,7 +363,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     }
 
     if ((facilityId && selectedOrganization) || subLocationName) {
-      navigate(getLocation(location.pathname, location, query.toString()), {replace: true});
+      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       setSearchCriteria(newSearchCriteria);
 
       // add seed bank and sub-location columns to show the filtered values as needed
