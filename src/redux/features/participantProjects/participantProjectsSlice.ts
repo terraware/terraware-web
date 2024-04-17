@@ -23,8 +23,6 @@ export const participantProjectSlice = createSlice({
   },
 });
 
-export const participantProjectReducer = participantProjectSlice.reducer;
-
 /**
  * Get Participant Project
  */
@@ -38,8 +36,6 @@ export const participantProjectUpdateSlice = createSlice({
     buildReducers(requestUpdateParticipantProject, true)(builder);
   },
 });
-
-export const participantProjectUpdateReducer = participantProjectUpdateSlice.reducer;
 
 /**
  * List Participant Projects
@@ -55,4 +51,10 @@ export const participantProjectsListSlice = createSlice({
   },
 });
 
-export const participantProjectsListReducer = participantProjectsListSlice.reducer;
+const participantProjectsReducers = {
+  participantProject: participantProjectSlice.reducer,
+  participantProjectUpdate: participantProjectUpdateSlice.reducer,
+  participantProjectsList: participantProjectsListSlice.reducer,
+};
+
+export default participantProjectsReducers;

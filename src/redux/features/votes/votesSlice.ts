@@ -19,8 +19,6 @@ export const votesSlice = createSlice({
   },
 });
 
-export const votesReducer = votesSlice.reducer;
-
 type VotingEditRequestsState = Record<string, StatusT<boolean>>;
 
 const initialVotingEditRequestsState: VotingEditRequestsState = {};
@@ -34,4 +32,9 @@ export const votesRequestsSlice = createSlice({
   },
 });
 
-export const votesRequestsReducer = votesRequestsSlice.reducer;
+const votesReducers = {
+  votes: votesSlice.reducer,
+  votesRequests: votesRequestsSlice.reducer,
+};
+
+export default votesReducers;

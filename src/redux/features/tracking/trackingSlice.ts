@@ -47,7 +47,6 @@ export const trackingSlice = createSlice({
 });
 
 export const { setPlantingSiteAction, setPlantingSitesAction } = trackingSlice.actions;
-export const trackingReducer = trackingSlice.reducer;
 
 // Define a type for the search slice state
 type SearchData = {
@@ -70,8 +69,6 @@ export const plantingSitesSearchResultsSlice = createSlice({
 
 export const { setPlantingSitesSearchResultsAction } = plantingSitesSearchResultsSlice.actions;
 
-export const plantingSitesSearchResultsReducer = plantingSitesSearchResultsSlice.reducer;
-
 // Planting Site Population Data Slice
 type SitePopulationData = {
   error?: string;
@@ -93,8 +90,6 @@ export const sitePopulationSlice = createSlice({
 });
 
 export const { setSitePopulationAction } = sitePopulationSlice.actions;
-
-export const sitePopulationReducer = sitePopulationSlice.reducer;
 
 // Planting Site Reported Plants Slice
 type SiteReportedPlantsData = {
@@ -122,8 +117,6 @@ export const siteReportedPlantsSlice = createSlice({
 
 export const { setSiteReportedPlantsAction } = siteReportedPlantsSlice.actions;
 
-export const siteReportedPlantsReducer = siteReportedPlantsSlice.reducer;
-
 // Monitoring plots
 
 type MonitoringPlotsState = Record<string, StatusT<MonitoringPlotsResponse>>;
@@ -137,4 +130,12 @@ const monitoringPlotsSlice = createSlice({
   extraReducers: buildReducers<MonitoringPlotsResponse>(requestMonitoringPlots),
 });
 
-export const monitoringPlotsReducer = monitoringPlotsSlice.reducer;
+const trackingReducers = {
+  tracking: trackingSlice.reducer,
+  plantingSitesSearchResults: plantingSitesSearchResultsSlice.reducer,
+  sitePopulation: sitePopulationSlice.reducer,
+  siteReportedPlantsResults: siteReportedPlantsSlice.reducer,
+  monitoringPlots: monitoringPlotsSlice.reducer,
+};
+
+export default trackingReducers;

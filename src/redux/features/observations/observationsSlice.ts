@@ -31,7 +31,6 @@ export const observationsResultsSlice = createSlice({
 });
 
 export const { setObservationsResultsAction } = observationsResultsSlice.actions;
-export const observationsResultsReducer = observationsResultsSlice.reducer;
 
 // Define a type for the slice state
 type Data = {
@@ -55,7 +54,6 @@ export const observationsSlice = createSlice({
 });
 
 export const { setObservationsAction } = observationsSlice.actions;
-export const observationsReducer = observationsSlice.reducer;
 
 type PlantingSitePayload = {
   plantingSiteId: number;
@@ -78,7 +76,6 @@ const plantingSiteObservationsResultsSlice = createSlice({
 });
 
 export const { setPlantingSiteObservationsResultsAction } = plantingSiteObservationsResultsSlice.actions;
-export const plantingSiteObservationsResultsReducer = plantingSiteObservationsResultsSlice.reducer;
 
 // Schedule/Reschedule observation
 
@@ -100,9 +97,6 @@ const rescheduleObservationSlice = createSlice({
   extraReducers: buildReducers(requestRescheduleObservation),
 });
 
-export const scheduleObservationReducer = scheduleObservationSlice.reducer;
-export const rescheduleObservationReducer = rescheduleObservationSlice.reducer;
-
 // Replace observation plot
 
 type ReplaceObservationPlotState = Record<string, StatusT<ReplaceObservationPlotResponsePayload>>;
@@ -116,4 +110,13 @@ const replaceObservationPlotSlice = createSlice({
   extraReducers: buildReducers<ReplaceObservationPlotResponsePayload>(requestReplaceObservationPlot),
 });
 
-export const replaceObservationPlotReducer = replaceObservationPlotSlice.reducer;
+const observationsReducers = {
+  observationsResults: observationsResultsSlice.reducer,
+  observations: observationsSlice.reducer,
+  plantingSiteObservationsResults: plantingSiteObservationsResultsSlice.reducer,
+  scheduleObservation: scheduleObservationSlice.reducer,
+  rescheduleObservation: rescheduleObservationSlice.reducer,
+  replaceObservationPlot: replaceObservationPlotSlice.reducer,
+};
+
+export default observationsReducers;

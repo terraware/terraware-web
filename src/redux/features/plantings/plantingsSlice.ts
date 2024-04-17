@@ -58,7 +58,11 @@ const updatePlantingsCompletedSlice = createSlice({
 });
 
 export const { setPlantingsAction } = plantingsSlice.actions;
-export const plantingsReducer = plantingsSlice.reducer;
 
-export const updatePlantingCompletedReducer = updatePlantingCompletedSlice.reducer;
-export const updatePlantingsCompletedReducer = updatePlantingsCompletedSlice.reducer;
+const plantingsReducers = {
+  plantings: plantingsSlice.reducer,
+  updatePlantingCompleted: updatePlantingCompletedSlice.reducer,
+  updatePlantingsCompleted: updatePlantingsCompletedSlice.reducer,
+};
+
+export default plantingsReducers;

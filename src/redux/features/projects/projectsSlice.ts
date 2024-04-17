@@ -43,7 +43,6 @@ export const projectsSlice = createSlice({
 });
 
 export const { setProjectsAction, setProjectAction } = projectsSlice.actions;
-export const projectsReducer = projectsSlice.reducer;
 
 type ProjectsResponsesUnion = UpdateProjectResponsePayload;
 type ProjectsRequestsState = Record<string, StatusT<ProjectsResponsesUnion>>;
@@ -61,4 +60,9 @@ export const projectsRequestsSlice = createSlice({
   },
 });
 
-export const projectsRequestsReducer = projectsRequestsSlice.reducer;
+const projectsReducers = {
+  projects: projectsSlice.reducer,
+  projectsRequests: projectsRequestsSlice.reducer,
+};
+
+export default projectsReducers;

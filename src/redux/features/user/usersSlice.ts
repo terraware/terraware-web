@@ -19,8 +19,6 @@ export const usersSlice = createSlice({
   },
 });
 
-export const usersReducer = usersSlice.reducer;
-
 /**
  * Get single user by email
  */
@@ -35,4 +33,9 @@ export const usersByEmailSlice = createSlice({
   },
 });
 
-export const usersByEmailReducer = usersByEmailSlice.reducer;
+const usersReducers = {
+  users: usersSlice.reducer,
+  usersByEmail: usersByEmailSlice.reducer,
+};
+
+export default usersReducers;
