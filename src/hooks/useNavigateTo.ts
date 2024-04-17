@@ -8,6 +8,14 @@ export default function useNavigateTo() {
 
   return useMemo(
     () => ({
+      goToDeliverable: (deliverableId: number, projectId: number) =>
+        history.push({
+          pathname: APP_PATHS.DELIVERABLE_VIEW.replace(':deliverableId', `${deliverableId}`).replace(
+            ':projectId',
+            `${projectId}`
+          ),
+        }),
+
       goToDocuments: () =>
         navigate({
           pathname: APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS,

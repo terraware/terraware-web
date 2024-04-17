@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { DatePicker } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
+import DatePicker from 'src/components/common/DatePicker';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers/hooks';

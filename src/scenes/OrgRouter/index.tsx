@@ -9,6 +9,7 @@ import ProjectsRouter from 'src/components/Projects/Router';
 import ReportsRouter from 'src/components/Reports/Router';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
+import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
 import { selectHasObservationsResults } from 'src/redux/features/observations/observationsSelectors';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
@@ -209,7 +210,14 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
         <ErrorBoundary setShowNavBar={setShowNavBar}>
           <Routes>
             {/* Routes, in order of their appearance down the side NavBar */}
-            <Route path={APP_PATHS.HOME} element={<Home />} />
+            <Route
+              path={APP_PATHS.HOME}
+              element={
+                <ParticipantProvider>
+                  <Home />
+                </ParticipantProvider>
+              }
+            />
             <Route path={APP_PATHS.SEEDS_DASHBOARD} element={<SeedsDashboard />} />
             <Route path={APP_PATHS.CHECKIN} element={<CheckIn />} />
             <Route

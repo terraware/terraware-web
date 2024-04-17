@@ -13,6 +13,7 @@ export const NurseryWithdrawalPurposes: { [key: string]: NurseryWithdrawalPurpos
   OUTPLANT: 'Out Plant',
   NURSERY_TRANSFER: 'Nursery Transfer',
   DEAD: 'Dead',
+  UNDO: 'Undo',
   OTHER: 'Other',
 };
 
@@ -20,7 +21,15 @@ export const NurseryWithdrawalPurposesValues = Object.values(NurseryWithdrawalPu
 
 export type NurseryTransfer = components['schemas']['CreateNurseryTransferRequestPayload'];
 export type NurseryWithdrawalRequest = components['schemas']['CreateNurseryWithdrawalRequestPayload'];
+export type NurseryWithdrawalRequestPurpose = NurseryWithdrawalRequest['purpose'];
 export type BatchWithdrawalPayload = components['schemas']['BatchWithdrawalPayload'];
+
+export const NurseryWithdrawalRequestPurposes: { [key: string]: NurseryWithdrawalRequestPurpose } = {
+  OUTPLANT: 'Out Plant',
+  NURSERY_TRANSFER: 'Nursery Transfer',
+  DEAD: 'Dead',
+  OTHER: 'Other',
+};
 
 export const purposeLabel = (purpose: NurseryWithdrawalPurpose): string => {
   switch (purpose) {
@@ -30,6 +39,8 @@ export const purposeLabel = (purpose: NurseryWithdrawalPurpose): string => {
       return strings.NURSERY_TRANSFER;
     case 'Dead':
       return strings.DEAD;
+    case 'Undo':
+      return strings.UNDO_WITHDRAWAL;
     default:
       return strings.OTHER;
   }

@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { DatePicker } from '@terraware/web-components';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import PageSnackbar from 'src/components/PageSnackbar';
+import DatePicker from 'src/components/common/DatePicker';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers/hooks';
@@ -18,6 +19,7 @@ import { getAllNurseries } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import LocationTimeZoneSelector from '../../components/LocationTimeZoneSelector';
 import PageForm from '../../components/common/PageForm';
@@ -49,6 +51,7 @@ export default function NurseryView(): JSX.Element {
     }
     return 4;
   };
+  const timeZoneId = useLocationTimeZone().get(record)?.id;
 
   useEffect(() => {
     if (nurseryId) {
@@ -137,11 +140,11 @@ export default function NurseryView(): JSX.Element {
     });
   };
 
-  const onUpdateDate = (field: string, value: any) => {
+  const onUpdateDate = (field: string, value?: Date | null) => {
     setRecord((previousRecord: Facility): Facility => {
       return {
         ...previousRecord,
-        [field]: value,
+        [field]: value ? getDateDisplayValue(value, timeZoneId) : value,
       };
     });
   };
@@ -206,11 +209,8 @@ export default function NurseryView(): JSX.Element {
             </Grid>
             <Grid item xs={gridSize()}>
               <DatePicker
-                id={'buildStartedDate'}
-                label={strings.FACILITY_BUILD_START_DATE}
-                value={record.buildStartedDate ?? ''}
-                onChange={(value) => onUpdateDate('buildStartedDate', value)}
                 aria-label='date-picker'
+                defaultTimeZone={timeZoneId}
                 errorText={
                   validateDates &&
                   !FacilityService.facilityBuildStartedDateValid(
@@ -221,16 +221,17 @@ export default function NurseryView(): JSX.Element {
                     ? strings.FACILITY_BUILD_START_DATE_INVALID
                     : ''
                 }
+                id={'buildStartedDate'}
+                label={strings.FACILITY_BUILD_START_DATE}
                 maxDate={record.buildCompletedDate}
+                onChange={(value?: Date | null) => onUpdateDate('buildStartedDate', value)}
+                value={record.buildStartedDate ?? ''}
               />
             </Grid>
             <Grid item xs={gridSize()}>
               <DatePicker
-                id={'buildCompletedDate'}
-                label={strings.FACILITY_BUILD_COMPLETION_DATE}
-                value={record.buildCompletedDate ?? ''}
-                onChange={(value) => onUpdateDate('buildCompletedDate', value)}
                 aria-label='date-picker'
+                defaultTimeZone={timeZoneId}
                 errorText={
                   validateDates &&
                   !FacilityService.facilityBuildCompletedDateValid(
@@ -241,17 +242,18 @@ export default function NurseryView(): JSX.Element {
                     ? strings.FACILITY_BUILD_COMPLETION_DATE_INVALID
                     : ''
                 }
-                minDate={record.buildStartedDate}
+                id={'buildCompletedDate'}
+                label={strings.FACILITY_BUILD_COMPLETION_DATE}
                 maxDate={record.operationStartedDate}
+                minDate={record.buildStartedDate}
+                onChange={(value?: Date | null) => onUpdateDate('buildCompletedDate', value)}
+                value={record.buildCompletedDate ?? ''}
               />
             </Grid>
             <Grid item xs={gridSize()}>
               <DatePicker
-                id={'operationStartedDate'}
-                label={strings.FACILITY_OPERATION_START_DATE}
-                value={record.operationStartedDate ?? ''}
-                onChange={(value) => onUpdateDate('operationStartedDate', value)}
                 aria-label='date-picker'
+                defaultTimeZone={timeZoneId}
                 errorText={
                   validateDates &&
                   !FacilityService.facilityOperationStartedDateValid(
@@ -262,7 +264,11 @@ export default function NurseryView(): JSX.Element {
                     ? strings.FACILITY_OPERATION_START_DATE_INVALID
                     : ''
                 }
+                id={'operationStartedDate'}
+                label={strings.FACILITY_OPERATION_START_DATE}
                 minDate={record.buildCompletedDate}
+                onChange={(value?: Date | null) => onUpdateDate('operationStartedDate', value)}
+                value={record.operationStartedDate ?? ''}
               />
             </Grid>
             <Grid item xs={gridSize()}>

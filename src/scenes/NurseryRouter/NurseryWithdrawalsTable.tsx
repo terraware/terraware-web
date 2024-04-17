@@ -43,7 +43,7 @@ const columns = (): TableColumnType[] => [
   { key: 'plantingSubzoneNames', name: strings.TO_SUBZONE, type: 'string' },
   { key: 'speciesScientificNames', name: strings.SPECIES, type: 'string' },
   { key: 'totalWithdrawn', name: strings.TOTAL_QUANTITY, type: 'number' },
-  { key: 'hasReassignments', name: '', type: 'string' },
+  { key: 'menu', name: '', type: 'string' },
 ];
 
 export default function NurseryWithdrawalsTable(): JSX.Element {
@@ -145,6 +145,10 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     navigate({
       pathname: APP_PATHS.NURSERY_REASSIGNMENT.replace(':deliveryId', withdrawal.delivery_id),
     });
+  };
+
+  const reload = () => {
+    onApplyFilters();
   };
 
   const getSearchChildren = useCallback(() => {
@@ -299,6 +303,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
           controlledOnSelect={true}
           sortHandler={onSortChange}
           isClickable={() => false}
+          reloadData={reload}
         />
       </Grid>
     </Grid>

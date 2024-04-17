@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Grid, useTheme } from '@mui/material';
+import { Grid, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import Page, { PageProps } from 'src/components/Page';
@@ -8,10 +8,11 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import ModuleTimeline from './ModuleTimeline';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme: Theme) => ({
   container: {
     paddingTop: 0,
     paddingLeft: 0,
+    paddingRight: theme.spacing(2),
   },
 }));
 
@@ -21,7 +22,7 @@ const PageWithModuleTimeline = (props: PageProps) => {
   const { isMobile } = useDeviceInfo();
 
   return (
-    <Grid container spacing={theme.spacing(1)}>
+    <Grid container spacing={theme.spacing(0)}>
       <Grid item xs style={{ flexGrow: 1 }}>
         <Page {...props} containerClassName={isMobile ? '' : classes.container} />
       </Grid>

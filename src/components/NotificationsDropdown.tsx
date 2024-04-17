@@ -7,7 +7,7 @@ import { NotificationsService } from 'src/services';
 import { Badge, IconButton, List, ListItem, ListItemIcon, ListItemText, Popover, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, Tooltip } from '@terraware/web-components';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 
 import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
 import { NotificationsResponse } from 'src/services/NotificationsService';
@@ -209,7 +209,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
     }
   }, [featureNotifications, serverNotifications]);
 
-  const getTimeStamp = (notification: Notification) => moment(notification.createdTime).valueOf();
+  const getTimeStamp = (notification: Notification) => DateTime.fromISO(notification.createdTime).toMillis();
 
   const getRecentUnreadTime = () => {
     if (notifications) {
