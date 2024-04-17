@@ -1,3 +1,4 @@
+f633370982 SW-4591 Update OrderPreservedTable user preference name that stores columns ordering when shuffled by user (#2520)
 581c51977e SW-5122 Implement ToDo list with mock data (#2519)
 5d26f98b8d SW-5122 Make the welcome banner dismissible (#2518)
 69c1440e27 SW-5122 Stub out welcome banner (#2516)
