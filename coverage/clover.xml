@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1713391681110" clover="3.2.0">
-  <project timestamp="1713391681110" name="All files">
-    <metrics statements="21124" coveredstatements="918" conditionals="13189" coveredconditionals="228" methods="6636" coveredmethods="162" elements="40949" coveredelements="1308" complexity="0" loc="21124" ncloc="21124" packages="198" files="927" classes="927"/>
+<coverage generated="1713392232230" clover="3.2.0">
+  <project timestamp="1713392232230" name="All files">
+    <metrics statements="21124" coveredstatements="918" conditionals="13191" coveredconditionals="228" methods="6636" coveredmethods="162" elements="40951" coveredelements="1308" complexity="0" loc="21124" ncloc="21124" packages="198" files="927" classes="927"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -949,7 +949,7 @@
       </file>
     </package>
     <package name="src.components.BatchWithdrawFlow.flow">
-      <metrics statements="413" coveredstatements="0" conditionals="325" coveredconditionals="0" methods="100" coveredmethods="0"/>
+      <metrics statements="413" coveredstatements="0" conditionals="327" coveredconditionals="0" methods="100" coveredmethods="0"/>
       <file name="AddPhotos.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/BatchWithdrawFlow/flow/AddPhotos.tsx">
         <metrics statements="9" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="16" count="0" type="stmt"/>
@@ -1073,7 +1073,7 @@
         <line num="364" count="0" type="stmt"/>
       </file>
       <file name="SelectPurposeForm.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/BatchWithdrawFlow/flow/SelectPurposeForm.tsx">
-        <metrics statements="267" coveredstatements="0" conditionals="231" coveredconditionals="0" methods="70" coveredmethods="0"/>
+        <metrics statements="267" coveredstatements="0" conditionals="233" coveredconditionals="0" methods="70" coveredmethods="0"/>
         <line num="42" count="0" type="stmt"/>
         <line num="74" count="0" type="stmt"/>
         <line num="77" count="0" type="stmt"/>
@@ -1155,7 +1155,7 @@
         <line num="200" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="201" count="0" type="stmt"/>
         <line num="202" count="0" type="stmt"/>
-        <line num="203" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="203" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="204" count="0" type="stmt"/>
         <line num="205" count="0" type="stmt"/>
         <line num="207" count="0" type="stmt"/>
