@@ -7,7 +7,7 @@ import DatePicker from 'src/components/common/DatePicker';
 import strings from 'src/strings';
 
 interface Props {
-  onChange: (id: string, value: string) => void;
+  onChange: (id: string, value: string | null) => void;
   id: string;
   validate?: boolean;
   timeZone: string;
@@ -65,18 +65,13 @@ export default function CollectedReceivedDate2({
     setDateValue(newValue);
 
     const date = newValue ? getDateDisplayValue(newValue.getTime(), timeZone) : null;
-    if (date) {
-      onChange(id, date);
-    }
+
+    onChange(id, date);
   };
 
   useEffect(() => {
     validateDate(dateValue);
   }, [validate, dateValue, validateDate]);
-
-  const onErrorHandler = (newValue: any) => {
-    setDateValue(newValue);
-  };
 
   return (
     <Grid item xs={12} sx={datePickerStyle}>
@@ -89,7 +84,6 @@ export default function CollectedReceivedDate2({
         errorText={validate ? dateError : ''}
         maxDate={maxDate}
         defaultTimeZone={timeZone}
-        onError={(reason, newValue) => onErrorHandler(newValue)}
       />
     </Grid>
   );
