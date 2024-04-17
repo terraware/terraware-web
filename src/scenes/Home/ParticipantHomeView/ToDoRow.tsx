@@ -1,7 +1,5 @@
 import { Grid, Typography, useTheme } from '@mui/material';
 
-import TextTruncated from 'src/components/common/TextTruncated';
-
 import { ToDoType } from './ToDo';
 import ToDoCta from './ToDoCta';
 import ToDoDate from './ToDoDate';
