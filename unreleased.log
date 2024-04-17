@@ -1,3 +1,4 @@
+87f6bfd072 SW-5122 Make the ToDo name fluidly shrink with an ellipsis (#2522)
 453bb143dd SW-5218 Bump web-component version to pick up datepicker fixes (#2524)
 5122b4b602 Update material ui, styles, styled-engine-sc, and emotion styled (#2523)
 d05191dc50 Bump tar from 6.1.15 to 6.2.1 (#2501)

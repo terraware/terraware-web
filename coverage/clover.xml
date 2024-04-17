@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1713389453565" clover="3.2.0">
-  <project timestamp="1713389453565" name="All files">
+<coverage generated="1713391681110" clover="3.2.0">
+  <project timestamp="1713391681110" name="All files">
     <metrics statements="21124" coveredstatements="918" conditionals="13189" coveredconditionals="228" methods="6636" coveredmethods="162" elements="40949" coveredelements="1308" complexity="0" loc="21124" ncloc="21124" packages="198" files="927" classes="927"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="46" coveredmethods="0"/>
@@ -14547,9 +14547,9 @@
       </file>
       <file name="ToDoRow.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/ParticipantHomeView/ToDoRow.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="14" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
-        <line num="17" count="0" type="stmt"/>
       </file>
       <file name="ToDoSection.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/ParticipantHomeView/ToDoSection.tsx">
         <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
