@@ -103,7 +103,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
   const barThickness: number | 'flex' | undefined = barWidth === undefined ? 50 : barWidth === 0 ? 'flex' : barWidth;
 
   useEffect(() => {
-    // used to prevent double render on dev scope (rect 18)
+    // used to prevent double render on dev scope (react 18)
     if (!initialized.current) {
       initialized.current = true;
       const getAxisLabelProps = (label?: string) => {

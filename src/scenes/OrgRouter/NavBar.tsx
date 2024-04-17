@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useMatch, useNavigate } from 'react-router-dom';
 
 import SubNavbar from '@terraware/web-components/components/Navbar/SubNavbar';
@@ -43,6 +43,8 @@ export default function NavBar({
   const { isAllowedViewConsole } = useAcceleratorConsole();
   const { activeLocale } = useLocalization();
   const { projectModules } = useModules();
+
+  const initialized = useRef(false);
 
   const isAccessionDashboardRoute = useMatch(APP_PATHS.SEEDS_DASHBOARD + '/');
   const isAccessionsRoute = useMatch(APP_PATHS.ACCESSIONS + '/');
@@ -118,17 +120,21 @@ export default function NavBar({
   }, [selectedOrganization]);
 
   useEffect(() => {
-    const getModuleProjectId = async () => {
-      const moduleProject = projectModules.find(({ id, modules }) => modules !== undefined);
+    // used to prevent double render that was causing infinite render on dev scope (react 18)
+    if (!initialized.current) {
+      initialized.current = true;
+      const getModuleProjectId = async () => {
+        const moduleProject = projectModules.find(({ id, modules }) => modules !== undefined);
 
-      if (!moduleProject) {
-        return;
-      }
+        if (!moduleProject) {
+          return;
+        }
 
-      setModuleProjectId(moduleProject.id);
-    };
+        setModuleProjectId(moduleProject.id);
+      };
 
-    getModuleProjectId();
+      getModuleProjectId();
+    }
   }, [projectModules]);
 
   useEffect(() => {
