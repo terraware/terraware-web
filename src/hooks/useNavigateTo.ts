@@ -9,7 +9,7 @@ export default function useNavigateTo() {
   return useMemo(
     () => ({
       goToDeliverable: (deliverableId: number, projectId: number) =>
-        history.push({
+        navigate({
           pathname: APP_PATHS.DELIVERABLE_VIEW.replace(':deliverableId', `${deliverableId}`).replace(
             ':projectId',
             `${projectId}`

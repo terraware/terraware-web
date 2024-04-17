@@ -379,12 +379,12 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
     const getChartData = async () => {
       if (selectedPeriod) {
         const timePeriodParams = getTimePeriodParams(selectedPeriod, timeZone);
-        const startTime = timePeriodParams.start;
-        const endTime = timePeriodParams.end;
-        if (selectedLocation) {
+        const startTime = timePeriodParams.start.toISO();
+        const endTime = timePeriodParams.end.toISO();
+        if (selectedLocation && startTime && endTime) {
           const response = await getTimeseriesHistory(
-            startTime.toISO(),
-            endTime.toISO(),
+            startTime,
+            endTime,
             [
               { deviceId: selectedLocation.id, timeseriesName: 'temperature' },
               { deviceId: selectedLocation.id, timeseriesName: 'humidity' },
