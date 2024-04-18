@@ -159,7 +159,7 @@ const ModuleContentView = () => {
                     key={event.id}
                     label={event.name}
                     onClickButton={() => goToModuleEvent(projectId, event.id, module.id)}
-                    value={event.eventTime ? getLongDateTime(event.eventTime, activeLocale) : ''}
+                    value={event.startTime ? getLongDateTime(event.startTime, activeLocale) : ''}
                   />
                 ))}
               </Grid>

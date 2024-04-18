@@ -16,15 +16,14 @@ export type ModuleEventData = {
 
 const mockEvents: ModuleEvent[] = [
   {
-    eventTime: '2024-03-16T22:00:00.000Z',
-    eventURL: 'https://google.com/',
+    startTime: '2024-03-16T22:00:00.000Z',
+    endTime: '2024-03-16T23:00:00.000Z',
+    meetingURL: 'https://google.com/',
     id: 1,
     moduleId: 3,
     name: 'Live Session',
-    links: [
-      { label: 'Live Session Slides', url: 'https://google.com/' },
-      { label: 'Live Session Recording', url: 'https://google.com/' },
-    ],
+    recordingURL: 'https://google.com/',
+    slidesURL: 'https://google.com/',
     callDescription: `
       <div>
         <p>Clicking "Join" will open up a browser window to join a Zoom video call.</p>
@@ -57,15 +56,14 @@ const mockEvents: ModuleEvent[] = [
     `,
   },
   {
-    eventTime: '2024-03-14T22:00:00.000Z',
-    eventURL: 'https://google.com/',
+    startTime: '2024-03-14T22:00:00.000Z',
+    endTime: '2024-03-14T23:00:00.000Z',
+    meetingURL: 'https://google.com/',
     id: 2,
     moduleId: 3,
     name: '1:1 Session',
-    links: [
-      { label: '1:1 Session Slides', url: 'https://google.com/' },
-      { label: '1:1 Session Recording', url: 'https://google.com/' },
-    ],
+    recordingURL: 'https://google.com/',
+    slidesURL: 'https://google.com/',
     callDescription: `
       <div>
         <p>Clicking "Join" will open up a browser window to join a Zoom video call.</p>
@@ -153,13 +151,15 @@ const mockModules: Module[] = [
     ],
     events: [
       {
-        eventTime: '2024-03-16T22:00:00.000Z',
+        startTime: '2024-03-16T22:00:00.000Z',
+        endTime: '2024-03-16T23:00:00.000Z',
         id: 1,
         moduleId: 1,
         name: 'Live Session',
       },
       {
-        eventTime: '2024-03-14T22:00:00.000Z',
+        startTime: '2024-03-14T22:00:00.000Z',
+        endTime: '2024-03-14T23:00:00.000Z',
         id: 2,
         moduleId: 1,
         name: '1:1 Session',
@@ -233,13 +233,15 @@ const mockModules: Module[] = [
     ],
     events: [
       {
-        eventTime: '2024-03-16T22:00:00.000Z',
+        startTime: '2024-03-16T22:00:00.000Z',
+        endTime: '2024-03-16T23:00:00.000Z',
         id: 1,
         moduleId: 2,
         name: 'Live Session',
       },
       {
-        eventTime: '2024-03-14T22:00:00.000Z',
+        startTime: '2024-03-14T22:00:00.000Z',
+        endTime: '2024-03-14T23:00:00.000Z',
         id: 2,
         moduleId: 2,
         name: '1:1 Session',
@@ -311,13 +313,15 @@ const mockModules: Module[] = [
     ],
     events: [
       {
-        eventTime: '2024-03-16T22:00:00.000Z',
+        startTime: '2024-03-16T22:00:00.000Z',
+        endTime: '2024-03-16T23:00:00.000Z',
         id: 1,
         moduleId: 3,
         name: 'Live Session',
       },
       {
-        eventTime: '2024-03-14T22:00:00.000Z',
+        startTime: '2024-03-14T22:00:00.000Z',
+        endTime: '2024-03-14T23:00:00.000Z',
         id: 2,
         moduleId: 3,
         name: '1:1 Session',

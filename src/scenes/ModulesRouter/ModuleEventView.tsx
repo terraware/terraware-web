@@ -17,6 +17,12 @@ import { getLongDateTime } from 'src/utils/dateFormatter';
 
 import ModuleViewTitle from './ModuleViewTitle';
 
+const openURL = (url: string | undefined, target = '_blank', features = 'noopener noreferrer') => {
+  if (url) {
+    window.open(url, target, features);
+  }
+};
+
 const ModuleEventView = () => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
@@ -41,8 +47,8 @@ const ModuleEventView = () => {
 
   const isEventStartingSoon = useMemo(() => {
     if (event) {
-      const eventTime = new Date(event.eventTime);
-      const diff = eventTime.getTime() - now.getTime();
+      const startTime = new Date(event.startTime);
+      const diff = startTime.getTime() - now.getTime();
       return diff < FIFTEEN_MINUTE_INTERVAL_MS;
     }
 
@@ -93,7 +99,7 @@ const ModuleEventView = () => {
               </Typography>
 
               <Typography marginBottom={theme.spacing(1)}>
-                {event.eventTime ? getLongDateTime(event.eventTime, activeLocale) : ''}
+                {event.startTime ? getLongDateTime(event.startTime, activeLocale) : ''}
               </Typography>
 
               <Box marginBottom={theme.spacing(2)}>
@@ -101,27 +107,36 @@ const ModuleEventView = () => {
                   disabled={!isEventStartingSoon}
                   label={strings.formatString(strings.JOIN_EVENT_NAME, event.name)?.toString()}
                   onClick={() => {
-                    if (event.eventURL) {
-                      window.open(event.eventURL, '_blank', 'noopener noreferrer');
-                    }
+                    openURL(event.meetingURL);
                   }}
                 />
               </Box>
 
-              {event?.links?.map((link, index) => (
-                <Box key={index} marginBottom={theme.spacing(2)}>
+              {event?.slidesURL && (
+                <Box marginBottom={theme.spacing(2)}>
                   <Link
                     fontSize='16px'
                     onClick={() => {
-                      if (link.url) {
-                        window.open(link.url, '_blank', 'noopener noreferrer');
-                      }
+                      openURL(event.slidesURL);
                     }}
                   >
-                    {link.label}
+                    {strings.formatString(strings.EVENT_NAME_SLIDES, event.name)}
                   </Link>
                 </Box>
-              ))}
+              )}
+
+              {event?.recordingURL && (
+                <Box marginBottom={theme.spacing(2)}>
+                  <Link
+                    fontSize='16px'
+                    onClick={() => {
+                      openURL(event.recordingURL);
+                    }}
+                  >
+                    {strings.formatString(strings.EVENT_NAME_RECORDING, event.name)}
+                  </Link>
+                </Box>
+              )}
             </Grid>
 
             <Grid item xs={6} style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>

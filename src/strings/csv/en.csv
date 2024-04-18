@@ -476,6 +476,8 @@ EST_READY_DATE,Est. Ready Date,
 EST_TOTAL_PLANTS_PLANTING_DENSITY_AREA,Est. Total Plants (Planting Density × Area), Estimated Total Plants
 EVENT,Event,
 EVENT_DETAILS,Event Details,
+EVENT_NAME_RECORDING,{0} Recording,
+EVENT_NAME_SLIDES,{0} Slides,
 EXCLUSION_AREAS,Exclusion Areas,
 EXISTING_PROJECT_ACCESSIONS_BODY,"There are accessions that have already been added to an existing project. If you select those accessions here, you will replace the project with {0} (rather than create an additional association).",
 EXISTING_PROJECT_ACCESSIONS_TITLE,Existing Project with Accessions,

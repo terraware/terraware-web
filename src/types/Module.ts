@@ -20,10 +20,12 @@ export type ModuleContent = {
 export type ModuleEvent = {
   callDescription?: string;
   description?: string;
-  eventTime: string;
-  eventURL?: string;
+  endTime: string;
   id: number;
-  links?: { label: string; url: string }[];
+  meetingURL?: string;
   moduleId: number;
   name: string;
+  recordingURL?: string;
+  slidesURL?: string;
+  startTime: string;
 };
