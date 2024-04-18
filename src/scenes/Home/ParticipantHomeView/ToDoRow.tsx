@@ -21,19 +21,18 @@ const ToDoRow = ({ toDo }: ToDoRowProps) => {
       justifyContent={'flex-start'}
       flexWrap={'nowrap'}
     >
-      <Grid item>
+      <Grid item flexBasis={'content'} flexGrow={0}>
         <ToDoStatusBadge status={toDo.status} />
       </Grid>
-      <Grid item>
+      <Grid item flexBasis={'content'} flexGrow={0}>
         <ToDoDate toDo={toDo} />
       </Grid>
-      <Grid item>
+      <Grid item flexBasis={'content'} flexGrow={0}>
         <Typography fontSize={'16px'} fontWeight={600} lineHeight={'24px'} component={'span'} whiteSpace={'nowrap'}>
           {toDo.type}
         </Typography>
       </Grid>
-      {/* These values might change when the tablet and mobile designs are implemented */}
-      <Grid item xs={3} sm={3} md={3} lg={5} xl={7}>
+      <Grid item zeroMinWidth flexGrow={1}>
         <Typography
           fontSize={'16px'}
           fontWeight={500}
@@ -46,7 +45,7 @@ const ToDoRow = ({ toDo }: ToDoRowProps) => {
           {toDo.name}
         </Typography>
       </Grid>
-      <Grid item marginLeft={'auto'}>
+      <Grid item flexBasis={'content'} flexGrow={0} marginLeft={'auto'}>
         <ToDoCta toDo={toDo} />
       </Grid>
     </Grid>

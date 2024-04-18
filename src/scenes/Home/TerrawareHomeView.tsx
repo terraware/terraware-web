@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Container, Grid } from '@mui/material';
+import { Box, Container, Grid } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import PageHeader from 'src/components/PageHeader';
@@ -33,7 +33,7 @@ const TerrawareHomeView = () => {
   };
 
   return (
-    <>
+    <Box paddingRight={'24px'}>
       <PageHeader
         title={user?.firstName ? strings.formatString(strings.WELCOME_PERSON, user.firstName) : strings.WELCOME}
         subtitle=''
@@ -101,7 +101,7 @@ const TerrawareHomeView = () => {
           </Grid>
         </Grid>
       </Container>
-    </>
+    </Box>
   );
 };
 
