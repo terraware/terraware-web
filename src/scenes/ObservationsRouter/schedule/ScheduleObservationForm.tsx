@@ -1,11 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { BusySpinner, DatePicker, Dropdown } from '@terraware/web-components';
+import { BusySpinner, Dropdown } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
+import DatePicker from 'src/components/common/DatePicker';
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { Statuses } from 'src/redux/features/asyncUtils';
@@ -126,7 +127,11 @@ export default function ScheduleObservationForm({
                 id='startDate'
                 label={strings.OBSERVATION_START_DATE}
                 value={startDate ?? ''}
-                onChange={(value) => onStartDate(value as string)}
+                onChange={(value) => {
+                  if (value) {
+                    onStartDate(value.toISOString());
+                  }
+                }}
                 aria-label='date-picker'
                 errorText={validate ? startDateError : ''}
               />
@@ -136,7 +141,11 @@ export default function ScheduleObservationForm({
                 id='endDate'
                 label={strings.OBSERVATION_END_DATE}
                 value={endDate ?? ''}
-                onChange={(value) => onEndDate(value as string)}
+                onChange={(value) => {
+                  if (value) {
+                    onEndDate(value.toISOString());
+                  }
+                }}
                 aria-label='date-picker'
                 errorText={validate ? endDateError : ''}
               />

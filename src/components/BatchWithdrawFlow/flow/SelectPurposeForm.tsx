@@ -193,14 +193,14 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     }));
   };
 
-  const validateDate = (id: string, value?: any) => {
+  const validateDate = (id: string, value?: any, allowFutureDates?: boolean) => {
     if (!value) {
       setIndividualError(id, strings.REQUIRED_FIELD);
       return false;
     } else if (isNaN(value.getTime())) {
       setIndividualError(id, strings.INVALID_DATE);
       return false;
-    } else if (isInTheFuture(value.getTime())) {
+    } else if (!allowFutureDates && isInTheFuture(value.getTime())) {
       setIndividualError(id, strings.NO_FUTURE_DATES);
       return false;
     } else {
@@ -209,9 +209,9 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     }
   };
 
-  const onChangeDate = (id: 'readyByDate' | 'withdrawnDate', value?: any) => {
+  const onChangeDate = (id: 'readyByDate' | 'withdrawnDate', value?: any, allowFutureDates?: boolean) => {
     const date = value ? getDateDisplayValue(value.getTime(), timeZone) : null;
-    const valid = validateDate(id, value);
+    const valid = validateDate(id, value, allowFutureDates);
     if (valid) {
       updateField(id, date);
     }
@@ -776,7 +776,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         label={strings.ESTIMATED_READY_DATE}
                         aria-label={strings.ESTIMATED_READY_DATE}
                         value={localRecord.readyByDate}
-                        onChange={(value) => onChangeDate('readyByDate', value)}
+                        onChange={(value) => onChangeDate('readyByDate', value, true)}
                         defaultTimeZone={timeZone}
                       />
                     </Grid>

@@ -1,5 +1,5 @@
 import { DropdownItem } from '@terraware/web-components';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 
 import strings from 'src/strings';
 import theme from 'src/theme';
@@ -32,36 +32,36 @@ export type HumidityValues = {
 };
 
 export const getTimePeriodParams = (period: string, timeZone: string) => {
-  const end = moment(changeTimezone(moment().toDate(), timeZone));
+  const end = DateTime.fromJSDate(changeTimezone(DateTime.now().toJSDate(), timeZone));
 
   switch (period) {
     case 'Last 12 hours':
       return {
-        start: moment(changeTimezone(moment(Date.now()).subtract(12, 'h').toDate(), timeZone)),
+        start: DateTime.fromJSDate(changeTimezone(DateTime.now().minus({ hours: 12 }).toJSDate(), timeZone)),
         end,
         numDataPoints: 50,
       };
     case 'Last 24 hours':
       return {
-        start: moment(changeTimezone(moment(Date.now()).subtract(24, 'h').toDate(), timeZone)),
+        start: DateTime.fromJSDate(changeTimezone(DateTime.now().minus({ hours: 24 }).toJSDate(), timeZone)),
         end,
         numDataPoints: 50,
       };
     case 'Last 7 days':
       return {
-        start: moment(changeTimezone(moment(Date.now()).subtract(7, 'd').toDate(), timeZone)),
+        start: DateTime.fromJSDate(changeTimezone(DateTime.now().minus({ days: 7 }).toJSDate(), timeZone)),
         end,
         numDataPoints: 50,
       };
     case 'Last 30 days':
       return {
-        start: moment(changeTimezone(moment(Date.now()).subtract(30, 'd').toDate(), timeZone)),
+        start: DateTime.fromJSDate(changeTimezone(DateTime.now().minus({ days: 30 }).toJSDate(), timeZone)),
         end,
         numDataPoints: 50,
       };
     default:
       return {
-        start: moment(changeTimezone(moment().toDate(), timeZone)),
+        start: DateTime.fromJSDate(changeTimezone(DateTime.now().toJSDate(), timeZone)),
         end,
         numDataPoints: 50,
       };
