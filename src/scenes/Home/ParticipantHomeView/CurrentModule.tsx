@@ -1,12 +1,12 @@
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 
+import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
 
 const CurrentModule = () => {
-  const theme = useTheme();
   const { currentModule, currentParticipantProject } = useParticipantData();
 
   if (!currentModule || !currentParticipantProject) {
@@ -14,14 +14,7 @@ const CurrentModule = () => {
   }
 
   return (
-    <Box
-      sx={{
-        backgroundColor: theme.palette.TwClrBaseWhite,
-        borderRadius: theme.spacing(2),
-        padding: theme.spacing(3),
-        paddingTop: theme.spacing(2),
-      }}
-    >
+    <Card>
       <Grid container flexDirection={'column'}>
         <Grid item xs={7}>
           <Grid container>
@@ -66,7 +59,7 @@ const CurrentModule = () => {
         </Grid>
         <Grid item xs={5}></Grid>
       </Grid>
-    </Box>
+    </Card>
   );
 };
 
