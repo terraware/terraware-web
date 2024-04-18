@@ -16,7 +16,7 @@
     "generate-strings": "node scripts/generate-strings.js",
     "generate-types": "node scripts/openapi-typescript-formatter.mjs",
     "license-report": "license-report --only=prod --department.value=terraware --relatedTo.value=terraware-web --output=html > docs/license-report.html",
-    "lint": "ESLINT_USE_FLAT_CONFIG=true eslint -c .eslintrc.js src/**/*.ts ",
+    "lint": "ESLINT_USE_FLAT_CONFIG=true eslint -c eslint.config.js src/**/*.ts ",
     "ts": "tsc --project ./tsconfig.json",
     "format": "prettier --write .",
     "docker:start": "./scripts/launch_server.sh",
@@ -87,13 +87,6 @@
     "utm": "^1.1.1",
     "web-vitals": "^3.1.1",
     "worker-loader": "^3.0.8"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest",
-      "plugin:storybook/recommended"
-    ]
   },
   "browserslist": {
     "production": [
