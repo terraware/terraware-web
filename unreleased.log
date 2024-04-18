@@ -1,3 +1,4 @@
+37b92915c8 SW-5193 crossed off undone withdrawals (#2528)
 4b57b94a7d SW-5225 Fix date validation for 'readyByDate' in nursery transfer withdrawals (#2525)
 87f6bfd072 SW-5122 Make the ToDo name fluidly shrink with an ellipsis (#2522)
 453bb143dd SW-5218 Bump web-component version to pick up datepicker fixes (#2524)
