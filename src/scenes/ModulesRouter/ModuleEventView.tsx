@@ -45,11 +45,21 @@ const ModuleEventView = () => {
     [activeLocale, moduleId, projectId]
   );
 
-  const isEventStartingSoon = useMemo(() => {
+  const eventIsStartingSoon = useMemo(() => {
     if (event) {
       const startTime = new Date(event.startTime);
       const diff = startTime.getTime() - now.getTime();
       return diff < FIFTEEN_MINUTE_INTERVAL_MS;
+    }
+
+    return false;
+  }, [event, now]);
+
+  const eventHasEnded = useMemo(() => {
+    if (event) {
+      const endTime = new Date(event.endTime);
+      const diff = endTime.getTime() - now.getTime();
+      return diff < 0;
     }
 
     return false;
@@ -103,13 +113,24 @@ const ModuleEventView = () => {
               </Typography>
 
               <Box marginBottom={theme.spacing(2)}>
-                <Button
-                  disabled={!isEventStartingSoon}
-                  label={strings.formatString(strings.JOIN_EVENT_NAME, event.name)?.toString()}
-                  onClick={() => {
-                    openURL(event.meetingURL);
-                  }}
-                />
+                {eventHasEnded ? (
+                  <Typography
+                    fontSize={'16px'}
+                    fontWeight={600}
+                    lineHeight={'32px'}
+                    sx={{ color: theme.palette.TwClrTxtWarning }}
+                  >
+                    {strings.THIS_SESSION_HAS_ENDED}
+                  </Typography>
+                ) : (
+                  <Button
+                    disabled={!eventIsStartingSoon}
+                    label={strings.formatString(strings.JOIN_EVENT_NAME, event.name)?.toString()}
+                    onClick={() => {
+                      openURL(event.meetingURL);
+                    }}
+                  />
+                )}
               </Box>
 
               {event?.slidesURL && (
