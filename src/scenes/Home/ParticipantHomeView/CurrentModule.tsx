@@ -57,7 +57,7 @@ const CurrentModule = () => {
             {/* TODO module links will come after BE sync */}
           </Grid>
         </Grid>
-        <Grid item xs={5}></Grid>
+        <Grid item xs={5} />
       </Grid>
     </Card>
   );
