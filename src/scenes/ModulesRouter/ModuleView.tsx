@@ -55,6 +55,11 @@ const ModuleContentView = () => {
   const getDueDateLabelColor = useCallback(
     (dueDate: string) => {
       const due = new Date(dueDate);
+      const isCurrentModule = true; // TODO: implement current module check
+
+      if (!isCurrentModule) {
+        return theme.palette.TwClrTxt;
+      }
 
       // if due date is in the past, item is overdue
       if (due < now) {
