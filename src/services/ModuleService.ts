@@ -1,4 +1,4 @@
-import { Module, ModuleEvent } from 'src/types/Module';
+import { Module, ModuleEvent, ModuleEventType } from 'src/types/Module';
 
 import { Response2 } from './HttpService';
 
@@ -14,29 +14,9 @@ export type ModuleEventData = {
   event: ModuleEvent | undefined;
 };
 
-const mockEvents: ModuleEvent[] = [
-  {
-    eventTime: '2024-03-16T22:00:00.000Z',
-    eventURL: 'https://google.com/',
-    id: 1,
-    moduleId: 3,
-    name: 'Live Session',
-    links: [
-      { label: 'Live Session Slides', url: 'https://google.com/' },
-      { label: 'Live Session Recording', url: 'https://google.com/' },
-    ],
-    callDescription: `
-      <div>
-        <p>Clicking "Join" will open up a browser window to join a Zoom video call.</p>
-        <p>For this Live Session you will need:</p>
-        <ul>
-          <li>An internet connection – broadband wired or wireless (3G or 4G/LTE)</li>
-          <li>Speakers and a microphone – built-in, USB plug-in, or wireless Bluetooth</li>
-          <li>A webcam or HD webcam - built-in, USB plug-in</li>
-        </ul>
-      </div>
-    `,
-    description: `
+const mockEvents: Partial<Record<ModuleEventType, ModuleEvent>> = {
+  Workshop: {
+    eventDescription: `
       <div>
         <h3>Details</h3>
         <p>The workshop will take place on Monday, September 18th and cover the following topics:</p>
@@ -55,46 +35,71 @@ const mockEvents: ModuleEvent[] = [
         <p>Damien Kuhn is an agronomist and forestry engineer from AgroParisTech, where he specialized in environmental economics. He has spent the past 16 years working on forestry and climate projects across Africa, Latin America, and Southeast Asia. As former COO of Kinomé, he developed partnerships worldwide and managing a portfolio of community-based forestry projects. He has also been an advisor to governments and companies on their climate, forestry, and agricultural strategies, including as lead expert for four countries' Nationally Determined Contributions under the Paris Climate Accords.</p>
       </div>
     `,
+    sessions: [
+      {
+        endTime: '2024-04-16T16:00:00Z',
+        id: 101,
+        meetingURL: 'https://source.unsplash.com/random/1920x1080/?cat',
+        recordingURL: 'https://source.unsplash.com/random/1920x1080/?dog',
+        slidesURL: 'https://source.unsplash.com/random/1920x1080/?cat,dog',
+        startTime: '2024-04-16T17:00:00Z',
+      },
+    ],
   },
-  {
-    eventTime: '2024-03-14T22:00:00.000Z',
-    eventURL: 'https://google.com/',
-    id: 2,
-    moduleId: 3,
-    name: '1:1 Session',
-    links: [
-      { label: '1:1 Session Slides', url: 'https://google.com/' },
-      { label: '1:1 Session Recording', url: 'https://google.com/' },
-    ],
-    additionalLinks: [
-      { label: 'Preparation Materials', url: 'https://google.com/' },
-      { label: 'Additional Resources', url: 'https://google.com/' },
-    ],
-    callDescription: `
-      <div>
-        <p>Clicking "Join" will open up a browser window to join a Zoom video call.</p>
-        <p>For this Live Session you will need:</p>
-        <ul>
-          <li>An internet connection – broadband wired or wireless (3G or 4G/LTE)</li>
-          <li>Speakers and a microphone – built-in, USB plug-in, or wireless Bluetooth</li>
-          <li>A webcam or HD webcam - built-in, USB plug-in</li>
-        </ul>
-      </div>
-    `,
-    description: `
+  'One-on-One Session': {
+    eventDescription: `
       <div>
         <h3>Details</h3>
         <p>This week's one-on-one session will focus on reviewing Budget Template.</p>
         <p>Please ensure to complete all the Stakeholders & Co-Benefits questions for the Feasibility Study by Friday 3rd November.</p>
       </div>
     `,
+    sessions: [
+      {
+        endTime: '2024-04-16T16:00:00Z',
+        id: 102,
+        meetingURL: 'https://source.unsplash.com/random/1920x1080/?cat',
+        recordingURL: 'https://source.unsplash.com/random/1920x1080/?dog',
+        slidesURL: 'https://source.unsplash.com/random/1920x1080/?cat,dog',
+        startTime: '2024-04-16T17:00:00Z',
+      },
+    ],
   },
-];
+};
 
 const mockModules: Module[] = [
   {
-    dateRange: 'Week of 2/24 - 3/1',
-    description: `
+    additionalResources: `
+      <div>
+        <ul>
+          <li><a href="#">Verified Carbon Standard</a></li>
+          <li><a href="#">Methodology For Afforestation, Reforestation and Revegetation Projects</a></li>
+          <li><a href="#">Plan Vivo</a></li>
+          <li><a href="#">AFOLU Non-Permanence Risk Tool</a></li>
+          <li><a href="#">Climate Change: Atmospheric Carbon Dioxide</a></li>
+          <li><a href="#">En-ROADS - Climate Interactive</a></li>
+          <li><a href="#">Tool for the Demonstration and Assessment of Additionality in VCS Agriculture, Forestry and Other Land Use (Afolu) Project Activities</a></li>
+        </ul>
+      </div>
+    `,
+    endDate: '2024-04-23T16:00:00Z',
+    events: mockEvents,
+    id: 1,
+    name: 'Kick-Off',
+    preparationMaterials: `
+      <div>
+        <ul>
+          <li><a href="#">Verified Carbon Standard</a></li>
+          <li><a href="#">Methodology For Afforestation, Reforestation and Revegetation Projects</a></li>
+          <li><a href="#">Plan Vivo</a></li>
+          <li><a href="#">AFOLU Non-Permanence Risk Tool</a></li>
+          <li><a href="#">Climate Change: Atmospheric Carbon Dioxide</a></li>
+          <li><a href="#">En-ROADS - Climate Interactive</a></li>
+          <li><a href="#">Tool for the Demonstration and Assessment of Additionality in VCS Agriculture, Forestry and Other Land Use (Afolu) Project Activities</a></li>
+        </ul>
+      </div>
+    `,
+    overview: `
       <div>
         <p>The purpose of this module is to welcome all participants, share an overview of each project, and set some goals for the Accelerator program.</p>
         <p>By the end of this week, you should be equipped with the following:</p>
@@ -104,227 +109,7 @@ const mockModules: Module[] = [
         </ul>
       </div>
     `,
-    id: 1,
-    name: 'Module 1',
-    title: 'Kick-Off',
-    contents: [
-      {
-        content: '',
-        dueDate: '2024-03-21T07:00:00.000Z',
-        id: 1,
-        moduleId: 3,
-        title: 'Module 6 Feasibility Questions',
-        url: 'https://google.com/',
-      },
-      {
-        content: '',
-        dueDate: null,
-        id: 2,
-        moduleId: 3,
-        title: 'Preparation Materials',
-        url: 'https://google.com/',
-      },
-      {
-        content: '',
-        dueDate: null,
-        id: 3,
-        moduleId: 3,
-        title: 'Live Session Slides',
-        url: 'https://google.com/',
-      },
-      {
-        content: `
-          <div>
-            <ul>
-              <li><a href="#">Verified Carbon Standard</a></li>
-              <li><a href="#">Methodology For Afforestation, Reforestation and Revegetation Projects</a></li>
-              <li><a href="#">Plan Vivo</a></li>
-              <li><a href="#">AFOLU Non-Permanence Risk Tool</a></li>
-              <li><a href="#">Climate Change: Atmospheric Carbon Dioxide</a></li>
-              <li><a href="#">En-ROADS - Climate Interactive</a></li>
-              <li><a href="#">Tool for the Demonstration and Assessment of Additionality in VCS Agriculture, Forestry and Other Land Use (Afolu) Project Activities</a></li>
-            </ul>
-          </div>
-        `,
-        dueDate: null,
-        id: 4,
-        moduleId: 3,
-        title: 'Additional Resources',
-        url: 'https://google.com/',
-      },
-    ],
-    events: [
-      {
-        eventTime: '2024-03-16T22:00:00.000Z',
-        id: 1,
-        moduleId: 3,
-        name: 'Live Session',
-      },
-      {
-        eventTime: '2024-03-14T22:00:00.000Z',
-        id: 2,
-        moduleId: 3,
-        name: '1:1 Session',
-      },
-    ],
-  },
-  {
-    dateRange: 'Week of 3/3 - 3/10',
-    description: `
-      <div>
-        <p>The purpose of this module is to introduce you to carbon market basics and help you understand what a carbon project entails. After this session, you will be able to complete the deliverable which is the Carbon Eligibility questions for the Feasibility Study.</p>
-        <p>By the end of this module, you should be equipped with the following:</p>
-        <ul>
-          <li>Knowledge of the major carbon standards (Verra/VCS, Plan Vivo, etc)</li>
-          <li>Knowledge of the different types of carbon projects (Afforestation, Reforestation and Revegetation (ARR), Improved Forest Management (IFM), Avoided Deforestation)</li>
-          <li>A good understanding of who is involved in a carbon project (project proponent, land owner, investors, buyers…)</li>
-          <li>Some familiarity with the timeline of a carbon project</li>
-          <li>New knowledge about Feasibility Studies and Project Design Documents (PDD)</li>
-          <li>An understanding of why it is important to provide high-quality due diligence information, in order to produce the best Feasibility Studies possible for your project and provide you with better chances to get selected and registered.</li>
-        </ul>
-      </div>
-    `,
-    id: 2,
-    name: 'Module 2',
-    title: 'Introduction to Carbon Projects',
-    contents: [
-      {
-        content: '',
-        dueDate: '2024-03-21T07:00:00.000Z',
-        id: 1,
-        moduleId: 3,
-        title: 'Module 6 Feasibility Questions',
-        url: 'https://google.com/',
-      },
-      {
-        content: '',
-        dueDate: null,
-        id: 2,
-        moduleId: 3,
-        title: 'Preparation Materials',
-        url: 'https://google.com/',
-      },
-      {
-        content: '',
-        dueDate: null,
-        id: 3,
-        moduleId: 3,
-        title: 'Live Session Slides',
-        url: 'https://google.com/',
-      },
-      {
-        content: `
-          <div>
-            <ul>
-              <li><a href="#">Verified Carbon Standard</a></li>
-              <li><a href="#">Methodology For Afforestation, Reforestation and Revegetation Projects</a></li>
-              <li><a href="#">Plan Vivo</a></li>
-              <li><a href="#">AFOLU Non-Permanence Risk Tool</a></li>
-              <li><a href="#">Climate Change: Atmospheric Carbon Dioxide</a></li>
-              <li><a href="#">En-ROADS - Climate Interactive</a></li>
-              <li><a href="#">Tool for the Demonstration and Assessment of Additionality in VCS Agriculture, Forestry and Other Land Use (Afolu) Project Activities</a></li>
-            </ul>
-          </div>
-        `,
-        dueDate: null,
-        id: 4,
-        moduleId: 3,
-        title: 'Additional Resources',
-        url: 'https://google.com/',
-      },
-    ],
-    events: [
-      {
-        eventTime: '2024-03-16T22:00:00.000Z',
-        id: 1,
-        moduleId: 3,
-        name: 'Live Session',
-      },
-      {
-        eventTime: '2024-03-14T22:00:00.000Z',
-        id: 2,
-        moduleId: 3,
-        name: '1:1 Session',
-      },
-    ],
-  },
-  {
-    dateRange: 'Week of 3/12 - 3/17',
-    description: `
-      <div>
-        <p>The purpose of this module is to introduce you to the legal frameworks needed to register a carbon project. After this session, you will be able to complete the deliverable which is the Legal Eligibility questions for the Feasibility Study.</p>
-        <p>By the end of this module, you should be equipped with the following:</p>
-        <ul>
-          <li>Role of Terraformation Legal Department</li>
-          <li>Importance of Land Tenure</li>
-          <li>Overview of Legal Agreements</li>
-          <li>International Compliance Obligations</li>
-        </ul>
-      </div>
-    `,
-    id: 3,
-    name: 'Module 3',
-    title: 'Legal Eligibility',
-    contents: [
-      {
-        content: '',
-        dueDate: '2024-03-21T07:00:00.000Z',
-        id: 1,
-        moduleId: 3,
-        title: 'Module 6 Feasibility Questions',
-        url: 'https://google.com/',
-      },
-      {
-        content: '',
-        dueDate: null,
-        id: 2,
-        moduleId: 3,
-        title: 'Preparation Materials',
-        url: 'https://google.com/',
-      },
-      {
-        content: '',
-        dueDate: null,
-        id: 3,
-        moduleId: 3,
-        title: 'Live Session Slides',
-        url: 'https://google.com/',
-      },
-      {
-        content: `
-          <div>
-            <ul>
-              <li><a href="#">Verified Carbon Standard</a></li>
-              <li><a href="#">Methodology For Afforestation, Reforestation and Revegetation Projects</a></li>
-              <li><a href="#">Plan Vivo</a></li>
-              <li><a href="#">AFOLU Non-Permanence Risk Tool</a></li>
-              <li><a href="#">Climate Change: Atmospheric Carbon Dioxide</a></li>
-              <li><a href="#">En-ROADS - Climate Interactive</a></li>
-              <li><a href="#">Tool for the Demonstration and Assessment of Additionality in VCS Agriculture, Forestry and Other Land Use (Afolu) Project Activities</a></li>
-            </ul>
-          </div>
-        `,
-        dueDate: null,
-        id: 4,
-        moduleId: 3,
-        title: 'Additional Resources',
-        url: 'https://google.com/',
-      },
-    ],
-    events: [
-      {
-        eventTime: '2024-03-16T22:00:00.000Z',
-        id: 1,
-        moduleId: 3,
-        name: 'Live Session',
-      },
-      {
-        eventTime: '2024-03-14T22:00:00.000Z',
-        id: 2,
-        moduleId: 3,
-        name: '1:1 Session',
-      },
-    ],
+    startDate: '2024-04-16T17:00:00Z',
   },
 ];
 
