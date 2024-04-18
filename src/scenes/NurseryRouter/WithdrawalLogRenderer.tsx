@@ -50,7 +50,7 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
     return (
       <Link
         to={nurseryWithdrawalDetailLocation}
-        className={`${classes.link} ${row.undoesWithdrawalId ? classes.undone : ''}`}
+        className={`${classes.link} ${row.undoneByWithdrawalId ? classes.undone : ''}`}
       >
         {iValue as React.ReactNode}
       </Link>
