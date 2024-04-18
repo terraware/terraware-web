@@ -38,3 +38,6 @@ APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
 
 # Store app version in build version file
 echo $APP_VERSION > public/build-version.txt
+
+# Set eslint config file
+ESLINT_USE_FLAT_CONFIG=true
