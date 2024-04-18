@@ -1,3 +1,4 @@
+46a25a4dc1 SW-5122 Left half of the current module content box in the participant home page (#2526)
 37b92915c8 SW-5193 crossed off undone withdrawals (#2528)
 4b57b94a7d SW-5225 Fix date validation for 'readyByDate' in nursery transfer withdrawals (#2525)
 87f6bfd072 SW-5122 Make the ToDo name fluidly shrink with an ellipsis (#2522)
