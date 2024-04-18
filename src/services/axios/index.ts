@@ -38,14 +38,17 @@ axios.interceptors.response.use(
 );
 
 axios.interceptors.request.use((x) => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   x.meta = x.meta || {};
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   x.meta.beginTimer = new Date().getTime();
   return x;
 });
 
 axios.interceptors.response.use((x) => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   x.responseTime = new Date().getTime() - x.config.meta.beginTimer;
   return x;

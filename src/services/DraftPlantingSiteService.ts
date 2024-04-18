@@ -54,7 +54,7 @@ const getDraftPlantingSite = (id: number): Promise<GetDraftPlantingSiteResponse>
         '{id}': `${id}`,
       },
     },
-    (data) => ({ site: data?.site ? toDraft(data!.site) : undefined })
+    (data) => ({ site: data?.site ? toDraft(data.site) : undefined })
   );
 
 /**

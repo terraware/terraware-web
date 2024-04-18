@@ -5,9 +5,6 @@ import strings from 'src/strings';
 import {
   CreateDocumentPayload,
   CreateSavedDocVersionPayload,
-  DocumentHistoryCreatedPayload,
-  DocumentHistoryEditedPayload,
-  DocumentHistorySavedPayload,
   UpdateDocumentPayload,
   UpdateSavedDocVersionPayload,
   UpgradeManifestPayload,
@@ -80,11 +77,7 @@ export const requestUpgradeManifest = createAsyncThunk(
 export const requestListHistory = createAsyncThunk('listHistory', async (documentId: number, { rejectWithValue }) => {
   const response = await DocumentService.listHistory(documentId);
   if (response.requestSucceeded && response.data?.history) {
-    return response.data.history as (
-      | DocumentHistoryEditedPayload
-      | DocumentHistorySavedPayload
-      | DocumentHistoryCreatedPayload
-    )[];
+    return response.data.history;
   }
 
   return rejectWithValue(response.error || strings.GENERIC_ERROR);

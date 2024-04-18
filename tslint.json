@@ -1,0 +1,65 @@
+{
+  "extends": [
+    "tslint:recommended",
+    "tslint-eslint-rules",
+    "tslint-react",
+    "tslint-config-prettier",
+    "tslint-react-hooks"
+  ],
+  "jsRules": {},
+  "rules": {
+    "interface-name": false,
+    "jsx-no-lambda": false,
+    "object-literal-sort-keys": false,
+    "quotemark": [true, "single", "avoid-escape"],
+    "no-debugger": true,
+    "indent": [true, "spaces", 2],
+    "variable-name": {
+      "options": ["ban-keywords", "check-format", "allow-leading-underscore", "allow-pascal-case"]
+    },
+    "curly": true,
+    "no-console": true,
+    "no-constant-condition": true,
+    "no-empty": [true],
+    "no-async-without-await": true,
+    "no-conditional-assignment": true,
+    "brace-style": [
+      true,
+      "1tbs",
+      {
+        "allowSingleLine": true
+      }
+    ],
+    "one-variable-per-declaration": [true, "ignore-for-loop"],
+    "linebreak-style": [true, "LF"],
+    "handle-callback-err": [true, "^(e|err|error)$"],
+    "array-bracket-spacing": [true, "never"],
+    "eofline": false,
+    "no-trailing-whitespace": [true, "ignore-blank-lines"],
+    "no-duplicate-variable": true,
+    "arrow-parens": true,
+    "ter-arrow-spacing": true,
+    "new-parens": true,
+    "ter-no-mixed-spaces-and-tabs": {
+      "type": "spaces"
+    },
+    "no-irregular-whitespace": true,
+    "whitespace": true,
+    "semicolon": [true, "always"],
+    "triple-equals": true,
+    "no-eval": true,
+    "no-sparse-arrays": true,
+    "no-ex-assign": true,
+    "no-var-keyword": true,
+    "ter-prefer-arrow-callback": true,
+    "prefer-const": true,
+    "jsx-boolean-value": false
+  },
+  "linterOptions": {
+    "exclude": [
+      "src/api/types/generated-schema.ts",
+      "src/api/types/generated-schema-seedbank.ts",
+      "src/types/documentProducer/generated-schema.ts"
+    ]
+  }
+}

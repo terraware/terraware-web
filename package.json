@@ -88,6 +88,29 @@
     "web-vitals": "^3.1.1",
     "worker-loader": "^3.0.8"
   },
+  "eslintConfig": {
+    "extends": [
+      "plugin:react/recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:@typescript-eslint/recommended-requiring-type-checking",
+      "plugin:jest-react/recommended",
+      "plugin:storybook/recommended"
+    ],
+    "parserOptions": {
+"project": "tsconfig.json"
+    },
+    "rules": {
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/no-unsafe-member-access": "off",
+      "@typescript-eslint/no-unsafe-call": "off",
+      "@typescript-eslint/no-unsafe-argument": "off",
+      "@typescript-eslint/no-floating-promises": "off",
+      "@typescript-eslint/no-redundant-type-constituents": "off",
+      "@typescript-eslint/no-unsafe-return": "off",
+      "@typescript-eslint/restrict-template-expressions": "off"
+    }
+  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -134,8 +157,9 @@
     "babel-plugin-named-exports-order": "^0.0.2",
     "btoa": "^1.2.1",
     "csv": "^6.2.8",
-    "eslint": "8.35.0",
+    "eslint": "^9.0.0",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-jest-react": "^0.1.0",
     "eslint-plugin-jsdoc": "^48.2.3",
     "eslint-plugin-prefer-arrow": "^1.2.3",
     "eslint-plugin-react": "^7.34.1",

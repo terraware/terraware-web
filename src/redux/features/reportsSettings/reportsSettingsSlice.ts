@@ -19,6 +19,7 @@ export const reportsSettingsSlice = createSlice({
     setReportsSettingsAction: (state, action: PayloadAction<Payload>) => {
       if (action.payload.settings) {
         // Leaving these here in case we want to do something with invalid responses
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { status, requestSucceeded, statusCode, ...rest } = action.payload.settings;
         state.settings = rest;
       }

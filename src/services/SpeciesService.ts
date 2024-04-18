@@ -342,7 +342,7 @@ const suggestSpecies = async (organizationId: number, query: string): Promise<Su
     });
   }
 
-  return (await SearchService.search(params)) as SuggestedSpecies[] | null;
+  return await SearchService.search(params);
 };
 
 const getSpeciesProjects = (

@@ -164,6 +164,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     setSelectedOrganization,
     organizations: organizations ?? [],
     orgPreferences,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     reloadOrganizations,
     reloadOrgPreferences,
     bootstrapped,

@@ -196,7 +196,7 @@ const getSearchNode = (organizationId: number, siteId: number): SearchNodePayloa
  * Get planting zone total plants
  */
 const getTotalPlantsInZones = async (organizationId: number, siteId: number): Promise<PlantingSiteZone[] | null> => {
-  return (await SearchService.search({
+  return await SearchService.search({
     prefix: 'plantingSites.plantingZones',
     fields: [
       'plantingSubzones.id',
@@ -210,7 +210,7 @@ const getTotalPlantsInZones = async (organizationId: number, siteId: number): Pr
     ],
     search: getSearchNode(organizationId, siteId),
     count: 0,
-  })) as PlantingSiteZone[] | null;
+  });
 };
 
 /**

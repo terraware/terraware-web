@@ -81,6 +81,7 @@ const download = async ({
   projectId: number;
   projectMeta?: ProjectMeta;
   organization?: AcceleratorOrg;
+  // eslint-disable-next-line @typescript-eslint/require-await
 }): Promise<string | null> => {
   const exportData = new Map<string, string | number | null | undefined>([
     [strings.ORGANIZATION_NAME, organization?.name],
@@ -168,6 +169,7 @@ const list = async (
 };
 
 const update = async (participantProject: ParticipantProject): Promise<Response> => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { projectId, ...payload } = participantProject;
 
   return httpParticipantProject.put2<UpdateProjectAcceleratorDetailsResponsePayload>({

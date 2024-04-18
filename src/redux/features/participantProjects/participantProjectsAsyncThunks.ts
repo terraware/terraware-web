@@ -39,7 +39,7 @@ export const requestListParticipantProjects = createAsyncThunk(
 
 export const requestUpdateParticipantProject = createAsyncThunk(
   'participantProjects/update',
-  async (participantProject: ParticipantProject, { rejectWithValue, dispatch }) => {
+  async (participantProject: ParticipantProject, { rejectWithValue }) => {
     const response: Response2<number> = await ParticipantProjectService.update(participantProject);
 
     if (response && response.requestSucceeded && response.data) {

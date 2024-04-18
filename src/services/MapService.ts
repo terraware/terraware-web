@@ -124,7 +124,7 @@ const getPlantingSiteBoundingBox = (mapData: MapData): MapBoundingBox => {
     ...(subzones?.entities.map((s) => s.boundary) || []),
     ...(permanentPlots?.entities.map((s) => s.boundary) || []),
     ...(temporaryPlots?.entities.map((s) => s.boundary) || []),
-  ].filter((g) => g) as MapGeometry[];
+  ].filter((g) => g);
 
   return getBoundingBox(geometries);
 };
@@ -213,7 +213,7 @@ const getMapEntityGeometry = (entity: MapEntity): MapGeometry => {
       if (!Array.isArray(geom)) {
         return null;
       }
-      return geom as number[][][];
+      return geom;
     })
     .filter((geom) => !!geom) as number[][][][];
 

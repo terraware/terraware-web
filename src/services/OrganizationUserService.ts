@@ -79,7 +79,7 @@ const createOrganizationUser = async (
 
   if (response.requestSucceeded) {
     const data: CreateOrganizationUserResponsePayload = response.data;
-    response.userId = data?.id as number;
+    response.userId = data?.id;
   } else {
     if (response.statusCode === 409) {
       // conflict
