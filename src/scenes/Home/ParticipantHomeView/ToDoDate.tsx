@@ -30,6 +30,7 @@ const ToDoDate = ({ toDo }: ToDoDateProps) => {
       fontWeight={600}
       lineHeight={'24px'}
       component={'span'}
+      whiteSpace={'nowrap'}
     >
       {dateLabel}
     </Typography>

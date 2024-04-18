@@ -61,7 +61,7 @@ const ToDoStatusBadge = ({ status }: ToDoStatusBadgeProps) => {
         padding: `${theme.spacing(0.5)} ${theme.spacing(1)}`,
       }}
     >
-      <Typography fontSize={'14px'} fontWeight={500} lineHeight={'20px'}>
+      <Typography fontSize={'14px'} fontWeight={500} lineHeight={'20px'} whiteSpace={'nowrap'}>
         {getToDoStatus(status)}
       </Typography>
     </Box>
