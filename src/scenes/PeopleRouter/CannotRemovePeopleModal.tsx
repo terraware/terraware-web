@@ -1,3 +1,5 @@
+import React from 'react';
+
 import strings from 'src/strings';
 
 import DialogBox from '../../components/common/DialogBox/DialogBox';

@@ -274,7 +274,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const onSortChange = (order: SortOrder, orderBy: string) => {
     const orderByStr = orderBy === 'speciesScientificNames' ? 'batchWithdrawals.batch_species_scientificName' : orderBy;
     setSearchSortOrder({
-      field: orderByStr as string,
+      field: orderByStr,
       direction: order === 'asc' ? 'Ascending' : 'Descending',
     });
   };

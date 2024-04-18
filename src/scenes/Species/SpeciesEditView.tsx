@@ -45,6 +45,7 @@ export default function SpeciesEditView(): JSX.Element {
     return 4;
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const goToSpecies = (id?: number) => {
     if (speciesId) {
       const speciesLocation = {

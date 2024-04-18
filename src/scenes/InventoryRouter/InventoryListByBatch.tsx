@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { CircularProgress, Container, Theme, Typography, useTheme } from '@mui/material';
+import { CircularProgress, Container, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { TableColumnType } from '@terraware/web-components';
 
@@ -19,7 +19,7 @@ import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   mainContainer: {
     padding: '32px 0',
   },

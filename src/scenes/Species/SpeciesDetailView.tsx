@@ -188,7 +188,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               name='rare'
               label={strings.RARE}
               disabled={true}
-              onChange={(value: boolean) => {
+              onChange={() => {
                 return;
               }}
               value={species?.rare}

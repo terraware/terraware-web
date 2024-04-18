@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Box, Divider, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';

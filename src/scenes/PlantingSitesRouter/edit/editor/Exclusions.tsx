@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { Box } from '@mui/material';
 import { Feature, FeatureCollection } from 'geojson';
@@ -27,7 +27,7 @@ const featureSiteExclusions = (site: DraftPlantingSite): FeatureCollection | und
   if (site.exclusion) {
     return {
       type: 'FeatureCollection',
-      features: [toFeature(site.exclusion!, {}, 0)],
+      features: [toFeature(site.exclusion, {}, 0)],
     };
   } else {
     return undefined;
@@ -70,7 +70,7 @@ export default function Exclusions({ onValidate, site }: ExclusionsProps): JSX.E
 
     return [
       {
-        data: { type: 'FeatureCollection', features: [toFeature(site.boundary!, {}, site.id)] },
+        data: { type: 'FeatureCollection', features: [toFeature(site.boundary, {}, site.id)] },
         id: 'site',
         renderProperties: getRenderAttributes('site'),
       },

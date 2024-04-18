@@ -34,6 +34,7 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
   const { column, row, value, index, onRowClick, reloadData } = props;
   const { NURSERY_TRANSFER } = NurseryWithdrawalPurposes;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const rowClick = (event?: React.SyntheticEvent) => {
     if (onRowClick) {
       onRowClick();

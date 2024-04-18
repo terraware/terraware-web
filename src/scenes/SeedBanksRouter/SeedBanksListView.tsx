@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Grid, Theme, useTheme } from '@mui/material';
+import { Grid, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -26,7 +26,7 @@ import TextField from '../../components/common/Textfield/Textfield';
 import TfMain from '../../components/common/TfMain';
 import SeedBanksCellRenderer from './TableCellRenderer';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   title: {
     marginTop: 0,
     marginBottom: 0,

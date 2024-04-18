@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Box } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { TableColumnType } from '@terraware/web-components';
@@ -91,6 +93,7 @@ export default function PlantingSiteDetailsTable({
 
 const DetailsRenderer =
   (classes: any, timeZone: string, plantingSiteId: number, zoneViewUrl: string) =>
+  // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
 

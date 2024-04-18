@@ -12,7 +12,7 @@ import {
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
-export const useSessionFilters = (viewIdentifier: string, writeToQuery = true) => {
+export const useSessionFilters = (viewIdentifier: string) => {
   const location = useStateLocation();
   const navigate = useNavigate();
   const query = useQuery();

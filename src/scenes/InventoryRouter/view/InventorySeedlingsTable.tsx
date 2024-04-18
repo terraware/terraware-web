@@ -342,7 +342,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
 
   const onSortChange = (order: SortOrder, orderBy: string) => {
     setSearchSortOrder({
-      field: orderBy as string,
+      field: orderBy,
       direction: order === 'asc' ? 'Ascending' : 'Descending',
     });
   };

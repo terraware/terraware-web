@@ -169,6 +169,7 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
 
 const contextRenderer =
   (site: MinimalPlantingSite, data: ZoneAggregation[], timeZone: string) =>
+  // eslint-disable-next-line react/display-name
   (entity: MapSourceProperties): JSX.Element => {
     let properties: TooltipProperty[] = [];
     let title: string | undefined;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Grid, Theme } from '@mui/material';
+import { Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Dropdown, MultiSelect } from '@terraware/web-components';
 
@@ -27,7 +27,7 @@ import {
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   blockCheckbox: {
     display: 'block',
   },
@@ -298,7 +298,7 @@ export default function SpeciesDetailsForm({
             onRemove={(type: EcosystemType) => {
               onChange('ecosystemTypes', record.ecosystemTypes?.filter((et) => et !== type) ?? []);
             }}
-            options={new Map(ecosystemTypes().map((type) => [type.value as EcosystemType, type.label]))}
+            options={new Map(ecosystemTypes().map((type) => [type.value, type.label]))}
             valueRenderer={(typeVal: string) => typeVal}
             selectedOptions={record.ecosystemTypes ?? []}
             placeHolder={strings.SELECT}

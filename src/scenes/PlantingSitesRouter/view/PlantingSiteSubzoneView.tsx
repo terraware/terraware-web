@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box } from '@mui/material';
@@ -124,6 +124,7 @@ export default function PlantingSiteZoneView(): JSX.Element {
 
 const DetailsRenderer =
   (classes: any, timeZone: string) =>
+  // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
 

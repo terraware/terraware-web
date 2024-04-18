@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, CircularProgress, Grid, Theme, useTheme } from '@mui/material';
@@ -200,7 +200,7 @@ export default function NurseryReassignmentView(): JSX.Element {
 
         return {
           numPlants: planting.numPlants,
-          species: speciesMap![planting.speciesId],
+          species: speciesMap[planting.speciesId],
           siteName,
           originalZone,
           originalSubzone,

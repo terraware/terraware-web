@@ -54,6 +54,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
 
   // Sync query filters into view
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { showEmptyBatches: filterShowEmptyBatches, ...restFilters } = filters;
     const { showEmptyBatches: sessionFilterShowEmptyBatches, ...restSessionFilters } = sessionFilters;
 
@@ -135,7 +136,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
 
   const onSortChange = (order: SortOrder, orderBy: string) => {
     setSearchSortOrder({
-      field: orderBy as string,
+      field: orderBy,
       direction: order === 'asc' ? 'Ascending' : 'Descending',
     });
   };

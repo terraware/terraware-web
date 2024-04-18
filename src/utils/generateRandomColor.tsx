@@ -17,7 +17,7 @@ const generateRandomColor = () => {
 };
 
 const generateRandomColors = (numberOfColors: number) => {
-  const colors = Array.from({ length: numberOfColors }).map((i) => {
+  const colors = Array.from({ length: numberOfColors }).map(() => {
     return generateRandomColor();
   });
   return colors;
@@ -25,7 +25,7 @@ const generateRandomColors = (numberOfColors: number) => {
 
 const generateTerrawareRandomColors = (theme: Theme, numberOfColors: number) => {
   const terrawareColorsList = terrawareColors(theme);
-  const colors = Array.from({ length: numberOfColors }).map((_, i) => {
+  const colors = Array.from({ length: numberOfColors }).map(() => {
     const randomIndex = Math.floor(Math.random() * terrawareColorsList.length);
     const selectedColor = terrawareColorsList.splice(randomIndex, 1);
     return selectedColor[0] || generateRandomColor();

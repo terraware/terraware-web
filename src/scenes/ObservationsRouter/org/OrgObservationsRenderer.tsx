@@ -21,6 +21,7 @@ const OrgObservationsRenderer =
     locale: string | undefined | null,
     goToRescheduleObservation: (observationId: number) => void
   ) =>
+  // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
 

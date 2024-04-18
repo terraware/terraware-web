@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box } from '@mui/material';
@@ -128,6 +128,7 @@ export default function GenericZoneView({
 
 const DetailsRenderer =
   (classes: any, plantingSiteId: number, zoneId: number, subzoneViewUrl: string) =>
+  // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row } = props;
 

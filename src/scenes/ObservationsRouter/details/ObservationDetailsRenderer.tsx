@@ -10,6 +10,7 @@ const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies', 'mortalityRate'];
 
 const ObservationDetailsRenderer =
   (plantingSiteId: number, observationId: number) =>
+  // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
 

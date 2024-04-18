@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';

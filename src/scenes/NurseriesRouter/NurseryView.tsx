@@ -120,7 +120,7 @@ export default function NurseryView(): JSX.Element {
       if (selectedNursery && editedSubLocations) {
         await SubLocationService.saveEditedSubLocations(id as number, editedSubLocations);
       }
-      await reloadOrganizations(selectedOrganization.id);
+      reloadOrganizations(selectedOrganization.id);
       snackbar.toastSuccess(selectedNursery ? strings.CHANGES_SAVED : strings.NURSERY_ADDED);
       if (!selectedNursery) {
         id = (response as CreateFacilityResponse).facilityId || undefined;

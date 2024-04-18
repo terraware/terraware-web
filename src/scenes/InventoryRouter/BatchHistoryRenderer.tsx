@@ -45,6 +45,7 @@ export default function BatchHistoryRenderer(props: RendererProps<TableRowType>)
 
   const { column, row, value, index, onRowClick } = props;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const rowClick = (event?: React.SyntheticEvent) => {
     if (onRowClick) {
       onRowClick();

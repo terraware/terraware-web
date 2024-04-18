@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Grid, Theme, Typography, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -19,7 +19,7 @@ import TextField from '../../components/common/Textfield/Textfield';
 import TfMain from '../../components/common/TfMain';
 import Button from '../../components/common/button/Button';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   titleWithButton: {
     display: 'flex',
     flexDirection: 'row',

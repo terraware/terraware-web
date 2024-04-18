@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Grid, Theme, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Dropdown } from '@terraware/web-components';
 
@@ -20,7 +20,7 @@ import PageForm from '../../components/common/PageForm';
 import TextField from '../../components/common/Textfield/Textfield';
 import { useOrganization } from '../../providers/hooks';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   titleSubtitle: {
     marginTop: '8px',
     marginBottom: 0,
@@ -112,7 +112,7 @@ export default function PersonView(): JSX.Element {
     }
 
     let successMessage: string | null = null;
-    let userId: number = -1;
+    let userId = -1;
 
     if (!!personSelectedToEdit) {
       const response = await OrganizationUserService.updateOrganizationUser(
@@ -144,7 +144,7 @@ export default function PersonView(): JSX.Element {
 
     if (successMessage) {
       snackbar.toastSuccess(successMessage);
-      await reloadOrganizations();
+      reloadOrganizations();
       goToViewPerson(userId.toString());
     } else {
       snackbar.toastError();

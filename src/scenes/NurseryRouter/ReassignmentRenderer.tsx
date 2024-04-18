@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-extra-non-null-assertion */
+
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React from 'react';
 
-import { Box, Theme, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Autocomplete, DropdownItem, Textfield } from '@terraware/web-components';
 
@@ -9,7 +12,7 @@ import { RendererProps } from 'src/components/common/table/types';
 import strings from 'src/strings';
 import { NumericFormatter } from 'src/types/Number';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   subzone: {
     minWidth: '175px',
   },
@@ -73,7 +76,8 @@ export default function ReassignmentRenderer({ zones, setReassignment, numericFo
       .map((zone) => ({ label: zone.name, value: zone.id }));
 
     const subzoneOptions: DropdownItem[] = newZoneId
-      ? zones
+      ? // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+        zones
           .find((zone) => zone.id === newZoneId)!!
           .subzones.filter((subzone) => subzone.id !== originalSubzone.id)
           .map((subzone) => ({

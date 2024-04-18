@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
@@ -189,7 +189,7 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
     const zonesData: RenderableReadOnlyBoundary = {
       data: {
         type: 'FeatureCollection',
-        features: zones!.features.map((feature: Feature) => toZoneFeature(feature, zoneIdGenerator)),
+        features: zones.features.map((feature: Feature) => toZoneFeature(feature, zoneIdGenerator)),
       },
       selectedId: selectedZone,
       id: 'zone',
@@ -209,8 +209,9 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
         type: 'FeatureCollection',
         features: Object.keys(subzones ?? {}).flatMap((key: string) => {
           const zoneId = Number(key);
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           const data = subzones![zoneId];
-          return data!.features.map((feature: Feature) =>
+          return data.features.map((feature: Feature) =>
             toIdentifiableFeature(feature, subzoneIdGenerator, { parentId: zoneId })
           );
         }),
@@ -284,7 +285,7 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
           return toIdentifiableFeature(subzone, idGenerator, { parentId: selectedZone });
         }) as GeometryFeature[];
 
-        setSubzonesData((prev) => ({
+        setSubzonesData(() => ({
           editableBoundary: emptyBoundary(),
           errorAnnotations: [],
           fixedBoundaries: {

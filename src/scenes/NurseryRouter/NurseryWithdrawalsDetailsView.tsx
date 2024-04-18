@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { TabContext, TabList, TabPanel } from '@mui/lab';
@@ -131,7 +131,7 @@ export default function NurseryWithdrawalsDetailsView({
   }, [selectedOrganization, withdrawalId, snackbar, reload]);
 
   useEffect(() => {
-    setSelectedTab((query.get('tab') || 'withdrawal') as string);
+    setSelectedTab(query.get('tab') || 'withdrawal');
   }, [query]);
 
   const tabStyles = {

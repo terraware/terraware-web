@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Box, Typography, useTheme } from '@mui/material';
 
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';

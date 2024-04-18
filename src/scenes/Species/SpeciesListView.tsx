@@ -431,6 +431,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder]);
 
   const onApplyFilters = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async (reviewErrors?: boolean) => {
       const params: SearchRequestPayload = getParams();
 
@@ -548,6 +549,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
 
   const reloadDataProblemsHandler = async () => {
     setHasNewData(false);
+    // eslint-disable-next-line @typescript-eslint/await-thenable
     await reloadData();
     setHandleProblemsColumn(true);
   };
@@ -645,7 +647,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
       isClientSorted
         ? undefined
         : {
-            field: orderBy as string,
+            field: orderBy,
             direction: order === 'asc' ? 'Ascending' : 'Descending',
           }
     );
@@ -745,6 +747,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
             <Tooltip title={strings.EXPORT}>
               <Button
                 id='downladSpeciesReport'
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 onClick={() => downloadReportHandler()}
                 type='passive'
                 priority='ghost'
@@ -773,6 +776,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
                   showTopBar={false}
                   Renderer={SpeciesCellRenderer}
                   controlledOnSelect={true}
+                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
                   reloadData={reloadDataProblemsHandler}
                   sortHandler={onSortChange}
                   isPresorted={!!searchSortOrder}

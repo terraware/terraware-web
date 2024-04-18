@@ -17,6 +17,7 @@ const ObservationPlantingZoneRenderer =
     plantingZoneId: number,
     setReplaceObservationPlot: React.Dispatch<React.SetStateAction<ObservationMonitoringPlotResultsPayload | undefined>>
   ) =>
+  // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
 

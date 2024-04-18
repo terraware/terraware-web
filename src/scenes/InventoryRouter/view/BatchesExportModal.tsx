@@ -1,3 +1,5 @@
+import React from 'react';
+
 import ExportCsvModal from 'src/components/common/ExportCsvModal';
 import { SearchResponseElement } from 'src/types/Search';
 

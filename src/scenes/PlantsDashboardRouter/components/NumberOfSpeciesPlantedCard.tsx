@@ -73,7 +73,7 @@ const SiteWithoutZonesCard = ({ plantingSiteId }: NumberOfSpeciesPlantedCardProp
   return <ChartData labels={labels} values={values} totalSpecies={totalSpecies} />;
 };
 
-const SiteWithZonesCard = ({ plantingSiteId }: NumberOfSpeciesPlantedCardProps): JSX.Element => {
+const SiteWithZonesCard = ({}: NumberOfSpeciesPlantedCardProps): JSX.Element => {
   const populationSelector = useAppSelector((state) => selectSitePopulationZones(state));
   const speciesSelector = useAppSelector((state) => selectSpecies(state));
   const [totalSpecies, setTotalSpecies] = useState<number>();

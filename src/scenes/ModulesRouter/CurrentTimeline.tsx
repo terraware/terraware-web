@@ -1,4 +1,4 @@
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import React, { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import strings from 'src/strings';
 import { CohortPhaseType } from 'src/types/Cohort';

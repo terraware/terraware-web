@@ -109,9 +109,9 @@ export default function SeedBankView(): JSX.Element {
       const response = await FacilityService.updateFacility({ ...record } as Facility);
       if (response.requestSucceeded) {
         if (editedSubLocations) {
-          await SubLocationService.saveEditedSubLocations(selectedSeedBank.id as number, editedSubLocations);
+          await SubLocationService.saveEditedSubLocations(selectedSeedBank.id, editedSubLocations);
         }
-        await reloadOrganizations(selectedOrganization.id);
+        reloadOrganizations(selectedOrganization.id);
         snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
         snackbar.toastError();
@@ -122,7 +122,7 @@ export default function SeedBankView(): JSX.Element {
         subLocationNames: editedSubLocations?.map((l) => l.name as string),
       });
       if (response.requestSucceeded) {
-        await reloadOrganizations(selectedOrganization.id);
+        reloadOrganizations(selectedOrganization.id);
         snackbar.toastSuccess(strings.SEED_BANK_ADDED);
         id = response.facilityId || undefined;
       } else {

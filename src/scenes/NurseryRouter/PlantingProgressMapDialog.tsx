@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import { Box, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';

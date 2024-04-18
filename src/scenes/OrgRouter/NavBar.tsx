@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useMatch, useNavigate } from 'react-router-dom';
 
 import SubNavbar from '@terraware/web-components/components/Navbar/SubNavbar';
@@ -123,7 +123,9 @@ export default function NavBar({
     // used to prevent double render that was causing infinite render on dev scope (react 18)
     if (!initialized.current) {
       initialized.current = true;
+      // eslint-disable-next-line @typescript-eslint/require-await
       const getModuleProjectId = async () => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const moduleProject = projectModules.find(({ id, modules }) => modules !== undefined);
 
         if (!moduleProject) {

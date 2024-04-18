@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Grid, List, ListItem, Theme, Typography, useTheme } from '@mui/material';
+import { Box, Grid, List, ListItem, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, DropdownItem } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
@@ -25,7 +25,7 @@ import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import BoundariesAndZones from './BoundariesAndZones';
 import SimplePlantingSite from './SimplePlantingSite';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   titleWithButton: {
     alignItems: 'center',
     display: 'flex',
