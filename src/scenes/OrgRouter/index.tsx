@@ -252,7 +252,10 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
               path={APP_PATHS.BATCH_WITHDRAW}
               element={<BatchBulkWithdrawView withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />}
             />
-            <Route path={APP_PATHS.PLANTING_SITES} element={<PlantingSites reloadTracking={reloadPlantingSites} />} />
+            <Route
+              path={APP_PATHS.PLANTING_SITES + '/*'}
+              element={<PlantingSites reloadTracking={reloadPlantingSites} />}
+            />
             <Route path={'/nursery/*'} element={<NurseryRouter />} />
             <Route path={APP_PATHS.CONTACT_US} element={<ContactUsView />} />
             <Route path={APP_PATHS.MY_ACCOUNT + '/*'} element={<MyAccountRouter />} />
