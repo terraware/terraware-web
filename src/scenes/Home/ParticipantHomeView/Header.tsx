@@ -3,9 +3,12 @@ import { useMemo } from 'react';
 import { Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem } from '@terraware/web-components';
 
+import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
+import { getDateRangeString } from 'src/utils/dateFormatter';
 
 const Header = () => {
+  const { activeLocale } = useLocalization();
   const theme = useTheme();
   const { currentModule, currentParticipantProject, participantProjects, setCurrentParticipantProject } =
     useParticipantData();
@@ -52,9 +55,11 @@ const Header = () => {
             </Typography>
           </Grid>
           <Grid item>
-            <Typography fontSize={'16px'} fontWeight={400} lineHeight={'24px'} component={'span'}>
-              {currentModule?.dateRange}
-            </Typography>
+            {currentModule?.startDate && currentModule?.endDate && activeLocale && (
+              <Typography fontSize={'16px'} fontWeight={400} lineHeight={'24px'} component={'span'}>
+                {getDateRangeString(currentModule?.startDate, currentModule?.endDate, activeLocale)}
+              </Typography>
+            )}
           </Grid>
         </Grid>
       </Grid>

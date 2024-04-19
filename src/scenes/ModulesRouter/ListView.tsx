@@ -46,7 +46,15 @@ export default function ListView(): JSX.Element {
           <Typography>{phaseDescription}</Typography>
         </Box>
 
-        {modules?.map((module, index) => <ModuleEntry module={module} projectId={projectId} key={index} />)}
+        {modules?.map((module, index) => (
+          <ModuleEntry
+            module={module}
+            projectId={projectId}
+            key={index}
+            index={index}
+            last={modules.length - 1 === index}
+          />
+        ))}
       </Card>
     </PageWithModuleTimeline>
   );

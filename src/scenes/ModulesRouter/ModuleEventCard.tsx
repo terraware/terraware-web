@@ -34,7 +34,9 @@ const ModuleEventCard = ({
         <Typography fontSize={'20px'} lineHeight={'28px'} fontWeight={600} marginBottom={theme.spacing(1)}>
           {label}
         </Typography>
+
         <Typography marginBottom={theme.spacing(1)}>{value}</Typography>
+
         {onClickButton && <Button label={strings.MORE_INFO} onClick={onClickButton} priority='secondary' />}
       </Box>
     </Grid>

@@ -13,6 +13,7 @@ import { requestGetModule } from 'src/redux/features/modules/modulesAsyncThunks'
 import { selectModule } from 'src/redux/features/modules/modulesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { ModuleEventType } from 'src/types/Module';
 import { getLongDate, getLongDateTime } from 'src/utils/dateFormatter';
 
 import ModuleEventCard from './ModuleEventCard';
@@ -106,18 +107,19 @@ const ModuleContentView = () => {
             <Grid item xs style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
               <ModuleContentSection>
                 <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={500}>
-                  {strings.formatString(strings.MODULE_NAME_OVERVIEW, module.name)}
+                  {/* TODO: replace "Module N" with a string using a derived module number like "Module 1" */}
+                  {strings.formatString(strings.MODULE_NAME_OVERVIEW, 'Module N')}
                 </Typography>
                 <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
-                  {module.title}
+                  {module.name}
                 </Typography>
               </ModuleContentSection>
 
               <ModuleContentSection>
-                <Box dangerouslySetInnerHTML={{ __html: module.description || '' }} />
+                <Box dangerouslySetInnerHTML={{ __html: module.overview || '' }} />
               </ModuleContentSection>
 
-              {module.contents.length && (
+              {(module.additionalResources || module.preparationMaterials) && (
                 <>
                   <ModuleContentSection>
                     <Typography fontSize={'20px'} lineHeight={'28px'} fontWeight={600}>
@@ -125,48 +127,59 @@ const ModuleContentView = () => {
                     </Typography>
                   </ModuleContentSection>
 
-                  {module.contents.map((content) => (
-                    <ModuleContentSection key={content.id}>
+                  {module.preparationMaterials && (
+                    <ModuleContentSection>
                       <Link
                         fontSize='16px'
                         onClick={() => {
-                          if (content.url) {
-                            window.open(content.url, '_blank', 'noopener noreferrer');
-                          }
+                          // TODO: nav to content screen for preparation materials
                         }}
                       >
-                        {content.title}
+                        {strings.PREPARATION_MATERIALS}
                       </Link>
-                      {content.dueDate && (
-                        <Typography
-                          component='span'
-                          fontSize={'16px'}
-                          fontWeight={600}
-                          lineHeight={'24px'}
-                          sx={{
-                            color: getDueDateLabelColor(content.dueDate),
-                            marginLeft: '8px',
-                          }}
-                        >
-                          {strings.formatString(strings.DUE, getLongDate(content.dueDate, activeLocale))}
-                        </Typography>
-                      )}
                     </ModuleContentSection>
-                  ))}
+                  )}
+
+                  {module.additionalResources && (
+                    <ModuleContentSection>
+                      <Link
+                        fontSize='16px'
+                        onClick={() => {
+                          // TODO: nav to content screen for additional resources
+                        }}
+                      >
+                        {strings.ADDITIONAL_RESOURCES}
+                      </Link>
+                    </ModuleContentSection>
+                  )}
                 </>
               )}
             </Grid>
 
-            {module.events.length && (
+            {Object.keys(module.events).length && (
               <Grid item>
-                {module.events.map((event) => (
-                  <ModuleEventCard
-                    key={event.id}
-                    label={event.name}
-                    onClickButton={() => goToModuleEvent(projectId, event.id, module.id)}
-                    value={event.startTime ? getLongDateTime(event.startTime, activeLocale) : ''}
-                  />
-                ))}
+                {Object.keys(module.events).map((key) => {
+                  const event = module.events[key as ModuleEventType];
+                  if (!event?.sessions.length) {
+                    return null;
+                  }
+
+                  return (
+                    <Grid item>
+                      {event.sessions.map((session) => {
+                        return (
+                          <ModuleEventCard
+                            key={session.id}
+                            // TODO: translate event key into a string to use for label prop
+                            label={key}
+                            onClickButton={() => goToModuleEvent(projectId, 1, module.id)}
+                            value={session.startTime ? getLongDateTime(session.startTime, activeLocale) : ''}
+                          />
+                        );
+                      })}
+                    </Grid>
+                  );
+                })}
               </Grid>
             )}
           </Grid>

@@ -1,31 +1,26 @@
+export type ModuleEventType = 'One-on-One Session' | 'Workshop' | 'Live Session';
+
 export type Module = {
-  dateRange: string;
-  description: string;
+  additionalResources?: string;
+  endDate: string;
+  events: Partial<Record<ModuleEventType, ModuleEvent>>;
   id: number;
   name: string;
-  title: string;
-  contents: ModuleContent[];
-  events: ModuleEvent[];
-};
-
-export type ModuleContent = {
-  content: string;
-  dueDate: string | null;
-  id: number;
-  moduleId: number;
-  url: string;
-  title: string;
+  overview?: string;
+  preparationMaterials?: string;
+  startDate: string;
 };
 
 export type ModuleEvent = {
-  callDescription?: string;
-  description?: string;
-  endTime: string;
+  eventDescription: string;
+  sessions: ModuleEventSession[];
+};
+
+export type ModuleEventSession = {
+  endTime?: string;
   id: number;
-  meetingURL?: string;
-  moduleId: number;
-  name: string;
-  recordingURL?: string;
-  slidesURL?: string;
-  startTime: string;
+  meetingUrl?: string;
+  recordingUrl?: string;
+  slidesUrl?: string;
+  startTime?: string;
 };
