@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Theme, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import { VariableWithValues } from 'src/types/documentProducer/Variable';
@@ -8,7 +8,7 @@ import { VariableValueValue } from 'src/types/documentProducer/VariableValue';
 
 import DisplayVariableValue from './DisplayVariableValue';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   sectionText: {
     fontSize: '16px',
   },

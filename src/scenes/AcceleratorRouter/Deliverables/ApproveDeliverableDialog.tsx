@@ -1,4 +1,4 @@
-import { Typography, useTheme } from '@mui/material';
+import React, { Typography, useTheme } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';
 
 import strings from 'src/strings';

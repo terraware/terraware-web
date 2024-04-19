@@ -11,6 +11,7 @@ export const selectPlantingSitesNames = createCachedSelector(
     const names = plantingSites?.map((ps) => ps.name);
     return names;
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
 )((state: RootState) => 'plantingSitesNames');
 
 export const selectPlantingSitesSearchResults = (state: RootState) => state.plantingSitesSearchResults.sites;

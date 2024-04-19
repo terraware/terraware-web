@@ -28,6 +28,7 @@ export const selectZonePopulationStats = createSelector(
 );
 
 export const selectSubzonePopulations = createCachedSelector(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (state: RootState, subzoneId: number) => selectSitePopulationZones(state),
   (state: RootState, subzoneId: number) => subzoneId,
   (zones, subzoneId) => {

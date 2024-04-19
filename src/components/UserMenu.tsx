@@ -24,7 +24,7 @@ type UserMenuProps = {
   hasOrganizations?: boolean;
 };
 
-export default function UserMenu({ hasOrganizations }: UserMenuProps): JSX.Element {
+export default function UserMenu({}: UserMenuProps): JSX.Element {
   const classes = useStyles();
   const { user } = useUser();
   const { isProduction } = useEnvironment();

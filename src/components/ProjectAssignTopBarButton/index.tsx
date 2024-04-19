@@ -13,12 +13,7 @@ interface ProjectAssignTopBarButtonProps {
   projectAssignPayloadCreator: () => AssignProjectRequestPayload;
 }
 
-function ProjectAssignTopBarButton({
-  totalResultsCount,
-  selectAllRows,
-  reloadData,
-  projectAssignPayloadCreator,
-}: ProjectAssignTopBarButtonProps) {
+function ProjectAssignTopBarButton({ reloadData, projectAssignPayloadCreator }: ProjectAssignTopBarButtonProps) {
   const [entityStub, setEntityStub] = useState({ id: -1, projectId: undefined });
   const [isProjectAssignModalOpen, setIsProjectAssignModalOpen] = useState<boolean>(false);
 

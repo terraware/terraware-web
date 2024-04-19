@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Typography, useTheme } from '@mui/material';
 
 export type ErrorMessageProps = {

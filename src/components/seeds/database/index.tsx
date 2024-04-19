@@ -526,7 +526,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const onSelect = (row: SearchResponseElementWithId) => {
     if (row.id) {
       const seedCollectionLocation = {
-        pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', row.id as string),
+        pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', row.id),
         // eslint-disable-next-line no-restricted-globals
         state: { from: location.pathname },
       };
@@ -536,7 +536,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   const onSortChange = (order: Order, orderBy: string) => {
     setSearchSortOrder({
-      field: orderBy as string,
+      field: orderBy,
       direction: order === 'asc' ? 'Ascending' : 'Descending',
     });
   };
@@ -572,6 +572,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     setReportModalOpen(false);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const isInactive = (row: SearchResponseElementWithId) => {
     return false;
   };

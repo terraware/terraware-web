@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, useTheme } from '@mui/material';
@@ -50,6 +50,7 @@ const VotingEdit = () => {
     }
 
     const updatedVotes = votes.filter(({ conditionalInfo, userId, voteOption }) => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-extra-non-null-assertion, @typescript-eslint/no-unnecessary-type-assertion
       const orignal = phaseVotes.votes.find((originalVote) => originalVote.userId === userId)!!;
       return !(orignal.conditionalInfo === conditionalInfo && orignal.voteOption === voteOption);
     });

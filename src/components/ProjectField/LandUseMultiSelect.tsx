@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import { LAND_USE_MODEL_TYPES, getLandUseModelType } from 'src/types/ParticipantProject';
 

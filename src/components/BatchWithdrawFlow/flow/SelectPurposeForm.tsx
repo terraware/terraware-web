@@ -8,7 +8,6 @@ import {
   Grid,
   Radio,
   RadioGroup,
-  Theme,
   Typography,
   useTheme,
 } from '@mui/material';
@@ -39,7 +38,7 @@ import { useNumberFormatter } from 'src/utils/useNumber';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   withdrawnQuantity: {
     '&> #withdrawnQuantity': {
       height: '44px',

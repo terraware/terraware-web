@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -168,7 +168,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
       };
       createChart();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [locale]);
 
   useEffect(() => {

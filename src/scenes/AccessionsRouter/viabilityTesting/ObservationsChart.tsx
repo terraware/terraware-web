@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -48,6 +48,7 @@ export default function ObservationsChart({ observations }: Props): JSX.Element 
           y: entry.seedsGerminated,
         }));
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         chartRef.current = await newChart(activeLocale, ctx, {
           type: 'line',
@@ -124,7 +125,7 @@ export default function ObservationsChart({ observations }: Props): JSX.Element 
     createChart();
 
     return () => chartRef.current?.destroy();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [activeLocale, observations]);
 
   return <canvas id='myChart' ref={canvasRef} className={classes.chart} />;

@@ -20,7 +20,7 @@ const ProjectFieldMultiSelect = ({ id, label, onChange, options, values }: Proje
 
   const handleOnAdd = useCallback(
     (_value: string) => {
-      const nextValues = [...localValues, _value as string];
+      const nextValues = [...localValues, _value];
       setLocalValues(nextValues);
       onChange(id, nextValues);
     },

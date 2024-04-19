@@ -1,4 +1,4 @@
-import { Box, useTheme } from '@mui/material';
+import React, { Box, useTheme } from '@mui/material';
 
 import strings from 'src/strings';
 

@@ -36,6 +36,7 @@ export default function PageCard(props: PageCardProps): JSX.Element {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const goToPage = (event?: React.MouseEvent) => {
     if (linkStyle === 'button') {
       return;

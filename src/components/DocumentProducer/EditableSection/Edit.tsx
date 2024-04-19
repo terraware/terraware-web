@@ -226,7 +226,7 @@ const SectionEdit = ({
               {strings.RECOMMENDED}:
             </Typography>
             <Box sx={{ display: 'flex', gap: theme.spacing(1), flexWrap: 'wrap' }}>
-              {recommendedVariables.map((variable, index) => (
+              {recommendedVariables.map((variable) => (
                 <Button
                   key={`variable-${variable.id}`}
                   className={classes.recommendedVariable}

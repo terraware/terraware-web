@@ -33,6 +33,7 @@ export type PlantingSiteSpeciesCellRendererProps = {
 export default function PlantingSiteSpeciesCellRenderer({ editMode, validate }: PlantingSiteSpeciesCellRendererProps) {
   const classes = useStyles();
 
+  // eslint-disable-next-line react/display-name
   return (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, index, onRowClick } = props;
     const createInput = (id: string) => {

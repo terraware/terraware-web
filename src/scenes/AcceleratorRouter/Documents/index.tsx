@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import React, { Route, Routes } from 'react-router-dom';
 
 import DocumentView from './DocumentView';
 import DocumentsAddView from './DocumentsAddView';

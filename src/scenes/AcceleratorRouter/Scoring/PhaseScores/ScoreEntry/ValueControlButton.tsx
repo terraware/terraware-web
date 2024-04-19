@@ -1,4 +1,4 @@
-import { Button, useTheme } from '@mui/material';
+import React, { Button, useTheme } from '@mui/material';
 
 import { ScoreValue, getScoreColors, getScoreValue } from 'src/types/Score';
 

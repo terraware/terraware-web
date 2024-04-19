@@ -1,4 +1,4 @@
-import { Box, Typography, useTheme } from '@mui/material';
+import React, { Box, Typography, useTheme } from '@mui/material';
 
 import strings from 'src/strings';
 import { categoryLabel } from 'src/types/Deliverables';

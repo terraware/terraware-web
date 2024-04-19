@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import React, { Box, Typography } from '@mui/material';
 import { IconTooltip } from '@terraware/web-components';
 
 import strings from 'src/strings';

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import createCachedSelector from 're-reselect';
 
 import { RootState } from 'src/redux/rootReducer';

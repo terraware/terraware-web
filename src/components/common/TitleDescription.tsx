@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Box, Typography, useTheme } from '@mui/material';
 
 export type TitleDescriptionProps = {

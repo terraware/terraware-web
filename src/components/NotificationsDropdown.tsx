@@ -338,6 +338,7 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
   const onNotificationClick = async (read: boolean, close?: boolean) => {
     if (close && localUrl.startsWith('/home')) {
       const orgId: string | null = new URL(localUrl, window.location.origin).searchParams.get('organizationId');
+      // eslint-disable-next-line @typescript-eslint/await-thenable
       await reloadOrganizationData(orgId ? parseInt(orgId, 10) : undefined);
     }
     markAsRead(read, id, close, notification.markAsRead);

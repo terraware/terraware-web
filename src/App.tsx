@@ -1,4 +1,3 @@
-/* eslint-disable import/no-webpack-loader-syntax */
 import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 

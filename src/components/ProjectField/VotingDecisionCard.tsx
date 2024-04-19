@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import React, { Box } from '@mui/material';
 
 import VoteBadge from 'src/scenes/AcceleratorRouter/Voting/VoteBadge';
 import strings from 'src/strings';

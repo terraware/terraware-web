@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactMapGL, {
   FullscreenControl,
   GeolocateControl,
@@ -117,7 +117,7 @@ export default function EditableMap({
     bounds: readOnlyBoundary?.length
       ? (bbox({
           type: 'MultiPolygon',
-          coordinates: readOnlyBoundary!
+          coordinates: readOnlyBoundary
             .flatMap((b) => b.data.features)
             .flatMap((feature) => toMultiPolygon(feature.geometry))
             .filter((poly: MultiPolygon | null) => poly !== null)
@@ -137,7 +137,7 @@ export default function EditableMap({
       return null;
     }
 
-    return readOnlyBoundary!.map((boundaryData: RenderableReadOnlyBoundary) => {
+    return readOnlyBoundary.map((boundaryData: RenderableReadOnlyBoundary) => {
       const drawingLayer: MapDrawingLayer = getMapDrawingLayer(boundaryData.renderProperties, boundaryData.id);
       return (
         <Source type='geojson' key={boundaryData.id} data={boundaryData.data} id={boundaryData.id}>

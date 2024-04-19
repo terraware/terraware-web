@@ -1,3 +1,5 @@
+import React from 'react';
+
 import Form, { PageFormProps as FormProps } from '@terraware/web-components/components/PageForm';
 
 import PageWorkflow from 'src/components/DocumentProducer/PageWorkflow';

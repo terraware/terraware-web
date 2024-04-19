@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Textfield } from '@terraware/web-components';
 
@@ -23,7 +22,7 @@ type InfoFieldProps = {
   tooltipTitle?: string;
 };
 
-export const useInfoCardStyles = makeStyles((theme: Theme) => ({
+export const useInfoCardStyles = makeStyles(() => ({
   infoCardStyle: {
     padding: 0,
     'white-space': 'pre',

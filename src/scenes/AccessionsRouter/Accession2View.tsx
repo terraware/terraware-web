@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { TabContext, TabList, TabPanel } from '@mui/lab';
@@ -198,7 +198,7 @@ export default function Accession2View(): JSX.Element {
   }, [accession, activeLocale, seedBankTimeZone]);
 
   useEffect(() => {
-    setSelectedTab((query.get('tab') || 'detail') as string);
+    setSelectedTab(query.get('tab') || 'detail');
   }, [query]);
 
   const handleChange = (newValue: string) => {

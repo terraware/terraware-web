@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { requestGetModule } from 'src/redux/features/modules/modulesAsyncThunks';

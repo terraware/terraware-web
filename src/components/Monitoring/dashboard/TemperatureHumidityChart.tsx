@@ -304,7 +304,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             scales: {
               y: {
                 ticks: {
-                  callback: (value, index, ticks) => {
+                  callback: (value) => {
                     return strings.formatString(
                       strings.DEGREES_CELSIUS_VALUE,
                       numericFormatter.format(value)
@@ -340,13 +340,14 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
                   drawOnChartArea: false, // only want the grid lines for one axis to show up
                 },
                 ticks: {
-                  callback: (value, index, ticks) => {
+                  callback: (value) => {
                     return strings.formatString(strings.PERCENTAGE_VALUE, numericFormatter.format(value)) as string;
                   },
                 },
               },
             },
             plugins: {
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               htmlLegend: {
                 containerID: 'legend-container-th',

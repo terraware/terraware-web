@@ -40,7 +40,7 @@ import { getMapDrawingLayer } from './utils';
 
 const mapboxImpl: any = mapboxgl;
 // @tslint
-// eslint-disable-next-line import/no-webpack-loader-syntax
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 mapboxImpl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default; /* tslint:disable-line */
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -391,7 +391,7 @@ export default function Map(props: MapProps): JSX.Element {
     if (!geoData) {
       return null;
     }
-    const sources = (geoData as any[]).map((geo: any) => (
+    const sources = geoData.map((geo: any) => (
       <Source type='geojson' key={geo.id} data={geo.data} id={geo.id}>
         {geo.patternFill && <Layer {...geo.patternFill} />}
         {geo.textAnnotation && <Layer {...geo.textAnnotation} />}

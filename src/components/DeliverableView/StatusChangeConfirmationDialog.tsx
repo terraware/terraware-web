@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Typography, useTheme } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';
 

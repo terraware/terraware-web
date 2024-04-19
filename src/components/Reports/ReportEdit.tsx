@@ -27,7 +27,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import useReportFiles from './useReportFiles';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   form: {
     paddingBottom: '250px',
   },
@@ -113,9 +113,7 @@ export default function ReportEdit(): JSX.Element {
       }
     };
 
-    let interval: ReturnType<typeof setInterval>;
-
-    interval = setInterval(getReport, 60000);
+    const interval = setInterval(getReport, 60000);
 
     // Clean up existing interval.
     return () => {
@@ -213,6 +211,7 @@ export default function ReportEdit(): JSX.Element {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const popStateEventHandler = (event: PopStateEvent) => {
       window.history.pushState(null, document.title, window.location.href);
       snackbar.toastWarning(strings.REPORT_BACK_WARNING);
@@ -412,6 +411,7 @@ export default function ReportEdit(): JSX.Element {
     if (report) {
       setReport(
         produce((draft) => {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           draft[field] = value;
         })
@@ -428,6 +428,7 @@ export default function ReportEdit(): JSX.Element {
     if (report && report[location]) {
       setReport(
         produce((draft) => {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           draft[location][index][field] = value;
         })
@@ -444,6 +445,7 @@ export default function ReportEdit(): JSX.Element {
     if (report && report[location]) {
       setReport(
         produce((draft) => {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           draft[location][index].workers[workersField] = value;
         })
@@ -461,6 +463,7 @@ export default function ReportEdit(): JSX.Element {
     if (report && report.annualDetails) {
       setReport(
         produce((draft) => {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           draft.annualDetails[field] = value;
         })
@@ -475,6 +478,7 @@ export default function ReportEdit(): JSX.Element {
     ) {
       setReport(
         produce((draft) => {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           draft.annualDetails.sustainableDevelopmentGoals[index].progress = value;
         })

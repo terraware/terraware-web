@@ -146,6 +146,7 @@ export default function PlantsPrimaryPage({
   return (
     <PlantsPrimaryPageView
       actionButton={actionButton}
+      // eslint-disable-next-line react/no-children-prop
       children={children}
       isEmptyState={isEmptyState}
       onSelect={setActivePlantingSite}

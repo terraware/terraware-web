@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Dispatch } from 'redux';
 
 import { setAccessionsAction } from 'src/redux/features/accessions/accessionsSlice';

@@ -103,6 +103,7 @@ export default function EditableMapDraw({
     const initialMode = 'simple_select';
 
     setDrawMode(initialMode);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     setMapRef(map);
 

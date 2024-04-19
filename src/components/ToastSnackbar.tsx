@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Snackbar as SnackbarUI } from '@mui/material';
-import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Message } from '@terraware/web-components';
 
@@ -11,7 +10,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Snackbar } from 'src/types/Snackbar';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   mainSnackbar: {
     '&.MuiSnackbar-anchorOriginTopCenter': {
       top: '32px',

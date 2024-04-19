@@ -18,9 +18,11 @@ export default function SubLocationsCellRenderer({
   editMode,
   renderLink,
 }: SubLocationsCellRendererProps) {
+  // eslint-disable-next-line react/display-name
   return (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, value, row, onRowClick } = props;
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const rowClick = (event?: React.SyntheticEvent) => {
       if (editMode && !!onRowClick) {
         onRowClick();

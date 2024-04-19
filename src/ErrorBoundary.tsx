@@ -18,6 +18,7 @@ export default class ErrorBoundary extends Component<Props, State> {
   };
 
   // when an error occurred we want to update the statee
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public static getDerivedStateFromError(_e: Error): State {
     // Update state so the next render will show the fallback UI.
 
@@ -25,6 +26,7 @@ export default class ErrorBoundary extends Component<Props, State> {
   }
 
   // when an error ocurred log the message
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     // tslint:disable-next-line: no-console
     if (this.props.handler) {

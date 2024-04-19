@@ -6,6 +6,7 @@ import { PlantingsService } from 'src/services';
 import { setPlantingsAction } from './plantingsSlice';
 
 export const requestPlantings = (organizationId: number) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   return async (dispatch: Dispatch, _getState: () => RootState) => {
     try {
       const response = await PlantingsService.listPlantings(organizationId, {});

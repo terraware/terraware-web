@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box, Grid, IconButton, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -64,7 +64,7 @@ const VariableDetailsInput = ({
     if (values) {
       const allTextValues = values.reduce((acc: string[], current: VariableValueValue) => {
         if (current.type === 'Text') {
-          const currentTextValue = current as VariableValueTextValue;
+          const currentTextValue = current;
           acc.push(currentTextValue.textValue);
         }
         return acc;
