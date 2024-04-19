@@ -16,7 +16,7 @@ export const requestGetModule = createAsyncThunk('modules/get', async (moduleId:
 export const requestGetModuleEvent = createAsyncThunk(
   'modules/getEvent',
   async (eventId: number, { rejectWithValue }) => {
-    const response = await ModuleService.getEvent(eventId);
+    const response = await ModuleService.getEvent(eventId?.toString());
 
     if (response !== null && response.requestSucceeded && response?.data?.event !== undefined) {
       return response.data.event;
