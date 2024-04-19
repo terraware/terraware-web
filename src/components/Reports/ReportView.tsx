@@ -36,6 +36,8 @@ export default function ReportView(): JSX.Element {
   const reportIdInt = reportId ? parseInt(reportId, 10) : -1;
   const reportName = `Report (${report?.year}-Q${report?.quarter}) ` + (report?.projectName ?? '');
 
+  const reportIdValid = () => reportIdInt && reportIdInt !== -1;
+
   useEffect(() => {
     const getReport = async () => {
       const result = await ReportService.getReport(reportIdInt);
@@ -46,14 +48,14 @@ export default function ReportView(): JSX.Element {
       }
     };
 
-    if (reportIdInt) {
+    if (reportIdValid()) {
       void getReport();
     }
   }, [reportIdInt, snackbar]);
 
   const confirmEdit = async () => {
     // lock the report
-    if (reportIdInt) {
+    if (reportIdValid()) {
       const lockResult = await ReportService.forceLockReport(reportIdInt);
 
       if (lockResult.requestSucceeded && reportId) {

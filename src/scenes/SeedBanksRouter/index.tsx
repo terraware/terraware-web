@@ -22,7 +22,7 @@ const SeedBanksRouter = () => {
     <Routes>
       <Route path={'/new'} element={<SeedBankView />} />
       <Route path={'/:seedbankId/edit'} element={<SeedBankView />} />
-      <Route path={':/seednankId'} element={<SeedBankDetailsView />} />
+      <Route path={':/seedbankId'} element={<SeedBankDetailsView />} />
       <Route path={'/*'} element={getSeedBanksView()} />
     </Routes>
   );

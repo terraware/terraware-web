@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Provider } from 'react-redux';
 
 import { Box, CssBaseline, StyledEngineProvider, useTheme } from '@mui/material';
@@ -41,6 +41,39 @@ function AppContent() {
   // updated. Declare the dependency here so the app rerenders when the locale changes.
   useLocalization();
 
+  const mainBoxStyles = useMemo(() => {
+    return {
+      backgroundColor: theme.palette.TwClrBaseGray025,
+      backgroundImage:
+        'linear-gradient(180deg,' +
+        `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0)} 0%,` +
+        `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0.4)} 100%)`,
+      backgroundAttachment: 'fixed',
+      minHeight: '100vh',
+      '& .navbar': {
+        backgroundColor: isDesktop ? theme.palette.TwClrBaseGray025 : theme.palette.TwClrBaseWhite,
+        backgroundImage: isDesktop
+          ? 'linear-gradient(180deg,' +
+            `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0)} 0%,` +
+            `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0.4)} 100%)`
+          : null,
+        backgroundAttachment: 'fixed',
+        paddingRight: isDesktop ? '8px' : undefined,
+        marginTop: isDesktop ? '96px' : '0px',
+        paddingTop: isDesktop ? '0px' : '24px',
+        overflowY: 'auto',
+        width: isDesktop ? '210px' : '300px',
+        zIndex: 1000,
+        '&::-webkit-scrollbar-thumb': {
+          backgroundColor: theme.palette.TwClrBgGhostActive,
+        },
+        '& .nav-footer': {
+          marginBottom: isDesktop ? '128px' : '32px',
+        },
+      },
+    };
+  }, []);
+
   return (
     <StyledEngineProvider injectFirst>
       <CssBaseline />
@@ -49,38 +82,7 @@ function AppContent() {
         <TopBarContent setShowNavBar={setShowNavBar} />
       </TopBar>
 
-      <Box
-        sx={{
-          backgroundColor: theme.palette.TwClrBaseGray025,
-          backgroundImage:
-            'linear-gradient(180deg,' +
-            `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0)} 0%,` +
-            `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0.4)} 100%)`,
-          backgroundAttachment: 'fixed',
-          minHeight: '100vh',
-          '& .navbar': {
-            backgroundColor: isDesktop ? theme.palette.TwClrBaseGray025 : theme.palette.TwClrBaseWhite,
-            backgroundImage: isDesktop
-              ? 'linear-gradient(180deg,' +
-                `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0)} 0%,` +
-                `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0.4)} 100%)`
-              : null,
-            backgroundAttachment: 'fixed',
-            paddingRight: isDesktop ? '8px' : undefined,
-            marginTop: isDesktop ? '96px' : '0px',
-            paddingTop: isDesktop ? '0px' : '24px',
-            overflowY: 'auto',
-            width: isDesktop ? '210px' : '300px',
-            zIndex: 1000,
-            '&::-webkit-scrollbar-thumb': {
-              backgroundColor: theme.palette.TwClrBgGhostActive,
-            },
-            '& .nav-footer': {
-              marginBottom: isDesktop ? '128px' : '32px',
-            },
-          },
-        }}
-      >
+      <Box sx={mainBoxStyles}>
         <React.Suspense fallback={<BlockingSpinner />}>
           {isAcceleratorRoute && isAllowed('VIEW_CONSOLE') ? (
             <AcceleratorRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />

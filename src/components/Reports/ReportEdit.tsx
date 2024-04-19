@@ -70,9 +70,11 @@ export default function ReportEdit(): JSX.Element {
     }
   }, [idInView]);
 
+  const reportIdValid = () => reportIdInt && reportIdInt !== -1;
+
   useEffect(() => {
     const getReport = async () => {
-      if (reportIdInt) {
+      if (reportIdValid()) {
         const result = await ReportService.getReport(reportIdInt);
         if (result.requestSucceeded && result.report) {
           setReport(result.report);
@@ -90,7 +92,7 @@ export default function ReportEdit(): JSX.Element {
   }, [reportIdInt, snackbar]);
 
   const updateFiles = async () => {
-    if (reportIdInt) {
+    if (reportIdValid()) {
       await Promise.all(
         initialReportFiles?.map((f: { id: number; filename: string }) => {
           if (!updatedReportFiles?.includes(f)) {
@@ -105,7 +107,7 @@ export default function ReportEdit(): JSX.Element {
 
   useEffect(() => {
     const getReport = async () => {
-      if (reportIdInt) {
+      if (reportIdInt && reportIdInt !== -1) {
         const result = await ReportService.getReport(reportIdInt);
         if (result.requestSucceeded && result.report) {
           setCurrentUserEditing(result.report.lockedByUserId === user?.id);
@@ -151,7 +153,7 @@ export default function ReportEdit(): JSX.Element {
       setBusyState(false);
     }
 
-    if ((!saveResult || saveResult.requestSucceeded) && reportIdInt) {
+    if ((!saveResult || saveResult.requestSucceeded) && reportIdValid()) {
       // unlock the report
       const unlockResult = await ReportService.unlockReport(reportIdInt);
       if (!unlockResult.requestSucceeded) {
