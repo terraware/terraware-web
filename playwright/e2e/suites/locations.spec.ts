@@ -40,7 +40,7 @@ export default function LocationTests() {
     await page.locator('#sub-location-name').getByRole('textbox').fill('Garage Fridge');
     await page.getByRole('button', { name: 'Add', exact: true }).click();
     await page.getByRole('button', { name: 'Save' }).click();
-    await expect(page.getByText(newSeedBankName).nth(1)).toBeVisible();
+    await expect(page.getByRole('link', { name: newSeedBankName }).nth(1)).toBeVisible();
     await expect(page.getByText('My Brand New Seed Bank!')).toBeVisible();
     await expect(page.getByText('Garage Fridge')).toBeVisible();
     await expect(page.getByText('Garage Freezer')).toBeVisible();

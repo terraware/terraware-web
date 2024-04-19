@@ -44,8 +44,8 @@ const SpeciesRouter = () => {
   return (
     <Routes>
       <Route path={'/new'} element={<SpeciesAddView reloadData={reloadSpecies} />} />
-      <Route path={'/speciesId'} element={<SpeciesDetailView reloadData={reloadSpecies} />} />
-      <Route path={'/speciesId/edit'} element={<SpeciesEditView />} />
+      <Route path={'/:speciesId'} element={<SpeciesDetailView reloadData={reloadSpecies} />} />
+      <Route path={'/:speciesId/edit'} element={<SpeciesEditView />} />
       <Route path={'/*'} element={getSpeciesView()} />
     </Routes>
   );
