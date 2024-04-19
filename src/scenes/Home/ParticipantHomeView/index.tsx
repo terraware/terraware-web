@@ -5,6 +5,7 @@ import { Grid, useTheme } from '@mui/material';
 import DismissibleWrapper from 'src/components/common/DismissibleWrapper';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 
+import CurrentModule from './CurrentModule';
 import Header from './Header';
 import ToDo from './ToDo';
 import WelcomeBanner from './WelcomeBanner';
@@ -29,6 +30,10 @@ const ParticipantHomeView = () => {
 
         <Grid item marginTop={theme.spacing(2)}>
           <ToDo />
+        </Grid>
+
+        <Grid item marginTop={theme.spacing(2)}>
+          <CurrentModule />
         </Grid>
       </Grid>
     </PageWithModuleTimeline>
