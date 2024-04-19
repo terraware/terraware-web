@@ -19,6 +19,12 @@ import { getLongDate, getLongDateTime } from 'src/utils/dateFormatter';
 import ModuleEventCard from './ModuleEventCard';
 import ModuleViewTitle from './ModuleViewTitle';
 
+type MockDeliverable = {
+  dueDate: string;
+  id: number;
+  name: string;
+};
+
 const ModuleContentSection = ({ children }: { children: React.ReactNode }) => {
   return (
     <Box
@@ -41,6 +47,8 @@ const ModuleContentView = () => {
   const pathParams = useParams<{ moduleId: string; projectId: string }>();
   const moduleId = Number(pathParams.moduleId);
   const module = useAppSelector(selectModule(moduleId));
+  const mockDeliverables: MockDeliverable[] = []; // TODO: get deliverables
+
   const [now, setNow] = useState(new Date());
 
   const crumbs: Crumb[] = useMemo(
@@ -52,7 +60,6 @@ const ModuleContentView = () => {
     ],
     [activeLocale, projectId]
   );
-
   const getDueDateLabelColor = useCallback(
     (dueDate: string) => {
       const due = new Date(dueDate);
@@ -127,6 +134,37 @@ const ModuleContentView = () => {
                     </Typography>
                   </ModuleContentSection>
 
+                  {mockDeliverables.length && (
+                    <>
+                      {mockDeliverables.map((deliverable) => (
+                        <ModuleContentSection key={deliverable.id}>
+                          <Link
+                            fontSize='16px'
+                            onClick={() => {
+                              // TODO: nav to deliverable or deliverables list screen
+                            }}
+                          >
+                            {deliverable.name}
+                          </Link>
+                          {deliverable.dueDate && (
+                            <Typography
+                              component='span'
+                              fontSize={'16px'}
+                              fontWeight={600}
+                              lineHeight={'24px'}
+                              sx={{
+                                color: getDueDateLabelColor(deliverable.dueDate),
+                                marginLeft: '8px',
+                              }}
+                            >
+                              {strings.formatString(strings.DUE, getLongDate(deliverable.dueDate, activeLocale))}
+                            </Typography>
+                          )}
+                        </ModuleContentSection>
+                      ))}
+                    </>
+                  )}
+
                   {module.preparationMaterials && (
                     <ModuleContentSection>
                       <Link
@@ -158,8 +196,8 @@ const ModuleContentView = () => {
 
             {Object.keys(module.events).length && (
               <Grid item>
-                {Object.keys(module.events).map((key) => {
-                  const event = module.events[key as ModuleEventType];
+                {Object.keys(module.events).map((eventKey) => {
+                  const event = module.events[eventKey as ModuleEventType];
                   if (!event?.sessions.length) {
                     return null;
                   }
@@ -170,8 +208,8 @@ const ModuleContentView = () => {
                         return (
                           <ModuleEventCard
                             key={session.id}
-                            // TODO: translate event key into a string to use for label prop
-                            label={key}
+                            // TODO: translate eventKey value for label prop below
+                            label={eventKey}
                             onClickButton={() => goToModuleEvent(projectId, 1, module.id)}
                             value={session.startTime ? getLongDateTime(session.startTime, activeLocale) : ''}
                           />
