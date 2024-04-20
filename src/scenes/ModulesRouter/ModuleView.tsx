@@ -196,7 +196,7 @@ const ModuleContentView = () => {
 
             {Object.keys(module.events).length && (
               <Grid item>
-                {Object.keys(module.events).map((eventKey) => {
+                {Object.keys(module.events).map((eventKey, index) => {
                   const event = module.events[eventKey as ModuleEventType];
                   if (!event?.sessions.length) {
                     return null;
@@ -210,7 +210,7 @@ const ModuleContentView = () => {
                             key={session.id}
                             // TODO: translate eventKey value for label prop below
                             label={eventKey}
-                            onClickButton={() => goToModuleEvent(projectId, 1, module.id)}
+                            onClickButton={() => goToModuleEvent(projectId, index, module.id)}
                             value={session.startTime ? getLongDateTime(session.startTime, activeLocale) : ''}
                           />
                         );
