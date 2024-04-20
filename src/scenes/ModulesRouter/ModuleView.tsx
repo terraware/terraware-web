@@ -13,11 +13,10 @@ import { requestGetModule } from 'src/redux/features/modules/modulesAsyncThunks'
 import { selectModule } from 'src/redux/features/modules/modulesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { ModuleEventType } from 'src/types/Module';
+import { ModuleEventType, getModuleEventName } from 'src/types/Module';
 import { getLongDate, getLongDateTime } from 'src/utils/dateFormatter';
 
 import ModuleEventCard from './ModuleEventCard';
-import { getModuleEventName } from './ModuleEventView';
 import ModuleViewTitle from './ModuleViewTitle';
 
 type MockDeliverable = {
