@@ -13,9 +13,22 @@ import { requestGetModule, requestGetModuleEvent } from 'src/redux/features/modu
 import { selectModule, selectModuleEvent } from 'src/redux/features/modules/modulesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { ModuleEventType } from 'src/types/Module';
 import { getLongDateTime } from 'src/utils/dateFormatter';
 
 import ModuleViewTitle from './ModuleViewTitle';
+
+const CALL_DESCRIPTION_HTML = `
+  <div>
+    <p>Clicking "Join" will open up a browser window to join a Zoom video call.</p>
+    <p>For this Live Session you will need:</p>
+    <ul>
+      <li>An internet connection – broadband wired or wireless (3G or 4G/LTE)</li>
+      <li>Speakers and a microphone – built-in, USB plug-in, or wireless Bluetooth</li>
+      <li>A webcam or HD webcam - built-in, USB plug-in</li>
+    </ul>
+  </div>
+`;
 
 const openURL = (url: string | undefined, target = '_blank', features = 'noopener noreferrer') => {
   if (url) {
@@ -30,9 +43,14 @@ const ModuleEventView = () => {
   const { project, projectId } = useProject();
   const pathParams = useParams<{ eventId: string; moduleId: string; projectId: string }>();
   const eventId = Number(pathParams.eventId);
-  const event = useAppSelector(selectModuleEvent(eventId));
-  const moduleId = event?.moduleId || -1;
+  const moduleId = Number(pathParams.moduleId);
   const module = useAppSelector(selectModule(moduleId));
+  const moduleEventType: ModuleEventType | undefined =
+    module?.events && (Object.keys(module.events)[eventId] as ModuleEventType);
+  const event = moduleEventType ? module?.events?.[moduleEventType] : undefined;
+  const eventSession = event?.sessions?.[0];
+  const eventName = moduleEventType; // TODO: translate this
+
   const [now, setNow] = useState(new Date());
 
   const crumbs: Crumb[] = useMemo(
@@ -46,24 +64,24 @@ const ModuleEventView = () => {
   );
 
   const eventIsStartingSoon = useMemo(() => {
-    if (event) {
-      const startTime = new Date(event.startTime);
+    if (eventSession?.startTime) {
+      const startTime = new Date(eventSession.startTime);
       const diff = startTime.getTime() - now.getTime();
       return diff < FIFTEEN_MINUTE_INTERVAL_MS;
     }
 
     return false;
-  }, [event, now]);
+  }, [eventSession, now]);
 
   const eventHasEnded = useMemo(() => {
-    if (event) {
-      const endTime = new Date(event.endTime);
+    if (eventSession?.endTime) {
+      const endTime = new Date(eventSession.endTime);
       const diff = endTime.getTime() - now.getTime();
       return diff < 0;
     }
 
     return false;
-  }, [event, now]);
+  }, [eventSession, now]);
 
   // update the current time every minute
   useEffect(() => {
@@ -101,15 +119,15 @@ const ModuleEventView = () => {
           padding: `${theme.spacing(2)} ${theme.spacing(1)}`,
         }}
       >
-        {event && (
+        {eventSession && (
           <Grid container spacing={theme.spacing(1)}>
             <Grid item xs={6} style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
               <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
-                {event.name}
+                {eventName}
               </Typography>
 
               <Typography marginBottom={theme.spacing(1)}>
-                {event.startTime ? getLongDateTime(event.startTime, activeLocale) : ''}
+                {eventSession.startTime ? getLongDateTime(eventSession.startTime, activeLocale) : ''}
               </Typography>
 
               <Box marginBottom={theme.spacing(2)}>
@@ -125,36 +143,36 @@ const ModuleEventView = () => {
                 ) : (
                   <Button
                     disabled={!eventIsStartingSoon}
-                    label={strings.formatString(strings.JOIN_EVENT_NAME, event.name)?.toString()}
+                    label={eventName ? strings.formatString(strings.JOIN_EVENT_NAME, eventName)?.toString() : ''}
                     onClick={() => {
-                      openURL(event.meetingURL);
+                      openURL(eventSession.meetingUrl);
                     }}
                   />
                 )}
               </Box>
 
-              {event?.slidesURL && (
+              {eventSession?.slidesUrl && (
                 <Box marginBottom={theme.spacing(2)}>
                   <Link
                     fontSize='16px'
                     onClick={() => {
-                      openURL(event.slidesURL);
+                      openURL(eventSession.slidesUrl);
                     }}
                   >
-                    {strings.formatString(strings.EVENT_NAME_SLIDES, event.name)}
+                    {eventName ? strings.formatString(strings.EVENT_NAME_SLIDES, eventName) : ''}
                   </Link>
                 </Box>
               )}
 
-              {event?.recordingURL && (
+              {eventSession?.recordingUrl && (
                 <Box marginBottom={theme.spacing(2)}>
                   <Link
                     fontSize='16px'
                     onClick={() => {
-                      openURL(event.recordingURL);
+                      openURL(eventSession.recordingUrl);
                     }}
                   >
-                    {strings.formatString(strings.EVENT_NAME_RECORDING, event.name)}
+                    {eventName ? strings.formatString(strings.EVENT_NAME_RECORDING, eventName) : ''}
                   </Link>
                 </Box>
               )}
@@ -162,7 +180,7 @@ const ModuleEventView = () => {
 
             <Grid item xs={6} style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
               <Box
-                dangerouslySetInnerHTML={{ __html: event?.callDescription || '' }}
+                dangerouslySetInnerHTML={{ __html: CALL_DESCRIPTION_HTML }}
                 sx={{ backgroundColor: theme.palette.TwClrBgSecondary, borderRadius: '8px', padding: '8px 16px' }}
               />
             </Grid>
@@ -176,7 +194,7 @@ const ModuleEventView = () => {
                 }}
               />
 
-              <Box dangerouslySetInnerHTML={{ __html: event?.description || '' }} />
+              <Box dangerouslySetInnerHTML={{ __html: event?.eventDescription || '' }} />
             </Grid>
           </Grid>
         )}
