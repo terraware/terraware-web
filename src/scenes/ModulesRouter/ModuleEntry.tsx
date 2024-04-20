@@ -30,8 +30,7 @@ const ModuleEntry = ({ index, last, module, projectId }: ModuleEntryProps) => {
             component={'span'}
             marginRight={theme.spacing(3)}
           >
-            {/* TODO: translate this */}
-            Module {index + 1}
+            {strings.formatString(strings.MODULE_N, (index + 1).toString())}
           </Typography>
           {module?.startDate && module?.endDate && activeLocale && (
             <Typography component={'span'}>

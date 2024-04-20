@@ -25,6 +25,19 @@ type MockDeliverable = {
   name: string;
 };
 
+export const getModuleEventName = (moduleEventType: ModuleEventType) => {
+  switch (moduleEventType) {
+    case 'Live Session':
+      return strings.LIVE_SESSION;
+    case 'One-on-One Session':
+      return strings.ONE_ON_ONE_SESSION;
+    case 'Workshop':
+      return strings.WORKSHOP;
+    default:
+      return '';
+  }
+};
+
 const ModuleContentSection = ({ children }: { children: React.ReactNode }) => {
   return (
     <Box
@@ -115,8 +128,8 @@ const ModuleContentView = () => {
             <Grid item xs style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
               <ModuleContentSection>
                 <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={500}>
-                  {/* TODO: replace "Module N" with a string using a derived module number like "Module 1" */}
-                  {strings.formatString(strings.MODULE_NAME_OVERVIEW, 'Module N')}
+                  {/* TODO: replace "N" with module # */}
+                  {strings.formatString(strings.MODULE_N_OVERVIEW, 'N')}
                 </Typography>
                 <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
                   {module.name}
@@ -209,8 +222,7 @@ const ModuleContentView = () => {
                         return (
                           <ModuleEventCard
                             key={session.id}
-                            // TODO: translate eventKey value for label prop below
-                            label={moduleEventType}
+                            label={getModuleEventName(moduleEventType as ModuleEventType)}
                             onClickButton={() => goToModuleEvent(projectId, index, module.id)}
                             value={
                               session.startTime && activeLocale ? getLongDateTime(session.startTime, activeLocale) : ''

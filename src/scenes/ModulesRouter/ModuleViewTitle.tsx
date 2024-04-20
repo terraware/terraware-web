@@ -3,6 +3,7 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 
 import { useLocalization } from 'src/providers';
+import strings from 'src/strings';
 import { Module } from 'src/types/Module';
 import { Project } from 'src/types/Project';
 import { getDateRangeString } from 'src/utils/dateFormatter';
@@ -23,8 +24,8 @@ const ModuleViewTitle = ({ module, project }: ModulePageTitleProps) => {
 
       <Box alignItems='center' display='flex' flexDirection='row'>
         <Typography fontSize={'20px'} lineHeight={'28px'} fontWeight={600} paddingRight='8px'>
-          {/* TODO: replace "Module N" with a string using a derived module number like "Module 1" */}
-          Module N
+          {/* TODO: replace "N" with module # */}
+          {strings.formatString(strings.MODULE_N, 'N')}
         </Typography>
 
         {module?.startDate && module?.endDate && activeLocale && (

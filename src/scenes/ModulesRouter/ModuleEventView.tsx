@@ -16,6 +16,7 @@ import strings from 'src/strings';
 import { ModuleEventType } from 'src/types/Module';
 import { getLongDateTime } from 'src/utils/dateFormatter';
 
+import { getModuleEventName } from './ModuleView';
 import ModuleViewTitle from './ModuleViewTitle';
 
 const CALL_DESCRIPTION_HTML = `
@@ -49,7 +50,7 @@ const ModuleEventView = () => {
     module?.events && (Object.keys(module.events)[eventId] as ModuleEventType);
   const event = moduleEventType ? module?.events?.[moduleEventType] : undefined;
   const eventSession = event?.sessions?.[0];
-  const eventName = moduleEventType; // TODO: translate this
+  const eventName = moduleEventType ? getModuleEventName(moduleEventType) : '';
 
   const [now, setNow] = useState(new Date());
 
