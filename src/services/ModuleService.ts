@@ -111,6 +111,98 @@ const mockModules: Module[] = [
     `,
     startDate: '2024-04-16T17:00:00Z',
   },
+  {
+    additionalResources: `
+      <div>
+        <ul>
+          <li><a href="#">Verified Carbon Standard</a></li>
+          <li><a href="#">Methodology For Afforestation, Reforestation and Revegetation Projects</a></li>
+          <li><a href="#">Plan Vivo</a></li>
+          <li><a href="#">AFOLU Non-Permanence Risk Tool</a></li>
+          <li><a href="#">Climate Change: Atmospheric Carbon Dioxide</a></li>
+          <li><a href="#">En-ROADS - Climate Interactive</a></li>
+          <li><a href="#">Tool for the Demonstration and Assessment of Additionality in VCS Agriculture, Forestry and Other Land Use (Afolu) Project Activities</a></li>
+        </ul>
+      </div>
+    `,
+    endDate: '2024-04-30T16:00:00Z',
+    events: mockEvents,
+    id: 2,
+    name: 'Introduction to Carbon Projects',
+    preparationMaterials: `
+      <div>
+        <ul>
+          <li><a href="#">Verified Carbon Standard</a></li>
+          <li><a href="#">Methodology For Afforestation, Reforestation and Revegetation Projects</a></li>
+          <li><a href="#">Plan Vivo</a></li>
+          <li><a href="#">AFOLU Non-Permanence Risk Tool</a></li>
+          <li><a href="#">Climate Change: Atmospheric Carbon Dioxide</a></li>
+          <li><a href="#">En-ROADS - Climate Interactive</a></li>
+          <li><a href="#">Tool for the Demonstration and Assessment of Additionality in VCS Agriculture, Forestry and Other Land Use (Afolu) Project Activities</a></li>
+        </ul>
+      </div>
+    `,
+    overview: `
+      <div>
+        <p>The purpose of this module is to introduce you to carbon market basics and help you understand what a carbon project entails. After this session, you will be able to complete the deliverable which is the Carbon Eligibility questions for the Feasibility Study.</p>
+        <p>By the end of this module, you should be equipped with the following:</p>
+        <ul>
+          <li>Knowledge of the major carbon standards (Verra/VCS, Plan Vivo, etc)</li>
+          <li>Knowledge of the different types of carbon projects (Afforestation, Reforestation and Revegetation (ARR), Improved Forest Management (IFM), Avoided Deforestation)</li>
+          <li>A good understanding of who is involved in a carbon project (project proponent, land owner, investors, buyers…)</li>
+          <li>Some familiarity with the timeline of a carbon project</li>
+          <li>New knowledge about Feasibility Studies and Project Design Documents (PDD)</li>
+          <li>An understanding of why it is important to provide high-quality due diligence information, in order to produce the best Feasibility Studies possible for your project and provide you with better chances to get selected and registered.</li>
+        </ul>
+      </div>
+    `,
+    startDate: '2024-04-23T17:00:00Z',
+  },
+  {
+    additionalResources: `
+      <div>
+        <ul>
+          <li><a href="#">Verified Carbon Standard</a></li>
+          <li><a href="#">Methodology For Afforestation, Reforestation and Revegetation Projects</a></li>
+          <li><a href="#">Plan Vivo</a></li>
+          <li><a href="#">AFOLU Non-Permanence Risk Tool</a></li>
+          <li><a href="#">Climate Change: Atmospheric Carbon Dioxide</a></li>
+          <li><a href="#">En-ROADS - Climate Interactive</a></li>
+          <li><a href="#">Tool for the Demonstration and Assessment of Additionality in VCS Agriculture, Forestry and Other Land Use (Afolu) Project Activities</a></li>
+        </ul>
+      </div>
+    `,
+    endDate: '2024-05-07T16:00:00Z',
+    events: mockEvents,
+    id: 3,
+    name: 'Legal Eligibility',
+    preparationMaterials: `
+      <div>
+        <ul>
+          <li><a href="#">Verified Carbon Standard</a></li>
+          <li><a href="#">Methodology For Afforestation, Reforestation and Revegetation Projects</a></li>
+          <li><a href="#">Plan Vivo</a></li>
+          <li><a href="#">AFOLU Non-Permanence Risk Tool</a></li>
+          <li><a href="#">Climate Change: Atmospheric Carbon Dioxide</a></li>
+          <li><a href="#">En-ROADS - Climate Interactive</a></li>
+          <li><a href="#">Tool for the Demonstration and Assessment of Additionality in VCS Agriculture, Forestry and Other Land Use (Afolu) Project Activities</a></li>
+        </ul>
+      </div>
+    `,
+    overview: `
+      <div>
+        <p>The purpose of this module is to introduce you to the legal frameworks needed to register a carbon project. After this session, you will be able to complete the deliverable which is the Legal Eligibility questions for the Feasibility Study.</p>
+        <p>By the end of this module, you should be equipped with the following:</p>
+        <ul>
+          <li>Role of Terraformation Legal Department</li>
+          <li>Importance of Land Tenure</li>
+          <li>Overview of Legal Agreements</li>
+          <li>International Compliance Obligations</li>
+        </ul>
+      </div>
+    `,
+    startDate: '2024-04-30T17:00:00Z',
+  },
 ];
 
 /**
