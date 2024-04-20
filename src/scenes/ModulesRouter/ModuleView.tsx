@@ -134,7 +134,7 @@ const ModuleContentView = () => {
                     </Typography>
                   </ModuleContentSection>
 
-                  {mockDeliverables.length && (
+                  {!!mockDeliverables.length && (
                     <>
                       {mockDeliverables.map((deliverable) => (
                         <ModuleContentSection key={deliverable.id}>
@@ -146,7 +146,7 @@ const ModuleContentView = () => {
                           >
                             {deliverable.name}
                           </Link>
-                          {deliverable.dueDate && (
+                          {deliverable.dueDate && activeLocale && (
                             <Typography
                               component='span'
                               fontSize={'16px'}
@@ -196,22 +196,24 @@ const ModuleContentView = () => {
 
             {Object.keys(module.events).length && (
               <Grid item>
-                {Object.keys(module.events).map((eventKey, index) => {
-                  const event = module.events[eventKey as ModuleEventType];
+                {Object.keys(module.events).map((moduleEventType, index) => {
+                  const event = module.events[moduleEventType as ModuleEventType];
                   if (!event?.sessions.length) {
                     return null;
                   }
 
                   return (
-                    <Grid key={eventKey} item>
+                    <Grid key={moduleEventType} item>
                       {event.sessions.map((session) => {
                         return (
                           <ModuleEventCard
                             key={session.id}
                             // TODO: translate eventKey value for label prop below
-                            label={eventKey}
+                            label={moduleEventType}
                             onClickButton={() => goToModuleEvent(projectId, index, module.id)}
-                            value={session.startTime ? getLongDateTime(session.startTime, activeLocale) : ''}
+                            value={
+                              session.startTime && activeLocale ? getLongDateTime(session.startTime, activeLocale) : ''
+                            }
                           />
                         );
                       })}
