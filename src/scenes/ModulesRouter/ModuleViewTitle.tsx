@@ -4,16 +4,17 @@ import { Box, Typography } from '@mui/material';
 
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { Module } from 'src/types/Module';
+import { Module, getModuleNumber } from 'src/types/Module';
 import { Project } from 'src/types/Project';
 import { getDateRangeString } from 'src/utils/dateFormatter';
 
 type ModulePageTitleProps = {
   module: Module | undefined;
+  modules: Module[] | undefined;
   project: Project | undefined;
 };
 
-const ModuleViewTitle = ({ module, project }: ModulePageTitleProps) => {
+const ModuleViewTitle = ({ module, modules, project }: ModulePageTitleProps) => {
   const { activeLocale } = useLocalization();
 
   return (
@@ -24,8 +25,7 @@ const ModuleViewTitle = ({ module, project }: ModulePageTitleProps) => {
 
       <Box alignItems='center' display='flex' flexDirection='row'>
         <Typography fontSize={'20px'} lineHeight={'28px'} fontWeight={600} paddingRight='8px'>
-          {/* TODO: replace "N" with module # */}
-          {strings.formatString(strings.MODULE_N, 'N')}
+          {strings.formatString(strings.MODULE_N, getModuleNumber(module, modules))}
         </Typography>
 
         {module?.startDate && module?.endDate && activeLocale && (

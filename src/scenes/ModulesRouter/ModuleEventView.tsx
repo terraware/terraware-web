@@ -11,6 +11,7 @@ import { APP_PATHS, FIFTEEN_MINUTE_INTERVAL_MS, ONE_MINUTE_INTERVAL_MS } from 's
 import { useLocalization, useProject } from 'src/providers';
 import { requestGetModule, requestGetModuleEvent } from 'src/redux/features/modules/modulesAsyncThunks';
 import { selectModule } from 'src/redux/features/modules/modulesSelectors';
+import { selectProjectModuleList } from 'src/redux/features/modules/modulesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { ModuleEventType, getModuleEventName } from 'src/types/Module';
@@ -45,6 +46,7 @@ const ModuleEventView = () => {
   const eventId = Number(pathParams.eventId);
   const moduleId = Number(pathParams.moduleId);
   const module = useAppSelector(selectModule(moduleId));
+  const modules = useAppSelector(selectProjectModuleList(projectId));
   const moduleEventType: ModuleEventType | undefined =
     module?.events && (Object.keys(module.events)[eventId] as ModuleEventType);
   const event = moduleEventType ? module?.events?.[moduleEventType] : undefined;
@@ -106,7 +108,7 @@ const ModuleEventView = () => {
     <PageWithModuleTimeline
       crumbs={crumbs}
       hierarchicalCrumbs={false}
-      title={<ModuleViewTitle module={module} project={project} />}
+      title={<ModuleViewTitle module={module} modules={modules} project={project} />}
     >
       <Card
         sx={{

@@ -9,8 +9,10 @@ import { APP_PATHS } from 'src/constants';
 import { useLocalization, useProject } from 'src/providers';
 import { requestGetModule } from 'src/redux/features/modules/modulesAsyncThunks';
 import { selectModule } from 'src/redux/features/modules/modulesSelectors';
+import { selectProjectModuleList } from 'src/redux/features/modules/modulesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { getModuleNumber } from 'src/types/Module';
 
 import ModuleViewTitle from './ModuleViewTitle';
 
@@ -22,6 +24,7 @@ const ModuleAdditionalResourcesView = () => {
   const pathParams = useParams<{ eventId: string; moduleId: string; projectId: string }>();
   const moduleId = Number(pathParams.moduleId);
   const module = useAppSelector(selectModule(moduleId));
+  const modules = useAppSelector(selectProjectModuleList(projectId));
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -43,7 +46,7 @@ const ModuleAdditionalResourcesView = () => {
     <PageWithModuleTimeline
       crumbs={crumbs}
       hierarchicalCrumbs={false}
-      title={<ModuleViewTitle module={module} project={project} />}
+      title={<ModuleViewTitle module={module} modules={modules} project={project} />}
     >
       <Card
         sx={{
@@ -59,8 +62,7 @@ const ModuleAdditionalResourcesView = () => {
         <Grid container spacing={theme.spacing(1)}>
           <Grid item xs style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
             <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={500}>
-              {/* TODO: replace "N" with module # */}
-              {strings.formatString(strings.MODULE_N, 'N')}
+              {strings.formatString(strings.MODULE_N, getModuleNumber(module, modules))}
             </Typography>
 
             <Typography fontSize={'20px'} lineHeight={'28px'} fontWeight={600}>

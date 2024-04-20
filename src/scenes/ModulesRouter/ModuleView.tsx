@@ -11,9 +11,10 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useProject } from 'src/providers';
 import { requestGetModule } from 'src/redux/features/modules/modulesAsyncThunks';
 import { selectModule } from 'src/redux/features/modules/modulesSelectors';
+import { selectProjectModuleList } from 'src/redux/features/modules/modulesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { ModuleEventType, getModuleEventName } from 'src/types/Module';
+import { ModuleEventType, getModuleEventName, getModuleNumber } from 'src/types/Module';
 import { getLongDate, getLongDateTime } from 'src/utils/dateFormatter';
 
 import ModuleEventCard from './ModuleEventCard';
@@ -48,6 +49,7 @@ const ModuleContentView = () => {
   const pathParams = useParams<{ moduleId: string; projectId: string }>();
   const moduleId = Number(pathParams.moduleId);
   const module = useAppSelector(selectModule(moduleId));
+  const modules = useAppSelector(selectProjectModuleList(projectId));
   const mockDeliverables: MockDeliverable[] = []; // TODO: get deliverables
 
   const [now, setNow] = useState(new Date());
@@ -97,7 +99,7 @@ const ModuleContentView = () => {
     <PageWithModuleTimeline
       crumbs={crumbs}
       hierarchicalCrumbs={false}
-      title={<ModuleViewTitle module={module} project={project} />}
+      title={<ModuleViewTitle module={module} modules={modules} project={project} />}
     >
       <Card
         sx={{
@@ -115,8 +117,7 @@ const ModuleContentView = () => {
             <Grid item xs style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
               <ModuleContentSection>
                 <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={500}>
-                  {/* TODO: replace "N" with module # */}
-                  {strings.formatString(strings.MODULE_N_OVERVIEW, 'N')}
+                  {strings.formatString(strings.MODULE_N_OVERVIEW, getModuleNumber(module, modules))}
                 </Typography>
                 <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
                   {module.name}

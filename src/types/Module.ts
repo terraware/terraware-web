@@ -39,3 +39,7 @@ export const getModuleEventName = (moduleEventType: ModuleEventType) => {
       return '';
   }
 };
+
+export const getModuleNumber = (module?: Module, modules?: Module[]): string => {
+  return ((modules || []).findIndex((m) => m.id === module?.id) + 1).toString();
+};
