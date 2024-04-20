@@ -66,6 +66,14 @@ const ModuleEventView = () => {
 
   const [now, setNow] = useState(new Date());
 
+  console.log('*********************************');
+  console.log('ModuleEventView');
+  console.log('eventId:', eventId);
+  console.log('eventName:', eventName);
+  console.log('eventSession:', eventSession);
+  console.log('event:', event);
+  console.log('module:', module);
+
   const crumbs: Crumb[] = useMemo(
     () => [
       {
