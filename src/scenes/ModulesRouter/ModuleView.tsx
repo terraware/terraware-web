@@ -20,7 +20,7 @@ import { getLongDate, getLongDateTime } from 'src/utils/dateFormatter';
 import ModuleEventCard from './ModuleEventCard';
 import ModuleViewTitle from './ModuleViewTitle';
 
-type MockDeliverable = {
+type MockModuleDeliverable = {
   dueDate: string;
   id: number;
   name: string;
@@ -50,7 +50,7 @@ const ModuleContentView = () => {
   const moduleId = Number(pathParams.moduleId);
   const module = useAppSelector(selectModule(moduleId));
   const modules = useAppSelector(selectProjectModuleList(projectId));
-  const mockDeliverables: MockDeliverable[] = []; // TODO: get deliverables
+  const mockDeliverables: MockModuleDeliverable[] = []; // TODO: get deliverables
 
   const [now, setNow] = useState(new Date());
 
