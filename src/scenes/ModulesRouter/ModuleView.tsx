@@ -203,7 +203,7 @@ const ModuleContentView = () => {
                   }
 
                   return (
-                    <Grid item>
+                    <Grid key={eventKey} item>
                       {event.sessions.map((session) => {
                         return (
                           <ModuleEventCard
