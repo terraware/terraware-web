@@ -10,7 +10,7 @@ import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline
 import { APP_PATHS, FIFTEEN_MINUTE_INTERVAL_MS, ONE_MINUTE_INTERVAL_MS } from 'src/constants';
 import { useLocalization, useProject } from 'src/providers';
 import { requestGetModule, requestGetModuleEvent } from 'src/redux/features/modules/modulesAsyncThunks';
-import { selectModule, selectModuleEvent } from 'src/redux/features/modules/modulesSelectors';
+import { selectModule } from 'src/redux/features/modules/modulesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { ModuleEventType } from 'src/types/Module';
