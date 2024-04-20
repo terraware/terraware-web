@@ -17,25 +17,13 @@ import { ModuleEventType } from 'src/types/Module';
 import { getLongDate, getLongDateTime } from 'src/utils/dateFormatter';
 
 import ModuleEventCard from './ModuleEventCard';
+import { getModuleEventName } from './ModuleEventView';
 import ModuleViewTitle from './ModuleViewTitle';
 
 type MockDeliverable = {
   dueDate: string;
   id: number;
   name: string;
-};
-
-export const getModuleEventName = (moduleEventType: ModuleEventType) => {
-  switch (moduleEventType) {
-    case 'Live Session':
-      return strings.LIVE_SESSION;
-    case 'One-on-One Session':
-      return strings.ONE_ON_ONE_SESSION;
-    case 'Workshop':
-      return strings.WORKSHOP;
-    default:
-      return '';
-  }
 };
 
 const ModuleContentSection = ({ children }: { children: React.ReactNode }) => {

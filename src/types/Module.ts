@@ -1,4 +1,4 @@
-export type ModuleEventType = 'One-on-One Session' | 'Workshop' | 'Live Session';
+export type ModuleEventType = 'One-on-One Session' | 'Live Session' | 'Workshop';
 
 export type Module = {
   additionalResources?: string;

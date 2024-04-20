@@ -24,10 +24,10 @@ const ModuleEntry = ({ index, last, module, projectId }: ModuleEntryProps) => {
       <Grid container display={'flex'} justifyContent={'space-between'} marginBottom={theme.spacing(1)}>
         <Grid item>
           <Typography
+            component={'span'}
             fontSize={'20px'}
             fontWeight={600}
             lineHeight={'28px'}
-            component={'span'}
             marginRight={theme.spacing(3)}
           >
             {strings.formatString(strings.MODULE_N, (index + 1).toString())}

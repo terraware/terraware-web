@@ -16,7 +16,6 @@ import strings from 'src/strings';
 import { ModuleEventType } from 'src/types/Module';
 import { getLongDateTime } from 'src/utils/dateFormatter';
 
-import { getModuleEventName } from './ModuleView';
 import ModuleViewTitle from './ModuleViewTitle';
 
 const CALL_DESCRIPTION_HTML = `
@@ -34,6 +33,19 @@ const CALL_DESCRIPTION_HTML = `
 const openURL = (url: string | undefined, target = '_blank', features = 'noopener noreferrer') => {
   if (url) {
     window.open(url, target, features);
+  }
+};
+
+export const getModuleEventName = (moduleEventType: ModuleEventType) => {
+  switch (moduleEventType) {
+    case 'Live Session':
+      return strings.LIVE_SESSION;
+    case 'One-on-One Session':
+      return strings.ONE_ON_ONE_SESSION;
+    case 'Workshop':
+      return strings.WORKSHOP;
+    default:
+      return '';
   }
 };
 

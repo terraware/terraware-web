@@ -48,11 +48,11 @@ export default function ListView(): JSX.Element {
 
         {modules?.map((module, index) => (
           <ModuleEntry
+            index={index}
+            key={index}
+            last={modules.length - 1 === index}
             module={module}
             projectId={projectId}
-            key={index}
-            index={index}
-            last={modules.length - 1 === index}
           />
         ))}
       </Card>
