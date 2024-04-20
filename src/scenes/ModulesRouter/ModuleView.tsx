@@ -180,6 +180,8 @@ const ModuleContentView = () => {
                     </ModuleContentSection>
                   )}
 
+                  {/* TODO: list session slides and other session resources? */}
+
                   {module.additionalResources && (
                     <ModuleContentSection>
                       <Link
