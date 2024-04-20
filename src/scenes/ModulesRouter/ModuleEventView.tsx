@@ -30,7 +30,7 @@ const CALL_DESCRIPTION_HTML = `
   </div>
 `;
 
-const openURL = (url: string | undefined, target = '_blank', features = 'noopener noreferrer') => {
+const openExternalURL = (url: string | undefined, target = '_blank', features = 'noopener noreferrer') => {
   if (url) {
     window.open(url, target, features);
   }
@@ -145,7 +145,7 @@ const ModuleEventView = () => {
                     disabled={!eventIsStartingSoon}
                     label={eventName ? strings.formatString(strings.JOIN_EVENT_NAME, eventName)?.toString() : ''}
                     onClick={() => {
-                      openURL(eventSession.meetingUrl);
+                      openExternalURL(eventSession.meetingUrl);
                     }}
                   />
                 )}
@@ -156,7 +156,7 @@ const ModuleEventView = () => {
                   <Link
                     fontSize='16px'
                     onClick={() => {
-                      openURL(eventSession.slidesUrl);
+                      openExternalURL(eventSession.slidesUrl);
                     }}
                   >
                     {eventName ? strings.formatString(strings.EVENT_NAME_SLIDES, eventName) : ''}
@@ -169,7 +169,7 @@ const ModuleEventView = () => {
                   <Link
                     fontSize='16px'
                     onClick={() => {
-                      openURL(eventSession.recordingUrl);
+                      openExternalURL(eventSession.recordingUrl);
                     }}
                   >
                     {eventName ? strings.formatString(strings.EVENT_NAME_RECORDING, eventName) : ''}
