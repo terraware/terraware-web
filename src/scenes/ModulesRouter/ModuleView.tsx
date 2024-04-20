@@ -42,7 +42,8 @@ const ModuleContentView = () => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const { goToModuleEvent } = useNavigateTo();
+  const { goToDeliverable, goToModuleAdditionalResources, goToModuleEvent, goToModulePreparationMaterials } =
+    useNavigateTo();
   const { project, projectId } = useProject();
   const pathParams = useParams<{ moduleId: string; projectId: string }>();
   const moduleId = Number(pathParams.moduleId);
@@ -141,7 +142,7 @@ const ModuleContentView = () => {
                           <Link
                             fontSize='16px'
                             onClick={() => {
-                              // TODO: nav to deliverable or deliverables list screen
+                              goToDeliverable(deliverable.id, projectId);
                             }}
                           >
                             {deliverable.name}
@@ -170,7 +171,7 @@ const ModuleContentView = () => {
                       <Link
                         fontSize='16px'
                         onClick={() => {
-                          // TODO: nav to content screen for preparation materials
+                          goToModulePreparationMaterials(projectId, module.id);
                         }}
                       >
                         {strings.PREPARATION_MATERIALS}
@@ -183,7 +184,7 @@ const ModuleContentView = () => {
                       <Link
                         fontSize='16px'
                         onClick={() => {
-                          // TODO: nav to content screen for additional resources
+                          goToModuleAdditionalResources(projectId, module.id);
                         }}
                       >
                         {strings.ADDITIONAL_RESOURCES}
