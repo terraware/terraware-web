@@ -31,7 +31,8 @@ export const defaultSelectedOrg: Organization = {
 export const OrganizationContext = createContext<ProvidedOrganizationData>({
   organizations: [],
   orgPreferences: {},
-  reloadOrganizations: () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  reloadOrganizations: (selectedOrgId?: number) => {
     // default no-op implementation
     return;
   },
@@ -39,7 +40,9 @@ export const OrganizationContext = createContext<ProvidedOrganizationData>({
     // default no-op implementation
     return;
   },
-  setSelectedOrganization: () => {
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  setSelectedOrganization: (org) => {
     // no-op
     return;
   },

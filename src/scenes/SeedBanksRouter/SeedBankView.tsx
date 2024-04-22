@@ -23,6 +23,11 @@ import LocationTimeZoneSelector from '../../components/LocationTimeZoneSelector'
 import PageForm from '../../components/common/PageForm';
 import TextField from '../../components/common/Textfield/Textfield';
 
+type NavigateToSeedBankObject = {
+  navigate: boolean;
+  id?: number;
+};
+
 export default function SeedBankView(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
   const theme = useTheme();
@@ -31,6 +36,10 @@ export default function SeedBankView(): JSX.Element {
   const [validateDates, setValidateDates] = useState(false);
   const [editedSubLocations, setEditedSubLocations] = useState<PartialSubLocation[]>();
   const snackbar = useSnackbar();
+  const [navigateToSeedBank, setNavigateToSeedBank] = useState<NavigateToSeedBankObject>({
+    navigate: false,
+    id: undefined,
+  });
 
   const [record, setRecord, onChange] = useForm<Facility>({
     name: '',
@@ -49,6 +58,12 @@ export default function SeedBankView(): JSX.Element {
     }
     return 4;
   };
+
+  useEffect(() => {
+    if (navigateToSeedBank.navigate) {
+      goToSeedBank(navigateToSeedBank.id);
+    }
+  }, [selectedOrganization]);
 
   useEffect(() => {
     if (seedBankId) {
@@ -122,14 +137,15 @@ export default function SeedBankView(): JSX.Element {
         subLocationNames: editedSubLocations?.map((l) => l.name as string),
       });
       if (response.requestSucceeded) {
-        reloadOrganizations(selectedOrganization.id);
+        // eslint-disable-next-line @typescript-eslint/await-thenable
+        await reloadOrganizations(selectedOrganization.id);
         snackbar.toastSuccess(strings.SEED_BANK_ADDED);
         id = response.facilityId || undefined;
       } else {
         snackbar.toastError();
       }
     }
-    goToSeedBank(id);
+    setNavigateToSeedBank({ navigate: true, id: id });
   };
 
   const onChangeTimeZone = (newTimeZone: TimeZoneDescription | undefined) => {
