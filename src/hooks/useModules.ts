@@ -10,7 +10,7 @@ export const useModules = () => {
   const { availableProjects } = useProjects();
 
   const projectIds = useMemo(() => availableProjects?.map((project) => project.id) || [], [availableProjects]);
-  const projectModules = useAppSelector(selectAllModuleList(projectIds));
+  const projectModules = useAppSelector((state) => selectAllModuleList(state, projectIds));
 
   useEffect(() => {
     projectIds.forEach((id) => void dispatch(requestListModules(id)));
