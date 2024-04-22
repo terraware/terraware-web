@@ -37,7 +37,7 @@ const openExternalURL = (url: string | undefined, target = '_blank', features = 
   }
 };
 
-const ModuleEventView = () => {
+const ModuleEventSessionView = () => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const theme = useTheme();
@@ -205,4 +205,4 @@ const ModuleEventView = () => {
   );
 };
 
-export default ModuleEventView;
+export default ModuleEventSessionView;

@@ -6,7 +6,7 @@ import ProjectProvider from 'src/providers/Project/ProjectProvider';
 
 import ListView from './ListView';
 import ModuleAdditionalResourcesView from './ModuleAdditionalResources';
-import ModuleEventView from './ModuleEventView';
+import ModuleEventSessionView from './ModuleEventView';
 import ModulePreparationMaterialsView from './ModulePreparationMaterials';
 import ModuleView from './ModuleView';
 
@@ -31,7 +31,7 @@ const ModulesRouter = () => {
         </Route>
 
         <Route exact path={APP_PATHS.PROJECT_MODULE_EVENT}>
-          <ModuleEventView />
+          <ModuleEventSessionView />
         </Route>
       </Switch>
     </ProjectProvider>
