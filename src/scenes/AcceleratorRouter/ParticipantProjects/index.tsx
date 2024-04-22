@@ -16,8 +16,8 @@ const ParticipantProjectsRouter = () => {
         <ScoringProvider>
           <ParticipantProjectProvider>
             <Routes>
-              <Route path={APP_PATHS.ACCELERATOR_PROJECT_VIEW} element={<SingleView />} />
-              <Route path={APP_PATHS.ACCELERATOR_PROJECT_EDIT} element={<EditView />} />
+              <Route path={'edit'} element={<EditView />} />
+              <Route path={''} element={<SingleView />} />
               <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_OVERVIEW} />} />
             </Routes>
           </ParticipantProjectProvider>

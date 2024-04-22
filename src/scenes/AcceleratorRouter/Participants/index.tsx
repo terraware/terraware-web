@@ -9,9 +9,9 @@ import ParticipantsView from './ParticipantsView';
 const ParticipantsRouter = () => {
   return (
     <Routes>
-      <Route path={APP_PATHS.ACCELERATOR_PARTICIPANTS_NEW} element={<ParticipantsNew />} />
-      <Route path={APP_PATHS.ACCELERATOR_PARTICIPANTS_EDIT} element={<ParticipantsEdit />} />
-      <Route path={APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW} element={<ParticipantsView />} />
+      <Route path={'new'} element={<ParticipantsNew />} />
+      <Route path={':participantId/edit'} element={<ParticipantsEdit />} />
+      <Route path={':participantId'} element={<ParticipantsView />} />
       <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW} />} />
     </Routes>
   );

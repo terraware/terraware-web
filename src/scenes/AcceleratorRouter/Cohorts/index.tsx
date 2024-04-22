@@ -10,10 +10,10 @@ import CohortsListView from './CohortsListView';
 const CohortsRouter = () => {
   return (
     <Routes>
-      <Route path={APP_PATHS.ACCELERATOR_COHORTS_EDIT} element={<CohortEditView />} />
-      <Route path={APP_PATHS.ACCELERATOR_COHORTS_NEW} element={<CohortNewView />} />
-      <Route path={APP_PATHS.ACCELERATOR_COHORTS_VIEW} element={<CohortView />} />
-      <Route path={APP_PATHS.ACCELERATOR_COHORTS} element={<CohortsListView />} />
+      <Route path={':cohortId/edit'} element={<CohortEditView />} />
+      <Route path={'new'} element={<CohortNewView />} />
+      <Route path={':cohortId'} element={<CohortView />} />
+      <Route path={''} element={<CohortsListView />} />
       <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_COHORTS} />} />
     </Routes>
   );

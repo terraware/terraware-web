@@ -51,7 +51,12 @@ const SingleView = () => {
   );
 
   return (
-    <Page crumbs={crumbs} title={user?.email || ''} rightComponent={rightComponent}>
+    <Page
+      contentStyle={{ display: 'flex', flexDirection: 'column', marginRight: theme.spacing(2), width: 'auto' }}
+      crumbs={crumbs}
+      title={user?.email || ''}
+      rightComponent={rightComponent}
+    >
       <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, borderRadius: '24px' }}>
         <Grid container spacing={3}>
           <Grid item xs={4}>

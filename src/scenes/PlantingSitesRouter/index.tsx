@@ -38,7 +38,7 @@ export default function PlantingSites({ reloadTracking }: PlantingSitesProps): J
   return (
     <Routes>
       <Route path={'/new'} element={<PlantingSiteCreate reloadPlantingSites={reloadTracking} />} />
-      {userDrawnDetailedSites && <Route path={'/draft/:plantingSiteId/*'} element={<PlantingSitesDraftRouter />} />}
+      {userDrawnDetailedSites && <Route path={'/draft/*'} element={<PlantingSitesDraftRouter />} />}
       <Route path={'/:plantingSiteId/*'} element={<PlantingSitesRouter reloadTracking={reloadTracking} />} />
       <Route path={'*'} element={<PlantingSitesList />} />
     </Routes>
@@ -89,9 +89,10 @@ export function PlantingSitesRouter({ reloadTracking }: PlantingSitesProps): JSX
 export function PlantingSitesDraftRouter(): JSX.Element {
   return (
     <Routes>
-      <Route path={'/zone/:zoneId'} element={<PlantingSiteDraftZoneView />} />
+      <Route path={'/:plantingSiteId/zone/:zoneId'} element={<PlantingSiteDraftZoneView />} />
       <Route path={'/new'} element={<PlantingSiteDraftCreate />} />
-      <Route path={'/edit'} element={<PlantingSiteDraftEdit />} />
+      <Route path={'/:plantingSiteId/edit'} element={<PlantingSiteDraftEdit />} />
+      <Route path={'/:plantingSiteId'} element={<PlantingSiteDraftView />} />
       <Route path={'*'} element={<PlantingSiteDraftView />} />
     </Routes>
   );
