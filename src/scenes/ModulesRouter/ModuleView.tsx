@@ -17,7 +17,7 @@ import strings from 'src/strings';
 import { ModuleEventType, getModuleEventName, getModuleNumber } from 'src/types/Module';
 import { getLongDate, getLongDateTime } from 'src/utils/dateFormatter';
 
-import ModuleEventCard from './ModuleEventCard';
+import ModuleEventSessionCard from './ModuleEventSessionCard';
 import ModuleViewTitle from './ModuleViewTitle';
 
 type MockModuleDeliverable = {
@@ -210,7 +210,7 @@ const ModuleContentView = () => {
                     <Grid key={moduleEventType} item>
                       {event.sessions.map((session) => {
                         return (
-                          <ModuleEventCard
+                          <ModuleEventSessionCard
                             key={session.id}
                             label={getModuleEventName(moduleEventType as ModuleEventType)}
                             onClickButton={() => goToModuleEvent(projectId, index, module.id)}

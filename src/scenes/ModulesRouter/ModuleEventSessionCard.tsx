@@ -5,7 +5,7 @@ import { Button } from '@terraware/web-components';
 
 import strings from 'src/strings';
 
-const ModuleEventCard = ({
+const ModuleEventSessionCard = ({
   label,
   leftBorder = true,
   onClickButton,
@@ -43,4 +43,4 @@ const ModuleEventCard = ({
   );
 };
 
-export default ModuleEventCard;
+export default ModuleEventSessionCard;
