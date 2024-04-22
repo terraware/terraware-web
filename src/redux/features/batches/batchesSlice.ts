@@ -48,5 +48,9 @@ export const batchesSlice = createSlice({
   },
 });
 
-export const batchesRequestsReducer = batchesRequestsSlice.reducer;
-export const batchesReducer = batchesSlice.reducer;
+const batchesReducers = {
+  batches: batchesSlice.reducer,
+  batchesRequests: batchesRequestsSlice.reducer,
+};
+
+export default batchesReducers;

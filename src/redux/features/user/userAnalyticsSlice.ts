@@ -21,4 +21,8 @@ export const userAnalyticsSlice = createSlice({
 
 export const { updateGtmInstrumented } = userAnalyticsSlice.actions;
 
-export const userAnalyticsReducer = userAnalyticsSlice.reducer;
+const userAnalyticsReducers = {
+  userAnalytics: userAnalyticsSlice.reducer,
+};
+
+export default userAnalyticsReducers;

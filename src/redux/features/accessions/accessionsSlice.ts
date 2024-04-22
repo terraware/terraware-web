@@ -26,4 +26,8 @@ export const accessionsSlice = createSlice({
 
 export const { setAccessionsAction } = accessionsSlice.actions;
 
-export const accessionsReducer = accessionsSlice.reducer;
+const accessionsReducers = {
+  accessions: accessionsSlice.reducer,
+};
+
+export default accessionsReducers;

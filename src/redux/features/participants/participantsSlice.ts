@@ -26,8 +26,6 @@ export const participantCreateSlice = createSlice({
   },
 });
 
-export const participantCreateReducer = participantCreateSlice.reducer;
-
 /**
  * Delete Participant
  */
@@ -41,8 +39,6 @@ export const participantDeleteSlice = createSlice({
     buildReducers(requestDeleteParticipant)(builder);
   },
 });
-
-export const participantDeleteReducer = participantDeleteSlice.reducer;
 
 /**
  * Get Participant
@@ -58,8 +54,6 @@ export const participantSlice = createSlice({
   },
 });
 
-export const participantReducer = participantSlice.reducer;
-
 /**
  * Participant list
  */
@@ -73,8 +67,6 @@ export const participantListSlice = createSlice({
     buildReducers(requestListParticipants)(builder);
   },
 });
-
-export const participantListReducer = participantListSlice.reducer;
 
 /**
  * Participant update
@@ -90,4 +82,12 @@ export const participantUpdateSlice = createSlice({
   },
 });
 
-export const participantUpdateReducer = participantUpdateSlice.reducer;
+const participantsReducers = {
+  participantCreate: participantCreateSlice.reducer,
+  participantDelete: participantDeleteSlice.reducer,
+  participant: participantSlice.reducer,
+  participantList: participantListSlice.reducer,
+  participantUpdate: participantUpdateSlice.reducer,
+};
+
+export default participantsReducers;

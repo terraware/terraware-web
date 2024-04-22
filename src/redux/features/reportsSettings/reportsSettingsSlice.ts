@@ -28,4 +28,8 @@ export const reportsSettingsSlice = createSlice({
 
 export const { setReportsSettingsAction } = reportsSettingsSlice.actions;
 
-export const reportsSettingsReducer = reportsSettingsSlice.reducer;
+const reportsSettingsReducers = {
+  reportsSettings: reportsSettingsSlice.reducer,
+};
+
+export default reportsSettingsReducers;

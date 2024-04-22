@@ -19,8 +19,6 @@ export const moduleSlice = createSlice({
   },
 });
 
-export const moduleReducer = moduleSlice.reducer;
-
 /**
  * Get Module Event
  */
@@ -36,8 +34,6 @@ export const moduleEventSlice = createSlice({
   },
 });
 
-export const moduleEventReducer = moduleEventSlice.reducer;
-
 /**
  * List Modules
  */
@@ -52,4 +48,10 @@ export const moduleListSlice = createSlice({
   },
 });
 
-export const moduleListReducer = moduleListSlice.reducer;
+const moduleReducers = {
+  module: moduleSlice.reducer,
+  moduleEvent: moduleEventSlice.reducer,
+  moduleList: moduleListSlice.reducer,
+};
+
+export default moduleReducers;

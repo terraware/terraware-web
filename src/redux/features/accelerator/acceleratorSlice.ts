@@ -19,4 +19,8 @@ export const acceleratorOrgsSlice = createSlice({
   },
 });
 
-export const acceleratorOrgsReducer = acceleratorOrgsSlice.reducer;
+const acceleratorReducers = {
+  acceleratorOrgs: acceleratorOrgsSlice.reducer,
+};
+
+export default acceleratorReducers;
