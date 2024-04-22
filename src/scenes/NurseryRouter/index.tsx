@@ -59,7 +59,7 @@ const NurseryRouter = () => {
     <Routes>
       <Route path={'/withdrawals'} element={<NurseryPlantingsAndWithdrawalsView reloadTracking={reloadTracking} />} />
       <Route
-        path={'/withdrawals/:withdrawalsId'}
+        path={'/withdrawals/:withdrawalId'}
         element={<NurseryWithdrawalsDetailsView species={species || []} plantingSubzoneNames={plantingSubzoneNames} />}
       />
       <Route path={'/reassignment/:deliveryId'} element={<NurseryReassignmentView />} />
