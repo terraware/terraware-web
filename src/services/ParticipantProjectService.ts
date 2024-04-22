@@ -169,12 +169,11 @@ const list = async (
 };
 
 const update = async (participantProject: ParticipantProject): Promise<Response> => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { projectId, ...payload } = participantProject;
 
   return httpParticipantProject.put2<UpdateProjectAcceleratorDetailsResponsePayload>({
     urlReplacements: {
-      '{projectId}': `${participantProject.projectId}`,
+      '{projectId}': `${projectId}`,
     },
     entity: payload as UpdateProjectAcceleratorDetailsRequestPayload,
   });
