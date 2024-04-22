@@ -82,14 +82,14 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
           <Routes>
             <Route path={APP_PATHS.ACCELERATOR_OVERVIEW} element={<Overview />} />
 
-            <Route path={APP_PATHS.ACCELERATOR_COHORTS} element={<Cohorts />} />
-            <Route path={APP_PATHS.ACCELERATOR_DELIVERABLES} element={<Deliverables />} />
+            <Route path={`${APP_PATHS.ACCELERATOR_COHORTS}/*`} element={<Cohorts />} />
+            <Route path={`${APP_PATHS.ACCELERATOR_DELIVERABLES}/*`} element={<Deliverables />} />
             <Route path={APP_PATHS.ACCELERATOR_MODULE_CONTENT} element={<ModuleContent />} />
-            <Route path={APP_PATHS.ACCELERATOR_PEOPLE} element={<People />} />
+            <Route path={`${APP_PATHS.ACCELERATOR_PEOPLE}/*`} element={<People />} />
             <Route path={APP_PATHS.ACCELERATOR_SCORING} element={<Scoring />} />
             <Route path={APP_PATHS.ACCELERATOR_VOTING} element={<Voting />} />
-            <Route path={APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW} element={<Participants />} />
-            <Route path={APP_PATHS.ACCELERATOR_PROJECT_VIEW} element={<ParticipantProjects />} />
+            <Route path={`${APP_PATHS.ACCELERATOR_PARTICIPANTS}/*`} element={<Participants />} />
+            <Route path={`${APP_PATHS.ACCELERATOR_PROJECT_VIEW}/*`} element={<ParticipantProjects />} />
 
             {documentProducerEnabled && (
               <Route path={APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS} element={<DocumentsRouter />} />

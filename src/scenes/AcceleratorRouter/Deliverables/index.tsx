@@ -8,8 +8,8 @@ import DeliverablesList from './DeliverablesList';
 const DeliverablesRouter = () => {
   return (
     <Routes>
-      <Route path={APP_PATHS.ACCELERATOR_DELIVERABLE_VIEW} element={<DeliverableViewWrapper />} />
-      <Route path={APP_PATHS.ACCELERATOR_DELIVERABLES} element={<DeliverablesList />} />
+      <Route path={'/:deliverableId/submissions/:projectId'} element={<DeliverableViewWrapper />} />
+      <Route path={''} element={<DeliverablesList />} />
       <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_DELIVERABLES} />} />
     </Routes>
   );

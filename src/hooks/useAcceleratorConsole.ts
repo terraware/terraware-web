@@ -5,7 +5,7 @@ import { useUser } from 'src/providers';
 import { isAllowed } from 'src/utils/acl';
 
 const useAcceleratorConsole = () => {
-  const isAcceleratorRoute = !!useMatch(APP_PATHS.ACCELERATOR);
+  const isAcceleratorRoute = !!useMatch({ path: APP_PATHS.ACCELERATOR, end: false });
   const { user } = useUser();
 
   const isAllowedViewConsole = user && isAllowed(user, 'VIEW_CONSOLE');

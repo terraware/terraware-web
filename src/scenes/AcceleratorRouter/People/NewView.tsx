@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { useTheme } from '@mui/material';
+
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
 import { requestUpdateGlobalRolesUser } from 'src/redux/features/globalRoles/globalRolesAsyncThunks';
@@ -22,6 +24,7 @@ const NewView = () => {
   const navigate = useNavigate();
   const location = useStateLocation();
   const snackbar = useSnackbar();
+  const theme = useTheme();
 
   const [user, setUser] = useState<User>();
   const [email, setEmail] = useState('');
@@ -98,7 +101,10 @@ const NewView = () => {
   }, [searchRequest]);
 
   return (
-    <Page title={strings.ADD_PERSON} contentStyle={{ display: 'flex', flexDirection: 'column' }}>
+    <Page
+      contentStyle={{ display: 'flex', flexDirection: 'column', marginRight: theme.spacing(2), width: 'auto' }}
+      title={strings.ADD_PERSON}
+    >
       <PersonForm
         busy={saveRequest?.status === 'pending'}
         emailEnabled

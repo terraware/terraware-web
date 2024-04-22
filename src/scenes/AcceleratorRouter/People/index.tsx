@@ -11,19 +11,19 @@ import SingleView from './SingleView';
 const PeopleRouter = () => {
   return (
     <Routes>
-      <Route path={APP_PATHS.ACCELERATOR_PEOPLE} element={<ListView />} />
-      <Route path={APP_PATHS.ACCELERATOR_PERSON_NEW} element={<NewView />} />
+      <Route path={'new'} element={<NewView />} />
       <Route
-        path={APP_PATHS.ACCELERATOR_PERSON}
+        path={':userId/*'}
         element={
           <PersonProvider>
             <Routes>
-              <Route path={APP_PATHS.ACCELERATOR_PERSON} element={<SingleView />} />
-              <Route path={APP_PATHS.ACCELERATOR_PERSON_EDIT} element={<EditView />} />
+              <Route path={''} element={<SingleView />} />
+              <Route path={'edit'} element={<EditView />} />
             </Routes>
           </PersonProvider>
         }
       />
+      <Route path={''} element={<ListView />} />
       <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_PEOPLE} />} />
     </Routes>
   );
