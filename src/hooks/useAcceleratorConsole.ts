@@ -1,13 +1,12 @@
-import { useLocation } from 'react-router-dom';
+import { useMatch } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 import { useUser } from 'src/providers';
 import { isAllowed } from 'src/utils/acl';
 
 const useAcceleratorConsole = () => {
+  const isAcceleratorRoute = !!useMatch({ path: APP_PATHS.ACCELERATOR, end: false });
   const { user } = useUser();
-  const location = useLocation();
-  const isAcceleratorRoute = location.pathname.startsWith(APP_PATHS.ACCELERATOR);
 
   const isAllowedViewConsole = user && isAllowed(user, 'VIEW_CONSOLE');
 
