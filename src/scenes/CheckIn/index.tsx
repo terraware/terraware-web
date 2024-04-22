@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Container, Grid, useTheme } from '@mui/material';
 import { Theme } from '@mui/material';
