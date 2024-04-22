@@ -24,4 +24,9 @@ export const subLocationsSlice = createSlice({
 });
 
 export const { setSubLocationsAction } = subLocationsSlice.actions;
-export const subLocationsReducer = subLocationsSlice.reducer;
+
+const subLocationsReducers = {
+  subLocations: subLocationsSlice.reducer,
+};
+
+export default subLocationsReducers;

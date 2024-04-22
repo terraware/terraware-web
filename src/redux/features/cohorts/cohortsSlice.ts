@@ -37,7 +37,6 @@ export const cohortsSlice = createSlice({
 });
 
 export const { setCohortsAction, setCohortAction } = cohortsSlice.actions;
-export const cohortsReducer = cohortsSlice.reducer;
 
 type CohortsResponsesUnion = UpdateCohortResponsePayload;
 type CohortsRequestsState = Record<string, StatusT<CohortsResponsesUnion>>;
@@ -54,4 +53,9 @@ export const cohortsRequestsSlice = createSlice({
   },
 });
 
-export const cohortsRequestsReducer = cohortsRequestsSlice.reducer;
+const cohortsReducers = {
+  cohorts: cohortsSlice.reducer,
+  cohortsRequests: cohortsRequestsSlice.reducer,
+};
+
+export default cohortsReducers;

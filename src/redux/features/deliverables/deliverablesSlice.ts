@@ -23,8 +23,6 @@ export const deliverablesListSlice = createSlice({
   },
 });
 
-export const deliverablesSearchReducer = deliverablesListSlice.reducer;
-
 /**
  * Individual Deliverable
  * Can be accessed by a request ID or by a deliverable/project ID string
@@ -50,8 +48,6 @@ export const deliverablesSlice = createSlice({
   },
 });
 
-export const deliverablesReducer = deliverablesSlice.reducer;
-
 /**
  * Simple OK/response for requests such as updating deliverable status, keeps
  * state of deliverable id that was edited.
@@ -68,4 +64,10 @@ export const deliverablesEditSlice = createSlice({
   },
 });
 
-export const deliverablesEditReducer = deliverablesEditSlice.reducer;
+const deliverablesReducers = {
+  deliverablesSearch: deliverablesListSlice.reducer,
+  deliverables: deliverablesSlice.reducer,
+  deliverablesEdit: deliverablesEditSlice.reducer,
+};
+
+export default deliverablesReducers;
