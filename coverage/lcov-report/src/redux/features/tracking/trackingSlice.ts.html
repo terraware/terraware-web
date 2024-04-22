@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/36</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/36</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
@@ -203,7 +203,8 @@
 <a name='L138'></a><a href='#L138'>138</a>
 <a name='L139'></a><a href='#L139'>139</a>
 <a name='L140'></a><a href='#L140'>140</a>
-<a name='L141'></a><a href='#L141'>141</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L141'></a><a href='#L141'>141</a>
+<a name='L142'></a><a href='#L142'>142</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -252,7 +253,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -275,8 +275,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -296,8 +294,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -327,13 +323,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -342,7 +343,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 &nbsp;
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
@@ -392,7 +394,6 @@ export const trackingSlice = <span class="cstat-no" title="statement not covered
 });
 &nbsp;
 export const { setPlantingSiteAction, setPlantingSitesAction } = <span class="cstat-no" title="statement not covered" >trackingSlice.actions;</span>
-export const trackingReducer = <span class="cstat-no" title="statement not covered" >trackingSlice.reducer;</span>
 &nbsp;
 // Define a type for the search slice state
 type SearchData = {
@@ -415,8 +416,6 @@ export const plantingSitesSearchResultsSlice = <span class="cstat-no" title="sta
 &nbsp;
 export const { setPlantingSitesSearchResultsAction } = <span class="cstat-no" title="statement not covered" >plantingSitesSearchResultsSlice.actions;</span>
 &nbsp;
-export const plantingSitesSearchResultsReducer = <span class="cstat-no" title="statement not covered" >plantingSitesSearchResultsSlice.reducer;</span>
-&nbsp;
 // Planting Site Population Data Slice
 type SitePopulationData = {
   error?: string;
@@ -438,8 +437,6 @@ export const sitePopulationSlice = <span class="cstat-no" title="statement not c
 });
 &nbsp;
 export const { setSitePopulationAction } = <span class="cstat-no" title="statement not covered" >sitePopulationSlice.actions;</span>
-&nbsp;
-export const sitePopulationReducer = <span class="cstat-no" title="statement not covered" >sitePopulationSlice.reducer;</span>
 &nbsp;
 // Planting Site Reported Plants Slice
 type SiteReportedPlantsData = {
@@ -467,8 +464,6 @@ export const siteReportedPlantsSlice = <span class="cstat-no" title="statement n
 &nbsp;
 export const { setSiteReportedPlantsAction } = <span class="cstat-no" title="statement not covered" >siteReportedPlantsSlice.actions;</span>
 &nbsp;
-export const siteReportedPlantsReducer = <span class="cstat-no" title="statement not covered" >siteReportedPlantsSlice.reducer;</span>
-&nbsp;
 // Monitoring plots
 &nbsp;
 type MonitoringPlotsState = Record&lt;string, StatusT&lt;MonitoringPlotsResponse&gt;&gt;;
@@ -482,7 +477,15 @@ const monitoringPlotsSlice = <span class="cstat-no" title="statement not covered
   extraReducers: buildReducers&lt;MonitoringPlotsResponse&gt;(requestMonitoringPlots),
 });
 &nbsp;
-export const monitoringPlotsReducer = <span class="cstat-no" title="statement not covered" >monitoringPlotsSlice.reducer;</span>
+const trackingReducers = <span class="cstat-no" title="statement not covered" >{</span>
+  tracking: trackingSlice.reducer,
+  plantingSitesSearchResults: plantingSitesSearchResultsSlice.reducer,
+  sitePopulation: sitePopulationSlice.reducer,
+  siteReportedPlantsResults: siteReportedPlantsSlice.reducer,
+  monitoringPlots: monitoringPlotsSlice.reducer,
+};
+&nbsp;
+export default trackingReducers;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -490,7 +493,7 @@ export const monitoringPlotsReducer = <span class="cstat-no" title="statement no
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-18T17:12:04.585Z
+                at 2024-04-22T13:26:25.329Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

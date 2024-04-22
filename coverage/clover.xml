@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1713460325215" clover="3.2.0">
-  <project timestamp="1713460325215" name="All files">
-    <metrics statements="21129" coveredstatements="918" conditionals="13195" coveredconditionals="228" methods="6637" coveredmethods="162" elements="40961" coveredelements="1308" complexity="0" loc="21129" ncloc="21129" packages="198" files="928" classes="928"/>
+<coverage generated="1713792385980" clover="3.2.0">
+  <project timestamp="1713792385980" name="All files">
+    <metrics statements="21098" coveredstatements="918" conditionals="13195" coveredconditionals="228" methods="6637" coveredmethods="162" elements="40930" coveredelements="1308" complexity="0" loc="21098" ncloc="21098" packages="198" files="929" classes="929"/>
     <package name="src">
       <metrics statements="167" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="46" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -8688,12 +8688,12 @@
       <metrics statements="10" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>
       <file name="rootReducer.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/rootReducer.ts">
         <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="72" count="0" type="stmt"/>
-        <line num="132" count="0" type="stmt"/>
-        <line num="137" count="0" type="stmt"/>
-        <line num="138" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="139" count="0" type="stmt"/>
-        <line num="142" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="64" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
       </file>
       <file name="store.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/store.ts">
         <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
@@ -8809,7 +8809,7 @@
       </file>
     </package>
     <package name="src.redux.features.batches">
-      <metrics statements="47" coveredstatements="0" conditionals="33" coveredconditionals="0" methods="10" coveredmethods="0"/>
+      <metrics statements="46" coveredstatements="0" conditionals="33" coveredconditionals="0" methods="10" coveredmethods="0"/>
       <file name="batchesAsyncThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/batches/batchesAsyncThunks.ts">
         <metrics statements="33" coveredstatements="0" conditionals="31" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
@@ -8852,7 +8852,7 @@
         <line num="5" count="0" type="stmt"/>
       </file>
       <file name="batchesSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/batches/batchesSlice.ts">
-        <metrics statements="12" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <metrics statements="11" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
@@ -8864,11 +8864,10 @@
         <line num="43" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="44" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.redux.features.cohorts">
-      <metrics statements="51" coveredstatements="0" conditionals="26" coveredconditionals="0" methods="16" coveredmethods="0"/>
+      <metrics statements="50" coveredstatements="0" conditionals="26" coveredconditionals="0" methods="16" coveredmethods="0"/>
       <file name="cohortsAsyncThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/cohorts/cohortsAsyncThunks.ts">
         <metrics statements="28" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
@@ -8910,7 +8909,7 @@
         <line num="12" count="0" type="stmt"/>
       </file>
       <file name="cohortsSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/cohorts/cohortsSlice.ts">
-        <metrics statements="17" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <metrics statements="16" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
@@ -8922,16 +8921,15 @@
         <line num="30" count="0" type="stmt"/>
         <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="39" count="0" type="stmt"/>
-        <line num="40" count="0" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="47" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
         <line num="52" count="0" type="stmt"/>
-        <line num="53" count="0" type="stmt"/>
-        <line num="57" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.redux.features.deliverables">
-      <metrics statements="49" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="16" coveredmethods="0"/>
+      <metrics statements="47" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="16" coveredmethods="0"/>
       <file name="deliverablesAsyncThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/deliverables/deliverablesAsyncThunks.ts">
         <metrics statements="24" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
@@ -8970,25 +8968,23 @@
         <line num="14" count="0" type="stmt"/>
       </file>
       <file name="deliverablesSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/deliverables/deliverablesSlice.ts">
-        <metrics statements="18" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <metrics statements="16" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
-        <line num="26" count="0" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="36" count="0" type="stmt"/>
-        <line num="37" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="38" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
-        <line num="53" count="0" type="stmt"/>
-        <line num="59" count="0" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
-        <line num="66" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
         <line num="67" count="0" type="stmt"/>
-        <line num="71" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.redux.features.documentProducer">
@@ -9296,7 +9292,7 @@
       </file>
     </package>
     <package name="src.redux.features.draftPlantingSite">
-      <metrics statements="67" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="31" coveredmethods="0"/>
+      <metrics statements="64" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="31" coveredmethods="0"/>
       <file name="draftPlantingSiteSelectors.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/draftPlantingSite/draftPlantingSiteSelectors.ts">
         <metrics statements="25" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="22" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
@@ -9326,7 +9322,7 @@
         <line num="60" count="0" type="stmt"/>
       </file>
       <file name="draftPlantingSiteSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/draftPlantingSite/draftPlantingSiteSlice.ts">
-        <metrics statements="17" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <metrics statements="14" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="17" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
@@ -9341,9 +9337,6 @@
         <line num="59" count="0" type="stmt"/>
         <line num="64" count="0" type="stmt"/>
         <line num="68" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="70" count="0" type="stmt"/>
-        <line num="71" count="0" type="stmt"/>
       </file>
       <file name="draftPlantingSiteThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/draftPlantingSite/draftPlantingSiteThunks.ts">
         <metrics statements="25" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="5" coveredmethods="0"/>
@@ -9375,7 +9368,7 @@
       </file>
     </package>
     <package name="src.redux.features.globalRoles">
-      <metrics statements="36" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="13" coveredmethods="0"/>
+      <metrics statements="34" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="13" coveredmethods="0"/>
       <file name="globalRolesAsyncThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/globalRoles/globalRolesAsyncThunks.ts">
         <metrics statements="18" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="9" count="0" type="stmt"/>
@@ -9407,19 +9400,17 @@
         <line num="10" count="0" type="stmt"/>
       </file>
       <file name="globalRolesSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/globalRoles/globalRolesSlice.ts">
-        <metrics statements="12" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <metrics statements="10" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
-        <line num="26" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="39" count="0" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
         <line num="56" count="0" type="stmt"/>
-        <line num="60" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.redux.features.message">
@@ -9440,7 +9431,7 @@
       </file>
     </package>
     <package name="src.redux.features.modules">
-      <metrics statements="32" coveredstatements="0" conditionals="15" coveredconditionals="0" methods="15" coveredmethods="0"/>
+      <metrics statements="30" coveredstatements="0" conditionals="15" coveredconditionals="0" methods="15" coveredmethods="0"/>
       <file name="modulesAsyncThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/modules/modulesAsyncThunks.ts">
         <metrics statements="15" coveredstatements="0" conditionals="15" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="6" count="0" type="stmt"/>
@@ -9468,23 +9459,21 @@
         <line num="10" count="0" type="stmt"/>
       </file>
       <file name="modulesSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/modules/modulesSlice.ts">
-        <metrics statements="12" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <metrics statements="10" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="11" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
-        <line num="22" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="39" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.redux.features.observations">
-      <metrics statements="330" coveredstatements="0" conditionals="148" coveredconditionals="0" methods="177" coveredmethods="0"/>
+      <metrics statements="325" coveredstatements="0" conditionals="148" coveredconditionals="0" methods="177" coveredmethods="0"/>
       <file name="observationDetailsSelectors.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/observations/observationDetailsSelectors.ts">
         <metrics statements="13" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="11" coveredmethods="0"/>
         <line num="26" count="0" type="stmt"/>
@@ -9615,35 +9604,30 @@
         <line num="206" count="0" type="stmt"/>
       </file>
       <file name="observationsSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/observations/observationsSlice.ts">
-        <metrics statements="28" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <metrics statements="23" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="19" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
         <line num="50" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
-        <line num="57" count="0" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
         <line num="67" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="74" count="0" type="stmt"/>
-        <line num="75" count="0" type="stmt"/>
-        <line num="80" count="0" type="stmt"/>
-        <line num="81" count="0" type="stmt"/>
-        <line num="87" count="0" type="stmt"/>
-        <line num="89" count="0" type="stmt"/>
-        <line num="96" count="0" type="stmt"/>
-        <line num="103" count="0" type="stmt"/>
+        <line num="72" count="0" type="stmt"/>
+        <line num="73" count="0" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="86" count="0" type="stmt"/>
+        <line num="93" count="0" type="stmt"/>
         <line num="104" count="0" type="stmt"/>
-        <line num="110" count="0" type="stmt"/>
-        <line num="112" count="0" type="stmt"/>
-        <line num="119" count="0" type="stmt"/>
+        <line num="106" count="0" type="stmt"/>
+        <line num="113" count="0" type="stmt"/>
       </file>
       <file name="observationsThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/observations/observationsThunks.ts">
         <metrics statements="21" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="0"/>
@@ -9847,7 +9831,7 @@
       </file>
     </package>
     <package name="src.redux.features.participantProjects">
-      <metrics statements="33" coveredstatements="0" conditionals="11" coveredconditionals="0" methods="12" coveredmethods="0"/>
+      <metrics statements="31" coveredstatements="0" conditionals="11" coveredconditionals="0" methods="12" coveredmethods="0"/>
       <file name="participantProjectsAsyncThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/participantProjects/participantProjectsAsyncThunks.ts">
         <metrics statements="15" coveredstatements="0" conditionals="11" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="9" count="0" type="stmt"/>
@@ -9876,23 +9860,21 @@
         <line num="10" count="0" type="stmt"/>
       </file>
       <file name="participantProjectsSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/participantProjects/participantProjectsSlice.ts">
-        <metrics statements="12" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <metrics statements="10" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
-        <line num="26" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="38" count="0" type="stmt"/>
-        <line num="42" count="0" type="stmt"/>
-        <line num="47" count="0" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.redux.features.participants">
-      <metrics statements="58" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="22" coveredmethods="0"/>
+      <metrics statements="54" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="22" coveredmethods="0"/>
       <file name="participantsAsyncThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/participants/participantsAsyncThunks.ts">
         <metrics statements="27" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="12" count="0" type="stmt"/>
@@ -9938,31 +9920,27 @@
         <line num="18" count="0" type="stmt"/>
       </file>
       <file name="participantsSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/participants/participantsSlice.ts">
-        <metrics statements="20" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <metrics statements="16" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="18" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
-        <line num="57" count="0" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
-        <line num="66" count="0" type="stmt"/>
-        <line num="68" count="0" type="stmt"/>
-        <line num="73" count="0" type="stmt"/>
-        <line num="77" count="0" type="stmt"/>
-        <line num="82" count="0" type="stmt"/>
-        <line num="84" count="0" type="stmt"/>
-        <line num="89" count="0" type="stmt"/>
-        <line num="93" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="76" count="0" type="stmt"/>
+        <line num="81" count="0" type="stmt"/>
+        <line num="85" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.redux.features.plantings">
-      <metrics statements="105" coveredstatements="0" conditionals="60" coveredconditionals="0" methods="48" coveredmethods="0"/>
+      <metrics statements="103" coveredstatements="0" conditionals="60" coveredconditionals="0" methods="48" coveredmethods="0"/>
       <file name="plantingsAsyncThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/plantings/plantingsAsyncThunks.ts">
         <metrics statements="17" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="9" coveredmethods="0"/>
         <line num="12" count="0" type="stmt"/>
@@ -10057,7 +10035,7 @@
         <line num="174" count="0" type="stmt"/>
       </file>
       <file name="plantingsSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/plantings/plantingsSlice.ts">
-        <metrics statements="11" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <metrics statements="9" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="29" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
@@ -10066,9 +10044,7 @@
         <line num="46" count="0" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
         <line num="60" count="0" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
-        <line num="63" count="0" type="stmt"/>
-        <line num="64" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
       </file>
       <file name="plantingsThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/plantings/plantingsThunks.ts">
         <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
@@ -10082,7 +10058,7 @@
       </file>
     </package>
     <package name="src.redux.features.projects">
-      <metrics statements="53" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="17" coveredmethods="0"/>
+      <metrics statements="52" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="17" coveredmethods="0"/>
       <file name="projectsAsyncThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/projects/projectsAsyncThunks.ts">
         <metrics statements="16" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="13" count="0" type="stmt"/>
@@ -10111,7 +10087,7 @@
         <line num="11" count="0" type="stmt"/>
       </file>
       <file name="projectsSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/projects/projectsSlice.ts">
-        <metrics statements="18" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <metrics statements="17" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="19" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
@@ -10123,13 +10099,12 @@
         <line num="34" count="0" type="stmt"/>
         <line num="37" count="0" type="stmt"/>
         <line num="45" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="53" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
         <line num="58" count="0" type="stmt"/>
         <line num="59" count="0" type="stmt"/>
-        <line num="60" count="0" type="stmt"/>
-        <line num="64" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
       </file>
       <file name="projectsThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/projects/projectsThunks.ts">
         <metrics statements="14" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="4" coveredmethods="0"/>
@@ -10176,7 +10151,7 @@
       </file>
     </package>
     <package name="src.redux.features.scores">
-      <metrics statements="22" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="10" coveredmethods="0"/>
+      <metrics statements="21" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="10" coveredmethods="0"/>
       <file name="scoresAsyncThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/scores/scoresAsyncThunks.ts">
         <metrics statements="11" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
@@ -10198,15 +10173,14 @@
         <line num="6" count="0" type="stmt"/>
       </file>
       <file name="scoresSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/scores/scoresSlice.ts">
-        <metrics statements="8" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="10" count="0" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.redux.features.snackbar">
@@ -10231,7 +10205,11 @@
       </file>
     </package>
     <package name="src.redux.features.species">
-      <metrics statements="32" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="10" coveredmethods="0"/>
+      <metrics statements="33" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="10" coveredmethods="0"/>
+      <file name="index.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/species/index.ts">
+        <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="4" count="0" type="stmt"/>
+      </file>
       <file name="speciesProjectsSelectors.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/species/speciesProjectsSelectors.ts">
         <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="3" count="0" type="stmt"/>
@@ -10297,7 +10275,7 @@
         <line num="20" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
-        <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
       </file>
       <file name="subLocationsThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/subLocations/subLocationsThunks.ts">
         <metrics statements="11" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="6" coveredmethods="0"/>
@@ -10315,7 +10293,7 @@
       </file>
     </package>
     <package name="src.redux.features.tracking">
-      <metrics statements="136" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="56" coveredmethods="0"/>
+      <metrics statements="132" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="56" coveredmethods="0"/>
       <file name="sitePopulationSelector.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/tracking/sitePopulationSelector.ts">
         <metrics statements="33" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="19" coveredmethods="0"/>
         <line num="6" count="0" type="stmt"/>
@@ -10390,7 +10368,7 @@
         <line num="42" count="0" type="stmt"/>
       </file>
       <file name="trackingSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/tracking/trackingSlice.ts">
-        <metrics statements="36" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="7" coveredmethods="0"/>
+        <metrics statements="32" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="23" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
@@ -10404,29 +10382,25 @@
         <line num="41" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="43" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="49" count="0" type="stmt"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="60" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
         <line num="65" count="0" type="stmt"/>
-        <line num="66" count="0" type="stmt"/>
-        <line num="71" count="0" type="stmt"/>
-        <line num="73" count="0" type="stmt"/>
-        <line num="81" count="0" type="stmt"/>
-        <line num="83" count="0" type="stmt"/>
-        <line num="88" count="0" type="stmt"/>
-        <line num="89" count="0" type="stmt"/>
-        <line num="90" count="0" type="stmt"/>
-        <line num="95" count="0" type="stmt"/>
-        <line num="97" count="0" type="stmt"/>
-        <line num="110" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="80" count="0" type="stmt"/>
+        <line num="85" count="0" type="stmt"/>
+        <line num="86" count="0" type="stmt"/>
+        <line num="87" count="0" type="stmt"/>
+        <line num="92" count="0" type="stmt"/>
+        <line num="105" count="0" type="stmt"/>
+        <line num="107" count="0" type="stmt"/>
         <line num="112" count="0" type="stmt"/>
-        <line num="117" count="0" type="stmt"/>
+        <line num="113" count="0" type="stmt"/>
         <line num="118" count="0" type="stmt"/>
-        <line num="123" count="0" type="stmt"/>
-        <line num="125" count="0" type="stmt"/>
-        <line num="131" count="0" type="stmt"/>
+        <line num="124" count="0" type="stmt"/>
+        <line num="126" count="0" type="stmt"/>
         <line num="133" count="0" type="stmt"/>
-        <line num="140" count="0" type="stmt"/>
       </file>
       <file name="trackingThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/tracking/trackingThunks.ts">
         <metrics statements="36" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="10" coveredmethods="0"/>
@@ -10469,7 +10443,7 @@
       </file>
     </package>
     <package name="src.redux.features.user">
-      <metrics statements="28" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="12" coveredmethods="0"/>
+      <metrics statements="27" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="12" coveredmethods="0"/>
       <file name="userAnalyticsSelectors.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/user/userAnalyticsSelectors.ts">
         <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="3" count="0" type="stmt"/>
@@ -10503,19 +10477,18 @@
         <line num="7" count="0" type="stmt"/>
       </file>
       <file name="usersSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/user/usersSlice.ts">
-        <metrics statements="8" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="11" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
-        <line num="22" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="38" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.redux.features.votes">
-      <metrics statements="21" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="6" coveredmethods="0"/>
+      <metrics statements="20" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="6" coveredmethods="0"/>
       <file name="votesAsyncThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/votes/votesAsyncThunks.ts">
         <metrics statements="11" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
@@ -10536,15 +10509,14 @@
         <line num="5" count="0" type="stmt"/>
       </file>
       <file name="votesSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/votes/votesSlice.ts">
-        <metrics statements="8" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="11" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
-        <line num="22" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.redux.hooks">
