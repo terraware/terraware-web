@@ -23,7 +23,7 @@ import LocationTimeZoneSelector from '../../components/LocationTimeZoneSelector'
 import PageForm from '../../components/common/PageForm';
 import TextField from '../../components/common/Textfield/Textfield';
 
-type NavigateToSeedBankObject = {
+export type NavigateToFacilityObject = {
   navigate: boolean;
   id?: number;
 };
@@ -36,7 +36,7 @@ export default function SeedBankView(): JSX.Element {
   const [validateDates, setValidateDates] = useState(false);
   const [editedSubLocations, setEditedSubLocations] = useState<PartialSubLocation[]>();
   const snackbar = useSnackbar();
-  const [navigateToSeedBank, setNavigateToSeedBank] = useState<NavigateToSeedBankObject>({
+  const [navigateToSeedBank, setNavigateToSeedBank] = useState<NavigateToFacilityObject>({
     navigate: false,
     id: undefined,
   });

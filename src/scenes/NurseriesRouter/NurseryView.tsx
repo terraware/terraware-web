@@ -24,6 +24,7 @@ import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import LocationTimeZoneSelector from '../../components/LocationTimeZoneSelector';
 import PageForm from '../../components/common/PageForm';
 import TextField from '../../components/common/Textfield/Textfield';
+import { NavigateToFacilityObject } from '../SeedBanksRouter/SeedBankView';
 
 export default function NurseryView(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
@@ -33,6 +34,10 @@ export default function NurseryView(): JSX.Element {
   const [editedSubLocations, setEditedSubLocations] = useState<PartialSubLocation[]>();
   const snackbar = useSnackbar();
   const theme = useTheme();
+  const [navigateToNursery, setNavigateToNursery] = useState<NavigateToFacilityObject>({
+    navigate: false,
+    id: undefined,
+  });
 
   const [record, setRecord, onChange] = useForm<Facility>({
     name: '',
@@ -59,6 +64,12 @@ export default function NurseryView(): JSX.Element {
       setSelectedNursery(seedBanks?.find((sb) => sb?.id === parseInt(nurseryId, 10)));
     }
   }, [nurseryId, selectedOrganization]);
+
+  useEffect(() => {
+    if (navigateToNursery.navigate) {
+      goToNursery(navigateToNursery.id);
+    }
+  }, [selectedOrganization]);
 
   useEffect(() => {
     setRecord({
@@ -125,7 +136,7 @@ export default function NurseryView(): JSX.Element {
       if (!selectedNursery) {
         id = (response as CreateFacilityResponse).facilityId || undefined;
       }
-      goToNursery(id);
+      setNavigateToNursery({ navigate: true, id: id });
     } else {
       snackbar.toastError();
     }
