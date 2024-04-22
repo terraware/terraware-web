@@ -6,7 +6,7 @@ import ProjectProvider from 'src/providers/Project/ProjectProvider';
 
 import ListView from './ListView';
 import ModuleAdditionalResourcesView from './ModuleAdditionalResources';
-import ModuleEventSessionView from './ModuleEventView';
+import ModuleEventSessionView from './ModuleEventSessionView';
 import ModulePreparationMaterialsView from './ModulePreparationMaterials';
 import ModuleView from './ModuleView';
 
