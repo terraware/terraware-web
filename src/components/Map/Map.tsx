@@ -474,6 +474,7 @@ export default function Map(props: MapProps): JSX.Element {
           <MapViewStyleControl mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
           {popupInfo && popupRenderer && renderedPopup && (
             <Popup
+              key={popupInfo.lat + popupInfo.lng}
               anchor={popupRenderer.anchor ?? 'top'}
               longitude={Number(popupInfo.lng)}
               latitude={Number(popupInfo.lat)}
