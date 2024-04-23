@@ -9,18 +9,21 @@ import { getDateRangeString } from 'src/utils/dateFormatter';
 
 interface ModuleEntryProps {
   index: number;
-  last?: boolean;
   module: Module;
   projectId: number;
 }
 
-const ModuleEntry = ({ index, last, module, projectId }: ModuleEntryProps) => {
+const ModuleEntry = ({ index, module, projectId }: ModuleEntryProps) => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
   const { goToModule } = useNavigateTo();
 
   return (
-    <Box paddingY={theme.spacing(3)} borderBottom={last ? undefined : `1px solid ${theme.palette.TwClrBgTertiary}`}>
+    <Box
+      borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}
+      paddingY={theme.spacing(3)}
+      sx={{ '&:last-child': { border: 'none' } }}
+    >
       <Grid container display={'flex'} justifyContent={'space-between'} marginBottom={theme.spacing(1)}>
         <Grid item>
           <Typography
