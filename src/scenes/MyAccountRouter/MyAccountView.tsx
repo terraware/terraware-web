@@ -47,8 +47,10 @@ import DeleteOrgDialog from './DeleteOrgModal';
 import LeaveOrganizationDialog from './LeaveOrganizationModal';
 
 type MyAccountProps = {
-  organizations?: Organization[];
+  className?: string;
   edit: boolean;
+  hasNav?: boolean;
+  organizations?: Organization[];
   reloadData?: () => void;
 };
 
@@ -63,11 +65,13 @@ export default function MyAccountView(props: MyAccountProps): JSX.Element | null
 }
 
 type MyAccountContentProps = {
-  user: User;
-  organizations?: Organization[];
+  className?: string;
   edit: boolean;
-  reloadUser: () => void;
+  hasNav?: boolean;
+  organizations?: Organization[];
   reloadData?: () => void;
+  reloadUser: () => void;
+  user: User;
 };
 
 /**
@@ -92,11 +96,13 @@ const columns = (): TableColumnType[] => [
 ];
 
 const MyAccountContent = ({
-  user,
-  organizations,
+  className,
   edit,
-  reloadUser,
+  hasNav,
+  organizations,
   reloadData,
+  reloadUser,
+  user,
 }: MyAccountContentProps): JSX.Element => {
   const { isMobile } = useDeviceInfo();
   const supportedLocales = useSupportedLocales();
@@ -320,7 +326,7 @@ const MyAccountContent = ({
   };
 
   return (
-    <TfMain>
+    <TfMain className={className}>
       <PageForm
         cancelID='cancelAccountChange'
         saveID='saveAccountChange'
@@ -357,12 +363,12 @@ const MyAccountContent = ({
             />
           </>
         )}
-        <PageHeaderWrapper nextElement={contentRef.current}>
+        <PageHeaderWrapper nextElement={contentRef.current} hasNav={hasNav}>
           <Box
             display='flex'
             justifyContent='space-between'
             marginBottom={theme.spacing(4)}
-            paddingLeft={theme.spacing(3)}
+            padding={hasNav === false ? theme.spacing(0, 5) : theme.spacing(0, 0, 0, 3)}
             marginTop={organizations && organizations.length > 0 ? 0 : theme.spacing(12)}
           >
             <TitleDescription title={strings.MY_ACCOUNT} description={strings.MY_ACCOUNT_DESC} style={{ padding: 0 }} />
@@ -389,8 +395,9 @@ const MyAccountContent = ({
           ref={contentRef}
           sx={{
             backgroundColor: theme.palette.TwClrBg,
-            padding: theme.spacing(3),
             borderRadius: '32px',
+            margin: theme.spacing(0, hasNav === false ? 4 : 0),
+            padding: theme.spacing(3),
           }}
         >
           <Box sx={isMobile ? { width: 'calc(100vw - 72px)' } : {}}>

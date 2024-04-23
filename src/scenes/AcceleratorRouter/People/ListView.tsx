@@ -147,11 +147,7 @@ const PeopleView = () => {
   }, [dispatchSearchRequest, lastSearchRequest, snackbar, deleteRolesRequest]);
 
   return (
-    <Page
-      contentStyle={{ marginRight: theme.spacing(2), width: 'auto' }}
-      title={strings.PEOPLE}
-      rightComponent={rightComponent}
-    >
+    <Page title={strings.PEOPLE} rightComponent={rightComponent}>
       <TableWithSearchFilters
         columns={columns}
         defaultSearchOrder={defaultSearchOrder}
