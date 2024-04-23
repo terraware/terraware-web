@@ -4,13 +4,15 @@ import { Box } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Tabs } from '@terraware/web-components';
 
-import Page from 'src/components/Page';
+import PageHeader from 'src/components/PageHeader';
 import { useLocalization, useUser } from 'src/providers';
 import CohortsListView from 'src/scenes/AcceleratorRouter/Cohorts/CohortsListView';
 import ParticipantProjectsList from 'src/scenes/AcceleratorRouter/ParticipantProjects/ListView';
 import ParticipantsList from 'src/scenes/AcceleratorRouter/Participants/ParticipantsList';
 import strings from 'src/strings';
 import useStickyTabs from 'src/utils/useStickyTabs';
+
+import AcceleratorMain from '../AcceleratorMain';
 
 const useStyles = makeStyles(() => ({
   tabs: {
@@ -70,11 +72,12 @@ const OverviewView = () => {
   });
 
   return (
-    <Page title={strings.OVERVIEW}>
+    <AcceleratorMain>
+      <PageHeader title={strings.OVERVIEW} />
       <Box display='flex' flexDirection='column' flexGrow={1} className={classes.tabs}>
         <Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} />
       </Box>
-    </Page>
+    </AcceleratorMain>
   );
 };
 
