@@ -230,7 +230,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
             <Route path={APP_PATHS.PEOPLE + '/*'} element={<PeopleRouter />} />
             {/* modules router *must* come before the projects router,
             or else the path will be picked up by the projects router */}
-            <Route path={APP_PATHS.PROJECT_MODULES} element={<ModulesRouter />} />
+            <Route path={APP_PATHS.PROJECT_MODULES + '/*'} element={<ModulesRouter />} />
             <Route
               path={APP_PATHS.PROJECTS + '/*'}
               element={
