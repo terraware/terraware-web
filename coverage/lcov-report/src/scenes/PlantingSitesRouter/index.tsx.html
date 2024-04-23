@@ -57,7 +57,7 @@
         <template id="filterTemplate">
             <div class="quiet">
                 Filter:
-                <input oninput="onInput()" type="search" id="fileSearch">
+                <input type="search" id="fileSearch">
             </div>
         </template>
     </div>
@@ -162,34 +162,7 @@
 <a name='L97'></a><a href='#L97'>97</a>
 <a name='L98'></a><a href='#L98'>98</a>
 <a name='L99'></a><a href='#L99'>99</a>
-<a name='L100'></a><a href='#L100'>100</a>
-<a name='L101'></a><a href='#L101'>101</a>
-<a name='L102'></a><a href='#L102'>102</a>
-<a name='L103'></a><a href='#L103'>103</a>
-<a name='L104'></a><a href='#L104'>104</a>
-<a name='L105'></a><a href='#L105'>105</a>
-<a name='L106'></a><a href='#L106'>106</a>
-<a name='L107'></a><a href='#L107'>107</a>
-<a name='L108'></a><a href='#L108'>108</a>
-<a name='L109'></a><a href='#L109'>109</a>
-<a name='L110'></a><a href='#L110'>110</a>
-<a name='L111'></a><a href='#L111'>111</a>
-<a name='L112'></a><a href='#L112'>112</a>
-<a name='L113'></a><a href='#L113'>113</a>
-<a name='L114'></a><a href='#L114'>114</a>
-<a name='L115'></a><a href='#L115'>115</a>
-<a name='L116'></a><a href='#L116'>116</a>
-<a name='L117'></a><a href='#L117'>117</a>
-<a name='L118'></a><a href='#L118'>118</a>
-<a name='L119'></a><a href='#L119'>119</a>
-<a name='L120'></a><a href='#L120'>120</a>
-<a name='L121'></a><a href='#L121'>121</a>
-<a name='L122'></a><a href='#L122'>122</a>
-<a name='L123'></a><a href='#L123'>123</a>
-<a name='L124'></a><a href='#L124'>124</a>
-<a name='L125'></a><a href='#L125'>125</a>
-<a name='L126'></a><a href='#L126'>126</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L100'></a><a href='#L100'>100</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -227,16 +200,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -288,14 +251,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -306,20 +261,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEffect } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 &nbsp;
 import { CircularProgress } from '@mui/material';
 &nbsp;
-import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
 import { requestPlantingSiteObservationsResults } from 'src/redux/features/observations/observationsThunks';
@@ -352,22 +299,12 @@ export default function <span class="fstat-no" title="function not covered" >Pla
   const userDrawnDetailedSites = <span class="cstat-no" title="statement not covered" >isEnabled('User Detailed Sites');</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Switch&gt;
-      &lt;Route path={APP_PATHS.PLANTING_SITES_NEW}&gt;
-        &lt;PlantingSiteCreate reloadPlantingSites={reloadTracking} /&gt;
-      &lt;/Route&gt;
-      {userDrawnDetailedSites &amp;&amp; (
-        &lt;Route path={APP_PATHS.PLANTING_SITES_DRAFT_VIEW}&gt;
-          &lt;PlantingSitesDraftRouter /&gt;
-        &lt;/Route&gt;
-      )}
-      &lt;Route path={APP_PATHS.PLANTING_SITES_VIEW}&gt;
-        &lt;PlantingSitesRouter reloadTracking={reloadTracking} /&gt;
-      &lt;/Route&gt;
-      &lt;Route path={'*'}&gt;
-        &lt;PlantingSitesList /&gt;
-      &lt;/Route&gt;
-    &lt;/Switch&gt;
+    &lt;Routes&gt;
+      &lt;Route path={'/new'} element={&lt;PlantingSiteCreate reloadPlantingSites={reloadTracking} /&gt;} /&gt;
+      {userDrawnDetailedSites &amp;&amp; &lt;Route path={'/draft/*'} element={&lt;PlantingSitesDraftRouter /&gt;} /&gt;}
+      &lt;Route path={'/:plantingSiteId/*'} element={&lt;PlantingSitesRouter reloadTracking={reloadTracking} /&gt;} /&gt;
+      &lt;Route path={'*'} element={&lt;PlantingSitesList /&gt;} /&gt;
+    &lt;/Routes&gt;
   );
 }
 &nbsp;
@@ -403,39 +340,24 @@ export function <span class="fstat-no" title="function not covered" >PlantingSit
   }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Switch&gt;
-      &lt;Route path={APP_PATHS.PLANTING_SITES_SUBZONE_VIEW}&gt;
-        &lt;PlantingSiteSubzoneView /&gt;
-      &lt;/Route&gt;
-      &lt;Route path={APP_PATHS.PLANTING_SITES_ZONE_VIEW}&gt;
-        &lt;PlantingSiteZoneView /&gt;
-      &lt;/Route&gt;
-      &lt;Route path={APP_PATHS.PLANTING_SITES_EDIT}&gt;
-        &lt;PlantingSiteCreate reloadPlantingSites={reloadTracking} /&gt;
-      &lt;/Route&gt;
-      &lt;Route path={APP_PATHS.PLANTING_SITES_VIEW}&gt;
-        &lt;PlantingSiteView /&gt;
-      &lt;/Route&gt;
-    &lt;/Switch&gt;
+    &lt;Routes&gt;
+      &lt;Route path={'/zone/:zoneId/subzone/:subzoneId'} element={&lt;PlantingSiteSubzoneView /&gt;} /&gt;
+      &lt;Route path={'/zone/:zoneId'} element={&lt;PlantingSiteZoneView /&gt;} /&gt;
+      &lt;Route path={'/edit'} element={&lt;PlantingSiteCreate reloadPlantingSites={reloadTracking} /&gt;} /&gt;
+      &lt;Route path={'*'} element={&lt;PlantingSiteView /&gt;} /&gt;
+    &lt;/Routes&gt;
   );
 }
 &nbsp;
 export function <span class="fstat-no" title="function not covered" >PlantingSitesDraftRouter(</span>): JSX.Element {
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Switch&gt;
-      &lt;Route path={APP_PATHS.PLANTING_SITES_DRAFT_ZONE_VIEW}&gt;
-        &lt;PlantingSiteDraftZoneView /&gt;
-      &lt;/Route&gt;
-      &lt;Route path={APP_PATHS.PLANTING_SITES_DRAFT_NEW}&gt;
-        &lt;PlantingSiteDraftCreate /&gt;
-      &lt;/Route&gt;
-      &lt;Route path={APP_PATHS.PLANTING_SITES_DRAFT_EDIT}&gt;
-        &lt;PlantingSiteDraftEdit /&gt;
-      &lt;/Route&gt;
-      &lt;Route path={APP_PATHS.PLANTING_SITES_DRAFT_VIEW}&gt;
-        &lt;PlantingSiteDraftView /&gt;
-      &lt;/Route&gt;
-    &lt;/Switch&gt;
+    &lt;Routes&gt;
+      &lt;Route path={'/:plantingSiteId/zone/:zoneId'} element={&lt;PlantingSiteDraftZoneView /&gt;} /&gt;
+      &lt;Route path={'/new'} element={&lt;PlantingSiteDraftCreate /&gt;} /&gt;
+      &lt;Route path={'/:plantingSiteId/edit'} element={&lt;PlantingSiteDraftEdit /&gt;} /&gt;
+      &lt;Route path={'/:plantingSiteId'} element={&lt;PlantingSiteDraftView /&gt;} /&gt;
+      &lt;Route path={'*'} element={&lt;PlantingSiteDraftView /&gt;} /&gt;
+    &lt;/Routes&gt;
   );
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -445,7 +367,7 @@ export function <span class="fstat-no" title="function not covered" >PlantingSit
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-22T14:37:29.837Z
+                at 2024-04-23T13:38:23.998Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

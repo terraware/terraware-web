@@ -57,7 +57,7 @@
         <template id="filterTemplate">
             <div class="quiet">
                 Filter:
-                <input oninput="onInput()" type="search" id="fileSearch">
+                <input type="search" id="fileSearch">
             </div>
         </template>
     </div>
@@ -858,7 +858,11 @@
 <a name='L793'></a><a href='#L793'>793</a>
 <a name='L794'></a><a href='#L794'>794</a>
 <a name='L795'></a><a href='#L795'>795</a>
-<a name='L796'></a><a href='#L796'>796</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L796'></a><a href='#L796'>796</a>
+<a name='L797'></a><a href='#L797'>797</a>
+<a name='L798'></a><a href='#L798'>798</a>
+<a name='L799'></a><a href='#L799'>799</a>
+<a name='L800'></a><a href='#L800'>800</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1292,6 +1296,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1408,6 +1413,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1605,6 +1611,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1624,6 +1631,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1654,7 +1662,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 &nbsp;
 import { Grid, Popover, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -1794,7 +1802,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
   const debouncedSearchTerm = <span class="cstat-no" title="statement not covered" >useDebounce(searchValue, 250);</span>
   const [results, setResults] = <span class="cstat-no" title="statement not covered" >useState&lt;SpeciesSearchResultRow[]&gt;();</span>
   const query = <span class="cstat-no" title="statement not covered" >useQuery();</span>
-  const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
+  const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
 &nbsp;
   const [filterAnchorEl, setFilterAnchorEl] = <span class="cstat-no" title="statement not covered" >useState&lt;null | HTMLElement&gt;(null);</span>
   const handleFilterClick = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>vent: React.MouseEvent&lt;HTMLElement&gt;) =&gt; {</span>
@@ -2086,6 +2094,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
   }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder]);
 &nbsp;
   const onApplyFilters = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
 <span class="fstat-no" title="function not covered" >    as</span>ync (reviewErrors?: boolean) =&gt; {
       const params: SearchRequestPayload = <span class="cstat-no" title="statement not covered" >getParams();</span>
 &nbsp;
@@ -2132,16 +2141,16 @@ export default function <span class="fstat-no" title="function not covered" >Spe
 <span class="cstat-no" title="statement not covered" >    if (shouldCheckData) {</span>
 <span class="cstat-no" title="statement not covered" >      query.delete('checkData');</span>
 <span class="cstat-no" title="statement not covered" >      setCheckDataModalOpen(true);</span>
-<span class="cstat-no" title="statement not covered" >      history.replace({ pathname: APP_PATHS.SPECIES, search: query.toString() });</span>
+<span class="cstat-no" title="statement not covered" >      navigate({ pathname: APP_PATHS.SPECIES, search: query.toString() }, { replace: true });</span>
     }
-  }, [query, setCheckDataModalOpen, history]);
+  }, [query, setCheckDataModalOpen, navigate]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    onApplyFilters();</span>
   }, [onApplyFilters]);
 &nbsp;
   const onNewSpecies = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    history.push(APP_PATHS.SPECIES_NEW);</span>
+<span class="cstat-no" title="statement not covered" >    navigate(APP_PATHS.SPECIES_NEW);</span>
   };
 &nbsp;
   const clearSearch = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -2203,6 +2212,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
 &nbsp;
   const reloadDataProblemsHandler = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setHasNewData(false);</span>
+    // eslint-disable-next-line @typescript-eslint/await-thenable
 <span class="cstat-no" title="statement not covered" >    await reloadData();</span>
 <span class="cstat-no" title="statement not covered" >    setHandleProblemsColumn(true);</span>
   };
@@ -2300,7 +2310,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
       isClientSorted
         ? undefined
         : {
-            field: orderBy as string,
+            field: orderBy,
             direction: order === 'asc' ? 'Ascending' : 'Descending',
           }
     );
@@ -2400,6 +2410,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             &lt;Tooltip title={strings.EXPORT}&gt;
               &lt;Button
                 id='downladSpeciesReport'
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >downloadReportHandler()}</span>
                 type='passive'
                 priority='ghost'
@@ -2428,6 +2439,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
                   showTopBar={false}
                   Renderer={SpeciesCellRenderer}
                   controlledOnSelect={true}
+                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
                   reloadData={reloadDataProblemsHandler}
                   sortHandler={onSortChange}
                   isPresorted={!!searchSortOrder}
@@ -2455,7 +2467,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-22T14:37:29.837Z
+                at 2024-04-23T13:38:23.998Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

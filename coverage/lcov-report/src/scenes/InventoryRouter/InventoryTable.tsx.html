@@ -57,7 +57,7 @@
         <template id="filterTemplate">
             <div class="quiet">
                 Filter:
-                <input oninput="onInput()" type="search" id="fileSearch">
+                <input type="search" id="fileSearch">
             </div>
         </template>
     </div>
@@ -281,7 +281,8 @@
 <a name='L216'></a><a href='#L216'>216</a>
 <a name='L217'></a><a href='#L217'>217</a>
 <a name='L218'></a><a href='#L218'>218</a>
-<a name='L219'></a><a href='#L219'>219</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -337,6 +338,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -500,7 +502,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 &nbsp;
 import { Box, Grid } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -549,12 +551,13 @@ export default function <span class="fstat-no" title="function not covered" >Inv
   } = <span class="cstat-no" title="statement not covered" >props;</span>
 &nbsp;
   const [selectedRows, setSelectedRows] = <span class="cstat-no" title="statement not covered" >useState&lt;any[]&gt;([]);</span>
-  const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
+  const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
   const { sessionFilters, setSessionFilters } = <span class="cstat-no" title="statement not covered" >useSessionFilters(origin.toLowerCase());</span>
   const [withdrawTooltip, setWithdrawTooltip] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;();</span>
 &nbsp;
   // Sync query filters into view
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { showEmptyBatches: filterShowEmptyBatches, ...restFilters } = <span class="cstat-no" title="statement not covered" >filters;</span>
     const { showEmptyBatches: sessionFilterShowEmptyBatches, ...restSessionFilters } = <span class="cstat-no" title="statement not covered" >sessionFilters;</span>
 &nbsp;
@@ -592,7 +595,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
         : selectedRows.filter(<span class="fstat-no" title="function not covered" >(r</span>) =&gt; <span class="cstat-no" title="statement not covered" >r.species_id)</span>.map(<span class="fstat-no" title="function not covered" >(r</span>ow) =&gt; <span class="cstat-no" title="statement not covered" >`batchId=${row.batchId}`)</span>;
     const searchParams = <span class="cstat-no" title="statement not covered" >origin === 'Species' ? speciesIds.join('&amp;') : batchIds.join('&amp;');</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    history.push({</span>
+<span class="cstat-no" title="statement not covered" >    navigate({</span>
       pathname: path,
       search: `?${searchParams}&amp;source=${window.location.pathname}`,
     });
@@ -636,7 +639,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
 &nbsp;
   const onSortChange = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(o</span>rder: SortOrder, orderBy: string) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setSearchSortOrder({</span>
-      field: orderBy as string,
+      field: orderBy,
       direction: order === 'asc' ? 'Ascending' : 'Descending',
     });
   };
@@ -647,8 +650,8 @@ export default function <span class="fstat-no" title="function not covered" >Inv
 &nbsp;
   const getResultsSpeciesNames = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    return results</span>
-      .map(
-<span class="fstat-no" title="function not covered" >        (r</span>esult: SearchResponseElement &amp; { facilityInventories?: string }) =&gt; <span class="cstat-no" title="statement not covered" >result.facilityInventories?.split('\r')</span>
+      .map(<span class="fstat-no" title="function not covered" >(r</span>esult: SearchResponseElement &amp; { facilityInventories?: string }) =&gt;
+<span class="cstat-no" title="statement not covered" >        result.facilityInventories?.split('\r')</span>
       )
       .flat()
       .filter(<span class="fstat-no" title="function not covered" >(s</span>pecies) =&gt; <span class="cstat-no" title="statement not covered" >!!species)</span> as string[];
@@ -724,7 +727,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-22T14:37:29.837Z
+                at 2024-04-23T13:38:23.998Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

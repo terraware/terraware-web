@@ -57,7 +57,7 @@
         <template id="filterTemplate">
             <div class="quiet">
                 Filter:
-                <input oninput="onInput()" type="search" id="fileSearch">
+                <input type="search" id="fileSearch">
             </div>
         </template>
     </div>
@@ -237,7 +237,8 @@
 <a name='L172'></a><a href='#L172'>172</a>
 <a name='L173'></a><a href='#L173'>173</a>
 <a name='L174'></a><a href='#L174'>174</a>
-<a name='L175'></a><a href='#L175'>175</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -399,6 +400,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -412,7 +414,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 &nbsp;
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
@@ -445,7 +447,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
   const [orgPreferenceForId, setOrgPreferenceForId] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;(defaultSelectedOrg.id);</span>
   const [orgAPIRequestStatus, setOrgAPIRequestStatus] = <span class="cstat-no" title="statement not covered" >useState&lt;APIRequestStatus&gt;(APIRequestStatus.AWAITING);</span>
   const [organizations, setOrganizations] = <span class="cstat-no" title="statement not covered" >useState&lt;Organization[]&gt;();</span>
-  const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
+  const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
   const query = <span class="cstat-no" title="statement not covered" >useQuery();</span>
   const location = <span class="cstat-no" title="statement not covered" >useStateLocation();</span>
   const { userPreferences, updateUserPreferences, bootstrapped: userBootstrapped } = <span class="cstat-no" title="statement not covered" >useUser();</span>
@@ -535,7 +537,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
           }
 <span class="cstat-no" title="statement not covered" >          if (queryOrganizationId !== orgToUse.id.toString()) {</span>
 <span class="cstat-no" title="statement not covered" >            query.set('organizationId', orgToUse.id.toString());</span>
-<span class="cstat-no" title="statement not covered" >            history.replace(getLocation(location.pathname, location, query.toString()));</span>
+<span class="cstat-no" title="statement not covered" >            navigate(getLocation(location.pathname, location, query.toString()), { replace: true });</span>
           }
         }
       }
@@ -543,7 +545,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
 <span class="cstat-no" title="statement not covered" >      if (queryOrganizationId &amp;&amp; (!orgToUse || isAcceleratorRoute)) {</span>
         // user does not belong to any orgs, clear the url param org id
 <span class="cstat-no" title="statement not covered" >        query.delete('organizationId');</span>
-<span class="cstat-no" title="statement not covered" >        history.replace(getLocation(location.pathname, location, query.toString()));</span>
+<span class="cstat-no" title="statement not covered" >        navigate(getLocation(location.pathname, location, query.toString()), { replace: true });</span>
       }
     }
   }, [
@@ -551,7 +553,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
     selectedOrganization,
     query,
     location,
-    history,
+    navigate,
     userPreferences,
     userBootstrapped,
     isAcceleratorRoute,
@@ -569,7 +571,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
   }, [selectedOrganization?.id]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (orgAPIRequestStatus === APIRequestStatus.FAILED) {</span>
-<span class="cstat-no" title="statement not covered" >    history.push(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);</span>
+<span class="cstat-no" title="statement not covered" >    navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);</span>
   }
 &nbsp;
   const [organizationData, setOrganizationData] = <span class="cstat-no" title="statement not covered" >useState&lt;ProvidedOrganizationData&gt;({</span>
@@ -577,6 +579,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
     setSelectedOrganization,
     organizations: organizations ?? [],
     orgPreferences,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     reloadOrganizations,
     reloadOrgPreferences,
     bootstrapped,
@@ -592,7 +595,7 @@ export default function <span class="fstat-no" title="function not covered" >Org
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-22T14:37:29.837Z
+                at 2024-04-23T13:38:23.998Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

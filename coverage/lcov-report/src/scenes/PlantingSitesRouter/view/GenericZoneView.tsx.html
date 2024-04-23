@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
@@ -57,7 +57,7 @@
         <template id="filterTemplate">
             <div class="quiet">
                 Filter:
-                <input oninput="onInput()" type="search" id="fileSearch">
+                <input type="search" id="fileSearch">
             </div>
         </template>
     </div>
@@ -221,7 +221,8 @@
 <a name='L156'></a><a href='#L156'>156</a>
 <a name='L157'></a><a href='#L157'>157</a>
 <a name='L158'></a><a href='#L158'>158</a>
-<a name='L159'></a><a href='#L159'>159</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -351,13 +352,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -379,8 +381,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useMemo, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 &nbsp;
 import { Box } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -451,7 +453,7 @@ export default function <span class="fstat-no" title="function not covered" >Gen
 }: Props): JSX.Element {
   const [search, setSearch] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
-  const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
+  const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
   const { plantingSiteId, zoneId } = <span class="cstat-no" title="statement not covered" >useParams&lt;{ plantingSiteId: string; zoneId: string }&gt;();</span>
 &nbsp;
   const plantingSite = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >siteSelector(state, Number(plantingSiteId)))</span>;</span>
@@ -468,11 +470,11 @@ export default function <span class="fstat-no" title="function not covered" >Gen
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (!plantingSite) {</span>
-<span class="cstat-no" title="statement not covered" >    history.push(APP_PATHS.PLANTING_SITES);</span>
+<span class="cstat-no" title="statement not covered" >    navigate(APP_PATHS.PLANTING_SITES);</span>
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (!plantingZone) {</span>
-<span class="cstat-no" title="statement not covered" >    history.push(siteViewUrl.replace(':plantingSiteId', plantingSiteId));</span>
+<span class="cstat-no" title="statement not covered" >  if (!plantingZone &amp;&amp; plantingSiteId) {</span>
+<span class="cstat-no" title="statement not covered" >    navigate(siteViewUrl.replace(':plantingSiteId', plantingSiteId));</span>
   }
 &nbsp;
   const crumbs: Crumb[] = <span class="cstat-no" title="statement not covered" >useMemo(</span>
@@ -509,6 +511,7 @@ export default function <span class="fstat-no" title="function not covered" >Gen
 &nbsp;
 const DetailsRenderer =
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  (c</span>lasses: any, plantingSiteId: number, zoneId: number, subzoneViewUrl: string) =&gt;</span>
+  // eslint-disable-next-line react/display-name
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  (p</span>rops: RendererProps&lt;TableRowType&gt;): JSX.Element =&gt; {</span>
     const { column, row } = <span class="cstat-no" title="statement not covered" >props;</span>
 &nbsp;
@@ -544,7 +547,7 @@ const DetailsRenderer =
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-22T14:37:29.837Z
+                at 2024-04-23T13:38:23.998Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

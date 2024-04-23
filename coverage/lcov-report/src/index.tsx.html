@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
@@ -57,7 +57,7 @@
         <template id="filterTemplate">
             <div class="quiet">
                 Filter:
-                <input oninput="onInput()" type="search" id="fileSearch">
+                <input type="search" id="fileSearch">
             </div>
         </template>
     </div>
@@ -103,7 +103,17 @@
 <a name='L38'></a><a href='#L38'>38</a>
 <a name='L39'></a><a href='#L39'>39</a>
 <a name='L40'></a><a href='#L40'>40</a>
-<a name='L41'></a><a href='#L41'>41</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -118,6 +128,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -144,8 +162,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
-import ReactDOM from 'react-dom';
-import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
+import { createRoot } from 'react-dom/client';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 &nbsp;
 import { ThemeProvider } from '@mui/material';
 &nbsp;
@@ -153,30 +171,39 @@ import App from './App';
 import AppError from './AppError';
 import { APP_PATHS } from './constants';
 import './index.css';
+import './index.css';
 import reportWebVitals from './reportWebVitals';
 import strings from './strings';
 import theme from './theme';
 &nbsp;
-<span class="cstat-no" title="statement not covered" >ReactDOM.render(</span>
+const root = <span class="cstat-no" title="statement not covered" >createRoot(document.getElementById('root')!);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >root.render(</span>
   &lt;React.StrictMode&gt;
     &lt;React.Suspense fallback={strings.LOADING}&gt;
       &lt;Router&gt;
-        &lt;Switch&gt;
-          &lt;Route path={APP_PATHS.ERROR}&gt;
-            &lt;ThemeProvider theme={theme}&gt;
-              &lt;AppError /&gt;
-            &lt;/ThemeProvider&gt;
-          &lt;/Route&gt;
-          &lt;Route path={'*'}&gt;
-            &lt;ThemeProvider theme={theme}&gt;
-              &lt;App /&gt;
-            &lt;/ThemeProvider&gt;
-          &lt;/Route&gt;
-        &lt;/Switch&gt;
+        &lt;Routes&gt;
+          &lt;Route
+            path={APP_PATHS.ERROR}
+            element={
+              &lt;ThemeProvider theme={theme}&gt;
+                &lt;AppError /&gt;
+              &lt;/ThemeProvider&gt;
+            }
+          /&gt;
+&nbsp;
+          &lt;Route
+            path={'*'}
+            element={
+              &lt;ThemeProvider theme={theme}&gt;
+                &lt;App /&gt;
+              &lt;/ThemeProvider&gt;
+            }
+          /&gt;
+        &lt;/Routes&gt;
       &lt;/Router&gt;
     &lt;/React.Suspense&gt;
-  &lt;/React.StrictMode&gt;,
-  document.getElementById('root')
+  &lt;/React.StrictMode&gt;
 );
 &nbsp;
 // If you want to start measuring performance in your app, pass a function
@@ -190,7 +217,7 @@ import theme from './theme';
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-22T14:37:29.837Z
+                at 2024-04-23T13:38:23.998Z
             </div>
         <script src="../prettify.js"></script>
         <script>

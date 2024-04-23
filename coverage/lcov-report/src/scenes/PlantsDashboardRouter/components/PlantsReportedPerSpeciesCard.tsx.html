@@ -57,7 +57,7 @@
         <template id="filterTemplate">
             <div class="quiet">
                 Filter:
-                <input oninput="onInput()" type="search" id="fileSearch">
+                <input type="search" id="fileSearch">
             </div>
         </template>
     </div>
@@ -218,9 +218,7 @@
 <a name='L153'></a><a href='#L153'>153</a>
 <a name='L154'></a><a href='#L154'>154</a>
 <a name='L155'></a><a href='#L155'>155</a>
-<a name='L156'></a><a href='#L156'>156</a>
-<a name='L157'></a><a href='#L157'>157</a>
-<a name='L158'></a><a href='#L158'>158</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L156'></a><a href='#L156'>156</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -290,9 +288,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -446,22 +442,20 @@ const SiteWithZonesCard = <span class="cstat-no" title="statement not covered" >
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (populationSelector) {</span>
       const speciesQuantities: Record&lt;string, number&gt; = <span class="cstat-no" title="statement not covered" >{};</span>
-<span class="cstat-no" title="statement not covered" >      populationSelector?.forEach(</span>
-<span class="fstat-no" title="function not covered" >        (z</span>one) =&gt;
-<span class="cstat-no" title="statement not covered" >          zone.plantingSubzones?.forEach(</span>
-<span class="fstat-no" title="function not covered" >            (s</span>ubzone) =&gt;
-<span class="cstat-no" title="statement not covered" >              subzone.populations?.forEach(<span class="fstat-no" title="function not covered" >(p</span>opulation) =&gt; {</span>
-                const numPlants = <span class="cstat-no" title="statement not covered" >+population['totalPlants(raw)'];</span>
-<span class="cstat-no" title="statement not covered" >                if (isNaN(numPlants)) {</span>
-<span class="cstat-no" title="statement not covered" >                  return;</span>
-                }
-<span class="cstat-no" title="statement not covered" >                if (speciesQuantities[population.species_scientificName]) {</span>
-<span class="cstat-no" title="statement not covered" >                  speciesQuantities[population.species_scientificName] += numPlants;</span>
-                } else {
-<span class="cstat-no" title="statement not covered" >                  speciesQuantities[population.species_scientificName] = numPlants;</span>
-                }
-              })
-          )
+<span class="cstat-no" title="statement not covered" >      populationSelector?.forEach(<span class="fstat-no" title="function not covered" >(z</span>one) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >        zone.plantingSubzones?.forEach(<span class="fstat-no" title="function not covered" >(s</span>ubzone) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >          subzone.populations?.forEach(<span class="fstat-no" title="function not covered" >(p</span>opulation) =&gt; {</span>
+            const numPlants = <span class="cstat-no" title="statement not covered" >+population['totalPlants(raw)'];</span>
+<span class="cstat-no" title="statement not covered" >            if (isNaN(numPlants)) {</span>
+<span class="cstat-no" title="statement not covered" >              return;</span>
+            }
+<span class="cstat-no" title="statement not covered" >            if (speciesQuantities[population.species_scientificName]) {</span>
+<span class="cstat-no" title="statement not covered" >              speciesQuantities[population.species_scientificName] += numPlants;</span>
+            } else {
+<span class="cstat-no" title="statement not covered" >              speciesQuantities[population.species_scientificName] = numPlants;</span>
+            }
+          })
+        )
       );
 <span class="cstat-no" title="statement not covered" >      setLabels(Object.keys(speciesQuantities).map(<span class="fstat-no" title="function not covered" >(n</span>ame) =&gt; <span class="cstat-no" title="statement not covered" >truncate(name, MAX_SPECIES_NAME_LENGTH))</span>);</span>
 <span class="cstat-no" title="statement not covered" >      setValues(Object.values(speciesQuantities));</span>
@@ -541,7 +535,7 @@ const ChartData = <span class="cstat-no" title="statement not covered" ><span cl
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-22T14:37:29.837Z
+                at 2024-04-23T13:38:23.998Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

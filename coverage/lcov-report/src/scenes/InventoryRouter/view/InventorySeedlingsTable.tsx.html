@@ -57,7 +57,7 @@
         <template id="filterTemplate">
             <div class="quiet">
                 Filter:
-                <input oninput="onInput()" type="search" id="fileSearch">
+                <input type="search" id="fileSearch">
             </div>
         </template>
     </div>
@@ -1006,7 +1006,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 &nbsp;
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem, TableColumnType } from '@terraware/web-components';
@@ -1081,7 +1081,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
   const { isMobile, isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
-  const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
+  const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
 &nbsp;
   const [openExportModal, setOpenExportModal] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [temporalSearchValue, setTemporalSearchValue] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
@@ -1219,14 +1219,14 @@ export default function <span class="fstat-no" title="function not covered" >Inv
     const batch = <span class="cstat-no" title="statement not covered" >batches.find(<span class="fstat-no" title="function not covered" >(b</span>) =&gt; <span class="cstat-no" title="statement not covered" >b.batchNumber === openBatchNumber)</span>;</span>
 <span class="cstat-no" title="statement not covered" >    if (batch) {</span>
 <span class="cstat-no" title="statement not covered" >      if (origin === 'Nursery') {</span>
-<span class="cstat-no" title="statement not covered" >        history.push({</span>
+<span class="cstat-no" title="statement not covered" >        navigate({</span>
           pathname: APP_PATHS.INVENTORY_BATCH_FOR_NURSERY.replace(':nurseryId', `${originId}`).replace(
             ':batchId',
             `${batch.id}`
           ),
         });
       } else {
-<span class="cstat-no" title="statement not covered" >        history.push({</span>
+<span class="cstat-no" title="statement not covered" >        navigate({</span>
           pathname: APP_PATHS.INVENTORY_BATCH_FOR_SPECIES.replace(':speciesId', `${originId}`).replace(
             ':batchId',
             `${batch.id}`
@@ -1234,7 +1234,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
         });
       }
     }
-  }, [batches, history, openBatchNumber, origin, originId]);
+  }, [batches, navigate, openBatchNumber, origin, originId]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setFilteredBatches(filterEmptyBatches(batches));</span>
@@ -1268,7 +1268,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
 &nbsp;
   const onBatchSelected = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(b</span>atch: any, fromColumn?: string) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (fromColumn === 'withdraw') {</span>
-<span class="cstat-no" title="statement not covered" >      history.push({</span>
+<span class="cstat-no" title="statement not covered" >      navigate({</span>
         pathname: APP_PATHS.BATCH_WITHDRAW,
         search: `?batchId=${batch.id.toString()}&amp;source=${window.location.pathname}`,
       });
@@ -1283,7 +1283,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
 <span class="cstat-no" title="statement not covered" >        to = APP_PATHS.INVENTORY_BATCH_FOR_SPECIES.replace(':speciesId', `${originId}`);</span>
       }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      history.push(to.replace(':batchId', batch.id));</span>
+<span class="cstat-no" title="statement not covered" >      navigate(to.replace(':batchId', batch.id));</span>
     }
   };
 &nbsp;
@@ -1293,7 +1293,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
   };
 &nbsp;
   const bulkWithdrawSelectedRows = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    history.push({</span>
+<span class="cstat-no" title="statement not covered" >    navigate({</span>
       pathname: APP_PATHS.BATCH_WITHDRAW,
       search: getSelectedRowsAsQueryParams(),
     });
@@ -1349,7 +1349,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
 &nbsp;
   const onSortChange = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(o</span>rder: SortOrder, orderBy: string) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setSearchSortOrder({</span>
-      field: orderBy as string,
+      field: orderBy,
       direction: order === 'asc' ? 'Ascending' : 'Descending',
     });
   };
@@ -1483,7 +1483,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-22T14:37:29.837Z
+                at 2024-04-23T13:38:23.998Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

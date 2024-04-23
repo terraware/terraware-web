@@ -57,7 +57,7 @@
         <template id="filterTemplate">
             <div class="quiet">
                 Filter:
-                <input oninput="onInput()" type="search" id="fileSearch">
+                <input type="search" id="fileSearch">
             </div>
         </template>
     </div>
@@ -196,17 +196,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useMemo } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 &nbsp;
 import { APP_PATHS } from 'src/constants';
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >useNavigateTo(</span>) {
-  const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
+  const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
       goToDeliverable: <span class="fstat-no" title="function not covered" >(d</span>eliverableId: number, projectId: number) =&gt;
-<span class="cstat-no" title="statement not covered" >        history.push({</span>
+<span class="cstat-no" title="statement not covered" >        navigate({</span>
           pathname: APP_PATHS.DELIVERABLE_VIEW.replace(':deliverableId', `${deliverableId}`).replace(
             ':projectId',
             `${projectId}`
@@ -214,51 +214,51 @@ export default function <span class="fstat-no" title="function not covered" >use
         }),
 &nbsp;
       goToDocuments: <span class="fstat-no" title="function not covered" >()</span> =&gt;
-<span class="cstat-no" title="statement not covered" >        history.push({</span>
+<span class="cstat-no" title="statement not covered" >        navigate({</span>
           pathname: APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS,
         }),
 &nbsp;
       goToDocumentNew: <span class="fstat-no" title="function not covered" >()</span> =&gt;
-<span class="cstat-no" title="statement not covered" >        history.push({</span>
+<span class="cstat-no" title="statement not covered" >        navigate({</span>
           pathname: APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_NEW,
         }),
 &nbsp;
       goToModule: <span class="fstat-no" title="function not covered" >(p</span>rojectId: number, moduleId: number) =&gt;
-<span class="cstat-no" title="statement not covered" >        history.push({</span>
+<span class="cstat-no" title="statement not covered" >        navigate({</span>
           pathname: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
         }),
 &nbsp;
       goToModuleEvent: <span class="fstat-no" title="function not covered" >(p</span>rojectId: number, eventId: number, moduleId: number) =&gt;
-<span class="cstat-no" title="statement not covered" >        history.push({</span>
+<span class="cstat-no" title="statement not covered" >        navigate({</span>
           pathname: APP_PATHS.PROJECT_MODULE_EVENT.replace(':projectId', `${projectId}`)
             .replace(':moduleId', `${moduleId}`)
             .replace(':eventId', `${eventId}`),
         }),
 &nbsp;
       goToParticipant: <span class="fstat-no" title="function not covered" >(p</span>articipantId: number) =&gt;
-<span class="cstat-no" title="statement not covered" >        history.push({</span>
+<span class="cstat-no" title="statement not covered" >        navigate({</span>
           pathname: APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW.replace(':participantId', `${participantId}`),
         }),
 &nbsp;
       goToParticipantsList: <span class="fstat-no" title="function not covered" >()</span> =&gt;
-<span class="cstat-no" title="statement not covered" >        history.push({</span>
+<span class="cstat-no" title="statement not covered" >        navigate({</span>
           pathname: APP_PATHS.ACCELERATOR_OVERVIEW,
           search: 'tab=participants',
         }),
 &nbsp;
       goToParticipantProject: <span class="fstat-no" title="function not covered" >(p</span>rojectId: number) =&gt;
-<span class="cstat-no" title="statement not covered" >        history.push({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`) }),</span>
+<span class="cstat-no" title="statement not covered" >        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`) }),</span>
 &nbsp;
       goToParticipantProjectEdit: <span class="fstat-no" title="function not covered" >(p</span>rojectId: number) =&gt;
-<span class="cstat-no" title="statement not covered" >        history.push({ pathname: APP_PATHS.ACCELERATOR_PROJECT_EDIT.replace(':projectId', `${projectId}`) }),</span>
+<span class="cstat-no" title="statement not covered" >        navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_EDIT.replace(':projectId', `${projectId}`) }),</span>
 &nbsp;
       goToParticipantProjectList: <span class="fstat-no" title="function not covered" >()</span> =&gt;
-<span class="cstat-no" title="statement not covered" >        history.push({</span>
+<span class="cstat-no" title="statement not covered" >        navigate({</span>
           pathname: APP_PATHS.ACCELERATOR_OVERVIEW,
           search: 'tab=projects',
         }),
     }),
-    [history]
+    [navigate]
   );
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -268,7 +268,7 @@ export default function <span class="fstat-no" title="function not covered" >use
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-22T14:37:29.837Z
+                at 2024-04-23T13:38:23.998Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

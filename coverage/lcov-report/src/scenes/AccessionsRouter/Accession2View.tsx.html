@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/160</span>
+                <span class='fraction'>0/161</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/177</span>
+                <span class='fraction'>0/179</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/159</span>
+                <span class='fraction'>0/160</span>
             </div>
         
             
@@ -57,7 +57,7 @@
         <template id="filterTemplate">
             <div class="quiet">
                 Filter:
-                <input oninput="onInput()" type="search" id="fileSearch">
+                <input type="search" id="fileSearch">
             </div>
         </template>
     </div>
@@ -790,7 +790,9 @@
 <a name='L725'></a><a href='#L725'>725</a>
 <a name='L726'></a><a href='#L726'>726</a>
 <a name='L727'></a><a href='#L727'>727</a>
-<a name='L728'></a><a href='#L728'>728</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L728'></a><a href='#L728'>728</a>
+<a name='L729'></a><a href='#L729'>729</a>
+<a name='L730'></a><a href='#L730'>730</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -923,10 +925,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1517,8 +1521,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 &nbsp;
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Grid, Link as LinkMUI, Tab, Theme, Typography, useTheme } from '@mui/material';
@@ -1601,7 +1605,7 @@ export default function <span class="fstat-no" title="function not covered" >Acc
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const { userPreferences } = <span class="cstat-no" title="statement not covered" >useUser();</span>
   const query = <span class="cstat-no" title="statement not covered" >useQuery();</span>
-  const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
+  const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
   const location = <span class="cstat-no" title="statement not covered" >useStateLocation();</span>
   const tab = <span class="cstat-no" title="statement not covered" >(query.get('tab') || '').toLowerCase();</span>
   const preselectedTab = <span class="cstat-no" title="statement not covered" >TABS.indexOf(tab) === -1 ? 'detail' : tab;</span>
@@ -1644,16 +1648,18 @@ export default function <span class="fstat-no" title="function not covered" >Acc
 &nbsp;
   const reloadData = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const populateAccession = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-      const response = <span class="cstat-no" title="statement not covered" >await AccessionService.getAccession(parseInt(accessionId, 10));</span>
-<span class="cstat-no" title="statement not covered" >      if (response.requestSucceeded) {</span>
-<span class="cstat-no" title="statement not covered" >        if (!_.isEqual(response.accession, accession)) {</span>
-<span class="cstat-no" title="statement not covered" >          setAccession(response.accession);</span>
-<span class="cstat-no" title="statement not covered" >          setHasPendingTests(</span>
-            response.accession?.viabilityTests?.some(<span class="fstat-no" title="function not covered" >(t</span>est) =&gt; <span class="cstat-no" title="statement not covered" >test.testType !== 'Cut' &amp;&amp; !test.endDate)</span> || false
-          );
+<span class="cstat-no" title="statement not covered" >      if (accessionId) {</span>
+        const response = <span class="cstat-no" title="statement not covered" >await AccessionService.getAccession(parseInt(accessionId, 10));</span>
+<span class="cstat-no" title="statement not covered" >        if (response.requestSucceeded) {</span>
+<span class="cstat-no" title="statement not covered" >          if (!_.isEqual(response.accession, accession)) {</span>
+<span class="cstat-no" title="statement not covered" >            setAccession(response.accession);</span>
+<span class="cstat-no" title="statement not covered" >            setHasPendingTests(</span>
+              response.accession?.viabilityTests?.some(<span class="fstat-no" title="function not covered" >(t</span>est) =&gt; <span class="cstat-no" title="statement not covered" >test.testType !== 'Cut' &amp;&amp; !test.endDate)</span> || false
+            );
+          }
+        } else {
+<span class="cstat-no" title="statement not covered" >          snackbar.toastError();</span>
         }
-      } else {
-<span class="cstat-no" title="statement not covered" >        snackbar.toastError();</span>
       }
     };
 &nbsp;
@@ -1715,12 +1721,12 @@ export default function <span class="fstat-no" title="function not covered" >Acc
   }, [accession, activeLocale, seedBankTimeZone]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setSelectedTab((query.get('tab') || 'detail') as string);</span>
+<span class="cstat-no" title="statement not covered" >    setSelectedTab(query.get('tab') || 'detail');</span>
   }, [query]);
 &nbsp;
   const handleChange = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(n</span>ewValue: string) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    query.set('tab', newValue);</span>
-<span class="cstat-no" title="statement not covered" >    history.push(getLocation(location.pathname, location, query.toString()));</span>
+<span class="cstat-no" title="statement not covered" >    navigate(getLocation(location.pathname, location, query.toString()));</span>
   };
 &nbsp;
   const tabStyles = <span class="cstat-no" title="statement not covered" >{</span>
@@ -2251,7 +2257,7 @@ export default function <span class="fstat-no" title="function not covered" >Acc
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-22T14:37:29.837Z
+                at 2024-04-23T13:38:23.998Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

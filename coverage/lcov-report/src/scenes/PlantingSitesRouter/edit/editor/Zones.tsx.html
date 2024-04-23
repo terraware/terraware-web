@@ -57,7 +57,7 @@
         <template id="filterTemplate">
             <div class="quiet">
                 Filter:
-                <input oninput="onInput()" type="search" id="fileSearch">
+                <input type="search" id="fileSearch">
             </div>
         </template>
     </div>
@@ -516,7 +516,8 @@
 <a name='L451'></a><a href='#L451'>451</a>
 <a name='L452'></a><a href='#L452'>452</a>
 <a name='L453'></a><a href='#L453'>453</a>
-<a name='L454'></a><a href='#L454'>454</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L454'></a><a href='#L454'>454</a>
+<a name='L455'></a><a href='#L455'>455</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -682,6 +683,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -969,7 +971,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback, useEffect, useMemo, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useMemo, useState } from 'react';
 &nbsp;
 import { Box, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
@@ -1071,7 +1073,7 @@ export default function <span class="fstat-no" title="function not covered" >Zon
       const missingZones = <span class="cstat-no" title="statement not covered" >zones === undefined;</span>
       const zonesTooSmall = <span class="cstat-no" title="statement not covered" >!!zonesData?.errorAnnotations?.length;</span>
       // check for missing zone names
-      const missingZoneNames = <span class="cstat-no" title="statement not covered" >!missingZones &amp;&amp; zones!.features.some(<span class="fstat-no" title="function not covered" >(z</span>one) =&gt; <span class="cstat-no" title="statement not covered" >!zone?.properties?.name?.trim())</span>;</span>
+      const missingZoneNames = <span class="cstat-no" title="statement not covered" >!missingZones &amp;&amp; zones.features.some(<span class="fstat-no" title="function not covered" >(z</span>one) =&gt; <span class="cstat-no" title="statement not covered" >!zone?.properties?.name?.trim())</span>;</span>
       const missingData = <span class="cstat-no" title="statement not covered" >(missingZones || missingZoneNames) &amp;&amp; !onValidate.isSaveAndClose;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (zonesTooSmall || missingData) {</span>
@@ -1118,7 +1120,7 @@ export default function <span class="fstat-no" title="function not covered" >Zon
     const exclusionsBoundary: RenderableReadOnlyBoundary[] = <span class="cstat-no" title="statement not covered" >site.exclusion</span>
       ? [
           {
-            data: { type: 'FeatureCollection', features: [toFeature(site.exclusion!, {}, 0)] },
+            data: { type: 'FeatureCollection', features: [toFeature(site.exclusion, {}, 0)] },
             id: 'exclusions',
             renderProperties: getRenderAttributes('exclusions'),
           },
@@ -1128,6 +1130,7 @@ export default function <span class="fstat-no" title="function not covered" >Zon
 <span class="cstat-no" title="statement not covered" >    return [</span>
       ...exclusionsBoundary,
       {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         data: { type: 'FeatureCollection', features: [toFeature(site.boundary!, {}, site.id)] },
         id: 'site',
         renderProperties: getRenderAttributes('site'),
@@ -1135,7 +1138,7 @@ export default function <span class="fstat-no" title="function not covered" >Zon
       {
         data: {
           type: 'FeatureCollection',
-          features: zones!.features.map(<span class="fstat-no" title="function not covered" >(f</span>eature: Feature) =&gt; <span class="cstat-no" title="statement not covered" >toZoneFeature(feature, idGenerator))</span>,
+          features: zones.features.map(<span class="fstat-no" title="function not covered" >(f</span>eature: Feature) =&gt; <span class="cstat-no" title="statement not covered" >toZoneFeature(feature, idGenerator))</span>,
         },
         id: 'zone',
         isInteractive: true,
@@ -1380,7 +1383,7 @@ const TooltipContents = <span class="cstat-no" title="statement not covered" ><s
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (validateInput()) {</span>
-<span class="cstat-no" title="statement not covered" >      onUpdate(zoneName, density as number);</span>
+<span class="cstat-no" title="statement not covered" >      onUpdate(zoneName, density);</span>
     }
   };
 &nbsp;
@@ -1429,7 +1432,7 @@ const TooltipContents = <span class="cstat-no" title="statement not covered" ><s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-22T14:37:29.837Z
+                at 2024-04-23T13:38:23.998Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

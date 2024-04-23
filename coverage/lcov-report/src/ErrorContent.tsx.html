@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
@@ -57,7 +57,7 @@
         <template id="filterTemplate">
             <div class="quiet">
                 Filter:
-                <input oninput="onInput()" type="search" id="fileSearch">
+                <input type="search" id="fileSearch">
             </div>
         </template>
     </div>
@@ -119,37 +119,7 @@
 <a name='L54'></a><a href='#L54'>54</a>
 <a name='L55'></a><a href='#L55'>55</a>
 <a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<a name='L57'></a><a href='#L57'>57</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -169,9 +139,17 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -198,10 +176,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 &nbsp;
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 &nbsp;
 import { APP_PATHS } from 'src/constants';
 import { useDocLinks } from 'src/docLinks';
@@ -209,37 +186,27 @@ import strings from 'src/strings';
 &nbsp;
 import Button from './components/common/button/Button';
 &nbsp;
-interface StyleProps {
-  inApp?: boolean;
-}
-&nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  main: {
-    paddingTop: '120px',
-    height: <span class="fstat-no" title="function not covered" >(p</span>rops: StyleProps) =&gt; (<span class="cstat-no" title="statement not covered" >props.inApp ? '100%' : 'calc(100% - 120px)')</span>,
-    width: '100%',
-    position: 'fixed',
-    background:
-      'url(/assets/error/wind.png) no-repeat 0% 100%/auto 300px, url(/assets/error/ufo.png) no-repeat 0 100%/auto 600px, url(/assets/error/land1.png) no-repeat bottom left/898px auto, url(/assets/error/land2.png) no-repeat bottom right/898px auto, url(/assets/error/mountains.png) no-repeat 0 100%/100% 400px, url(/assets/error/moon.png) no-repeat 60% 350px/auto 190px, url(/assets/error/stars.png) no-repeat 0 100%/auto 100%, url(/assets/error/background.png) no-repeat 100% 0/100% 100%, linear-gradient(to bottom right, rgb(255, 255, 255) 0%, rgb(199, 226, 234) 100%) no-repeat 0 0/auto',
-  },
-  buttonLeft: {
-    marginRight: '16px',
-  },
-}));
-&nbsp;
 interface ErrorContentProps {
   text?: string | null;
   inApp?: boolean;
 }
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >ErrorContent(</span>{ text, inApp }: ErrorContentProps) {
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles({ inApp });</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
+  const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
   const docLinks = <span class="cstat-no" title="statement not covered" >useDocLinks();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;div className={classes.main}&gt;
+    &lt;Box
+      sx={{
+        paddingTop: '120px',
+        height: inApp ? '100%' : 'calc(100% - 120px)',
+        width: '100%',
+        position: 'fixed',
+        background:
+          'url(/assets/error/wind.png) no-repeat 0% 100%/auto 300px, url(/assets/error/ufo.png) no-repeat 0 100%/auto 600px, url(/assets/error/land1.png) no-repeat bottom left/898px auto, url(/assets/error/land2.png) no-repeat bottom right/898px auto, url(/assets/error/mountains.png) no-repeat 0 100%/100% 400px, url(/assets/error/moon.png) no-repeat 60% 350px/auto 190px, url(/assets/error/stars.png) no-repeat 0 100%/auto 100%, url(/assets/error/background.png) no-repeat 100% 0/100% 100%, linear-gradient(to bottom right, rgb(255, 255, 255) 0%, rgb(199, 226, 234) 100%) no-repeat 0 0/auto',
+      }}
+    &gt;
       &lt;Grid container justifyContent='center'&gt;
         &lt;Box sx={{ margin: '0 auto', color: theme.palette.TwClrBg, width: '550px', textAlign: 'center' }}&gt;
           &lt;Typography sx={{ fontSize: '40px', fontWeight: 600, paddingBottom: '32px' }}&gt;
@@ -250,9 +217,9 @@ export default function <span class="fstat-no" title="function not covered" >Err
           &lt;Button
             label={strings.BACK_TO_TERRAWARE}
             size='medium'
-            onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >history.push(APP_PATHS.WELCOME)}</span>
-            className={classes.buttonLeft}
+            onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >navigate(APP_PATHS.WELCOME)}</span>
             type='passive'
+            style={{ marginRight: '16px' }}
           /&gt;
           &lt;Button
             size='medium'
@@ -261,7 +228,7 @@ export default function <span class="fstat-no" title="function not covered" >Err
           /&gt;
         &lt;/Box&gt;
       &lt;/Grid&gt;
-    &lt;/div&gt;
+    &lt;/Box&gt;
   );
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -271,7 +238,7 @@ export default function <span class="fstat-no" title="function not covered" >Err
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-22T14:37:29.837Z
+                at 2024-04-23T13:38:23.998Z
             </div>
         <script src="../prettify.js"></script>
         <script>

@@ -57,7 +57,7 @@
         <template id="filterTemplate">
             <div class="quiet">
                 Filter:
-                <input oninput="onInput()" type="search" id="fileSearch">
+                <input type="search" id="fileSearch">
             </div>
         </template>
     </div>
@@ -130,11 +130,7 @@
 <a name='L65'></a><a href='#L65'>65</a>
 <a name='L66'></a><a href='#L66'>66</a>
 <a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L68'></a><a href='#L68'>68</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -181,11 +177,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -204,9 +198,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 &nbsp;
-import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
@@ -240,35 +233,33 @@ const InventoryRouter = <span class="cstat-no" title="statement not covered" ><s
   }, [species, reloadSpecies]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Switch&gt;
-      &lt;Route exact path={APP_PATHS.INVENTORY}&gt;
-        &lt;InventoryV2View
-          hasNurseries={selectedOrgHasFacilityType(selectedOrganization, 'Nursery')}
-          hasSpecies={(species || []).length &gt; 0}
-        /&gt;
-      &lt;/Route&gt;
-      &lt;Route exact path={APP_PATHS.INVENTORY_NEW}&gt;
-        &lt;InventoryCreateView /&gt;
-      &lt;/Route&gt;
-      &lt;Route path={APP_PATHS.INVENTORY_WITHDRAW}&gt;
-        &lt;SpeciesBulkWithdrawView withdrawalCreatedCallback={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setWithdrawalCreated(true)}</span> /&gt;
-      &lt;/Route&gt;
-      &lt;Route path={APP_PATHS.INVENTORY_BATCH}&gt;
-        &lt;InventoryBatchView origin='Batches' species={species || []} /&gt;
-      &lt;/Route&gt;
-      &lt;Route path={APP_PATHS.INVENTORY_BATCH_FOR_NURSERY}&gt;
-        &lt;InventoryBatchView origin='Nursery' species={species || []} /&gt;
-      &lt;/Route&gt;
-      &lt;Route path={APP_PATHS.INVENTORY_BATCH_FOR_SPECIES}&gt;
-        &lt;InventoryBatchView origin='Species' species={species || []} /&gt;
-      &lt;/Route&gt;
-      &lt;Route path={APP_PATHS.INVENTORY_ITEM_FOR_NURSERY}&gt;
-        &lt;InventoryForNurseryView /&gt;
-      &lt;/Route&gt;
-      &lt;Route path={APP_PATHS.INVENTORY_ITEM_FOR_SPECIES}&gt;
-        &lt;InventoryForSpeciesView species={species || []} /&gt;
-      &lt;/Route&gt;
-    &lt;/Switch&gt;
+    &lt;Routes&gt;
+      &lt;Route
+        path={'/*'}
+        element={
+          &lt;InventoryV2View
+            hasNurseries={selectedOrgHasFacilityType(selectedOrganization, 'Nursery')}
+            hasSpecies={(species || []).length &gt; 0}
+          /&gt;
+        }
+      /&gt;
+      &lt;Route path={'/new'} element={&lt;InventoryCreateView /&gt;} /&gt;
+      &lt;Route
+        path={'/withdraw'}
+        element={&lt;SpeciesBulkWithdrawView withdrawalCreatedCallback={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setWithdrawalCreated(true)}</span> /&gt;}
+      /&gt;
+      &lt;Route path={'/batch/:batchId'} element={&lt;InventoryBatchView origin='Batches' species={species || []} /&gt;} /&gt;
+      &lt;Route
+        path={'/nursery/:nurseryId/batch/:batchId'}
+        element={&lt;InventoryBatchView origin='Nursery' species={species || []} /&gt;}
+      /&gt;
+      &lt;Route
+        path={'/species/:speciesId/batch/:batchId'}
+        element={&lt;InventoryBatchView origin='Species' species={species || []} /&gt;}
+      /&gt;
+      &lt;Route path={'/nursery/:nurseryId'} element={&lt;InventoryForNurseryView /&gt;} /&gt;
+      &lt;Route path={'/:speciesId'} element={&lt;InventoryForSpeciesView species={species || []} /&gt;} /&gt;
+    &lt;/Routes&gt;
   );
 };
 &nbsp;
@@ -280,7 +271,7 @@ export default InventoryRouter;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-22T14:37:29.837Z
+                at 2024-04-23T13:38:23.998Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

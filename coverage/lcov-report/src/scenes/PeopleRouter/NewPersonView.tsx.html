@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/51</span>
+                <span class='fraction'>0/53</span>
             </div>
         
             
@@ -57,7 +57,7 @@
         <template id="filterTemplate">
             <div class="quiet">
                 Filter:
-                <input oninput="onInput()" type="search" id="fileSearch">
+                <input type="search" id="fileSearch">
             </div>
         </template>
     </div>
@@ -628,9 +628,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 &nbsp;
-import { Box, Grid, Theme, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Dropdown } from '@terraware/web-components';
 &nbsp;
@@ -649,7 +649,7 @@ import PageForm from '../../components/common/PageForm';
 import TextField from '../../components/common/Textfield/Textfield';
 import { useOrganization } from '../../providers/hooks';
 &nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
   titleSubtitle: {
     marginTop: '8px',
     marginBottom: 0,
@@ -669,7 +669,7 @@ export default function <span class="fstat-no" title="function not covered" >Per
   const { selectedOrganization, reloadOrganizations } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
+  const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
   const [emailError, setEmailError] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const [repeatedEmail, setRepeatedEmail] = <span class="cstat-no" title="statement not covered" >useState('');</span>
@@ -702,7 +702,7 @@ export default function <span class="fstat-no" title="function not covered" >Per
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const populatePeople = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
       const response = <span class="cstat-no" title="statement not covered" >await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);</span>
-<span class="cstat-no" title="statement not covered" >      if (response.requestSucceeded) {</span>
+<span class="cstat-no" title="statement not covered" >      if (personId &amp;&amp; response.requestSucceeded) {</span>
 <span class="cstat-no" title="statement not covered" >        setPeople(response.users);</span>
 <span class="cstat-no" title="statement not covered" >        setPersonSelectedToEdit(response.users.find(<span class="fstat-no" title="function not covered" >(u</span>ser) =&gt; <span class="cstat-no" title="statement not covered" >user.id === parseInt(personId, 10))</span>);</span>
       }
@@ -715,11 +715,11 @@ export default function <span class="fstat-no" title="function not covered" >Per
   };
 &nbsp;
   const goToPeople = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    history.push({ pathname: APP_PATHS.PEOPLE });</span>
+<span class="cstat-no" title="statement not covered" >    navigate({ pathname: APP_PATHS.PEOPLE });</span>
   };
 &nbsp;
   const goToViewPerson = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(u</span>serId: string) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    history.push({ pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', userId) });</span>
+<span class="cstat-no" title="statement not covered" >    navigate({ pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', userId) });</span>
   };
 &nbsp;
   const saveUser = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
@@ -741,7 +741,7 @@ export default function <span class="fstat-no" title="function not covered" >Per
     }
 &nbsp;
     let successMessage: string | null = <span class="cstat-no" title="statement not covered" >null;</span>
-    let userId: number = <span class="cstat-no" title="statement not covered" >-1;</span>
+    let userId = <span class="cstat-no" title="statement not covered" >-1;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (!!personSelectedToEdit) {</span>
       const response = <span class="cstat-no" title="statement not covered" >await OrganizationUserService.updateOrganizationUser(</span>
@@ -773,7 +773,7 @@ export default function <span class="fstat-no" title="function not covered" >Per
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (successMessage) {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastSuccess(successMessage);</span>
-<span class="cstat-no" title="statement not covered" >      await reloadOrganizations();</span>
+<span class="cstat-no" title="statement not covered" >      reloadOrganizations();</span>
 <span class="cstat-no" title="statement not covered" >      goToViewPerson(userId.toString());</span>
     } else {
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError();</span>
@@ -788,7 +788,7 @@ export default function <span class="fstat-no" title="function not covered" >Per
         const profileLocation = <span class="cstat-no" title="statement not covered" >{</span>
           pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', profile.id.toString()),
         };
-<span class="cstat-no" title="statement not covered" >        history.push(profileLocation);</span>
+<span class="cstat-no" title="statement not covered" >        navigate(profileLocation);</span>
       }
     }
   };
@@ -916,7 +916,7 @@ export default function <span class="fstat-no" title="function not covered" >Per
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-22T14:37:29.837Z
+                at 2024-04-23T13:38:23.998Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

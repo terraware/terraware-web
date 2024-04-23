@@ -57,7 +57,7 @@
         <template id="filterTemplate">
             <div class="quiet">
                 Filter:
-                <input oninput="onInput()" type="search" id="fileSearch">
+                <input type="search" id="fileSearch">
             </div>
         </template>
     </div>
@@ -679,7 +679,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useState } from 'react';
 import { useEffect, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 &nbsp;
 import {
   Box,
@@ -784,15 +784,15 @@ export default function <span class="fstat-no" title="function not covered" >Sma
   const { user } = <span class="cstat-no" title="statement not covered" >useUser();</span>
   const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const history = <span class="cstat-no" title="statement not covered" >useHistory();</span>
+  const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
   const [newOrganizationModalOpened, setNewOrganizationModalOpened] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
   const [open, setOpen] = <span class="cstat-no" title="statement not covered" >React.useState(false);</span>
   const anchorRef = <span class="cstat-no" title="statement not covered" >React.useRef&lt;HTMLButtonElement&gt;(null);</span>
   const { isProduction } = <span class="cstat-no" title="statement not covered" >useEnvironment();</span>
   const iconLetter = <span class="cstat-no" title="statement not covered" >user?.firstName?.charAt(0) || user?.lastName?.charAt(0) || user?.email?.charAt(0);</span>
 &nbsp;
-  const navigate = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(u</span>rl: string) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    history.push(url);</span>
+  const navigateTo = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(u</span>rl: string) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    navigate(url);</span>
   };
 &nbsp;
   const handleToggle = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -825,7 +825,7 @@ export default function <span class="fstat-no" title="function not covered" >Sma
   const selectOrganization = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(n</span>ewlySelectedOrg: Organization) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setSelectedOrganization(<span class="fstat-no" title="function not covered" >(c</span>urrentlySelectedOrg: Organization | undefined) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      if (newlySelectedOrg.id !== currentlySelectedOrg?.id) {</span>
-<span class="cstat-no" title="statement not covered" >        history.push({ pathname: APP_PATHS.HOME });</span>
+<span class="cstat-no" title="statement not covered" >        navigate({ pathname: APP_PATHS.HOME });</span>
       }
 <span class="cstat-no" title="statement not covered" >      return newlySelectedOrg;</span>
     });
@@ -901,7 +901,7 @@ export default function <span class="fstat-no" title="function not covered" >Sma
                   &lt;/Box&gt;
                   &lt;MenuItem
                     onClick={<span class="fstat-no" title="function not covered" >(e</span>) =&gt; {
-<span class="cstat-no" title="statement not covered" >                      navigate(APP_PATHS.MY_ACCOUNT);</span>
+<span class="cstat-no" title="statement not covered" >                      navigateTo(APP_PATHS.MY_ACCOUNT);</span>
 <span class="cstat-no" title="statement not covered" >                      handleClose(e);</span>
                     }}
                     className={classes.menuItem}
@@ -966,7 +966,7 @@ export default function <span class="fstat-no" title="function not covered" >Sma
                     &lt;div&gt;
                       &lt;MenuItem
                         onClick={<span class="fstat-no" title="function not covered" >(e</span>) =&gt; {
-<span class="cstat-no" title="statement not covered" >                          navigate(APP_PATHS.OPT_IN);</span>
+<span class="cstat-no" title="statement not covered" >                          navigateTo(APP_PATHS.OPT_IN);</span>
 <span class="cstat-no" title="statement not covered" >                          handleClose(e);</span>
                         }}
                         className={classes.menuItem}
@@ -991,7 +991,7 @@ export default function <span class="fstat-no" title="function not covered" >Sma
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-22T14:37:29.837Z
+                at 2024-04-23T13:38:23.998Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
