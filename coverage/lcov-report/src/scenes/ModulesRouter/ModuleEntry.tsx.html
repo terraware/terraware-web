@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
@@ -111,7 +111,22 @@
 <a name='L46'></a><a href='#L46'>46</a>
 <a name='L47'></a><a href='#L47'>47</a>
 <a name='L48'></a><a href='#L48'>48</a>
-<a name='L49'></a><a href='#L49'>49</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -126,8 +141,17 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -163,32 +187,44 @@
 &nbsp;
 import Button from 'src/components/common/button/Button';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { Module } from 'src/types/Module';
+import { getDateRangeString } from 'src/utils/dateFormatter';
 &nbsp;
 interface ModuleEntryProps {
+  index: number;
   module: Module;
   projectId: number;
 }
 &nbsp;
-const ModuleEntry = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> module, projectId }: ModuleEntryProps) =&gt; {</span>
+const ModuleEntry = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> index, module, projectId }: ModuleEntryProps) =&gt; {</span>
+  const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { goToModule } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Box paddingY={theme.spacing(3)} borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}&gt;
+    &lt;Box
+      borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}
+      paddingY={theme.spacing(3)}
+      sx={{ '&amp;:last-child': { border: 'none' } }}
+    &gt;
       &lt;Grid container display={'flex'} justifyContent={'space-between'} marginBottom={theme.spacing(1)}&gt;
         &lt;Grid item&gt;
           &lt;Typography
+            component={'span'}
             fontSize={'20px'}
             fontWeight={600}
             lineHeight={'28px'}
-            component={'span'}
             marginRight={theme.spacing(3)}
           &gt;
-            {module.name}
+            {strings.formatString(strings.MODULE_N, (index + 1).toString())}
           &lt;/Typography&gt;
-          &lt;Typography component={'span'}&gt;{module.dateRange}&lt;/Typography&gt;
+          {module?.startDate &amp;&amp; module?.endDate &amp;&amp; activeLocale &amp;&amp; (
+            &lt;Typography component={'span'}&gt;
+              {getDateRangeString(module?.startDate, module?.endDate, activeLocale)}
+            &lt;/Typography&gt;
+          )}
         &lt;/Grid&gt;
         &lt;Grid item&gt;
           &lt;Button onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >goToModule(projectId, module.id)}</span> label={strings.VIEW} priority={'secondary'} /&gt;
@@ -197,11 +233,11 @@ const ModuleEntry = <span class="cstat-no" title="statement not covered" ><span 
 &nbsp;
       &lt;Box marginBottom={theme.spacing(1)}&gt;
         &lt;Typography fontSize={'24px'} fontWeight={600} lineHeight={'32px'}&gt;
-          {module.title}
+          {module.name}
         &lt;/Typography&gt;
       &lt;/Box&gt;
 &nbsp;
-      &lt;Box dangerouslySetInnerHTML={{ __html: module.description || '' }} /&gt;
+      &lt;Box dangerouslySetInnerHTML={{ __html: module.overview || '' }} /&gt;
     &lt;/Box&gt;
   );
 };
@@ -214,7 +250,7 @@ export default ModuleEntry;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-23T20:06:00.413Z
+                at 2024-04-23T21:01:26.894Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
