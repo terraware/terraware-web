@@ -35,12 +35,14 @@ const ModuleEntry = ({ index, module, projectId }: ModuleEntryProps) => {
           >
             {strings.formatString(strings.MODULE_N, (index + 1).toString())}
           </Typography>
+
           {module?.startDate && module?.endDate && activeLocale && (
             <Typography component={'span'}>
               {getDateRangeString(module?.startDate, module?.endDate, activeLocale)}
             </Typography>
           )}
         </Grid>
+
         <Grid item>
           <Button onClick={() => goToModule(projectId, module.id)} label={strings.VIEW} priority={'secondary'} />
         </Grid>

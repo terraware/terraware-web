@@ -49,11 +49,13 @@ const Header = () => {
               selectedValue={currentParticipantProject?.id}
             />
           </Grid>
+
           <Grid item>
             <Typography fontSize={'20px'} fontWeight={600} lineHeight={'28px'} component={'span'}>
               {currentModule?.name}
             </Typography>
           </Grid>
+
           <Grid item>
             {currentModule?.startDate && currentModule?.endDate && activeLocale && (
               <Typography fontSize={'16px'} fontWeight={400} lineHeight={'24px'} component={'span'}>

@@ -31,27 +31,12 @@ export default function useNavigateTo() {
           pathname: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
         }),
 
-      goToModuleAdditionalResources: (projectId: number, moduleId: number) =>
+      goToModuleEventSession: (sessionId: number, moduleId: number) =>
         navigate({
-          pathname: APP_PATHS.PROJECT_MODULE_ADDITIONAL_RESOURCES.replace(':projectId', `${projectId}`).replace(
-            ':moduleId',
-            `${moduleId}`
+          pathname: APP_PATHS.PROJECT_MODULE_SESSION.replace(':moduleId', `${moduleId}`).replace(
+            ':sessionId',
+            `${sessionId}`
           ),
-        }),
-
-      goToModulePreparationMaterials: (projectId: number, moduleId: number) =>
-        navigate({
-          pathname: APP_PATHS.PROJECT_MODULE_PREPARATION_MATERIALS.replace(':projectId', `${projectId}`).replace(
-            ':moduleId',
-            `${moduleId}`
-          ),
-        }),
-
-      goToModuleEvent: (projectId: number, eventId: number, moduleId: number) =>
-        navigate({
-          pathname: APP_PATHS.PROJECT_MODULE_EVENT.replace(':projectId', `${projectId}`)
-            .replace(':moduleId', `${moduleId}`)
-            .replace(':eventId', `${eventId}`),
         }),
 
       goToParticipant: (participantId: number) =>

@@ -3,23 +3,13 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import ModuleService from 'src/services/ModuleService';
 import strings from 'src/strings';
 
-export const requestGetModule = createAsyncThunk('modules/get', async (moduleId: number, { rejectWithValue }) => {
-  const response = await ModuleService.get(moduleId);
+export const requestGetModule = createAsyncThunk(
+  'modules/get',
+  async ({ moduleId, projectId }: { moduleId: number; projectId: number }, { rejectWithValue }) => {
+    const response = await ModuleService.get(projectId, moduleId);
 
-  if (response !== null && response.requestSucceeded && response?.data?.module !== undefined) {
-    return response.data.module;
-  }
-
-  return rejectWithValue(strings.GENERIC_ERROR);
-});
-
-export const requestGetModuleEvent = createAsyncThunk(
-  'modules/getEvent',
-  async (eventId: number, { rejectWithValue }) => {
-    const response = await ModuleService.getEvent(eventId?.toString());
-
-    if (response !== null && response.requestSucceeded && response?.data?.event !== undefined) {
-      return response.data.event;
+    if (response !== null && response.requestSucceeded && response?.data?.module !== undefined) {
+      return response.data.module;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);
