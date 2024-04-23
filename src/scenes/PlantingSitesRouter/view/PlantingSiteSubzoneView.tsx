@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import React, { useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -50,7 +50,7 @@ const columns = (): TableColumnType[] => [
 export default function PlantingSiteZoneView(): JSX.Element {
   const [search, setSearch] = useState<string>('');
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const defaultTimeZone = useDefaultTimeZone();
 
   const { plantingSiteId, zoneId, subzoneId } = useParams<{
@@ -75,17 +75,15 @@ export default function PlantingSiteZoneView(): JSX.Element {
   );
 
   if (!plantingSite) {
-    history.push(APP_PATHS.PLANTING_SITES);
+    navigate(APP_PATHS.PLANTING_SITES);
   }
 
-  if (!plantingZone) {
-    history.push(APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', plantingSiteId));
+  if (plantingSiteId && !plantingZone) {
+    navigate(APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', plantingSiteId));
   }
 
-  if (!plantingZone?.plantingSubzones.length) {
-    history.push(
-      APP_PATHS.PLANTING_SITES_ZONE_VIEW.replace(':plantingSiteId', plantingSiteId).replace(':zoneId', zoneId)
-    );
+  if (zoneId && plantingSiteId && !plantingZone?.plantingSubzones.length) {
+    navigate(APP_PATHS.PLANTING_SITES_ZONE_VIEW.replace(':plantingSiteId', plantingSiteId).replace(':zoneId', zoneId));
   }
 
   const crumbs: Crumb[] = useMemo(
@@ -126,6 +124,7 @@ export default function PlantingSiteZoneView(): JSX.Element {
 
 const DetailsRenderer =
   (classes: any, timeZone: string) =>
+  // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
 

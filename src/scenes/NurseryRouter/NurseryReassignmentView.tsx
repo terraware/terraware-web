@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, CircularProgress, Grid, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -51,7 +51,7 @@ export default function NurseryReassignmentView(): JSX.Element {
   const numberFormatter = useNumberFormatter();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isMobile } = useDeviceInfo();
   const { deliveryId } = useParams<{ deliveryId: string }>();
   const snackbar = useSnackbar();
@@ -133,7 +133,7 @@ export default function NurseryReassignmentView(): JSX.Element {
 
   const goToWithdrawals = () => {
     const withdrawalId = query.has('fromWithdrawal') ? delivery?.withdrawalId : undefined;
-    history.push({ pathname: APP_PATHS.NURSERY_WITHDRAWALS + (withdrawalId ? `/${withdrawalId}` : '') });
+    navigate({ pathname: APP_PATHS.NURSERY_WITHDRAWALS + (withdrawalId ? `/${withdrawalId}` : '') });
   };
 
   const reassign = async () => {
@@ -200,7 +200,7 @@ export default function NurseryReassignmentView(): JSX.Element {
 
         return {
           numPlants: planting.numPlants,
-          species: speciesMap![planting.speciesId],
+          species: speciesMap[planting.speciesId],
           siteName,
           originalZone,
           originalSubzone,

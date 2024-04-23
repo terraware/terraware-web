@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
@@ -18,7 +18,7 @@ export default function PlantingSiteTypeSelect(props: PlantingSiteTypeSelectProp
   const { open, onClose } = props;
   const [plantingSiteTypeModalOpen, setPlantingSiteTypeModalOpen] = useState(false);
   const [plantingSiteTypeHelpModalOpen, setPlantingSiteTypeHelpModalOpen] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
   const userDrawnDetailedSites = isEnabled('User Detailed Sites');
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function PlantingSiteTypeSelect(props: PlantingSiteTypeSelectProp
       pathname: appPath,
       search,
     };
-    history.push(appPathLocation);
+    navigate(appPathLocation);
   };
 
   if (userDrawnDetailedSites) {

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, CircularProgress, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -44,7 +44,7 @@ export type FileUploadDialogProps = {
 export default function FileUploadDialog({ deliverable, files, onClose }: FileUploadDialogProps): JSX.Element {
   const [validate, setValidate] = useState<boolean>(false);
   const [requestId, setRequestId] = useState<string>('');
-  const [description, setDescription] = useState<string[]>(files.map((_) => ''));
+  const [description, setDescription] = useState<string[]>(files.map(() => ''));
   const theme = useTheme();
   const classes = useStyles();
   const dispatch = useAppDispatch();

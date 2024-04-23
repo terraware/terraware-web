@@ -1,5 +1,5 @@
-import { useCallback, useMemo } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useCallback, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -16,7 +16,7 @@ import { useVotingData } from './VotingContext';
 import VotingWrapper from './VotingWrapper';
 
 const VotingView = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useStateLocation();
   const query = useQuery();
   const { activeLocale } = useLocalization();
@@ -26,10 +26,10 @@ const VotingView = () => {
 
   const goToEditVotes = useCallback(() => {
     // keep query state for edit view
-    history.push(
+    navigate(
       getLocation(APP_PATHS.ACCELERATOR_VOTING_EDIT.replace(':projectId', `${projectId}`), location, query.toString())
     );
-  }, [history, location, projectId, query]);
+  }, [navigate, location, projectId, query]);
 
   // Edit Votes button
   const editVotes = useMemo(

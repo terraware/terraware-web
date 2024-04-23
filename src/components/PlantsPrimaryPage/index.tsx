@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import _ from 'lodash';
 
@@ -54,7 +54,7 @@ export default function PlantsPrimaryPage({
   const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSite>();
   const [plantingSites, setPlantingSites] = useState<PlantingSite[]>();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
 
@@ -97,10 +97,10 @@ export default function PlantsPrimaryPage({
   const setActivePlantingSite = useCallback(
     (site: PlantingSite | undefined) => {
       if (site) {
-        history.push(pagePath.replace(':plantingSiteId', site.id.toString()));
+        navigate(pagePath.replace(':plantingSiteId', site.id.toString()));
       }
     },
-    [history, pagePath]
+    [navigate, pagePath]
   );
 
   useEffect(() => {
@@ -146,6 +146,7 @@ export default function PlantsPrimaryPage({
   return (
     <PlantsPrimaryPageView
       actionButton={actionButton}
+      // eslint-disable-next-line react/no-children-prop
       children={children}
       isEmptyState={isEmptyState}
       onSelect={setActivePlantingSite}

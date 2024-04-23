@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import { makeStyles } from '@mui/styles';
 import { DropdownItem, PopoverMenu } from '@terraware/web-components';
@@ -20,13 +20,13 @@ const useStyles = makeStyles(() => ({
 export default function OrganizationsDropdown(): JSX.Element {
   const classes = useStyles();
   const { selectedOrganization, setSelectedOrganization, organizations } = useOrganization();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [newOrganizationModalOpened, setNewOrganizationModalOpened] = useState(false);
 
   const selectOrganization = (newlySelectedOrg: Organization) => {
     setSelectedOrganization((currentlySelectedOrg: Organization | undefined) => {
       if (newlySelectedOrg.id !== currentlySelectedOrg?.id) {
-        history.push({ pathname: APP_PATHS.HOME });
+        navigate({ pathname: APP_PATHS.HOME });
       }
       return newlySelectedOrg;
     });

@@ -1,22 +1,36 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
-import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 import MyAccountView from 'src/scenes/MyAccountRouter/MyAccountView';
 
-const MyAccountRouter = () => {
+export interface Props {
+  className?: string;
+  hasNav?: boolean;
+}
+
+const MyAccountRouter = ({ className, hasNav }: Props) => {
   const { organizations, reloadOrganizations } = useOrganization();
 
   return (
-    <Switch>
-      <Route exact path={APP_PATHS.MY_ACCOUNT_EDIT}>
-        <MyAccountView organizations={organizations} edit={true} reloadData={reloadOrganizations} />
-      </Route>
-      <Route exact path={APP_PATHS.MY_ACCOUNT}>
-        <MyAccountView organizations={organizations} edit={false} />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route
+        path={'/edit'}
+        element={
+          <MyAccountView
+            className={className}
+            edit={true}
+            hasNav={hasNav}
+            organizations={organizations}
+            reloadData={reloadOrganizations}
+          />
+        }
+      />
+      <Route
+        path={'/*'}
+        element={<MyAccountView className={className} edit={false} hasNav={hasNav} organizations={organizations} />}
+      />
+    </Routes>
   );
 };
 

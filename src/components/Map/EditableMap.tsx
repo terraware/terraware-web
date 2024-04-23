@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ReactMapGL, { FullscreenControl, LngLatBoundsLike, MapRef } from 'react-map-gl';
 
 import { Box, Typography, useTheme } from '@mui/material';

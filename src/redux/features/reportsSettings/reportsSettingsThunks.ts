@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Dispatch } from 'redux';
 
 import { setReportsSettingsAction } from 'src/redux/features/reportsSettings/reportsSettingsSlice';

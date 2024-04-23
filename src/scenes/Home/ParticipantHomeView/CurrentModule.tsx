@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from '@mui/material';
+import React, { Box, Grid, Typography } from '@mui/material';
 
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';

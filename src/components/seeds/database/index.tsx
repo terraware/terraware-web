@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { Box, CircularProgress, Container, Grid, useTheme } from '@mui/material';
 import { Theme } from '@mui/material';
@@ -169,7 +169,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const query = useQuery();
   const location = useStateLocation();
   const { sessionFilters, setSessionFilters } = useSessionFilters('accessions');
@@ -363,7 +363,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     }
 
     if ((facilityId && selectedOrganization) || subLocationName) {
-      history.replace(getLocation(location.pathname, location, query.toString()));
+      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       setSearchCriteria(newSearchCriteria);
 
       // add seed bank and sub-location columns to show the filtered values as needed
@@ -383,7 +383,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
   }, [
     query,
     location,
-    history,
+    navigate,
     setSearchCriteria,
     selectedOrganization,
     searchCriteria,
@@ -526,17 +526,17 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const onSelect = (row: SearchResponseElementWithId) => {
     if (row.id) {
       const seedCollectionLocation = {
-        pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', row.id as string),
+        pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', row.id),
         // eslint-disable-next-line no-restricted-globals
         state: { from: location.pathname },
       };
-      history.push(seedCollectionLocation);
+      navigate(seedCollectionLocation);
     }
   };
 
   const onSortChange = (order: Order, orderBy: string) => {
     setSearchSortOrder({
-      field: orderBy as string,
+      field: orderBy,
       direction: order === 'asc' ? 'Ascending' : 'Descending',
     });
   };
@@ -572,24 +572,25 @@ export default function Database(props: DatabaseProps): JSX.Element {
     setReportModalOpen(false);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const isInactive = (row: SearchResponseElementWithId) => {
     return false;
   };
 
   const handleViewCollections = () => {
-    history.push(APP_PATHS.CHECKIN);
+    navigate(APP_PATHS.CHECKIN);
   };
 
   const goTo = (appPath: string) => {
     const appPathLocation = {
       pathname: appPath,
     };
-    history.push(appPathLocation);
+    navigate(appPathLocation);
   };
 
   const goToNewAccession = () => {
     const newAccessionLocation = getLocation(APP_PATHS.ACCESSIONS2_NEW, location);
-    history.push(newAccessionLocation);
+    navigate(newAccessionLocation);
   };
 
   const onSeedBankForImportSelected = (selectedFacilityOnModal: Facility | undefined) => {
@@ -755,7 +756,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
         </PageHeaderWrapper>
         <Container ref={contentRef} maxWidth={false} className={classes.mainContainer}>
           {selectedOrganization && unfilteredResults ? (
-            <Card flushMobile>
+            <Card>
               {isOnboarded ? (
                 <>
                   <Box

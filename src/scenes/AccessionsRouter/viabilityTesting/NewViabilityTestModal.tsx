@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Close } from '@mui/icons-material';
 import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';

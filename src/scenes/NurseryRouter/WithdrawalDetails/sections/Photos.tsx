@@ -1,4 +1,7 @@
-import { useEffect, useState } from 'react';
+/* eslint-disable react/react-in-jsx-scope */
+
+/* eslint-disable @typescript-eslint/no-extra-non-null-assertion */
+import React, { useEffect, useState } from 'react';
 
 import { Box, Typography } from '@mui/material';
 
@@ -19,6 +22,7 @@ export default function Photos({ withdrawalId }: PhotosSectionProps): JSX.Elemen
 
   useEffect(() => {
     const getPhotos = async () => {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       const photoListResponse = await NurseryWithdrawalService.getWithdrawalPhotosList(withdrawalId!!);
       if (!photoListResponse.requestSucceeded || photoListResponse.error) {
         setPhotoUrls([]);
@@ -27,6 +31,7 @@ export default function Photos({ withdrawalId }: PhotosSectionProps): JSX.Elemen
         const photoUrlArray: string[] = [];
         photoListResponse.photoIds?.forEach(({ id }: { id: number }) => {
           photoUrlArray.push(
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
             NURSERY_WITHDRAWAL_PHOTO_ENDPOINT.replace('{withdrawalId}', withdrawalId!!.toString()).replace(
               '{photoId}',
               id.toString()

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Container, Grid, useTheme } from '@mui/material';
 import { Theme } from '@mui/material';
@@ -59,7 +59,7 @@ export default function CheckIn(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const classes = useStyles();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useStateLocation();
   const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElement[] | null>();
   const contentRef = useRef(null);
@@ -107,7 +107,7 @@ export default function CheckIn(): JSX.Element {
         reloadData();
         setCheckInAllConfirmationDialogOpen(false);
         snackbar.toastSuccess(strings.ALL_ACCESSIONS_CHECKED_IN);
-        history.push(APP_PATHS.ACCESSIONS);
+        navigate(APP_PATHS.ACCESSIONS);
       } catch (e) {
         setBusy(false);
         snackbar.toastError();
@@ -143,7 +143,7 @@ export default function CheckIn(): JSX.Element {
       // eslint-disable-next-line no-restricted-globals
       state: { from: location.pathname },
     };
-    history.push(accessionLocation);
+    navigate(accessionLocation);
   };
 
   const pendingAccessionsById = transformPendingAccessions();

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Typography } from '@mui/material';
 import { BusySpinner, Button, DialogBox } from '@terraware/web-components';
@@ -22,7 +22,7 @@ export type DeletePlantingSiteModalProps = {
 export default function DeletePlantingSiteModal(props: DeletePlantingSiteModalProps): JSX.Element {
   const { onClose, plantingSite } = props;
   const [busy, setBusy] = useState<boolean>(false);
-  const history = useHistory();
+  const navigate = useNavigate();
   const snackbar = useSnackbar();
   const docLinks = useDocLinks();
   const hasPlantings = useAppSelector((state) => selectPlantingsForSite(state, plantingSite.id)).length > 0;
@@ -33,7 +33,7 @@ export default function DeletePlantingSiteModal(props: DeletePlantingSiteModalPr
     setBusy(false);
     if (response.requestSucceeded) {
       snackbar.toastSuccess(strings.PLANTING_SITE_DELETED);
-      history.push(APP_PATHS.PLANTING_SITES);
+      navigate(APP_PATHS.PLANTING_SITES);
     } else {
       snackbar.toastError();
     }

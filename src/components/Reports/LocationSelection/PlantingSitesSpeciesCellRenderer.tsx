@@ -33,6 +33,7 @@ export type PlantingSiteSpeciesCellRendererProps = {
 export default function PlantingSiteSpeciesCellRenderer({ editMode, validate }: PlantingSiteSpeciesCellRendererProps) {
   const classes = useStyles();
 
+  // eslint-disable-next-line react/display-name
   return (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, index, onRowClick } = props;
     const createInput = (id: string) => {
@@ -94,8 +95,8 @@ function TableCellInput(props: TableCellInputProps): JSX.Element {
             newValue === ''
               ? ''
               : isPercentage
-              ? Math.max(0, Math.min(100, Math.floor(newValue as number)))
-              : Math.max(0, Math.floor(newValue as number))
+                ? Math.max(0, Math.min(100, Math.floor(newValue as number)))
+                : Math.max(0, Math.floor(newValue as number))
           }`
         )
       }

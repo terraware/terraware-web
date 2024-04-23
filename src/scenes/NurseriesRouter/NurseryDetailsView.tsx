@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { Grid, Theme, Typography, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import BackToLink from 'src/components/common/BackToLink';
@@ -19,7 +19,7 @@ import TfMain from '../../components/common/TfMain';
 import Button from '../../components/common/button/Button';
 import NurserySubLocations from './NurserySubLocations';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   titleWithButton: {
     display: 'flex',
     flexDirection: 'row',
@@ -33,11 +33,11 @@ export default function NurseryDetailsView(): JSX.Element {
   const theme = useTheme();
   const { nurseryId } = useParams<{ nurseryId: string }>();
   const [nursery, setNursery] = useState<Facility>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const tz = useLocationTimeZone().get(nursery);
 
   useEffect(() => {
-    if (selectedOrganization) {
+    if (selectedOrganization && nurseryId) {
       const selectedNursery = FacilityService.getFacility({
         organization: selectedOrganization,
         facilityId: nurseryId,
@@ -46,18 +46,20 @@ export default function NurseryDetailsView(): JSX.Element {
       if (selectedNursery) {
         setNursery(selectedNursery);
       } else {
-        history.push(APP_PATHS.NURSERIES);
+        navigate(APP_PATHS.NURSERIES);
       }
     }
-  }, [nurseryId, selectedOrganization, history]);
+  }, [nurseryId, selectedOrganization, navigate]);
 
   const classes = useStyles();
 
   const goToEditNursery = () => {
-    const editNurseryLocation = {
-      pathname: APP_PATHS.NURSERIES_EDIT.replace(':nurseryId', nurseryId),
-    };
-    history.push(editNurseryLocation);
+    if (nurseryId) {
+      const editNurseryLocation = {
+        pathname: APP_PATHS.NURSERIES_EDIT.replace(':nurseryId', nurseryId),
+      };
+      navigate(editNurseryLocation);
+    }
   };
 
   const { isMobile } = useDeviceInfo();

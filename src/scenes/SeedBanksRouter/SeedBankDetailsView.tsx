@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { Grid, Theme, Typography, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -19,7 +19,7 @@ import TextField from '../../components/common/Textfield/Textfield';
 import TfMain from '../../components/common/TfMain';
 import Button from '../../components/common/button/Button';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   titleWithButton: {
     display: 'flex',
     flexDirection: 'row',
@@ -33,11 +33,11 @@ export default function SeedBankDetailsView(): JSX.Element {
   const theme = useTheme();
   const { seedBankId } = useParams<{ seedBankId: string }>();
   const [seedBank, setSeedBank] = useState<Facility>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const tz = useLocationTimeZone().get(seedBank);
 
   useEffect(() => {
-    if (selectedOrganization) {
+    if (selectedOrganization && seedBankId) {
       const selectedSeedBank = FacilityService.getFacility({
         organization: selectedOrganization,
         facilityId: seedBankId,
@@ -46,18 +46,20 @@ export default function SeedBankDetailsView(): JSX.Element {
       if (selectedSeedBank) {
         setSeedBank(selectedSeedBank);
       } else {
-        history.push(APP_PATHS.SEED_BANKS);
+        navigate(APP_PATHS.SEED_BANKS);
       }
     }
-  }, [seedBankId, selectedOrganization, history]);
+  }, [seedBankId, selectedOrganization, navigate]);
 
   const classes = useStyles();
 
   const goToEditSeedBank = () => {
-    const editSeedBankLocation = {
-      pathname: APP_PATHS.SEED_BANKS_EDIT.replace(':seedBankId', seedBankId),
-    };
-    history.push(editSeedBankLocation);
+    if (seedBankId) {
+      const editSeedBankLocation = {
+        pathname: APP_PATHS.SEED_BANKS_EDIT.replace(':seedBankId', seedBankId),
+      };
+      navigate(editSeedBankLocation);
+    }
   };
 
   const { isMobile } = useDeviceInfo();

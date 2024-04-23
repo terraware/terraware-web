@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 
 import { ClickAwayListener, IconButton, Theme, Tooltip } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -51,7 +51,7 @@ export default function SpeciesCellRenderer(props: RendererProps<TableRowType>):
   const { column, row, value, index, onRowClick, reloadData } = props;
   const [openedTooltip, setOpenedTooltip] = useState(false);
 
-  const createLinkToSpeciesDetail = (iValue: React.ReactNode | unknown[]) => {
+  const createLinkToSpeciesDetail = (iValue: ReactNode | unknown[]) => {
     return (
       <Link to={APP_PATHS.SPECIES_DETAILS.replace(':speciesId', row.id.toString())}>{iValue as React.ReactNode}</Link>
     );

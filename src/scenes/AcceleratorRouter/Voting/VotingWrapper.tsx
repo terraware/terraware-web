@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 import { BusySpinner, ErrorBox } from '@terraware/web-components';

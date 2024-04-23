@@ -1,0 +1,31 @@
+6 ESLint rules behave differently from their TSLint counterparts:
+  * react/jsx-no-bind:
+    - ESLint rule 'jsx-no-bind' also checks for Function.bind
+    - ESLint rule 'jsx-no-bind' also checks for arrow functions
+  * no-underscore-dangle:
+    - Leading and trailing underscores (_) on identifiers will now be ignored.
+  * no-invalid-this:
+    - Functions in methods will no longer be ignored.
+  * @typescript-eslint/no-unused-expressions:
+    - The TSLint optional config "allow-new" is the default ESLint behavior and will no longer be ignored.
+  * prefer-arrow/prefer-arrow-functions:
+    - ESLint (eslint-plugin-prefer-arrow plugin) does not support allowing named functions defined with the function keyword.
+  * padded-blocks:
+    - ESLint's padded-blocks rule also bans a blank line before a closing brace.
+
+Error: multiple output react/jsx-curly-spacing ESLint rule options were generated, but tslint-to-eslint-config doesn't have "merger" logic to deal with this.
+Please file an issue at https://github.com/typescript-eslint/tslint-to-eslint-config/issues/new?template=missing_merger.md. Thanks!
+
+9 rules are not known by tslint-to-eslint-config to have ESLint equivalents:
+  * tslint-to-eslint-config does not know the ESLint equivalent for TSLint's "array-bracket-spacing".
+  * tslint-to-eslint-config does not know the ESLint equivalent for TSLint's "brace-style".
+  * tslint-to-eslint-config does not know the ESLint equivalent for TSLint's "handle-callback-err".
+  * tslint-to-eslint-config does not know the ESLint equivalent for TSLint's "jsx-no-string-ref".
+  * tslint-to-eslint-config does not know the ESLint equivalent for TSLint's "no-ex-assign".
+  * tslint-to-eslint-config does not know the ESLint equivalent for TSLint's "ter-arrow-spacing".
+  * tslint-to-eslint-config does not know the ESLint equivalent for TSLint's "ter-no-mixed-spaces-and-tabs".
+  * tslint-to-eslint-config does not know the ESLint equivalent for TSLint's "ter-prefer-arrow-callback".
+  * tslint-to-eslint-config does not know the ESLint equivalent for TSLint's "whitespace".
+
+  * import-destructuring-spacing
+

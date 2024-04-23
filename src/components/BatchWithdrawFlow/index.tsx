@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Typography } from '@mui/material';
 import { BusySpinner, theme } from '@terraware/web-components';
@@ -44,7 +44,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
   const [showEmptyBatchesModalFor, setShowEmptyBatchesModalFor] = useState<NurseryWithdrawal | null>(null);
   const [filterProjectId, setFilterProjectId] = useState<number>();
   const snackbar = useSnackbar();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const populateBatches = async () => {
@@ -181,9 +181,9 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
 
   const goToInventory = () => {
     if (sourcePage && sourcePage.startsWith(APP_PATHS.INVENTORY)) {
-      history.push({ pathname: sourcePage });
+      navigate({ pathname: sourcePage });
     } else {
-      history.push({ pathname: APP_PATHS.INVENTORY });
+      navigate({ pathname: APP_PATHS.INVENTORY });
     }
   };
 

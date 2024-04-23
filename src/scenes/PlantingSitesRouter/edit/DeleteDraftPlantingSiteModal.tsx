@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Typography } from '@mui/material';
 import { BusySpinner, Button, DialogBox } from '@terraware/web-components';
@@ -19,7 +19,7 @@ export type Props = {
 
 export default function DeleteDraftPlantingSiteModal(props: Props): JSX.Element {
   const { onClose, plantingSite } = props;
-  const history = useHistory();
+  const navigate = useNavigate();
   const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
@@ -33,11 +33,11 @@ export default function DeleteDraftPlantingSiteModal(props: Props): JSX.Element 
   useEffect(() => {
     if (result?.status === 'success') {
       snackbar.toastSuccess(strings.PLANTING_SITE_DELETED);
-      history.push(APP_PATHS.PLANTING_SITES);
+      navigate(APP_PATHS.PLANTING_SITES);
     } else if (result?.status === 'error') {
       snackbar.toastError();
     }
-  }, [history, result?.status, snackbar]);
+  }, [navigate, result?.status, snackbar]);
 
   return (
     <>

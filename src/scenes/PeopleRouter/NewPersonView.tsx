@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Grid, Theme, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Dropdown } from '@terraware/web-components';
 
@@ -20,7 +20,7 @@ import PageForm from '../../components/common/PageForm';
 import TextField from '../../components/common/Textfield/Textfield';
 import { useOrganization } from '../../providers/hooks';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   titleSubtitle: {
     marginTop: '8px',
     marginBottom: 0,
@@ -40,7 +40,7 @@ export default function PersonView(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
   const classes = useStyles();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [emailError, setEmailError] = useState('');
   const snackbar = useSnackbar();
   const [repeatedEmail, setRepeatedEmail] = useState('');
@@ -73,7 +73,7 @@ export default function PersonView(): JSX.Element {
   useEffect(() => {
     const populatePeople = async () => {
       const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
-      if (response.requestSucceeded) {
+      if (personId && response.requestSucceeded) {
         setPeople(response.users);
         setPersonSelectedToEdit(response.users.find((user) => user.id === parseInt(personId, 10)));
       }
@@ -86,11 +86,11 @@ export default function PersonView(): JSX.Element {
   };
 
   const goToPeople = () => {
-    history.push({ pathname: APP_PATHS.PEOPLE });
+    navigate({ pathname: APP_PATHS.PEOPLE });
   };
 
   const goToViewPerson = (userId: string) => {
-    history.push({ pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', userId) });
+    navigate({ pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', userId) });
   };
 
   const saveUser = async () => {
@@ -112,7 +112,7 @@ export default function PersonView(): JSX.Element {
     }
 
     let successMessage: string | null = null;
-    let userId: number = -1;
+    let userId = -1;
 
     if (!!personSelectedToEdit) {
       const response = await OrganizationUserService.updateOrganizationUser(
@@ -144,7 +144,7 @@ export default function PersonView(): JSX.Element {
 
     if (successMessage) {
       snackbar.toastSuccess(successMessage);
-      await reloadOrganizations();
+      reloadOrganizations();
       goToViewPerson(userId.toString());
     } else {
       snackbar.toastError();
@@ -159,7 +159,7 @@ export default function PersonView(): JSX.Element {
         const profileLocation = {
           pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', profile.id.toString()),
         };
-        history.push(profileLocation);
+        navigate(profileLocation);
       }
     }
   };

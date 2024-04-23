@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Box, CircularProgress } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -233,6 +233,7 @@ export default function PlantingProgressList({
 
 const DetailsRenderer =
   (classes: any) =>
+  // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row } = props;
 

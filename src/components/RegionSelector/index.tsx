@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Grid, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';

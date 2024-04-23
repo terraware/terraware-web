@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -104,6 +104,7 @@ export default function SubLocations({
     return topBarButtons;
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onSubLocationSelected = (location: PartialSubLocation, fromColumn?: string) => {
     setSelectedSubLocation(location);
     setOpenSubLocationModal(true);

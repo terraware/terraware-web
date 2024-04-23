@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
@@ -31,7 +31,7 @@ export type Response = {
 export default function useFetchDeliverable({ deliverableId, projectId }: Props): Response {
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const snackbar = useSnackbar();
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const [requestId, setRequestId] = useState('');
@@ -41,8 +41,8 @@ export default function useFetchDeliverable({ deliverableId, projectId }: Props)
   const deliverableData = useAppSelector(selectDeliverableData(deliverableId, projectId));
 
   const goToDeliverables = useCallback(() => {
-    history.push(isAcceleratorRoute ? APP_PATHS.ACCELERATOR_DELIVERABLES : APP_PATHS.DELIVERABLES);
-  }, [history, isAcceleratorRoute]);
+    navigate(isAcceleratorRoute ? APP_PATHS.ACCELERATOR_DELIVERABLES : APP_PATHS.DELIVERABLES);
+  }, [navigate, isAcceleratorRoute]);
 
   useEffect(() => {
     if (!isNaN(deliverableId)) {

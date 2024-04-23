@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -95,7 +95,7 @@ export default function OrgObservationsListView({
   const [results, setResults] = useState<any>([]);
   const classes = useStyles();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
 
   const observations: Observation[] | undefined = useAppSelector((state) =>
@@ -112,9 +112,9 @@ export default function OrgObservationsListView({
 
   const goToRescheduleObservation = useCallback(
     (observationId: number) => {
-      history.push(APP_PATHS.RESCHEDULE_OBSERVATION.replace(':observationId', observationId.toString()));
+      navigate(APP_PATHS.RESCHEDULE_OBSERVATION.replace(':observationId', observationId.toString()));
     },
-    [history]
+    [navigate]
   );
 
   const endDates = useMemo<Record<number, string>>(

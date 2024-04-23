@@ -1,6 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 
@@ -13,14 +13,10 @@ export default function AppError() {
   return (
     <AppBootstrap>
       <Provider store={store}>
-        <Switch>
-          <Route exact path={APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA}>
-            <ErrorContent />
-          </Route>
-          <Route path={APP_PATHS.ERROR}>
-            <QueryParamsError />
-          </Route>
-        </Switch>
+        <Routes>
+          <Route path={APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA} element={<ErrorContent />} />
+          <Route path={APP_PATHS.ERROR} element={<QueryParamsError />} />
+        </Routes>
       </Provider>
     </AppBootstrap>
   );

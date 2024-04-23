@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Box, Theme, Typography, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Button, MultiSelect } from '@terraware/web-components';
 
@@ -13,7 +13,7 @@ interface StyleProps {
   isMobile?: boolean;
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   button: {
     width: (props: StyleProps) => (props.isMobile ? '100%' : 'auto'),
   },

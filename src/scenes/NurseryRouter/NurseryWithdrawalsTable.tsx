@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Grid } from '@mui/material';
 import { SortOrder } from '@terraware/web-components';
@@ -49,7 +49,7 @@ const columns = (): TableColumnType[] => [
 export default function NurseryWithdrawalsTable(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useStateLocation();
   const query = useQuery();
   const subzoneParam = query.get('subzoneName');
@@ -142,7 +142,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   }, [selectedOrganization]);
 
   const onWithdrawalClicked = (withdrawal: any) => {
-    history.push({
+    navigate({
       pathname: APP_PATHS.NURSERY_REASSIGNMENT.replace(':deliveryId', withdrawal.delivery_id),
     });
   };
@@ -238,7 +238,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   useEffect(() => {
     if (siteParam) {
       query.delete('siteName');
-      history.replace(getLocation(location.pathname, location, query.toString()));
+      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       setFilters((curr) => ({
         ...curr,
         destinationName: {
@@ -249,12 +249,12 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         },
       }));
     }
-  }, [siteParam, query, history, location]);
+  }, [siteParam, query, navigate, location]);
 
   useEffect(() => {
     if (subzoneParam) {
       query.delete('subzoneName');
-      history.replace(getLocation(location.pathname, location, query.toString()));
+      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       setFilters((curr) => ({
         ...curr,
         plantingSubzoneNames: {
@@ -265,7 +265,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         },
       }));
     }
-  }, [subzoneParam, query, history, location]);
+  }, [subzoneParam, query, navigate, location]);
 
   useEffect(() => {
     void onApplyFilters();
@@ -274,7 +274,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const onSortChange = (order: SortOrder, orderBy: string) => {
     const orderByStr = orderBy === 'speciesScientificNames' ? 'batchWithdrawals.batch_species_scientificName' : orderBy;
     setSearchSortOrder({
-      field: orderByStr as string,
+      field: orderByStr,
       direction: order === 'asc' ? 'Ascending' : 'Descending',
     });
   };

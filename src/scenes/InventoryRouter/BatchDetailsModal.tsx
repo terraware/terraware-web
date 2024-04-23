@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Container, Divider, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -177,10 +177,9 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
         return;
       }
 
-      let response;
       let responseQuantities = { requestSucceeded: true };
 
-      response = await NurseryBatchService.updateBatch(record);
+      const response = await NurseryBatchService.updateBatch(record);
       if (response.batch) {
         responseQuantities = await NurseryBatchService.updateBatchQuantities({
           ...record,

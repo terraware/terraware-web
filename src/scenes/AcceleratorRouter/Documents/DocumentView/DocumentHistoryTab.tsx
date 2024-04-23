@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { TableColumnType } from '@terraware/web-components';
 import { RendererProps } from '@terraware/web-components/components/table/types';

@@ -20,6 +20,7 @@ export enum APP_PATHS {
   ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS = '/accelerator/documents',
   ACCELERATOR_MODULE_CONTENT = '/accelerator/modules',
   ACCELERATOR_OVERVIEW = '/accelerator/overview',
+  ACCELERATOR_PARTICIPANTS = '/accelerator/participants',
   ACCELERATOR_PARTICIPANTS_EDIT = '/accelerator/participants/:participantId/edit',
   ACCELERATOR_PARTICIPANTS_NEW = '/accelerator/participants/new',
   ACCELERATOR_PARTICIPANTS_VIEW = '/accelerator/participants/:participantId',

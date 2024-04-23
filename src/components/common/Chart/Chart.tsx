@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -98,72 +98,77 @@ function ChartContent(props: ChartContentProps): JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [chart, setChart] = useState<ChartJS | null>(null);
   const theme = useTheme();
+  const initialized = useRef(false);
 
   const barThickness: number | 'flex' | undefined = barWidth === undefined ? 50 : barWidth === 0 ? 'flex' : barWidth;
 
   useEffect(() => {
-    const getAxisLabelProps = (label?: string) => {
-      if (!label) {
-        return {};
-      }
-      return {
-        title: {
-          display: true,
-          align: 'center',
-          text: label,
-        },
-      };
-    };
-
-    const createChart = async () => {
-      if (chart) {
-        chart.destroy();
-      }
-
-      const ctx = canvasRef?.current?.getContext('2d');
-      if (ctx) {
-        setChart(
-          await newChart(locale, ctx, {
-            type,
-            data: {
-              labels: [],
-              datasets: [],
-            },
-            options: {
-              maintainAspectRatio: false,
-              layout: {
-                padding: {
-                  left: 0,
-                  right: 0,
-                  top: 10,
-                },
-              },
-              scales: {
-                x: {
-                  display: type === 'pie' ? false : undefined,
-                  ...getAxisLabelProps(xAxisLabel),
-                },
-                y: {
-                  ticks: {
-                    precision: 0,
-                  },
-                  min: yLimits?.min,
-                  max: yLimits?.max,
-                  display: type === 'pie' ? false : undefined,
-                  ...getAxisLabelProps(yAxisLabel),
-                },
-              },
-            },
-          })
-        );
-        // when component unmounts
-        return () => {
-          chart?.destroy();
+    // used to prevent double render on dev scope (react 18)
+    if (!initialized.current) {
+      initialized.current = true;
+      const getAxisLabelProps = (label?: string) => {
+        if (!label) {
+          return {};
+        }
+        return {
+          title: {
+            display: true,
+            align: 'center',
+            text: label,
+          },
         };
-      }
-    };
-    createChart();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      };
+
+      const createChart = async () => {
+        if (chart) {
+          chart.destroy();
+        }
+
+        const ctx = canvasRef?.current?.getContext('2d');
+        if (ctx) {
+          setChart(
+            await newChart(locale, ctx, {
+              type,
+              data: {
+                labels: [],
+                datasets: [],
+              },
+              options: {
+                maintainAspectRatio: false,
+                layout: {
+                  padding: {
+                    left: 0,
+                    right: 0,
+                    top: 10,
+                  },
+                },
+                scales: {
+                  x: {
+                    display: type === 'pie' ? false : undefined,
+                    ...getAxisLabelProps(xAxisLabel),
+                  },
+                  y: {
+                    ticks: {
+                      precision: 0,
+                    },
+                    min: yLimits?.min,
+                    max: yLimits?.max,
+                    display: type === 'pie' ? false : undefined,
+                    ...getAxisLabelProps(yAxisLabel),
+                  },
+                },
+              },
+            })
+          );
+          // when component unmounts
+          return () => {
+            chart?.destroy();
+          };
+        }
+      };
+      createChart();
+    }
+    // eslint-disable-next-line
   }, [locale]);
 
   useEffect(() => {

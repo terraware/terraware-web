@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import { Grid, Theme, useTheme } from '@mui/material';
+import { Grid, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -26,7 +26,7 @@ import TextField from '../../components/common/Textfield/Textfield';
 import TfMain from '../../components/common/TfMain';
 import SeedBanksCellRenderer from './TableCellRenderer';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   title: {
     marginTop: 0,
     marginBottom: 0,
@@ -63,7 +63,7 @@ export default function SeedBanksListView({ organization }: SeedBanksListProps):
   const defaultTimeZone = useDefaultTimeZone().get();
   const classes = useStyles();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const [results, setResults] = useState<Facility[]>([]);
@@ -74,7 +74,7 @@ export default function SeedBanksListView({ organization }: SeedBanksListProps):
     const newSeedBankLocation = {
       pathname: APP_PATHS.SEED_BANKS_NEW,
     };
-    history.push(newSeedBankLocation);
+    navigate(newSeedBankLocation);
   };
 
   const clearSearch = () => {

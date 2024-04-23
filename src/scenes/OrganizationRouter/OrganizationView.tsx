@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
@@ -23,7 +23,7 @@ import { getUTC } from '../../utils/useTimeZoneUtils';
 export default function OrganizationView(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [countries, setCountries] = useState<Country[]>();
   const [people, setPeople] = useState<OrganizationUser[]>();
   const { isMobile } = useDeviceInfo();
@@ -59,7 +59,7 @@ export default function OrganizationView(): JSX.Element {
     const editOrganizationLocation = {
       pathname: APP_PATHS.ORGANIZATION_EDIT,
     };
-    history.push(editOrganizationLocation);
+    navigate(editOrganizationLocation);
   };
 
   const organizationState = () => {

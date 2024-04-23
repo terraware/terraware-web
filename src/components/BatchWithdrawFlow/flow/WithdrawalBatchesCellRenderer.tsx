@@ -83,6 +83,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const createReadyOutplantInput = (iValue: React.ReactNode | unknown[]) => {
     if (onRowClick) {
       return (

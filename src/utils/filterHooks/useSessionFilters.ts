@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import {
   FiltersType,
@@ -12,9 +12,9 @@ import {
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
-export const useSessionFilters = (viewIdentifier: string, writeToQuery = true) => {
+export const useSessionFilters = (viewIdentifier: string) => {
   const location = useStateLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const query = useQuery();
 
   const [localFilters, setLocalFilters] = useState<FiltersType>({});
@@ -29,9 +29,9 @@ export const useSessionFilters = (viewIdentifier: string, writeToQuery = true) =
 
       resetQuery(query, viewIdentifier);
       writeFiltersToQuery(query, viewIdentifier, filters);
-      history.replace(getLocation(location.pathname, location, query.toString()));
+      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
     },
-    [history, location, query, viewIdentifier]
+    [navigate, location, query, viewIdentifier]
   );
 
   // Query overrides session, pull filters from query and session, write merged filters back to session
@@ -53,10 +53,10 @@ export const useSessionFilters = (viewIdentifier: string, writeToQuery = true) =
     writeFiltersToSession(viewIdentifier, mergedFilters);
 
     writeFiltersToQuery(query, viewIdentifier, mergedFilters);
-    history.replace(getLocation(location.pathname, location, query.toString()));
+    navigate(getLocation(location.pathname, location, query.toString()));
 
     setIsInitialized(true);
-  }, [history, isInitialized, location, query, viewIdentifier]);
+  }, [navigate, isInitialized, location, query, viewIdentifier]);
 
   useEffect(() => {
     if (isInitialized) {

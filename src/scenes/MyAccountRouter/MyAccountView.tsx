@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem } from '@terraware/web-components';
@@ -47,8 +47,10 @@ import DeleteOrgDialog from './DeleteOrgModal';
 import LeaveOrganizationDialog from './LeaveOrganizationModal';
 
 type MyAccountProps = {
-  organizations?: Organization[];
+  className?: string;
   edit: boolean;
+  hasNav?: boolean;
+  organizations?: Organization[];
   reloadData?: () => void;
 };
 
@@ -63,11 +65,13 @@ export default function MyAccountView(props: MyAccountProps): JSX.Element | null
 }
 
 type MyAccountContentProps = {
-  user: User;
-  organizations?: Organization[];
+  className?: string;
   edit: boolean;
-  reloadUser: () => void;
+  hasNav?: boolean;
+  organizations?: Organization[];
   reloadData?: () => void;
+  reloadUser: () => void;
+  user: User;
 };
 
 /**
@@ -92,18 +96,20 @@ const columns = (): TableColumnType[] => [
 ];
 
 const MyAccountContent = ({
-  user,
-  organizations,
+  className,
   edit,
-  reloadUser,
+  hasNav,
+  organizations,
   reloadData,
+  reloadUser,
+  user,
 }: MyAccountContentProps): JSX.Element => {
   const { isMobile } = useDeviceInfo();
   const supportedLocales = useSupportedLocales();
   const theme = useTheme();
   const [selectedRows, setSelectedRows] = useState<PersonOrganization[]>([]);
   const [personOrganizations, setPersonOrganizations] = useState<PersonOrganization[]>([]);
-  const history = useHistory();
+  const navigate = useNavigate();
   const [record, setRecord, onChange] = useForm<User>(user);
   const [openDeleteAccountModal, setOpenDeleteAccountModal] = useState<boolean>(false);
   const [removedOrg, setRemovedOrg] = useState<Organization>();
@@ -199,7 +205,7 @@ const MyAccountContent = ({
     setPreferredWeightSystemSelected((userPreferences?.preferredWeightSystem as string) || 'metric');
     setLocaleSelected(selectedLocale);
     setSelectedRows([]);
-    history.push(APP_PATHS.MY_ACCOUNT);
+    navigate(APP_PATHS.MY_ACCOUNT);
   };
 
   const saveChanges = async () => {
@@ -234,7 +240,7 @@ const MyAccountContent = ({
         setSelectedLocale(lastLocale);
         snackbar.toastError();
       }
-      history.push(APP_PATHS.MY_ACCOUNT);
+      navigate(APP_PATHS.MY_ACCOUNT);
     }
   };
 
@@ -282,7 +288,7 @@ const MyAccountContent = ({
       snackbar.toastError();
     }
     setLeaveOrganizationModalOpened(false);
-    history.push(APP_PATHS.MY_ACCOUNT);
+    navigate(APP_PATHS.MY_ACCOUNT);
   };
 
   const deleteOrgHandler = async () => {
@@ -298,7 +304,7 @@ const MyAccountContent = ({
       } else {
         snackbar.toastError();
       }
-      history.push(APP_PATHS.HOME);
+      navigate(APP_PATHS.HOME);
     }
   };
 
@@ -320,7 +326,7 @@ const MyAccountContent = ({
   };
 
   return (
-    <TfMain>
+    <TfMain className={className}>
       <PageForm
         cancelID='cancelAccountChange'
         saveID='saveAccountChange'
@@ -357,12 +363,12 @@ const MyAccountContent = ({
             />
           </>
         )}
-        <PageHeaderWrapper nextElement={contentRef.current}>
+        <PageHeaderWrapper nextElement={contentRef.current} hasNav={hasNav}>
           <Box
             display='flex'
             justifyContent='space-between'
             marginBottom={theme.spacing(4)}
-            paddingLeft={theme.spacing(3)}
+            padding={hasNav === false ? theme.spacing(0, 5) : theme.spacing(0, 0, 0, 3)}
             marginTop={organizations && organizations.length > 0 ? 0 : theme.spacing(12)}
           >
             <TitleDescription title={strings.MY_ACCOUNT} description={strings.MY_ACCOUNT_DESC} style={{ padding: 0 }} />
@@ -373,7 +379,7 @@ const MyAccountContent = ({
                   id='edit-account'
                   icon='iconEdit'
                   label={isMobile ? '' : strings.EDIT_ACCOUNT}
-                  onClick={() => history.push(APP_PATHS.MY_ACCOUNT_EDIT)}
+                  onClick={() => navigate(APP_PATHS.MY_ACCOUNT_EDIT)}
                   size='medium'
                   priority='primary'
                 />
@@ -389,8 +395,9 @@ const MyAccountContent = ({
           ref={contentRef}
           sx={{
             backgroundColor: theme.palette.TwClrBg,
-            padding: theme.spacing(3),
             borderRadius: '32px',
+            margin: theme.spacing(0, hasNav === false ? 4 : 0),
+            padding: theme.spacing(3),
           }}
         >
           <Box sx={isMobile ? { width: 'calc(100vw - 72px)' } : {}}>

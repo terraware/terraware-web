@@ -276,8 +276,8 @@ export default function PhotoChooser(props: PhotoChooserProps): JSX.Element {
           {(editing || files.length > 0) && !multipleSelection
             ? photoSelectedText
             : isMobile && uploadMobileDescription
-            ? uploadMobileDescription
-            : uploadDescription}
+              ? uploadMobileDescription
+              : uploadDescription}
         </Typography>
         <input
           type='file'

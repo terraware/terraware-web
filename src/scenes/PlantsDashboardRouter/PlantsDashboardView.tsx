@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -50,7 +50,7 @@ export default function PlantsDashboardView(): JSX.Element {
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState(-1);
   const [plantsDashboardPreferences, setPlantsDashboardPreferences] = useState<Record<string, unknown>>();
   const locale = useLocalization();
-  const history = useHistory();
+  const navigate = useNavigate();
   const theme = useTheme();
 
   const onSelect = useCallback((site: PlantingSite) => setSelectedPlantingSiteId(site.id), [setSelectedPlantingSiteId]);
@@ -297,7 +297,7 @@ export default function PlantsDashboardView(): JSX.Element {
             title={strings.NO_PLANTING_SITES_TITLE}
             text={strings.NO_PLANTING_SITES_DESCRIPTION}
             buttonText={strings.GO_TO_PLANTING_SITES}
-            onClick={() => history.push(APP_PATHS.PLANTING_SITES)}
+            onClick={() => navigate(APP_PATHS.PLANTING_SITES)}
           />
         </Box>
       )}

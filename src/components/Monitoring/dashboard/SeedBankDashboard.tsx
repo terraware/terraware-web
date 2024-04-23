@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Grid, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -59,7 +59,7 @@ type SeedBankDashboardProps = {
 export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.Element {
   const { isMobile, isDesktop } = useDeviceInfo();
   const classes = useStyles({ isDesktop });
-  const history = useHistory();
+  const navigate = useNavigate();
   const query = useQuery();
   const stateLocation = useStateLocation();
   const { seedBank, monitoringPreferences, updatePreferences } = props;
@@ -168,7 +168,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
 
     // clear url param if necessary
     if (urlDeviceId || urlTimePeriod) {
-      history.push(getLocation(stateLocation.pathname, stateLocation, query.toString()));
+      navigate(getLocation(stateLocation.pathname, stateLocation, query.toString()));
     }
 
     if (location || timePeriod) {
@@ -177,7 +177,7 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
         ...updates,
       });
     }
-  }, [availableLocations, history, query, stateLocation, monitoringPreferences, updatePreferences]);
+  }, [availableLocations, navigate, query, stateLocation, monitoringPreferences, updatePreferences]);
 
   useEffect(() => {
     const populateLocations = async () => {

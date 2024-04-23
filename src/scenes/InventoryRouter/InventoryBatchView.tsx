@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -70,10 +70,10 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
   const { batchId } = useParams<{ batchId: string }>();
   const { speciesId } = useParams<{ speciesId: string }>();
   const { nurseryId } = useParams<{ nurseryId: string }>();
-  const batch = useAppSelector(selectBatch(batchId));
+  const batch = useAppSelector(selectBatch(batchId || -1));
   const tab = initializeTab(query.get('tab'));
   const [activeTab, setActiveTab] = useState<string>(tab);
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useStateLocation();
   const [inventorySpecies, setInventorySpecies] = useState<Species>();
   const [inventoryNursery, setInventoryNursery] = useState<Facility>();
@@ -123,13 +123,15 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
   const onTabChange = useCallback(
     (newTab: string) => {
       query.set('tab', newTab);
-      history.push(getLocation(location.pathname, location, query.toString()));
+      navigate(getLocation(location.pathname, location, query.toString()));
     },
-    [query, history, location]
+    [query, navigate, location]
   );
 
   const fetchBatch = useCallback(() => {
-    dispatch(requestFetchBatch({ batchId }));
+    if (batchId) {
+      dispatch(requestFetchBatch({ batchId }));
+    }
   }, [batchId, dispatch]);
 
   useEffect(() => {
@@ -152,10 +154,10 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
           }`}
           to={
             origin === 'Species'
-              ? APP_PATHS.INVENTORY_ITEM_FOR_SPECIES.replace(':speciesId', speciesId)
+              ? APP_PATHS.INVENTORY_ITEM_FOR_SPECIES.replace(':speciesId', speciesId || '')
               : origin === 'Nursery'
-              ? APP_PATHS.INVENTORY_ITEM_FOR_NURSERY.replace(':nurseryId', nurseryId)
-              : `${APP_PATHS.INVENTORY}?tab=batches_by_batch`
+                ? APP_PATHS.INVENTORY_ITEM_FOR_NURSERY.replace(':nurseryId', nurseryId || '')
+                : `${APP_PATHS.INVENTORY}?tab=batches_by_batch`
           }
         />
         <Grid
@@ -194,13 +196,13 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
               {getNurseryLabel()}
             </Typography>
           </Box>
-          {isWithdrawable && (
+          {isWithdrawable && batchId && (
             <Box margin={isMobile ? theme.spacing(2, 2, 0, 2) : 0} display='flex' flexGrow={isMobile ? 1 : 0}>
               <Button
                 className={isMobile ? classes.fullWidth : ''}
                 label={strings.WITHDRAW}
                 onClick={() =>
-                  history.push({
+                  navigate({
                     pathname: APP_PATHS.BATCH_WITHDRAW,
                     search: `?batchId=${batchId.toString()}&source=${window.location.pathname}`,
                   })

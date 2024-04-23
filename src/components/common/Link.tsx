@@ -1,8 +1,7 @@
-import React, { MouseEvent, ReactNode, SyntheticEvent } from 'react';
+import React, { CSSProperties, MouseEvent, ReactNode, SyntheticEvent } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
-import { Link as MuiLink, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Link as MuiLink, useTheme } from '@mui/material';
 
 export type LinkProps = {
   children: ReactNode;
@@ -16,40 +15,31 @@ export type LinkProps = {
   id?: string;
   disabled?: boolean;
   replace?: boolean;
+  style?: CSSProperties;
 };
 
-type StyleProps = {
-  fontSize: string | number;
-  fontWeight: string | number;
-  lineHeight: string | number;
-};
+export default function Link(props: LinkProps): JSX.Element {
+  const { to, children, className, onClick, fontSize, fontWeight, lineHeight, target, id, disabled, replace, style } =
+    props;
 
-const useStyles = makeStyles((theme: Theme) => ({
-  link: {
+  const theme = useTheme();
+
+  const styleToUse = {
+    fontSize: fontSize || '14px',
+    fontWeight: fontWeight || 500,
+    lineHeight: lineHeight || '21px',
     color: theme.palette.TwClrTxtBrand,
     fontFamily: 'Inter',
-    fontSize: (props: StyleProps) => props.fontSize,
-    fontWeight: (props: StyleProps) => props.fontWeight,
-    lineHeight: (props: StyleProps) => props.lineHeight,
     textDecoration: 'none',
     '&:hover': {
       textDecoration: 'underline',
     },
-  },
-}));
-
-export default function Link(props: LinkProps): JSX.Element {
-  const { to, children, className, onClick, fontSize, fontWeight, lineHeight, target, id, disabled, replace } = props;
-  const classes = useStyles({
-    fontSize: fontSize || '14px',
-    fontWeight: fontWeight || 500,
-    lineHeight: lineHeight || '21px',
-  });
-  const classNameToUse = `${classes.link} ${className || ''}`;
+    ...style,
+  };
 
   if (to) {
     return (
-      <RouterLink to={to} className={classNameToUse} target={target} id={id} replace={replace}>
+      <RouterLink to={to} className={className} target={target} id={id} replace={replace} style={styleToUse}>
         {children}
       </RouterLink>
     );
@@ -58,11 +48,12 @@ export default function Link(props: LinkProps): JSX.Element {
   return (
     <MuiLink
       component='button'
-      className={classNameToUse}
+      className={className}
       onClick={onClick}
       id={id}
       disabled={disabled}
       sx={{
+        ...styleToUse,
         opacity: disabled ? 0.5 : 1,
       }}
     >

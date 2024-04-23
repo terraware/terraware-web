@@ -1,11 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
 
 import { CircularProgress } from '@mui/material';
 
 import { FilterField } from 'src/components/common/FilterGroup';
 import { SearchProps } from 'src/components/common/SearchFiltersWrapper';
-import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
   selectObservationsResults,
@@ -123,32 +122,26 @@ const ObservationsInnerRouter = (): JSX.Element => {
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
 
   return (
-    <Switch>
-      {scheduleObservationsEnabled && (
-        <Route path={APP_PATHS.RESCHEDULE_OBSERVATION}>
-          <RescheduleObservation />
-        </Route>
-      )}
-      {scheduleObservationsEnabled && (
-        <Route path={APP_PATHS.SCHEDULE_OBSERVATION}>
-          <ScheduleObservation />
-        </Route>
-      )}
-      <Route path={APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS}>
-        <ObservationMonitoringPlotDetails />
-      </Route>
-      <Route path={APP_PATHS.OBSERVATION_PLANTING_ZONE_DETAILS}>
-        <ObservationPlantingZoneDetails />
-      </Route>
-      <Route path={APP_PATHS.OBSERVATION_DETAILS}>
-        <ObservationDetails {...searchProps} setFilterOptions={setFilterOptionsCallback} />
-      </Route>
-      <Route path={APP_PATHS.OBSERVATIONS_SITE}>
-        <ObservationsHome {...searchProps} setFilterOptions={setFilterOptionsCallback} />
-      </Route>
-      <Route path={'*'}>
-        <ObservationsHome {...searchProps} setFilterOptions={setFilterOptionsCallback} />
-      </Route>
-    </Switch>
+    <Routes>
+      {scheduleObservationsEnabled && <Route path={'schedule/:observationId'} element={<RescheduleObservation />} />}
+      {scheduleObservationsEnabled && <Route path={'/schedule'} element={<ScheduleObservation />} />}
+      <Route
+        path={'/:plantingSiteId/results/:observationId/zone/:plantingZoneId/plot/:monitoringPlotId'}
+        element={<ObservationMonitoringPlotDetails />}
+      />
+      <Route
+        path={'/:plantingSiteId/results/:observationId/zone/:plantingZoneId'}
+        element={<ObservationPlantingZoneDetails />}
+      />
+      <Route
+        path={'/:plantingSiteId/results/:observationId'}
+        element={<ObservationDetails {...searchProps} setFilterOptions={setFilterOptionsCallback} />}
+      />
+      <Route
+        path={'/:plantingSiteId'}
+        element={<ObservationsHome {...searchProps} setFilterOptions={setFilterOptionsCallback} />}
+      />
+      <Route path={'/*'} element={<ObservationsHome {...searchProps} setFilterOptions={setFilterOptionsCallback} />} />
+    </Routes>
   );
 };

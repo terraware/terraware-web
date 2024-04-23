@@ -75,7 +75,7 @@ export default function SelectSeedBankModal(props: SelectSeedBankProps): JSX.Ele
             onChange={onChange}
             options={availableFacilities
               .filter((facility) => !!facility)
-              .map((facility) => facility!.name)
+              .map((facility) => facility.name)
               .sort()}
             label={strings.SEED_BANK}
             aria-label={strings.SELECT_SEED_BANK}

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -72,7 +72,7 @@ export default function MonitoringView(props: MonitoringProps): JSX.Element {
   const { isDesktop, isMobile } = useDeviceInfo();
   const classes = useStyles({ isDesktop, isMobile });
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { hasSeedBanks, reloadData } = props;
   const [selectedSeedBank, setSelectedSeedBank] = useState<Facility>();
   const [seedBanks, setSeedBanks] = useState<Facility[]>([]);
@@ -84,16 +84,16 @@ export default function MonitoringView(props: MonitoringProps): JSX.Element {
     const seedBanksLocation = {
       pathname: APP_PATHS.SEED_BANKS,
     };
-    history.push(seedBanksLocation);
+    navigate(seedBanksLocation);
   };
 
   const setActiveSeedBank = useCallback(
     (seedBank: Facility | undefined) => {
       if (seedBank) {
-        history.push(APP_PATHS.MONITORING_SEED_BANK.replace(':seedBankId', seedBank.id.toString()));
+        navigate(APP_PATHS.MONITORING_SEED_BANK.replace(':seedBankId', seedBank.id.toString()));
       }
     },
-    [history]
+    [navigate]
   );
 
   const onChangeSeedBank = (newValue: string) => {

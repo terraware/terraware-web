@@ -9,7 +9,7 @@ import {
   VariableWithValues,
   isImageVariable,
 } from 'src/types/documentProducer/Variable';
-import { CombinedInjectedValue, ImageVariableValue } from 'src/types/documentProducer/VariableValue';
+import { CombinedInjectedValue } from 'src/types/documentProducer/VariableValue';
 import { getImagePath } from 'src/utils/images';
 
 import { getSourceVariable } from './util';
@@ -49,7 +49,7 @@ export const PreviewImage = ({
     <Box>
       {combinedInjectedValue.values?.map((img, index) => {
         if (img.type === 'Image') {
-          const imgValue = img as ImageVariableValue;
+          const imgValue = img;
 
           return (
             <div className='image-container' key={`image-${index}`}>

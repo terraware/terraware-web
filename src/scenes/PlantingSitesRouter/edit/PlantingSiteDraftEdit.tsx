@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import React, { useParams } from 'react-router-dom';
 
 import { BusySpinner } from '@terraware/web-components';
 

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 import { Statuses } from 'src/redux/features/asyncUtils';
@@ -40,7 +40,7 @@ export type Response = {
  */
 export default function useDraftPlantingSiteUpdate(): Response {
   const dispatch = useAppDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const snackbar = useSnackbar();
 
   const [draftRequest, setDraftRequest] = useState<Data>();
@@ -70,12 +70,12 @@ export default function useDraftPlantingSiteUpdate(): Response {
     if (draftResult?.status === 'success' && draftRequest) {
       if (redirect) {
         snackbar.toastSuccess(strings.PLANTING_SITE_SAVED);
-        history.push(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${draftRequest.draft.id}`));
+        navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${draftRequest.draft.id}`));
       } else {
         setUpdatedDraft(draftRequest);
       }
     }
-  }, [draftRequest, draftResult?.status, history, redirect, snackbar]);
+  }, [draftRequest, draftResult?.status, navigate, redirect, snackbar]);
 
   return useMemo<Response>(
     () => ({

@@ -1,9 +1,7 @@
-/* eslint-disable import/no-webpack-loader-syntax */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Provider } from 'react-redux';
 
-import { CssBaseline, StyledEngineProvider, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, CssBaseline, StyledEngineProvider, useTheme } from '@mui/material';
 
 import AppBootstrap from 'src/AppBootstrap';
 import ToastSnackbar from 'src/components/ToastSnackbar';
@@ -20,53 +18,14 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 const AcceleratorRouter = React.lazy(() => import('src/scenes/AcceleratorRouter'));
 const TerrawareRouter = React.lazy(() => import('src/scenes/TerrawareRouter'));
 
-interface StyleProps {
-  isDesktop?: boolean;
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  container: {
-    backgroundColor: theme.palette.TwClrBaseGray025,
-    backgroundImage:
-      'linear-gradient(180deg,' +
-      `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0)} 0%,` +
-      `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0.4)} 100%)`,
-    backgroundAttachment: 'fixed',
-    minHeight: '100vh',
-    '& .navbar': {
-      backgroundColor: (props: StyleProps) =>
-        props.isDesktop ? theme.palette.TwClrBaseGray025 : theme.palette.TwClrBaseWhite,
-      backgroundImage: (props: StyleProps) =>
-        props.isDesktop
-          ? 'linear-gradient(180deg,' +
-            `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0)} 0%,` +
-            `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0.4)} 100%)`
-          : null,
-      backgroundAttachment: 'fixed',
-      paddingRight: (props: StyleProps) => (props.isDesktop ? '8px' : undefined),
-      marginTop: (props: StyleProps) => (props.isDesktop ? '96px' : '0px'),
-      paddingTop: (props: StyleProps) => (props.isDesktop ? '0px' : '24px'),
-      overflowY: 'auto',
-      width: (props: StyleProps) => (props.isDesktop ? '210px' : '300px'),
-      zIndex: 1000,
-      '&::-webkit-scrollbar-thumb': {
-        backgroundColor: theme.palette.TwClrBgGhostActive,
-      },
-      '& .nav-footer': {
-        marginBottom: (props: StyleProps) => (props.isDesktop ? '128px' : '32px'),
-      },
-    },
-  },
-}));
-
 function AppContent() {
   // manager hooks
   useAppVersion();
 
   const { isDesktop, type } = useDeviceInfo();
-  const classes = useStyles({ isDesktop });
   const { isAllowed } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const theme = useTheme();
 
   const [showNavBar, setShowNavBar] = useState(true);
 
@@ -82,6 +41,39 @@ function AppContent() {
   // updated. Declare the dependency here so the app rerenders when the locale changes.
   useLocalization();
 
+  const mainBoxStyles = useMemo(() => {
+    return {
+      backgroundColor: theme.palette.TwClrBaseGray025,
+      backgroundImage:
+        'linear-gradient(180deg,' +
+        `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0)} 0%,` +
+        `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0.4)} 100%)`,
+      backgroundAttachment: 'fixed',
+      minHeight: '100vh',
+      '& .navbar': {
+        backgroundColor: isDesktop ? theme.palette.TwClrBaseGray025 : theme.palette.TwClrBaseWhite,
+        backgroundImage: isDesktop
+          ? 'linear-gradient(180deg,' +
+            `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0)} 0%,` +
+            `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0.4)} 100%)`
+          : null,
+        backgroundAttachment: 'fixed',
+        paddingRight: isDesktop ? '8px' : undefined,
+        marginTop: isDesktop ? '96px' : '0px',
+        paddingTop: isDesktop ? '0px' : '24px',
+        overflowY: 'auto',
+        width: isDesktop ? '210px' : '300px',
+        zIndex: 1000,
+        '&::-webkit-scrollbar-thumb': {
+          backgroundColor: theme.palette.TwClrBgGhostActive,
+        },
+        '& .nav-footer': {
+          marginBottom: isDesktop ? '128px' : '32px',
+        },
+      },
+    };
+  }, []);
+
   return (
     <StyledEngineProvider injectFirst>
       <CssBaseline />
@@ -90,7 +82,7 @@ function AppContent() {
         <TopBarContent setShowNavBar={setShowNavBar} />
       </TopBar>
 
-      <div className={classes.container}>
+      <Box sx={mainBoxStyles}>
         <React.Suspense fallback={<BlockingSpinner />}>
           {isAcceleratorRoute && isAllowed('VIEW_CONSOLE') ? (
             <AcceleratorRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
@@ -98,7 +90,7 @@ function AppContent() {
             <TerrawareRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
           )}
         </React.Suspense>
-      </div>
+      </Box>
     </StyledEngineProvider>
   );
 }

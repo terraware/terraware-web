@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
@@ -24,6 +24,7 @@ import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import LocationTimeZoneSelector from '../../components/LocationTimeZoneSelector';
 import PageForm from '../../components/common/PageForm';
 import TextField from '../../components/common/Textfield/Textfield';
+import { NavigateToFacilityObject } from '../SeedBanksRouter/SeedBankView';
 
 export default function NurseryView(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
@@ -33,6 +34,10 @@ export default function NurseryView(): JSX.Element {
   const [editedSubLocations, setEditedSubLocations] = useState<PartialSubLocation[]>();
   const snackbar = useSnackbar();
   const theme = useTheme();
+  const [navigateToNursery, setNavigateToNursery] = useState<NavigateToFacilityObject>({
+    navigate: false,
+    id: undefined,
+  });
 
   const [record, setRecord, onChange] = useForm<Facility>({
     name: '',
@@ -43,7 +48,7 @@ export default function NurseryView(): JSX.Element {
   });
   const { nurseryId } = useParams<{ nurseryId: string }>();
   const [selectedNursery, setSelectedNursery] = useState<Facility | null>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isMobile } = useDeviceInfo();
   const gridSize = () => {
     if (isMobile) {
@@ -54,9 +59,17 @@ export default function NurseryView(): JSX.Element {
   const timeZoneId = useLocationTimeZone().get(record)?.id;
 
   useEffect(() => {
-    const seedBanks = getAllNurseries(selectedOrganization);
-    setSelectedNursery(seedBanks?.find((sb) => sb?.id === parseInt(nurseryId, 10)));
+    if (nurseryId) {
+      const seedBanks = getAllNurseries(selectedOrganization);
+      setSelectedNursery(seedBanks?.find((sb) => sb?.id === parseInt(nurseryId, 10)));
+    }
   }, [nurseryId, selectedOrganization]);
+
+  useEffect(() => {
+    if (navigateToNursery.navigate) {
+      goToNursery(navigateToNursery.id);
+    }
+  }, [selectedOrganization]);
 
   useEffect(() => {
     setRecord({
@@ -78,7 +91,7 @@ export default function NurseryView(): JSX.Element {
     const nurseriesLocation = {
       pathname: APP_PATHS.NURSERIES + (id ? `/${id}` : ''),
     };
-    history.push(nurseriesLocation);
+    navigate(nurseriesLocation);
   };
 
   const saveNursery = async () => {
@@ -118,12 +131,12 @@ export default function NurseryView(): JSX.Element {
       if (selectedNursery && editedSubLocations) {
         await SubLocationService.saveEditedSubLocations(id as number, editedSubLocations);
       }
-      await reloadOrganizations(selectedOrganization.id);
+      reloadOrganizations(selectedOrganization.id);
       snackbar.toastSuccess(selectedNursery ? strings.CHANGES_SAVED : strings.NURSERY_ADDED);
       if (!selectedNursery) {
         id = (response as CreateFacilityResponse).facilityId || undefined;
       }
-      goToNursery(id);
+      setNavigateToNursery({ navigate: true, id: id });
     } else {
       snackbar.toastError();
     }

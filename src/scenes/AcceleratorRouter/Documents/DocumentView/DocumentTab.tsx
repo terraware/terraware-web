@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import EditableSectionContainer from 'src/components/DocumentProducer/EditableSection/Container';
 import MultiLineComponentNonEditable from 'src/components/DocumentProducer/MultiLineComponentNonEditable';

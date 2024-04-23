@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Grid } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -21,7 +21,7 @@ interface ReportSettingsEditFormProps {
 const ReportSettingsEditForm = ({ reportsSettings, isEditing }: ReportSettingsEditFormProps) => {
   const { isMobile } = useDeviceInfo();
   const { selectedOrganization } = useOrganization();
-  const history = useHistory();
+  const navigate = useNavigate();
   const snackbar = useSnackbar();
 
   const [localReportsSettings, setLocalReportsSettings] = useState(reportsSettings);
@@ -40,8 +40,8 @@ const ReportSettingsEditForm = ({ reportsSettings, isEditing }: ReportSettingsEd
       return;
     }
 
-    history.push(APP_PATHS.REPORTS_SETTINGS);
-  }, [history, localReportsSettings, selectedOrganization.id, snackbar]);
+    navigate(APP_PATHS.REPORTS_SETTINGS);
+  }, [navigate, localReportsSettings, selectedOrganization.id, snackbar]);
 
   const onChange = useCallback(
     (key: string | number, value: boolean) => {
@@ -78,7 +78,7 @@ const ReportSettingsEditForm = ({ reportsSettings, isEditing }: ReportSettingsEd
     <PageForm
       cancelID='cancelReportsSettings'
       saveID='saveReportsSettings'
-      onCancel={() => history.push(APP_PATHS.REPORTS_SETTINGS)}
+      onCancel={() => navigate(APP_PATHS.REPORTS_SETTINGS)}
       onSave={onSave}
       busy={isBusy}
     >

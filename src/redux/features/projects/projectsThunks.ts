@@ -5,6 +5,7 @@ import { RootState } from 'src/redux/rootReducer';
 import ProjectsService from 'src/services/ProjectsService';
 
 export const requestProjects = (organizationId?: number, locale?: string | null) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   return async (dispatch: Dispatch, _getState: () => RootState) => {
     try {
       const response = await ProjectsService.listProjects(organizationId, locale);
@@ -18,6 +19,7 @@ export const requestProjects = (organizationId?: number, locale?: string | null)
   };
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const requestProject = (projectId: number) => async (dispatch: Dispatch, _getState: () => RootState) => {
   try {
     const response = await ProjectsService.getProject(projectId);

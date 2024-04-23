@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Container, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -171,7 +171,7 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const classes = useStyles({ isMobile });
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useStateLocation();
   const { hasNurseries, hasSpecies } = props;
   const [importInventoryModalOpen, setImportInventoryModalOpen] = useState(false);
@@ -188,9 +188,9 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
       await PreferencesService.updateUserPreferences({ inventoryListType: newTab });
       reloadUserPreferences();
       query.set('tab', newTab);
-      history.push(getLocation(location.pathname, location, query.toString()));
+      navigate(getLocation(location.pathname, location, query.toString()));
     },
-    [query, history, location, reloadUserPreferences]
+    [query, navigate, location, reloadUserPreferences]
   );
 
   useEffect(() => {
@@ -201,7 +201,7 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
     const appPathLocation = {
       pathname: appPath,
     };
-    history.push(appPathLocation);
+    navigate(appPathLocation);
   };
 
   const onCloseDownloadReportModal = () => {

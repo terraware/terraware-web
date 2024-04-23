@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import strings from 'src/strings';
@@ -10,7 +9,7 @@ import DialogBox from '../../components/common/DialogBox/DialogBox';
 import Select from '../../components/common/Select/Select';
 import Button from '../../components/common/button/Button';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   select: {
     width: '100%',
     textAlign: 'left',

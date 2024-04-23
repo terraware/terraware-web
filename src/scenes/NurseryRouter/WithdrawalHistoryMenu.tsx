@@ -27,6 +27,7 @@ export default function WithdrawalHistoryMenu(props: WithdrawalHistoryMenuProps)
     setMenuAnchorEl(null);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const openUndoWithdrawalHandler = (event: any) => {
     closeMenuHandler();
     undo();

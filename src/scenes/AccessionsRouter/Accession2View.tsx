@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Grid, Link as LinkMUI, Tab, Theme, Typography, useTheme } from '@mui/material';
@@ -82,7 +82,7 @@ export default function Accession2View(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { userPreferences } = useUser();
   const query = useQuery();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useStateLocation();
   const tab = (query.get('tab') || '').toLowerCase();
   const preselectedTab = TABS.indexOf(tab) === -1 ? 'detail' : tab;
@@ -125,16 +125,18 @@ export default function Accession2View(): JSX.Element {
 
   const reloadData = useCallback(() => {
     const populateAccession = async () => {
-      const response = await AccessionService.getAccession(parseInt(accessionId, 10));
-      if (response.requestSucceeded) {
-        if (!_.isEqual(response.accession, accession)) {
-          setAccession(response.accession);
-          setHasPendingTests(
-            response.accession?.viabilityTests?.some((test) => test.testType !== 'Cut' && !test.endDate) || false
-          );
+      if (accessionId) {
+        const response = await AccessionService.getAccession(parseInt(accessionId, 10));
+        if (response.requestSucceeded) {
+          if (!_.isEqual(response.accession, accession)) {
+            setAccession(response.accession);
+            setHasPendingTests(
+              response.accession?.viabilityTests?.some((test) => test.testType !== 'Cut' && !test.endDate) || false
+            );
+          }
+        } else {
+          snackbar.toastError();
         }
-      } else {
-        snackbar.toastError();
       }
     };
 
@@ -196,12 +198,12 @@ export default function Accession2View(): JSX.Element {
   }, [accession, activeLocale, seedBankTimeZone]);
 
   useEffect(() => {
-    setSelectedTab((query.get('tab') || 'detail') as string);
+    setSelectedTab(query.get('tab') || 'detail');
   }, [query]);
 
   const handleChange = (newValue: string) => {
     query.set('tab', newValue);
-    history.push(getLocation(location.pathname, location, query.toString()));
+    navigate(getLocation(location.pathname, location, query.toString()));
   };
 
   const tabStyles = {

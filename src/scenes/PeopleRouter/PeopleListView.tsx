@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Grid, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -69,7 +69,7 @@ export default function PeopleListView(): JSX.Element {
   const { user } = useUser();
   const classes = useStyles();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [selectedPeopleRows, setSelectedPeopleRows] = useState<OrganizationUser[]>([]);
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
   const [removePeopleModalOpened, setRemovePeopleModalOpened] = useState(false);
@@ -183,7 +183,7 @@ export default function PeopleListView(): JSX.Element {
     const newPersonLocation = {
       pathname: APP_PATHS.PEOPLE_NEW,
     };
-    history.push(newPersonLocation);
+    navigate(newPersonLocation);
   };
 
   const openDeleteOrgModal = () => {
@@ -261,7 +261,7 @@ export default function PeopleListView(): JSX.Element {
     } else {
       snackbar.toastError();
     }
-    history.push(APP_PATHS.PEOPLE);
+    navigate(APP_PATHS.PEOPLE);
   };
 
   const deleteOrgHandler = async () => {
@@ -296,7 +296,7 @@ export default function PeopleListView(): JSX.Element {
       } else {
         snackbar.toastError();
       }
-      history.push(APP_PATHS.HOME);
+      navigate(APP_PATHS.HOME);
     }
   };
 

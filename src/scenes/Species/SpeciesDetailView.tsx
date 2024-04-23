@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -44,7 +44,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
   const theme = useTheme();
   const classes = useStyles();
   const [species, setSpecies] = useState<Species>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isMobile } = useDeviceInfo();
   const { selectedOrganization } = useOrganization();
   const { speciesId } = useParams<{ speciesId: string }>();
@@ -66,19 +66,21 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
       if (speciesResponse.requestSucceeded) {
         setSpecies(speciesResponse.species);
       } else {
-        history.push(APP_PATHS.SPECIES);
+        navigate(APP_PATHS.SPECIES);
       }
     };
     if (selectedOrganization) {
       getSpecies();
     }
-  }, [speciesId, selectedOrganization, history]);
+  }, [speciesId, selectedOrganization, navigate]);
 
   const goToEditSpecies = () => {
-    const editSpeciesLocation = {
-      pathname: APP_PATHS.SPECIES_EDIT.replace(':speciesId', speciesId),
-    };
-    history.push(editSpeciesLocation);
+    if (speciesId) {
+      const editSpeciesLocation = {
+        pathname: APP_PATHS.SPECIES_EDIT.replace(':speciesId', speciesId),
+      };
+      navigate(editSpeciesLocation);
+    }
   };
 
   const onOptionItemClick = (optionItem: DropdownItem) => {
@@ -97,7 +99,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
       reloadData();
     }
     setDeleteSpeciesModalOpen(false);
-    history.push(APP_PATHS.SPECIES);
+    navigate(APP_PATHS.SPECIES);
   };
 
   return (
@@ -186,7 +188,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               name='rare'
               label={strings.RARE}
               disabled={true}
-              onChange={(value: boolean) => {
+              onChange={() => {
                 return;
               }}
               value={species?.rare}

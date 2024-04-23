@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
@@ -99,6 +99,7 @@ export default function OrganizationNotification(): Notification | null {
             timeZoneAcknowledgedOnMs: Date.now(),
           });
 
+          // eslint-disable-next-line @typescript-eslint/await-thenable
           await reloadUserPreferences();
         },
       };
