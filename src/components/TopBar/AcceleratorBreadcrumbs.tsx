@@ -61,7 +61,7 @@ export default function AcceleratorBreadcrumbs(): JSX.Element | null {
       <div>
         <Grid container>
           <Grid item>
-            <Link fontSize={16} to={APP_PATHS.ACCELERATOR} className={classes.link}>
+            <Link className={classes.link} fontSize={16} lineHeight='32px' to={APP_PATHS.ACCELERATOR}>
               {strings.ACCELERATOR_CONSOLE}
             </Link>
           </Grid>
