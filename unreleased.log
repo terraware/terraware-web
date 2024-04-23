@@ -1,3 +1,4 @@
+818ec97c50 SW-5255 Fix nav bar highlighted item (#2536)
 7932b3404d Changes to update react to v18 (#1820)
 ff674080ac Updated translations from Phrase (#2521)
 861f91a88c SW-5194 Clean up redux/rootReducer (#2527)

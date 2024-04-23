@@ -909,29 +909,29 @@ export default function <span class="fstat-no" title="function not covered" >Nav
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const { projectModules } = <span class="cstat-no" title="statement not covered" >useModules();</span>
 &nbsp;
-  const isAccessionDashboardRoute = <span class="cstat-no" title="statement not covered" >useMatch(APP_PATHS.SEEDS_DASHBOARD + '/');</span>
-  const isAccessionsRoute = <span class="cstat-no" title="statement not covered" >useMatch(APP_PATHS.ACCESSIONS + '/');</span>
-  const isCheckinRoute = <span class="cstat-no" title="statement not covered" >useMatch(APP_PATHS.CHECKIN + '/');</span>
-  const isContactUsRoute = <span class="cstat-no" title="statement not covered" >useMatch(APP_PATHS.CONTACT_US + '/');</span>
-  const isDeliverablesRoute = <span class="cstat-no" title="statement not covered" >useMatch(APP_PATHS.DELIVERABLES + '/');</span>
-  const isDeliverableViewRoute = <span class="cstat-no" title="statement not covered" >useMatch(APP_PATHS.DELIVERABLE_VIEW + '/');</span>
-  const isHomeRoute = <span class="cstat-no" title="statement not covered" >useMatch(APP_PATHS.HOME + '/');</span>
-  const isPeopleRoute = <span class="cstat-no" title="statement not covered" >useMatch(APP_PATHS.PEOPLE + '/');</span>
-  const isSpeciesRoute = <span class="cstat-no" title="statement not covered" >useMatch(APP_PATHS.SPECIES + '/');</span>
-  const isOrganizationRoute = <span class="cstat-no" title="statement not covered" >useMatch(APP_PATHS.ORGANIZATION + '/');</span>
-  const isMonitoringRoute = <span class="cstat-no" title="statement not covered" >useMatch(APP_PATHS.MONITORING + '/');</span>
-  const isSeedbanksRoute = <span class="cstat-no" title="statement not covered" >useMatch(APP_PATHS.SEED_BANKS + '/');</span>
-  const isNurseriesRoute = <span class="cstat-no" title="statement not covered" >useMatch(APP_PATHS.NURSERIES + '/');</span>
-  const isInventoryRoute = <span class="cstat-no" title="statement not covered" >useMatch(APP_PATHS.INVENTORY + '/');</span>
-  const isBatchWithdrawRoute = <span class="cstat-no" title="statement not covered" >useMatch(APP_PATHS.BATCH_WITHDRAW + '/');</span>
-  const isPlantingSitesRoute = <span class="cstat-no" title="statement not covered" >useMatch(APP_PATHS.PLANTING_SITES + '/');</span>
-  const isPlantsDashboardRoute = <span class="cstat-no" title="statement not covered" >useMatch(APP_PATHS.PLANTS_DASHBOARD + '/');</span>
-  const isWithdrawalLogRoute = <span class="cstat-no" title="statement not covered" >useMatch(APP_PATHS.NURSERY_WITHDRAWALS + '/');</span>
-  const isReassignmentRoute = <span class="cstat-no" title="statement not covered" >useMatch(APP_PATHS.NURSERY_REASSIGNMENT + '/');</span>
-  const isReportsRoute = <span class="cstat-no" title="statement not covered" >useMatch(APP_PATHS.REPORTS + '/');</span>
-  const isObservationsRoute = <span class="cstat-no" title="statement not covered" >useMatch(APP_PATHS.OBSERVATIONS + '/');</span>
-  const isProjectsRoute = <span class="cstat-no" title="statement not covered" >useMatch(APP_PATHS.PROJECTS + '/');</span>
-  const isProjectModulesRoute = <span class="cstat-no" title="statement not covered" >useMatch(APP_PATHS.PROJECT_MODULES + '/');</span>
+  const isAccessionDashboardRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.SEEDS_DASHBOARD + '/', end: false });</span>
+  const isAccessionsRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.ACCESSIONS + '/', end: false });</span>
+  const isCheckinRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.CHECKIN + '/', end: false });</span>
+  const isContactUsRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.CONTACT_US + '/', end: false });</span>
+  const isDeliverablesRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.DELIVERABLES + '/', end: false });</span>
+  const isDeliverableViewRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.DELIVERABLE_VIEW + '/', end: false });</span>
+  const isHomeRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.HOME + '/', end: false });</span>
+  const isPeopleRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.PEOPLE + '/', end: false });</span>
+  const isSpeciesRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.SPECIES + '/', end: false });</span>
+  const isOrganizationRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.ORGANIZATION + '/', end: false });</span>
+  const isMonitoringRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.MONITORING + '/', end: false });</span>
+  const isSeedbanksRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.SEED_BANKS + '/', end: false });</span>
+  const isNurseriesRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.NURSERIES + '/', end: false });</span>
+  const isInventoryRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.INVENTORY + '/', end: false });</span>
+  const isBatchWithdrawRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.BATCH_WITHDRAW + '/', end: false });</span>
+  const isPlantingSitesRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.PLANTING_SITES + '/', end: false });</span>
+  const isPlantsDashboardRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.PLANTS_DASHBOARD + '/', end: false });</span>
+  const isWithdrawalLogRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.NURSERY_WITHDRAWALS + '/', end: false });</span>
+  const isReassignmentRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.NURSERY_REASSIGNMENT + '/', end: false });</span>
+  const isReportsRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.REPORTS + '/', end: false });</span>
+  const isObservationsRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.OBSERVATIONS + '/', end: false });</span>
+  const isProjectsRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.PROJECTS + '/', end: false });</span>
+  const isProjectModulesRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.PROJECT_MODULES + '/', end: false });</span>
 &nbsp;
   const featureFlagParticipantExperience = <span class="cstat-no" title="statement not covered" >isEnabled('Participant Experience');</span>
 &nbsp;
@@ -1270,7 +1270,7 @@ export default function <span class="fstat-no" title="function not covered" >Nav
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-23T13:38:23.998Z
+                at 2024-04-23T14:41:30.265Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
