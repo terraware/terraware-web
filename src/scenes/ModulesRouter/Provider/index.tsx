@@ -23,6 +23,8 @@ const ModuleProvider = ({ children }: Props) => {
   const projectId = Number(pathParams.projectId);
   const sessionId = Number(pathParams.sessionId);
 
+  console.log({ moduleId, projectId });
+
   const [allSessions, setAllSessions] = useState<ModuleEventSession[]>([]);
   const [event, setEvent] = useState<ModuleEvent>();
   const [module, setModule] = useState<Module>();

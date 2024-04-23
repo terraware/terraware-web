@@ -17,6 +17,7 @@ export type Props = {
 const ProjectProvider = ({ children }: Props) => {
   const dispatch = useAppDispatch();
   const pathParams = useParams<{ projectId: string }>();
+  console.log(pathParams);
   const pathProjectId = Number(pathParams.projectId);
   const { goToParticipantProjectList } = useNavigateTo();
 

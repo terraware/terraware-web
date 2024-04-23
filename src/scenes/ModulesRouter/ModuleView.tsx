@@ -51,7 +51,7 @@ const MODULE_CONTENTS = (): ModuleContent[] => [
   },
 ];
 
-const ModuleContentView = () => {
+const ModuleView = () => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
   const { goToDeliverable, goToModuleContent, goToModuleEventSession } = useNavigateTo();
@@ -211,4 +211,4 @@ const ModuleContentView = () => {
   );
 };
 
-export default ModuleContentView;
+export default ModuleView;
