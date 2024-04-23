@@ -502,7 +502,6 @@ export default function ReportEdit(): JSX.Element {
       <SubmitConfirmationDialog
         open={confirmSubmitDialogOpen}
         onClose={() => setConfirmSubmitDialogOpen(false)}
-        onCancel={() => setConfirmSubmitDialogOpen(false)}
         onSubmit={submitReport}
       />
       {busyState && <BusySpinner withSkrim={true} />}

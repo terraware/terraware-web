@@ -85,7 +85,7 @@ export default function ProjectView(): JSX.Element {
         <Button label={strings.EDIT_PROJECT} icon='iconEdit' onClick={goToEditProject} size='medium' id='editProject' />
         <OptionsMenu
           onOptionItemClick={onOptionItemClick}
-          optionItems={[{ label: activeLocale ? strings.DELETE : '', value: 'delete' }]}
+          optionItems={[{ label: activeLocale ? strings.DELETE : '', value: 'delete', type: 'destructive' }]}
         />
       </>
     ),
@@ -123,7 +123,6 @@ export default function ProjectView(): JSX.Element {
       <DeleteConfirmationDialog
         open={isDeleteConfirmationOpen}
         onClose={onDeleteConfirmationDialogClose}
-        onCancel={onDeleteConfirmationDialogClose}
         onSubmit={onDeleteConfirmationDialogSubmit}
       />
     </Page>
