@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Typography, useTheme } from '@mui/material';
-import { Button, DialogBox } from '@terraware/web-components';
+import { Confirm } from '@terraware/web-components';
 
 import strings from 'src/strings';
 
@@ -17,37 +17,25 @@ export default function StatusChangeConfirmationDialog({
   const theme = useTheme();
 
   return (
-    <DialogBox
+    <Confirm
+      closeButtonText={strings.CANCEL}
+      confirmButtonText={strings.CONTINUE_AND_RESET_STATUS}
+      message={(
+        <>
+          <Typography fontSize='16px' fontWeight={400} marginBottom={theme.spacing(2)}>
+            {strings.DELIVERABLE_STATUS_CHANGE_CONFIRMATION_1}
+          </Typography>
+
+          <Typography fontSize='16px' fontWeight={400}>
+            {strings.DELIVERABLE_STATUS_CHANGE_CONFIRMATION_2}
+          </Typography>
+        </>
+      )}
       onClose={onClose}
+      onConfirm={onConfirm}
       open={true}
-      middleButtons={[
-        <Button
-          id='cancel'
-          key='button-1'
-          label={strings.CANCEL}
-          onClick={onClose}
-          priority='secondary'
-          type='passive'
-        />,
-        <Button
-          id='submit'
-          key='button-2'
-          label={strings.CONTINUE_AND_RESET_STATUS}
-          onClick={onConfirm}
-          priority='primary'
-        />,
-      ]}
-      scrolled
       size='large'
       title={strings.SUBMIT_DOCUMENT}
-    >
-      <Typography fontSize='16px' fontWeight={400} marginBottom={theme.spacing(2)}>
-        {strings.DELIVERABLE_STATUS_CHANGE_CONFIRMATION_1}
-      </Typography>
-
-      <Typography fontSize='16px' fontWeight={400}>
-        {strings.DELIVERABLE_STATUS_CHANGE_CONFIRMATION_2}
-      </Typography>
-    </DialogBox>
+    />
   );
 }

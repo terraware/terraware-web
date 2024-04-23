@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Typography, useTheme } from '@mui/material';
-import { Button, DialogBox } from '@terraware/web-components';
+import { Confirm } from '@terraware/web-components';
 
 import strings from 'src/strings';
 
@@ -9,43 +9,37 @@ export type ConcurrentEditorWarningDialogProps = {
   open: boolean;
   lockedBy: string;
   onClose: () => void;
-  onCancel: () => void;
   onConfirm: () => void;
 };
 
 export default function ConcurrentEditorWarningDialog({
   open,
   lockedBy,
-  onCancel,
   onClose,
   onConfirm,
 }: ConcurrentEditorWarningDialogProps): JSX.Element {
   const theme = useTheme();
 
   return (
-    <DialogBox
+    <Confirm
+      closeButtonId='cancelEditReport'
+      closeButtonText={strings.CANCEL}
+      confirmButtonId='confirmEdit'
+      confirmButtonText={strings.REPORT_EDIT}
+      message={
+        <>
+          <Typography fontSize='16px' fontWeight={400}>
+            {strings.formatString(strings.REPORT_CONCURRENT_EDITOR_WARNING_1, lockedBy ?? '')}
+          </Typography>
+          <Typography fontSize='16px' fontWeight={400} marginTop={theme.spacing(3)}>
+            {strings.REPORT_CONCURRENT_EDITOR_WARNING_2}
+          </Typography>
+        </>
+      }
       open={open}
-      title={strings.REPORT_CONCURRENT_EDITOR}
-      size='medium'
       onClose={onClose}
-      middleButtons={[
-        <Button
-          id='cancelEditReport'
-          label={strings.CANCEL}
-          priority='secondary'
-          type='passive'
-          onClick={onCancel}
-          key='button-1'
-        />,
-        <Button id='confirmEdit' label={strings.REPORT_EDIT} onClick={onConfirm} key='button-2' />,
-      ]}
-    >
-      <Typography fontSize='16px' fontWeight={400}>
-        {strings.formatString(strings.REPORT_CONCURRENT_EDITOR_WARNING_1, lockedBy ?? '')}
-      </Typography>
-      <Typography fontSize='16px' fontWeight={400} marginTop={theme.spacing(3)}>
-        {strings.REPORT_CONCURRENT_EDITOR_WARNING_2}
-      </Typography>
-    </DialogBox>
+      onConfirm={onConfirm}
+      title={strings.REPORT_CONCURRENT_EDITOR}
+    />
   );
 }

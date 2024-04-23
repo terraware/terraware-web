@@ -93,7 +93,6 @@ export default function ReportView(): JSX.Element {
         open={confirmEditDialogOpen}
         lockedBy={report?.lockedByName ?? ''}
         onClose={() => setConfirmEditDialogOpen(false)}
-        onCancel={() => setConfirmEditDialogOpen(false)}
         onConfirm={confirmEdit}
       />
       <Box display='flex' flexDirection='column'>
