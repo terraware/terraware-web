@@ -1,3 +1,4 @@
+4bf612ca5b SW-5265 Fix popup not rendering correctly in plants dashboard map (#2539)
 6fce90a093 SW-5257 Fix my-account/edit redirect for no-org view (#2538)
 818ec97c50 SW-5255 Fix nav bar highlighted item (#2536)
 7932b3404d Changes to update react to v18 (#1820)

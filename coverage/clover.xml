@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1713891641297" clover="3.2.0">
-  <project timestamp="1713891641297" name="All files">
+<coverage generated="1713901320947" clover="3.2.0">
+  <project timestamp="1713901320947" name="All files">
     <metrics statements="21098" coveredstatements="918" conditionals="13282" coveredconditionals="228" methods="6622" coveredmethods="162" elements="41002" coveredelements="1308" complexity="0" loc="21098" ncloc="21098" packages="198" files="929" classes="929"/>
     <package name="src">
       <metrics statements="159" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="37" coveredmethods="0"/>
@@ -3150,13 +3150,13 @@
         <line num="463" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="464" count="0" type="stmt"/>
         <line num="465" count="0" type="stmt"/>
-        <line num="481" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="482" count="0" type="stmt"/>
-        <line num="484" count="0" type="stmt"/>
+        <line num="482" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="483" count="0" type="stmt"/>
         <line num="485" count="0" type="stmt"/>
-        <line num="505" count="0" type="stmt"/>
+        <line num="486" count="0" type="stmt"/>
         <line num="506" count="0" type="stmt"/>
-        <line num="508" count="0" type="stmt"/>
+        <line num="507" count="0" type="stmt"/>
+        <line num="509" count="0" type="stmt"/>
       </file>
       <file name="MapBanner.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Map/MapBanner.tsx">
         <metrics statements="5" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
