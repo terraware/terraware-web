@@ -41,5 +41,6 @@ export const getModuleEventName = (moduleEventType: ModuleEventType) => {
 };
 
 export const getModuleNumber = (module?: Module, modules?: Module[]): string => {
-  return ((modules || []).findIndex((m) => m.id === module?.id) + 1).toString();
+  const index = (modules || []).findIndex((m) => m.id === module?.id);
+  return index === -1 ? '' : (index + 1).toString();
 };
