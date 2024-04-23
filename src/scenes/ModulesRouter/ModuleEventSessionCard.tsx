@@ -5,7 +5,7 @@ import { Button } from '@terraware/web-components';
 
 import strings from 'src/strings';
 
-const ModuleEventCard = ({
+const ModuleEventSessionCard = ({
   label,
   leftBorder = true,
   onClickButton,
@@ -34,11 +34,13 @@ const ModuleEventCard = ({
         <Typography fontSize={'20px'} lineHeight={'28px'} fontWeight={600} marginBottom={theme.spacing(1)}>
           {label}
         </Typography>
+
         <Typography marginBottom={theme.spacing(1)}>{value}</Typography>
+
         {onClickButton && <Button label={strings.MORE_INFO} onClick={onClickButton} priority='secondary' />}
       </Box>
     </Grid>
   );
 };
 
-export default ModuleEventCard;
+export default ModuleEventSessionCard;

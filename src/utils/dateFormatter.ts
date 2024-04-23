@@ -34,3 +34,14 @@ export const getDateTimeDisplayValue = (timestamp: number): string => {
   // DateTime has pre-supported formats but none satisfy our requirements
   return `${getDateDisplayValue(timestamp)} ${dateTime.toLocaleString(DateTime.TIME_SIMPLE)}`;
 };
+
+export const getDateRangeString = (startDate: string, endDate: string, locale: string | undefined | null) => {
+  const formattedStart = new Intl.DateTimeFormat(locale || 'en-US', { month: 'numeric', day: 'numeric' }).format(
+    new Date(startDate)
+  );
+  const formattedEnd = new Intl.DateTimeFormat(locale || 'en-US', { month: 'numeric', day: 'numeric' }).format(
+    new Date(endDate)
+  );
+
+  return `${formattedStart}–${formattedEnd}`;
+};

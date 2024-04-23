@@ -40,12 +40,12 @@ const CurrentModule = () => {
 
             <Grid item xs={12}>
               <Typography fontSize={'24px'} fontWeight={600} lineHeight={'32px'}>
-                {currentModule.title}
+                {currentModule.name}
               </Typography>
             </Grid>
 
             <Grid item xs={12}>
-              <Box dangerouslySetInnerHTML={{ __html: currentModule.description }} />
+              <Box dangerouslySetInnerHTML={{ __html: currentModule.overview || '' }} />
             </Grid>
 
             <Grid item xs={12}>

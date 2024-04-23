@@ -1,4 +1,6 @@
 export const API_PULL_INTERVAL = 60000;
+export const ONE_MINUTE_INTERVAL_MS = 60 * 1000;
+export const FIFTEEN_MINUTE_INTERVAL_MS = 15 * 60 * 1000;
 
 export const SEED_COLLECTOR_APP_STORE_LINK = 'https://apps.apple.com/us/app/terraware/id1568369900';
 export const SEED_COLLECTOR_GOOGLE_PLAY_LINK =

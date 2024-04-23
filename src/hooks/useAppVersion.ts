@@ -1,10 +1,9 @@
 import { useEffect } from 'react';
 
+import { ONE_MINUTE_INTERVAL_MS } from 'src/constants';
 import { requestAppVersion } from 'src/redux/features/appVersion/appVersionThunks';
 
 import { useAppDispatch } from './../redux/store';
-
-const ONE_MINUTE_INTERVAL_MS = 60 * 1000;
 
 // variable used to track interval references
 let checkInterval: NodeJS.Timeout;
