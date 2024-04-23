@@ -70,7 +70,7 @@ const OverviewView = () => {
   });
 
   return (
-    <Page title={strings.OVERVIEW}>
+    <Page title={strings.OVERVIEW} contentStyle={{ display: 'block' }}>
       <Box display='flex' flexDirection='column' flexGrow={1} className={classes.tabs}>
         <Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} />
       </Box>
