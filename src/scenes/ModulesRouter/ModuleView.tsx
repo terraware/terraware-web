@@ -9,7 +9,7 @@ import { APP_PATHS, ONE_MINUTE_INTERVAL_MS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useProject } from 'src/providers';
 import strings from 'src/strings';
-import { ModuleContentType } from 'src/types/Module';
+import { ModuleContentType, ModuleWithNumber } from 'src/types/Module';
 import { getLongDate, getLongDateTime } from 'src/utils/dateFormatter';
 
 import ModuleEventSessionCard from './ModuleEventSessionCard';
@@ -40,16 +40,25 @@ type ModuleContent = {
   label: string;
 };
 
-const MODULE_CONTENTS = (): ModuleContent[] => [
-  {
-    type: 'additionalResources',
-    label: strings.ADDITIONAL_RESOURCES,
-  },
-  {
-    type: 'preparationMaterials',
-    label: strings.PREPARATION_MATERIALS,
-  },
-];
+const MODULE_CONTENTS = (module: ModuleWithNumber): ModuleContent[] => {
+  const content: ModuleContent[] = [];
+
+  if (module.additionalResources) {
+    content.push({
+      type: 'additionalResources',
+      label: strings.ADDITIONAL_RESOURCES,
+    });
+  }
+
+  if (module.preparationMaterials) {
+    content.push({
+      type: 'preparationMaterials',
+      label: strings.PREPARATION_MATERIALS,
+    });
+  }
+
+  return content;
+};
 
 const ModuleView = () => {
   const { activeLocale } = useLocalization();
@@ -89,6 +98,8 @@ const ModuleView = () => {
     },
     [now, theme]
   );
+
+  const contents = useMemo(() => (module ? MODULE_CONTENTS(module) : []), [module]);
 
   // update the current time every minute
   useEffect(() => {
@@ -163,13 +174,15 @@ const ModuleView = () => {
                 </>
               )}
 
-              <ModuleContentSection>
-                <Typography fontSize={'20px'} lineHeight={'28px'} fontWeight={600}>
-                  {strings.THIS_MODULE_CONTAINS}
-                </Typography>
-              </ModuleContentSection>
+              {contents.length > 0 && (
+                <ModuleContentSection>
+                  <Typography fontSize={'20px'} lineHeight={'28px'} fontWeight={600}>
+                    {strings.THIS_MODULE_CONTAINS}
+                  </Typography>
+                </ModuleContentSection>
+              )}
 
-              {MODULE_CONTENTS().map((content, index) => (
+              {contents.map((content, index) => (
                 <ModuleContentSection key={index}>
                   <Link fontSize='16px' onClick={() => goToModuleContent(projectId, module.id, content.type)}>
                     {content.label}
