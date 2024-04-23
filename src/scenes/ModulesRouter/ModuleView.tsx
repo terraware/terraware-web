@@ -9,7 +9,7 @@ import { APP_PATHS, ONE_MINUTE_INTERVAL_MS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useProject } from 'src/providers';
 import strings from 'src/strings';
-import { getModuleNumber } from 'src/types/Module';
+import { ModuleContentType } from 'src/types/Module';
 import { getLongDate, getLongDateTime } from 'src/utils/dateFormatter';
 
 import ModuleEventSessionCard from './ModuleEventSessionCard';
@@ -36,17 +36,17 @@ const ModuleContentSection = ({ children }: { children: React.ReactNode }) => {
 };
 
 type ModuleContent = {
-  key: 'additionalResources' | 'preparationMaterials';
+  type: ModuleContentType;
   label: string;
 };
 
 const MODULE_CONTENTS = (): ModuleContent[] => [
   {
-    key: 'additionalResources',
+    type: 'additionalResources',
     label: strings.ADDITIONAL_RESOURCES,
   },
   {
-    key: 'preparationMaterials',
+    type: 'preparationMaterials',
     label: strings.PREPARATION_MATERIALS,
   },
 ];
@@ -121,7 +121,7 @@ const ModuleContentView = () => {
             <Grid item xs style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
               <ModuleContentSection>
                 <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={500}>
-                  {strings.formatString(strings.MODULE_N_OVERVIEW, getModuleNumber(module, modules))}
+                  {strings.formatString(strings.MODULE_N_OVERVIEW, module.number)}
                 </Typography>
                 <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
                   {module.name}
@@ -171,7 +171,7 @@ const ModuleContentView = () => {
 
               {MODULE_CONTENTS().map((content, index) => (
                 <ModuleContentSection key={index}>
-                  <Link fontSize='16px' onClick={() => goToModuleContent(projectId, module.id, content.key)}>
+                  <Link fontSize='16px' onClick={() => goToModuleContent(projectId, module.id, content.type)}>
                     {content.label}
                   </Link>
                   {module.endDate && (

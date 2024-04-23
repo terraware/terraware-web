@@ -22,7 +22,4 @@ export const getEventType = (input: ModuleEventType): string => {
   }
 };
 
-export const getModuleNumber = (module?: Module, modules?: Module[]): string => {
-  const index = (modules || []).findIndex((m) => m.id === module?.id);
-  return index === -1 ? '' : (index + 1).toString();
-};
+export type ModuleContentType = keyof Pick<Module, 'additionalResources' | 'preparationMaterials'>;

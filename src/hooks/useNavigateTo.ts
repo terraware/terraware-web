@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
+import { ModuleContentType } from 'src/types/Module';
 
 export default function useNavigateTo() {
   const navigate = useNavigate();
@@ -31,11 +32,7 @@ export default function useNavigateTo() {
           pathname: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
         }),
 
-      goToModuleContent: (
-        projectId: number,
-        moduleId: number,
-        type: 'additionalResources' | 'preparationMaterials'
-      ) => {
+      goToModuleContent: (projectId: number, moduleId: number, type: ModuleContentType) => {
         let pathname = '';
         switch (type) {
           case 'additionalResources':
