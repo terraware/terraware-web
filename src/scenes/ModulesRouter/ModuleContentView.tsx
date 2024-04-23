@@ -45,7 +45,7 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
       },
       {
         // TODO this will need to become "module index" or something
-        name: activeLocale ? strings.formatString(strings.MODULE_NUMBER, `${module?.id}`) : '',
+        name: (activeLocale ? strings.formatString(strings.MODULE_NUMBER, `${module?.id}`) : '') as string,
         to: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
       },
     ],
@@ -54,7 +54,6 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
 
   useEffect(() => {
     const nextContent = (module || {})[contentType];
-    console.log('nextContent', nextContent);
     if (module && nextContent) {
       setContent(nextContent);
     }
@@ -86,8 +85,9 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
             <Grid item xs style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
               <ModuleContentSection>
                 <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={500}>
-                  {strings.formatString(strings.MODULE_NAME_OVERVIEW, module.name)}
+                  {strings.formatString(strings.MODULE_N, module.number)}
                 </Typography>
+
                 <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
                   {module.name}
                 </Typography>

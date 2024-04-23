@@ -1,14 +1,14 @@
 import { paths } from 'src/api/types/generated-schema';
-import { Module } from 'src/types/Module';
+import { Module, ModuleWithNumber } from 'src/types/Module';
 
 import HttpService, { Response2 } from './HttpService';
 
 export type ModulesData = {
-  modules: Module[] | undefined;
+  modules: ModuleWithNumber[] | undefined;
 };
 
 export type ModuleData = {
-  module: Module | undefined;
+  module: ModuleWithNumber | undefined;
 };
 
 const PROJECT_MODULES_ENDPOINT = '/api/v1/modules/projects/{projectId}';
@@ -27,7 +27,16 @@ const list = (projectId: number | null): Promise<Response2<ModulesData | null>> 
       url: PROJECT_MODULES_ENDPOINT,
       urlReplacements: { '{projectId}': `${projectId}` },
     },
-    (response) => ({ data: { modules: response?.modules } })
+    (response) => ({
+      data: {
+        modules: response?.modules.map(
+          (module: Module, index: number): ModuleWithNumber => ({
+            ...module,
+            number: index + 1,
+          })
+        ),
+      },
+    })
   );
 
 /**
@@ -37,12 +46,18 @@ const get = async (projectId: number, moduleId: number): Promise<Response2<Modul
   // TODO this will become its own API in the BE soon.
   const _list = await list(projectId);
   if (_list && _list.requestSucceeded && _list.data?.modules) {
-    return {
-      requestSucceeded: true,
-      data: {
-        module: _list.data?.modules?.find((module) => module.id === moduleId),
-      },
-    };
+    const module = _list.data.modules.find((module) => module.id === moduleId);
+    if (module) {
+      return {
+        requestSucceeded: true,
+        data: {
+          module: {
+            ...module,
+            number: _list.data.modules.indexOf(module) + 1,
+          },
+        },
+      };
+    }
   }
 
   return {

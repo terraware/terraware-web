@@ -5,7 +5,7 @@ import { requestGetModule } from 'src/redux/features/modules/modulesAsyncThunks'
 import { selectModuleRequest } from 'src/redux/features/modules/modulesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { Module, ModuleEvent, ModuleEventSession } from 'src/types/Module';
+import { ModuleEvent, ModuleEventSession, ModuleWithNumber } from 'src/types/Module';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { ModuleContext, ModuleData } from './Context';
@@ -23,11 +23,9 @@ const ModuleProvider = ({ children }: Props) => {
   const projectId = Number(pathParams.projectId);
   const sessionId = Number(pathParams.sessionId);
 
-  console.log({ moduleId, projectId });
-
   const [allSessions, setAllSessions] = useState<ModuleEventSession[]>([]);
   const [event, setEvent] = useState<ModuleEvent>();
-  const [module, setModule] = useState<Module>();
+  const [module, setModule] = useState<ModuleWithNumber>();
   const [session, setSession] = useState<ModuleEventSession>();
 
   const [requestId, setRequestId] = useState('');

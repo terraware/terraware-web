@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { Module } from 'src/types/Module';
+import { ModuleWithNumber } from 'src/types/Module';
 
 import { StatusT, buildReducers } from '../asyncUtils';
 import { requestGetModule, requestListModules } from './modulesAsyncThunks';
@@ -8,7 +8,7 @@ import { requestGetModule, requestListModules } from './modulesAsyncThunks';
 /**
  * Get Module
  */
-const initialStateModule: { [key: string]: StatusT<Module> } = {};
+const initialStateModule: { [key: string]: StatusT<ModuleWithNumber> } = {};
 
 export const moduleSlice = createSlice({
   name: 'moduleSlice',
@@ -22,7 +22,7 @@ export const moduleSlice = createSlice({
 /**
  * List Modules
  */
-const initialStateModuleList: { [key: string]: StatusT<Module[]> } = {};
+const initialStateModuleList: { [key: string]: StatusT<ModuleWithNumber[]> } = {};
 
 export const moduleListSlice = createSlice({
   name: 'moduleListSlice',
