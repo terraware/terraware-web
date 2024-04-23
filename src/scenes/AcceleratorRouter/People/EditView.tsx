@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useTheme } from '@mui/material';
-
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
 import { requestUpdateGlobalRolesUser } from 'src/redux/features/globalRoles/globalRolesAsyncThunks';
@@ -22,7 +20,6 @@ const EditView = () => {
   const navigate = useNavigate();
   const location = useStateLocation();
   const snackbar = useSnackbar();
-  const theme = useTheme();
   const { user, userId } = usePersonData();
 
   const [saveRequestId, setSaveRequestId] = useState('');
@@ -55,10 +52,7 @@ const EditView = () => {
   }, [dispatch, goToViewPerson, saveRequest, snackbar, userId]);
 
   return (
-    <Page
-      contentStyle={{ display: 'flex', flexDirection: 'column', marginRight: theme.spacing(2), width: 'auto' }}
-      title={user?.email || ''}
-    >
+    <Page title={user?.email || ''} contentStyle={{ display: 'flex', flexDirection: 'column' }}>
       {user && (
         <PersonForm
           busy={saveRequest?.status === 'pending'}
