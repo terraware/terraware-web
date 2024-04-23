@@ -32,7 +32,7 @@ export default function useNavigateTo() {
         }),
 
       goToModuleAdditionalResources: (projectId: number, moduleId: number) =>
-        history.push({
+        navigate({
           pathname: APP_PATHS.PROJECT_MODULE_ADDITIONAL_RESOURCES.replace(':projectId', `${projectId}`).replace(
             ':moduleId',
             `${moduleId}`
@@ -40,7 +40,7 @@ export default function useNavigateTo() {
         }),
 
       goToModulePreparationMaterials: (projectId: number, moduleId: number) =>
-        history.push({
+        navigate({
           pathname: APP_PATHS.PROJECT_MODULE_PREPARATION_MATERIALS.replace(':projectId', `${projectId}`).replace(
             ':moduleId',
             `${moduleId}`
