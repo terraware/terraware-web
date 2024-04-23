@@ -54,7 +54,7 @@ const MODULE_CONTENTS = (): ModuleContent[] => [
 const ModuleContentView = () => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const { goToDeliverable, goToModuleEventSession } = useNavigateTo();
+  const { goToDeliverable, goToModuleContent, goToModuleEventSession } = useNavigateTo();
   const mockDeliverables: MockModuleDeliverable[] = []; // TODO: get deliverables
 
   const { project, projectId } = useProject();
@@ -171,7 +171,7 @@ const ModuleContentView = () => {
 
               {MODULE_CONTENTS().map((content, index) => (
                 <ModuleContentSection key={index}>
-                  <Link fontSize='16px' onClick={() => na}>
+                  <Link fontSize='16px' onClick={() => goToModuleContent(projectId, module.id, content.key)}>
                     {content.label}
                   </Link>
                   {module.endDate && (
@@ -198,7 +198,7 @@ const ModuleContentView = () => {
                   <ModuleEventSessionCard
                     key={session.id}
                     label={session.type}
-                    onClickButton={() => goToModuleEventSession(session.id, module.id)}
+                    onClickButton={() => goToModuleEventSession(session.id, module.id, projectId)}
                     value={session.startTime ? getLongDateTime(session.startTime, activeLocale) : ''}
                   />
                 ))}

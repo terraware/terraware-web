@@ -12,18 +12,22 @@ const ModulesRouter = () => {
   return (
     <ProjectProvider>
       <Routes>
-        <Route path={'/*'} element={<ListView />} />
+        {/* @see /src/constants.ts:APP_PATHS.PROJECT_MODULE */}
         <Route
           path={'/:moduleId'}
           element={
             <ModuleProvider>
               <Routes>
+                {/* @see /src/constants.ts:APP_PATHS.PROJECT_MODULE */}
                 <Route path={'/*'} element={<ModuleView />} />
+                {/* @see /src/constants.ts:APP_PATHS.PROJECT_MODULE_SESSION */}
                 <Route path={'/session/:sessionId'} element={<ModuleEventSessionView />} />
               </Routes>
             </ModuleProvider>
           }
         />
+        {/* @see /src/constants.ts:APP_PATHS.PROJECT_MODULES */}
+        <Route path={'/*'} element={<ListView />} />
       </Routes>
     </ProjectProvider>
   );

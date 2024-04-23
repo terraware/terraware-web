@@ -30,7 +30,7 @@ const ToDoCta = ({ toDo }: ToDoCtaProps) => {
     if (toDo.deliverableId) {
       goToDeliverable(toDo.deliverableId, toDo.projectId);
     } else if (toDo.eventId) {
-      goToModuleEventSession(toDo.eventId, toDo.moduleId);
+      goToModuleEventSession(toDo.eventId, toDo.moduleId, toDo.projectId);
     }
   }, [goToDeliverable, goToModuleEventSession, toDo]);
 

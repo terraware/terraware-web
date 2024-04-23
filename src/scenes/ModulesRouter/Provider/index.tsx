@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { requestGetModule } from 'src/redux/features/modules/modulesAsyncThunks';
@@ -41,7 +41,7 @@ const ModuleProvider = ({ children }: Props) => {
   });
 
   useEffect(() => {
-    if (isNaN(projectId) || isNaN(moduleId)) {
+    if (!isNaN(projectId) && !isNaN(moduleId)) {
       const request = dispatch(requestGetModule({ projectId, moduleId }));
       setRequestId(request.requestId);
     }

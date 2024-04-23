@@ -22,12 +22,12 @@ const httpProjectModules = HttpService.root(PROJECT_MODULES_ENDPOINT);
  * List all modules for a project
  */
 const list = (projectId: number | null): Promise<Response2<ModulesData | null>> =>
-  httpProjectModules.get<ListModulesResponsePayload, { data: Module[] | undefined }>(
+  httpProjectModules.get<ListModulesResponsePayload, { data: ModulesData | undefined }>(
     {
       url: PROJECT_MODULES_ENDPOINT,
       urlReplacements: { '{projectId}': `${projectId}` },
     },
-    (response) => ({ data: response?.modules })
+    (response) => ({ data: { modules: response?.modules } })
   );
 
 /**
@@ -40,7 +40,7 @@ const get = async (projectId: number, moduleId: number): Promise<Response2<Modul
     return {
       requestSucceeded: true,
       data: {
-        module: _list.data.modules.find((module) => module.id === moduleId),
+        module: _list.data?.modules?.find((module) => module.id === moduleId),
       },
     };
   }

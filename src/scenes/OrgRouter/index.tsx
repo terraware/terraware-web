@@ -266,7 +266,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
             {!isProduction && (
               <Route path={APP_PATHS.OPT_IN} element={<OptInFeaturesView refresh={reloadPreferences} />} />
             )}
-            {/* 
+            {/*
             <Route path='*' element={<RedirectsRouter />} /> */}
             <Route path='*' element={<Navigate to={APP_PATHS.HOME} />} />
           </Routes>
