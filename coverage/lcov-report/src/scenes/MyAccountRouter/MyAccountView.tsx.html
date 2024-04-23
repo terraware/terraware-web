@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/127</span>
+                <span class='fraction'>0/131</span>
             </div>
         
             
@@ -638,7 +638,14 @@
 <a name='L573'></a><a href='#L573'>573</a>
 <a name='L574'></a><a href='#L574'>574</a>
 <a name='L575'></a><a href='#L575'>575</a>
-<a name='L576'></a><a href='#L576'>576</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L576'></a><a href='#L576'>576</a>
+<a name='L577'></a><a href='#L577'>577</a>
+<a name='L578'></a><a href='#L578'>578</a>
+<a name='L579'></a><a href='#L579'>579</a>
+<a name='L580'></a><a href='#L580'>580</a>
+<a name='L581'></a><a href='#L581'>581</a>
+<a name='L582'></a><a href='#L582'>582</a>
+<a name='L583'></a><a href='#L583'>583</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -693,6 +700,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -700,6 +709,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -717,6 +727,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -732,12 +743,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1014,6 +1027,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1262,8 +1276,10 @@ import DeleteOrgDialog from './DeleteOrgModal';
 import LeaveOrganizationDialog from './LeaveOrganizationModal';
 &nbsp;
 type MyAccountProps = {
-  organizations?: Organization[];
+  className?: string;
   edit: boolean;
+  hasNav?: boolean;
+  organizations?: Organization[];
   reloadData?: () =&gt; void;
 };
 &nbsp;
@@ -1278,11 +1294,13 @@ export default function <span class="fstat-no" title="function not covered" >MyA
 }
 &nbsp;
 type MyAccountContentProps = {
-  user: User;
-  organizations?: Organization[];
+  className?: string;
   edit: boolean;
-  reloadUser: () =&gt; void;
+  hasNav?: boolean;
+  organizations?: Organization[];
   reloadData?: () =&gt; void;
+  reloadUser: () =&gt; void;
+  user: User;
 };
 &nbsp;
 /**
@@ -1307,11 +1325,13 @@ const columns = <span class="cstat-no" title="statement not covered" ><span clas
 ];
 &nbsp;
 const MyAccountContent = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span></span>
-  user,
-  organizations,
+  className,
   edit,
-  reloadUser,
+  hasNav,
+  organizations,
   reloadData,
+  reloadUser,
+  user,
 }: MyAccountContentProps): JSX.Element =&gt; {
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const supportedLocales = <span class="cstat-no" title="statement not covered" >useSupportedLocales();</span>
@@ -1535,7 +1555,7 @@ const MyAccountContent = <span class="cstat-no" title="statement not covered" ><
   };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;TfMain&gt;
+    &lt;TfMain className={className}&gt;
       &lt;PageForm
         cancelID='cancelAccountChange'
         saveID='saveAccountChange'
@@ -1572,12 +1592,12 @@ const MyAccountContent = <span class="cstat-no" title="statement not covered" ><
             /&gt;
           &lt;/&gt;
         )}
-        &lt;PageHeaderWrapper nextElement={contentRef.current}&gt;
+        &lt;PageHeaderWrapper nextElement={contentRef.current} hasNav={hasNav}&gt;
           &lt;Box
             display='flex'
             justifyContent='space-between'
             marginBottom={theme.spacing(4)}
-            paddingLeft={theme.spacing(3)}
+            padding={hasNav === false ? theme.spacing(0, 5) : theme.spacing(0, 0, 0, 3)}
             marginTop={organizations &amp;&amp; organizations.length &gt; 0 ? 0 : theme.spacing(12)}
           &gt;
             &lt;TitleDescription title={strings.MY_ACCOUNT} description={strings.MY_ACCOUNT_DESC} style={{ padding: 0 }} /&gt;
@@ -1604,8 +1624,9 @@ const MyAccountContent = <span class="cstat-no" title="statement not covered" ><
           ref={contentRef}
           sx={{
             backgroundColor: theme.palette.TwClrBg,
-            padding: theme.spacing(3),
             borderRadius: '32px',
+            margin: theme.spacing(0, hasNav === false ? 4 : 0),
+            padding: theme.spacing(3),
           }}
         &gt;
           &lt;Box sx={isMobile ? { width: 'calc(100vw - 72px)' } : {}}&gt;
@@ -1795,7 +1816,7 @@ const MyAccountContent = <span class="cstat-no" title="statement not covered" ><
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-23T14:41:30.265Z
+                at 2024-04-23T17:00:40.648Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
