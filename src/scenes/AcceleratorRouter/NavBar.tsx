@@ -21,13 +21,13 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
   const navigate = useNavigate();
   const { isAllowed } = useUser();
 
-  const isDeliverablesRoute = useMatch(APP_PATHS.ACCELERATOR_DELIVERABLES);
-  const isModuleContentRoute = useMatch(APP_PATHS.ACCELERATOR_MODULE_CONTENT);
-  const isOverviewRoute = useMatch(APP_PATHS.ACCELERATOR_OVERVIEW);
-  const isParticipantsRoute = useMatch(APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW);
-  const isPeopleRoute = useMatch(APP_PATHS.ACCELERATOR_PEOPLE);
-  const isScoringRoute = useMatch(APP_PATHS.ACCELERATOR_SCORING);
-  const isVotingRoute = useMatch(APP_PATHS.ACCELERATOR_VOTING);
+  const isDeliverablesRoute = useMatch({ path: APP_PATHS.ACCELERATOR_DELIVERABLES, end: false });
+  const isModuleContentRoute = useMatch({ path: APP_PATHS.ACCELERATOR_MODULE_CONTENT, end: false });
+  const isOverviewRoute = useMatch({ path: APP_PATHS.ACCELERATOR_OVERVIEW, end: false });
+  const isParticipantsRoute = useMatch({ path: APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW, end: false });
+  const isPeopleRoute = useMatch({ path: APP_PATHS.ACCELERATOR_PEOPLE, end: false });
+  const isScoringRoute = useMatch({ path: APP_PATHS.ACCELERATOR_SCORING, end: false });
+  const isVotingRoute = useMatch({ path: APP_PATHS.ACCELERATOR_VOTING, end: false });
 
   const isAllowedViewPeople = isAllowed('READ_GLOBAL_ROLES');
 
