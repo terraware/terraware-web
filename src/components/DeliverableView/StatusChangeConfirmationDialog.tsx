@@ -20,7 +20,7 @@ export default function StatusChangeConfirmationDialog({
     <Confirm
       closeButtonText={strings.CANCEL}
       confirmButtonText={strings.CONTINUE_AND_RESET_STATUS}
-      message={(
+      message={
         <>
           <Typography fontSize='16px' fontWeight={400} marginBottom={theme.spacing(2)}>
             {strings.DELIVERABLE_STATUS_CHANGE_CONFIRMATION_1}
@@ -30,7 +30,7 @@ export default function StatusChangeConfirmationDialog({
             {strings.DELIVERABLE_STATUS_CHANGE_CONFIRMATION_2}
           </Typography>
         </>
-      )}
+      }
       onClose={onClose}
       onConfirm={onConfirm}
       open={true}
