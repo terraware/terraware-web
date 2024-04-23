@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, CircularProgress, Container, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -58,7 +58,7 @@ Cookies.defaults = {
 export default function SeedSummary(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   // populateSummaryInterval value is only being used when it is set.
   const [, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
   const [summary, setSummary] = useState<SummaryResponse>();
@@ -167,7 +167,7 @@ export default function SeedSummary(): JSX.Element {
                       {strings.DASHBOARD_MESSAGE}
                     </Typography>
                     <Box sx={{ alignSelf: 'end' }}>
-                      <Button label={strings.GET_STARTED} onClick={() => history.push(APP_PATHS.ACCESSIONS)} />
+                      <Button label={strings.GET_STARTED} onClick={() => navigate(APP_PATHS.ACCESSIONS)} />
                     </Box>
                   </Box>
                 </Box>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
@@ -29,7 +29,7 @@ function initSpecies(species?: Species): Species {
 export default function SpeciesEditView(): JSX.Element {
   const theme = useTheme();
   const [species, setSpecies] = useState<Species>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isMobile } = useDeviceInfo();
   const { selectedOrganization } = useOrganization();
   const { speciesId } = useParams<{ speciesId: string }>();
@@ -45,11 +45,14 @@ export default function SpeciesEditView(): JSX.Element {
     return 4;
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const goToSpecies = (id?: number) => {
-    const speciesLocation = {
-      pathname: APP_PATHS.SPECIES_DETAILS.replace(':speciesId', speciesId.toString()),
-    };
-    history.push(speciesLocation);
+    if (speciesId) {
+      const speciesLocation = {
+        pathname: APP_PATHS.SPECIES_DETAILS.replace(':speciesId', speciesId.toString()),
+      };
+      navigate(speciesLocation);
+    }
   };
 
   useEffect(() => {
@@ -58,13 +61,13 @@ export default function SpeciesEditView(): JSX.Element {
       if (speciesResponse.requestSucceeded) {
         setSpecies(speciesResponse.species);
       } else {
-        history.push(APP_PATHS.SPECIES);
+        navigate(APP_PATHS.SPECIES);
       }
     };
     if (selectedOrganization && speciesId) {
       getSpecies();
     }
-  }, [speciesId, selectedOrganization, history]);
+  }, [speciesId, selectedOrganization, navigate]);
 
   useEffect(() => {
     setRecord({

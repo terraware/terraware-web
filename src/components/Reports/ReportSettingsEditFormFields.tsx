@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Grid, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -40,7 +40,7 @@ const useStyles = makeStyles(() => ({
 const ReportSettingsEditFormFields = ({ isEditing, onChange, reportsSettings }: ReportSettingsEditFormFieldsProps) => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { selectedOrganization } = useOrganization();
   const classes = useStyles();
 
@@ -91,7 +91,7 @@ const ReportSettingsEditFormFields = ({ isEditing, onChange, reportsSettings }: 
               <Button
                 icon={'iconEdit'}
                 label={strings.EDIT}
-                onClick={() => history.push(APP_PATHS.REPORTS_SETTINGS_EDIT)}
+                onClick={() => navigate(APP_PATHS.REPORTS_SETTINGS_EDIT)}
               />
             </Grid>
           )}

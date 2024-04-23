@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Box, Theme, Typography, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Dropdown } from '@terraware/web-components';
 
@@ -15,7 +15,7 @@ type LiveDeadPlantsPerSpeciesCardProps = {
   plantingSiteId: number;
 };
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   maxDropdownWidth: {
     maxWidth: '228px',
   },

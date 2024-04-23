@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
@@ -32,7 +32,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   const [orgPreferenceForId, setOrgPreferenceForId] = useState<number>(defaultSelectedOrg.id);
   const [orgAPIRequestStatus, setOrgAPIRequestStatus] = useState<APIRequestStatus>(APIRequestStatus.AWAITING);
   const [organizations, setOrganizations] = useState<Organization[]>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const query = useQuery();
   const location = useStateLocation();
   const { userPreferences, updateUserPreferences, bootstrapped: userBootstrapped } = useUser();
@@ -122,7 +122,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
           }
           if (queryOrganizationId !== orgToUse.id.toString()) {
             query.set('organizationId', orgToUse.id.toString());
-            history.replace(getLocation(location.pathname, location, query.toString()));
+            navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
           }
         }
       }
@@ -130,7 +130,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
       if (queryOrganizationId && (!orgToUse || isAcceleratorRoute)) {
         // user does not belong to any orgs, clear the url param org id
         query.delete('organizationId');
-        history.replace(getLocation(location.pathname, location, query.toString()));
+        navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
       }
     }
   }, [
@@ -138,7 +138,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     selectedOrganization,
     query,
     location,
-    history,
+    navigate,
     userPreferences,
     userBootstrapped,
     isAcceleratorRoute,
@@ -156,7 +156,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   }, [selectedOrganization?.id]);
 
   if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
-    history.push(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
+    navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
   }
 
   const [organizationData, setOrganizationData] = useState<ProvidedOrganizationData>({
@@ -164,6 +164,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     setSelectedOrganization,
     organizations: organizations ?? [],
     orgPreferences,
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     reloadOrganizations,
     reloadOrgPreferences,
     bootstrapped,

@@ -36,7 +36,7 @@ const uploadPhotos = async (uploadUrl: string, photos: File[]): Promise<((Respon
         console.error(response.reason);
         return response.reason;
       } else {
-        return response.value as Response & PhotoId;
+        return response.value;
       }
     });
   } catch (e) {

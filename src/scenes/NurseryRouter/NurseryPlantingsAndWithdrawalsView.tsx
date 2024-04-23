@@ -2,7 +2,7 @@
  * Nursery plantings and withdrawals
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -50,7 +50,7 @@ export default function NurseryPlantingsAndWithdrawalsView({ reloadTracking }: N
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const query = useQuery();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useStateLocation();
   const contentRef = useRef(null);
   const dispatch = useAppDispatch();
@@ -61,9 +61,9 @@ export default function NurseryPlantingsAndWithdrawalsView({ reloadTracking }: N
   const onTabChange = useCallback(
     (newTab: string) => {
       query.set('tab', newTab);
-      history.push(getLocation(location.pathname, location, query.toString()));
+      navigate(getLocation(location.pathname, location, query.toString()));
     },
-    [query, history, location]
+    [query, navigate, location]
   );
 
   useEffect(() => {

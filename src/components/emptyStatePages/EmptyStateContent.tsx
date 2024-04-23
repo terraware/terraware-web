@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Container, Grid, Theme } from '@mui/material';
+import { Box, Container, Grid, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import Link from 'src/components/common/Link';
@@ -44,16 +44,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: '0 auto',
     marginBottom: theme.spacing(3),
     maxWidth: '700px',
-  }),
-  listContainer: (props: EmptyStateStyleProps) => ({
-    display: 'flex',
-    flexDirection: props.isMobile ? 'column' : 'row',
-    alignContent: 'center',
-    flexWrap: 'wrap',
-    fontSize: '14px',
-    justifyContent: 'center',
-    lineHeight: '20px',
-    margin: `${props.listContainerVerticalMargin} auto`,
   }),
   listItem: {
     flex: '1 1 auto',
@@ -144,7 +134,18 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
           {para}
         </p>
       ))}
-      <div className={classes.listContainer}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: isMobile ? 'column' : 'row',
+          alignContent: 'center',
+          flexWrap: 'wrap',
+          fontSize: '14px',
+          justifyContent: 'center',
+          lineHeight: '20px',
+          margin: `${DEFAULT_EMPTY_STATE_CONTENT_STYLES.listContainerVerticalMargin} auto`,
+        }}
+      >
         {listItems?.map((item, index) => {
           return (
             <Grid item xs={gridSize()} key={`${item.title}-${index}`} className={`${classes.listItem}`}>
@@ -172,7 +173,7 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
             </Grid>
           );
         })}
-      </div>
+      </Box>
       {buttonText && onClickButton && (
         <Button size='medium' icon={buttonIcon} className={classes.button} label={buttonText} onClick={onClickButton} />
       )}

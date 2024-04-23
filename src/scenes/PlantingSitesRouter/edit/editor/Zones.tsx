@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
@@ -100,7 +100,7 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
       const missingZones = zones === undefined;
       const zonesTooSmall = !!zonesData?.errorAnnotations?.length;
       // check for missing zone names
-      const missingZoneNames = !missingZones && zones!.features.some((zone) => !zone?.properties?.name?.trim());
+      const missingZoneNames = !missingZones && zones.features.some((zone) => !zone?.properties?.name?.trim());
       const missingData = (missingZones || missingZoneNames) && !onValidate.isSaveAndClose;
 
       if (zonesTooSmall || missingData) {
@@ -147,7 +147,7 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
     const exclusionsBoundary: RenderableReadOnlyBoundary[] = site.exclusion
       ? [
           {
-            data: { type: 'FeatureCollection', features: [toFeature(site.exclusion!, {}, 0)] },
+            data: { type: 'FeatureCollection', features: [toFeature(site.exclusion, {}, 0)] },
             id: 'exclusions',
             renderProperties: getRenderAttributes('exclusions'),
           },
@@ -157,6 +157,7 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
     return [
       ...exclusionsBoundary,
       {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         data: { type: 'FeatureCollection', features: [toFeature(site.boundary!, {}, site.id)] },
         id: 'site',
         renderProperties: getRenderAttributes('site'),
@@ -164,7 +165,7 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
       {
         data: {
           type: 'FeatureCollection',
-          features: zones!.features.map((feature: Feature) => toZoneFeature(feature, idGenerator)),
+          features: zones.features.map((feature: Feature) => toZoneFeature(feature, idGenerator)),
         },
         id: 'zone',
         isInteractive: true,
@@ -409,7 +410,7 @@ const TooltipContents = ({
     }
 
     if (validateInput()) {
-      onUpdate(zoneName, density as number);
+      onUpdate(zoneName, density);
     }
   };
 

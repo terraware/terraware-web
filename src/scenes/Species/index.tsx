@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import { BusySpinner } from '@terraware/web-components';
 
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
-import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
@@ -43,20 +42,12 @@ const SpeciesRouter = () => {
   }, [species, reloadSpecies]);
 
   return (
-    <Switch>
-      <Route exact path={APP_PATHS.SPECIES_NEW}>
-        <SpeciesAddView reloadData={reloadSpecies} />
-      </Route>
-      <Route exact path={APP_PATHS.SPECIES}>
-        {getSpeciesView()}
-      </Route>
-      <Route exact path={APP_PATHS.SPECIES_EDIT}>
-        <SpeciesEditView />
-      </Route>
-      <Route path={APP_PATHS.SPECIES_DETAILS}>
-        <SpeciesDetailView reloadData={reloadSpecies} />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path={'/new'} element={<SpeciesAddView reloadData={reloadSpecies} />} />
+      <Route path={'/:speciesId'} element={<SpeciesDetailView reloadData={reloadSpecies} />} />
+      <Route path={'/:speciesId/edit'} element={<SpeciesEditView />} />
+      <Route path={'/*'} element={getSpeciesView()} />
+    </Routes>
   );
 };
 

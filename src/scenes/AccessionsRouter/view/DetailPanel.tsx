@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Button, Icon } from '@terraware/web-components';
 
 import PhotosList from 'src/components/common/PhotosList';
@@ -51,18 +50,10 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
     marginBottom: theme.spacing(3),
   };
 
-  const useStyles = makeStyles(() => ({
-    folderIcon: {
-      fill: theme.palette.TwClrIcn,
-      marginRight: theme.spacing(1),
-    },
-  }));
-
   const gridLeftSide = isMobile ? 12 : 2;
   const gridRightSide = isMobile ? 12 : 10;
   const [openEditAccessionModal, setOpenEditAccessionModal] = useState(false);
   const [countries, setCountries] = useState<Country[]>();
-  const classes = useStyles();
 
   useEffect(() => {
     if (activeLocale) {
@@ -168,7 +159,13 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
               {accession.collectionSiteNotes && (
                 <Box marginTop={2} display='flex'>
                   <Typography>
-                    <Icon name='iconFile' className={classes.folderIcon} />
+                    <Icon
+                      name='iconFile'
+                      style={{
+                        marginRight: theme.spacing(1),
+                        fill: theme.palette.TwClrIcn,
+                      }}
+                    />
                     {accession.collectionSiteNotes}
                   </Typography>
                 </Box>
@@ -199,7 +196,13 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
               {accession.notes ? (
                 <Box marginTop={2} display='flex'>
                   <Typography>
-                    <Icon name='iconFile' className={classes.folderIcon} />
+                    <Icon
+                      name='iconFile'
+                      style={{
+                        marginRight: theme.spacing(1),
+                        fill: theme.palette.TwClrIcn,
+                      }}
+                    />
                     {accession.notes}
                   </Typography>
                 </Box>

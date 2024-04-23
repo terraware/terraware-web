@@ -1,4 +1,4 @@
-import { Box, Typography, useTheme } from '@mui/material';
+import React, { Box, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';
 
 import AccessionService from 'src/services/AccessionService';

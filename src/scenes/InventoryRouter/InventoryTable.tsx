@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -48,12 +48,13 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   } = props;
 
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
-  const history = useHistory();
+  const navigate = useNavigate();
   const { sessionFilters, setSessionFilters } = useSessionFilters(origin.toLowerCase());
   const [withdrawTooltip, setWithdrawTooltip] = useState<string>();
 
   // Sync query filters into view
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { showEmptyBatches: filterShowEmptyBatches, ...restFilters } = filters;
     const { showEmptyBatches: sessionFilterShowEmptyBatches, ...restSessionFilters } = sessionFilters;
 
@@ -91,7 +92,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
         : selectedRows.filter((r) => r.species_id).map((row) => `batchId=${row.batchId}`);
     const searchParams = origin === 'Species' ? speciesIds.join('&') : batchIds.join('&');
 
-    history.push({
+    navigate({
       pathname: path,
       search: `?${searchParams}&source=${window.location.pathname}`,
     });
@@ -135,7 +136,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
 
   const onSortChange = (order: SortOrder, orderBy: string) => {
     setSearchSortOrder({
-      field: orderBy as string,
+      field: orderBy,
       direction: order === 'asc' ? 'Ascending' : 'Descending',
     });
   };
@@ -146,8 +147,8 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
 
   const getResultsSpeciesNames = useCallback(() => {
     return results
-      .map(
-        (result: SearchResponseElement & { facilityInventories?: string }) => result.facilityInventories?.split('\r')
+      .map((result: SearchResponseElement & { facilityInventories?: string }) =>
+        result.facilityInventories?.split('\r')
       )
       .flat()
       .filter((species) => !!species) as string[];

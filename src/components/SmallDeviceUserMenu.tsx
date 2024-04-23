@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useEffect, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import {
   Box,
@@ -105,15 +105,15 @@ export default function SmallDeviceUserMenu({
   const { user } = useUser();
   const classes = useStyles();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [newOrganizationModalOpened, setNewOrganizationModalOpened] = useState(false);
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef<HTMLButtonElement>(null);
   const { isProduction } = useEnvironment();
   const iconLetter = user?.firstName?.charAt(0) || user?.lastName?.charAt(0) || user?.email?.charAt(0);
 
-  const navigate = (url: string) => {
-    history.push(url);
+  const navigateTo = (url: string) => {
+    navigate(url);
   };
 
   const handleToggle = () => {
@@ -146,7 +146,7 @@ export default function SmallDeviceUserMenu({
   const selectOrganization = (newlySelectedOrg: Organization) => {
     setSelectedOrganization((currentlySelectedOrg: Organization | undefined) => {
       if (newlySelectedOrg.id !== currentlySelectedOrg?.id) {
-        history.push({ pathname: APP_PATHS.HOME });
+        navigate({ pathname: APP_PATHS.HOME });
       }
       return newlySelectedOrg;
     });
@@ -222,7 +222,7 @@ export default function SmallDeviceUserMenu({
                   </Box>
                   <MenuItem
                     onClick={(e) => {
-                      navigate(APP_PATHS.MY_ACCOUNT);
+                      navigateTo(APP_PATHS.MY_ACCOUNT);
                       handleClose(e);
                     }}
                     className={classes.menuItem}
@@ -287,7 +287,7 @@ export default function SmallDeviceUserMenu({
                     <div>
                       <MenuItem
                         onClick={(e) => {
-                          navigate(APP_PATHS.OPT_IN);
+                          navigateTo(APP_PATHS.OPT_IN);
                           handleClose(e);
                         }}
                         className={classes.menuItem}

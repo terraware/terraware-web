@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import { Grid, Popover, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -139,7 +139,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const debouncedSearchTerm = useDebounce(searchValue, 250);
   const [results, setResults] = useState<SpeciesSearchResultRow[]>();
   const query = useQuery();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(null);
   const handleFilterClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -431,6 +431,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder]);
 
   const onApplyFilters = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async (reviewErrors?: boolean) => {
       const params: SearchRequestPayload = getParams();
 
@@ -477,16 +478,16 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     if (shouldCheckData) {
       query.delete('checkData');
       setCheckDataModalOpen(true);
-      history.replace({ pathname: APP_PATHS.SPECIES, search: query.toString() });
+      navigate({ pathname: APP_PATHS.SPECIES, search: query.toString() }, { replace: true });
     }
-  }, [query, setCheckDataModalOpen, history]);
+  }, [query, setCheckDataModalOpen, navigate]);
 
   useEffect(() => {
     onApplyFilters();
   }, [onApplyFilters]);
 
   const onNewSpecies = () => {
-    history.push(APP_PATHS.SPECIES_NEW);
+    navigate(APP_PATHS.SPECIES_NEW);
   };
 
   const clearSearch = () => {
@@ -548,6 +549,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
 
   const reloadDataProblemsHandler = async () => {
     setHasNewData(false);
+    // eslint-disable-next-line @typescript-eslint/await-thenable
     await reloadData();
     setHandleProblemsColumn(true);
   };
@@ -645,7 +647,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
       isClientSorted
         ? undefined
         : {
-            field: orderBy as string,
+            field: orderBy,
             direction: order === 'asc' ? 'Ascending' : 'Descending',
           }
     );
@@ -745,6 +747,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
             <Tooltip title={strings.EXPORT}>
               <Button
                 id='downladSpeciesReport'
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
                 onClick={() => downloadReportHandler()}
                 type='passive'
                 priority='ghost'
@@ -773,6 +776,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
                   showTopBar={false}
                   Renderer={SpeciesCellRenderer}
                   controlledOnSelect={true}
+                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
                   reloadData={reloadDataProblemsHandler}
                   sortHandler={onSortChange}
                   isPresorted={!!searchSortOrder}

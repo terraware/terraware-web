@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { Box, Theme } from '@mui/material';
+import { Box } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Tabs } from '@terraware/web-components';
 
@@ -12,7 +12,7 @@ import ParticipantsList from 'src/scenes/AcceleratorRouter/Participants/Particip
 import strings from 'src/strings';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   tabs: {
     '& .MuiTabPanel-root[hidden]': {
       flexGrow: 0,

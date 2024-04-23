@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Grid } from '@mui/material';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
@@ -32,6 +32,7 @@ export type DetailsInputFormProps<T extends MinimalPlantingSite> = {
 export default function DetailsInputForm<T extends MinimalPlantingSite>({
   onChange,
   onValidate,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   plantingSeasons,
   record,
   setPlantingSeasons,

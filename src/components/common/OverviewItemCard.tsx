@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, IconTooltip, Tooltip } from '@terraware/web-components';
 
@@ -20,7 +22,6 @@ type OverviewItemCardProps = {
 export default function OverviewItemCard({
   isEditable,
   hideEditIcon,
-  onClick,
   handleEdit,
   title,
   titleInfoTooltip,

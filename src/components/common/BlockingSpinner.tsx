@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { CircularProgress, StyledEngineProvider, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 

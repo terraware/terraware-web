@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
 
@@ -29,22 +30,24 @@ export const decorators = [
     const [activeLocale, setActiveLocale] = useState<string | null>(null);
 
     return (
-      <ThemeProvider theme={theme}>
-        <LocalizationProvider
-          selectedLocale={selectedLocale}
-          setSelectedLocale={setSelectedLocale}
-          activeLocale={activeLocale}
-          setActiveLocale={setActiveLocale}
-        >
-          <StyledEngineProvider injectFirst>
-            <MemoryRouter initialEntries={['/']}>
-              <Provider store={store}>
-                <Story />
-              </Provider>
-            </MemoryRouter>
-          </StyledEngineProvider>
-        </LocalizationProvider>
-      </ThemeProvider>
+      <>
+        <ThemeProvider theme={theme}>
+          <LocalizationProvider
+            selectedLocale={selectedLocale}
+            setSelectedLocale={setSelectedLocale}
+            activeLocale={activeLocale}
+            setActiveLocale={setActiveLocale}
+          >
+            <StyledEngineProvider injectFirst>
+              <MemoryRouter initialEntries={['/']}>
+                <Provider store={store}>
+                  <Story />
+                </Provider>
+              </MemoryRouter>
+            </StyledEngineProvider>
+          </LocalizationProvider>
+        </ThemeProvider>
+      </>
     );
   },
 ];

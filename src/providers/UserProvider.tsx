@@ -45,7 +45,7 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
       const response = await UserService.getUser();
 
       if (response.requestSucceeded) {
-        setUser(response.user!);
+        setUser(response.user);
         if (response.user && !userAnalyticsState?.gtmInstrumented && (window as any).INIT_GTAG) {
           dispatch(updateGtmInstrumented({ gtmInstrumented: true }));
 

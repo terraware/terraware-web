@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { IconButton } from '@mui/material';
 import { DropdownItem, Icon, Popover } from '@terraware/web-components';
@@ -57,6 +57,7 @@ export default function DocumentHistoryRowMenu({
               : { label: strings.MARK_AS_SUBMITTED, value: 'mark-as-submitted' },
           ],
         ]}
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         handleClick={(item: DropdownItem) => {
           markAsSubmitted();
         }}

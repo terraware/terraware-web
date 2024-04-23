@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import BatchWithdrawFlow from 'src/components/BatchWithdrawFlow';
 import { APP_PATHS } from 'src/constants';
@@ -16,7 +16,7 @@ export default function SpeciesBulkWithdrawView(props: SpeciesBulkWithdrawViewCo
   const [speciesIds, setSpeciesIds] = useState<string[]>();
   const [batchIds, setBatchIds] = useState<string[]>();
   const [source, setSource] = useState<string | null>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const query = useQuery();
 
   useEffect(() => {
@@ -25,9 +25,9 @@ export default function SpeciesBulkWithdrawView(props: SpeciesBulkWithdrawViewCo
       setSource(query.get('source'));
     } else {
       // return to inventory page if we came here from some bad url (no valid species)
-      history.push({ pathname: APP_PATHS.INVENTORY });
+      navigate({ pathname: APP_PATHS.INVENTORY });
     }
-  }, [query, history]);
+  }, [query, navigate]);
 
   useEffect(() => {
     const populateResults = async () => {
@@ -41,13 +41,13 @@ export default function SpeciesBulkWithdrawView(props: SpeciesBulkWithdrawViewCo
           setBatchIds(ids);
         } else {
           // return to inventory page if we came here from some bad url (no valid species)
-          history.push({ pathname: APP_PATHS.INVENTORY });
+          navigate({ pathname: APP_PATHS.INVENTORY });
         }
       }
     };
 
     populateResults();
-  }, [speciesIds, history, selectedOrganization.id]);
+  }, [speciesIds, navigate, selectedOrganization.id]);
 
   return batchIds ? (
     <BatchWithdrawFlow

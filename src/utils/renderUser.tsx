@@ -6,7 +6,7 @@ export const renderUser = (userSel: User | OrganizationUser, accUser: User, cont
   const email = contributor ? accUser.email : userSel?.email;
 
   if (!firstName && !lastName) {
-    return email as string;
+    return email;
   } else if (firstName && lastName) {
     return `${firstName} ${lastName}`;
   } else {

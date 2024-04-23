@@ -141,10 +141,11 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
           },
           options: {
             scales: {
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               y: {
                 ticks: {
-                  callback: (value, index, ticks) => {
+                  callback: (value) => {
                     return strings.formatString(strings.PERCENTAGE_VALUE, value) as string;
                   },
                 },
@@ -175,13 +176,14 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
                   drawOnChartArea: false, // only want the grid lines for one axis to show up
                 },
                 ticks: {
-                  callback: (value, index, ticks) => {
+                  callback: (value) => {
                     return strings.formatString(strings.WATTS_VALUE, numericFormatter.format(value)) as string;
                   },
                 },
               },
             },
             plugins: {
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               htmlLegend: {
                 containerID: 'legend-container-pvbattery',
@@ -198,6 +200,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
                       label += DateTime.fromMillis(context.parsed.x).toFormat('yyyy-MM-ddTHH:mm');
                     }
                     if (context.parsed.y !== null) {
+                      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
                       label += ', ' + context.parsed.y;
                     }
                     return label;
@@ -216,7 +219,7 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
         const timePeriodParams = getTimePeriodParams(selectedPVBatteryPeriod, timeZone);
         const startTime = timePeriodParams.start;
         const endTime = timePeriodParams.end;
-        if (BMU) {
+        if (BMU && startTime.isValid && endTime.isValid) {
           const response = await getTimeseriesHistory(
             startTime.toISO(),
             endTime.toISO(),

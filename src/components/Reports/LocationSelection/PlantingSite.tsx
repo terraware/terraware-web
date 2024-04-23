@@ -294,8 +294,8 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
             editable
               ? (location as ReportPlantingSite).mortalityRate ?? ''
               : (location as ReportPlantingSite).mortalityRate
-              ? `${(location as ReportPlantingSite).mortalityRate}%`
-              : ''
+                ? `${(location as ReportPlantingSite).mortalityRate}%`
+                : ''
           }
           minNum={0}
           maxNum={100}

@@ -6,6 +6,7 @@ import { SpeciesService } from 'src/services';
 import { setSpeciesAction } from './speciesSlice';
 
 export const requestSpecies = (organizationId: number) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   return async (dispatch: Dispatch, _getState: () => RootState) => {
     try {
       const response = await SpeciesService.getAllSpecies(organizationId);

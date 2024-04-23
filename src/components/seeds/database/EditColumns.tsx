@@ -51,7 +51,7 @@ export default function EditColumnsDialog(props: Props): JSX.Element {
   const onChange = (id: string, checked: boolean) => {
     if (checked) {
       const newValue = [...value];
-      newValue.push(id as string);
+      newValue.push(id);
       setValue(newValue);
     } else {
       setValue(value.filter((v) => v !== id));

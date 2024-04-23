@@ -264,7 +264,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
               description={
                 strings.PHOTOS_TO_UPLOAD +
                 ' ' +
-                strings.formatString(strings.PHOTOS_TO_UPLOAD_LIMIT, MAX_PHOTOS - photoCount) +
+                strings.formatString(strings.PHOTOS_TO_UPLOAD_LIMIT, MAX_PHOTOS - photoCount).toString() +
                 ':'
               }
             />

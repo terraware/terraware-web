@@ -248,7 +248,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
             <Message body={strings.ACCELERATOR_ORGS_EMPTY_WARNING} priority='warning' type='page' />
           </Grid>
         )}
-        {orgProjectsSections.map((section, index) => (
+        {orgProjectsSections.map((section) => (
           <OrgProjectsSectionEdit
             availableOrgs={availableOrgs}
             key={section.id}

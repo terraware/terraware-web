@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Grid, IconButton, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -61,7 +61,7 @@ type TopBarProps = {
 };
 
 export default function TopBarContent(props: TopBarProps): JSX.Element | null {
-  const history = useHistory();
+  const navigate = useNavigate();
   const classes = useStyles();
   const { selectedOrganization, organizations, reloadOrganizations } = useOrganization();
   const { setShowNavBar } = props;
@@ -114,7 +114,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         item
         xs={6}
         className={`${classes.center} ${classes.clickableLogo} logo`}
-        onClick={() => history.push(APP_PATHS.HOME)}
+        onClick={() => navigate(APP_PATHS.HOME)}
       />
 
       <Grid item xs={3} className={classes.right}>

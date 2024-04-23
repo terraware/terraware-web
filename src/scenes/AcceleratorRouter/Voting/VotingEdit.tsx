@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, useTheme } from '@mui/material';
 
@@ -20,7 +20,7 @@ import { useVotingData } from './VotingContext';
 import VotingWrapper from './VotingWrapper';
 
 const VotingEdit = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useStateLocation();
   const query = useQuery();
   const dispatch = useAppDispatch();
@@ -34,10 +34,10 @@ const VotingEdit = () => {
   const result = useAppSelector((state) => selectProjectVotesEditRequest(state, requestId));
 
   const goToVotingView = useCallback(() => {
-    history.push(
+    navigate(
       getLocation(APP_PATHS.ACCELERATOR_VOTING.replace(':projectId', `${projectId}`), location, query.toString())
     );
-  }, [history, location, projectId, query]);
+  }, [navigate, location, projectId, query]);
 
   const onSave = () => {
     if (!phaseVotes) {
@@ -50,6 +50,7 @@ const VotingEdit = () => {
     }
 
     const updatedVotes = votes.filter(({ conditionalInfo, userId, voteOption }) => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-extra-non-null-assertion, @typescript-eslint/no-unnecessary-type-assertion
       const orignal = phaseVotes.votes.find((originalVote) => originalVote.userId === userId)!!;
       return !(orignal.conditionalInfo === conditionalInfo && orignal.voteOption === voteOption);
     });

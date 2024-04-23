@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import React, { useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -70,7 +70,7 @@ export default function GenericZoneView({
 }: Props): JSX.Element {
   const [search, setSearch] = useState<string>('');
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { plantingSiteId, zoneId } = useParams<{ plantingSiteId: string; zoneId: string }>();
 
   const plantingSite = useAppSelector((state) => siteSelector(state, Number(plantingSiteId)));
@@ -87,11 +87,11 @@ export default function GenericZoneView({
   );
 
   if (!plantingSite) {
-    history.push(APP_PATHS.PLANTING_SITES);
+    navigate(APP_PATHS.PLANTING_SITES);
   }
 
-  if (!plantingZone) {
-    history.push(siteViewUrl.replace(':plantingSiteId', plantingSiteId));
+  if (!plantingZone && plantingSiteId) {
+    navigate(siteViewUrl.replace(':plantingSiteId', plantingSiteId));
   }
 
   const crumbs: Crumb[] = useMemo(
@@ -128,6 +128,7 @@ export default function GenericZoneView({
 
 const DetailsRenderer =
   (classes: any, plantingSiteId: number, zoneId: number, subzoneViewUrl: string) =>
+  // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row } = props;
 

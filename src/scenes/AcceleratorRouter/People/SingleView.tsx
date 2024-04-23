@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 import { Grid, useTheme } from '@mui/material';
 
@@ -17,7 +17,7 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { usePersonData } from './PersonContext';
 
 const SingleView = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useStateLocation();
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
@@ -27,8 +27,8 @@ const SingleView = () => {
   const canEdit = isAllowed('ASSIGN_SOME_GLOBAL_ROLES');
 
   const goToEditPerson = useCallback(
-    () => history.push(getLocation(APP_PATHS.ACCELERATOR_PERSON_EDIT.replace(':userId', `${userId}`), location)),
-    [history, location, userId]
+    () => navigate(getLocation(APP_PATHS.ACCELERATOR_PERSON_EDIT.replace(':userId', `${userId}`), location)),
+    [navigate, location, userId]
   );
 
   const rightComponent = useMemo(
@@ -51,7 +51,12 @@ const SingleView = () => {
   );
 
   return (
-    <Page crumbs={crumbs} title={user?.email || ''} rightComponent={rightComponent}>
+    <Page
+      contentStyle={{ display: 'flex', flexDirection: 'column', marginRight: theme.spacing(2), width: 'auto' }}
+      crumbs={crumbs}
+      title={user?.email || ''}
+      rightComponent={rightComponent}
+    >
       <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, borderRadius: '24px' }}>
         <Grid container spacing={3}>
           <Grid item xs={4}>

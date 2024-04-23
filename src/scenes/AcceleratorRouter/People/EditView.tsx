@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useNavigate } from 'react-router-dom';
+
+import { useTheme } from '@mui/material';
 
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
@@ -17,17 +19,18 @@ import PersonForm from './PersonForm';
 
 const EditView = () => {
   const dispatch = useAppDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useStateLocation();
   const snackbar = useSnackbar();
+  const theme = useTheme();
   const { user, userId } = usePersonData();
 
   const [saveRequestId, setSaveRequestId] = useState('');
   const saveRequest = useAppSelector(selectGlobalRolesUserUpdateRequest(saveRequestId));
 
   const goToViewPerson = useCallback(
-    () => history.push(getLocation(APP_PATHS.ACCELERATOR_PERSON.replace(':userId', `${userId}`), location)),
-    [history, location, userId]
+    () => navigate(getLocation(APP_PATHS.ACCELERATOR_PERSON.replace(':userId', `${userId}`), location)),
+    [navigate, location, userId]
   );
 
   const handleOnSave = useCallback(
@@ -52,7 +55,10 @@ const EditView = () => {
   }, [dispatch, goToViewPerson, saveRequest, snackbar, userId]);
 
   return (
-    <Page title={user?.email || ''} contentStyle={{ display: 'flex', flexDirection: 'column' }}>
+    <Page
+      contentStyle={{ display: 'flex', flexDirection: 'column', marginRight: theme.spacing(2), width: 'auto' }}
+      title={user?.email || ''}
+    >
       {user && (
         <PersonForm
           busy={saveRequest?.status === 'pending'}

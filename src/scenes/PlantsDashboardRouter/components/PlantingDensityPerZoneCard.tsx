@@ -90,6 +90,7 @@ export default function PlantingDensityPerZoneCard({ plantingSiteId }: PlantingD
             {observation
               ? strings.formatString(
                   strings.PLANTING_DENSITY_PER_ZONE_W_OBS_CARD_TITLE,
+                  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
                   getShortDate(observation?.completedTime!, locale.activeLocale)
                 )
               : strings.PLANTING_DENSITY_PER_ZONE_CARD_TITLE}

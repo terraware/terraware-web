@@ -331,6 +331,7 @@ const mockModules: Module[] = [
 /**
  * List all modules for a project
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/require-await
 const list = async (projectId: number | null): Promise<Response2<ModulesData | null>> => {
   return {
     requestSucceeded: true,
@@ -343,6 +344,7 @@ const list = async (projectId: number | null): Promise<Response2<ModulesData | n
 /**
  * Get module data for a specific module / project ID.
  */
+// eslint-disable-next-line @typescript-eslint/require-await
 const get = async (moduleId: number): Promise<Response2<ModuleData | null>> => {
   const module = mockModules.find((_module) => _module.id === moduleId);
   return {
@@ -356,6 +358,7 @@ const get = async (moduleId: number): Promise<Response2<ModuleData | null>> => {
 /**
  * Get module event data for a specific module event.
  */
+// eslint-disable-next-line @typescript-eslint/require-await
 const getEvent = async (eventId: number): Promise<Response2<ModuleEventData | null>> => {
   const event = mockEvents.find((_event) => _event.id === eventId);
   return {

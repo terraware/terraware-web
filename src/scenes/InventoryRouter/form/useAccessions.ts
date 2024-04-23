@@ -6,6 +6,7 @@ import { requestAccessions } from 'src/redux/features/accessions/accessionsThunk
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { SearchResponseAccession } from 'src/services/SeedBankService';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const useAccessions = (record?: { accessionId?: number }, speciesId?: number, excludeUsedUp?: boolean) => {
   const dispatch = useAppDispatch();
   const { selectedOrganization } = useOrganization();

@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useMatch, useNavigate } from 'react-router-dom';
 
 import SubNavbar from '@terraware/web-components/components/Navbar/SubNavbar';
 
@@ -38,34 +38,35 @@ export default function NavBar({
   const [moduleProjectId, setModuleProjectId] = useState<number | undefined>(undefined);
   const [hasDeliverables, setHasDeliverables] = useState<boolean>(false);
   const { isDesktop, isMobile } = useDeviceInfo();
-  const history = useHistory();
+  const navigate = useNavigate();
+
   const { isAllowedViewConsole } = useAcceleratorConsole();
   const { activeLocale } = useLocalization();
   const { projectModules } = useModules();
 
-  const isAccessionDashboardRoute = useRouteMatch(APP_PATHS.SEEDS_DASHBOARD + '/');
-  const isAccessionsRoute = useRouteMatch(APP_PATHS.ACCESSIONS + '/');
-  const isCheckinRoute = useRouteMatch(APP_PATHS.CHECKIN + '/');
-  const isContactUsRoute = useRouteMatch(APP_PATHS.CONTACT_US + '/');
-  const isDeliverablesRoute = useRouteMatch(APP_PATHS.DELIVERABLES + '/');
-  const isDeliverableViewRoute = useRouteMatch(APP_PATHS.DELIVERABLE_VIEW + '/');
-  const isHomeRoute = useRouteMatch(APP_PATHS.HOME + '/');
-  const isPeopleRoute = useRouteMatch(APP_PATHS.PEOPLE + '/');
-  const isSpeciesRoute = useRouteMatch(APP_PATHS.SPECIES + '/');
-  const isOrganizationRoute = useRouteMatch(APP_PATHS.ORGANIZATION + '/');
-  const isMonitoringRoute = useRouteMatch(APP_PATHS.MONITORING + '/');
-  const isSeedbanksRoute = useRouteMatch(APP_PATHS.SEED_BANKS + '/');
-  const isNurseriesRoute = useRouteMatch(APP_PATHS.NURSERIES + '/');
-  const isInventoryRoute = useRouteMatch(APP_PATHS.INVENTORY + '/');
-  const isBatchWithdrawRoute = useRouteMatch(APP_PATHS.BATCH_WITHDRAW + '/');
-  const isPlantingSitesRoute = useRouteMatch(APP_PATHS.PLANTING_SITES + '/');
-  const isPlantsDashboardRoute = useRouteMatch(APP_PATHS.PLANTS_DASHBOARD + '/');
-  const isWithdrawalLogRoute = useRouteMatch(APP_PATHS.NURSERY_WITHDRAWALS + '/');
-  const isReassignmentRoute = useRouteMatch(APP_PATHS.NURSERY_REASSIGNMENT + '/');
-  const isReportsRoute = useRouteMatch(APP_PATHS.REPORTS + '/');
-  const isObservationsRoute = useRouteMatch(APP_PATHS.OBSERVATIONS + '/');
-  const isProjectsRoute = useRouteMatch(APP_PATHS.PROJECTS + '/');
-  const isProjectModulesRoute = useRouteMatch(APP_PATHS.PROJECT_MODULES + '/');
+  const isAccessionDashboardRoute = useMatch(APP_PATHS.SEEDS_DASHBOARD + '/');
+  const isAccessionsRoute = useMatch(APP_PATHS.ACCESSIONS + '/');
+  const isCheckinRoute = useMatch(APP_PATHS.CHECKIN + '/');
+  const isContactUsRoute = useMatch(APP_PATHS.CONTACT_US + '/');
+  const isDeliverablesRoute = useMatch(APP_PATHS.DELIVERABLES + '/');
+  const isDeliverableViewRoute = useMatch(APP_PATHS.DELIVERABLE_VIEW + '/');
+  const isHomeRoute = useMatch(APP_PATHS.HOME + '/');
+  const isPeopleRoute = useMatch(APP_PATHS.PEOPLE + '/');
+  const isSpeciesRoute = useMatch(APP_PATHS.SPECIES + '/');
+  const isOrganizationRoute = useMatch(APP_PATHS.ORGANIZATION + '/');
+  const isMonitoringRoute = useMatch(APP_PATHS.MONITORING + '/');
+  const isSeedbanksRoute = useMatch(APP_PATHS.SEED_BANKS + '/');
+  const isNurseriesRoute = useMatch(APP_PATHS.NURSERIES + '/');
+  const isInventoryRoute = useMatch(APP_PATHS.INVENTORY + '/');
+  const isBatchWithdrawRoute = useMatch(APP_PATHS.BATCH_WITHDRAW + '/');
+  const isPlantingSitesRoute = useMatch(APP_PATHS.PLANTING_SITES + '/');
+  const isPlantsDashboardRoute = useMatch(APP_PATHS.PLANTS_DASHBOARD + '/');
+  const isWithdrawalLogRoute = useMatch(APP_PATHS.NURSERY_WITHDRAWALS + '/');
+  const isReassignmentRoute = useMatch(APP_PATHS.NURSERY_REASSIGNMENT + '/');
+  const isReportsRoute = useMatch(APP_PATHS.REPORTS + '/');
+  const isObservationsRoute = useMatch(APP_PATHS.OBSERVATIONS + '/');
+  const isProjectsRoute = useMatch(APP_PATHS.PROJECTS + '/');
+  const isProjectModulesRoute = useMatch(APP_PATHS.PROJECT_MODULES + '/');
 
   const featureFlagParticipantExperience = isEnabled('Participant Experience');
 
@@ -79,10 +80,10 @@ export default function NavBar({
     (path: string) => {
       closeNavBar();
       if (path) {
-        history.push(path);
+        navigate(path);
       }
     },
-    [closeNavBar, history]
+    [closeNavBar, navigate]
   );
 
   const checkNurseryWithdrawals = useCallback(() => {
@@ -117,17 +118,13 @@ export default function NavBar({
   }, [selectedOrganization]);
 
   useEffect(() => {
-    const getModuleProjectId = async () => {
-      const moduleProject = projectModules.find(({ id, modules }) => modules !== undefined);
+    const moduleProject = projectModules.find(({ modules }) => modules !== undefined);
 
-      if (!moduleProject) {
-        return;
-      }
+    if (!moduleProject) {
+      return;
+    }
 
-      setModuleProjectId(moduleProject.id);
-    };
-
-    getModuleProjectId();
+    setModuleProjectId(moduleProject.id);
   }, [projectModules]);
 
   useEffect(() => {

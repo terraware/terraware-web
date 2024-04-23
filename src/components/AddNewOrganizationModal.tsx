@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -46,7 +46,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   const classes = useStyles();
   const { reloadOrganizations } = useOrganization();
   const { activeLocale } = useLocalization();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { onCancel, open } = props;
   const snackbar = useSnackbar();
   const { isDesktop } = useDeviceInfo();
@@ -150,7 +150,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
     );
     if (response.requestSucceeded && response.organization) {
       reloadOrganizations();
-      history.push({ pathname: APP_PATHS.HOME });
+      navigate({ pathname: APP_PATHS.HOME });
       snackbar.pageSuccess(
         isDesktop ? strings.ORGANIZATION_CREATED_MSG_DESKTOP : strings.ORGANIZATION_CREATED_MSG,
         strings.formatString(strings.ORGANIZATION_CREATED_TITLE, response.organization.name)

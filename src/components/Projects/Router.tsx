@@ -1,12 +1,11 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import ProjectEditView from 'src/components/ProjectEditView';
 import ProjectNewView from 'src/components/ProjectNewView';
 import ProjectView from 'src/components/ProjectView';
 import Projects from 'src/components/Projects';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
-import { APP_PATHS } from 'src/constants';
 
 export type ProjectsRouterProps = {
   isPlaceholderOrg: () => boolean;
@@ -27,19 +26,11 @@ export default function ProjectsRouter({
   };
 
   return (
-    <Switch>
-      <Route exact path={APP_PATHS.PROJECTS}>
-        {getProjectsView()}
-      </Route>
-      <Route exact path={APP_PATHS.PROJECTS_NEW}>
-        <ProjectNewView reloadData={reloadProjects} />
-      </Route>
-      <Route exact path={APP_PATHS.PROJECT_VIEW}>
-        <ProjectView />
-      </Route>
-      <Route exact path={APP_PATHS.PROJECT_EDIT}>
-        <ProjectEditView />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path={'/*'} element={getProjectsView()} />
+      <Route path={'/new'} element={<ProjectNewView reloadData={reloadProjects} />} />
+      <Route path={'/:projectId'} element={<ProjectView />} />
+      <Route path={'/:projectId/edit'} element={<ProjectEditView />} />
+    </Routes>
   );
 }

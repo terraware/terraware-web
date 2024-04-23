@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import React, { ReactElement } from 'react';
 
 import { Document } from 'src/types/documentProducer/Document';
 import { SectionVariableWithValues, VariableWithValues } from 'src/types/documentProducer/Variable';

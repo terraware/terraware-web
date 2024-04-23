@@ -35,7 +35,7 @@ export const htmlLegendPlugin = {
     if (generateLabelsFunction) {
       const items = generateLabelsFunction(chart);
       const hasHumidityTresholds = items.find((item) => item.text === strings.MONITORING_LABEL_HUMIDITY_THRESHOLDS);
-      items.forEach((item, index) => {
+      items.forEach((item) => {
         const li = document.createElement('li');
         li.style.alignItems = 'center';
         li.style.cursor = 'pointer';

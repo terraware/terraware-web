@@ -1,4 +1,4 @@
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import React, { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import Button from 'src/components/common/button/Button';
 import useNavigateTo from 'src/hooks/useNavigateTo';

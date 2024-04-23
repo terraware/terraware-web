@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
@@ -34,7 +34,7 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
   const [record, setRecord, onChange] = useForm<Species>(initSpecies());
   const [nameFormatError, setNameFormatError] = useState<string | string[]>('');
   const [isBusy, setIsBusy] = useState<boolean>(false);
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
@@ -48,7 +48,7 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
       if (response.requestSucceeded) {
         if (response.speciesId) {
           reloadData();
-          history.push(APP_PATHS.SPECIES_DETAILS.replace(':speciesId', response.speciesId.toString()));
+          navigate(APP_PATHS.SPECIES_DETAILS.replace(':speciesId', response.speciesId.toString()));
         }
       } else {
         if (response.error === SpeciesRequestError.PreexistingSpecies) {
@@ -64,7 +64,7 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
       <PageForm
         cancelID='cancelAddSpecies'
         saveID='saveAddSpecies'
-        onCancel={() => history.push(APP_PATHS.SPECIES)}
+        onCancel={() => navigate(APP_PATHS.SPECIES)}
         onSave={createNewSpecies}
       >
         <Typography variant='h2' sx={{ fontSize: '24px', fontWeight: 'bold', paddingLeft: theme.spacing(3) }}>

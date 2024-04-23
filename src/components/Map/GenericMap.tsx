@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Box, CircularProgress } from '@mui/material';
 
 import { MapControl, MapEntityOptions, MapOptions, MapPopupRenderer } from 'src/types/Map';

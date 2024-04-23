@@ -1,3 +1,5 @@
+import React from 'react';
+
 import Chart, { BaseChartProps } from './Chart';
 
 export type BarChartProps = BaseChartProps;

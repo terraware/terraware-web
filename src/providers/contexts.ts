@@ -17,6 +17,7 @@ export const UserContext = createContext<ProvidedUserData>({
   userPreferences: {},
   bootstrapped: false,
   updateUserPreferences: () => Promise.resolve(true),
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isAllowed: (_: GlobalRolePermission, __?: unknown) => false,
 });
 
@@ -30,6 +31,7 @@ export const defaultSelectedOrg: Organization = {
 export const OrganizationContext = createContext<ProvidedOrganizationData>({
   organizations: [],
   orgPreferences: {},
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   reloadOrganizations: (selectedOrgId?: number) => {
     // default no-op implementation
     return;
@@ -38,6 +40,8 @@ export const OrganizationContext = createContext<ProvidedOrganizationData>({
     // default no-op implementation
     return;
   },
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setSelectedOrganization: (org) => {
     // no-op
     return;

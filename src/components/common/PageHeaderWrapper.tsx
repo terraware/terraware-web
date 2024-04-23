@@ -45,7 +45,7 @@ export default function PageHeaderWrapper({ children, nextElement, nextElementIn
     }
 
     let lastScrollY = 0;
-    const handleScroll = (ev: Event) => {
+    const handleScroll = () => {
       const delta = window.scrollY - lastScrollY;
       setScrollDown(delta > 0);
 

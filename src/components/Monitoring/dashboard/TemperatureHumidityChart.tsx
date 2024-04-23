@@ -304,7 +304,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
             scales: {
               y: {
                 ticks: {
-                  callback: (value, index, ticks) => {
+                  callback: (value) => {
                     return strings.formatString(
                       strings.DEGREES_CELSIUS_VALUE,
                       numericFormatter.format(value)
@@ -340,13 +340,14 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
                   drawOnChartArea: false, // only want the grid lines for one axis to show up
                 },
                 ticks: {
-                  callback: (value, index, ticks) => {
+                  callback: (value) => {
                     return strings.formatString(strings.PERCENTAGE_VALUE, numericFormatter.format(value)) as string;
                   },
                 },
               },
             },
             plugins: {
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               htmlLegend: {
                 containerID: 'legend-container-th',
@@ -381,7 +382,7 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
         const timePeriodParams = getTimePeriodParams(selectedPeriod, timeZone);
         const startTime = timePeriodParams.start;
         const endTime = timePeriodParams.end;
-        if (selectedLocation) {
+        if (selectedLocation && startTime.isValid && endTime.isValid) {
           const response = await getTimeseriesHistory(
             startTime.toISO(),
             endTime.toISO(),

@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Grid, Theme, Typography, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { TableColumnType } from '@terraware/web-components';
 import { Option } from '@terraware/web-components/components/table/types';
@@ -25,7 +25,7 @@ import { getUserDisplayName } from 'src/utils/user';
 import BatchHistoryRenderer from './BatchHistoryRenderer';
 import EventDetailsModal from './EventDetailsModal';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   searchField: {
     width: '300px',
   },
@@ -219,6 +219,7 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
     }
   }, [users, batchId, findPreviousEvent, nurseryName, filters, search]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onBatchSelected = (batch: any, fromColumn?: string) => {
     setSelectedEvent(batch);
     setOpenEventDetailsModal(true);

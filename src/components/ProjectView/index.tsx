@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Grid } from '@mui/material';
 import { DropdownItem } from '@terraware/web-components';
@@ -26,7 +25,7 @@ export default function ProjectView(): JSX.Element {
   const dispatch = useAppDispatch();
 
   const snackbar = useSnackbar();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useStateLocation();
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
@@ -59,12 +58,13 @@ export default function ProjectView(): JSX.Element {
     setRequestId(dispatched.requestId);
   }, [dispatch, projectId]);
 
-  const goToEditProject = useCallback(
-    () => history.push(getLocation(APP_PATHS.PROJECT_EDIT.replace(':projectId', pathParams.projectId), location)),
-    [history, location, pathParams.projectId]
-  );
+  const goToEditProject = useCallback(() => {
+    if (pathParams.projectId) {
+      navigate(getLocation(APP_PATHS.PROJECT_EDIT.replace(':projectId', pathParams.projectId), location));
+    }
+  }, [navigate, location, pathParams.projectId]);
 
-  const goToProjects = useCallback(() => history.push(getLocation(APP_PATHS.PROJECTS, location)), [history, location]);
+  const goToProjects = useCallback(() => navigate(getLocation(APP_PATHS.PROJECTS, location)), [navigate, location]);
 
   useEffect(() => {
     if (!projectDeleteRequest) {

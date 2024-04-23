@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Crumb } from 'src/components/BreadCrumbs';
@@ -64,8 +64,8 @@ const ScoringProvider = ({ children }: Props) => {
   const hasData = useMemo<boolean | undefined>(
     () =>
       scoreListResult?.status === 'success' && (phase0Scores || phase1Scores)
-        ? [phase0Scores, phase1Scores].filter(
-            (data) => data?.scores.some((score) => score.qualitative !== undefined || score.value !== undefined)
+        ? [phase0Scores, phase1Scores].filter((data) =>
+            data?.scores.some((score) => score.qualitative !== undefined || score.value !== undefined)
           ).length > 0
         : undefined,
     [phase0Scores, phase1Scores, scoreListResult?.status]

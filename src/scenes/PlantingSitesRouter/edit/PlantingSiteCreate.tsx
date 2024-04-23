@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -46,7 +46,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
   const classes = useStyles();
   const { reloadPlantingSites } = props;
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
-  const history = useHistory();
+  const navigate = useNavigate();
   const snackbar = useSnackbar();
   const [loaded, setLoaded] = useState(false);
   const [onValidate, setOnValidate] = useState<((hasErrors: boolean) => void) | undefined>(undefined);
@@ -89,7 +89,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
     const plantingSitesLocation = {
       pathname: APP_PATHS.PLANTING_SITES + (id && id !== -1 ? `/${id}` : ''),
     };
-    history.push(plantingSitesLocation);
+    navigate(plantingSitesLocation);
   };
 
   const onSave = () =>

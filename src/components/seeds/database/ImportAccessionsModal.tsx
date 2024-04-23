@@ -1,3 +1,5 @@
+import React from 'react';
+
 import ImportModal from 'src/components/common/ImportModal';
 import { SeedBankService } from 'src/services';
 import strings from 'src/strings';

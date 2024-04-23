@@ -196,7 +196,7 @@ export const cutOverlappingBoundaries = async (
     return;
   }
   // cut new polygons using the cut geometry overlapping the fixed boundaries
-  const cutBoundaries = cutPolygons(source!.features as GeometryFeature[], cutWithFeature!.geometry) || [];
+  const cutBoundaries = cutPolygons(source.features as GeometryFeature[], cutWithFeature.geometry) || [];
 
   if (!cutBoundaries.length) {
     onError([]);
@@ -221,6 +221,7 @@ export const findErrors = async (
   draft: DraftPlantingSite,
   errorCheckLevel: ErrorCheckLevel,
   cutBoundaries: GeometryFeature[] // TODO: remove this when switching to BE API, use the draft payload instead
+  // eslint-disable-next-line @typescript-eslint/require-await
 ): Promise<Feature[]> => {
   // TODO: use BE API
   // 1. do a dry-run of planting site create with the input 'draft'

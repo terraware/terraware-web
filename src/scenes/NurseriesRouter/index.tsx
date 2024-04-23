@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
-import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 import NurseriesListView from 'src/scenes/NurseriesRouter/NurseriesListView';
 import NurseryDetailsView from 'src/scenes/NurseriesRouter/NurseryDetailsView';
@@ -20,20 +19,12 @@ const NurseriesRouter = () => {
   }, [selectedOrganization]);
 
   return (
-    <Switch>
-      <Route exact path={APP_PATHS.NURSERIES_NEW}>
-        <NurseryView />
-      </Route>
-      <Route exact path={APP_PATHS.NURSERIES_EDIT}>
-        <NurseryView />
-      </Route>
-      <Route path={APP_PATHS.NURSERIES_VIEW}>
-        <NurseryDetailsView />
-      </Route>
-      <Route exact path={APP_PATHS.NURSERIES}>
-        {getNurseriesView()}
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path={'/new'} element={<NurseryView />} />
+      <Route path={'/:nurseryId/edit'} element={<NurseryView />} />
+      <Route path={'/:nurseryId'} element={<NurseryDetailsView />} />
+      <Route path={'/*'} element={getNurseriesView()} />
+    </Routes>
   );
 };
 

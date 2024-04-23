@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { Badge, IconButton, List, ListItem, ListItemIcon, ListItemText, Popover, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -152,7 +151,7 @@ type NotificationsDropdownProps = {
 
 export default function NotificationsDropdown(props: NotificationsDropdownProps): JSX.Element {
   const classes = useStyles({});
-  const history = useHistory();
+  const navigate = useNavigate();
   const { organizationId, reloadOrganizationData } = props;
   // notificationsInterval value is only being used when it is set.
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
@@ -230,7 +229,7 @@ export default function NotificationsDropdown(props: NotificationsDropdownProps)
   };
 
   const goToSettings = () => {
-    history.push({ pathname: APP_PATHS.MY_ACCOUNT });
+    navigate({ pathname: APP_PATHS.MY_ACCOUNT });
     onPopoverClose();
   };
 
@@ -338,6 +337,7 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
   const onNotificationClick = async (read: boolean, close?: boolean) => {
     if (close && localUrl.startsWith('/home')) {
       const orgId: string | null = new URL(localUrl, window.location.origin).searchParams.get('organizationId');
+      // eslint-disable-next-line @typescript-eslint/await-thenable
       await reloadOrganizationData(orgId ? parseInt(orgId, 10) : undefined);
     }
     markAsRead(read, id, close, notification.markAsRead);

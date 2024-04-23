@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Typography } from '@mui/material';
 import { FormButton, theme } from '@terraware/web-components';
@@ -32,7 +32,7 @@ type ProjectNewViewProps = {
 export default function ProjectNewView({ reloadData }: ProjectNewViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const snackbar = useSnackbar();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const [record, setRecord] = useForm<CreateProjectRequest>({
     name: '',
@@ -49,8 +49,8 @@ export default function ProjectNewView({ reloadData }: ProjectNewViewProps): JSX
   const [projectPlantingSites, setProjectPlantingSites] = useState<PlantingSiteSearchResult[]>([]);
 
   const goToProjects = useCallback(() => {
-    history.push({ pathname: APP_PATHS.PROJECTS });
-  }, [history]);
+    navigate({ pathname: APP_PATHS.PROJECTS });
+  }, [navigate]);
 
   const saveProject = useCallback(async () => {
     // first create the project

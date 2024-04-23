@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
@@ -14,7 +14,7 @@ import CohortForm from './CohortForm';
 
 export default function CohortEditView(): JSX.Element {
   const dispatch = useAppDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const snackbar = useSnackbar();
 
   const pathParams = useParams<{ cohortId: string }>();
@@ -39,8 +39,8 @@ export default function CohortEditView(): JSX.Element {
   );
 
   const goToCohortView = useCallback(() => {
-    history.push({ pathname: APP_PATHS.ACCELERATOR_COHORTS_VIEW.replace(':cohortId', `${cohortId}`) });
-  }, [history, cohortId]);
+    navigate({ pathname: APP_PATHS.ACCELERATOR_COHORTS_VIEW.replace(':cohortId', `${cohortId}`) });
+  }, [navigate, cohortId]);
 
   useEffect(() => {
     if (!cohortUpdateRequest) {

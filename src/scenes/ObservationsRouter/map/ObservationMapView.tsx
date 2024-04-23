@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
-import { Box, Theme } from '@mui/material';
+import { Box } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import { PlantingSiteMap } from 'src/components/Map';
@@ -16,7 +16,7 @@ import { ObservationResults } from 'src/types/Observations';
 import { PlantingSite } from 'src/types/Tracking';
 import { regexMatch } from 'src/utils/search';
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   popover: {
     '&.mapboxgl-popup': {
       maxWidth: '324px !important', // !important to override a default mapbox style
@@ -45,8 +45,8 @@ export default function ObservationMapView({
 
     return Array.from(uniqueDates)
       ?.filter((time) => time)
-      ?.map((time) => time!)
-      ?.sort((a, b) => (Date.parse(a!) > Date.parse(b!) ? 1 : -1));
+      ?.map((time) => time)
+      ?.sort((a, b) => (Date.parse(a) > Date.parse(b) ? 1 : -1));
   }, [observationsResults]);
 
   const [selectedObservationDate, setSelectedObservationDate] = useState<string | undefined>();

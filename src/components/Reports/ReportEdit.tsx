@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -15,7 +15,6 @@ import {
 import ReportForm from 'src/components/Reports/ReportForm';
 import ReportFormAnnual from 'src/components/Reports/ReportFormAnnual';
 import SubmitConfirmationDialog from 'src/components/Reports/SubmitConfirmationDialog';
-import useReportFiles from 'src/components/Reports/useReportFiles';
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
@@ -26,7 +25,9 @@ import { Report, ReportFile } from 'src/types/Report';
 import { overWordLimit } from 'src/utils/text';
 import useSnackbar from 'src/utils/useSnackbar';
 
-const useStyles = makeStyles((theme) => ({
+import useReportFiles from './useReportFiles';
+
+const useStyles = makeStyles(() => ({
   form: {
     paddingBottom: '250px',
   },
@@ -38,7 +39,9 @@ export default function ReportEdit(): JSX.Element {
   const { user } = useUser();
   const theme = useTheme();
   const classes = useStyles();
-  const history = useHistory();
+
+  const navigate = useNavigate();
+
   const snackbar = useSnackbar();
 
   const [showInvalidUserModal, setShowInvalidUserModal] = useState(false);
@@ -56,7 +59,7 @@ export default function ReportEdit(): JSX.Element {
 
   const initialReportFiles = useReportFiles(report, setUpdatedReportFiles);
 
-  const reportIdInt = parseInt(reportId, 10);
+  const reportIdInt = reportId ? parseInt(reportId, 10) : -1;
   const reportName = `Report (${report?.year}-Q${report?.quarter}) ` + (report?.projectName ?? '');
 
   useEffect(() => {
@@ -67,13 +70,17 @@ export default function ReportEdit(): JSX.Element {
     }
   }, [idInView]);
 
+  const reportIdValid = () => reportIdInt && reportIdInt !== -1;
+
   useEffect(() => {
     const getReport = async () => {
-      const result = await ReportService.getReport(reportIdInt);
-      if (result.requestSucceeded && result.report) {
-        setReport(result.report);
-      } else {
-        snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
+      if (reportIdValid()) {
+        const result = await ReportService.getReport(reportIdInt);
+        if (result.requestSucceeded && result.report) {
+          setReport(result.report);
+        } else {
+          snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
+        }
       }
     };
 
@@ -85,28 +92,30 @@ export default function ReportEdit(): JSX.Element {
   }, [reportIdInt, snackbar]);
 
   const updateFiles = async () => {
-    await Promise.all(
-      initialReportFiles?.map((f) => {
-        if (!updatedReportFiles?.includes(f)) {
-          return ReportService.deleteReportFile(reportIdInt, f.id);
-        }
-        return undefined;
-      }) ?? []
-    );
-    await Promise.all(newReportFiles?.map((f) => ReportService.uploadReportFile(reportIdInt, f)) ?? []);
+    if (reportIdValid()) {
+      await Promise.all(
+        initialReportFiles?.map((f: { id: number; filename: string }) => {
+          if (!updatedReportFiles?.includes(f)) {
+            return ReportService.deleteReportFile(reportIdInt, f.id);
+          }
+          return undefined;
+        }) ?? []
+      );
+      await Promise.all(newReportFiles?.map((f) => ReportService.uploadReportFile(reportIdInt, f)) ?? []);
+    }
   };
 
   useEffect(() => {
     const getReport = async () => {
-      const result = await ReportService.getReport(reportIdInt);
-      if (result.requestSucceeded && result.report) {
-        setCurrentUserEditing(result.report.lockedByUserId === user?.id);
+      if (reportIdInt && reportIdInt !== -1) {
+        const result = await ReportService.getReport(reportIdInt);
+        if (result.requestSucceeded && result.report) {
+          setCurrentUserEditing(result.report.lockedByUserId === user?.id);
+        }
       }
     };
 
-    let interval: ReturnType<typeof setInterval>;
-
-    interval = setInterval(getReport, 60000);
+    const interval = setInterval(getReport, 60000);
 
     // Clean up existing interval.
     return () => {
@@ -144,7 +153,7 @@ export default function ReportEdit(): JSX.Element {
       setBusyState(false);
     }
 
-    if (!saveResult || saveResult.requestSucceeded) {
+    if ((!saveResult || saveResult.requestSucceeded) && reportIdValid()) {
       // unlock the report
       const unlockResult = await ReportService.unlockReport(reportIdInt);
       if (!unlockResult.requestSucceeded) {
@@ -152,7 +161,9 @@ export default function ReportEdit(): JSX.Element {
       }
 
       // then navigate to view
-      history.replace({ pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId) });
+      if (reportId) {
+        navigate({ pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId) });
+      }
     }
   };
 
@@ -202,6 +213,7 @@ export default function ReportEdit(): JSX.Element {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const popStateEventHandler = (event: PopStateEvent) => {
       window.history.pushState(null, document.title, window.location.href);
       snackbar.toastWarning(strings.REPORT_BACK_WARNING);
@@ -341,13 +353,13 @@ export default function ReportEdit(): JSX.Element {
     if (report) {
       setBusyState(true);
       const saveResult = await ReportService.updateReport(report);
-      if (saveResult.requestSucceeded) {
+      if (saveResult.requestSucceeded && reportIdInt) {
         await updateFiles();
         await updatePhotos(report.id);
         const submitResult = await ReportService.submitReport(reportIdInt);
-        if (submitResult.requestSucceeded) {
+        if (submitResult.requestSucceeded && reportId) {
           reloadOrganizations(selectedOrganization.id);
-          history.replace({ pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId) });
+          navigate({ pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId) }, { replace: true });
         } else {
           snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SUBMIT);
         }
@@ -389,7 +401,9 @@ export default function ReportEdit(): JSX.Element {
   });
 
   const redirectToReportView = () => {
-    history.push(APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId));
+    if (reportId) {
+      navigate(APP_PATHS.REPORTS_VIEW.replace(':reportId', reportId));
+    }
   };
 
   /**
@@ -399,6 +413,7 @@ export default function ReportEdit(): JSX.Element {
     if (report) {
       setReport(
         produce((draft) => {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           draft[field] = value;
         })
@@ -415,6 +430,7 @@ export default function ReportEdit(): JSX.Element {
     if (report && report[location]) {
       setReport(
         produce((draft) => {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           draft[location][index][field] = value;
         })
@@ -431,6 +447,7 @@ export default function ReportEdit(): JSX.Element {
     if (report && report[location]) {
       setReport(
         produce((draft) => {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           draft[location][index].workers[workersField] = value;
         })
@@ -448,6 +465,7 @@ export default function ReportEdit(): JSX.Element {
     if (report && report.annualDetails) {
       setReport(
         produce((draft) => {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           draft.annualDetails[field] = value;
         })
@@ -462,6 +480,7 @@ export default function ReportEdit(): JSX.Element {
     ) {
       setReport(
         produce((draft) => {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           draft.annualDetails.sustainableDevelopmentGoals[index].progress = value;
         })

@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Grid, useTheme } from '@mui/material';
 
 import useDeviceInfo from 'src/utils/useDeviceInfo';

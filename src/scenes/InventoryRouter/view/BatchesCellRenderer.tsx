@@ -29,6 +29,7 @@ export default function BatchesCellRenderer(props: RendererProps<TableRowType>):
   const { column, row, value, index, onRowClick } = props;
   const [modalValues, setModalValues] = useState({ type: 'germinating', openChangeQuantityModal: false });
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const rowClick = (event?: React.SyntheticEvent) => {
     if (onRowClick) {
       onRowClick();

@@ -5,6 +5,7 @@ import { RootState } from 'src/redux/rootReducer';
 import { SubLocationService } from 'src/services';
 
 export const requestSubLocations = (facilityIds: number[]) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   return async (dispatch: Dispatch, _getState: () => RootState) => {
     try {
       if (facilityIds.length) {

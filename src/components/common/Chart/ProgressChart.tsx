@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { LinearProgress, useTheme } from '@mui/material';
 
 export type ProgressChartProps = {

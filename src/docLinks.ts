@@ -47,6 +47,6 @@ const DOC_LINKS: Record<SupportedLocaleId, DocLink> = {
 export const useDocLinks = () => {
   const { selectedLocale } = useLocalization();
 
-  const docs = DOC_LINKS[selectedLocale as SupportedLocaleId] || DOC_LINKS.en;
+  const docs = DOC_LINKS[selectedLocale] || DOC_LINKS.en;
   return docs;
 };

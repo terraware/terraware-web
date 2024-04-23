@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
@@ -50,7 +52,6 @@ type ProblemTooltipProps = {
 
 export default function ProblemTooltip({
   problems,
-  openedTooltip,
   setOpenedTooltip,
   reloadData,
   onRowClick,

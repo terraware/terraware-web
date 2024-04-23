@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import Page from 'src/components/Page';
 import useNavigateTo from 'src/hooks/useNavigateTo';
@@ -41,7 +41,8 @@ export default function ParticipantsNew(): JSX.Element {
     if (result?.status === 'error') {
       snackbar.toastError();
     } else if (result?.status === 'success') {
-      goToParticipant(result!.data!.id);
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      goToParticipant(result.data!.id);
       snackbar.toastSuccess(strings.CHANGES_SAVED);
     }
   }, [goToParticipant, result, snackbar]);

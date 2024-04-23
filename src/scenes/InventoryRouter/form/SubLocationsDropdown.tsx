@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { MultiSelect } from '@terraware/web-components';
 
@@ -15,7 +14,7 @@ type SubLocationsDropdownProps<T extends { subLocationIds?: number[] } | undefin
   setRecord: (setFn: (previousValue: T) => T) => void;
 };
 
-const useStyles = makeStyles((theme: Theme) => ({
+const useStyles = makeStyles(() => ({
   multiSelectStyle: {
     height: '100%',
     width: '100%',

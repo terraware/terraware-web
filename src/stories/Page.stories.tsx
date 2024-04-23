@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Story } from '@storybook/react';
 
 import Page, { PageProps } from 'src/components/Page';

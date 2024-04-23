@@ -134,6 +134,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
 
   const getContextRenderer = useCallback(
     () =>
+      // eslint-disable-next-line react/display-name
       (entity: MapSourceProperties): JSX.Element => {
         let properties: TooltipProperty[] = [];
         const zoneObservation: ObservationPlantingZoneResults | undefined = observation?.plantingZones?.find(
@@ -147,7 +148,7 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
               {
                 key: strings.MORTALITY_RATE,
                 value: zoneObservation.hasObservedPermanentPlots
-                  ? `${zoneObservation!.mortalityRate}%`
+                  ? `${zoneObservation.mortalityRate}%`
                   : strings.UNKNOWN,
               },
               {
@@ -156,9 +157,9 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
               },
               { key: strings.PLANTING_PROGRESS, value: `${zoneProgress[entity.id].progress}%` },
               { key: strings.RECORDED_PLANTS, value: `${zoneStats[entity.id].reportedPlants} ${strings.PLANTS}` },
-              { key: strings.OBSERVED_PLANTS, value: `${zoneObservation!.totalPlants} ${strings.PLANTS}` },
+              { key: strings.OBSERVED_PLANTS, value: `${zoneObservation.totalPlants} ${strings.PLANTS}` },
               { key: strings.RECORDED_SPECIES, value: `${zoneStats[entity.id].reportedSpecies} ${strings.SPECIES}` },
-              { key: strings.OBSERVED_SPECIES, value: `${zoneObservation!.totalSpecies} ${strings.SPECIES}` },
+              { key: strings.OBSERVED_SPECIES, value: `${zoneObservation.totalSpecies} ${strings.SPECIES}` },
             ];
           } else {
             properties = [

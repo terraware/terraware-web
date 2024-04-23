@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
@@ -38,7 +38,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
   const [organizationTypeError, setOrganizationTypeError] = useState('');
   const [organizationTypeDetailsError, setOrganizationTypeDetailsError] = useState('');
   const [requireSubdivision, setRequireSubdivisions] = useState(!!organization.countrySubdivisionCode);
-  const history = useHistory();
+  const navigate = useNavigate();
   const snackbar = useSnackbar();
   const timeZones = useTimeZones();
   const defaultTimeZone = useUserTimeZone()?.id || getUTC(timeZones).id;
@@ -73,7 +73,7 @@ export default function OrganizationView({ organization, reloadOrganizationData 
     const organizationLocation = {
       pathname: APP_PATHS.ORGANIZATION,
     };
-    history.push(organizationLocation);
+    navigate(organizationLocation);
   };
 
   const saveOrganization = async () => {

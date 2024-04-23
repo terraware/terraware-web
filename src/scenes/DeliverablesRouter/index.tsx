@@ -1,20 +1,15 @@
-import { Route, Switch } from 'react-router-dom';
-
-import { APP_PATHS } from 'src/constants';
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
 
 import DeliverableViewWrapper from './DeliverableViewWrapper';
 import DeliverablesList from './DeliverablesList';
 
 const DeliverablesRouter = (): JSX.Element => {
   return (
-    <Switch>
-      <Route path={APP_PATHS.DELIVERABLE_VIEW}>
-        <DeliverableViewWrapper />
-      </Route>
-      <Route path={'*'}>
-        <DeliverablesList />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route path={'/:deliverableId/submissions/:projectId'} element={<DeliverableViewWrapper />} />
+      <Route path={'*'} element={<DeliverablesList />} />
+    </Routes>
   );
 };
 

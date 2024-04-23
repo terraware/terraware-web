@@ -42,10 +42,10 @@ export default function ChangeQuantityModal(props: ChangeQuantityModalProps): JS
     if (movedValue === undefined || movedValue === 0) {
       setErrorText(strings.REQUIRED_FIELD);
       return;
-    } else if (type === 'germinating' && (movedValue as number) > +row['germinatingQuantity(raw)']) {
+    } else if (type === 'germinating' && movedValue > +row['germinatingQuantity(raw)']) {
       setErrorText(strings.GERMINATING_QUANTITY_CANNOT_BE_LESS_THAN_ZERO);
       return;
-    } else if (type === 'not-ready' && (movedValue as number) > +row['notReadyQuantity(raw)']) {
+    } else if (type === 'not-ready' && movedValue > +row['notReadyQuantity(raw)']) {
       setErrorText(strings.NOT_READY_QUANTITY_CANNOT_BE_LESS_THAN_ZERO);
       return;
     }

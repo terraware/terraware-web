@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -22,7 +22,9 @@ export default function ReportView(): JSX.Element {
   const { reportId } = useParams<{ reportId: string }>();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const history = useHistory();
+
+  const navigate = useNavigate();
+
   const snackbar = useSnackbar();
 
   const [report, setReport] = useState<Report>();
@@ -31,8 +33,10 @@ export default function ReportView(): JSX.Element {
 
   const initialReportFiles = useReportFiles(report);
 
-  const reportIdInt = parseInt(reportId, 10);
+  const reportIdInt = reportId ? parseInt(reportId, 10) : -1;
   const reportName = `Report (${report?.year}-Q${report?.quarter}) ` + (report?.projectName ?? '');
+
+  const reportIdValid = () => reportIdInt && reportIdInt !== -1;
 
   useEffect(() => {
     const getReport = async () => {
@@ -44,20 +48,22 @@ export default function ReportView(): JSX.Element {
       }
     };
 
-    if (reportIdInt) {
+    if (reportIdValid()) {
       void getReport();
     }
   }, [reportIdInt, snackbar]);
 
   const confirmEdit = async () => {
     // lock the report
-    const lockResult = await ReportService.forceLockReport(reportIdInt);
+    if (reportIdValid()) {
+      const lockResult = await ReportService.forceLockReport(reportIdInt);
 
-    if (lockResult.requestSucceeded) {
-      // then navigate to editing
-      history.replace({ pathname: APP_PATHS.REPORTS_EDIT.replace(':reportId', reportId) });
-    } else {
-      snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_EDIT);
+      if (lockResult.requestSucceeded && reportId) {
+        // then navigate to editing
+        navigate({ pathname: APP_PATHS.REPORTS_EDIT.replace(':reportId', reportId) });
+      } else {
+        snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_EDIT);
+      }
     }
   };
 

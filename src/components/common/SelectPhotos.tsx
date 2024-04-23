@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { PhotoChooser, PhotoChooserErrorType, PhotoChooserProps } from '@terraware/web-components';
 
 import strings from 'src/strings';

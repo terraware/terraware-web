@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Dropdown } from '@terraware/web-components';
 
 import strings from 'src/strings';

@@ -90,8 +90,8 @@ export default function OptInFeaturesView({ refresh }: OptInFeaturesViewProps): 
     borderLeft: isMobile
       ? 'none'
       : isDisclosure
-      ? `1px solid ${theme.palette.TwClrTxtDanger}`
-      : `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+        ? `1px solid ${theme.palette.TwClrTxtDanger}`
+        : `1px solid ${theme.palette.TwClrBrdrTertiary}`,
     borderTop: isMobile
       ? isDisclosure
         ? `1px solid ${theme.palette.TwClrTxtDanger}`

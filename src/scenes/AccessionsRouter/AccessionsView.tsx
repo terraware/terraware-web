@@ -14,7 +14,7 @@ interface AccessionsViewProps {
   setWithdrawalCreated: (value: boolean) => void;
 }
 
-const AccessionsView = ({ setWithdrawalCreated }: AccessionsViewProps) => {
+const AccessionsView = ({}: AccessionsViewProps) => {
   const dispatch = useAppDispatch();
   const { userPreferences } = useUser();
   const { selectedOrganization, reloadOrganizations, orgPreferences } = useOrganization();

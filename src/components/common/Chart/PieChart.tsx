@@ -1,3 +1,5 @@
+import React from 'react';
+
 import Chart, { BaseChartProps } from './Chart';
 
 export type PieChartProps = Omit<BaseChartProps, 'elementColor | xAxisLabel | yAxisLabel'>;

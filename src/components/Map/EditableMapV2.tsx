@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactMapGL, {
   FullscreenControl,
   GeolocateControl,
@@ -94,8 +94,6 @@ export default function EditableMap({
   const [firstVisible, setFirstVisible] = useState<boolean>(false);
   const [interactiveLayerIds, setInteractiveLayerIds] = useState<string[] | undefined>();
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
-  const [isOverridePopupEvent, setIsOverridePopupEvent] = useState<boolean>(false);
-  const [isUpdateEvent, setIsUpdateEvent] = useState<boolean>(false);
   const [, setActiveContext] = useState<MapEntityOptions | undefined>();
   const containerRef = useRef(null);
   const mapRef = useRef<MapRef | null>(null);
@@ -117,15 +115,15 @@ export default function EditableMap({
     bounds: readOnlyBoundary?.length
       ? (bbox({
           type: 'MultiPolygon',
-          coordinates: readOnlyBoundary!
+          coordinates: readOnlyBoundary
             .flatMap((b) => b.data.features)
             .flatMap((feature) => toMultiPolygon(feature.geometry))
             .filter((poly: MultiPolygon | null) => poly !== null)
             .flatMap((poly: MultiPolygon | null) => poly!.coordinates),
         }) as LngLatBoundsLike)
       : editableBoundary
-      ? (bbox(editableBoundary) as LngLatBoundsLike)
-      : undefined,
+        ? (bbox(editableBoundary) as LngLatBoundsLike)
+        : undefined,
     fitBoundsOptions: {
       animate: false,
       padding: 25,
@@ -137,7 +135,7 @@ export default function EditableMap({
       return null;
     }
 
-    return readOnlyBoundary!.map((boundaryData: RenderableReadOnlyBoundary) => {
+    return readOnlyBoundary.map((boundaryData: RenderableReadOnlyBoundary) => {
       const drawingLayer: MapDrawingLayer = getMapDrawingLayer(boundaryData.renderProperties, boundaryData.id);
       return (
         <Source type='geojson' key={boundaryData.id} data={boundaryData.data} id={boundaryData.id}>
@@ -183,7 +181,10 @@ export default function EditableMap({
       clearPopupInfo();
       // update selection
       mapRef?.current?.setFeatureState({ source: info.sourceId, id: `${info.id}` }, { select: true });
-      setPopupInfo(info);
+      // this is needed to avoid a click-out closing the newly opened popup
+      setTimeout(() => {
+        setPopupInfo(info);
+      }, 0);
     },
     [clearPopupInfo, mapRef]
   );
@@ -199,14 +200,6 @@ export default function EditableMap({
   // map click to fetch geometry and show a popup at that location
   const onMapClick = useCallback(
     (event: MapLayerMouseEvent) => {
-      if (isOverridePopupEvent) {
-        if (overridePopupInfo) {
-          initializePopupInfo(overridePopupInfo);
-        }
-        setIsOverridePopupEvent(false);
-        return;
-      }
-
       if (!event?.features) {
         return;
       }
@@ -231,17 +224,17 @@ export default function EditableMap({
         });
       }
     },
-    [featureSelectorOnClick, initializePopupInfo, isOverridePopupEvent, overridePopupInfo, readOnlyBoundary]
+    [featureSelectorOnClick, initializePopupInfo, overridePopupInfo, readOnlyBoundary]
   );
 
   /**
    * Call the prop function when boundary changes.
    * Use local state to capture if this was a click or drag event.
    */
+  /*
   const onBoundaryCallback = useCallback(
-    (data: FeatureCollection | undefined, isUpdate: boolean) => {
+    (data: FeatureCollection | undefined) => {
       if (onEditableBoundaryChanged) {
-        setIsUpdateEvent(isUpdate);
         onEditableBoundaryChanged(data);
       }
     },
@@ -261,6 +254,7 @@ export default function EditableMap({
     },
     [onBoundaryCallback]
   );
+*/
 
   const selectActiveContext = useCallback(() => {
     const markActiveContext = (data: MapEntityId[], value: boolean) => {
@@ -305,24 +299,9 @@ export default function EditableMap({
   // Separate useEffect from clearing popup state due to dependencies.
   useEffect(() => {
     if (overridePopupInfo) {
-      setIsOverridePopupEvent(true);
+      initializePopupInfo(overridePopupInfo);
     }
-  }, [overridePopupInfo]);
-
-  /**
-   * Show popup info if boundary was moved to a valid location,
-   * capturing when user drags the polygon.
-   * On click is handled by the onMapClick function.
-   */
-  useEffect(() => {
-    if (isUpdateEvent && isOverridePopupEvent && overridePopupInfo) {
-      if (overridePopupInfo) {
-        initializePopupInfo(overridePopupInfo);
-      }
-      setIsOverridePopupEvent(false);
-      setIsUpdateEvent(false);
-    }
-  }, [initializePopupInfo, isOverridePopupEvent, isUpdateEvent, overridePopupInfo]);
+  }, [initializePopupInfo, overridePopupInfo]);
 
   // Show active context as selected once the map is loaded.
   // This is to catch up on an already initalized active context.
@@ -358,7 +337,7 @@ export default function EditableMap({
               width: '100%',
               height: '100%',
               display: 'flex',
-              flexGrow: '1',
+              flexGrow: 1,
               flexDirection: 'column',
               ...style,
             }}
@@ -373,9 +352,9 @@ export default function EditableMap({
             <MapViewStyleControl mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
             <EditableMapDraw
               boundary={editableBoundary}
-              onBoundaryCreated={onBoundaryCreated}
+              onBoundaryCreated={onEditableBoundaryChanged}
               onBoundaryDeleted={onEditableBoundaryChanged}
-              onBoundaryUpdated={onBoundaryUpdated}
+              onBoundaryUpdated={onEditableBoundaryChanged}
               setMode={setEditMode}
             />
             <UndoRedoControl onRedo={onRedo} onUndo={onUndo} />

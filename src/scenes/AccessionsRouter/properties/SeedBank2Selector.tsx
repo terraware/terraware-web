@@ -25,7 +25,7 @@ export default function SeedBank2Selector(props: SeedBank2SelectorProps): JSX.El
   const [subLocations, setSubLocations] = useState<SubLocation[]>([]);
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const seedBanks: Facility[] = (getAllSeedBanks(selectedOrganization).filter((sb) => !!sb) as Facility[]) || [];
+  const seedBanks: Facility[] = getAllSeedBanks(selectedOrganization).filter((sb) => !!sb) || [];
 
   const gridSize = () => (isMobile ? 12 : 6);
 

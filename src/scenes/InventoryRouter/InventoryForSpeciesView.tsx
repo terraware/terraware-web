@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { Grid, Typography, useTheme } from '@mui/material';
 
@@ -22,7 +22,7 @@ interface InventoryForSpeciesViewProps {
 
 export default function InventoryForSpeciesView(props: InventoryForSpeciesViewProps): JSX.Element {
   const query = useQuery();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useStateLocation();
   const openBatchNumber = (query.get('batch') || '').toLowerCase();
   const { species } = props;
@@ -54,7 +54,7 @@ export default function InventoryForSpeciesView(props: InventoryForSpeciesViewPr
     } else {
       query.set('batch', batchNum);
     }
-    history.replace(getLocation(location.pathname, location, query.toString()));
+    navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
   };
 
   return (

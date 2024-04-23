@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Grid, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -49,7 +49,7 @@ export default function ProjectsList(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const classes = useStyles();
   const theme = useTheme();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const [results, setResults] = useState<Project[]>();
@@ -86,7 +86,7 @@ export default function ProjectsList(): JSX.Element {
     const newProjectLocation = {
       pathname: APP_PATHS.PROJECTS_NEW,
     };
-    history.push(newProjectLocation);
+    navigate(newProjectLocation);
   };
 
   const clearSearch = () => {

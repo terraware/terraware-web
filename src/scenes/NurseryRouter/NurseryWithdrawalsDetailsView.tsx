@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Tab, Theme, Typography, useTheme } from '@mui/material';
@@ -70,7 +70,7 @@ export default function NurseryWithdrawalsDetailsView({
   const snackbar = useSnackbar();
   const { OUTPLANT, NURSERY_TRANSFER } = NurseryWithdrawalPurposes;
   const query = useQuery();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useStateLocation();
   const tab = (query.get('tab') || '').toLowerCase();
   const preselectedTab = TABS.indexOf(tab) === -1 ? 'withdrawal' : tab;
@@ -100,28 +100,30 @@ export default function NurseryWithdrawalsDetailsView({
         setBatches(withdrawalResponse.batches);
       }
       // get summary information
-      const apiSearchResults = await NurseryWithdrawalService.listNurseryWithdrawals(selectedOrganization.id, [
-        {
-          operation: 'field',
-          field: 'id',
-          type: 'Exact',
-          values: [withdrawalId],
-        },
-      ]);
-      if (apiSearchResults && apiSearchResults.length > 0) {
-        const withdrawalSummaryRecord = apiSearchResults[0];
-        setWithdrawalSummary({
-          id: withdrawalSummaryRecord.id as string,
-          delivery_id: withdrawalSummaryRecord.delivery_id as string,
-          withdrawnDate: withdrawalSummaryRecord.withdrawnDate as string,
-          purpose: withdrawalSummaryRecord.purpose as string,
-          facilityName: withdrawalSummaryRecord.facilityName as string,
-          destinationName: withdrawalSummaryRecord.destinationName as string,
-          subzoneNames: withdrawalSummaryRecord.plantingSubzoneNames as string,
-          scientificNames: withdrawalSummaryRecord.speciesScientificNames as string[],
-          totalWithdrawn: withdrawalSummaryRecord.totalWithdrawn as string,
-          hasReassignments: isTrue(withdrawalSummaryRecord.hasReassignments),
-        });
+      if (withdrawalId) {
+        const apiSearchResults = await NurseryWithdrawalService.listNurseryWithdrawals(selectedOrganization.id, [
+          {
+            operation: 'field',
+            field: 'id',
+            type: 'Exact',
+            values: [withdrawalId],
+          },
+        ]);
+        if (apiSearchResults && apiSearchResults.length > 0) {
+          const withdrawalSummaryRecord = apiSearchResults[0];
+          setWithdrawalSummary({
+            id: withdrawalSummaryRecord.id as string,
+            delivery_id: withdrawalSummaryRecord.delivery_id as string,
+            withdrawnDate: withdrawalSummaryRecord.withdrawnDate as string,
+            purpose: withdrawalSummaryRecord.purpose as string,
+            facilityName: withdrawalSummaryRecord.facilityName as string,
+            destinationName: withdrawalSummaryRecord.destinationName as string,
+            subzoneNames: withdrawalSummaryRecord.plantingSubzoneNames as string,
+            scientificNames: withdrawalSummaryRecord.speciesScientificNames as string[],
+            totalWithdrawn: withdrawalSummaryRecord.totalWithdrawn as string,
+            hasReassignments: isTrue(withdrawalSummaryRecord.hasReassignments),
+          });
+        }
       }
     };
 
@@ -129,7 +131,7 @@ export default function NurseryWithdrawalsDetailsView({
   }, [selectedOrganization, withdrawalId, snackbar, reload]);
 
   useEffect(() => {
-    setSelectedTab((query.get('tab') || 'withdrawal') as string);
+    setSelectedTab(query.get('tab') || 'withdrawal');
   }, [query]);
 
   const tabStyles = {
@@ -155,7 +157,7 @@ export default function NurseryWithdrawalsDetailsView({
 
   const handleReassign = () => {
     if (delivery) {
-      history.push({
+      navigate({
         pathname: APP_PATHS.NURSERY_REASSIGNMENT.replace(':deliveryId', delivery.id.toString()),
         search: '?fromWithdrawal',
       });
@@ -164,7 +166,7 @@ export default function NurseryWithdrawalsDetailsView({
 
   const handleTabChange = (newValue: string) => {
     query.set('tab', newValue);
-    history.push(getLocation(location.pathname, location, query.toString()));
+    navigate(getLocation(location.pathname, location, query.toString()));
   };
 
   return (

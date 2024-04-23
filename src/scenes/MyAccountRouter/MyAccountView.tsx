@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem } from '@terraware/web-components';
@@ -103,7 +103,7 @@ const MyAccountContent = ({
   const theme = useTheme();
   const [selectedRows, setSelectedRows] = useState<PersonOrganization[]>([]);
   const [personOrganizations, setPersonOrganizations] = useState<PersonOrganization[]>([]);
-  const history = useHistory();
+  const navigate = useNavigate();
   const [record, setRecord, onChange] = useForm<User>(user);
   const [openDeleteAccountModal, setOpenDeleteAccountModal] = useState<boolean>(false);
   const [removedOrg, setRemovedOrg] = useState<Organization>();
@@ -199,7 +199,7 @@ const MyAccountContent = ({
     setPreferredWeightSystemSelected((userPreferences?.preferredWeightSystem as string) || 'metric');
     setLocaleSelected(selectedLocale);
     setSelectedRows([]);
-    history.push(APP_PATHS.MY_ACCOUNT);
+    navigate(APP_PATHS.MY_ACCOUNT);
   };
 
   const saveChanges = async () => {
@@ -234,7 +234,7 @@ const MyAccountContent = ({
         setSelectedLocale(lastLocale);
         snackbar.toastError();
       }
-      history.push(APP_PATHS.MY_ACCOUNT);
+      navigate(APP_PATHS.MY_ACCOUNT);
     }
   };
 
@@ -282,7 +282,7 @@ const MyAccountContent = ({
       snackbar.toastError();
     }
     setLeaveOrganizationModalOpened(false);
-    history.push(APP_PATHS.MY_ACCOUNT);
+    navigate(APP_PATHS.MY_ACCOUNT);
   };
 
   const deleteOrgHandler = async () => {
@@ -298,7 +298,7 @@ const MyAccountContent = ({
       } else {
         snackbar.toastError();
       }
-      history.push(APP_PATHS.HOME);
+      navigate(APP_PATHS.HOME);
     }
   };
 
@@ -373,7 +373,7 @@ const MyAccountContent = ({
                   id='edit-account'
                   icon='iconEdit'
                   label={isMobile ? '' : strings.EDIT_ACCOUNT}
-                  onClick={() => history.push(APP_PATHS.MY_ACCOUNT_EDIT)}
+                  onClick={() => navigate(APP_PATHS.MY_ACCOUNT_EDIT)}
                   size='medium'
                   priority='primary'
                 />

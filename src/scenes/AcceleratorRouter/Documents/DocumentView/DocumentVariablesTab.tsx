@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { CellRenderer, RendererProps, TableColumnType } from '@terraware/web-components';
 
