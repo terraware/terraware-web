@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1713906087513" clover="3.2.0">
-  <project timestamp="1713906087514" name="All files">
-    <metrics statements="21187" coveredstatements="918" conditionals="13344" coveredconditionals="228" methods="6644" coveredmethods="162" elements="41175" coveredelements="1308" complexity="0" loc="21187" ncloc="21187" packages="198" files="931" classes="931"/>
+<coverage generated="1713915160227" clover="3.2.0">
+  <project timestamp="1713915160228" name="All files">
+    <metrics statements="21184" coveredstatements="918" conditionals="13344" coveredconditionals="228" methods="6641" coveredmethods="162" elements="41169" coveredelements="1308" complexity="0" loc="21184" ncloc="21184" packages="198" files="931" classes="931"/>
     <package name="src">
       <metrics statements="161" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -4845,7 +4845,7 @@
       <metrics statements="40" coveredstatements="0" conditionals="17" coveredconditionals="0" methods="12" coveredmethods="0"/>
       <file name="DeleteConfirmationDialog.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectView/DeleteConfirmationDialog.tsx">
         <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="21" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectView/index.tsx">
         <metrics statements="39" coveredstatements="0" conditionals="17" coveredconditionals="0" methods="11" coveredmethods="0"/>
@@ -5020,11 +5020,11 @@
       </file>
     </package>
     <package name="src.components.Reports">
-      <metrics statements="670" coveredstatements="0" conditionals="583" coveredconditionals="0" methods="202" coveredmethods="0"/>
+      <metrics statements="668" coveredstatements="0" conditionals="583" coveredconditionals="0" methods="200" coveredmethods="0"/>
       <file name="ConcurrentEditorWarningDialog.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Reports/ConcurrentEditorWarningDialog.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="21" count="0" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
       </file>
       <file name="InvalidUserModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Reports/InvalidUserModal.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -5044,7 +5044,7 @@
         <line num="41" count="0" type="stmt"/>
       </file>
       <file name="ReportEdit.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Reports/ReportEdit.tsx">
-        <metrics statements="234" coveredstatements="0" conditionals="211" coveredconditionals="0" methods="52" coveredmethods="0"/>
+        <metrics statements="233" coveredstatements="0" conditionals="211" coveredconditionals="0" methods="51" coveredmethods="0"/>
         <line num="30" count="0" type="stmt"/>
         <line num="37" count="0" type="stmt"/>
         <line num="38" count="0" type="stmt"/>
@@ -5277,8 +5277,7 @@
         <line num="485" count="0" type="stmt"/>
         <line num="493" count="0" type="stmt"/>
         <line num="504" count="0" type="stmt"/>
-        <line num="505" count="0" type="stmt"/>
-        <line num="519" count="0" type="stmt"/>
+        <line num="518" count="0" type="stmt"/>
       </file>
       <file name="ReportForm.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Reports/ReportForm.tsx">
         <metrics statements="58" coveredstatements="0" conditionals="75" coveredconditionals="0" methods="25" coveredmethods="0"/>
@@ -5554,7 +5553,7 @@
         <line num="124" count="0" type="stmt"/>
       </file>
       <file name="ReportView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Reports/ReportView.tsx">
-        <metrics statements="42" coveredstatements="0" conditionals="46" coveredconditionals="0" methods="14" coveredmethods="0"/>
+        <metrics statements="41" coveredstatements="0" conditionals="46" coveredconditionals="0" methods="13" coveredmethods="0"/>
         <line num="22" count="0" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
@@ -5592,11 +5591,10 @@
         <line num="87" count="0" type="stmt"/>
         <line num="90" count="0" type="stmt"/>
         <line num="95" count="0" type="stmt"/>
-        <line num="96" count="0" type="stmt"/>
-        <line num="124" count="0" type="stmt"/>
-        <line num="131" count="0" type="stmt"/>
-        <line num="164" count="0" type="stmt"/>
-        <line num="171" count="0" type="stmt"/>
+        <line num="123" count="0" type="stmt"/>
+        <line num="130" count="0" type="stmt"/>
+        <line num="163" count="0" type="stmt"/>
+        <line num="170" count="0" type="stmt"/>
       </file>
       <file name="ReportsView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Reports/ReportsView.tsx">
         <metrics statements="40" coveredstatements="0" conditionals="21" coveredconditionals="0" methods="15" coveredmethods="0"/>
@@ -5651,7 +5649,7 @@
       </file>
       <file name="SubmitConfirmationDialog.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Reports/SubmitConfirmationDialog.tsx">
         <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="21" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
       </file>
       <file name="TableCellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Reports/TableCellRenderer.tsx">
         <metrics statements="11" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -12073,7 +12071,7 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.People">
-      <metrics statements="210" coveredstatements="0" conditionals="97" coveredconditionals="0" methods="54" coveredmethods="0"/>
+      <metrics statements="209" coveredstatements="0" conditionals="97" coveredconditionals="0" methods="53" coveredmethods="0"/>
       <file name="EditView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/People/EditView.tsx">
         <metrics statements="22" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="18" count="0" type="stmt"/>
@@ -12281,15 +12279,14 @@
         <line num="53" count="0" type="stmt"/>
       </file>
       <file name="RemoveRolesTopBarButton.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/People/RemoveRolesTopBarButton.tsx">
-        <metrics statements="8" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="13" count="0" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
-        <line num="40" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
       </file>
       <file name="SingleView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/People/SingleView.tsx">
         <metrics statements="15" coveredstatements="0" conditionals="7" coveredconditionals="0" methods="4" coveredmethods="0"/>
