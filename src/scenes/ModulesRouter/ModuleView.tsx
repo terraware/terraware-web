@@ -205,7 +205,7 @@ const ModuleView = () => {
               ))}
             </Grid>
 
-            {allSessions.length && (
+            {!!allSessions.length && (
               <Grid item>
                 {allSessions.map((session) => (
                   <ModuleEventSessionCard
