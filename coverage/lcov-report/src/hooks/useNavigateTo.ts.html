@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
@@ -145,19 +145,10 @@
 <a name='L80'></a><a href='#L80'>80</a>
 <a name='L81'></a><a href='#L81'>81</a>
 <a name='L82'></a><a href='#L82'>82</a>
-<a name='L83'></a><a href='#L83'>83</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -166,10 +157,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -184,12 +178,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -231,6 +237,7 @@
 import { useNavigate } from 'react-router-dom';
 &nbsp;
 import { APP_PATHS } from 'src/constants';
+import { ModuleContentType } from 'src/types/Module';
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >useNavigateTo(</span>) {
   const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
@@ -260,27 +267,29 @@ export default function <span class="fstat-no" title="function not covered" >use
           pathname: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
         }),
 &nbsp;
-      goToModuleAdditionalResources: <span class="fstat-no" title="function not covered" >(p</span>rojectId: number, moduleId: number) =&gt;
-<span class="cstat-no" title="statement not covered" >        navigate({</span>
-          pathname: APP_PATHS.PROJECT_MODULE_ADDITIONAL_RESOURCES.replace(':projectId', `${projectId}`).replace(
-            ':moduleId',
-            `${moduleId}`
-          ),
-        }),
+      goToModuleContent: <span class="fstat-no" title="function not covered" >(p</span>rojectId: number, moduleId: number, type: ModuleContentType) =&gt; {
+        let pathname = <span class="cstat-no" title="statement not covered" >'';</span>
+<span class="cstat-no" title="statement not covered" >        switch (type) {</span>
+          case 'additionalResources':
+<span class="cstat-no" title="statement not covered" >            pathname = APP_PATHS.PROJECT_MODULE_ADDITIONAL_RESOURCES;</span>
+<span class="cstat-no" title="statement not covered" >            break;</span>
+          case 'preparationMaterials':
+<span class="cstat-no" title="statement not covered" >            pathname = APP_PATHS.PROJECT_MODULE_PREPARATION_MATERIALS;</span>
+<span class="cstat-no" title="statement not covered" >            break;</span>
+          default:
+<span class="cstat-no" title="statement not covered" >            return;</span>
+        }
 &nbsp;
-      goToModulePreparationMaterials: <span class="fstat-no" title="function not covered" >(p</span>rojectId: number, moduleId: number) =&gt;
 <span class="cstat-no" title="statement not covered" >        navigate({</span>
-          pathname: APP_PATHS.PROJECT_MODULE_PREPARATION_MATERIALS.replace(':projectId', `${projectId}`).replace(
-            ':moduleId',
-            `${moduleId}`
-          ),
-        }),
+          pathname: pathname.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
+        });
+      },
 &nbsp;
-      goToModuleEvent: <span class="fstat-no" title="function not covered" >(p</span>rojectId: number, eventId: number, moduleId: number) =&gt;
+      goToModuleEventSession: <span class="fstat-no" title="function not covered" >(p</span>rojectId: number, moduleId: number, sessionId: number) =&gt;
 <span class="cstat-no" title="statement not covered" >        navigate({</span>
-          pathname: APP_PATHS.PROJECT_MODULE_EVENT.replace(':projectId', `${projectId}`)
+          pathname: APP_PATHS.PROJECT_MODULE_SESSION.replace(':projectId', `${projectId}`)
             .replace(':moduleId', `${moduleId}`)
-            .replace(':eventId', `${eventId}`),
+            .replace(':sessionId', `${sessionId}`),
         }),
 &nbsp;
       goToParticipant: <span class="fstat-no" title="function not covered" >(p</span>articipantId: number) =&gt;
@@ -316,7 +325,7 @@ export default function <span class="fstat-no" title="function not covered" >use
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-24T04:13:10.007Z
+                at 2024-04-24T16:34:07.893Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
