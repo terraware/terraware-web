@@ -185,7 +185,7 @@ export default function NurseryWithdrawalsDetailsView({
               id='back'
               to={`${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history`}
               className={classes.backToWithdrawals}
-              name={strings.WITHDRAWAL_LOG}
+              name={strings.WITHDRAWAL_HISTORY}
             />
           </Box>
           <Box
