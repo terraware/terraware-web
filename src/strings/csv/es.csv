@@ -1845,7 +1845,6 @@ WITHDRAWAL_BATCHES_MISSING_QUANTITY_ERROR,Ingresar una cantidad en al menos una 
 WITHDRAWAL_DESCRIPTION,Todos los detalles acerca de la extracción de las semillas.,
 WITHDRAWAL_DETAILS,Detalles de extracción,
 WITHDRAWAL_HISTORY,Historial de retiros,
-WITHDRAWAL_LOG,Registro de extracción,
 WITHDRAWAL_UNDONE,Retiro deshecho,
 WITHDRAWAL_UNDONE_DESCRIPTION,Se deshizo el retiro y las cantidades se devolvieron al lote original.,
 WITHDRAWALS,Retiros,
