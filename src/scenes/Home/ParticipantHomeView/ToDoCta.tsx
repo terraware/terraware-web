@@ -24,15 +24,15 @@ const getCtaLabel = (type: ToDoType['type']): string => {
 };
 
 const ToDoCta = ({ toDo }: ToDoCtaProps) => {
-  const { goToDeliverable, goToModuleEvent } = useNavigateTo();
+  const { goToDeliverable, goToModuleEventSession } = useNavigateTo();
 
   const handleOnClick = useCallback(() => {
     if (toDo.deliverableId) {
       goToDeliverable(toDo.deliverableId, toDo.projectId);
     } else if (toDo.eventId) {
-      goToModuleEvent(toDo.projectId, toDo.eventId, toDo.moduleId);
+      goToModuleEventSession(toDo.eventId, toDo.moduleId, toDo.projectId);
     }
-  }, [goToDeliverable, goToModuleEvent, toDo]);
+  }, [goToDeliverable, goToModuleEventSession, toDo]);
 
   // How do we determine if an event is ready to join? Probably answered by BE when it is ready
   let priority: ButtonPriority = 'primary';

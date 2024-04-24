@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
 
 import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
 
@@ -9,16 +8,13 @@ import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline
 import { APP_PATHS, ONE_MINUTE_INTERVAL_MS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useProject } from 'src/providers';
-import { requestGetModule } from 'src/redux/features/modules/modulesAsyncThunks';
-import { selectModule } from 'src/redux/features/modules/modulesSelectors';
-import { selectProjectModuleList } from 'src/redux/features/modules/modulesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { ModuleEventType, getModuleEventName, getModuleNumber } from 'src/types/Module';
+import { ModuleContentType, ModuleWithNumber } from 'src/types/Module';
 import { getLongDate, getLongDateTime } from 'src/utils/dateFormatter';
 
 import ModuleEventSessionCard from './ModuleEventSessionCard';
 import ModuleViewTitle from './ModuleViewTitle';
+import { useModuleData } from './Provider/Context';
 
 type MockModuleDeliverable = {
   dueDate: string;
@@ -39,18 +35,39 @@ const ModuleContentSection = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-const ModuleContentView = () => {
-  const dispatch = useAppDispatch();
+type ModuleContent = {
+  type: ModuleContentType;
+  label: string;
+};
+
+const MODULE_CONTENTS = (module: ModuleWithNumber): ModuleContent[] => {
+  const content: ModuleContent[] = [];
+
+  if (module.additionalResources) {
+    content.push({
+      type: 'additionalResources',
+      label: strings.ADDITIONAL_RESOURCES,
+    });
+  }
+
+  if (module.preparationMaterials) {
+    content.push({
+      type: 'preparationMaterials',
+      label: strings.PREPARATION_MATERIALS,
+    });
+  }
+
+  return content;
+};
+
+const ModuleView = () => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const { goToDeliverable, goToModuleAdditionalResources, goToModuleEvent, goToModulePreparationMaterials } =
-    useNavigateTo();
-  const { project, projectId } = useProject();
-  const pathParams = useParams<{ moduleId: string; projectId: string }>();
-  const moduleId = Number(pathParams.moduleId);
-  const module = useAppSelector(selectModule(moduleId));
-  const modules = useAppSelector(selectProjectModuleList(projectId));
+  const { goToDeliverable, goToModuleContent, goToModuleEventSession } = useNavigateTo();
   const mockDeliverables: MockModuleDeliverable[] = []; // TODO: get deliverables
+
+  const { project, projectId } = useProject();
+  const { module, allSessions } = useModuleData();
 
   const [now, setNow] = useState(new Date());
 
@@ -82,6 +99,8 @@ const ModuleContentView = () => {
     [now, theme]
   );
 
+  const contents = useMemo(() => (module ? MODULE_CONTENTS(module) : []), [module]);
+
   // update the current time every minute
   useEffect(() => {
     const interval = setInterval(() => {
@@ -91,15 +110,11 @@ const ModuleContentView = () => {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    void dispatch(requestGetModule(moduleId));
-  }, [dispatch, moduleId]);
-
   return (
     <PageWithModuleTimeline
       crumbs={crumbs}
       hierarchicalCrumbs={false}
-      title={<ModuleViewTitle module={module} modules={modules} project={project} />}
+      title={<ModuleViewTitle module={module} project={project} />}
     >
       <Card
         sx={{
@@ -117,7 +132,7 @@ const ModuleContentView = () => {
             <Grid item xs style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
               <ModuleContentSection>
                 <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={500}>
-                  {strings.formatString(strings.MODULE_N_OVERVIEW, getModuleNumber(module, modules))}
+                  {strings.formatString(strings.MODULE_N_OVERVIEW, module.number)}
                 </Typography>
                 <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
                   {module.name}
@@ -128,101 +143,78 @@ const ModuleContentView = () => {
                 <Box dangerouslySetInnerHTML={{ __html: module.overview || '' }} />
               </ModuleContentSection>
 
-              {(module.additionalResources || module.preparationMaterials) && (
+              {!!mockDeliverables.length && (
                 <>
-                  <ModuleContentSection>
-                    <Typography fontSize={'20px'} lineHeight={'28px'} fontWeight={600}>
-                      {strings.THIS_MODULE_CONTAINS}
-                    </Typography>
-                  </ModuleContentSection>
-
-                  {!!mockDeliverables.length && (
-                    <>
-                      {mockDeliverables.map((deliverable) => (
-                        <ModuleContentSection key={deliverable.id}>
-                          <Link
-                            fontSize='16px'
-                            onClick={() => {
-                              goToDeliverable(deliverable.id, projectId);
-                            }}
-                          >
-                            {deliverable.name}
-                          </Link>
-                          {deliverable.dueDate && activeLocale && (
-                            <Typography
-                              component='span'
-                              fontSize={'16px'}
-                              fontWeight={600}
-                              lineHeight={'24px'}
-                              sx={{
-                                color: getDueDateLabelColor(deliverable.dueDate),
-                                marginLeft: '8px',
-                              }}
-                            >
-                              {strings.formatString(strings.DUE, getLongDate(deliverable.dueDate, activeLocale))}
-                            </Typography>
-                          )}
-                        </ModuleContentSection>
-                      ))}
-                    </>
-                  )}
-
-                  {module.preparationMaterials && (
-                    <ModuleContentSection>
+                  {mockDeliverables.map((deliverable) => (
+                    <ModuleContentSection key={deliverable.id}>
                       <Link
                         fontSize='16px'
                         onClick={() => {
-                          goToModulePreparationMaterials(projectId, module.id);
+                          goToDeliverable(deliverable.id, projectId);
                         }}
                       >
-                        {strings.PREPARATION_MATERIALS}
+                        {deliverable.name}
                       </Link>
+                      {deliverable.dueDate && activeLocale && (
+                        <Typography
+                          component='span'
+                          fontSize={'16px'}
+                          fontWeight={600}
+                          lineHeight={'24px'}
+                          sx={{
+                            color: getDueDateLabelColor(deliverable.dueDate),
+                            marginLeft: '8px',
+                          }}
+                        >
+                          {strings.formatString(strings.DUE, getLongDate(deliverable.dueDate, activeLocale))}
+                        </Typography>
+                      )}
                     </ModuleContentSection>
-                  )}
-
-                  {/* TODO: list session slides and other session resources? */}
-
-                  {module.additionalResources && (
-                    <ModuleContentSection>
-                      <Link
-                        fontSize='16px'
-                        onClick={() => {
-                          goToModuleAdditionalResources(projectId, module.id);
-                        }}
-                      >
-                        {strings.ADDITIONAL_RESOURCES}
-                      </Link>
-                    </ModuleContentSection>
-                  )}
+                  ))}
                 </>
               )}
+
+              {contents.length > 0 && (
+                <ModuleContentSection>
+                  <Typography fontSize={'20px'} lineHeight={'28px'} fontWeight={600}>
+                    {strings.THIS_MODULE_CONTAINS}
+                  </Typography>
+                </ModuleContentSection>
+              )}
+
+              {contents.map((content, index) => (
+                <ModuleContentSection key={index}>
+                  <Link fontSize='16px' onClick={() => goToModuleContent(projectId, module.id, content.type)}>
+                    {content.label}
+                  </Link>
+                  {module.endDate && (
+                    <Typography
+                      component='span'
+                      fontSize={'16px'}
+                      fontWeight={600}
+                      lineHeight={'24px'}
+                      sx={{
+                        color: theme.palette.TwClrTxtWarning,
+                        marginLeft: '8px',
+                      }}
+                    >
+                      {strings.formatString(strings.DUE, getLongDate(module.endDate, activeLocale))}
+                    </Typography>
+                  )}
+                </ModuleContentSection>
+              ))}
             </Grid>
 
-            {Object.keys(module.events).length && (
+            {!!allSessions.length && (
               <Grid item>
-                {Object.keys(module.events).map((moduleEventType, index) => {
-                  const event = module.events[moduleEventType as ModuleEventType];
-                  if (!event?.sessions.length) {
-                    return null;
-                  }
-
-                  return (
-                    <Grid key={moduleEventType} item>
-                      {event.sessions.map((session) => {
-                        return (
-                          <ModuleEventSessionCard
-                            key={session.id}
-                            label={getModuleEventName(moduleEventType as ModuleEventType)}
-                            onClickButton={() => goToModuleEvent(projectId, index, module.id)}
-                            value={
-                              session.startTime && activeLocale ? getLongDateTime(session.startTime, activeLocale) : ''
-                            }
-                          />
-                        );
-                      })}
-                    </Grid>
-                  );
-                })}
+                {allSessions.map((session) => (
+                  <ModuleEventSessionCard
+                    key={session.id}
+                    label={session.type}
+                    onClickButton={() => goToModuleEventSession(session.id, module.id, projectId)}
+                    value={session.startTime ? getLongDateTime(session.startTime, activeLocale) : ''}
+                  />
+                ))}
               </Grid>
             )}
           </Grid>
@@ -232,4 +224,4 @@ const ModuleContentView = () => {
   );
 };
 
-export default ModuleContentView;
+export default ModuleView;

@@ -21,9 +21,8 @@ const CurrentModule = () => {
             <Grid item xs={12}>
               <Grid container justifyContent={'space-between'}>
                 <Grid item>
-                  {/* TODO when backend is done, this will probably change to currentModule.number or something, the ID is likely to be an increment ID */}
                   <Typography fontSize={'16px'} fontWeight={500} lineHeight={'24px'}>
-                    {strings.formatString(strings.MODULE_NAME_OVERVIEW, currentModule.name)}
+                    {strings.formatString(strings.MODULE_NAME_OVERVIEW, currentModule.number)}
                   </Typography>
                 </Grid>
                 <Grid item>
@@ -44,9 +43,11 @@ const CurrentModule = () => {
               </Typography>
             </Grid>
 
-            <Grid item xs={12}>
-              <Box dangerouslySetInnerHTML={{ __html: currentModule.overview || '' }} />
-            </Grid>
+            {currentModule.overview && (
+              <Grid item xs={12}>
+                <Box dangerouslySetInnerHTML={{ __html: currentModule.overview }} />
+              </Grid>
+            )}
 
             <Grid item xs={12}>
               <Typography fontSize={'20px'} fontWeight={600} lineHeight={'28px'}>

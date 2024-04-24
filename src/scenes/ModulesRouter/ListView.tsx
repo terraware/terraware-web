@@ -20,8 +20,6 @@ export default function ListView(): JSX.Element {
   const { project, projectId } = useProject();
 
   const modules = useAppSelector(selectProjectModuleList(projectId));
-  // tslint:disable:no-console
-  console.log(project, modules);
 
   // TODO - where will this be stored? Is this stored in the back end within another enum table?
   // Should we store it and localize it in the front end? Will it be stored somewhere an admin can edit it?

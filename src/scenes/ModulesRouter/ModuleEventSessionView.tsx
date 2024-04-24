@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
 
 import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -9,15 +8,12 @@ import Link from 'src/components/common/Link';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { APP_PATHS, FIFTEEN_MINUTE_INTERVAL_MS, ONE_MINUTE_INTERVAL_MS } from 'src/constants';
 import { useLocalization, useProject } from 'src/providers';
-import { requestGetModule, requestGetModuleEvent } from 'src/redux/features/modules/modulesAsyncThunks';
-import { selectModule } from 'src/redux/features/modules/modulesSelectors';
-import { selectProjectModuleList } from 'src/redux/features/modules/modulesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { ModuleEventType, getModuleEventName } from 'src/types/Module';
+import { getEventType } from 'src/types/Module';
 import { getLongDateTime } from 'src/utils/dateFormatter';
 
 import ModuleViewTitle from './ModuleViewTitle';
+import { useModuleData } from './Provider/Context';
 
 const CALL_DESCRIPTION_HTML = `
   <div>
@@ -38,22 +34,14 @@ const openExternalURL = (url: string | undefined, target = '_blank', features = 
 };
 
 const ModuleEventSessionView = () => {
-  const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const theme = useTheme();
   const { project, projectId } = useProject();
-  const pathParams = useParams<{ eventId: string; moduleId: string; projectId: string }>();
-  const eventId = Number(pathParams.eventId);
-  const moduleId = Number(pathParams.moduleId);
-  const module = useAppSelector(selectModule(moduleId));
-  const modules = useAppSelector(selectProjectModuleList(projectId));
-  const moduleEventType: ModuleEventType | undefined =
-    module?.events && (Object.keys(module.events)[eventId] as ModuleEventType);
-  const event = moduleEventType ? module?.events?.[moduleEventType] : undefined;
-  const eventSession = event?.sessions?.[0];
-  const eventName = moduleEventType ? getModuleEventName(moduleEventType) : '';
+  const { event, module, moduleId, session } = useModuleData();
 
   const [now, setNow] = useState(new Date());
+
+  const eventType = session?.type ? getEventType(session.type) : '';
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -66,24 +54,24 @@ const ModuleEventSessionView = () => {
   );
 
   const eventIsStartingSoon = useMemo(() => {
-    if (eventSession?.startTime) {
-      const startTime = new Date(eventSession.startTime);
+    if (session?.startTime) {
+      const startTime = new Date(session.startTime);
       const diff = startTime.getTime() - now.getTime();
       return diff < FIFTEEN_MINUTE_INTERVAL_MS;
     }
 
     return false;
-  }, [eventSession, now]);
+  }, [session, now]);
 
   const eventHasEnded = useMemo(() => {
-    if (eventSession?.endTime) {
-      const endTime = new Date(eventSession.endTime);
+    if (session?.endTime) {
+      const endTime = new Date(session.endTime);
       const diff = endTime.getTime() - now.getTime();
       return diff < 0;
     }
 
     return false;
-  }, [eventSession, now]);
+  }, [session, now]);
 
   // update the current time every minute
   useEffect(() => {
@@ -94,21 +82,11 @@ const ModuleEventSessionView = () => {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    if (moduleId) {
-      void dispatch(requestGetModule(moduleId));
-    }
-  }, [dispatch, moduleId]);
-
-  useEffect(() => {
-    void dispatch(requestGetModuleEvent(eventId));
-  }, [dispatch, eventId]);
-
   return (
     <PageWithModuleTimeline
       crumbs={crumbs}
       hierarchicalCrumbs={false}
-      title={<ModuleViewTitle module={module} modules={modules} project={project} />}
+      title={<ModuleViewTitle module={module} project={project} />}
     >
       <Card
         sx={{
@@ -121,15 +99,15 @@ const ModuleEventSessionView = () => {
           padding: `${theme.spacing(2)} ${theme.spacing(1)}`,
         }}
       >
-        {eventSession && (
+        {session && (
           <Grid container spacing={theme.spacing(1)}>
             <Grid item xs={6} style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
               <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
-                {eventName}
+                {eventType}
               </Typography>
 
               <Typography marginBottom={theme.spacing(1)}>
-                {eventSession.startTime ? getLongDateTime(eventSession.startTime, activeLocale) : ''}
+                {session.startTime ? getLongDateTime(session.startTime, activeLocale) : ''}
               </Typography>
 
               <Box marginBottom={theme.spacing(2)}>
@@ -145,36 +123,36 @@ const ModuleEventSessionView = () => {
                 ) : (
                   <Button
                     disabled={!eventIsStartingSoon}
-                    label={eventName ? strings.formatString(strings.JOIN_EVENT_NAME, eventName)?.toString() : ''}
+                    label={eventType ? strings.formatString(strings.JOIN_EVENT_NAME, eventType)?.toString() : ''}
                     onClick={() => {
-                      openExternalURL(eventSession.meetingUrl);
+                      openExternalURL(session.meetingUrl);
                     }}
                   />
                 )}
               </Box>
 
-              {eventSession?.slidesUrl && (
+              {session?.slidesUrl && (
                 <Box marginBottom={theme.spacing(2)}>
                   <Link
                     fontSize='16px'
                     onClick={() => {
-                      openExternalURL(eventSession.slidesUrl);
+                      openExternalURL(session.slidesUrl);
                     }}
                   >
-                    {eventName ? strings.formatString(strings.EVENT_NAME_SLIDES, eventName) : ''}
+                    {eventType ? strings.formatString(strings.EVENT_NAME_SLIDES, eventType) : ''}
                   </Link>
                 </Box>
               )}
 
-              {eventSession?.recordingUrl && (
+              {session?.recordingUrl && (
                 <Box marginBottom={theme.spacing(2)}>
                   <Link
                     fontSize='16px'
                     onClick={() => {
-                      openExternalURL(eventSession.recordingUrl);
+                      openExternalURL(session.recordingUrl);
                     }}
                   >
-                    {eventName ? strings.formatString(strings.EVENT_NAME_RECORDING, eventName) : ''}
+                    {eventType ? strings.formatString(strings.EVENT_NAME_RECORDING, eventType) : ''}
                   </Link>
                 </Box>
               )}
@@ -196,7 +174,26 @@ const ModuleEventSessionView = () => {
                 }}
               />
 
-              <Box dangerouslySetInnerHTML={{ __html: event?.eventDescription || '' }} />
+              <Box dangerouslySetInnerHTML={{ __html: event?.description || '' }} />
+
+              {/* {event?.additionalLinks?.length && (
+                <>
+                  {event?.additionalLinks?.map((link, index) => (
+                    <Box key={index} marginBottom={theme.spacing(2)}>
+                      <Link
+                        fontSize='16px'
+                        onClick={() => {
+                          if (link.url) {
+                            window.open(link.url, '_blank', 'noopener noreferrer');
+                          }
+                        }}
+                      >
+                        {link.label}
+                      </Link>
+                    </Box>
+                  ))}
+                </>
+              )} */}
             </Grid>
           </Grid>
         )}

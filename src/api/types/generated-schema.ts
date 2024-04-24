@@ -216,6 +216,10 @@ export interface paths {
      */
     get: operations["login"];
   };
+  "/api/v1/modules/projects/{projectId}": {
+    /** Gets modules for a project. */
+    get: operations["listModules"];
+  };
   "/api/v1/notifications": {
     /** Retrieve all notifications for current user scoped to an organization. */
     get: operations["readAll"];
@@ -2207,6 +2211,10 @@ export interface components {
       details: components["schemas"]["ProjectAcceleratorDetailsPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetProjectModulesResponsePayload: {
+      modules: components["schemas"]["ProjectModule"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetProjectResponsePayload: {
       project: components["schemas"]["ProjectPayload"];
       status: components["schemas"]["SuccessOrError"];
@@ -3235,6 +3243,39 @@ export interface components {
       region?: "Antarctica" | ("East Asia & Pacific") | ("Europe & Central Asia") | ("Latin America & Caribbean") | ("Middle East & North Africa") | "North America" | "Oceania" | "South Asia" | "Sub-Saharan Africa";
       totalExpansionPotential?: number;
       whatNeedsToBeTrue?: string;
+    };
+    ProjectModule: {
+      additionalResources?: string;
+      /** Format: date */
+      endDate: string;
+      events: components["schemas"]["ProjectModuleEvent"][];
+      /** Format: int64 */
+      id: number;
+      name: string;
+      overview?: string;
+      preparationMaterials?: string;
+      /** Format: date */
+      startDate: string;
+    };
+    ProjectModuleEvent: {
+      description: string;
+      sessions: components["schemas"]["ProjectModuleEventSession"][];
+    };
+    ProjectModuleEventSession: {
+      /** Format: date-time */
+      endTime?: string;
+      /** Format: int64 */
+      id: number;
+      /** Format: uri */
+      meetingUrl?: string;
+      /** Format: uri */
+      recordingUrl?: string;
+      /** Format: uri */
+      slidesUrl?: string;
+      /** Format: date-time */
+      startTime?: string;
+      /** @enum {string} */
+      type: "One-on-One Session" | "Workshop" | "Live Session";
     };
     ProjectPayload: {
       /** Format: int64 */
@@ -5529,6 +5570,28 @@ export interface operations {
       /** @description Redirects to a login page. After login, the user will be redirected back to the URL specified in the "redirect" parameter. */
       302: {
         content: never;
+      };
+    };
+  };
+  /** Gets modules for a project. */
+  listModules: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetProjectModulesResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
       };
     };
   };

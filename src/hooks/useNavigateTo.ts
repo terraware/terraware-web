@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
+import { ModuleContentType } from 'src/types/Module';
 
 export default function useNavigateTo() {
   const navigate = useNavigate();
@@ -31,27 +32,29 @@ export default function useNavigateTo() {
           pathname: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
         }),
 
-      goToModuleAdditionalResources: (projectId: number, moduleId: number) =>
-        navigate({
-          pathname: APP_PATHS.PROJECT_MODULE_ADDITIONAL_RESOURCES.replace(':projectId', `${projectId}`).replace(
-            ':moduleId',
-            `${moduleId}`
-          ),
-        }),
+      goToModuleContent: (projectId: number, moduleId: number, type: ModuleContentType) => {
+        let pathname = '';
+        switch (type) {
+          case 'additionalResources':
+            pathname = APP_PATHS.PROJECT_MODULE_ADDITIONAL_RESOURCES;
+            break;
+          case 'preparationMaterials':
+            pathname = APP_PATHS.PROJECT_MODULE_PREPARATION_MATERIALS;
+            break;
+          default:
+            return;
+        }
 
-      goToModulePreparationMaterials: (projectId: number, moduleId: number) =>
         navigate({
-          pathname: APP_PATHS.PROJECT_MODULE_PREPARATION_MATERIALS.replace(':projectId', `${projectId}`).replace(
-            ':moduleId',
-            `${moduleId}`
-          ),
-        }),
+          pathname: pathname.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
+        });
+      },
 
-      goToModuleEvent: (projectId: number, eventId: number, moduleId: number) =>
+      goToModuleEventSession: (projectId: number, moduleId: number, sessionId: number) =>
         navigate({
-          pathname: APP_PATHS.PROJECT_MODULE_EVENT.replace(':projectId', `${projectId}`)
+          pathname: APP_PATHS.PROJECT_MODULE_SESSION.replace(':projectId', `${projectId}`)
             .replace(':moduleId', `${moduleId}`)
-            .replace(':eventId', `${eventId}`),
+            .replace(':sessionId', `${sessionId}`),
         }),
 
       goToParticipant: (participantId: number) =>
