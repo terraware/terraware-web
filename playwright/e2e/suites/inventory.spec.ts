@@ -164,7 +164,7 @@ export default function InventoryTests() {
     await expect(page.locator('#row1-notReady')).toContainText('10');
     await expect(page.locator('#row1-ready')).toContainText('0');
     await expect(page.locator('#row1-total')).toContainText('15');
-    await page.getByRole('link', { name: 'Withdrawal Log' }).click();
+    await page.getByRole('link', { name: 'Withdrawal History' }).click();
     await expect(page.locator('#row1-speciesScientificNames')).toContainText('Coconut');
     await expect(page.getByRole('cell', { name: '15', exact: true })).toBeVisible();
   });
