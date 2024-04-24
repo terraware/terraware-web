@@ -1,3 +1,5 @@
+ee2fcfd922 SW-5238: Undo Withdrawal dialogs copy change for grammar and consistency (#2546)
+ad6135763f SW-5222: Batch detail view should have withdraw button as long as there is a non-zero quantity (#2545)
 245745b4c4 SW-4594 Display error for duplicate species addition (#2547)
 bec2baca2d Sync up Module types, services, views with the backend  (#2540)
 9484e2bd96 Fix the sizing with the PageWithModuleTimeline and the ParticipantHomeView's contents (#2529)
