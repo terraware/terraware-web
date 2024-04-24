@@ -1,11 +1,11 @@
 import { createContext, useContext } from 'react';
 
-import { Module } from 'src/types/Module';
+import { ModuleWithNumber } from 'src/types/Module';
 import { Participant } from 'src/types/Participant';
 import { Project } from 'src/types/Project';
 
 export type ParticipantData = {
-  currentModule?: Module;
+  currentModule?: ModuleWithNumber;
   currentParticipant?: Participant;
   currentParticipantProject?: Project;
   participantProjects: Project[];

@@ -9,7 +9,7 @@ import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { Module } from 'src/types/Module';
+import { ModuleWithNumber } from 'src/types/Module';
 import { Project } from 'src/types/Project';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -27,7 +27,7 @@ const ParticipantProvider = ({ children }: Props) => {
 
   const [moduleRequestId, setModuleRequestId] = useState('');
   const [currentParticipantProject, setCurrentParticipantProject] = useState<Project>();
-  const [currentModule, setCurrentModule] = useState<Module>();
+  const [currentModule, setCurrentModule] = useState<ModuleWithNumber>();
   const [participantProjects, setParticipantProjects] = useState<Project[]>([]);
 
   const participant = useAppSelector(selectParticipant(currentParticipantProject?.participantId || -1));

@@ -44,8 +44,7 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
         to: APP_PATHS.PROJECT_MODULES.replace(':projectId', `${projectId}`),
       },
       {
-        // TODO this will need to become "module index" or something
-        name: (activeLocale ? strings.formatString(strings.MODULE_NUMBER, `${module?.id}`) : '') as string,
+        name: (activeLocale ? strings.formatString(strings.MODULE_NUMBER, `${module?.number}`) : '') as string,
         to: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
       },
     ],
