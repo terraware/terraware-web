@@ -22,11 +22,14 @@ const PageWithModuleTimeline = (props: PageProps) => {
   const { isMobile } = useDeviceInfo();
 
   return (
-    <Grid container spacing={theme.spacing(0)}>
-      <Grid item xs style={{ flexGrow: 1 }}>
+    <Grid container spacing={theme.spacing(0)} paddingRight={'24px'}>
+      <Grid
+        item
+        sx={{ maxWidth: { xs: '100%', sm: '100%', md: '100%', lg: 'calc(100% - 206px)', xl: 'calc(100% - 206px)' } }}
+      >
         <Page {...props} containerClassName={isMobile ? '' : classes.container} />
       </Grid>
-      <Grid item>
+      <Grid item sx={{ display: { xs: 'none', sm: 'none', md: 'none', lg: 'block', xl: 'block' } }} minWidth={'206px'}>
         <ModuleTimeline activeStep={mockPhase.activeModule} steps={mockPhase.modules} title={mockPhase.title} />
       </Grid>
     </Grid>

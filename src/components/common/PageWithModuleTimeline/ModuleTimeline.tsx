@@ -50,7 +50,7 @@ type ModuleTimelineProps = {
 
 const ModuleTimeline = ({ activeStep, steps, title }: ModuleTimelineProps) => {
   return (
-    <Box>
+    <Box maxWidth={'206px'}>
       <Box sx={{ marginBottom: '24px', paddingRight: '16px' }}>
         <Badge label={title} />
       </Box>
