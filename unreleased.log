@@ -1,3 +1,4 @@
+4bd507157d Updated translations from Phrase (#2548)
 82800c2dc6 SW-5239: Withdrawals: List View is titled "Withdrawal History" but breadcrumb says "Withdrawal Log" (#2544)
 ee2fcfd922 SW-5238: Undo Withdrawal dialogs copy change for grammar and consistency (#2546)
 ad6135763f SW-5222: Batch detail view should have withdraw button as long as there is a non-zero quantity (#2545)
