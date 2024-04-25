@@ -28,7 +28,7 @@ export default function SpeciesTests() {
 
     await page.locator('#commonName').getByRole('textbox').click();
     await page.locator('#commonName').getByRole('textbox').fill('Koa');
-    await page.locator('#growthForms').getByPlaceholder('Select...').click();
+    await page.locator('#growthForm').getByPlaceholder('Select...').click();
     await page
       .locator('li')
       .filter({ hasText: /^Tree$/ })
