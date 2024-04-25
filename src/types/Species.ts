@@ -12,7 +12,52 @@ export type Species = {
   seedStorageBehavior?: SeedStorageBehavior;
   problems?: SpeciesProblemElement[];
   ecosystemTypes?: EcosystemType[];
+  nativeStatus?: NativeStatus;
+  nativeEcosystem?: string;
+  successionalGroup?: SuccessionalGroup[];
+  ecologicalRoleKnown?: string;
+  localUsesKnown?: string;
+  plantMaterialSourcingMethod?: PlantMaterialSourcingMethod[];
+  heightAtMaturity?: number;
+  heightAtMaturitySource?: string;
+  dbhDiameterAtMaturity?: number;
+  dbhSource?: string;
+  averageWoodDensity?: number;
+  woodDensityLevel?: WoodDensityLevel;
+  otherFacts?: string;
 };
+
+// TODO: remove this mock data when the actual data is available
+export const mockSpeciesNewFieldsData: Partial<Species> = {
+  nativeStatus: 'Native',
+  nativeEcosystem: 'Tropical and subtropical moist broad leaf forests',
+  successionalGroup: ['Pioneer', 'Early secondary'],
+  ecologicalRoleKnown: 'Yes',
+  localUsesKnown: 'Yes',
+  plantMaterialSourcingMethod: ['Seed collection & germination', 'Seedling purchase'],
+  heightAtMaturity: 10,
+  heightAtMaturitySource: 'Source',
+  dbhDiameterAtMaturity: 10,
+  dbhSource: 'Source',
+  averageWoodDensity: 10,
+  woodDensityLevel: 'Species',
+  otherFacts: 'Other facts',
+};
+
+export type WoodDensityLevel = 'Species' | 'Genus' | 'Family';
+
+export type PlantMaterialSourcingMethod =
+  | 'Seed collection & germination'
+  | 'Seed purchase & germination'
+  | 'Mangrove propagules'
+  | 'Vegetative propagation'
+  | 'Wildling harvest'
+  | 'Seedling purchase'
+  | 'Other';
+
+export type SuccessionalGroup = 'Pioneer' | 'Early secondary' | 'Late secondary' | 'Mature';
+
+export type NativeStatus = 'Native' | 'Non-Native';
 
 export type EcosystemType =
   | 'Boreal forests/Taiga'

@@ -1,7 +1,8 @@
 import { paths } from 'src/api/types/generated-schema';
+import isEnabled from 'src/features';
 import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
 import { FieldNodePayload, SearchRequestPayload, SearchResponseElement } from 'src/types/Search';
-import { Species, SpeciesDetails, SuggestedSpecies } from 'src/types/Species';
+import { Species, SpeciesDetails, SuggestedSpecies, mockSpeciesNewFieldsData } from 'src/types/Species';
 import { parseSearchTerm } from 'src/utils/search';
 
 import HttpService, { Response, ServerData } from './HttpService';
@@ -105,12 +106,16 @@ const createSpecies = async (species: Omit<Species, 'id'>, organizationId: numbe
  */
 const getSpecies = async (speciesId: number, organizationId: number): Promise<SpeciesIdResponse> => {
   const params = { organizationId: organizationId.toString() };
+  const featureFlagMockedSpecies = isEnabled('Mocked Species');
   const response: SpeciesIdResponse = await httpSpeciesId.get<SpeciesIdResponsePayload, SpeciesIdData>(
     {
       params,
       urlReplacements: { '{speciesId}': speciesId.toString() },
     },
-    (data) => ({ species: data?.species })
+    (data) => ({
+      species:
+        featureFlagMockedSpecies && data?.species ? { ...data.species, ...mockSpeciesNewFieldsData } : data?.species,
+    })
   );
 
   return response;
@@ -160,6 +165,7 @@ const deleteSpecies = async (speciesId: number, organizationId: number): Promise
  */
 const getAllSpecies = async (organizationId: number, inUse?: boolean): Promise<AllSpeciesResponse> => {
   const params: any = { organizationId: organizationId.toString() };
+  const featureFlagMockedSpecies = isEnabled('Mocked Species');
 
   if (inUse) {
     params.inUse = inUse.toString();
@@ -168,7 +174,10 @@ const getAllSpecies = async (organizationId: number, inUse?: boolean): Promise<A
   const response: AllSpeciesResponse = await httpSpecies.get<SpeciesResponsePayload, AllSpeciesData>(
     { params },
     (data) => ({
-      species: data?.species,
+      species:
+        featureFlagMockedSpecies && data?.species
+          ? data?.species.map((species) => ({ ...species, ...mockSpeciesNewFieldsData }))
+          : data?.species,
     })
   );
 
