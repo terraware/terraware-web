@@ -7,6 +7,7 @@ export type Species = {
   conservationCategory?: 'CR' | 'DD' | 'EN' | 'EW' | 'EX' | 'LC' | 'NE' | 'NT' | 'VU';
   familyName?: string;
   growthForm?: GrowthForm;
+  growthForms?: GrowthForm[];
   scientificName: string;
   rare?: boolean;
   seedStorageBehavior?: SeedStorageBehavior;

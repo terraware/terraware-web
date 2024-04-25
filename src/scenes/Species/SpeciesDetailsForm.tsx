@@ -227,16 +227,16 @@ export default function SpeciesDetailsForm({
               label={strings.GROWTH_FORM}
               fullWidth={true}
               onAdd={(growthForm: GrowthForm) => {
-                const selectedGrowthForms = record.growthFormNEXT ?? [];
+                const selectedGrowthForms = record.growthForms ?? [];
                 selectedGrowthForms.push(growthForm);
                 onChange('growthFormNEXT', selectedGrowthForms);
               }}
               onRemove={(growthForm: GrowthForm) => {
-                onChange('growthFormNEXT', record.growthFormNEXT?.filter((gf) => gf !== growthForm) ?? []);
+                onChange('growthFormNEXT', record.growthForms?.filter((gf) => gf !== growthForm) ?? []);
               }}
               options={new Map(growthForms(activeLocale).map((gf) => [gf.value as GrowthForm, gf.label]))}
               valueRenderer={(gfVal: string) => gfVal}
-              selectedOptions={record.growthFormNEXT ?? []}
+              selectedOptions={record.growthForms ?? []}
               placeHolder={strings.SELECT}
             />
           ) : (
