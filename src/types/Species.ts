@@ -224,9 +224,9 @@ export function successionalGroups(): { label: string; value: SuccessionalGroup 
   ];
 }
 
-export function getGrowthFormString(species: Species) {
-  if (species.growthForms) {
-    return species.growthForms.map((growthForm) => {
+export function getGrowthFormString(species: Species): string {
+  return (species.growthForms || [])
+    .map((growthForm) => {
       switch (growthForm) {
         case 'Fern':
           return strings.FERN;
@@ -254,11 +254,11 @@ export function getGrowthFormString(species: Species) {
           return strings.TREE;
         case 'Vine':
           return strings.VINE;
+        default:
+          return `${growthForm}`;
       }
-    });
-  } else {
-    return undefined;
-  }
+    })
+    .join(', ');
 }
 
 export type SpeciesWithScientificName = Species & {
