@@ -14,7 +14,6 @@ export type Species = {
   ecosystemTypes?: EcosystemType[];
   nativeStatus?: NativeStatus;
   nativeEcosystem?: string;
-  growthForms?: GrowthForm[];
   successionalGroup?: SuccessionalGroup[];
   ecologicalRoleKnown?: string;
   localUsesKnown?: string;
