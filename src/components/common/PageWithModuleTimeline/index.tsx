@@ -25,7 +25,10 @@ const PageWithModuleTimeline = (props: PageProps) => {
     <Grid container spacing={theme.spacing(0)} paddingRight={'24px'}>
       <Grid
         item
-        sx={{ maxWidth: { xs: '100%', sm: '100%', md: '100%', lg: 'calc(100% - 206px)', xl: 'calc(100% - 206px)' } }}
+        sx={{
+          maxWidth: { xs: '100%', sm: '100%', md: '100%', lg: 'calc(100% - 206px)', xl: 'calc(100% - 206px)' },
+          width: '100%',
+        }}
       >
         <Page {...props} containerClassName={isMobile ? '' : classes.container} />
       </Grid>
