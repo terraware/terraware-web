@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Outlet, useParams } from 'react-router-dom';
 
 import { requestGetModule } from 'src/redux/features/modules/modulesAsyncThunks';
 import { selectModuleRequest } from 'src/redux/features/modules/modulesSelectors';
@@ -11,7 +11,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { ModuleContext, ModuleData } from './Context';
 
 export type Props = {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 };
 
 const ModuleProvider = ({ children }: Props) => {
@@ -89,13 +89,19 @@ const ModuleProvider = ({ children }: Props) => {
     setModuleData({
       allSessions,
       event,
+      session,
       sessionId,
       module,
       moduleId,
     });
-  }, [allSessions, event, sessionId, module, moduleId]);
+  }, [allSessions, event, session, sessionId, module, moduleId]);
 
-  return <ModuleContext.Provider value={moduleData}>{children}</ModuleContext.Provider>;
+  return (
+    <ModuleContext.Provider value={moduleData}>
+      {children}
+      <Outlet />
+    </ModuleContext.Provider>
+  );
 };
 
 export default ModuleProvider;

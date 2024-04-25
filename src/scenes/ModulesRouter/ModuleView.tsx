@@ -211,7 +211,7 @@ const ModuleView = () => {
                   <ModuleEventSessionCard
                     key={session.id}
                     label={session.type}
-                    onClickButton={() => goToModuleEventSession(session.id, module.id, projectId)}
+                    onClickButton={() => goToModuleEventSession(projectId, module.id, session.id)}
                     value={session.startTime ? getLongDateTime(session.startTime, activeLocale) : ''}
                   />
                 ))}
