@@ -32,7 +32,6 @@ export type Species = {
 export const mockSpeciesNewFieldsData: Partial<Species> = {
   nativeStatus: 'Native',
   nativeEcosystem: 'Tropical and subtropical moist broad leaf forests',
-  growthForms: ['Tree', 'Shrub'],
   successionalGroup: ['Pioneer', 'Early secondary'],
   ecologicalRoleKnown: 'Yes',
   localUsesKnown: 'Yes',
