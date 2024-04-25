@@ -409,7 +409,18 @@ export default function SpeciesDetailsForm({
                 placeholder={strings.SELECT}
                 fullWidth={true}
                 fixedMenu
-                tooltipTitle={strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP}
+                tooltipTitle={
+                  <>
+                    <ul style={{ paddingLeft: '16px' }}>
+                      <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_SEED_COLLECTION_AND_GERMINATION}</li>
+                      <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_SEED_PURCHASE_AND_GERMINATION}</li>
+                      <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_MANGROVE_PROPAGULES}</li>
+                      <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_VEGETATIVE_PROPAGATION}</li>
+                      <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_WILDLING_HARVEST}</li>
+                      <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_SEEDLING_PURCHASE}</li>
+                    </ul>
+                  </>
+                }
               />
             </Grid>
             <Grid item xs={isMobile ? 12 : 8}>
