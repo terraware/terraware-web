@@ -94,10 +94,10 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const [selectedNursery, setSelectedNursery] = useState<Facility>();
   const [destinationNurseriesOptions, setDestinationNurseriesOptions] = useState<DropdownItem[]>();
   const [isSingleBatch] = useState<boolean>(batches.length === 1);
-  const [withdrawnQuantity, setWithdrawnQuantity] = useState<number>();
-  const [readyQuantityWithdrawn, setReadyQuantityWithdrawn] = useState<number>();
-  const [notReadyQuantityWithdrawn, setNotReadyQuantityWithdrawn] = useState<number>();
-  const [germinatingQuantityWithdrawn, setGerminatingQuantityWithdrawn] = useState<number>();
+  const [withdrawnQuantity, setWithdrawnQuantity] = useState<number>(0);
+  const [readyQuantityWithdrawn, setReadyQuantityWithdrawn] = useState<number>(0);
+  const [notReadyQuantityWithdrawn, setNotReadyQuantityWithdrawn] = useState<number>(0);
+  const [germinatingQuantityWithdrawn, setGerminatingQuantityWithdrawn] = useState<number>(0);
   const [zones, setZones] = useState<any[]>([]);
   const [zoneId, setZoneId] = useState<number>();
   const [noReadySeedlings, setNoReadySeedlings] = useState<boolean>(false);
@@ -262,6 +262,11 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const validateGerminatingReadyAndNotReadyQuantities = () => {
     let allValid = true;
     if (isSingleBatch && !isOutplant) {
+      if(notReadyQuantityWithdrawn === 0 && readyQuantityWithdrawn === 0 && germinatingQuantityWithdrawn === 0) {
+        setIndividualError('totalQuantityWithdrawn', 'Withdrawn Quantity Must Be Greater Than 0');
+        allValid = false;
+      }
+
       if (!notReadyQuantityWithdrawn && notReadyQuantityWithdrawn !== 0) {
         setIndividualError('notReadyQuantityWithdrawn', strings.REQUIRED_FIELD);
         allValid = false;
@@ -803,6 +808,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         onChange={(value: unknown) => setWithdrawnQuantity(value as number)}
                         type='text'
                         value={numericFormatter.format(withdrawnQuantity)}
+                        errorText={fieldsErrors.totalQuantityWithdrawn}
                         display={true}
                       />
                     </Grid>
