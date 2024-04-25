@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1714019299782" clover="3.2.0">
-  <project timestamp="1714019299782" name="All files">
+<coverage generated="1714077728634" clover="3.2.0">
+  <project timestamp="1714077728634" name="All files">
     <metrics statements="21208" coveredstatements="918" conditionals="13374" coveredconditionals="228" methods="6644" coveredmethods="162" elements="41226" coveredelements="1308" complexity="0" loc="21208" ncloc="21208" packages="199" files="932" classes="932"/>
     <package name="src">
       <metrics statements="161" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="37" coveredmethods="0"/>
@@ -7254,7 +7254,7 @@
         <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
-        <line num="39" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.common.ProgressCircle">

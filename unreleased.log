@@ -1,3 +1,4 @@
+5078b9c794 Fix the width of the page with the module timeline (#2552)
 4bd507157d Updated translations from Phrase (#2548)
 82800c2dc6 SW-5239: Withdrawals: List View is titled "Withdrawal History" but breadcrumb says "Withdrawal Log" (#2544)
 ee2fcfd922 SW-5238: Undo Withdrawal dialogs copy change for grammar and consistency (#2546)
