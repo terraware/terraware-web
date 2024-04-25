@@ -5,6 +5,7 @@ import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
 
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers/hooks';
 import SpeciesDetailsForm from 'src/scenes/Species/SpeciesDetailsForm';
 import { SpeciesService } from 'src/services';
@@ -37,6 +38,9 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
   const navigate = useNavigate();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
+  const featureFlagMockedSpecies: boolean = isEnabled('Mocked Species');
+
+  const newGridSize = isMobile ? 12 : 4;
 
   const createNewSpecies = async () => {
     if (!record.scientificName) {
@@ -75,7 +79,7 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
           sx={{
             display: 'flex',
             margin: '0 auto',
-            width: isMobile ? '100%' : '700px',
+            width: isMobile || featureFlagMockedSpecies ? '100%' : '700px',
             paddingLeft: theme.spacing(isMobile ? 0 : 4),
             paddingRight: theme.spacing(isMobile ? 0 : 4),
             paddingTop: theme.spacing(5),
@@ -83,7 +87,7 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
         >
           <Grid
             container
-            width={isMobile ? '100%' : '700px'}
+            width={isMobile || featureFlagMockedSpecies ? '100%' : '700px'}
             sx={{
               backgroundColor: theme.palette.TwClrBg,
               borderRadius: theme.spacing(4),
@@ -91,7 +95,7 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
             }}
           >
             <SpeciesDetailsForm
-              gridSize={12}
+              gridSize={featureFlagMockedSpecies ? newGridSize : 12}
               record={record}
               onChange={onChange}
               setRecord={setRecord}
