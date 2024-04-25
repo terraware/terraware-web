@@ -178,7 +178,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
             <TextField
               id={'growthForm'}
               label={strings.GROWTH_FORM}
-              value={featureFlagMockedSpecies ? species?.growthForms?.join(', ') : species?.growthForm}
+              value={species?.growthForms?.join(', ')}
               type='text'
               aria-label='date-picker'
               display={true}
