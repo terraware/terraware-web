@@ -7,6 +7,7 @@ export type Species = {
   conservationCategory?: 'CR' | 'DD' | 'EN' | 'EW' | 'EX' | 'LC' | 'NE' | 'NT' | 'VU';
   familyName?: string;
   growthForm?: GrowthForm;
+  growthForms?: GrowthForm[];
   scientificName: string;
   rare?: boolean;
   seedStorageBehavior?: SeedStorageBehavior;
@@ -121,6 +122,31 @@ export function conservationCategories() {
   ];
 }
 
+export function nativeStatuses() {
+  return [
+    { label: strings.NATIVE, value: 'Native' },
+    { label: strings.NON_NATIVE, value: 'Non-Native' },
+  ];
+}
+
+export function plantMaterialSourcingMethods() {
+  return [
+    {
+      label: strings.PLANT_MATERIAL_SOURCE_METHOD_SEED_COLLECTION_AND_GERMINATION,
+      value: 'Seed collection and germination',
+    },
+    {
+      label: strings.PLANT_MATERIAL_SOURCE_METHOD_SEED_PURCHASE_AND_GERMINATION,
+      value: 'Seed purchase and germination',
+    },
+    { label: strings.PLANT_MATERIAL_SOURCE_METHOD_MANGROVE_PROPAGULES, value: 'Mangrove propagules' },
+    { label: strings.PLANT_MATERIAL_SOURCE_METHOD_VEGETATIVE_PROPAGATION, value: 'Vegetative propagation' },
+    { label: strings.PLANT_MATERIAL_SOURCE_METHOD_WILDLING_HARVEST, value: 'Wildling harvest' },
+    { label: strings.PLANT_MATERIAL_SOURCE_METHOD_SEEDLING_PURCHASE, value: 'Seedling purchase' },
+    { label: strings.OTHER, value: 'Other' },
+  ];
+}
+
 export function growthForms(activeLocale: string | null) {
   const collator = new Intl.Collator(activeLocale || undefined);
 
@@ -187,6 +213,15 @@ export function ecosystemTypes(): { label: string; value: EcosystemType }[] {
       value: 'Tropical and subtropical moist broad leaf forests',
     },
     { label: strings.ECOSYSTEM_TUNDRA, value: 'Tundra' },
+  ];
+}
+
+export function successionalGroups(): { label: string; value: SuccessionalGroup }[] {
+  return [
+    { label: strings.SUCCESSIONAL_GROUP_PIONEER, value: 'Pioneer' },
+    { label: strings.SUCCESSIONAL_GROUP_EARLY_SECONDARY, value: 'Early secondary' },
+    { label: strings.SUCCESSIONAL_GROUP_LATE_SECONDARY, value: 'Late secondary' },
+    { label: strings.SUCCESSIONAL_GROUP_MATURE, value: 'Mature' },
   ];
 }
 
