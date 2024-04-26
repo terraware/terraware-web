@@ -62,9 +62,17 @@ const get = async (projectId: number, projectSpeciesId: number): Promise<Project
   });
 };
 
-const list = async (projectId: number): Promise<AllSpeciesResponse> => {
+const list = async (projectId?: number): Promise<AllSpeciesResponse> => {
   return new Promise((resolve) => {
-    resolve({ data: { projectSpecies: mockProjectSpecies?.[projectId] || [] }, requestSucceeded: true });
+    if (projectId === undefined) {
+      const allProjectsSpecies: ProjectSpecies[] = [];
+      Object.values(mockProjectSpecies).forEach((speciesList) => {
+        allProjectsSpecies.push(...speciesList);
+      });
+      resolve({ data: { projectSpecies: allProjectsSpecies }, requestSucceeded: true });
+    } else {
+      resolve({ data: { projectSpecies: mockProjectSpecies?.[projectId] || [] }, requestSucceeded: true });
+    }
   });
 };
 
