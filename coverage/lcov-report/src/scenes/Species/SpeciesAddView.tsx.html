@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
@@ -169,7 +169,11 @@
 <a name='L104'></a><a href='#L104'>104</a>
 <a name='L105'></a><a href='#L105'>105</a>
 <a name='L106'></a><a href='#L106'>106</a>
-<a name='L107'></a><a href='#L107'>107</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -178,17 +182,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -201,12 +194,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -282,6 +290,7 @@ import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
 &nbsp;
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers/hooks';
 import SpeciesDetailsForm from 'src/scenes/Species/SpeciesDetailsForm';
 import { SpeciesService } from 'src/services';
@@ -314,6 +323,9 @@ export default function <span class="fstat-no" title="function not covered" >Spe
   const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
+  const featureFlagMockedSpecies: boolean = <span class="cstat-no" title="statement not covered" >isEnabled('Mocked Species');</span>
+&nbsp;
+  const newGridSize = <span class="cstat-no" title="statement not covered" >isMobile ? 12 : 4;</span>
 &nbsp;
   const createNewSpecies = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!record.scientificName) {</span>
@@ -352,7 +364,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
           sx={{
             display: 'flex',
             margin: '0 auto',
-            width: isMobile ? '100%' : '700px',
+            width: isMobile || featureFlagMockedSpecies ? '100%' : '700px',
             paddingLeft: theme.spacing(isMobile ? 0 : 4),
             paddingRight: theme.spacing(isMobile ? 0 : 4),
             paddingTop: theme.spacing(5),
@@ -360,7 +372,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
         &gt;
           &lt;Grid
             container
-            width={isMobile ? '100%' : '700px'}
+            width={isMobile || featureFlagMockedSpecies ? '100%' : '700px'}
             sx={{
               backgroundColor: theme.palette.TwClrBg,
               borderRadius: theme.spacing(4),
@@ -368,7 +380,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             }}
           &gt;
             &lt;SpeciesDetailsForm
-              gridSize={12}
+              gridSize={featureFlagMockedSpecies ? newGridSize : 12}
               record={record}
               onChange={onChange}
               setRecord={setRecord}
@@ -388,7 +400,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-25T23:32:13.841Z
+                at 2024-04-26T12:26:44.960Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
