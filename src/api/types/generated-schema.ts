@@ -3611,39 +3611,65 @@ export interface components {
       type: "Name Misspelled" | "Name Not Found" | "Name Is Synonym";
     };
     SpeciesRequestPayload: {
+      /** Format: double */
+      averageWoodDensity?: number;
       commonName?: string;
       /**
        * @description IUCN Red List conservation category code.
        * @enum {string}
        */
       conservationCategory?: "CR" | "DD" | "EN" | "EW" | "EX" | "LC" | "NE" | "NT" | "VU";
+      dbhSource?: string;
+      /** Format: double */
+      dbhValue?: number;
+      ecologicalRoleKnown?: string;
       ecosystemTypes?: ("Boreal forests/Taiga" | "Deserts and xeric shrublands" | "Flooded grasslands and savannas" | "Mangroves" | "Mediterranean forests, woodlands and scrubs" | "Montane grasslands and shrublands" | "Temperate broad leaf and mixed forests" | "Temperate coniferous forest" | "Temperate grasslands, savannas and shrublands" | "Tropical and subtropical coniferous forests" | "Tropical and subtropical dry broad leaf forests" | "Tropical and subtropical grasslands, savannas and shrublands" | "Tropical and subtropical moist broad leaf forests" | "Tundra")[];
       familyName?: string;
       growthForms?: ("Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern" | "Fungus" | "Lichen" | "Moss" | "Vine" | "Liana" | "Shrub/Tree" | "Subshrub" | "Multiple Forms" | "Mangrove")[];
+      heightAtMaturitySource?: string;
+      /** Format: double */
+      heightAtMaturityValue?: number;
+      localUsesKnown?: string;
+      nativeEcosystem?: string;
       /**
        * Format: int64
        * @description Which organization's species list to update.
        */
       organizationId: number;
+      otherFacts?: string;
       plantMaterialSourcingMethods?: (("Seed collection & germination") | ("Seed purchase & germination") | "Mangrove propagules" | "Vegetative propagation" | "Wildling harvest" | "Seedling purchase" | "Other")[];
       rare?: boolean;
       scientificName: string;
       /** @enum {string} */
       seedStorageBehavior?: "Orthodox" | "Recalcitrant" | "Intermediate" | "Unknown" | "Likely Orthodox" | "Likely Recalcitrant" | "Likely Intermediate";
       successionalGroups?: ("Pioneer" | "Early secondary" | "Late secondary" | "Mature")[];
+      /** @enum {string} */
+      woodDensityLevel?: "Species level" | "Genus level" | "Family level";
     };
     SpeciesResponseElement: {
+      /** Format: double */
+      averageWoodDensity?: number;
       commonName?: string;
       /**
        * @description IUCN Red List conservation category code.
        * @enum {string}
        */
       conservationCategory?: "CR" | "DD" | "EN" | "EW" | "EX" | "LC" | "NE" | "NT" | "VU";
+      dbhSource?: string;
+      /** Format: double */
+      dbhValue?: number;
+      ecologicalRoleKnown?: string;
       ecosystemTypes?: ("Boreal forests/Taiga" | "Deserts and xeric shrublands" | "Flooded grasslands and savannas" | "Mangroves" | "Mediterranean forests, woodlands and scrubs" | "Montane grasslands and shrublands" | "Temperate broad leaf and mixed forests" | "Temperate coniferous forest" | "Temperate grasslands, savannas and shrublands" | "Tropical and subtropical coniferous forests" | "Tropical and subtropical dry broad leaf forests" | "Tropical and subtropical grasslands, savannas and shrublands" | "Tropical and subtropical moist broad leaf forests" | "Tundra")[];
       familyName?: string;
       growthForms?: ("Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern" | "Fungus" | "Lichen" | "Moss" | "Vine" | "Liana" | "Shrub/Tree" | "Subshrub" | "Multiple Forms" | "Mangrove")[];
+      heightAtMaturitySource?: string;
+      /** Format: double */
+      heightAtMaturityValue?: number;
       /** Format: int64 */
       id: number;
+      localUsesKnown?: string;
+      nativeEcosystem?: string;
+      otherFacts?: string;
       plantMaterialSourcingMethods?: (("Seed collection & germination") | ("Seed purchase & germination") | "Mangrove propagules" | "Vegetative propagation" | "Wildling harvest" | "Seedling purchase" | "Other")[];
       problems?: components["schemas"]["SpeciesProblemElement"][];
       rare?: boolean;
@@ -3651,6 +3677,8 @@ export interface components {
       /** @enum {string} */
       seedStorageBehavior?: "Orthodox" | "Recalcitrant" | "Intermediate" | "Unknown" | "Likely Orthodox" | "Likely Recalcitrant" | "Likely Intermediate";
       successionalGroups?: ("Pioneer" | "Early secondary" | "Late secondary" | "Mature")[];
+      /** @enum {string} */
+      woodDensityLevel?: "Species level" | "Genus level" | "Family level";
     };
     SpeciesSummaryNurseryPayload: {
       /** Format: int64 */
