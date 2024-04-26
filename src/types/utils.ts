@@ -18,3 +18,12 @@ export const isArrayOfT = <T>(input: unknown, typeguard: (input: unknown) => inp
 
 export const isObject = (input: unknown): input is Record<string, unknown> =>
   typeof input === 'object' && input !== null && !isArray(input);
+
+// Gives you a type from an array of the given type
+// (1 | 2 | 3)[] => 1 | 2 | 3
+// MyType[] => MyType
+export type ArrayDeref<T extends unknown[]> = T[number];
+
+// Removes the union with undefined
+// MyType | undefined => MyType
+export type NonUndefined<T> = T extends undefined ? never : T;
