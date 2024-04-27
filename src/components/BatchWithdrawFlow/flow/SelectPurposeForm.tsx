@@ -262,7 +262,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const validateGerminatingReadyAndNotReadyQuantities = () => {
     let allValid = true;
     if (isSingleBatch && !isOutplant) {
-      if(notReadyQuantityWithdrawn === 0 && readyQuantityWithdrawn === 0 && germinatingQuantityWithdrawn === 0) {
+      if (notReadyQuantityWithdrawn === 0 && readyQuantityWithdrawn === 0 && germinatingQuantityWithdrawn === 0) {
         setIndividualError('totalQuantityWithdrawn', strings.WITHDRAWN_QUANTITY_GREATER_THAN_ZERO_ERROR);
         allValid = false;
       } else {
