@@ -3,9 +3,12 @@ import { components } from 'src/api/types/generated-schema';
 import { Response } from './HttpService';
 
 export type ParticipantProjectSpecies = {
+  feedback?: string;
   id: number;
   projectId: number;
+  rationale?: string;
   speciesId: number;
+  status: 'Not Submitted' | 'In Review' | 'Rejected' | 'Approved' | 'Needs Translation' | 'Not Needed';
 };
 
 export type ParticipantProjectSpeciesData = { participantProjectSpecies?: ParticipantProjectSpecies | undefined };
@@ -29,11 +32,13 @@ const mockParticipantProjectSpecies: Record<number, ParticipantProjectSpecies[]>
       id: 1,
       projectId: 1,
       speciesId: 1,
+      status: 'In Review',
     },
     {
       id: 2,
       projectId: 1,
       speciesId: 2,
+      status: 'Not Submitted',
     },
   ],
   2: [
@@ -41,11 +46,13 @@ const mockParticipantProjectSpecies: Record<number, ParticipantProjectSpecies[]>
       id: 3,
       projectId: 2,
       speciesId: 1,
+      status: 'In Review',
     },
     {
       id: 4,
       projectId: 2,
       speciesId: 2,
+      status: 'Not Submitted',
     },
   ],
 };
