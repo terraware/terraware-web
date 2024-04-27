@@ -14,5 +14,7 @@ export const selectParticipantProjectSpeciesUpdateRequest = (requestId: string) 
 export const selectParticipantProjectSpeciesRemoveRequest = (requestId: string) => (state: RootState) =>
   state.participantProjectSpeciesRemove[requestId];
 
-export const selectParticipantProjectSpecies = (projectId: number, projectSpeciesId: number) => (state: RootState) =>
-  state.participantProjectSpecies[participantProjectSpeciesCompositeKeyFn({ projectId, projectSpeciesId })]?.data;
+export const selectParticipantProjectSpecies =
+  (projectId: number, participantProjectSpeciesId: number) => (state: RootState) =>
+    state.participantProjectSpecies[participantProjectSpeciesCompositeKeyFn({ projectId, participantProjectSpeciesId })]
+      ?.data;

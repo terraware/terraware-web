@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import { ProjectSpecies } from 'src/services/ParticipantProjectSpeciesService';
+import { ParticipantProjectSpecies } from 'src/services/ParticipantProjectSpeciesService';
 
 import {
   requestGetParticipantProjectSpecies,
@@ -10,20 +10,20 @@ import {
   requestUpdateParticipantProjectSpecies,
 } from './participantProjectSpeciesAsyncThunks';
 
-type ParticipantProjectSpeciesIdArg = { projectId: number; projectSpeciesId: number };
+type ParticipantProjectSpeciesIdArg = { projectId: number; participantProjectSpeciesId: number };
 export const participantProjectSpeciesCompositeKeyFn = (arg: unknown): string => {
   const castArg = arg as ParticipantProjectSpeciesIdArg;
-  if (!(castArg.projectId && castArg.projectSpeciesId)) {
+  if (!(castArg.projectId && castArg.participantProjectSpeciesId)) {
     return '';
   }
 
-  return `p${castArg.projectId}-ps${castArg.projectSpeciesId}`;
+  return `p${castArg.projectId}-ps${castArg.participantProjectSpeciesId}`;
 };
 
 /**
  * Get Participant Project Species
  */
-const initialStateParticipantProject: { [key: string]: StatusT<ProjectSpecies> } = {};
+const initialStateParticipantProject: { [key: string]: StatusT<ParticipantProjectSpecies> } = {};
 
 export const participantProjectSpeciesSlice = createSlice({
   name: 'participantProjectSpeciesSlice',
@@ -37,7 +37,7 @@ export const participantProjectSpeciesSlice = createSlice({
 /**
  * List Participant Project Species
  */
-const initialStateParticipantProjectsList: { [key: string]: StatusT<ProjectSpecies[]> } = {};
+const initialStateParticipantProjectsList: { [key: string]: StatusT<ParticipantProjectSpecies[]> } = {};
 
 export const participantProjectSpeciesListSlice = createSlice({
   name: 'participantProjectSpeciesListSlice',

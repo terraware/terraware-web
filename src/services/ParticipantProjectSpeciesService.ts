@@ -2,29 +2,29 @@ import { components } from 'src/api/types/generated-schema';
 
 import { Response } from './HttpService';
 
-export type ProjectSpecies = {
+export type ParticipantProjectSpecies = {
   deliverableId: number;
   id: number;
   projectId: number;
   speciesId: number;
 };
 
-export type ProjectSpeciesData = { projectSpecies?: ProjectSpecies | undefined };
+export type ParticipantProjectSpeciesData = { participantProjectSpecies?: ParticipantProjectSpecies | undefined };
 
-export type ProjectSpeciesResponse = Response & ProjectSpeciesData;
+export type ParticipantProjectSpeciesResponse = Response & ParticipantProjectSpeciesData;
 
-export type AllProjectSpeciesData = { projectSpecies?: ProjectSpecies[] | undefined };
+export type AllParticipantProjectSpeciesData = { participantProjectSpecies?: ParticipantProjectSpecies[] | undefined };
 
-export type AllSpeciesResponse = Response & AllProjectSpeciesData;
+export type AllSpeciesResponse = Response & AllParticipantProjectSpeciesData;
 
-export type UpdateProjectSpeciesData = { projectSpecies?: ProjectSpecies | undefined };
+export type UpdateParticipantProjectSpeciesData = { participantProjectSpecies?: ParticipantProjectSpecies | undefined };
 
-export type UpdateProjectSpeciesResponse = Response & UpdateProjectSpeciesData;
+export type UpdateParticipantProjectSpeciesResponse = Response & UpdateParticipantProjectSpeciesData;
 
-export type DeleteProjectSpeciesResponse = components['schemas']['SimpleSuccessResponsePayload'];
+export type DeleteParticipantProjectSpeciesResponse = components['schemas']['SimpleSuccessResponsePayload'];
 
-// Record<projectId, ProjectSpecies[]>
-const mockProjectSpecies: Record<number, ProjectSpecies[]> = {
+// Record<projectId, ParticipantProjectSpecies[]>
+const mockParticipantProjectSpecies: Record<number, ParticipantProjectSpecies[]> = {
   1: [
     {
       deliverableId: 1,
@@ -55,54 +55,61 @@ const mockProjectSpecies: Record<number, ProjectSpecies[]> = {
   ],
 };
 
-const get = async (projectSpeciesId: number): Promise<ProjectSpeciesResponse> => {
+const get = async (participantProjectSpeciesId: number): Promise<ParticipantProjectSpeciesResponse> => {
   return new Promise((resolve) => {
-    let projectSpecies;
+    let participantProjectSpecies;
 
-    for (const speciesList of Object.values(mockProjectSpecies)) {
-      const result = speciesList.find((ps) => ps.id === projectSpeciesId);
+    for (const speciesList of Object.values(mockParticipantProjectSpecies)) {
+      const result = speciesList.find((ps) => ps.id === participantProjectSpeciesId);
       if (result) {
-        projectSpecies = result;
+        participantProjectSpecies = result;
         break;
       }
     }
 
-    resolve({ data: { projectSpecies }, requestSucceeded: true });
+    console.log('service.get - participantProjectSpecies', participantProjectSpecies);
+    resolve({ data: { participantProjectSpecies }, requestSucceeded: true });
   });
 };
 
 const list = async (projectId: number): Promise<AllSpeciesResponse> => {
   return new Promise((resolve) => {
-    resolve({ data: { projectSpecies: mockProjectSpecies?.[projectId] || [] }, requestSucceeded: true });
+    resolve({
+      data: { participantProjectSpecies: mockParticipantProjectSpecies?.[projectId] || [] },
+      requestSucceeded: true,
+    });
   });
 };
 
 const update = async (
   projectId: number,
-  projectSpeciesId: number,
-  projectSpecies: ProjectSpecies
-): Promise<UpdateProjectSpeciesResponse> => {
+  participantProjectSpeciesId: number,
+  participantProjectSpecies: ParticipantProjectSpecies
+): Promise<UpdateParticipantProjectSpeciesResponse> => {
   return new Promise((resolve) => {
-    const projectSpeciesList = mockProjectSpecies?.[projectId] || [];
-    const index = projectSpeciesList.findIndex((ps) => ps.id === projectSpeciesId);
+    const speciesList = mockParticipantProjectSpecies?.[projectId] || [];
+    const index = speciesList.findIndex((ps) => ps.id === participantProjectSpeciesId);
 
     if (index !== -1) {
-      projectSpeciesList[index] = projectSpecies;
-      mockProjectSpecies[projectId] = projectSpeciesList;
+      speciesList[index] = participantProjectSpecies;
+      mockParticipantProjectSpecies[projectId] = speciesList;
     }
 
-    resolve({ data: { projectSpecies }, requestSucceeded: true });
+    resolve({ data: { participantProjectSpecies }, requestSucceeded: true });
   });
 };
 
-const remove = async (projectId: number, projectSpeciesId: number): Promise<DeleteProjectSpeciesResponse> => {
+const remove = async (
+  projectId: number,
+  participantProjectSpeciesId: number
+): Promise<DeleteParticipantProjectSpeciesResponse> => {
   return new Promise((resolve) => {
-    const projectSpeciesList = mockProjectSpecies?.[projectId] || [];
-    const index = projectSpeciesList.findIndex((ps) => ps.id === projectSpeciesId);
+    const speciesList = mockParticipantProjectSpecies?.[projectId] || [];
+    const index = speciesList.findIndex((ps) => ps.id === participantProjectSpeciesId);
 
     if (index !== -1) {
-      projectSpeciesList.splice(index, 1);
-      mockProjectSpecies[projectId] = projectSpeciesList;
+      speciesList.splice(index, 1);
+      mockParticipantProjectSpecies[projectId] = speciesList;
     }
 
     resolve({ status: 'ok' });

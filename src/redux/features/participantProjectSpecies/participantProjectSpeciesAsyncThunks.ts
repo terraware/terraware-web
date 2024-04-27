@@ -2,19 +2,23 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import ParticipantProjectSpeciesService, {
   AllSpeciesResponse,
-  DeleteProjectSpeciesResponse,
-  ProjectSpecies,
-  ProjectSpeciesResponse,
+  DeleteParticipantProjectSpeciesResponse,
+  ParticipantProjectSpecies,
+  ParticipantProjectSpeciesResponse,
 } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
 
 export const requestGetParticipantProjectSpecies = createAsyncThunk(
   'participantProjectSpecies/get-one',
-  async ({ projectSpeciesId }: { projectId: number; projectSpeciesId: number }, { rejectWithValue }) => {
-    const response: ProjectSpeciesResponse = await ParticipantProjectSpeciesService.get(projectSpeciesId);
+  async (
+    { participantProjectSpeciesId }: { projectId: number; participantProjectSpeciesId: number },
+    { rejectWithValue }
+  ) => {
+    const response: ParticipantProjectSpeciesResponse =
+      await ParticipantProjectSpeciesService.get(participantProjectSpeciesId);
 
     if (response && response.requestSucceeded) {
-      return response.data.projectSpecies;
+      return response.data.participantProjectSpecies;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);
@@ -27,7 +31,7 @@ export const requestListParticipantProjectSpecies = createAsyncThunk(
     const response: AllSpeciesResponse = await ParticipantProjectSpeciesService.list(projectId);
 
     if (response && response.requestSucceeded) {
-      return response.data.projectSpecies;
+      return response.data.participantProjectSpecies;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);
@@ -39,19 +43,19 @@ export const requestUpdateParticipantProjectSpecies = createAsyncThunk(
   async (
     {
       projectId,
-      projectSpeciesId,
-      projectSpecies,
-    }: { projectId: number; projectSpeciesId: number; projectSpecies: ProjectSpecies },
+      participantProjectSpeciesId,
+      participantProjectSpecies,
+    }: { projectId: number; participantProjectSpeciesId: number; participantProjectSpecies: ParticipantProjectSpecies },
     { dispatch, rejectWithValue }
   ) => {
-    const response: ProjectSpeciesResponse = await ParticipantProjectSpeciesService.update(
+    const response: ParticipantProjectSpeciesResponse = await ParticipantProjectSpeciesService.update(
       projectId,
-      projectSpeciesId,
-      projectSpecies
+      participantProjectSpeciesId,
+      participantProjectSpecies
     );
 
     if (response && response.requestSucceeded) {
-      dispatch(requestGetParticipantProjectSpecies({ projectId, projectSpeciesId }));
+      dispatch(requestGetParticipantProjectSpecies({ projectId, participantProjectSpeciesId }));
       return true;
     }
 
@@ -61,10 +65,13 @@ export const requestUpdateParticipantProjectSpecies = createAsyncThunk(
 
 export const requestRemoveParticipantProjectSpecies = createAsyncThunk(
   'participantProjectSpecies/remove',
-  async ({ projectId, projectSpeciesId }: { projectId: number; projectSpeciesId: number }, { rejectWithValue }) => {
-    const response: DeleteProjectSpeciesResponse = await ParticipantProjectSpeciesService.remove(
+  async (
+    { projectId, participantProjectSpeciesId }: { projectId: number; participantProjectSpeciesId: number },
+    { rejectWithValue }
+  ) => {
+    const response: DeleteParticipantProjectSpeciesResponse = await ParticipantProjectSpeciesService.remove(
       projectId,
-      projectSpeciesId
+      participantProjectSpeciesId
     );
 
     if (response?.status === 'ok') {
