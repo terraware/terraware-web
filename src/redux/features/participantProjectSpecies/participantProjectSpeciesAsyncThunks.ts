@@ -10,8 +10,8 @@ import strings from 'src/strings';
 
 export const requestGetParticipantProjectSpecies = createAsyncThunk(
   'participantProjectSpecies/get-one',
-  async ({ projectId, projectSpeciesId }: { projectId: number; projectSpeciesId: number }, { rejectWithValue }) => {
-    const response: ProjectSpeciesResponse = await ParticipantProjectSpeciesService.get(projectId, projectSpeciesId);
+  async ({ projectSpeciesId }: { projectId: number; projectSpeciesId: number }, { rejectWithValue }) => {
+    const response: ProjectSpeciesResponse = await ParticipantProjectSpeciesService.get(projectSpeciesId);
 
     if (response && response.requestSucceeded) {
       return response.data.projectSpecies;

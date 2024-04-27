@@ -55,9 +55,18 @@ const mockProjectSpecies: Record<number, ProjectSpecies[]> = {
   ],
 };
 
-const get = async (projectId: number, projectSpeciesId: number): Promise<ProjectSpeciesResponse> => {
+const get = async (projectSpeciesId: number): Promise<ProjectSpeciesResponse> => {
   return new Promise((resolve) => {
-    const projectSpecies = mockProjectSpecies?.[projectId]?.find((ps) => ps.id === projectSpeciesId);
+    let projectSpecies;
+
+    for (const speciesList of Object.values(mockProjectSpecies)) {
+      const result = speciesList.find((ps) => ps.id === projectSpeciesId);
+      if (result) {
+        projectSpecies = result;
+        break;
+      }
+    }
+
     resolve({ data: { projectSpecies }, requestSucceeded: true });
   });
 };
