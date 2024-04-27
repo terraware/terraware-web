@@ -3,7 +3,6 @@ import { components } from 'src/api/types/generated-schema';
 import { Response } from './HttpService';
 
 export type ParticipantProjectSpecies = {
-  deliverableId: number;
   id: number;
   projectId: number;
   speciesId: number;
@@ -27,13 +26,11 @@ export type DeleteParticipantProjectSpeciesResponse = components['schemas']['Sim
 const mockParticipantProjectSpecies: Record<number, ParticipantProjectSpecies[]> = {
   1: [
     {
-      deliverableId: 1,
       id: 1,
       projectId: 1,
       speciesId: 1,
     },
     {
-      deliverableId: 1,
       id: 2,
       projectId: 1,
       speciesId: 2,
@@ -41,13 +38,11 @@ const mockParticipantProjectSpecies: Record<number, ParticipantProjectSpecies[]>
   ],
   2: [
     {
-      deliverableId: 1,
       id: 3,
       projectId: 2,
       speciesId: 1,
     },
     {
-      deliverableId: 1,
       id: 4,
       projectId: 2,
       speciesId: 2,
