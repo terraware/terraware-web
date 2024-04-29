@@ -8932,7 +8932,51 @@
 <a name='L8867'></a><a href='#L8867'>8867</a>
 <a name='L8868'></a><a href='#L8868'>8868</a>
 <a name='L8869'></a><a href='#L8869'>8869</a>
-<a name='L8870'></a><a href='#L8870'>8870</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L8870'></a><a href='#L8870'>8870</a>
+<a name='L8871'></a><a href='#L8871'>8871</a>
+<a name='L8872'></a><a href='#L8872'>8872</a>
+<a name='L8873'></a><a href='#L8873'>8873</a>
+<a name='L8874'></a><a href='#L8874'>8874</a>
+<a name='L8875'></a><a href='#L8875'>8875</a>
+<a name='L8876'></a><a href='#L8876'>8876</a>
+<a name='L8877'></a><a href='#L8877'>8877</a>
+<a name='L8878'></a><a href='#L8878'>8878</a>
+<a name='L8879'></a><a href='#L8879'>8879</a>
+<a name='L8880'></a><a href='#L8880'>8880</a>
+<a name='L8881'></a><a href='#L8881'>8881</a>
+<a name='L8882'></a><a href='#L8882'>8882</a>
+<a name='L8883'></a><a href='#L8883'>8883</a>
+<a name='L8884'></a><a href='#L8884'>8884</a>
+<a name='L8885'></a><a href='#L8885'>8885</a>
+<a name='L8886'></a><a href='#L8886'>8886</a>
+<a name='L8887'></a><a href='#L8887'>8887</a>
+<a name='L8888'></a><a href='#L8888'>8888</a>
+<a name='L8889'></a><a href='#L8889'>8889</a>
+<a name='L8890'></a><a href='#L8890'>8890</a>
+<a name='L8891'></a><a href='#L8891'>8891</a>
+<a name='L8892'></a><a href='#L8892'>8892</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -21423,39 +21467,59 @@ export interface components {
       type: "Name Misspelled" | "Name Not Found" | "Name Is Synonym";
     };
     SpeciesRequestPayload: {
+      averageWoodDensity?: number;
       commonName?: string;
       /**
        * @description IUCN Red List conservation category code.
        * @enum {string}
        */
       conservationCategory?: "CR" | "DD" | "EN" | "EW" | "EX" | "LC" | "NE" | "NT" | "VU";
+      dbhSource?: string;
+      dbhValue?: number;
+      ecologicalRoleKnown?: string;
       ecosystemTypes?: ("Boreal forests/Taiga" | "Deserts and xeric shrublands" | "Flooded grasslands and savannas" | "Mangroves" | "Mediterranean forests, woodlands and scrubs" | "Montane grasslands and shrublands" | "Temperate broad leaf and mixed forests" | "Temperate coniferous forest" | "Temperate grasslands, savannas and shrublands" | "Tropical and subtropical coniferous forests" | "Tropical and subtropical dry broad leaf forests" | "Tropical and subtropical grasslands, savannas and shrublands" | "Tropical and subtropical moist broad leaf forests" | "Tundra")[];
       familyName?: string;
       growthForms?: ("Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern" | "Fungus" | "Lichen" | "Moss" | "Vine" | "Liana" | "Shrub/Tree" | "Subshrub" | "Multiple Forms" | "Mangrove")[];
+      heightAtMaturitySource?: string;
+      heightAtMaturityValue?: number;
+      localUsesKnown?: string;
+      nativeEcosystem?: string;
       /**
        * Format: int64
        * @description Which organization's species list to update.
        */
       organizationId: number;
+      otherFacts?: string;
       plantMaterialSourcingMethods?: (("Seed collection &amp; germination") | ("Seed purchase &amp; germination") | "Mangrove propagules" | "Vegetative propagation" | "Wildling harvest" | "Seedling purchase" | "Other")[];
       rare?: boolean;
       scientificName: string;
       /** @enum {string} */
       seedStorageBehavior?: "Orthodox" | "Recalcitrant" | "Intermediate" | "Unknown" | "Likely Orthodox" | "Likely Recalcitrant" | "Likely Intermediate";
       successionalGroups?: ("Pioneer" | "Early secondary" | "Late secondary" | "Mature")[];
+      /** @enum {string} */
+      woodDensityLevel?: "Species" | "Genus" | "Family";
     };
     SpeciesResponseElement: {
+      averageWoodDensity?: number;
       commonName?: string;
       /**
        * @description IUCN Red List conservation category code.
        * @enum {string}
        */
       conservationCategory?: "CR" | "DD" | "EN" | "EW" | "EX" | "LC" | "NE" | "NT" | "VU";
+      dbhSource?: string;
+      dbhValue?: number;
+      ecologicalRoleKnown?: string;
       ecosystemTypes?: ("Boreal forests/Taiga" | "Deserts and xeric shrublands" | "Flooded grasslands and savannas" | "Mangroves" | "Mediterranean forests, woodlands and scrubs" | "Montane grasslands and shrublands" | "Temperate broad leaf and mixed forests" | "Temperate coniferous forest" | "Temperate grasslands, savannas and shrublands" | "Tropical and subtropical coniferous forests" | "Tropical and subtropical dry broad leaf forests" | "Tropical and subtropical grasslands, savannas and shrublands" | "Tropical and subtropical moist broad leaf forests" | "Tundra")[];
       familyName?: string;
       growthForms?: ("Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern" | "Fungus" | "Lichen" | "Moss" | "Vine" | "Liana" | "Shrub/Tree" | "Subshrub" | "Multiple Forms" | "Mangrove")[];
+      heightAtMaturitySource?: string;
+      heightAtMaturityValue?: number;
       /** Format: int64 */
       id: number;
+      localUsesKnown?: string;
+      nativeEcosystem?: string;
+      otherFacts?: string;
       plantMaterialSourcingMethods?: (("Seed collection &amp; germination") | ("Seed purchase &amp; germination") | "Mangrove propagules" | "Vegetative propagation" | "Wildling harvest" | "Seedling purchase" | "Other")[];
       problems?: components["schemas"]["SpeciesProblemElement"][];
       rare?: boolean;
@@ -21463,6 +21527,8 @@ export interface components {
       /** @enum {string} */
       seedStorageBehavior?: "Orthodox" | "Recalcitrant" | "Intermediate" | "Unknown" | "Likely Orthodox" | "Likely Recalcitrant" | "Likely Intermediate";
       successionalGroups?: ("Pioneer" | "Early secondary" | "Late secondary" | "Mature")[];
+      /** @enum {string} */
+      woodDensityLevel?: "Species" | "Genus" | "Family";
     };
     SpeciesSummaryNurseryPayload: {
       /** Format: int64 */
@@ -26677,7 +26743,7 @@ export interface operations {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-29T20:49:55.030Z
+                at 2024-04-29T22:05:56.422Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
