@@ -44,7 +44,8 @@ export const participantProjectSpeciesListSlice = createSlice({
   initialState: initialStateParticipantProjectsList,
   reducers: {},
   extraReducers: (builder) => {
-    buildReducers(requestListParticipantProjectSpecies)(builder);
+    // Project ID used as arg
+    buildReducers(requestListParticipantProjectSpecies, true)(builder);
   },
 });
 
