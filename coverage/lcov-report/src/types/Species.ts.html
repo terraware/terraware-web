@@ -32,14 +32,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/32</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -341,8 +341,8 @@
 <a name='L276'></a><a href='#L276'>276</a>
 <a name='L277'></a><a href='#L277'>277</a>
 <a name='L278'></a><a href='#L278'>278</a>
-<a name='L279'></a><a href='#L279'>279</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L279'></a><a href='#L279'>279</a>
+<a name='L280'></a><a href='#L280'>280</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -570,7 +570,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -598,8 +597,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -627,7 +629,6 @@ export type Species = {
   commonName?: string;
   conservationCategory?: 'CR' | 'DD' | 'EN' | 'EW' | 'EX' | 'LC' | 'NE' | 'NT' | 'VU';
   familyName?: string;
-  growthForm?: GrowthForm;
   growthForms?: GrowthForm[];
   scientificName: string;
   rare?: boolean;
@@ -846,39 +847,41 @@ export function <span class="fstat-no" title="function not covered" >successiona
   ];
 }
 &nbsp;
-export function <span class="fstat-no" title="function not covered" >getGrowthFormString(</span>species: Species) {
-<span class="cstat-no" title="statement not covered" >  if (species.growthForm) {</span>
-<span class="cstat-no" title="statement not covered" >    switch (species.growthForm) {</span>
-      case 'Fern':
-<span class="cstat-no" title="statement not covered" >        return strings.FERN;</span>
-      case 'Forb':
-<span class="cstat-no" title="statement not covered" >        return strings.FORB;</span>
-      case 'Fungus':
-<span class="cstat-no" title="statement not covered" >        return strings.FUNGUS;</span>
-      case 'Graminoid':
-<span class="cstat-no" title="statement not covered" >        return strings.GRAMINOID;</span>
-      case 'Liana':
-<span class="cstat-no" title="statement not covered" >        return strings.LIANA;</span>
-      case 'Lichen':
-<span class="cstat-no" title="statement not covered" >        return strings.LICHEN;</span>
-      case 'Moss':
-<span class="cstat-no" title="statement not covered" >        return strings.MOSS;</span>
-      case 'Multiple Forms':
-<span class="cstat-no" title="statement not covered" >        return strings.MULTIPLE_FORMS;</span>
-      case 'Shrub':
-<span class="cstat-no" title="statement not covered" >        return strings.SHRUB;</span>
-      case 'Shrub/Tree':
-<span class="cstat-no" title="statement not covered" >        return strings.SHRUB_TREE;</span>
-      case 'Subshrub':
-<span class="cstat-no" title="statement not covered" >        return strings.SUBSHRUB;</span>
-      case 'Tree':
-<span class="cstat-no" title="statement not covered" >        return strings.TREE;</span>
-      case 'Vine':
-<span class="cstat-no" title="statement not covered" >        return strings.VINE;</span>
-    }
-  } else {
-<span class="cstat-no" title="statement not covered" >    return undefined;</span>
-  }
+export function <span class="fstat-no" title="function not covered" >getGrowthFormString(</span>species: Species): string {
+<span class="cstat-no" title="statement not covered" >  return (species.growthForms || [])</span>
+    .map(<span class="fstat-no" title="function not covered" >(g</span>rowthForm) =&gt; {
+<span class="cstat-no" title="statement not covered" >      switch (growthForm) {</span>
+        case 'Fern':
+<span class="cstat-no" title="statement not covered" >          return strings.FERN;</span>
+        case 'Forb':
+<span class="cstat-no" title="statement not covered" >          return strings.FORB;</span>
+        case 'Fungus':
+<span class="cstat-no" title="statement not covered" >          return strings.FUNGUS;</span>
+        case 'Graminoid':
+<span class="cstat-no" title="statement not covered" >          return strings.GRAMINOID;</span>
+        case 'Liana':
+<span class="cstat-no" title="statement not covered" >          return strings.LIANA;</span>
+        case 'Lichen':
+<span class="cstat-no" title="statement not covered" >          return strings.LICHEN;</span>
+        case 'Moss':
+<span class="cstat-no" title="statement not covered" >          return strings.MOSS;</span>
+        case 'Multiple Forms':
+<span class="cstat-no" title="statement not covered" >          return strings.MULTIPLE_FORMS;</span>
+        case 'Shrub':
+<span class="cstat-no" title="statement not covered" >          return strings.SHRUB;</span>
+        case 'Shrub/Tree':
+<span class="cstat-no" title="statement not covered" >          return strings.SHRUB_TREE;</span>
+        case 'Subshrub':
+<span class="cstat-no" title="statement not covered" >          return strings.SUBSHRUB;</span>
+        case 'Tree':
+<span class="cstat-no" title="statement not covered" >          return strings.TREE;</span>
+        case 'Vine':
+<span class="cstat-no" title="statement not covered" >          return strings.VINE;</span>
+        default:
+<span class="cstat-no" title="statement not covered" >          return `${growthForm}`;</span>
+      }
+    })
+    .join(', ');
 }
 &nbsp;
 export type SpeciesWithScientificName = Species &amp; {
@@ -904,7 +907,7 @@ export type SuggestedSpecies = Partial&lt;Species&gt; &amp; { scientificName: st
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-29T16:06:03.311Z
+                at 2024-04-29T18:35:33.927Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

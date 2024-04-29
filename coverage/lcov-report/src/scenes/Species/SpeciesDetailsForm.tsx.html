@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/102</span>
+                <span class='fraction'>0/101</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/59</span>
+                <span class='fraction'>0/57</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/49</span>
+                <span class='fraction'>0/48</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/97</span>
+                <span class='fraction'>0/96</span>
             </div>
         
             
@@ -549,20 +549,7 @@
 <a name='L484'></a><a href='#L484'>484</a>
 <a name='L485'></a><a href='#L485'>485</a>
 <a name='L486'></a><a href='#L486'>486</a>
-<a name='L487'></a><a href='#L487'>487</a>
-<a name='L488'></a><a href='#L488'>488</a>
-<a name='L489'></a><a href='#L489'>489</a>
-<a name='L490'></a><a href='#L490'>490</a>
-<a name='L491'></a><a href='#L491'>491</a>
-<a name='L492'></a><a href='#L492'>492</a>
-<a name='L493'></a><a href='#L493'>493</a>
-<a name='L494'></a><a href='#L494'>494</a>
-<a name='L495'></a><a href='#L495'>495</a>
-<a name='L496'></a><a href='#L496'>496</a>
-<a name='L497'></a><a href='#L497'>497</a>
-<a name='L498'></a><a href='#L498'>498</a>
-<a name='L499'></a><a href='#L499'>499</a>
-<a name='L500'></a><a href='#L500'>500</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L487'></a><a href='#L487'>487</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -808,19 +795,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1285,49 +1259,36 @@ export default function <span class="fstat-no" title="function not covered" >Spe
           /&gt;
         &lt;/Grid&gt;
         &lt;Grid item xs={gridSize}&gt;
-          {featureFlagMockedSpecies ? (
-            &lt;MultiSelect
-              label={strings.GROWTH_FORM}
-              fullWidth={true}
-              onAdd={<span class="fstat-no" title="function not covered" >(g</span>rowthForm: GrowthForm) =&gt; {
-                const selectedGrowthForms = <span class="cstat-no" title="statement not covered" >record.growthForms ?? [];</span>
-<span class="cstat-no" title="statement not covered" >                selectedGrowthForms.push(growthForm);</span>
-<span class="cstat-no" title="statement not covered" >                onChange('growthFormNEXT', selectedGrowthForms);</span>
-              }}
-              onRemove={<span class="fstat-no" title="function not covered" >(g</span>rowthForm: GrowthForm) =&gt; {
-<span class="cstat-no" title="statement not covered" >                onChange('growthFormNEXT', record.growthForms?.filter(<span class="fstat-no" title="function not covered" >(g</span>f) =&gt; <span class="cstat-no" title="statement not covered" >gf !== growthForm)</span> ?? []);</span>
-              }}
-              options={new Map(growthForms(activeLocale).map(<span class="fstat-no" title="function not covered" >(g</span>f) =&gt; <span class="cstat-no" title="statement not covered" >[gf.value as GrowthForm, gf.label])</span>)}
-              valueRenderer={<span class="fstat-no" title="function not covered" >(g</span>fVal: string) =&gt; <span class="cstat-no" title="statement not covered" >gfVal}</span>
-              selectedOptions={record.growthForms ?? []}
-              placeHolder={strings.SELECT}
-            /&gt;
-          ) : (
-            &lt;Dropdown
-              id='growthForm'
-              selectedValue={record.growthForm}
-              onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('growthForm', value)}</span>
-              options={growthForms(activeLocale)}
-              label={strings.GROWTH_FORM}
-              aria-label={strings.GROWTH_FORM}
-              placeholder={strings.SELECT}
-              fullWidth={true}
-              fixedMenu
-              tooltipTitle={
-                &lt;&gt;
-                  {strings.TOOLTIP_SPECIES_GROWTH_FORM}
-                  &lt;LearnMoreLink
-                    onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt;
-<span class="cstat-no" title="statement not covered" >                      openTooltipLearnMoreModal({</span>
-                        title: strings.GROWTH_FORM,
-                        content: &lt;LearnMoreModalContentGrowthForm /&gt;,
-                      })
-                    }
-                  /&gt;
-                &lt;/&gt;
-              }
-            /&gt;
-          )}
+          &lt;MultiSelect
+            id='growthForms'
+            label={strings.GROWTH_FORM}
+            fullWidth={true}
+            onAdd={<span class="fstat-no" title="function not covered" >(g</span>rowthForm: GrowthForm) =&gt; {
+              const selectedGrowthForms = <span class="cstat-no" title="statement not covered" >record.growthForms ?? [];</span>
+<span class="cstat-no" title="statement not covered" >              selectedGrowthForms.push(growthForm);</span>
+<span class="cstat-no" title="statement not covered" >              onChange('growthForms', selectedGrowthForms);</span>
+            }}
+            onRemove={<span class="fstat-no" title="function not covered" >(g</span>rowthForm: GrowthForm) =&gt; {
+<span class="cstat-no" title="statement not covered" >              onChange('growthForms', record.growthForms?.filter(<span class="fstat-no" title="function not covered" >(g</span>f) =&gt; <span class="cstat-no" title="statement not covered" >gf !== growthForm)</span> ?? []);</span>
+            }}
+            options={new Map(growthForms(activeLocale).map(<span class="fstat-no" title="function not covered" >(g</span>f) =&gt; <span class="cstat-no" title="statement not covered" >[gf.value as GrowthForm, gf.label])</span>)}
+            valueRenderer={<span class="fstat-no" title="function not covered" >(g</span>fVal: string) =&gt; <span class="cstat-no" title="statement not covered" >gfVal}</span>
+            selectedOptions={record.growthForms ?? []}
+            placeHolder={strings.SELECT}
+            tooltipTitle={
+              &lt;&gt;
+                {strings.TOOLTIP_SPECIES_GROWTH_FORM}
+                &lt;LearnMoreLink
+                  onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt;
+<span class="cstat-no" title="statement not covered" >                    openTooltipLearnMoreModal({</span>
+                      title: strings.GROWTH_FORM,
+                      content: &lt;LearnMoreModalContentGrowthForm /&gt;,
+                    })
+                  }
+                /&gt;
+              &lt;/&gt;
+            }
+          /&gt;
         &lt;/Grid&gt;
         &lt;Grid item xs={gridSize} sx={{ 'align-self': 'center' }}&gt;
           &lt;Checkbox
@@ -1567,7 +1528,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-29T16:06:03.311Z
+                at 2024-04-29T18:35:33.927Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
