@@ -222,49 +222,36 @@ export default function SpeciesDetailsForm({
           />
         </Grid>
         <Grid item xs={gridSize}>
-          {featureFlagMockedSpecies ? (
-            <MultiSelect
-              label={strings.GROWTH_FORM}
-              fullWidth={true}
-              onAdd={(growthForm: GrowthForm) => {
-                const selectedGrowthForms = record.growthForms ?? [];
-                selectedGrowthForms.push(growthForm);
-                onChange('growthFormNEXT', selectedGrowthForms);
-              }}
-              onRemove={(growthForm: GrowthForm) => {
-                onChange('growthFormNEXT', record.growthForms?.filter((gf) => gf !== growthForm) ?? []);
-              }}
-              options={new Map(growthForms(activeLocale).map((gf) => [gf.value as GrowthForm, gf.label]))}
-              valueRenderer={(gfVal: string) => gfVal}
-              selectedOptions={record.growthForms ?? []}
-              placeHolder={strings.SELECT}
-            />
-          ) : (
-            <Dropdown
-              id='growthForm'
-              selectedValue={record.growthForm}
-              onChange={(value) => onChange('growthForm', value)}
-              options={growthForms(activeLocale)}
-              label={strings.GROWTH_FORM}
-              aria-label={strings.GROWTH_FORM}
-              placeholder={strings.SELECT}
-              fullWidth={true}
-              fixedMenu
-              tooltipTitle={
-                <>
-                  {strings.TOOLTIP_SPECIES_GROWTH_FORM}
-                  <LearnMoreLink
-                    onClick={() =>
-                      openTooltipLearnMoreModal({
-                        title: strings.GROWTH_FORM,
-                        content: <LearnMoreModalContentGrowthForm />,
-                      })
-                    }
-                  />
-                </>
-              }
-            />
-          )}
+          <MultiSelect
+            id='growthForms'
+            label={strings.GROWTH_FORM}
+            fullWidth={true}
+            onAdd={(growthForm: GrowthForm) => {
+              const selectedGrowthForms = record.growthForms ?? [];
+              selectedGrowthForms.push(growthForm);
+              onChange('growthForms', selectedGrowthForms);
+            }}
+            onRemove={(growthForm: GrowthForm) => {
+              onChange('growthForms', record.growthForms?.filter((gf) => gf !== growthForm) ?? []);
+            }}
+            options={new Map(growthForms(activeLocale).map((gf) => [gf.value as GrowthForm, gf.label]))}
+            valueRenderer={(gfVal: string) => gfVal}
+            selectedOptions={record.growthForms ?? []}
+            placeHolder={strings.SELECT}
+            tooltipTitle={
+              <>
+                {strings.TOOLTIP_SPECIES_GROWTH_FORM}
+                <LearnMoreLink
+                  onClick={() =>
+                    openTooltipLearnMoreModal({
+                      title: strings.GROWTH_FORM,
+                      content: <LearnMoreModalContentGrowthForm />,
+                    })
+                  }
+                />
+              </>
+            }
+          />
         </Grid>
         <Grid item xs={gridSize} sx={{ 'align-self': 'center' }}>
           <Checkbox

@@ -3619,8 +3619,7 @@ export interface components {
       conservationCategory?: "CR" | "DD" | "EN" | "EW" | "EX" | "LC" | "NE" | "NT" | "VU";
       ecosystemTypes?: ("Boreal forests/Taiga" | "Deserts and xeric shrublands" | "Flooded grasslands and savannas" | "Mangroves" | "Mediterranean forests, woodlands and scrubs" | "Montane grasslands and shrublands" | "Temperate broad leaf and mixed forests" | "Temperate coniferous forest" | "Temperate grasslands, savannas and shrublands" | "Tropical and subtropical coniferous forests" | "Tropical and subtropical dry broad leaf forests" | "Tropical and subtropical grasslands, savannas and shrublands" | "Tropical and subtropical moist broad leaf forests" | "Tundra")[];
       familyName?: string;
-      /** @enum {string} */
-      growthForm?: "Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern" | "Fungus" | "Lichen" | "Moss" | "Vine" | "Liana" | "Shrub/Tree" | "Subshrub" | "Multiple Forms";
+      growthForms?: ("Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern" | "Fungus" | "Lichen" | "Moss" | "Vine" | "Liana" | "Shrub/Tree" | "Subshrub" | "Multiple Forms" | "Mangrove")[];
       /**
        * Format: int64
        * @description Which organization's species list to update.
@@ -3640,8 +3639,7 @@ export interface components {
       conservationCategory?: "CR" | "DD" | "EN" | "EW" | "EX" | "LC" | "NE" | "NT" | "VU";
       ecosystemTypes?: ("Boreal forests/Taiga" | "Deserts and xeric shrublands" | "Flooded grasslands and savannas" | "Mangroves" | "Mediterranean forests, woodlands and scrubs" | "Montane grasslands and shrublands" | "Temperate broad leaf and mixed forests" | "Temperate coniferous forest" | "Temperate grasslands, savannas and shrublands" | "Tropical and subtropical coniferous forests" | "Tropical and subtropical dry broad leaf forests" | "Tropical and subtropical grasslands, savannas and shrublands" | "Tropical and subtropical moist broad leaf forests" | "Tundra")[];
       familyName?: string;
-      /** @enum {string} */
-      growthForm?: "Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern" | "Fungus" | "Lichen" | "Moss" | "Vine" | "Liana" | "Shrub/Tree" | "Subshrub" | "Multiple Forms";
+      growthForms?: ("Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern" | "Fungus" | "Lichen" | "Moss" | "Vine" | "Liana" | "Shrub/Tree" | "Subshrub" | "Multiple Forms" | "Mangrove")[];
       /** Format: int64 */
       id: number;
       problems?: components["schemas"]["SpeciesProblemElement"][];

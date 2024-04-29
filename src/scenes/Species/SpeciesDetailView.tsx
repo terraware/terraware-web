@@ -176,9 +176,9 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
           </Grid>
           <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
             <TextField
-              id={'growthForm'}
+              id={'growthForms'}
               label={strings.GROWTH_FORM}
-              value={featureFlagMockedSpecies ? species?.growthForms?.join(', ') : species?.growthForm}
+              value={species?.growthForms?.join(', ')}
               type='text'
               aria-label='date-picker'
               display={true}

@@ -109,14 +109,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const BE_SORTED_FIELDS = [
-  'scientificName',
-  'commonName',
-  'conservationCategory',
-  'familyName',
-  'growthForm',
-  'seedStorageBehavior',
-];
+const BE_SORTED_FIELDS = ['scientificName', 'commonName', 'conservationCategory', 'familyName', 'seedStorageBehavior'];
 
 // These need to be in the same order as in the import template.
 const CSV_FIELDS = [
@@ -125,7 +118,7 @@ const CSV_FIELDS = [
   'familyName',
   'conservationCategory',
   'rare',
-  'growthForm',
+  'growthForms.growthForm',
   'seedStorageBehavior',
   'ecosystemTypes.ecosystemType',
 ];
@@ -217,7 +210,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         tooltipTitle: strings.TOOLTIP_SPECIES_RARE,
       },
       {
-        key: 'growthForm',
+        key: 'growthForms',
         name: strings.GROWTH_FORM,
         type: 'string',
         tooltipTitle: (
@@ -276,7 +269,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     () =>
       activeLocale
         ? [
-            { name: 'growthForm', label: strings.GROWTH_FORM, type: 'multiple_selection' },
+            { name: 'growthForms.growthForm', label: strings.GROWTH_FORM, type: 'multiple_selection' },
             { name: 'conservationCategory', label: strings.CONSERVATION_CATEGORY, type: 'multiple_selection' },
             { name: 'rare', label: strings.RARE, type: 'multiple_selection' },
             { name: 'seedStorageBehavior', label: strings.SEED_STORAGE_BEHAVIOR, type: 'multiple_selection' },
@@ -293,7 +286,12 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     const getApiSearchResults = async () => {
       const searchParams: SearchRequestPayload = {
         prefix: 'species',
-        fields: ['growthForm', 'seedStorageBehavior', 'ecosystemTypes_ecosystemType', 'conservationCategory'],
+        fields: [
+          'growthForms_growthForm',
+          'seedStorageBehavior',
+          'ecosystemTypes_ecosystemType',
+          'conservationCategory',
+        ],
         search: {
           operation: 'and',
           children: [
@@ -317,6 +315,10 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
       if (result['ecosystemTypes_ecosystemType']) {
         result['ecosystemTypes.ecosystemType'] = result['ecosystemTypes_ecosystemType'];
         delete result['ecosystemTypes_ecosystemType'];
+      }
+      if (result['growthForms_growthForm']) {
+        result['growthForms.growthForm'] = result['growthForms_growthForm'];
+        delete result['growthForms_growthForm'];
       }
       /* tslint:enable:no-string-literal */
 
@@ -344,7 +346,14 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const getParams = useCallback(() => {
     const params: SearchRequestPayload = {
       prefix: 'species',
-      fields: [...BE_SORTED_FIELDS, 'id', 'rare', 'ecosystemTypes.ecosystemType', 'organization_id'],
+      fields: [
+        ...BE_SORTED_FIELDS,
+        'id',
+        'rare',
+        'growthForms.growthForm',
+        'ecosystemTypes.ecosystemType',
+        'organization_id',
+      ],
       search: {
         operation: 'and',
         children: [
@@ -417,14 +426,14 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     if (filters.conservationCategory) {
       params.search.children.push(filters.conservationCategory);
     }
-    if (filters.growthForm) {
-      params.search.children.push(filters.growthForm);
-    }
     if (filters.seedStorageBehavior) {
       params.search.children.push(filters.seedStorageBehavior);
     }
     if (filters['ecosystemTypes.ecosystemType']) {
       params.search.children.push(filters['ecosystemTypes.ecosystemType']);
+    }
+    if (filters['growthForms.growthForm']) {
+      params.search.children.push(filters['growthForms.growthForm']);
     }
 
     return params;
@@ -449,7 +458,9 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               scientificName: result.scientificName as string,
               commonName: result.commonName as string,
               familyName: result.familyName as string,
-              growthForm: result.growthForm as string,
+              growthForms: (result.growthForms as any[])?.map(
+                (growthFormData) => growthFormData.growthForm
+              ) as string[],
               seedStorageBehavior: result.seedStorageBehavior as string,
               ecosystemTypes: (result.ecosystemTypes as any[])?.map((et) => et.ecosystemType) as string[],
               rare: result.rare === strings.BOOLEAN_TRUE ? 'true' : 'false',
@@ -613,12 +624,12 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         onRemove: () => onRemoveFilter('rare'),
       });
     }
-    if (filters.growthForm) {
+    if (filters['growthForms.growthForm']) {
       result.push({
-        id: 'growthForm',
+        id: 'growthForms.growthForm',
         label: strings.GROWTH_FORM,
-        value: filters.growthForm.values?.join(', ') ?? '',
-        onRemove: () => onRemoveFilter('growthForm'),
+        value: filters['growthForms.growthForm'].values?.join(', ') ?? '',
+        onRemove: () => onRemoveFilter('growthForms.growthForm'),
       });
     }
     if (filters.seedStorageBehavior) {

@@ -28,11 +28,14 @@ export default function SpeciesTests() {
 
     await page.locator('#commonName').getByRole('textbox').click();
     await page.locator('#commonName').getByRole('textbox').fill('Koa');
-    await page.locator('#growthForm').getByPlaceholder('Select...').click();
+
+    await page.locator('#growthForms').getByText('Select...').click();
     await page
       .locator('li')
       .filter({ hasText: /^Tree$/ })
       .click();
+    await page.getByRole('heading', { name: 'Add Species' }).click();
+
     await page.locator('#seedStorageBehavior').getByPlaceholder('Select...').click();
     await page
       .locator('li')

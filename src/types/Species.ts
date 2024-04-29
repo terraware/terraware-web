@@ -6,7 +6,6 @@ export type Species = {
   commonName?: string;
   conservationCategory?: 'CR' | 'DD' | 'EN' | 'EW' | 'EX' | 'LC' | 'NE' | 'NT' | 'VU';
   familyName?: string;
-  growthForm?: GrowthForm;
   growthForms?: GrowthForm[];
   scientificName: string;
   rare?: boolean;
@@ -225,39 +224,41 @@ export function successionalGroups(): { label: string; value: SuccessionalGroup 
   ];
 }
 
-export function getGrowthFormString(species: Species) {
-  if (species.growthForm) {
-    switch (species.growthForm) {
-      case 'Fern':
-        return strings.FERN;
-      case 'Forb':
-        return strings.FORB;
-      case 'Fungus':
-        return strings.FUNGUS;
-      case 'Graminoid':
-        return strings.GRAMINOID;
-      case 'Liana':
-        return strings.LIANA;
-      case 'Lichen':
-        return strings.LICHEN;
-      case 'Moss':
-        return strings.MOSS;
-      case 'Multiple Forms':
-        return strings.MULTIPLE_FORMS;
-      case 'Shrub':
-        return strings.SHRUB;
-      case 'Shrub/Tree':
-        return strings.SHRUB_TREE;
-      case 'Subshrub':
-        return strings.SUBSHRUB;
-      case 'Tree':
-        return strings.TREE;
-      case 'Vine':
-        return strings.VINE;
-    }
-  } else {
-    return undefined;
-  }
+export function getGrowthFormString(species: Species): string {
+  return (species.growthForms || [])
+    .map((growthForm) => {
+      switch (growthForm) {
+        case 'Fern':
+          return strings.FERN;
+        case 'Forb':
+          return strings.FORB;
+        case 'Fungus':
+          return strings.FUNGUS;
+        case 'Graminoid':
+          return strings.GRAMINOID;
+        case 'Liana':
+          return strings.LIANA;
+        case 'Lichen':
+          return strings.LICHEN;
+        case 'Moss':
+          return strings.MOSS;
+        case 'Multiple Forms':
+          return strings.MULTIPLE_FORMS;
+        case 'Shrub':
+          return strings.SHRUB;
+        case 'Shrub/Tree':
+          return strings.SHRUB_TREE;
+        case 'Subshrub':
+          return strings.SUBSHRUB;
+        case 'Tree':
+          return strings.TREE;
+        case 'Vine':
+          return strings.VINE;
+        default:
+          return `${growthForm}`;
+      }
+    })
+    .join(', ');
 }
 
 export type SpeciesWithScientificName = Species & {

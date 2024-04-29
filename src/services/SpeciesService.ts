@@ -84,7 +84,7 @@ const createSpecies = async (species: Omit<Species, 'id'>, organizationId: numbe
     commonName: species.commonName,
     conservationCategory: species.conservationCategory,
     familyName: species.familyName,
-    growthForm: species.growthForm,
+    growthForms: species.growthForms,
     organizationId,
     rare: species.rare,
     scientificName: species.scientificName,
@@ -112,10 +112,19 @@ const getSpecies = async (speciesId: number, organizationId: number): Promise<Sp
       params,
       urlReplacements: { '{speciesId}': speciesId.toString() },
     },
-    (data) => ({
-      species:
-        featureFlagMockedSpecies && data?.species ? { ...data.species, ...mockSpeciesNewFieldsData } : data?.species,
-    })
+    (data) => {
+      if (!data?.species) {
+        return {} as SpeciesIdData;
+      }
+
+      const speciesData: SpeciesIdData = {
+        species: (featureFlagMockedSpecies
+          ? { ...data.species, ...mockSpeciesNewFieldsData }
+          : data.species) as Species, // TODO remove this casting when we remove the mock data
+      };
+
+      return speciesData;
+    }
   );
 
   return response;
@@ -130,7 +139,7 @@ const updateSpecies = async (species: Species, organizationId: number): Promise<
     commonName: species.commonName,
     conservationCategory: species.conservationCategory,
     familyName: species.familyName,
-    growthForm: species.growthForm,
+    growthForms: species.growthForms,
     organizationId,
     rare: species.rare,
     scientificName: species.scientificName,
@@ -176,8 +185,8 @@ const getAllSpecies = async (organizationId: number, inUse?: boolean): Promise<A
     (data) => ({
       species:
         featureFlagMockedSpecies && data?.species
-          ? data?.species.map((species) => ({ ...species, ...mockSpeciesNewFieldsData }))
-          : data?.species,
+          ? (data?.species.map((species) => ({ ...species, ...mockSpeciesNewFieldsData })) as Species[]) // TODO remove this casting when we remove the mock data
+          : (data?.species as Species[]), // TODO remove this casting when we remove the mock data
     })
   );
 

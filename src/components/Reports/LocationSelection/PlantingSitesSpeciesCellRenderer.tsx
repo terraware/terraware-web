@@ -51,7 +51,7 @@ export default function PlantingSiteSpeciesCellRenderer({ editMode, validate }: 
       }
     };
 
-    if (column.key === 'growthForm') {
+    if (column.key === 'growthForms') {
       return <CellRenderer index={index} row={row} column={column} value={getGrowthFormString(row as Species)} />;
     }
 

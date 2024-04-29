@@ -1,11 +1,11 @@
-import { Species } from 'src/types/Species';
+import { GrowthForm, Species } from 'src/types/Species';
 
 export type SpeciesSearchResultRow = Omit<
   Species,
-  'growthForm' | 'seedStorageBehavior' | 'ecosystemTypes' | 'conservationCategory' | 'rare'
+  'growthForms' | 'seedStorageBehavior' | 'ecosystemTypes' | 'conservationCategory' | 'rare'
 > & {
   conservationCategory?: string;
-  growthForm?: string;
+  growthForms?: string[];
   rare?: string;
   seedStorageBehavior?: string;
   ecosystemTypes?: string[];
