@@ -286,6 +286,7 @@ export default function SpeciesDetailsForm({
         </Grid>
         <Grid item xs={gridSize}>
           <MultiSelect
+            id='successionalGroups'
             label={strings.SUCCESSIONAL_GROUP}
             fullWidth={true}
             onAdd={(successionalGroup: SuccessionalGroup) => {
@@ -304,6 +305,7 @@ export default function SpeciesDetailsForm({
         </Grid>
         <Grid item xs={gridSize}>
           <MultiSelect
+            id='ecosystemTypes'
             fullWidth={true}
             label={strings.ECOSYSTEM_TYPE}
             tooltipTitle={
