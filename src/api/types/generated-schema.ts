@@ -3625,10 +3625,12 @@ export interface components {
        * @description Which organization's species list to update.
        */
       organizationId: number;
+      plantMaterialSourcingMethods?: (("Seed collection & germination") | ("Seed purchase & germination") | "Mangrove propagules" | "Vegetative propagation" | "Wildling harvest" | "Seedling purchase" | "Other")[];
       rare?: boolean;
       scientificName: string;
       /** @enum {string} */
       seedStorageBehavior?: "Orthodox" | "Recalcitrant" | "Intermediate" | "Unknown" | "Likely Orthodox" | "Likely Recalcitrant" | "Likely Intermediate";
+      successionalGroups?: ("Pioneer" | "Early secondary" | "Late secondary" | "Mature")[];
     };
     SpeciesResponseElement: {
       commonName?: string;
@@ -3642,11 +3644,13 @@ export interface components {
       growthForms?: ("Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern" | "Fungus" | "Lichen" | "Moss" | "Vine" | "Liana" | "Shrub/Tree" | "Subshrub" | "Multiple Forms" | "Mangrove")[];
       /** Format: int64 */
       id: number;
+      plantMaterialSourcingMethods?: (("Seed collection & germination") | ("Seed purchase & germination") | "Mangrove propagules" | "Vegetative propagation" | "Wildling harvest" | "Seedling purchase" | "Other")[];
       problems?: components["schemas"]["SpeciesProblemElement"][];
       rare?: boolean;
       scientificName: string;
       /** @enum {string} */
       seedStorageBehavior?: "Orthodox" | "Recalcitrant" | "Intermediate" | "Unknown" | "Likely Orthodox" | "Likely Recalcitrant" | "Likely Intermediate";
+      successionalGroups?: ("Pioneer" | "Early secondary" | "Late secondary" | "Mature")[];
     };
     SpeciesSummaryNurseryPayload: {
       /** Format: int64 */

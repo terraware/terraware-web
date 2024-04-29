@@ -1,6 +1,8 @@
 import { components } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
 
+import { ArrayDeref, NonUndefined } from './utils';
+
 export type Species = {
   id: number;
   commonName?: string;
@@ -31,10 +33,8 @@ export type Species = {
 export const mockSpeciesNewFieldsData: Partial<Species> = {
   nativeStatus: 'Native',
   nativeEcosystem: 'Tropical and subtropical moist broad leaf forests',
-  successionalGroup: ['Pioneer', 'Early secondary'],
   ecologicalRoleKnown: 'Yes',
   localUsesKnown: 'Yes',
-  plantMaterialSourcingMethod: ['Seed collection & germination', 'Seedling purchase'],
   heightAtMaturity: 10,
   heightAtMaturitySource: 'Source',
   dbhDiameterAtMaturity: 10,
@@ -46,58 +46,27 @@ export const mockSpeciesNewFieldsData: Partial<Species> = {
 
 export type WoodDensityLevel = 'Species' | 'Genus' | 'Family';
 
-export type PlantMaterialSourcingMethod =
-  | 'Seed collection & germination'
-  | 'Seed purchase & germination'
-  | 'Mangrove propagules'
-  | 'Vegetative propagation'
-  | 'Wildling harvest'
-  | 'Seedling purchase'
-  | 'Other';
+export type PlantMaterialSourcingMethod = ArrayDeref<
+  NonUndefined<components['schemas']['GetSpeciesResponsePayload']['species']['plantMaterialSourcingMethods']>
+>;
 
-export type SuccessionalGroup = 'Pioneer' | 'Early secondary' | 'Late secondary' | 'Mature';
+export type SuccessionalGroup = ArrayDeref<
+  NonUndefined<components['schemas']['GetSpeciesResponsePayload']['species']['successionalGroups']>
+>;
 
 export type NativeStatus = 'Native' | 'Non-Native';
 
-export type EcosystemType =
-  | 'Boreal forests/Taiga'
-  | 'Deserts and xeric shrublands'
-  | 'Flooded grasslands and savannas'
-  | 'Mangroves'
-  | 'Mediterranean forests, woodlands and scrubs'
-  | 'Montane grasslands and shrublands'
-  | 'Temperate broad leaf and mixed forests'
-  | 'Temperate coniferous forest'
-  | 'Temperate grasslands, savannas and shrublands'
-  | 'Tropical and subtropical coniferous forests'
-  | 'Tropical and subtropical dry broad leaf forests'
-  | 'Tropical and subtropical grasslands, savannas and shrublands'
-  | 'Tropical and subtropical moist broad leaf forests'
-  | 'Tundra';
+export type EcosystemType = ArrayDeref<
+  NonUndefined<components['schemas']['GetSpeciesResponsePayload']['species']['ecosystemTypes']>
+>;
 
-export type GrowthForm =
-  | 'Tree'
-  | 'Shrub'
-  | 'Forb'
-  | 'Graminoid'
-  | 'Fern'
-  | 'Fungus'
-  | 'Lichen'
-  | 'Moss'
-  | 'Vine'
-  | 'Liana'
-  | 'Shrub/Tree'
-  | 'Subshrub'
-  | 'Multiple Forms';
+export type GrowthForm = ArrayDeref<
+  NonUndefined<components['schemas']['GetSpeciesResponsePayload']['species']['growthForms']>
+>;
 
-export type SeedStorageBehavior =
-  | 'Intermediate'
-  | 'Likely Intermediate'
-  | 'Likely Orthodox'
-  | 'Likely Recalcitrant'
-  | 'Orthodox'
-  | 'Recalcitrant'
-  | 'Unknown';
+export type SeedStorageBehavior = NonUndefined<
+  components['schemas']['GetSpeciesResponsePayload']['species']['seedStorageBehavior']
+>;
 
 export type SpeciesProblemElement = {
   id: number;
@@ -156,6 +125,7 @@ export function growthForms(activeLocale: string | null) {
     { label: strings.GRAMINOID, value: 'Graminoid' },
     { label: strings.LIANA, value: 'Liana' },
     { label: strings.LICHEN, value: 'Lichen' },
+    { label: strings.MANGROVE, value: 'Mangrove' },
     { label: strings.MOSS, value: 'Moss' },
     { label: strings.MULTIPLE_FORMS, value: 'Multiple Forms' },
     { label: strings.SHRUB, value: 'Shrub' },
@@ -240,6 +210,8 @@ export function getGrowthFormString(species: Species): string {
           return strings.LIANA;
         case 'Lichen':
           return strings.LICHEN;
+        case 'Mangrove':
+          return strings.MANGROVE;
         case 'Moss':
           return strings.MOSS;
         case 'Multiple Forms':
