@@ -69,7 +69,6 @@ const get = async (participantProjectSpeciesId: number): Promise<ParticipantProj
       }
     }
 
-    console.log('service.get - participantProjectSpecies', participantProjectSpecies);
     resolve({ data: { participantProjectSpecies }, requestSucceeded: true });
   });
 };

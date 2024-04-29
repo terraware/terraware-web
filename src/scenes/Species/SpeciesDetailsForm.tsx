@@ -223,6 +223,7 @@ export default function SpeciesDetailsForm({
         </Grid>
         <Grid item xs={gridSize}>
           <MultiSelect
+            id='growthForms'
             label={strings.GROWTH_FORM}
             fullWidth={true}
             onAdd={(growthForm: GrowthForm) => {

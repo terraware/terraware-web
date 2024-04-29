@@ -176,7 +176,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
           </Grid>
           <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
             <TextField
-              id={'growthForm'}
+              id={'growthForms'}
               label={strings.GROWTH_FORM}
               value={species?.growthForms?.join(', ')}
               type='text'
