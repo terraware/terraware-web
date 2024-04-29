@@ -11,7 +11,7 @@ export type ModuleData = {
   module: ModuleWithNumber | undefined;
 };
 
-const PROJECT_MODULES_ENDPOINT = '/api/v1/modules/projects/{projectId}';
+const PROJECT_MODULES_ENDPOINT = '/api/v1/projects/{projectId}/modules';
 
 export type ListModulesResponsePayload =
   paths[typeof PROJECT_MODULES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
