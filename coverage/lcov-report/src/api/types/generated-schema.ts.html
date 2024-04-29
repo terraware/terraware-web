@@ -8900,7 +8900,71 @@
 <a name='L8835'></a><a href='#L8835'>8835</a>
 <a name='L8836'></a><a href='#L8836'>8836</a>
 <a name='L8837'></a><a href='#L8837'>8837</a>
-<a name='L8838'></a><a href='#L8838'>8838</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L8838'></a><a href='#L8838'>8838</a>
+<a name='L8839'></a><a href='#L8839'>8839</a>
+<a name='L8840'></a><a href='#L8840'>8840</a>
+<a name='L8841'></a><a href='#L8841'>8841</a>
+<a name='L8842'></a><a href='#L8842'>8842</a>
+<a name='L8843'></a><a href='#L8843'>8843</a>
+<a name='L8844'></a><a href='#L8844'>8844</a>
+<a name='L8845'></a><a href='#L8845'>8845</a>
+<a name='L8846'></a><a href='#L8846'>8846</a>
+<a name='L8847'></a><a href='#L8847'>8847</a>
+<a name='L8848'></a><a href='#L8848'>8848</a>
+<a name='L8849'></a><a href='#L8849'>8849</a>
+<a name='L8850'></a><a href='#L8850'>8850</a>
+<a name='L8851'></a><a href='#L8851'>8851</a>
+<a name='L8852'></a><a href='#L8852'>8852</a>
+<a name='L8853'></a><a href='#L8853'>8853</a>
+<a name='L8854'></a><a href='#L8854'>8854</a>
+<a name='L8855'></a><a href='#L8855'>8855</a>
+<a name='L8856'></a><a href='#L8856'>8856</a>
+<a name='L8857'></a><a href='#L8857'>8857</a>
+<a name='L8858'></a><a href='#L8858'>8858</a>
+<a name='L8859'></a><a href='#L8859'>8859</a>
+<a name='L8860'></a><a href='#L8860'>8860</a>
+<a name='L8861'></a><a href='#L8861'>8861</a>
+<a name='L8862'></a><a href='#L8862'>8862</a>
+<a name='L8863'></a><a href='#L8863'>8863</a>
+<a name='L8864'></a><a href='#L8864'>8864</a>
+<a name='L8865'></a><a href='#L8865'>8865</a>
+<a name='L8866'></a><a href='#L8866'>8866</a>
+<a name='L8867'></a><a href='#L8867'>8867</a>
+<a name='L8868'></a><a href='#L8868'>8868</a>
+<a name='L8869'></a><a href='#L8869'>8869</a>
+<a name='L8870'></a><a href='#L8870'>8870</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -17955,10 +18019,6 @@ export interface paths {
      */
     get: operations["login"];
   };
-  "/api/v1/modules/projects/{projectId}": {
-    /** Gets modules for a project. */
-    get: operations["listModules"];
-  };
   "/api/v1/notifications": {
     /** Retrieve all notifications for current user scoped to an organization. */
     get: operations["readAll"];
@@ -18144,6 +18204,14 @@ export interface paths {
      * @description Overwrites any existing project assignments.
      */
     post: operations["assignProject"];
+  };
+  "/api/v1/projects/{projectId}/modules": {
+    /** Gets modules for a project. */
+    get: operations["listModules"];
+  };
+  "/api/v1/projects/{projectId}/modules/{moduleId}": {
+    /** Gets one module for a project. */
+    get: operations["getModule"];
   };
   "/api/v1/reports": {
     /** Lists an organization's reports. */
@@ -19950,6 +20018,10 @@ export interface components {
       details: components["schemas"]["ProjectAcceleratorDetailsPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetProjectModuleResponsePayload: {
+      module: components["schemas"]["ProjectModule"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetProjectModulesResponsePayload: {
       modules: components["schemas"]["ProjectModule"][];
       status: components["schemas"]["SuccessOrError"];
@@ -20995,6 +21067,7 @@ export interface components {
       preparationMaterials?: string;
       /** Format: date */
       startDate: string;
+      title: string;
     };
     ProjectModuleEvent: {
       description: string;
@@ -23314,28 +23387,6 @@ export interface operations {
       };
     };
   };
-  /** Gets modules for a project. */
-  listModules: {
-    parameters: {
-      path: {
-        projectId: number;
-      };
-    };
-    responses: {
-      /** @description The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetProjectModulesResponsePayload"];
-        };
-      };
-      /** @description The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
   /** Retrieve all notifications for current user scoped to an organization. */
   readAll: {
     parameters: {
@@ -24297,6 +24348,51 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets modules for a project. */
+  listModules: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetProjectModulesResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets one module for a project. */
+  getModule: {
+    parameters: {
+      path: {
+        projectId: number;
+        moduleId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetProjectModuleResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -26581,7 +26677,7 @@ export interface operations {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-29T19:19:29.277Z
+                at 2024-04-29T19:40:42.212Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

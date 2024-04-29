@@ -1,3 +1,4 @@
+fac7e89f89 Updated Module API types and endpoints (#2569)
 772b33e98c Fix reducers for listing participant project species (#2567)
 9e63589c6e Pull in the current module and modules into the module timeline (#2554)
 03156f54e5 SW-5280 Update with BE types for new species enum sets (#2557)
