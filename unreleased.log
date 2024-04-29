@@ -1,3 +1,4 @@
+06b4b1eba2 SW-5305 Use "title" for modules (#2570)
 fac7e89f89 Updated Module API types and endpoints (#2569)
 772b33e98c Fix reducers for listing participant project species (#2567)
 9e63589c6e Pull in the current module and modules into the module timeline (#2554)
