@@ -1,4 +1,5 @@
 import { paths } from 'src/api/types/generated-schema';
+import isEnabled from 'src/features';
 import HttpService, { Params, Response } from 'src/services/HttpService';
 import {
   Deliverable,
@@ -7,6 +8,7 @@ import {
   ListDeliverablesElement,
   ListDeliverablesResponsePayload,
   UploadDeliverableDocumentRequest,
+  mockSpeciesListDeliverables,
 } from 'src/types/Deliverables';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { SearchAndSortFn, SearchOrderConfig, searchAndSort as genericSearchAndSort } from 'src/utils/searchAndSort';
@@ -73,6 +75,7 @@ const list = async (
   searchSortOrder?: SearchSortOrder,
   searchAndSort?: SearchAndSortFn<ListDeliverablesElement>
 ): Promise<(DeliverablesData & Response) | null> => {
+  const featureFlagMockedSpecies = isEnabled('Mocked Species');
   let searchOrderConfig: SearchOrderConfig;
   if (searchSortOrder) {
     searchOrderConfig = {
@@ -86,11 +89,17 @@ const list = async (
     {
       params: request as Params,
     },
-    (data) => ({
-      deliverables: searchAndSort
+    (data) => {
+      const deliverablesResult = searchAndSort
         ? searchAndSort(data?.deliverables || [], search, searchOrderConfig)
-        : genericSearchAndSort(data?.deliverables || [], search, searchOrderConfig),
-    })
+        : genericSearchAndSort(data?.deliverables || [], search, searchOrderConfig);
+
+      return {
+        deliverables: featureFlagMockedSpecies
+          ? [...mockSpeciesListDeliverables, ...deliverablesResult]
+          : deliverablesResult,
+      };
+    }
   );
 };
 

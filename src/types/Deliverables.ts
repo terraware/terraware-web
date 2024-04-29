@@ -39,7 +39,39 @@ export type DeliverableData = {
 };
 
 export type ListDeliverablesResponsePayload = components['schemas']['ListDeliverablesResponsePayload'];
-export type ListDeliverablesElement = components['schemas']['ListDeliverablesElement'];
+export type ListDeliverablesElement = Omit<components['schemas']['ListDeliverablesElement'], 'type'> & {
+  type: 'Document' | 'Species List';
+};
+
+// TODO: remove this mock data when the actual data is available
+export const mockSpeciesListDeliverables: ListDeliverablesElement[] = [
+  {
+    category: 'Carbon Eligibility',
+    id: 1,
+    name: 'Species List 1',
+    organizationId: 1,
+    organizationName: 'Organization 1',
+    participantId: 1,
+    participantName: 'Participant 1',
+    projectId: 1,
+    projectName: 'Project 1',
+    status: 'Not Submitted',
+    type: 'Species List',
+  },
+  {
+    category: 'Carbon Eligibility',
+    id: 2,
+    name: 'Species List 2',
+    organizationId: 1,
+    organizationName: 'Organization 1',
+    participantId: 1,
+    participantName: 'Participant 1',
+    projectId: 2,
+    projectName: 'Project 1',
+    status: 'Not Submitted',
+    type: 'Species List',
+  },
+];
 
 export type DeliverablesData = {
   deliverables: ListDeliverablesElement[];
