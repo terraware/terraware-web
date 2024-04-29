@@ -6,7 +6,8 @@ export type FeatureName =
   | 'User Detailed Sites'
   | 'Console'
   | 'Participant Experience'
-  | 'Document Producer';
+  | 'Document Producer'
+  | 'Mocked Species';
 
 export type Feature = {
   name: FeatureName;
@@ -65,6 +66,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Terraware Accelerator Console access to the document producer tool'],
+    disclosure: ['This is WIP'],
+  },
+  {
+    name: 'Mocked Species',
+    preferenceName: 'enableMockedSpecies',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Appends mocked data for new fields to species'],
     disclosure: ['This is WIP'],
   },
 ];
