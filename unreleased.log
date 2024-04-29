@@ -1,3 +1,5 @@
+0623002069 SW-5295 Pre-populate accession collected date with today (#2560)
+38b108f394 SW-5296 Pre-populate seedling withdrawal quantities with 0 (#2559)
 4c677d501b SW-5272: FE - Set up mock data for species deliverable (#2555)
 0e2ea049a9 Updated translations from Phrase (#2556)
 8b04845d4c SW-5270 SW-5271 Edit/Add species and Species Details views updates (#2550)
