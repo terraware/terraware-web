@@ -5,8 +5,8 @@ import { participantProjectSpeciesCompositeKeyFn } from './participantProjectSpe
 export const selectParticipantProjectSpeciesRequest = (requestId: string) => (state: RootState) =>
   state.participantProjectSpecies[requestId];
 
-export const selectParticipantProjectSpeciesListRequest = (requestId: string) => (state: RootState) =>
-  state.participantProjectSpeciesList[requestId];
+export const selectParticipantProjectSpeciesListRequest = (projectId: number) => (state: RootState) =>
+  state.participantProjectSpeciesList[projectId];
 
 export const selectParticipantProjectSpeciesUpdateRequest = (requestId: string) => (state: RootState) =>
   state.participantProjectSpeciesUpdate[requestId];
