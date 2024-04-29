@@ -76,7 +76,7 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
           sx={{
             display: 'flex',
             margin: '0 auto',
-            width: isMobile ? '100%' : '700px',
+            width: '100%',
             paddingLeft: theme.spacing(isMobile ? 0 : 4),
             paddingRight: theme.spacing(isMobile ? 0 : 4),
             paddingTop: theme.spacing(5),
@@ -84,7 +84,7 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
         >
           <Grid
             container
-            width={isMobile ? '100%' : '700px'}
+            width={'100%'}
             sx={{
               backgroundColor: theme.palette.TwClrBg,
               borderRadius: theme.spacing(4),
