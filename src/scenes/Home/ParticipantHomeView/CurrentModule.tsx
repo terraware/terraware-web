@@ -22,7 +22,7 @@ const CurrentModule = () => {
               <Grid container justifyContent={'space-between'}>
                 <Grid item>
                   <Typography fontSize={'16px'} fontWeight={500} lineHeight={'24px'}>
-                    {strings.formatString(strings.MODULE_NAME_OVERVIEW, currentModule.number)}
+                    {strings.formatString(strings.TITLE_OVERVIEW, currentModule.title)}
                   </Typography>
                 </Grid>
                 <Grid item>

@@ -9,7 +9,6 @@ import Typography from '@mui/material/Typography';
 import { Badge } from '@terraware/web-components';
 
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import strings from 'src/strings';
 
 type AltStepIconProps = {
   activeStep: number;
@@ -72,7 +71,7 @@ const ModuleTimeline = () => {
                 icon={<AltStepIcon activeStep={activeIndex} index={index} />}
                 sx={{ fontWeight: 600, '.MuiStepLabel-label.Mui-disabled': { fontWeight: 600 } }}
               >
-                {strings.formatString(strings.MODULE_NUMBER, `${module.number}`) as string}
+                {module.title}
                 <br />
                 <Typography component='span' style={{ fontSize: '14px', fontWeight: 400 }}>
                   {module.name}

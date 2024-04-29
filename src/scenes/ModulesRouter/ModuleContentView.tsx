@@ -44,7 +44,7 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
         to: APP_PATHS.PROJECT_MODULES.replace(':projectId', `${projectId}`),
       },
       {
-        name: (activeLocale ? strings.formatString(strings.MODULE_NUMBER, `${module?.number}`) : '') as string,
+        name: module?.title || '',
         to: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
       },
     ],
@@ -84,7 +84,7 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
             <Grid item xs style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
               <ModuleContentSection>
                 <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={500}>
-                  {strings.formatString(strings.MODULE_N, module.number)}
+                  {module.title}
                 </Typography>
 
                 <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
