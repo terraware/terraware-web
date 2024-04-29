@@ -8,6 +8,9 @@ import Stepper from '@mui/material/Stepper';
 import Typography from '@mui/material/Typography';
 import { Badge } from '@terraware/web-components';
 
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
+import strings from 'src/strings';
+
 type AltStepIconProps = {
   activeStep: number;
   index: number;
@@ -37,36 +40,42 @@ const AltStepIcon = ({ activeStep, index }: AltStepIconProps) => {
   );
 };
 
-type ModuleTimelineStep = {
-  description: string;
-  label: string;
-};
+const ModuleTimeline = () => {
+  const { currentModule, modules, currentParticipant, currentParticipantProject } = useParticipantData();
+  console.log(
+    'currentModule, currentParticipant, currentParticipantProject',
+    currentModule,
+    modules,
+    currentParticipant,
+    currentParticipantProject
+  );
 
-type ModuleTimelineProps = {
-  activeStep: number;
-  steps: ModuleTimelineStep[];
-  title: string;
-};
+  if (!(currentModule && currentParticipant && modules)) {
+    return null;
+  }
 
-const ModuleTimeline = ({ activeStep, steps, title }: ModuleTimelineProps) => {
+  const activeIndex = modules.findIndex((module) => module.id === currentModule.id);
+
   return (
     <Box maxWidth={'206px'}>
-      <Box sx={{ marginBottom: '24px', paddingRight: '16px' }}>
-        <Badge label={title} />
-      </Box>
+      {currentParticipant.cohortPhase && (
+        <Box sx={{ marginBottom: '24px', paddingRight: '16px' }}>
+          <Badge label={currentParticipant.cohortPhase || ''} />
+        </Box>
+      )}
 
       <Box sx={{ width: 180 }}>
-        <Stepper activeStep={activeStep} orientation='vertical'>
-          {steps.map((step, index) => (
-            <Step key={step.label}>
+        <Stepper activeStep={activeIndex} orientation='vertical'>
+          {modules.map((module, index) => (
+            <Step key={module.id}>
               <StepLabel
-                icon={<AltStepIcon activeStep={activeStep} index={index} />}
+                icon={<AltStepIcon activeStep={activeIndex} index={index} />}
                 sx={{ fontWeight: 600, '.MuiStepLabel-label.Mui-disabled': { fontWeight: 600 } }}
               >
-                {step.label}
+                {strings.formatString(strings.MODULE_NUMBER, `${module.number}`) as string}
                 <br />
                 <Typography component='span' style={{ fontSize: '14px', fontWeight: 400 }}>
-                  {step.description}
+                  {module.name}
                 </Typography>
               </StepLabel>
             </Step>

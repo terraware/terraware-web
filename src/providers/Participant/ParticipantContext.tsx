@@ -8,6 +8,7 @@ export type ParticipantData = {
   currentModule?: ModuleWithNumber;
   currentParticipant?: Participant;
   currentParticipantProject?: Project;
+  modules?: ModuleWithNumber[];
   participantProjects: Project[];
   orgHasParticipants: boolean;
   setCurrentParticipantProject: (projectId: string | number) => void;
