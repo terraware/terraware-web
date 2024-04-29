@@ -3,70 +3,21 @@ import strings from 'src/strings';
 
 import { ArrayDeref, NonUndefined } from './utils';
 
-export type Species = {
-  id: number;
-  commonName?: string;
-  conservationCategory?: 'CR' | 'DD' | 'EN' | 'EW' | 'EX' | 'LC' | 'NE' | 'NT' | 'VU';
-  familyName?: string;
-  growthForms?: GrowthForm[];
-  scientificName: string;
-  rare?: boolean;
-  seedStorageBehavior?: SeedStorageBehavior;
-  problems?: SpeciesProblemElement[];
-  ecosystemTypes?: EcosystemType[];
-  nativeStatus?: NativeStatus;
-  nativeEcosystem?: string;
-  successionalGroup?: SuccessionalGroup[];
-  ecologicalRoleKnown?: string;
-  localUsesKnown?: string;
-  plantMaterialSourcingMethod?: PlantMaterialSourcingMethod[];
-  heightAtMaturity?: number;
-  heightAtMaturitySource?: string;
-  dbhDiameterAtMaturity?: number;
-  dbhSource?: string;
-  averageWoodDensity?: number;
-  woodDensityLevel?: WoodDensityLevel;
-  otherFacts?: string;
-};
+export type Species = components['schemas']['GetSpeciesResponsePayload']['species'];
 
-// TODO: remove this mock data when the actual data is available
-export const mockSpeciesNewFieldsData: Partial<Species> = {
-  nativeStatus: 'Native',
-  nativeEcosystem: 'Tropical and subtropical moist broad leaf forests',
-  ecologicalRoleKnown: 'Yes',
-  localUsesKnown: 'Yes',
-  heightAtMaturity: 10,
-  heightAtMaturitySource: 'Source',
-  dbhDiameterAtMaturity: 10,
-  dbhSource: 'Source',
-  averageWoodDensity: 10,
-  woodDensityLevel: 'Species',
-  otherFacts: 'Other facts',
-};
+export type WoodDensityLevel = NonUndefined<Species['woodDensityLevel']>;
 
-export type WoodDensityLevel = 'Species' | 'Genus' | 'Family';
+export type PlantMaterialSourcingMethod = ArrayDeref<NonUndefined<Species['plantMaterialSourcingMethods']>>;
 
-export type PlantMaterialSourcingMethod = ArrayDeref<
-  NonUndefined<components['schemas']['GetSpeciesResponsePayload']['species']['plantMaterialSourcingMethods']>
->;
-
-export type SuccessionalGroup = ArrayDeref<
-  NonUndefined<components['schemas']['GetSpeciesResponsePayload']['species']['successionalGroups']>
->;
+export type SuccessionalGroup = ArrayDeref<NonUndefined<Species['successionalGroups']>>;
 
 export type NativeStatus = 'Native' | 'Non-Native';
 
-export type EcosystemType = ArrayDeref<
-  NonUndefined<components['schemas']['GetSpeciesResponsePayload']['species']['ecosystemTypes']>
->;
+export type EcosystemType = ArrayDeref<NonUndefined<Species['ecosystemTypes']>>;
 
-export type GrowthForm = ArrayDeref<
-  NonUndefined<components['schemas']['GetSpeciesResponsePayload']['species']['growthForms']>
->;
+export type GrowthForm = ArrayDeref<NonUndefined<Species['growthForms']>>;
 
-export type SeedStorageBehavior = NonUndefined<
-  components['schemas']['GetSpeciesResponsePayload']['species']['seedStorageBehavior']
->;
+export type SeedStorageBehavior = NonUndefined<Species['seedStorageBehavior']>;
 
 export type SpeciesProblemElement = {
   id: number;
