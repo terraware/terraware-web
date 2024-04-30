@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/90</span>
+                <span class='fraction'>0/96</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/49</span>
+                <span class='fraction'>0/55</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/40</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/85</span>
+                <span class='fraction'>0/91</span>
             </div>
         
             
@@ -483,7 +483,17 @@
 <a name='L418'></a><a href='#L418'>418</a>
 <a name='L419'></a><a href='#L419'>419</a>
 <a name='L420'></a><a href='#L420'>420</a>
-<a name='L421'></a><a href='#L421'>421</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L421'></a><a href='#L421'>421</a>
+<a name='L422'></a><a href='#L422'>422</a>
+<a name='L423'></a><a href='#L423'>423</a>
+<a name='L424'></a><a href='#L424'>424</a>
+<a name='L425'></a><a href='#L425'>425</a>
+<a name='L426'></a><a href='#L426'>426</a>
+<a name='L427'></a><a href='#L427'>427</a>
+<a name='L428'></a><a href='#L428'>428</a>
+<a name='L429'></a><a href='#L429'>429</a>
+<a name='L430'></a><a href='#L430'>430</a>
+<a name='L431'></a><a href='#L431'>431</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -517,6 +527,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -856,6 +867,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -869,11 +881,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -925,6 +945,7 @@ import strings from 'src/strings';
 import {
   EcosystemType,
   GrowthForm,
+  PlantMaterialSourcingMethod,
   Species,
   SuccessionalGroup,
   conservationCategories,
@@ -1185,7 +1206,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             id={'nativeEcosystem'}
             label={strings.NATIVE_ECOSYSTEM}
             onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('nativeEcosystem', value)}</span>
-            value={record.familyName}
+            value={record.nativeEcosystem}
             type='text'
           /&gt;
         &lt;/Grid&gt;
@@ -1197,10 +1218,10 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             onAdd={<span class="fstat-no" title="function not covered" >(s</span>uccessionalGroup: SuccessionalGroup) =&gt; {
               const selectedSuccessionalGroups = <span class="cstat-no" title="statement not covered" >record.successionalGroups ?? [];</span>
 <span class="cstat-no" title="statement not covered" >              selectedSuccessionalGroups.push(successionalGroup);</span>
-<span class="cstat-no" title="statement not covered" >              onChange('successionalGroup', selectedSuccessionalGroups);</span>
+<span class="cstat-no" title="statement not covered" >              onChange('successionalGroups', selectedSuccessionalGroups);</span>
             }}
             onRemove={<span class="fstat-no" title="function not covered" >(s</span>uccessionalGroup: SuccessionalGroup) =&gt; {
-<span class="cstat-no" title="statement not covered" >              onChange('successionalGroup', record.successionalGroups?.filter(<span class="fstat-no" title="function not covered" >(s</span>g) =&gt; <span class="cstat-no" title="statement not covered" >sg !== successionalGroup)</span> ?? []);</span>
+<span class="cstat-no" title="statement not covered" >              onChange('successionalGroups', record.successionalGroups?.filter(<span class="fstat-no" title="function not covered" >(s</span>g) =&gt; <span class="cstat-no" title="statement not covered" >sg !== successionalGroup)</span> ?? []);</span>
             }}
             options={new Map(successionalGroups().map(<span class="fstat-no" title="function not covered" >(s</span>g) =&gt; <span class="cstat-no" title="statement not covered" >[sg.value, sg.label])</span>)}
             valueRenderer={<span class="fstat-no" title="function not covered" >(s</span>gVal: string) =&gt; <span class="cstat-no" title="statement not covered" >sgVal}</span>
@@ -1286,16 +1307,25 @@ export default function <span class="fstat-no" title="function not covered" >Spe
           /&gt;
         &lt;/Grid&gt;
         &lt;Grid item xs={gridSize}&gt;
-          &lt;Dropdown
-            id='plantMaterialSourcingMethod'
-            selectedValue={record.plantMaterialSourcingMethods}
-            onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('plantMaterialSourcingMethod', value)}</span>
-            options={plantMaterialSourcingMethods()}
-            label={strings.PLANT_MATERIAL_SOURCING_METHOD}
-            aria-label={strings.PLANT_MATERIAL_SOURCING_METHOD}
-            placeholder={strings.SELECT}
+          &lt;MultiSelect
+            id='plantMaterialSourcingMethods'
             fullWidth={true}
-            fixedMenu
+            label={strings.PLANT_MATERIAL_SOURCING_METHOD}
+            onAdd={<span class="fstat-no" title="function not covered" >(m</span>ethod: PlantMaterialSourcingMethod) =&gt; {
+              const selected = <span class="cstat-no" title="statement not covered" >record.plantMaterialSourcingMethods ?? [];</span>
+<span class="cstat-no" title="statement not covered" >              selected.push(method);</span>
+<span class="cstat-no" title="statement not covered" >              onChange('plantMaterialSourcingMethods', selected);</span>
+            }}
+            onRemove={<span class="fstat-no" title="function not covered" >(m</span>ethod: PlantMaterialSourcingMethod) =&gt; {
+<span class="cstat-no" title="statement not covered" >              onChange(</span>
+                'plantMaterialSourcingMethods',
+                record.plantMaterialSourcingMethods?.filter(<span class="fstat-no" title="function not covered" >(_</span>method) =&gt; <span class="cstat-no" title="statement not covered" >_method !== method)</span> ?? []
+              );
+            }}
+            options={new Map(plantMaterialSourcingMethods().map(<span class="fstat-no" title="function not covered" >(t</span>ype) =&gt; <span class="cstat-no" title="statement not covered" >[type.value, type.label])</span>)}
+            valueRenderer={<span class="fstat-no" title="function not covered" >(v</span>al: string) =&gt; <span class="cstat-no" title="statement not covered" >`${val}`}</span>
+            selectedOptions={record.plantMaterialSourcingMethods ?? []}
+            placeHolder={strings.SELECT}
             tooltipTitle={
               &lt;&gt;
                 &lt;ul style={{ paddingLeft: '16px' }}&gt;
@@ -1330,7 +1360,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-04-30T19:11:11.372Z
+                at 2024-04-30T19:29:03.433Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
