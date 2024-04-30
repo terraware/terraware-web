@@ -82,12 +82,18 @@ const createSpecies = async (species: Omit<Species, 'id'>, organizationId: numbe
     ecosystemTypes: species.ecosystemTypes,
     commonName: species.commonName,
     conservationCategory: species.conservationCategory,
+    ecologicalRoleKnown: species.ecologicalRoleKnown,
     familyName: species.familyName,
     growthForms: species.growthForms,
+    localUsesKnown: species.localUsesKnown,
+    nativeEcosystem: species.nativeEcosystem,
     organizationId,
+    otherFacts: species.otherFacts,
+    plantMaterialSourcingMethods: species.plantMaterialSourcingMethods,
     rare: species.rare,
     scientificName: species.scientificName,
     seedStorageBehavior: species.seedStorageBehavior,
+    successionalGroups: species.successionalGroups,
   };
 
   const serverResponse: Response = await httpSpecies.post({ entity });
@@ -134,12 +140,18 @@ const updateSpecies = async (species: Species, organizationId: number): Promise<
     ecosystemTypes: species.ecosystemTypes,
     commonName: species.commonName,
     conservationCategory: species.conservationCategory,
+    ecologicalRoleKnown: species.ecologicalRoleKnown,
     familyName: species.familyName,
     growthForms: species.growthForms,
+    localUsesKnown: species.localUsesKnown,
+    nativeEcosystem: species.nativeEcosystem,
     organizationId,
+    otherFacts: species.otherFacts,
+    plantMaterialSourcingMethods: species.plantMaterialSourcingMethods,
     rare: species.rare,
     scientificName: species.scientificName,
     seedStorageBehavior: species.seedStorageBehavior,
+    successionalGroups: species.successionalGroups,
   };
 
   return await httpSpeciesId.put({
