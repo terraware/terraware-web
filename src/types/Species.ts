@@ -48,15 +48,18 @@ export function nativeStatuses() {
   ];
 }
 
-export function plantMaterialSourcingMethods() {
+export function plantMaterialSourcingMethods(): {
+  label: string;
+  value: PlantMaterialSourcingMethod;
+}[] {
   return [
     {
       label: strings.PLANT_MATERIAL_SOURCE_METHOD_SEED_COLLECTION_AND_GERMINATION,
-      value: 'Seed collection and germination',
+      value: 'Seed collection & germination',
     },
     {
       label: strings.PLANT_MATERIAL_SOURCE_METHOD_SEED_PURCHASE_AND_GERMINATION,
-      value: 'Seed purchase and germination',
+      value: 'Seed purchase & germination',
     },
     { label: strings.PLANT_MATERIAL_SOURCE_METHOD_MANGROVE_PROPAGULES, value: 'Mangrove propagules' },
     { label: strings.PLANT_MATERIAL_SOURCE_METHOD_VEGETATIVE_PROPAGATION, value: 'Vegetative propagation' },

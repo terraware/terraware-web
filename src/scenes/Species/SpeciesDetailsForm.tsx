@@ -20,6 +20,7 @@ import strings from 'src/strings';
 import {
   EcosystemType,
   GrowthForm,
+  PlantMaterialSourcingMethod,
   Species,
   SuccessionalGroup,
   conservationCategories,
@@ -280,7 +281,7 @@ export default function SpeciesDetailsForm({
             id={'nativeEcosystem'}
             label={strings.NATIVE_ECOSYSTEM}
             onChange={(value) => onChange('nativeEcosystem', value)}
-            value={record.familyName}
+            value={record.nativeEcosystem}
             type='text'
           />
         </Grid>
@@ -292,10 +293,10 @@ export default function SpeciesDetailsForm({
             onAdd={(successionalGroup: SuccessionalGroup) => {
               const selectedSuccessionalGroups = record.successionalGroups ?? [];
               selectedSuccessionalGroups.push(successionalGroup);
-              onChange('successionalGroup', selectedSuccessionalGroups);
+              onChange('successionalGroups', selectedSuccessionalGroups);
             }}
             onRemove={(successionalGroup: SuccessionalGroup) => {
-              onChange('successionalGroup', record.successionalGroups?.filter((sg) => sg !== successionalGroup) ?? []);
+              onChange('successionalGroups', record.successionalGroups?.filter((sg) => sg !== successionalGroup) ?? []);
             }}
             options={new Map(successionalGroups().map((sg) => [sg.value, sg.label]))}
             valueRenderer={(sgVal: string) => sgVal}
@@ -381,16 +382,25 @@ export default function SpeciesDetailsForm({
           />
         </Grid>
         <Grid item xs={gridSize}>
-          <Dropdown
-            id='plantMaterialSourcingMethod'
-            selectedValue={record.plantMaterialSourcingMethods}
-            onChange={(value) => onChange('plantMaterialSourcingMethod', value)}
-            options={plantMaterialSourcingMethods()}
-            label={strings.PLANT_MATERIAL_SOURCING_METHOD}
-            aria-label={strings.PLANT_MATERIAL_SOURCING_METHOD}
-            placeholder={strings.SELECT}
+          <MultiSelect
+            id='plantMaterialSourcingMethods'
             fullWidth={true}
-            fixedMenu
+            label={strings.PLANT_MATERIAL_SOURCING_METHOD}
+            onAdd={(method: PlantMaterialSourcingMethod) => {
+              const selected = record.plantMaterialSourcingMethods ?? [];
+              selected.push(method);
+              onChange('plantMaterialSourcingMethods', selected);
+            }}
+            onRemove={(method: PlantMaterialSourcingMethod) => {
+              onChange(
+                'plantMaterialSourcingMethods',
+                record.plantMaterialSourcingMethods?.filter((_method) => _method !== method) ?? []
+              );
+            }}
+            options={new Map(plantMaterialSourcingMethods().map((type) => [type.value, type.label]))}
+            valueRenderer={(val: string) => `${val}`}
+            selectedOptions={record.plantMaterialSourcingMethods ?? []}
+            placeHolder={strings.SELECT}
             tooltipTitle={
               <>
                 <ul style={{ paddingLeft: '16px' }}>
