@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
+import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import Card from 'src/components/common/Card';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
+import { useProjects } from 'src/hooks/useProjects';
 import { useProject } from 'src/providers';
 import { requestListModules } from 'src/redux/features/modules/modulesAsyncThunks';
 import { selectProjectModuleList } from 'src/redux/features/modules/modulesSelectors';
@@ -17,9 +19,12 @@ export default function ListView(): JSX.Element {
   const dispatch = useAppDispatch();
   const theme = useTheme();
 
+  const { availableProjects } = useProjects();
   const { project, projectId } = useProject();
 
-  const modules = useAppSelector(selectProjectModuleList(projectId));
+  const [projectFilter, setProjectFilter] = useState<{ projectId?: number }>({ projectId: undefined });
+
+  const modules = useAppSelector(selectProjectModuleList(projectFilter.projectId ?? -1));
 
   // TODO - where will this be stored? Is this stored in the back end within another enum table?
   // Should we store it and localize it in the front end? Will it be stored somewhere an admin can edit it?
@@ -32,11 +37,23 @@ export default function ListView(): JSX.Element {
     'deliverables are due or need review.';
 
   useEffect(() => {
-    void dispatch(requestListModules(projectId));
-  }, [dispatch, projectId]);
+    if (projectFilter.projectId) {
+      void dispatch(requestListModules(projectFilter.projectId));
+    }
+  }, [dispatch, projectFilter]);
 
   return (
     <PageWithModuleTimeline title={strings.ALL_MODULES}>
+      <Box sx={{ paddingBottom: 2 }}>
+        <ProjectsDropdown
+          allowUnselect
+          availableProjects={availableProjects}
+          record={projectFilter}
+          setRecord={setProjectFilter}
+          label={strings.PROJECT}
+        />
+      </Box>
+
       <Card style={{ width: '100%' }}>
         <CurrentTimeline cohortPhase={project?.cohortPhase} />
 

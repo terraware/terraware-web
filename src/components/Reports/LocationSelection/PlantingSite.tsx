@@ -22,14 +22,14 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { SpeciesService } from 'src/services';
 import strings from 'src/strings';
 import { ReportPlantingSite } from 'src/types/Report';
-import { Species } from 'src/types/Species';
+import { GrowthForm, Species } from 'src/types/Species';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type PlantingSiteSpecies = {
   id: number;
   name: string;
-  growthForm?: string;
+  growthForms?: GrowthForm[];
   mortalityRateInField?: number | undefined;
   mortalityRateInNursery?: number | undefined;
   totalPlanted?: number | undefined;
@@ -42,7 +42,7 @@ const columns = (): TableColumnType[] => [
     type: 'string',
   },
   {
-    key: 'growthForm',
+    key: 'growthForms',
     name: strings.GROWTH_FORM,
     type: 'string',
   },
@@ -123,7 +123,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
           psSpecies.push({
             id: iSpecies.id,
             name: foundSpecies.scientificName,
-            growthForm: foundSpecies.growthForm,
+            growthForms: foundSpecies.growthForms,
             mortalityRateInField: iSpecies.mortalityRateInField,
             totalPlanted: iSpecies.totalPlanted,
           });

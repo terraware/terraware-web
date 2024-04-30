@@ -65,6 +65,7 @@ export default function CreateAccession(): JSX.Element {
   const defaultAccession = (): AccessionPostRequestBody =>
     ({
       state: 'Awaiting Check-In',
+      collectedDate: getTodaysDateFormatted(timeZone),
       receivedDate: getTodaysDateFormatted(timeZone),
     }) as AccessionPostRequestBody;
 
@@ -183,6 +184,7 @@ export default function CreateAccession(): JSX.Element {
               onChange={onChange}
               validate={validateFields}
               timeZone={timeZone}
+              value={record.collectedDate}
               id='collectedDate'
               onDateError={onCollectedDateError}
               label={strings.COLLECTION_DATE_REQUIRED}

@@ -76,7 +76,7 @@ export default function SpeciesEditView(): JSX.Element {
       id: species?.id ?? -1,
       familyName: species?.familyName,
       conservationCategory: species?.conservationCategory,
-      growthForm: species?.growthForm,
+      growthForms: species?.growthForms,
       seedStorageBehavior: species?.seedStorageBehavior,
       ecosystemTypes: species?.ecosystemTypes,
       rare: species?.rare,

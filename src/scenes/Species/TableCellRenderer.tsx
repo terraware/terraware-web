@@ -99,7 +99,7 @@ export default function SpeciesCellRenderer(props: RendererProps<TableRowType>):
         row={row}
       />
     );
-  } else if (column.key === 'ecosystemTypes') {
+  } else if (['ecosystemTypes', 'growthForms'].includes(column.key)) {
     return (
       <CellRenderer
         index={index}

@@ -11,7 +11,6 @@ import BackToLink from 'src/components/common/BackToLink';
 import Checkbox from 'src/components/common/Checkbox';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers/hooks';
 import { SpeciesService } from 'src/services';
 import strings from 'src/strings';
@@ -53,7 +52,6 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
   const [deleteSpeciesModalOpen, setDeleteSpeciesModalOpen] = useState(false);
   const [isBusy, setIsBusy] = useState<boolean>(false);
   const snackbar = useSnackbar();
-  const featureFlagMockedSpecies: boolean = isEnabled('Mocked Species');
 
   const gridSize = () => {
     if (isMobile) {
@@ -176,9 +174,9 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
           </Grid>
           <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
             <TextField
-              id={'growthForm'}
+              id={'growthForms'}
               label={strings.GROWTH_FORM}
-              value={featureFlagMockedSpecies ? species?.growthForms?.join(', ') : species?.growthForm}
+              value={species?.growthForms?.join(', ')}
               type='text'
               aria-label='date-picker'
               display={true}
@@ -197,9 +195,8 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               className={classes.blockCheckbox}
             />
           </Grid>
-          {featureFlagMockedSpecies ? (
-            <>
-              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+          {/* TODO this will eventually come from the participant project species, not the org species */}
+          {/* <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
                 <TextField
                   id={'nativeStatus'}
                   label={strings.NATIVE_NON_NATIVE}
@@ -208,116 +205,93 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
                   display={true}
                   required
                 />
-              </Grid>
-              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-                <TextField
-                  id={'nativeEcosistem'}
-                  label={strings.NATIVE_ECOSYSTEM}
-                  value={species?.nativeEcosystem}
-                  type='text'
-                  display={true}
-                />
-              </Grid>
-              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-                <TextField
-                  id={'successionalGroup'}
-                  label={strings.SUCCESSIONAL_GROUP}
-                  value={species?.successionalGroup?.join(', ')}
-                  type='text'
-                  display={true}
-                />
-              </Grid>
-              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-                <TextField
-                  id={'ecosystemType'}
-                  label={strings.ECOSYSTEM_TYPE}
-                  value={species?.ecosystemTypes?.join(', ')}
-                  type='text'
-                  display={true}
-                />
-              </Grid>
-              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-                <TextField
-                  id={'ecologicalRoleKnown'}
-                  label={strings.ECOLOGICAL_ROLE_KNOWN}
-                  value={species?.ecologicalRoleKnown}
-                  type='text'
-                  display={true}
-                  tooltipTitle={strings.ECOLOGICAL_ROLE_KNOWN_TOOLTIP}
-                />
-              </Grid>
-              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-                <TextField
-                  id={'localUsesKnown'}
-                  label={strings.LOCAL_USES_KNOWN}
-                  value={species?.localUsesKnown}
-                  type='text'
-                  display={true}
-                  tooltipTitle={strings.LOCAL_USES_KNOWN_TOOLTIP}
-                />
-              </Grid>
-              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-                <TextField
-                  id={'seedStorageBehavior'}
-                  label={strings.SEED_STORAGE_BEHAVIOR}
-                  value={species?.seedStorageBehavior}
-                  type='text'
-                  display={true}
-                />
-              </Grid>
-              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-                <TextField
-                  id={'plantMaterialSourcingMethod'}
-                  label={strings.PLANT_MATERIAL_SOURCING_METHOD}
-                  value={species?.plantMaterialSourcingMethod?.join(', ')}
-                  type='text'
-                  display={true}
-                  tooltipTitle={
-                    <>
-                      <ul style={{ paddingLeft: '16px' }}>
-                        <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_SEED_COLLECTION_AND_GERMINATION}</li>
-                        <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_SEED_PURCHASE_AND_GERMINATION}</li>
-                        <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_MANGROVE_PROPAGULES}</li>
-                        <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_VEGETATIVE_PROPAGATION}</li>
-                        <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_WILDLING_HARVEST}</li>
-                        <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_SEEDLING_PURCHASE}</li>
-                      </ul>
-                    </>
-                  }
-                />
-              </Grid>
-              <Grid item xs={isMobile ? 12 : 8}>
-                <TextField
-                  id={'otherFacts'}
-                  label={strings.OTHER_FACTS}
-                  value={species?.otherFacts}
-                  type='textarea'
-                  display={true}
-                />
-              </Grid>
-            </>
-          ) : (
-            <>
-              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-                <TextField
-                  id={'seedStorageBehavior'}
-                  label={strings.SEED_STORAGE_BEHAVIOR}
-                  value={species?.seedStorageBehavior}
-                  type='text'
-                  display={true}
-                />
-              </Grid>
-              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-                <TextField
-                  id={'ecosystemType'}
-                  label={strings.ECOSYSTEM_TYPE}
-                  type='text'
-                  display={true}
-                  value={species?.ecosystemTypes?.join(', ')}
-                />
-              </Grid>
-            </>
-          )}
+              </Grid> */}
+          <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+            <TextField
+              id={'nativeEcosistem'}
+              label={strings.NATIVE_ECOSYSTEM}
+              value={species?.nativeEcosystem}
+              type='text'
+              display={true}
+            />
+          </Grid>
+          <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+            <TextField
+              id={'successionalGroup'}
+              label={strings.SUCCESSIONAL_GROUP}
+              value={species?.successionalGroups?.join(', ')}
+              type='text'
+              display={true}
+            />
+          </Grid>
+          <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+            <TextField
+              id={'ecosystemType'}
+              label={strings.ECOSYSTEM_TYPE}
+              value={species?.ecosystemTypes?.join(', ')}
+              type='text'
+              display={true}
+            />
+          </Grid>
+          <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+            <TextField
+              id={'ecologicalRoleKnown'}
+              label={strings.ECOLOGICAL_ROLE_KNOWN}
+              value={species?.ecologicalRoleKnown}
+              type='text'
+              display={true}
+              tooltipTitle={strings.ECOLOGICAL_ROLE_KNOWN_TOOLTIP}
+            />
+          </Grid>
+          <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+            <TextField
+              id={'localUsesKnown'}
+              label={strings.LOCAL_USES_KNOWN}
+              value={species?.localUsesKnown}
+              type='text'
+              display={true}
+              tooltipTitle={strings.LOCAL_USES_KNOWN_TOOLTIP}
+            />
+          </Grid>
+          <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+            <TextField
+              id={'seedStorageBehavior'}
+              label={strings.SEED_STORAGE_BEHAVIOR}
+              value={species?.seedStorageBehavior}
+              type='text'
+              display={true}
+            />
+          </Grid>
+          <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+            <TextField
+              id={'plantMaterialSourcingMethod'}
+              label={strings.PLANT_MATERIAL_SOURCING_METHOD}
+              value={species?.plantMaterialSourcingMethods?.join(', ')}
+              type='text'
+              display={true}
+              tooltipTitle={
+                <>
+                  <ul style={{ paddingLeft: '16px' }}>
+                    <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_SEED_COLLECTION_AND_GERMINATION}</li>
+                    <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_SEED_PURCHASE_AND_GERMINATION}</li>
+                    <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_MANGROVE_PROPAGULES}</li>
+                    <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_VEGETATIVE_PROPAGATION}</li>
+                    <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_WILDLING_HARVEST}</li>
+                    <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_SEEDLING_PURCHASE}</li>
+                  </ul>
+                </>
+              }
+            />
+          </Grid>
+          <Grid item xs={isMobile ? 12 : 8}>
+            <TextField
+              id={'otherFacts'}
+              label={strings.OTHER_FACTS}
+              value={species?.otherFacts}
+              type='textarea'
+              display={true}
+            />
+          </Grid>
         </Grid>
       </Grid>
       {species && (

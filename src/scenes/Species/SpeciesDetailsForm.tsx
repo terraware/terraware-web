@@ -14,19 +14,18 @@ import TooltipLearnMoreModal, {
 import Checkbox from 'src/components/common/Checkbox';
 import Select from 'src/components/common/Select/Select';
 import TextField from 'src/components/common/Textfield/Textfield';
-import isEnabled from 'src/features';
 import { useLocalization } from 'src/providers/hooks';
 import { SpeciesService } from 'src/services';
 import strings from 'src/strings';
 import {
   EcosystemType,
   GrowthForm,
+  PlantMaterialSourcingMethod,
   Species,
   SuccessionalGroup,
   conservationCategories,
   ecosystemTypes,
   growthForms,
-  nativeStatuses,
   plantMaterialSourcingMethods,
   storageBehaviors,
   successionalGroups,
@@ -70,7 +69,6 @@ export default function SpeciesDetailsForm({
     undefined
   );
   const { isMobile } = useDeviceInfo();
-  const featureFlagMockedSpecies: boolean = isEnabled('Mocked Species');
 
   const openTooltipLearnMoreModal = (data: TooltipLearnMoreModalData) => {
     setTooltipLearnMoreModalData(data);
@@ -222,49 +220,36 @@ export default function SpeciesDetailsForm({
           />
         </Grid>
         <Grid item xs={gridSize}>
-          {featureFlagMockedSpecies ? (
-            <MultiSelect
-              label={strings.GROWTH_FORM}
-              fullWidth={true}
-              onAdd={(growthForm: GrowthForm) => {
-                const selectedGrowthForms = record.growthForms ?? [];
-                selectedGrowthForms.push(growthForm);
-                onChange('growthFormNEXT', selectedGrowthForms);
-              }}
-              onRemove={(growthForm: GrowthForm) => {
-                onChange('growthFormNEXT', record.growthForms?.filter((gf) => gf !== growthForm) ?? []);
-              }}
-              options={new Map(growthForms(activeLocale).map((gf) => [gf.value as GrowthForm, gf.label]))}
-              valueRenderer={(gfVal: string) => gfVal}
-              selectedOptions={record.growthForms ?? []}
-              placeHolder={strings.SELECT}
-            />
-          ) : (
-            <Dropdown
-              id='growthForm'
-              selectedValue={record.growthForm}
-              onChange={(value) => onChange('growthForm', value)}
-              options={growthForms(activeLocale)}
-              label={strings.GROWTH_FORM}
-              aria-label={strings.GROWTH_FORM}
-              placeholder={strings.SELECT}
-              fullWidth={true}
-              fixedMenu
-              tooltipTitle={
-                <>
-                  {strings.TOOLTIP_SPECIES_GROWTH_FORM}
-                  <LearnMoreLink
-                    onClick={() =>
-                      openTooltipLearnMoreModal({
-                        title: strings.GROWTH_FORM,
-                        content: <LearnMoreModalContentGrowthForm />,
-                      })
-                    }
-                  />
-                </>
-              }
-            />
-          )}
+          <MultiSelect
+            id='growthForms'
+            label={strings.GROWTH_FORM}
+            fullWidth={true}
+            onAdd={(growthForm: GrowthForm) => {
+              const selectedGrowthForms = record.growthForms ?? [];
+              selectedGrowthForms.push(growthForm);
+              onChange('growthForms', selectedGrowthForms);
+            }}
+            onRemove={(growthForm: GrowthForm) => {
+              onChange('growthForms', record.growthForms?.filter((gf) => gf !== growthForm) ?? []);
+            }}
+            options={new Map(growthForms(activeLocale).map((gf) => [gf.value as GrowthForm, gf.label]))}
+            valueRenderer={(gfVal: string) => gfVal}
+            selectedOptions={record.growthForms ?? []}
+            placeHolder={strings.SELECT}
+            tooltipTitle={
+              <>
+                {strings.TOOLTIP_SPECIES_GROWTH_FORM}
+                <LearnMoreLink
+                  onClick={() =>
+                    openTooltipLearnMoreModal({
+                      title: strings.GROWTH_FORM,
+                      content: <LearnMoreModalContentGrowthForm />,
+                    })
+                  }
+                />
+              </>
+            }
+          />
         </Grid>
         <Grid item xs={gridSize} sx={{ 'align-self': 'center' }}>
           <Checkbox
@@ -276,9 +261,8 @@ export default function SpeciesDetailsForm({
             className={classes.blockCheckbox}
           />
         </Grid>
-        {featureFlagMockedSpecies ? (
-          <>
-            <Grid item xs={gridSize}>
+        {/* TODO this will eventually come from the participant project species, not the org species */}
+        {/* <Grid item xs={gridSize}>
               <Dropdown
                 id='nativeStatus'
                 selectedValue={record.nativeStatus}
@@ -291,208 +275,155 @@ export default function SpeciesDetailsForm({
                 fixedMenu
                 required
               />
-            </Grid>
-            <Grid item xs={gridSize}>
-              <TextField
-                id={'nativeEcosystem'}
-                label={strings.NATIVE_ECOSYSTEM}
-                onChange={(value) => onChange('nativeEcosystem', value)}
-                value={record.familyName}
-                type='text'
-              />
-            </Grid>
-            <Grid item xs={gridSize}>
-              <MultiSelect
-                label={strings.SUCCESSIONAL_GROUP}
-                fullWidth={true}
-                onAdd={(successionalGroup: SuccessionalGroup) => {
-                  const selectedSuccessionalGroups = record.successionalGroup ?? [];
-                  selectedSuccessionalGroups.push(successionalGroup);
-                  onChange('successionalGroup', selectedSuccessionalGroups);
-                }}
-                onRemove={(successionalGroup: SuccessionalGroup) => {
-                  onChange(
-                    'successionalGroup',
-                    record.successionalGroup?.filter((sg) => sg !== successionalGroup) ?? []
-                  );
-                }}
-                options={new Map(successionalGroups().map((sg) => [sg.value, sg.label]))}
-                valueRenderer={(sgVal: string) => sgVal}
-                selectedOptions={record.successionalGroup ?? []}
-                placeHolder={strings.SELECT}
-              />
-            </Grid>
-            <Grid item xs={gridSize}>
-              <MultiSelect
-                fullWidth={true}
-                label={strings.ECOSYSTEM_TYPE}
-                tooltipTitle={
-                  <>
-                    {`${strings.TOOLTIP_ECOSYSTEM_TYPE} `}
-                    <a
-                      target='_blank'
-                      rel='noopener noreferrer'
-                      href='https://www.worldwildlife.org/publications/terrestrial-ecoregions-of-the-world'
-                    >
-                      {strings.LEARN_MORE}
-                    </a>
-                  </>
-                }
-                onAdd={(type: EcosystemType) => {
-                  const selectedTypes = record.ecosystemTypes ?? [];
-                  selectedTypes.push(type);
-                  onChange('ecosystemTypes', selectedTypes);
-                }}
-                onRemove={(type: EcosystemType) => {
-                  onChange('ecosystemTypes', record.ecosystemTypes?.filter((et) => et !== type) ?? []);
-                }}
-                options={new Map(ecosystemTypes().map((type) => [type.value, type.label]))}
-                valueRenderer={(typeVal: string) => typeVal}
-                selectedOptions={record.ecosystemTypes ?? []}
-                placeHolder={strings.SELECT}
-              />
-            </Grid>
-            <Grid item xs={gridSize}>
-              <TextField
-                id={'ecologicalRoleKnown'}
-                label={strings.ECOLOGICAL_ROLE_KNOWN}
-                onChange={(value) => onChange('ecologicalRoleKnown', value)}
-                value={record.ecologicalRoleKnown}
-                type='text'
-                tooltipTitle={strings.ECOLOGICAL_ROLE_KNOWN_TOOLTIP}
-              />
-            </Grid>
-            <Grid item xs={gridSize}>
-              <TextField
-                id={'localUsesKnown'}
-                label={strings.LOCAL_USES_KNOWN}
-                onChange={(value) => onChange('localUsesKnown', value)}
-                value={record.localUsesKnown}
-                type='text'
-                tooltipTitle={strings.LOCAL_USES_KNOWN_TOOLTIP}
-              />
-            </Grid>
-            <Grid item xs={gridSize}>
-              <Dropdown
-                id='seedStorageBehavior'
-                selectedValue={record.seedStorageBehavior}
-                onChange={(value) => onChange('seedStorageBehavior', value)}
-                options={storageBehaviors()}
-                label={strings.SEED_STORAGE_BEHAVIOR}
-                aria-label={strings.SEED_STORAGE_BEHAVIOR}
-                placeholder={strings.SELECT}
-                fullWidth={true}
-                fixedMenu
-                tooltipTitle={
-                  <>
-                    {strings.TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR}
-                    <LearnMoreLink
-                      onClick={() =>
-                        openTooltipLearnMoreModal({
-                          title: strings.SEED_STORAGE_BEHAVIOR,
-                          content: <LearnMoreModalContentSeedStorageBehavior />,
-                        })
-                      }
-                    />
-                  </>
-                }
-              />
-            </Grid>
-            <Grid item xs={gridSize}>
-              <Dropdown
-                id='plantMaterialSourcingMethod'
-                selectedValue={record.plantMaterialSourcingMethod}
-                onChange={(value) => onChange('plantMaterialSourcingMethod', value)}
-                options={plantMaterialSourcingMethods()}
-                label={strings.PLANT_MATERIAL_SOURCING_METHOD}
-                aria-label={strings.PLANT_MATERIAL_SOURCING_METHOD}
-                placeholder={strings.SELECT}
-                fullWidth={true}
-                fixedMenu
-                tooltipTitle={
-                  <>
-                    <ul style={{ paddingLeft: '16px' }}>
-                      <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_SEED_COLLECTION_AND_GERMINATION}</li>
-                      <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_SEED_PURCHASE_AND_GERMINATION}</li>
-                      <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_MANGROVE_PROPAGULES}</li>
-                      <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_VEGETATIVE_PROPAGATION}</li>
-                      <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_WILDLING_HARVEST}</li>
-                      <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_SEEDLING_PURCHASE}</li>
-                    </ul>
-                  </>
-                }
-              />
-            </Grid>
-            <Grid item xs={isMobile ? 12 : 8}>
-              <TextField
-                id={'otherFacts'}
-                label={strings.OTHER_FACTS}
-                onChange={(value) => onChange('otherFacts', value)}
-                value={record.otherFacts}
-                type='textarea'
-              />
-            </Grid>
-          </>
-        ) : (
-          <>
-            <Grid item xs={gridSize}>
-              <Dropdown
-                id='seedStorageBehavior'
-                selectedValue={record.seedStorageBehavior}
-                onChange={(value) => onChange('seedStorageBehavior', value)}
-                options={storageBehaviors()}
-                label={strings.SEED_STORAGE_BEHAVIOR}
-                aria-label={strings.SEED_STORAGE_BEHAVIOR}
-                placeholder={strings.SELECT}
-                fullWidth={true}
-                fixedMenu
-                tooltipTitle={
-                  <>
-                    {strings.TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR}
-                    <LearnMoreLink
-                      onClick={() =>
-                        openTooltipLearnMoreModal({
-                          title: strings.SEED_STORAGE_BEHAVIOR,
-                          content: <LearnMoreModalContentSeedStorageBehavior />,
-                        })
-                      }
-                    />
-                  </>
-                }
-              />
-            </Grid>
-            <Grid item xs={gridSize}>
-              <MultiSelect
-                fullWidth={true}
-                label={strings.ECOSYSTEM_TYPE}
-                tooltipTitle={
-                  <>
-                    {`${strings.TOOLTIP_ECOSYSTEM_TYPE} `}
-                    <a
-                      target='_blank'
-                      rel='noopener noreferrer'
-                      href='https://www.worldwildlife.org/publications/terrestrial-ecoregions-of-the-world'
-                    >
-                      {strings.LEARN_MORE}
-                    </a>
-                  </>
-                }
-                onAdd={(type: EcosystemType) => {
-                  const selectedTypes = record.ecosystemTypes ?? [];
-                  selectedTypes.push(type);
-                  onChange('ecosystemTypes', selectedTypes);
-                }}
-                onRemove={(type: EcosystemType) => {
-                  onChange('ecosystemTypes', record.ecosystemTypes?.filter((et) => et !== type) ?? []);
-                }}
-                options={new Map(ecosystemTypes().map((type) => [type.value, type.label]))}
-                valueRenderer={(typeVal: string) => typeVal}
-                selectedOptions={record.ecosystemTypes ?? []}
-                placeHolder={strings.SELECT}
-              />
-            </Grid>
-          </>
-        )}
+            </Grid> */}
+        <Grid item xs={gridSize}>
+          <TextField
+            id={'nativeEcosystem'}
+            label={strings.NATIVE_ECOSYSTEM}
+            onChange={(value) => onChange('nativeEcosystem', value)}
+            value={record.nativeEcosystem}
+            type='text'
+          />
+        </Grid>
+        <Grid item xs={gridSize}>
+          <MultiSelect
+            id='successionalGroups'
+            label={strings.SUCCESSIONAL_GROUP}
+            fullWidth={true}
+            onAdd={(successionalGroup: SuccessionalGroup) => {
+              const selectedSuccessionalGroups = record.successionalGroups ?? [];
+              selectedSuccessionalGroups.push(successionalGroup);
+              onChange('successionalGroups', selectedSuccessionalGroups);
+            }}
+            onRemove={(successionalGroup: SuccessionalGroup) => {
+              onChange('successionalGroups', record.successionalGroups?.filter((sg) => sg !== successionalGroup) ?? []);
+            }}
+            options={new Map(successionalGroups().map((sg) => [sg.value, sg.label]))}
+            valueRenderer={(sgVal: string) => sgVal}
+            selectedOptions={record.successionalGroups ?? []}
+            placeHolder={strings.SELECT}
+          />
+        </Grid>
+        <Grid item xs={gridSize}>
+          <MultiSelect
+            id='ecosystemTypes'
+            fullWidth={true}
+            label={strings.ECOSYSTEM_TYPE}
+            tooltipTitle={
+              <>
+                {`${strings.TOOLTIP_ECOSYSTEM_TYPE} `}
+                <a
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  href='https://www.worldwildlife.org/publications/terrestrial-ecoregions-of-the-world'
+                >
+                  {strings.LEARN_MORE}
+                </a>
+              </>
+            }
+            onAdd={(type: EcosystemType) => {
+              const selectedTypes = record.ecosystemTypes ?? [];
+              selectedTypes.push(type);
+              onChange('ecosystemTypes', selectedTypes);
+            }}
+            onRemove={(type: EcosystemType) => {
+              onChange('ecosystemTypes', record.ecosystemTypes?.filter((et) => et !== type) ?? []);
+            }}
+            options={new Map(ecosystemTypes().map((type) => [type.value, type.label]))}
+            valueRenderer={(typeVal: string) => typeVal}
+            selectedOptions={record.ecosystemTypes ?? []}
+            placeHolder={strings.SELECT}
+          />
+        </Grid>
+        <Grid item xs={gridSize}>
+          <TextField
+            id={'ecologicalRoleKnown'}
+            label={strings.ECOLOGICAL_ROLE_KNOWN}
+            onChange={(value) => onChange('ecologicalRoleKnown', value)}
+            value={record.ecologicalRoleKnown}
+            type='text'
+            tooltipTitle={strings.ECOLOGICAL_ROLE_KNOWN_TOOLTIP}
+          />
+        </Grid>
+        <Grid item xs={gridSize}>
+          <TextField
+            id={'localUsesKnown'}
+            label={strings.LOCAL_USES_KNOWN}
+            onChange={(value) => onChange('localUsesKnown', value)}
+            value={record.localUsesKnown}
+            type='text'
+            tooltipTitle={strings.LOCAL_USES_KNOWN_TOOLTIP}
+          />
+        </Grid>
+        <Grid item xs={gridSize}>
+          <Dropdown
+            id='seedStorageBehavior'
+            selectedValue={record.seedStorageBehavior}
+            onChange={(value) => onChange('seedStorageBehavior', value)}
+            options={storageBehaviors()}
+            label={strings.SEED_STORAGE_BEHAVIOR}
+            aria-label={strings.SEED_STORAGE_BEHAVIOR}
+            placeholder={strings.SELECT}
+            fullWidth={true}
+            fixedMenu
+            tooltipTitle={
+              <>
+                {strings.TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR}
+                <LearnMoreLink
+                  onClick={() =>
+                    openTooltipLearnMoreModal({
+                      title: strings.SEED_STORAGE_BEHAVIOR,
+                      content: <LearnMoreModalContentSeedStorageBehavior />,
+                    })
+                  }
+                />
+              </>
+            }
+          />
+        </Grid>
+        <Grid item xs={gridSize}>
+          <MultiSelect
+            id='plantMaterialSourcingMethods'
+            fullWidth={true}
+            label={strings.PLANT_MATERIAL_SOURCING_METHOD}
+            onAdd={(method: PlantMaterialSourcingMethod) => {
+              const selected = record.plantMaterialSourcingMethods ?? [];
+              selected.push(method);
+              onChange('plantMaterialSourcingMethods', selected);
+            }}
+            onRemove={(method: PlantMaterialSourcingMethod) => {
+              onChange(
+                'plantMaterialSourcingMethods',
+                record.plantMaterialSourcingMethods?.filter((_method) => _method !== method) ?? []
+              );
+            }}
+            options={new Map(plantMaterialSourcingMethods().map((type) => [type.value, type.label]))}
+            valueRenderer={(val: string) => `${val}`}
+            selectedOptions={record.plantMaterialSourcingMethods ?? []}
+            placeHolder={strings.SELECT}
+            tooltipTitle={
+              <>
+                <ul style={{ paddingLeft: '16px' }}>
+                  <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_SEED_COLLECTION_AND_GERMINATION}</li>
+                  <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_SEED_PURCHASE_AND_GERMINATION}</li>
+                  <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_MANGROVE_PROPAGULES}</li>
+                  <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_VEGETATIVE_PROPAGATION}</li>
+                  <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_WILDLING_HARVEST}</li>
+                  <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_SEEDLING_PURCHASE}</li>
+                </ul>
+              </>
+            }
+          />
+        </Grid>
+        <Grid item xs={isMobile ? 12 : 8}>
+          <TextField
+            id={'otherFacts'}
+            label={strings.OTHER_FACTS}
+            onChange={(value) => onChange('otherFacts', value)}
+            value={record.otherFacts}
+            type='textarea'
+          />
+        </Grid>
       </Grid>
     </>
   );

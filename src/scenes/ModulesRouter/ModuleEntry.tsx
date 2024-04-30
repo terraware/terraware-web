@@ -13,7 +13,7 @@ interface ModuleEntryProps {
   projectId: number;
 }
 
-const ModuleEntry = ({ index, module, projectId }: ModuleEntryProps) => {
+const ModuleEntry = ({ module, projectId }: ModuleEntryProps) => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
   const { goToModule } = useNavigateTo();
@@ -33,7 +33,7 @@ const ModuleEntry = ({ index, module, projectId }: ModuleEntryProps) => {
             lineHeight={'28px'}
             marginRight={theme.spacing(3)}
           >
-            {strings.formatString(strings.MODULE_N, (index + 1).toString())}
+            {module.title}
           </Typography>
 
           {module?.startDate && module?.endDate && activeLocale && (

@@ -216,10 +216,6 @@ export interface paths {
      */
     get: operations["login"];
   };
-  "/api/v1/modules/projects/{projectId}": {
-    /** Gets modules for a project. */
-    get: operations["listModules"];
-  };
   "/api/v1/notifications": {
     /** Retrieve all notifications for current user scoped to an organization. */
     get: operations["readAll"];
@@ -405,6 +401,14 @@ export interface paths {
      * @description Overwrites any existing project assignments.
      */
     post: operations["assignProject"];
+  };
+  "/api/v1/projects/{projectId}/modules": {
+    /** Gets modules for a project. */
+    get: operations["listModules"];
+  };
+  "/api/v1/projects/{projectId}/modules/{moduleId}": {
+    /** Gets one module for a project. */
+    get: operations["getModule"];
   };
   "/api/v1/reports": {
     /** Lists an organization's reports. */
@@ -2211,6 +2215,10 @@ export interface components {
       details: components["schemas"]["ProjectAcceleratorDetailsPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetProjectModuleResponsePayload: {
+      module: components["schemas"]["ProjectModule"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetProjectModulesResponsePayload: {
       modules: components["schemas"]["ProjectModule"][];
       status: components["schemas"]["SuccessOrError"];
@@ -3256,6 +3264,7 @@ export interface components {
       preparationMaterials?: string;
       /** Format: date */
       startDate: string;
+      title: string;
     };
     ProjectModuleEvent: {
       description: string;
@@ -3274,6 +3283,8 @@ export interface components {
       slidesUrl?: string;
       /** Format: date-time */
       startTime?: string;
+      /** @enum {string} */
+      status: "Not Started" | "Starting Soon" | "In Progress" | "Ended";
       /** @enum {string} */
       type: "One-on-One Session" | "Workshop" | "Live Session";
     };
@@ -3611,44 +3622,68 @@ export interface components {
       type: "Name Misspelled" | "Name Not Found" | "Name Is Synonym";
     };
     SpeciesRequestPayload: {
+      averageWoodDensity?: number;
       commonName?: string;
       /**
        * @description IUCN Red List conservation category code.
        * @enum {string}
        */
       conservationCategory?: "CR" | "DD" | "EN" | "EW" | "EX" | "LC" | "NE" | "NT" | "VU";
+      dbhSource?: string;
+      dbhValue?: number;
+      ecologicalRoleKnown?: string;
       ecosystemTypes?: ("Boreal forests/Taiga" | "Deserts and xeric shrublands" | "Flooded grasslands and savannas" | "Mangroves" | "Mediterranean forests, woodlands and scrubs" | "Montane grasslands and shrublands" | "Temperate broad leaf and mixed forests" | "Temperate coniferous forest" | "Temperate grasslands, savannas and shrublands" | "Tropical and subtropical coniferous forests" | "Tropical and subtropical dry broad leaf forests" | "Tropical and subtropical grasslands, savannas and shrublands" | "Tropical and subtropical moist broad leaf forests" | "Tundra")[];
       familyName?: string;
-      /** @enum {string} */
-      growthForm?: "Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern" | "Fungus" | "Lichen" | "Moss" | "Vine" | "Liana" | "Shrub/Tree" | "Subshrub" | "Multiple Forms";
+      growthForms?: ("Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern" | "Fungus" | "Lichen" | "Moss" | "Vine" | "Liana" | "Shrub/Tree" | "Subshrub" | "Multiple Forms" | "Mangrove")[];
+      heightAtMaturitySource?: string;
+      heightAtMaturityValue?: number;
+      localUsesKnown?: string;
+      nativeEcosystem?: string;
       /**
        * Format: int64
        * @description Which organization's species list to update.
        */
       organizationId: number;
+      otherFacts?: string;
+      plantMaterialSourcingMethods?: (("Seed collection & germination") | ("Seed purchase & germination") | "Mangrove propagules" | "Vegetative propagation" | "Wildling harvest" | "Seedling purchase" | "Other")[];
       rare?: boolean;
       scientificName: string;
       /** @enum {string} */
       seedStorageBehavior?: "Orthodox" | "Recalcitrant" | "Intermediate" | "Unknown" | "Likely Orthodox" | "Likely Recalcitrant" | "Likely Intermediate";
+      successionalGroups?: ("Pioneer" | "Early secondary" | "Late secondary" | "Mature")[];
+      /** @enum {string} */
+      woodDensityLevel?: "Species" | "Genus" | "Family";
     };
     SpeciesResponseElement: {
+      averageWoodDensity?: number;
       commonName?: string;
       /**
        * @description IUCN Red List conservation category code.
        * @enum {string}
        */
       conservationCategory?: "CR" | "DD" | "EN" | "EW" | "EX" | "LC" | "NE" | "NT" | "VU";
+      dbhSource?: string;
+      dbhValue?: number;
+      ecologicalRoleKnown?: string;
       ecosystemTypes?: ("Boreal forests/Taiga" | "Deserts and xeric shrublands" | "Flooded grasslands and savannas" | "Mangroves" | "Mediterranean forests, woodlands and scrubs" | "Montane grasslands and shrublands" | "Temperate broad leaf and mixed forests" | "Temperate coniferous forest" | "Temperate grasslands, savannas and shrublands" | "Tropical and subtropical coniferous forests" | "Tropical and subtropical dry broad leaf forests" | "Tropical and subtropical grasslands, savannas and shrublands" | "Tropical and subtropical moist broad leaf forests" | "Tundra")[];
       familyName?: string;
-      /** @enum {string} */
-      growthForm?: "Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern" | "Fungus" | "Lichen" | "Moss" | "Vine" | "Liana" | "Shrub/Tree" | "Subshrub" | "Multiple Forms";
+      growthForms?: ("Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern" | "Fungus" | "Lichen" | "Moss" | "Vine" | "Liana" | "Shrub/Tree" | "Subshrub" | "Multiple Forms" | "Mangrove")[];
+      heightAtMaturitySource?: string;
+      heightAtMaturityValue?: number;
       /** Format: int64 */
       id: number;
+      localUsesKnown?: string;
+      nativeEcosystem?: string;
+      otherFacts?: string;
+      plantMaterialSourcingMethods?: (("Seed collection & germination") | ("Seed purchase & germination") | "Mangrove propagules" | "Vegetative propagation" | "Wildling harvest" | "Seedling purchase" | "Other")[];
       problems?: components["schemas"]["SpeciesProblemElement"][];
       rare?: boolean;
       scientificName: string;
       /** @enum {string} */
       seedStorageBehavior?: "Orthodox" | "Recalcitrant" | "Intermediate" | "Unknown" | "Likely Orthodox" | "Likely Recalcitrant" | "Likely Intermediate";
+      successionalGroups?: ("Pioneer" | "Early secondary" | "Late secondary" | "Mature")[];
+      /** @enum {string} */
+      woodDensityLevel?: "Species" | "Genus" | "Family";
     };
     SpeciesSummaryNurseryPayload: {
       /** Format: int64 */
@@ -5573,28 +5608,6 @@ export interface operations {
       };
     };
   };
-  /** Gets modules for a project. */
-  listModules: {
-    parameters: {
-      path: {
-        projectId: number;
-      };
-    };
-    responses: {
-      /** @description The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetProjectModulesResponsePayload"];
-        };
-      };
-      /** @description The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
   /** Retrieve all notifications for current user scoped to an organization. */
   readAll: {
     parameters: {
@@ -6556,6 +6569,51 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets modules for a project. */
+  listModules: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetProjectModulesResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets one module for a project. */
+  getModule: {
+    parameters: {
+      path: {
+        projectId: number;
+        moduleId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetProjectModuleResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };

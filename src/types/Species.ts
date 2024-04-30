@@ -1,104 +1,23 @@
 import { components } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
 
-export type Species = {
-  id: number;
-  commonName?: string;
-  conservationCategory?: 'CR' | 'DD' | 'EN' | 'EW' | 'EX' | 'LC' | 'NE' | 'NT' | 'VU';
-  familyName?: string;
-  growthForm?: GrowthForm;
-  growthForms?: GrowthForm[];
-  scientificName: string;
-  rare?: boolean;
-  seedStorageBehavior?: SeedStorageBehavior;
-  problems?: SpeciesProblemElement[];
-  ecosystemTypes?: EcosystemType[];
-  nativeStatus?: NativeStatus;
-  nativeEcosystem?: string;
-  successionalGroup?: SuccessionalGroup[];
-  ecologicalRoleKnown?: string;
-  localUsesKnown?: string;
-  plantMaterialSourcingMethod?: PlantMaterialSourcingMethod[];
-  heightAtMaturity?: number;
-  heightAtMaturitySource?: string;
-  dbhDiameterAtMaturity?: number;
-  dbhSource?: string;
-  averageWoodDensity?: number;
-  woodDensityLevel?: WoodDensityLevel;
-  otherFacts?: string;
-};
+import { ArrayDeref, NonUndefined } from './utils';
 
-// TODO: remove this mock data when the actual data is available
-export const mockSpeciesNewFieldsData: Partial<Species> = {
-  nativeStatus: 'Native',
-  nativeEcosystem: 'Tropical and subtropical moist broad leaf forests',
-  successionalGroup: ['Pioneer', 'Early secondary'],
-  ecologicalRoleKnown: 'Yes',
-  localUsesKnown: 'Yes',
-  plantMaterialSourcingMethod: ['Seed collection & germination', 'Seedling purchase'],
-  heightAtMaturity: 10,
-  heightAtMaturitySource: 'Source',
-  dbhDiameterAtMaturity: 10,
-  dbhSource: 'Source',
-  averageWoodDensity: 10,
-  woodDensityLevel: 'Species',
-  otherFacts: 'Other facts',
-};
+export type Species = components['schemas']['GetSpeciesResponsePayload']['species'];
 
-export type WoodDensityLevel = 'Species' | 'Genus' | 'Family';
+export type WoodDensityLevel = NonUndefined<Species['woodDensityLevel']>;
 
-export type PlantMaterialSourcingMethod =
-  | 'Seed collection & germination'
-  | 'Seed purchase & germination'
-  | 'Mangrove propagules'
-  | 'Vegetative propagation'
-  | 'Wildling harvest'
-  | 'Seedling purchase'
-  | 'Other';
+export type PlantMaterialSourcingMethod = ArrayDeref<NonUndefined<Species['plantMaterialSourcingMethods']>>;
 
-export type SuccessionalGroup = 'Pioneer' | 'Early secondary' | 'Late secondary' | 'Mature';
+export type SuccessionalGroup = ArrayDeref<NonUndefined<Species['successionalGroups']>>;
 
 export type NativeStatus = 'Native' | 'Non-Native';
 
-export type EcosystemType =
-  | 'Boreal forests/Taiga'
-  | 'Deserts and xeric shrublands'
-  | 'Flooded grasslands and savannas'
-  | 'Mangroves'
-  | 'Mediterranean forests, woodlands and scrubs'
-  | 'Montane grasslands and shrublands'
-  | 'Temperate broad leaf and mixed forests'
-  | 'Temperate coniferous forest'
-  | 'Temperate grasslands, savannas and shrublands'
-  | 'Tropical and subtropical coniferous forests'
-  | 'Tropical and subtropical dry broad leaf forests'
-  | 'Tropical and subtropical grasslands, savannas and shrublands'
-  | 'Tropical and subtropical moist broad leaf forests'
-  | 'Tundra';
+export type EcosystemType = ArrayDeref<NonUndefined<Species['ecosystemTypes']>>;
 
-export type GrowthForm =
-  | 'Tree'
-  | 'Shrub'
-  | 'Forb'
-  | 'Graminoid'
-  | 'Fern'
-  | 'Fungus'
-  | 'Lichen'
-  | 'Moss'
-  | 'Vine'
-  | 'Liana'
-  | 'Shrub/Tree'
-  | 'Subshrub'
-  | 'Multiple Forms';
+export type GrowthForm = ArrayDeref<NonUndefined<Species['growthForms']>>;
 
-export type SeedStorageBehavior =
-  | 'Intermediate'
-  | 'Likely Intermediate'
-  | 'Likely Orthodox'
-  | 'Likely Recalcitrant'
-  | 'Orthodox'
-  | 'Recalcitrant'
-  | 'Unknown';
+export type SeedStorageBehavior = NonUndefined<Species['seedStorageBehavior']>;
 
 export type SpeciesProblemElement = {
   id: number;
@@ -129,15 +48,18 @@ export function nativeStatuses() {
   ];
 }
 
-export function plantMaterialSourcingMethods() {
+export function plantMaterialSourcingMethods(): {
+  label: string;
+  value: PlantMaterialSourcingMethod;
+}[] {
   return [
     {
       label: strings.PLANT_MATERIAL_SOURCE_METHOD_SEED_COLLECTION_AND_GERMINATION,
-      value: 'Seed collection and germination',
+      value: 'Seed collection & germination',
     },
     {
       label: strings.PLANT_MATERIAL_SOURCE_METHOD_SEED_PURCHASE_AND_GERMINATION,
-      value: 'Seed purchase and germination',
+      value: 'Seed purchase & germination',
     },
     { label: strings.PLANT_MATERIAL_SOURCE_METHOD_MANGROVE_PROPAGULES, value: 'Mangrove propagules' },
     { label: strings.PLANT_MATERIAL_SOURCE_METHOD_VEGETATIVE_PROPAGATION, value: 'Vegetative propagation' },
@@ -157,6 +79,7 @@ export function growthForms(activeLocale: string | null) {
     { label: strings.GRAMINOID, value: 'Graminoid' },
     { label: strings.LIANA, value: 'Liana' },
     { label: strings.LICHEN, value: 'Lichen' },
+    { label: strings.MANGROVE, value: 'Mangrove' },
     { label: strings.MOSS, value: 'Moss' },
     { label: strings.MULTIPLE_FORMS, value: 'Multiple Forms' },
     { label: strings.SHRUB, value: 'Shrub' },
@@ -225,39 +148,43 @@ export function successionalGroups(): { label: string; value: SuccessionalGroup 
   ];
 }
 
-export function getGrowthFormString(species: Species) {
-  if (species.growthForm) {
-    switch (species.growthForm) {
-      case 'Fern':
-        return strings.FERN;
-      case 'Forb':
-        return strings.FORB;
-      case 'Fungus':
-        return strings.FUNGUS;
-      case 'Graminoid':
-        return strings.GRAMINOID;
-      case 'Liana':
-        return strings.LIANA;
-      case 'Lichen':
-        return strings.LICHEN;
-      case 'Moss':
-        return strings.MOSS;
-      case 'Multiple Forms':
-        return strings.MULTIPLE_FORMS;
-      case 'Shrub':
-        return strings.SHRUB;
-      case 'Shrub/Tree':
-        return strings.SHRUB_TREE;
-      case 'Subshrub':
-        return strings.SUBSHRUB;
-      case 'Tree':
-        return strings.TREE;
-      case 'Vine':
-        return strings.VINE;
-    }
-  } else {
-    return undefined;
-  }
+export function getGrowthFormString(species: Species): string {
+  return (species.growthForms || [])
+    .map((growthForm) => {
+      switch (growthForm) {
+        case 'Fern':
+          return strings.FERN;
+        case 'Forb':
+          return strings.FORB;
+        case 'Fungus':
+          return strings.FUNGUS;
+        case 'Graminoid':
+          return strings.GRAMINOID;
+        case 'Liana':
+          return strings.LIANA;
+        case 'Lichen':
+          return strings.LICHEN;
+        case 'Mangrove':
+          return strings.MANGROVE;
+        case 'Moss':
+          return strings.MOSS;
+        case 'Multiple Forms':
+          return strings.MULTIPLE_FORMS;
+        case 'Shrub':
+          return strings.SHRUB;
+        case 'Shrub/Tree':
+          return strings.SHRUB_TREE;
+        case 'Subshrub':
+          return strings.SUBSHRUB;
+        case 'Tree':
+          return strings.TREE;
+        case 'Vine':
+          return strings.VINE;
+        default:
+          return `${growthForm}`;
+      }
+    })
+    .join(', ');
 }
 
 export type SpeciesWithScientificName = Species & {

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { requestGetModule } from 'src/redux/features/modules/modulesAsyncThunks';
-import { selectModuleRequest } from 'src/redux/features/modules/modulesSelectors';
+import { selectModuleRequest, selectProjectModuleList } from 'src/redux/features/modules/modulesSelectors';
 import { requestGetParticipant } from 'src/redux/features/participants/participantsAsyncThunks';
 import { selectParticipant } from 'src/redux/features/participants/participantsSelectors';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
@@ -32,6 +32,7 @@ const ParticipantProvider = ({ children }: Props) => {
 
   const participant = useAppSelector(selectParticipant(currentParticipantProject?.participantId || -1));
   const currentModuleResponse = useAppSelector(selectModuleRequest(moduleRequestId));
+  const modules = useAppSelector(selectProjectModuleList(currentParticipantProject?.id || -1));
   const projects = useAppSelector(selectProjects);
 
   const _setCurrentParticipantProject = useCallback(
@@ -92,15 +93,25 @@ const ParticipantProvider = ({ children }: Props) => {
   }, [currentModuleResponse, snackbar]);
 
   useEffect(() => {
-    setParticipantData({
-      currentModule,
-      currentParticipant: participant,
-      currentParticipantProject,
-      participantProjects,
-      orgHasParticipants: participantProjects.length > 0,
-      setCurrentParticipantProject: _setCurrentParticipantProject,
-    });
-  }, [currentModule, currentParticipantProject, participant, participantProjects, _setCurrentParticipantProject]);
+    if (currentModule && participant && currentParticipantProject && modules && participantProjects) {
+      setParticipantData({
+        currentModule,
+        currentParticipant: participant,
+        currentParticipantProject,
+        modules,
+        participantProjects,
+        orgHasParticipants: participantProjects.length > 0,
+        setCurrentParticipantProject: _setCurrentParticipantProject,
+      });
+    }
+  }, [
+    currentModule,
+    currentParticipantProject,
+    modules,
+    participant,
+    participantProjects,
+    _setCurrentParticipantProject,
+  ]);
 
   return <ParticipantContext.Provider value={participantData}>{children}</ParticipantContext.Provider>;
 };

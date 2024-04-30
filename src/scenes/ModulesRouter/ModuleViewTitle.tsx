@@ -3,7 +3,6 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 
 import { useLocalization } from 'src/providers';
-import strings from 'src/strings';
 import { ModuleWithNumber } from 'src/types/Module';
 import { Project } from 'src/types/Project';
 import { getDateRangeString } from 'src/utils/dateFormatter';
@@ -23,9 +22,9 @@ const ModuleViewTitle = ({ module, project }: ModulePageTitleProps) => {
       </Typography>
 
       <Box alignItems='center' display='flex' flexDirection='row'>
-        {module?.number && (
+        {module && (
           <Typography fontSize={'20px'} lineHeight={'28px'} fontWeight={600} paddingRight='8px'>
-            {strings.formatString(strings.MODULE_N, module.number)}
+            {module.title}
           </Typography>
         )}
 
