@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
 import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -6,10 +6,10 @@ import { Button } from '@terraware/web-components';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Link from 'src/components/common/Link';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
-import { APP_PATHS, FIFTEEN_MINUTE_INTERVAL_MS, ONE_MINUTE_INTERVAL_MS } from 'src/constants';
+import { APP_PATHS } from 'src/constants';
 import { useLocalization, useProject } from 'src/providers';
 import strings from 'src/strings';
-import { getEventType } from 'src/types/Module';
+import { getEventStatus, getEventType } from 'src/types/Module';
 import { getLongDateTime } from 'src/utils/dateFormatter';
 
 import ModuleViewTitle from './ModuleViewTitle';
@@ -39,8 +39,6 @@ const ModuleEventSessionView = () => {
   const { project, projectId } = useProject();
   const { event, module, moduleId, session } = useModuleData();
 
-  const [now, setNow] = useState(new Date());
-
   const eventType = session?.type ? getEventType(session.type) : '';
 
   const crumbs: Crumb[] = useMemo(
@@ -52,35 +50,6 @@ const ModuleEventSessionView = () => {
     ],
     [activeLocale, moduleId, projectId]
   );
-
-  const eventIsStartingSoon = useMemo(() => {
-    if (session?.startTime) {
-      const startTime = new Date(session.startTime);
-      const diff = startTime.getTime() - now.getTime();
-      return diff < FIFTEEN_MINUTE_INTERVAL_MS;
-    }
-
-    return false;
-  }, [session, now]);
-
-  const eventHasEnded = useMemo(() => {
-    if (session?.endTime) {
-      const endTime = new Date(session.endTime);
-      const diff = endTime.getTime() - now.getTime();
-      return diff < 0;
-    }
-
-    return false;
-  }, [session, now]);
-
-  // update the current time every minute
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setNow(new Date());
-    }, ONE_MINUTE_INTERVAL_MS);
-
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <PageWithModuleTimeline
@@ -111,24 +80,21 @@ const ModuleEventSessionView = () => {
               </Typography>
 
               <Box marginBottom={theme.spacing(2)}>
-                {eventHasEnded ? (
-                  <Typography
-                    fontSize={'16px'}
-                    fontWeight={600}
-                    lineHeight={'32px'}
-                    sx={{ color: theme.palette.TwClrTxtWarning }}
-                  >
-                    {strings.THIS_SESSION_HAS_ENDED}
-                  </Typography>
-                ) : (
-                  <Button
-                    disabled={!eventIsStartingSoon}
-                    label={eventType ? strings.formatString(strings.JOIN_EVENT_NAME, eventType)?.toString() : ''}
-                    onClick={() => {
-                      openExternalURL(session.meetingUrl);
-                    }}
-                  />
-                )}
+                <Typography
+                  fontSize={'16px'}
+                  fontWeight={600}
+                  lineHeight={'32px'}
+                  sx={{ color: theme.palette.TwClrTxtWarning }}
+                >
+                  {getEventStatus(session.status)}
+                </Typography>
+
+                <Button
+                  label={eventType ? strings.formatString(strings.JOIN_EVENT_NAME, eventType)?.toString() : ''}
+                  onClick={() => {
+                    openExternalURL(session.meetingUrl);
+                  }}
+                />
               </Box>
 
               {session?.slidesUrl && (
