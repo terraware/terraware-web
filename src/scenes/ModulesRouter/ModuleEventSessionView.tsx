@@ -9,7 +9,7 @@ import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useProject } from 'src/providers';
 import strings from 'src/strings';
-import { getEventType } from 'src/types/Module';
+import { getEventStatus, getEventType } from 'src/types/Module';
 import { getLongDateTime } from 'src/utils/dateFormatter';
 
 import ModuleViewTitle from './ModuleViewTitle';
@@ -51,23 +51,6 @@ const ModuleEventSessionView = () => {
     [activeLocale, moduleId, projectId]
   );
 
-  const getEventStatus = () => {
-    switch (session?.status) {
-      case 'Not Started': {
-        return strings.SESSION_HAS_NOT_STARTED;
-      }
-      case 'Starting Soon': {
-        return strings.SESSION_IS_STARTING_SOON;
-      }
-      case 'In Progress': {
-        return strings.SESSION_IS_IN_PROGRESS;
-      }
-      case 'Ended': {
-        return strings.SESSION_HAS_ENDED;
-      }
-    }
-  };
-
   return (
     <PageWithModuleTimeline
       crumbs={crumbs}
@@ -103,7 +86,7 @@ const ModuleEventSessionView = () => {
                   lineHeight={'32px'}
                   sx={{ color: theme.palette.TwClrTxtWarning }}
                 >
-                  {getEventStatus()}
+                  {getEventStatus(session.status)}
                 </Typography>
 
                 <Button
