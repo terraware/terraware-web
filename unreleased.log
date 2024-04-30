@@ -1,3 +1,4 @@
+8dc0335015 SW-5308 Add project picker in the "All modules view" (#2571)
 b7f52e4f48 SW-5280 Sync with BE that has other new species fields (#2558)
 06b4b1eba2 SW-5305 Use "title" for modules (#2570)
 fac7e89f89 Updated Module API types and endpoints (#2569)
