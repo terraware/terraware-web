@@ -1,3 +1,4 @@
+614ec683f3 SW-5304 Show event information using BE event states (#2573)
 e2b71f2144 SW-5268 New Species fields qa fixes (#2572)
 8dc0335015 SW-5308 Add project picker in the "All modules view" (#2571)
 b7f52e4f48 SW-5280 Sync with BE that has other new species fields (#2558)
