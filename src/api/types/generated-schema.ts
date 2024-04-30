@@ -3284,6 +3284,8 @@ export interface components {
       /** Format: date-time */
       startTime?: string;
       /** @enum {string} */
+      status: "Not Started" | "Starting Soon" | "In Progress" | "Ended";
+      /** @enum {string} */
       type: "One-on-One Session" | "Workshop" | "Live Session";
     };
     ProjectPayload: {
