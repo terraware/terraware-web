@@ -37,7 +37,9 @@ const CurrentTimeline = ({ cohortPhase }: CurrentTimelineProps) => {
   ];
 
   const currentPhaseIndex = phases.findIndex((phase) => phase.phase === cohortPhase);
-  const displayPhases = phases.slice(currentPhaseIndex - 1, 3);
+  const lowIdx = Math.max(currentPhaseIndex - 1, 0)
+  const highIdx = lowIdx + 3
+  const displayPhases = phases.slice(lowIdx, highIdx);
 
   return (
     <Box borderRadius={theme.spacing(1)} padding={theme.spacing(3)} bgcolor={theme.palette.TwClrBgSecondary}>
