@@ -7,7 +7,9 @@ export type ParticipantProjectSpecies = {
   id: number;
   projectId: number;
   rationale?: string;
+  speciesCommonName?: string;
   speciesId: number;
+  speciesScientificName?: string;
   status: 'Not Submitted' | 'In Review' | 'Rejected' | 'Approved' | 'Needs Translation' | 'Not Needed';
 };
 
@@ -26,18 +28,22 @@ export type UpdateParticipantProjectSpeciesResponse = Response & UpdateParticipa
 export type DeleteParticipantProjectSpeciesResponse = components['schemas']['SimpleSuccessResponsePayload'];
 
 // Record<projectId, ParticipantProjectSpecies[]>
-const mockParticipantProjectSpecies: Record<number, ParticipantProjectSpecies[]> = {
+export const mockParticipantProjectSpecies: Record<number, ParticipantProjectSpecies[]> = {
   1: [
     {
       id: 1,
       projectId: 1,
+      speciesCommonName: 'ʻŌhiʻa',
       speciesId: 1,
+      speciesScientificName: 'Metrosideros polymorpha',
       status: 'In Review',
     },
     {
       id: 2,
       projectId: 1,
+      speciesCommonName: 'Koa',
       speciesId: 2,
+      speciesScientificName: 'Acacia koa',
       status: 'Not Submitted',
     },
   ],
@@ -45,13 +51,17 @@ const mockParticipantProjectSpecies: Record<number, ParticipantProjectSpecies[]>
     {
       id: 3,
       projectId: 2,
+      speciesCommonName: 'ʻŌhiʻa',
       speciesId: 1,
+      speciesScientificName: 'Metrosideros polymorpha',
       status: 'In Review',
     },
     {
       id: 4,
       projectId: 2,
+      speciesCommonName: 'Koa',
       speciesId: 2,
+      speciesScientificName: 'Acacia koa',
       status: 'Not Submitted',
     },
   ],
