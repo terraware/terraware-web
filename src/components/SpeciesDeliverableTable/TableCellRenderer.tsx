@@ -9,7 +9,7 @@ import { DeliverableStatusType } from 'src/types/Deliverables';
 
 export default function SpeciesDeliverableCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { activeLocale } = useLocalization();
-  const { column, row, value, index } = props;
+  const { column, index, row, value } = props;
 
   const createLinkToSpecies = (iValue: React.ReactNode | unknown[]) => {
     return (
@@ -24,16 +24,16 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
   };
 
   if (column.key === 'speciesScientificName') {
-    return <CellRenderer index={index} column={column} value={createLinkToSpecies(value)} row={row} />;
+    return <CellRenderer column={column} index={index} row={row} value={createLinkToSpecies(value)} />;
   }
 
   if (column.key === 'status') {
     return (
       <CellRenderer
-        index={index}
         column={column}
-        value={activeLocale ? <DeliverableStatusBadge status={value as DeliverableStatusType} /> : ''}
+        index={index}
         row={row}
+        value={activeLocale ? <DeliverableStatusBadge status={value as DeliverableStatusType} /> : ''}
       />
     );
   }

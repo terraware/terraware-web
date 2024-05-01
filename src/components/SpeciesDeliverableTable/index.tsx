@@ -58,13 +58,13 @@ const SpeciesDeliverableTable = (): JSX.Element => {
 
             <Button
               icon='plus'
+              id='add-species-to-project'
               label='Add Species to Project'
               onClick={() => {
                 console.log('add species to project button pressed');
               }}
-              size='medium'
-              id='add-species-to-project'
               priority='secondary'
+              size='medium'
             />
           </Box>
 
