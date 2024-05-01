@@ -17,7 +17,7 @@ import ModuleEntry from './ModuleEntry';
 export default function ListView(): JSX.Element {
   const theme = useTheme();
 
-  const { currentParticipantProject, participantProjects, setCurrentParticipantProject } = useParticipantData();
+  const { currentParticipant, currentParticipantProject, participantProjects, setCurrentParticipantProject } = useParticipantData();
 
   const { goToModules } = useNavigateTo();
 
@@ -75,7 +75,7 @@ export default function ListView(): JSX.Element {
       </Box>
 
       <Card style={{ width: '100%' }}>
-        <CurrentTimeline cohortPhase={currentParticipantProject?.cohortPhase} />
+        <CurrentTimeline cohortPhase={currentParticipant?.cohortPhase} />
 
         <Box paddingY={theme.spacing(2)} borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}>
           <Typography>{phaseDescription}</Typography>

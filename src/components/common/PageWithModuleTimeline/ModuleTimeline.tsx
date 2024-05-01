@@ -40,14 +40,7 @@ const AltStepIcon = ({ activeStep, index }: AltStepIconProps) => {
 };
 
 const ModuleTimeline = () => {
-  const { currentModule, modules, currentParticipant, currentParticipantProject } = useParticipantData();
-  console.log(
-    'currentModule, currentParticipant, currentParticipantProject',
-    currentModule,
-    modules,
-    currentParticipant,
-    currentParticipantProject
-  );
+  const { currentModule, modules, currentParticipant } = useParticipantData();
 
   if (!(currentModule && currentParticipant && modules)) {
     return null;
