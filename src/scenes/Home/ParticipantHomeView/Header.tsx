@@ -10,8 +10,11 @@ import { getDateRangeString } from 'src/utils/dateFormatter';
 const Header = () => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const { currentModule, currentParticipantProject, participantProjects, setCurrentParticipantProject } =
+  const { activeModules, currentParticipantProject, participantProjects, setCurrentParticipantProject } =
     useParticipantData();
+
+  // Only first active modules shown for now. TODO: upgrade to support multiple active modules for overlapping modules
+  const currentModule = activeModules && activeModules.length > 0 ? activeModules[0] : undefined;
 
   const options: DropdownItem[] = useMemo(
     () =>
@@ -52,12 +55,12 @@ const Header = () => {
 
           <Grid item>
             <Typography fontSize={'20px'} fontWeight={600} lineHeight={'28px'} component={'span'}>
-              {currentModule?.name}
+              {currentModule && currentModule?.name}
             </Typography>
           </Grid>
 
           <Grid item>
-            {currentModule?.startDate && currentModule?.endDate && activeLocale && (
+            {currentModule && currentModule?.startDate && currentModule?.endDate && activeLocale && (
               <Typography fontSize={'16px'} fontWeight={400} lineHeight={'24px'} component={'span'}>
                 {getDateRangeString(currentModule?.startDate, currentModule?.endDate, activeLocale)}
               </Typography>

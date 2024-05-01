@@ -40,13 +40,16 @@ const AltStepIcon = ({ activeStep, index }: AltStepIconProps) => {
 };
 
 const ModuleTimeline = () => {
-  const { currentModule, modules, currentParticipant } = useParticipantData();
+  const { activeModules, modules, currentParticipant } = useParticipantData();
 
-  if (!(currentModule && currentParticipant && modules)) {
+  if (!(activeModules && currentParticipant && modules)) {
     return null;
   }
 
-  const activeIndex = modules.findIndex((module) => module.id === currentModule.id);
+  // Find first active index. TODO upgrade stepper to handle multiple active steps
+  const activeIndex = modules.findIndex(
+    (module) => activeModules.find((active) => module.id === active.id) != undefined
+  );
 
   return (
     <Box maxWidth={'206px'}>

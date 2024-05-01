@@ -5,7 +5,7 @@ import { Participant } from 'src/types/Participant';
 import { Project } from 'src/types/Project';
 
 export type ParticipantData = {
-  currentModule?: Module;
+  activeModules?: Module[];
   currentParticipant?: Participant;
   currentParticipantProject?: Project;
   modules?: Module[];
