@@ -39,7 +39,7 @@ const ListViewHeader = () => {
         const projectId = +id;
         if (projectId != currentParticipantProject?.id) {
           setCurrentParticipantProject(projectId);
-          goToModules(+projectId);
+          goToModules(projectId);
         }
       }}
       options={options}
