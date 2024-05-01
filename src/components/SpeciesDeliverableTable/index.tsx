@@ -10,7 +10,6 @@ import { useParticipantData } from 'src/providers/Participant/ParticipantContext
 import { requestListParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { selectParticipantProjectSpeciesListRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { mockParticipantProjectSpecies } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
 
 import TableCellRenderer from './TableCellRenderer';
@@ -75,7 +74,7 @@ const SpeciesDeliverableTable = (): JSX.Element => {
             id='species-deliverable-table'
             orderBy='speciesScientificName'
             Renderer={TableCellRenderer}
-            rows={participantProjectSpecies?.data || mockParticipantProjectSpecies[1] || []}
+            rows={participantProjectSpecies?.data || []}
             selectedRows={selectedRows}
             setSelectedRows={setSelectedRows}
             showCheckbox={true}
