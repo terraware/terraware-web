@@ -9,7 +9,7 @@ import { APP_PATHS, ONE_MINUTE_INTERVAL_MS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useProject } from 'src/providers';
 import strings from 'src/strings';
-import { ModuleContentType, ModuleWithNumber } from 'src/types/Module';
+import { Module, ModuleContentType } from 'src/types/Module';
 import { getLongDate, getLongDateTime } from 'src/utils/dateFormatter';
 
 import ModuleEventSessionCard from './ModuleEventSessionCard';
@@ -40,7 +40,7 @@ type ModuleContent = {
   label: string;
 };
 
-const MODULE_CONTENTS = (module: ModuleWithNumber): ModuleContent[] => {
+const MODULE_CONTENTS = (module: Module): ModuleContent[] => {
   const content: ModuleContent[] = [];
 
   if (module.additionalResources) {

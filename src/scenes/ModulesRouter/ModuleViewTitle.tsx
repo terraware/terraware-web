@@ -3,12 +3,12 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 
 import { useLocalization } from 'src/providers';
-import { ModuleWithNumber } from 'src/types/Module';
+import { Module } from 'src/types/Module';
 import { Project } from 'src/types/Project';
 import { getDateRangeString } from 'src/utils/dateFormatter';
 
 type ModulePageTitleProps = {
-  module: ModuleWithNumber | undefined;
+  module: Module | undefined;
   project: Project | undefined;
 };
 

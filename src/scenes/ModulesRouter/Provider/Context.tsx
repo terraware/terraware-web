@@ -1,11 +1,11 @@
 import { createContext, useContext } from 'react';
 
-import { ModuleEvent, ModuleEventSession, ModuleWithNumber } from 'src/types/Module';
+import { Module, ModuleEvent, ModuleEventSession } from 'src/types/Module';
 
 export type ModuleData = {
   allSessions: ModuleEventSession[];
   event?: ModuleEvent;
-  module?: ModuleWithNumber;
+  module?: Module;
   moduleId: number;
   session?: ModuleEventSession;
   sessionId?: number;
