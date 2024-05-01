@@ -71,6 +71,7 @@ const SpeciesDeliverableTable = (): JSX.Element => {
 
           <Table
             columns={columns}
+            emptyTableMessage={strings.NO_SPECIES_ADDED}
             id='species-deliverable-table'
             orderBy='speciesScientificName'
             Renderer={TableCellRenderer}

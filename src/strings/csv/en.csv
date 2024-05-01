@@ -881,6 +881,7 @@ NO_SEEDBANKS_NON_ADMIN_MSG,"Before you can add and manage your accessions, you�
 NO_SEEDBANKS_SET_UP_NON_ADMIN_MSG,"If your seed bank was built by Terraformation, it is equipped with a sensor kit that you can remotely monitor things like the seed bank's temperature and humidity. Your seed bank either does not have a sensor kit, or it has not yet been set up by your administrator.",
 NO_SEEDLINGS_AVAILABLE_TO_OUTPLANT_DESCRIPTION,"There are no batches selected with seedlings that are ""ready."" Select another withdraw purpose or cancel and select a different batch.",
 NO_SEEDLINGS_AVAILABLE_TO_OUTPLANT_TITLE,No Seedlings Available to Outplant,
+NO_SPECIES_ADDED,No species addded.,
 NO_SPECIES_CONTRIBUTOR_MSG,"There are no species in your species list yet. Only admins can add species, so please reach out to yours for assistance.",
 NO_SPECIES_DESCRIPTION,"It looks like you haven’t added any species yet. Having a master species list helps streamline your organization’s seed and plant data entry. You can either add species manually and individually, or import data from a CSV.",
 NO_SUB_LOCATIONS,Edit this seed bank to add sub-locations.,
