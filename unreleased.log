@@ -1,3 +1,4 @@
+19eb23e783 Move header and content to new components (#2578)
 d10053bb31 Removed ModulesWithNumber type because it is replaced by title
 035035a5b5 SW-5277: Create SpeciesDeliverableView (#2564)
 e4df0385f6 Updated module list view to use participant project data (#2575)
