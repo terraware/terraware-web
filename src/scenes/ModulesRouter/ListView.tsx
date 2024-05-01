@@ -17,7 +17,8 @@ import ModuleEntry from './ModuleEntry';
 export default function ListView(): JSX.Element {
   const theme = useTheme();
 
-  const { currentParticipant, currentParticipantProject, participantProjects, setCurrentParticipantProject } = useParticipantData();
+  const { currentParticipant, currentParticipantProject, participantProjects, setCurrentParticipantProject } =
+    useParticipantData();
 
   const { goToModules } = useNavigateTo();
 
