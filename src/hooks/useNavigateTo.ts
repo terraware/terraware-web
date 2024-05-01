@@ -57,6 +57,11 @@ export default function useNavigateTo() {
             .replace(':sessionId', `${sessionId}`),
         }),
 
+      goToModules: (projectId: number) =>
+        navigate({
+          pathname: APP_PATHS.PROJECT_MODULES.replace(':projectId', `${projectId}`),
+        }),
+
       goToParticipant: (participantId: number) =>
         navigate({
           pathname: APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW.replace(':participantId', `${participantId}`),
