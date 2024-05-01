@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import ProjectProvider from 'src/providers/Project/ProjectProvider';
+import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
 
 import ListView from './ListView';
 import ModuleContentView from './ModuleContentView';
@@ -11,7 +11,7 @@ import ModuleProvider from './Provider';
 
 const ModulesRouter = () => {
   return (
-    <ProjectProvider>
+    <ParticipantProvider>
       <Routes>
         {/* @see /src/constants.ts:APP_PATHS.PROJECT_MODULE */}
         <Route path={'/:moduleId'} element={<ModuleProvider />}>
@@ -29,7 +29,7 @@ const ModulesRouter = () => {
         {/* @see /src/constants.ts:APP_PATHS.PROJECT_MODULES */}
         <Route path={''} element={<ListView />} />
       </Routes>
-    </ProjectProvider>
+    </ParticipantProvider>
   );
 };
 

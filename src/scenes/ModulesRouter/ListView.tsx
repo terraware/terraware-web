@@ -1,30 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
+import { Dropdown, DropdownItem } from '@terraware/web-components';
 
-import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import Card from 'src/components/common/Card';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
-import { useProjects } from 'src/hooks/useProjects';
-import { useProject } from 'src/providers';
-import { requestListModules } from 'src/redux/features/modules/modulesAsyncThunks';
+import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { selectProjectModuleList } from 'src/redux/features/modules/modulesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 
 import CurrentTimeline from './CurrentTimeline';
 import ModuleEntry from './ModuleEntry';
 
 export default function ListView(): JSX.Element {
-  const dispatch = useAppDispatch();
   const theme = useTheme();
 
-  const { availableProjects } = useProjects();
-  const { project, projectId } = useProject();
+  const { currentParticipantProject, participantProjects, setCurrentParticipantProject } = useParticipantData();
 
-  const [projectFilter, setProjectFilter] = useState<{ projectId?: number }>({ projectId: undefined });
+  const { goToModules } = useNavigateTo();
 
-  const modules = useAppSelector(selectProjectModuleList(projectFilter.projectId ?? -1));
+  const modules = useAppSelector(selectProjectModuleList(currentParticipantProject?.id ?? -1));
 
   // TODO - where will this be stored? Is this stored in the back end within another enum table?
   // Should we store it and localize it in the front end? Will it be stored somewhere an admin can edit it?
@@ -36,34 +33,58 @@ export default function ListView(): JSX.Element {
     'review is displayed in your To Do list on your home screen. Please login to Terraware regularly to check which ' +
     'deliverables are due or need review.';
 
-  useEffect(() => {
-    if (projectFilter.projectId) {
-      void dispatch(requestListModules(projectFilter.projectId));
-    }
-  }, [dispatch, projectFilter]);
+  const options: DropdownItem[] = useMemo(
+    () =>
+      participantProjects.map((project) => ({
+        label: project.name,
+        value: project.id,
+      })),
+    [participantProjects]
+  );
+
+  const selectStyles = {
+    arrow: {
+      height: '32px',
+    },
+    input: {
+      fontSize: '24px',
+      fontWeight: '600',
+      lineHeight: '32px',
+    },
+    inputContainer: {
+      border: 0,
+      backgroundColor: 'initial',
+    },
+  };
 
   return (
     <PageWithModuleTimeline title={strings.ALL_MODULES}>
       <Box sx={{ paddingBottom: 2 }}>
-        <ProjectsDropdown
-          allowUnselect
-          availableProjects={availableProjects}
-          record={projectFilter}
-          setRecord={setProjectFilter}
-          label={strings.PROJECT}
+        <Dropdown
+          onChange={(id) => {
+            const projectId = +id;
+            if (projectId != currentParticipantProject?.id) {
+              setCurrentParticipantProject(projectId);
+              goToModules(+projectId);
+            }
+          }}
+          options={options}
+          selectStyles={selectStyles}
+          selectedValue={currentParticipantProject?.id}
         />
       </Box>
 
       <Card style={{ width: '100%' }}>
-        <CurrentTimeline cohortPhase={project?.cohortPhase} />
+        <CurrentTimeline cohortPhase={currentParticipantProject?.cohortPhase} />
 
         <Box paddingY={theme.spacing(2)} borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}>
           <Typography>{phaseDescription}</Typography>
         </Box>
 
-        {modules?.map((module, index) => (
-          <ModuleEntry index={index} key={index} module={module} projectId={projectId} />
-        ))}
+        {currentParticipantProject &&
+          modules?.map((module, index) => (
+            <ModuleEntry index={index} key={index} module={module} projectId={currentParticipantProject?.id} />
+          ))}
       </Card>
     </PageWithModuleTimeline>
   );
