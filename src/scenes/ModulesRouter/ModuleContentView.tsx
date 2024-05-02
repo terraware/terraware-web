@@ -5,7 +5,8 @@ import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
 import { Crumb } from 'src/components/BreadCrumbs';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { APP_PATHS } from 'src/constants';
-import { useLocalization, useProject } from 'src/providers';
+import { useLocalization } from 'src/providers';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
 import { ModuleContentType } from 'src/types/Module';
 
@@ -32,23 +33,31 @@ interface ModuleContentViewProps {
 const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const { project, projectId } = useProject();
+
+  const { currentParticipantProject } = useParticipantData();
   const { module, moduleId } = useModuleData();
 
   const [content, setContent] = useState('');
+
+  if (!currentParticipantProject) {
+    return;
+  }
 
   const crumbs: Crumb[] = useMemo(
     () => [
       {
         name: activeLocale ? strings.ALL_MODULES : '',
-        to: APP_PATHS.PROJECT_MODULES.replace(':projectId', `${projectId}`),
+        to: APP_PATHS.PROJECT_MODULES.replace(':projectId', `${currentParticipantProject.id}`),
       },
       {
         name: module?.title || '',
-        to: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
+        to: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${currentParticipantProject.id}`).replace(
+          ':moduleId',
+          `${moduleId}`
+        ),
       },
     ],
-    [activeLocale, projectId]
+    [activeLocale, currentParticipantProject]
   );
 
   useEffect(() => {
@@ -66,7 +75,7 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
     <PageWithModuleTimeline
       crumbs={crumbs}
       hierarchicalCrumbs={false}
-      title={<ModuleViewTitle module={module} project={project} />}
+      title={<ModuleViewTitle module={module} project={currentParticipantProject} />}
     >
       <Card
         sx={{

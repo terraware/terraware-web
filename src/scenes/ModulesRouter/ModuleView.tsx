@@ -7,7 +7,8 @@ import Link from 'src/components/common/Link';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { APP_PATHS, ONE_MINUTE_INTERVAL_MS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useLocalization, useProject } from 'src/providers';
+import { useLocalization } from 'src/providers';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
 import { Module, ModuleContentType } from 'src/types/Module';
 import { getLongDate, getLongDateTime } from 'src/utils/dateFormatter';
@@ -66,19 +67,23 @@ const ModuleView = () => {
   const { goToDeliverable, goToModuleContent, goToModuleEventSession } = useNavigateTo();
   const mockDeliverables: MockModuleDeliverable[] = []; // TODO: get deliverables
 
-  const { project, projectId } = useProject();
+  const { currentParticipantProject } = useParticipantData();
   const { module, allSessions } = useModuleData();
 
   const [now, setNow] = useState(new Date());
+
+  if (!currentParticipantProject) {
+    return;
+  }
 
   const crumbs: Crumb[] = useMemo(
     () => [
       {
         name: activeLocale ? strings.ALL_MODULES : '',
-        to: APP_PATHS.PROJECT_MODULES.replace(':projectId', `${projectId}`),
+        to: APP_PATHS.PROJECT_MODULES.replace(':projectId', `${currentParticipantProject.id}`),
       },
     ],
-    [activeLocale, projectId]
+    [activeLocale, currentParticipantProject]
   );
   const getDueDateLabelColor = useCallback(
     (dueDate: string) => {
@@ -114,7 +119,7 @@ const ModuleView = () => {
     <PageWithModuleTimeline
       crumbs={crumbs}
       hierarchicalCrumbs={false}
-      title={<ModuleViewTitle module={module} project={project} />}
+      title={<ModuleViewTitle module={module} project={currentParticipantProject} />}
     >
       <Card
         sx={{
@@ -150,7 +155,7 @@ const ModuleView = () => {
                       <Link
                         fontSize='16px'
                         onClick={() => {
-                          goToDeliverable(deliverable.id, projectId);
+                          goToDeliverable(deliverable.id, currentParticipantProject.id);
                         }}
                       >
                         {deliverable.name}
@@ -184,7 +189,10 @@ const ModuleView = () => {
 
               {contents.map((content, index) => (
                 <ModuleContentSection key={index}>
-                  <Link fontSize='16px' onClick={() => goToModuleContent(projectId, module.id, content.type)}>
+                  <Link
+                    fontSize='16px'
+                    onClick={() => goToModuleContent(currentParticipantProject.id, module.id, content.type)}
+                  >
                     {content.label}
                   </Link>
                   {module.endDate && (
@@ -211,7 +219,7 @@ const ModuleView = () => {
                   <ModuleEventSessionCard
                     key={session.id}
                     label={session.type}
-                    onClickButton={() => goToModuleEventSession(projectId, module.id, session.id)}
+                    onClickButton={() => goToModuleEventSession(currentParticipantProject.id, module.id, session.id)}
                     value={session.startTime ? getLongDateTime(session.startTime, activeLocale) : ''}
                   />
                 ))}

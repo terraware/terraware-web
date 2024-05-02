@@ -7,7 +7,8 @@ import { Crumb } from 'src/components/BreadCrumbs';
 import Link from 'src/components/common/Link';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { APP_PATHS } from 'src/constants';
-import { useLocalization, useProject } from 'src/providers';
+import { useLocalization } from 'src/providers';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
 import { getEventStatus, getEventType } from 'src/types/Module';
 import { getLongDateTime } from 'src/utils/dateFormatter';
@@ -36,26 +37,34 @@ const openExternalURL = (url: string | undefined, target = '_blank', features = 
 const ModuleEventSessionView = () => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const { project, projectId } = useProject();
+
+  const { currentParticipantProject } = useParticipantData();
   const { event, module, moduleId, session } = useModuleData();
 
   const eventType = session?.type ? getEventType(session.type) : '';
+
+  if (!currentParticipantProject) {
+    return;
+  }
 
   const crumbs: Crumb[] = useMemo(
     () => [
       {
         name: activeLocale ? 'Module' : '',
-        to: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
+        to: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${currentParticipantProject.id}`).replace(
+          ':moduleId',
+          `${moduleId}`
+        ),
       },
     ],
-    [activeLocale, moduleId, projectId]
+    [activeLocale, moduleId, currentParticipantProject]
   );
 
   return (
     <PageWithModuleTimeline
       crumbs={crumbs}
       hierarchicalCrumbs={false}
-      title={<ModuleViewTitle module={module} project={project} />}
+      title={<ModuleViewTitle module={module} project={currentParticipantProject} />}
     >
       <Card
         sx={{
