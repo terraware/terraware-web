@@ -12,6 +12,7 @@ import { selectParticipantProjectSpeciesListRequest } from 'src/redux/features/p
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 
+import RemoveSpeciesDialog from './RemoveSpeciesDialog';
 import TableCellRenderer from './TableCellRenderer';
 
 const columns = (): TableColumnType[] => [
@@ -31,6 +32,7 @@ const SpeciesDeliverableTable = (): JSX.Element => {
   );
 
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
   useEffect(() => {
     if (!currentParticipantProject?.id) {
@@ -44,6 +46,11 @@ const SpeciesDeliverableTable = (): JSX.Element => {
     <>
       {activeLocale && (
         <>
+          <RemoveSpeciesDialog
+            onClose={() => setShowConfirmDialog(false)}
+            open={showConfirmDialog}
+            speciesToRemove={selectedRows.map((row) => row.id)}
+          />
           <Box
             alignItems='center'
             display='flex'
@@ -83,9 +90,7 @@ const SpeciesDeliverableTable = (): JSX.Element => {
               {
                 buttonText: strings.REMOVE,
                 buttonType: 'destructive',
-                onButtonClick: () => {
-                  console.log('remove button click');
-                },
+                onButtonClick: () => setShowConfirmDialog(true),
                 icon: 'iconTrashCan',
               },
             ]}

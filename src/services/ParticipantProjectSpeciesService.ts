@@ -110,20 +110,27 @@ const update = async (
   });
 };
 
-const remove = async (
-  projectId: number,
-  participantProjectSpeciesId: number
-): Promise<DeleteParticipantProjectSpeciesResponse> => {
+const remove = async (participantProjectSpeciesId: number): Promise<DeleteParticipantProjectSpeciesResponse> => {
   return new Promise((resolve) => {
-    const speciesList = mockParticipantProjectSpecies?.[projectId] || [];
-    const index = speciesList.findIndex((ps) => ps.id === participantProjectSpeciesId);
+    let found = false;
 
-    if (index !== -1) {
-      speciesList.splice(index, 1);
-      mockParticipantProjectSpecies[projectId] = speciesList;
+    for (const projectId in mockParticipantProjectSpecies) {
+      const speciesList = mockParticipantProjectSpecies[projectId] || [];
+      const index = speciesList.findIndex((ps) => ps.id === participantProjectSpeciesId);
+
+      if (index !== -1) {
+        speciesList.splice(index, 1);
+        mockParticipantProjectSpecies[projectId] = speciesList;
+        found = true;
+        break;
+      }
     }
 
-    resolve({ status: 'ok' });
+    if (found) {
+      resolve({ status: 'ok' });
+    } else {
+      resolve({ status: 'error' });
+    }
   });
 };
 
