@@ -35,29 +35,23 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
   const theme = useTheme();
 
   const { currentParticipantProject } = useParticipantData();
+  const { projectId } = useModuleData();
   const { module, moduleId } = useModuleData();
 
   const [content, setContent] = useState('');
-
-  if (!currentParticipantProject) {
-    return;
-  }
 
   const crumbs: Crumb[] = useMemo(
     () => [
       {
         name: activeLocale ? strings.ALL_MODULES : '',
-        to: APP_PATHS.PROJECT_MODULES.replace(':projectId', `${currentParticipantProject.id}`),
+        to: APP_PATHS.PROJECT_MODULES.replace(':projectId', `${projectId}`),
       },
       {
         name: module?.title || '',
-        to: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${currentParticipantProject.id}`).replace(
-          ':moduleId',
-          `${moduleId}`
-        ),
+        to: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
       },
     ],
-    [activeLocale, currentParticipantProject]
+    [activeLocale, projectId]
   );
 
   useEffect(() => {

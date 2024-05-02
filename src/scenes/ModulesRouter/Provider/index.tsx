@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { requestGetModule } from 'src/redux/features/modules/modulesAsyncThunks';
 import { selectModuleRequest } from 'src/redux/features/modules/modulesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -36,9 +37,18 @@ const ModuleProvider = ({ children }: Props) => {
     event,
     module,
     moduleId,
+    projectId,
     session,
     sessionId,
   });
+
+  const { currentParticipantProject, setCurrentParticipantProject } = useParticipantData();
+
+  useEffect(() => {
+    if (currentParticipantProject?.id !== projectId) {
+      setCurrentParticipantProject(projectId);
+    }
+  }, [currentParticipantProject, setCurrentParticipantProject, projectId]);
 
   useEffect(() => {
     if (!isNaN(projectId) && !isNaN(moduleId)) {
@@ -93,8 +103,9 @@ const ModuleProvider = ({ children }: Props) => {
       sessionId,
       module,
       moduleId,
+      projectId,
     });
-  }, [allSessions, event, session, sessionId, module, moduleId]);
+  }, [allSessions, event, session, sessionId, module, moduleId, projectId]);
 
   return (
     <ModuleContext.Provider value={moduleData}>

@@ -5,9 +5,12 @@ import { Dropdown, DropdownItem } from '@terraware/web-components';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 
+import { useModuleData } from './Provider/Context';
+
 const ListViewHeader = () => {
-  const { currentParticipantProject, participantProjects, setCurrentParticipantProject } = useParticipantData();
+  const { participantProjects } = useParticipantData();
   const { goToModules } = useNavigateTo();
+  const { projectId } = useModuleData();
 
   const options: DropdownItem[] = useMemo(
     () =>
@@ -36,15 +39,13 @@ const ListViewHeader = () => {
   return (
     <Dropdown
       onChange={(id) => {
-        const projectId = +id;
-        if (projectId != currentParticipantProject?.id) {
-          setCurrentParticipantProject(projectId);
-          goToModules(projectId);
+        if (projectId !== +id) {
+          goToModules(+id);
         }
       }}
       options={options}
       selectStyles={selectStyles}
-      selectedValue={currentParticipantProject?.id}
+      selectedValue={projectId}
     />
   );
 };

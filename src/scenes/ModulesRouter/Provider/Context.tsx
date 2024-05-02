@@ -7,6 +7,7 @@ export type ModuleData = {
   event?: ModuleEvent;
   module?: Module;
   moduleId: number;
+  projectId: number;
   session?: ModuleEventSession;
   sessionId?: number;
 };
@@ -15,6 +16,7 @@ export type ModuleData = {
 export const ModuleContext = createContext<ModuleData>({
   allSessions: [],
   moduleId: -1,
+  projectId: -1,
 });
 
 export const useModuleData = () => useContext(ModuleContext);

@@ -2,23 +2,20 @@ import React from 'react';
 
 import { Box } from '@mui/material';
 
-import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { selectProjectModuleList } from 'src/redux/features/modules/modulesSelectors';
 import { useAppSelector } from 'src/redux/store';
 
 import ModuleEntry from './ModuleEntry';
+import { useModuleData } from './Provider/Context';
 
 export default function ListModulesContent(): JSX.Element {
-  const { currentParticipantProject } = useParticipantData();
+  const { projectId } = useModuleData();
 
-  const modules = useAppSelector(selectProjectModuleList(currentParticipantProject?.id ?? -1));
+  const modules = useAppSelector(selectProjectModuleList(projectId));
 
   return (
     <Box>
-      {currentParticipantProject &&
-        modules?.map((module, index) => (
-          <ModuleEntry index={index} key={index} module={module} projectId={currentParticipantProject?.id} />
-        ))}
+      {modules?.map((module, index) => <ModuleEntry index={index} key={index} module={module} projectId={projectId} />)}
     </Box>
   );
 }

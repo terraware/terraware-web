@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -39,22 +39,15 @@ const ModuleEventSessionView = () => {
   const theme = useTheme();
 
   const { currentParticipantProject } = useParticipantData();
-  const { event, module, moduleId, session } = useModuleData();
+  const { event, module, moduleId, projectId, session } = useModuleData();
 
   const eventType = session?.type ? getEventType(session.type) : '';
-
-  if (!currentParticipantProject) {
-    return;
-  }
 
   const crumbs: Crumb[] = useMemo(
     () => [
       {
         name: activeLocale ? 'Module' : '',
-        to: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${currentParticipantProject.id}`).replace(
-          ':moduleId',
-          `${moduleId}`
-        ),
+        to: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
       },
     ],
     [activeLocale, moduleId, currentParticipantProject]
