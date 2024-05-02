@@ -3259,6 +3259,7 @@ export interface components {
       events: components["schemas"]["ProjectModuleEvent"][];
       /** Format: int64 */
       id: number;
+      isActive: boolean;
       name: string;
       overview?: string;
       preparationMaterials?: string;

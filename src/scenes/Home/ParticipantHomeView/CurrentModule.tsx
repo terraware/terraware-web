@@ -7,11 +7,14 @@ import { useParticipantData } from 'src/providers/Participant/ParticipantContext
 import strings from 'src/strings';
 
 const CurrentModule = () => {
-  const { currentModule, currentParticipantProject } = useParticipantData();
+  const { activeModules, currentParticipantProject } = useParticipantData();
 
-  if (!currentModule || !currentParticipantProject) {
+  if (!activeModules || activeModules.length === 0 || !currentParticipantProject) {
     return null;
   }
+
+  // Only first active modules shown for now. TODO: upgrade to support multiple active modules for overlapping modules
+  const currentModule = activeModules[0];
 
   return (
     <Card>
