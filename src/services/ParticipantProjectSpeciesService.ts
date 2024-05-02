@@ -7,7 +7,9 @@ export type ParticipantProjectSpecies = {
   id: number;
   projectId: number;
   rationale?: string;
+  speciesCommonName?: string;
   speciesId: number;
+  speciesScientificName?: string;
   status: 'Not Submitted' | 'In Review' | 'Rejected' | 'Approved' | 'Needs Translation' | 'Not Needed';
 };
 
@@ -26,18 +28,22 @@ export type UpdateParticipantProjectSpeciesResponse = Response & UpdateParticipa
 export type DeleteParticipantProjectSpeciesResponse = components['schemas']['SimpleSuccessResponsePayload'];
 
 // Record<projectId, ParticipantProjectSpecies[]>
-const mockParticipantProjectSpecies: Record<number, ParticipantProjectSpecies[]> = {
+export const mockParticipantProjectSpecies: Record<number, ParticipantProjectSpecies[]> = {
   1: [
     {
       id: 1,
       projectId: 1,
+      speciesCommonName: 'ʻŌhiʻa',
       speciesId: 1,
+      speciesScientificName: 'Metrosideros polymorpha',
       status: 'In Review',
     },
     {
       id: 2,
       projectId: 1,
+      speciesCommonName: 'Koa',
       speciesId: 2,
+      speciesScientificName: 'Acacia koa',
       status: 'Not Submitted',
     },
   ],
@@ -45,13 +51,17 @@ const mockParticipantProjectSpecies: Record<number, ParticipantProjectSpecies[]>
     {
       id: 3,
       projectId: 2,
+      speciesCommonName: 'ʻŌhiʻa',
       speciesId: 1,
+      speciesScientificName: 'Metrosideros polymorpha',
       status: 'In Review',
     },
     {
       id: 4,
       projectId: 2,
+      speciesCommonName: 'Koa',
       speciesId: 2,
+      speciesScientificName: 'Acacia koa',
       status: 'Not Submitted',
     },
   ],
@@ -100,20 +110,27 @@ const update = async (
   });
 };
 
-const remove = async (
-  projectId: number,
-  participantProjectSpeciesId: number
-): Promise<DeleteParticipantProjectSpeciesResponse> => {
+const remove = async (participantProjectSpeciesId: number): Promise<DeleteParticipantProjectSpeciesResponse> => {
   return new Promise((resolve) => {
-    const speciesList = mockParticipantProjectSpecies?.[projectId] || [];
-    const index = speciesList.findIndex((ps) => ps.id === participantProjectSpeciesId);
+    let found = false;
 
-    if (index !== -1) {
-      speciesList.splice(index, 1);
-      mockParticipantProjectSpecies[projectId] = speciesList;
+    for (const projectId in mockParticipantProjectSpecies) {
+      const speciesList = mockParticipantProjectSpecies[projectId] || [];
+      const index = speciesList.findIndex((ps) => ps.id === participantProjectSpeciesId);
+
+      if (index !== -1) {
+        speciesList.splice(index, 1);
+        mockParticipantProjectSpecies[projectId] = speciesList;
+        found = true;
+        break;
+      }
     }
 
-    resolve({ status: 'ok' });
+    if (found) {
+      resolve({ status: 'ok' });
+    } else {
+      resolve({ status: 'error' });
+    }
   });
 };
 

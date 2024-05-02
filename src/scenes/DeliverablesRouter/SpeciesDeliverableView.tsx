@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
@@ -9,6 +9,7 @@ import MobileMessage from 'src/components/DeliverableView/MobileMessage';
 import TitleBar from 'src/components/DeliverableView/TitleBar';
 import { EditProps, ViewProps } from 'src/components/DeliverableView/types';
 import Page from 'src/components/Page';
+import SpeciesDeliverableTable from 'src/components/SpeciesDeliverableTable';
 import Card from 'src/components/common/Card';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
@@ -30,7 +31,6 @@ const SpeciesDeliverableView = (props: Props): JSX.Element => {
   const dispatch = useAppDispatch();
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
-  const theme = useTheme();
   const { currentParticipantProject } = useParticipantData();
   const participantProjectSpecies = useAppSelector(
     selectParticipantProjectSpeciesListRequest(currentParticipantProject?.id || -1)
@@ -86,10 +86,7 @@ const SpeciesDeliverableView = (props: Props): JSX.Element => {
         <RejectedDeliverableMessage {...viewProps} />
         <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
           <Metadata {...viewProps} />
-          <Typography marginBottom={theme.spacing(2)} fontSize='20px' lineHeight='28px' fontWeight={600}>
-            {strings.SPECIES}
-          </Typography>
-          {/* TODO: Species table here */}
+          <SpeciesDeliverableTable />
         </Card>
       </Box>
     </Page>
