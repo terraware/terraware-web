@@ -77,11 +77,11 @@ const SpeciesDeliverableTable = (): JSX.Element => {
 
           <Table
             columns={columns}
-            emptyTableMessage={strings.THERE_ARE_NO_SPECIES_ADDED_TO_THIS_PROJET_YET}
+            emptyTableMessage={strings.NO_SPECIES_ADDED}
             id='species-deliverable-table'
             orderBy='speciesScientificName'
             Renderer={TableCellRenderer}
-            rows={participantProjectSpecies?.data || mockParticipantProjectSpecies[1] || []}
+            rows={participantProjectSpecies?.data || []}
             selectedRows={selectedRows}
             setSelectedRows={setSelectedRows}
             showCheckbox={true}
