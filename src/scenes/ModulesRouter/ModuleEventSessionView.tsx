@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -50,7 +50,7 @@ const ModuleEventSessionView = () => {
         to: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
       },
     ],
-    [activeLocale, moduleId, currentParticipantProject]
+    [activeLocale, moduleId, projectId]
   );
 
   return (
