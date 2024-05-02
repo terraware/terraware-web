@@ -10,10 +10,7 @@ import strings from 'src/strings';
 
 export const requestGetParticipantProjectSpecies = createAsyncThunk(
   'participantProjectSpecies/get-one',
-  async (
-    { participantProjectSpeciesId }: { projectId: number; participantProjectSpeciesId: number },
-    { rejectWithValue }
-  ) => {
+  async (participantProjectSpeciesId: number, { rejectWithValue }) => {
     const response: ParticipantProjectSpeciesResponse =
       await ParticipantProjectSpeciesService.get(participantProjectSpeciesId);
 
@@ -55,7 +52,7 @@ export const requestUpdateParticipantProjectSpecies = createAsyncThunk(
     );
 
     if (response && response.requestSucceeded) {
-      dispatch(requestGetParticipantProjectSpecies({ projectId, participantProjectSpeciesId }));
+      dispatch(requestGetParticipantProjectSpecies(participantProjectSpeciesId));
       return true;
     }
 
@@ -65,14 +62,9 @@ export const requestUpdateParticipantProjectSpecies = createAsyncThunk(
 
 export const requestRemoveParticipantProjectSpecies = createAsyncThunk(
   'participantProjectSpecies/remove',
-  async (
-    { projectId, participantProjectSpeciesId }: { projectId: number; participantProjectSpeciesId: number },
-    { rejectWithValue }
-  ) => {
-    const response: DeleteParticipantProjectSpeciesResponse = await ParticipantProjectSpeciesService.remove(
-      projectId,
-      participantProjectSpeciesId
-    );
+  async (participantProjectSpeciesId: number, { rejectWithValue }) => {
+    const response: DeleteParticipantProjectSpeciesResponse =
+      await ParticipantProjectSpeciesService.remove(participantProjectSpeciesId);
 
     if (response?.status === 'ok') {
       return true;

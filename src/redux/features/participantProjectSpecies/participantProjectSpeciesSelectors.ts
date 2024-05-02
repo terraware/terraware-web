@@ -1,7 +1,5 @@
 import { RootState } from 'src/redux/rootReducer';
 
-import { participantProjectSpeciesCompositeKeyFn } from './participantProjectSpeciesSlice';
-
 export const selectParticipantProjectSpeciesRequest = (requestId: string) => (state: RootState) =>
   state.participantProjectSpecies[requestId];
 
@@ -14,7 +12,5 @@ export const selectParticipantProjectSpeciesUpdateRequest = (requestId: string) 
 export const selectParticipantProjectSpeciesRemoveRequest = (requestId: string) => (state: RootState) =>
   state.participantProjectSpeciesRemove[requestId];
 
-export const selectParticipantProjectSpecies =
-  (projectId: number, participantProjectSpeciesId: number) => (state: RootState) =>
-    state.participantProjectSpecies[participantProjectSpeciesCompositeKeyFn({ projectId, participantProjectSpeciesId })]
-      ?.data;
+export const selectParticipantProjectSpecies = (participantProjectSpeciesId: number) => (state: RootState) =>
+  state.participantProjectSpecies[participantProjectSpeciesId]?.data;

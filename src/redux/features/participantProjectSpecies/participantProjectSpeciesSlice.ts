@@ -10,16 +10,6 @@ import {
   requestUpdateParticipantProjectSpecies,
 } from './participantProjectSpeciesAsyncThunks';
 
-type ParticipantProjectSpeciesIdArg = { projectId: number; participantProjectSpeciesId: number };
-export const participantProjectSpeciesCompositeKeyFn = (arg: unknown): string => {
-  const castArg = arg as ParticipantProjectSpeciesIdArg;
-  if (!(castArg.projectId && castArg.participantProjectSpeciesId)) {
-    return '';
-  }
-
-  return `p${castArg.projectId}-ps${castArg.participantProjectSpeciesId}`;
-};
-
 /**
  * Get Participant Project Species
  */
@@ -30,7 +20,7 @@ export const participantProjectSpeciesSlice = createSlice({
   initialState: initialStateParticipantProject,
   reducers: {},
   extraReducers: (builder) => {
-    buildReducers(requestGetParticipantProjectSpecies, true, participantProjectSpeciesCompositeKeyFn)(builder);
+    buildReducers(requestGetParticipantProjectSpecies, true)(builder);
   },
 });
 
