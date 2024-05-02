@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
@@ -171,11 +171,9 @@
 <a name='L106'></a><a href='#L106'>106</a>
 <a name='L107'></a><a href='#L107'>107</a>
 <a name='L108'></a><a href='#L108'>108</a>
-<a name='L109'></a><a href='#L109'>109</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -183,9 +181,15 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -281,34 +285,36 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { Box, Grid, Typography, useTheme } from '@mui/material';
 &nbsp;
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
-import { CohortPhaseType } from 'src/types/Cohort';
 &nbsp;
-interface CurrentTimelineProps {
-  cohortPhase?: CohortPhaseType;
-}
-&nbsp;
-const CurrentTimeline = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> cohortPhase }: CurrentTimelineProps) =&gt; {</span>
+const CurrentTimeline = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span>: JSX.Element =&gt; {</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
+&nbsp;
+  const { currentParticipant } = <span class="cstat-no" title="statement not covered" >useParticipantData();</span>
 &nbsp;
   // TODO these will probably come from the BE, not sure if they will be attached to the project, or cohort, or some
   // other data model, so for now they are hard coded.
   const phases = <span class="cstat-no" title="statement not covered" >[</span>
     {
+      phaseEnum: 'Phase 0 - Due Diligence',
       phase: 'Phase 0 - Due Diligence',
       description: 'Review application, final due diligence reviewing documents from shortlisted cohort.',
     },
     {
+      phaseEnum: 'Phase 1 - Feasibility Study',
       phase: 'Phase 1 - Feasibility Study',
       description:
         'Attending modules &amp; 1:1s, filling out Feasibility Study sections, completing deliverables. Possible site visit.',
     },
     {
+      phaseEnum: 'Phase 2 - Plan and Scale',
       phase: 'Phase 2 - PDD Writing &amp; Registration',
       description: 'PDA signed, PDD writing from FS information, PDD registered on Verra (Under Development &amp; Full).',
     },
     {
-      phase: 'Phase 3 - Should not be visible',
+      phaseEnum: 'Phase 3 - Implement and Monitor',
+      phase: 'Phase 3 - Mock title',
       description: 'Mock desription',
     },
     {
@@ -317,9 +323,9 @@ const CurrentTimeline = <span class="cstat-no" title="statement not covered" ><s
     },
   ];
 &nbsp;
-  const currentPhaseIndex = <span class="cstat-no" title="statement not covered" >phases.findIndex(<span class="fstat-no" title="function not covered" >(p</span>hase) =&gt; <span class="cstat-no" title="statement not covered" >phase.phase === cohortPhase)</span>;</span>
+  const currentPhaseIndex = <span class="cstat-no" title="statement not covered" >phases.findIndex(<span class="fstat-no" title="function not covered" >(p</span>hase) =&gt; <span class="cstat-no" title="statement not covered" >phase.phaseEnum === currentParticipant?.cohortPhase)</span>;</span>
   const lowIdx = <span class="cstat-no" title="statement not covered" >Math.max(currentPhaseIndex - 1, 0);</span>
-  const highIdx = <span class="cstat-no" title="statement not covered" >lowIdx + 3;</span>
+  const highIdx = <span class="cstat-no" title="statement not covered" >Math.min(lowIdx + 3, phases.length);</span>
   const displayPhases = <span class="cstat-no" title="statement not covered" >phases.slice(lowIdx, highIdx);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
@@ -331,7 +337,7 @@ const CurrentTimeline = <span class="cstat-no" title="statement not covered" ><s
         &lt;Grid item&gt;
           &lt;Grid display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}&gt;
             {displayPhases.map(<span class="fstat-no" title="function not covered" >(p</span>hase, index) =&gt; {
-              const isActivePhase = <span class="cstat-no" title="statement not covered" >phase.phase === cohortPhase;</span>
+              const isActivePhase = <span class="cstat-no" title="statement not covered" >phase.phaseEnum === currentParticipant?.cohortPhase;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >              return (</span>
                 &lt;&gt;
@@ -394,7 +400,7 @@ export default CurrentTimeline;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-01T20:59:13.283Z
+                at 2024-05-02T16:38:24.269Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
