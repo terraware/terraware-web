@@ -13,6 +13,11 @@ export type ParticipantProjectSpecies = {
   status: 'Not Submitted' | 'In Review' | 'Rejected' | 'Approved' | 'Needs Translation' | 'Not Needed';
 };
 
+export type ParticipantProjectSpeciesRequest = Omit<
+  ParticipantProjectSpecies,
+  'id' | 'status' | 'speciesCommonName' | 'speciesScientificName'
+>;
+
 export type ParticipantProjectSpeciesData = { participantProjectSpecies?: ParticipantProjectSpecies | undefined };
 
 export type ParticipantProjectSpeciesResponse = Response & ParticipantProjectSpeciesData;
