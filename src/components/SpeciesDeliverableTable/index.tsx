@@ -39,7 +39,7 @@ const SpeciesDeliverableTable = (): JSX.Element => {
       return;
     }
 
-    void dispatch(requestListParticipantProjectSpecies(currentParticipantProject?.id));
+    void dispatch(requestListParticipantProjectSpecies(currentParticipantProject.id));
   }, []);
 
   return (
