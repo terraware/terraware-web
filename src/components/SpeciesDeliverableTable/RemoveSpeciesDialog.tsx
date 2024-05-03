@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { Typography } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';
 
 import ParticipantProjectSpeciesService from 'src/services/ParticipantProjectSpeciesService';
@@ -50,30 +49,29 @@ export default function RemoveSpeciesDialog(props: RemoveSpeciesDialogProps): JS
 
   return (
     <DialogBox
-      onClose={onClose}
-      open={open}
-      title={strings.REMOVE_SPECIES}
-      size='medium'
+      message={strings.ARE_YOU_SURE}
       middleButtons={[
         <Button
-          label={strings.CANCEL}
-          priority='secondary'
-          type='passive'
-          onClick={onClose}
-          size='medium'
           key='button-1'
+          label={strings.CANCEL}
+          onClick={onClose}
+          priority='secondary'
+          size='medium'
+          type='passive'
         />,
         <Button
+          key='button-2'
           label={strings.REMOVE}
-          type='destructive'
           onClick={removeSelectedSpeciesFromParticipantProject}
           size='medium'
-          key='button-2'
+          type='destructive'
         />,
       ]}
+      onClose={onClose}
+      open={open}
+      size='medium'
       skrim={true}
-    >
-      <Typography sx={{ paddingTop: 3 }}>{strings.ARE_YOU_SURE}</Typography>
-    </DialogBox>
+      title={strings.REMOVE_SPECIES}
+    />
   );
 }

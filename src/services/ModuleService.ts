@@ -1,14 +1,14 @@
 import { paths } from 'src/api/types/generated-schema';
-import { Module, ModuleWithNumber } from 'src/types/Module';
+import { Module } from 'src/types/Module';
 
 import HttpService, { Response2 } from './HttpService';
 
 export type ModulesData = {
-  modules: ModuleWithNumber[] | undefined;
+  modules: Module[] | undefined;
 };
 
 export type ModuleData = {
-  module: ModuleWithNumber | undefined;
+  module: Module | undefined;
 };
 
 const PROJECT_MODULES_ENDPOINT = '/api/v1/projects/{projectId}/modules';
@@ -29,12 +29,7 @@ const list = (projectId: number | null): Promise<Response2<ModulesData | null>> 
     },
     (response) => ({
       data: {
-        modules: response?.modules.map(
-          (module: Module, index: number): ModuleWithNumber => ({
-            ...module,
-            number: index + 1,
-          })
-        ),
+        modules: response?.modules,
       },
     })
   );
@@ -51,10 +46,7 @@ const get = async (projectId: number, moduleId: number): Promise<Response2<Modul
       return {
         requestSucceeded: true,
         data: {
-          module: {
-            ...module,
-            number: _list.data.modules.indexOf(module) + 1,
-          },
+          module: module,
         },
       };
     }

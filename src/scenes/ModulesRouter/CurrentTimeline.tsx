@@ -1,33 +1,35 @@
 import React, { Box, Grid, Typography, useTheme } from '@mui/material';
 
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
-import { CohortPhaseType } from 'src/types/Cohort';
 
-interface CurrentTimelineProps {
-  cohortPhase?: CohortPhaseType;
-}
-
-const CurrentTimeline = ({ cohortPhase }: CurrentTimelineProps) => {
+const CurrentTimeline = (): JSX.Element => {
   const theme = useTheme();
+
+  const { currentParticipant } = useParticipantData();
 
   // TODO these will probably come from the BE, not sure if they will be attached to the project, or cohort, or some
   // other data model, so for now they are hard coded.
   const phases = [
     {
+      phaseEnum: 'Phase 0 - Due Diligence',
       phase: 'Phase 0 - Due Diligence',
       description: 'Review application, final due diligence reviewing documents from shortlisted cohort.',
     },
     {
+      phaseEnum: 'Phase 1 - Feasibility Study',
       phase: 'Phase 1 - Feasibility Study',
       description:
         'Attending modules & 1:1s, filling out Feasibility Study sections, completing deliverables. Possible site visit.',
     },
     {
+      phaseEnum: 'Phase 2 - Plan and Scale',
       phase: 'Phase 2 - PDD Writing & Registration',
       description: 'PDA signed, PDD writing from FS information, PDD registered on Verra (Under Development & Full).',
     },
     {
-      phase: 'Phase 3 - Should not be visible',
+      phaseEnum: 'Phase 3 - Implement and Monitor',
+      phase: 'Phase 3 - Mock title',
       description: 'Mock desription',
     },
     {
@@ -36,9 +38,9 @@ const CurrentTimeline = ({ cohortPhase }: CurrentTimelineProps) => {
     },
   ];
 
-  const currentPhaseIndex = phases.findIndex((phase) => phase.phase === cohortPhase);
+  const currentPhaseIndex = phases.findIndex((phase) => phase.phaseEnum === currentParticipant?.cohortPhase);
   const lowIdx = Math.max(currentPhaseIndex - 1, 0);
-  const highIdx = lowIdx + 3;
+  const highIdx = Math.min(lowIdx + 3, phases.length);
   const displayPhases = phases.slice(lowIdx, highIdx);
 
   return (
@@ -50,7 +52,7 @@ const CurrentTimeline = ({ cohortPhase }: CurrentTimelineProps) => {
         <Grid item>
           <Grid display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
             {displayPhases.map((phase, index) => {
-              const isActivePhase = phase.phase === cohortPhase;
+              const isActivePhase = phase.phaseEnum === currentParticipant?.cohortPhase;
 
               return (
                 <>

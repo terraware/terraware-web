@@ -1,14 +1,14 @@
 import { createContext, useContext } from 'react';
 
-import { ModuleWithNumber } from 'src/types/Module';
+import { Module } from 'src/types/Module';
 import { Participant } from 'src/types/Participant';
 import { Project } from 'src/types/Project';
 
 export type ParticipantData = {
-  currentModule?: ModuleWithNumber;
+  activeModules?: Module[];
   currentParticipant?: Participant;
   currentParticipantProject?: Project;
-  modules?: ModuleWithNumber[];
+  modules?: Module[];
   participantProjects: Project[];
   orgHasParticipants: boolean;
   setCurrentParticipantProject: (projectId: string | number) => void;

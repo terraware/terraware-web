@@ -2,16 +2,13 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { requestGetModule } from 'src/redux/features/modules/modulesAsyncThunks';
-import { selectModuleRequest, selectProjectModuleList } from 'src/redux/features/modules/modulesSelectors';
+import { selectActiveModules, selectProjectModuleList } from 'src/redux/features/modules/modulesSelectors';
 import { requestGetParticipant } from 'src/redux/features/participants/participantsAsyncThunks';
 import { selectParticipant } from 'src/redux/features/participants/participantsSelectors';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import strings from 'src/strings';
-import { ModuleWithNumber } from 'src/types/Module';
 import { Project } from 'src/types/Project';
-import useSnackbar from 'src/utils/useSnackbar';
 
 import { ParticipantContext, ParticipantData } from './ParticipantContext';
 
@@ -23,15 +20,12 @@ const ParticipantProvider = ({ children }: Props) => {
   const dispatch = useAppDispatch();
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
-  const snackbar = useSnackbar();
 
-  const [moduleRequestId, setModuleRequestId] = useState('');
   const [currentParticipantProject, setCurrentParticipantProject] = useState<Project>();
-  const [currentModule, setCurrentModule] = useState<ModuleWithNumber>();
   const [participantProjects, setParticipantProjects] = useState<Project[]>([]);
 
   const participant = useAppSelector(selectParticipant(currentParticipantProject?.participantId || -1));
-  const currentModuleResponse = useAppSelector(selectModuleRequest(moduleRequestId));
+  const activeModules = useAppSelector(selectActiveModules(currentParticipantProject?.id || -1));
   const modules = useAppSelector(selectProjectModuleList(currentParticipantProject?.id || -1));
   const projects = useAppSelector(selectProjects);
 
@@ -50,10 +44,7 @@ const ParticipantProvider = ({ children }: Props) => {
 
   useEffect(() => {
     if (participant?.currentModuleId && currentParticipantProject?.id) {
-      const request = dispatch(
-        requestGetModule({ projectId: currentParticipantProject.id, moduleId: participant.currentModuleId })
-      );
-      setModuleRequestId(request.requestId);
+      dispatch(requestGetModule({ projectId: currentParticipantProject.id, moduleId: participant.currentModuleId }));
     }
   }, [currentParticipantProject, dispatch, participant]);
 
@@ -81,21 +72,9 @@ const ParticipantProvider = ({ children }: Props) => {
   }, [activeLocale, dispatch, selectedOrganization]);
 
   useEffect(() => {
-    if (!currentModuleResponse) {
-      return;
-    }
-
-    if (currentModuleResponse.status === 'success' && currentModuleResponse.data) {
-      setCurrentModule(currentModuleResponse.data);
-    } else if (currentModuleResponse.status === 'error') {
-      snackbar.toastError(strings.GENERIC_ERROR);
-    }
-  }, [currentModuleResponse, snackbar]);
-
-  useEffect(() => {
-    if (currentModule && participant && currentParticipantProject && modules && participantProjects) {
+    if (activeModules && participant && currentParticipantProject && modules && participantProjects) {
       setParticipantData({
-        currentModule,
+        activeModules,
         currentParticipant: participant,
         currentParticipantProject,
         modules,
@@ -105,7 +84,7 @@ const ParticipantProvider = ({ children }: Props) => {
       });
     }
   }, [
-    currentModule,
+    activeModules,
     currentParticipantProject,
     modules,
     participant,

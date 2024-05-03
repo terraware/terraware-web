@@ -92,7 +92,7 @@ const SpeciesDeliverableTable = (): JSX.Element => {
 
           <Table
             columns={columns}
-            emptyTableMessage={strings.NO_SPECIES_ADDED}
+            emptyTableMessage={strings.THERE_ARE_NO_SPECIES_ADDED_TO_THIS_PROJET_YET}
             id='species-deliverable-table'
             orderBy='speciesScientificName'
             Renderer={TableCellRenderer}

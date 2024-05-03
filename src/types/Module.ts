@@ -2,7 +2,6 @@ import { components } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
 
 export type Module = components['schemas']['ProjectModule'];
-export type ModuleWithNumber = Module & { number: number };
 
 export type ModuleEvent = components['schemas']['ProjectModuleEvent'];
 
