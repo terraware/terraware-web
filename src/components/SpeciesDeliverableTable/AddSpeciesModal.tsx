@@ -8,6 +8,9 @@ import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { useOrganization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
+import { requestCreateParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
+import { selectParticipantProjectSpeciesCreateRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { SpeciesService } from 'src/services';
 import {
   ParticipantProjectSpecies,
@@ -15,6 +18,7 @@ import {
 } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
+import useSnackbar from 'src/utils/useSnackbar';
 
 export interface AddEditSubLocationProps {
   onClose: () => void;
@@ -32,6 +36,10 @@ export default function AddSpeciesModal(props: AddEditSubLocationProps): JSX.Ele
   const [selectedSpecies, setSelectedSpecies] = useState<Species>();
   const [error, setError] = useState<string>('');
   const theme = useTheme();
+  const [requestId, setRequestId] = useState<string>('');
+  const dispatch = useAppDispatch();
+  const result = useAppSelector(selectParticipantProjectSpeciesCreateRequest(requestId));
+  const snackbar = useSnackbar();
 
   useMemo(() => {
     const ids = participantProjectSpecies.map((ppSpecies) => ppSpecies.id);
@@ -67,13 +75,21 @@ export default function AddSpeciesModal(props: AddEditSubLocationProps): JSX.Ele
 
   const [record] = useState<ParticipantProjectSpeciesRequest | undefined>(initializeSpeciesProject());
 
-  const save = () => {
-    if (selectedSpecies) {
-      setError('');
-      // const newProjectSpecies = { ...record, speciesId: selectedSpecies.id };
-      // save newProjectSpecies
+  useEffect(() => {
+    if (result?.status === 'error') {
+      snackbar.toastError();
+    } else if (result?.status === 'success') {
       reload();
       onClose();
+    }
+  }, [result, snackbar]);
+
+  const save = () => {
+    if (selectedSpecies && record) {
+      setError('');
+      const newProjectSpecies = { ...record, speciesId: selectedSpecies.id };
+      const request = dispatch(requestCreateParticipantProjectSpecies(newProjectSpecies));
+      setRequestId(request.requestId);
     } else {
       setError(strings.REQUIRED_FIELD);
     }

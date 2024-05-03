@@ -4,6 +4,7 @@ import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { ParticipantProjectSpecies } from 'src/services/ParticipantProjectSpeciesService';
 
 import {
+  requestCreateParticipantProjectSpecies,
   requestGetParticipantProjectSpecies,
   requestListParticipantProjectSpecies,
   requestRemoveParticipantProjectSpecies,
@@ -67,11 +68,26 @@ export const participantProjectSpeciesRemoveSlice = createSlice({
   },
 });
 
+/**
+ * Create Participant Projects Species
+ */
+const initialStateParticipantProjectSpeciesCreate: { [key: string]: StatusT<ParticipantProjectSpecies> } = {};
+
+export const participantProjectSpeciesCreateSlice = createSlice({
+  name: 'participantProjectSpeciesCreateSlice',
+  initialState: initialStateParticipantProjectSpeciesCreate,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestCreateParticipantProjectSpecies)(builder);
+  },
+});
+
 const participantProjectSpeciesReducers = {
   participantProjectSpecies: participantProjectSpeciesSlice.reducer,
   participantProjectSpeciesList: participantProjectSpeciesListSlice.reducer,
   participantProjectSpeciesUpdate: participantProjectSpeciesListSlice.reducer,
   participantProjectSpeciesRemove: participantProjectSpeciesRemoveSlice.reducer,
+  participantProjectSpeciesCreate: participantProjectSpeciesCreateSlice.reducer,
 };
 
 export default participantProjectSpeciesReducers;

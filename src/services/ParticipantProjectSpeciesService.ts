@@ -139,7 +139,23 @@ const remove = async (participantProjectSpeciesId: number): Promise<DeletePartic
   });
 };
 
+const create = async (entity: ParticipantProjectSpeciesRequest): Promise<ParticipantProjectSpeciesResponse> => {
+  return new Promise((resolve) => {
+    // await httpParticipantProjectSpecies.post({ entity });
+    const newParticipantProjectSpecies = {
+      id: 5,
+      projectId: entity.projectId,
+      speciesCommonName: 'Testing',
+      speciesId: entity.speciesId,
+      speciesScientificName: 'Testing Metrosideros polymorpha',
+      status: 'In Review',
+    };
+    resolve({ data: { participantProjectSpecies: newParticipantProjectSpecies }, requestSucceeded: true });
+  });
+};
+
 const ParticipantProjectSpeciesService = {
+  create,
   get,
   list,
   update,
