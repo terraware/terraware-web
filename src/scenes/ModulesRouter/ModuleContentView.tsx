@@ -1,11 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { APP_PATHS } from 'src/constants';
-import { useLocalization, useProject } from 'src/providers';
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { ModuleContentType } from 'src/types/Module';
 
@@ -32,7 +33,8 @@ interface ModuleContentViewProps {
 const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const { project, projectId } = useProject();
+  const pathParams = useParams<{ sessionId: string; moduleId: string; projectId: string }>();
+  const projectId = Number(pathParams.projectId);
   const { module, moduleId } = useModuleData();
 
   const [content, setContent] = useState('');
@@ -66,7 +68,7 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
     <PageWithModuleTimeline
       crumbs={crumbs}
       hierarchicalCrumbs={false}
-      title={<ModuleViewTitle module={module} project={project} />}
+      title={<ModuleViewTitle module={module} projectId={projectId} />}
     >
       <Card
         sx={{

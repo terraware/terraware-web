@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
 
@@ -7,7 +8,7 @@ import Link from 'src/components/common/Link';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { APP_PATHS, ONE_MINUTE_INTERVAL_MS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useLocalization, useProject } from 'src/providers';
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { Module, ModuleContentType } from 'src/types/Module';
 import { getLongDate, getLongDateTime } from 'src/utils/dateFormatter';
@@ -63,10 +64,12 @@ const MODULE_CONTENTS = (module: Module): ModuleContent[] => {
 const ModuleView = () => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
+  const pathParams = useParams<{ sessionId: string; moduleId: string; projectId: string }>();
+  const projectId = Number(pathParams.projectId);
+
   const { goToDeliverable, goToModuleContent, goToModuleEventSession } = useNavigateTo();
   const mockDeliverables: MockModuleDeliverable[] = []; // TODO: get deliverables
 
-  const { project, projectId } = useProject();
   const { module, allSessions } = useModuleData();
 
   const [now, setNow] = useState(new Date());
@@ -114,7 +117,7 @@ const ModuleView = () => {
     <PageWithModuleTimeline
       crumbs={crumbs}
       hierarchicalCrumbs={false}
-      title={<ModuleViewTitle module={module} project={project} />}
+      title={<ModuleViewTitle module={module} projectId={projectId} />}
     >
       <Card
         sx={{

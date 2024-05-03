@@ -3,22 +3,24 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 
 import { useLocalization } from 'src/providers';
+import { selectProject } from 'src/redux/features/projects/projectsSelectors';
+import { useAppSelector } from 'src/redux/store';
 import { Module } from 'src/types/Module';
-import { Project } from 'src/types/Project';
 import { getDateRangeString } from 'src/utils/dateFormatter';
 
 type ModulePageTitleProps = {
   module: Module | undefined;
-  project: Project | undefined;
+  projectId: number;
 };
 
-const ModuleViewTitle = ({ module, project }: ModulePageTitleProps) => {
+const ModuleViewTitle = ({ module, projectId }: ModulePageTitleProps) => {
   const { activeLocale } = useLocalization();
+  const project = useAppSelector(selectProject(projectId));
 
   return (
     <Box alignItems='center' display='flex' flexDirection='row' flexWrap='wrap' marginY='24px' width='100%'>
       <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600} paddingRight='24px' whiteSpace='nowrap'>
-        {project?.name ? project?.name : ''}
+        {project?.name ?? ''}
       </Typography>
 
       <Box alignItems='center' display='flex' flexDirection='row'>
