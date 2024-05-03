@@ -22,6 +22,8 @@ import RejectedDeliverableMessage from 'src/scenes/DeliverablesRouter/RejectedDe
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+import SpeciesDeliverableStatusMessage from './SpeciesDeliverableStatusMessage';
+
 export type Props = EditProps & {
   isBusy?: boolean;
 };
@@ -83,7 +85,7 @@ const SpeciesDeliverableView = (props: Props): JSX.Element => {
     >
       {props.isBusy && <BusySpinner />}
       <Box display='flex' flexDirection='column' flexGrow={1}>
-        <RejectedDeliverableMessage {...viewProps} />
+        <SpeciesDeliverableStatusMessage {...viewProps} species={participantProjectSpecies?.data || []} />
         <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
           <Metadata {...viewProps} />
           <SpeciesDeliverableTable />
