@@ -13,6 +13,11 @@ export type ParticipantProjectSpecies = {
   status: 'Not Submitted' | 'In Review' | 'Rejected' | 'Approved' | 'Needs Translation' | 'Not Needed';
 };
 
+export type ParticipantProjectSpeciesRequest = Omit<
+  ParticipantProjectSpecies,
+  'id' | 'status' | 'speciesCommonName' | 'speciesScientificName'
+>;
+
 export type ParticipantProjectSpeciesData = { participantProjectSpecies?: ParticipantProjectSpecies | undefined };
 
 export type ParticipantProjectSpeciesResponse = Response & ParticipantProjectSpeciesData;
@@ -134,7 +139,23 @@ const remove = async (participantProjectSpeciesId: number): Promise<DeletePartic
   });
 };
 
+const create = async (entity: ParticipantProjectSpeciesRequest): Promise<ParticipantProjectSpeciesResponse> => {
+  return new Promise((resolve) => {
+    // await httpParticipantProjectSpecies.post({ entity });
+    const newParticipantProjectSpecies = {
+      id: 5,
+      projectId: entity.projectId,
+      speciesCommonName: 'Testing',
+      speciesId: entity.speciesId,
+      speciesScientificName: 'Testing Metrosideros polymorpha',
+      status: 'In Review',
+    };
+    resolve({ data: { participantProjectSpecies: newParticipantProjectSpecies }, requestSucceeded: true });
+  });
+};
+
 const ParticipantProjectSpeciesService = {
+  create,
   get,
   list,
   update,

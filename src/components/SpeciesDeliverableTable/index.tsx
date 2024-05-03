@@ -12,6 +12,7 @@ import { selectParticipantProjectSpeciesListRequest } from 'src/redux/features/p
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 
+import AddSpeciesModal from './AddSpeciesModal';
 import RemoveSpeciesDialog from './RemoveSpeciesDialog';
 import TableCellRenderer from './TableCellRenderer';
 
@@ -33,6 +34,7 @@ const SpeciesDeliverableTable = (): JSX.Element => {
 
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [openedAddSpeciesModal, setOpenedAddSpeciesModal] = useState(false);
 
   useEffect(() => {
     if (!currentParticipantProject?.id) {
@@ -41,6 +43,12 @@ const SpeciesDeliverableTable = (): JSX.Element => {
 
     void dispatch(requestListParticipantProjectSpecies(currentParticipantProject.id));
   }, []);
+
+  const reload = () => {
+    if (currentParticipantProject) {
+      dispatch(requestListParticipantProjectSpecies(currentParticipantProject.id));
+    }
+  };
 
   return (
     <>
@@ -51,6 +59,13 @@ const SpeciesDeliverableTable = (): JSX.Element => {
             open={showConfirmDialog}
             speciesToRemove={selectedRows.map((row) => row.id)}
           />
+          {openedAddSpeciesModal && (
+            <AddSpeciesModal
+              onClose={() => setOpenedAddSpeciesModal(false)}
+              participantProjectSpecies={participantProjectSpecies?.data || []}
+              reload={reload}
+            />
+          )}
           <Box
             alignItems='center'
             display='flex'
@@ -68,7 +83,7 @@ const SpeciesDeliverableTable = (): JSX.Element => {
               id='add-species-to-project'
               label='Add Species to Project'
               onClick={() => {
-                console.log('add species to project button pressed');
+                setOpenedAddSpeciesModal(true);
               }}
               priority='secondary'
               size='medium'

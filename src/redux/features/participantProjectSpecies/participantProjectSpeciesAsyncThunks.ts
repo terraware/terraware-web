@@ -4,6 +4,7 @@ import ParticipantProjectSpeciesService, {
   AllSpeciesResponse,
   DeleteParticipantProjectSpeciesResponse,
   ParticipantProjectSpecies,
+  ParticipantProjectSpeciesRequest,
   ParticipantProjectSpeciesResponse,
 } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
@@ -68,6 +69,19 @@ export const requestRemoveParticipantProjectSpecies = createAsyncThunk(
 
     if (response?.status === 'ok') {
       return true;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestCreateParticipantProjectSpecies = createAsyncThunk(
+  'participantProjectSpecies/create',
+  async (request: ParticipantProjectSpeciesRequest, { rejectWithValue }) => {
+    const response: ParticipantProjectSpeciesResponse = await ParticipantProjectSpeciesService.create(request);
+
+    if (response && response.requestSucceeded) {
+      return response.data.participantProjectSpecies;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);
