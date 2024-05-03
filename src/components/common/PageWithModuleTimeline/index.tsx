@@ -32,11 +32,7 @@ const PageWithModuleTimeline = (props: PageProps) => {
       >
         <Page {...props} containerClassName={isMobile ? '' : classes.container} />
       </Grid>
-      <Grid
-        item
-        sx={{ display: { xs: 'none', sm: 'none', md: 'none', lg: 'block', xl: 'block' } }}
-        minWidth={'206px'}
-      >
+      <Grid item sx={{ display: { xs: 'none', sm: 'none', md: 'none', lg: 'block', xl: 'block' } }} minWidth={'206px'}>
         <ModuleTimeline />
       </Grid>
     </Grid>
