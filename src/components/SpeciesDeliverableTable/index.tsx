@@ -109,6 +109,8 @@ const SpeciesDeliverableTable = (): JSX.Element => {
                 icon: 'iconTrashCan',
               },
             ]}
+            isClickable={() => false}
+            reloadData={reload}
           />
         </>
       )}
