@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -7,7 +8,7 @@ import { Crumb } from 'src/components/BreadCrumbs';
 import Link from 'src/components/common/Link';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { APP_PATHS } from 'src/constants';
-import { useLocalization, useProject } from 'src/providers';
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { getEventStatus, getEventType } from 'src/types/Module';
 import { getLongDateTime } from 'src/utils/dateFormatter';
@@ -36,7 +37,8 @@ const openExternalURL = (url: string | undefined, target = '_blank', features = 
 const ModuleEventSessionView = () => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const { project, projectId } = useProject();
+  const pathParams = useParams<{ sessionId: string; moduleId: string; projectId: string }>();
+  const projectId = Number(pathParams.projectId);
   const { event, module, moduleId, session } = useModuleData();
 
   const eventType = session?.type ? getEventType(session.type) : '';
@@ -55,7 +57,7 @@ const ModuleEventSessionView = () => {
     <PageWithModuleTimeline
       crumbs={crumbs}
       hierarchicalCrumbs={false}
-      title={<ModuleViewTitle module={module} project={project} />}
+      title={<ModuleViewTitle module={module} projectId={projectId} />}
     >
       <Card
         sx={{
