@@ -159,7 +159,7 @@
     "babel-plugin-named-exports-order": "^0.0.2",
     "btoa": "^1.2.1",
     "csv": "^6.2.8",
-    "eslint": "^9.0.0",
+    "eslint": "^9.2.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jest-react": "^0.1.0",
     "eslint-plugin-jsdoc": "^48.2.3",
