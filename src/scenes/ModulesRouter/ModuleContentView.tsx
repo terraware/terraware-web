@@ -53,10 +53,23 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
     [activeLocale, projectId]
   );
 
+  const addBlankTargetToHtmlAHref = (htmlString: string) : string => {
+    const container = document.createElement('div');
+    container.innerHTML = htmlString;
+
+    const links = container.querySelectorAll('a');
+    links.forEach(link => {
+      link.setAttribute('target', '_blank');
+      link.setAttribute('rel', 'noopener noreferrer');
+    });
+
+    return container.innerHTML;
+  };
+
   useEffect(() => {
     const nextContent = (module || {})[contentType];
     if (module && nextContent) {
-      setContent(nextContent);
+      setContent(addBlankTargetToHtmlAHref(nextContent));
     }
   }, [module]);
 
