@@ -53,12 +53,12 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
     [activeLocale, projectId]
   );
 
-  const addBlankTargetToHtmlAHref = (htmlString: string) : string => {
+  const addBlankTargetToHtmlAHref = (htmlString: string): string => {
     const container = document.createElement('div');
     container.innerHTML = htmlString;
 
     const links = container.querySelectorAll('a');
-    links.forEach(link => {
+    links.forEach((link) => {
       link.setAttribute('target', '_blank');
       link.setAttribute('rel', 'noopener noreferrer');
     });
