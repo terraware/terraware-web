@@ -24,7 +24,7 @@ export type Props = EditProps & {
   showRejectDialog: () => void;
 };
 
-const DeliverableView = (props: Props): JSX.Element => {
+const DocumentDeliverableView = (props: Props): JSX.Element => {
   const { ...viewProps }: Props = props;
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
@@ -68,4 +68,4 @@ const DeliverableView = (props: Props): JSX.Element => {
   );
 };
 
-export default DeliverableView;
+export default DocumentDeliverableView;

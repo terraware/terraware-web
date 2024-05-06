@@ -13,8 +13,9 @@ import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
 
 import ApproveDeliverableDialog from './ApproveDeliverableDialog';
-import DeliverableView from './DeliverableView';
+import DocumentDeliverableView from './DocumentDeliverableView';
 import RejectDialog from './RejectDialog';
+import SpeciesDeliverableView from './SpeciesDeliverableView';
 
 const DeliverableViewWrapper = () => {
   const [showApproveDialog, setShowApproveDialog] = useState<boolean>(false);
@@ -124,15 +125,29 @@ const DeliverableViewWrapper = () => {
     return (
       <>
         {showApproveDialog && (
-          <ApproveDeliverableDialog onClose={() => setShowApproveDialog(false)} onSubmit={approveDeliverable} />
+          <ApproveDeliverableDialog
+            onClose={() => setShowApproveDialog(false)}
+            onSubmit={approveDeliverable}
+            deliverableType={deliverable.type}
+          />
         )}
         {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectDeliverable} />}
-        <DeliverableView
-          callToAction={callToAction}
-          deliverable={deliverable}
-          isBusy={requestStatus === 'pending'}
-          showRejectDialog={() => setShowRejectDialog(true)}
-        />
+
+        {deliverable.type === 'Document' ? (
+          <DocumentDeliverableView
+            callToAction={callToAction}
+            deliverable={deliverable}
+            isBusy={requestStatus === 'pending'}
+            showRejectDialog={() => setShowRejectDialog(true)}
+          />
+        ) : (
+          <SpeciesDeliverableView
+            callToAction={callToAction}
+            deliverable={deliverable}
+            isBusy={requestStatus === 'pending'}
+            showRejectDialog={() => setShowRejectDialog(true)}
+          />
+        )}
       </>
     );
   } else {
