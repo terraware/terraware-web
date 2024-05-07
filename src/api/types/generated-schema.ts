@@ -4136,7 +4136,10 @@ export interface components {
       role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
     };
     UpdateParticipantProjectSpeciesPayload: {
-      participantProjectSpecies: components["schemas"]["ParticipantProjectSpeciesPayload"];
+      feedback?: string;
+      rationale?: string;
+      /** @enum {string} */
+      submissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
     };
     UpdateParticipantRequestPayload: {
       /**
