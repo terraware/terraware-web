@@ -23,12 +23,12 @@ export default function RemoveSpeciesDialog(props: RemoveSpeciesDialogProps): JS
     }
 
     const removeSpeciesPromises = speciesToRemove.map((participantProjectSpeciesId) =>
-      ParticipantProjectSpeciesService.remove(participantProjectSpeciesId)
+      ParticipantProjectSpeciesService.deleteMany([participantProjectSpeciesId])
     );
     try {
       const results = await Promise.allSettled(removeSpeciesPromises);
       const allRequestsCompletedSuccessfully = results.every(
-        (result) => result.status === 'fulfilled' && result.value?.status === 'ok'
+        (result) => result.status === 'fulfilled' && result.value.data?.status === 'ok'
       );
       if (allRequestsCompletedSuccessfully) {
         snackbar.toastSuccess(strings.CHANGES_SAVED);

@@ -18,7 +18,6 @@ import { useParticipantData } from 'src/providers/Participant/ParticipantContext
 import { requestListParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { selectParticipantProjectSpeciesListRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import RejectedDeliverableMessage from 'src/scenes/DeliverablesRouter/RejectedDeliverableMessage';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -34,16 +33,16 @@ const SpeciesDeliverableView = (props: Props): JSX.Element => {
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
   const { currentParticipantProject } = useParticipantData();
-  const participantProjectSpecies = useAppSelector(
+  const ppsSearchResults = useAppSelector(
     selectParticipantProjectSpeciesListRequest(currentParticipantProject?.id || -1)
   );
 
   const submitButtonIsDisabled = useMemo(() => {
     return (
-      !participantProjectSpecies?.data?.length ||
-      participantProjectSpecies?.data?.every((species) => species.status === 'Approved')
+      !ppsSearchResults?.data?.length ||
+      ppsSearchResults?.data?.every((species) => species.submissionStatus === 'Approved')
     );
-  }, [participantProjectSpecies]);
+  }, [ppsSearchResults]);
 
   useEffect(() => {
     if (!currentParticipantProject?.id) {
@@ -85,7 +84,7 @@ const SpeciesDeliverableView = (props: Props): JSX.Element => {
     >
       {props.isBusy && <BusySpinner />}
       <Box display='flex' flexDirection='column' flexGrow={1}>
-        <SpeciesDeliverableStatusMessage {...viewProps} species={participantProjectSpecies?.data || []} />
+        <SpeciesDeliverableStatusMessage {...viewProps} species={ppsSearchResults?.data || []} />
         <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
           <Metadata {...viewProps} />
           <SpeciesDeliverableTable />

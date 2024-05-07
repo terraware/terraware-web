@@ -1,24 +1,70 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import { ParticipantProjectSpecies } from 'src/services/ParticipantProjectSpeciesService';
+import {
+  ParticipantProjectSpecies,
+  SpeciesWithParticipantProjectsSearchResponse,
+} from 'src/services/ParticipantProjectSpeciesService';
 
 import {
+  requestAssignParticipantProjectSpecies,
   requestCreateParticipantProjectSpecies,
+  requestDeleteManyParticipantProjectSpecies,
   requestGetParticipantProjectSpecies,
   requestListParticipantProjectSpecies,
-  requestRemoveParticipantProjectSpecies,
   requestUpdateParticipantProjectSpecies,
 } from './participantProjectSpeciesAsyncThunks';
 
 /**
+ * Assign Participant Projects Species
+ */
+const initialStateParticipantProjectSpeciesAssign: { [key: string]: StatusT<boolean> } = {};
+
+export const participantProjectSpeciesAssignSlice = createSlice({
+  name: 'participantProjectSpeciesAssignSlice',
+  initialState: initialStateParticipantProjectSpeciesAssign,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestAssignParticipantProjectSpecies)(builder);
+  },
+});
+
+/**
+ * Create Participant Projects Species
+ */
+const initialStateParticipantProjectSpeciesCreate: { [key: string]: StatusT<ParticipantProjectSpecies> } = {};
+
+export const participantProjectSpeciesCreateSlice = createSlice({
+  name: 'participantProjectSpeciesCreateSlice',
+  initialState: initialStateParticipantProjectSpeciesCreate,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestCreateParticipantProjectSpecies)(builder);
+  },
+});
+
+/**
+ * Remove Participant Project Species
+ */
+const initialStateParticipantProjectDeleteMany: { [key: string]: StatusT<boolean> } = {};
+
+export const participantProjectSpeciesDeleteManySlice = createSlice({
+  name: 'participantProjectSpeciesDeleteManySlice',
+  initialState: initialStateParticipantProjectDeleteMany,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestDeleteManyParticipantProjectSpecies)(builder);
+  },
+});
+
+/**
  * Get Participant Project Species
  */
-const initialStateParticipantProject: { [key: string]: StatusT<ParticipantProjectSpecies> } = {};
+const initialStateParticipantProjectGet: { [key: string]: StatusT<ParticipantProjectSpecies> } = {};
 
-export const participantProjectSpeciesSlice = createSlice({
-  name: 'participantProjectSpeciesSlice',
-  initialState: initialStateParticipantProject,
+export const participantProjectSpeciesGetSlice = createSlice({
+  name: 'participantProjectSpeciesGetSlice',
+  initialState: initialStateParticipantProjectGet,
   reducers: {},
   extraReducers: (builder) => {
     buildReducers(requestGetParticipantProjectSpecies, true)(builder);
@@ -28,7 +74,8 @@ export const participantProjectSpeciesSlice = createSlice({
 /**
  * List Participant Project Species
  */
-const initialStateParticipantProjectsList: { [key: string]: StatusT<ParticipantProjectSpecies[]> } = {};
+const initialStateParticipantProjectsList: { [key: string]: StatusT<SpeciesWithParticipantProjectsSearchResponse[]> } =
+  {};
 
 export const participantProjectSpeciesListSlice = createSlice({
   name: 'participantProjectSpeciesListSlice',
@@ -54,40 +101,13 @@ export const participantProjectSpeciesUpdateSlice = createSlice({
   },
 });
 
-/**
- * Remove Participant Project Species
- */
-const initialStateParticipantProjectRemove: { [key: string]: StatusT<boolean> } = {};
-
-export const participantProjectSpeciesRemoveSlice = createSlice({
-  name: 'participantProjectSpeciesRemoveSlice',
-  initialState: initialStateParticipantProjectRemove,
-  reducers: {},
-  extraReducers: (builder) => {
-    buildReducers(requestRemoveParticipantProjectSpecies)(builder);
-  },
-});
-
-/**
- * Create Participant Projects Species
- */
-const initialStateParticipantProjectSpeciesCreate: { [key: string]: StatusT<ParticipantProjectSpecies> } = {};
-
-export const participantProjectSpeciesCreateSlice = createSlice({
-  name: 'participantProjectSpeciesCreateSlice',
-  initialState: initialStateParticipantProjectSpeciesCreate,
-  reducers: {},
-  extraReducers: (builder) => {
-    buildReducers(requestCreateParticipantProjectSpecies)(builder);
-  },
-});
-
 const participantProjectSpeciesReducers = {
-  participantProjectSpecies: participantProjectSpeciesSlice.reducer,
-  participantProjectSpeciesList: participantProjectSpeciesListSlice.reducer,
-  participantProjectSpeciesUpdate: participantProjectSpeciesListSlice.reducer,
-  participantProjectSpeciesRemove: participantProjectSpeciesRemoveSlice.reducer,
+  participantProjectSpeciesAssign: participantProjectSpeciesAssignSlice.reducer,
   participantProjectSpeciesCreate: participantProjectSpeciesCreateSlice.reducer,
+  participantProjectSpeciesDeleteMany: participantProjectSpeciesDeleteManySlice.reducer,
+  participantProjectSpeciesGet: participantProjectSpeciesGetSlice.reducer,
+  participantProjectSpeciesList: participantProjectSpeciesListSlice.reducer,
+  participantProjectSpeciesUpdate: participantProjectSpeciesUpdateSlice.reducer,
 };
 
 export default participantProjectSpeciesReducers;

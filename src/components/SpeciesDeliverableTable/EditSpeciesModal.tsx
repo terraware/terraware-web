@@ -9,7 +9,6 @@ import { APP_PATHS } from 'src/constants';
 import { requestUpdateParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { selectParticipantProjectUpdateRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { useParticipantProjectData } from 'src/scenes/AcceleratorRouter/ParticipantProjects/ParticipantProjectContext';
 import { ParticipantProjectSpecies } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -29,7 +28,6 @@ export default function EditSpeciesModal(props: AddEditSubLocationProps): JSX.El
   const dispatch = useAppDispatch();
   const result = useAppSelector(selectParticipantProjectUpdateRequest(requestId));
   const snackbar = useSnackbar();
-  const { projectId } = useParticipantProjectData();
 
   const [record] = useState<ParticipantProjectSpecies>(projectSpecies);
 
@@ -45,8 +43,6 @@ export default function EditSpeciesModal(props: AddEditSubLocationProps): JSX.El
   const save = () => {
     const request = dispatch(
       requestUpdateParticipantProjectSpecies({
-        projectId,
-        participantProjectSpeciesId: record.id,
         participantProjectSpecies: record,
       })
     );
@@ -80,7 +76,8 @@ export default function EditSpeciesModal(props: AddEditSubLocationProps): JSX.El
             fontSize='16px'
             to={APP_PATHS.SPECIES_DETAILS.replace(':speciesId', projectSpecies.speciesId.toString())}
           >
-            {projectSpecies.speciesScientificName}
+            {/* {projectSpecies.speciesScientificName} */}
+            TODO speciesScientificName
           </Link>
         </Grid>
         <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
