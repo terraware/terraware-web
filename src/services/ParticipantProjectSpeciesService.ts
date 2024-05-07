@@ -107,7 +107,7 @@ const update = async (
     const index = speciesList.findIndex((ps) => ps.id === participantProjectSpeciesId);
 
     if (index !== -1) {
-      speciesList[index] = participantProjectSpecies;
+      // speciesList[index] = participantProjectSpecies;
       mockParticipantProjectSpecies[projectId] = speciesList;
     }
 

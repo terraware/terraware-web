@@ -88,7 +88,7 @@ const SpeciesDeliverableView = (props: Props): JSX.Element => {
         <SpeciesDeliverableStatusMessage {...viewProps} species={participantProjectSpecies?.data || []} />
         <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
           <Metadata {...viewProps} />
-          <SpeciesDeliverableTable />
+          <SpeciesDeliverableTable projectId={currentParticipantProject?.id || -1} />
         </Card>
       </Box>
     </Page>

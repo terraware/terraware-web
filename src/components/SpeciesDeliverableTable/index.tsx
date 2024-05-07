@@ -5,8 +5,8 @@ import { TableColumnType, TableRowType } from '@terraware/web-components';
 
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers';
-import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { requestListParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { selectParticipantProjectSpeciesListRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -23,31 +23,33 @@ const columns = (): TableColumnType[] => [
   { key: 'status', name: strings.STATUS, type: 'string' },
 ];
 
-const SpeciesDeliverableTable = (): JSX.Element => {
+const consoleColumns = (): TableColumnType[] => [
+  ...columns(),
+  { key: 'reject', name: '', type: 'string' },
+  { key: 'approve', name: '', type: 'string' },
+];
+
+type SpeciesDeliverableTableProps = {
+  projectId: number;
+};
+
+const SpeciesDeliverableTable = ({ projectId }: SpeciesDeliverableTableProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const { currentParticipantProject } = useParticipantData();
-  const participantProjectSpecies = useAppSelector(
-    selectParticipantProjectSpeciesListRequest(currentParticipantProject?.id || -1)
-  );
+  const participantProjectSpecies = useAppSelector(selectParticipantProjectSpeciesListRequest(projectId));
 
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [openedAddSpeciesModal, setOpenedAddSpeciesModal] = useState(false);
+  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   useEffect(() => {
-    if (!currentParticipantProject?.id) {
-      return;
-    }
-
-    void dispatch(requestListParticipantProjectSpecies(currentParticipantProject.id));
+    void dispatch(requestListParticipantProjectSpecies(projectId));
   }, []);
 
   const reload = () => {
-    if (currentParticipantProject) {
-      dispatch(requestListParticipantProjectSpecies(currentParticipantProject.id));
-    }
+    dispatch(requestListParticipantProjectSpecies(projectId));
   };
 
   return (
@@ -78,20 +80,20 @@ const SpeciesDeliverableTable = (): JSX.Element => {
               {strings.SPECIES}
             </Typography>
 
-            <Button
-              icon='plus'
-              id='add-species-to-project'
-              label='Add Species to Project'
-              onClick={() => {
-                setOpenedAddSpeciesModal(true);
-              }}
-              priority='secondary'
-              size='medium'
-            />
+            {!isAcceleratorRoute && (
+              <Button
+                icon='plus'
+                id='add-species-to-project'
+                label='Add Species to Project'
+                onClick={() => setOpenedAddSpeciesModal(true)}
+                priority='secondary'
+                size='medium'
+              />
+            )}
           </Box>
 
           <Table
-            columns={columns}
+            columns={isAcceleratorRoute ? consoleColumns : columns}
             emptyTableMessage={strings.THERE_ARE_NO_SPECIES_ADDED_TO_THIS_PROJET_YET}
             id='species-deliverable-table'
             orderBy='speciesScientificName'
