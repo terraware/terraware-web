@@ -142,7 +142,11 @@ const list = async (
 };
 
 const update = (participantProjectSpecies: ParticipantProjectSpecies): Promise<Response2<UpdateResponse>> => {
-  const entity: UpdateRequestPayload = { participantProjectSpecies };
+  const entity: UpdateRequestPayload = {
+    feedback: participantProjectSpecies.feedback,
+    rationale: participantProjectSpecies.rationale,
+    submissionStatus: participantProjectSpecies.submissionStatus,
+  };
 
   return HttpService.root(ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR).put2<UpdateResponse>({
     urlReplacements: {
