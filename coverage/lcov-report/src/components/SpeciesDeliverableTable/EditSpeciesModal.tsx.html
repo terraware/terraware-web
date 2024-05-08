@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
@@ -152,11 +152,7 @@
 <a name='L87'></a><a href='#L87'>87</a>
 <a name='L88'></a><a href='#L88'>88</a>
 <a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a>
-<a name='L92'></a><a href='#L92'>92</a>
-<a name='L93'></a><a href='#L93'>93</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L90'></a><a href='#L90'>90</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -186,7 +182,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -205,12 +200,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -258,7 +252,6 @@ import { APP_PATHS } from 'src/constants';
 import { requestUpdateParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { selectParticipantProjectUpdateRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { useParticipantProjectData } from 'src/scenes/AcceleratorRouter/ParticipantProjects/ParticipantProjectContext';
 import { ParticipantProjectSpecies } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -278,7 +271,6 @@ export default function <span class="fstat-no" title="function not covered" >Edi
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const result = <span class="cstat-no" title="statement not covered" >useAppSelector(selectParticipantProjectUpdateRequest(requestId));</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
-  const { projectId } = <span class="cstat-no" title="statement not covered" >useParticipantProjectData();</span>
 &nbsp;
   const [record] = <span class="cstat-no" title="statement not covered" >useState&lt;ParticipantProjectSpecies&gt;(projectSpecies);</span>
 &nbsp;
@@ -294,8 +286,6 @@ export default function <span class="fstat-no" title="function not covered" >Edi
   const save = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const request = <span class="cstat-no" title="statement not covered" >dispatch(</span>
       requestUpdateParticipantProjectSpecies({
-        projectId,
-        participantProjectSpeciesId: record.id,
         participantProjectSpecies: record,
       })
     );
@@ -329,7 +319,8 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             fontSize='16px'
             to={APP_PATHS.SPECIES_DETAILS.replace(':speciesId', projectSpecies.speciesId.toString())}
           &gt;
-            {projectSpecies.speciesScientificName}
+            {/* {projectSpecies.speciesScientificName} */}
+            TODO speciesScientificName
           &lt;/Link&gt;
         &lt;/Grid&gt;
         &lt;Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}&gt;
@@ -346,7 +337,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-07T15:28:00.206Z
+                at 2024-05-08T18:47:53.374Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
