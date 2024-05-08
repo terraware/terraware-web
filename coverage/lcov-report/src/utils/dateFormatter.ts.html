@@ -110,7 +110,21 @@
 <a name='L45'></a><a href='#L45'>45</a>
 <a name='L46'></a><a href='#L46'>46</a>
 <a name='L47'></a><a href='#L47'>47</a>
-<a name='L48'></a><a href='#L48'>48</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -121,6 +135,29 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -132,19 +169,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -168,6 +196,9 @@ export const getShortDate = <span class="cstat-no" title="statement not covered"
     new Date(date)
   );
 &nbsp;
+/**
+ * Returns &lt;Month&gt; &lt;Day&gt;, &lt;Year&gt; (eg. July 1, 2023)
+ */
 export const getLongDate = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(d</span>ate: string, locale: string | undefined | null): string =&gt;</span>
 <span class="cstat-no" title="statement not covered" >  new Intl.DateTimeFormat(locale || 'en-US', {</span>
     day: 'numeric',
@@ -176,24 +207,35 @@ export const getLongDate = <span class="cstat-no" title="statement not covered" 
     timeZone: 'UTC',
   }).format(new Date(date));
 &nbsp;
+/**
+ * Returns &lt;Month&gt; &lt;Day&gt;, &lt;Year&gt; at &lt;Hour&gt;:&lt;Minute&gt;:&lt;Second&gt; &lt;AM/PM&gt; (eg. July 1, 2023 at 2:00:00 PM)
+ */
 export const getLongDateTime = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(d</span>ate: string, locale: string | undefined | null): string =&gt;</span>
 <span class="cstat-no" title="statement not covered" >  new Intl.DateTimeFormat(locale || 'en-US', {</span>
     dateStyle: 'long',
     timeStyle: 'medium',
   }).format(new Date(date));
 &nbsp;
+/**
+ * Returns &lt;Hour&gt;:&lt;Minute&gt; &lt;am/pm&gt; (eg. 12:00 pm)
+ */
 export const getShortTime = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(d</span>ateTime: string, locale: string | undefined | null, timeZone?: string): string =&gt;</span>
 <span class="cstat-no" title="statement not covered" >  new Intl.DateTimeFormat(locale || 'en-US', { timeStyle: 'short', timeZone: timeZone ?? 'UTC' })</span>
     .format(new Date(dateTime))
     .toLowerCase();
 &nbsp;
+/**
+ * Returns &lt;ISO Date&gt; &lt;Hour&gt;:&lt;Minute&gt; &lt;AM/PM&gt; (eg. 2023-09-05 3:31 PM)
+ */
 export const getDateTimeDisplayValue = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(t</span>imestamp: number): string =&gt; {</span>
   const dateTime = <span class="cstat-no" title="statement not covered" >DateTime.fromMillis(timestamp);</span>
-  // returns {ISO} {TIME}, eg. 2023-09-05 3:31 PM
   // DateTime has pre-supported formats but none satisfy our requirements
 <span class="cstat-no" title="statement not covered" >  return `${getDateDisplayValue(timestamp)} ${dateTime.toLocaleString(DateTime.TIME_SIMPLE)}`;</span>
 };
 &nbsp;
+/**
+ * Returns &lt;Date&gt;–&lt;Date&gt; (eg. 7/1-7/15)
+ */
 export const getDateRangeString = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tartDate: string, endDate: string, locale: string | undefined | null) =&gt; {</span>
   const formattedStart = <span class="cstat-no" title="statement not covered" >new Intl.DateTimeFormat(locale || 'en-US', { month: 'numeric', day: 'numeric' }).format(</span>
     new Date(startDate)
@@ -211,7 +253,7 @@ export const getDateRangeString = <span class="cstat-no" title="statement not co
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-08T18:47:53.374Z
+                at 2024-05-08T19:37:01.946Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
