@@ -1,18 +1,21 @@
 import React, { Theme, Typography, useTheme } from '@mui/material';
 import { Property } from 'csstype';
 
-import strings from 'src/strings';
-
-import { ToDoType } from './ToDo';
+import { ToDoBadge, ToDoItem } from 'src/types/ProjectToDo';
 
 interface ToDoDateProps {
-  toDo: ToDoType;
+  toDo: ToDoItem;
 }
 
-const getDateColor = (status: ToDoType['status'], theme: Theme): Property.Color | undefined => {
+const getDateColor = (status: ToDoBadge, theme: Theme): Property.Color | undefined => {
   switch (status) {
+    case 'Not Accepted':
     case 'Overdue':
       return theme.palette.TwClrTxtDanger;
+    case 'Completed':
+    case 'Event':
+    case 'In Review':
+    case 'Not Submitted':
     default:
       return theme.palette.TwClrTxtWarning;
   }
@@ -21,11 +24,11 @@ const getDateColor = (status: ToDoType['status'], theme: Theme): Property.Color 
 const ToDoDate = ({ toDo }: ToDoDateProps) => {
   const theme = useTheme();
 
-  const dateLabel = toDo.type === 'Deliverable' ? strings.formatString(strings.DUE, toDo.dueDate) : toDo.dueDate;
+  const dateLabel = toDo.getDisplayDateTimeString()
 
   return (
     <Typography
-      color={getDateColor(toDo.status, theme)}
+      color={getDateColor(toDo.getBadge(), theme)}
       fontSize={'16px'}
       fontWeight={600}
       lineHeight={'24px'}
