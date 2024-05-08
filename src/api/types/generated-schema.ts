@@ -65,6 +65,22 @@ export interface paths {
     /** Deletes a participant that has no projects. */
     delete: operations["deleteParticipant"];
   };
+  "/api/v1/accelerator/projects/species": {
+    /** Creates a new participant project species entry. */
+    post: operations["createParticipantProjectSpecies"];
+    /** Deletes participant project species entries. */
+    delete: operations["deleteParticipantProjectSpecies"];
+  };
+  "/api/v1/accelerator/projects/species/assign": {
+    /** Creates a new participant project species entry for every project ID and species ID pairing. */
+    post: operations["assignParticipantProjectSpecies"];
+  };
+  "/api/v1/accelerator/projects/species/{participantProjectSpeciesId}": {
+    /** Gets information about a participant project species. */
+    get: operations["getParticipantProjectSpecies"];
+    /** Updates a participant project species entry. */
+    put: operations["updateParticipantProjectSpecies"];
+  };
   "/api/v1/accelerator/projects/{projectId}": {
     /**
      * Gets the accelerator-related details for a project.
@@ -1039,6 +1055,10 @@ export interface components {
       successStories?: string;
       sustainableDevelopmentGoals: components["schemas"]["GoalProgressPayloadV1"][];
     };
+    AssignParticipantProjectSpeciesPayload: {
+      projectIds: number[];
+      speciesIds: number[];
+    };
     AssignProjectRequestPayload: {
       accessionIds?: number[];
       batchIds?: number[];
@@ -1658,6 +1678,13 @@ export interface components {
       id: number;
       status: components["schemas"]["SuccessOrError"];
     };
+    CreateParticipantProjectSpeciesPayload: {
+      /** Format: int64 */
+      projectId: number;
+      rationale?: string;
+      /** Format: int64 */
+      speciesId: number;
+    };
     CreateParticipantRequestPayload: {
       /**
        * Format: int64
@@ -1777,6 +1804,9 @@ export interface components {
     DeleteGlobalRolesRequestPayload: {
       userIds: number[];
     };
+    DeleteParticipantProjectSpeciesPayload: {
+      participantProjectSpeciesIds: number[];
+    };
     DeleteProjectVotesRequestPayload: {
       /** @enum {string} */
       phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
@@ -1815,7 +1845,7 @@ export interface components {
       /** Format: uri */
       templateUrl?: string;
       /** @enum {string} */
-      type: "Document";
+      type: "Document" | "Species";
     };
     /** @description If the withdrawal was an outplanting to a planting site, the delivery that was created. Not present for other withdrawal purposes. */
     DeliveryPayload: {
@@ -2171,6 +2201,10 @@ export interface components {
     GetOrganizationUserResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
       user: components["schemas"]["OrganizationUserPayload"];
+    };
+    GetParticipantProjectSpeciesResponsePayload: {
+      participantProjectSpecies: components["schemas"]["ParticipantProjectSpeciesPayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetParticipantResponsePayload: {
       participant: components["schemas"]["ParticipantPayload"];
@@ -2528,7 +2562,7 @@ export interface components {
       /** @enum {string} */
       status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
       /** @enum {string} */
-      type: "Document";
+      type: "Document" | "Species";
     };
     ListDeliverablesResponsePayload: {
       deliverables: components["schemas"]["ListDeliverablesElement"][];
@@ -3088,6 +3122,18 @@ export interface components {
       /** Format: int64 */
       projectId: number;
       projectName: string;
+    };
+    ParticipantProjectSpeciesPayload: {
+      feedback?: string;
+      /** Format: int64 */
+      id: number;
+      /** Format: int64 */
+      projectId: number;
+      rationale?: string;
+      /** Format: int64 */
+      speciesId: number;
+      /** @enum {string} */
+      submissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
     };
     PhaseScores: {
       /** @enum {string} */
@@ -4089,6 +4135,12 @@ export interface components {
       /** @enum {string} */
       role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
     };
+    UpdateParticipantProjectSpeciesPayload: {
+      feedback?: string;
+      rationale?: string;
+      /** @enum {string} */
+      submissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
+    };
     UpdateParticipantRequestPayload: {
       /**
        * Format: int64
@@ -4759,6 +4811,109 @@ export interface operations {
       };
       /** @description There are projects associated with the participant. */
       409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Creates a new participant project species entry. */
+  createParticipantProjectSpecies: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateParticipantProjectSpeciesPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetParticipantProjectSpeciesResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Deletes participant project species entries. */
+  deleteParticipantProjectSpecies: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DeleteParticipantProjectSpeciesPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Creates a new participant project species entry for every project ID and species ID pairing. */
+  assignParticipantProjectSpecies: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AssignParticipantProjectSpeciesPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets information about a participant project species. */
+  getParticipantProjectSpecies: {
+    parameters: {
+      path: {
+        participantProjectSpeciesId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetParticipantProjectSpeciesResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Updates a participant project species entry. */
+  updateParticipantProjectSpecies: {
+    parameters: {
+      path: {
+        participantProjectSpeciesId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateParticipantProjectSpeciesPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };

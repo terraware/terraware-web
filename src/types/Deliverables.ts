@@ -39,9 +39,7 @@ export type DeliverableData = {
 };
 
 export type ListDeliverablesResponsePayload = components['schemas']['ListDeliverablesResponsePayload'];
-export type ListDeliverablesElement = Omit<components['schemas']['ListDeliverablesElement'], 'type'> & {
-  type: 'Document' | 'Species List';
-};
+export type ListDeliverablesElement = components['schemas']['ListDeliverablesElement'];
 
 // TODO: remove this mock data when the actual data is available
 export const mockSpeciesListDeliverables: ListDeliverablesElement[] = [
@@ -56,7 +54,7 @@ export const mockSpeciesListDeliverables: ListDeliverablesElement[] = [
     projectId: 1,
     projectName: 'Project 1',
     status: 'Not Submitted',
-    type: 'Species List',
+    type: 'Species',
   },
   {
     category: 'Carbon Eligibility',
@@ -69,7 +67,7 @@ export const mockSpeciesListDeliverables: ListDeliverablesElement[] = [
     projectId: 2,
     projectName: 'Project 1',
     status: 'Not Submitted',
-    type: 'Species List',
+    type: 'Species',
   },
 ];
 

@@ -13,8 +13,8 @@ import { selectParticipantProjectSpeciesCreateRequest } from 'src/redux/features
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { SpeciesService } from 'src/services';
 import {
-  ParticipantProjectSpecies,
-  ParticipantProjectSpeciesRequest,
+  CreateParticipantProjectSpeciesRequestPayload,
+  SpeciesWithParticipantProjectsSearchResponse,
 } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
@@ -22,7 +22,8 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 export interface AddEditSubLocationProps {
   onClose: () => void;
-  participantProjectSpecies: ParticipantProjectSpecies[];
+  participantProjectSpecies: SpeciesWithParticipantProjectsSearchResponse[];
+
   reload: () => void;
 }
 
@@ -73,7 +74,7 @@ export default function AddSpeciesModal(props: AddEditSubLocationProps): JSX.Ele
     setSelectableSpecies(speciesToAdd);
   }, [allSpecies]);
 
-  const [record] = useState<ParticipantProjectSpeciesRequest | undefined>(initializeSpeciesProject());
+  const [record] = useState<CreateParticipantProjectSpeciesRequestPayload | undefined>(initializeSpeciesProject());
 
   useEffect(() => {
     if (result?.status === 'error') {

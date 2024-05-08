@@ -59,6 +59,7 @@ const SpeciesDeliverableTable = (): JSX.Element => {
             open={showConfirmDialog}
             speciesToRemove={selectedRows.map((row) => row.id)}
           />
+
           {openedAddSpeciesModal && (
             <AddSpeciesModal
               onClose={() => setOpenedAddSpeciesModal(false)}
@@ -66,6 +67,7 @@ const SpeciesDeliverableTable = (): JSX.Element => {
               reload={reload}
             />
           )}
+
           <Box
             alignItems='center'
             display='flex'
