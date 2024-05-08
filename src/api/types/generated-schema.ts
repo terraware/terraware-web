@@ -1845,7 +1845,7 @@ export interface components {
       /** Format: uri */
       templateUrl?: string;
       /** @enum {string} */
-      type: "Document";
+      type: "Document" | "Species";
     };
     /** @description If the withdrawal was an outplanting to a planting site, the delivery that was created. Not present for other withdrawal purposes. */
     DeliveryPayload: {
@@ -2562,7 +2562,7 @@ export interface components {
       /** @enum {string} */
       status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
       /** @enum {string} */
-      type: "Document";
+      type: "Document" | "Species";
     };
     ListDeliverablesResponsePayload: {
       deliverables: components["schemas"]["ListDeliverablesElement"][];
