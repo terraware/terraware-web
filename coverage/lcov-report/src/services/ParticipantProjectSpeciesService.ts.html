@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/29</span>
+                <span class='fraction'>0/27</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/29</span>
+                <span class='fraction'>0/27</span>
             </div>
         
             
@@ -228,10 +228,7 @@
 <a name='L163'></a><a href='#L163'>163</a>
 <a name='L164'></a><a href='#L164'>164</a>
 <a name='L165'></a><a href='#L165'>165</a>
-<a name='L166'></a><a href='#L166'>166</a>
-<a name='L167'></a><a href='#L167'>167</a>
-<a name='L168'></a><a href='#L168'>168</a>
-<a name='L169'></a><a href='#L169'>169</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L166'></a><a href='#L166'>166</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -343,23 +340,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -428,7 +422,7 @@ type DeleteResponse =
 type GetResponse =
   paths[typeof ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR]['get']['responses'][200]['content']['application/json'];
 &nbsp;
-type UpdateRequestPayload =
+export type UpdateRequestPayload =
   paths[typeof ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR]['put']['requestBody']['content']['application/json'];
 type UpdateResponse =
   paths[typeof ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR]['put']['responses'][200]['content']['application/json'];
@@ -437,12 +431,12 @@ export type ParticipantProjectSpecies = components['schemas']['ParticipantProjec
 export type SubmissionStatus = ParticipantProjectSpecies['submissionStatus'];
 &nbsp;
 export type SpeciesWithParticipantProjectsSearchResponse = {
-  commonName: string;
+  commonName?: string;
   feedback?: string;
   id: number;
   projectId: number;
   rationale?: string;
-  scientificName: string;
+  scientificName?: string;
   speciesId: number;
   submissionStatus: SubmissionStatus;
 };
@@ -484,12 +478,13 @@ const list = <span class="cstat-no" title="statement not covered" ><span class="
   const params: SearchRequestPayload = <span class="cstat-no" title="statement not covered" >{</span>
     prefix: 'species',
     fields: [
+      'id',
       'commonName',
-      'participantProjectSpecies.project.id',
-      'participantProjectSpecies.id',
-      'participantProjectSpecies.feedback',
-      'participantProjectSpecies.rationale',
-      'participantProjectSpecies.submissionStatus',
+      'participantProjectSpecies_project_id',
+      'participantProjectSpecies_id',
+      'participantProjectSpecies_feedback',
+      'participantProjectSpecies_rationale',
+      'participantProjectSpecies_submissionStatus',
       'scientificName',
     ],
     search: {
@@ -501,7 +496,7 @@ const list = <span class="cstat-no" title="statement not covered" ><span class="
           operation: 'field',
         },
         {
-          field: 'participantProjectSpecies.projects.id',
+          field: 'participantProjectSpecies_project_id',
           values: [`${projectId}`],
           operation: 'field',
         },
@@ -521,21 +516,17 @@ const list = <span class="cstat-no" title="statement not covered" ><span class="
   }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return response.map(<span class="fstat-no" title="function not covered" >(e</span>ntity) =&gt; {</span>
-    const { id, feedback, rationale, submissionStatus, project } = <span class="cstat-no" title="statement not covered" >(entity.participantProjectSpecies || {}) as Record&lt;</span>
-      string,
-      unknown
-    &gt;;
-    const { projectId } = <span class="cstat-no" title="statement not covered" >(project || {}) as Record&lt;string, unknown&gt;;</span>
-&nbsp;
     const searchResponse: SpeciesWithParticipantProjectsSearchResponse = <span class="cstat-no" title="statement not covered" >{</span>
-      commonName: `${entity.commonName}`,
-      feedback: `${feedback}`,
-      id: Number(id),
-      projectId: Number(projectId),
-      rationale: `${rationale}`,
-      scientificName: `${entity.scientificName}`,
-      speciesId: Number(entity.speciesId),
-      submissionStatus: `${submissionStatus}` as SubmissionStatus,
+      commonName: entity.commonName ? `${entity.commonName}` : undefined,
+      feedback: entity.participantProjectSpecies_feedback ? `${entity.participantProjectSpecies_feedback}` : undefined,
+      id: Number(entity.participantProjectSpecies_id),
+      projectId: Number(entity.participantProjectSpecies_project_id),
+      rationale: entity.participantProjectSpecies_rationale
+        ? `${entity.participantProjectSpecies_rationale}`
+        : undefined,
+      scientificName: entity.scientificName ? `${entity.scientificName}` : undefined,
+      speciesId: Number(entity.id),
+      submissionStatus: `${entity.participantProjectSpecies_submissionStatus}` as SubmissionStatus,
     };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return searchResponse;</span>
@@ -574,7 +565,7 @@ export default ParticipantProjectSpeciesService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-08T19:37:01.946Z
+                at 2024-05-08T22:08:06.337Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
