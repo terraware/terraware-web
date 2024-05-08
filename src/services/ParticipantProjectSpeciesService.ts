@@ -27,7 +27,7 @@ type DeleteResponse =
 type GetResponse =
   paths[typeof ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR]['get']['responses'][200]['content']['application/json'];
 
-type UpdateRequestPayload =
+export type UpdateRequestPayload =
   paths[typeof ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR]['put']['requestBody']['content']['application/json'];
 type UpdateResponse =
   paths[typeof ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR]['put']['responses'][200]['content']['application/json'];
@@ -36,12 +36,12 @@ export type ParticipantProjectSpecies = components['schemas']['ParticipantProjec
 export type SubmissionStatus = ParticipantProjectSpecies['submissionStatus'];
 
 export type SpeciesWithParticipantProjectsSearchResponse = {
-  commonName: string;
+  commonName?: string;
   feedback?: string;
   id: number;
   projectId: number;
   rationale?: string;
-  scientificName: string;
+  scientificName?: string;
   speciesId: number;
   submissionStatus: SubmissionStatus;
 };
@@ -83,12 +83,13 @@ const list = async (
   const params: SearchRequestPayload = {
     prefix: 'species',
     fields: [
+      'id',
       'commonName',
-      'participantProjectSpecies.project.id',
-      'participantProjectSpecies.id',
-      'participantProjectSpecies.feedback',
-      'participantProjectSpecies.rationale',
-      'participantProjectSpecies.submissionStatus',
+      'participantProjectSpecies_project_id',
+      'participantProjectSpecies_id',
+      'participantProjectSpecies_feedback',
+      'participantProjectSpecies_rationale',
+      'participantProjectSpecies_submissionStatus',
       'scientificName',
     ],
     search: {
@@ -100,7 +101,7 @@ const list = async (
           operation: 'field',
         },
         {
-          field: 'participantProjectSpecies.projects.id',
+          field: 'participantProjectSpecies_project_id',
           values: [`${projectId}`],
           operation: 'field',
         },
@@ -120,21 +121,17 @@ const list = async (
   }
 
   return response.map((entity) => {
-    const { id, feedback, rationale, submissionStatus, project } = (entity.participantProjectSpecies || {}) as Record<
-      string,
-      unknown
-    >;
-    const { projectId } = (project || {}) as Record<string, unknown>;
-
     const searchResponse: SpeciesWithParticipantProjectsSearchResponse = {
-      commonName: `${entity.commonName}`,
-      feedback: `${feedback}`,
-      id: Number(id),
-      projectId: Number(projectId),
-      rationale: `${rationale}`,
-      scientificName: `${entity.scientificName}`,
-      speciesId: Number(entity.speciesId),
-      submissionStatus: `${submissionStatus}` as SubmissionStatus,
+      commonName: entity.commonName ? `${entity.commonName}` : undefined,
+      feedback: entity.participantProjectSpecies_feedback ? `${entity.participantProjectSpecies_feedback}` : undefined,
+      id: Number(entity.participantProjectSpecies_id),
+      projectId: Number(entity.participantProjectSpecies_project_id),
+      rationale: entity.participantProjectSpecies_rationale
+        ? `${entity.participantProjectSpecies_rationale}`
+        : undefined,
+      scientificName: entity.scientificName ? `${entity.scientificName}` : undefined,
+      speciesId: Number(entity.id),
+      submissionStatus: `${entity.participantProjectSpecies_submissionStatus}` as SubmissionStatus,
     };
 
     return searchResponse;
