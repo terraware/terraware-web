@@ -39,7 +39,7 @@ export const requestProjectToDoDeliverables = createAsyncThunk(
             operation: 'field',
             field: 'status',
             type: 'Exact',
-            values: ['Not Submitted', 'Rejected'],
+            values: [null, 'Not Submitted', 'Rejected'],
           },
         ],
       },

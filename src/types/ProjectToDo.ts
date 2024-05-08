@@ -56,7 +56,7 @@ export type DeliverableSearchResultType = {
   dueDate: string;
   name: string;
   position: number;
-  status: DeliverableStatusType;
+  status: DeliverableStatusType | null;
   type: DeliverableTypeType;
 };
 
@@ -81,7 +81,7 @@ export class DeliverableToDoItem implements ToDoItem {
     this.moduleName = searchResult.module_name;
     this.position = searchResult.position;
     this.projectId = searchResult.project_id;
-    this.status = searchResult.status;
+    this.status = searchResult.status ?? 'Not Submitted';
     this.type = searchResult.type;
   }
 
