@@ -14,7 +14,18 @@ export const requestProjectToDoDeliverables = createAsyncThunk(
   async (request: { projectId: number }) => {
     const searchParams: SearchRequestPayload = {
       prefix: 'projects.projectDeliverables',
-      fields: ['id', 'module_id', 'module_name', 'project_id', 'name', 'description', 'dueDate', 'status', 'type', 'category'],
+      fields: [
+        'id',
+        'module_id',
+        'module_name',
+        'project_id',
+        'name',
+        'description',
+        'dueDate',
+        'status',
+        'type',
+        'category',
+      ],
       search: {
         operation: 'and',
         children: [

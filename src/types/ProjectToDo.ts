@@ -1,6 +1,7 @@
+import { DateTime } from 'luxon';
+
 import { DeliverableCategoryType, DeliverableStatusType, DeliverableTypeType } from './Deliverables';
 import { ModuleEventSessionStatus, ModuleEventType } from './Module';
-import { DateTime } from 'luxon';
 
 const SEVEN_DAYS_IN_MILLIS = 1000 * 3600 * 24 * 7;
 
@@ -22,7 +23,7 @@ export interface ToDoItem {
   /**
    * returns the date time string for displaying
    */
-  getDisplayDateTimeString(): string
+  getDisplayDateTimeString(): string;
 
   /**
    * returns the badge tag of the to do item
@@ -162,7 +163,7 @@ export class EventToDoItem implements ToDoItem {
 
   getDate = (): DateTime => this.startTime;
 
-  getDisplayDateTimeString = (): string =>  this.startTime.toFormat('EEEE, LLLL dd, hh:mm a ZZZZ');
+  getDisplayDateTimeString = (): string => this.startTime.toFormat('EEEE, LLLL dd, hh:mm a ZZZZ');
 
   getBadge = (): ToDoBadge => 'Event';
 

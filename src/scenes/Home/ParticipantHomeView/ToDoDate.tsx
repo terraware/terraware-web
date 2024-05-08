@@ -24,7 +24,7 @@ const getDateColor = (status: ToDoBadge, theme: Theme): Property.Color | undefin
 const ToDoDate = ({ toDo }: ToDoDateProps) => {
   const theme = useTheme();
 
-  const dateLabel = toDo.getDisplayDateTimeString()
+  const dateLabel = toDo.getDisplayDateTimeString();
 
   return (
     <Typography
