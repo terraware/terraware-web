@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@terraware/web-components';
 
@@ -9,6 +10,7 @@ import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers';
+import { useParticipantProjectSpeciesData } from 'src/providers/ParticipantProject/ParticipantProjectSpeciesContext';
 import { requestUpdateParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { useAppDispatch } from 'src/redux/store';
 import RejectDialog from 'src/scenes/AcceleratorRouter/Deliverables/RejectDialog';
@@ -24,7 +26,9 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
   const [openedEditSpeciesModal, setOpenedEditSpeciesModal] = useState(false);
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const { setCurrentParticipantProjectSpecies, currentDeliverable } = useParticipantProjectSpeciesData();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const createLinkToSpecies = (iValue: React.ReactNode | unknown[]) => {
     return <Link onClick={() => setOpenedEditSpeciesModal(true)}>{iValue as React.ReactNode}</Link>;
@@ -32,7 +36,16 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
 
   const createLinkToAcceleratorSpecies = (iValue: React.ReactNode | unknown[]) => {
     return (
-      <Link to={`${APP_PATHS.ACCELERATOR_SPECIES.replace(':speciesId', row.speciesId.toString())}`}>
+      <Link
+        onClick={() => {
+          setCurrentParticipantProjectSpecies(row.id);
+          navigate(
+            APP_PATHS.ACCELERATOR_SPECIES.replace(':speciesId', row.speciesId.toString())
+              .replace(':projectId', row.projectId)
+              .replace(':deliverableId', currentDeliverable?.id.toString() || '')
+          );
+        }}
+      >
         {iValue as React.ReactNode}
       </Link>
     );

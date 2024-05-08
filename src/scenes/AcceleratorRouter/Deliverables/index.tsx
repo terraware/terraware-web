@@ -2,8 +2,10 @@ import React, { Navigate, Route, Routes } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
+import ParticipantProjectSpeciesProvider from 'src/providers/ParticipantProject/ParticipantProjectSpeciesProvider';
 import ProjectProvider from 'src/providers/Project/ProjectProvider';
 
+import Species from '../Species';
 import DeliverableViewWrapper from './DeliverableViewWrapper';
 import DeliverablesList from './DeliverablesList';
 
@@ -15,7 +17,21 @@ const DeliverablesRouter = () => {
         element={
           <ProjectProvider>
             <ParticipantProvider>
-              <DeliverableViewWrapper />
+              <ParticipantProjectSpeciesProvider>
+                <DeliverableViewWrapper />
+              </ParticipantProjectSpeciesProvider>
+            </ParticipantProvider>
+          </ProjectProvider>
+        }
+      />
+      <Route
+        path={'/:deliverableId/submissions/:projectId/species/:speciesId'}
+        element={
+          <ProjectProvider>
+            <ParticipantProvider>
+              <ParticipantProjectSpeciesProvider>
+                <Species />
+              </ParticipantProjectSpeciesProvider>
             </ParticipantProvider>
           </ProjectProvider>
         }

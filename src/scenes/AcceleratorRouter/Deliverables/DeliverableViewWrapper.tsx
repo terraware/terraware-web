@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Box, useTheme } from '@mui/material';
@@ -9,6 +9,7 @@ import useUpdateDeliverable from 'src/components/DeliverableView/useUpdateDelive
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { useLocalization, useUser } from 'src/providers';
+import { useParticipantProjectSpeciesData } from 'src/providers/ParticipantProject/ParticipantProjectSpeciesContext';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
 
@@ -28,11 +29,18 @@ const DeliverableViewWrapper = () => {
   const theme = useTheme();
   const { isAllowed } = useUser();
   const { activeLocale } = useLocalization();
+  const { setCurrentDeliverable } = useParticipantProjectSpeciesData();
 
   const deliverableId = Number(_deliverableId);
   const projectId = Number(_projectId);
 
   const { deliverable } = useFetchDeliverable({ deliverableId, projectId });
+
+  useEffect(() => {
+    if (deliverable) {
+      setCurrentDeliverable(deliverable);
+    }
+  }, [deliverable]);
 
   const setStatus = useCallback(
     (status: DeliverableStatusType) => {
