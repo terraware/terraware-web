@@ -1,5 +1,5 @@
 import { isInTheFuture } from '@terraware/web-components/utils/date';
-import { DateTime, Duration } from 'luxon';
+import { DateTime } from 'luxon';
 
 import { DeliverableCategoryType, DeliverableStatusType, DeliverableTypeType } from './Deliverables';
 import { ModuleEventSessionStatus, ModuleEventType } from './Module';
