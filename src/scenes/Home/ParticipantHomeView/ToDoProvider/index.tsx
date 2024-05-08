@@ -71,8 +71,8 @@ const ToDoProvider = ({ children }: Props) => {
   }, [toDoDeliverables, toDoEvents, setAllItems]);
 
   useEffect(() => {
-    setToDoItems(allItems.filter((item) => item.getSection() == 'To Do'));
-    setUpcomingItems(allItems.filter((item) => item.getSection() == 'Upcoming'));
+    setToDoItems(allItems.filter((item) => item.getSection() == 'To Do').slice(0, 3));
+    setUpcomingItems(allItems.filter((item) => item.getSection() == 'Upcoming').slice(0, 3));
   }, [allItems, setToDoItems, setUpcomingItems]);
 
   useEffect(() => {
