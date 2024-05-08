@@ -1,3 +1,4 @@
+import { isInTheFuture } from '@terraware/web-components/utils/date';
 import { DateTime, Duration } from 'luxon';
 
 import { DeliverableCategoryType, DeliverableStatusType, DeliverableTypeType } from './Deliverables';
@@ -122,10 +123,10 @@ export class DeliverableToDoItem implements ToDoItem {
       return 'Completed';
     }
 
-    if (this.dueDate.diffNow() < Duration.fromMillis(ONE_DAY_IN_MILLIS * 7)) {
-      return 'To Do';
-    } else {
+    if (isInTheFuture(this.dueDate) && this.dueDate.diffNow().toMillis() > ONE_DAY_IN_MILLIS * 7) {
       return 'Upcoming';
+    } else {
+      return 'To Do';
     }
   };
 }
