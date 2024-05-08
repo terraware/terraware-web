@@ -4,6 +4,7 @@ import useFetchDeliverable from 'src/components/DeliverableView/useFetchDelivera
 import Page from 'src/components/Page';
 
 import DocumentDeliverableView from './DocumentDeliverableView';
+import SpeciesDeliverableView from './SpeciesDeliverableView';
 
 const DeliverableViewWrapper = () => {
   const { deliverableId, projectId } = useParams<{ deliverableId: string; projectId: string }>();
@@ -11,7 +12,15 @@ const DeliverableViewWrapper = () => {
   const { deliverable } = useFetchDeliverable({ deliverableId: Number(deliverableId), projectId: Number(projectId) });
 
   if (deliverable) {
-    return <DocumentDeliverableView deliverable={deliverable} />;
+    switch (deliverable.type) {
+      case 'Document':
+        return <DocumentDeliverableView deliverable={deliverable} />;
+      case 'Species':
+        return <SpeciesDeliverableView deliverable={deliverable} />;
+      default:
+        // TODO what should we do if the backend returns a type that the frontend isn't aware of yet/
+        return null;
+    }
   } else {
     return <Page isLoading={true} />;
   }

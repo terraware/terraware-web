@@ -17,10 +17,10 @@ import RemoveSpeciesDialog from './RemoveSpeciesDialog';
 import TableCellRenderer from './TableCellRenderer';
 
 const columns = (): TableColumnType[] => [
-  { key: 'speciesScientificName', name: strings.SCIENTIFIC_NAME, type: 'string' },
-  { key: 'speciesCommonName', name: strings.COMMON_NAME, type: 'string' },
+  { key: 'scientificName', name: strings.SCIENTIFIC_NAME, type: 'string' },
+  { key: 'commonName', name: strings.COMMON_NAME, type: 'string' },
   { key: 'rationale', name: strings.RATIONALE, type: 'string' },
-  { key: 'status', name: strings.STATUS, type: 'string' },
+  { key: 'submissionStatus', name: strings.STATUS, type: 'string' },
 ];
 
 const SpeciesDeliverableTable = (): JSX.Element => {
@@ -42,11 +42,18 @@ const SpeciesDeliverableTable = (): JSX.Element => {
     }
 
     void dispatch(requestListParticipantProjectSpecies(currentParticipantProject.id));
-  }, []);
+  }, [currentParticipantProject]);
 
   const reload = () => {
     if (currentParticipantProject) {
       dispatch(requestListParticipantProjectSpecies(currentParticipantProject.id));
+    }
+  };
+
+  const onCloseRemoveSpecies = (_reload?: boolean) => {
+    setShowConfirmDialog(false);
+    if (_reload) {
+      reload();
     }
   };
 
@@ -55,7 +62,7 @@ const SpeciesDeliverableTable = (): JSX.Element => {
       {activeLocale && (
         <>
           <RemoveSpeciesDialog
-            onClose={() => setShowConfirmDialog(false)}
+            onClose={onCloseRemoveSpecies}
             open={showConfirmDialog}
             speciesToRemove={selectedRows.map((row) => row.id)}
           />

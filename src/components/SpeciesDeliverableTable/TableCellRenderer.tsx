@@ -19,7 +19,7 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
     return <Link onClick={() => setOpenedEditSpeciesModal(true)}>{iValue as React.ReactNode}</Link>;
   };
 
-  if (column.key === 'speciesScientificName') {
+  if (column.key === 'scientificName') {
     return (
       <CellRenderer
         column={column}
@@ -41,7 +41,7 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
     );
   }
 
-  if (column.key === 'status') {
+  if (column.key === 'submissionStatus') {
     return (
       <CellRenderer
         column={column}
