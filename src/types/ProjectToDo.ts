@@ -1,9 +1,9 @@
-import { DateTime } from 'luxon';
+import { DateTime, Duration } from 'luxon';
 
 import { DeliverableCategoryType, DeliverableStatusType, DeliverableTypeType } from './Deliverables';
 import { ModuleEventSessionStatus, ModuleEventType } from './Module';
 
-const SEVEN_DAYS_IN_MILLIS = 1000 * 3600 * 24 * 7;
+const ONE_DAY_IN_MILLIS = 1000 * 3600 * 24;
 
 export type ToDoBadge = 'Not Submitted' | 'Event' | 'In Review' | 'Not Accepted' | 'Overdue' | 'Completed';
 export type ToDoType = 'Deliverable' | ModuleEventType;
@@ -122,7 +122,7 @@ export class DeliverableToDoItem implements ToDoItem {
       return 'Completed';
     }
 
-    if (this.dueDate.valueOf() - Date.now() > SEVEN_DAYS_IN_MILLIS) {
+    if (this.dueDate.diffNow() < Duration.fromMillis(ONE_DAY_IN_MILLIS * 7)) {
       return 'To Do';
     } else {
       return 'Upcoming';
