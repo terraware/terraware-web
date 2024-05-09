@@ -51,14 +51,6 @@ const CurrentModule = () => {
                 <Box dangerouslySetInnerHTML={{ __html: currentModule.overview }} />
               </Grid>
             )}
-
-            <Grid item xs={12}>
-              <Typography fontSize={'20px'} fontWeight={600} lineHeight={'28px'}>
-                {strings.THIS_MODULE_CONTAINS}
-              </Typography>
-            </Grid>
-
-            {/* TODO module links will come after BE sync */}
           </Grid>
         </Grid>
         <Grid item xs={5} />
