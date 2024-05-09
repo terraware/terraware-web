@@ -11,7 +11,7 @@ import Navbar from 'src/components/common/Navbar/Navbar';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
-import { useModules } from 'src/hooks/useModules';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { NurseryWithdrawalService } from 'src/services';
 import DeliverablesService from 'src/services/DeliverablesService';
@@ -35,14 +35,14 @@ export default function NavBar({
   const { selectedOrganization } = useOrganization();
   const [showNurseryWithdrawals, setShowNurseryWithdrawals] = useState<boolean>(false);
   const [reports, setReports] = useState<Reports>([]);
-  const [moduleProjectId, setModuleProjectId] = useState<number | undefined>(undefined);
   const [hasDeliverables, setHasDeliverables] = useState<boolean>(false);
   const { isDesktop, isMobile } = useDeviceInfo();
   const navigate = useNavigate();
 
   const { isAllowedViewConsole } = useAcceleratorConsole();
   const { activeLocale } = useLocalization();
-  const { projectModules } = useModules();
+  const { orgHasModules, currentParticipantProject, setCurrentParticipantProject, moduleProjects } =
+    useParticipantData();
 
   const isAccessionDashboardRoute = useMatch({ path: APP_PATHS.SEEDS_DASHBOARD + '/', end: false });
   const isAccessionsRoute = useMatch({ path: APP_PATHS.ACCESSIONS + '/', end: false });
@@ -119,16 +119,6 @@ export default function NavBar({
   }, [selectedOrganization]);
 
   useEffect(() => {
-    const moduleProject = projectModules.find(({ modules }) => modules !== undefined);
-
-    if (!moduleProject) {
-      return;
-    }
-
-    setModuleProjectId(moduleProject.id);
-  }, [projectModules]);
-
-  useEffect(() => {
     const fetchDeliverables = async () => {
       // TODO I think we should pull this out of redux
       // using a direct service call, without redux, to keep with existing pattern in the nav bars
@@ -143,6 +133,12 @@ export default function NavBar({
       setHasDeliverables(false);
     }
   }, [activeLocale, selectedOrganization]);
+
+  useEffect(() => {
+    if (!currentParticipantProject && moduleProjects && moduleProjects.length > 0) {
+      setCurrentParticipantProject(moduleProjects[0].id);
+    }
+  }, [moduleProjects, currentParticipantProject, setCurrentParticipantProject]);
 
   const getSeedlingsMenuItems = () => {
     const inventoryMenu = (
@@ -206,18 +202,20 @@ export default function NavBar({
 
   const modulesMenu = useMemo<JSX.Element | null>(
     () =>
-      featureFlagParticipantExperience && moduleProjectId ? (
+      currentParticipantProject && featureFlagParticipantExperience && orgHasModules ? (
         <NavItem
           icon='iconModule'
           label={strings.MODULES}
           selected={!!isProjectModulesRoute}
           onClick={() => {
-            closeAndNavigateTo(APP_PATHS.PROJECT_MODULES.replace(':projectId', moduleProjectId.toString()));
+            closeAndNavigateTo(
+              APP_PATHS.PROJECT_MODULES.replace(':projectId', currentParticipantProject.id.toString())
+            );
           }}
           id='reports-list'
         />
       ) : null,
-    [closeAndNavigateTo, featureFlagParticipantExperience, isProjectModulesRoute, moduleProjectId]
+    [closeAndNavigateTo, featureFlagParticipantExperience, isProjectModulesRoute, currentParticipantProject]
   );
 
   const acceleratorSectionTitle = useMemo<string>(

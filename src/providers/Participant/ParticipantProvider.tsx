@@ -1,7 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { selectActiveModules, selectProjectModuleList } from 'src/redux/features/modules/modulesSelectors';
+import { requestListModules } from 'src/redux/features/modules/modulesAsyncThunks';
+import {
+  selectActiveModules,
+  selectAllModuleList,
+  selectProjectModuleList,
+} from 'src/redux/features/modules/modulesSelectors';
 import { requestGetParticipant } from 'src/redux/features/participants/participantsAsyncThunks';
 import { selectParticipant } from 'src/redux/features/participants/participantsSelectors';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
@@ -22,11 +27,24 @@ const ParticipantProvider = ({ children }: Props) => {
 
   const [currentParticipantProject, setCurrentParticipantProject] = useState<Project>();
   const [participantProjects, setParticipantProjects] = useState<Project[]>([]);
+  const [moduleProjects, setModuleProjects] = useState<Project[]>([]);
 
   const participant = useAppSelector(selectParticipant(currentParticipantProject?.participantId || -1));
   const activeModules = useAppSelector((state) => selectActiveModules(state, currentParticipantProject?.id || -1));
   const modules = useAppSelector(selectProjectModuleList(currentParticipantProject?.id || -1));
   const projects = useAppSelector(selectProjects);
+  const allModules = useAppSelector((state) =>
+    selectAllModuleList(
+      state,
+      (projects || []).map((project) => project.id)
+    )
+  );
+
+  useEffect(() => {
+    if (projects && projects.length > 0) {
+      projects.forEach((project) => void dispatch(requestListModules(project.id)));
+    }
+  }, [projects, dispatch]);
 
   const _setCurrentParticipantProject = useCallback(
     (projectId: string | number) => {
@@ -36,20 +54,29 @@ const ParticipantProvider = ({ children }: Props) => {
   );
 
   const [participantData, setParticipantData] = useState<ParticipantData>({
+    moduleProjects,
     participantProjects,
     orgHasParticipants: false,
+    orgHasModules: false,
     setCurrentParticipantProject: _setCurrentParticipantProject,
   });
 
   useEffect(() => {
     const nextParticipantProjects = (projects || []).filter((project) => !!project.participantId);
     setParticipantProjects(nextParticipantProjects);
+  }, [projects]);
+
+  useEffect(() => {
+    const nextModuleProjects = (projects || []).filter((project) =>
+      allModules.find(({ id, modules }) => id === project.id && modules && modules.length > 0)
+    );
+    setModuleProjects(nextModuleProjects);
 
     // Assign the first participant as the current participant
-    if (nextParticipantProjects.length > 0 && !currentParticipantProject) {
-      setCurrentParticipantProject(nextParticipantProjects[0]);
+    if (nextModuleProjects.length > 0 && !currentParticipantProject) {
+      setCurrentParticipantProject(nextModuleProjects[0]);
     }
-  }, [currentParticipantProject, projects]);
+  }, [projects]);
 
   useEffect(() => {
     if (currentParticipantProject?.participantId) {
@@ -70,8 +97,10 @@ const ParticipantProvider = ({ children }: Props) => {
         activeModules,
         currentParticipant: participant,
         currentParticipantProject,
+        moduleProjects,
         modules,
         participantProjects,
+        orgHasModules: moduleProjects.length > 0,
         orgHasParticipants: participantProjects.length > 0,
         setCurrentParticipantProject: _setCurrentParticipantProject,
       });
@@ -79,6 +108,7 @@ const ParticipantProvider = ({ children }: Props) => {
   }, [
     activeModules,
     currentParticipantProject,
+    moduleProjects,
     modules,
     participant,
     participantProjects,

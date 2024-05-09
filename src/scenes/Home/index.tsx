@@ -38,13 +38,13 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function Home(): JSX.Element {
   const { isMobile } = useDeviceInfo();
-  const { orgHasParticipants } = useParticipantData();
+  const { orgHasModules } = useParticipantData();
   const classes = useStyles({ isMobile });
   const featureFlagParticipantExperience = isEnabled('Participant Experience');
 
   return (
     <main className={classes.main}>
-      {featureFlagParticipantExperience && orgHasParticipants ? <ParticipantHomeView /> : <TerrawareHomeView />}
+      {featureFlagParticipantExperience && orgHasModules ? <ParticipantHomeView /> : <TerrawareHomeView />}
     </main>
   );
 }
