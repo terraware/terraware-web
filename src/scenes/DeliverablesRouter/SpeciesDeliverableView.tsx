@@ -33,9 +33,8 @@ const SpeciesDeliverableView = (props: Props): JSX.Element => {
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
   const { currentParticipantProject } = useParticipantData();
-  const ppsSearchResults = useAppSelector(
-    selectParticipantProjectSpeciesListRequest(currentParticipantProject?.id || -1)
-  );
+  const projectId = viewProps.deliverable.projectId;
+  const ppsSearchResults = useAppSelector(selectParticipantProjectSpeciesListRequest(projectId));
 
   const submitButtonIsDisabled = useMemo(() => {
     return (
@@ -49,7 +48,7 @@ const SpeciesDeliverableView = (props: Props): JSX.Element => {
       return;
     }
 
-    void dispatch(requestListParticipantProjectSpecies(currentParticipantProject?.id));
+    void dispatch(requestListParticipantProjectSpecies(projectId));
   }, []);
 
   const crumbs: Crumb[] = useMemo(
@@ -87,7 +86,7 @@ const SpeciesDeliverableView = (props: Props): JSX.Element => {
         <SpeciesDeliverableStatusMessage {...viewProps} species={ppsSearchResults?.data || []} />
         <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
           <Metadata {...viewProps} />
-          <SpeciesDeliverableTable />
+          <SpeciesDeliverableTable projectId={viewProps.deliverable.projectId} />
         </Card>
       </Box>
     </Page>
