@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
@@ -134,8 +134,21 @@
 <a name='L69'></a><a href='#L69'>69</a>
 <a name='L70'></a><a href='#L70'>70</a>
 <a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -157,6 +170,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -169,6 +187,16 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -209,24 +237,28 @@
 import { Property } from 'csstype';
 &nbsp;
 import strings from 'src/strings';
-&nbsp;
-import { ToDoType } from './ToDo';
+import { ToDoBadge } from 'src/types/ProjectToDo';
 &nbsp;
 interface ToDoStatusBadgeProps {
-  status: ToDoType['status'];
+  status: ToDoBadge;
 }
 &nbsp;
 // TODO this will move to the appropriate types area when the BE for ToDos is fleshed out
-const getToDoStatus = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tatus: ToDoType['status']): string =&gt; {</span>
+const getToDoStatus = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tatus: ToDoBadge): string =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  switch (status) {</span>
-    case 'Event':
-<span class="cstat-no" title="statement not covered" >      return strings.EVENT;</span>
     case 'Not Submitted':
 <span class="cstat-no" title="statement not covered" >      return strings.NOT_SUBMITTED;</span>
+    case 'Event':
+<span class="cstat-no" title="statement not covered" >      return strings.EVENT;</span>
+    case 'In Review':
+<span class="cstat-no" title="statement not covered" >      return strings.IN_REVIEW;</span>
+    case 'Not Accepted':
+<span class="cstat-no" title="statement not covered" >      return strings.NOT_ACCEPTED;</span>
     case 'Overdue':
 <span class="cstat-no" title="statement not covered" >      return strings.OVERDUE;</span>
+    case 'Completed':
     default:
-<span class="cstat-no" title="statement not covered" >      return `${status}`;</span>
+<span class="cstat-no" title="statement not covered" >      return '';</span>
   }
 };
 &nbsp;
@@ -236,14 +268,24 @@ type StatusColors = {
   text: Property.Color | undefined;
 };
 &nbsp;
-const getStatusColors = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tatus: ToDoType['status'], theme: Theme): StatusColors =&gt; {</span>
+const getStatusColors = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tatus: ToDoBadge, theme: Theme): StatusColors =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  switch (status) {</span>
+    case 'In Review':
+<span class="cstat-no" title="statement not covered" >      return {</span>
+        background: theme.palette.TwClrBgWarningTertiary,
+        border: theme.palette.TwClrBrdrWarning,
+        text: theme.palette.TwClrTxtWarning,
+      };
+    case 'Not Accepted':
     case 'Overdue':
 <span class="cstat-no" title="statement not covered" >      return {</span>
         background: theme.palette.TwClrBgDangerTertiary,
         border: theme.palette.TwClrBrdrDanger,
         text: theme.palette.TwClrTxtDanger,
       };
+    case 'Completed':
+    case 'Not Submitted':
+    case 'Event':
     default:
 <span class="cstat-no" title="statement not covered" >      return {</span>
         background: theme.palette.TwClrBgInfoTertiary,
@@ -283,7 +325,7 @@ export default ToDoStatusBadge;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-08T22:08:06.337Z
+                at 2024-05-09T17:35:02.658Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

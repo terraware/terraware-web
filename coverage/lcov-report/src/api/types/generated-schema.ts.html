@@ -9112,7 +9112,61 @@
 <a name='L9047'></a><a href='#L9047'>9047</a>
 <a name='L9048'></a><a href='#L9048'>9048</a>
 <a name='L9049'></a><a href='#L9049'>9049</a>
-<a name='L9050'></a><a href='#L9050'>9050</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L9050'></a><a href='#L9050'>9050</a>
+<a name='L9051'></a><a href='#L9051'>9051</a>
+<a name='L9052'></a><a href='#L9052'>9052</a>
+<a name='L9053'></a><a href='#L9053'>9053</a>
+<a name='L9054'></a><a href='#L9054'>9054</a>
+<a name='L9055'></a><a href='#L9055'>9055</a>
+<a name='L9056'></a><a href='#L9056'>9056</a>
+<a name='L9057'></a><a href='#L9057'>9057</a>
+<a name='L9058'></a><a href='#L9058'>9058</a>
+<a name='L9059'></a><a href='#L9059'>9059</a>
+<a name='L9060'></a><a href='#L9060'>9060</a>
+<a name='L9061'></a><a href='#L9061'>9061</a>
+<a name='L9062'></a><a href='#L9062'>9062</a>
+<a name='L9063'></a><a href='#L9063'>9063</a>
+<a name='L9064'></a><a href='#L9064'>9064</a>
+<a name='L9065'></a><a href='#L9065'>9065</a>
+<a name='L9066'></a><a href='#L9066'>9066</a>
+<a name='L9067'></a><a href='#L9067'>9067</a>
+<a name='L9068'></a><a href='#L9068'>9068</a>
+<a name='L9069'></a><a href='#L9069'>9069</a>
+<a name='L9070'></a><a href='#L9070'>9070</a>
+<a name='L9071'></a><a href='#L9071'>9071</a>
+<a name='L9072'></a><a href='#L9072'>9072</a>
+<a name='L9073'></a><a href='#L9073'>9073</a>
+<a name='L9074'></a><a href='#L9074'>9074</a>
+<a name='L9075'></a><a href='#L9075'>9075</a>
+<a name='L9076'></a><a href='#L9076'>9076</a>
+<a name='L9077'></a><a href='#L9077'>9077</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -19495,9 +19549,20 @@ export interface components {
       cohorts: components["schemas"]["CohortPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    CohortModule: {
+      /** Format: date */
+      endDate: string;
+      /** Format: int64 */
+      id: number;
+      isActive: boolean;
+      /** Format: date */
+      startDate: string;
+      title: string;
+    };
     CohortPayload: {
       /** Format: int64 */
       id: number;
+      modules: components["schemas"]["CohortModule"][];
       name: string;
       participantIds?: number[];
       /** @enum {string} */
@@ -19861,10 +19926,13 @@ export interface components {
     CreatePlantingSiteRequestPayload: {
       boundary?: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
       description?: string;
+      exclusion?: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
       name: string;
       /** Format: int64 */
       organizationId: number;
       plantingSeasons?: components["schemas"]["NewPlantingSeasonPayload"][];
+      /** @description List of planting zones to create. If present and not empty, "boundary" must also be specified. */
+      plantingZones?: components["schemas"]["NewPlantingZonePayload"][];
       /** Format: int64 */
       projectId?: number;
       /**
@@ -20909,6 +20977,17 @@ export interface components {
       endDate: string;
       /** Format: date */
       startDate: string;
+    };
+    NewPlantingSubzonePayload: {
+      boundary: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
+      name: string;
+    };
+    /** @description List of planting zones to create. If present and not empty, "boundary" must also be specified. */
+    NewPlantingZonePayload: {
+      boundary: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
+      name: string;
+      plantingSubzones?: components["schemas"]["NewPlantingSubzonePayload"][];
+      targetPlantingDensity?: number;
     };
     /** @description Search criterion that matches results that do not match a set of search criteria. */
     NotNodePayload: WithRequired&lt;{
@@ -22639,7 +22718,8 @@ export interface operations {
     parameters: {
       query: {
         /** @description If specified, retrieve associated entities to the supplied depth. For example, 'participant' depth will return the participants associated to the cohort. */
-        depth: "Cohort" | "Participant";
+        cohortDepth: "Cohort" | "Participant";
+        cohortModuleDepth: "Cohort" | "Module";
       };
     };
     responses: {
@@ -22672,7 +22752,8 @@ export interface operations {
     parameters: {
       query: {
         /** @description If specified, retrieve associated entities to the supplied depth. For example, 'participant' depth will return the participants associated to the cohort. */
-        depth: "Cohort" | "Participant";
+        cohortDepth: "Cohort" | "Participant";
+        cohortModuleDepth: "Cohort" | "Module";
       };
       path: {
         cohortId: number;
@@ -27217,7 +27298,7 @@ export interface operations {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-08T22:08:06.337Z
+                at 2024-05-09T17:35:02.658Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
