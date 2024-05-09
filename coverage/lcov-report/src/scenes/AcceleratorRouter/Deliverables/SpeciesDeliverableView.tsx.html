@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
@@ -122,20 +122,7 @@
 <a name='L57'></a><a href='#L57'>57</a>
 <a name='L58'></a><a href='#L58'>58</a>
 <a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L60'></a><a href='#L60'>60</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -164,11 +151,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -185,12 +167,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -207,23 +183,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useMemo } from 'react';
 &nbsp;
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
 &nbsp;
 import { Crumb } from 'src/components/BreadCrumbs';
-import DocumentsUploader from 'src/components/DeliverableView/DocumentsUploader';
 import Metadata from 'src/components/DeliverableView/Metadata';
 import MobileMessage from 'src/components/DeliverableView/MobileMessage';
 import TitleBar from 'src/components/DeliverableView/TitleBar';
 import { EditProps } from 'src/components/DeliverableView/types';
 import Page from 'src/components/Page';
+import SpeciesDeliverableTable from 'src/components/SpeciesDeliverableTable';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
-import { useLocalization, useOrganization, useUser } from 'src/providers';
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 &nbsp;
-import DocumentsList from './DocumentsList';
 import RejectedDeliverableMessage from './RejectedDeliverableMessage';
 &nbsp;
 export type Props = EditProps &amp; {
@@ -235,11 +210,6 @@ const SpeciesDeliverableView = <span class="cstat-no" title="statement not cover
   const { ...viewProps }: Props = <span class="cstat-no" title="statement not covered" >props;</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-  const { isAllowed } = <span class="cstat-no" title="statement not covered" >useUser();</span>
-  const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
-  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-&nbsp;
-  const canCreateSubmission = <span class="cstat-no" title="statement not covered" >isAllowed('CREATE_SUBMISSION', selectedOrganization);</span>
 &nbsp;
   const crumbs: Crumb[] = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >[</span>
@@ -262,13 +232,7 @@ const SpeciesDeliverableView = <span class="cstat-no" title="statement not cover
         &lt;RejectedDeliverableMessage {...viewProps} /&gt;
         &lt;Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}&gt;
           &lt;Metadata {...viewProps} /&gt;
-          &lt;Typography marginBottom={theme.spacing(2)} fontSize='20px' lineHeight='28px' fontWeight={600}&gt;
-            {strings.DOCUMENTS}
-          &lt;/Typography&gt;
-          {canCreateSubmission &amp;&amp; (
-            &lt;DocumentsUploader {...viewProps} deliverableStatusesToIgnore={['Not Submitted', 'In Review']} /&gt;
-          )}
-          &lt;DocumentsList {...viewProps} /&gt;
+          &lt;SpeciesDeliverableTable projectId={viewProps.deliverable.projectId} /&gt;
         &lt;/Card&gt;
       &lt;/Box&gt;
     &lt;/Page&gt;
@@ -283,7 +247,7 @@ export default SpeciesDeliverableView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-09T19:15:45.101Z
+                at 2024-05-09T19:27:19.603Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
