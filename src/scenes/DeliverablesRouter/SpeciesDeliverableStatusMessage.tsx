@@ -5,18 +5,18 @@ import { Message } from '@terraware/web-components';
 
 import { ViewProps } from 'src/components/DeliverableView/types';
 import { useLocalization } from 'src/providers/hooks';
-import { ParticipantProjectSpecies } from 'src/services/ParticipantProjectSpeciesService';
+import { SpeciesWithParticipantProjectsSearchResponse } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
 
 type Props = ViewProps & {
-  species?: ParticipantProjectSpecies[] | undefined;
+  species?: SpeciesWithParticipantProjectsSearchResponse[] | undefined;
 };
 
 const SpeciesDeliverableStatusMessage = ({ deliverable, species }: Props): JSX.Element | null => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
 
-  const rejectedSpecies = species?.filter((s) => s.status === 'Rejected');
+  const rejectedSpecies = species?.filter((s) => s.submissionStatus === 'Rejected');
 
   return !activeLocale ? null : (
     <>
@@ -49,7 +49,8 @@ const SpeciesDeliverableStatusMessage = ({ deliverable, species }: Props): JSX.E
               <ul>
                 {rejectedSpecies.map((species, index) => (
                   <li key={index}>
-                    {species.speciesScientificName || species.speciesCommonName}
+                    {/* {species.speciesScientificName || species.speciesCommonName} */}
+                    TODO scientific name or common name
                     {species.feedback ? `: ${species.feedback}` : ''}
                   </li>
                 ))}

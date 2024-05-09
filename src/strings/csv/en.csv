@@ -1561,6 +1561,7 @@ SOMETHING_WENT_WRONG_MESSAGE,"If you’re having trouble using Terraware, please
 SOMETHING_WENT_WRONG_TITLE,Something went wrong...,
 SOWN,Sown,
 SPECIES,Species,
+SPECIES_LIST,Species List,
 SPECIES_CARD_DESCRIPTION,View the Species that are referenced by your Seed and Plant entries.,
 SPECIES_DATA_NOT_AVAILABLE,Species Data Not Available,
 SPECIES_DESCRIPTION,"Manage your organization’s species list for planning, operation and reporting.",
