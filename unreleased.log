@@ -1,3 +1,6 @@
+e34549e725 SW-5327 Updated all modules view text (#2600)
+40ba2ec730 SW-5326 Updated call description text (#2599)
+90c72761e7 SW-5338 Updated welcome texts (#2602)
 b6a1dbffa9 SW-5292 Used real data via search for to do list (#2597)
 3bbc2ccebb Fix up some of the UI connections to the new ParticipantProjectSpecies backend (#2595)
 c75cc5b486 SW-5342: Document date/time formats used in Terraware (#2594)
