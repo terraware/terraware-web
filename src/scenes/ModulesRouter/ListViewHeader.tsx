@@ -6,16 +6,16 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 
 const ListViewHeader = () => {
-  const { currentParticipantProject, participantProjects, setCurrentParticipantProject } = useParticipantData();
+  const { currentParticipantProject, moduleProjects, setCurrentParticipantProject } = useParticipantData();
   const { goToModules } = useNavigateTo();
 
   const options: DropdownItem[] = useMemo(
     () =>
-      participantProjects.map((project) => ({
+      moduleProjects.map((project) => ({
         label: project.name,
         value: project.id,
       })),
-    [participantProjects]
+    [moduleProjects]
   );
 
   const selectStyles = {

@@ -72,9 +72,11 @@ const ParticipantProvider = ({ children }: Props) => {
     );
     setModuleProjects(nextModuleProjects);
 
-    // Assign the first participant as the current participant
-    if (nextModuleProjects.length > 0 && !currentParticipantProject) {
+    // Assign the first project with modules as the current participant project
+    if (nextModuleProjects.length > 0) {
       setCurrentParticipantProject(nextModuleProjects[0]);
+    } else {
+      setCurrentParticipantProject(undefined);
     }
   }, [projects]);
 

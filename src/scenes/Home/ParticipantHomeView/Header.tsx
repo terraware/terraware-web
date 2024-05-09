@@ -10,7 +10,7 @@ import { getDateRangeString } from 'src/utils/dateFormatter';
 const Header = () => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const { activeModules, currentParticipantProject, participantProjects, setCurrentParticipantProject } =
+  const { activeModules, currentParticipantProject, moduleProjects, setCurrentParticipantProject } =
     useParticipantData();
 
   // Only first active modules shown for now. TODO: upgrade to support multiple active modules for overlapping modules
@@ -18,11 +18,11 @@ const Header = () => {
 
   const options: DropdownItem[] = useMemo(
     () =>
-      participantProjects.map((project) => ({
+      moduleProjects.map((project) => ({
         label: project.name,
         value: project.id,
       })),
-    [participantProjects]
+    [moduleProjects]
   );
 
   const selectStyles = {
