@@ -24,12 +24,12 @@ import useSnackbar from 'src/utils/useSnackbar';
 export interface AddEditSubLocationProps {
   onClose: () => void;
   participantProjectSpecies: SpeciesWithParticipantProjectsSearchResponse[];
-
+  projectId: number;
   reload: () => void;
 }
 
 export default function AddSpeciesModal(props: AddEditSubLocationProps): JSX.Element {
-  const { onClose, participantProjectSpecies, reload } = props;
+  const { onClose, participantProjectSpecies, reload, projectId } = props;
 
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
@@ -70,13 +70,11 @@ export default function AddSpeciesModal(props: AddEditSubLocationProps): JSX.Ele
   }, [result, snackbar]);
 
   useEffect(() => {
-    if (currentParticipantProject) {
-      setRecord((prev) => ({
-        ...prev,
-        projectId: currentParticipantProject.id,
-      }));
-    }
-  }, [currentParticipantProject]);
+    setRecord((prev) => ({
+      ...prev,
+      projectId: projectId,
+    }));
+  }, []);
 
   const save = () => {
     const payload: CreateParticipantProjectSpeciesRequestPayload = {

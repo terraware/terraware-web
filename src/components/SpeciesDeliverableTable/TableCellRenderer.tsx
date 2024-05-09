@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Button } from '@terraware/web-components';
 
@@ -10,7 +10,8 @@ import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers';
 import { requestUpdateParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
-import { useAppDispatch } from 'src/redux/store';
+import { selectParticipantProjectSpeciesUpdateRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import RejectDialog from 'src/scenes/AcceleratorRouter/Deliverables/RejectDialog';
 import { ParticipantProjectSpecies } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
@@ -24,7 +25,15 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
   const [openedEditSpeciesModal, setOpenedEditSpeciesModal] = useState(false);
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const [requestId, setRequestId] = useState<string>('');
+  const result = useAppSelector(selectParticipantProjectSpeciesUpdateRequest(requestId));
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (result?.status === 'success' && reloadData) {
+      reloadData();
+    }
+  }, [result]);
 
   const createLinkToSpecies = (iValue: React.ReactNode | unknown[]) => {
     return <Link onClick={() => setOpenedEditSpeciesModal(true)}>{iValue as React.ReactNode}</Link>;
@@ -73,17 +82,18 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
 
   if (column.key === 'reject') {
     const rejectHandler = (feedback: string) => {
-      dispatch(
+      const request = dispatch(
         requestUpdateParticipantProjectSpecies({
           participantProjectSpecies: {
             id: row.id,
             speciesId: row.speciesId,
             projectId: row.projectId,
             submissionStatus: 'Rejected',
-            feedback: feedback,
+            rationale: feedback,
           },
         })
       );
+      setRequestId(request.requestId);
 
       setShowRejectDialog(false);
     };
@@ -101,7 +111,7 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
               onClick={() => setShowRejectDialog(true)}
               priority='secondary'
               type='destructive'
-              disabled={row.status === 'Rejected'}
+              disabled={row.submissionStatus === 'Rejected'}
             />
           </>
         }
@@ -111,7 +121,7 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
 
   if (column.key === 'approve') {
     const approveHandler = () => {
-      dispatch(
+      const request = dispatch(
         requestUpdateParticipantProjectSpecies({
           participantProjectSpecies: {
             id: row.id,
@@ -121,6 +131,7 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
           },
         })
       );
+      setRequestId(request.requestId);
     };
 
     return (
@@ -133,7 +144,7 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
             label={strings.APPROVE}
             onClick={() => approveHandler()}
             priority='secondary'
-            disabled={row.status === 'Approved'}
+            disabled={row.submissionStatus === 'Approved'}
           />
         }
       />
