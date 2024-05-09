@@ -17,11 +17,11 @@ export default function ListView(): JSX.Element {
   // Should we store it and localize it in the front end? Will it be stored somewhere an admin can edit it?
   // For now, I am hard coding it to get the UI done while we figure out where it belongs.
   const phaseDescription =
-    'We have divided Phase 1 into a series of modules that will help you keep on track and ' +
-    'provide resources like live workshops throughout your project. Each module has a specific timeframe, but you ' +
-    'will need to review all deliverables over the course of Phase 1. A list of deliverables that you need to ' +
-    'review is displayed in your To Do list on your home screen. Please login to Terraware regularly to check which ' +
-    'deliverables are due or need review.';
+    'Phase 1 is divided into a series of modules that provide resources, such as live sessions and workshops, ' +
+    'that help you keep your project on track with the program. Each module has a timeframe. Over the course of ' +
+    'Phase 1, you will need to review all Phase 1 deliverables. The deliverables that are due or need review are ' +
+    'displayed in the To Do list on your Home screen. Please log in to Terraware regularly to check which ' + 
+    'deliverables are due.';
 
   return (
     <PageWithModuleTimeline title={strings.ALL_MODULES}>
