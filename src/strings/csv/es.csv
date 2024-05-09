@@ -895,6 +895,7 @@ NO_VOTERS_FOR_PROJECT,Este proyecto no tiene votantes. Póngase en contacto con 
 NO_WITHDRAWABLE_QUANTITIES_FOUND,No se encontraron cantidades retirables,
 NON_NATIVE,No nativo,
 NONE,Ninguno,
+NOT_ACCEPTED,No aceptado(a),
 NOT_COMPLETE,Sin completar,
 NOT_CONNECTED,Sin conexión,
 NOT_ENOUGH_SEEDS_IN_ACCESSION,No hay suficientes semillas en la accesión.,
