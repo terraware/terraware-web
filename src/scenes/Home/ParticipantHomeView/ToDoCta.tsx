@@ -20,7 +20,7 @@ const ToDoCta = ({ toDo }: ToDoCtaProps) => {
       case 'One-on-One Session':
       case 'Live Session':
         const event = toDo as EventToDoItem;
-        return goToModuleEventSession(event.id, event.moduleId, event.projectId);
+        return goToModuleEventSession(event.projectId, event.moduleId, event.id);
       case 'Deliverable':
         const deliverable = toDo as DeliverableToDoItem;
         return goToDeliverable(deliverable.id, deliverable.projectId);
