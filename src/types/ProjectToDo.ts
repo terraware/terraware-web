@@ -184,3 +184,26 @@ export class EventToDoItem implements ToDoItem {
     }
   };
 }
+
+export const compareToDoItems = (left: ToDoItem, right: ToDoItem): number => {
+  const leftDate = left.getDate();
+  const rightDate = right.getDate();
+
+  const leftMidnight = leftDate.startOf('day');
+  const rightMidnight = leftDate.startOf('day');
+
+  if (leftMidnight < rightMidnight) {
+    return -1;
+  } else if (leftMidnight > rightMidnight) {
+    return 1;
+  } else {
+    // Always order Events before Deliverables if they fall on the same day
+    if (leftDate instanceof EventToDoItem && !(rightDate instanceof EventToDoItem)) {
+      return -1;
+    } else if (!(leftDate instanceof EventToDoItem) && rightDate instanceof EventToDoItem) {
+      return 1;
+    } else {
+      return leftDate.toMillis() - rightDate.toMillis();
+    }
+  }
+};

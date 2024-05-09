@@ -11,7 +11,7 @@ import {
   selectProjectToDoEvents,
 } from 'src/redux/features/projectToDo/projectToDoSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { ToDoItem } from 'src/types/ProjectToDo';
+import { ToDoItem, compareToDoItems } from 'src/types/ProjectToDo';
 
 import { ToDoContext, ToDoData } from './Context';
 
@@ -62,11 +62,7 @@ const ToDoProvider = ({ children }: Props) => {
       toDoEvents.status === 'success' &&
       toDoEvents.data
     ) {
-      setAllItems(
-        [...toDoDeliverables.data, ...toDoEvents.data].sort(
-          (left, right) => left.getDate().valueOf() - right.getDate().valueOf()
-        )
-      );
+      setAllItems([...toDoDeliverables.data, ...toDoEvents.data].sort(compareToDoItems));
     }
   }, [toDoDeliverables, toDoEvents, setAllItems]);
 
