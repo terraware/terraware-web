@@ -8,6 +8,7 @@ import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline
 import CurrentModule from './CurrentModule';
 import Header from './Header';
 import ToDo from './ToDo';
+import ToDoProvider from './ToDoProvider';
 import WelcomeBanner from './WelcomeBanner';
 
 const ParticipantHomeView = () => {
@@ -29,7 +30,9 @@ const ParticipantHomeView = () => {
         </DismissibleWrapper>
 
         <Grid item marginTop={theme.spacing(2)}>
-          <ToDo />
+          <ToDoProvider>
+            <ToDo />
+          </ToDoProvider>
         </Grid>
 
         <Grid item marginTop={theme.spacing(2)}>

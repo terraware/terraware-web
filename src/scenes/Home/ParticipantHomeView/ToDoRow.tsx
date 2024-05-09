@@ -1,12 +1,13 @@
 import React, { Grid, Typography, useTheme } from '@mui/material';
 
-import { ToDoType } from './ToDo';
+import { ToDoItem } from 'src/types/ProjectToDo';
+
 import ToDoCta from './ToDoCta';
 import ToDoDate from './ToDoDate';
 import ToDoStatusBadge from './ToDoStatusBadge';
 
 interface ToDoRowProps {
-  toDo: ToDoType;
+  toDo: ToDoItem;
 }
 
 const ToDoRow = ({ toDo }: ToDoRowProps) => {
@@ -22,14 +23,14 @@ const ToDoRow = ({ toDo }: ToDoRowProps) => {
       flexWrap={'nowrap'}
     >
       <Grid item flexBasis={'content'} flexGrow={0}>
-        <ToDoStatusBadge status={toDo.status} />
+        <ToDoStatusBadge status={toDo.getBadge()} />
       </Grid>
       <Grid item flexBasis={'content'} flexGrow={0}>
         <ToDoDate toDo={toDo} />
       </Grid>
       <Grid item flexBasis={'content'} flexGrow={0}>
         <Typography fontSize={'16px'} fontWeight={600} lineHeight={'24px'} component={'span'} whiteSpace={'nowrap'}>
-          {toDo.type}
+          {toDo.getType()}
         </Typography>
       </Grid>
       <Grid item zeroMinWidth flexGrow={1}>
@@ -42,7 +43,7 @@ const ToDoRow = ({ toDo }: ToDoRowProps) => {
           overflow={'hidden'}
           textOverflow={'ellipsis'}
         >
-          {toDo.name}
+          {toDo.getTitle()}
         </Typography>
       </Grid>
       <Grid item flexBasis={'content'} flexGrow={0} marginLeft={'auto'}>

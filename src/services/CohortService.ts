@@ -17,7 +17,7 @@ const COHORT_ENDPOINT = '/api/v1/accelerator/cohorts/{cohortId}';
 
 export type ListCohortsResponsePayload =
   paths[typeof COHORTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-export type ListCohortsRequestDepth = paths[typeof COHORTS_ENDPOINT]['get']['parameters']['query']['depth'];
+export type ListCohortsRequestDepth = paths[typeof COHORTS_ENDPOINT]['get']['parameters']['query']['cohortDepth'];
 
 export type CreateCohortResponsePayload =
   paths[typeof COHORTS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
@@ -39,7 +39,7 @@ const listCohorts = async (
   locale: string | null,
   search?: SearchNodePayload,
   searchSortOrder?: SearchSortOrder,
-  depth: ListCohortsRequestDepth = 'Cohort'
+  cohortDepth: ListCohortsRequestDepth = 'Cohort'
 ): Promise<(CohortsData & Response) | null> => {
   let searchOrderConfig: SearchOrderConfig;
   if (searchSortOrder) {
@@ -50,7 +50,7 @@ const listCohorts = async (
     };
   }
 
-  return httpCohorts.get<ListCohortsResponsePayload, CohortsData>({ params: { depth } }, (response) => ({
+  return httpCohorts.get<ListCohortsResponsePayload, CohortsData>({ params: { cohortDepth } }, (response) => ({
     cohorts: searchAndSort(response?.cohorts || [], search, searchOrderConfig),
   }));
 };

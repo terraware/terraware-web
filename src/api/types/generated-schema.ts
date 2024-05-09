@@ -1332,9 +1332,20 @@ export interface components {
       cohorts: components["schemas"]["CohortPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    CohortModule: {
+      /** Format: date */
+      endDate: string;
+      /** Format: int64 */
+      id: number;
+      isActive: boolean;
+      /** Format: date */
+      startDate: string;
+      title: string;
+    };
     CohortPayload: {
       /** Format: int64 */
       id: number;
+      modules: components["schemas"]["CohortModule"][];
       name: string;
       participantIds?: number[];
       /** @enum {string} */
@@ -1698,10 +1709,13 @@ export interface components {
     CreatePlantingSiteRequestPayload: {
       boundary?: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
       description?: string;
+      exclusion?: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
       name: string;
       /** Format: int64 */
       organizationId: number;
       plantingSeasons?: components["schemas"]["NewPlantingSeasonPayload"][];
+      /** @description List of planting zones to create. If present and not empty, "boundary" must also be specified. */
+      plantingZones?: components["schemas"]["NewPlantingZonePayload"][];
       /** Format: int64 */
       projectId?: number;
       /**
@@ -2746,6 +2760,17 @@ export interface components {
       endDate: string;
       /** Format: date */
       startDate: string;
+    };
+    NewPlantingSubzonePayload: {
+      boundary: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
+      name: string;
+    };
+    /** @description List of planting zones to create. If present and not empty, "boundary" must also be specified. */
+    NewPlantingZonePayload: {
+      boundary: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
+      name: string;
+      plantingSubzones?: components["schemas"]["NewPlantingSubzonePayload"][];
+      targetPlantingDensity?: number;
     };
     /** @description Search criterion that matches results that do not match a set of search criteria. */
     NotNodePayload: WithRequired<{
@@ -4476,7 +4501,8 @@ export interface operations {
     parameters: {
       query: {
         /** @description If specified, retrieve associated entities to the supplied depth. For example, 'participant' depth will return the participants associated to the cohort. */
-        depth: "Cohort" | "Participant";
+        cohortDepth: "Cohort" | "Participant";
+        cohortModuleDepth: "Cohort" | "Module";
       };
     };
     responses: {
@@ -4509,7 +4535,8 @@ export interface operations {
     parameters: {
       query: {
         /** @description If specified, retrieve associated entities to the supplied depth. For example, 'participant' depth will return the participants associated to the cohort. */
-        depth: "Cohort" | "Participant";
+        cohortDepth: "Cohort" | "Participant";
+        cohortModuleDepth: "Cohort" | "Module";
       };
       path: {
         cohortId: number;
