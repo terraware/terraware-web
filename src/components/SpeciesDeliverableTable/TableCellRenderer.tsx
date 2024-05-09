@@ -75,13 +75,11 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
     const rejectHandler = (feedback: string) => {
       dispatch(
         requestUpdateParticipantProjectSpecies({
-          projectId: row.projectId,
-          participantProjectSpeciesId: row.id,
           participantProjectSpecies: {
             id: row.id,
             speciesId: row.speciesId,
             projectId: row.projectId,
-            status: 'Rejected',
+            submissionStatus: 'Rejected',
             feedback: feedback,
           },
         })
@@ -115,13 +113,11 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
     const approveHandler = () => {
       dispatch(
         requestUpdateParticipantProjectSpecies({
-          projectId: row.projectId,
-          participantProjectSpeciesId: row.id,
           participantProjectSpecies: {
             id: row.id,
             speciesId: row.speciesId,
             projectId: row.projectId,
-            status: 'Approved',
+            submissionStatus: 'Approved',
           },
         })
       );
