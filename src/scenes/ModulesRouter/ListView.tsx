@@ -20,7 +20,7 @@ export default function ListView(): JSX.Element {
     'Phase 1 is divided into a series of modules that provide resources, such as live sessions and workshops, ' +
     'that help you keep your project on track with the program. Each module has a timeframe. Over the course of ' +
     'Phase 1, you will need to review all Phase 1 deliverables. The deliverables that are due or need review are ' +
-    'displayed in the To Do list on your Home screen. Please log in to Terraware regularly to check which ' + 
+    'displayed in the To Do list on your Home screen. Please log in to Terraware regularly to check which ' +
     'deliverables are due.';
 
   return (
