@@ -4,7 +4,6 @@ import { Grid, useTheme } from '@mui/material';
 
 import DismissibleWrapper from 'src/components/common/DismissibleWrapper';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
-import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 
 import CurrentModule from './CurrentModule';
@@ -13,15 +12,17 @@ import ToDo from './ToDo';
 import ToDoProvider from './ToDoProvider';
 import WelcomeBanner from './WelcomeBanner';
 
-const ParticipantHomeView = () => {
+export type ParticipantHomeViewProp = {
+  setShowParticipant: (value: boolean) => void;
+};
+
+const ParticipantHomeView = ({ setShowParticipant }: ParticipantHomeViewProp) => {
   const theme = useTheme();
 
   const { currentParticipantProject } = useParticipantData();
-  const { goToHome } = useNavigateTo();
 
   if (!currentParticipantProject) {
-    // Force reload of home screen.
-    goToHome();
+    setShowParticipant(false);
   }
 
   return (
