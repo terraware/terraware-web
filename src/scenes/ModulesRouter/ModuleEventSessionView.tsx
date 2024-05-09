@@ -18,7 +18,7 @@ import { useModuleData } from './Provider/Context';
 
 const CALL_DESCRIPTION_HTML = `
   <div>
-    <p>Clicking "Join" will open up a browser window to join a Zoom video call.</p>
+    <p>Clicking "Join" will open up a browser window to join a Google Meet video call.</p>
     <p>For this Live Session you will need:</p>
     <ul>
       <li>An internet connection – broadband wired or wireless (3G or 4G/LTE)</li>

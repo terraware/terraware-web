@@ -46,7 +46,7 @@ const SpeciesDeliverableTable = ({ projectId }: SpeciesDeliverableTableProps): J
 
   useEffect(() => {
     void dispatch(requestListParticipantProjectSpecies(projectId));
-  }, []);
+  }, [projectId]);
 
   const reload = () => {
     dispatch(requestListParticipantProjectSpecies(projectId));
@@ -74,6 +74,7 @@ const SpeciesDeliverableTable = ({ projectId }: SpeciesDeliverableTableProps): J
               onClose={() => setOpenedAddSpeciesModal(false)}
               participantProjectSpecies={participantProjectSpecies?.data || []}
               reload={reload}
+              projectId={projectId}
             />
           )}
 
@@ -110,7 +111,7 @@ const SpeciesDeliverableTable = ({ projectId }: SpeciesDeliverableTableProps): J
             rows={participantProjectSpecies?.data || []}
             selectedRows={selectedRows}
             setSelectedRows={setSelectedRows}
-            showCheckbox={true}
+            showCheckbox={!isAcceleratorRoute}
             showTopBar={true}
             topBarButtons={[
               {
