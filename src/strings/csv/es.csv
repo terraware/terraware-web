@@ -1567,6 +1567,7 @@ SPECIES_DESCRIPTION,"Gestione la lista de especies de su organización para fine
 SPECIES_EMPTY_MSG_BODY,Ingrese ahora la especie que recolecta o planta para simplificar su experiencia cuando esté en campo.,
 SPECIES_ERROR_SEARCH,No se pudo cargar la lista de especie para la búsqueda,
 SPECIES_IMPORT_COMPLETE,¡Se completó la importación de los datos de especies!,
+SPECIES_LIST,Lista de especies,
 SPECIES_NAME,Nombre de la especie,
 SPECIES_NOT_ACCEPTED,Especies no aceptadas,
 SPECIES_OBSERVED,Especies observadas,
