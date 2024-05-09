@@ -114,7 +114,7 @@ export class DeliverableToDoItem implements ToDoItem {
     }
   };
 
-  getTitle = (): string => this.category + ' - ' + this.moduleName;
+  getTitle = (): string => this.name;
 
   getType = (): ToDoType => 'Deliverable';
 
