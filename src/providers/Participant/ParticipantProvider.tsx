@@ -25,7 +25,7 @@ const ParticipantProvider = ({ children }: Props) => {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
 
-  const [currentParticipantProject, setCurrentParticipantProject] = useState<Project>();
+  const [currentParticipantProject, setCurrentParticipantProject] = useState<Project | null>();
   const [participantProjects, setParticipantProjects] = useState<Project[]>([]);
   const [moduleProjects, setModuleProjects] = useState<Project[]>([]);
 
@@ -42,7 +42,8 @@ const ParticipantProvider = ({ children }: Props) => {
 
   useEffect(() => {
     if (projects && projects.length > 0) {
-      projects.forEach((project) => void dispatch(requestListModules(project.id)));
+      // TODO: Need to figure out how to force selectors to reload, once dispatch is completed.
+      projects.forEach((project) => dispatch(requestListModules(project.id)));
     }
   }, [projects, dispatch]);
 
@@ -67,18 +68,21 @@ const ParticipantProvider = ({ children }: Props) => {
   }, [projects]);
 
   useEffect(() => {
-    const nextModuleProjects = (projects || []).filter((project) =>
+    const nextModuleProjects = (participantProjects || []).filter((project) =>
       allModules.find(({ id, modules }) => id === project.id && modules && modules.length > 0)
     );
     setModuleProjects(nextModuleProjects);
 
     // Assign the first project with modules as the current participant project
-    if (nextModuleProjects.length > 0) {
+    if (nextModuleProjects.findIndex((project) => project.id === currentParticipantProject?.id) != -1) {
+      // Selected project already in organization
+      return;
+    } else if (nextModuleProjects.length > 0) {
       setCurrentParticipantProject(nextModuleProjects[0]);
     } else {
-      setCurrentParticipantProject(undefined);
+      setCurrentParticipantProject(null);
     }
-  }, [projects]);
+  }, [currentParticipantProject, participantProjects]);
 
   useEffect(() => {
     if (currentParticipantProject?.participantId) {
@@ -88,25 +92,23 @@ const ParticipantProvider = ({ children }: Props) => {
 
   useEffect(() => {
     if (selectedOrganization && activeLocale) {
-      setCurrentParticipantProject(undefined);
+      setCurrentParticipantProject(null);
       dispatch(requestProjects(selectedOrganization.id, activeLocale));
     }
   }, [activeLocale, dispatch, selectedOrganization]);
 
   useEffect(() => {
-    if (activeModules && participant && currentParticipantProject && modules && participantProjects) {
-      setParticipantData({
-        activeModules,
-        currentParticipant: participant,
-        currentParticipantProject,
-        moduleProjects,
-        modules,
-        participantProjects,
-        orgHasModules: moduleProjects.length > 0,
-        orgHasParticipants: participantProjects.length > 0,
-        setCurrentParticipantProject: _setCurrentParticipantProject,
-      });
-    }
+    setParticipantData({
+      activeModules,
+      currentParticipant: participant,
+      currentParticipantProject,
+      moduleProjects,
+      modules,
+      participantProjects,
+      orgHasModules: moduleProjects.length > 0,
+      orgHasParticipants: participantProjects.length > 0,
+      setCurrentParticipantProject: _setCurrentParticipantProject,
+    });
   }, [
     activeModules,
     currentParticipantProject,

@@ -215,7 +215,13 @@ export default function NavBar({
           id='reports-list'
         />
       ) : null,
-    [closeAndNavigateTo, featureFlagParticipantExperience, isProjectModulesRoute, currentParticipantProject]
+    [
+      closeAndNavigateTo,
+      featureFlagParticipantExperience,
+      isProjectModulesRoute,
+      currentParticipantProject,
+      orgHasModules,
+    ]
   );
 
   const acceleratorSectionTitle = useMemo<string>(

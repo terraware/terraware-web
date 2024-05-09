@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -42,15 +42,11 @@ export default function Home(): JSX.Element {
   const classes = useStyles({ isMobile });
   const featureFlagParticipantExperience = isEnabled('Participant Experience');
 
-  const [showParticipant, setShowParticipant] = useState(false);
-
-  useEffect(() => {
-    setShowParticipant(featureFlagParticipantExperience && orgHasModules);
-  }, [featureFlagParticipantExperience, orgHasModules]);
-
-  return (
-    <main className={classes.main}>
-      {showParticipant ? <ParticipantHomeView setShowParticipant={setShowParticipant} /> : <TerrawareHomeView />}
-    </main>
+  const homeScreen = useMemo(
+    (): JSX.Element =>
+      featureFlagParticipantExperience && orgHasModules ? <ParticipantHomeView /> : <TerrawareHomeView />,
+    [featureFlagParticipantExperience, orgHasModules]
   );
+
+  return <main className={classes.main}>{homeScreen}</main>;
 }
