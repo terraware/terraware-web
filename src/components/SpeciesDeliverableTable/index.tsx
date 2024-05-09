@@ -17,10 +17,10 @@ import RemoveSpeciesDialog from './RemoveSpeciesDialog';
 import TableCellRenderer from './TableCellRenderer';
 
 const columns = (): TableColumnType[] => [
-  { key: 'speciesScientificName', name: strings.SCIENTIFIC_NAME, type: 'string' },
-  { key: 'speciesCommonName', name: strings.COMMON_NAME, type: 'string' },
+  { key: 'scientificName', name: strings.SCIENTIFIC_NAME, type: 'string' },
+  { key: 'commonName', name: strings.COMMON_NAME, type: 'string' },
   { key: 'rationale', name: strings.RATIONALE, type: 'string' },
-  { key: 'status', name: strings.STATUS, type: 'string' },
+  { key: 'submissionStatus', name: strings.STATUS, type: 'string' },
 ];
 
 const consoleColumns = (): TableColumnType[] => [
@@ -52,15 +52,23 @@ const SpeciesDeliverableTable = ({ projectId }: SpeciesDeliverableTableProps): J
     dispatch(requestListParticipantProjectSpecies(projectId));
   };
 
+  const onCloseRemoveSpecies = (_reload?: boolean) => {
+    setShowConfirmDialog(false);
+    if (_reload) {
+      reload();
+    }
+  };
+
   return (
     <>
       {activeLocale && (
         <>
           <RemoveSpeciesDialog
-            onClose={() => setShowConfirmDialog(false)}
+            onClose={onCloseRemoveSpecies}
             open={showConfirmDialog}
             speciesToRemove={selectedRows.map((row) => row.id)}
           />
+
           {openedAddSpeciesModal && (
             <AddSpeciesModal
               onClose={() => setOpenedAddSpeciesModal(false)}
@@ -68,6 +76,7 @@ const SpeciesDeliverableTable = ({ projectId }: SpeciesDeliverableTableProps): J
               reload={reload}
             />
           )}
+
           <Box
             alignItems='center'
             display='flex'

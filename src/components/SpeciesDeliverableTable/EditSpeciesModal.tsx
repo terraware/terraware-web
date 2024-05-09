@@ -7,10 +7,12 @@ import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { requestUpdateParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
-import { selectParticipantProjectUpdateRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
+import { selectParticipantProjectSpeciesUpdateRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { useParticipantProjectData } from 'src/scenes/AcceleratorRouter/ParticipantProjects/ParticipantProjectContext';
-import { ParticipantProjectSpecies } from 'src/services/ParticipantProjectSpeciesService';
+import {
+  ParticipantProjectSpecies,
+  SpeciesWithParticipantProjectsSearchResponse,
+} from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -19,7 +21,7 @@ import Link from '../common/Link';
 export interface AddEditSubLocationProps {
   onClose: () => void;
   reload: () => void;
-  projectSpecies: ParticipantProjectSpecies;
+  projectSpecies: SpeciesWithParticipantProjectsSearchResponse;
 }
 
 export default function EditSpeciesModal(props: AddEditSubLocationProps): JSX.Element {
@@ -27,11 +29,11 @@ export default function EditSpeciesModal(props: AddEditSubLocationProps): JSX.El
   const theme = useTheme();
   const [requestId, setRequestId] = useState<string>('');
   const dispatch = useAppDispatch();
-  const result = useAppSelector(selectParticipantProjectUpdateRequest(requestId));
+  const result = useAppSelector(selectParticipantProjectSpeciesUpdateRequest(requestId));
   const snackbar = useSnackbar();
-  const { projectId } = useParticipantProjectData();
 
-  const [record] = useState<ParticipantProjectSpecies>(projectSpecies);
+  const [error, setError] = useState('');
+  const [record, setRecord] = useState<ParticipantProjectSpecies>(projectSpecies);
 
   useEffect(() => {
     if (result?.status === 'error') {
@@ -43,14 +45,24 @@ export default function EditSpeciesModal(props: AddEditSubLocationProps): JSX.El
   }, [result, snackbar]);
 
   const save = () => {
+    if (!record.rationale) {
+      setError(strings.GENERIC_ERROR);
+      return;
+    }
+
     const request = dispatch(
       requestUpdateParticipantProjectSpecies({
-        projectId,
-        participantProjectSpeciesId: record.id,
         participantProjectSpecies: record,
       })
     );
     setRequestId(request.requestId);
+  };
+
+  const onChangeRationale = (rationale: unknown) => {
+    setRecord((prev) => ({
+      ...prev,
+      rationale: `${rationale}`,
+    }));
   };
 
   return (
@@ -80,11 +92,19 @@ export default function EditSpeciesModal(props: AddEditSubLocationProps): JSX.El
             fontSize='16px'
             to={APP_PATHS.SPECIES_DETAILS.replace(':speciesId', projectSpecies.speciesId.toString())}
           >
-            {projectSpecies.speciesScientificName}
+            {projectSpecies.scientificName}
           </Link>
         </Grid>
         <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
-          <TextField id='rationale' label={strings.RATIONALE} type='textarea' value={record?.rationale} />
+          <TextField
+            required
+            id='rationale'
+            label={strings.RATIONALE}
+            type='textarea'
+            value={record?.rationale}
+            onChange={onChangeRationale}
+            errorText={error && !record?.rationale ? strings.REQUIRED_FIELD : ''}
+          />
         </Grid>
       </Grid>
     </DialogBox>

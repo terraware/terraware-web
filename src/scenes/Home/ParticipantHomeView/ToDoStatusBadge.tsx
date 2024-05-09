@@ -2,24 +2,28 @@ import React, { Box, Theme, Typography, useTheme } from '@mui/material';
 import { Property } from 'csstype';
 
 import strings from 'src/strings';
-
-import { ToDoType } from './ToDo';
+import { ToDoBadge } from 'src/types/ProjectToDo';
 
 interface ToDoStatusBadgeProps {
-  status: ToDoType['status'];
+  status: ToDoBadge;
 }
 
 // TODO this will move to the appropriate types area when the BE for ToDos is fleshed out
-const getToDoStatus = (status: ToDoType['status']): string => {
+const getToDoStatus = (status: ToDoBadge): string => {
   switch (status) {
-    case 'Event':
-      return strings.EVENT;
     case 'Not Submitted':
       return strings.NOT_SUBMITTED;
+    case 'Event':
+      return strings.EVENT;
+    case 'In Review':
+      return strings.IN_REVIEW;
+    case 'Not Accepted':
+      return strings.NOT_ACCEPTED;
     case 'Overdue':
       return strings.OVERDUE;
+    case 'Completed':
     default:
-      return `${status}`;
+      return '';
   }
 };
 
@@ -29,14 +33,24 @@ type StatusColors = {
   text: Property.Color | undefined;
 };
 
-const getStatusColors = (status: ToDoType['status'], theme: Theme): StatusColors => {
+const getStatusColors = (status: ToDoBadge, theme: Theme): StatusColors => {
   switch (status) {
+    case 'In Review':
+      return {
+        background: theme.palette.TwClrBgWarningTertiary,
+        border: theme.palette.TwClrBrdrWarning,
+        text: theme.palette.TwClrTxtWarning,
+      };
+    case 'Not Accepted':
     case 'Overdue':
       return {
         background: theme.palette.TwClrBgDangerTertiary,
         border: theme.palette.TwClrBrdrDanger,
         text: theme.palette.TwClrTxtDanger,
       };
+    case 'Completed':
+    case 'Not Submitted':
+    case 'Event':
     default:
       return {
         background: theme.palette.TwClrBgInfoTertiary,

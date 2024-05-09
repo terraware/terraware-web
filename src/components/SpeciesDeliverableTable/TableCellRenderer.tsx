@@ -51,7 +51,7 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
     );
   };
 
-  if (column.key === 'speciesScientificName') {
+  if (column.key === 'scientificName') {
     return (
       <CellRenderer
         column={column}
@@ -73,7 +73,7 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
     );
   }
 
-  if (column.key === 'status') {
+  if (column.key === 'submissionStatus') {
     return (
       <CellRenderer
         column={column}
@@ -88,14 +88,12 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
     const rejectHandler = (feedback: string) => {
       dispatch(
         requestUpdateParticipantProjectSpecies({
-          projectId: row.projectId,
-          participantProjectSpeciesId: row.id,
           participantProjectSpecies: {
             id: row.id,
             speciesId: row.speciesId,
             projectId: row.projectId,
-            status: 'Rejected',
-            feedback: feedback,
+            submissionStatus: 'Rejected',
+            rationale: feedback,
           },
         })
       );
@@ -116,7 +114,7 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
               onClick={() => setShowRejectDialog(true)}
               priority='secondary'
               type='destructive'
-              disabled={row.status === 'Rejected'}
+              disabled={row.submissionStatus === 'Rejected'}
             />
           </>
         }
@@ -128,13 +126,11 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
     const approveHandler = () => {
       dispatch(
         requestUpdateParticipantProjectSpecies({
-          projectId: row.projectId,
-          participantProjectSpeciesId: row.id,
           participantProjectSpecies: {
             id: row.id,
             speciesId: row.speciesId,
             projectId: row.projectId,
-            status: 'Approved',
+            submissionStatus: 'Approved',
           },
         })
       );
@@ -150,7 +146,7 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
             label={strings.APPROVE}
             onClick={() => approveHandler()}
             priority='secondary'
-            disabled={row.status === 'Approved'}
+            disabled={row.submissionStatus === 'Approved'}
           />
         }
       />

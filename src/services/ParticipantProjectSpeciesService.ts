@@ -1,165 +1,165 @@
-import { components } from 'src/api/types/generated-schema';
+import { components, paths } from 'src/api/types/generated-schema';
+import { SearchNodePayload, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
 
-import { Response } from './HttpService';
+import HttpService, { Response2 } from './HttpService';
+import SearchService from './SearchService';
 
-export type ParticipantProjectSpecies = {
+const ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR =
+  '/api/v1/accelerator/projects/species/{participantProjectSpeciesId}';
+const ENDPOINT_PARTICIPANT_PROJECT_SPECIES = '/api/v1/accelerator/projects/species';
+const ENDPOINT_PARTICIPANT_PROJECT_SPECIES_ASSIGN = '/api/v1/accelerator/projects/species/assign';
+
+type AssignRequestPayload =
+  paths[typeof ENDPOINT_PARTICIPANT_PROJECT_SPECIES_ASSIGN]['post']['requestBody']['content']['application/json'];
+type AssignResponse =
+  paths[typeof ENDPOINT_PARTICIPANT_PROJECT_SPECIES_ASSIGN]['post']['responses'][200]['content']['application/json'];
+
+export type CreateParticipantProjectSpeciesRequestPayload =
+  paths[typeof ENDPOINT_PARTICIPANT_PROJECT_SPECIES]['post']['requestBody']['content']['application/json'];
+type CreateResponse =
+  paths[typeof ENDPOINT_PARTICIPANT_PROJECT_SPECIES]['post']['responses'][200]['content']['application/json'];
+
+type DeleteRequestPayload =
+  paths[typeof ENDPOINT_PARTICIPANT_PROJECT_SPECIES]['delete']['requestBody']['content']['application/json'];
+type DeleteResponse =
+  paths[typeof ENDPOINT_PARTICIPANT_PROJECT_SPECIES]['delete']['responses'][200]['content']['application/json'];
+
+type GetResponse =
+  paths[typeof ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR]['get']['responses'][200]['content']['application/json'];
+
+export type UpdateRequestPayload =
+  paths[typeof ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR]['put']['requestBody']['content']['application/json'];
+type UpdateResponse =
+  paths[typeof ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR]['put']['responses'][200]['content']['application/json'];
+
+export type ParticipantProjectSpecies = components['schemas']['ParticipantProjectSpeciesPayload'];
+export type SubmissionStatus = ParticipantProjectSpecies['submissionStatus'];
+
+export type SpeciesWithParticipantProjectsSearchResponse = {
+  commonName?: string;
   feedback?: string;
   id: number;
   projectId: number;
   rationale?: string;
-  speciesCommonName?: string;
+  scientificName?: string;
   speciesId: number;
-  speciesScientificName?: string;
-  status: 'Not Submitted' | 'In Review' | 'Rejected' | 'Approved' | 'Needs Translation' | 'Not Needed';
+  submissionStatus: SubmissionStatus;
 };
 
-export type ParticipantProjectSpeciesRequest = Omit<
-  ParticipantProjectSpecies,
-  'id' | 'status' | 'speciesCommonName' | 'speciesScientificName'
->;
+const assign = async (projectIds: number[], speciesIds: number[]): Promise<Response2<AssignResponse>> => {
+  const entity: AssignRequestPayload = { projectIds, speciesIds };
 
-export type ParticipantProjectSpeciesData = { participantProjectSpecies?: ParticipantProjectSpecies | undefined };
-
-export type ParticipantProjectSpeciesResponse = Response & ParticipantProjectSpeciesData;
-
-export type AllParticipantProjectSpeciesData = { participantProjectSpecies?: ParticipantProjectSpecies[] | undefined };
-
-export type AllSpeciesResponse = Response & AllParticipantProjectSpeciesData;
-
-export type UpdateParticipantProjectSpeciesData = { participantProjectSpecies?: ParticipantProjectSpecies | undefined };
-
-export type UpdateParticipantProjectSpeciesResponse = Response & UpdateParticipantProjectSpeciesData;
-
-export type DeleteParticipantProjectSpeciesResponse = components['schemas']['SimpleSuccessResponsePayload'];
-
-// Record<projectId, ParticipantProjectSpecies[]>
-export const mockParticipantProjectSpecies: Record<number, ParticipantProjectSpecies[]> = {
-  1: [
-    {
-      id: 1,
-      projectId: 1,
-      speciesCommonName: 'ʻŌhiʻa',
-      speciesId: 1,
-      speciesScientificName: 'Metrosideros polymorpha',
-      status: 'In Review',
-    },
-    {
-      id: 2,
-      projectId: 1,
-      speciesCommonName: 'Koa',
-      speciesId: 2,
-      speciesScientificName: 'Acacia koa',
-      status: 'Not Submitted',
-    },
-  ],
-  2: [
-    {
-      id: 3,
-      projectId: 2,
-      speciesCommonName: 'ʻŌhiʻa',
-      speciesId: 1,
-      speciesScientificName: 'Metrosideros polymorpha',
-      status: 'In Review',
-    },
-    {
-      id: 4,
-      projectId: 2,
-      speciesCommonName: 'Koa',
-      speciesId: 2,
-      speciesScientificName: 'Acacia koa',
-      status: 'Not Submitted',
-    },
-  ],
-};
-
-const get = async (participantProjectSpeciesId: number): Promise<ParticipantProjectSpeciesResponse> => {
-  return new Promise((resolve) => {
-    let participantProjectSpecies;
-
-    for (const speciesList of Object.values(mockParticipantProjectSpecies)) {
-      const result = speciesList.find((ps) => ps.id === participantProjectSpeciesId);
-      if (result) {
-        participantProjectSpecies = result;
-        break;
-      }
-    }
-
-    resolve({ data: { participantProjectSpecies }, requestSucceeded: true });
+  return HttpService.root(ENDPOINT_PARTICIPANT_PROJECT_SPECIES_ASSIGN).post2<AssignResponse>({
+    entity,
   });
 };
 
-const list = async (projectId: number): Promise<AllSpeciesResponse> => {
-  return new Promise((resolve) => {
-    resolve({
-      data: { participantProjectSpecies: mockParticipantProjectSpecies?.[projectId] || [] },
-      requestSucceeded: true,
-    });
+const create = async (request: CreateParticipantProjectSpeciesRequestPayload): Promise<Response2<CreateResponse>> =>
+  HttpService.root(ENDPOINT_PARTICIPANT_PROJECT_SPECIES).post2<CreateResponse>({
+    entity: request,
+  });
+
+const deleteMany = (participantProjectSpeciesIds: number[]): Promise<Response2<DeleteResponse>> => {
+  const entity: DeleteRequestPayload = { participantProjectSpeciesIds };
+
+  return HttpService.root(ENDPOINT_PARTICIPANT_PROJECT_SPECIES).delete2<DeleteResponse>({
+    entity,
   });
 };
 
-const update = async (
+const get = (participantProjectSpeciesId: number): Promise<Response2<GetResponse>> =>
+  HttpService.root(ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR).get2<GetResponse>({
+    urlReplacements: {
+      '{participantProjectSpeciesId}': `${participantProjectSpeciesId}`,
+    },
+  });
+
+const list = async (
+  organizationId: number,
   projectId: number,
-  participantProjectSpeciesId: number,
-  participantProjectSpecies: ParticipantProjectSpecies
-): Promise<UpdateParticipantProjectSpeciesResponse> => {
-  return new Promise((resolve) => {
-    const speciesList = mockParticipantProjectSpecies?.[projectId] || [];
-    const index = speciesList.findIndex((ps) => ps.id === participantProjectSpeciesId);
+  searchCriteria?: SearchNodePayload,
+  sortOrder?: SearchSortOrder
+): Promise<SpeciesWithParticipantProjectsSearchResponse[] | null> => {
+  const params: SearchRequestPayload = {
+    prefix: 'species',
+    fields: [
+      'id',
+      'commonName',
+      'participantProjectSpecies_project_id',
+      'participantProjectSpecies_id',
+      'participantProjectSpecies_feedback',
+      'participantProjectSpecies_rationale',
+      'participantProjectSpecies_submissionStatus',
+      'scientificName',
+    ],
+    search: {
+      operation: 'and',
+      children: [
+        {
+          field: 'organization_id',
+          values: [`${organizationId}`],
+          operation: 'field',
+        },
+        {
+          field: 'participantProjectSpecies_project_id',
+          values: [`${projectId}`],
+          operation: 'field',
+        },
+        ...(searchCriteria ? [searchCriteria] : []),
+      ],
+    },
+    count: 1000,
+  };
 
-    if (index !== -1) {
-      // speciesList[index] = participantProjectSpecies;
-      mockParticipantProjectSpecies[projectId] = speciesList;
-    }
+  if (sortOrder) {
+    params.sortOrder = [sortOrder];
+  }
 
-    resolve({ data: { participantProjectSpecies }, requestSucceeded: true });
-  });
-};
+  const response = await SearchService.search(params);
+  if (!response) {
+    return response;
+  }
 
-const remove = async (participantProjectSpeciesId: number): Promise<DeleteParticipantProjectSpeciesResponse> => {
-  return new Promise((resolve) => {
-    let found = false;
-
-    for (const projectId in mockParticipantProjectSpecies) {
-      const speciesList = mockParticipantProjectSpecies[projectId] || [];
-      const index = speciesList.findIndex((ps) => ps.id === participantProjectSpeciesId);
-
-      if (index !== -1) {
-        speciesList.splice(index, 1);
-        mockParticipantProjectSpecies[projectId] = speciesList;
-        found = true;
-        break;
-      }
-    }
-
-    if (found) {
-      resolve({ status: 'ok' });
-    } else {
-      resolve({ status: 'error' });
-    }
-  });
-};
-
-const create = async (entity: ParticipantProjectSpeciesRequest): Promise<ParticipantProjectSpeciesResponse> => {
-  return new Promise((resolve) => {
-    // await httpParticipantProjectSpecies.post({ entity });
-    const newParticipantProjectSpecies = {
-      id: 5,
-      projectId: entity.projectId,
-      speciesCommonName: 'Testing',
-      speciesId: entity.speciesId,
-      speciesScientificName: 'Testing Metrosideros polymorpha',
-      status: 'In Review',
+  return response.map((entity) => {
+    const searchResponse: SpeciesWithParticipantProjectsSearchResponse = {
+      commonName: entity.commonName ? `${entity.commonName}` : undefined,
+      feedback: entity.participantProjectSpecies_feedback ? `${entity.participantProjectSpecies_feedback}` : undefined,
+      id: Number(entity.participantProjectSpecies_id),
+      projectId: Number(entity.participantProjectSpecies_project_id),
+      rationale: entity.participantProjectSpecies_rationale
+        ? `${entity.participantProjectSpecies_rationale}`
+        : undefined,
+      scientificName: entity.scientificName ? `${entity.scientificName}` : undefined,
+      speciesId: Number(entity.id),
+      submissionStatus: `${entity.participantProjectSpecies_submissionStatus}` as SubmissionStatus,
     };
-    resolve({ data: { participantProjectSpecies: newParticipantProjectSpecies }, requestSucceeded: true });
+
+    return searchResponse;
+  });
+};
+
+const update = (participantProjectSpecies: ParticipantProjectSpecies): Promise<Response2<UpdateResponse>> => {
+  const entity: UpdateRequestPayload = {
+    feedback: participantProjectSpecies.feedback,
+    rationale: participantProjectSpecies.rationale,
+    submissionStatus: participantProjectSpecies.submissionStatus,
+  };
+
+  return HttpService.root(ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR).put2<UpdateResponse>({
+    urlReplacements: {
+      '{participantProjectSpeciesId}': `${participantProjectSpecies.id}`,
+    },
+    entity,
   });
 };
 
 const ParticipantProjectSpeciesService = {
+  assign,
   create,
   get,
   list,
   update,
-  remove,
+  deleteMany,
 };
 
 export default ParticipantProjectSpeciesService;

@@ -1,21 +1,57 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import ParticipantProjectSpeciesService, {
-  AllSpeciesResponse,
-  DeleteParticipantProjectSpeciesResponse,
+  CreateParticipantProjectSpeciesRequestPayload,
   ParticipantProjectSpecies,
-  ParticipantProjectSpeciesRequest,
-  ParticipantProjectSpeciesResponse,
 } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
+
+export const requestAssignParticipantProjectSpecies = createAsyncThunk(
+  'participantProjectSpecies/assign',
+  async (request: { projectIds: number[]; speciesIds: number[] }, { rejectWithValue }) => {
+    const { projectIds, speciesIds } = request;
+    const response = await ParticipantProjectSpeciesService.assign(projectIds, speciesIds);
+
+    if (response && response.requestSucceeded) {
+      return true;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestCreateParticipantProjectSpecies = createAsyncThunk(
+  'participantProjectSpecies/create',
+  async (request: CreateParticipantProjectSpeciesRequestPayload, { rejectWithValue }) => {
+    const response = await ParticipantProjectSpeciesService.create(request);
+
+    if (response && response.requestSucceeded && response.data) {
+      return response.data.participantProjectSpecies;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
+export const requestDeleteManyParticipantProjectSpecies = createAsyncThunk(
+  'participantProjectSpecies/delete-many',
+  async (participantProjectSpeciesIds: number[], { rejectWithValue }) => {
+    const response = await ParticipantProjectSpeciesService.deleteMany(participantProjectSpeciesIds);
+
+    if (response && response.requestSucceeded) {
+      return true;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
 
 export const requestGetParticipantProjectSpecies = createAsyncThunk(
   'participantProjectSpecies/get-one',
   async (participantProjectSpeciesId: number, { rejectWithValue }) => {
-    const response: ParticipantProjectSpeciesResponse =
-      await ParticipantProjectSpeciesService.get(participantProjectSpeciesId);
+    const response = await ParticipantProjectSpeciesService.get(participantProjectSpeciesId);
 
-    if (response && response.requestSucceeded) {
+    if (response && response.requestSucceeded && response.data) {
       return response.data.participantProjectSpecies;
     }
 
@@ -26,10 +62,11 @@ export const requestGetParticipantProjectSpecies = createAsyncThunk(
 export const requestListParticipantProjectSpecies = createAsyncThunk(
   'participantProjectSpecies/list',
   async (projectId: number, { rejectWithValue }) => {
-    const response: AllSpeciesResponse = await ParticipantProjectSpeciesService.list(projectId);
+    const organizationId = 1;
+    const response = await ParticipantProjectSpeciesService.list(organizationId, projectId);
 
-    if (response && response.requestSucceeded) {
-      return response.data.participantProjectSpecies;
+    if (response) {
+      return response;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);
@@ -39,49 +76,14 @@ export const requestListParticipantProjectSpecies = createAsyncThunk(
 export const requestUpdateParticipantProjectSpecies = createAsyncThunk(
   'participantProjectSpecies/update',
   async (
-    {
-      projectId,
-      participantProjectSpeciesId,
-      participantProjectSpecies,
-    }: { projectId: number; participantProjectSpeciesId: number; participantProjectSpecies: ParticipantProjectSpecies },
+    { participantProjectSpecies }: { participantProjectSpecies: ParticipantProjectSpecies },
     { dispatch, rejectWithValue }
   ) => {
-    const response: ParticipantProjectSpeciesResponse = await ParticipantProjectSpeciesService.update(
-      projectId,
-      participantProjectSpeciesId,
-      participantProjectSpecies
-    );
+    const response = await ParticipantProjectSpeciesService.update(participantProjectSpecies);
 
-    if (response && response.requestSucceeded) {
-      dispatch(requestGetParticipantProjectSpecies(participantProjectSpeciesId));
+    if (response && response.requestSucceeded && response.data) {
+      dispatch(requestGetParticipantProjectSpecies(participantProjectSpecies.id));
       return true;
-    }
-
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
-
-export const requestRemoveParticipantProjectSpecies = createAsyncThunk(
-  'participantProjectSpecies/remove',
-  async (participantProjectSpeciesId: number, { rejectWithValue }) => {
-    const response: DeleteParticipantProjectSpeciesResponse =
-      await ParticipantProjectSpeciesService.remove(participantProjectSpeciesId);
-
-    if (response?.status === 'ok') {
-      return true;
-    }
-
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
-
-export const requestCreateParticipantProjectSpecies = createAsyncThunk(
-  'participantProjectSpecies/create',
-  async (request: ParticipantProjectSpeciesRequest, { rejectWithValue }) => {
-    const response: ParticipantProjectSpeciesResponse = await ParticipantProjectSpeciesService.create(request);
-
-    if (response && response.requestSucceeded) {
-      return response.data.participantProjectSpecies;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);

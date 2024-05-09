@@ -1,10 +1,11 @@
 import React, { Box, Typography, useTheme } from '@mui/material';
 
-import { ToDoType } from './ToDo';
+import { ToDoItem } from 'src/types/ProjectToDo';
+
 import ToDoRow from './ToDoRow';
 
 interface ToDoSectionProps {
-  toDos: ToDoType[];
+  toDos: ToDoItem[];
   section: string;
 }
 

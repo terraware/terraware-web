@@ -20,6 +20,7 @@ import participantProjectSpeciesReducers from './features/participantProjectSpec
 import participantProjectsReducers from './features/participantProjects/participantProjectsSlice';
 import participantsReducers from './features/participants/participantsSlice';
 import plantingsReducers from './features/plantings/plantingsSlice';
+import projectToDoReducers from './features/projectToDo/projectToDoSlice';
 import scoresReducers from './features/scores/scoresSlice';
 import snackbarReducers from './features/snackbar/snackbarSlice';
 import subLocationsReducers from './features/subLocations/subLocationsSlice';
@@ -47,6 +48,7 @@ export const reducers = {
   ...participantProjectSpeciesReducers,
   ...plantingsReducers,
   ...projectsReducers,
+  ...projectToDoReducers,
   ...reportsSettingsReducers,
   ...scoresReducers,
   ...snackbarReducers,

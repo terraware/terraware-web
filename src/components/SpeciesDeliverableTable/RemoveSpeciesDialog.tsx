@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Button, DialogBox } from '@terraware/web-components';
 
-import ParticipantProjectSpeciesService from 'src/services/ParticipantProjectSpeciesService';
+import { requestDeleteManyParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
+import { selectParticipantProjectSpeciesDeleteManyRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export interface RemoveSpeciesDialogProps {
-  onClose: () => void;
+  onClose: (reload?: boolean) => void;
   onSubmit?: () => void;
   open: boolean;
   speciesToRemove: number[];
@@ -15,33 +17,35 @@ export interface RemoveSpeciesDialogProps {
 
 export default function RemoveSpeciesDialog(props: RemoveSpeciesDialogProps): JSX.Element | null {
   const { onClose, open, speciesToRemove } = props;
+
+  const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
 
-  const removeSelectedSpeciesFromParticipantProject = async () => {
+  const [requestId, setRequestId] = useState('');
+  const deleteRequest = useAppSelector(selectParticipantProjectSpeciesDeleteManyRequest(requestId));
+
+  const removeSelectedSpeciesFromParticipantProject = () => {
     if (!speciesToRemove?.length) {
       return;
     }
 
-    const removeSpeciesPromises = speciesToRemove.map((participantProjectSpeciesId) =>
-      ParticipantProjectSpeciesService.remove(participantProjectSpeciesId)
-    );
-    try {
-      const results = await Promise.allSettled(removeSpeciesPromises);
-      const allRequestsCompletedSuccessfully = results.every(
-        (result) => result.status === 'fulfilled' && result.value?.status === 'ok'
-      );
-      if (allRequestsCompletedSuccessfully) {
-        snackbar.toastSuccess(strings.CHANGES_SAVED);
-      } else {
-        snackbar.toastError(strings.GENERIC_ERROR);
-      }
-    } catch (error) {
-      // tslint:disable-next-line: no-console
-      console.error('Error removing species from participant project', error);
+    const request = dispatch(requestDeleteManyParticipantProjectSpecies(speciesToRemove));
+    setRequestId(request.requestId);
+  };
+
+  useEffect(() => {
+    if (!deleteRequest) {
+      return;
     }
 
-    onClose();
-  };
+    if (deleteRequest.status === 'success') {
+      snackbar.toastSuccess(strings.CHANGES_SAVED);
+      onClose(true);
+    } else {
+      snackbar.toastError(strings.GENERIC_ERROR);
+      onClose();
+    }
+  }, [deleteRequest]);
 
   if (!open) {
     return null;
@@ -54,7 +58,7 @@ export default function RemoveSpeciesDialog(props: RemoveSpeciesDialogProps): JS
         <Button
           key='button-1'
           label={strings.CANCEL}
-          onClick={onClose}
+          onClick={() => onClose()}
           priority='secondary'
           size='medium'
           type='passive'
