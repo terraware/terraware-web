@@ -109,7 +109,6 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const navigate = useNavigate();
   const projects = useAppSelector(selectProjects);
 
-
   const contentRef = useRef(null);
   const { activeLocale } = useLocalization();
   const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>({
