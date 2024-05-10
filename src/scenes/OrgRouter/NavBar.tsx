@@ -69,8 +69,6 @@ export default function NavBar({
   const isProjectRoute = useMatch({ path: APP_PATHS.PROJECT_VIEW + '/', end: true });
   const isProjectModulesRoute = useMatch({ path: APP_PATHS.PROJECT_MODULES + '/', end: false });
 
-  const featureFlagParticipantExperience = isEnabled('Participant Experience');
-
   const closeNavBar = useCallback(() => {
     if (!isDesktop) {
       setShowNavBar(false);
@@ -202,7 +200,7 @@ export default function NavBar({
 
   const modulesMenu = useMemo<JSX.Element | null>(
     () =>
-      currentParticipantProject && featureFlagParticipantExperience && orgHasModules ? (
+      currentParticipantProject && orgHasModules ? (
         <NavItem
           icon='iconModule'
           label={strings.MODULES}
@@ -217,7 +215,6 @@ export default function NavBar({
       ) : null,
     [
       closeAndNavigateTo,
-      featureFlagParticipantExperience,
       isProjectModulesRoute,
       currentParticipantProject,
       orgHasModules,

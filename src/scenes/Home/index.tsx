@@ -40,12 +40,11 @@ export default function Home(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const { orgHasModules } = useParticipantData();
   const classes = useStyles({ isMobile });
-  const featureFlagParticipantExperience = isEnabled('Participant Experience');
 
   const homeScreen = useMemo(
     (): JSX.Element =>
-      featureFlagParticipantExperience && orgHasModules ? <ParticipantHomeView /> : <TerrawareHomeView />,
-    [featureFlagParticipantExperience, orgHasModules]
+      orgHasModules ? <ParticipantHomeView /> : <TerrawareHomeView />,
+    [orgHasModules]
   );
 
   return <main className={classes.main}>{homeScreen}</main>;
