@@ -27,6 +27,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import ApproveDeliverableDialog from '../Deliverables/ApproveDeliverableDialog';
 import RejectDialog from '../Deliverables/RejectDialog';
+import RejectedBox from './RejectedBox';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleWithButton: {
@@ -129,7 +130,7 @@ export default function SpeciesDetailView(): JSX.Element {
             speciesId: species?.id || -1,
             projectId: projectId,
             submissionStatus: 'Rejected',
-            rationale: feedback,
+            feedback: feedback,
           },
         })
       );
@@ -250,6 +251,9 @@ export default function SpeciesDetailView(): JSX.Element {
         rightComponent={actions}
         crumbs={crumbs}
       >
+        {currentParticipantProjectSpecies?.submissionStatus === 'Rejected' && currentParticipantProjectSpecies && (
+          <RejectedBox participantProjectSpecies={currentParticipantProjectSpecies} onSubmit={rejectHandler} />
+        )}
         <Grid container padding={theme.spacing(0, 0, 4, 0)}>
           <Grid item xs={12}>
             <PageSnackbar />
@@ -271,11 +275,10 @@ export default function SpeciesDetailView(): JSX.Element {
                   marginBottom='16px'
                   padding='16px'
                 >
-                  {currentParticipantProjectSpecies.submissionStatus !== 'Rejected' && (
-                    <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
-                      <DeliverableStatusBadge status={currentParticipantProjectSpecies.submissionStatus} />
-                    </div>
-                  )}
+                  <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
+                    <DeliverableStatusBadge status={currentParticipantProjectSpecies.submissionStatus} />
+                  </div>
+
                   {currentDeliverable && <InternalComment deliverable={currentDeliverable} />}
                 </Box>
               </Box>
