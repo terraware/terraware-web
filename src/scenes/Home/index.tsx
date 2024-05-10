@@ -3,7 +3,6 @@ import React, { useMemo } from 'react';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
-import isEnabled from 'src/features';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
