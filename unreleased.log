@@ -1,3 +1,4 @@
+27cb25fe38 SW-5350 Refactored module details card out and use also in home screen (#2609)
 bf64195dcd SW-5356 Added modules dispatch into ParticipantProvider, used projects with modules only for Participant Experience (#2603)
 acb0aa2581 SW-5335 Updated date time format (#2604)
 335726f856 Updated translations from Phrase (#2598)
