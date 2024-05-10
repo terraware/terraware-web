@@ -93,7 +93,7 @@ const ParticipantProvider = ({ children }: Props) => {
     if (allProjectModuleList && allProjectModuleList.status === 'success' && allProjectModuleList.data) {
       const allProjectModules = allProjectModuleList.data;
       const nextModuleProjects = (participantProjects || []).filter((project) =>
-        allProjectModules.map(({ id, modules }) => id === project.id && modules && modules.length > 0)
+        allProjectModules.findIndex(({ id, modules }) => id === project.id && modules && modules.length > 0) !== -1
       );
       setModuleProjects(nextModuleProjects);
 
