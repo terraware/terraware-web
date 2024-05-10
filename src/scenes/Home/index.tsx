@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
-import isEnabled from 'src/features';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -38,13 +37,13 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function Home(): JSX.Element {
   const { isMobile } = useDeviceInfo();
-  const { orgHasParticipants } = useParticipantData();
+  const { orgHasModules } = useParticipantData();
   const classes = useStyles({ isMobile });
-  const featureFlagParticipantExperience = isEnabled('Participant Experience');
 
-  return (
-    <main className={classes.main}>
-      {featureFlagParticipantExperience && orgHasParticipants ? <ParticipantHomeView /> : <TerrawareHomeView />}
-    </main>
+  const homeScreen = useMemo(
+    (): JSX.Element => (orgHasModules ? <ParticipantHomeView /> : <TerrawareHomeView />),
+    [orgHasModules]
   );
+
+  return <main className={classes.main}>{homeScreen}</main>;
 }

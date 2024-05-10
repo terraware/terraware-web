@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { Module } from 'src/types/Module';
 
 import { StatusT, buildReducers } from '../asyncUtils';
-import { requestGetModule, requestListModules } from './modulesAsyncThunks';
+import { requestGetModule, requestListAllModules, requestListModules } from './modulesAsyncThunks';
 
 /**
  * Get Module
@@ -29,13 +29,28 @@ export const moduleListSlice = createSlice({
   initialState: initialStateModuleList,
   reducers: {},
   extraReducers: (builder) => {
-    buildReducers(requestListModules, true)(builder);
+    buildReducers(requestListModules)(builder);
+  },
+});
+
+/**
+ * List Modules
+ */
+const initialStateAllModuleList: { [key: string]: StatusT<{ id: number; modules: Module[] }[]> } = {};
+
+export const allModuleListSlice = createSlice({
+  name: 'allModuleListSlice',
+  initialState: initialStateAllModuleList,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestListAllModules)(builder);
   },
 });
 
 const moduleReducers = {
   module: moduleSlice.reducer,
   moduleList: moduleListSlice.reducer,
+  allModuleList: allModuleListSlice.reducer,
 };
 
 export default moduleReducers;

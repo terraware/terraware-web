@@ -25,3 +25,21 @@ export const requestListModules = createAsyncThunk('modules/list', async (projec
 
   return rejectWithValue(strings.GENERIC_ERROR);
 });
+
+export const requestListAllModules = createAsyncThunk(
+  'modules/listAll',
+  async (projectIds: number[], { rejectWithValue }) => {
+    const results = await Promise.all(projectIds.map((projectId) => ModuleService.list(projectId)));
+
+    const requestSucceeded = results.reduce(
+      (prev, result) => prev && !!result && result.requestSucceeded && !!result.data,
+      true
+    );
+
+    if (requestSucceeded) {
+      return results.map((result, idx) => ({ id: projectIds[idx], modules: result.data?.modules }));
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);

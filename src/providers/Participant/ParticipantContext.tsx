@@ -8,15 +8,19 @@ export type ParticipantData = {
   activeModules?: Module[];
   currentParticipant?: Participant;
   currentParticipantProject?: Project;
+  moduleProjects: Project[];
   modules?: Module[];
   participantProjects: Project[];
+  orgHasModules: boolean;
   orgHasParticipants: boolean;
   setCurrentParticipantProject: (projectId: string | number) => void;
 };
 
 // default values pointing to nothing
 export const ParticipantContext = createContext<ParticipantData>({
+  moduleProjects: [],
   participantProjects: [],
+  orgHasModules: false,
   orgHasParticipants: false,
   // tslint:disable-next-line:no-empty
   setCurrentParticipantProject: () => {},

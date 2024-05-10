@@ -184,24 +184,26 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
 
   return (
     <>
-      {type !== 'desktop' ? (
-        <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
-          <div className={classes.navBarOpened}>
-            <NavBar
-              setShowNavBar={setShowNavBar}
-              withdrawalCreated={withdrawalCreated}
-              hasPlantingSites={selectedOrgHasPlantingSites()}
-            />
-          </div>
-        </Slide>
-      ) : (
-        <NavBar
-          setShowNavBar={setShowNavBar}
-          backgroundTransparent={viewHasBackgroundImage()}
-          withdrawalCreated={withdrawalCreated}
-          hasPlantingSites={selectedOrgHasPlantingSites()}
-        />
-      )}
+      <ParticipantProvider>
+        {type !== 'desktop' ? (
+          <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
+            <div className={classes.navBarOpened}>
+              <NavBar
+                setShowNavBar={setShowNavBar}
+                withdrawalCreated={withdrawalCreated}
+                hasPlantingSites={selectedOrgHasPlantingSites()}
+              />
+            </div>
+          </Slide>
+        ) : (
+          <NavBar
+            setShowNavBar={setShowNavBar}
+            backgroundTransparent={viewHasBackgroundImage()}
+            withdrawalCreated={withdrawalCreated}
+            hasPlantingSites={selectedOrgHasPlantingSites()}
+          />
+        )}
+      </ParticipantProvider>
       <div
         className={`${type === 'desktop' && showNavBar ? classes.contentWithNavBar : ''} ${
           classes.content

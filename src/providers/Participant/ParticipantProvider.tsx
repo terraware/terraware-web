@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { selectActiveModules, selectProjectModuleList } from 'src/redux/features/modules/modulesSelectors';
+import { requestListAllModules, requestListModules } from 'src/redux/features/modules/modulesAsyncThunks';
+import { selectAllProjectModuleList, selectProjectModuleList } from 'src/redux/features/modules/modulesSelectors';
 import { requestGetParticipant } from 'src/redux/features/participants/participantsAsyncThunks';
 import { selectParticipant } from 'src/redux/features/participants/participantsSelectors';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { Module } from 'src/types/Module';
 import { Project } from 'src/types/Project';
 
 import { ParticipantContext, ParticipantData } from './ParticipantContext';
@@ -22,11 +24,19 @@ const ParticipantProvider = ({ children }: Props) => {
 
   const [currentParticipantProject, setCurrentParticipantProject] = useState<Project>();
   const [participantProjects, setParticipantProjects] = useState<Project[]>([]);
+  const [moduleProjects, setModuleProjects] = useState<Project[]>([]);
+  const [modules, setModules] = useState<Module[]>([]);
+  const [activeModules, setActiveModules] = useState<Module[]>([]);
+
+  const [listModulesRequest, setListModulesRequest] = useState<string>('');
+  const [allModulesRequest, setAllModulesRequest] = useState<string>('');
 
   const participant = useAppSelector(selectParticipant(currentParticipantProject?.participantId || -1));
-  const activeModules = useAppSelector((state) => selectActiveModules(state, currentParticipantProject?.id || -1));
-  const modules = useAppSelector(selectProjectModuleList(currentParticipantProject?.id || -1));
+
+  const projectModuleList = useAppSelector(selectProjectModuleList(listModulesRequest));
   const projects = useAppSelector(selectProjects);
+
+  const allProjectModuleList = useAppSelector(selectAllProjectModuleList(allModulesRequest));
 
   const _setCurrentParticipantProject = useCallback(
     (projectId: string | number) => {
@@ -36,49 +46,90 @@ const ParticipantProvider = ({ children }: Props) => {
   );
 
   const [participantData, setParticipantData] = useState<ParticipantData>({
+    activeModules,
+    moduleProjects,
+    modules,
     participantProjects,
     orgHasParticipants: false,
+    orgHasModules: false,
     setCurrentParticipantProject: _setCurrentParticipantProject,
   });
 
   useEffect(() => {
-    const nextParticipantProjects = (projects || []).filter((project) => !!project.participantId);
-    setParticipantProjects(nextParticipantProjects);
-
-    // Assign the first participant as the current participant
-    if (nextParticipantProjects.length > 0 && !currentParticipantProject) {
-      setCurrentParticipantProject(nextParticipantProjects[0]);
-    }
-  }, [currentParticipantProject, projects]);
-
-  useEffect(() => {
-    if (currentParticipantProject?.participantId) {
-      dispatch(requestGetParticipant(currentParticipantProject.participantId));
-    }
-  }, [currentParticipantProject, dispatch]);
-
-  useEffect(() => {
     if (selectedOrganization && activeLocale) {
       setCurrentParticipantProject(undefined);
+      setModuleProjects([]);
+      setParticipantProjects([]);
       dispatch(requestProjects(selectedOrganization.id, activeLocale));
     }
   }, [activeLocale, dispatch, selectedOrganization]);
 
   useEffect(() => {
-    if (activeModules && participant && currentParticipantProject && modules && participantProjects) {
-      setParticipantData({
-        activeModules,
-        currentParticipant: participant,
-        currentParticipantProject,
-        modules,
-        participantProjects,
-        orgHasParticipants: participantProjects.length > 0,
-        setCurrentParticipantProject: _setCurrentParticipantProject,
-      });
+    const nextParticipantProjects = (projects || []).filter((project) => !!project.participantId);
+    setParticipantProjects(nextParticipantProjects);
+  }, [projects]);
+
+  useEffect(() => {
+    if (participantProjects && participantProjects.length > 0) {
+      const projectIds = participantProjects.map((project) => project.id);
+      const request = dispatch(requestListAllModules(projectIds));
+      setAllModulesRequest(request.requestId);
     }
+  }, [participantProjects, dispatch]);
+
+  useEffect(() => {
+    if (!projectModuleList) {
+      return;
+    }
+
+    if (projectModuleList.status === 'success') {
+      const nextModules = projectModuleList.data ?? [];
+      setModules(nextModules);
+      setActiveModules(nextModules.filter((module) => module.isActive === true));
+    }
+  }, [projectModuleList]);
+
+  useEffect(() => {
+    if (allProjectModuleList && allProjectModuleList.status === 'success' && allProjectModuleList.data) {
+      const allProjectModules = allProjectModuleList.data;
+      const nextModuleProjects = (participantProjects || []).filter(
+        (project) =>
+          allProjectModules.findIndex(({ id, modules }) => id === project.id && modules && modules.length > 0) !== -1
+      );
+      setModuleProjects(nextModuleProjects);
+
+      // Assign the first project with modules as the current participant project
+      if (nextModuleProjects.length > 0 && !currentParticipantProject) {
+        setCurrentParticipantProject(nextModuleProjects[0]);
+      }
+      return;
+    }
+  }, [allProjectModuleList, currentParticipantProject, participantProjects]);
+
+  useEffect(() => {
+    if (currentParticipantProject?.participantId) {
+      dispatch(requestGetParticipant(currentParticipantProject.participantId));
+      const request = dispatch(requestListModules(currentParticipantProject.id));
+      setListModulesRequest(request.requestId);
+    }
+  }, [currentParticipantProject, dispatch]);
+
+  useEffect(() => {
+    setParticipantData({
+      activeModules,
+      currentParticipant: participant,
+      currentParticipantProject,
+      moduleProjects,
+      modules,
+      participantProjects,
+      orgHasModules: moduleProjects.length > 0,
+      orgHasParticipants: participantProjects.length > 0,
+      setCurrentParticipantProject: _setCurrentParticipantProject,
+    });
   }, [
     activeModules,
     currentParticipantProject,
+    moduleProjects,
     modules,
     participant,
     participantProjects,
