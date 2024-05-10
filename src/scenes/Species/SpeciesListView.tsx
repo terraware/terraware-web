@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Grid, Popover, Theme } from '@mui/material';
+import { Grid, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { DropdownItem, SortOrder } from '@terraware/web-components';
-import { PillList, PillListItem, Tooltip } from '@terraware/web-components';
+import { Tooltip } from '@terraware/web-components';
 import _ from 'lodash';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -16,17 +16,21 @@ import TooltipLearnMoreModal, {
 } from 'src/components/TooltipLearnMoreModal';
 import Card from 'src/components/common/Card';
 import EmptyMessage from 'src/components/common/EmptyMessage';
-import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
+import { FilterField } from 'src/components/common/FilterGroup';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import SearchFiltersWrapperV2, { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import { OrderPreserveableTable as Table } from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
+import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
+import { useAppSelector } from 'src/redux/store';
 import SearchService from 'src/services/SearchService';
 import strings from 'src/strings';
+import { Project } from 'src/types/Project';
 import { FieldNodePayload, FieldOptionsMap, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
 import { Species } from 'src/types/Species';
 import { isContributor } from 'src/utils/organization';
@@ -37,7 +41,6 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
 import useQuery from 'src/utils/useQuery';
 
-import TextField from '../../components/common/Textfield/Textfield';
 import Icon from '../../components/common/icon/Icon';
 import CheckDataModal from './CheckDataModal';
 import ImportSpeciesModal from './ImportSpeciesModal';
@@ -50,11 +53,6 @@ type SpeciesListProps = {
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
-  mainContainer: {
-    padding: theme.spacing(3),
-    backgroundColor: theme.palette.TwClrBg,
-    borderRadius: '32px',
-  },
   pageTitle: {
     fontSize: '24px',
     lineHeight: '32px',
@@ -73,39 +71,15 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '50%',
     marginTop: '10%',
   },
-  spinner: {
-    display: 'flex',
-    margin: 'auto',
-    minHeight: '50%',
-  },
-  errorBox: {
-    width: '400px',
-    marginTop: '120px',
-  },
-  searchField: {
-    width: '300px',
-  },
   searchBar: {
     display: 'flex',
     alignItems: 'center',
-  },
-  pillList: {
-    display: 'flex',
-    alightItems: 'center',
-    marginTop: '16px',
   },
   icon: {
     fill: theme.palette.TwClrIcnSecondary,
   },
   headerIconContainer: {
     marginLeft: '12px',
-  },
-  popoverContainer: {
-    '& .MuiPaper-root': {
-      border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-      borderRadius: '8px',
-      width: '480px',
-    },
   },
 }));
 
@@ -133,14 +107,8 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const [results, setResults] = useState<SpeciesSearchResultRow[]>();
   const query = useQuery();
   const navigate = useNavigate();
+  const projects = useAppSelector(selectProjects);
 
-  const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(null);
-  const handleFilterClick = (event: React.MouseEvent<HTMLElement>) => {
-    setFilterAnchorEl(event.currentTarget);
-  };
-  const handleFilterClose = () => {
-    setFilterAnchorEl(null);
-  };
 
   const contentRef = useRef(null);
   const { activeLocale } = useLocalization();
@@ -185,6 +153,12 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         name: strings.FAMILY,
         type: 'string',
         tooltipTitle: strings.TOOLTIP_SPECIES_FAMILY,
+      },
+      {
+        key: 'participantProjectSpecies.project.id',
+        name: strings.PROJECTS,
+        type: 'string',
+        tooltipTitle: '?', // TODO: set tooltip
       },
       {
         key: 'conservationCategory',
@@ -282,6 +256,42 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const [filters, setFilters] = useState<Record<string, any>>({});
   const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
 
+  const getProjectName = useCallback(
+    (projectId: string | number) => {
+      const project = projects?.find((p) => p.id === Number(projectId));
+      return project?.name || '';
+    },
+    [projects]
+  );
+
+  const featuredFilters: FilterConfig[] = useMemo(() => {
+    const _filters: FilterConfig[] = [
+      {
+        field: 'participantProjectSpecies.project.id',
+        label: strings.PROJECT,
+        options: (projects || [])?.map((project: Project) => `${project.id}`),
+        renderOption: getProjectName,
+        pillValueRenderer: (values: (string | number | null)[]) =>
+          values
+            .map((value: string | number | null) => (value === null ? value : getProjectName(value)))
+            .filter((value) => value)
+            .join(', '),
+      },
+    ];
+
+    return activeLocale ? _filters : [];
+  }, [activeLocale]);
+
+  const iconFilters: FilterConfig[] = useMemo(() => {
+    const _filters = filterColumns.map((filter) => ({
+      field: filter.name,
+      label: filter.label,
+      options: filterOptions?.[filter.name]?.values || [],
+    }));
+
+    return activeLocale ? _filters : [];
+  }, [activeLocale, filterColumns, filterOptions]);
+
   useEffect(() => {
     const getApiSearchResults = async () => {
       const searchParams: SearchRequestPayload = {
@@ -353,6 +363,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         'growthForms.growthForm',
         'ecosystemTypes.ecosystemType',
         'organization_id',
+        'participantProjectSpecies.project.id',
       ],
       search: {
         operation: 'and',
@@ -501,10 +512,6 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     navigate(APP_PATHS.SPECIES_NEW);
   };
 
-  const clearSearch = () => {
-    setSearchValue('');
-  };
-
   const onChangeSearch = (id: string, value: unknown) => {
     setSearchValue(value as string);
   };
@@ -521,14 +528,6 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
       link.setAttribute('href', encodedUri);
       link.setAttribute('download', `species.csv`);
       link.click();
-    }
-  };
-
-  const onRemoveFilter = (key: string) => {
-    if (filters[key]) {
-      const newFilters = { ...filters };
-      delete newFilters[key];
-      setFilters(newFilters);
     }
   };
 
@@ -606,52 +605,6 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     }
   };
 
-  const getFilterPillData = (): PillListItem<string>[] => {
-    const result = [];
-    if (filters.conservationCategory) {
-      result.push({
-        id: 'conservationCategory',
-        label: strings.CONSERVATION_CATEGORY,
-        value: filters.conservationCategory.values?.join(', ') ?? '',
-        onRemove: () => onRemoveFilter('conservationCategory'),
-      });
-    }
-    if (filters.rare) {
-      result.push({
-        id: 'rare',
-        label: strings.RARE,
-        value: filters.rare.values?.join(', ') ?? '',
-        onRemove: () => onRemoveFilter('rare'),
-      });
-    }
-    if (filters['growthForms.growthForm']) {
-      result.push({
-        id: 'growthForms.growthForm',
-        label: strings.GROWTH_FORM,
-        value: filters['growthForms.growthForm'].values?.join(', ') ?? '',
-        onRemove: () => onRemoveFilter('growthForms.growthForm'),
-      });
-    }
-    if (filters.seedStorageBehavior) {
-      result.push({
-        id: 'seedStorageBehavior',
-        label: strings.SEED_STORAGE_BEHAVIOR,
-        value: filters.seedStorageBehavior.values?.join(', ') ?? '',
-        onRemove: () => onRemoveFilter('seedStorageBehavior'),
-      });
-    }
-    if (filters['ecosystemTypes.ecosystemType']) {
-      result.push({
-        id: 'ecosystemTypes.ecosystemType',
-        label: strings.ECOSYSTEM_TYPE,
-        value: filters['ecosystemTypes.ecosystemType'].values?.join(', ') ?? '',
-        onRemove: () => onRemoveFilter('ecosystemTypes.ecosystemType'),
-      });
-    }
-
-    return result;
-  };
-
   const onSortChange = (order: SortOrder, orderBy: string) => {
     const isClientSorted = BE_SORTED_FIELDS.indexOf(orderBy) === -1;
     setSearchSortOrder(
@@ -708,66 +661,27 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
       <Card flushMobile>
         <Grid container>
           <Grid item xs={12} className={classes.searchBar}>
-            <TextField
-              placeholder={strings.SEARCH_BY_NAME_OR_FAMILY}
-              iconLeft='search'
-              label=''
-              id='search'
-              type='text'
-              className={classes.searchField}
-              onChange={(value) => onChangeSearch('search', value)}
-              value={searchValue}
-              iconRight='cancel'
-              onClickRightIcon={clearSearch}
+            <SearchFiltersWrapperV2
+              currentFilters={filters}
+              featuredFilters={featuredFilters}
+              iconFilters={iconFilters}
+              onSearch={(value) => onChangeSearch('search', value)}
+              search={searchValue}
+              searchPlaceholder={strings.SEARCH_BY_NAME_OR_FAMILY}
+              setCurrentFilters={setFilters}
+              rightComponent={
+                <Tooltip title={strings.EXPORT}>
+                  <Button
+                    id='downladSpeciesReport'
+                    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                    onClick={() => downloadReportHandler()}
+                    type='passive'
+                    priority='ghost'
+                    icon='iconExport'
+                  />
+                </Tooltip>
+              }
             />
-            <Tooltip title={strings.FILTER}>
-              <Button
-                id='filterSpecies'
-                onClick={(event) => event && handleFilterClick(event)}
-                type='passive'
-                priority='ghost'
-                icon='filter'
-              />
-            </Tooltip>
-            <Popover
-              id='simple-popover'
-              open={Boolean(filterAnchorEl)}
-              anchorEl={filterAnchorEl}
-              onClose={handleFilterClose}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'center',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'center',
-              }}
-              className={classes.popoverContainer}
-            >
-              <FilterGroup
-                initialFilters={filters}
-                fields={filterColumns}
-                values={filterOptions || {}}
-                onConfirm={(fs) => {
-                  handleFilterClose();
-                  setFilters(fs);
-                }}
-                onCancel={handleFilterClose}
-              />
-            </Popover>
-            <Tooltip title={strings.EXPORT}>
-              <Button
-                id='downladSpeciesReport'
-                // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                onClick={() => downloadReportHandler()}
-                type='passive'
-                priority='ghost'
-                icon='iconExport'
-              />
-            </Tooltip>
-          </Grid>
-          <Grid item xs={12} className={classes.pillList}>
-            <PillList data={getFilterPillData()} />
           </Grid>
           {species && species.length ? (
             <Grid item xs={12}>
