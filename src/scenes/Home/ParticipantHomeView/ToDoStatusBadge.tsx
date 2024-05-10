@@ -8,7 +8,6 @@ interface ToDoStatusBadgeProps {
   status: ToDoBadge;
 }
 
-// TODO this will move to the appropriate types area when the BE for ToDos is fleshed out
 const getToDoStatus = (status: ToDoBadge): string => {
   switch (status) {
     case 'Not Submitted':

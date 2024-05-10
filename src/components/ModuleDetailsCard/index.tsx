@@ -1,22 +1,17 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
 import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
+import { DateTime } from 'luxon';
 
 import Link from 'src/components/common/Link';
-import { APP_PATHS, ONE_MINUTE_INTERVAL_MS } from 'src/constants';
+import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { Module, ModuleContentType } from 'src/types/Module';
+import { Module, ModuleContentType, ModuleDeliverable } from 'src/types/Module';
 import { getLongDate, getLongDateTime } from 'src/utils/dateFormatter';
 
 import ModuleEventSessionCard from './ModuleEventSessionCard';
-
-type MockModuleDeliverable = {
-  dueDate: string;
-  id: number;
-  name: string;
-};
 
 const ModuleContentSection = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -58,51 +53,38 @@ const MODULE_CONTENTS = (module: Module): ModuleContent[] => {
 };
 
 export type ModuleDetailsCardProp = {
-  projectId: number;
+  deliverables: ModuleDeliverable[];
   module: Module;
+  projectId: number;
   showSeeAllModules?: boolean;
 };
 
-const ModuleDetailsCard = ({ projectId, module, showSeeAllModules = false }: ModuleDetailsCardProp) => {
+const ModuleDetailsCard = ({ deliverables, module, projectId, showSeeAllModules = false }: ModuleDetailsCardProp) => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
 
   const { goToDeliverable, goToModuleContent, goToModuleEventSession } = useNavigateTo();
-  const mockDeliverables: MockModuleDeliverable[] = []; // TODO: get deliverables
 
   const sessions = module.events.flatMap(({ sessions }) => sessions);
 
-  const [now, setNow] = useState(new Date());
+  const getDueDateLabelColor = (dueDate: DateTime) => {
+    const isCurrentModule = module.isActive;
+    const today = DateTime.now().startOf('day');
+    const dueDateStart = dueDate.startOf('day');
 
-  const getDueDateLabelColor = useCallback(
-    (dueDate: string) => {
-      const due = new Date(dueDate);
-      const isCurrentModule = module.isActive;
+    // if due date is in the past, item is overdue
+    if (dueDateStart < today) {
+      return theme.palette.TwClrTxtDanger;
+    }
 
-      if (!isCurrentModule) {
-        return theme.palette.TwClrTxt;
-      }
+    if (!isCurrentModule) {
+      return theme.palette.TwClrTxt;
+    }
 
-      // if due date is in the past, item is overdue
-      if (due < now) {
-        return theme.palette.TwClrTxtDanger;
-      }
-
-      return theme.palette.TwClrTxtWarning;
-    },
-    [now, theme]
-  );
+    return theme.palette.TwClrTxtWarning;
+  };
 
   const contents = useMemo(() => (module ? MODULE_CONTENTS(module) : []), [module]);
-
-  // update the current time every minute
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setNow(new Date());
-    }, ONE_MINUTE_INTERVAL_MS);
-
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <Card
@@ -152,9 +134,17 @@ const ModuleDetailsCard = ({ projectId, module, showSeeAllModules = false }: Mod
             <Box dangerouslySetInnerHTML={{ __html: module.overview || '' }} />
           </ModuleContentSection>
 
-          {!!mockDeliverables.length && (
+          {(!!contents.length || !!deliverables.length) && (
+            <ModuleContentSection>
+              <Typography fontSize={'20px'} lineHeight={'28px'} fontWeight={600}>
+                {strings.THIS_MODULE_CONTAINS}
+              </Typography>
+            </ModuleContentSection>
+          )}
+
+          {!!deliverables.length && (
             <>
-              {mockDeliverables.map((deliverable) => (
+              {deliverables.map((deliverable) => (
                 <ModuleContentSection key={deliverable.id}>
                   <Link
                     fontSize='16px'
@@ -175,20 +165,12 @@ const ModuleDetailsCard = ({ projectId, module, showSeeAllModules = false }: Mod
                         marginLeft: '8px',
                       }}
                     >
-                      {strings.formatString(strings.DUE, getLongDate(deliverable.dueDate, activeLocale))}
+                      {strings.formatString(strings.DUE, getLongDate(deliverable.dueDate.toString(), activeLocale))}
                     </Typography>
                   )}
                 </ModuleContentSection>
               ))}
             </>
-          )}
-
-          {contents.length > 0 && (
-            <ModuleContentSection>
-              <Typography fontSize={'20px'} lineHeight={'28px'} fontWeight={600}>
-                {strings.THIS_MODULE_CONTAINS}
-              </Typography>
-            </ModuleContentSection>
           )}
 
           {contents.map((content, index) => (
