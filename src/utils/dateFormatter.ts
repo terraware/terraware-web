@@ -49,17 +49,9 @@ export const getDateTimeDisplayValue = (timestamp: number): string => {
 /**
  * Returns <ISO Date> – <ISO Date> (eg. 2023/07/01 - 2023/07/15)
  */
-export const getDateRangeString = (startDate: string, endDate: string, locale: string | undefined | null) => {
-  const formattedStart = new Intl.DateTimeFormat(locale || 'en-US', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  }).format(new Date(startDate));
-  const formattedEnd = new Intl.DateTimeFormat(locale || 'en-US', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  }).format(new Date(endDate));
+export const getDateRangeString = (startDate: string, endDate: string) => {
+  const formattedStart = DateTime.fromISO(startDate).toFormat('yyyy/MM/dd');
+  const formattedEnd = DateTime.fromISO(endDate).toFormat('yyyy/MM/dd');
 
   return `${formattedStart} – ${formattedEnd}`;
 };
