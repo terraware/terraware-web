@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
@@ -70,53 +70,20 @@
 <a name='L5'></a><a href='#L5'>5</a>
 <a name='L6'></a><a href='#L6'>6</a>
 <a name='L7'></a><a href='#L7'>7</a>
-<a name='L8'></a><a href='#L8'>8</a>
-<a name='L9'></a><a href='#L9'>9</a>
-<a name='L10'></a><a href='#L10'>10</a>
-<a name='L11'></a><a href='#L11'>11</a>
-<a name='L12'></a><a href='#L12'>12</a>
-<a name='L13'></a><a href='#L13'>13</a>
-<a name='L14'></a><a href='#L14'>14</a>
-<a name='L15'></a><a href='#L15'>15</a>
-<a name='L16'></a><a href='#L16'>16</a>
-<a name='L17'></a><a href='#L17'>17</a>
-<a name='L18'></a><a href='#L18'>18</a>
-<a name='L19'></a><a href='#L19'>19</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<a name='L8'></a><a href='#L8'>8</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import createCachedSelector from 're-reselect';
-&nbsp;
-import { RootState } from 'src/redux/rootReducer';
-&nbsp;
-export const selectActiveModules = <span class="cstat-no" title="statement not covered" >createCachedSelector(</span>
-<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, projectId: number) =&gt; <span class="cstat-no" title="statement not covered" >state.moduleList[projectId]?.data?.filter(<span class="fstat-no" title="function not covered" >(m</span>odule) =&gt; <span class="cstat-no" title="statement not covered" >module.isActive)</span>,</span>
-<span class="fstat-no" title="function not covered" >  (d</span>ata) =&gt; <span class="cstat-no" title="statement not covered" >data</span>
-)(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >'activeModules')</span>;
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { RootState } from 'src/redux/rootReducer';
 &nbsp;
 export const selectModuleRequest = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >state.module[requestId];</span></span></span>
 &nbsp;
-export const selectProjectModuleList = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>rojectId: number) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >state.moduleList[projectId]?.data;</span></span></span>
+export const selectProjectModuleList = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >state.moduleList[requestId];</span></span></span>
 &nbsp;
-export const selectAllModuleList = <span class="cstat-no" title="statement not covered" >createCachedSelector(</span>
-<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, projectIds: number[]) =&gt;
-<span class="cstat-no" title="statement not covered" >    projectIds.map(<span class="fstat-no" title="function not covered" >(p</span>rojectId) =&gt; (<span class="cstat-no" title="statement not covered" >{ id: projectId, modules: state.moduleList[projectId]?.data })</span>),</span>
-<span class="fstat-no" title="function not covered" >  (d</span>ata) =&gt; <span class="cstat-no" title="statement not covered" >data</span>
-)(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >'allModules')</span>;
+export const selectAllProjectModuleList = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>equestId: string) =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >state.allModuleList[requestId];</span></span></span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -124,7 +91,7 @@ export const selectAllModuleList = <span class="cstat-no" title="statement not c
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-10T16:29:46.109Z
+                at 2024-05-10T16:50:46.272Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
