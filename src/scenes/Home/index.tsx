@@ -42,8 +42,7 @@ export default function Home(): JSX.Element {
   const classes = useStyles({ isMobile });
 
   const homeScreen = useMemo(
-    (): JSX.Element =>
-      orgHasModules ? <ParticipantHomeView /> : <TerrawareHomeView />,
+    (): JSX.Element => (orgHasModules ? <ParticipantHomeView /> : <TerrawareHomeView />),
     [orgHasModules]
   );
 

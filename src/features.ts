@@ -1,11 +1,7 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName =
-  | 'Show Production View'
-  | 'User Detailed Sites'
-  | 'Console'
-  | 'Document Producer';
+export type FeatureName = 'Show Production View' | 'User Detailed Sites' | 'Console' | 'Document Producer';
 
 export type Feature = {
   name: FeatureName;

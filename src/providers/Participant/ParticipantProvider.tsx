@@ -92,8 +92,9 @@ const ParticipantProvider = ({ children }: Props) => {
   useEffect(() => {
     if (allProjectModuleList && allProjectModuleList.status === 'success' && allProjectModuleList.data) {
       const allProjectModules = allProjectModuleList.data;
-      const nextModuleProjects = (participantProjects || []).filter((project) =>
-        allProjectModules.findIndex(({ id, modules }) => id === project.id && modules && modules.length > 0) !== -1
+      const nextModuleProjects = (participantProjects || []).filter(
+        (project) =>
+          allProjectModules.findIndex(({ id, modules }) => id === project.id && modules && modules.length > 0) !== -1
       );
       setModuleProjects(nextModuleProjects);
 
