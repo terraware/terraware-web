@@ -1570,6 +1570,7 @@ SPECIES_DESCRIPTION,"Manage your organization’s species list for planning, ope
 SPECIES_EMPTY_MSG_BODY,Enter species that you collect or plant now to simplify your experience when you’re out in the field.,
 SPECIES_ERROR_SEARCH,Couldn't load species list for search,
 SPECIES_IMPORT_COMPLETE,Species data import complete!,
+SPECIES_LIST,Species List,
 SPECIES_NAME,Species Name,
 SPECIES_NOT_ACCEPTED,Species Not Accepted,
 SPECIES_OBSERVED,Species Observed,
