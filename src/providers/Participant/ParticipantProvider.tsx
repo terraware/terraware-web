@@ -22,7 +22,7 @@ const ParticipantProvider = ({ children }: Props) => {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
 
-  const [currentParticipantProject, setCurrentParticipantProject] = useState<Project | null>();
+  const [currentParticipantProject, setCurrentParticipantProject] = useState<Project>();
   const [participantProjects, setParticipantProjects] = useState<Project[]>([]);
   const [moduleProjects, setModuleProjects] = useState<Project[]>([]);
   const [modules, setModules] = useState<Module[]>([]);
@@ -57,7 +57,7 @@ const ParticipantProvider = ({ children }: Props) => {
 
   useEffect(() => {
     if (selectedOrganization && activeLocale) {
-      setCurrentParticipantProject(null);
+      setCurrentParticipantProject(undefined);
       setModuleProjects([]);
       setParticipantProjects([]);
       dispatch(requestProjects(selectedOrganization.id, activeLocale));
