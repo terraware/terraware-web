@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1715306303832" clover="3.2.0">
-  <project timestamp="1715306303832" name="All files">
+<coverage generated="1715358586781" clover="3.2.0">
+  <project timestamp="1715358586781" name="All files">
     <metrics statements="21657" coveredstatements="918" conditionals="13646" coveredconditionals="228" methods="6801" coveredmethods="162" elements="42104" coveredelements="1308" complexity="0" loc="21657" ncloc="21657" packages="203" files="952" classes="952"/>
     <package name="src">
       <metrics statements="161" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="37" coveredmethods="0"/>
@@ -24553,8 +24553,8 @@
         <line num="46" count="0" type="stmt"/>
         <line num="52" count="0" type="stmt"/>
         <line num="53" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="56" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="60" count="0" type="stmt"/>
+        <line num="58" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="64" count="0" type="stmt"/>
       </file>
       <file name="dateUtils.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/dateUtils.ts">
         <metrics statements="10" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="1" coveredmethods="0"/>
