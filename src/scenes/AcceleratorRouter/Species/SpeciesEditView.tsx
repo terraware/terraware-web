@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { BusySpinner } from '@terraware/web-components';
+import { BusySpinner, Message } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -153,6 +153,17 @@ export default function SpeciesEditView(): JSX.Element {
             {species?.scientificName}
           </Typography>
           <PageSnackbar />
+        </Box>
+        <Box marginBottom={4}>
+          <Message
+            title={strings.formatString(strings.EDITING_SPECIES_DATA_FOR_ORGANIZATION, selectedOrganization.name)}
+            body={strings.formatString(
+              strings.EDITING_SPECIES_DATA_FOR_ORGANIZATION_WARNING,
+              selectedOrganization.name
+            )}
+            type='page'
+            priority='warning'
+          />
         </Box>
         <Box
           sx={{
