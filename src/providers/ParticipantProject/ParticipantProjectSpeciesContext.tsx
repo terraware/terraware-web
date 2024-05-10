@@ -9,6 +9,7 @@ export type ParticipantProjectSpeciesData = {
   currentDeliverable?: Deliverable;
   setCurrentDeliverable: (deliverable: Deliverable) => void;
   setCurrentParticipantProjectSpecies: (projectSpeciesId: string | number) => void;
+  reload: () => void;
 };
 
 // default values pointing to nothing
@@ -17,6 +18,7 @@ export const ParticipantProjectSpeciesContext = createContext<ParticipantProject
   participantProjectSpecies: [],
   setCurrentParticipantProjectSpecies: () => {},
   setCurrentDeliverable: () => {},
+  reload: () => {},
 });
 
 export const useParticipantProjectSpeciesData = () => useContext(ParticipantProjectSpeciesContext);

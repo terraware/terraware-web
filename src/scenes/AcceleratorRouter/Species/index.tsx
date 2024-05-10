@@ -7,7 +7,8 @@ import { Button, DropdownItem } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
 import { Crumb } from 'src/components/BreadCrumbs';
-import Metadata from 'src/components/DeliverableView/Metadata';
+import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
+import InternalComment from 'src/components/DeliverableView/InternalComment';
 import Page from 'src/components/Page';
 import PageSnackbar from 'src/components/PageSnackbar';
 import Checkbox from 'src/components/common/Checkbox';
@@ -16,7 +17,8 @@ import { APP_PATHS } from 'src/constants';
 import { useParticipantProjectSpeciesData } from 'src/providers/ParticipantProject/ParticipantProjectSpeciesContext';
 import { useLocalization, useOrganization, useProject } from 'src/providers/hooks';
 import { requestUpdateParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
-import { useAppDispatch } from 'src/redux/store';
+import { selectParticipantProjectSpeciesUpdateRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { SpeciesService } from 'src/services';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
@@ -47,31 +49,37 @@ export default function SpeciesDetailView(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const { selectedOrganization } = useOrganization();
   const { speciesId } = useParams<{ speciesId: string }>();
-  const { currentParticipantProjectSpecies, currentDeliverable } = useParticipantProjectSpeciesData();
+  const { currentParticipantProjectSpecies, currentDeliverable, reload } = useParticipantProjectSpeciesData();
   const [showApproveDialog, setShowApproveDialog] = useState<boolean>(false);
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const { projectId } = useProject();
   const { activeLocale } = useLocalization();
+  const [requestId, setRequestId] = useState<string>('');
+  const result = useAppSelector(selectParticipantProjectSpeciesUpdateRequest(requestId));
+
+  useEffect(() => {
+    if (result?.status === 'success') {
+      reload();
+    }
+  }, [result]);
 
   const setStatus = useCallback(
     (status: DeliverableStatusType) => {
-      if (currentDeliverable?.id !== undefined && currentParticipantProjectSpecies) {
+      if (currentParticipantProjectSpecies) {
         dispatch(
           requestUpdateParticipantProjectSpecies({
-            projectId: projectId,
-            participantProjectSpeciesId: currentParticipantProjectSpecies.id,
             participantProjectSpecies: {
               id: currentParticipantProjectSpecies.id || -1,
               speciesId: species?.id || -1,
               projectId: projectId,
-              status,
+              submissionStatus: status,
             },
           })
         );
       }
     },
-    [currentDeliverable]
+    [currentParticipantProjectSpecies]
   );
 
   const gridSize = () => {
@@ -97,36 +105,36 @@ export default function SpeciesDetailView(): JSX.Element {
 
   const approveHandler = () => {
     if (currentParticipantProjectSpecies?.id) {
-      dispatch(
+      const request = dispatch(
         requestUpdateParticipantProjectSpecies({
-          projectId: projectId,
-          participantProjectSpeciesId: currentParticipantProjectSpecies.id,
           participantProjectSpecies: {
             id: currentParticipantProjectSpecies?.id || -1,
             speciesId: species?.id || -1,
             projectId: projectId,
-            status: 'Approved',
+            submissionStatus: 'Approved',
           },
         })
       );
+      setRequestId(request.requestId);
+      setShowApproveDialog(false);
     }
   };
 
   const rejectHandler = (feedback: string) => {
     if (currentParticipantProjectSpecies?.id) {
-      dispatch(
+      const request = dispatch(
         requestUpdateParticipantProjectSpecies({
-          projectId: projectId,
-          participantProjectSpeciesId: currentParticipantProjectSpecies.id,
           participantProjectSpecies: {
             id: currentParticipantProjectSpecies?.id || -1,
             speciesId: species?.id || -1,
             projectId: projectId,
-            status: 'Rejected',
-            feedback: feedback,
+            submissionStatus: 'Rejected',
+            rationale: feedback,
           },
         })
       );
+      setRequestId(request.requestId);
+      setShowRejectDialog(false);
     }
   };
 
@@ -169,7 +177,7 @@ export default function SpeciesDetailView(): JSX.Element {
     return (
       <Box display='flex' flexDirection='row' flexGrow={0} marginRight={theme.spacing(3)} justifyContent='right'>
         <Button
-          disabled={currentDeliverable?.status === 'Rejected'}
+          disabled={currentParticipantProjectSpecies?.submissionStatus === 'Rejected'}
           id='rejectDeliverable'
           label={strings.REJECT_ACTION}
           priority='secondary'
@@ -178,7 +186,7 @@ export default function SpeciesDetailView(): JSX.Element {
           type='destructive'
         />
         <Button
-          disabled={currentDeliverable?.status === 'Approved'}
+          disabled={currentParticipantProjectSpecies?.submissionStatus === 'Approved'}
           id='approveDeliverable'
           label={strings.APPROVE}
           onClick={() => void setShowApproveDialog(true)}
@@ -187,7 +195,7 @@ export default function SpeciesDetailView(): JSX.Element {
         <OptionsMenu onOptionItemClick={onOptionItemClick} optionItems={optionItems} />
       </Box>
     );
-  }, [currentDeliverable?.status, onOptionItemClick, optionItems, theme]);
+  }, [currentParticipantProjectSpecies?.submissionStatus, onOptionItemClick, optionItems, theme]);
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -197,7 +205,7 @@ export default function SpeciesDetailView(): JSX.Element {
       },
       {
         name: currentDeliverable?.name || '',
-        to: `${APP_PATHS.ACCELERATOR_DELIVERABLES}/${currentDeliverable?.id}/submissions/${projectId}`,
+        to: `/${currentDeliverable?.id}/submissions/${projectId}`,
       },
     ],
     [activeLocale]
@@ -255,7 +263,23 @@ export default function SpeciesDetailView(): JSX.Element {
               margin: 0,
             }}
           >
-            {currentDeliverable && <Metadata deliverable={currentDeliverable} />}
+            {currentParticipantProjectSpecies && (
+              <Box display='flex' flexDirection='column' width='100%'>
+                <Box
+                  border={`1px solid ${theme.palette.TwClrBaseGray100}`}
+                  borderRadius='8px'
+                  marginBottom='16px'
+                  padding='16px'
+                >
+                  {currentParticipantProjectSpecies.submissionStatus !== 'Rejected' && (
+                    <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
+                      <DeliverableStatusBadge status={currentParticipantProjectSpecies.submissionStatus} />
+                    </div>
+                  )}
+                  {currentDeliverable && <InternalComment deliverable={currentDeliverable} />}
+                </Box>
+              </Box>
+            )}
             <Grid item xs={12} paddingBottom={theme.spacing(2)}>
               <TextField
                 label={strings.RATIONALE}
