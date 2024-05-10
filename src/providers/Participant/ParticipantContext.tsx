@@ -11,8 +11,8 @@ export type ParticipantData = {
   moduleProjects: Project[];
   modules?: Module[];
   participantProjects: Project[];
-  orgHasModules: boolean;
-  orgHasParticipants: boolean;
+  orgHasModules: boolean | undefined; // undefined for unknown, useful for showing loading spinner
+  orgHasParticipants: boolean | undefined; // undefined for unknown, useful for showing loading spinner
   setCurrentParticipantProject: (projectId: string | number) => void;
 };
 
