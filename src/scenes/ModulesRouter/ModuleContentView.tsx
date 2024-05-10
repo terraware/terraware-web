@@ -50,7 +50,7 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
         to: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
       },
     ],
-    [activeLocale, projectId]
+    [activeLocale, projectId, module, moduleId]
   );
 
   const addBlankTargetToHtmlAHref = (htmlString: string): string => {

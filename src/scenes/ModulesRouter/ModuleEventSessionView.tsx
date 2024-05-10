@@ -46,11 +46,15 @@ const ModuleEventSessionView = () => {
   const crumbs: Crumb[] = useMemo(
     () => [
       {
-        name: activeLocale ? 'Module' : '',
+        name: activeLocale ? strings.ALL_MODULES : '',
+        to: APP_PATHS.PROJECT_MODULES.replace(':projectId', `${projectId}`),
+      },
+      {
+        name: module?.title || '',
         to: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
       },
     ],
-    [activeLocale, moduleId, projectId]
+    [activeLocale, projectId, module, moduleId]
   );
 
   return (
