@@ -3,14 +3,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Button, DropdownItem } from '@terraware/web-components';
+import { BusySpinner, Button, DropdownItem } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
 import InternalComment from 'src/components/DeliverableView/InternalComment';
 import Page from 'src/components/Page';
-import PageSnackbar from 'src/components/PageSnackbar';
 import Checkbox from 'src/components/common/Checkbox';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
@@ -24,6 +23,7 @@ import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
 import { Species } from 'src/types/Species';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import ApproveDeliverableDialog from '../Deliverables/ApproveDeliverableDialog';
 import RejectDialog from '../Deliverables/RejectDialog';
@@ -58,15 +58,28 @@ export default function SpeciesDetailView(): JSX.Element {
   const { activeLocale } = useLocalization();
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectParticipantProjectSpeciesUpdateRequest(requestId));
+  const [isBusy, setIsBusy] = useState(false);
+  const [approving, setApproving] = useState(false);
+  const snackbar = useSnackbar();
 
   useEffect(() => {
     if (result?.status === 'success') {
+      if (approving && species) {
+        snackbar.pageSuccess(
+          strings.formatString(strings.YOU_APPROVED_SPECIES, species.scientificName).toString(),
+          strings.SPECIES_APPROVED
+        );
+        setApproving(false);
+      }
       reload();
+      setIsBusy(false);
+      setRequestId('');
     }
   }, [result]);
 
   const setStatus = useCallback(
     (status: DeliverableStatusType) => {
+      setApproving(false);
       if (currentParticipantProjectSpecies) {
         dispatch(
           requestUpdateParticipantProjectSpecies({
@@ -105,7 +118,9 @@ export default function SpeciesDetailView(): JSX.Element {
   }, [speciesId, selectedOrganization, navigate]);
 
   const approveHandler = () => {
+    setApproving(false);
     if (currentParticipantProjectSpecies?.id) {
+      setIsBusy(true);
       const request = dispatch(
         requestUpdateParticipantProjectSpecies({
           participantProjectSpecies: {
@@ -117,12 +132,15 @@ export default function SpeciesDetailView(): JSX.Element {
         })
       );
       setRequestId(request.requestId);
+      setApproving(true);
       setShowApproveDialog(false);
     }
   };
 
   const rejectHandler = (feedback: string) => {
+    setApproving(false);
     if (currentParticipantProjectSpecies?.id) {
+      setIsBusy(true);
       const request = dispatch(
         requestUpdateParticipantProjectSpecies({
           participantProjectSpecies: {
@@ -216,6 +234,7 @@ export default function SpeciesDetailView(): JSX.Element {
     <>
       {showApproveDialog && (
         <ApproveDeliverableDialog
+          approveMessage={strings.YOU_ARE_ABOUT_TO_APPROVE_THIS_SPECIES}
           onClose={() => setShowApproveDialog(false)}
           onSubmit={approveHandler}
           deliverableType={currentDeliverable?.type || 'species'}
@@ -251,13 +270,11 @@ export default function SpeciesDetailView(): JSX.Element {
         rightComponent={actions}
         crumbs={crumbs}
       >
+        {isBusy && <BusySpinner />}
         {currentParticipantProjectSpecies?.submissionStatus === 'Rejected' && currentParticipantProjectSpecies && (
           <RejectedBox participantProjectSpecies={currentParticipantProjectSpecies} onSubmit={rejectHandler} />
         )}
         <Grid container padding={theme.spacing(0, 0, 4, 0)}>
-          <Grid item xs={12}>
-            <PageSnackbar />
-          </Grid>
           <Grid
             container
             sx={{

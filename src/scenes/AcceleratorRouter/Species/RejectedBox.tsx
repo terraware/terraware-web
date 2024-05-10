@@ -39,7 +39,7 @@ const RejectedBox = ({ participantProjectSpecies, onSubmit }: RejectedBoxProps) 
 
   return (
     <>
-      <Box display='flex' alignItems='center' width='100%'>
+      <Box display='flex' alignItems='center' width='100%' marginBottom={4}>
         <Message
           title={strings.SPECIES_NOT_ACCEPTED}
           priority='critical'
