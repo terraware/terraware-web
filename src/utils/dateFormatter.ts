@@ -47,7 +47,7 @@ export const getDateTimeDisplayValue = (timestamp: number): string => {
 };
 
 /**
- * Returns <Date>–<Date> (eg. 7/1-7/15)
+ * Returns <Date>–<Date> (eg. 2023/07/01 - 2023/07/15)
  */
 export const getDateRangeString = (startDate: string, endDate: string, locale: string | undefined | null) => {
   const formattedStart = new Intl.DateTimeFormat(locale || 'en-US', {
