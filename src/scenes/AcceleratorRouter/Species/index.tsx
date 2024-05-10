@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
@@ -20,7 +20,6 @@ import { selectParticipantProjectSpeciesUpdateRequest } from 'src/redux/features
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { SpeciesService } from 'src/services';
 import strings from 'src/strings';
-import { DeliverableStatusType } from 'src/types/Deliverables';
 import { Species } from 'src/types/Species';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -76,25 +75,6 @@ export default function SpeciesDetailView(): JSX.Element {
       setRequestId('');
     }
   }, [result]);
-
-  const setStatus = useCallback(
-    (status: DeliverableStatusType) => {
-      setApproving(false);
-      if (currentParticipantProjectSpecies) {
-        dispatch(
-          requestUpdateParticipantProjectSpecies({
-            participantProjectSpecies: {
-              id: currentParticipantProjectSpecies.id || -1,
-              speciesId: species?.id || -1,
-              projectId: projectId,
-              submissionStatus: status,
-            },
-          })
-        );
-      }
-    },
-    [currentParticipantProjectSpecies]
-  );
 
   const gridSize = () => {
     if (isMobile) {
@@ -157,35 +137,33 @@ export default function SpeciesDetailView(): JSX.Element {
     }
   };
 
-  const onOptionItemClick = useCallback(
-    (optionItem: DropdownItem) => {
+  const onOptionItemClick = (optionItem: DropdownItem) => {
+    if (species && currentDeliverable) {
       switch (optionItem.value) {
-        case 'needs_translation': {
-          setStatus('Needs Translation');
-          break;
-        }
-        case 'not_needed': {
-          setStatus('Not Needed');
-          break;
+        case 'edit': {
+          console.log(
+            'aca',
+            APP_PATHS.ACCELERATOR_SPECIES_EDIT.replace(':speciesId', species.id.toString())
+              .replace(':projectId', projectId.toString())
+              .replace(':deliverableId', currentDeliverable.id.toString())
+          );
+          navigate(
+            APP_PATHS.ACCELERATOR_SPECIES_EDIT.replace(':speciesId', species.id.toString())
+              .replace(':projectId', projectId.toString())
+              .replace(':deliverableId', currentDeliverable.id.toString())
+          );
         }
       }
-    },
-    [setStatus]
-  );
+    }
+  };
 
   const optionItems = useMemo(
     (): DropdownItem[] =>
       activeLocale
         ? [
             {
-              label: strings.formatString(strings.STATUS_WITH_STATUS, strings.NEEDS_TRANSLATION) as string,
-              value: 'needs_translation',
-              disabled: currentDeliverable?.status === 'Needs Translation',
-            },
-            {
-              label: strings.formatString(strings.STATUS_WITH_STATUS, strings.NOT_NEEDED) as string,
-              value: 'not_needed',
-              disabled: currentDeliverable?.status === 'Not Needed',
+              label: strings.EDIT,
+              value: 'edit',
             },
           ]
         : [],

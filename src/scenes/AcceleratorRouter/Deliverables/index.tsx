@@ -6,6 +6,7 @@ import ParticipantProjectSpeciesProvider from 'src/providers/ParticipantProject/
 import ProjectProvider from 'src/providers/Project/ProjectProvider';
 
 import Species from '../Species';
+import SpeciesEditView from '../Species/SpeciesEditView';
 import DeliverableViewWrapper from './DeliverableViewWrapper';
 import DeliverablesList from './DeliverablesList';
 
@@ -31,6 +32,18 @@ const DeliverablesRouter = () => {
             <ParticipantProvider>
               <ParticipantProjectSpeciesProvider>
                 <Species />
+              </ParticipantProjectSpeciesProvider>
+            </ParticipantProvider>
+          </ProjectProvider>
+        }
+      />
+      <Route
+        path={'/:deliverableId/submissions/:projectId/species/:speciesId/edit'}
+        element={
+          <ProjectProvider>
+            <ParticipantProvider>
+              <ParticipantProjectSpeciesProvider>
+                <SpeciesEditView />
               </ParticipantProjectSpeciesProvider>
             </ParticipantProvider>
           </ProjectProvider>
