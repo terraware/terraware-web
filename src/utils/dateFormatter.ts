@@ -50,12 +50,16 @@ export const getDateTimeDisplayValue = (timestamp: number): string => {
  * Returns <Date>–<Date> (eg. 7/1-7/15)
  */
 export const getDateRangeString = (startDate: string, endDate: string, locale: string | undefined | null) => {
-  const formattedStart = new Intl.DateTimeFormat(locale || 'en-US', { month: 'numeric', day: 'numeric' }).format(
-    new Date(startDate)
-  );
-  const formattedEnd = new Intl.DateTimeFormat(locale || 'en-US', { month: 'numeric', day: 'numeric' }).format(
-    new Date(endDate)
-  );
+  const formattedStart = new Intl.DateTimeFormat(locale || 'en-US', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(new Date(startDate));
+  const formattedEnd = new Intl.DateTimeFormat(locale || 'en-US', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(new Date(endDate));
 
-  return `${formattedStart}–${formattedEnd}`;
+  return `${formattedStart} – ${formattedEnd}`;
 };
