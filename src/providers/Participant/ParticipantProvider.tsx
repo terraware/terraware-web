@@ -1,17 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { requestListModules } from 'src/redux/features/modules/modulesAsyncThunks';
-import {
-  selectActiveModules,
-  selectAllModuleList,
-  selectProjectModuleList,
-} from 'src/redux/features/modules/modulesSelectors';
+import { requestListAllModules, requestListModules } from 'src/redux/features/modules/modulesAsyncThunks';
+import { selectAllProjectModuleList, selectProjectModuleList } from 'src/redux/features/modules/modulesSelectors';
 import { requestGetParticipant } from 'src/redux/features/participants/participantsAsyncThunks';
 import { selectParticipant } from 'src/redux/features/participants/participantsSelectors';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { Module } from 'src/types/Module';
 import { Project } from 'src/types/Project';
 
 import { ParticipantContext, ParticipantData } from './ParticipantContext';
@@ -28,24 +25,18 @@ const ParticipantProvider = ({ children }: Props) => {
   const [currentParticipantProject, setCurrentParticipantProject] = useState<Project | null>();
   const [participantProjects, setParticipantProjects] = useState<Project[]>([]);
   const [moduleProjects, setModuleProjects] = useState<Project[]>([]);
+  const [modules, setModules] = useState<Module[]>([]);
+  const [activeModules, setActiveModules] = useState<Module[]>([]);
+
+  const [listModulesRequest, setListModulesRequest] = useState<string>('');
+  const [allModulesRequest, setAllModulesRequest] = useState<string>('');
 
   const participant = useAppSelector(selectParticipant(currentParticipantProject?.participantId || -1));
-  const activeModules = useAppSelector((state) => selectActiveModules(state, currentParticipantProject?.id || -1));
-  const modules = useAppSelector(selectProjectModuleList(currentParticipantProject?.id || -1));
-  const projects = useAppSelector(selectProjects);
-  const allModules = useAppSelector((state) =>
-    selectAllModuleList(
-      state,
-      (projects || []).map((project) => project.id)
-    )
-  );
 
-  useEffect(() => {
-    if (projects && projects.length > 0) {
-      // TODO: Need to figure out how to force selectors to reload, once dispatch is completed.
-      projects.forEach((project) => dispatch(requestListModules(project.id)));
-    }
-  }, [projects, dispatch]);
+  const projectModuleList = useAppSelector(selectProjectModuleList(listModulesRequest));
+  const projects = useAppSelector(selectProjects);
+
+  const allProjectModuleList = useAppSelector(selectAllProjectModuleList(allModulesRequest));
 
   const _setCurrentParticipantProject = useCallback(
     (projectId: string | number) => {
@@ -55,7 +46,9 @@ const ParticipantProvider = ({ children }: Props) => {
   );
 
   const [participantData, setParticipantData] = useState<ParticipantData>({
+    activeModules,
     moduleProjects,
+    modules,
     participantProjects,
     orgHasParticipants: false,
     orgHasModules: false,
@@ -63,39 +56,62 @@ const ParticipantProvider = ({ children }: Props) => {
   });
 
   useEffect(() => {
+    if (selectedOrganization && activeLocale) {
+      setCurrentParticipantProject(null);
+      setModuleProjects([]);
+      setParticipantProjects([]);
+      dispatch(requestProjects(selectedOrganization.id, activeLocale));
+    }
+  }, [activeLocale, dispatch, selectedOrganization]);
+
+  useEffect(() => {
     const nextParticipantProjects = (projects || []).filter((project) => !!project.participantId);
     setParticipantProjects(nextParticipantProjects);
   }, [projects]);
 
   useEffect(() => {
-    const nextModuleProjects = (participantProjects || []).filter((project) =>
-      allModules.find(({ id, modules }) => id === project.id && modules && modules.length > 0)
-    );
-    setModuleProjects(nextModuleProjects);
-
-    // Assign the first project with modules as the current participant project
-    if (nextModuleProjects.findIndex((project) => project.id === currentParticipantProject?.id) != -1) {
-      // Selected project already in organization
-      return;
-    } else if (nextModuleProjects.length > 0) {
-      setCurrentParticipantProject(nextModuleProjects[0]);
-    } else {
-      setCurrentParticipantProject(null);
+    if (participantProjects && participantProjects.length > 0) {
+      const projectIds = participantProjects.map((project) => project.id);
+      const request = dispatch(requestListAllModules(projectIds));
+      setAllModulesRequest(request.requestId);
     }
-  }, [currentParticipantProject, participantProjects]);
+  }, [participantProjects, dispatch]);
+
+  useEffect(() => {
+    if (!projectModuleList) {
+      return;
+    }
+
+    if (projectModuleList.status === 'success') {
+      const nextModules = projectModuleList.data ?? [];
+      setModules(nextModules);
+      setActiveModules(nextModules.filter((module) => module.isActive === true));
+    }
+  }, [projectModuleList]);
+
+  useEffect(() => {
+    if (allProjectModuleList && allProjectModuleList.status === 'success' && allProjectModuleList.data) {
+      const allProjectModules = allProjectModuleList.data;
+      const nextModuleProjects = (participantProjects || []).filter((project) =>
+        allProjectModules.map(({ id, modules }) => id === project.id && modules && modules.length > 0)
+      );
+      setModuleProjects(nextModuleProjects);
+
+      // Assign the first project with modules as the current participant project
+      if (nextModuleProjects.length > 0 && !currentParticipantProject) {
+        setCurrentParticipantProject(nextModuleProjects[0]);
+      }
+      return;
+    }
+  }, [allProjectModuleList, currentParticipantProject, participantProjects]);
 
   useEffect(() => {
     if (currentParticipantProject?.participantId) {
       dispatch(requestGetParticipant(currentParticipantProject.participantId));
+      const request = dispatch(requestListModules(currentParticipantProject.id));
+      setListModulesRequest(request.requestId);
     }
   }, [currentParticipantProject, dispatch]);
-
-  useEffect(() => {
-    if (selectedOrganization && activeLocale) {
-      setCurrentParticipantProject(null);
-      dispatch(requestProjects(selectedOrganization.id, activeLocale));
-    }
-  }, [activeLocale, dispatch, selectedOrganization]);
 
   useEffect(() => {
     setParticipantData({
