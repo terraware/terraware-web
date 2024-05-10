@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { Module } from 'src/types/Module';
 
 import { StatusT, buildReducers } from '../asyncUtils';
-import { requestGetModule, requestListAllModules, requestListModules } from './modulesAsyncThunks';
+import { requestGetModule, requestListModuleProjects, requestListModules } from './modulesAsyncThunks';
 
 /**
  * Get Module
@@ -34,23 +34,23 @@ export const moduleListSlice = createSlice({
 });
 
 /**
- * List Modules
+ * List projects with modules in an organization
  */
-const initialStateAllModuleList: { [key: string]: StatusT<{ id: number; modules: Module[] }[]> } = {};
+const initialStateModuleProjects: { [key: string]: StatusT<number[]> } = {};
 
-export const allModuleListSlice = createSlice({
-  name: 'allModuleListSlice',
-  initialState: initialStateAllModuleList,
+export const moduleProjectsSlice = createSlice({
+  name: 'moduleProjectsSlice',
+  initialState: initialStateModuleProjects,
   reducers: {},
   extraReducers: (builder) => {
-    buildReducers(requestListAllModules)(builder);
+    buildReducers(requestListModuleProjects)(builder);
   },
 });
 
 const moduleReducers = {
   module: moduleSlice.reducer,
   moduleList: moduleListSlice.reducer,
-  allModuleList: allModuleListSlice.reducer,
+  moduleProjects: moduleProjectsSlice.reducer,
 };
 
 export default moduleReducers;
