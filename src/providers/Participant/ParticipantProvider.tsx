@@ -49,8 +49,8 @@ const ParticipantProvider = ({ children }: Props) => {
     activeModules,
     moduleProjects,
     modules,
-    orgHasModules: orgHasModules,
-    orgHasParticipants: orgHasParticipants,
+    orgHasModules,
+    orgHasParticipants,
     participantProjects,
     setCurrentParticipantProject: _setCurrentParticipantProject,
   });
