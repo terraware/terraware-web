@@ -251,6 +251,14 @@ export default function NavBar({
         }}
         id='speciesNb'
       />
+      {(deliverablesMenu || modulesMenu || reportsMenu) && (
+        <>
+          <NavSection title={acceleratorSectionTitle} />
+          {deliverablesMenu}
+          {modulesMenu}
+          {reportsMenu}
+        </>
+      )}
       <NavSection />
       <NavItem label={strings.SEEDS} icon='seeds' id='seeds'>
         <SubNavbar>
@@ -307,15 +315,6 @@ export default function NavBar({
           )}
         </SubNavbar>
       </NavItem>
-
-      {(deliverablesMenu || modulesMenu || reportsMenu) && (
-        <>
-          <NavSection title={acceleratorSectionTitle} />
-          {deliverablesMenu}
-          {modulesMenu}
-          {reportsMenu}
-        </>
-      )}
 
       {isAdmin(selectedOrganization) && (
         <>
