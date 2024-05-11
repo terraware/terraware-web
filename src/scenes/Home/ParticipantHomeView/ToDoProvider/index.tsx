@@ -23,7 +23,6 @@ const ToDoProvider = ({ children }: Props) => {
   const dispatch = useAppDispatch();
   const { currentParticipantProject } = useParticipantData();
 
-  const [allItems, setAllItems] = useState<ToDoItem[]>([]);
   const [toDoItems, setToDoItems] = useState<ToDoItem[]>([]);
   const [upcomingItems, setUpcomingItems] = useState<ToDoItem[]>([]);
   const [projectId, setProjectId] = useState<number>(-1);
@@ -31,12 +30,11 @@ const ToDoProvider = ({ children }: Props) => {
   const [deliverablesRequestId, setDeliverablesRequestId] = useState('');
   const [eventsRequestId, setEventsRequestId] = useState('');
 
-  const toDoDeliverables = useAppSelector(selectProjectToDoDeliverables(deliverablesRequestId));
-  const toDoEvents = useAppSelector(selectProjectToDoEvents(eventsRequestId));
+  const toDoDeliverablesRequest = useAppSelector(selectProjectToDoDeliverables(deliverablesRequestId));
+  const toDoEventsRequest = useAppSelector(selectProjectToDoEvents(eventsRequestId));
 
   const [toDoData, setToDoData] = useState<ToDoData>({
     projectId: projectId,
-    allItems: allItems,
     toDoItems: toDoItems,
     upcomingItems: upcomingItems,
   });
@@ -49,36 +47,58 @@ const ToDoProvider = ({ children }: Props) => {
       setDeliverablesRequestId(deliverablesRequest.requestId);
       setEventsRequestId(eventsRequest.requestId);
     }
-  }, [dispatch, currentParticipantProject, setDeliverablesRequestId, setEventsRequestId, setProjectId]);
+  }, [dispatch, currentParticipantProject]);
 
   useEffect(() => {
-    if (!toDoDeliverables || !toDoEvents) {
+    if (!toDoDeliverablesRequest || !toDoEventsRequest) {
       return;
     }
 
     if (
-      toDoDeliverables.status === 'success' &&
-      toDoDeliverables.data &&
-      toDoEvents.status === 'success' &&
-      toDoEvents.data
+      toDoDeliverablesRequest.status === 'success' &&
+      toDoDeliverablesRequest.data &&
+      toDoEventsRequest.status === 'success' &&
+      toDoEventsRequest.data
     ) {
-      setAllItems([...toDoDeliverables.data, ...toDoEvents.data].sort(compareToDoItems));
-    }
-  }, [toDoDeliverables, toDoEvents, setAllItems]);
+      const allDeliverables = [...toDoDeliverablesRequest.data];
+      const allEvents = [...toDoEventsRequest.data];
 
-  useEffect(() => {
-    setToDoItems(allItems.filter((item) => item.getSection() == 'To Do').slice(0, 3));
-    setUpcomingItems(allItems.filter((item) => item.getSection() == 'Upcoming').slice(0, 3));
-  }, [allItems, setToDoItems, setUpcomingItems]);
+      const sortedDeliverables = allDeliverables.sort(compareToDoItems);
+      const sortedEvents = allEvents.sort(compareToDoItems);
+
+      const toDoDeliverables = sortedDeliverables.filter((deliverable) => deliverable.getSection() === 'To Do');
+      const upcomingDeliverables = sortedDeliverables.filter((deliverable) => deliverable.getSection() === 'Upcoming');
+
+      console.log(upcomingDeliverables);
+
+      const toDoEvents = sortedEvents.filter((event) => event.getSection() === 'To Do');
+      const upcomingEvents = sortedEvents.filter((event) => event.getSection() === 'Upcoming');
+
+      const upcomingItems = [...upcomingDeliverables, ...upcomingEvents].sort(compareToDoItems);
+
+      const maxItems = 6;
+      const nextToDoItems: ToDoItem[] = [];
+      const nextUpcomingItems: ToDoItem[] = [];
+
+      nextToDoItems.push(...toDoDeliverables.splice(0, 3));
+      nextToDoItems.push(...toDoEvents.splice(0, maxItems - nextToDoItems.length));
+
+      if (maxItems - nextToDoItems.length > 0) {
+        nextUpcomingItems.push(...upcomingItems.splice(0, maxItems - nextToDoItems.length));
+      }
+
+      setToDoItems(nextToDoItems.sort(compareToDoItems));
+      setUpcomingItems(nextUpcomingItems);
+    }
+  }, [toDoDeliverablesRequest, toDoEventsRequest]);
 
   useEffect(() => {
     setToDoData({
       projectId: projectId,
-      allItems: allItems,
       toDoItems: toDoItems,
       upcomingItems: upcomingItems,
     });
-  }, [projectId, allItems, toDoItems, upcomingItems]);
+  }, [projectId, toDoItems, upcomingItems]);
 
   return (
     <ToDoContext.Provider value={toDoData}>

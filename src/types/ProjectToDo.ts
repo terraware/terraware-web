@@ -198,9 +198,9 @@ export const compareToDoItems = (left: ToDoItem, right: ToDoItem): number => {
     return 1;
   } else {
     // Always order Events before Deliverables if they fall on the same day
-    if (leftDate instanceof EventToDoItem && !(rightDate instanceof EventToDoItem)) {
+    if (left instanceof EventToDoItem && !(right instanceof EventToDoItem)) {
       return -1;
-    } else if (!(leftDate instanceof EventToDoItem) && rightDate instanceof EventToDoItem) {
+    } else if (!(left instanceof EventToDoItem) && right instanceof EventToDoItem) {
       return 1;
     } else {
       return leftDate.toMillis() - rightDate.toMillis();
