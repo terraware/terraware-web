@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/61</span>
+                <span class='fraction'>0/58</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/27</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/56</span>
+                <span class='fraction'>0/54</span>
             </div>
         
             
@@ -202,10 +202,7 @@
 <a name='L137'></a><a href='#L137'>137</a>
 <a name='L138'></a><a href='#L138'>138</a>
 <a name='L139'></a><a href='#L139'>139</a>
-<a name='L140'></a><a href='#L140'>140</a>
-<a name='L141'></a><a href='#L141'>141</a>
-<a name='L142'></a><a href='#L142'>142</a>
-<a name='L143'></a><a href='#L143'>143</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L140'></a><a href='#L140'>140</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -280,7 +277,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -300,7 +296,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -309,7 +304,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -350,8 +344,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useState } from 'react';
 &nbsp;
 import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { requestListAllModules, requestListModules } from 'src/redux/features/modules/modulesAsyncThunks';
-import { selectAllProjectModuleList, selectProjectModuleList } from 'src/redux/features/modules/modulesSelectors';
+import { requestListModuleProjects, requestListModules } from 'src/redux/features/modules/modulesAsyncThunks';
+import { selectModuleProjects, selectProjectModuleList } from 'src/redux/features/modules/modulesSelectors';
 import { requestGetParticipant } from 'src/redux/features/participants/participantsAsyncThunks';
 import { selectParticipant } from 'src/redux/features/participants/participantsSelectors';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
@@ -378,14 +372,14 @@ const ParticipantProvider = <span class="cstat-no" title="statement not covered"
   const [activeModules, setActiveModules] = <span class="cstat-no" title="statement not covered" >useState&lt;Module[]&gt;([]);</span>
 &nbsp;
   const [listModulesRequest, setListModulesRequest] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
-  const [allModulesRequest, setAllModulesRequest] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
+  const [listModuleProjectsRequest, setListModuleProjectsRequest] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
 &nbsp;
   const participant = <span class="cstat-no" title="statement not covered" >useAppSelector(selectParticipant(currentParticipantProject?.participantId || -1));</span>
 &nbsp;
   const projectModuleList = <span class="cstat-no" title="statement not covered" >useAppSelector(selectProjectModuleList(listModulesRequest));</span>
   const projects = <span class="cstat-no" title="statement not covered" >useAppSelector(selectProjects);</span>
 &nbsp;
-  const allProjectModuleList = <span class="cstat-no" title="statement not covered" >useAppSelector(selectAllProjectModuleList(allModulesRequest));</span>
+  const moduleProjectsList = <span class="cstat-no" title="statement not covered" >useAppSelector(selectModuleProjects(listModuleProjectsRequest));</span>
 &nbsp;
   const _setCurrentParticipantProject = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (p</span>rojectId: string | number) =&gt; {
@@ -419,12 +413,11 @@ const ParticipantProvider = <span class="cstat-no" title="statement not covered"
   }, [projects]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (participantProjects &amp;&amp; participantProjects.length &gt; 0) {</span>
-      const projectIds = <span class="cstat-no" title="statement not covered" >participantProjects.map(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; <span class="cstat-no" title="statement not covered" >project.id)</span>;</span>
-      const request = <span class="cstat-no" title="statement not covered" >dispatch(requestListAllModules(projectIds));</span>
-<span class="cstat-no" title="statement not covered" >      setAllModulesRequest(request.requestId);</span>
+<span class="cstat-no" title="statement not covered" >    if (selectedOrganization) {</span>
+      const request = <span class="cstat-no" title="statement not covered" >dispatch(requestListModuleProjects(selectedOrganization.id));</span>
+<span class="cstat-no" title="statement not covered" >      setListModuleProjectsRequest(request.requestId);</span>
     }
-  }, [participantProjects, dispatch]);
+  }, [selectedOrganization, dispatch]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!projectModuleList) {</span>
@@ -439,21 +432,19 @@ const ParticipantProvider = <span class="cstat-no" title="statement not covered"
   }, [projectModuleList]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (allProjectModuleList &amp;&amp; allProjectModuleList.status === 'success' &amp;&amp; allProjectModuleList.data) {</span>
-      const allProjectModules = <span class="cstat-no" title="statement not covered" >allProjectModuleList.data;</span>
-      const nextModuleProjects = <span class="cstat-no" title="statement not covered" >(participantProjects || []).filter(</span>
-<span class="fstat-no" title="function not covered" >        (p</span>roject) =&gt;
-<span class="cstat-no" title="statement not covered" >          allProjectModules.findIndex(<span class="fstat-no" title="function not covered" >({</span> id, modules }) =&gt; <span class="cstat-no" title="statement not covered" >id === project.id &amp;&amp; modules &amp;&amp; modules.length &gt; 0)</span> !== -1</span>
-      );
+<span class="cstat-no" title="statement not covered" >    if (moduleProjectsList &amp;&amp; moduleProjectsList.status === 'success' &amp;&amp; moduleProjectsList.data) {</span>
+      const nextModuleProjects = <span class="cstat-no" title="statement not covered" >moduleProjectsList.data</span>
+        .map(<span class="fstat-no" title="function not covered" >(i</span>d) =&gt; <span class="cstat-no" title="statement not covered" >participantProjects.find(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; <span class="cstat-no" title="statement not covered" >project.id === id)</span>)</span>
+        .filter(<span class="fstat-no" title="function not covered" >(p</span>roject): project is Project =&gt; <span class="cstat-no" title="statement not covered" >!!project)</span>;
+&nbsp;
 <span class="cstat-no" title="statement not covered" >      setModuleProjects(nextModuleProjects);</span>
 &nbsp;
       // Assign the first project with modules as the current participant project
 <span class="cstat-no" title="statement not covered" >      if (nextModuleProjects.length &gt; 0 &amp;&amp; !currentParticipantProject) {</span>
 <span class="cstat-no" title="statement not covered" >        setCurrentParticipantProject(nextModuleProjects[0]);</span>
       }
-<span class="cstat-no" title="statement not covered" >      return;</span>
     }
-  }, [allProjectModuleList, currentParticipantProject, participantProjects]);
+  }, [moduleProjectsList, currentParticipantProject, participantProjects]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (currentParticipantProject?.participantId) {</span>
@@ -496,7 +487,7 @@ export default ParticipantProvider;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-13T22:21:19.279Z
+                at 2024-05-13T22:47:50.344Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
