@@ -14,18 +14,22 @@ const CurrentTimeline = (): JSX.Element => {
     {
       phaseEnum: 'Phase 0 - Due Diligence',
       phase: 'Phase 0 - Due Diligence',
-      description: 'Review application, final due diligence reviewing documents from shortlisted cohort.',
+      description:
+        'Submit project-relevant documentation that prove that the statements provided in the ' +
+        'application are truthful and accurate.',
     },
     {
       phaseEnum: 'Phase 1 - Feasibility Study',
       phase: 'Phase 1 - Feasibility Study',
       description:
-        'Attending modules & 1:1s, filling out Feasibility Study sections, completing deliverables. Possible site visit.',
+        'Attend 10 weeks of training, and evaluate the strengths and risks of your proposed carbon project ' +
+        'by submitting key information that will also be used to create a Feasibility Study document.',
     },
     {
-      phaseEnum: 'Phase 2 - Plan and Scale',
+      phaseEnum: 'Phase 2 - PDD Writing & Registration',
       phase: 'Phase 2 - PDD Writing & Registration',
-      description: 'PDA signed, PDD writing from FS information, PDD registered on Verra (Under Development & Full).',
+      description:
+        'Work toward having a PDA signed, a PDD written, and the PDD registered on Verra (Under Development & Full).',
     },
     {
       phaseEnum: 'Phase 3 - Implement and Monitor',
