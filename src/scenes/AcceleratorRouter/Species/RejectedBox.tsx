@@ -19,7 +19,7 @@ const useStyles = makeStyles(() => ({
 
 interface RejectedBoxProps {
   participantProjectSpecies: ParticipantProjectSpecies;
-  onSubmit: (feedbaxck: string) => void;
+  onSubmit: (feedback: string) => void;
 }
 
 const RejectedBox = ({ participantProjectSpecies, onSubmit }: RejectedBoxProps) => {
