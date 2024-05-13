@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-import { Module } from 'src/types/Module';
+import { Module, ModuleDeliverable } from 'src/types/Module';
 import { Participant } from 'src/types/Participant';
 import { Project } from 'src/types/Project';
 
@@ -8,6 +8,7 @@ export type ParticipantData = {
   activeModules?: Module[];
   currentParticipant?: Participant;
   currentParticipantProject?: Project;
+  currentDeliverables: ModuleDeliverable[];
   moduleProjects: Project[];
   modules?: Module[];
   participantProjects: Project[];
@@ -18,6 +19,7 @@ export type ParticipantData = {
 
 // default values pointing to nothing
 export const ParticipantContext = createContext<ParticipantData>({
+  currentDeliverables: [],
   moduleProjects: [],
   participantProjects: [],
   orgHasModules: false,

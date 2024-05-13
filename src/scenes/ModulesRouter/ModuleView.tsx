@@ -16,7 +16,7 @@ const ModuleView = () => {
   const pathParams = useParams<{ sessionId: string; moduleId: string; projectId: string }>();
   const projectId = Number(pathParams.projectId);
 
-  const { module } = useModuleData();
+  const { deliverables, module } = useModuleData();
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -34,7 +34,7 @@ const ModuleView = () => {
       hierarchicalCrumbs={false}
       title={<ModuleViewTitle module={module} projectId={projectId} />}
     >
-      {module && <ModuleDetailsCard projectId={projectId} module={module} />}
+      {module && <ModuleDetailsCard deliverables={deliverables} module={module} projectId={projectId} />}
     </PageWithModuleTimeline>
   );
 };

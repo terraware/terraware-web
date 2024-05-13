@@ -1,9 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { Module } from 'src/types/Module';
+import { Module, ModuleDeliverable } from 'src/types/Module';
 
 import { StatusT, buildReducers } from '../asyncUtils';
-import { requestGetModule, requestListModuleProjects, requestListModules } from './modulesAsyncThunks';
+import {
+  requestGetModule,
+  requestListModuleDeliverables,
+  requestListModuleProjects,
+  requestListModules,
+} from './modulesAsyncThunks';
 
 /**
  * Get Module
@@ -47,8 +52,23 @@ export const moduleProjectsSlice = createSlice({
   },
 });
 
+/**
+ * List module deliverables for a project module pair
+ */
+const initialStateModuleDeliverables: { [key: string]: StatusT<ModuleDeliverable[]> } = {};
+
+export const ModuleDeliverablesSlice = createSlice({
+  name: 'ModuleDeliverablesSlice',
+  initialState: initialStateModuleDeliverables,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestListModuleDeliverables)(builder);
+  },
+});
+
 const moduleReducers = {
   module: moduleSlice.reducer,
+  moduleDeliverables: ModuleDeliverablesSlice.reducer,
   moduleList: moduleListSlice.reducer,
   moduleProjects: moduleProjectsSlice.reducer,
 };
