@@ -1,3 +1,4 @@
+9434e4a240 SW-5331 Show loading page when determining module projects (#2607)
 754d8951a9 SW-5331 Used search to imporve find module projects performances (#2606)
 b0524ec2f5 SW-5335 Updated date range format to be locale agnostic (#2611)
 25b7ebdb75 Added loading state to all modules view (#2618)

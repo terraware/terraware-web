@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/58</span>
+                <span class='fraction'>0/62</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/54</span>
+                <span class='fraction'>0/58</span>
             </div>
         
             
@@ -202,7 +202,9 @@
 <a name='L137'></a><a href='#L137'>137</a>
 <a name='L138'></a><a href='#L138'>138</a>
 <a name='L139'></a><a href='#L139'>139</a>
-<a name='L140'></a><a href='#L140'>140</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L140'></a><a href='#L140'>140</a>
+<a name='L141'></a><a href='#L141'>141</a>
+<a name='L142'></a><a href='#L142'>142</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -231,16 +233,16 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -263,16 +265,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -280,6 +272,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -298,6 +291,15 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -317,6 +319,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -365,21 +369,21 @@ const ParticipantProvider = <span class="cstat-no" title="statement not covered"
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
 &nbsp;
+  const [activeModules, setActiveModules] = <span class="cstat-no" title="statement not covered" >useState&lt;Module[]&gt;([]);</span>
   const [currentParticipantProject, setCurrentParticipantProject] = <span class="cstat-no" title="statement not covered" >useState&lt;Project&gt;();</span>
   const [participantProjects, setParticipantProjects] = <span class="cstat-no" title="statement not covered" >useState&lt;Project[]&gt;([]);</span>
   const [moduleProjects, setModuleProjects] = <span class="cstat-no" title="statement not covered" >useState&lt;Project[]&gt;([]);</span>
   const [modules, setModules] = <span class="cstat-no" title="statement not covered" >useState&lt;Module[]&gt;([]);</span>
-  const [activeModules, setActiveModules] = <span class="cstat-no" title="statement not covered" >useState&lt;Module[]&gt;([]);</span>
+  const [orgHasModules, setOrgHasModules] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean | undefined&gt;(undefined);</span>
+  const [orgHasParticipants, setOrgHasParticipants] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean | undefined&gt;(undefined);</span>
 &nbsp;
   const [listModulesRequest, setListModulesRequest] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const [listModuleProjectsRequest, setListModuleProjectsRequest] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
 &nbsp;
+  const moduleProjectsList = <span class="cstat-no" title="statement not covered" >useAppSelector(selectModuleProjects(listModuleProjectsRequest));</span>
   const participant = <span class="cstat-no" title="statement not covered" >useAppSelector(selectParticipant(currentParticipantProject?.participantId || -1));</span>
-&nbsp;
   const projectModuleList = <span class="cstat-no" title="statement not covered" >useAppSelector(selectProjectModuleList(listModulesRequest));</span>
   const projects = <span class="cstat-no" title="statement not covered" >useAppSelector(selectProjects);</span>
-&nbsp;
-  const moduleProjectsList = <span class="cstat-no" title="statement not covered" >useAppSelector(selectModuleProjects(listModuleProjectsRequest));</span>
 &nbsp;
   const _setCurrentParticipantProject = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (p</span>rojectId: string | number) =&gt; {
@@ -392,9 +396,9 @@ const ParticipantProvider = <span class="cstat-no" title="statement not covered"
     activeModules,
     moduleProjects,
     modules,
+    orgHasModules,
+    orgHasParticipants,
     participantProjects,
-    orgHasParticipants: false,
-    orgHasModules: false,
     setCurrentParticipantProject: _setCurrentParticipantProject,
   });
 &nbsp;
@@ -402,6 +406,8 @@ const ParticipantProvider = <span class="cstat-no" title="statement not covered"
 <span class="cstat-no" title="statement not covered" >    if (selectedOrganization &amp;&amp; activeLocale) {</span>
 <span class="cstat-no" title="statement not covered" >      setCurrentParticipantProject(undefined);</span>
 <span class="cstat-no" title="statement not covered" >      setModuleProjects([]);</span>
+<span class="cstat-no" title="statement not covered" >      setOrgHasModules(undefined);</span>
+<span class="cstat-no" title="statement not covered" >      setOrgHasParticipants(undefined);</span>
 <span class="cstat-no" title="statement not covered" >      setParticipantProjects([]);</span>
 <span class="cstat-no" title="statement not covered" >      dispatch(requestProjects(selectedOrganization.id, activeLocale));</span>
     }
@@ -410,6 +416,7 @@ const ParticipantProvider = <span class="cstat-no" title="statement not covered"
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const nextParticipantProjects = <span class="cstat-no" title="statement not covered" >(projects || []).filter(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; <span class="cstat-no" title="statement not covered" >!!project.participantId)</span>;</span>
 <span class="cstat-no" title="statement not covered" >    setParticipantProjects(nextParticipantProjects);</span>
+<span class="cstat-no" title="statement not covered" >    setOrgHasParticipants(nextParticipantProjects.length &gt; 0);</span>
   }, [projects]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -420,11 +427,7 @@ const ParticipantProvider = <span class="cstat-no" title="statement not covered"
   }, [selectedOrganization, dispatch]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!projectModuleList) {</span>
-<span class="cstat-no" title="statement not covered" >      return;</span>
-    }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    if (projectModuleList.status === 'success') {</span>
+<span class="cstat-no" title="statement not covered" >    if (projectModuleList &amp;&amp; projectModuleList.status === 'success') {</span>
       const nextModules = <span class="cstat-no" title="statement not covered" >projectModuleList.data ?? [];</span>
 <span class="cstat-no" title="statement not covered" >      setModules(nextModules);</span>
 <span class="cstat-no" title="statement not covered" >      setActiveModules(nextModules.filter(<span class="fstat-no" title="function not covered" >(m</span>odule) =&gt; <span class="cstat-no" title="statement not covered" >module.isActive === true)</span>);</span>
@@ -438,6 +441,7 @@ const ParticipantProvider = <span class="cstat-no" title="statement not covered"
         .filter(<span class="fstat-no" title="function not covered" >(p</span>roject): project is Project =&gt; <span class="cstat-no" title="statement not covered" >!!project)</span>;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      setModuleProjects(nextModuleProjects);</span>
+<span class="cstat-no" title="statement not covered" >      setOrgHasModules(nextModuleProjects.length &gt; 0);</span>
 &nbsp;
       // Assign the first project with modules as the current participant project
 <span class="cstat-no" title="statement not covered" >      if (nextModuleProjects.length &gt; 0 &amp;&amp; !currentParticipantProject) {</span>
@@ -462,8 +466,8 @@ const ParticipantProvider = <span class="cstat-no" title="statement not covered"
       moduleProjects,
       modules,
       participantProjects,
-      orgHasModules: moduleProjects.length &gt; 0,
-      orgHasParticipants: participantProjects.length &gt; 0,
+      orgHasModules: orgHasModules,
+      orgHasParticipants: orgHasParticipants,
       setCurrentParticipantProject: _setCurrentParticipantProject,
     });
   }, [
@@ -471,6 +475,8 @@ const ParticipantProvider = <span class="cstat-no" title="statement not covered"
     currentParticipantProject,
     moduleProjects,
     modules,
+    orgHasModules,
+    orgHasParticipants,
     participant,
     participantProjects,
     _setCurrentParticipantProject,
@@ -487,7 +493,7 @@ export default ParticipantProvider;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-13T22:47:50.344Z
+                at 2024-05-13T22:58:04.164Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
