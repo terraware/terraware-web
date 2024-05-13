@@ -9,7 +9,7 @@ import useUpdateDeliverable from 'src/components/DeliverableView/useUpdateDelive
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { useLocalization, useUser } from 'src/providers';
-import { useParticipantProjectSpeciesData } from 'src/providers/ParticipantProject/ParticipantProjectSpeciesContext';
+import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
 
@@ -29,7 +29,7 @@ const DeliverableViewWrapper = () => {
   const theme = useTheme();
   const { isAllowed } = useUser();
   const { activeLocale } = useLocalization();
-  const { setCurrentDeliverable } = useParticipantProjectSpeciesData();
+  const { setCurrentDeliverable } = useDeliverableData();
 
   const deliverableId = Number(_deliverableId);
   const projectId = Number(_projectId);

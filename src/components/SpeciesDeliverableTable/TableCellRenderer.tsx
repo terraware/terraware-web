@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@terraware/web-components';
 
@@ -7,9 +6,10 @@ import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableSt
 import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
-import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
+import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
 import { useParticipantProjectSpeciesData } from 'src/providers/ParticipantProject/ParticipantProjectSpeciesContext';
 import { requestUpdateParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { selectParticipantProjectSpeciesUpdateRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
@@ -27,11 +27,12 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
   const [openedEditSpeciesModal, setOpenedEditSpeciesModal] = useState(false);
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
   const { isAcceleratorRoute } = useAcceleratorConsole();
-  const { setCurrentParticipantProjectSpecies, currentDeliverable } = useParticipantProjectSpeciesData();
-  const navigate = useNavigate();
+  const { setCurrentParticipantProjectSpecies } = useParticipantProjectSpeciesData();
+  const { currentDeliverable } = useDeliverableData();
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectParticipantProjectSpeciesUpdateRequest(requestId));
   const dispatch = useAppDispatch();
+  const { goToParticipantProjectSpecies } = useNavigateTo();
 
   useEffect(() => {
     if (result?.status === 'success' && reloadData) {
@@ -48,11 +49,7 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
       <Link
         onClick={() => {
           setCurrentParticipantProjectSpecies(row.id);
-          navigate(
-            APP_PATHS.ACCELERATOR_SPECIES.replace(':speciesId', row.speciesId.toString())
-              .replace(':projectId', row.projectId)
-              .replace(':deliverableId', currentDeliverable?.id.toString() || '')
-          );
+          goToParticipantProjectSpecies(currentDeliverable?.id || -1, row.projectId, row.speciesId);
         }}
       >
         {iValue as React.ReactNode}
