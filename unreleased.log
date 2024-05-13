@@ -1,3 +1,5 @@
+25b7ebdb75 Added loading state to all modules view (#2618)
+8419489cde SW-5325 Updated To-Do items priority logic (#2616)
 f6820f1363 SW-5328 Make inactive phases opaque (#2613)
 99fb02ea09 SW-5313 Move accelerator section up in the nav menu (#2614)
 d0c9944ee2 SW-5334 Updated timeline text (#2615)
