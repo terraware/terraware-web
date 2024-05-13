@@ -22,21 +22,21 @@ const ParticipantProvider = ({ children }: Props) => {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
 
+  const [activeModules, setActiveModules] = useState<Module[]>([]);
   const [currentParticipantProject, setCurrentParticipantProject] = useState<Project>();
   const [participantProjects, setParticipantProjects] = useState<Project[]>([]);
   const [moduleProjects, setModuleProjects] = useState<Project[]>([]);
   const [modules, setModules] = useState<Module[]>([]);
-  const [activeModules, setActiveModules] = useState<Module[]>([]);
+  const [orgHasModules, setOrgHasModules] = useState<boolean | undefined>(undefined);
+  const [orgHasParticipants, setOrgHasParticipants] = useState<boolean | undefined>(undefined);
 
   const [listModulesRequest, setListModulesRequest] = useState<string>('');
   const [listModuleProjectsRequest, setListModuleProjectsRequest] = useState<string>('');
 
+  const moduleProjectsList = useAppSelector(selectModuleProjects(listModuleProjectsRequest));
   const participant = useAppSelector(selectParticipant(currentParticipantProject?.participantId || -1));
-
   const projectModuleList = useAppSelector(selectProjectModuleList(listModulesRequest));
   const projects = useAppSelector(selectProjects);
-
-  const moduleProjectsList = useAppSelector(selectModuleProjects(listModuleProjectsRequest));
 
   const _setCurrentParticipantProject = useCallback(
     (projectId: string | number) => {
@@ -49,9 +49,9 @@ const ParticipantProvider = ({ children }: Props) => {
     activeModules,
     moduleProjects,
     modules,
+    orgHasModules,
+    orgHasParticipants,
     participantProjects,
-    orgHasParticipants: false,
-    orgHasModules: false,
     setCurrentParticipantProject: _setCurrentParticipantProject,
   });
 
@@ -59,6 +59,8 @@ const ParticipantProvider = ({ children }: Props) => {
     if (selectedOrganization && activeLocale) {
       setCurrentParticipantProject(undefined);
       setModuleProjects([]);
+      setOrgHasModules(undefined);
+      setOrgHasParticipants(undefined);
       setParticipantProjects([]);
       dispatch(requestProjects(selectedOrganization.id, activeLocale));
     }
@@ -67,6 +69,7 @@ const ParticipantProvider = ({ children }: Props) => {
   useEffect(() => {
     const nextParticipantProjects = (projects || []).filter((project) => !!project.participantId);
     setParticipantProjects(nextParticipantProjects);
+    setOrgHasParticipants(nextParticipantProjects.length > 0);
   }, [projects]);
 
   useEffect(() => {
@@ -77,11 +80,7 @@ const ParticipantProvider = ({ children }: Props) => {
   }, [selectedOrganization, dispatch]);
 
   useEffect(() => {
-    if (!projectModuleList) {
-      return;
-    }
-
-    if (projectModuleList.status === 'success') {
+    if (projectModuleList && projectModuleList.status === 'success') {
       const nextModules = projectModuleList.data ?? [];
       setModules(nextModules);
       setActiveModules(nextModules.filter((module) => module.isActive === true));
@@ -95,6 +94,7 @@ const ParticipantProvider = ({ children }: Props) => {
         .filter((project): project is Project => !!project);
 
       setModuleProjects(nextModuleProjects);
+      setOrgHasModules(nextModuleProjects.length > 0);
 
       // Assign the first project with modules as the current participant project
       if (nextModuleProjects.length > 0 && !currentParticipantProject) {
@@ -119,8 +119,8 @@ const ParticipantProvider = ({ children }: Props) => {
       moduleProjects,
       modules,
       participantProjects,
-      orgHasModules: moduleProjects.length > 0,
-      orgHasParticipants: participantProjects.length > 0,
+      orgHasModules: orgHasModules,
+      orgHasParticipants: orgHasParticipants,
       setCurrentParticipantProject: _setCurrentParticipantProject,
     });
   }, [
@@ -128,6 +128,8 @@ const ParticipantProvider = ({ children }: Props) => {
     currentParticipantProject,
     moduleProjects,
     modules,
+    orgHasModules,
+    orgHasParticipants,
     participant,
     participantProjects,
     _setCurrentParticipantProject,

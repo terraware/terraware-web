@@ -3,6 +3,7 @@ import React, { useMemo } from 'react';
 import { Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
+import Page from 'src/components/Page';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -40,10 +41,12 @@ export default function Home(): JSX.Element {
   const { orgHasModules } = useParticipantData();
   const classes = useStyles({ isMobile });
 
-  const homeScreen = useMemo(
-    (): JSX.Element => (orgHasModules ? <ParticipantHomeView /> : <TerrawareHomeView />),
-    [orgHasModules]
-  );
+  const homeScreen = useMemo((): JSX.Element => {
+    if (orgHasModules === undefined) {
+      return <Page isLoading={true} />;
+    }
+    return orgHasModules ? <ParticipantHomeView /> : <TerrawareHomeView />;
+  }, [orgHasModules]);
 
   return <main className={classes.main}>{homeScreen}</main>;
 }
