@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
 import Card from 'src/components/common/Card';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
 
 import CurrentTimeline from './CurrentTimeline';
@@ -12,6 +13,10 @@ import ListViewHeader from './ListViewHeader';
 
 export default function ListView(): JSX.Element {
   const theme = useTheme();
+
+  const { currentParticipant } = useParticipantData();
+
+  const isLoading = useMemo(() => !currentParticipant, [currentParticipant]);
 
   // TODO - where will this be stored? Is this stored in the back end within another enum table?
   // Should we store it and localize it in the front end? Will it be stored somewhere an admin can edit it?
@@ -24,7 +29,7 @@ export default function ListView(): JSX.Element {
     'deliverables are due.';
 
   return (
-    <PageWithModuleTimeline title={strings.ALL_MODULES}>
+    <PageWithModuleTimeline title={strings.ALL_MODULES} isLoading={isLoading}>
       <Box sx={{ paddingBottom: 2 }}>
         <ListViewHeader />
       </Box>

@@ -37,6 +37,7 @@ const CurrentTimeline = (): JSX.Element => {
       description: 'Mock desription',
     },
     {
+      phaseEnum: 'Phase 4 - Should not be visible',
       phase: 'Phase 4 - Should not be visible',
       description: 'Mock desription',
     },
