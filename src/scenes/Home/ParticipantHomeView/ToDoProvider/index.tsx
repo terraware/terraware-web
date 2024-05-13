@@ -69,8 +69,6 @@ const ToDoProvider = ({ children }: Props) => {
       const toDoDeliverables = sortedDeliverables.filter((deliverable) => deliverable.getSection() === 'To Do');
       const upcomingDeliverables = sortedDeliverables.filter((deliverable) => deliverable.getSection() === 'Upcoming');
 
-      console.log(upcomingDeliverables);
-
       const toDoEvents = sortedEvents.filter((event) => event.getSection() === 'To Do');
       const upcomingEvents = sortedEvents.filter((event) => event.getSection() === 'Upcoming');
 
