@@ -142,7 +142,7 @@ const ModuleDetailsCard = ({ deliverables, module, projectId, showSeeAllModules 
             </ModuleContentSection>
           )}
 
-          {!!deliverables.length && (
+          {
             <>
               {deliverables.map((deliverable) => (
                 <ModuleContentSection key={deliverable.id}>
@@ -171,7 +171,7 @@ const ModuleDetailsCard = ({ deliverables, module, projectId, showSeeAllModules 
                 </ModuleContentSection>
               ))}
             </>
-          )}
+          }
 
           {contents.map((content, index) => (
             <ModuleContentSection key={index}>
