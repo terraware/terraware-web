@@ -1,10 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { requestListParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
-import { selectParticipantProjectSpeciesListRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
+import {
+  requestGetParticipantProjectSpecies,
+  requestListParticipantProjectSpecies,
+} from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
+import {
+  selectParticipantProjectSpeciesGetRequest,
+  selectParticipantProjectSpeciesListRequest,
+} from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ParticipantProjectSpecies } from 'src/services/ParticipantProjectSpeciesService';
-import { Deliverable } from 'src/types/Deliverables';
 
 import { useProjectData } from '../Project/ProjectContext';
 import { ParticipantProjectSpeciesContext, ParticipantProjectSpeciesData } from './ParticipantProjectSpeciesContext';
@@ -17,13 +22,16 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
   const dispatch = useAppDispatch();
 
   const { projectId } = useProjectData();
-
   const [currentParticipantProjectSpecies, setCurrentParticipantProjectSpecies] = useState<ParticipantProjectSpecies>();
-  const [currentDeliverable, setCurrentDeliverable] = useState<Deliverable>();
   const participantProjectSpeciesApi = useAppSelector(selectParticipantProjectSpeciesListRequest(projectId));
+  const [requestId, setRequestId] = useState('');
+  const newParticipantProjectSpecies = useAppSelector(selectParticipantProjectSpeciesGetRequest(requestId));
 
   const reload = useCallback(() => {
-    void dispatch(requestListParticipantProjectSpecies(projectId));
+    if (currentParticipantProjectSpecies) {
+      const request = dispatch(requestGetParticipantProjectSpecies(currentParticipantProjectSpecies?.id));
+      setRequestId(request.requestId);
+    }
   }, [dispatch, projectId]);
 
   useEffect(() => {
@@ -34,23 +42,14 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
 
   const _setCurrentParticipantProjectSpecies = useCallback(
     (projectSpeciesId: string | number) => {
-      if (participantProjectSpeciesApi?.data) {
-        setCurrentParticipantProjectSpecies(
-          participantProjectSpeciesApi?.data.find((projectSpecies) => projectSpecies.id === Number(projectSpeciesId))
-        );
-      }
+      const request = dispatch(requestGetParticipantProjectSpecies(Number(projectSpeciesId)));
+      setRequestId(request.requestId);
     },
     [participantProjectSpeciesApi]
   );
 
-  const _setCurrentDeliverable = (deliverable: Deliverable) => {
-    setCurrentDeliverable(deliverable);
-  };
-
   const [participantProjectSpeciesData, setParticipantProjectSpeciesData] = useState<ParticipantProjectSpeciesData>({
     participantProjectSpecies: [],
-    currentDeliverable,
-    setCurrentDeliverable: _setCurrentDeliverable,
     setCurrentParticipantProjectSpecies: _setCurrentParticipantProjectSpecies,
     reload,
   });
@@ -59,19 +58,6 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
       dispatch(requestListParticipantProjectSpecies(projectId));
     }
   }, [projectId]);
-
-  useEffect(() => {
-    if (currentDeliverable) {
-      setParticipantProjectSpeciesData(
-        (previousRecord: ParticipantProjectSpeciesData): ParticipantProjectSpeciesData => {
-          return {
-            ...previousRecord,
-            currentDeliverable,
-          };
-        }
-      );
-    }
-  }, [currentDeliverable]);
 
   useEffect(() => {
     if (participantProjectSpeciesApi?.data && participantProjectSpeciesApi?.data.length > 0) {
@@ -87,6 +73,19 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
       );
     }
   }, [participantProjectSpeciesApi?.data, setCurrentParticipantProjectSpecies, currentParticipantProjectSpecies]);
+
+  useEffect(() => {
+    if (newParticipantProjectSpecies) {
+      setParticipantProjectSpeciesData(
+        (previousRecord: ParticipantProjectSpeciesData): ParticipantProjectSpeciesData => {
+          return {
+            ...previousRecord,
+            currentParticipantProjectSpecies: newParticipantProjectSpecies.data,
+          };
+        }
+      );
+    }
+  }, [newParticipantProjectSpecies]);
 
   return (
     <ParticipantProjectSpeciesContext.Provider value={participantProjectSpeciesData}>

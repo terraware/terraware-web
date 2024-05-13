@@ -9,6 +9,7 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
 import { useParticipantProjectSpeciesData } from 'src/providers/ParticipantProject/ParticipantProjectSpeciesContext';
 import { useOrganization } from 'src/providers/hooks';
 import { requestUpdateParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
@@ -44,7 +45,8 @@ export default function SpeciesEditView(): JSX.Element {
   const [record, setRecord, onChange] = useForm<Species>(initSpecies());
   const snackbar = useSnackbar();
   const [nameFormatError, setNameFormatError] = useState<string | string[]>('');
-  const { currentParticipantProjectSpecies, currentDeliverable, reload } = useParticipantProjectSpeciesData();
+  const { currentParticipantProjectSpecies, reload } = useParticipantProjectSpeciesData();
+  const { currentDeliverable } = useDeliverableData();
   const [rationale, setRationale] = useState(currentParticipantProjectSpecies?.rationale || '');
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectParticipantProjectSpeciesUpdateRequest(requestId));

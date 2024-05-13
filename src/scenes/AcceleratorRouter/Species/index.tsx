@@ -13,6 +13,7 @@ import Page from 'src/components/Page';
 import Checkbox from 'src/components/common/Checkbox';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
+import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
 import { useParticipantProjectSpeciesData } from 'src/providers/ParticipantProject/ParticipantProjectSpeciesContext';
 import { useLocalization, useOrganization, useProject } from 'src/providers/hooks';
 import { requestUpdateParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
@@ -49,7 +50,8 @@ export default function SpeciesDetailView(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const { selectedOrganization } = useOrganization();
   const { speciesId } = useParams<{ speciesId: string }>();
-  const { currentParticipantProjectSpecies, currentDeliverable, reload } = useParticipantProjectSpeciesData();
+  const { currentParticipantProjectSpecies, reload } = useParticipantProjectSpeciesData();
+  const { currentDeliverable } = useDeliverableData();
   const [showApproveDialog, setShowApproveDialog] = useState<boolean>(false);
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
   const dispatch = useAppDispatch();
@@ -141,12 +143,6 @@ export default function SpeciesDetailView(): JSX.Element {
     if (species && currentDeliverable) {
       switch (optionItem.value) {
         case 'edit': {
-          console.log(
-            'aca',
-            APP_PATHS.ACCELERATOR_SPECIES_EDIT.replace(':speciesId', species.id.toString())
-              .replace(':projectId', projectId.toString())
-              .replace(':deliverableId', currentDeliverable.id.toString())
-          );
           navigate(
             APP_PATHS.ACCELERATOR_SPECIES_EDIT.replace(':speciesId', species.id.toString())
               .replace(':projectId', projectId.toString())

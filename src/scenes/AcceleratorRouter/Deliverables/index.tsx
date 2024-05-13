@@ -1,6 +1,7 @@
 import React, { Navigate, Route, Routes } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
+import DeliverableProvider from 'src/providers/Deliverable/DeliverableProvider';
 import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
 import ParticipantProjectSpeciesProvider from 'src/providers/ParticipantProject/ParticipantProjectSpeciesProvider';
 import ProjectProvider from 'src/providers/Project/ProjectProvider';
@@ -18,9 +19,11 @@ const DeliverablesRouter = () => {
         element={
           <ProjectProvider>
             <ParticipantProvider>
-              <ParticipantProjectSpeciesProvider>
-                <DeliverableViewWrapper />
-              </ParticipantProjectSpeciesProvider>
+              <DeliverableProvider>
+                <ParticipantProjectSpeciesProvider>
+                  <DeliverableViewWrapper />
+                </ParticipantProjectSpeciesProvider>
+              </DeliverableProvider>
             </ParticipantProvider>
           </ProjectProvider>
         }
@@ -30,9 +33,11 @@ const DeliverablesRouter = () => {
         element={
           <ProjectProvider>
             <ParticipantProvider>
-              <ParticipantProjectSpeciesProvider>
-                <Species />
-              </ParticipantProjectSpeciesProvider>
+              <DeliverableProvider>
+                <ParticipantProjectSpeciesProvider>
+                  <Species />
+                </ParticipantProjectSpeciesProvider>
+              </DeliverableProvider>
             </ParticipantProvider>
           </ProjectProvider>
         }
@@ -42,9 +47,11 @@ const DeliverablesRouter = () => {
         element={
           <ProjectProvider>
             <ParticipantProvider>
-              <ParticipantProjectSpeciesProvider>
-                <SpeciesEditView />
-              </ParticipantProjectSpeciesProvider>
+              <DeliverableProvider>
+                <ParticipantProjectSpeciesProvider>
+                  <SpeciesEditView />
+                </ParticipantProjectSpeciesProvider>
+              </DeliverableProvider>
             </ParticipantProvider>
           </ProjectProvider>
         }

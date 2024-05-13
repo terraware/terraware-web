@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
+import DeliverableProvider from 'src/providers/Deliverable/DeliverableProvider';
 import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
 import ProjectProvider from 'src/providers/Project/ProjectProvider';
 
@@ -16,9 +17,11 @@ const DeliverablesRouter = (): JSX.Element => {
         element={
           <ProjectProvider>
             <ParticipantProvider>
-              <ParticipantProjectProvider>
-                <DeliverableViewWrapper />
-              </ParticipantProjectProvider>
+              <DeliverableProvider>
+                <ParticipantProjectProvider>
+                  <DeliverableViewWrapper />
+                </ParticipantProjectProvider>
+              </DeliverableProvider>
             </ParticipantProvider>
           </ProjectProvider>
         }
