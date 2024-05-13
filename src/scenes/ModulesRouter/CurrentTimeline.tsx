@@ -70,12 +70,7 @@ const CurrentTimeline = (): JSX.Element => {
                       />
                     </Grid>
                   ) : null}
-                  <Grid
-                    item
-                    key={index}
-                    color={isActivePhase ? theme.palette.TwClrBaseBlack : theme.palette.TwClrBgTertiary}
-                    alignSelf={'start'}
-                  >
+                  <Grid item key={index} color={theme.palette.TwClrBaseBlack} alignSelf={'start'}>
                     <Box
                       bgcolor={isActivePhase ? theme.palette.TwClrBgBrand : ''}
                       width={'100%'}
