@@ -1,3 +1,4 @@
+b0524ec2f5 SW-5335 Updated date range format to be locale agnostic (#2611)
 25b7ebdb75 Added loading state to all modules view (#2618)
 8419489cde SW-5325 Updated To-Do items priority logic (#2616)
 f6820f1363 SW-5328 Make inactive phases opaque (#2613)
