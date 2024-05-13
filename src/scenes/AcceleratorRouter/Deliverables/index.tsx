@@ -1,7 +1,6 @@
 import React, { Navigate, Route, Routes } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
-import DeliverableProvider from 'src/providers/Deliverable/DeliverableProvider';
 import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
 import ParticipantProjectSpeciesProvider from 'src/providers/ParticipantProject/ParticipantProjectSpeciesProvider';
 import ProjectProvider from 'src/providers/Project/ProjectProvider';
@@ -19,11 +18,9 @@ const DeliverablesRouter = () => {
         element={
           <ProjectProvider>
             <ParticipantProvider>
-              <DeliverableProvider>
-                <ParticipantProjectSpeciesProvider>
-                  <DeliverableViewWrapper />
-                </ParticipantProjectSpeciesProvider>
-              </DeliverableProvider>
+              <ParticipantProjectSpeciesProvider>
+                <DeliverableViewWrapper />
+              </ParticipantProjectSpeciesProvider>
             </ParticipantProvider>
           </ProjectProvider>
         }
@@ -33,11 +30,9 @@ const DeliverablesRouter = () => {
         element={
           <ProjectProvider>
             <ParticipantProvider>
-              <DeliverableProvider>
-                <ParticipantProjectSpeciesProvider>
-                  <Species />
-                </ParticipantProjectSpeciesProvider>
-              </DeliverableProvider>
+              <ParticipantProjectSpeciesProvider>
+                <Species />
+              </ParticipantProjectSpeciesProvider>
             </ParticipantProvider>
           </ProjectProvider>
         }
@@ -47,11 +42,9 @@ const DeliverablesRouter = () => {
         element={
           <ProjectProvider>
             <ParticipantProvider>
-              <DeliverableProvider>
-                <ParticipantProjectSpeciesProvider>
-                  <SpeciesEditView />
-                </ParticipantProjectSpeciesProvider>
-              </DeliverableProvider>
+              <ParticipantProjectSpeciesProvider>
+                <SpeciesEditView />
+              </ParticipantProjectSpeciesProvider>
             </ParticipantProvider>
           </ProjectProvider>
         }

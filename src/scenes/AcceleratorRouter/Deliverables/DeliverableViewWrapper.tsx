@@ -1,14 +1,15 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { Box, useTheme } from '@mui/material';
 import { Button, DropdownItem } from '@terraware/web-components';
 
+import useFetchDeliverable from 'src/components/DeliverableView/useFetchDeliverable';
 import useUpdateDeliverable from 'src/components/DeliverableView/useUpdateDeliverable';
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { useLocalization, useUser } from 'src/providers';
-import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
-import ParticipantProjectSpeciesProvider from 'src/providers/ParticipantProject/ParticipantProjectSpeciesProvider';
+import { useParticipantProjectSpeciesData } from 'src/providers/ParticipantProject/ParticipantProjectSpeciesContext';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
 
@@ -20,12 +21,26 @@ import SpeciesDeliverableView from './SpeciesDeliverableView';
 const DeliverableViewWrapper = () => {
   const [showApproveDialog, setShowApproveDialog] = useState<boolean>(false);
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
-
+  const { deliverableId: _deliverableId, projectId: _projectId } = useParams<{
+    deliverableId: string;
+    projectId: string;
+  }>();
   const { status: requestStatus, update } = useUpdateDeliverable();
   const theme = useTheme();
   const { isAllowed } = useUser();
   const { activeLocale } = useLocalization();
-  const { currentDeliverable: deliverable } = useDeliverableData();
+  const { setCurrentDeliverable } = useParticipantProjectSpeciesData();
+
+  const deliverableId = Number(_deliverableId);
+  const projectId = Number(_projectId);
+
+  const { deliverable } = useFetchDeliverable({ deliverableId, projectId });
+
+  useEffect(() => {
+    if (deliverable) {
+      setCurrentDeliverable(deliverable);
+    }
+  }, [deliverable]);
 
   const setStatus = useCallback(
     (status: DeliverableStatusType) => {
@@ -134,14 +149,12 @@ const DeliverableViewWrapper = () => {
             showRejectDialog={() => setShowRejectDialog(true)}
           />
         ) : (
-          <ParticipantProjectSpeciesProvider>
-            <SpeciesDeliverableView
-              callToAction={callToAction}
-              deliverable={deliverable}
-              isBusy={requestStatus === 'pending'}
-              showRejectDialog={() => setShowRejectDialog(true)}
-            />
-          </ParticipantProjectSpeciesProvider>
+          <SpeciesDeliverableView
+            callToAction={callToAction}
+            deliverable={deliverable}
+            isBusy={requestStatus === 'pending'}
+            showRejectDialog={() => setShowRejectDialog(true)}
+          />
         )}
       </>
     );

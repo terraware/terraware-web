@@ -1,25 +1,22 @@
-import React from 'react';
+import React, { useParams } from 'react-router-dom';
 
+import useFetchDeliverable from 'src/components/DeliverableView/useFetchDeliverable';
 import Page from 'src/components/Page';
-import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
-import ParticipantProjectSpeciesProvider from 'src/providers/ParticipantProject/ParticipantProjectSpeciesProvider';
 
 import DocumentDeliverableView from './DocumentDeliverableView';
 import SpeciesDeliverableView from './SpeciesDeliverableView';
 
 const DeliverableViewWrapper = () => {
-  const { currentDeliverable } = useDeliverableData();
+  const { deliverableId, projectId } = useParams<{ deliverableId: string; projectId: string }>();
 
-  if (currentDeliverable) {
-    switch (currentDeliverable.type) {
+  const { deliverable } = useFetchDeliverable({ deliverableId: Number(deliverableId), projectId: Number(projectId) });
+
+  if (deliverable) {
+    switch (deliverable.type) {
       case 'Document':
-        return <DocumentDeliverableView deliverable={currentDeliverable} />;
+        return <DocumentDeliverableView deliverable={deliverable} />;
       case 'Species':
-        return (
-          <ParticipantProjectSpeciesProvider>
-            <SpeciesDeliverableView deliverable={currentDeliverable} />
-          </ParticipantProjectSpeciesProvider>
-        );
+        return <SpeciesDeliverableView deliverable={deliverable} />;
       default:
         // TODO what should we do if the backend returns a type that the frontend isn't aware of yet/
         return null;
