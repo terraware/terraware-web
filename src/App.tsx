@@ -14,9 +14,21 @@ import { useLocalization, useUser } from 'src/providers';
 import { store } from 'src/redux/store';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { MixpanelProvider } from 'react-mixpanel-browser';
+import useEnvironment from 'src/utils/useEnvironment';
 
 const AcceleratorRouter = React.lazy(() => import('src/scenes/AcceleratorRouter'));
 const TerrawareRouter = React.lazy(() => import('src/scenes/TerrawareRouter'));
+
+// Mixpanel setup
+// Uncomment this line to enable Mixpanel tracking for the Terraware Dev project
+const enableMixpanelDev = true;
+const { isProduction } = useEnvironment();
+const { isStaging } = useEnvironment();
+const MIXPANEL_TOKEN = isProduction ? 'a2ea671ce64976806e4b0aeac55a0dab' : (isStaging ? '1a92141fe08a3514530f48f7e8056bf0' : ( enableMixpanelDev ? '189f8a16494df135f5207a433213f708' : undefined));
+const MIXPANEL_CONFIG = {
+  track_pageview: "url-with-path",
+};
 
 function AppContent() {
   // manager hooks
@@ -26,6 +38,7 @@ function AppContent() {
   const { isAllowed } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const theme = useTheme();
+  
 
   const [showNavBar, setShowNavBar] = useState(true);
 
@@ -97,10 +110,12 @@ function AppContent() {
 
 export default function App(): JSX.Element {
   return (
+    <MixpanelProvider config={MIXPANEL_CONFIG} token={MIXPANEL_TOKEN}>
     <Provider store={store}>
       <AppBootstrap>
         <AppContent />
       </AppBootstrap>
     </Provider>
+    </MixpanelProvider>
   );
 }

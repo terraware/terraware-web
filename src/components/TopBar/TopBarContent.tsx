@@ -17,6 +17,7 @@ import OrganizationsDropdown from '../OrganizationsDropdown';
 import SmallDeviceUserMenu from '../SmallDeviceUserMenu';
 import UserMenu from '../UserMenu';
 import Icon from '../common/icon/Icon';
+import { useMixpanel } from 'react-mixpanel-browser';
 
 const useStyles = makeStyles((theme: Theme) => ({
   logo: {
@@ -68,16 +69,23 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   const { isDesktop } = useDeviceInfo();
   const { user } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const mixpanel = useMixpanel();
 
   const onHandleLogout = () => {
     window.location.href = `/sso/logout`;
+  };
+
+  const handleTopBarClick = () => {
+    mixpanel.track('TopBarHome', {my_custom_prop: 'foo'});
+    navigate(APP_PATHS.HOME);
+    console.log("Here!");
   };
 
   return isDesktop ? (
     <>
       <div className={classes.left}>
         <div className='logo'>
-          <Link to={APP_PATHS.HOME}>
+          <Link onClick={() => handleTopBarClick()}>
             <Svg.Logo className={classes.logo} />
           </Link>
         </div>
