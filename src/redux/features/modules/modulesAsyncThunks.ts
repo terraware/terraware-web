@@ -1,7 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
+import { SearchService } from 'src/services';
 import ModuleService from 'src/services/ModuleService';
 import strings from 'src/strings';
+import { ModuleProjectSearchResult } from 'src/types/Module';
+import { SearchRequestPayload } from 'src/types/Search';
 
 export const requestGetModule = createAsyncThunk(
   'modules/get',
@@ -26,18 +29,32 @@ export const requestListModules = createAsyncThunk('modules/list', async (projec
   return rejectWithValue(strings.GENERIC_ERROR);
 });
 
-export const requestListAllModules = createAsyncThunk(
-  'modules/listAll',
-  async (projectIds: number[], { rejectWithValue }) => {
-    const results = await Promise.all(projectIds.map((projectId) => ModuleService.list(projectId)));
+export const requestListModuleProjects = createAsyncThunk(
+  'modules/listProjects',
+  async (organizationId: number, { rejectWithValue }) => {
+    const searchParams: SearchRequestPayload = {
+      prefix: 'projects',
+      fields: ['id', 'participant.cohort.cohortModules.module_id'],
+      search: {
+        operation: 'field',
+        field: 'organization.id',
+        type: 'Exact',
+        values: [organizationId.toString()],
+      },
+      count: 20,
+    };
 
-    const requestSucceeded = results.reduce(
-      (prev, result) => prev && !!result && result.requestSucceeded && !!result.data,
-      true
-    );
+    const response: ModuleProjectSearchResult[] | null = await SearchService.search(searchParams);
 
-    if (requestSucceeded) {
-      return results.map((result, idx) => ({ id: projectIds[idx], modules: result.data?.modules }));
+    if (response) {
+      const moduleProjectIds = response
+        .filter(
+          (moduleProject) =>
+            moduleProject.participant?.cohort?.cohortModules &&
+            moduleProject.participant?.cohort?.cohortModules.length > 0
+        )
+        .map(({ id }) => Number(id));
+      return moduleProjectIds;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);

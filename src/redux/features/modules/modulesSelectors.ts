@@ -4,4 +4,4 @@ export const selectModuleRequest = (requestId: string) => (state: RootState) => 
 
 export const selectProjectModuleList = (requestId: string) => (state: RootState) => state.moduleList[requestId];
 
-export const selectAllProjectModuleList = (requestId: string) => (state: RootState) => state.allModuleList[requestId];
+export const selectModuleProjects = (requestId: string) => (state: RootState) => state.moduleProjects[requestId];

@@ -24,6 +24,17 @@ export const getEventType = (input: ModuleEventType): string => {
   }
 };
 
+export type ModuleProjectSearchResult = {
+  id: number;
+  participant?: {
+    cohort?: {
+      cohortModules?: {
+        module_id: string;
+      }[];
+    };
+  };
+};
+
 export const getEventStatus = (status: ModuleEventSessionStatus) => {
   switch (status) {
     case 'Not Started': {
