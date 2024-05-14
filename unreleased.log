@@ -1,3 +1,4 @@
+788064757d Bump web-components to pickup style changes (#2624)
 a04e2fd291 SW-5330 Make ProviderParticipant persist over entire OrgRouter (#2619)
 799f5bdb52 Updated translations from Phrase (#2621)
 26318cc835 SW-5339: Deliverables: Status - change "Rejected" to "Not Accepted" (#2610)
