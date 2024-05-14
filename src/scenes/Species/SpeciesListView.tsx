@@ -154,7 +154,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         tooltipTitle: strings.TOOLTIP_SPECIES_FAMILY,
       },
       {
-        key: 'participantProjectSpecies.project.id',
+        key: 'participantProjects',
         name: strings.PROJECTS,
         type: 'string',
         tooltipTitle: '?', // TODO: set tooltip
@@ -255,26 +255,12 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const [filters, setFilters] = useState<Record<string, any>>({});
   const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
 
-  const getProjectName = useCallback(
-    (projectId: string | number) => {
-      const project = projects?.find((p) => p.id === Number(projectId));
-      return project?.name || '';
-    },
-    [projects]
-  );
 
   const featuredFilters: FilterConfig[] = useMemo(() => {
     const _filters: FilterConfig[] = [
       {
-        field: 'participantProjectSpecies.project.id',
+        field: 'participantProjectSpecies.project.name',
         label: strings.PROJECT,
-        options: (projects || [])?.map((project: Project) => `${project.id}`),
-        renderOption: getProjectName,
-        pillValueRenderer: (values: (string | number | null)[]) =>
-          values
-            .map((value: string | number | null) => (value === null ? value : getProjectName(value)))
-            .filter((value) => value)
-            .join(', '),
       },
     ];
 
@@ -363,6 +349,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         'ecosystemTypes.ecosystemType',
         'organization_id',
         'participantProjectSpecies.project.id',
+        'participantProjectSpecies.project.name',
       ],
       search: {
         operation: 'and',
@@ -445,6 +432,9 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     if (filters['growthForms.growthForm']) {
       params.search.children.push(filters['growthForms.growthForm']);
     }
+    if (filters['participantProjectSpecies.project.name']) {
+      params.search.children.push(filters['participantProjectSpecies.project.name']);
+    }
 
     return params;
   }, [filters, debouncedSearchTerm, selectedOrganization, searchSortOrder]);
@@ -464,6 +454,9 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
           searchResults?.forEach((result) => {
             speciesResults.push({
               id: result.id as number,
+              participantProjects: (result.participantProjectSpecies as any[])?.map(
+                (ppsData) => ppsData.project.name
+              ) as string[],
               problems: species.find((sp) => sp.id.toString() === (result.id as string))?.problems,
               scientificName: result.scientificName as string,
               commonName: result.commonName as string,
