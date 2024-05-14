@@ -50,9 +50,6 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
 
   const _setCurrentParticipantProjectSpecies = useCallback(
     (projectSpeciesId: string | number) => {
-      console.log('entra aca con projectSpeciesId', projectSpeciesId);
-
-      console.log('participantProjectSpeciesApi es', participantProjectSpeciesApi);
       if (participantProjectSpeciesApi?.data) {
         setCurrentParticipantProjectSpecies(
           participantProjectSpeciesApi?.data.find((projectSpecies) => projectSpecies.id === Number(projectSpeciesId))

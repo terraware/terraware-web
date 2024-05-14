@@ -3,7 +3,6 @@ import React, { Navigate, Route, Routes } from 'react-router-dom';
 import { APP_PATHS } from 'src/constants';
 import DeliverableProvider from 'src/providers/Deliverable/DeliverableProvider';
 import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
-import ParticipantProjectSpeciesProvider from 'src/providers/ParticipantProject/ParticipantProjectSpeciesProvider';
 import ProjectProvider from 'src/providers/Project/ProjectProvider';
 
 import DeliverableRouter from './DeliverableRouter';
@@ -18,9 +17,7 @@ const DeliverablesRouter = () => {
           <ProjectProvider>
             <ParticipantProvider>
               <DeliverableProvider>
-                <ParticipantProjectSpeciesProvider>
                   <DeliverableRouter />
-                </ParticipantProjectSpeciesProvider>
               </DeliverableProvider>
             </ParticipantProvider>
           </ProjectProvider>
