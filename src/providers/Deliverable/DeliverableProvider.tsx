@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
+import useFetchDeliverable from 'src/components/DeliverableView/useFetchDeliverable';
 import { Deliverable } from 'src/types/Deliverables';
 
 import { DeliverableContext, DeliverableData } from './DeliverableContext';
@@ -8,7 +10,15 @@ export type Props = {
   children: React.ReactNode;
 };
 
-const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
+const DeliverableProvider = ({ children }: Props) => {
+  const { deliverableId: _deliverableId, projectId: _projectId } = useParams<{
+    deliverableId: string;
+    projectId: string;
+  }>();
+  const deliverableId = Number(_deliverableId);
+  const projectId = Number(_projectId);
+
+  const { deliverable } = useFetchDeliverable({ deliverableId, projectId });
   const [currentDeliverable, setCurrentDeliverable] = useState<Deliverable>();
 
   const _setCurrentDeliverable = (deliverable: Deliverable) => {
@@ -18,6 +28,12 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
   const [deliverableData, setDeliverableData] = useState<DeliverableData>({
     setCurrentDeliverable: _setCurrentDeliverable,
   });
+
+  useEffect(() => {
+    if (deliverable) {
+      setCurrentDeliverable(deliverable);
+    }
+  }, [deliverable]);
 
   useEffect(() => {
     if (currentDeliverable) {
@@ -33,4 +49,4 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
   return <DeliverableContext.Provider value={deliverableData}>{children}</DeliverableContext.Provider>;
 };
 
-export default ParticipantProjectSpeciesProvider;
+export default DeliverableProvider;

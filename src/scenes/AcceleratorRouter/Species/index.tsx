@@ -145,12 +145,6 @@ export default function SpeciesDetailView(): JSX.Element {
     if (species && currentDeliverable) {
       switch (optionItem.value) {
         case 'edit': {
-          console.log(
-            'aca',
-            APP_PATHS.ACCELERATOR_SPECIES_EDIT.replace(':speciesId', species.id.toString())
-              .replace(':projectId', projectId.toString())
-              .replace(':deliverableId', currentDeliverable.id.toString())
-          );
           navigate(
             APP_PATHS.ACCELERATOR_SPECIES_EDIT.replace(':speciesId', species.id.toString())
               .replace(':projectId', projectId.toString())
