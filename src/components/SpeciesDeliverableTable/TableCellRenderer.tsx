@@ -19,14 +19,17 @@ import { DeliverableStatusType } from 'src/types/Deliverables';
 import EditSpeciesModal from './EditSpeciesModal';
 
 export default function SpeciesDeliverableCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
-  const { activeLocale } = useLocalization();
   const { column, index, row, value, reloadData, onRowClick } = props;
+
+  const dispatch = useAppDispatch();
+  const { activeLocale } = useLocalization();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
+
   const [openedEditSpeciesModal, setOpenedEditSpeciesModal] = useState(false);
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
-  const { isAcceleratorRoute } = useAcceleratorConsole();
+
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectParticipantProjectSpeciesUpdateRequest(requestId));
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (result?.status === 'success' && reloadData) {

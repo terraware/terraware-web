@@ -8,7 +8,6 @@ import Table from 'src/components/common/table';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
-import { useParticipantProjectSpeciesData } from 'src/providers/ParticipantProject/ParticipantProjectSpeciesContext';
 import { requestListParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { selectParticipantProjectSpeciesListRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -40,15 +39,14 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const theme = useTheme();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
+  const { goToParticipantProjectSpecies } = useNavigateTo();
+
   const participantProjectSpecies = useAppSelector(selectParticipantProjectSpeciesListRequest(deliverable.projectId));
 
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [openedAddSpeciesModal, setOpenedAddSpeciesModal] = useState(false);
-  const { isAcceleratorRoute } = useAcceleratorConsole();
-
-  const { setCurrentParticipantProjectSpecies } = useParticipantProjectSpeciesData();
-  const { goToParticipantProjectSpecies } = useNavigateTo();
 
   useEffect(() => {
     void dispatch(requestListParticipantProjectSpecies(deliverable.projectId));
@@ -66,8 +64,7 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
   };
 
   const onAcceleratorSpeciesClick = (row: any) => {
-    setCurrentParticipantProjectSpecies(row.id);
-    goToParticipantProjectSpecies(deliverable.id, row.projectId, row.speciesId);
+    goToParticipantProjectSpecies(deliverable.id, row.projectId, row.id);
   };
 
   return (

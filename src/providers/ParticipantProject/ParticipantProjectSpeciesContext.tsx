@@ -1,20 +1,23 @@
 import { createContext, useContext } from 'react';
 
 import { ParticipantProjectSpecies } from 'src/services/ParticipantProjectSpeciesService';
+import { Species } from 'src/types/Species';
 
 export type ParticipantProjectSpeciesData = {
-  participantProjectSpecies: ParticipantProjectSpecies[];
   currentParticipantProjectSpecies?: ParticipantProjectSpecies;
-  setCurrentParticipantProjectSpecies: (projectSpeciesId: string | number) => void;
-  reload: (ppSpeciesId: number) => void;
+  currentSpecies?: Species;
+  isBusy: boolean;
+  participantProjectSpeciesId: number;
+  reload: () => void;
+  update: (species?: Species, participantProjectSpecies?: ParticipantProjectSpecies) => void;
 };
 
 // default values pointing to nothing
 export const ParticipantProjectSpeciesContext = createContext<ParticipantProjectSpeciesData>({
-  // tslint:disable-next-line:no-empty
-  participantProjectSpecies: [],
-  setCurrentParticipantProjectSpecies: () => {},
+  isBusy: false,
+  participantProjectSpeciesId: -1,
   reload: () => {},
+  update: () => {},
 });
 
 export const useParticipantProjectSpeciesData = () => useContext(ParticipantProjectSpeciesContext);

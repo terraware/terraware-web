@@ -91,6 +91,13 @@ export default function useNavigateTo() {
             .replace(':projectId', `${projectId}`)
             .replace(':deliverableId', `${deliverableId}`),
         }),
+
+      goToParticipantProjectSpeciesEdit: (deliverableId: number, projectId: number, speciesId: number) =>
+        navigate(
+          APP_PATHS.ACCELERATOR_SPECIES_EDIT.replace(':speciesId', `${speciesId}`)
+            .replace(':projectId', `${projectId}`)
+            .replace(':deliverableId', `${deliverableId}`)
+        ),
     }),
     [navigate]
   );

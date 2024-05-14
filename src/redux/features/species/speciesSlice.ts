@@ -2,6 +2,9 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { Species } from 'src/types/Species';
 
+import { StatusT, buildReducers } from '../asyncUtils';
+import { requestGetOneSpecies, requestUpdateSpecies } from './speciesAsyncThunks';
+
 // Define a type for the slice state
 type Data = {
   error?: string;
@@ -26,3 +29,36 @@ export const speciesSlice = createSlice({
 export const { setSpeciesAction } = speciesSlice.actions;
 
 export const speciesReducer = speciesSlice.reducer;
+
+/**
+ * Get Single Species
+ */
+const initialStateSpeciesGetOne: { [key: string]: StatusT<Species> } = {};
+
+export const speciesGetOneSlice = createSlice({
+  name: 'speciesGetOneSlice',
+  initialState: initialStateSpeciesGetOne,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestGetOneSpecies)(builder);
+  },
+});
+
+/**
+ * Update Species
+ */
+const initialStateSpeciesUpdate: { [key: string]: StatusT<boolean> } = {};
+
+export const speciesUpdateSlice = createSlice({
+  name: 'speciesUpdateSlice',
+  initialState: initialStateSpeciesUpdate,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestUpdateSpecies)(builder);
+  },
+});
+
+export const speciesAsyncThunkReducers = {
+  speciesGetOne: speciesGetOneSlice.reducer,
+  speciesUpdate: speciesUpdateSlice.reducer,
+};
