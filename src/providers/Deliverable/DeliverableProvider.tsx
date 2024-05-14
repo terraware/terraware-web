@@ -19,7 +19,7 @@ const DeliverableProvider = ({ children }: Props) => {
   const projectId = Number(params.projectId);
 
   const { deliverable } = useFetchDeliverable({ deliverableId, projectId });
-  
+
   const [currentDeliverable, setCurrentDeliverable] = useState<Deliverable>();
 
   const [deliverableData, setDeliverableData] = useState<DeliverableData>({ deliverableId });
