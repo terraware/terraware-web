@@ -183,27 +183,25 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   ]);
 
   return (
-    <>
-      <ParticipantProvider>
-        {type !== 'desktop' ? (
-          <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
-            <div className={classes.navBarOpened}>
-              <NavBar
-                setShowNavBar={setShowNavBar}
-                withdrawalCreated={withdrawalCreated}
-                hasPlantingSites={selectedOrgHasPlantingSites()}
-              />
-            </div>
-          </Slide>
-        ) : (
-          <NavBar
-            setShowNavBar={setShowNavBar}
-            backgroundTransparent={viewHasBackgroundImage()}
-            withdrawalCreated={withdrawalCreated}
-            hasPlantingSites={selectedOrgHasPlantingSites()}
-          />
-        )}
-      </ParticipantProvider>
+    <ParticipantProvider>
+      {type !== 'desktop' ? (
+        <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
+          <div className={classes.navBarOpened}>
+            <NavBar
+              setShowNavBar={setShowNavBar}
+              withdrawalCreated={withdrawalCreated}
+              hasPlantingSites={selectedOrgHasPlantingSites()}
+            />
+          </div>
+        </Slide>
+      ) : (
+        <NavBar
+          setShowNavBar={setShowNavBar}
+          backgroundTransparent={viewHasBackgroundImage()}
+          withdrawalCreated={withdrawalCreated}
+          hasPlantingSites={selectedOrgHasPlantingSites()}
+        />
+      )}
       <div
         className={`${type === 'desktop' && showNavBar ? classes.contentWithNavBar : ''} ${
           classes.content
@@ -212,14 +210,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
         <ErrorBoundary setShowNavBar={setShowNavBar}>
           <Routes>
             {/* Routes, in order of their appearance down the side NavBar */}
-            <Route
-              path={APP_PATHS.HOME}
-              element={
-                <ParticipantProvider>
-                  <Home />
-                </ParticipantProvider>
-              }
-            />
+            <Route path={APP_PATHS.HOME} element={<Home />} />
             <Route path={APP_PATHS.SEEDS_DASHBOARD} element={<SeedsDashboard />} />
             <Route path={APP_PATHS.CHECKIN} element={<CheckIn />} />
             <Route
@@ -273,7 +264,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
           </Routes>
         </ErrorBoundary>
       </div>
-    </>
+    </ParticipantProvider>
   );
 };
 
