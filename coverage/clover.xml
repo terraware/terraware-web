@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1715657578526" clover="3.2.0">
-  <project timestamp="1715657578526" name="All files">
+<coverage generated="1715708657923" clover="3.2.0">
+  <project timestamp="1715708657924" name="All files">
     <metrics statements="21728" coveredstatements="918" conditionals="13666" coveredconditionals="228" methods="6806" coveredmethods="162" elements="42200" coveredelements="1308" complexity="0" loc="21728" ncloc="21728" packages="204" files="952" classes="952"/>
     <package name="src">
       <metrics statements="161" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="37" coveredmethods="0"/>
@@ -16714,8 +16714,8 @@
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ModulesRouter/index.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="12" count="0" type="stmt"/>
-        <line num="13" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.ModulesRouter.Provider">
@@ -18923,8 +18923,8 @@
         <line num="161" count="0" type="stmt"/>
         <line num="162" count="0" type="stmt"/>
         <line num="185" count="0" type="stmt"/>
-        <line num="241" count="0" type="stmt"/>
-        <line num="255" count="0" type="stmt"/>
+        <line num="232" count="0" type="stmt"/>
+        <line num="246" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.OrganizationRouter">
