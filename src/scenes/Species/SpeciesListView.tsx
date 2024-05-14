@@ -157,7 +157,6 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         key: 'participantProjects',
         name: strings.PROJECTS,
         type: 'string',
-        tooltipTitle: '?', // TODO: set tooltip
       },
       {
         key: 'conservationCategory',
