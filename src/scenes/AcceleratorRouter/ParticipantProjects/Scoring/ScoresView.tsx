@@ -20,11 +20,11 @@ const ScorecardView = () => {
   const { crumbs, hasData, phase0Scores, phase1Scores, projectId, projectName, status } = useScoringData();
 
   const goToScoresEdit = useCallback(() => {
-    navigate({ pathname: APP_PATHS.ACCELERATOR_SCORING_EDIT.replace(':projectId', `${projectId}`) });
+    navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_SCORES_EDIT.replace(':projectId', `${projectId}`) });
   }, [navigate, projectId]);
 
   const goToVoting = useCallback(() => {
-    navigate({ pathname: APP_PATHS.ACCELERATOR_VOTING.replace(':projectId', `${projectId}`) });
+    navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`) });
   }, [navigate, projectId]);
 
   const rightComponent = useMemo(

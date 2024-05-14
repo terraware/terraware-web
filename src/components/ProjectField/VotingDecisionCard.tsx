@@ -1,6 +1,6 @@
 import React, { Box } from '@mui/material';
 
-import VoteBadge from 'src/scenes/AcceleratorRouter/Voting/VoteBadge';
+import VoteBadge from 'src/scenes/AcceleratorRouter/ParticipantProjects/Voting/VoteBadge';
 import strings from 'src/strings';
 import { PhaseVotes } from 'src/types/Votes';
 
