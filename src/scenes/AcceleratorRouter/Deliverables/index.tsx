@@ -17,7 +17,7 @@ const DeliverablesRouter = () => {
           <ProjectProvider>
             <ParticipantProvider>
               <DeliverableProvider>
-                  <DeliverableRouter />
+                <DeliverableRouter />
               </DeliverableProvider>
             </ParticipantProvider>
           </ProjectProvider>
