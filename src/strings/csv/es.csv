@@ -339,6 +339,7 @@ DELETED_SPECIES,<deleted species>,
 DELIVERABLE_APPROVED,Entregable aprobado,
 DELIVERABLE_CATEGORY,Categoría: {0},"Shows the deliverable document's category name, example Category: Legal"
 DELIVERABLE_NAME,Nombre del entregable,
+DELIVERABLE_NOT_ACCEPTED,Entregable no aceptado,
 DELIVERABLE_PROJECT,Proyecto: {0},"Shows the project name associated with the deliverable document, example Project: Andromeda"
 DELIVERABLE_REJECTED,Entregable descartado,
 DELIVERABLE_STATUS_CHANGE_CONFIRMATION_1,Enviar un documento después de la revisión de un entregable hará que se restablezca el estado del entregable.,
