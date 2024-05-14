@@ -76,7 +76,7 @@ export const statusLabel = (status: DeliverableStatusType): string => {
     case 'In Review':
       return strings.IN_REVIEW;
     case 'Rejected':
-      return strings.REJECTED;
+      return strings.NOT_ACCEPTED;
     case 'Approved':
       return strings.APPROVED;
     case 'Not Needed':
