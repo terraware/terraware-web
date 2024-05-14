@@ -1,13 +1,7 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName =
-  | 'Show Production View'
-  | 'User Detailed Sites'
-  | 'Console'
-  | 'Participant Experience'
-  | 'Document Producer'
-  | 'Mocked Species';
+export type FeatureName = 'Show Production View' | 'User Detailed Sites' | 'Console' | 'Document Producer';
 
 export type Feature = {
   name: FeatureName;
@@ -51,30 +45,12 @@ export const OPT_IN_FEATURES: Feature[] = [
     disclosure: ['This is WIP'],
   },
   {
-    name: 'Participant Experience',
-    preferenceName: 'enableParticipantExperience',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Participant-facing functionality related to the Terraware Accelerator'],
-    disclosure: ['This is WIP'],
-  },
-  {
     name: 'Document Producer',
     preferenceName: 'enableDocumentProducer',
     active: true,
     enabled: false,
     allowInternalProduction: false,
     description: ['Terraware Accelerator Console access to the document producer tool'],
-    disclosure: ['This is WIP'],
-  },
-  {
-    name: 'Mocked Species',
-    preferenceName: 'enableMockedSpecies',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Appends mocked data for new fields to species'],
     disclosure: ['This is WIP'],
   },
 ];

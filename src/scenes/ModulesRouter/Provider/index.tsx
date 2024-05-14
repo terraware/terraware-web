@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 
-import { requestGetModule } from 'src/redux/features/modules/modulesAsyncThunks';
-import { selectModuleRequest } from 'src/redux/features/modules/modulesSelectors';
+import { requestGetModule, requestListModuleDeliverables } from 'src/redux/features/modules/modulesAsyncThunks';
+import { selectModuleDeliverables, selectModuleRequest } from 'src/redux/features/modules/modulesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { Module, ModuleEvent, ModuleEventSession } from 'src/types/Module';
+import { Module, ModuleDeliverable, ModuleEvent, ModuleEventSession } from 'src/types/Module';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { ModuleContext, ModuleData } from './Context';
@@ -24,6 +24,7 @@ const ModuleProvider = ({ children }: Props) => {
   const sessionId = Number(pathParams.sessionId);
 
   const [allSessions, setAllSessions] = useState<ModuleEventSession[]>([]);
+  const [deliverables, setDeliverables] = useState<ModuleDeliverable[]>([]);
   const [event, setEvent] = useState<ModuleEvent>();
   const [module, setModule] = useState<Module>();
   const [session, setSession] = useState<ModuleEventSession>();
@@ -31,8 +32,12 @@ const ModuleProvider = ({ children }: Props) => {
   const [requestId, setRequestId] = useState('');
   const moduleRequest = useAppSelector(selectModuleRequest(requestId));
 
+  const [deliverableRequestId, setDeliverableRequestId] = useState('');
+  const deliverableRequest = useAppSelector(selectModuleDeliverables(deliverableRequestId));
+
   const [moduleData, setModuleData] = useState<ModuleData>({
     allSessions,
+    deliverables,
     event,
     module,
     moduleId,
@@ -44,8 +49,23 @@ const ModuleProvider = ({ children }: Props) => {
     if (!isNaN(projectId) && !isNaN(moduleId)) {
       const request = dispatch(requestGetModule({ projectId, moduleId }));
       setRequestId(request.requestId);
+
+      const deliverableRequest = dispatch(requestListModuleDeliverables({ projectId, moduleId }));
+      setDeliverableRequestId(deliverableRequest.requestId);
     }
   }, [dispatch, projectId, moduleId]);
+
+  useEffect(() => {
+    if (!deliverableRequest) {
+      return;
+    }
+
+    if (deliverableRequest.status === 'success' && deliverableRequest.data) {
+      setDeliverables(deliverableRequest.data);
+    } else if (moduleRequest.status === 'error') {
+      snackbar.toastError(strings.GENERIC_ERROR);
+    }
+  }, [deliverableRequest, snackbar]);
 
   useEffect(() => {
     if (!moduleRequest) {
@@ -88,13 +108,14 @@ const ModuleProvider = ({ children }: Props) => {
   useEffect(() => {
     setModuleData({
       allSessions,
+      deliverables,
       event,
       session,
       sessionId,
       module,
       moduleId,
     });
-  }, [allSessions, event, session, sessionId, module, moduleId]);
+  }, [allSessions, deliverables, event, session, sessionId, module, moduleId]);
 
   return (
     <ModuleContext.Provider value={moduleData}>

@@ -5,8 +5,8 @@ import { TableColumnType, TableRowType } from '@terraware/web-components';
 
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers';
-import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { requestListParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { selectParticipantProjectSpeciesListRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -17,36 +17,45 @@ import RemoveSpeciesDialog from './RemoveSpeciesDialog';
 import TableCellRenderer from './TableCellRenderer';
 
 const columns = (): TableColumnType[] => [
-  { key: 'speciesScientificName', name: strings.SCIENTIFIC_NAME, type: 'string' },
-  { key: 'speciesCommonName', name: strings.COMMON_NAME, type: 'string' },
+  { key: 'scientificName', name: strings.SCIENTIFIC_NAME, type: 'string' },
+  { key: 'commonName', name: strings.COMMON_NAME, type: 'string' },
   { key: 'rationale', name: strings.RATIONALE, type: 'string' },
-  { key: 'status', name: strings.STATUS, type: 'string' },
+  { key: 'submissionStatus', name: strings.STATUS, type: 'string' },
 ];
 
-const SpeciesDeliverableTable = (): JSX.Element => {
+const consoleColumns = (): TableColumnType[] => [
+  ...columns(),
+  { key: 'reject', name: '', type: 'string' },
+  { key: 'approve', name: '', type: 'string' },
+];
+
+type SpeciesDeliverableTableProps = {
+  projectId: number;
+};
+
+const SpeciesDeliverableTable = ({ projectId }: SpeciesDeliverableTableProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const { currentParticipantProject } = useParticipantData();
-  const participantProjectSpecies = useAppSelector(
-    selectParticipantProjectSpeciesListRequest(currentParticipantProject?.id || -1)
-  );
+  const participantProjectSpecies = useAppSelector(selectParticipantProjectSpeciesListRequest(projectId));
 
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [openedAddSpeciesModal, setOpenedAddSpeciesModal] = useState(false);
+  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   useEffect(() => {
-    if (!currentParticipantProject?.id) {
-      return;
-    }
-
-    void dispatch(requestListParticipantProjectSpecies(currentParticipantProject.id));
-  }, []);
+    void dispatch(requestListParticipantProjectSpecies(projectId));
+  }, [projectId]);
 
   const reload = () => {
-    if (currentParticipantProject) {
-      dispatch(requestListParticipantProjectSpecies(currentParticipantProject.id));
+    dispatch(requestListParticipantProjectSpecies(projectId));
+  };
+
+  const onCloseRemoveSpecies = (_reload?: boolean) => {
+    setShowConfirmDialog(false);
+    if (_reload) {
+      reload();
     }
   };
 
@@ -55,7 +64,7 @@ const SpeciesDeliverableTable = (): JSX.Element => {
       {activeLocale && (
         <>
           <RemoveSpeciesDialog
-            onClose={() => setShowConfirmDialog(false)}
+            onClose={onCloseRemoveSpecies}
             open={showConfirmDialog}
             speciesToRemove={selectedRows.map((row) => row.id)}
           />
@@ -65,6 +74,7 @@ const SpeciesDeliverableTable = (): JSX.Element => {
               onClose={() => setOpenedAddSpeciesModal(false)}
               participantProjectSpecies={participantProjectSpecies?.data || []}
               reload={reload}
+              projectId={projectId}
             />
           )}
 
@@ -80,20 +90,20 @@ const SpeciesDeliverableTable = (): JSX.Element => {
               {strings.SPECIES}
             </Typography>
 
-            <Button
-              icon='plus'
-              id='add-species-to-project'
-              label='Add Species to Project'
-              onClick={() => {
-                setOpenedAddSpeciesModal(true);
-              }}
-              priority='secondary'
-              size='medium'
-            />
+            {!isAcceleratorRoute && (
+              <Button
+                icon='plus'
+                id='add-species-to-project'
+                label='Add Species to Project'
+                onClick={() => setOpenedAddSpeciesModal(true)}
+                priority='secondary'
+                size='medium'
+              />
+            )}
           </Box>
 
           <Table
-            columns={columns}
+            columns={isAcceleratorRoute ? consoleColumns : columns}
             emptyTableMessage={strings.THERE_ARE_NO_SPECIES_ADDED_TO_THIS_PROJET_YET}
             id='species-deliverable-table'
             orderBy='speciesScientificName'
@@ -101,7 +111,7 @@ const SpeciesDeliverableTable = (): JSX.Element => {
             rows={participantProjectSpecies?.data || []}
             selectedRows={selectedRows}
             setSelectedRows={setSelectedRows}
-            showCheckbox={true}
+            showCheckbox={!isAcceleratorRoute}
             showTopBar={true}
             topBarButtons={[
               {

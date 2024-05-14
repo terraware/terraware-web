@@ -18,7 +18,7 @@ import { useModuleData } from './Provider/Context';
 
 const CALL_DESCRIPTION_HTML = `
   <div>
-    <p>Clicking "Join" will open up a browser window to join a Zoom video call.</p>
+    <p>Clicking "Join" will open up a browser window to join a Google Meet video call.</p>
     <p>For this Live Session you will need:</p>
     <ul>
       <li>An internet connection – broadband wired or wireless (3G or 4G/LTE)</li>
@@ -46,11 +46,15 @@ const ModuleEventSessionView = () => {
   const crumbs: Crumb[] = useMemo(
     () => [
       {
-        name: activeLocale ? 'Module' : '',
+        name: activeLocale ? strings.ALL_MODULES : '',
+        to: APP_PATHS.PROJECT_MODULES.replace(':projectId', `${projectId}`),
+      },
+      {
+        name: module?.title || '',
         to: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),
       },
     ],
-    [activeLocale, moduleId, projectId]
+    [activeLocale, projectId, module, moduleId]
   );
 
   return (

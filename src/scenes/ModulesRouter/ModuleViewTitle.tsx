@@ -2,7 +2,6 @@ import React from 'react';
 
 import { Box, Typography } from '@mui/material';
 
-import { useLocalization } from 'src/providers';
 import { selectProject } from 'src/redux/features/projects/projectsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import { Module } from 'src/types/Module';
@@ -14,7 +13,6 @@ type ModulePageTitleProps = {
 };
 
 const ModuleViewTitle = ({ module, projectId }: ModulePageTitleProps) => {
-  const { activeLocale } = useLocalization();
   const project = useAppSelector(selectProject(projectId));
 
   return (
@@ -30,9 +28,9 @@ const ModuleViewTitle = ({ module, projectId }: ModulePageTitleProps) => {
           </Typography>
         )}
 
-        {module?.startDate && module?.endDate && activeLocale && (
+        {module?.startDate && module?.endDate && (
           <Typography fontSize={'16px'} fontWeight={400} lineHeight={'24px'}>
-            {getDateRangeString(module?.startDate, module?.endDate, activeLocale)}
+            {getDateRangeString(module?.startDate, module?.endDate)}
           </Typography>
         )}
       </Box>

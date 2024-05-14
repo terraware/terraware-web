@@ -15,7 +15,7 @@ export const selectParticipantProjectSpeciesGetRequest = (requestId: string) => 
 export const selectParticipantProjectSpeciesListRequest = (projectId: number) => (state: RootState) =>
   state.participantProjectSpeciesList[projectId];
 
-export const selectParticipantProjectSpeciesRemoveRequest = (requestId: string) => (state: RootState) =>
+export const selectParticipantProjectSpeciesDeleteManyRequest = (requestId: string) => (state: RootState) =>
   state.participantProjectSpeciesDeleteMany[requestId];
 
 export const selectParticipantProjectSpeciesUpdateRequest = (requestId: string) => (state: RootState) =>

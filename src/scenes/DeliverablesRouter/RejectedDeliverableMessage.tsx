@@ -18,7 +18,7 @@ const RejectedDeliverableMessage = ({ deliverable }: ViewProps): JSX.Element => 
           <Message
             body={deliverable?.feedback || ''}
             priority='critical'
-            title={strings.DELIVERABLE_REJECTED}
+            title={strings.DELIVERABLE_NOT_ACCEPTED}
             type='page'
           />
         </Box>
