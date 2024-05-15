@@ -1,5 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useMemo, useState } from 'react';
 
 import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -13,17 +12,12 @@ import Page from 'src/components/Page';
 import Checkbox from 'src/components/common/Checkbox';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
 import { useParticipantProjectSpeciesData } from 'src/providers/ParticipantProject/ParticipantProjectSpeciesContext';
-import { useLocalization, useOrganization, useProject } from 'src/providers/hooks';
-import { requestUpdateParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
-import { selectParticipantProjectSpeciesUpdateRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { SpeciesService } from 'src/services';
+import { useLocalization, useProject } from 'src/providers/hooks';
 import strings from 'src/strings';
-import { Species } from 'src/types/Species';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import useSnackbar from 'src/utils/useSnackbar';
 
 import ApproveDeliverableDialog from '../Deliverables/ApproveDeliverableDialog';
 import RejectDialog from '../Deliverables/RejectDialog';
@@ -44,41 +38,17 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function SpeciesDetailView(): JSX.Element {
   const theme = useTheme();
+  const { activeLocale } = useLocalization();
   const classes = useStyles();
-  const [species, setSpecies] = useState<Species>();
-  const navigate = useNavigate();
+  const { goToParticipantProjectSpeciesEdit } = useNavigateTo();
   const { isMobile } = useDeviceInfo();
-  const { selectedOrganization } = useOrganization();
-  const { speciesId } = useParams<{ speciesId: string }>();
-  const { currentParticipantProjectSpecies, reload } = useParticipantProjectSpeciesData();
-  const { currentDeliverable } = useDeliverableData();
+  const { projectId } = useProject();
+  const { currentParticipantProjectSpecies, currentSpecies, isBusy, participantProjectSpeciesId, update } =
+    useParticipantProjectSpeciesData();
+  const { currentDeliverable, deliverableId } = useDeliverableData();
+
   const [showApproveDialog, setShowApproveDialog] = useState<boolean>(false);
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
-  const dispatch = useAppDispatch();
-  const { projectId } = useProject();
-  const { activeLocale } = useLocalization();
-  const [requestId, setRequestId] = useState<string>('');
-  const result = useAppSelector(selectParticipantProjectSpeciesUpdateRequest(requestId));
-  const [isBusy, setIsBusy] = useState(false);
-  const [approving, setApproving] = useState(false);
-  const snackbar = useSnackbar();
-
-  useEffect(() => {
-    if (result?.status === 'success') {
-      if (approving && species) {
-        snackbar.pageSuccess(
-          strings.formatString(strings.YOU_APPROVED_SPECIES, species.scientificName).toString(),
-          strings.SPECIES_APPROVED
-        );
-        setApproving(false);
-      }
-      if (currentParticipantProjectSpecies) {
-        reload(currentParticipantProjectSpecies.id);
-      }
-      setIsBusy(false);
-      setRequestId('');
-    }
-  }, [result]);
 
   const gridSize = () => {
     if (isMobile) {
@@ -87,70 +57,31 @@ export default function SpeciesDetailView(): JSX.Element {
     return 4;
   };
 
-  useEffect(() => {
-    const getSpecies = async () => {
-      const speciesResponse = await SpeciesService.getSpecies(Number(speciesId), selectedOrganization.id);
-      if (speciesResponse.requestSucceeded) {
-        setSpecies(speciesResponse.species);
-      } else {
-        navigate(APP_PATHS.SPECIES);
-      }
-    };
-    if (selectedOrganization) {
-      getSpecies();
-    }
-  }, [speciesId, selectedOrganization, navigate]);
-
   const approveHandler = () => {
-    setApproving(false);
-    if (currentParticipantProjectSpecies?.id) {
-      setIsBusy(true);
-      const request = dispatch(
-        requestUpdateParticipantProjectSpecies({
-          participantProjectSpecies: {
-            id: currentParticipantProjectSpecies?.id || -1,
-            speciesId: species?.id || -1,
-            projectId: projectId,
-            submissionStatus: 'Approved',
-          },
-        })
-      );
-      setRequestId(request.requestId);
-      setApproving(true);
-      setShowApproveDialog(false);
-    }
+    currentParticipantProjectSpecies &&
+      update(undefined, {
+        ...currentParticipantProjectSpecies,
+        submissionStatus: 'Approved',
+      });
+
+    setShowApproveDialog(false);
   };
 
   const rejectHandler = (feedback: string) => {
-    setApproving(false);
-    if (currentParticipantProjectSpecies?.id) {
-      setIsBusy(true);
-      const request = dispatch(
-        requestUpdateParticipantProjectSpecies({
-          participantProjectSpecies: {
-            id: currentParticipantProjectSpecies?.id || -1,
-            speciesId: species?.id || -1,
-            projectId: projectId,
-            submissionStatus: 'Rejected',
-            feedback: feedback,
-          },
-        })
-      );
-      setRequestId(request.requestId);
-      setShowRejectDialog(false);
-    }
+    currentParticipantProjectSpecies &&
+      update(undefined, {
+        ...currentParticipantProjectSpecies,
+        feedback: feedback,
+        submissionStatus: 'Rejected',
+      });
+
+    setShowRejectDialog(false);
   };
 
   const onOptionItemClick = (optionItem: DropdownItem) => {
-    if (species && currentDeliverable) {
-      switch (optionItem.value) {
-        case 'edit': {
-          navigate(
-            APP_PATHS.ACCELERATOR_SPECIES_EDIT.replace(':speciesId', species.id.toString())
-              .replace(':projectId', projectId.toString())
-              .replace(':deliverableId', currentDeliverable.id.toString())
-          );
-        }
+    switch (optionItem.value) {
+      case 'edit': {
+        goToParticipantProjectSpeciesEdit(deliverableId, projectId, participantProjectSpeciesId);
       }
     }
   };
@@ -169,10 +100,14 @@ export default function SpeciesDetailView(): JSX.Element {
   );
 
   const actions = useMemo(() => {
+    if (!(currentParticipantProjectSpecies && activeLocale)) {
+      return null;
+    }
+
     return (
       <Box display='flex' flexDirection='row' flexGrow={0} marginRight={theme.spacing(3)} justifyContent='right'>
         <Button
-          disabled={currentParticipantProjectSpecies?.submissionStatus === 'Rejected'}
+          disabled={currentParticipantProjectSpecies.submissionStatus === 'Rejected'}
           id='rejectDeliverable'
           label={strings.REJECT_ACTION}
           priority='secondary'
@@ -181,7 +116,7 @@ export default function SpeciesDetailView(): JSX.Element {
           type='destructive'
         />
         <Button
-          disabled={currentParticipantProjectSpecies?.submissionStatus === 'Approved'}
+          disabled={currentParticipantProjectSpecies.submissionStatus === 'Approved'}
           id='approveDeliverable'
           label={strings.APPROVE}
           onClick={() => void setShowApproveDialog(true)}
@@ -190,20 +125,23 @@ export default function SpeciesDetailView(): JSX.Element {
         <OptionsMenu onOptionItemClick={onOptionItemClick} optionItems={optionItems} />
       </Box>
     );
-  }, [currentParticipantProjectSpecies?.submissionStatus, onOptionItemClick, optionItems, theme]);
+  }, [activeLocale, currentParticipantProjectSpecies, onOptionItemClick, optionItems, theme]);
 
   const crumbs: Crumb[] = useMemo(
-    () => [
-      {
-        name: activeLocale ? strings.DELIVERABLES : '',
-        to: APP_PATHS.ACCELERATOR_DELIVERABLES,
-      },
-      {
-        name: currentDeliverable?.name || '',
-        to: `/${currentDeliverable?.id}/submissions/${projectId}`,
-      },
-    ],
-    [activeLocale]
+    () =>
+      activeLocale
+        ? [
+            {
+              name: strings.DELIVERABLES,
+              to: APP_PATHS.ACCELERATOR_DELIVERABLES,
+            },
+            {
+              name: currentDeliverable?.name || '',
+              to: `/${deliverableId}/submissions/${projectId}`,
+            },
+          ]
+        : [],
+    [activeLocale, currentDeliverable]
   );
 
   return (
@@ -218,228 +156,238 @@ export default function SpeciesDetailView(): JSX.Element {
       )}
       {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectHandler} />}
 
-      <Page
-        title={
-          <Box
-            margin={theme.spacing(3)}
-            alignItems='center'
-            justifyContent='space-between'
-            display='flex'
-            flexDirection='row'
-          >
-            <Box display='flex' flexDirection='column'>
-              <Typography fontSize='14px' lineHeight='20px' fontWeight={400} color={theme.palette.TwClrTxt}>
-                {strings.formatString(strings.DELIVERABLE_PROJECT, currentDeliverable?.projectName ?? '')}
-              </Typography>
-              <Typography
-                fontSize='24px'
-                lineHeight='32px'
-                fontWeight={600}
-                color={theme.palette.TwClrTxt}
-                margin={theme.spacing(1, 0)}
-              >
-                {species?.scientificName}
-              </Typography>
-            </Box>
-          </Box>
-        }
-        rightComponent={actions}
-        crumbs={crumbs}
-      >
-        {isBusy && <BusySpinner />}
-        {currentParticipantProjectSpecies?.submissionStatus === 'Rejected' && currentParticipantProjectSpecies && (
-          <RejectedBox participantProjectSpecies={currentParticipantProjectSpecies} onSubmit={rejectHandler} />
-        )}
-        <Grid container padding={theme.spacing(0, 0, 4, 0)}>
-          <Grid
-            container
-            sx={{
-              backgroundColor: theme.palette.TwClrBg,
-              borderRadius: '32px',
-              padding: theme.spacing(3),
-              margin: 0,
-            }}
-          >
-            {currentParticipantProjectSpecies && (
-              <Box display='flex' flexDirection='column' width='100%'>
-                <Box
-                  border={`1px solid ${theme.palette.TwClrBaseGray100}`}
-                  borderRadius='8px'
-                  marginBottom='16px'
-                  padding='16px'
-                >
-                  <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
-                    <DeliverableStatusBadge status={currentParticipantProjectSpecies.submissionStatus} />
-                  </div>
+      {(isBusy || !currentSpecies || !currentParticipantProjectSpecies) && <BusySpinner withSkrim={true} />}
 
-                  {currentDeliverable && <InternalComment deliverable={currentDeliverable} />}
-                </Box>
+      {currentParticipantProjectSpecies && currentSpecies && (
+        <Page
+          title={
+            <Box
+              margin={theme.spacing(3)}
+              alignItems='center'
+              justifyContent='space-between'
+              display='flex'
+              flexDirection='row'
+            >
+              <Box display='flex' flexDirection='column'>
+                <Typography fontSize='14px' lineHeight='20px' fontWeight={400} color={theme.palette.TwClrTxt}>
+                  {strings.formatString(strings.DELIVERABLE_PROJECT, currentDeliverable?.projectName ?? '')}
+                </Typography>
+                <Typography
+                  fontSize='24px'
+                  lineHeight='32px'
+                  fontWeight={600}
+                  color={theme.palette.TwClrTxt}
+                  margin={theme.spacing(1, 0)}
+                >
+                  {currentSpecies.scientificName}
+                </Typography>
               </Box>
-            )}
-            <Grid item xs={12} paddingBottom={theme.spacing(2)}>
-              <TextField
-                label={strings.RATIONALE}
-                id='rationale'
-                type='text'
-                value={currentParticipantProjectSpecies?.rationale}
-                display={true}
-              />
-            </Grid>
-            <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-              <TextField
-                label={strings.SCIENTIFIC_NAME}
-                id='scientificName'
-                type='text'
-                value={species?.scientificName}
-                display={true}
-              />
-            </Grid>
-            <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-              <TextField
-                label={strings.COMMON_NAME}
-                id='commonName'
-                type='text'
-                value={species?.commonName}
-                tooltipTitle={strings.TOOLTIP_TIME_ZONE_NURSERY}
-                display={true}
-              />
-            </Grid>
-            <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-              <TextField id={'family'} label={strings.FAMILY} value={species?.familyName} type='text' display={true} />
-            </Grid>
-            <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-              <TextField
-                id={'conservationCategory'}
-                label={strings.CONSERVATION_CATEGORY}
-                value={species?.conservationCategory}
-                type='text'
-                display={true}
-              />
-            </Grid>
-            <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-              <TextField
-                id={'growthForms'}
-                label={strings.GROWTH_FORM}
-                value={species?.growthForms?.join(', ')}
-                type='text'
-                aria-label='date-picker'
-                display={true}
-              />
-            </Grid>
-            <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-              <Checkbox
-                id='Rare'
-                name='rare'
-                label={strings.RARE}
-                disabled={true}
-                onChange={() => {
-                  return;
-                }}
-                value={species?.rare}
-                className={classes.blockCheckbox}
-              />
-            </Grid>
-            {/* TODO this will eventually come from the participant project species, not the org species */}
-            {/* <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+            </Box>
+          }
+          rightComponent={actions}
+          crumbs={crumbs}
+        >
+          {currentParticipantProjectSpecies.submissionStatus === 'Rejected' && (
+            <RejectedBox participantProjectSpecies={currentParticipantProjectSpecies} onSubmit={rejectHandler} />
+          )}
+
+          <Grid container padding={theme.spacing(0, 0, 4, 0)}>
+            <Grid
+              container
+              sx={{
+                backgroundColor: theme.palette.TwClrBg,
+                borderRadius: '32px',
+                padding: theme.spacing(3),
+                margin: 0,
+              }}
+            >
+              {currentParticipantProjectSpecies && (
+                <Box display='flex' flexDirection='column' width='100%'>
+                  <Box
+                    border={`1px solid ${theme.palette.TwClrBaseGray100}`}
+                    borderRadius='8px'
+                    marginBottom='16px'
+                    padding='16px'
+                  >
+                    <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
+                      <DeliverableStatusBadge status={currentParticipantProjectSpecies.submissionStatus} />
+                    </div>
+
+                    {currentDeliverable && <InternalComment deliverable={currentDeliverable} />}
+                  </Box>
+                </Box>
+              )}
+              <Grid item xs={12} paddingBottom={theme.spacing(2)}>
+                <TextField
+                  label={strings.RATIONALE}
+                  id='rationale'
+                  type='text'
+                  value={currentParticipantProjectSpecies.rationale}
+                  display={true}
+                />
+              </Grid>
+              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+                <TextField
+                  label={strings.SCIENTIFIC_NAME}
+                  id='scientificName'
+                  type='text'
+                  value={currentSpecies.scientificName}
+                  display={true}
+                />
+              </Grid>
+              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+                <TextField
+                  label={strings.COMMON_NAME}
+                  id='commonName'
+                  type='text'
+                  value={currentSpecies.commonName}
+                  tooltipTitle={strings.TOOLTIP_TIME_ZONE_NURSERY}
+                  display={true}
+                />
+              </Grid>
+              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+                <TextField
+                  id={'family'}
+                  label={strings.FAMILY}
+                  value={currentSpecies.familyName}
+                  type='text'
+                  display={true}
+                />
+              </Grid>
+              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+                <TextField
+                  id={'conservationCategory'}
+                  label={strings.CONSERVATION_CATEGORY}
+                  value={currentSpecies.conservationCategory}
+                  type='text'
+                  display={true}
+                />
+              </Grid>
+              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+                <TextField
+                  id={'growthForms'}
+                  label={strings.GROWTH_FORM}
+                  value={currentSpecies.growthForms?.join(', ')}
+                  type='text'
+                  aria-label='date-picker'
+                  display={true}
+                />
+              </Grid>
+              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+                <Checkbox
+                  id='Rare'
+                  name='rare'
+                  label={strings.RARE}
+                  disabled={true}
+                  onChange={() => {
+                    return;
+                  }}
+                  value={currentSpecies.rare}
+                  className={classes.blockCheckbox}
+                />
+              </Grid>
+              {/* TODO this will eventually come from the participant project species, not the org species */}
+              {/* <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
                 <TextField
                   id={'nativeStatus'}
                   label={strings.NATIVE_NON_NATIVE}
-                  value={species?.nativeStatus}
+                  value={currentSpecies.nativeStatus}
                   type='text'
                   display={true}
                   required
                 />
               </Grid> */}
-            <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-              <TextField
-                id={'nativeEcosistem'}
-                label={strings.NATIVE_ECOSYSTEM}
-                value={species?.nativeEcosystem}
-                type='text'
-                display={true}
-              />
-            </Grid>
-            <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-              <TextField
-                id={'successionalGroup'}
-                label={strings.SUCCESSIONAL_GROUP}
-                value={species?.successionalGroups?.join(', ')}
-                type='text'
-                display={true}
-              />
-            </Grid>
-            <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-              <TextField
-                id={'ecosystemType'}
-                label={strings.ECOSYSTEM_TYPE}
-                value={species?.ecosystemTypes?.join(', ')}
-                type='text'
-                display={true}
-              />
-            </Grid>
-            <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-              <TextField
-                id={'ecologicalRoleKnown'}
-                label={strings.ECOLOGICAL_ROLE_KNOWN}
-                value={species?.ecologicalRoleKnown}
-                type='text'
-                display={true}
-                tooltipTitle={strings.ECOLOGICAL_ROLE_KNOWN_TOOLTIP}
-              />
-            </Grid>
-            <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-              <TextField
-                id={'localUsesKnown'}
-                label={strings.LOCAL_USES_KNOWN}
-                value={species?.localUsesKnown}
-                type='text'
-                display={true}
-                tooltipTitle={strings.LOCAL_USES_KNOWN_TOOLTIP}
-              />
-            </Grid>
-            <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-              <TextField
-                id={'seedStorageBehavior'}
-                label={strings.SEED_STORAGE_BEHAVIOR}
-                value={species?.seedStorageBehavior}
-                type='text'
-                display={true}
-              />
-            </Grid>
-            <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
-              <TextField
-                id={'plantMaterialSourcingMethod'}
-                label={strings.PLANT_MATERIAL_SOURCING_METHOD}
-                value={species?.plantMaterialSourcingMethods?.join(', ')}
-                type='text'
-                display={true}
-                tooltipTitle={
-                  <>
-                    <ul style={{ paddingLeft: '16px' }}>
-                      <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_SEED_COLLECTION_AND_GERMINATION}</li>
-                      <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_SEED_PURCHASE_AND_GERMINATION}</li>
-                      <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_MANGROVE_PROPAGULES}</li>
-                      <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_VEGETATIVE_PROPAGATION}</li>
-                      <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_WILDLING_HARVEST}</li>
-                      <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_SEEDLING_PURCHASE}</li>
-                    </ul>
-                  </>
-                }
-              />
-            </Grid>
-            <Grid item xs={isMobile ? 12 : 8}>
-              <TextField
-                id={'otherFacts'}
-                label={strings.OTHER_FACTS}
-                value={species?.otherFacts}
-                type='textarea'
-                display={true}
-              />
+              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+                <TextField
+                  id={'nativeEcosistem'}
+                  label={strings.NATIVE_ECOSYSTEM}
+                  value={currentSpecies.nativeEcosystem}
+                  type='text'
+                  display={true}
+                />
+              </Grid>
+              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+                <TextField
+                  id={'successionalGroup'}
+                  label={strings.SUCCESSIONAL_GROUP}
+                  value={currentSpecies.successionalGroups?.join(', ')}
+                  type='text'
+                  display={true}
+                />
+              </Grid>
+              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+                <TextField
+                  id={'ecosystemType'}
+                  label={strings.ECOSYSTEM_TYPE}
+                  value={currentSpecies.ecosystemTypes?.join(', ')}
+                  type='text'
+                  display={true}
+                />
+              </Grid>
+              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+                <TextField
+                  id={'ecologicalRoleKnown'}
+                  label={strings.ECOLOGICAL_ROLE_KNOWN}
+                  value={currentSpecies.ecologicalRoleKnown}
+                  type='text'
+                  display={true}
+                  tooltipTitle={strings.ECOLOGICAL_ROLE_KNOWN_TOOLTIP}
+                />
+              </Grid>
+              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+                <TextField
+                  id={'localUsesKnown'}
+                  label={strings.LOCAL_USES_KNOWN}
+                  value={currentSpecies.localUsesKnown}
+                  type='text'
+                  display={true}
+                  tooltipTitle={strings.LOCAL_USES_KNOWN_TOOLTIP}
+                />
+              </Grid>
+              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+                <TextField
+                  id={'seedStorageBehavior'}
+                  label={strings.SEED_STORAGE_BEHAVIOR}
+                  value={currentSpecies.seedStorageBehavior}
+                  type='text'
+                  display={true}
+                />
+              </Grid>
+              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+                <TextField
+                  id={'plantMaterialSourcingMethod'}
+                  label={strings.PLANT_MATERIAL_SOURCING_METHOD}
+                  value={currentSpecies.plantMaterialSourcingMethods?.join(', ')}
+                  type='text'
+                  display={true}
+                  tooltipTitle={
+                    <>
+                      <ul style={{ paddingLeft: '16px' }}>
+                        <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_SEED_COLLECTION_AND_GERMINATION}</li>
+                        <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_SEED_PURCHASE_AND_GERMINATION}</li>
+                        <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_MANGROVE_PROPAGULES}</li>
+                        <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_VEGETATIVE_PROPAGATION}</li>
+                        <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_WILDLING_HARVEST}</li>
+                        <li>{strings.PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_SEEDLING_PURCHASE}</li>
+                      </ul>
+                    </>
+                  }
+                />
+              </Grid>
+              <Grid item xs={isMobile ? 12 : 8}>
+                <TextField
+                  id={'otherFacts'}
+                  label={strings.OTHER_FACTS}
+                  value={currentSpecies.otherFacts}
+                  type='textarea'
+                  display={true}
+                />
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
-        {/* TODO:  Additional Species Data */}
-      </Page>
+          {/* TODO:  Additional Species Data */}
+        </Page>
+      )}
     </>
   );
 }

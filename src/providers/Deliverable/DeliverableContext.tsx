@@ -4,13 +4,12 @@ import { Deliverable } from 'src/types/Deliverables';
 
 export type DeliverableData = {
   currentDeliverable?: Deliverable;
-  setCurrentDeliverable: (deliverable: Deliverable) => void;
+  deliverableId: number;
 };
 
 // default values pointing to nothing
 export const DeliverableContext = createContext<DeliverableData>({
-  // tslint:disable-next-line:no-empty
-  setCurrentDeliverable: () => {},
+  deliverableId: -1,
 });
 
 export const useDeliverableData = () => useContext(DeliverableContext);
