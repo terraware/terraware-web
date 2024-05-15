@@ -293,7 +293,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               display={true}
             />
           </Grid>
-          {species && <SpeciesProjectsTable speciesId={species.id} />}
+          {species && <SpeciesProjectsTable speciesId={species.id} editMode={false} />}
         </Grid>
       </Grid>
       {species && (

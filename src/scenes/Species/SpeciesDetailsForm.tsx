@@ -33,6 +33,8 @@ import {
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 
+import SpeciesProjectsTable from './SpeciesProjectsTable';
+
 const useStyles = makeStyles(() => ({
   blockCheckbox: {
     display: 'block',
@@ -46,6 +48,11 @@ type SpeciesDetailsFormProps = {
   onChange: (id: string, value: unknown) => void;
   nameFormatError: string | string[];
   setNameFormatError: React.Dispatch<React.SetStateAction<string | string[]>>;
+  onAdd?: (id: number) => void;
+  onRemoveNew?: (ids: number[]) => void;
+  onRemoveExisting?: (ids: number[]) => void;
+  addedProjectsIds?: number[];
+  removedProjectsIds?: number[];
 };
 
 export default function SpeciesDetailsForm({
@@ -55,6 +62,11 @@ export default function SpeciesDetailsForm({
   onChange,
   nameFormatError,
   setNameFormatError,
+  onAdd,
+  onRemoveNew,
+  onRemoveExisting,
+  addedProjectsIds,
+  removedProjectsIds,
 }: SpeciesDetailsFormProps): JSX.Element {
   const { activeLocale } = useLocalization();
   const classes = useStyles();
@@ -424,6 +436,17 @@ export default function SpeciesDetailsForm({
             type='textarea'
           />
         </Grid>
+        {
+          <SpeciesProjectsTable
+            speciesId={record.id}
+            editMode={true}
+            onAdd={onAdd}
+            onRemoveExisting={onRemoveExisting}
+            onRemoveNew={onRemoveNew}
+            addedProjectsIds={addedProjectsIds}
+            removedProjectsIds={removedProjectsIds}
+          />
+        }
       </Grid>
     </>
   );

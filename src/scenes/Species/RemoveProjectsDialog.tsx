@@ -1,50 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { Button, DialogBox } from '@terraware/web-components';
 
-import { requestDeleteManyParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
-import { selectParticipantProjectSpeciesDeleteManyRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import useSnackbar from 'src/utils/useSnackbar';
 
 export interface RemoveProjectsDialogProps {
   onClose: (reload?: boolean) => void;
-  onSubmit?: () => void;
+  onSubmit: (ids: number[]) => void;
   ppSpeciesToRemove: number[];
 }
 
 export default function RemoveProjectsDialog(props: RemoveProjectsDialogProps): JSX.Element | null {
-  const { onClose, ppSpeciesToRemove } = props;
-
-  const dispatch = useAppDispatch();
-  const snackbar = useSnackbar();
-
-  const [requestId, setRequestId] = useState('');
-  const deleteRequest = useAppSelector(selectParticipantProjectSpeciesDeleteManyRequest(requestId));
+  const { onClose, ppSpeciesToRemove, onSubmit } = props;
 
   const removePpSpecies = () => {
-    if (!ppSpeciesToRemove?.length) {
-      return;
-    }
-
-    const request = dispatch(requestDeleteManyParticipantProjectSpecies(ppSpeciesToRemove));
-    setRequestId(request.requestId);
+    onSubmit(ppSpeciesToRemove);
   };
-
-  useEffect(() => {
-    if (!deleteRequest) {
-      return;
-    }
-
-    if (deleteRequest.status === 'success') {
-      snackbar.toastSuccess(strings.CHANGES_SAVED);
-      onClose(true);
-    } else if (deleteRequest.status === 'error') {
-      snackbar.toastError(strings.GENERIC_ERROR);
-      onClose();
-    }
-  }, [deleteRequest]);
 
   return (
     <DialogBox
