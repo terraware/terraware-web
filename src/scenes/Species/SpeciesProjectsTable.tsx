@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { SpeciesProjectsResult } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
 import { Project } from 'src/types/Project';
+import { SearchRequestPayload } from 'src/types/Search';
 
 import AddToProjectModal from './AddToProjectModal';
 import RemoveProjectsDialog from './RemoveProjectsDialog';
