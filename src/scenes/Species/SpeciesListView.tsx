@@ -254,7 +254,6 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const [filters, setFilters] = useState<Record<string, any>>({});
   const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
 
-
   const featuredFilters: FilterConfig[] = useMemo(() => {
     const _filters: FilterConfig[] = [
       {
