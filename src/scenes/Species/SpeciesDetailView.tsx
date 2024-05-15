@@ -22,6 +22,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import TextField from '../../components/common/Textfield/Textfield';
 import TfMain from '../../components/common/TfMain';
 import DeleteSpeciesModal from './DeleteSpeciesModal';
+import SpeciesProjectsTable from './SpeciesProjectsTable';
 
 const useStyles = makeStyles((theme: Theme) => ({
   titleWithButton: {
@@ -292,6 +293,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               display={true}
             />
           </Grid>
+          {species && <SpeciesProjectsTable speciesId={species.id} />}
         </Grid>
       </Grid>
       {species && (
