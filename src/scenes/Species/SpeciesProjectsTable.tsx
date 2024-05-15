@@ -84,7 +84,7 @@ export default function SpeciesProjectsTable({
   const onAddHandler = (addedId: number) => {
     // only add new project if it's not already added
     const exsist = searchResults?.find((sr) => {
-      sr.id === addedId;
+      sr.id.toString() === addedId.toString();
     });
     if (!exsist && onAdd) {
       onAdd(addedId);
@@ -96,7 +96,7 @@ export default function SpeciesProjectsTable({
     const newIdsToRemove: number[] = [];
     removedIds.forEach((removedId) => {
       const exists = searchResults?.find((sr) => {
-        sr.id === removedId;
+        return sr.id.toString() === removedId.toString();
       });
 
       if (exists) {

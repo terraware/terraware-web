@@ -23,6 +23,7 @@ export default function AddToProjectModal(props: AddToProjectModalProps): JSX.El
   const save = () => {
     if (selectedProject) {
       onSubmit(selectedProject.projectId);
+      onClose();
     }
   };
 

@@ -15,6 +15,7 @@ export default function RemoveProjectsDialog(props: RemoveProjectsDialogProps): 
 
   const removePpSpecies = () => {
     onSubmit(ppSpeciesToRemove);
+    onClose();
   };
 
   return (

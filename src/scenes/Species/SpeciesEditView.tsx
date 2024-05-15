@@ -56,8 +56,7 @@ export default function SpeciesEditView(): JSX.Element {
   const dispatch = useAppDispatch();
 
   const onRemoveExistingHandler = (removedIds: number[]) => {
-    const newIds = removedProjectsIds?.filter((pIds) => !removedIds.includes(pIds));
-    setRemovedProjectsIds(newIds);
+    setRemovedProjectsIds(removedIds);
   };
 
   const onRemoveNewHandler = (removedIds: number[]) => {
@@ -76,6 +75,13 @@ export default function SpeciesEditView(): JSX.Element {
   useEffect(() => {
     console.log('addedResult', addedResult);
     console.log('removedResult', removedResult);
+
+    if (removedResult?.status === 'success') {
+      goToSpecies(record.id);
+    }
+    if (addedResult?.status === 'success') {
+      goToSpecies(record.id);
+    }
   }, [addedResult, removedResult]);
 
   const gridSize = () => {
