@@ -89,7 +89,7 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
   }, [reloadPPS, reloadSpecies]);
 
   const isEqual = (a: ParticipantProjectSpecies | undefined, b: ParticipantProjectSpecies | undefined): boolean =>
-    !!(a && b && (a.feedback || null) === (b.feedback || null) && (a.rationale || null) === (b.rationale || null));
+    !!(a && b && (a.feedback || null) === (b.feedback || null) && (a.rationale || null) === (b.rationale || null) && a.submissionStatus === b.submissionStatus);
 
   const update = useCallback(
     (species?: Species, participantProjectSpecies?: ParticipantProjectSpecies) => {
