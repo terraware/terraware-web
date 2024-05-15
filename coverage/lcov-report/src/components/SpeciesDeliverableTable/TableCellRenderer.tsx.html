@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/36</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/35</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
@@ -239,20 +239,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -261,9 +263,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -381,7 +381,6 @@ import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableSt
 import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
-import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers';
 import { requestUpdateParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
@@ -395,14 +394,17 @@ import { DeliverableStatusType } from 'src/types/Deliverables';
 import EditSpeciesModal from './EditSpeciesModal';
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >SpeciesDeliverableCellRenderer(</span>props: RendererProps&lt;TableRowType&gt;): JSX.Element {
+  const { column, index, row, value, reloadData, onRowClick } = <span class="cstat-no" title="statement not covered" >props;</span>
+&nbsp;
+  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-  const { column, index, row, value, reloadData } = <span class="cstat-no" title="statement not covered" >props;</span>
+  const { isAcceleratorRoute } = <span class="cstat-no" title="statement not covered" >useAcceleratorConsole();</span>
+&nbsp;
   const [openedEditSpeciesModal, setOpenedEditSpeciesModal] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
   const [showRejectDialog, setShowRejectDialog] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
-  const { isAcceleratorRoute } = <span class="cstat-no" title="statement not covered" >useAcceleratorConsole();</span>
+&nbsp;
   const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const result = <span class="cstat-no" title="statement not covered" >useAppSelector(selectParticipantProjectSpeciesUpdateRequest(requestId));</span>
-  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (result?.status === 'success' &amp;&amp; reloadData) {</span>
@@ -415,11 +417,9 @@ export default function <span class="fstat-no" title="function not covered" >Spe
   };
 &nbsp;
   const createLinkToAcceleratorSpecies = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>Value: React.ReactNode | unknown[]) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return (</span>
-      &lt;Link to={`${APP_PATHS.ACCELERATOR_SPECIES.replace(':speciesId', row.speciesId.toString())}`}&gt;
-        {iValue as React.ReactNode}
-      &lt;/Link&gt;
-    );
+<span class="cstat-no" title="statement not covered" >    if (onRowClick) {</span>
+<span class="cstat-no" title="statement not covered" >      return &lt;Link onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >onRowClick()}</span>&gt;{iValue as React.ReactNode}&lt;/Link&gt;;</span>
+    }
   };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (column.key === 'scientificName') {</span>
@@ -535,7 +535,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-15T20:03:38.730Z
+                at 2024-05-15T22:04:08.720Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

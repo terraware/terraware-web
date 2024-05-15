@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/55</span>
+                <span class='fraction'>0/57</span>
             </div>
         
             
@@ -967,7 +967,7 @@ const useStyles = <span class="cstat-no" title="statement not covered" >makeStyl
 type SpeciesDetailsFormProps = {
   gridSize: number;
   record: Species;
-  setRecord: React.Dispatch&lt;React.SetStateAction&lt;Species&gt;&gt;;
+  setRecord?: React.Dispatch&lt;React.SetStateAction&lt;Species&gt;&gt;;
   onChange: (id: string, value: unknown) =&gt; void;
   nameFormatError: string | string[];
   setNameFormatError: React.Dispatch&lt;React.SetStateAction&lt;string | string[]&gt;&gt;;
@@ -1019,7 +1019,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
 <span class="cstat-no" title="statement not covered" >      if (!debouncedSearchTerm) {</span>
 <span class="cstat-no" title="statement not covered" >        setNewScientificName(false);</span>
       }
-<span class="cstat-no" title="statement not covered" >      if (debouncedSearchTerm.length &gt; 1) {</span>
+<span class="cstat-no" title="statement not covered" >      if (debouncedSearchTerm.length &gt; 1 &amp;&amp; setRecord) {</span>
         const requestId = <span class="cstat-no" title="statement not covered" >Math.random().toString();</span>
 <span class="cstat-no" title="statement not covered" >        setRequestId('details', requestId);</span>
         const response = <span class="cstat-no" title="statement not covered" >await SpeciesService.getSpeciesDetails(debouncedSearchTerm);</span>
@@ -1150,7 +1150,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             label={strings.GROWTH_FORM}
             fullWidth={true}
             onAdd={<span class="fstat-no" title="function not covered" >(g</span>rowthForm: GrowthForm) =&gt; {
-              const selectedGrowthForms = <span class="cstat-no" title="statement not covered" >record.growthForms ?? [];</span>
+              const selectedGrowthForms = <span class="cstat-no" title="statement not covered" >[...(record.growthForms ?? [])];</span>
 <span class="cstat-no" title="statement not covered" >              selectedGrowthForms.push(growthForm);</span>
 <span class="cstat-no" title="statement not covered" >              onChange('growthForms', selectedGrowthForms);</span>
             }}
@@ -1216,7 +1216,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             label={strings.SUCCESSIONAL_GROUP}
             fullWidth={true}
             onAdd={<span class="fstat-no" title="function not covered" >(s</span>uccessionalGroup: SuccessionalGroup) =&gt; {
-              const selectedSuccessionalGroups = <span class="cstat-no" title="statement not covered" >record.successionalGroups ?? [];</span>
+              const selectedSuccessionalGroups = <span class="cstat-no" title="statement not covered" >[...(record.successionalGroups ?? [])];</span>
 <span class="cstat-no" title="statement not covered" >              selectedSuccessionalGroups.push(successionalGroup);</span>
 <span class="cstat-no" title="statement not covered" >              onChange('successionalGroups', selectedSuccessionalGroups);</span>
             }}
@@ -1247,7 +1247,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
               &lt;/&gt;
             }
             onAdd={<span class="fstat-no" title="function not covered" >(t</span>ype: EcosystemType) =&gt; {
-              const selectedTypes = <span class="cstat-no" title="statement not covered" >record.ecosystemTypes ?? [];</span>
+              const selectedTypes = <span class="cstat-no" title="statement not covered" >[...(record.ecosystemTypes ?? [])];</span>
 <span class="cstat-no" title="statement not covered" >              selectedTypes.push(type);</span>
 <span class="cstat-no" title="statement not covered" >              onChange('ecosystemTypes', selectedTypes);</span>
             }}
@@ -1312,7 +1312,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             fullWidth={true}
             label={strings.PLANT_MATERIAL_SOURCING_METHOD}
             onAdd={<span class="fstat-no" title="function not covered" >(m</span>ethod: PlantMaterialSourcingMethod) =&gt; {
-              const selected = <span class="cstat-no" title="statement not covered" >record.plantMaterialSourcingMethods ?? [];</span>
+              const selected = <span class="cstat-no" title="statement not covered" >[...(record.plantMaterialSourcingMethods ?? [])];</span>
 <span class="cstat-no" title="statement not covered" >              selected.push(method);</span>
 <span class="cstat-no" title="statement not covered" >              onChange('plantMaterialSourcingMethods', selected);</span>
             }}
@@ -1360,7 +1360,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-15T20:03:38.730Z
+                at 2024-05-15T22:04:08.720Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

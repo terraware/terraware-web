@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/41</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/41</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
@@ -213,16 +213,7 @@
 <a name='L148'></a><a href='#L148'>148</a>
 <a name='L149'></a><a href='#L149'>149</a>
 <a name='L150'></a><a href='#L150'>150</a>
-<a name='L151'></a><a href='#L151'>151</a>
-<a name='L152'></a><a href='#L152'>152</a>
-<a name='L153'></a><a href='#L153'>153</a>
-<a name='L154'></a><a href='#L154'>154</a>
-<a name='L155'></a><a href='#L155'>155</a>
-<a name='L156'></a><a href='#L156'>156</a>
-<a name='L157'></a><a href='#L157'>157</a>
-<a name='L158'></a><a href='#L158'>158</a>
-<a name='L159'></a><a href='#L159'>159</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L151'></a><a href='#L151'>151</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -243,18 +234,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -380,16 +364,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
 &nbsp;
 import { Box, useTheme } from '@mui/material';
 import { Button, DropdownItem } from '@terraware/web-components';
 &nbsp;
-import useFetchDeliverable from 'src/components/DeliverableView/useFetchDeliverable';
 import useUpdateDeliverable from 'src/components/DeliverableView/useUpdateDeliverable';
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { useLocalization, useUser } from 'src/providers';
+import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
 &nbsp;
@@ -401,19 +384,12 @@ import SpeciesDeliverableView from './SpeciesDeliverableView';
 const DeliverableViewWrapper = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
   const [showApproveDialog, setShowApproveDialog] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [showRejectDialog, setShowRejectDialog] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
-  const { deliverableId: _deliverableId, projectId: _projectId } = <span class="cstat-no" title="statement not covered" >useParams&lt;{</span>
-    deliverableId: string;
-    projectId: string;
-  }&gt;();
+&nbsp;
   const { status: requestStatus, update } = <span class="cstat-no" title="statement not covered" >useUpdateDeliverable();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { isAllowed } = <span class="cstat-no" title="statement not covered" >useUser();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-&nbsp;
-  const deliverableId = <span class="cstat-no" title="statement not covered" >Number(_deliverableId);</span>
-  const projectId = <span class="cstat-no" title="statement not covered" >Number(_projectId);</span>
-&nbsp;
-  const { deliverable } = <span class="cstat-no" title="statement not covered" >useFetchDeliverable({ deliverableId, projectId });</span>
+  const { currentDeliverable: deliverable } = <span class="cstat-no" title="statement not covered" >useDeliverableData();</span>
 &nbsp;
   const setStatus = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (s</span>tatus: DeliverableStatusType) =&gt; {
@@ -544,7 +520,7 @@ export default DeliverableViewWrapper;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-15T20:03:38.730Z
+                at 2024-05-15T22:04:08.720Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
