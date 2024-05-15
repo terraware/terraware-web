@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Grid, useTheme } from '@mui/material';
 import { SelectT } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
-import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
+import { useOrganization } from 'src/providers';
+import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
+import { requestProjects } from 'src/redux/features/projects/projectsThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { ParticipantProject } from 'src/types/Participant';
+import { Project } from 'src/types/Project';
 
 export interface AddToProjectModalProps {
   onClose: (reload?: boolean) => void;
@@ -16,13 +19,19 @@ export interface AddToProjectModalProps {
 
 export default function AddToProjectModal(props: AddToProjectModalProps): JSX.Element {
   const { onClose, onSubmit } = props;
-  const { currentParticipant } = useParticipantData();
+  const projects = useAppSelector(selectProjects);
   const theme = useTheme();
-  const [selectedProject, setSelectedProject] = useState<ParticipantProject>();
+  const [selectedProject, setSelectedProject] = useState<Project>();
+  const dispatch = useAppDispatch();
+  const { selectedOrganization } = useOrganization();
+
+  useEffect(() => {
+    void dispatch(requestProjects(selectedOrganization.id));
+  }, [selectedOrganization]);
 
   const save = () => {
     if (selectedProject) {
-      onSubmit(selectedProject.projectId);
+      onSubmit(selectedProject.id);
       onClose();
     }
   };
@@ -47,18 +56,18 @@ export default function AddToProjectModal(props: AddToProjectModalProps): JSX.El
     >
       <Grid container textAlign={'left'}>
         <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
-          <SelectT<ParticipantProject>
+          <SelectT<Project>
             id='project'
             label={strings.PROJECT}
             placeholder={strings.SELECT}
-            options={currentParticipant?.projects || []}
+            options={projects || []}
             onChange={(project) => setSelectedProject(project)}
             selectedValue={selectedProject}
             fullWidth={true}
-            isEqual={(a: ParticipantProject, b: ParticipantProject) => a.projectId === b.projectId}
-            renderOption={(project: ParticipantProject) => project?.projectName || ''}
-            displayLabel={(project: ParticipantProject) => project?.projectName || ''}
-            toT={(projectName: string) => ({ projectName }) as ParticipantProject}
+            isEqual={(a: Project, b: Project) => a.id === b.id}
+            renderOption={(project: Project) => project?.name || ''}
+            displayLabel={(project: Project) => project?.name || ''}
+            toT={(name: string) => ({ name }) as Project}
             required
           />
         </Grid>

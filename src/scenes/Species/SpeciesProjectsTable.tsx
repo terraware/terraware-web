@@ -6,7 +6,9 @@ import { TableColumnType } from '@terraware/web-components/components/table/type
 
 import Table from 'src/components/common/table';
 import { useOrganization } from 'src/providers';
-import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
+import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
+import { requestProjects } from 'src/redux/features/projects/projectsThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { SearchService } from 'src/services';
 import strings from 'src/strings';
 import { SearchRequestPayload } from 'src/types/Search';
@@ -55,24 +57,28 @@ export default function SpeciesProjectsTable({
   const [showRemoveDialog, setShowRemoveDialog] = useState(false);
   const [reload, setReload] = useState(false);
   const [openedAddToProjectModal, setOpenedAddToProjectModal] = useState(false);
-  const { currentParticipant } = useParticipantData();
+  const allProjects = useAppSelector(selectProjects);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    void dispatch(requestProjects(selectedOrganization.id));
+  }, [selectedOrganization]);
 
   useEffect(() => {
     let updatedResults = searchResults ?? [];
-    const allProjects = currentParticipant?.projects;
 
     if (removedProjectsIds) {
       updatedResults =
         searchResults?.filter((sResults) => {
-          !removedProjectsIds?.includes(sResults.id);
+          return !removedProjectsIds?.includes(Number(sResults.id));
         }) || [];
     }
     if (addedProjectsIds) {
       const newProjects = addedProjectsIds?.map((id) => {
         return {
-          id: -1,
+          id: id,
           submissionStatus: 'Not submitted',
-          projectName: allProjects?.find((proj) => proj.projectId === id)?.projectName,
+          projectName: allProjects?.find((proj) => proj.id === id)?.name,
         } as SpeciesProjectsResult;
       });
       updatedResults = [...updatedResults, ...newProjects];

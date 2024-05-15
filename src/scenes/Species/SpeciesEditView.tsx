@@ -73,9 +73,6 @@ export default function SpeciesEditView(): JSX.Element {
   };
 
   useEffect(() => {
-    console.log('addedResult', addedResult);
-    console.log('removedResult', removedResult);
-
     if (removedResult?.status === 'success') {
       goToSpecies(record.id);
     }
