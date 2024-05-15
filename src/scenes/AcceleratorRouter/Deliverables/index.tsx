@@ -1,21 +1,24 @@
 import React, { Navigate, Route, Routes } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
+import DeliverableProvider from 'src/providers/Deliverable/DeliverableProvider';
 import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
 import ProjectProvider from 'src/providers/Project/ProjectProvider';
 
-import DeliverableViewWrapper from './DeliverableViewWrapper';
+import DeliverableRouter from './DeliverableRouter';
 import DeliverablesList from './DeliverablesList';
 
 const DeliverablesRouter = () => {
   return (
     <Routes>
       <Route
-        path={'/:deliverableId/submissions/:projectId'}
+        path={'/:deliverableId/submissions/:projectId/*'}
         element={
           <ProjectProvider>
             <ParticipantProvider>
-              <DeliverableViewWrapper />
+              <DeliverableProvider>
+                <DeliverableRouter />
+              </DeliverableProvider>
             </ParticipantProvider>
           </ProjectProvider>
         }

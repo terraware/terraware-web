@@ -6,11 +6,13 @@ import { TableColumnType, TableRowType } from '@terraware/web-components';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { requestListParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { selectParticipantProjectSpeciesListRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { Deliverable } from 'src/types/Deliverables';
 
 import AddSpeciesModal from './AddSpeciesModal';
 import RemoveSpeciesDialog from './RemoveSpeciesDialog';
@@ -30,26 +32,28 @@ const consoleColumns = (): TableColumnType[] => [
 ];
 
 type SpeciesDeliverableTableProps = {
-  projectId: number;
+  deliverable: Deliverable;
 };
 
-const SpeciesDeliverableTable = ({ projectId }: SpeciesDeliverableTableProps): JSX.Element => {
+const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const participantProjectSpecies = useAppSelector(selectParticipantProjectSpeciesListRequest(projectId));
+  const { isAcceleratorRoute } = useAcceleratorConsole();
+  const { goToParticipantProjectSpecies } = useNavigateTo();
+
+  const participantProjectSpecies = useAppSelector(selectParticipantProjectSpeciesListRequest(deliverable.projectId));
 
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [openedAddSpeciesModal, setOpenedAddSpeciesModal] = useState(false);
-  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   useEffect(() => {
-    void dispatch(requestListParticipantProjectSpecies(projectId));
-  }, [projectId]);
+    void dispatch(requestListParticipantProjectSpecies(deliverable.projectId));
+  }, [deliverable.projectId]);
 
   const reload = () => {
-    dispatch(requestListParticipantProjectSpecies(projectId));
+    dispatch(requestListParticipantProjectSpecies(deliverable.projectId));
   };
 
   const onCloseRemoveSpecies = (_reload?: boolean) => {
@@ -57,6 +61,10 @@ const SpeciesDeliverableTable = ({ projectId }: SpeciesDeliverableTableProps): J
     if (_reload) {
       reload();
     }
+  };
+
+  const onAcceleratorSpeciesClick = (row: any) => {
+    goToParticipantProjectSpecies(deliverable.id, row.projectId, row.id);
   };
 
   return (
@@ -74,7 +82,7 @@ const SpeciesDeliverableTable = ({ projectId }: SpeciesDeliverableTableProps): J
               onClose={() => setOpenedAddSpeciesModal(false)}
               participantProjectSpecies={participantProjectSpecies?.data || []}
               reload={reload}
-              projectId={projectId}
+              projectId={deliverable.projectId}
             />
           )}
 
@@ -123,6 +131,7 @@ const SpeciesDeliverableTable = ({ projectId }: SpeciesDeliverableTableProps): J
             ]}
             isClickable={() => false}
             reloadData={reload}
+            onSelect={onAcceleratorSpeciesClick}
           />
         </>
       )}
