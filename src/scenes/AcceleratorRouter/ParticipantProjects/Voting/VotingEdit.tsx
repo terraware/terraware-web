@@ -35,7 +35,7 @@ const VotingEdit = () => {
 
   const goToVotingView = useCallback(() => {
     navigate(
-      getLocation(APP_PATHS.ACCELERATOR_VOTING.replace(':projectId', `${projectId}`), location, query.toString())
+      getLocation(APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`), location, query.toString())
     );
   }, [navigate, location, projectId, query]);
 

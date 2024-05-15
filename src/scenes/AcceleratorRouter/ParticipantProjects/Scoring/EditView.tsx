@@ -35,11 +35,11 @@ const ScorecardEditView = () => {
   const [updatedScores, setUpdatedScores] = useState<Score[]>([]);
 
   const goToVoting = useCallback(() => {
-    navigate({ pathname: APP_PATHS.ACCELERATOR_VOTING.replace(':projectId', `${projectId}`) });
+    navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`) });
   }, [navigate, projectId]);
 
   const goToScorecardView = useCallback(() => {
-    navigate({ pathname: APP_PATHS.ACCELERATOR_SCORING.replace(':projectId', `${projectId}`) });
+    navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${projectId}`) });
   }, [navigate, projectId]);
 
   const onCancel = useCallback(() => {
