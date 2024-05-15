@@ -259,6 +259,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
       {
         field: 'participantProjectSpecies.project.name',
         label: strings.PROJECT,
+        options: (projects || [])?.map((project: Project) => `${project.name}`),
       },
     ];
 
