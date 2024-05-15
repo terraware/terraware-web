@@ -663,7 +663,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               rightComponent={
                 <Tooltip title={strings.EXPORT}>
                   <Button
-                    id='downladSpeciesReport'
+                    id='downloadSpeciesReport'
                     // eslint-disable-next-line @typescript-eslint/no-misused-promises
                     onClick={() => downloadReportHandler()}
                     type='passive'
