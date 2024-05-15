@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Grid, Typography } from '@mui/material';
+import { TableRowType } from '@terraware/web-components';
 import { TableColumnType } from '@terraware/web-components/components/table/types';
 
 import Table from 'src/components/common/table';
@@ -8,6 +9,8 @@ import { useOrganization } from 'src/providers';
 import { SearchService } from 'src/services';
 import strings from 'src/strings';
 import { SearchRequestPayload } from 'src/types/Search';
+
+import RemoveProjectsDialog from './RemoveProjectsDialog';
 
 const columns = (): TableColumnType[] => [
   { key: 'projectName', name: strings.PROJECT, type: 'string' },
@@ -19,23 +22,31 @@ type SpeciesProjectsTableProps = {
 };
 
 type SpeciesProjectsResult = {
+  id: number;
   submissionStatus: string;
   projectName: string;
 };
 
 type SpeciesProjectsSearchResult = {
-  participantProjectSpecies: { submissionStatus: string; project: { name: string } }[];
+  participantProjectSpecies: { id: number; submissionStatus: string; project: { name: string } }[];
 };
 
 export default function SpeciesProjectsTable({ speciesId }: SpeciesProjectsTableProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const [searchResults, setSearchResults] = useState<SpeciesProjectsResult[] | null>();
+  const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
+  const [showRemoveDialog, setShowRemoveDialog] = useState(false);
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
     const getApiSearchResults = async () => {
       const searchParams: SearchRequestPayload = {
         prefix: 'species',
-        fields: ['participantProjectSpecies.project.name', 'participantProjectSpecies.submissionStatus'],
+        fields: [
+          'participantProjectSpecies.id',
+          'participantProjectSpecies.project.name',
+          'participantProjectSpecies.submissionStatus',
+        ],
         search: {
           operation: 'and',
           children: [
@@ -63,15 +74,33 @@ export default function SpeciesProjectsTable({ speciesId }: SpeciesProjectsTable
         return {
           submissionStatus: pps.submissionStatus,
           projectName: pps.project.name,
+          id: pps.id,
         } as SpeciesProjectsResult;
       });
 
       setSearchResults(projects);
+      if (reload) {
+        setReload(false);
+      }
     };
     getApiSearchResults();
-  }, [selectedOrganization]);
+  }, [selectedOrganization, reload]);
+
+  const onCloseRemoveProjects = (reload?: boolean) => {
+    setShowRemoveDialog(false);
+    if (reload) {
+      setReload(true);
+    }
+  };
+
   return (
     <>
+      {showRemoveDialog && (
+        <RemoveProjectsDialog
+          onClose={onCloseRemoveProjects}
+          ppSpeciesToRemove={selectedRows.map((row) => Number(row.id))}
+        />
+      )}
       {searchResults && (
         <Grid item xs={12}>
           <Grid item xs={12}>
@@ -80,7 +109,24 @@ export default function SpeciesProjectsTable({ speciesId }: SpeciesProjectsTable
             </Typography>
           </Grid>
           <Grid item xs={12}>
-            <Table id='species-projects' columns={columns} rows={searchResults} orderBy={'projectName'} />
+            <Table
+              id='species-projects'
+              columns={columns}
+              rows={searchResults}
+              orderBy={'projectName'}
+              selectedRows={selectedRows}
+              setSelectedRows={setSelectedRows}
+              showCheckbox={true}
+              showTopBar={true}
+              topBarButtons={[
+                {
+                  buttonText: strings.REMOVE,
+                  buttonType: 'destructive',
+                  onButtonClick: () => setShowRemoveDialog(true),
+                  icon: 'iconTrashCan',
+                },
+              ]}
+            />
           </Grid>
         </Grid>
       )}
