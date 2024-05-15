@@ -339,6 +339,7 @@ DELETED_SPECIES,<deleted species>,
 DELIVERABLE_APPROVED,Deliverable Approved,
 DELIVERABLE_CATEGORY,Category: {0},"Shows the deliverable document's category name, example Category: Legal"
 DELIVERABLE_NAME,Deliverable Name,
+DELIVERABLE_NOT_ACCEPTED,Deliverable Not Accepted,
 DELIVERABLE_PROJECT,Project: {0},"Shows the project name associated with the deliverable document, example Project: Andromeda"
 DELIVERABLE_REJECTED,Deliverable Rejected,
 DELIVERABLE_STATUS_CHANGE_CONFIRMATION_1,Submitting a document after a deliverable has been reviewed will reset the deliverable status.,

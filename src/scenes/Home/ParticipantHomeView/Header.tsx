@@ -3,14 +3,12 @@ import React, { useMemo } from 'react';
 import { Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem } from '@terraware/web-components';
 
-import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { getDateRangeString } from 'src/utils/dateFormatter';
 
 const Header = () => {
-  const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const { activeModules, currentParticipantProject, participantProjects, setCurrentParticipantProject } =
+  const { activeModules, currentParticipantProject, moduleProjects, setCurrentParticipantProject } =
     useParticipantData();
 
   // Only first active modules shown for now. TODO: upgrade to support multiple active modules for overlapping modules
@@ -18,11 +16,11 @@ const Header = () => {
 
   const options: DropdownItem[] = useMemo(
     () =>
-      participantProjects.map((project) => ({
+      moduleProjects.map((project) => ({
         label: project.name,
         value: project.id,
       })),
-    [participantProjects]
+    [moduleProjects]
   );
 
   const selectStyles = {
@@ -60,9 +58,9 @@ const Header = () => {
           </Grid>
 
           <Grid item>
-            {currentModule && currentModule?.startDate && currentModule?.endDate && activeLocale && (
+            {currentModule && currentModule?.startDate && currentModule?.endDate && (
               <Typography fontSize={'16px'} fontWeight={400} lineHeight={'24px'} component={'span'}>
-                {getDateRangeString(currentModule?.startDate, currentModule?.endDate, activeLocale)}
+                {getDateRangeString(currentModule?.startDate, currentModule?.endDate)}
               </Typography>
             )}
           </Grid>

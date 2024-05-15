@@ -27,7 +27,7 @@ const VotingView = () => {
   const goToEditVotes = useCallback(() => {
     // keep query state for edit view
     navigate(
-      getLocation(APP_PATHS.ACCELERATOR_VOTING_EDIT.replace(':projectId', `${projectId}`), location, query.toString())
+      getLocation(APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`), location, query.toString())
     );
   }, [navigate, location, projectId, query]);
 
