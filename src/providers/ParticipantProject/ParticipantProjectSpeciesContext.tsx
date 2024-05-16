@@ -16,7 +16,9 @@ export type ParticipantProjectSpeciesData = {
 export const ParticipantProjectSpeciesContext = createContext<ParticipantProjectSpeciesData>({
   isBusy: false,
   participantProjectSpeciesId: -1,
+  // tslint:disable-next-line:no-empty
   reload: () => {},
+  // tslint:disable-next-line:no-empty
   update: () => {},
 });
 
