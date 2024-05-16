@@ -75,7 +75,6 @@ const get = (participantProjectSpeciesId: number): Promise<Response2<GetResponse
   });
 
 const list = async (
-  organizationId: number,
   projectId: number,
   searchCriteria?: SearchNodePayload,
   sortOrder?: SearchSortOrder
@@ -95,11 +94,6 @@ const list = async (
     search: {
       operation: 'and',
       children: [
-        {
-          field: 'organization_id',
-          values: [`${organizationId}`],
-          operation: 'field',
-        },
         {
           field: 'participantProjectSpecies_project_id',
           values: [`${projectId}`],

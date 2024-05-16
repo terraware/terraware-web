@@ -62,8 +62,7 @@ export const requestGetParticipantProjectSpecies = createAsyncThunk(
 export const requestListParticipantProjectSpecies = createAsyncThunk(
   'participantProjectSpecies/list',
   async (projectId: number, { rejectWithValue }) => {
-    const organizationId = 1;
-    const response = await ParticipantProjectSpeciesService.list(organizationId, projectId);
+    const response = await ParticipantProjectSpeciesService.list(projectId);
 
     if (response) {
       return response;
