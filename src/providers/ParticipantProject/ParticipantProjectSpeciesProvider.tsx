@@ -37,7 +37,6 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
   const params = useParams<{ participantProjectSpeciesId?: string }>();
 
   const participantProjectSpeciesId = Number(params.participantProjectSpeciesId);
-
   const [currentParticipantProjectSpecies, setCurrentParticipantProjectSpecies] = useState<ParticipantProjectSpecies>();
   const [currentSpecies, setCurrentSpecies] = useState<Species>();
 
