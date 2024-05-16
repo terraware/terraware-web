@@ -1,8 +1,9 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import {
   ParticipantProjectSpecies,
+  SpeciesProjectsResult,
   SpeciesWithParticipantProjectsSearchResponse,
 } from 'src/services/ParticipantProjectSpeciesService';
 
@@ -101,6 +102,32 @@ export const participantProjectSpeciesUpdateSlice = createSlice({
   },
 });
 
+type SpeciesId = number;
+
+type Payload = {
+  projects: SpeciesProjectsResult[];
+  speciesId: SpeciesId;
+};
+
+// Define the initial state
+const initialState: Record<SpeciesId, SpeciesProjectsResult[]> = {};
+
+export const projectsForSpeciesSlice = createSlice({
+  name: 'projectsForSpeciesSlice',
+  initialState,
+  reducers: {
+    setProjectsForSpeciesAction: (state, action: PayloadAction<Payload>) => {
+      if (action.payload.projects) {
+        state[action.payload.speciesId] = action.payload.projects;
+      }
+    },
+  },
+});
+
+export const { setProjectsForSpeciesAction } = projectsForSpeciesSlice.actions;
+
+export const projectsForSpeciesReducer = projectsForSpeciesSlice.reducer;
+
 const participantProjectSpeciesReducers = {
   participantProjectSpeciesAssign: participantProjectSpeciesAssignSlice.reducer,
   participantProjectSpeciesCreate: participantProjectSpeciesCreateSlice.reducer,
@@ -108,6 +135,7 @@ const participantProjectSpeciesReducers = {
   participantProjectSpeciesGet: participantProjectSpeciesGetSlice.reducer,
   participantProjectSpeciesList: participantProjectSpeciesListSlice.reducer,
   participantProjectSpeciesUpdate: participantProjectSpeciesUpdateSlice.reducer,
+  projectsForSpecies: projectsForSpeciesSlice.reducer,
 };
 
 export default participantProjectSpeciesReducers;

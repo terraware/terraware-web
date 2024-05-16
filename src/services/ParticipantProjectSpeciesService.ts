@@ -35,6 +35,17 @@ type UpdateResponse =
 export type ParticipantProjectSpecies = components['schemas']['ParticipantProjectSpeciesPayload'];
 export type SubmissionStatus = ParticipantProjectSpecies['submissionStatus'];
 
+export type SpeciesProjectsResult = {
+  id: number;
+  submissionStatus: string;
+  projectName: string;
+  projectId: number;
+};
+
+type SpeciesProjectsSearchResult = {
+  participantProjectSpecies: { id: number; submissionStatus: string; project: { name: string; id: number } }[];
+};
+
 export type SpeciesWithParticipantProjectsSearchResponse = {
   commonName?: string;
   feedback?: string;
@@ -147,6 +158,50 @@ const update = (participantProjectSpecies: ParticipantProjectSpecies): Promise<R
   });
 };
 
+const getProjectsForSpecies = async (speciesId: number, organizationId: number): Promise<SpeciesProjectsResult[]> => {
+  const searchParams: SearchRequestPayload = {
+    prefix: 'species',
+    fields: [
+      'participantProjectSpecies.id',
+      'participantProjectSpecies.project.name',
+      'participantProjectSpecies.project.id',
+      'participantProjectSpecies.submissionStatus',
+    ],
+    search: {
+      operation: 'and',
+      children: [
+        {
+          operation: 'field',
+          field: 'organization_id',
+          type: 'Exact',
+          values: [organizationId],
+        },
+        {
+          operation: 'field',
+          field: 'id',
+          type: 'Exact',
+          values: [speciesId],
+        },
+      ],
+    },
+    count: 1000,
+  };
+
+  const apiSearchResults = (await SearchService.search(searchParams)) as SpeciesProjectsSearchResult[];
+  // it will always be one result since we are searching by species id
+  const firstApiResult = apiSearchResults[0];
+  const projects = firstApiResult?.participantProjectSpecies.map((pps) => {
+    return {
+      submissionStatus: pps.submissionStatus,
+      projectName: pps.project.name,
+      projectId: pps.project.id,
+      id: pps.id,
+    } as SpeciesProjectsResult;
+  });
+
+  return projects;
+};
+
 const ParticipantProjectSpeciesService = {
   assign,
   create,
@@ -154,6 +209,7 @@ const ParticipantProjectSpeciesService = {
   list,
   update,
   deleteMany,
+  getProjectsForSpecies,
 };
 
 export default ParticipantProjectSpeciesService;

@@ -9,6 +9,15 @@ import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers/hooks';
+import {
+  requestAssignParticipantProjectSpecies,
+  requestDeleteManyParticipantProjectSpecies,
+} from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
+import {
+  selectParticipantProjectSpeciesAssignRequest,
+  selectParticipantProjectSpeciesDeleteManyRequest,
+} from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import SpeciesDetailsForm from 'src/scenes/Species/SpeciesDetailsForm';
 import { SpeciesService } from 'src/services';
 import strings from 'src/strings';
@@ -37,6 +46,40 @@ export default function SpeciesEditView(): JSX.Element {
   const [record, setRecord, onChange] = useForm<Species>(initSpecies());
   const snackbar = useSnackbar();
   const [nameFormatError, setNameFormatError] = useState<string | string[]>('');
+  const [addedProjectsIds, setAddedProjectsIds] = useState<number[]>();
+  const [removedProjectsIds, setRemovedProjectsIds] = useState<number[]>();
+
+  const [addRequestId, setAddRequestId] = useState<string>('');
+  const [removeRequestId, setRemoveRequestId] = useState<string>('');
+  const addedResult = useAppSelector(selectParticipantProjectSpeciesAssignRequest(addRequestId));
+  const removedResult = useAppSelector(selectParticipantProjectSpeciesDeleteManyRequest(removeRequestId));
+  const dispatch = useAppDispatch();
+
+  const onRemoveExistingHandler = (removedIds: number[]) => {
+    setRemovedProjectsIds(removedIds);
+  };
+
+  const onRemoveNewHandler = (removedIds: number[]) => {
+    setAddedProjectsIds((oldProjectsIds: number[] | undefined) => {
+      const newIds = oldProjectsIds?.filter((oPId) => !removedIds.includes(oPId));
+      return newIds;
+    });
+  };
+
+  const onAddHandler = (addedId: number) => {
+    setAddedProjectsIds((oldProjectsIds: number[] | undefined) => {
+      return oldProjectsIds ? [...oldProjectsIds, addedId] : [addedId];
+    });
+  };
+
+  useEffect(() => {
+    if (removedResult?.status === 'success') {
+      goToSpecies(record.id);
+    }
+    if (addedResult?.status === 'success') {
+      goToSpecies(record.id);
+    }
+  }, [addedResult, removedResult]);
 
   const gridSize = () => {
     if (isMobile) {
@@ -91,7 +134,19 @@ export default function SpeciesEditView(): JSX.Element {
       const response = await SpeciesService.updateSpecies(record, selectedOrganization.id);
       setIsBusy(false);
       if (response.requestSucceeded) {
-        goToSpecies(record.id);
+        if (removedProjectsIds) {
+          const request = dispatch(requestDeleteManyParticipantProjectSpecies(removedProjectsIds));
+          setRemoveRequestId(request.requestId);
+        }
+        if (addedProjectsIds && speciesId) {
+          const request = dispatch(
+            requestAssignParticipantProjectSpecies({ projectIds: addedProjectsIds, speciesIds: [Number(speciesId)] })
+          );
+          setAddRequestId(request.requestId);
+        }
+        if ((!removedProjectsIds || !removedProjectsIds.length) && (!addedProjectsIds || !addedProjectsIds.length)) {
+          goToSpecies(record.id);
+        }
       } else {
         snackbar.toastError();
       }
@@ -128,6 +183,11 @@ export default function SpeciesEditView(): JSX.Element {
             setRecord={setRecord}
             nameFormatError={nameFormatError}
             setNameFormatError={setNameFormatError}
+            onAdd={onAddHandler}
+            onRemoveExisting={onRemoveExistingHandler}
+            onRemoveNew={onRemoveNewHandler}
+            addedProjectsIds={addedProjectsIds}
+            removedProjectsIds={removedProjectsIds}
           />
         </Box>
       </PageForm>
