@@ -3154,6 +3154,9 @@ export interface components {
       feedback?: string;
       /** Format: int64 */
       id: number;
+      internalComment?: string;
+      /** @enum {string} */
+      nativeNonNative?: "Native" | "Non-native";
       /** Format: int64 */
       projectId: number;
       rationale?: string;
@@ -4164,6 +4167,9 @@ export interface components {
     };
     UpdateParticipantProjectSpeciesPayload: {
       feedback?: string;
+      internalComment?: string;
+      /** @enum {string} */
+      nativeNonNative?: "Native" | "Non-native";
       rationale?: string;
       /** @enum {string} */
       submissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -85,6 +85,17 @@ export default function SpeciesDetailView(): JSX.Element {
       }
     }
   };
+
+  const onUpdateInternalComment = useCallback(
+    (internalComment: string) => {
+      currentParticipantProjectSpecies &&
+        update(undefined, {
+          ...currentParticipantProjectSpecies,
+          internalComment,
+        });
+    },
+    [currentParticipantProjectSpecies]
+  );
 
   const optionItems = useMemo(
     (): DropdownItem[] =>
@@ -213,7 +224,9 @@ export default function SpeciesDetailView(): JSX.Element {
                       <DeliverableStatusBadge status={currentParticipantProjectSpecies.submissionStatus} />
                     </div>
 
-                    {currentDeliverable && <InternalComment deliverable={currentDeliverable} />}
+                    {currentDeliverable && (
+                      <InternalComment entity={currentParticipantProjectSpecies} update={onUpdateInternalComment} />
+                    )}
                   </Box>
                 </Box>
               )}

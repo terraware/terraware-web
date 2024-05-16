@@ -174,6 +174,8 @@ const list = async (
 const update = (participantProjectSpecies: ParticipantProjectSpecies): Promise<Response2<UpdateResponse>> => {
   const entity: UpdateRequestPayload = {
     feedback: participantProjectSpecies.feedback,
+    internalComment: participantProjectSpecies.internalComment,
+    nativeNonNative: participantProjectSpecies.nativeNonNative,
     rationale: participantProjectSpecies.rationale,
     submissionStatus: participantProjectSpecies.submissionStatus,
   };
