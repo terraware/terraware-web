@@ -65,7 +65,7 @@ const DeliverableStatusBadge = (props: DeliverableStatusBadgeProps): JSX.Element
           backgroundColor: theme.palette.TwClrBgDangerTertiary,
           borderColor: theme.palette.TwClrBrdrDanger,
           labelColor: theme.palette.TwClrTxtDanger,
-          label: strings.REJECTED,
+          label: strings.NOT_ACCEPTED,
         };
       default:
         return undefined;

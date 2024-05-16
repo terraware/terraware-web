@@ -24,9 +24,9 @@ import strings from 'src/strings';
 import { Country } from 'src/types/Country';
 import { getCountryByCode } from 'src/utils/country';
 
-import { useScoringData } from '../Scoring/ScoringContext';
-import { useVotingData } from '../Voting/VotingContext';
 import { useParticipantProjectData } from './ParticipantProjectContext';
+import { useScoringData } from './Scoring/ScoringContext';
+import { useVotingData } from './Voting/VotingContext';
 
 const SingleView = () => {
   const { activeLocale } = useLocalization();
@@ -132,7 +132,7 @@ const SingleView = () => {
               )}
               <ProjectFieldLink
                 label={strings.SEE_SCORECARD}
-                value={APP_PATHS.ACCELERATOR_SCORING.replace(':projectId', `${project.id}`)}
+                value={APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project.id}`)}
               />
               <ProjectFieldDisplay
                 label={strings.FILE_NAMING}

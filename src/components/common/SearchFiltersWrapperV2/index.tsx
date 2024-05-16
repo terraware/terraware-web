@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { ReactNode, useCallback, useMemo } from 'react';
 
 import { Box, Grid } from '@mui/material';
 import { PillList, PillListItem, Textfield } from '@terraware/web-components';
@@ -13,6 +13,7 @@ import IconFilters from './IconFilters';
 
 export type SearchInputProps = {
   search: string;
+  searchPlaceholder?: string;
   onSearch: (search: string) => void;
 };
 
@@ -34,17 +35,20 @@ export type SearchProps = SearchInputProps & {
   featuredFilters?: FilterConfig[];
   currentFilters: Record<string, SearchNodePayload>;
   setCurrentFilters: (filters: Record<string, SearchNodePayload>) => void;
+  rightComponent?: ReactNode;
 };
 
 const defaultPillValueRenderer = (values: (string | number | null)[]): string | undefined => values.join(', ');
 
 export default function SearchFiltersWrapperV2({
   search,
+  searchPlaceholder,
   onSearch,
   iconFilters,
   featuredFilters,
   currentFilters,
   setCurrentFilters,
+  rightComponent,
 }: SearchProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
 
@@ -104,7 +108,7 @@ export default function SearchFiltersWrapperV2({
       <Grid item xs={12} display='flex' alignItems='center'>
         <Box width={isMobile ? '200px' : '300px'} display='inline-flex' flexDirection='column'>
           <Textfield
-            placeholder={strings.SEARCH}
+            placeholder={searchPlaceholder || strings.SEARCH}
             iconLeft='search'
             label=''
             id='search'
@@ -123,6 +127,8 @@ export default function SearchFiltersWrapperV2({
         {iconFilters && (
           <IconFilters filters={iconFilters} setCurrentFilters={setFilters} currentFilters={currentFilters} />
         )}
+
+        {rightComponent}
       </Grid>
 
       {filterPillData.length > 0 && (

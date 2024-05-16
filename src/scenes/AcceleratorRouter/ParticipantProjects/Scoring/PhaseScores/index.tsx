@@ -19,7 +19,7 @@ interface ScorecardProps {
 
 const PhaseScores = ({ editable, onChangeValue, onChangeQualitative, phaseScores }: ScorecardProps) => {
   const theme = useTheme();
-  const isEditing = useMatch(APP_PATHS.ACCELERATOR_SCORING_EDIT);
+  const isEditing = useMatch(APP_PATHS.ACCELERATOR_PROJECT_SCORES_EDIT);
 
   if (!phaseScores) {
     return null;

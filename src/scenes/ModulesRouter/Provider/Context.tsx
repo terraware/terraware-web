@@ -1,9 +1,10 @@
 import { createContext, useContext } from 'react';
 
-import { Module, ModuleEvent, ModuleEventSession } from 'src/types/Module';
+import { Module, ModuleDeliverable, ModuleEvent, ModuleEventSession } from 'src/types/Module';
 
 export type ModuleData = {
   allSessions: ModuleEventSession[];
+  deliverables: ModuleDeliverable[];
   event?: ModuleEvent;
   module?: Module;
   moduleId: number;
@@ -14,6 +15,7 @@ export type ModuleData = {
 // default values pointing to nothing
 export const ModuleContext = createContext<ModuleData>({
   allSessions: [],
+  deliverables: [],
   moduleId: -1,
 });
 

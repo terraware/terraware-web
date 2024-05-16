@@ -11,23 +11,18 @@ export type Props = {
 };
 
 const DeliverableProvider = ({ children }: Props) => {
-  const { deliverableId: _deliverableId, projectId: _projectId } = useParams<{
+  const params = useParams<{
     deliverableId: string;
     projectId: string;
   }>();
-  const deliverableId = Number(_deliverableId);
-  const projectId = Number(_projectId);
+  const deliverableId = Number(params.deliverableId);
+  const projectId = Number(params.projectId);
 
   const { deliverable } = useFetchDeliverable({ deliverableId, projectId });
+
   const [currentDeliverable, setCurrentDeliverable] = useState<Deliverable>();
 
-  const _setCurrentDeliverable = (deliverable: Deliverable) => {
-    setCurrentDeliverable(deliverable);
-  };
-
-  const [deliverableData, setDeliverableData] = useState<DeliverableData>({
-    setCurrentDeliverable: _setCurrentDeliverable,
-  });
+  const [deliverableData, setDeliverableData] = useState<DeliverableData>({ deliverableId });
 
   useEffect(() => {
     if (deliverable) {
@@ -36,15 +31,11 @@ const DeliverableProvider = ({ children }: Props) => {
   }, [deliverable]);
 
   useEffect(() => {
-    if (currentDeliverable) {
-      setDeliverableData((previousRecord: DeliverableData): DeliverableData => {
-        return {
-          ...previousRecord,
-          currentDeliverable,
-        };
-      });
-    }
-  }, [currentDeliverable]);
+    setDeliverableData({
+      currentDeliverable,
+      deliverableId,
+    });
+  }, [currentDeliverable, deliverableId]);
 
   return <DeliverableContext.Provider value={deliverableData}>{children}</DeliverableContext.Provider>;
 };

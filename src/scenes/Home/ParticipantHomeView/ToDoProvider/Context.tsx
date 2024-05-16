@@ -4,7 +4,6 @@ import { ToDoItem } from 'src/types/ProjectToDo';
 
 export type ToDoData = {
   projectId: number;
-  allItems: ToDoItem[];
   toDoItems: ToDoItem[];
   upcomingItems: ToDoItem[];
 };
@@ -12,7 +11,6 @@ export type ToDoData = {
 // default values pointing to nothing
 export const ToDoContext = createContext<ToDoData>({
   projectId: -1,
-  allItems: [],
   toDoItems: [],
   upcomingItems: [],
 });
