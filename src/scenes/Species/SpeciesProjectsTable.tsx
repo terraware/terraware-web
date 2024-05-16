@@ -13,6 +13,7 @@ import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { SpeciesProjectsResult } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
+import { Project } from 'src/types/Project';
 
 import AddToProjectModal from './AddToProjectModal';
 import RemoveProjectsDialog from './RemoveProjectsDialog';
@@ -49,6 +50,7 @@ export default function SpeciesProjectsTable({
   const [reload, setReload] = useState(false);
   const [openedAddToProjectModal, setOpenedAddToProjectModal] = useState(false);
   const allProjects = useAppSelector(selectProjects);
+  const [selectableProjects, setSelectableProjects] = useState<Project[]>([]);
   const projectForSpecies = useAppSelector(selectProjectsForSpecies(speciesId));
   const dispatch = useAppDispatch();
 
@@ -59,6 +61,14 @@ export default function SpeciesProjectsTable({
   useEffect(() => {
     void dispatch(requestProjectsForSpecies(selectedOrganization.id, speciesId));
   }, [selectedOrganization, reload, speciesId]);
+
+  useEffect(() => {
+    const assignedProjectsIds = filteredResults?.map((fr) => Number(fr.projectId));
+    const pendingProjects = allProjects?.filter((project) => {
+      return !assignedProjectsIds?.includes(project.id);
+    });
+    setSelectableProjects(pendingProjects || []);
+  }, [filteredResults, allProjects]);
 
   useEffect(() => {
     let updatedResults = searchResults ?? [];
@@ -73,8 +83,9 @@ export default function SpeciesProjectsTable({
       const newProjects = addedProjectsIds?.map((id) => {
         return {
           id: id,
-          submissionStatus: 'Not submitted',
+          submissionStatus: 'Not Submitted',
           projectName: allProjects?.find((proj) => proj.id === id)?.name,
+          projectId: id,
         } as SpeciesProjectsResult;
       });
       updatedResults = [...updatedResults, ...newProjects];
@@ -144,7 +155,9 @@ export default function SpeciesProjectsTable({
           onSubmit={onRemoveHandler}
         />
       )}
-      {openedAddToProjectModal && <AddToProjectModal onClose={onCloseAddToProject} onSubmit={onAddHandler} />}
+      {openedAddToProjectModal && (
+        <AddToProjectModal onClose={onCloseAddToProject} onSubmit={onAddHandler} projects={selectableProjects} />
+      )}
       <Grid item xs={12}>
         <Grid item xs={12}>
           <Box
@@ -166,6 +179,7 @@ export default function SpeciesProjectsTable({
                 onClick={() => setOpenedAddToProjectModal(true)}
                 priority='secondary'
                 size='medium'
+                disabled={selectableProjects?.length < 1}
               />
             )}
           </Box>

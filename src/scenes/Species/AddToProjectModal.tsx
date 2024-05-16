@@ -1,33 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { Grid, useTheme } from '@mui/material';
 import { SelectT } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
-import { useOrganization } from 'src/providers';
-import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import { requestProjects } from 'src/redux/features/projects/projectsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Project } from 'src/types/Project';
 
 export interface AddToProjectModalProps {
   onClose: (reload?: boolean) => void;
   onSubmit: (id: number) => void;
+  projects?: Project[];
 }
 
 export default function AddToProjectModal(props: AddToProjectModalProps): JSX.Element {
-  const { onClose, onSubmit } = props;
-  const projects = useAppSelector(selectProjects);
+  const { onClose, onSubmit, projects } = props;
   const theme = useTheme();
   const [selectedProject, setSelectedProject] = useState<Project>();
-  const dispatch = useAppDispatch();
-  const { selectedOrganization } = useOrganization();
-
-  useEffect(() => {
-    void dispatch(requestProjects(selectedOrganization.id));
-  }, [selectedOrganization]);
 
   const save = () => {
     if (selectedProject) {

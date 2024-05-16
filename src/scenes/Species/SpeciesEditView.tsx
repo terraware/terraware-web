@@ -144,6 +144,9 @@ export default function SpeciesEditView(): JSX.Element {
           );
           setAddRequestId(request.requestId);
         }
+        if ((!removedProjectsIds || !removedProjectsIds.length) && (!addedProjectsIds || !addedProjectsIds.length)) {
+          goToSpecies(record.id);
+        }
       } else {
         snackbar.toastError();
       }

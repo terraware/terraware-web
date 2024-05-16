@@ -39,10 +39,11 @@ export type SpeciesProjectsResult = {
   id: number;
   submissionStatus: string;
   projectName: string;
+  projectId: number;
 };
 
 type SpeciesProjectsSearchResult = {
-  participantProjectSpecies: { id: number; submissionStatus: string; project: { name: string } }[];
+  participantProjectSpecies: { id: number; submissionStatus: string; project: { name: string; id: number } }[];
 };
 
 export type SpeciesWithParticipantProjectsSearchResponse = {
@@ -169,6 +170,7 @@ const getProjectsForSpecies = async (speciesId: number, organizationId: number):
     fields: [
       'participantProjectSpecies.id',
       'participantProjectSpecies.project.name',
+      'participantProjectSpecies.project.id',
       'participantProjectSpecies.submissionStatus',
     ],
     search: {
@@ -198,6 +200,7 @@ const getProjectsForSpecies = async (speciesId: number, organizationId: number):
     return {
       submissionStatus: pps.submissionStatus,
       projectName: pps.project.name,
+      projectId: pps.project.id,
       id: pps.id,
     } as SpeciesProjectsResult;
   });
