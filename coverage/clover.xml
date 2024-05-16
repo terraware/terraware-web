@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1715878277073" clover="3.2.0">
-  <project timestamp="1715878277073" name="All files">
-    <metrics statements="21932" coveredstatements="918" conditionals="13810" coveredconditionals="228" methods="6862" coveredmethods="162" elements="42604" coveredelements="1308" complexity="0" loc="21932" ncloc="21932" packages="207" files="963" classes="963"/>
+<coverage generated="1715885853395" clover="3.2.0">
+  <project timestamp="1715885853395" name="All files">
+    <metrics statements="21931" coveredstatements="918" conditionals="13810" coveredconditionals="228" methods="6862" coveredmethods="162" elements="42603" coveredelements="1308" complexity="0" loc="21931" ncloc="21931" packages="207" files="963" classes="963"/>
     <package name="src">
       <metrics statements="161" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -10213,9 +10213,9 @@
       </file>
     </package>
     <package name="src.redux.features.participantProjectSpecies">
-      <metrics statements="66" coveredstatements="0" conditionals="25" coveredconditionals="0" methods="26" coveredmethods="0"/>
+      <metrics statements="65" coveredstatements="0" conditionals="25" coveredconditionals="0" methods="26" coveredmethods="0"/>
       <file name="participantProjectSpeciesAsyncThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks.ts">
-        <metrics statements="33" coveredstatements="0" conditionals="25" coveredconditionals="0" methods="6" coveredmethods="0"/>
+        <metrics statements="32" coveredstatements="0" conditionals="25" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="9" count="0" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
@@ -10239,16 +10239,15 @@
         <line num="58" count="0" type="stmt"/>
         <line num="62" count="0" type="stmt"/>
         <line num="65" count="0" type="stmt"/>
-        <line num="66" count="0" type="stmt"/>
-        <line num="68" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="72" count="0" type="stmt"/>
-        <line num="76" count="0" type="stmt"/>
-        <line num="82" count="0" type="stmt"/>
-        <line num="84" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="67" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="81" count="0" type="stmt"/>
+        <line num="83" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="84" count="0" type="stmt"/>
         <line num="85" count="0" type="stmt"/>
-        <line num="86" count="0" type="stmt"/>
-        <line num="89" count="0" type="stmt"/>
+        <line num="88" count="0" type="stmt"/>
       </file>
       <file name="participantProjectSpeciesSelectors.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors.ts">
         <metrics statements="14" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="14" coveredmethods="0"/>
@@ -23318,19 +23317,19 @@
         <line num="70" count="0" type="stmt"/>
         <line num="71" count="0" type="stmt"/>
         <line num="77" count="0" type="stmt"/>
-        <line num="83" count="0" type="stmt"/>
-        <line num="114" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="115" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="108" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="109" count="0" type="stmt"/>
+        <line num="112" count="0" type="stmt"/>
+        <line num="113" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="114" count="0" type="stmt"/>
+        <line num="117" count="0" type="stmt"/>
         <line num="118" count="0" type="stmt"/>
-        <line num="119" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="120" count="0" type="stmt"/>
-        <line num="123" count="0" type="stmt"/>
-        <line num="124" count="0" type="stmt"/>
-        <line num="137" count="0" type="stmt"/>
-        <line num="141" count="0" type="stmt"/>
+        <line num="131" count="0" type="stmt"/>
+        <line num="135" count="0" type="stmt"/>
+        <line num="136" count="0" type="stmt"/>
         <line num="142" count="0" type="stmt"/>
-        <line num="148" count="0" type="stmt"/>
-        <line num="156" count="0" type="stmt"/>
+        <line num="150" count="0" type="stmt"/>
       </file>
       <file name="ParticipantsService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/ParticipantsService.ts">
         <metrics statements="27" coveredstatements="10" conditionals="14" coveredconditionals="0" methods="9" coveredmethods="0"/>
