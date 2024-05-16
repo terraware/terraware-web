@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-import { ParticipantProjectSpecies } from 'src/types/ParticipantProjectSpecies';
+import { ParticipantProjectSpecies } from 'src/services/ParticipantProjectSpeciesService';
 import { Species } from 'src/types/Species';
 
 export type ParticipantProjectSpeciesData = {

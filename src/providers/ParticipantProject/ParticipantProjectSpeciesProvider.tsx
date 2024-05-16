@@ -15,8 +15,8 @@ import {
 import { requestGetOneSpecies, requestUpdateSpecies } from 'src/redux/features/species/speciesAsyncThunks';
 import { selectSpeciesGetOneRequest, selectSpeciesUpdateRequest } from 'src/redux/features/species/speciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { ParticipantProjectSpecies } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
-import { ParticipantProjectSpecies } from 'src/types/ParticipantProjectSpecies';
 import { Species } from 'src/types/Species';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -34,9 +34,10 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
   const { currentDeliverable, deliverableId } = useDeliverableData();
   const { projectId } = useProjectData();
   const { goToParticipantProjectSpecies: _goToParticipantProjectSpecies } = useNavigateTo();
-  const params = useParams<{ participantProjectSpeciesId?: string }>();
+  const params = useParams<{ speciesId: string }>();
 
-  const participantProjectSpeciesId = Number(params.participantProjectSpeciesId);
+  const participantProjectSpeciesId = Number(params.speciesId);
+
   const [currentParticipantProjectSpecies, setCurrentParticipantProjectSpecies] = useState<ParticipantProjectSpecies>();
   const [currentSpecies, setCurrentSpecies] = useState<Species>();
 
@@ -92,8 +93,6 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
       a &&
       b &&
       (a.feedback || null) === (b.feedback || null) &&
-      (a.internalComment || null) === (b.internalComment || null) &&
-      (a.nativeNonNative || null) === (b.nativeNonNative || null) &&
       (a.rationale || null) === (b.rationale || null) &&
       a.submissionStatus === b.submissionStatus
     );

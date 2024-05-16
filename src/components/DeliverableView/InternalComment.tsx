@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -7,6 +7,10 @@ import TextField from '@terraware/web-components/components/Textfield/Textfield'
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
+import { Deliverable } from 'src/types/Deliverables';
+import useSnackbar from 'src/utils/useSnackbar';
+
+import useUpdateDeliverable from './useUpdateDeliverable';
 
 const useStyles = makeStyles(() => ({
   icon: {
@@ -15,25 +19,34 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-interface InternalCommentProps<T> {
-  entity: T;
-  update: (internalComment: string) => void;
+interface InternalCommentProps {
+  deliverable: Deliverable;
 }
 
-function InternalComment<T extends { internalComment?: string }>({ entity, update }: InternalCommentProps<T>) {
+const InternalComment = ({ deliverable }: InternalCommentProps) => {
+  const snackbar = useSnackbar();
   const classes = useStyles();
+  const { status, update } = useUpdateDeliverable();
 
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-  const [internalComment, setInternalComment] = useState(entity.internalComment || '');
+  const [internalComment, setInternalComment] = useState(deliverable.internalComment || '');
 
   const toggleDialog = useCallback(() => {
     setIsDialogOpen((prev) => !prev);
   }, []);
 
   const handleUpdate = () => {
-    update(internalComment);
-    toggleDialog();
+    update({ ...deliverable, internalComment });
   };
+
+  useEffect(() => {
+    if (status === 'success') {
+      snackbar.toastSuccess(strings.CHANGES_SAVED);
+      toggleDialog();
+    } else if (status === 'error') {
+      snackbar.toastError(strings.GENERIC_ERROR);
+    }
+  }, [status, snackbar, toggleDialog]);
 
   return (
     <>
@@ -55,7 +68,7 @@ function InternalComment<T extends { internalComment?: string }>({ entity, updat
         onChange={(value) => setInternalComment(value as string)}
         preserveNewlines
         type='textarea'
-        value={entity.internalComment ?? strings.NO_COMMENTS_ADDED}
+        value={deliverable.internalComment ?? strings.NO_COMMENTS_ADDED}
       />
       <DialogBox
         onClose={toggleDialog}
@@ -89,6 +102,6 @@ function InternalComment<T extends { internalComment?: string }>({ entity, updat
       </DialogBox>
     </>
   );
-}
+};
 
 export default InternalComment;

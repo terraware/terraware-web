@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -85,17 +85,6 @@ export default function SpeciesDetailView(): JSX.Element {
       }
     }
   };
-
-  const onUpdateInternalComment = useCallback(
-    (internalComment: string) => {
-      currentParticipantProjectSpecies &&
-        update(undefined, {
-          ...currentParticipantProjectSpecies,
-          internalComment,
-        });
-    },
-    [currentParticipantProjectSpecies]
-  );
 
   const optionItems = useMemo(
     (): DropdownItem[] =>
@@ -224,9 +213,7 @@ export default function SpeciesDetailView(): JSX.Element {
                       <DeliverableStatusBadge status={currentParticipantProjectSpecies.submissionStatus} />
                     </div>
 
-                    {currentDeliverable && (
-                      <InternalComment entity={currentParticipantProjectSpecies} update={onUpdateInternalComment} />
-                    )}
+                    {currentDeliverable && <InternalComment deliverable={currentDeliverable} />}
                   </Box>
                 </Box>
               )}
@@ -299,16 +286,17 @@ export default function SpeciesDetailView(): JSX.Element {
                   className={classes.blockCheckbox}
                 />
               </Grid>
-              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+              {/* TODO this will eventually come from the participant project species, not the org species */}
+              {/* <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
                 <TextField
-                  id={'nativeNonNative'}
+                  id={'nativeStatus'}
                   label={strings.NATIVE_NON_NATIVE}
-                  value={currentParticipantProjectSpecies?.nativeNonNative}
+                  value={currentSpecies.nativeStatus}
                   type='text'
                   display={true}
                   required
                 />
-              </Grid>
+              </Grid> */}
               <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
                 <TextField
                   id={'nativeEcosistem'}

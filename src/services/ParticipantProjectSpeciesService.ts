@@ -1,5 +1,4 @@
-import { paths } from 'src/api/types/generated-schema';
-import { ParticipantProjectSpecies, SubmissionStatus } from 'src/types/ParticipantProjectSpecies';
+import { components, paths } from 'src/api/types/generated-schema';
 import { SearchNodePayload, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
 
 import HttpService, { Response2 } from './HttpService';
@@ -32,6 +31,9 @@ export type UpdateRequestPayload =
   paths[typeof ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR]['put']['requestBody']['content']['application/json'];
 type UpdateResponse =
   paths[typeof ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR]['put']['responses'][200]['content']['application/json'];
+
+export type ParticipantProjectSpecies = components['schemas']['ParticipantProjectSpeciesPayload'];
+export type SubmissionStatus = ParticipantProjectSpecies['submissionStatus'];
 
 export type SpeciesProjectsResult = {
   id: number;
@@ -144,8 +146,6 @@ const list = async (
 const update = (participantProjectSpecies: ParticipantProjectSpecies): Promise<Response2<UpdateResponse>> => {
   const entity: UpdateRequestPayload = {
     feedback: participantProjectSpecies.feedback,
-    internalComment: participantProjectSpecies.internalComment,
-    nativeNonNative: participantProjectSpecies.nativeNonNative,
     rationale: participantProjectSpecies.rationale,
     submissionStatus: participantProjectSpecies.submissionStatus,
   };
