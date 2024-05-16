@@ -1,7 +1,8 @@
 import { DateTime } from 'luxon';
 
-import { components, paths } from 'src/api/types/generated-schema';
+import { paths } from 'src/api/types/generated-schema';
 import { DeliverableTypeType, getDeliverableTypeLabel } from 'src/types/Deliverables';
+import { ParticipantProjectSpecies, SubmissionStatus } from 'src/types/ParticipantProjectSpecies';
 import { SearchNodePayload, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
 
 import HttpService, { Response2 } from './HttpService';
@@ -34,9 +35,6 @@ export type UpdateRequestPayload =
   paths[typeof ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR]['put']['requestBody']['content']['application/json'];
 type UpdateResponse =
   paths[typeof ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR]['put']['responses'][200]['content']['application/json'];
-
-export type ParticipantProjectSpecies = components['schemas']['ParticipantProjectSpeciesPayload'];
-export type SubmissionStatus = ParticipantProjectSpecies['submissionStatus'];
 
 export type SpeciesProjectsResult = {
   id: number;

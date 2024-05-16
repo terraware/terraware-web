@@ -299,17 +299,16 @@ export default function SpeciesDetailView(): JSX.Element {
                   className={classes.blockCheckbox}
                 />
               </Grid>
-              {/* TODO this will eventually come from the participant project species, not the org species */}
-              {/* <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
                 <TextField
-                  id={'nativeStatus'}
+                  id={'nativeNonNative'}
                   label={strings.NATIVE_NON_NATIVE}
-                  value={currentSpecies.nativeStatus}
+                  value={currentParticipantProjectSpecies?.nativeNonNative}
                   type='text'
                   display={true}
                   required
                 />
-              </Grid> */}
+              </Grid>
               <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
                 <TextField
                   id={'nativeEcosistem'}

@@ -2,10 +2,10 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import {
-  ParticipantProjectSpecies,
   SpeciesProjectsResult,
   SpeciesWithParticipantProjectsSearchResponse,
 } from 'src/services/ParticipantProjectSpeciesService';
+import { ParticipantProjectSpecies } from 'src/types/ParticipantProjectSpecies';
 
 import {
   requestAssignParticipantProjectSpecies,
