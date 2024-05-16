@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { BusySpinner } from '@terraware/web-components';
+import { BusySpinner, Message } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -10,7 +10,7 @@ import TfMain from 'src/components/common/TfMain';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
 import { useParticipantProjectSpeciesData } from 'src/providers/ParticipantProject/ParticipantProjectSpeciesContext';
-import { useProject } from 'src/providers/hooks';
+import { useOrganization, useProject } from 'src/providers/hooks';
 import SpeciesDetailsForm from 'src/scenes/Species/SpeciesDetailsForm';
 import { ParticipantProjectSpecies } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
@@ -22,6 +22,7 @@ export default function SpeciesEditView(): JSX.Element {
   const theme = useTheme();
   const { goToParticipantProjectSpecies } = useNavigateTo();
   const { isMobile } = useDeviceInfo();
+  const { selectedOrganization } = useOrganization();
   const { currentParticipantProjectSpecies, currentSpecies, isBusy, participantProjectSpeciesId, update } =
     useParticipantProjectSpeciesData();
   const { projectId } = useProject();
@@ -80,6 +81,17 @@ export default function SpeciesEditView(): JSX.Element {
               {currentSpecies.scientificName}
             </Typography>
             <PageSnackbar />
+          </Box>
+          <Box marginBottom={4}>
+            <Message
+              title={strings.formatString(strings.EDITING_SPECIES_DATA_FOR_ORGANIZATION, selectedOrganization.name)}
+              body={strings.formatString(
+                strings.EDITING_SPECIES_DATA_FOR_ORGANIZATION_WARNING,
+                selectedOrganization.name
+              )}
+              type='page'
+              priority='warning'
+            />
           </Box>
           <Box
             sx={{
