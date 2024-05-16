@@ -84,6 +84,20 @@ export default function useNavigateTo() {
           pathname: APP_PATHS.ACCELERATOR_OVERVIEW,
           search: 'tab=projects',
         }),
+
+      goToParticipantProjectSpecies: (deliverableId: number, projectId: number, speciesId: number) =>
+        navigate({
+          pathname: APP_PATHS.ACCELERATOR_SPECIES.replace(':speciesId', `${speciesId}`)
+            .replace(':projectId', `${projectId}`)
+            .replace(':deliverableId', `${deliverableId}`),
+        }),
+
+      goToParticipantProjectSpeciesEdit: (deliverableId: number, projectId: number, speciesId: number) =>
+        navigate(
+          APP_PATHS.ACCELERATOR_SPECIES_EDIT.replace(':speciesId', `${speciesId}`)
+            .replace(':projectId', `${projectId}`)
+            .replace(':deliverableId', `${deliverableId}`)
+        ),
     }),
     [navigate]
   );

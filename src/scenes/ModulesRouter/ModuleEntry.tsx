@@ -2,7 +2,6 @@ import React, { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import Button from 'src/components/common/button/Button';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { Module } from 'src/types/Module';
 import { getDateRangeString } from 'src/utils/dateFormatter';
@@ -14,7 +13,6 @@ interface ModuleEntryProps {
 }
 
 const ModuleEntry = ({ module, projectId }: ModuleEntryProps) => {
-  const { activeLocale } = useLocalization();
   const theme = useTheme();
   const { goToModule } = useNavigateTo();
 
@@ -36,10 +34,8 @@ const ModuleEntry = ({ module, projectId }: ModuleEntryProps) => {
             {module.title}
           </Typography>
 
-          {module?.startDate && module?.endDate && activeLocale && (
-            <Typography component={'span'}>
-              {getDateRangeString(module?.startDate, module?.endDate, activeLocale)}
-            </Typography>
+          {module?.startDate && module?.endDate && (
+            <Typography component={'span'}>{getDateRangeString(module?.startDate, module?.endDate)}</Typography>
           )}
         </Grid>
 

@@ -48,7 +48,7 @@ export const requestProjectToDoDeliverables = createAsyncThunk(
           field: 'dueDate',
         },
       ],
-      count: 20,
+      count: 50,
     };
 
     const response = await SearchService.search(searchParams);
@@ -86,7 +86,7 @@ export const requestProjectToDoEvents = createAsyncThunk(
           field: 'startTime',
         },
       ],
-      count: 20,
+      count: 50,
     };
 
     const response = await SearchService.search(searchParams);

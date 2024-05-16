@@ -1,5 +1,9 @@
+import { DateTime } from 'luxon';
+
 import { components } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
+
+import { DeliverableCategoryType, DeliverableStatusType, DeliverableTypeType } from './Deliverables';
 
 export type Module = components['schemas']['ProjectModule'];
 
@@ -24,6 +28,17 @@ export const getEventType = (input: ModuleEventType): string => {
   }
 };
 
+export type ModuleProjectSearchResult = {
+  id: number;
+  participant?: {
+    cohort?: {
+      cohortModules?: {
+        module_id: string;
+      }[];
+    };
+  };
+};
+
 export const getEventStatus = (status: ModuleEventSessionStatus) => {
   switch (status) {
     case 'Not Started': {
@@ -41,6 +56,28 @@ export const getEventStatus = (status: ModuleEventSessionStatus) => {
     default:
       return `${status}`;
   }
+};
+
+export type ModuleDeliverableSearchResult = {
+  id: number;
+  module_id: number;
+  project_id: number;
+  name: string;
+  category: DeliverableCategoryType;
+  dueDate: string;
+  status: DeliverableStatusType;
+  type: DeliverableTypeType;
+};
+
+export type ModuleDeliverable = {
+  id: number;
+  moduleId: number;
+  projectId: number;
+  name: string;
+  category: DeliverableCategoryType;
+  dueDate: DateTime;
+  status: DeliverableStatusType;
+  type: DeliverableTypeType;
 };
 
 export type ModuleContentType = keyof Pick<Module, 'additionalResources' | 'preparationMaterials'>;

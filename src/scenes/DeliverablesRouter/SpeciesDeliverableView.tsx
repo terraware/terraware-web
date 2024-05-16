@@ -86,7 +86,7 @@ const SpeciesDeliverableView = (props: Props): JSX.Element => {
         <SpeciesDeliverableStatusMessage {...viewProps} species={ppsSearchResults?.data || []} />
         <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
           <Metadata {...viewProps} />
-          <SpeciesDeliverableTable projectId={viewProps.deliverable.projectId} />
+          <SpeciesDeliverableTable deliverable={viewProps.deliverable} />
         </Card>
       </Box>
     </Page>

@@ -1,12 +1,7 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName =
-  | 'Show Production View'
-  | 'User Detailed Sites'
-  | 'Console'
-  | 'Participant Experience'
-  | 'Document Producer';
+export type FeatureName = 'Show Production View' | 'User Detailed Sites' | 'Console' | 'Document Producer';
 
 export type Feature = {
   name: FeatureName;
@@ -47,15 +42,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['User drawn detailed sites'],
-    disclosure: ['This is WIP'],
-  },
-  {
-    name: 'Participant Experience',
-    preferenceName: 'enableParticipantExperience',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Participant-facing functionality related to the Terraware Accelerator'],
     disclosure: ['This is WIP'],
   },
   {

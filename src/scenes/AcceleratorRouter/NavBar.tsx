@@ -26,8 +26,8 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
   const isOverviewRoute = useMatch({ path: APP_PATHS.ACCELERATOR_OVERVIEW, end: false });
   const isParticipantsRoute = useMatch({ path: APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW, end: false });
   const isPeopleRoute = useMatch({ path: APP_PATHS.ACCELERATOR_PEOPLE, end: false });
-  const isScoringRoute = useMatch({ path: APP_PATHS.ACCELERATOR_SCORING, end: false });
-  const isVotingRoute = useMatch({ path: APP_PATHS.ACCELERATOR_VOTING, end: false });
+  const isScoringRoute = useMatch({ path: APP_PATHS.ACCELERATOR_PROJECT_SCORES, end: false });
+  const isVotingRoute = useMatch({ path: APP_PATHS.ACCELERATOR_PROJECT_VOTES, end: false });
 
   const isAllowedViewPeople = isAllowed('READ_GLOBAL_ROLES');
 

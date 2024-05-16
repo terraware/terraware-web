@@ -25,9 +25,9 @@ import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import { useScoringData } from '../../Scoring/ScoringContext';
-import { useVotingData } from '../../Voting/VotingContext';
 import { useParticipantProjectData } from '../ParticipantProjectContext';
+import { useScoringData } from '../Scoring/ScoringContext';
+import { useVotingData } from '../Voting/VotingContext';
 import EditNameConfirm from './EditNameConfirm';
 
 const EditView = () => {

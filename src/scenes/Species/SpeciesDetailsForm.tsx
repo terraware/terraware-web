@@ -42,7 +42,7 @@ const useStyles = makeStyles(() => ({
 type SpeciesDetailsFormProps = {
   gridSize: number;
   record: Species;
-  setRecord: React.Dispatch<React.SetStateAction<Species>>;
+  setRecord?: React.Dispatch<React.SetStateAction<Species>>;
   onChange: (id: string, value: unknown) => void;
   nameFormatError: string | string[];
   setNameFormatError: React.Dispatch<React.SetStateAction<string | string[]>>;
@@ -94,7 +94,7 @@ export default function SpeciesDetailsForm({
       if (!debouncedSearchTerm) {
         setNewScientificName(false);
       }
-      if (debouncedSearchTerm.length > 1) {
+      if (debouncedSearchTerm.length > 1 && setRecord) {
         const requestId = Math.random().toString();
         setRequestId('details', requestId);
         const response = await SpeciesService.getSpeciesDetails(debouncedSearchTerm);
@@ -225,7 +225,7 @@ export default function SpeciesDetailsForm({
             label={strings.GROWTH_FORM}
             fullWidth={true}
             onAdd={(growthForm: GrowthForm) => {
-              const selectedGrowthForms = record.growthForms ?? [];
+              const selectedGrowthForms = [...(record.growthForms ?? [])];
               selectedGrowthForms.push(growthForm);
               onChange('growthForms', selectedGrowthForms);
             }}
@@ -291,7 +291,7 @@ export default function SpeciesDetailsForm({
             label={strings.SUCCESSIONAL_GROUP}
             fullWidth={true}
             onAdd={(successionalGroup: SuccessionalGroup) => {
-              const selectedSuccessionalGroups = record.successionalGroups ?? [];
+              const selectedSuccessionalGroups = [...(record.successionalGroups ?? [])];
               selectedSuccessionalGroups.push(successionalGroup);
               onChange('successionalGroups', selectedSuccessionalGroups);
             }}
@@ -322,7 +322,7 @@ export default function SpeciesDetailsForm({
               </>
             }
             onAdd={(type: EcosystemType) => {
-              const selectedTypes = record.ecosystemTypes ?? [];
+              const selectedTypes = [...(record.ecosystemTypes ?? [])];
               selectedTypes.push(type);
               onChange('ecosystemTypes', selectedTypes);
             }}
@@ -387,7 +387,7 @@ export default function SpeciesDetailsForm({
             fullWidth={true}
             label={strings.PLANT_MATERIAL_SOURCING_METHOD}
             onAdd={(method: PlantMaterialSourcingMethod) => {
-              const selected = record.plantMaterialSourcingMethods ?? [];
+              const selected = [...(record.plantMaterialSourcingMethods ?? [])];
               selected.push(method);
               onChange('plantMaterialSourcingMethods', selected);
             }}
