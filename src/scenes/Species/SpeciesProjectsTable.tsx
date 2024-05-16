@@ -6,12 +6,13 @@ import { TableColumnType } from '@terraware/web-components/components/table/type
 
 import Table from 'src/components/common/table';
 import { useOrganization } from 'src/providers';
+import { requestProjectsForSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
+import { selectProjectsForSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { SearchService } from 'src/services';
+import { SpeciesProjectsResult } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
-import { SearchRequestPayload } from 'src/types/Search';
 
 import AddToProjectModal from './AddToProjectModal';
 import RemoveProjectsDialog from './RemoveProjectsDialog';
@@ -31,16 +32,6 @@ type SpeciesProjectsTableProps = {
   removedProjectsIds?: number[];
 };
 
-type SpeciesProjectsResult = {
-  id: number;
-  submissionStatus: string;
-  projectName: string;
-};
-
-type SpeciesProjectsSearchResult = {
-  participantProjectSpecies: { id: number; submissionStatus: string; project: { name: string } }[];
-};
-
 export default function SpeciesProjectsTable({
   speciesId,
   editMode,
@@ -58,11 +49,16 @@ export default function SpeciesProjectsTable({
   const [reload, setReload] = useState(false);
   const [openedAddToProjectModal, setOpenedAddToProjectModal] = useState(false);
   const allProjects = useAppSelector(selectProjects);
+  const projectForSpecies = useAppSelector(selectProjectsForSpecies(speciesId));
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     void dispatch(requestProjects(selectedOrganization.id));
   }, [selectedOrganization]);
+
+  useEffect(() => {
+    void dispatch(requestProjectsForSpecies(selectedOrganization.id, speciesId));
+  }, [selectedOrganization, reload, speciesId]);
 
   useEffect(() => {
     let updatedResults = searchResults ?? [];
@@ -122,52 +118,8 @@ export default function SpeciesProjectsTable({
   };
 
   useEffect(() => {
-    const getApiSearchResults = async () => {
-      const searchParams: SearchRequestPayload = {
-        prefix: 'species',
-        fields: [
-          'participantProjectSpecies.id',
-          'participantProjectSpecies.project.name',
-          'participantProjectSpecies.submissionStatus',
-        ],
-        search: {
-          operation: 'and',
-          children: [
-            {
-              operation: 'field',
-              field: 'organization_id',
-              type: 'Exact',
-              values: [selectedOrganization.id],
-            },
-            {
-              operation: 'field',
-              field: 'id',
-              type: 'Exact',
-              values: [speciesId],
-            },
-          ],
-        },
-        count: 1000,
-      };
-
-      const apiSearchResults = (await SearchService.search(searchParams)) as SpeciesProjectsSearchResult[];
-      // it will always be one result since we are searching by species id
-      const firstApiResult = apiSearchResults[0];
-      const projects = firstApiResult?.participantProjectSpecies.map((pps) => {
-        return {
-          submissionStatus: pps.submissionStatus,
-          projectName: pps.project.name,
-          id: pps.id,
-        } as SpeciesProjectsResult;
-      });
-
-      setSearchResults(projects);
-      if (reload) {
-        setReload(false);
-      }
-    };
-    getApiSearchResults();
-  }, [selectedOrganization, reload, speciesId]);
+    setSearchResults(projectForSpecies);
+  }, [projectForSpecies]);
 
   const onCloseRemoveProjects = (reload?: boolean) => {
     setShowRemoveDialog(false);

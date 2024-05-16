@@ -1,10 +1,14 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { Dispatch, createAsyncThunk } from '@reduxjs/toolkit';
 
+import { RootState } from 'src/redux/rootReducer';
 import ParticipantProjectSpeciesService, {
   CreateParticipantProjectSpeciesRequestPayload,
   ParticipantProjectSpecies,
+  SpeciesProjectsResult,
 } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
+
+import { setProjectsForSpeciesAction } from './participantProjectSpeciesSlice';
 
 export const requestAssignParticipantProjectSpecies = createAsyncThunk(
   'participantProjectSpecies/assign',
@@ -89,3 +93,21 @@ export const requestUpdateParticipantProjectSpecies = createAsyncThunk(
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );
+
+export const requestProjectsForSpecies = (organizationId: number, speciesId: number) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  return async (dispatch: Dispatch, _getState: () => RootState) => {
+    try {
+      const response: SpeciesProjectsResult[] | null = await ParticipantProjectSpeciesService.getProjectsForSpecies(
+        speciesId,
+        organizationId
+      );
+
+      dispatch(setProjectsForSpeciesAction({ projects: response, speciesId }));
+    } catch (e) {
+      // should not happen, the response above captures any http request errors
+      // tslint:disable-next-line: no-console
+      console.error('Error dispatching request to get projects for a species', e);
+    }
+  };
+};

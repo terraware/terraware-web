@@ -20,3 +20,9 @@ export const selectParticipantProjectSpeciesDeleteManyRequest = (requestId: stri
 
 export const selectParticipantProjectSpeciesUpdateRequest = (requestId: string) => (state: RootState) =>
   state.participantProjectSpeciesUpdate[requestId];
+
+export const selectParticipantProjectsForSpecies = (projectId: number) => (state: RootState) =>
+  state.participantProjectSpeciesList[projectId];
+
+export const selectProjectsForSpecies = (speciesId: number) => (state: RootState) =>
+  state.projectsForSpecies[speciesId];
