@@ -12,8 +12,8 @@ import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext
 import { useParticipantProjectSpeciesData } from 'src/providers/ParticipantProject/ParticipantProjectSpeciesContext';
 import { useOrganization, useProject } from 'src/providers/hooks';
 import SpeciesDetailsForm from 'src/scenes/Species/SpeciesDetailsForm';
-import { ParticipantProjectSpecies } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
+import { ParticipantProjectSpecies } from 'src/types/ParticipantProjectSpecies';
 import { Species } from 'src/types/Species';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
@@ -29,7 +29,8 @@ export default function SpeciesEditView(): JSX.Element {
   const { currentDeliverable, deliverableId } = useDeliverableData();
 
   const [speciesRecord, setSpeciesRecord, onChangeSpecies] = useForm<Species | undefined>(undefined);
-  const [rationale, setRationale] = useState(currentParticipantProjectSpecies?.rationale || '');
+  const [participantProjectSpeciesRecord, setParticipantProjectSpeciesRecord, onChangeParticipantProjectSpecies] =
+    useForm<ParticipantProjectSpecies | undefined>(undefined);
 
   const [nameFormatError, setNameFormatError] = useState<string | string[]>('');
 
@@ -40,11 +41,28 @@ export default function SpeciesEditView(): JSX.Element {
     return 4;
   };
 
+  const onChange = (id: string, value: unknown): void => {
+    if (
+      (['rationale', 'nativeNonNative'] as (keyof ParticipantProjectSpecies)[]).includes(
+        id as keyof ParticipantProjectSpecies
+      )
+    ) {
+      return onChangeParticipantProjectSpecies(id, value);
+    }
+    return onChangeSpecies(id, value);
+  };
+
   useEffect(() => {
     if (currentSpecies) {
       setSpeciesRecord(currentSpecies);
     }
   }, [currentSpecies, setSpeciesRecord]);
+
+  useEffect(() => {
+    if (currentParticipantProjectSpecies) {
+      setParticipantProjectSpeciesRecord(currentParticipantProjectSpecies);
+    }
+  }, [currentParticipantProjectSpecies, setParticipantProjectSpeciesRecord]);
 
   const saveSpecies = () => {
     if (!(currentParticipantProjectSpecies && speciesRecord)) {
@@ -54,19 +72,14 @@ export default function SpeciesEditView(): JSX.Element {
     if (!speciesRecord.scientificName) {
       setNameFormatError(strings.REQUIRED_FIELD);
     } else {
-      const nextParticipantProjectSpecies: ParticipantProjectSpecies = {
-        ...currentParticipantProjectSpecies,
-        rationale,
-      };
-
-      update(speciesRecord, nextParticipantProjectSpecies);
+      update(speciesRecord, participantProjectSpeciesRecord);
     }
   };
 
   return (
     <TfMain>
-      {(isBusy || !currentSpecies) && <BusySpinner withSkrim={true} />}
-      {currentSpecies && (
+      {(isBusy || !speciesRecord || !participantProjectSpeciesRecord) && <BusySpinner withSkrim={true} />}
+      {speciesRecord && participantProjectSpeciesRecord && (
         <PageForm
           cancelID='cancelEditSpecies'
           saveID='saveEditSpecies'
@@ -78,7 +91,7 @@ export default function SpeciesEditView(): JSX.Element {
               {strings.formatString(strings.DELIVERABLE_PROJECT, currentDeliverable?.projectName ?? '')}
             </Typography>
             <Typography fontSize='24px' fontWeight={600}>
-              {currentSpecies.scientificName}
+              {speciesRecord.scientificName}
             </Typography>
             <PageSnackbar />
           </Box>
@@ -106,15 +119,16 @@ export default function SpeciesEditView(): JSX.Element {
                 label={strings.RATIONALE}
                 id='rationale'
                 type='text'
-                value={rationale}
-                onChange={(value) => setRationale(value as string)}
+                value={participantProjectSpeciesRecord?.rationale}
+                onChange={(value: unknown) => onChangeParticipantProjectSpecies('rationale', value)}
               />
             </Grid>
             {speciesRecord && (
               <SpeciesDetailsForm
                 gridSize={gridSize()}
                 record={speciesRecord}
-                onChange={onChangeSpecies}
+                participantProjectSpeciesRecord={participantProjectSpeciesRecord}
+                onChange={onChange}
                 nameFormatError={nameFormatError}
                 setNameFormatError={setNameFormatError}
               />

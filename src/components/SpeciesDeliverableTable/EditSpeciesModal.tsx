@@ -9,11 +9,9 @@ import { APP_PATHS } from 'src/constants';
 import { requestUpdateParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { selectParticipantProjectSpeciesUpdateRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import {
-  ParticipantProjectSpecies,
-  SpeciesWithParticipantProjectsSearchResponse,
-} from 'src/services/ParticipantProjectSpeciesService';
+import { SpeciesWithParticipantProjectsSearchResponse } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
+import { ParticipantProjectSpecies } from 'src/types/ParticipantProjectSpecies';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import Link from '../common/Link';

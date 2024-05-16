@@ -2,9 +2,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import ParticipantProjectSpeciesService, {
   CreateParticipantProjectSpeciesRequestPayload,
-  ParticipantProjectSpecies,
 } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
+import { ParticipantProjectSpecies } from 'src/types/ParticipantProjectSpecies';
 
 export const requestAssignParticipantProjectSpecies = createAsyncThunk(
   'participantProjectSpecies/assign',
