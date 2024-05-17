@@ -216,7 +216,7 @@ export default function SpeciesDetailView(): JSX.Element {
               container
               sx={{
                 backgroundColor: theme.palette.TwClrBg,
-                borderRadius: '32px',
+                borderRadius: '32px 32px 0 0',
                 padding: theme.spacing(3),
                 margin: 0,
               }}
@@ -405,8 +405,96 @@ export default function SpeciesDetailView(): JSX.Element {
                 />
               </GridItemWrapper>
             </Grid>
+
+            <Grid
+              container
+              sx={{
+                backgroundColor: theme.palette.TwClrBg,
+                borderRadius: '0 0 32px 32px',
+                padding: theme.spacing(3),
+                margin: 0,
+              }}
+            >
+              <Grid
+                sx={{ borderTop: `1px solid ${theme.palette.TwClrBaseGray100}` }}
+                container
+                padding={theme.spacing(0, 0, 4, 0)}
+              >
+                <Grid
+                  container
+                  sx={{
+                    backgroundColor: theme.palette.TwClrBg,
+                    borderRadius: '32px',
+                    paddingTop: theme.spacing(3),
+                    margin: 0,
+                  }}
+                >
+                  <Grid item xs={12} paddingBottom={theme.spacing(2)} minHeight={'64px'}>
+                    <Typography fontSize={'20px'} fontWeight={600} lineHeight={'28px'}>
+                      {strings.ADDITIONAL_SPECIES_DATA}
+                    </Typography>
+                  </Grid>
+
+                  <Grid item xs={5} paddingBottom={theme.spacing(2)} minHeight={'64px'}>
+                    <TextField
+                      label={strings.HEIGHT_AT_MATURITY}
+                      id='heightAtMaturityValue'
+                      type='text'
+                      value={currentSpecies.heightAtMaturityValue}
+                      display={true}
+                    />
+                  </Grid>
+                  <Grid item xs={7} paddingBottom={theme.spacing(2)} minHeight={'64px'}>
+                    <TextField
+                      label={strings.REFERENCE}
+                      id='heightAtMaturitySource'
+                      type='text'
+                      value={currentSpecies.heightAtMaturitySource}
+                      display={true}
+                    />
+                  </Grid>
+
+                  <Grid item xs={5} paddingBottom={theme.spacing(2)} minHeight={'64px'}>
+                    <TextField
+                      label={strings.DIAMETER_AT_BREAST_HEIGHT}
+                      id='dbhValue'
+                      type='text'
+                      value={currentSpecies.dbhValue}
+                      display={true}
+                    />
+                  </Grid>
+                  <Grid item xs={7} paddingBottom={theme.spacing(2)} minHeight={'64px'}>
+                    <TextField
+                      label={strings.REFERENCE}
+                      id='dbhSource'
+                      type='text'
+                      value={currentSpecies.dbhSource}
+                      display={true}
+                    />
+                  </Grid>
+
+                  <Grid item xs={5} paddingBottom={theme.spacing(2)} minHeight={'64px'}>
+                    <TextField
+                      label={strings.AVERAGE_WOOD_DENSITY}
+                      id='averageWoodDensity'
+                      type='text'
+                      value={currentSpecies.averageWoodDensity}
+                      display={true}
+                    />
+                  </Grid>
+                  <Grid item xs={7} paddingBottom={theme.spacing(2)} minHeight={'64px'}>
+                    <TextField
+                      label={strings.WOOD_DENSITY_LEVEL}
+                      id='woodDensityLevel'
+                      type='text'
+                      value={currentSpecies.woodDensityLevel}
+                      display={true}
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
           </Grid>
-          {/* TODO:  Additional Species Data */}
         </Page>
       )}
     </>
