@@ -14,6 +14,7 @@ import TooltipLearnMoreModal, {
 import Checkbox from 'src/components/common/Checkbox';
 import Select from 'src/components/common/Select/Select';
 import TextField from 'src/components/common/Textfield/Textfield';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers/hooks';
 import { SpeciesService } from 'src/services';
 import strings from 'src/strings';
@@ -81,6 +82,7 @@ export default function SpeciesDetailsForm({
     undefined
   );
   const { isMobile } = useDeviceInfo();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const openTooltipLearnMoreModal = (data: TooltipLearnMoreModalData) => {
     setTooltipLearnMoreModalData(data);
@@ -436,7 +438,7 @@ export default function SpeciesDetailsForm({
             type='textarea'
           />
         </Grid>
-        {
+        {!isAcceleratorRoute && (
           <SpeciesProjectsTable
             speciesId={record.id}
             editMode={true}
@@ -446,7 +448,7 @@ export default function SpeciesDetailsForm({
             addedProjectsIds={addedProjectsIds}
             removedProjectsIds={removedProjectsIds}
           />
-        }
+        )}
       </Grid>
     </>
   );
