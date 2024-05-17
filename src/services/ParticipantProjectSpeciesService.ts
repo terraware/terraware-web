@@ -145,7 +145,7 @@ const update = (participantProjectSpecies: ParticipantProjectSpecies): Promise<R
   const entity: UpdateRequestPayload = {
     feedback: participantProjectSpecies.feedback,
     internalComment: participantProjectSpecies.internalComment,
-    nativeNonNative: participantProjectSpecies.nativeNonNative,
+    speciesNativeCategory: participantProjectSpecies.speciesNativeCategory,
     rationale: participantProjectSpecies.rationale,
     submissionStatus: participantProjectSpecies.submissionStatus,
   };

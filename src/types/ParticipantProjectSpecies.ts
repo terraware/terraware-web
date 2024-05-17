@@ -6,9 +6,9 @@ import strings from 'src/strings';
 // These will all change when the BE is done, some of the props might even come from different models
 export type ParticipantProjectSpecies = components['schemas']['ParticipantProjectSpeciesPayload'];
 export type SubmissionStatus = ParticipantProjectSpecies['submissionStatus'];
-export type NativeNonNative = ParticipantProjectSpecies['nativeNonNative'];
+export type SpeciesNativeCategory = ParticipantProjectSpecies['speciesNativeCategory'];
 
-export const getNativeNonNativeLabel = (value: NativeNonNative): string => {
+export const getSpeciesNativeCategoryLabel = (value: SpeciesNativeCategory): string => {
   switch (value) {
     case 'Native':
       return strings.NATIVE;
@@ -19,17 +19,17 @@ export const getNativeNonNativeLabel = (value: NativeNonNative): string => {
   }
 };
 
-export const getNativeNonNativeOptions = (
+export const getSpeciesNativeCategoryOptions = (
   activeLocale: string | null
-): (Omit<DropdownItem, 'value'> & { value: NativeNonNative })[] =>
+): (Omit<DropdownItem, 'value'> & { value: SpeciesNativeCategory })[] =>
   activeLocale
     ? [
         {
-          label: getNativeNonNativeLabel('Native'),
+          label: getSpeciesNativeCategoryLabel('Native'),
           value: 'Native',
         },
         {
-          label: getNativeNonNativeLabel('Non-native'),
+          label: getSpeciesNativeCategoryLabel('Non-native'),
           value: 'Non-native',
         },
       ]

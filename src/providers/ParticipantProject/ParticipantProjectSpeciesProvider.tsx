@@ -93,7 +93,7 @@ const ParticipantProjectSpeciesProvider = ({ children }: Props) => {
       b &&
       (a.feedback || null) === (b.feedback || null) &&
       (a.internalComment || null) === (b.internalComment || null) &&
-      (a.nativeNonNative || null) === (b.nativeNonNative || null) &&
+      (a.speciesNativeCategory || null) === (b.speciesNativeCategory || null) &&
       (a.rationale || null) === (b.rationale || null) &&
       a.submissionStatus === b.submissionStatus
     );
