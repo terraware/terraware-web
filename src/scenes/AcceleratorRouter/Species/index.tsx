@@ -311,7 +311,7 @@ export default function SpeciesDetailView(): JSX.Element {
               </Grid>
               <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
                 <TextField
-                  id={'nativeEcosistem'}
+                  id={'nativeEcosystem'}
                   label={strings.NATIVE_ECOSYSTEM}
                   value={currentSpecies.nativeEcosystem}
                   type='text'
