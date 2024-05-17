@@ -11,6 +11,7 @@ import BackToLink from 'src/components/common/BackToLink';
 import Checkbox from 'src/components/common/Checkbox';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useOrganization } from 'src/providers/hooks';
 import { SpeciesService } from 'src/services';
 import strings from 'src/strings';
@@ -53,6 +54,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
   const [deleteSpeciesModalOpen, setDeleteSpeciesModalOpen] = useState(false);
   const [isBusy, setIsBusy] = useState<boolean>(false);
   const snackbar = useSnackbar();
+  const { orgHasParticipants } = useParticipantData();
 
   const gridSize = () => {
     if (isMobile) {
@@ -293,7 +295,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               display={true}
             />
           </Grid>
-          {species && <SpeciesProjectsTable speciesId={species.id} editMode={false} />}
+          {species && orgHasParticipants && <SpeciesProjectsTable speciesId={species.id} editMode={false} />}
         </Grid>
       </Grid>
       {species && (
