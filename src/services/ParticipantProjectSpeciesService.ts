@@ -188,7 +188,7 @@ const update = (participantProjectSpecies: ParticipantProjectSpecies): Promise<R
 
 const getProjectsForSpecies = async (speciesId: number, organizationId: number): Promise<SpeciesProjectsResult[]> => {
   const todayUTC = DateTime.fromISO(new Date().toISOString()).toFormat('yyyy-MM-dd');
-  console.log('todayUTC', todayUTC);
+
   const searchParams: SearchRequestPayload = {
     prefix: 'projects.projectDeliverables',
     fields: [
