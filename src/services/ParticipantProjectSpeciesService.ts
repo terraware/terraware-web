@@ -1,6 +1,7 @@
 import { components, paths } from 'src/api/types/generated-schema';
 import { SearchNodePayload, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
 
+import DeliverablesService from './DeliverablesService';
 import HttpService, { Response2 } from './HttpService';
 import SearchService from './SearchService';
 
@@ -40,6 +41,7 @@ export type SpeciesProjectsResult = {
   submissionStatus: string;
   projectName: string;
   projectId: number;
+  deliverableId?: number;
 };
 
 type SpeciesProjectsSearchResult = {
@@ -190,14 +192,37 @@ const getProjectsForSpecies = async (speciesId: number, organizationId: number):
   const apiSearchResults = (await SearchService.search(searchParams)) as SpeciesProjectsSearchResult[];
   // it will always be one result since we are searching by species id
   const firstApiResult = apiSearchResults[0];
-  const projects = firstApiResult?.participantProjectSpecies.map((pps) => {
-    return {
-      submissionStatus: pps.submissionStatus,
-      projectName: pps.project.name,
-      projectId: pps.project.id,
-      id: pps.id,
-    } as SpeciesProjectsResult;
-  });
+  const projects = await Promise.all(
+    firstApiResult?.participantProjectSpecies.map(async (pps) => {
+      //deliverables
+      const response = await DeliverablesService.list(
+        null,
+        {
+          organizationId,
+          projectId: pps.project.id,
+        },
+        {
+          operation: 'and',
+          children: [
+            {
+              operation: 'field',
+              field: 'type',
+              type: 'Exact',
+              values: ['species'],
+            },
+          ],
+        }
+      );
+
+      return {
+        submissionStatus: pps.submissionStatus,
+        projectName: pps.project.name,
+        projectId: pps.project.id,
+        id: pps.id,
+        deliverableId: response?.deliverables?.length ? response.deliverables[0].id : undefined,
+      } as SpeciesProjectsResult;
+    })
+  );
 
   return projects;
 };

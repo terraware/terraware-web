@@ -17,10 +17,20 @@ import { Project } from 'src/types/Project';
 
 import AddToProjectModal from './AddToProjectModal';
 import RemoveProjectsDialog from './RemoveProjectsDialog';
+import SpeciesProjectsCellRenderer from './SpeciesProjectsCellRenderer';
 
 const columns = (): TableColumnType[] => [
   { key: 'projectName', name: strings.PROJECT, type: 'string' },
   { key: 'submissionStatus', name: strings.STATUS, type: 'string' },
+];
+
+const viewColumns = (): TableColumnType[] => [
+  ...columns(),
+  {
+    key: 'deliverableId',
+    name: '',
+    type: 'string',
+  } as TableColumnType,
 ];
 
 type SpeciesProjectsTableProps = {
@@ -187,7 +197,7 @@ export default function SpeciesProjectsTable({
         <Grid item xs={12}>
           <Table
             id='species-projects'
-            columns={columns}
+            columns={editMode ? columns : viewColumns}
             rows={editMode ? filteredResults || [] : searchResults || []}
             orderBy={'projectName'}
             selectedRows={selectedRows}
@@ -202,6 +212,7 @@ export default function SpeciesProjectsTable({
                 icon: 'iconTrashCan',
               },
             ]}
+            Renderer={SpeciesProjectsCellRenderer}
           />
         </Grid>
       </Grid>
