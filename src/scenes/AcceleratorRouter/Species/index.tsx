@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
+import { Box, Grid, GridProps, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { BusySpinner, Button, DropdownItem } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
@@ -50,12 +50,12 @@ export default function SpeciesDetailView(): JSX.Element {
   const [showApproveDialog, setShowApproveDialog] = useState<boolean>(false);
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
 
-  const gridSize = () => {
+  const gridSize = useMemo(() => {
     if (isMobile) {
       return 12;
     }
     return 4;
-  };
+  }, [isMobile]);
 
   const approveHandler = () => {
     currentParticipantProjectSpecies &&
@@ -155,6 +155,15 @@ export default function SpeciesDetailView(): JSX.Element {
     [activeLocale, currentDeliverable]
   );
 
+  const GridItemWrapper = useCallback(
+    ({ children, props }: { children: JSX.Element; props?: GridProps }) => (
+      <Grid item xs={gridSize} {...props} minHeight={'64px'} paddingBottom={theme.spacing(2)}>
+        {children}
+      </Grid>
+    ),
+    [gridSize]
+  );
+
   return (
     <>
       {showApproveDialog && (
@@ -230,7 +239,7 @@ export default function SpeciesDetailView(): JSX.Element {
                   </Box>
                 </Box>
               )}
-              <Grid item xs={12} paddingBottom={theme.spacing(2)}>
+              <GridItemWrapper props={{ xs: 12 }}>
                 <TextField
                   label={strings.RATIONALE}
                   id='rationale'
@@ -238,8 +247,8 @@ export default function SpeciesDetailView(): JSX.Element {
                   value={currentParticipantProjectSpecies.rationale}
                   display={true}
                 />
-              </Grid>
-              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+              </GridItemWrapper>
+              <GridItemWrapper>
                 <TextField
                   label={strings.SCIENTIFIC_NAME}
                   id='scientificName'
@@ -247,8 +256,8 @@ export default function SpeciesDetailView(): JSX.Element {
                   value={currentSpecies.scientificName}
                   display={true}
                 />
-              </Grid>
-              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+              </GridItemWrapper>
+              <GridItemWrapper>
                 <TextField
                   label={strings.COMMON_NAME}
                   id='commonName'
@@ -257,8 +266,8 @@ export default function SpeciesDetailView(): JSX.Element {
                   tooltipTitle={strings.TOOLTIP_TIME_ZONE_NURSERY}
                   display={true}
                 />
-              </Grid>
-              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+              </GridItemWrapper>
+              <GridItemWrapper>
                 <TextField
                   id={'family'}
                   label={strings.FAMILY}
@@ -266,8 +275,8 @@ export default function SpeciesDetailView(): JSX.Element {
                   type='text'
                   display={true}
                 />
-              </Grid>
-              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+              </GridItemWrapper>
+              <GridItemWrapper>
                 <TextField
                   id={'conservationCategory'}
                   label={strings.CONSERVATION_CATEGORY}
@@ -275,8 +284,8 @@ export default function SpeciesDetailView(): JSX.Element {
                   type='text'
                   display={true}
                 />
-              </Grid>
-              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+              </GridItemWrapper>
+              <GridItemWrapper>
                 <TextField
                   id={'growthForms'}
                   label={strings.GROWTH_FORM}
@@ -285,8 +294,8 @@ export default function SpeciesDetailView(): JSX.Element {
                   aria-label='date-picker'
                   display={true}
                 />
-              </Grid>
-              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+              </GridItemWrapper>
+              <GridItemWrapper>
                 <Checkbox
                   id='Rare'
                   name='rare'
@@ -298,8 +307,8 @@ export default function SpeciesDetailView(): JSX.Element {
                   value={currentSpecies.rare}
                   className={classes.blockCheckbox}
                 />
-              </Grid>
-              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+              </GridItemWrapper>
+              <GridItemWrapper>
                 <TextField
                   id={'speciesNativeCategory'}
                   label={strings.NATIVE_NON_NATIVE}
@@ -308,8 +317,8 @@ export default function SpeciesDetailView(): JSX.Element {
                   display={true}
                   required
                 />
-              </Grid>
-              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+              </GridItemWrapper>
+              <GridItemWrapper>
                 <TextField
                   id={'nativeEcosystem'}
                   label={strings.NATIVE_ECOSYSTEM}
@@ -317,8 +326,8 @@ export default function SpeciesDetailView(): JSX.Element {
                   type='text'
                   display={true}
                 />
-              </Grid>
-              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+              </GridItemWrapper>
+              <GridItemWrapper>
                 <TextField
                   id={'successionalGroup'}
                   label={strings.SUCCESSIONAL_GROUP}
@@ -326,8 +335,8 @@ export default function SpeciesDetailView(): JSX.Element {
                   type='text'
                   display={true}
                 />
-              </Grid>
-              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+              </GridItemWrapper>
+              <GridItemWrapper>
                 <TextField
                   id={'ecosystemType'}
                   label={strings.ECOSYSTEM_TYPE}
@@ -335,8 +344,8 @@ export default function SpeciesDetailView(): JSX.Element {
                   type='text'
                   display={true}
                 />
-              </Grid>
-              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+              </GridItemWrapper>
+              <GridItemWrapper>
                 <TextField
                   id={'ecologicalRoleKnown'}
                   label={strings.ECOLOGICAL_ROLE_KNOWN}
@@ -345,8 +354,8 @@ export default function SpeciesDetailView(): JSX.Element {
                   display={true}
                   tooltipTitle={strings.ECOLOGICAL_ROLE_KNOWN_TOOLTIP}
                 />
-              </Grid>
-              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+              </GridItemWrapper>
+              <GridItemWrapper>
                 <TextField
                   id={'localUsesKnown'}
                   label={strings.LOCAL_USES_KNOWN}
@@ -355,8 +364,8 @@ export default function SpeciesDetailView(): JSX.Element {
                   display={true}
                   tooltipTitle={strings.LOCAL_USES_KNOWN_TOOLTIP}
                 />
-              </Grid>
-              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+              </GridItemWrapper>
+              <GridItemWrapper>
                 <TextField
                   id={'seedStorageBehavior'}
                   label={strings.SEED_STORAGE_BEHAVIOR}
@@ -364,8 +373,8 @@ export default function SpeciesDetailView(): JSX.Element {
                   type='text'
                   display={true}
                 />
-              </Grid>
-              <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+              </GridItemWrapper>
+              <GridItemWrapper>
                 <TextField
                   id={'plantMaterialSourcingMethod'}
                   label={strings.PLANT_MATERIAL_SOURCING_METHOD}
@@ -385,8 +394,8 @@ export default function SpeciesDetailView(): JSX.Element {
                     </>
                   }
                 />
-              </Grid>
-              <Grid item xs={isMobile ? 12 : 8}>
+              </GridItemWrapper>
+              <GridItemWrapper props={{ xs: isMobile ? 12 : 8 }}>
                 <TextField
                   id={'otherFacts'}
                   label={strings.OTHER_FACTS}
@@ -394,7 +403,7 @@ export default function SpeciesDetailView(): JSX.Element {
                   type='textarea'
                   display={true}
                 />
-              </Grid>
+              </GridItemWrapper>
             </Grid>
           </Grid>
           {/* TODO:  Additional Species Data */}

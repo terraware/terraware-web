@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
+import { Box, Grid, GridProps, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { BusySpinner } from '@terraware/web-components';
 import { Button, DropdownItem } from '@terraware/web-components';
@@ -56,12 +56,12 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
   const snackbar = useSnackbar();
   const { orgHasParticipants } = useParticipantData();
 
-  const gridSize = () => {
+  const gridSize = useMemo(() => {
     if (isMobile) {
       return 12;
     }
     return 4;
-  };
+  }, [isMobile]);
 
   useEffect(() => {
     const getSpecies = async () => {
@@ -105,6 +105,15 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
     navigate(APP_PATHS.SPECIES);
   };
 
+  const GridItemWrapper = useCallback(
+    ({ children, props }: { children: JSX.Element; props?: GridProps }) => (
+      <Grid item xs={gridSize} {...props} minHeight={'64px'} paddingBottom={theme.spacing(2)}>
+        {children}
+      </Grid>
+    ),
+    [gridSize]
+  );
+
   return (
     <TfMain>
       {isBusy && <BusySpinner withSkrim={true} />}
@@ -144,7 +153,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
             margin: 0,
           }}
         >
-          <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+          <GridItemWrapper>
             <TextField
               label={strings.SCIENTIFIC_NAME}
               id='scientificName'
@@ -152,8 +161,8 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               value={species?.scientificName}
               display={true}
             />
-          </Grid>
-          <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+          </GridItemWrapper>
+          <GridItemWrapper>
             <TextField
               label={strings.COMMON_NAME}
               id='commonName'
@@ -162,11 +171,11 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               tooltipTitle={strings.TOOLTIP_TIME_ZONE_NURSERY}
               display={true}
             />
-          </Grid>
-          <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+          </GridItemWrapper>
+          <GridItemWrapper>
             <TextField id={'family'} label={strings.FAMILY} value={species?.familyName} type='text' display={true} />
-          </Grid>
-          <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+          </GridItemWrapper>
+          <GridItemWrapper>
             <TextField
               id={'conservationCategory'}
               label={strings.CONSERVATION_CATEGORY}
@@ -174,8 +183,8 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               type='text'
               display={true}
             />
-          </Grid>
-          <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+          </GridItemWrapper>
+          <GridItemWrapper>
             <TextField
               id={'growthForms'}
               label={strings.GROWTH_FORM}
@@ -184,8 +193,8 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               aria-label='date-picker'
               display={true}
             />
-          </Grid>
-          <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+          </GridItemWrapper>
+          <GridItemWrapper>
             <Checkbox
               id='Rare'
               name='rare'
@@ -197,9 +206,9 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               value={species?.rare}
               className={classes.blockCheckbox}
             />
-          </Grid>
+          </GridItemWrapper>
           {/* TODO this will eventually come from the participant project species, not the org species */}
-          {/* <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+          {/* <GridItemWrapper>
                 <TextField
                   id={'nativeStatus'}
                   label={strings.NATIVE_NON_NATIVE}
@@ -209,7 +218,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
                   required
                 />
               </Grid> */}
-          <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+          <GridItemWrapper>
             <TextField
               id={'nativeEcosistem'}
               label={strings.NATIVE_ECOSYSTEM}
@@ -217,8 +226,8 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               type='text'
               display={true}
             />
-          </Grid>
-          <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+          </GridItemWrapper>
+          <GridItemWrapper>
             <TextField
               id={'successionalGroup'}
               label={strings.SUCCESSIONAL_GROUP}
@@ -226,8 +235,8 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               type='text'
               display={true}
             />
-          </Grid>
-          <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+          </GridItemWrapper>
+          <GridItemWrapper>
             <TextField
               id={'ecosystemType'}
               label={strings.ECOSYSTEM_TYPE}
@@ -235,8 +244,8 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               type='text'
               display={true}
             />
-          </Grid>
-          <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+          </GridItemWrapper>
+          <GridItemWrapper>
             <TextField
               id={'ecologicalRoleKnown'}
               label={strings.ECOLOGICAL_ROLE_KNOWN}
@@ -245,8 +254,8 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               display={true}
               tooltipTitle={strings.ECOLOGICAL_ROLE_KNOWN_TOOLTIP}
             />
-          </Grid>
-          <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+          </GridItemWrapper>
+          <GridItemWrapper>
             <TextField
               id={'localUsesKnown'}
               label={strings.LOCAL_USES_KNOWN}
@@ -255,8 +264,8 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               display={true}
               tooltipTitle={strings.LOCAL_USES_KNOWN_TOOLTIP}
             />
-          </Grid>
-          <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+          </GridItemWrapper>
+          <GridItemWrapper>
             <TextField
               id={'seedStorageBehavior'}
               label={strings.SEED_STORAGE_BEHAVIOR}
@@ -264,8 +273,8 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               type='text'
               display={true}
             />
-          </Grid>
-          <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+          </GridItemWrapper>
+          <GridItemWrapper>
             <TextField
               id={'plantMaterialSourcingMethod'}
               label={strings.PLANT_MATERIAL_SOURCING_METHOD}
@@ -285,8 +294,8 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
                 </>
               }
             />
-          </Grid>
-          <Grid item xs={isMobile ? 12 : 8}>
+          </GridItemWrapper>
+          <GridItemWrapper props={{ xs: isMobile ? 12 : 8 }}>
             <TextField
               id={'otherFacts'}
               label={strings.OTHER_FACTS}
@@ -294,7 +303,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               type='textarea'
               display={true}
             />
-          </Grid>
+          </GridItemWrapper>
           {species && orgHasParticipants && <SpeciesProjectsTable speciesId={species.id} editMode={false} />}
         </Grid>
       </Grid>
