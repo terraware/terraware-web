@@ -20,7 +20,7 @@ import { useParticipantProjectSpeciesData } from 'src/providers/ParticipantProje
 import { useLocalization } from 'src/providers/hooks';
 import { SpeciesService } from 'src/services';
 import strings from 'src/strings';
-import { ParticipantProjectSpecies, getNativeNonNativeOptions } from 'src/types/ParticipantProjectSpecies';
+import { ParticipantProjectSpecies, getSpeciesNativeCategoryOptions } from 'src/types/ParticipantProjectSpecies';
 import {
   EcosystemType,
   GrowthForm,
@@ -285,10 +285,10 @@ export default function SpeciesDetailsForm({
         {currentParticipantProjectSpecies && (
           <Grid item xs={gridSize}>
             <Dropdown
-              id='nativeNonNative'
-              selectedValue={participantProjectSpeciesRecord?.nativeNonNative}
-              onChange={(value) => onChange('nativeNonNative', value)}
-              options={getNativeNonNativeOptions(activeLocale)}
+              id='speciesNativeCategory'
+              selectedValue={participantProjectSpeciesRecord?.speciesNativeCategory}
+              onChange={(value) => onChange('speciesNativeCategory', value)}
+              options={getSpeciesNativeCategoryOptions(activeLocale)}
               label={strings.NATIVE_NON_NATIVE}
               aria-label={strings.NATIVE_NON_NATIVE}
               placeholder={strings.SELECT}

@@ -301,9 +301,9 @@ export default function SpeciesDetailView(): JSX.Element {
               </Grid>
               <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
                 <TextField
-                  id={'nativeNonNative'}
+                  id={'speciesNativeCategory'}
                   label={strings.NATIVE_NON_NATIVE}
-                  value={currentParticipantProjectSpecies?.nativeNonNative}
+                  value={currentParticipantProjectSpecies?.speciesNativeCategory}
                   type='text'
                   display={true}
                   required

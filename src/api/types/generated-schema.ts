@@ -3155,13 +3155,13 @@ export interface components {
       /** Format: int64 */
       id: number;
       internalComment?: string;
-      /** @enum {string} */
-      nativeNonNative?: "Native" | "Non-native";
       /** Format: int64 */
       projectId: number;
       rationale?: string;
       /** Format: int64 */
       speciesId: number;
+      /** @enum {string} */
+      speciesNativeCategory?: "Native" | "Non-native";
       /** @enum {string} */
       submissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
     };
@@ -4168,9 +4168,9 @@ export interface components {
     UpdateParticipantProjectSpeciesPayload: {
       feedback?: string;
       internalComment?: string;
-      /** @enum {string} */
-      nativeNonNative?: "Native" | "Non-native";
       rationale?: string;
+      /** @enum {string} */
+      speciesNativeCategory?: "Native" | "Non-native";
       /** @enum {string} */
       submissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
     };

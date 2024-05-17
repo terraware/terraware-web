@@ -43,7 +43,7 @@ export default function SpeciesEditView(): JSX.Element {
 
   const onChange = (id: string, value: unknown): void => {
     if (
-      (['rationale', 'nativeNonNative'] as (keyof ParticipantProjectSpecies)[]).includes(
+      (['rationale', 'speciesNativeCategory'] as (keyof ParticipantProjectSpecies)[]).includes(
         id as keyof ParticipantProjectSpecies
       )
     ) {
