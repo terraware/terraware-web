@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/190</span>
+                <span class='fraction'>0/191</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/90</span>
+                <span class='fraction'>0/94</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/184</span>
+                <span class='fraction'>0/185</span>
             </div>
         
             
@@ -778,7 +778,14 @@
 <a name='L713'></a><a href='#L713'>713</a>
 <a name='L714'></a><a href='#L714'>714</a>
 <a name='L715'></a><a href='#L715'>715</a>
-<a name='L716'></a><a href='#L716'>716</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L716'></a><a href='#L716'>716</a>
+<a name='L717'></a><a href='#L717'>717</a>
+<a name='L718'></a><a href='#L718'>718</a>
+<a name='L719'></a><a href='#L719'>719</a>
+<a name='L720'></a><a href='#L720'>720</a>
+<a name='L721'></a><a href='#L721'>721</a>
+<a name='L722'></a><a href='#L722'>722</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -888,26 +895,21 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -915,6 +917,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1520,6 +1532,7 @@ import Button from 'src/components/common/button/Button';
 import { OrderPreserveableTable as Table } from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { useAppSelector } from 'src/redux/store';
@@ -1603,6 +1616,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
   const query = <span class="cstat-no" title="statement not covered" >useQuery();</span>
   const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
   const projects = <span class="cstat-no" title="statement not covered" >useAppSelector(selectProjects);</span>
+  const { orgHasParticipants } = <span class="cstat-no" title="statement not covered" >useParticipantData();</span>
 &nbsp;
   const contentRef = <span class="cstat-no" title="statement not covered" >useRef(null);</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
@@ -1648,11 +1662,15 @@ export default function <span class="fstat-no" title="function not covered" >Spe
         type: 'string',
         tooltipTitle: strings.TOOLTIP_SPECIES_FAMILY,
       },
-      {
-        key: 'participantProjects',
-        name: strings.PROJECTS,
-        type: 'string',
-      },
+      ...(orgHasParticipants
+        ? ([
+            {
+              key: 'participantProjects',
+              name: strings.PROJECTS,
+              type: 'string',
+            },
+          ] as TableColumnType[])
+        : []),
       {
         key: 'conservationCategory',
         name: strings.CONSERVATION_CATEGORY,
@@ -1758,8 +1776,8 @@ export default function <span class="fstat-no" title="function not covered" >Spe
       },
     ];
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return activeLocale ? _filters : [];</span>
-  }, [activeLocale]);
+<span class="cstat-no" title="statement not covered" >    return activeLocale &amp;&amp; orgHasParticipants ? _filters : [];</span>
+  }, [activeLocale, orgHasParticipants]);
 &nbsp;
   const iconFilters: FilterConfig[] = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const _filters = <span class="cstat-no" title="statement not covered" >filterColumns.map(<span class="fstat-no" title="function not covered" >(f</span>ilter) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
@@ -2215,7 +2233,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-16T20:46:42.969Z
+                at 2024-05-17T15:05:16.400Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
