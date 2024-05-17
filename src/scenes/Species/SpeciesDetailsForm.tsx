@@ -45,6 +45,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 type SpeciesDetailsFormProps = {
+  additionalFields?: JSX.Element;
   gridSize: number;
   nameFormatError: string | string[];
   onChange: (id: string, value: unknown) => void;
@@ -60,6 +61,7 @@ type SpeciesDetailsFormProps = {
 };
 
 export default function SpeciesDetailsForm({
+  additionalFields,
   gridSize,
   nameFormatError,
   onChange,
@@ -455,6 +457,7 @@ export default function SpeciesDetailsForm({
             removedProjectsIds={removedProjectsIds}
           />
         )}
+        {additionalFields ?? null}
       </Grid>
     </>
   );

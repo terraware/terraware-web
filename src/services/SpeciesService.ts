@@ -137,12 +137,17 @@ const getSpecies = async (speciesId: number, organizationId: number): Promise<Sp
  */
 const updateSpecies = async (species: Species, organizationId: number): Promise<Response> => {
   const entity: UpdateSpeciesRequestPayload = {
+    averageWoodDensity: species.averageWoodDensity,
     ecosystemTypes: species.ecosystemTypes,
     commonName: species.commonName,
     conservationCategory: species.conservationCategory,
+    dbhSource: species.dbhSource,
+    dbhValue: species.dbhValue,
     ecologicalRoleKnown: species.ecologicalRoleKnown,
     familyName: species.familyName,
     growthForms: species.growthForms,
+    heightAtMaturitySource: species.heightAtMaturitySource,
+    heightAtMaturityValue: species.heightAtMaturityValue,
     localUsesKnown: species.localUsesKnown,
     nativeEcosystem: species.nativeEcosystem,
     organizationId,
@@ -152,6 +157,7 @@ const updateSpecies = async (species: Species, organizationId: number): Promise<
     scientificName: species.scientificName,
     seedStorageBehavior: species.seedStorageBehavior,
     successionalGroups: species.successionalGroups,
+    woodDensityLevel: species.woodDensityLevel,
   };
 
   return await httpSpeciesId.put({

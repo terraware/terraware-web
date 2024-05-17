@@ -18,6 +18,8 @@ import { Species } from 'src/types/Species';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
 
+import SpeciesInternalFieldsForm from './SpeciesInternalFieldsForm';
+
 export default function SpeciesEditView(): JSX.Element {
   const theme = useTheme();
   const { goToParticipantProjectSpecies } = useNavigateTo();
@@ -109,7 +111,7 @@ export default function SpeciesEditView(): JSX.Element {
           <Box
             sx={{
               backgroundColor: theme.palette.TwClrBg,
-              borderRadius: '32px',
+              borderRadius: '32px 32px 0 0',
               padding: theme.spacing(3),
               margin: 0,
             }}
@@ -131,6 +133,7 @@ export default function SpeciesEditView(): JSX.Element {
                 onChange={onChange}
                 nameFormatError={nameFormatError}
                 setNameFormatError={setNameFormatError}
+                additionalFields={<SpeciesInternalFieldsForm speciesRecord={speciesRecord} onChange={onChange} />}
               />
             )}
           </Box>
