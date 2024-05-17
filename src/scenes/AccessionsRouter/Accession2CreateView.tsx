@@ -31,6 +31,7 @@ import {
   Collectors2,
   SeedBank2Selector,
 } from './properties';
+import AccessionPhotos from './properties/AccessionPhotos';
 
 const SubTitleStyle = {
   fontSize: '20px',
@@ -53,6 +54,11 @@ export default function CreateAccession(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const [collectedDateError, setCollectedDateError] = useState<string>();
   const [receivedDateError, setReceivedDateError] = useState<string>();
+  const [photos, setPhotos] = useState<File[]>([]);
+
+  const onPhotosChanged = (photosList: File[]) => {
+    setPhotos(photosList);
+  };
 
   const onCollectedDateError = (error?: string) => {
     setCollectedDateError(error);
@@ -134,6 +140,11 @@ export default function CreateAccession(): JSX.Element {
     }
     const response = await SeedBankService.createAccession(record);
     if (response.requestSucceeded) {
+      if (photos.length) {
+        // upload photos
+        await SeedBankService.uploadAccessionPhotos(response.id, photos);
+      }
+
       navigate(accessionsDatabase, { replace: true });
       navigate({
         pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', response.id.toString()),
@@ -258,6 +269,10 @@ export default function CreateAccession(): JSX.Element {
             </Grid>
             <SeedBank2Selector record={record} onChange={onChange} validate={validateFields} />
           </Grid>
+
+          <Box sx={marginTop}>
+            <AccessionPhotos onPhotosChanged={onPhotosChanged} />
+          </Box>
         </Container>
       </PageForm>
     </TfMain>

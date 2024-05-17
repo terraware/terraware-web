@@ -51,6 +51,7 @@ ADD_INVENTORY_DESCRIPTION,"Add inventory from a new source. To add inventory fro
 ADD_INVENTORY_MANUALLY_DESCRIPTION,"Enter species, quantities, and other relevant information using our inventory form.",
 ADD_MANUALLY,Add Manually,
 ADD_NEW,Add New,
+ADD_PHOTO,Add Photo...,
 ADD_NOTES,Add Notes,
 ADD_NURSERIES,Add Nurseries,
 ADD_NURSERY,Add Nursery,
