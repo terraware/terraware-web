@@ -210,6 +210,8 @@ const getProjectsForSpecies = async (speciesId: number, organizationId: number):
           operation: 'field',
           field: 'type',
           type: 'Exact',
+          // Since the search API is localized, we need to send the localized values
+          // ** This will not work as expected if the BE and FE localized values do not match
           values: [getDeliverableTypeLabel('Species' as DeliverableTypeType)],
         },
         {
@@ -224,6 +226,7 @@ const getProjectsForSpecies = async (speciesId: number, organizationId: number):
           type: 'Exact',
           values: [speciesId],
         },
+        // We only want to grab deliverables that are part of an active module
         {
           operation: 'field',
           field: 'module.cohortModules.endDate',
