@@ -4,7 +4,6 @@ import { Box, useTheme } from '@mui/material';
 
 import SelectPhotos from 'src/components/common/SelectPhotos';
 import strings from 'src/strings';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const MAX_PHOTOS = 10;
 
@@ -13,7 +12,6 @@ type Props = {
 };
 
 export default function AccessionPhotos({ onPhotosChanged }: Props): JSX.Element {
-  const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
   return (
