@@ -200,8 +200,8 @@ export default function SpeciesProjectsTable({
             columns={editMode ? columns : viewColumns}
             rows={editMode ? filteredResults || [] : searchResults || []}
             orderBy={'projectName'}
-            selectedRows={selectedRows}
-            setSelectedRows={setSelectedRows}
+            selectedRows={editMode ? selectedRows : undefined}
+            setSelectedRows={editMode ? setSelectedRows : undefined}
             showCheckbox={editMode}
             showTopBar={true}
             topBarButtons={[
