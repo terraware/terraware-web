@@ -23,6 +23,11 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           type: 'string',
         },
         {
+          key: 'dueDate',
+          name: strings.DUE_DATE,
+          type: 'date',
+        },
+        {
           key: 'type',
           name: strings.TYPE,
           type: 'string',
@@ -46,11 +51,6 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           key: 'status',
           name: strings.STATUS,
           type: 'string',
-        },
-        {
-          key: 'dueDate',
-          name: strings.DUE_DATE,
-          type: 'date',
         },
       ]
     : [];
