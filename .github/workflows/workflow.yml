@@ -3,9 +3,6 @@
 
 name: Deployment
 
-runs:
-  using: 'node20'
-
 on:
   push:
     branches:
