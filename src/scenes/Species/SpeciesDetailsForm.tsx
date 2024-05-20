@@ -307,6 +307,7 @@ export default function SpeciesDetailsForm({
             onChange={(value) => onChange('nativeEcosystem', value)}
             value={record.nativeEcosystem}
             type='text'
+            tooltipTitle={strings.NATIVE_ECOSYSTEM_TOOLTIP}
           />
         </Grid>
         <Grid item xs={gridSize}>
