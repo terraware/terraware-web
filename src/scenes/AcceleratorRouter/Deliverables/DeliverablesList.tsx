@@ -47,6 +47,11 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           name: strings.STATUS,
           type: 'string',
         },
+        {
+          key: 'dueDate',
+          name: strings.DUE_DATE,
+          type: 'date',
+        },
       ]
     : [];
 
