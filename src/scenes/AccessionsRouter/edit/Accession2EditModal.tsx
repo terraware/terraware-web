@@ -59,15 +59,14 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
     setNewPhotos(photosList);
   };
 
-  const onRemovePhoto = (photoFilename: string) => {
-    const _photoFilenames = [...photoFilenamesToRemove];
-    _photoFilenames.push(photoFilename);
-    setPhotoFilenamesToRemove(_photoFilenames);
-  };
-
   const removePhoto = (photoFilename: string, index: number) => {
-    photoFilenames.splice(index, 1);
-    onRemovePhoto(photoFilename);
+    const _photoFilenames = [...photoFilenames];
+    _photoFilenames.splice(index, 1);
+    setPhotoFilenames(_photoFilenames);
+
+    const _photoFilenamesToRemove = [...photoFilenamesToRemove];
+    _photoFilenamesToRemove.push(photoFilename);
+    setPhotoFilenamesToRemove(_photoFilenamesToRemove);
   };
 
   const updatePhotos = async () => {
