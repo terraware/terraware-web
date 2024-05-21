@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -40,7 +39,6 @@ export default function ContactUsView(): JSX.Element {
   const docLinks = useDocLinks();
   const appVersion = useAppSelector(selectAppVersion);
   const theme = useTheme();
-  const navigate = useNavigate();
 
   const listItemContent: ListItemContent[] = [
     {
