@@ -2,6 +2,7 @@ import React from 'react';
 import { useCallback } from 'react';
 
 import { Button } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import strings from 'src/strings';
@@ -13,6 +14,7 @@ interface ToDoCtaProps {
 
 const ToDoCta = ({ toDo }: ToDoCtaProps) => {
   const { goToDeliverable, goToModuleEventSession } = useNavigateTo();
+  const { isMobile } = useDeviceInfo();
 
   const handleOnClick = useCallback(() => {
     switch (toDo.getType()) {
@@ -27,7 +29,7 @@ const ToDoCta = ({ toDo }: ToDoCtaProps) => {
     }
   }, [goToDeliverable, goToModuleEventSession, toDo]);
 
-  return <Button label={strings.VIEW} onClick={handleOnClick} />;
+  return <Button style={isMobile ? { width: '100%' } : {}} label={strings.VIEW} onClick={handleOnClick} />;
 };
 
 export default ToDoCta;
