@@ -1,4 +1,8 @@
-import { components, paths } from 'src/api/types/generated-schema';
+import { DateTime } from 'luxon';
+
+import { paths } from 'src/api/types/generated-schema';
+import { DeliverableTypeType, getDeliverableTypeLabel } from 'src/types/Deliverables';
+import { ParticipantProjectSpecies, SubmissionStatus } from 'src/types/ParticipantProjectSpecies';
 import { SearchNodePayload, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
 
 import HttpService, { Response2 } from './HttpService';
@@ -32,18 +36,40 @@ export type UpdateRequestPayload =
 type UpdateResponse =
   paths[typeof ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR]['put']['responses'][200]['content']['application/json'];
 
-export type ParticipantProjectSpecies = components['schemas']['ParticipantProjectSpeciesPayload'];
-export type SubmissionStatus = ParticipantProjectSpecies['submissionStatus'];
-
 export type SpeciesProjectsResult = {
   id: number;
   submissionStatus: string;
   projectName: string;
   projectId: number;
+  deliverableId?: number;
 };
 
 type SpeciesProjectsSearchResult = {
-  participantProjectSpecies: { id: number; submissionStatus: string; project: { name: string; id: number } }[];
+  // Deliverable ID
+  id: string;
+  module: {
+    cohortModules: {
+      startDate: string;
+      endDate: string;
+    }[];
+  };
+  project: {
+    participantProjectSpecies: {
+      id: string;
+      project: {
+        name: string;
+        id: string;
+      };
+      species: {
+        id: string;
+        organization: {
+          id: string;
+        };
+      };
+      submissionStatus: string;
+    }[];
+  };
+  type: string;
 };
 
 export type SpeciesWithParticipantProjectsSearchResponse = {
@@ -146,6 +172,8 @@ const list = async (
 const update = (participantProjectSpecies: ParticipantProjectSpecies): Promise<Response2<UpdateResponse>> => {
   const entity: UpdateRequestPayload = {
     feedback: participantProjectSpecies.feedback,
+    internalComment: participantProjectSpecies.internalComment,
+    speciesNativeCategory: participantProjectSpecies.speciesNativeCategory,
     rationale: participantProjectSpecies.rationale,
     submissionStatus: participantProjectSpecies.submissionStatus,
   };
@@ -159,47 +187,78 @@ const update = (participantProjectSpecies: ParticipantProjectSpecies): Promise<R
 };
 
 const getProjectsForSpecies = async (speciesId: number, organizationId: number): Promise<SpeciesProjectsResult[]> => {
+  const todayUTC = DateTime.fromISO(new Date().toISOString()).toFormat('yyyy-MM-dd');
+
   const searchParams: SearchRequestPayload = {
-    prefix: 'species',
+    prefix: 'projects.projectDeliverables',
     fields: [
-      'participantProjectSpecies.id',
-      'participantProjectSpecies.project.name',
-      'participantProjectSpecies.project.id',
-      'participantProjectSpecies.submissionStatus',
+      'id',
+      'type',
+      'project.participantProjectSpecies.id',
+      'project.participantProjectSpecies.project.name',
+      'project.participantProjectSpecies.project.id',
+      'project.participantProjectSpecies.species.id',
+      'project.participantProjectSpecies.species.organization.id',
+      'project.participantProjectSpecies.submissionStatus',
+      'module.cohortModules.startDate',
+      'module.cohortModules.endDate',
     ],
     search: {
       operation: 'and',
       children: [
         {
           operation: 'field',
-          field: 'organization_id',
+          field: 'type',
+          type: 'Exact',
+          // Since the search API is localized, we need to send the localized values
+          // ** This will not work as expected if the BE and FE localized values do not match
+          values: [getDeliverableTypeLabel('Species' as DeliverableTypeType)],
+        },
+        {
+          operation: 'field',
+          field: 'project.participantProjectSpecies.species.organization.id',
           type: 'Exact',
           values: [organizationId],
         },
         {
           operation: 'field',
-          field: 'id',
+          field: 'project.participantProjectSpecies.species.id',
           type: 'Exact',
           values: [speciesId],
+        },
+        // We only want to grab deliverables that are part of an active module
+        {
+          operation: 'field',
+          field: 'module.cohortModules.endDate',
+          type: 'Range',
+          values: [todayUTC, null],
+        },
+        {
+          operation: 'field',
+          field: 'module.cohortModules.startDate',
+          type: 'Range',
+          values: [null, todayUTC],
         },
       ],
     },
     count: 1000,
   };
 
-  const apiSearchResults = (await SearchService.search(searchParams)) as SpeciesProjectsSearchResult[];
-  // it will always be one result since we are searching by species id
-  const firstApiResult = apiSearchResults[0];
-  const projects = firstApiResult?.participantProjectSpecies.map((pps) => {
-    return {
-      submissionStatus: pps.submissionStatus,
-      projectName: pps.project.name,
-      projectId: pps.project.id,
-      id: pps.id,
-    } as SpeciesProjectsResult;
-  });
+  const apiSearchResults = await SearchService.search<SpeciesProjectsSearchResult>(searchParams);
 
-  return projects;
+  return apiSearchResults
+    ? apiSearchResults.flatMap((result: SpeciesProjectsSearchResult): SpeciesProjectsResult[] =>
+        result.project.participantProjectSpecies.map(
+          (pps: SpeciesProjectsSearchResult['project']['participantProjectSpecies'][0]): SpeciesProjectsResult => ({
+            submissionStatus: pps.submissionStatus,
+            projectName: pps.project.name,
+            projectId: Number(pps.project.id),
+            id: Number(pps.species.id),
+            deliverableId: Number(result.id),
+          })
+        )
+      )
+    : [];
 };
 
 const ParticipantProjectSpeciesService = {

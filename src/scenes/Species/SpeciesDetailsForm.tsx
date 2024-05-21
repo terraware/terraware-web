@@ -14,10 +14,13 @@ import TooltipLearnMoreModal, {
 import Checkbox from 'src/components/common/Checkbox';
 import Select from 'src/components/common/Select/Select';
 import TextField from 'src/components/common/Textfield/Textfield';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
+import { useParticipantProjectSpeciesData } from 'src/providers/ParticipantProject/ParticipantProjectSpeciesContext';
 import { useLocalization } from 'src/providers/hooks';
 import { SpeciesService } from 'src/services';
 import strings from 'src/strings';
+import { ParticipantProjectSpecies, getSpeciesNativeCategoryOptions } from 'src/types/ParticipantProjectSpecies';
 import {
   EcosystemType,
   GrowthForm,
@@ -43,31 +46,35 @@ const useStyles = makeStyles(() => ({
 }));
 
 type SpeciesDetailsFormProps = {
+  additionalFields?: JSX.Element;
   gridSize: number;
-  record: Species;
-  setRecord?: React.Dispatch<React.SetStateAction<Species>>;
-  onChange: (id: string, value: unknown) => void;
   nameFormatError: string | string[];
+  onChange: (id: string, value: unknown) => void;
+  participantProjectSpeciesRecord?: ParticipantProjectSpecies;
+  record: Species;
   setNameFormatError: React.Dispatch<React.SetStateAction<string | string[]>>;
   onAdd?: (id: number) => void;
   onRemoveNew?: (ids: number[]) => void;
   onRemoveExisting?: (ids: number[]) => void;
   addedProjectsIds?: number[];
   removedProjectsIds?: number[];
+  setRecord?: React.Dispatch<React.SetStateAction<Species>>;
 };
 
 export default function SpeciesDetailsForm({
+  additionalFields,
   gridSize,
-  record,
-  setRecord,
-  onChange,
   nameFormatError,
+  onChange,
+  participantProjectSpeciesRecord,
+  record,
   setNameFormatError,
   onAdd,
   onRemoveNew,
   onRemoveExisting,
   addedProjectsIds,
   removedProjectsIds,
+  setRecord,
 }: SpeciesDetailsFormProps): JSX.Element {
   const { activeLocale } = useLocalization();
   const classes = useStyles();
@@ -82,7 +89,9 @@ export default function SpeciesDetailsForm({
     undefined
   );
   const { isMobile } = useDeviceInfo();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
   const { orgHasParticipants } = useParticipantData();
+  const { currentParticipantProjectSpecies } = useParticipantProjectSpeciesData();
 
   const openTooltipLearnMoreModal = (data: TooltipLearnMoreModalData) => {
     setTooltipLearnMoreModalData(data);
@@ -275,21 +284,22 @@ export default function SpeciesDetailsForm({
             className={classes.blockCheckbox}
           />
         </Grid>
-        {/* TODO this will eventually come from the participant project species, not the org species */}
-        {/* <Grid item xs={gridSize}>
-              <Dropdown
-                id='nativeStatus'
-                selectedValue={record.nativeStatus}
-                onChange={(value) => onChange('nativeStatus', value)}
-                options={nativeStatuses()}
-                label={strings.NATIVE_NON_NATIVE}
-                aria-label={strings.NATIVE_NON_NATIVE}
-                placeholder={strings.SELECT}
-                fullWidth={true}
-                fixedMenu
-                required
-              />
-            </Grid> */}
+        {currentParticipantProjectSpecies && (
+          <Grid item xs={gridSize}>
+            <Dropdown
+              id='speciesNativeCategory'
+              selectedValue={participantProjectSpeciesRecord?.speciesNativeCategory}
+              onChange={(value) => onChange('speciesNativeCategory', value)}
+              options={getSpeciesNativeCategoryOptions(activeLocale)}
+              label={strings.NATIVE_NON_NATIVE}
+              aria-label={strings.NATIVE_NON_NATIVE}
+              placeholder={strings.SELECT}
+              fullWidth={true}
+              fixedMenu
+              required
+            />
+          </Grid>
+        )}
         <Grid item xs={gridSize}>
           <TextField
             id={'nativeEcosystem'}
@@ -297,6 +307,7 @@ export default function SpeciesDetailsForm({
             onChange={(value) => onChange('nativeEcosystem', value)}
             value={record.nativeEcosystem}
             type='text'
+            tooltipTitle={strings.NATIVE_ECOSYSTEM_TOOLTIP}
           />
         </Grid>
         <Grid item xs={gridSize}>
@@ -438,7 +449,7 @@ export default function SpeciesDetailsForm({
             type='textarea'
           />
         </Grid>
-        {orgHasParticipants && (
+        {orgHasParticipants && !isAcceleratorRoute && (
           <SpeciesProjectsTable
             speciesId={record.id}
             editMode={true}
@@ -449,6 +460,7 @@ export default function SpeciesDetailsForm({
             removedProjectsIds={removedProjectsIds}
           />
         )}
+        {additionalFields ?? null}
       </Grid>
     </>
   );

@@ -48,11 +48,7 @@ const SpeciesDeliverableStatusMessage = ({ deliverable, species }: Props): JSX.E
             body={
               <ul>
                 {rejectedSpecies.map((species, index) => (
-                  <li key={index}>
-                    {/* {species.speciesScientificName || species.speciesCommonName} */}
-                    TODO scientific name or common name
-                    {species.feedback ? `: ${species.feedback}` : ''}
-                  </li>
+                  <li key={index}>{species.scientificName || species.commonName}</li>
                 ))}
               </ul>
             }
