@@ -62,6 +62,7 @@ ADD_PEOPLE_MESSAGE,"Para añadir personas a esta organización, vaya a Personas.
 ADD_PERSON,Añadir persona,
 ADD_PERSON_DESC,Rellene esta página para añadir una persona a la organización.,
 ADD_PERSON_GENERAL_DESC,Introduzca a continuación los datos de la persona.,
+ADD_PHOTO,Agregar foto...,
 ADD_PHOTOS,Añadir fotos,
 ADD_PHOTOS_DESCRIPTION,Tome una foto (o fotos) de los lotes que se plantarán en la subzona seleccionada. Asegúrese de incluir el retiro entero en la(s) foto(s).,
 ADD_PHOTOS_DESCRIPTION_OPTIONAL,Tome una foto opcional (o fotos) de los lotes.,
