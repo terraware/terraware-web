@@ -633,66 +633,95 @@ export default function Accession2View(): JSX.Element {
         </Grid>
       </Grid>
 
-      <Tabs
-        activeTab={activeTab}
-        onTabChange={onTabChange}
-        tabs={[
-          {
-            id: 'detail',
-            label: strings.DETAILS,
-            children: (
-              <Box
-                sx={{
-                  backgroundColor: themeObj.palette.TwClrBg,
-                  borderRadius: isMobile ? '0 0 16px 16px' : '32px',
-                  padding: themeObj.spacing(3),
-                }}
-              >
-                <DetailPanel accession={accession} reload={reloadData} />
-              </Box>
-            ),
-          },
-          {
-            id: 'history',
-            label: strings.HISTORY,
-            children: (
-              <Box
-                sx={{
-                  backgroundColor: themeObj.palette.TwClrBg,
-                  borderRadius: isMobile ? '0 0 16px 16px' : '32px',
-                  padding: themeObj.spacing(3),
-                }}
-              >
-                {accession && <Accession2History accession={accession} />}
-              </Box>
-            ),
-          },
-          {
-            id: 'viabilityTesting',
-            label: strings.VIABILITY_TESTS,
-            children: (
-              <Box
-                sx={{
-                  backgroundColor: themeObj.palette.TwClrBg,
-                  borderRadius: isMobile ? '0 0 16px 16px' : '32px',
-                  padding: themeObj.spacing(3),
-                }}
-              >
-                {accession && (
-                  <ViabilityTestingPanel
-                    accession={accession}
-                    reload={reloadData}
-                    canAddTest={viabilityEditable}
-                    setNewViabilityTestOpened={setOpenNewViabilityTest}
-                    setViewViabilityTestModalOpened={setOpenViewViabilityTestModal}
-                    setSelectedTest={setSelectedTest}
-                  />
-                )}
-              </Box>
-            ),
-          },
-        ]}
-      />
+      <Box
+        sx={{
+          '.MuiTab-root:last-child::after': hasPendingTests
+            ? {
+                background: themeObj.palette.TwClrIcnDanger as string,
+                content: '""',
+                height: '10px',
+                width: '10px',
+                position: 'absolute',
+                right: themeObj.spacing(1),
+                top: themeObj.spacing(1),
+                borderRadius: '5px',
+              }
+            : {},
+        }}
+      >
+        <Tabs
+          activeTab={activeTab}
+          onTabChange={onTabChange}
+          tabs={[
+            {
+              id: 'detail',
+              label: strings.DETAILS,
+              children: (
+                <Box
+                  sx={{
+                    backgroundColor: themeObj.palette.TwClrBg,
+                    borderRadius: isMobile ? '0 0 16px 16px' : '32px',
+                    padding: themeObj.spacing(3),
+                  }}
+                >
+                  <DetailPanel accession={accession} reload={reloadData} />
+                </Box>
+              ),
+            },
+            {
+              id: 'history',
+              label: strings.HISTORY,
+              children: (
+                <Box
+                  sx={{
+                    backgroundColor: themeObj.palette.TwClrBg,
+                    borderRadius: isMobile ? '0 0 16px 16px' : '32px',
+                    padding: themeObj.spacing(3),
+                    '::after': hasPendingTests
+                      ? {
+                          background: themeObj.palette.TwClrIcnDanger as string,
+                          content: '""',
+                          height: '10px',
+                          width: '10px',
+                          position: 'absolute',
+                          right: themeObj.spacing(1),
+                          top: themeObj.spacing(1),
+                          borderRadius: '5px',
+                        }
+                      : {},
+                  }}
+                >
+                  {accession && <Accession2History accession={accession} />}
+                </Box>
+              ),
+            },
+            {
+              id: 'viabilityTesting',
+              label: strings.VIABILITY_TESTS,
+              children: (
+                <Box
+                  sx={{
+                    backgroundColor: themeObj.palette.TwClrBg,
+                    borderRadius: isMobile ? '0 0 16px 16px' : '32px',
+                    padding: themeObj.spacing(3),
+                  }}
+                >
+                  {accession && (
+                    <ViabilityTestingPanel
+                      accession={accession}
+                      reload={reloadData}
+                      canAddTest={viabilityEditable}
+                      setNewViabilityTestOpened={setOpenNewViabilityTest}
+                      setViewViabilityTestModalOpened={setOpenViewViabilityTestModal}
+                      setSelectedTest={setSelectedTest}
+                    />
+                  )}
+                </Box>
+              ),
+            },
+          ]}
+        />
+      </Box>
     </TfMain>
   );
 }
