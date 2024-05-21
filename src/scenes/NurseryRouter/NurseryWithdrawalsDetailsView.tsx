@@ -1,10 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { Box, Tab, Theme, Typography, useTheme } from '@mui/material';
+import { Box, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { Button, Message } from '@terraware/web-components';
+import { Button, Message, Tabs } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import BackToLink from 'src/components/common/BackToLink';
@@ -74,7 +73,16 @@ export default function NurseryWithdrawalsDetailsView({
   const location = useStateLocation();
   const tab = (query.get('tab') || '').toLowerCase();
   const preselectedTab = TABS.indexOf(tab) === -1 ? 'withdrawal' : tab;
-  const [selectedTab, setSelectedTab] = useState(preselectedTab);
+  const [activeTab, setActiveTab] = useState<string>(preselectedTab);
+
+  const onTabChange = useCallback(
+    (newTab: string) => {
+      setActiveTab(newTab);
+      query.set('tab', newTab);
+      navigate(getLocation(location.pathname, location, query.toString()));
+    },
+    [query, navigate, location]
+  );
 
   const [withdrawal, setWithdrawal] = useState<NurseryWithdrawal | undefined>(undefined);
   const [withdrawalSummary, setWithdrawalSummary] = useState<WithdrawalSummary | undefined>(undefined);
@@ -131,19 +139,8 @@ export default function NurseryWithdrawalsDetailsView({
   }, [selectedOrganization, withdrawalId, snackbar, reload]);
 
   useEffect(() => {
-    setSelectedTab(query.get('tab') || 'withdrawal');
+    setActiveTab(query.get('tab') || 'withdrawal');
   }, [query]);
-
-  const tabStyles = {
-    fontSize: '14px',
-    padding: theme.spacing(1, 2),
-    minHeight: theme.spacing(4.5),
-    textTransform: 'capitalize',
-    '&.Mui-selected': {
-      color: theme.palette.TwClrTxtBrand as string,
-      fontWeight: 500,
-    },
-  };
 
   const contentPanelProps = {
     borderRadius: '32px',
@@ -162,11 +159,6 @@ export default function NurseryWithdrawalsDetailsView({
         search: '?fromWithdrawal',
       });
     }
-  };
-
-  const handleTabChange = (newValue: string) => {
-    query.set('tab', newValue);
-    navigate(getLocation(location.pathname, location, query.toString()));
   };
 
   return (
@@ -235,49 +227,57 @@ export default function NurseryWithdrawalsDetailsView({
           </Box>
         )}
         {withdrawal?.purpose === OUTPLANT && withdrawalSummary?.hasReassignments && (
-          <TabContext value={selectedTab}>
-            <Box
-              sx={{
-                borderBottom: 1,
-                borderColor: 'divider',
-                margin: isMobile ? 0 : theme.spacing(0, 4),
-              }}
-            >
-              <TabList
-                sx={{ minHeight: theme.spacing(4.5) }}
-                onChange={(_, value) => handleTabChange(value)}
-                TabIndicatorProps={{
-                  style: {
-                    background: theme.palette.TwClrBgBrand,
-                    height: '4px',
-                    borderRadius: '4px 4px 0 0',
-                  },
-                }}
-              >
-                <Tab label={strings.WITHDRAWAL} value='withdrawal' sx={tabStyles} />
-                <Tab label={strings.REASSIGNMENT} value='reassignment' sx={tabStyles} />
-              </TabList>
-            </Box>
-            <TabPanel value='withdrawal' sx={contentPanelProps}>
-              <WithdrawalTabPanelContent
-                species={species}
-                plantingSubzoneNames={plantingSubzoneNames}
-                withdrawal={withdrawal}
-                withdrawalSummary={withdrawalSummary}
-                delivery={delivery}
-                batches={batches}
-              />
-            </TabPanel>
-            <TabPanel value='reassignment' sx={contentPanelProps}>
-              <ReassignmentTabPanelContent
-                species={species}
-                plantingSubzoneNames={plantingSubzoneNames}
-                withdrawal={withdrawal}
-                delivery={delivery}
-                batches={batches}
-              />
-            </TabPanel>
-          </TabContext>
+          <>
+            <Tabs
+              activeTab={activeTab}
+              onTabChange={onTabChange}
+              tabs={[
+                {
+                  id: 'withdrawal',
+                  label: strings.WITHDRAWAL,
+                  children: (
+                    <Box
+                      sx={{
+                        backgroundColor: theme.palette.TwClrBg,
+                        borderRadius: isMobile ? '0 0 16px 16px' : '32px',
+                        padding: theme.spacing(3),
+                      }}
+                    >
+                      <WithdrawalTabPanelContent
+                        species={species}
+                        plantingSubzoneNames={plantingSubzoneNames}
+                        withdrawal={withdrawal}
+                        withdrawalSummary={withdrawalSummary}
+                        delivery={delivery}
+                        batches={batches}
+                      />
+                    </Box>
+                  ),
+                },
+                {
+                  id: 'reassignment',
+                  label: strings.REASSIGNMENT,
+                  children: (
+                    <Box
+                      sx={{
+                        backgroundColor: theme.palette.TwClrBg,
+                        borderRadius: isMobile ? '0 0 16px 16px' : '32px',
+                        padding: theme.spacing(3),
+                      }}
+                    >
+                      <ReassignmentTabPanelContent
+                        species={species}
+                        plantingSubzoneNames={plantingSubzoneNames}
+                        withdrawal={withdrawal}
+                        delivery={delivery}
+                        batches={batches}
+                      />
+                    </Box>
+                  ),
+                },
+              ]}
+            />
+          </>
         )}
         {withdrawal?.purpose === OUTPLANT && !withdrawalSummary?.hasReassignments && (
           <Box sx={contentPanelProps}>
