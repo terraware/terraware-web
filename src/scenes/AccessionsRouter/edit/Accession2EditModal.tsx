@@ -7,7 +7,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import ProgressCircle from 'src/components/common/ProgressCircle/ProgressCircle';
 import SelectPhotos from 'src/components/common/SelectPhotos';
 import SpeciesSelector from 'src/components/common/SpeciesSelector';
-import { useOrganization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import AccessionService from 'src/services/AccessionService';
 import SeedBankService from 'src/services/SeedBankService';
 import strings from 'src/strings';
@@ -37,8 +37,9 @@ const MANDATORY_FIELDS = ['speciesId', 'collectedDate'] as const;
 
 type MandatoryField = (typeof MANDATORY_FIELDS)[number];
 
-export default function Accession2EditModal(props: Accession2EditModalProps): JSX.Element {
+export default function Accession2EditModal(props: Accession2EditModalProps): JSX.Element | null {
   const { onClose, open, accession, reload } = props;
+  const { activeLocale } = useLocalization();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const [record, setRecord, onChange] = useForm(accession);
@@ -119,7 +120,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
     onClose();
   };
 
-  return (
+  return !activeLocale ? null : (
     <DialogBox
       middleButtons={[
         <Button

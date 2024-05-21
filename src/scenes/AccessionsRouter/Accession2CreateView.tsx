@@ -13,7 +13,7 @@ import Textfield from 'src/components/common/Textfield/Textfield';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useProjects } from 'src/hooks/useProjects';
-import { useOrganization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import SeedBankService, { AccessionPostRequestBody } from 'src/services/SeedBankService';
 import strings from 'src/strings';
 import { accessionCreateStates } from 'src/types/Accession';
@@ -44,7 +44,8 @@ type MandatoryField = (typeof MANDATORY_FIELDS)[number];
 
 export const MAX_ACCESSION_PHOTOS = 10;
 
-export default function CreateAccession(): JSX.Element {
+export default function CreateAccession(): JSX.Element | null {
+  const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const navigate = useNavigate();
@@ -158,7 +159,7 @@ export default function CreateAccession(): JSX.Element {
 
   const gridSize = () => (isMobile ? 12 : 6);
 
-  return (
+  return !activeLocale ? null : (
     <TfMain>
       <PageForm
         cancelID='cancelCreateAccession'
