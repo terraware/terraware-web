@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1716320954238" clover="3.2.0">
-  <project timestamp="1716320954239" name="All files">
-    <metrics statements="22169" coveredstatements="923" conditionals="13956" coveredconditionals="228" methods="6944" coveredmethods="162" elements="43069" coveredelements="1313" complexity="0" loc="22169" ncloc="22169" packages="207" files="969" classes="969"/>
+<coverage generated="1716323165861" clover="3.2.0">
+  <project timestamp="1716323165861" name="All files">
+    <metrics statements="22171" coveredstatements="923" conditionals="13960" coveredconditionals="228" methods="6945" coveredmethods="162" elements="43076" coveredelements="1313" complexity="0" loc="22171" ncloc="22171" packages="207" files="969" classes="969"/>
     <package name="src">
       <metrics statements="161" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -79,11 +79,11 @@
       </file>
       <file name="docLinks.ts" path="/home/runner/work/terraware-web/terraware-web/src/docLinks.ts">
         <metrics statements="5" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="16" count="0" type="stmt"/>
-        <line num="47" count="0" type="stmt"/>
-        <line num="48" count="0" type="stmt"/>
-        <line num="50" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="51" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="59" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="60" count="0" type="stmt"/>
       </file>
       <file name="features.ts" path="/home/runner/work/terraware-web/terraware-web/src/features.ts">
         <metrics statements="24" coveredstatements="0" conditionals="25" coveredconditionals="0" methods="3" coveredmethods="0"/>
@@ -15058,17 +15058,19 @@
       </file>
     </package>
     <package name="src.scenes.ContactUs">
-      <metrics statements="8" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="3" coveredmethods="0"/>
+      <metrics statements="10" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="4" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ContactUs/index.tsx">
-        <metrics statements="8" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="3" coveredmethods="0"/>
-        <line num="17" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
-        <line num="36" count="0" type="stmt"/>
+        <metrics statements="10" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <line num="20" count="0" type="stmt"/>
         <line num="37" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
         <line num="40" count="0" type="stmt"/>
-        <line num="67" count="0" type="stmt"/>
-        <line num="73" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="117" count="0" type="stmt"/>
+        <line num="152" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.DeliverablesRouter">
