@@ -9,7 +9,10 @@ export type DocType =
   | 'planting_site_create_zone_boundary_instructions_video'
   | 'privacy_policy'
   | 'report_a_problem'
-  | 'request_a_feature';
+  | 'request_a_feature'
+  | 'terraformation'
+  | 'terraformation_software_solutions'
+  | 'knowledge_base';
 
 type DocLink = Record<DocType, string>;
 
@@ -27,6 +30,9 @@ const DOC_LINKS: Record<SupportedLocaleId, DocLink> = {
     privacy_policy: 'https://www.terraformation.com/privacy-policy',
     report_a_problem: 'https://www.terraformation.com/contact-us/terraware-support-bug-report',
     request_a_feature: 'https://www.terraformation.com/contact-us/terraware-support-feature-request',
+    terraformation: 'https://www.terraformation.com',
+    terraformation_software_solutions: 'https://www.terraformation.com/solutions/software',
+    knowledge_base: 'https://knowledge.terraformation.com/',
   },
   es: {
     contact_us: 'https://www.terraformation.com/contact-us/soporte-terraware-contactenos',
@@ -41,6 +47,9 @@ const DOC_LINKS: Record<SupportedLocaleId, DocLink> = {
     privacy_policy: 'https://www.terraformation.com/politica-de-privacidad',
     report_a_problem: 'https://www.terraformation.com/contact-us/soporte-terraware-informe-de-un-problema',
     request_a_feature: 'https://www.terraformation.com/contact-us/soporte-terraware-solicite-una-funcion',
+    terraformation: 'https://www.terraformation.com',
+    terraformation_software_solutions: 'https://www.terraformation.com/solutions/software',
+    knowledge_base: 'https://knowledge.terraformation.com/',
   },
 };
 
