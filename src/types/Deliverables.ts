@@ -88,7 +88,7 @@ export const statusLabel = (status: DeliverableStatusType): string => {
   }
 };
 
-export const typeLabel = (status: DeliverableTypeType): string => {
+export const getDeliverableTypeLabel = (status: DeliverableTypeType): string => {
   switch (status) {
     case 'Document':
       return strings.DOCUMENT;

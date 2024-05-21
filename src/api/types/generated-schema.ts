@@ -2556,6 +2556,8 @@ export interface components {
       category: "Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files";
       /** @description Optional description of the deliverable in HTML form. */
       descriptionHtml?: string;
+      /** Format: date */
+      dueDate: string;
       /** Format: int64 */
       id: number;
       name: string;
