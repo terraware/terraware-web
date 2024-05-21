@@ -1,6 +1,7 @@
 import React, { Theme, Typography, useTheme } from '@mui/material';
 import { Property } from 'csstype';
 
+import strings from 'src/strings';
 import { ToDoBadge, ToDoItem } from 'src/types/ProjectToDo';
 
 interface ToDoDateProps {
@@ -25,6 +26,7 @@ const ToDoDate = ({ toDo }: ToDoDateProps) => {
   const theme = useTheme();
 
   const dateLabel = toDo.getDisplayDateTimeString();
+  const dateString = toDo.getType() == 'Deliverable' ? strings.formatString(strings.DUE, dateLabel) : dateLabel;
 
   return (
     <Typography
@@ -35,7 +37,7 @@ const ToDoDate = ({ toDo }: ToDoDateProps) => {
       component={'span'}
       whiteSpace={'nowrap'}
     >
-      {dateLabel}
+      {dateString}
     </Typography>
   );
 };
