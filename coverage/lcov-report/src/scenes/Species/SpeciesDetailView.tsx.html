@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/46</span>
+                <span class='fraction'>0/48</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/45</span>
+                <span class='fraction'>0/47</span>
             </div>
         
             
@@ -374,7 +374,16 @@
 <a name='L309'></a><a href='#L309'>309</a>
 <a name='L310'></a><a href='#L310'>310</a>
 <a name='L311'></a><a href='#L311'>311</a>
-<a name='L312'></a><a href='#L312'>312</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L312'></a><a href='#L312'>312</a>
+<a name='L313'></a><a href='#L313'>313</a>
+<a name='L314'></a><a href='#L314'>314</a>
+<a name='L315'></a><a href='#L315'>315</a>
+<a name='L316'></a><a href='#L316'>316</a>
+<a name='L317'></a><a href='#L317'>317</a>
+<a name='L318'></a><a href='#L318'>318</a>
+<a name='L319'></a><a href='#L319'>319</a>
+<a name='L320'></a><a href='#L320'>320</a>
+<a name='L321'></a><a href='#L321'>321</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -483,6 +492,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -685,10 +703,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 &nbsp;
-import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
+import { Box, Grid, GridProps, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { BusySpinner } from '@terraware/web-components';
 import { Button, DropdownItem } from '@terraware/web-components';
@@ -743,12 +761,12 @@ export default function <span class="fstat-no" title="function not covered" >Spe
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const { orgHasParticipants } = <span class="cstat-no" title="statement not covered" >useParticipantData();</span>
 &nbsp;
-  const gridSize = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+  const gridSize = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (isMobile) {</span>
 <span class="cstat-no" title="statement not covered" >      return 12;</span>
     }
 <span class="cstat-no" title="statement not covered" >    return 4;</span>
-  };
+  }, [isMobile]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const getSpecies = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
@@ -792,6 +810,15 @@ export default function <span class="fstat-no" title="function not covered" >Spe
 <span class="cstat-no" title="statement not covered" >    navigate(APP_PATHS.SPECIES);</span>
   };
 &nbsp;
+  const GridItemWrapper = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    ({</span> children, props }: { children: JSX.Element; props?: GridProps }) =&gt; (
+<span class="cstat-no" title="statement not covered" >      &lt;Grid item xs={gridSize} {...props} minHeight={'64px'} paddingBottom={theme.spacing(2)}&gt;</span>
+        {children}
+      &lt;/Grid&gt;
+    ),
+    [gridSize]
+  );
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;TfMain&gt;
       {isBusy &amp;&amp; &lt;BusySpinner withSkrim={true} /&gt;}
@@ -831,7 +858,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             margin: 0,
           }}
         &gt;
-          &lt;Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}&gt;
+          &lt;GridItemWrapper&gt;
             &lt;TextField
               label={strings.SCIENTIFIC_NAME}
               id='scientificName'
@@ -839,8 +866,8 @@ export default function <span class="fstat-no" title="function not covered" >Spe
               value={species?.scientificName}
               display={true}
             /&gt;
-          &lt;/Grid&gt;
-          &lt;Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}&gt;
+          &lt;/GridItemWrapper&gt;
+          &lt;GridItemWrapper&gt;
             &lt;TextField
               label={strings.COMMON_NAME}
               id='commonName'
@@ -849,11 +876,11 @@ export default function <span class="fstat-no" title="function not covered" >Spe
               tooltipTitle={strings.TOOLTIP_TIME_ZONE_NURSERY}
               display={true}
             /&gt;
-          &lt;/Grid&gt;
-          &lt;Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}&gt;
+          &lt;/GridItemWrapper&gt;
+          &lt;GridItemWrapper&gt;
             &lt;TextField id={'family'} label={strings.FAMILY} value={species?.familyName} type='text' display={true} /&gt;
-          &lt;/Grid&gt;
-          &lt;Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}&gt;
+          &lt;/GridItemWrapper&gt;
+          &lt;GridItemWrapper&gt;
             &lt;TextField
               id={'conservationCategory'}
               label={strings.CONSERVATION_CATEGORY}
@@ -861,8 +888,8 @@ export default function <span class="fstat-no" title="function not covered" >Spe
               type='text'
               display={true}
             /&gt;
-          &lt;/Grid&gt;
-          &lt;Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}&gt;
+          &lt;/GridItemWrapper&gt;
+          &lt;GridItemWrapper&gt;
             &lt;TextField
               id={'growthForms'}
               label={strings.GROWTH_FORM}
@@ -871,8 +898,8 @@ export default function <span class="fstat-no" title="function not covered" >Spe
               aria-label='date-picker'
               display={true}
             /&gt;
-          &lt;/Grid&gt;
-          &lt;Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}&gt;
+          &lt;/GridItemWrapper&gt;
+          &lt;GridItemWrapper&gt;
             &lt;Checkbox
               id='Rare'
               name='rare'
@@ -884,9 +911,9 @@ export default function <span class="fstat-no" title="function not covered" >Spe
               value={species?.rare}
               className={classes.blockCheckbox}
             /&gt;
-          &lt;/Grid&gt;
+          &lt;/GridItemWrapper&gt;
           {/* TODO this will eventually come from the participant project species, not the org species */}
-          {/* &lt;Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}&gt;
+          {/* &lt;GridItemWrapper&gt;
                 &lt;TextField
                   id={'nativeStatus'}
                   label={strings.NATIVE_NON_NATIVE}
@@ -896,7 +923,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
                   required
                 /&gt;
               &lt;/Grid&gt; */}
-          &lt;Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}&gt;
+          &lt;GridItemWrapper&gt;
             &lt;TextField
               id={'nativeEcosistem'}
               label={strings.NATIVE_ECOSYSTEM}
@@ -904,8 +931,8 @@ export default function <span class="fstat-no" title="function not covered" >Spe
               type='text'
               display={true}
             /&gt;
-          &lt;/Grid&gt;
-          &lt;Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}&gt;
+          &lt;/GridItemWrapper&gt;
+          &lt;GridItemWrapper&gt;
             &lt;TextField
               id={'successionalGroup'}
               label={strings.SUCCESSIONAL_GROUP}
@@ -913,8 +940,8 @@ export default function <span class="fstat-no" title="function not covered" >Spe
               type='text'
               display={true}
             /&gt;
-          &lt;/Grid&gt;
-          &lt;Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}&gt;
+          &lt;/GridItemWrapper&gt;
+          &lt;GridItemWrapper&gt;
             &lt;TextField
               id={'ecosystemType'}
               label={strings.ECOSYSTEM_TYPE}
@@ -922,8 +949,8 @@ export default function <span class="fstat-no" title="function not covered" >Spe
               type='text'
               display={true}
             /&gt;
-          &lt;/Grid&gt;
-          &lt;Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}&gt;
+          &lt;/GridItemWrapper&gt;
+          &lt;GridItemWrapper&gt;
             &lt;TextField
               id={'ecologicalRoleKnown'}
               label={strings.ECOLOGICAL_ROLE_KNOWN}
@@ -932,8 +959,8 @@ export default function <span class="fstat-no" title="function not covered" >Spe
               display={true}
               tooltipTitle={strings.ECOLOGICAL_ROLE_KNOWN_TOOLTIP}
             /&gt;
-          &lt;/Grid&gt;
-          &lt;Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}&gt;
+          &lt;/GridItemWrapper&gt;
+          &lt;GridItemWrapper&gt;
             &lt;TextField
               id={'localUsesKnown'}
               label={strings.LOCAL_USES_KNOWN}
@@ -942,8 +969,8 @@ export default function <span class="fstat-no" title="function not covered" >Spe
               display={true}
               tooltipTitle={strings.LOCAL_USES_KNOWN_TOOLTIP}
             /&gt;
-          &lt;/Grid&gt;
-          &lt;Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}&gt;
+          &lt;/GridItemWrapper&gt;
+          &lt;GridItemWrapper&gt;
             &lt;TextField
               id={'seedStorageBehavior'}
               label={strings.SEED_STORAGE_BEHAVIOR}
@@ -951,8 +978,8 @@ export default function <span class="fstat-no" title="function not covered" >Spe
               type='text'
               display={true}
             /&gt;
-          &lt;/Grid&gt;
-          &lt;Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}&gt;
+          &lt;/GridItemWrapper&gt;
+          &lt;GridItemWrapper&gt;
             &lt;TextField
               id={'plantMaterialSourcingMethod'}
               label={strings.PLANT_MATERIAL_SOURCING_METHOD}
@@ -972,8 +999,8 @@ export default function <span class="fstat-no" title="function not covered" >Spe
                 &lt;/&gt;
               }
             /&gt;
-          &lt;/Grid&gt;
-          &lt;Grid item xs={isMobile ? 12 : 8}&gt;
+          &lt;/GridItemWrapper&gt;
+          &lt;GridItemWrapper props={{ xs: isMobile ? 12 : 8 }}&gt;
             &lt;TextField
               id={'otherFacts'}
               label={strings.OTHER_FACTS}
@@ -981,7 +1008,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
               type='textarea'
               display={true}
             /&gt;
-          &lt;/Grid&gt;
+          &lt;/GridItemWrapper&gt;
           {species &amp;&amp; orgHasParticipants &amp;&amp; &lt;SpeciesProjectsTable speciesId={species.id} editMode={false} /&gt;}
         &lt;/Grid&gt;
       &lt;/Grid&gt;
@@ -1003,7 +1030,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-21T16:29:01.267Z
+                at 2024-05-21T17:36:33.651Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

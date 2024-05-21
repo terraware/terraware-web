@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -157,24 +157,7 @@
 <a name='L92'></a><a href='#L92'>92</a>
 <a name='L93'></a><a href='#L93'>93</a>
 <a name='L94'></a><a href='#L94'>94</a>
-<a name='L95'></a><a href='#L95'>95</a>
-<a name='L96'></a><a href='#L96'>96</a>
-<a name='L97'></a><a href='#L97'>97</a>
-<a name='L98'></a><a href='#L98'>98</a>
-<a name='L99'></a><a href='#L99'>99</a>
-<a name='L100'></a><a href='#L100'>100</a>
-<a name='L101'></a><a href='#L101'>101</a>
-<a name='L102'></a><a href='#L102'>102</a>
-<a name='L103'></a><a href='#L103'>103</a>
-<a name='L104'></a><a href='#L104'>104</a>
-<a name='L105'></a><a href='#L105'>105</a>
-<a name='L106'></a><a href='#L106'>106</a>
-<a name='L107'></a><a href='#L107'>107</a>
-<a name='L108'></a><a href='#L108'>108</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L95'></a><a href='#L95'>95</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -195,9 +178,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -209,15 +191,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -277,7 +251,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useState } from 'react';
 &nbsp;
 import { Box, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -286,10 +260,6 @@ import TextField from '@terraware/web-components/components/Textfield/Textfield'
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
-import { Deliverable } from 'src/types/Deliverables';
-import useSnackbar from 'src/utils/useSnackbar';
-&nbsp;
-import useUpdateDeliverable from './useUpdateDeliverable';
 &nbsp;
 const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
   icon: {
@@ -298,34 +268,25 @@ const useStyles = <span class="cstat-no" title="statement not covered" >makeStyl
   },
 }));
 &nbsp;
-interface InternalCommentProps {
-  deliverable: Deliverable;
+interface InternalCommentProps&lt;T&gt; {
+  entity: T;
+  update: (internalComment: string) =&gt; void;
 }
 &nbsp;
-const InternalComment = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> deliverable }: InternalCommentProps) =&gt; {</span>
-  const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
+function <span class="fstat-no" title="function not covered" >InternalComment&lt;</span>T extends { internalComment?: string }&gt;({ entity, update }: InternalCommentProps&lt;T&gt;) {
   const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
-  const { status, update } = <span class="cstat-no" title="statement not covered" >useUpdateDeliverable();</span>
 &nbsp;
   const [isDialogOpen, setIsDialogOpen] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
-  const [internalComment, setInternalComment] = <span class="cstat-no" title="statement not covered" >useState(deliverable.internalComment || '');</span>
+  const [internalComment, setInternalComment] = <span class="cstat-no" title="statement not covered" >useState(entity.internalComment || '');</span>
 &nbsp;
   const toggleDialog = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setIsDialogOpen(<span class="fstat-no" title="function not covered" >(p</span>rev) =&gt; <span class="cstat-no" title="statement not covered" >!prev)</span>;</span>
   }, []);
 &nbsp;
   const handleUpdate = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    update({ ...deliverable, internalComment });</span>
+<span class="cstat-no" title="statement not covered" >    update(internalComment);</span>
+<span class="cstat-no" title="statement not covered" >    toggleDialog();</span>
   };
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (status === 'success') {</span>
-<span class="cstat-no" title="statement not covered" >      snackbar.toastSuccess(strings.CHANGES_SAVED);</span>
-<span class="cstat-no" title="statement not covered" >      toggleDialog();</span>
-    } else <span class="cstat-no" title="statement not covered" >if (status === 'error') {</span>
-<span class="cstat-no" title="statement not covered" >      snackbar.toastError(strings.GENERIC_ERROR);</span>
-    }
-  }, [status, snackbar, toggleDialog]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;&gt;
@@ -347,7 +308,7 @@ const InternalComment = <span class="cstat-no" title="statement not covered" ><s
         onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >setInternalComment(value as string)}</span>
         preserveNewlines
         type='textarea'
-        value={deliverable.internalComment ?? strings.NO_COMMENTS_ADDED}
+        value={entity.internalComment ?? strings.NO_COMMENTS_ADDED}
       /&gt;
       &lt;DialogBox
         onClose={toggleDialog}
@@ -381,7 +342,7 @@ const InternalComment = <span class="cstat-no" title="statement not covered" ><s
       &lt;/DialogBox&gt;
     &lt;/&gt;
   );
-};
+}
 &nbsp;
 export default InternalComment;
 &nbsp;</pre></td></tr></table></pre>
@@ -391,7 +352,7 @@ export default InternalComment;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-21T16:29:01.267Z
+                at 2024-05-21T17:36:33.651Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
