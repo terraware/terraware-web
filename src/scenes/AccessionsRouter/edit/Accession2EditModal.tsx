@@ -279,7 +279,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
               <SelectPhotos
                 onPhotosChanged={onPhotosChanged}
                 multipleSelection={true}
-                maxPhotos={MAX_ACCESSION_PHOTOS - photoFilenames.length}
+                maxPhotos={MAX_ACCESSION_PHOTOS - (photoFilenames.length + newPhotos.length)}
               />
             </Box>
           </Container>
