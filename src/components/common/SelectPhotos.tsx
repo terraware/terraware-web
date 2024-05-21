@@ -13,10 +13,10 @@ export default function SelectPhotos(props: PhotoChooserProps): JSX.Element {
   return (
     <PhotoChooser
       {...props}
-      uploadText={strings.ADD_PHOTOS}
+      uploadText={strings.UPLOAD_PHOTOS}
       uploadDescription={strings.UPLOAD_PHOTO_DESCRIPTION}
       uploadMobileDescription={strings.UPLOAD_PHOTO_MOBILE_DESCRIPTION}
-      chooseFileText={strings.ADD_PHOTO}
+      chooseFileText={strings.UPLOAD_PHOTO}
     />
   );
 }

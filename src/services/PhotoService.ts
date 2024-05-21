@@ -26,14 +26,8 @@ const uploadPhoto = async (uploadUrl: string, file: File): Promise<Response & Ph
 /**
  * Upload multiple photos for a report
  */
-const uploadPhotos = async (
-  uploadUrl: string,
-  photos: File[],
-  appendFilenameToUrl?: boolean
-): Promise<((Response & PhotoId) | string)[]> => {
-  const uploadPhotoPromises = photos.map((photo) =>
-    uploadPhoto(appendFilenameToUrl ? `${uploadUrl}/${photo.name}` : uploadUrl, photo)
-  );
+const uploadPhotos = async (uploadUrl: string, photos: File[]): Promise<((Response & PhotoId) | string)[]> => {
+  const uploadPhotoPromises = photos.map((photo) => uploadPhoto(uploadUrl, photo));
   try {
     const promiseResponses = await Promise.allSettled(uploadPhotoPromises);
     return promiseResponses.map((response) => {
