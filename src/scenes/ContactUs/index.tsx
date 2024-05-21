@@ -8,7 +8,6 @@ import { Button } from '@terraware/web-components';
 import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
 import getHelpEmail from 'src/components/common/HelpEmail';
-import PageCard from 'src/components/common/PageCard';
 import TextWithLink from 'src/components/common/TextWithLink';
 import TfMain from 'src/components/common/TfMain';
 import Icon from 'src/components/common/icon/Icon';
@@ -24,7 +23,7 @@ const useStyles = makeStyles(() => ({
     fontSize: '24px',
     fontWeight: 600,
     lineHeight: '32px',
-    margin: '0 0 12px 0',
+    margin: '0 0 12px 16px',
   },
 }));
 
@@ -37,13 +36,12 @@ type ListItemContent = {
 };
 export default function ContactUsView(): JSX.Element {
   const classes = useStyles();
-  const { isMobile } = useDeviceInfo();
+  const { isMobile, isDesktop } = useDeviceInfo();
   const docLinks = useDocLinks();
   const appVersion = useAppSelector(selectAppVersion);
   const theme = useTheme();
   const navigate = useNavigate();
 
-  /*TODO USE CORRECT LINKS HERE */
   const listItemContent: ListItemContent[] = [
     {
       icon: 'iconLibrary',
@@ -131,16 +129,24 @@ export default function ContactUsView(): JSX.Element {
                   </Typography>
                 </Box>
 
-                <Grid xs={12} sx={{ display: 'flex', alignItems: 'center' }}>
+                <Grid item xs={isDesktop ? 9 : 12} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Box
+                  sx={{ display: 'flex', alignItems: 'center', flexShrink: 1, flexGrow: 0 }}
+                  marginRight={theme.spacing(3)}
+                >
                   <Typography fontSize='16px'>{item.description}</Typography>
+                  </Box>
+                  <Box
+                  sx={{ display: 'flex', alignItems: 'center', justifyContent: 'right', flexShrink: 0, flexGrow: 1 }}
+                >
                   <Button
                     label={item.buttonText}
                     size='medium'
                     onClick={() => navigate(item.link)}
                     priority='secondary'
                     type='productive'
-                    style={{ marginRight: '16px' }}
                   />
+                  </Box>
                 </Grid>
               </Grid>
             );
