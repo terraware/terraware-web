@@ -151,7 +151,7 @@ export default function ContactUsView(): JSX.Element {
                     <Button
                       label={item.buttonText}
                       size='medium'
-                      onClick={() => navigate(item.link)}
+                      onClick={() => window.open(item.link)}
                       priority='secondary'
                       type='productive'
                     />
