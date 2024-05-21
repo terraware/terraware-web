@@ -45,18 +45,8 @@ import DetailPanel from './view/DetailPanel';
 import WithdrawModal from './withdraw/WithdrawModal';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  iconStyle: {
-    fill: theme.palette.TwClrIcn,
-  },
-  editIcon: {
-    display: 'none',
-    fill: theme.palette.TwClrIcn,
-  },
   fullSizeButton: {
     width: '100%',
-  },
-  actionMenuButton: {
-    marginLeft: theme.spacing(1),
   },
   addIconEnabled: {
     fill: theme.palette.TwClrIcnBrand,
