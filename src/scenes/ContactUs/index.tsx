@@ -129,23 +129,32 @@ export default function ContactUsView(): JSX.Element {
                   </Typography>
                 </Box>
 
-                <Grid item xs={isDesktop ? 9 : 12} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Box
-                  sx={{ display: 'flex', alignItems: 'center', flexShrink: 1, flexGrow: 0 }}
-                  marginRight={theme.spacing(3)}
+                <Grid
+                  item
+                  xs={isDesktop ? 9 : 12}
+                  flexDirection={isMobile ? 'column' : 'row'}
+                  display='flex'
+                  alignItems='center'
+                  justifyContent='space-between'
                 >
-                  <Typography fontSize='16px'>{item.description}</Typography>
+                  <Box display='flex' alignItems='center' flexShrink='1' flexGrow='0' marginRight={theme.spacing(3)}>
+                    <Typography fontSize='16px'>{item.description}</Typography>
                   </Box>
                   <Box
-                  sx={{ display: 'flex', alignItems: 'center', justifyContent: 'right', flexShrink: 0, flexGrow: 1 }}
-                >
-                  <Button
-                    label={item.buttonText}
-                    size='medium'
-                    onClick={() => navigate(item.link)}
-                    priority='secondary'
-                    type='productive'
-                  />
+                    display='flex'
+                    alignItems='center'
+                    justifyContent='right'
+                    flexShrink='0'
+                    flexGrow='1'
+                    marginTop={isMobile ? theme.spacing(1) : 0}
+                  >
+                    <Button
+                      label={item.buttonText}
+                      size='medium'
+                      onClick={() => navigate(item.link)}
+                      priority='secondary'
+                      type='productive'
+                    />
                   </Box>
                 </Grid>
               </Grid>
