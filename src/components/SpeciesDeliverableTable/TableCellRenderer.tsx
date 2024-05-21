@@ -14,7 +14,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import RejectDialog from 'src/scenes/AcceleratorRouter/Deliverables/RejectDialog';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
-import { ParticipantProjectSpecies } from 'src/types/ParticipantProjectSpecies';
+import { SpeciesForParticipantProject } from 'src/types/ParticipantProjectSpecies';
 
 import EditSpeciesModal from './EditSpeciesModal';
 
@@ -47,7 +47,7 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
     }
   };
 
-  if (column.key === 'scientificName') {
+  if (column.key === 'speciesScientificName') {
     return (
       <CellRenderer
         column={column}
@@ -59,7 +59,7 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
               <EditSpeciesModal
                 onClose={() => setOpenedEditSpeciesModal(false)}
                 reload={reloadData}
-                projectSpecies={row as ParticipantProjectSpecies}
+                projectSpecies={row as SpeciesForParticipantProject}
               />
             )}
             {isAcceleratorRoute ? createLinkToAcceleratorSpecies(value) : createLinkToSpecies(value)}
@@ -69,7 +69,7 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
     );
   }
 
-  if (column.key === 'submissionStatus') {
+  if (column.key === 'participantProjectSpeciesSubmissionStatus') {
     return (
       <CellRenderer
         column={column}

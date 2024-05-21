@@ -35,11 +35,10 @@ const SpeciesDeliverableView = (props: Props): JSX.Element => {
   const { currentParticipantProject } = useParticipantData();
   const projectId = viewProps.deliverable.projectId;
   const ppsSearchResults = useAppSelector(selectParticipantProjectSpeciesListRequest(projectId));
-
   const submitButtonIsDisabled = useMemo(() => {
     return (
       !ppsSearchResults?.data?.length ||
-      ppsSearchResults?.data?.every((species) => species.submissionStatus === 'Approved')
+      ppsSearchResults?.data?.every((species) => species.participantProjectSpeciesSubmissionStatus === 'Approved')
     );
   }, [ppsSearchResults]);
 

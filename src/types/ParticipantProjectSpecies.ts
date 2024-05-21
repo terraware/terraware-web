@@ -7,6 +7,8 @@ import strings from 'src/strings';
 export type ParticipantProjectSpecies = components['schemas']['ParticipantProjectSpeciesPayload'];
 export type SubmissionStatus = ParticipantProjectSpecies['submissionStatus'];
 export type SpeciesNativeCategory = ParticipantProjectSpecies['speciesNativeCategory'];
+export type ParticipantProjectForSpecies = components['schemas']['ParticipantProjectForSpeciesPayload'];
+export type SpeciesForParticipantProject = components['schemas']['SpeciesForParticipantProjectPayload'];
 
 export const getSpeciesNativeCategoryLabel = (value: SpeciesNativeCategory): string => {
   switch (value) {

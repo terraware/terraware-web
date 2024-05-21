@@ -19,10 +19,10 @@ import RemoveSpeciesDialog from './RemoveSpeciesDialog';
 import TableCellRenderer from './TableCellRenderer';
 
 const columns = (): TableColumnType[] => [
-  { key: 'scientificName', name: strings.SCIENTIFIC_NAME, type: 'string' },
-  { key: 'commonName', name: strings.COMMON_NAME, type: 'string' },
-  { key: 'rationale', name: strings.RATIONALE, type: 'string' },
-  { key: 'submissionStatus', name: strings.STATUS, type: 'string' },
+  { key: 'speciesScientificName', name: strings.SCIENTIFIC_NAME, type: 'string' },
+  { key: 'speciesCommonName', name: strings.COMMON_NAME, type: 'string' },
+  { key: 'participantProjectSpeciesRationale', name: strings.RATIONALE, type: 'string' },
+  { key: 'participantProjectSpeciesSubmissionStatus', name: strings.STATUS, type: 'string' },
 ];
 
 const consoleColumns = (): TableColumnType[] => [

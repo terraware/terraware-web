@@ -33,7 +33,7 @@ export default function SpeciesProjectsCellRenderer(props: RendererProps<TableRo
     }
   }
 
-  if (column.key === 'submissionStatus') {
+  if (column.key === 'participantProjectSpeciesSubmissionStatus') {
     return (
       <CellRenderer
         index={index}
