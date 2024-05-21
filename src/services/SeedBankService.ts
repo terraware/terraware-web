@@ -16,6 +16,7 @@ import { UnitType } from 'src/units';
 import HttpService, { Response } from './HttpService';
 import PhotoService, { PhotoId } from './PhotoService';
 import SearchService from './SearchService';
+import { getPromisesResponse } from './utils';
 
 /**
  * Seed bank related services
@@ -23,6 +24,7 @@ import SearchService from './SearchService';
 
 const SUMMARY_ENDPOINT = '/api/v1/seedbank/summary';
 const ACCESSIONS_ENDPOINT = '/api/v2/seedbank/accessions';
+const ACCESSION_PHOTO_ENDPOINT = '/api/v1/seedbank/accessions/{accessionId}/photos/{photoFilename}';
 const ACCESSION_PHOTOS_ENDPOINT = '/api/v1/seedbank/accessions/{accessionId}/photos';
 const ACCESSIONS_TEMPLATE_ENDPOINT = '/api/v2/seedbank/accessions/uploads/template';
 const ACCESSIONS_UPLOADS_ENDPOINT = '/api/v2/seedbank/accessions/uploads';
@@ -239,6 +241,27 @@ const uploadAccessionPhotos = async (
 };
 
 /**
+ * Delete multiple photos for an accession
+ */
+const deleteAccessionPhotos = async (accessionId: number, photoFilenames: string[]): Promise<(Response | null)[]> => {
+  const deletePhotoPromises = photoFilenames.map((photoFilename) => deleteAccessionPhoto(accessionId, photoFilename));
+
+  return getPromisesResponse<Response>(deletePhotoPromises);
+};
+
+/**
+ * delete accession photo
+ */
+const deleteAccessionPhoto = async (accessionId: number, photoFilename: string): Promise<Response> => {
+  return await HttpService.root(ACCESSION_PHOTO_ENDPOINT).delete({
+    urlReplacements: {
+      '{accessionId}': accessionId.toString(),
+      '{photoFilename}': photoFilename,
+    },
+  });
+};
+
+/**
  * check on upload status
  */
 const getAccessionsUploadStatus = async (uploadId: number): Promise<Response & AccessionsUploadStatusDetails> => {
@@ -313,6 +336,7 @@ const SeedBankService = {
   downloadAccessionsTemplate,
   uploadAccessions,
   uploadAccessionPhotos,
+  deleteAccessionPhotos,
   getAccessionsUploadStatus,
   resolveAccessionsUpload,
   getAccessionForSpecies,

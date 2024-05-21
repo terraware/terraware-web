@@ -7,6 +7,7 @@ import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import PageForm from 'src/components/common/PageForm';
+import SelectPhotos from 'src/components/common/SelectPhotos';
 import SpeciesSelector from 'src/components/common/SpeciesSelector';
 import Textfield from 'src/components/common/Textfield/Textfield';
 import TfMain from 'src/components/common/TfMain';
@@ -31,7 +32,6 @@ import {
   Collectors2,
   SeedBank2Selector,
 } from './properties';
-import AccessionPhotos from './properties/AccessionPhotos';
 
 const SubTitleStyle = {
   fontSize: '20px',
@@ -41,6 +41,8 @@ const SubTitleStyle = {
 const MANDATORY_FIELDS = ['speciesId', 'collectedDate', 'receivedDate', 'state', 'facilityId'] as const;
 
 type MandatoryField = (typeof MANDATORY_FIELDS)[number];
+
+export const MAX_ACCESSION_PHOTOS = 10;
 
 export default function CreateAccession(): JSX.Element {
   const { isMobile } = useDeviceInfo();
@@ -271,7 +273,23 @@ export default function CreateAccession(): JSX.Element {
           </Grid>
 
           <Box sx={marginTop}>
-            <AccessionPhotos onPhotosChanged={onPhotosChanged} />
+            <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px'>
+              {strings.PHOTOS}
+            </Typography>
+
+            <Box
+              sx={{
+                marginLeft: `-${theme.spacing(3)}`,
+                marginRight: `-${theme.spacing(3)}`,
+                marginTop: `-${theme.spacing(1)}`,
+              }}
+            >
+              <SelectPhotos
+                maxPhotos={MAX_ACCESSION_PHOTOS}
+                multipleSelection={true}
+                onPhotosChanged={onPhotosChanged}
+              />
+            </Box>
           </Box>
         </Container>
       </PageForm>
