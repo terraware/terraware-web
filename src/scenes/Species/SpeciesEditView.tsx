@@ -66,9 +66,9 @@ export default function SpeciesEditView(): JSX.Element {
     });
   };
 
-  const onAddHandler = (addedId: number) => {
+  const onAddHandler = (addedIds: number[]) => {
     setAddedProjectsIds((oldProjectsIds: number[] | undefined) => {
-      return oldProjectsIds ? [...oldProjectsIds, addedId] : [addedId];
+      return oldProjectsIds ? [...oldProjectsIds, ...addedIds] : addedIds;
     });
   };
 

@@ -53,7 +53,7 @@ type SpeciesDetailsFormProps = {
   participantProjectSpeciesRecord?: ParticipantProjectSpecies;
   record: Species;
   setNameFormatError: React.Dispatch<React.SetStateAction<string | string[]>>;
-  onAdd?: (id: number) => void;
+  onAdd?: (ids: number[]) => void;
   onRemoveNew?: (ids: number[]) => void;
   onRemoveExisting?: (ids: number[]) => void;
   addedProjectsIds?: number[];

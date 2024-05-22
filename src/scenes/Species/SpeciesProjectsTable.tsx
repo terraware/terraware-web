@@ -37,7 +37,7 @@ const viewColumns = (): TableColumnType[] => [
 type SpeciesProjectsTableProps = {
   speciesId: number;
   editMode: boolean;
-  onAdd?: (id: number) => void;
+  onAdd?: (ids: number[]) => void;
   onRemoveNew?: (ids: number[]) => void;
   onRemoveExisting?: (ids: number[]) => void;
   addedProjectsIds?: number[];
@@ -104,6 +104,7 @@ export default function SpeciesProjectsTable({
           return !removedProjectsIds?.includes(Number(sResults.participantProjectSpeciesId));
         }) || [];
     }
+
     if (addedProjectsIds) {
       const newProjects = addedProjectsIds?.map((id) => {
         return {
@@ -120,13 +121,11 @@ export default function SpeciesProjectsTable({
     setFilteredResults(updatedResults);
   }, [addedProjectsIds, removedProjectsIds, searchResults]);
 
-  const onAddHandler = (addedId: number) => {
+  const onAddHandler = (addedIds: number[]) => {
     // only add new project if it's not already added
-    const exsist = searchResults?.find((sr) => {
-      sr.projectId.toString() === addedId.toString();
-    });
-    if (!exsist && onAdd) {
-      onAdd(addedId);
+    const netNewIds = addedIds.filter((id) => !searchResults?.find((sr) => Number(sr.projectId) === id));
+    if (netNewIds.length > 0 && onAdd) {
+      onAdd(netNewIds);
     }
   };
 
