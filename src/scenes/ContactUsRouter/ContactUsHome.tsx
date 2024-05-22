@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -12,10 +12,14 @@ import TfMain from 'src/components/common/TfMain';
 import Icon from 'src/components/common/icon/Icon';
 import { IconName } from 'src/components/common/icon/icons';
 import { useDocLinks } from 'src/docLinks';
+import isEnabled from 'src/features';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { selectAppVersion } from 'src/redux/features/appVersion/appVersionSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+import { useSupportData } from './provider/Context';
 
 const useStyles = makeStyles(() => ({
   title: {
@@ -27,27 +31,31 @@ const useStyles = makeStyles(() => ({
 }));
 
 type ListItemContent = {
-  icon: IconName;
+  icon?: IconName;
   title: string;
   description: string;
   buttonText: string;
-  link: string;
+  onClick: () => void;
 };
-export default function ContactUsView(): JSX.Element {
+export default function ContactUsHome(): JSX.Element {
   const classes = useStyles();
   const { isMobile, isDesktop } = useDeviceInfo();
   const docLinks = useDocLinks();
   const appVersion = useAppSelector(selectAppVersion);
   const theme = useTheme();
+  const { goToContactUsForm } = useNavigateTo();
+  const { types } = useSupportData();
+  const featureEnabled = isEnabled('Terraware Support Forms');
 
-  const listItemContent: ListItemContent[] = [
-    {
-      icon: 'iconLibrary',
-      title: strings.KNOWLEDGE_BASE,
-      description: strings.DESCRIPTION_KNOWLEDGE_BASE,
-      buttonText: strings.KNOWLEDGE_BASE,
-      link: docLinks.knowledge_base,
-    },
+  const knowledgeBaseItem: ListItemContent = {
+    icon: 'iconLibrary',
+    title: strings.KNOWLEDGE_BASE,
+    description: strings.DESCRIPTION_KNOWLEDGE_BASE,
+    buttonText: strings.KNOWLEDGE_BASE,
+    onClick: () => window.open(docLinks.knowledge_base),
+  };
+
+  const defaultListItems: ListItemContent[] = [
     {
       icon: 'bug',
       title: strings.TITLE_REPORT_PROBLEM,
@@ -56,23 +64,44 @@ export default function ContactUsView(): JSX.Element {
         <i>`&quot;`{appVersion || 'n/a'}`&quot;`</i>
       ) as string,
       buttonText: strings.REPORT_PROBLEM,
-      link: `${docLinks.report_a_problem}?build=${appVersion || ''}`,
+      onClick: () => window.open(`${docLinks.report_a_problem}?build=${appVersion || ''}`),
     },
     {
       icon: 'sparkles',
       title: strings.TITLE_REQUEST_FEATURE,
       description: strings.DESCRIPTION_REQUEST_FEATURE,
       buttonText: strings.REQUEST_FEATURE,
-      link: docLinks.request_a_feature,
+      onClick: () => window.open(docLinks.request_a_feature),
     },
     {
       icon: 'mail',
       title: strings.CONTACT_US,
       description: strings.formatString(strings.CONTACT_US_DESCRIPTION, getHelpEmail()) as string,
       buttonText: strings.CONTACT_US,
-      link: docLinks.contact_us,
+      onClick: () => window.open(docLinks.contact_us),
     },
   ];
+
+  const jiraListItems = useMemo(
+    () =>
+      (types ?? []).map(
+        (item): ListItemContent => ({
+          title: item.name,
+          description: item.description,
+          buttonText: item.name,
+          onClick: () => goToContactUsForm(item.requestTypeId),
+        })
+      ),
+    [types]
+  );
+
+  const listItemContent = useMemo(() => {
+    if (featureEnabled && jiraListItems.length > 0) {
+      return [knowledgeBaseItem, ...jiraListItems];
+    } else {
+      return [knowledgeBaseItem, ...defaultListItems];
+    }
+  }, [featureEnabled, jiraListItems]);
 
   return (
     <TfMain>
@@ -121,7 +150,7 @@ export default function ContactUsView(): JSX.Element {
                   marginTop={theme.spacing(3)}
                   marginBottom={theme.spacing(2)}
                 >
-                  <Icon size='medium' name={item.icon} />
+                  {item.icon && <Icon size='medium' name={item.icon} />}
                   <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
                     &nbsp;{item.title}
                   </Typography>
@@ -149,7 +178,7 @@ export default function ContactUsView(): JSX.Element {
                     <Button
                       label={item.buttonText}
                       size='medium'
-                      onClick={() => window.open(item.link)}
+                      onClick={item.onClick}
                       priority='secondary'
                       type='productive'
                     />

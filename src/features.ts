@@ -1,7 +1,11 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName = 'Show Production View' | 'User Detailed Sites' | 'Console' | 'Document Producer';
+export type FeatureName =
+  | 'Show Production View'
+  | 'User Detailed Sites'
+  | 'Terraware Support Forms'
+  | 'Document Producer';
 
 export type Feature = {
   name: FeatureName;
@@ -51,6 +55,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Terraware Accelerator Console access to the document producer tool'],
+    disclosure: ['This is WIP'],
+  },
+  {
+    name: 'Terraware Support Forms',
+    preferenceName: 'enableSupportForms',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Terraware support forms to file bugs, submit feature requests, or ask questions'],
     disclosure: ['This is WIP'],
   },
 ];

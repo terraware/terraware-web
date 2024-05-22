@@ -99,6 +99,10 @@ export interface paths {
      */
     put: operations["upsertProjectScores"];
   };
+  "/api/v1/accelerator/projects/{projectId}/species": {
+    /** Gets all species associated to a participant project. */
+    get: operations["getSpeciesForProject"];
+  };
   "/api/v1/accelerator/projects/{projectId}/votes": {
     /**
      * Gets vote selections for a single project.
@@ -115,6 +119,10 @@ export interface paths {
      * @description Remove the voters from the project phase, making them ineligible from voting. This is different from undoing a vote (by setting the `voteOption` to `null`). To remove voters from the entire project phase, set `userId` to `null`, and set `phaseDelete` to `true`
      */
     delete: operations["deleteProjectVotes"];
+  };
+  "/api/v1/accelerator/species/{speciesId}/projects": {
+    /** Gets all participant projects associated to a species with active deliverable information if applicable. */
+    get: operations["getProjectsForSpecies"];
   };
   "/api/v1/automations": {
     /** Gets a list of automations for a device or facility. */
@@ -625,6 +633,12 @@ export interface paths {
      * @description The species will no longer appear in the organization's list of species, but existing data (plants, seeds, etc.) that refer to the species will still refer to it.
      */
     delete: operations["deleteSpecies"];
+  };
+  "/api/v1/support": {
+    /** Lists support request types. */
+    get: operations["listRequestTypes"];
+    /** Submit support request types. */
+    post: operations["submitRequest"];
   };
   "/api/v1/timeseries": {
     /** Lists the timeseries for one or more devices. */
@@ -2220,6 +2234,10 @@ export interface components {
       participantProjectSpecies: components["schemas"]["ParticipantProjectSpeciesPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetParticipantProjectsForSpeciesResponsePayload: {
+      participantProjectsForSpecies: components["schemas"]["ParticipantProjectForSpeciesPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetParticipantResponsePayload: {
       participant: components["schemas"]["ParticipantPayload"];
       status: components["schemas"]["SuccessOrError"];
@@ -2363,6 +2381,10 @@ export interface components {
       /** Format: int64 */
       totalSeedsStoredForProject?: number;
       workers: components["schemas"]["WorkersPayloadV1"];
+    };
+    GetSpeciesForParticipantProjectsResponsePayload: {
+      speciesForParticipantProjects: components["schemas"]["SpeciesForParticipantProjectPayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetSpeciesProblemResponsePayload: {
       problem: components["schemas"]["SpeciesProblemElement"];
@@ -2719,6 +2741,10 @@ export interface components {
     ListSubLocationsResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
       subLocations: components["schemas"]["SubLocationPayload"][];
+    };
+    ListSupportRequestTypesResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      types: components["schemas"]["ServiceRequestType"][];
     };
     ListTimeZoneNamesResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
@@ -3141,6 +3167,19 @@ export interface components {
       id: number;
       name: string;
       projects: components["schemas"]["ParticipantProjectPayload"][];
+    };
+    ParticipantProjectForSpeciesPayload: {
+      /** Format: int64 */
+      activeDeliverableId?: number;
+      /** Format: int64 */
+      participantProjectSpeciesId: number;
+      /** @enum {string} */
+      participantProjectSpeciesSubmissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
+      /** Format: int64 */
+      projectId: number;
+      projectName: string;
+      /** Format: int64 */
+      speciesId: number;
     };
     ParticipantProjectPayload: {
       /** Format: int64 */
@@ -3652,12 +3691,31 @@ export interface components {
       body: string;
       subject: string;
     };
+    ServiceRequestType: {
+      description: string;
+      name: string;
+      /** Format: int32 */
+      requestTypeId: number;
+    };
     SimpleErrorResponsePayload: {
       error: components["schemas"]["ErrorDetails"];
       status: components["schemas"]["SuccessOrError"];
     };
     SimpleSuccessResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
+    };
+    SpeciesForParticipantProjectPayload: {
+      /** Format: int64 */
+      participantProjectSpeciesId: number;
+      participantProjectSpeciesRationale?: string;
+      /** @enum {string} */
+      participantProjectSpeciesSubmissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
+      /** Format: int64 */
+      projectId: number;
+      speciesCommonName?: string;
+      /** Format: int64 */
+      speciesId: number;
+      speciesScientificName: string;
     };
     SpeciesLookupCommonNamePayload: {
       /** @description ISO 639-1 two-letter language code indicating the name's language. Some common names in the server's taxonomic database are not tagged with languages; this value will not be present for those names. */
@@ -3827,6 +3885,16 @@ export interface components {
       id: number;
       name: string;
       originalName?: string;
+    };
+    SubmitSupportRequestPayload: {
+      description: string;
+      /** Format: int32 */
+      requestTypeId: number;
+      summary: string;
+    };
+    SubmitSupportRequestResponsePayload: {
+      issueKey: string;
+      status: components["schemas"]["SuccessOrError"];
     };
     /**
      * @description Indicates of success or failure of the requested operation.
@@ -5059,6 +5127,28 @@ export interface operations {
       };
     };
   };
+  /** Gets all species associated to a participant project. */
+  getSpeciesForProject: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetSpeciesForParticipantProjectsResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
   /**
    * Gets vote selections for a single project.
    * @description List every vote selection for this project, organized by phases. Each phase will contain a list of eligible voters and their selections.
@@ -5174,6 +5264,28 @@ export interface operations {
       };
       /** @description Attempting to delete a vote in an inactive phase */
       409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets all participant projects associated to a species with active deliverable information if applicable. */
+  getProjectsForSpecies: {
+    parameters: {
+      path: {
+        speciesId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetParticipantProjectsForSpeciesResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
@@ -7814,6 +7926,33 @@ export interface operations {
       409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Lists support request types. */
+  listRequestTypes: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListSupportRequestTypesResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Submit support request types. */
+  submitRequest: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SubmitSupportRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SubmitSupportRequestResponsePayload"];
         };
       };
     };
