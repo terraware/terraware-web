@@ -20,9 +20,7 @@ import { Species } from 'src/types/Species';
 import { Delivery } from 'src/types/Tracking';
 import { isTrue } from 'src/utils/boolean';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
-import useStateLocation from 'src/utils/useStateLocation';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import UndoWithdrawalModal from './UndoWithdrawalModal';
@@ -36,8 +34,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginTop: theme.spacing(2),
   },
 }));
-
-const TABS = ['withdrawal', 'reassignment'];
 
 export interface WithdrawalSummary {
   id: string;
@@ -70,10 +66,7 @@ export default function NurseryWithdrawalsDetailsView({
   const contentRef = useRef(null);
   const snackbar = useSnackbar();
   const { OUTPLANT, NURSERY_TRANSFER } = NurseryWithdrawalPurposes;
-  const query = useQuery();
   const navigate = useNavigate();
-  const location = useStateLocation();
-  const tab = (query.get('tab') || '').toLowerCase();
 
   const [withdrawal, setWithdrawal] = useState<NurseryWithdrawal | undefined>(undefined);
   const [withdrawalSummary, setWithdrawalSummary] = useState<WithdrawalSummary | undefined>(undefined);
