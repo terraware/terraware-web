@@ -25,6 +25,7 @@ import Button from 'src/components/common/button/Button';
 import { OrderPreserveableTable as Table } from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { useAppSelector } from 'src/redux/store';
@@ -108,6 +109,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const query = useQuery();
   const navigate = useNavigate();
   const projects = useAppSelector(selectProjects);
+  const { orgHasParticipants } = useParticipantData();
 
   const contentRef = useRef(null);
   const { activeLocale } = useLocalization();
@@ -153,11 +155,15 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         type: 'string',
         tooltipTitle: strings.TOOLTIP_SPECIES_FAMILY,
       },
-      {
-        key: 'participantProjects',
-        name: strings.PROJECTS,
-        type: 'string',
-      },
+      ...(orgHasParticipants
+        ? ([
+            {
+              key: 'participantProjects',
+              name: strings.PROJECTS,
+              type: 'string',
+            },
+          ] as TableColumnType[])
+        : []),
       {
         key: 'conservationCategory',
         name: strings.CONSERVATION_CATEGORY,
@@ -263,8 +269,8 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
       },
     ];
 
-    return activeLocale ? _filters : [];
-  }, [activeLocale]);
+    return activeLocale && orgHasParticipants ? _filters : [];
+  }, [activeLocale, orgHasParticipants]);
 
   const iconFilters: FilterConfig[] = useMemo(() => {
     const _filters = filterColumns.map((filter) => ({

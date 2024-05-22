@@ -2556,6 +2556,8 @@ export interface components {
       category: "Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files";
       /** @description Optional description of the deliverable in HTML form. */
       descriptionHtml?: string;
+      /** Format: date */
+      dueDate: string;
       /** Format: int64 */
       id: number;
       name: string;
@@ -3152,11 +3154,14 @@ export interface components {
       feedback?: string;
       /** Format: int64 */
       id: number;
+      internalComment?: string;
       /** Format: int64 */
       projectId: number;
       rationale?: string;
       /** Format: int64 */
       speciesId: number;
+      /** @enum {string} */
+      speciesNativeCategory?: "Native" | "Non-native";
       /** @enum {string} */
       submissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
     };
@@ -4162,7 +4167,10 @@ export interface components {
     };
     UpdateParticipantProjectSpeciesPayload: {
       feedback?: string;
+      internalComment?: string;
       rationale?: string;
+      /** @enum {string} */
+      speciesNativeCategory?: "Native" | "Non-native";
       /** @enum {string} */
       submissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
     };

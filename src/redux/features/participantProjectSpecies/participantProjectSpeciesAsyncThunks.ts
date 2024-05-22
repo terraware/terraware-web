@@ -3,10 +3,10 @@ import { Dispatch, createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from 'src/redux/rootReducer';
 import ParticipantProjectSpeciesService, {
   CreateParticipantProjectSpeciesRequestPayload,
-  ParticipantProjectSpecies,
   SpeciesProjectsResult,
 } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
+import { ParticipantProjectSpecies } from 'src/types/ParticipantProjectSpecies';
 
 import { setProjectsForSpeciesAction } from './participantProjectSpeciesSlice';
 

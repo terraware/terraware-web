@@ -1,3 +1,5 @@
+import { DropdownItem } from '@terraware/web-components';
+
 import { components } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
 
@@ -186,6 +188,37 @@ export function getGrowthFormString(species: Species): string {
     })
     .join(', ');
 }
+
+export const getWoodDensityLevel = (value: WoodDensityLevel): string => {
+  switch (value) {
+    case 'Family':
+      return strings.FAMILY;
+    case 'Genus':
+      return strings.GENUS;
+    case 'Species':
+      return strings.SPECIES;
+  }
+};
+
+export const getWoodDensityLevelOptions = (
+  activeLocale: string | null
+): (Omit<DropdownItem, 'value'> & { value: WoodDensityLevel })[] =>
+  activeLocale
+    ? [
+        {
+          label: getWoodDensityLevel('Family'),
+          value: 'Family',
+        },
+        {
+          label: getWoodDensityLevel('Genus'),
+          value: 'Genus',
+        },
+        {
+          label: getWoodDensityLevel('Species'),
+          value: 'Species',
+        },
+      ]
+    : [];
 
 export type SpeciesWithScientificName = Species & {
   scientificName?: string;

@@ -12,9 +12,9 @@ import { requestUpdateParticipantProjectSpecies } from 'src/redux/features/parti
 import { selectParticipantProjectSpeciesUpdateRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import RejectDialog from 'src/scenes/AcceleratorRouter/Deliverables/RejectDialog';
-import { ParticipantProjectSpecies } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
+import { ParticipantProjectSpecies } from 'src/types/ParticipantProjectSpecies';
 
 import EditSpeciesModal from './EditSpeciesModal';
 

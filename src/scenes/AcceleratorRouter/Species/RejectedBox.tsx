@@ -7,8 +7,8 @@ import TextField from '@terraware/web-components/components/Textfield/Textfield'
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
-import { ParticipantProjectSpecies } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
+import { ParticipantProjectSpecies } from 'src/types/ParticipantProjectSpecies';
 
 const useStyles = makeStyles(() => ({
   icon: {
