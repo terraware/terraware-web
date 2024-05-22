@@ -173,8 +173,12 @@
 <a name='L108'></a><a href='#L108'>108</a>
 <a name='L109'></a><a href='#L109'>109</a>
 <a name='L110'></a><a href='#L110'>110</a>
-<a name='L111'></a><a href='#L111'>111</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -224,6 +228,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -294,20 +304,19 @@ import { APP_PATHS } from 'src/constants';
 import { requestUpdateParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { selectParticipantProjectSpeciesUpdateRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { SpeciesWithParticipantProjectsSearchResponse } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
-import { ParticipantProjectSpecies } from 'src/types/ParticipantProjectSpecies';
+import { SpeciesForParticipantProject } from 'src/types/ParticipantProjectSpecies';
 import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
 import Link from '../common/Link';
 &nbsp;
-export interface AddEditSubLocationProps {
+export interface EditSpeciesModalProps {
   onClose: () =&gt; void;
   reload: () =&gt; void;
-  projectSpecies: SpeciesWithParticipantProjectsSearchResponse;
+  projectSpecies: SpeciesForParticipantProject;
 }
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >EditSpeciesModal(</span>props: AddEditSubLocationProps): JSX.Element {
+export default function <span class="fstat-no" title="function not covered" >EditSpeciesModal(</span>props: EditSpeciesModalProps): JSX.Element {
   const { onClose, reload, projectSpecies } = <span class="cstat-no" title="statement not covered" >props;</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
@@ -316,7 +325,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
 &nbsp;
   const [error, setError] = <span class="cstat-no" title="statement not covered" >useState('');</span>
-  const [record, setRecord] = <span class="cstat-no" title="statement not covered" >useState&lt;ParticipantProjectSpecies&gt;(projectSpecies);</span>
+  const [record, setRecord] = <span class="cstat-no" title="statement not covered" >useState&lt;SpeciesForParticipantProject&gt;(projectSpecies);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (result?.status === 'error') {</span>
@@ -328,14 +337,20 @@ export default function <span class="fstat-no" title="function not covered" >Edi
   }, [result, snackbar]);
 &nbsp;
   const save = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!record.rationale) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!record.participantProjectSpeciesRationale) {</span>
 <span class="cstat-no" title="statement not covered" >      setError(strings.GENERIC_ERROR);</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
 &nbsp;
     const request = <span class="cstat-no" title="statement not covered" >dispatch(</span>
       requestUpdateParticipantProjectSpecies({
-        participantProjectSpecies: record,
+        participantProjectSpecies: {
+          id: record.participantProjectSpeciesId,
+          projectId: record.projectId,
+          rationale: record.participantProjectSpeciesRationale,
+          speciesId: record.speciesId,
+          submissionStatus: record.participantProjectSpeciesSubmissionStatus,
+        },
       })
     );
 <span class="cstat-no" title="statement not covered" >    setRequestId(request.requestId);</span>
@@ -344,7 +359,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
   const onChangeRationale = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>ationale: unknown) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setRecord(<span class="fstat-no" title="function not covered" >(p</span>rev) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
       ...prev,
-      rationale: `${rationale}`,
+      participantProjectSpeciesRationale: `${rationale}`,
     }));
   };
 &nbsp;
@@ -375,7 +390,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             fontSize='16px'
             to={APP_PATHS.SPECIES_DETAILS.replace(':speciesId', projectSpecies.speciesId.toString())}
           &gt;
-            {projectSpecies.scientificName}
+            {projectSpecies.speciesScientificName}
           &lt;/Link&gt;
         &lt;/Grid&gt;
         &lt;Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}&gt;
@@ -384,9 +399,9 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             id='rationale'
             label={strings.RATIONALE}
             type='textarea'
-            value={record?.rationale}
+            value={record?.participantProjectSpeciesRationale}
             onChange={onChangeRationale}
-            errorText={error &amp;&amp; !record?.rationale ? strings.REQUIRED_FIELD : ''}
+            errorText={error &amp;&amp; !record?.participantProjectSpeciesRationale ? strings.REQUIRED_FIELD : ''}
           /&gt;
         &lt;/Grid&gt;
       &lt;/Grid&gt;
@@ -400,7 +415,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-22T21:02:41.870Z
+                at 2024-05-22T22:26:23.686Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
