@@ -1,17 +1,18 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import {
-  SpeciesProjectsResult,
-  SpeciesWithParticipantProjectsSearchResponse,
-} from 'src/services/ParticipantProjectSpeciesService';
-import { ParticipantProjectSpecies } from 'src/types/ParticipantProjectSpecies';
+  ParticipantProjectForSpecies,
+  ParticipantProjectSpecies,
+  SpeciesForParticipantProject,
+} from 'src/types/ParticipantProjectSpecies';
 
 import {
   requestAssignParticipantProjectSpecies,
   requestCreateParticipantProjectSpecies,
   requestDeleteManyParticipantProjectSpecies,
   requestGetParticipantProjectSpecies,
+  requestGetProjectsForSpecies,
   requestListParticipantProjectSpecies,
   requestUpdateParticipantProjectSpecies,
 } from './participantProjectSpeciesAsyncThunks';
@@ -73,10 +74,23 @@ export const participantProjectSpeciesGetSlice = createSlice({
 });
 
 /**
+ * Get Projects for Species
+ */
+const initialStateParticipantProjectsForSpeciesGet: { [key: string]: StatusT<ParticipantProjectForSpecies[]> } = {};
+
+export const participantProjectsForSpeciesGetSlice = createSlice({
+  name: 'participantProjectsForSpeciesGetSlice',
+  initialState: initialStateParticipantProjectsForSpeciesGet,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestGetProjectsForSpecies)(builder);
+  },
+});
+
+/**
  * List Participant Project Species
  */
-const initialStateParticipantProjectsList: { [key: string]: StatusT<SpeciesWithParticipantProjectsSearchResponse[]> } =
-  {};
+const initialStateParticipantProjectsList: { [key: string]: StatusT<SpeciesForParticipantProject[]> } = {};
 
 export const participantProjectSpeciesListSlice = createSlice({
   name: 'participantProjectSpeciesListSlice',
@@ -102,32 +116,6 @@ export const participantProjectSpeciesUpdateSlice = createSlice({
   },
 });
 
-type SpeciesId = number;
-
-type Payload = {
-  projects: SpeciesProjectsResult[];
-  speciesId: SpeciesId;
-};
-
-// Define the initial state
-const initialState: Record<SpeciesId, SpeciesProjectsResult[]> = {};
-
-export const projectsForSpeciesSlice = createSlice({
-  name: 'projectsForSpeciesSlice',
-  initialState,
-  reducers: {
-    setProjectsForSpeciesAction: (state, action: PayloadAction<Payload>) => {
-      if (action.payload.projects) {
-        state[action.payload.speciesId] = action.payload.projects;
-      }
-    },
-  },
-});
-
-export const { setProjectsForSpeciesAction } = projectsForSpeciesSlice.actions;
-
-export const projectsForSpeciesReducer = projectsForSpeciesSlice.reducer;
-
 const participantProjectSpeciesReducers = {
   participantProjectSpeciesAssign: participantProjectSpeciesAssignSlice.reducer,
   participantProjectSpeciesCreate: participantProjectSpeciesCreateSlice.reducer,
@@ -135,7 +123,7 @@ const participantProjectSpeciesReducers = {
   participantProjectSpeciesGet: participantProjectSpeciesGetSlice.reducer,
   participantProjectSpeciesList: participantProjectSpeciesListSlice.reducer,
   participantProjectSpeciesUpdate: participantProjectSpeciesUpdateSlice.reducer,
-  projectsForSpecies: projectsForSpeciesSlice.reducer,
+  participantProjectsForSpeciesGet: participantProjectsForSpeciesGetSlice.reducer,
 };
 
 export default participantProjectSpeciesReducers;

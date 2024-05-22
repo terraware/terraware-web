@@ -13,22 +13,20 @@ import { selectParticipantProjectSpeciesCreateRequest } from 'src/redux/features
 import { selectSpecies } from 'src/redux/features/species/speciesSelectors';
 import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import {
-  CreateParticipantProjectSpeciesRequestPayload,
-  SpeciesWithParticipantProjectsSearchResponse,
-} from 'src/services/ParticipantProjectSpeciesService';
+import { CreateParticipantProjectSpeciesRequestPayload } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
+import { SpeciesForParticipantProject } from 'src/types/ParticipantProjectSpecies';
 import { Species } from 'src/types/Species';
 import useSnackbar from 'src/utils/useSnackbar';
 
-export interface AddEditSubLocationProps {
+export interface AddSpeciesModalProps {
   onClose: () => void;
-  participantProjectSpecies: SpeciesWithParticipantProjectsSearchResponse[];
+  participantProjectSpecies: SpeciesForParticipantProject[];
   projectId: number;
   reload: () => void;
 }
 
-export default function AddSpeciesModal(props: AddEditSubLocationProps): JSX.Element {
+export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Element {
   const { onClose, participantProjectSpecies, reload, projectId } = props;
 
   const dispatch = useAppDispatch();
@@ -47,7 +45,7 @@ export default function AddSpeciesModal(props: AddEditSubLocationProps): JSX.Ele
 
   useEffect(() => {
     const speciesToAdd = allSpecies?.filter((species) => {
-      return !participantProjectSpecies?.find((_species) => species.id === _species.id);
+      return !participantProjectSpecies?.find((_species) => species.id === _species.speciesId);
     });
     setSelectableSpecies(speciesToAdd);
   }, [allSpecies, participantProjectSpecies]);

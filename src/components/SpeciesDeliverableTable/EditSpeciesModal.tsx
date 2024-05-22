@@ -9,20 +9,19 @@ import { APP_PATHS } from 'src/constants';
 import { requestUpdateParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { selectParticipantProjectSpeciesUpdateRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { SpeciesWithParticipantProjectsSearchResponse } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
-import { ParticipantProjectSpecies } from 'src/types/ParticipantProjectSpecies';
+import { SpeciesForParticipantProject } from 'src/types/ParticipantProjectSpecies';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import Link from '../common/Link';
 
-export interface AddEditSubLocationProps {
+export interface EditSpeciesModalProps {
   onClose: () => void;
   reload: () => void;
-  projectSpecies: SpeciesWithParticipantProjectsSearchResponse;
+  projectSpecies: SpeciesForParticipantProject;
 }
 
-export default function EditSpeciesModal(props: AddEditSubLocationProps): JSX.Element {
+export default function EditSpeciesModal(props: EditSpeciesModalProps): JSX.Element {
   const { onClose, reload, projectSpecies } = props;
   const theme = useTheme();
   const [requestId, setRequestId] = useState<string>('');
@@ -31,7 +30,7 @@ export default function EditSpeciesModal(props: AddEditSubLocationProps): JSX.El
   const snackbar = useSnackbar();
 
   const [error, setError] = useState('');
-  const [record, setRecord] = useState<ParticipantProjectSpecies>(projectSpecies);
+  const [record, setRecord] = useState<SpeciesForParticipantProject>(projectSpecies);
 
   useEffect(() => {
     if (result?.status === 'error') {
@@ -43,14 +42,20 @@ export default function EditSpeciesModal(props: AddEditSubLocationProps): JSX.El
   }, [result, snackbar]);
 
   const save = () => {
-    if (!record.rationale) {
+    if (!record.participantProjectSpeciesRationale) {
       setError(strings.GENERIC_ERROR);
       return;
     }
 
     const request = dispatch(
       requestUpdateParticipantProjectSpecies({
-        participantProjectSpecies: record,
+        participantProjectSpecies: {
+          id: record.participantProjectSpeciesId,
+          projectId: record.projectId,
+          rationale: record.participantProjectSpeciesRationale,
+          speciesId: record.speciesId,
+          submissionStatus: record.participantProjectSpeciesSubmissionStatus,
+        },
       })
     );
     setRequestId(request.requestId);
@@ -59,7 +64,7 @@ export default function EditSpeciesModal(props: AddEditSubLocationProps): JSX.El
   const onChangeRationale = (rationale: unknown) => {
     setRecord((prev) => ({
       ...prev,
-      rationale: `${rationale}`,
+      participantProjectSpeciesRationale: `${rationale}`,
     }));
   };
 
@@ -90,7 +95,7 @@ export default function EditSpeciesModal(props: AddEditSubLocationProps): JSX.El
             fontSize='16px'
             to={APP_PATHS.SPECIES_DETAILS.replace(':speciesId', projectSpecies.speciesId.toString())}
           >
-            {projectSpecies.scientificName}
+            {projectSpecies.speciesScientificName}
           </Link>
         </Grid>
         <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
@@ -99,9 +104,9 @@ export default function EditSpeciesModal(props: AddEditSubLocationProps): JSX.El
             id='rationale'
             label={strings.RATIONALE}
             type='textarea'
-            value={record?.rationale}
+            value={record?.participantProjectSpeciesRationale}
             onChange={onChangeRationale}
-            errorText={error && !record?.rationale ? strings.REQUIRED_FIELD : ''}
+            errorText={error && !record?.participantProjectSpeciesRationale ? strings.REQUIRED_FIELD : ''}
           />
         </Grid>
       </Grid>

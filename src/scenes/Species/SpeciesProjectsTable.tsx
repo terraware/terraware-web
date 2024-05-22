@@ -6,14 +6,15 @@ import { TableColumnType } from '@terraware/web-components/components/table/type
 
 import Table from 'src/components/common/table';
 import { useOrganization } from 'src/providers';
-import { requestProjectsForSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
-import { selectProjectsForSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
+import { requestGetProjectsForSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
+import { selectProjectsForSpeciesRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { SpeciesProjectsResult } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
+import { ParticipantProjectForSpecies } from 'src/types/ParticipantProjectSpecies';
 import { Project } from 'src/types/Project';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import AddToProjectModal from './AddToProjectModal';
 import RemoveProjectsDialog from './RemoveProjectsDialog';
@@ -21,13 +22,13 @@ import SpeciesProjectsCellRenderer from './SpeciesProjectsCellRenderer';
 
 const columns = (): TableColumnType[] => [
   { key: 'projectName', name: strings.PROJECT, type: 'string' },
-  { key: 'submissionStatus', name: strings.STATUS, type: 'string' },
+  { key: 'participantProjectSpeciesSubmissionStatus', name: strings.STATUS, type: 'string' },
 ];
 
 const viewColumns = (): TableColumnType[] => [
   ...columns(),
   {
-    key: 'deliverableId',
+    key: 'activeDeliverableId',
     name: '',
     type: 'string',
   } as TableColumnType,
@@ -52,25 +53,39 @@ export default function SpeciesProjectsTable({
   addedProjectsIds,
   removedProjectsIds,
 }: SpeciesProjectsTableProps): JSX.Element {
+  const dispatch = useAppDispatch();
+  const snackbar = useSnackbar();
   const { selectedOrganization } = useOrganization();
-  const [searchResults, setSearchResults] = useState<SpeciesProjectsResult[] | null>();
-  const [filteredResults, setFilteredResults] = useState<SpeciesProjectsResult[] | null>();
+
+  const allProjects = useAppSelector(selectProjects);
+
+  const [requestId, setRequestId] = useState('');
+  const projectsForSpeciesRequest = useAppSelector(selectProjectsForSpeciesRequest(requestId));
+
+  const [searchResults, setSearchResults] = useState<ParticipantProjectForSpecies[] | null>();
+  const [filteredResults, setFilteredResults] = useState<ParticipantProjectForSpecies[] | null>();
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
   const [showRemoveDialog, setShowRemoveDialog] = useState(false);
   const [reload, setReload] = useState(false);
   const [openedAddToProjectModal, setOpenedAddToProjectModal] = useState(false);
-  const allProjects = useAppSelector(selectProjects);
   const [selectableProjects, setSelectableProjects] = useState<Project[]>([]);
-  const projectForSpecies = useAppSelector(selectProjectsForSpecies(speciesId));
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     void dispatch(requestProjects(selectedOrganization.id));
   }, [selectedOrganization]);
 
   useEffect(() => {
-    void dispatch(requestProjectsForSpecies(selectedOrganization.id, speciesId));
+    const request = dispatch(requestGetProjectsForSpecies({ speciesId }));
+    setRequestId(request.requestId);
   }, [selectedOrganization, reload, speciesId]);
+
+  useEffect(() => {
+    if (projectsForSpeciesRequest?.status === 'success') {
+      setSearchResults(projectsForSpeciesRequest.data);
+    } else if (projectsForSpeciesRequest?.status === 'error') {
+      snackbar.toastError(strings.GENERIC_ERROR);
+    }
+  }, [projectsForSpeciesRequest]);
 
   useEffect(() => {
     const assignedProjectsIds = filteredResults?.map((fr) => Number(fr.projectId));
@@ -86,17 +101,18 @@ export default function SpeciesProjectsTable({
     if (removedProjectsIds) {
       updatedResults =
         searchResults?.filter((sResults) => {
-          return !removedProjectsIds?.includes(Number(sResults.id));
+          return !removedProjectsIds?.includes(Number(sResults.participantProjectSpeciesId));
         }) || [];
     }
     if (addedProjectsIds) {
       const newProjects = addedProjectsIds?.map((id) => {
         return {
-          id: id,
-          submissionStatus: 'Not Submitted',
-          projectName: allProjects?.find((proj) => proj.id === id)?.name,
+          participantProjectSpeciesId: -1,
+          participantProjectSpeciesSubmissionStatus: 'Not Submitted',
           projectId: id,
-        } as SpeciesProjectsResult;
+          projectName: allProjects?.find((proj) => proj.id === id)?.name,
+          speciesId,
+        } as ParticipantProjectForSpecies;
       });
       updatedResults = [...updatedResults, ...newProjects];
     }
@@ -107,7 +123,7 @@ export default function SpeciesProjectsTable({
   const onAddHandler = (addedId: number) => {
     // only add new project if it's not already added
     const exsist = searchResults?.find((sr) => {
-      sr.id.toString() === addedId.toString();
+      sr.projectId.toString() === addedId.toString();
     });
     if (!exsist && onAdd) {
       onAdd(addedId);
@@ -117,9 +133,10 @@ export default function SpeciesProjectsTable({
   const onRemoveHandler = (removedIds: number[]) => {
     const existingIdsToRemove: number[] = [];
     const newIdsToRemove: number[] = [];
+
     removedIds.forEach((removedId) => {
       const exists = searchResults?.find((sr) => {
-        return sr.id.toString() === removedId.toString();
+        return sr.participantProjectSpeciesId.toString() === removedId.toString();
       });
 
       if (exists) {
@@ -137,10 +154,6 @@ export default function SpeciesProjectsTable({
       onRemoveNew(newIdsToRemove);
     }
   };
-
-  useEffect(() => {
-    setSearchResults(projectForSpecies);
-  }, [projectForSpecies]);
 
   const onCloseRemoveProjects = (reload?: boolean) => {
     setShowRemoveDialog(false);
@@ -161,7 +174,7 @@ export default function SpeciesProjectsTable({
       {showRemoveDialog && (
         <RemoveProjectsDialog
           onClose={onCloseRemoveProjects}
-          ppSpeciesToRemove={selectedRows.map((row) => Number(row.id))}
+          ppSpeciesToRemove={selectedRows.map((row) => Number(row.participantProjectSpeciesId))}
           onSubmit={onRemoveHandler}
         />
       )}

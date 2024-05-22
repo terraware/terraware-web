@@ -1,17 +1,14 @@
-import { DateTime } from 'luxon';
-
 import { paths } from 'src/api/types/generated-schema';
-import { DeliverableTypeType, getDeliverableTypeLabel } from 'src/types/Deliverables';
 import { ParticipantProjectSpecies, SubmissionStatus } from 'src/types/ParticipantProjectSpecies';
-import { SearchNodePayload, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
 
 import HttpService, { Response2 } from './HttpService';
-import SearchService from './SearchService';
 
 const ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR =
   '/api/v1/accelerator/projects/species/{participantProjectSpeciesId}';
 const ENDPOINT_PARTICIPANT_PROJECT_SPECIES = '/api/v1/accelerator/projects/species';
 const ENDPOINT_PARTICIPANT_PROJECT_SPECIES_ASSIGN = '/api/v1/accelerator/projects/species/assign';
+const ENDPOINT_PARTICIPANT_PROJECTS_FOR_SPECIES = '/api/v1/accelerator/species/{speciesId}/projects';
+const ENDPOINT_PARTICIPANT_SPECIES_FOR_PROJECT = '/api/v1/accelerator/projects/{projectId}/species';
 
 type AssignRequestPayload =
   paths[typeof ENDPOINT_PARTICIPANT_PROJECT_SPECIES_ASSIGN]['post']['requestBody']['content']['application/json'];
@@ -31,46 +28,16 @@ type DeleteResponse =
 type GetResponse =
   paths[typeof ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR]['get']['responses'][200]['content']['application/json'];
 
+type GetProjectsForSpeciesResponse =
+  paths[typeof ENDPOINT_PARTICIPANT_PROJECTS_FOR_SPECIES]['get']['responses'][200]['content']['application/json'];
+
+type GetSpeciesForProjectResponse =
+  paths[typeof ENDPOINT_PARTICIPANT_SPECIES_FOR_PROJECT]['get']['responses'][200]['content']['application/json'];
+
 export type UpdateRequestPayload =
   paths[typeof ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR]['put']['requestBody']['content']['application/json'];
 type UpdateResponse =
   paths[typeof ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR]['put']['responses'][200]['content']['application/json'];
-
-export type SpeciesProjectsResult = {
-  id: number;
-  submissionStatus: string;
-  projectName: string;
-  projectId: number;
-  deliverableId?: number;
-};
-
-type SpeciesProjectsSearchResult = {
-  // Deliverable ID
-  id: string;
-  module: {
-    cohortModules: {
-      startDate: string;
-      endDate: string;
-    }[];
-  };
-  project: {
-    participantProjectSpecies: {
-      id: string;
-      project: {
-        name: string;
-        id: string;
-      };
-      species: {
-        id: string;
-        organization: {
-          id: string;
-        };
-      };
-      submissionStatus: string;
-    }[];
-  };
-  type: string;
-};
 
 export type SpeciesWithParticipantProjectsSearchResponse = {
   commonName?: string;
@@ -111,63 +78,19 @@ const get = (participantProjectSpeciesId: number): Promise<Response2<GetResponse
     },
   });
 
-const list = async (
-  projectId: number,
-  searchCriteria?: SearchNodePayload,
-  sortOrder?: SearchSortOrder
-): Promise<SpeciesWithParticipantProjectsSearchResponse[] | null> => {
-  const params: SearchRequestPayload = {
-    prefix: 'species',
-    fields: [
-      'id',
-      'commonName',
-      'participantProjectSpecies_project_id',
-      'participantProjectSpecies_id',
-      'participantProjectSpecies_feedback',
-      'participantProjectSpecies_rationale',
-      'participantProjectSpecies_submissionStatus',
-      'scientificName',
-    ],
-    search: {
-      operation: 'and',
-      children: [
-        {
-          field: 'participantProjectSpecies_project_id',
-          values: [`${projectId}`],
-          operation: 'field',
-        },
-        ...(searchCriteria ? [searchCriteria] : []),
-      ],
+const getProjectsForSpecies = (speciesId: number): Promise<Response2<GetProjectsForSpeciesResponse>> =>
+  HttpService.root(ENDPOINT_PARTICIPANT_PROJECTS_FOR_SPECIES).get2<GetProjectsForSpeciesResponse>({
+    urlReplacements: {
+      '{speciesId}': `${speciesId}`,
     },
-    count: 1000,
-  };
-
-  if (sortOrder) {
-    params.sortOrder = [sortOrder];
-  }
-
-  const response = await SearchService.search(params);
-  if (!response) {
-    return response;
-  }
-
-  return response.map((entity) => {
-    const searchResponse: SpeciesWithParticipantProjectsSearchResponse = {
-      commonName: entity.commonName ? `${entity.commonName}` : undefined,
-      feedback: entity.participantProjectSpecies_feedback ? `${entity.participantProjectSpecies_feedback}` : undefined,
-      id: Number(entity.participantProjectSpecies_id),
-      projectId: Number(entity.participantProjectSpecies_project_id),
-      rationale: entity.participantProjectSpecies_rationale
-        ? `${entity.participantProjectSpecies_rationale}`
-        : undefined,
-      scientificName: entity.scientificName ? `${entity.scientificName}` : undefined,
-      speciesId: Number(entity.id),
-      submissionStatus: `${entity.participantProjectSpecies_submissionStatus}` as SubmissionStatus,
-    };
-
-    return searchResponse;
   });
-};
+
+const list = (projectId: number): Promise<Response2<GetSpeciesForProjectResponse>> =>
+  HttpService.root(ENDPOINT_PARTICIPANT_SPECIES_FOR_PROJECT).get2<GetSpeciesForProjectResponse>({
+    urlReplacements: {
+      '{projectId}': `${projectId}`,
+    },
+  });
 
 const update = (participantProjectSpecies: ParticipantProjectSpecies): Promise<Response2<UpdateResponse>> => {
   const entity: UpdateRequestPayload = {
@@ -184,81 +107,6 @@ const update = (participantProjectSpecies: ParticipantProjectSpecies): Promise<R
     },
     entity,
   });
-};
-
-const getProjectsForSpecies = async (speciesId: number, organizationId: number): Promise<SpeciesProjectsResult[]> => {
-  const todayUTC = DateTime.fromISO(new Date().toISOString()).toFormat('yyyy-MM-dd');
-
-  const searchParams: SearchRequestPayload = {
-    prefix: 'projects.projectDeliverables',
-    fields: [
-      'id',
-      'type',
-      'project.participantProjectSpecies.id',
-      'project.participantProjectSpecies.project.name',
-      'project.participantProjectSpecies.project.id',
-      'project.participantProjectSpecies.species.id',
-      'project.participantProjectSpecies.species.organization.id',
-      'project.participantProjectSpecies.submissionStatus',
-      'module.cohortModules.startDate',
-      'module.cohortModules.endDate',
-    ],
-    search: {
-      operation: 'and',
-      children: [
-        {
-          operation: 'field',
-          field: 'type',
-          type: 'Exact',
-          // Since the search API is localized, we need to send the localized values
-          // ** This will not work as expected if the BE and FE localized values do not match
-          values: [getDeliverableTypeLabel('Species' as DeliverableTypeType)],
-        },
-        {
-          operation: 'field',
-          field: 'project.participantProjectSpecies.species.organization.id',
-          type: 'Exact',
-          values: [organizationId],
-        },
-        {
-          operation: 'field',
-          field: 'project.participantProjectSpecies.species.id',
-          type: 'Exact',
-          values: [speciesId],
-        },
-        // We only want to grab deliverables that are part of an active module
-        {
-          operation: 'field',
-          field: 'module.cohortModules.endDate',
-          type: 'Range',
-          values: [todayUTC, null],
-        },
-        {
-          operation: 'field',
-          field: 'module.cohortModules.startDate',
-          type: 'Range',
-          values: [null, todayUTC],
-        },
-      ],
-    },
-    count: 1000,
-  };
-
-  const apiSearchResults = await SearchService.search<SpeciesProjectsSearchResult>(searchParams);
-
-  return apiSearchResults
-    ? apiSearchResults.flatMap((result: SpeciesProjectsSearchResult): SpeciesProjectsResult[] =>
-        result.project.participantProjectSpecies.map(
-          (pps: SpeciesProjectsSearchResult['project']['participantProjectSpecies'][0]): SpeciesProjectsResult => ({
-            submissionStatus: pps.submissionStatus,
-            projectName: pps.project.name,
-            projectId: Number(pps.project.id),
-            id: Number(pps.species.id),
-            deliverableId: Number(result.id),
-          })
-        )
-      )
-    : [];
 };
 
 const ParticipantProjectSpeciesService = {

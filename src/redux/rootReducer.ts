@@ -16,9 +16,7 @@ import documentProducerReducers from './features/documentProducer';
 import messageReducers from './features/message/messageSlice';
 import moduleReducers from './features/modules/modulesSlice';
 import observationsReducers from './features/observations/observationsSlice';
-import participantProjectSpeciesReducers, {
-  projectsForSpeciesReducer,
-} from './features/participantProjectSpecies/participantProjectSpeciesSlice';
+import participantProjectSpeciesReducers from './features/participantProjectSpecies/participantProjectSpeciesSlice';
 import participantProjectsReducers from './features/participantProjects/participantProjectsSlice';
 import participantsReducers from './features/participants/participantsSlice';
 import plantingsReducers from './features/plantings/plantingsSlice';
@@ -51,7 +49,6 @@ export const reducers = {
   ...participantProjectSpeciesReducers,
   ...plantingsReducers,
   ...projectsReducers,
-  ...projectsForSpeciesReducer,
   ...projectToDoReducers,
   ...reportsSettingsReducers,
   ...scoresReducers,

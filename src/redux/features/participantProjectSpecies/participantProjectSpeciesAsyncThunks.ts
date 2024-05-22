@@ -1,14 +1,10 @@
-import { Dispatch, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { RootState } from 'src/redux/rootReducer';
 import ParticipantProjectSpeciesService, {
   CreateParticipantProjectSpeciesRequestPayload,
-  SpeciesProjectsResult,
 } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
 import { ParticipantProjectSpecies } from 'src/types/ParticipantProjectSpecies';
-
-import { setProjectsForSpeciesAction } from './participantProjectSpeciesSlice';
 
 export const requestAssignParticipantProjectSpecies = createAsyncThunk(
   'participantProjectSpecies/assign',
@@ -63,13 +59,28 @@ export const requestGetParticipantProjectSpecies = createAsyncThunk(
   }
 );
 
+export const requestGetProjectsForSpecies = createAsyncThunk(
+  'participantProjectSpecies/get-projects-for-species',
+  async (request: { speciesId: number }, { rejectWithValue }) => {
+    const { speciesId } = request;
+
+    const response = await ParticipantProjectSpeciesService.getProjectsForSpecies(speciesId);
+
+    if (response && response.requestSucceeded && response.data?.participantProjectsForSpecies) {
+      return response.data.participantProjectsForSpecies;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
 export const requestListParticipantProjectSpecies = createAsyncThunk(
   'participantProjectSpecies/list',
   async (projectId: number, { rejectWithValue }) => {
     const response = await ParticipantProjectSpeciesService.list(projectId);
 
-    if (response) {
-      return response;
+    if (response && response.requestSucceeded && response.data?.speciesForParticipantProjects) {
+      return response.data.speciesForParticipantProjects;
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);
@@ -92,21 +103,3 @@ export const requestUpdateParticipantProjectSpecies = createAsyncThunk(
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );
-
-export const requestProjectsForSpecies = (organizationId: number, speciesId: number) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  return async (dispatch: Dispatch, _getState: () => RootState) => {
-    try {
-      const response: SpeciesProjectsResult[] | null = await ParticipantProjectSpeciesService.getProjectsForSpecies(
-        speciesId,
-        organizationId
-      );
-
-      dispatch(setProjectsForSpeciesAction({ projects: response, speciesId }));
-    } catch (e) {
-      // should not happen, the response above captures any http request errors
-      // tslint:disable-next-line: no-console
-      console.error('Error dispatching request to get projects for a species', e);
-    }
-  };
-};
