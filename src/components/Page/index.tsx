@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { CSSProperties, useRef } from 'react';
 
 import { CircularProgress, Grid, Typography, useTheme } from '@mui/material';
 import { Button, IconName } from '@terraware/web-components';
@@ -19,7 +19,7 @@ export type PrimaryButtonType = ButtonType & {
 
 export type PageProps = {
   children?: React.ReactNode;
-  containerClassName?: string;
+  containerStyles?: CSSProperties;
   contentStyle?: Record<string, string | number>;
   crumbs?: Crumb[];
   hierarchicalCrumbs?: boolean;
@@ -34,7 +34,7 @@ export type PageProps = {
  */
 export default function Page({
   children,
-  containerClassName,
+  containerStyles,
   contentStyle,
   crumbs,
   hierarchicalCrumbs,
@@ -55,7 +55,7 @@ export default function Page({
   }
 
   return (
-    <TfMain className={containerClassName}>
+    <TfMain style={containerStyles}>
       <PageHeaderWrapper nextElement={contentRef.current}>
         <>{crumbs && <BreadCrumbs crumbs={crumbs} hierarchical={hierarchicalCrumbs ?? true} />}</>
         <Grid container justifyContent='space-between' alignItems='center'>
