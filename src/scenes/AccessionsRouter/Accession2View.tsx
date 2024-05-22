@@ -27,6 +27,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import useStickyTabs from 'src/utils/useStickyTabs';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import OverviewItemCard from '../../components/common/OverviewItemCard';
@@ -64,8 +65,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const DEFAULT_TAB = 'detail';
-
 export default function Accession2View(): JSX.Element {
   const { user } = useUser();
   const { selectedOrganization } = useOrganization();
@@ -73,7 +72,6 @@ export default function Accession2View(): JSX.Element {
   const query = useQuery();
   const navigate = useNavigate();
   const location = useStateLocation();
-  const tab = (query.get('tab') || '').toLowerCase() || DEFAULT_TAB;
   const { accessionId } = useParams<{ accessionId: string }>();
   const [accession, setAccession] = useState<Accession>();
   const [openEditLocationModal, setOpenEditLocationModal] = useState(false);
@@ -97,17 +95,6 @@ export default function Accession2View(): JSX.Element {
   const contentRef = useRef(null);
   const { activeLocale } = useLocalization();
   const locationTimeZone = useLocationTimeZone();
-
-  const [activeTab, setActiveTab] = useState<string>(tab);
-
-  const onTabChange = useCallback(
-    (newTab: string) => {
-      setActiveTab(newTab);
-      query.set('tab', newTab);
-      navigate(getLocation(location.pathname, location, query.toString()));
-    },
-    [query, navigate, location]
-  );
 
   const seedBankTimeZone = useMemo(() => {
     const facility = accession?.facilityId
@@ -340,6 +327,87 @@ export default function Accession2View(): JSX.Element {
   const quantityEditable = userCanEdit && accession?.state !== 'Used Up';
   const viabilityEditable = userCanEdit && accession?.estimatedCount !== undefined && accession?.state !== 'Used Up';
   const isAwaitingCheckin = accession?.state === 'Awaiting Check-In';
+
+  const tabs = useMemo(() => {
+    if (!activeLocale) {
+      return [];
+    }
+
+    return [
+      {
+        id: 'detail',
+        label: strings.ACCESSION_DETAILS,
+        children: (
+          <Box
+            sx={{
+              backgroundColor: themeObj.palette.TwClrBg,
+              borderRadius: isMobile ? '0 0 16px 16px' : '32px',
+              padding: themeObj.spacing(3),
+            }}
+          >
+            <DetailPanel accession={accession} reload={reloadData} />
+          </Box>
+        ),
+      },
+      {
+        id: 'history',
+        label: strings.HISTORY,
+        children: (
+          <Box
+            sx={{
+              backgroundColor: themeObj.palette.TwClrBg,
+              borderRadius: isMobile ? '0 0 16px 16px' : '32px',
+              padding: themeObj.spacing(3),
+              '::after': hasPendingTests
+                ? {
+                    background: themeObj.palette.TwClrIcnDanger as string,
+                    content: '""',
+                    height: '10px',
+                    width: '10px',
+                    position: 'absolute',
+                    right: themeObj.spacing(1),
+                    top: themeObj.spacing(1),
+                    borderRadius: '5px',
+                  }
+                : {},
+            }}
+          >
+            {accession && <Accession2History accession={accession} />}
+          </Box>
+        ),
+      },
+      {
+        id: 'viabilityTesting',
+        label: strings.VIABILITY_TESTS,
+        children: (
+          <Box
+            sx={{
+              backgroundColor: themeObj.palette.TwClrBg,
+              borderRadius: isMobile ? '0 0 16px 16px' : '32px',
+              padding: themeObj.spacing(3),
+            }}
+          >
+            {accession && (
+              <ViabilityTestingPanel
+                accession={accession}
+                reload={reloadData}
+                canAddTest={viabilityEditable}
+                setNewViabilityTestOpened={setOpenNewViabilityTest}
+                setViewViabilityTestModalOpened={setOpenViewViabilityTestModal}
+                setSelectedTest={setSelectedTest}
+              />
+            )}
+          </Box>
+        ),
+      },
+    ];
+  }, [accession, reloadData, themeObj, viabilityEditable, hasPendingTests]);
+
+  const { activeTab, onTabChange } = useStickyTabs({
+    defaultTab: 'detail',
+    tabs,
+    viewIdentifier: 'accession-view',
+  });
 
   return (
     <TfMain>
@@ -649,78 +717,7 @@ export default function Accession2View(): JSX.Element {
             : {},
         }}
       >
-        <Tabs
-          activeTab={activeTab}
-          onTabChange={onTabChange}
-          tabs={[
-            {
-              id: 'detail',
-              label: strings.ACCESSION_DETAILS,
-              children: (
-                <Box
-                  sx={{
-                    backgroundColor: themeObj.palette.TwClrBg,
-                    borderRadius: isMobile ? '0 0 16px 16px' : '32px',
-                    padding: themeObj.spacing(3),
-                  }}
-                >
-                  <DetailPanel accession={accession} reload={reloadData} />
-                </Box>
-              ),
-            },
-            {
-              id: 'history',
-              label: strings.HISTORY,
-              children: (
-                <Box
-                  sx={{
-                    backgroundColor: themeObj.palette.TwClrBg,
-                    borderRadius: isMobile ? '0 0 16px 16px' : '32px',
-                    padding: themeObj.spacing(3),
-                    '::after': hasPendingTests
-                      ? {
-                          background: themeObj.palette.TwClrIcnDanger as string,
-                          content: '""',
-                          height: '10px',
-                          width: '10px',
-                          position: 'absolute',
-                          right: themeObj.spacing(1),
-                          top: themeObj.spacing(1),
-                          borderRadius: '5px',
-                        }
-                      : {},
-                  }}
-                >
-                  {accession && <Accession2History accession={accession} />}
-                </Box>
-              ),
-            },
-            {
-              id: 'viabilityTesting',
-              label: strings.VIABILITY_TESTS,
-              children: (
-                <Box
-                  sx={{
-                    backgroundColor: themeObj.palette.TwClrBg,
-                    borderRadius: isMobile ? '0 0 16px 16px' : '32px',
-                    padding: themeObj.spacing(3),
-                  }}
-                >
-                  {accession && (
-                    <ViabilityTestingPanel
-                      accession={accession}
-                      reload={reloadData}
-                      canAddTest={viabilityEditable}
-                      setNewViabilityTestOpened={setOpenNewViabilityTest}
-                      setViewViabilityTestModalOpened={setOpenViewViabilityTestModal}
-                      setSelectedTest={setSelectedTest}
-                    />
-                  )}
-                </Box>
-              ),
-            },
-          ]}
-        />
+        <Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} />
       </Box>
     </TfMain>
   );
