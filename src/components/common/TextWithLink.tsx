@@ -53,15 +53,15 @@ export default function TextWithLink({
   return (
     <>
       {handlePrefix ? handlePrefix(prefix) : prefix}
-      <Link
-        className={className}
-        to={isExternal ? { pathname: href } : href}
-        onClick={onClick}
-        fontSize={fontSize ?? '16px'}
-        target={isExternal ? '_blank' : undefined}
-      >
-        {linkText}
-      </Link>
+      {isExternal ? (
+        <Link className={className} onClick={() => window.open(href)} fontSize={fontSize ?? '16px'}>
+          {linkText}
+        </Link>
+      ) : (
+        <Link className={className} to={href} onClick={onClick} fontSize={fontSize ?? '16px'}>
+          {linkText}
+        </Link>
+      )}
       {handleSuffix ? handleSuffix(suffix) : suffix}
     </>
   );
