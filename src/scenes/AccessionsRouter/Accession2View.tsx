@@ -655,7 +655,7 @@ export default function Accession2View(): JSX.Element {
           tabs={[
             {
               id: 'detail',
-              label: strings.DETAILS,
+              label: strings.ACCESSION_DETAILS,
               children: (
                 <Box
                   sx={{
