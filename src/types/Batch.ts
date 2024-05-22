@@ -34,7 +34,7 @@ export const NurseryWithdrawalRequestPurposes: { [key: string]: NurseryWithdrawa
 export const purposeLabel = (purpose: NurseryWithdrawalPurpose): string => {
   switch (purpose) {
     case 'Out Plant':
-      return strings.OUTPLANT;
+      return strings.PLANTING;
     case 'Nursery Transfer':
       return strings.NURSERY_TRANSFER;
     case 'Dead':
