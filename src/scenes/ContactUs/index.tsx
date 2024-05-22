@@ -96,7 +96,7 @@ export default function ContactUsView(): JSX.Element {
               <Typography fontSize='16px'>
                 <TextWithLink
                   href={docLinks.terraformation}
-                  isExternal={false}
+                  isExternal={true}
                   text={strings.TERRAWARE_IS_SOFTWARE}
                   fontSize='16px'
                 />
@@ -106,7 +106,7 @@ export default function ContactUsView(): JSX.Element {
               <Typography fontSize='16px'>
                 <TextWithLink
                   href={docLinks.terraformation_software_solutions}
-                  isExternal={false}
+                  isExternal={true}
                   text={strings.FOR_A_FULL_OVERVIEW}
                   fontSize='16px'
                 />
