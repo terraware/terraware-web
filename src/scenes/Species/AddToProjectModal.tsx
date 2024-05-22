@@ -21,10 +21,9 @@ export default function AddToProjectModal(props: AddToProjectModalProps): JSX.El
   const [selectedProjectIds, setSelectedProjectIds] = useState<number[]>([]);
 
   const handleOnAdd = useCallback((value: number) => {
-    console.log('value', value);
     setSelectedProjectIds((prev) => [...prev, value]);
   }, []);
-  console.log('selectedProjectIds', selectedProjectIds);
+
   const handleOnRemove = useCallback((value: number) => {
     setSelectedProjectIds((prev) => prev.filter((prevValue) => prevValue !== value));
   }, []);
