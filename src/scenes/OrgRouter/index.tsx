@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { Slide, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Slide, useTheme } from '@mui/material';
 
 import ErrorBoundary from 'src/ErrorBoundary';
 import ProjectsRouter from 'src/components/Projects/Router';
@@ -54,30 +53,6 @@ interface OrgRouterProps {
   setShowNavBar: (value: boolean) => void;
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
-  content: {
-    height: '100%',
-    overflow: 'auto',
-    '& > div, & > main': {
-      paddingTop: '96px',
-    },
-  },
-  contentWithNavBar: {
-    '& > div, & > main': {
-      paddingLeft: '220px',
-    },
-  },
-  navBarOpened: {
-    backdropFilter: 'blur(8px)',
-    background: getRgbaFromHex(theme.palette.TwClrBgSecondary as string, 0.8),
-    height: '100%',
-    alignItems: 'center',
-    position: 'fixed',
-    zIndex: 1300,
-    inset: '0px',
-  },
-}));
-
 const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
@@ -86,12 +61,37 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   const { reloadUserPreferences: reloadPreferences } = useUser();
   const location = useStateLocation();
   const { selectedOrganization } = useOrganization();
-  const classes = useStyles();
+  const theme = useTheme();
 
   const species = useAppSelector(selectSpecies);
   const hasObservationsResults: boolean = useAppSelector(selectHasObservationsResults);
   const plantingSites: PlantingSite[] | undefined = useAppSelector(selectPlantingSites);
   const projects: Project[] | undefined = useAppSelector(selectProjects);
+
+  const contentStyles = {
+    height: '100%',
+    overflow: 'auto',
+    '& > div, & > main': {
+      paddingTop: '96px !important',
+    },
+  };
+
+  const contentWithNavBar = {
+    '& > div, & > main': {
+      paddingTop: '96px !important',
+      paddingLeft: '220px !important',
+    },
+  };
+
+  const navBarOpened = {
+    backdropFilter: 'blur(8px)',
+    background: getRgbaFromHex(theme.palette.TwClrBgSecondary as string, 0.8),
+    height: '100%',
+    alignItems: 'center',
+    position: 'fixed',
+    zIndex: 1300,
+    inset: '0px',
+  };
 
   const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
 
@@ -186,13 +186,13 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
     <ParticipantProvider>
       {type !== 'desktop' ? (
         <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
-          <div className={classes.navBarOpened}>
+          <Box sx={navBarOpened}>
             <NavBar
               setShowNavBar={setShowNavBar}
               withdrawalCreated={withdrawalCreated}
               hasPlantingSites={selectedOrgHasPlantingSites()}
             />
-          </div>
+          </Box>
         </Slide>
       ) : (
         <NavBar
@@ -202,10 +202,9 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
           hasPlantingSites={selectedOrgHasPlantingSites()}
         />
       )}
-      <div
-        className={`${type === 'desktop' && showNavBar ? classes.contentWithNavBar : ''} ${
-          classes.content
-        } scrollable-content`}
+      <Box
+        sx={type === 'desktop' && showNavBar ? { ...contentStyles, ...contentWithNavBar } : contentStyles}
+        className='scrollable-content'
       >
         <ErrorBoundary setShowNavBar={setShowNavBar}>
           <Routes>
@@ -263,7 +262,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
             <Route path='*' element={<Navigate to={APP_PATHS.HOME} />} />
           </Routes>
         </ErrorBoundary>
-      </div>
+      </Box>
     </ParticipantProvider>
   );
 };

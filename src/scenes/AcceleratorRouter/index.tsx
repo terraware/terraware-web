@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { Slide, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Slide, useTheme } from '@mui/material';
 
 import ErrorBoundary from 'src/ErrorBoundary';
 import { APP_PATHS } from 'src/constants';
@@ -26,20 +25,17 @@ interface AcceleratorRouterProps {
   setShowNavBar: (value: boolean) => void;
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
-  content: {
-    height: '100%',
-    overflow: 'auto',
-    '& > div, & > main': {
-      paddingTop: '96px',
-    },
-  },
-  contentWithNavBar: {
-    '& > div, & > main': {
-      paddingLeft: '220px',
-    },
-  },
-  navBarOpened: {
+const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps) => {
+  const { type } = useDeviceInfo();
+  const location = useStateLocation();
+  const documentProducerEnabled = isEnabled('Document Producer');
+  const theme = useTheme();
+
+  const viewHasBackgroundImage = useCallback((): boolean => {
+    return location.pathname.startsWith(APP_PATHS.ACCELERATOR_OVERVIEW);
+  }, [location]);
+
+  const navBarOpened = {
     backdropFilter: 'blur(8px)',
     background: getRgbaFromHex(theme.palette.TwClrBgSecondary as string, 0.8),
     height: '100%',
@@ -47,34 +43,37 @@ const useStyles = makeStyles((theme: Theme) => ({
     position: 'fixed',
     zIndex: 1300,
     inset: '0px',
-  },
-}));
+  };
 
-const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps) => {
-  const { type } = useDeviceInfo();
-  const classes = useStyles();
-  const location = useStateLocation();
-  const documentProducerEnabled = isEnabled('Document Producer');
+  const contentStyles = {
+    height: '100%',
+    overflow: 'auto',
+    '& > div, & > main': {
+      paddingTop: '96px !important',
+    },
+  };
 
-  const viewHasBackgroundImage = useCallback((): boolean => {
-    return location.pathname.startsWith(APP_PATHS.ACCELERATOR_OVERVIEW);
-  }, [location]);
+  const contentWithNavBar = {
+    '& > div, & > main': {
+      paddingTop: '96px !important',
+      paddingLeft: '220px !important',
+    },
+  };
 
   return (
     <>
       {type !== 'desktop' ? (
         <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
-          <div className={classes.navBarOpened}>
+          <Box sx={navBarOpened}>
             <NavBar setShowNavBar={setShowNavBar} />
-          </div>
+          </Box>
         </Slide>
       ) : (
         <NavBar setShowNavBar={setShowNavBar} backgroundTransparent={viewHasBackgroundImage()} />
       )}
-      <div
-        className={`${type === 'desktop' && showNavBar ? classes.contentWithNavBar : ''} ${
-          classes.content
-        } scrollable-content`}
+      <Box
+        sx={type === 'desktop' && showNavBar ? { ...contentStyles, ...contentWithNavBar } : contentStyles}
+        className='scrollable-content'
       >
         <ErrorBoundary setShowNavBar={setShowNavBar}>
           <Routes>
@@ -93,7 +92,7 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
             <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_OVERVIEW} />} />
           </Routes>
         </ErrorBoundary>
-      </div>
+      </Box>
     </>
   );
 };

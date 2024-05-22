@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
@@ -65,7 +65,7 @@ export default function MyAccountView(props: MyAccountProps): JSX.Element | null
 }
 
 type MyAccountContentProps = {
-  className?: string;
+  style?: CSSProperties;
   edit: boolean;
   hasNav?: boolean;
   organizations?: Organization[];
@@ -96,7 +96,7 @@ const columns = (): TableColumnType[] => [
 ];
 
 const MyAccountContent = ({
-  className,
+  style,
   edit,
   hasNav,
   organizations,
@@ -326,7 +326,7 @@ const MyAccountContent = ({
   };
 
   return (
-    <TfMain className={className}>
+    <TfMain style={style}>
       <PageForm
         cancelID='cancelAccountChange'
         saveID='saveAccountChange'
