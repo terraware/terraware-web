@@ -116,6 +116,8 @@ export default function SpeciesCellRenderer(props: RendererProps<TableRowType>):
     );
   } else if (column.key === 'scientificName') {
     return <CellRenderer index={index} column={column} value={createLinkToSpeciesDetail(value)} row={row} />;
+  } else if (column.key === 'participantProjects') {
+    return <CellRenderer {...props} value={<TextTruncated stringList={(value || []) as string[]} />} />;
   }
 
   return <CellRenderer {...props} />;
