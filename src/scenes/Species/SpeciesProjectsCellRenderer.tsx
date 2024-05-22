@@ -16,7 +16,7 @@ export default function SpeciesProjectsCellRenderer(props: RendererProps<TableRo
   const { goToDeliverable } = useNavigateTo();
   const { activeLocale } = useLocalization();
 
-  if (column.key === 'deliverableId') {
+  if (column.key === 'activeDeliverableId') {
     if (value) {
       return (
         <CellRenderer

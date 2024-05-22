@@ -61,10 +61,10 @@ export const requestGetParticipantProjectSpecies = createAsyncThunk(
 
 export const requestGetProjectsForSpecies = createAsyncThunk(
   'participantProjectSpecies/get-projects-for-species',
-  async (request: { organizationId: number; speciesId: number }, { rejectWithValue }) => {
-    const { organizationId, speciesId } = request;
+  async (request: { speciesId: number }, { rejectWithValue }) => {
+    const { speciesId } = request;
 
-    const response = await ParticipantProjectSpeciesService.getProjectsForSpecies(organizationId, speciesId);
+    const response = await ParticipantProjectSpeciesService.getProjectsForSpecies(speciesId);
 
     if (response && response.requestSucceeded && response.data?.participantProjectsForSpecies) {
       return response.data.participantProjectsForSpecies;

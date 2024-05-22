@@ -83,7 +83,7 @@ export const participantProjectsForSpeciesGetSlice = createSlice({
   initialState: initialStateParticipantProjectsForSpeciesGet,
   reducers: {},
   extraReducers: (builder) => {
-    buildReducers(requestGetProjectsForSpecies, true)(builder);
+    buildReducers(requestGetProjectsForSpecies)(builder);
   },
 });
 

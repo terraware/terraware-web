@@ -28,7 +28,7 @@ const columns = (): TableColumnType[] => [
 const viewColumns = (): TableColumnType[] => [
   ...columns(),
   {
-    key: 'deliverableId',
+    key: 'activeDeliverableId',
     name: '',
     type: 'string',
   } as TableColumnType,
@@ -60,7 +60,7 @@ export default function SpeciesProjectsTable({
   const allProjects = useAppSelector(selectProjects);
 
   const [requestId, setRequestId] = useState('');
-  const projectForSpeciesRequest = useAppSelector(selectProjectsForSpeciesRequest(requestId));
+  const projectsForSpeciesRequest = useAppSelector(selectProjectsForSpeciesRequest(requestId));
 
   const [searchResults, setSearchResults] = useState<ParticipantProjectForSpecies[] | null>();
   const [filteredResults, setFilteredResults] = useState<ParticipantProjectForSpecies[] | null>();
@@ -75,17 +75,17 @@ export default function SpeciesProjectsTable({
   }, [selectedOrganization]);
 
   useEffect(() => {
-    const request = dispatch(requestGetProjectsForSpecies({ organizationId: selectedOrganization.id, speciesId }));
+    const request = dispatch(requestGetProjectsForSpecies({ speciesId }));
     setRequestId(request.requestId);
   }, [selectedOrganization, reload, speciesId]);
 
   useEffect(() => {
-    if (projectForSpeciesRequest?.status === 'success') {
-      setSearchResults(projectForSpeciesRequest.data);
-    } else if (projectForSpeciesRequest?.status === 'error') {
+    if (projectsForSpeciesRequest?.status === 'success') {
+      setSearchResults(projectsForSpeciesRequest.data);
+    } else if (projectsForSpeciesRequest?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [projectForSpeciesRequest]);
+  }, [projectsForSpeciesRequest]);
 
   useEffect(() => {
     const assignedProjectsIds = filteredResults?.map((fr) => Number(fr.projectId));

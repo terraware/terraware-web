@@ -79,16 +79,12 @@ const get = (participantProjectSpeciesId: number): Promise<Response2<GetResponse
   });
 
 const getProjectsForSpecies = (
-  organizationId: number,
   speciesId: number
 ): Promise<Response2<GetProjectsForSpeciesResponse>> =>
   HttpService.root(ENDPOINT_PARTICIPANT_PROJECTS_FOR_SPECIES).get2<GetProjectsForSpeciesResponse>({
     urlReplacements: {
       '{speciesId}': `${speciesId}`,
-    },
-    params: {
-      organizationId: `${organizationId}`,
-    },
+    }
   });
 
 const list = (projectId: number): Promise<Response2<GetSpeciesForProjectResponse>> =>
