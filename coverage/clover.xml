@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1716384989550" clover="3.2.0">
-  <project timestamp="1716384989550" name="All files">
-    <metrics statements="22123" coveredstatements="918" conditionals="13938" coveredconditionals="228" methods="6934" coveredmethods="162" elements="42995" coveredelements="1308" complexity="0" loc="22123" ncloc="22123" packages="207" files="969" classes="969"/>
+<coverage generated="1716394826177" clover="3.2.0">
+  <project timestamp="1716394826177" name="All files">
+    <metrics statements="22142" coveredstatements="918" conditionals="13958" coveredconditionals="228" methods="6938" coveredmethods="162" elements="43038" coveredelements="1308" complexity="0" loc="22142" ncloc="22142" packages="207" files="969" classes="969"/>
     <package name="src">
       <metrics statements="161" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -3430,10 +3430,10 @@
         <line num="89" count="0" type="stmt"/>
         <line num="148" count="0" type="stmt"/>
         <line num="152" count="0" type="stmt"/>
-        <line num="177" count="0" type="stmt"/>
-        <line num="178" count="0" type="stmt"/>
-        <line num="202" count="0" type="stmt"/>
-        <line num="205" count="0" type="stmt"/>
+        <line num="179" count="0" type="stmt"/>
+        <line num="180" count="0" type="stmt"/>
+        <line num="204" count="0" type="stmt"/>
+        <line num="207" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.Monitoring">
@@ -15186,7 +15186,7 @@
       </file>
     </package>
     <package name="src.scenes.Home.ParticipantHomeView">
-      <metrics statements="68" coveredstatements="0" conditionals="47" coveredconditionals="0" methods="18" coveredmethods="0"/>
+      <metrics statements="87" coveredstatements="0" conditionals="67" coveredconditionals="0" methods="22" coveredmethods="0"/>
       <file name="CurrentModule.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/ParticipantHomeView/CurrentModule.tsx">
         <metrics statements="6" coveredstatements="0" conditionals="5" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="6" count="0" type="stmt"/>
@@ -15215,33 +15215,52 @@
         <line num="12" count="0" type="stmt"/>
       </file>
       <file name="ToDoCta.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/ParticipantHomeView/ToDoCta.tsx">
-        <metrics statements="9" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="14" count="0" type="stmt"/>
+        <metrics statements="10" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
-        <line num="18" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="22" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="26" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
-      </file>
-      <file name="ToDoDate.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/ParticipantHomeView/ToDoDate.tsx">
-        <metrics statements="8" coveredstatements="0" conditionals="7" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="10" count="0" type="stmt"/>
-        <line num="11" count="0" type="cond" truecount="0" falsecount="7"/>
-        <line num="14" count="0" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="20" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
+      </file>
+      <file name="ToDoDate.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/ParticipantHomeView/ToDoDate.tsx">
+        <metrics statements="9" coveredstatements="0" conditionals="9" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="12" count="0" type="cond" truecount="0" falsecount="7"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="29" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="31" count="0" type="stmt"/>
       </file>
       <file name="ToDoRow.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/ParticipantHomeView/ToDoRow.tsx">
-        <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="13" count="0" type="stmt"/>
+        <metrics statements="20" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="14" count="0" type="stmt"/>
-        <line num="16" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="20" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="27" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="34" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="41" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
       </file>
       <file name="ToDoSection.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/ParticipantHomeView/ToDoSection.tsx">
         <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
