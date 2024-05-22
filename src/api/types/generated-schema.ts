@@ -5247,9 +5247,6 @@ export interface operations {
   /** Gets all participant projects associated to a species with active deliverable information if applicable. */
   getProjectsForSpecies: {
     parameters: {
-      query: {
-        organizationId: number;
-      };
       path: {
         speciesId: number;
       };
