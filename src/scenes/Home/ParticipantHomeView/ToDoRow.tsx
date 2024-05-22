@@ -16,7 +16,6 @@ const ToDoRow = ({ toDo }: ToDoRowProps) => {
 
   const { isTablet, isMobile } = useDeviceInfo();
 
-  console.log('Tablet: ', isTablet);
   const wrap = () => {
     if (isMobile || isTablet) {
       return 'wrap';
