@@ -1,4 +1,5 @@
 import React, { Grid, Typography, useTheme } from '@mui/material';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { ToDoItem } from 'src/types/ProjectToDo';
 
@@ -13,6 +14,36 @@ interface ToDoRowProps {
 const ToDoRow = ({ toDo }: ToDoRowProps) => {
   const theme = useTheme();
 
+  const { isTablet, isMobile } = useDeviceInfo();
+
+  const wrap = () => {
+    if (isMobile || isTablet) {
+      return 'wrap';
+    }
+    return 'nowrap';
+  };
+
+  const gridSize = () => {
+    if (isMobile || isTablet) {
+      return 12;
+    }
+    return 'auto';
+  };
+
+  const whiteSpace = () => {
+    if (isMobile || isTablet) {
+      return 'pre-line';
+    }
+    return 'nowrap';
+  };
+
+  const marginLeft = () => {
+    if (isMobile || isTablet) {
+      return 0;
+    }
+    return 'auto';
+  };
+
   return (
     <Grid
       container
@@ -20,33 +51,37 @@ const ToDoRow = ({ toDo }: ToDoRowProps) => {
       marginTop={theme.spacing(2)}
       alignItems={'center'}
       justifyContent={'flex-start'}
-      flexWrap={'nowrap'}
+      flexWrap={wrap()}
     >
-      <Grid item flexBasis={'content'} flexGrow={0}>
+      <Grid item flexGrow={0} xs={gridSize()}>
         <ToDoStatusBadge status={toDo.getBadge()} />
       </Grid>
-      <Grid item flexBasis={'content'} flexGrow={0}>
+      <Grid item flexGrow={0} xs={gridSize()}>
         <ToDoDate toDo={toDo} />
       </Grid>
-      <Grid item flexBasis={'content'} flexGrow={0}>
-        <Typography fontSize={'16px'} fontWeight={600} lineHeight={'24px'} component={'span'} whiteSpace={'nowrap'}>
+      <Grid item flexBasis={'content'} flexGrow={0} overflow={'hidden'} textOverflow={'ellipsis'}>
+        <Typography
+          display={'inline'}
+          fontSize={'16px'}
+          fontWeight={600}
+          lineHeight={'24px'}
+          paddingInlineEnd={theme.spacing(2)}
+          whiteSpace={'nowrap'}
+        >
           {toDo.getType()}
         </Typography>
-      </Grid>
-      <Grid item zeroMinWidth flexGrow={1}>
         <Typography
+          display={'inline'}
           fontSize={'16px'}
           fontWeight={500}
           lineHeight={'24px'}
           component={'p'}
-          whiteSpace={'nowrap'}
-          overflow={'hidden'}
-          textOverflow={'ellipsis'}
+          whiteSpace={whiteSpace()}
         >
           {toDo.getTitle()}
         </Typography>
       </Grid>
-      <Grid item flexBasis={'content'} flexGrow={0} marginLeft={'auto'}>
+      <Grid item flexGrow={0} xs={gridSize()} marginLeft={marginLeft()}>
         <ToDoCta toDo={toDo} />
       </Grid>
     </Grid>

@@ -151,6 +151,7 @@ const ModuleDetailsCard = ({ deliverables, module, projectId, showSeeAllModules 
                     onClick={() => {
                       goToDeliverable(deliverable.id, projectId);
                     }}
+                    style={{ textAlign: 'left' }}
                   >
                     {deliverable.name}
                   </Link>
@@ -164,6 +165,7 @@ const ModuleDetailsCard = ({ deliverables, module, projectId, showSeeAllModules 
                         color: getDueDateLabelColor(deliverable.dueDate),
                         marginLeft: '8px',
                       }}
+                      whiteSpace={'nowrap'}
                     >
                       {strings.formatString(strings.DUE, getLongDate(deliverable.dueDate.toString(), activeLocale))}
                     </Typography>
