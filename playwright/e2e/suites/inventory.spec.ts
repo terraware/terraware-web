@@ -257,7 +257,7 @@ export default function InventoryTests() {
 
     await page.getByRole('link', { name: '-2-2-003' }).click();
     await page.getByRole('button', { name: 'Withdraw', exact: true }).click();
-    await page.getByLabel('Outplant').check();
+    await page.getByLabel('Planting').check();
     await page.locator('#plantingSiteId').getByPlaceholder('Select...').click();
     await page.getByText('Planting Site', { exact: true }).click();
     await page.getByLabel('Open').first().click();
@@ -281,7 +281,7 @@ export default function InventoryTests() {
     await page.getByRole('link', { name: '60' }).click();
     await expect(page.getByText('Destination:Planting Site')).toBeVisible();
     await expect(page.getByText('Subzone:East-North')).toBeVisible();
-    await expect(page.locator('#row1-purpose')).toContainText('Outplant');
+    await expect(page.locator('#row1-purpose')).toContainText('Planting');
     await expect(page.locator('#row1-facility_name')).toContainText('My New Nursery-');
     await expect(page.locator('#row1-destinationName')).toContainText('Planting Site');
     await expect(page.locator('#row1-plantingSubzoneNames')).toContainText('East-North');
