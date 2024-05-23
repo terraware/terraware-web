@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
 import { Grid, useTheme } from '@mui/material';
-import { SelectT } from '@terraware/web-components';
+import { Dropdown, SelectT } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
-import { useOrganization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { requestCreateParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { selectParticipantProjectSpeciesCreateRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
@@ -15,8 +15,9 @@ import { requestSpecies } from 'src/redux/features/species/speciesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { CreateParticipantProjectSpeciesRequestPayload } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
-import { SpeciesForParticipantProject } from 'src/types/ParticipantProjectSpecies';
+import { SpeciesForParticipantProject, getSpeciesNativeCategoryOptions } from 'src/types/ParticipantProjectSpecies';
 import { Species } from 'src/types/Species';
+import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export interface AddSpeciesModalProps {
@@ -50,7 +51,8 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
     setSelectableSpecies(speciesToAdd);
   }, [allSpecies, participantProjectSpecies]);
 
-  const [record, setRecord] = useState<Partial<CreateParticipantProjectSpeciesRequestPayload>>({});
+  const [record, setRecord, onChange] = useForm<Partial<CreateParticipantProjectSpeciesRequestPayload>>(undefined);
+  const { activeLocale } = useLocalization();
 
   useEffect(() => {
     if (!allSpecies) {
@@ -146,6 +148,20 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             toT={(scientificName: string) => ({ scientificName }) as Species}
             required
             errorText={error}
+          />
+        </Grid>
+        <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+          <Dropdown
+            id='speciesNativeCategory'
+            selectedValue={record?.speciesNativeCategory}
+            onChange={(value) => onChange('speciesNativeCategory', value)}
+            options={getSpeciesNativeCategoryOptions(activeLocale)}
+            label={strings.NATIVE_NON_NATIVE}
+            aria-label={strings.NATIVE_NON_NATIVE}
+            placeholder={strings.SELECT}
+            fixedMenu
+            required
+            fullWidth={true}
           />
         </Grid>
         <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>

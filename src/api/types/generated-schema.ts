@@ -1709,6 +1709,7 @@ export interface components {
       rationale?: string;
       /** Format: int64 */
       speciesId: number;
+      speciesNativeCategory?: "Native" | "Non-native";
     };
     CreateParticipantRequestPayload: {
       /**
@@ -3716,6 +3717,7 @@ export interface components {
       /** Format: int64 */
       speciesId: number;
       speciesScientificName: string;
+      participantProjectSpeciesNativeCategory?: "Native" | "Non-native";
     };
     SpeciesLookupCommonNamePayload: {
       /** @description ISO 639-1 two-letter language code indicating the name's language. Some common names in the server's taxonomic database are not tagged with languages; this value will not be present for those names. */
