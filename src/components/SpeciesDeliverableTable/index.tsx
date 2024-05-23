@@ -64,7 +64,7 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
   };
 
   const onAcceleratorSpeciesClick = (row: any) => {
-    goToParticipantProjectSpecies(deliverable.id, row.projectId, row.id);
+    goToParticipantProjectSpecies(deliverable.id, row.projectId, row.participantProjectSpeciesId);
   };
 
   return (
