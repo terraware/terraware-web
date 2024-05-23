@@ -1,3 +1,4 @@
+180f9a5969 Fix remove recently added projects (#2660)
 101e001649 SW-5410 Make the add species to projects modal a multi select modal (#2656)
 f6265f10de Fix PPS list calls, a few more QA fixes (#2647)
 c16b0859bd SW-5407: Use updated Tab components for Accession Details and Reports (#2650)
