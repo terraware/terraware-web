@@ -108,7 +108,7 @@ export default function SpeciesProjectsTable({
     if (addedProjectsIds) {
       const newProjects = addedProjectsIds?.map((id) => {
         return {
-          participantProjectSpeciesId: -1,
+          participantProjectSpeciesId: id,
           participantProjectSpeciesSubmissionStatus: 'Not Submitted',
           projectId: id,
           projectName: allProjects?.find((proj) => proj.id === id)?.name,
