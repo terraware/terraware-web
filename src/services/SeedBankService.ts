@@ -172,6 +172,19 @@ const getCollectors = async (organizationId: number): Promise<string[] | undefin
 };
 
 /**
+ * Returns all the CollectionSiteName values associated with an organization id, or undefined if the API request failed.
+ */
+const getCollectionSiteNames = async (organizationId: number): Promise<string[] | undefined> => {
+  try {
+    const collectionSiteNames =
+      (await searchFieldValues(['collectionSiteName'], {}, organizationId))?.collectionSiteName?.values || [];
+    return collectionSiteNames.filter((collectionSiteName) => collectionSiteName !== null) as string[];
+  } catch {
+    return undefined;
+  }
+};
+
+/**
  * Get accessions awaiting check-in
  */
 const getPendingAccessions = async (organizationId: number): Promise<SearchResponseElementWithId[] | null> => {
@@ -296,6 +309,7 @@ const SeedBankService = {
   searchAccessions,
   searchFieldValues,
   getCollectors,
+  getCollectionSiteNames,
   getPendingAccessions,
   downloadAccessionsTemplate,
   uploadAccessions,

@@ -20,6 +20,7 @@ import {
   CollectedReceivedDate2,
   Collectors2,
 } from '../properties';
+import CollectionSiteName from '../properties/CollectionSiteName';
 
 export interface Accession2EditModalProps {
   open: boolean;
@@ -134,14 +135,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
           <Typography>{strings.SITE_DETAIL} </Typography>
         </Grid>
         <Grid item xs={12}>
-          <Textfield
-            id='collectionSiteName'
-            type='text'
-            label={strings.COLLECTION_SITE}
-            value={record?.collectionSiteName}
-            onChange={(value) => onChange('collectionSiteName', value)}
-            tooltipTitle={strings.TOOLTIP_ACCESSIONS_ADD_COLLECTING_SITE}
-          />
+          <CollectionSiteName onChange={onChange} collectionSiteName={record?.collectionSiteName} />
         </Grid>
 
         <Grid item xs={12}>
