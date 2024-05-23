@@ -23,8 +23,8 @@ const httpSupport = HttpService.root(SUPPORT_ENDPOINT);
 /**
  * List all support requesr types
  */
-const listSupportRequestTypes = async (): Promise<ServiceRequestTypeData & Response> => {
-  return await httpSupport.get<ListSupportRequestTypesServerResponse, ServiceRequestTypeData>({}, (data) => ({
+const listSupportRequestTypes = (): Promise<ServiceRequestTypeData & Response> => {
+  return httpSupport.get<ListSupportRequestTypesServerResponse, ServiceRequestTypeData>({}, (data) => ({
     types: data?.types ?? [],
   }));
 };
@@ -32,7 +32,7 @@ const listSupportRequestTypes = async (): Promise<ServiceRequestTypeData & Respo
 /**
  * Submit a support request
  */
-const submitSupportRequest = async (request: SupportRequest): Promise<Response2<SubmitSupportRequestServerRespnse>> => {
+const submitSupportRequest = (request: SupportRequest): Promise<Response2<SubmitSupportRequestServerRespnse>> => {
   const payload: SubmitSupportRequestPayload = request;
 
   return httpSupport.post2<SubmitSupportRequestServerRespnse>({

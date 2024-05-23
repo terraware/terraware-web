@@ -14,6 +14,7 @@ import { IconName } from 'src/components/common/icon/icons';
 import { useDocLinks } from 'src/docLinks';
 import isEnabled from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useLocalization } from 'src/providers';
 import { selectAppVersion } from 'src/redux/features/appVersion/appVersionSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -38,6 +39,7 @@ type ListItemContent = {
   onClick: () => void;
 };
 export default function ContactUsHome(): JSX.Element {
+  const { activeLocale } = useLocalization();
   const classes = useStyles();
   const { isMobile, isDesktop } = useDeviceInfo();
   const docLinks = useDocLinks();
@@ -47,40 +49,46 @@ export default function ContactUsHome(): JSX.Element {
   const { types } = useSupportData();
   const featureEnabled = isEnabled('Terraware Support Forms');
 
-  const knowledgeBaseItem: ListItemContent = {
-    icon: 'iconLibrary',
-    title: strings.KNOWLEDGE_BASE,
-    description: strings.DESCRIPTION_KNOWLEDGE_BASE,
-    buttonText: strings.KNOWLEDGE_BASE,
-    onClick: () => window.open(docLinks.knowledge_base),
-  };
+  const knowledgeBaseItem: ListItemContent = useMemo(
+    () => ({
+      icon: 'iconLibrary',
+      title: strings.KNOWLEDGE_BASE,
+      description: strings.DESCRIPTION_KNOWLEDGE_BASE,
+      buttonText: strings.KNOWLEDGE_BASE,
+      onClick: () => window.open(docLinks.knowledge_base),
+    }),
+    [activeLocale]
+  );
 
-  const defaultListItems: ListItemContent[] = [
-    {
-      icon: 'bug',
-      title: strings.TITLE_REPORT_PROBLEM,
-      description: strings.formatString(
-        strings.DESCRIPTION_REPORT_PROBLEM,
-        <i>`&quot;`{appVersion || 'n/a'}`&quot;`</i>
-      ) as string,
-      buttonText: strings.REPORT_PROBLEM,
-      onClick: () => window.open(`${docLinks.report_a_problem}?build=${appVersion || ''}`),
-    },
-    {
-      icon: 'sparkles',
-      title: strings.TITLE_REQUEST_FEATURE,
-      description: strings.DESCRIPTION_REQUEST_FEATURE,
-      buttonText: strings.REQUEST_FEATURE,
-      onClick: () => window.open(docLinks.request_a_feature),
-    },
-    {
-      icon: 'mail',
-      title: strings.CONTACT_US,
-      description: strings.formatString(strings.CONTACT_US_DESCRIPTION, getHelpEmail()) as string,
-      buttonText: strings.CONTACT_US,
-      onClick: () => window.open(docLinks.contact_us),
-    },
-  ];
+  const defaultListItems: ListItemContent[] = useMemo(
+    () => [
+      {
+        icon: 'bug',
+        title: strings.TITLE_REPORT_PROBLEM,
+        description: strings.formatString(
+          strings.DESCRIPTION_REPORT_PROBLEM,
+          <i>`&quot;`{appVersion || 'n/a'}`&quot;`</i>
+        ) as string,
+        buttonText: strings.REPORT_PROBLEM,
+        onClick: () => window.open(`${docLinks.report_a_problem}?build=${appVersion || ''}`),
+      },
+      {
+        icon: 'sparkles',
+        title: strings.TITLE_REQUEST_FEATURE,
+        description: strings.DESCRIPTION_REQUEST_FEATURE,
+        buttonText: strings.REQUEST_FEATURE,
+        onClick: () => window.open(docLinks.request_a_feature),
+      },
+      {
+        icon: 'mail',
+        title: strings.CONTACT_US,
+        description: strings.formatString(strings.CONTACT_US_DESCRIPTION, getHelpEmail()) as string,
+        buttonText: strings.CONTACT_US,
+        onClick: () => window.open(docLinks.contact_us),
+      },
+    ],
+    [activeLocale]
+  );
 
   const jiraListItems = useMemo(
     () =>
@@ -101,7 +109,7 @@ export default function ContactUsHome(): JSX.Element {
     } else {
       return [knowledgeBaseItem, ...defaultListItems];
     }
-  }, [featureEnabled, jiraListItems]);
+  }, [defaultListItems, featureEnabled, jiraListItems, knowledgeBaseItem]);
 
   return (
     <TfMain>
