@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { BusySpinner, Message } from '@terraware/web-components';
+import { BusySpinner, Dropdown, Message } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -10,10 +10,10 @@ import TfMain from 'src/components/common/TfMain';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
 import { useParticipantProjectSpeciesData } from 'src/providers/ParticipantProject/ParticipantProjectSpeciesContext';
-import { useOrganization, useProject } from 'src/providers/hooks';
+import { useLocalization, useOrganization, useProject } from 'src/providers/hooks';
 import SpeciesDetailsForm from 'src/scenes/Species/SpeciesDetailsForm';
 import strings from 'src/strings';
-import { ParticipantProjectSpecies } from 'src/types/ParticipantProjectSpecies';
+import { ParticipantProjectSpecies, getSpeciesNativeCategoryOptions } from 'src/types/ParticipantProjectSpecies';
 import { Species } from 'src/types/Species';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
@@ -29,6 +29,7 @@ export default function SpeciesEditView(): JSX.Element {
     useParticipantProjectSpeciesData();
   const { projectId } = useProject();
   const { currentDeliverable, deliverableId } = useDeliverableData();
+  const { activeLocale } = useLocalization();
 
   const [speciesRecord, setSpeciesRecord, onChangeSpecies] = useForm<Species | undefined>(undefined);
   const [participantProjectSpeciesRecord, setParticipantProjectSpeciesRecord, onChangeParticipantProjectSpecies] =
@@ -116,6 +117,19 @@ export default function SpeciesEditView(): JSX.Element {
               margin: 0,
             }}
           >
+            <Grid item xs={12} paddingBottom={theme.spacing(2)}>
+              <Dropdown
+                id='speciesNativeCategory'
+                selectedValue={participantProjectSpeciesRecord?.speciesNativeCategory}
+                onChange={(value) => onChange('speciesNativeCategory', value)}
+                options={getSpeciesNativeCategoryOptions(activeLocale)}
+                label={strings.NATIVE_NON_NATIVE}
+                aria-label={strings.NATIVE_NON_NATIVE}
+                placeholder={strings.SELECT}
+                fixedMenu
+                required
+              />
+            </Grid>
             <Grid item xs={12} paddingBottom={theme.spacing(2)}>
               <TextField
                 label={strings.RATIONALE}

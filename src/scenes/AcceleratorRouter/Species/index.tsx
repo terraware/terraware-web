@@ -239,6 +239,15 @@ export default function SpeciesDetailView(): JSX.Element {
                   </Box>
                 </Box>
               )}
+              <GridItemWrapper>
+                <TextField
+                  label={strings.NATIVE_NON_NATIVE}
+                  id='speciesNativeCategory'
+                  type='text'
+                  value={currentParticipantProjectSpecies.speciesNativeCategory}
+                  display={true}
+                />
+              </GridItemWrapper>
               <GridItemWrapper props={{ xs: 12 }}>
                 <TextField
                   label={strings.RATIONALE}
@@ -310,9 +319,9 @@ export default function SpeciesDetailView(): JSX.Element {
               </GridItemWrapper>
               <GridItemWrapper>
                 <TextField
-                  id={'speciesNativeCategory'}
-                  label={strings.NATIVE_NON_NATIVE}
-                  value={currentParticipantProjectSpecies?.speciesNativeCategory}
+                  id={'nativeEcosystem'}
+                  label={strings.NATIVE_ECOSYSTEM}
+                  value={currentSpecies.nativeEcosystem}
                   type='text'
                   display={true}
                   required
