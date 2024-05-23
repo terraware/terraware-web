@@ -634,6 +634,12 @@ export interface paths {
      */
     delete: operations["deleteSpecies"];
   };
+  "/api/v1/support": {
+    /** Lists support request types. */
+    get: operations["listRequestTypes"];
+    /** Submit support request types. */
+    post: operations["submitRequest"];
+  };
   "/api/v1/timeseries": {
     /** Lists the timeseries for one or more devices. */
     get: operations["listTimeseries"];
@@ -2736,6 +2742,10 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
       subLocations: components["schemas"]["SubLocationPayload"][];
     };
+    ListSupportRequestTypesResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      types: components["schemas"]["ServiceRequestType"][];
+    };
     ListTimeZoneNamesResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
       timeZones: components["schemas"]["TimeZonePayload"][];
@@ -3681,6 +3691,12 @@ export interface components {
       body: string;
       subject: string;
     };
+    ServiceRequestType: {
+      description: string;
+      name: string;
+      /** Format: int32 */
+      requestTypeId: number;
+    };
     SimpleErrorResponsePayload: {
       error: components["schemas"]["ErrorDetails"];
       status: components["schemas"]["SuccessOrError"];
@@ -3869,6 +3885,16 @@ export interface components {
       id: number;
       name: string;
       originalName?: string;
+    };
+    SubmitSupportRequestPayload: {
+      description: string;
+      /** Format: int32 */
+      requestTypeId: number;
+      summary: string;
+    };
+    SubmitSupportRequestResponsePayload: {
+      issueKey: string;
+      status: components["schemas"]["SuccessOrError"];
     };
     /**
      * @description Indicates of success or failure of the requested operation.
@@ -7900,6 +7926,33 @@ export interface operations {
       409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Lists support request types. */
+  listRequestTypes: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListSupportRequestTypesResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Submit support request types. */
+  submitRequest: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SubmitSupportRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SubmitSupportRequestResponsePayload"];
         };
       };
     };

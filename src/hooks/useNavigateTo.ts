@@ -9,6 +9,14 @@ export default function useNavigateTo() {
 
   return useMemo(
     () => ({
+      goToContactUs: () => {
+        navigate({ pathname: APP_PATHS.CONTACT_US });
+      },
+
+      goToContactUsForm: (requestTypeId: number) => {
+        navigate({ pathname: APP_PATHS.CONTACT_US_FORM.replace(':requestTypeId', `${requestTypeId}`) });
+      },
+
       goToDeliverable: (deliverableId: number, projectId: number) =>
         navigate({
           pathname: APP_PATHS.DELIVERABLE_VIEW.replace(':deliverableId', `${deliverableId}`).replace(
