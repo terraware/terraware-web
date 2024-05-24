@@ -54,7 +54,9 @@ const DeliverablesTable = ({
   const { acceleratorOrgs } = useAcceleratorOrgs(true);
   const { selectedParticipant } = useParticipants(participantId);
 
-  const acceleratorProjects = useMemo(() => acceleratorOrgs?.flatMap((org) => org.projects), [acceleratorOrgs]);
+  // TODO we should move this logic out of this component. It should be general purpose and we should not be calling
+  // accelerator related APIs on the participant side of things
+  const acceleratorProjects = useMemo(() => (acceleratorOrgs || [])?.flatMap((org) => org.projects), [acceleratorOrgs]);
 
   const [deliverables, setDeliverables] = useState<ListDeliverablesElement[]>([]);
   const [deliverablesSearchRequestId, setDeliverablesSearchRequestId] = useState('');
