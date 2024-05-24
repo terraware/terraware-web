@@ -137,9 +137,9 @@ const DeliverablesList = (): JSX.Element => {
               <ProjectsDropdown
                 allowUnselect
                 availableProjects={participantProjects}
+                label={''}
                 record={projectFilter}
                 setRecord={setProjectFilter}
-                label={''}
               />
             </Grid>
           </Grid>
