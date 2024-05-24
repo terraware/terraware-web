@@ -19,10 +19,10 @@ import RemoveSpeciesDialog from './RemoveSpeciesDialog';
 import TableCellRenderer from './TableCellRenderer';
 
 const columns = (): TableColumnType[] => [
-  { key: 'speciesScientificName', name: strings.SCIENTIFIC_NAME, type: 'string' },
-  { key: 'speciesCommonName', name: strings.COMMON_NAME, type: 'string' },
-  { key: 'participantProjectSpeciesRationale', name: strings.RATIONALE, type: 'string' },
-  { key: 'participantProjectSpeciesSubmissionStatus', name: strings.STATUS, type: 'string' },
+  { key: 'species.scientificName', name: strings.SCIENTIFIC_NAME, type: 'string' },
+  { key: 'species.commonName', name: strings.COMMON_NAME, type: 'string' },
+  { key: 'participantProjectSpecies.rationale', name: strings.RATIONALE, type: 'string' },
+  { key: 'participantProjectSpecies.submissionStatus', name: strings.STATUS, type: 'string' },
 ];
 
 const consoleColumns = (): TableColumnType[] => [
@@ -64,7 +64,7 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
   };
 
   const onAcceleratorSpeciesClick = (row: any) => {
-    goToParticipantProjectSpecies(deliverable.id, row.projectId, row.participantProjectSpeciesId);
+    goToParticipantProjectSpecies(deliverable.id, row.project.id, row.participantProjectSpecies.id);
   };
 
   return (

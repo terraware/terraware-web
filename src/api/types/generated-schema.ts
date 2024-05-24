@@ -75,6 +75,10 @@ export interface paths {
     /** Creates a new participant project species entry for every project ID and species ID pairing. */
     post: operations["assignParticipantProjectSpecies"];
   };
+  "/api/v1/accelerator/projects/species/snapshots/{submissionId}": {
+    /** Creates a new participant project species entry. */
+    post: operations["getParticipantProjectSpeciesSnapshot"];
+  };
   "/api/v1/accelerator/projects/species/{participantProjectSpeciesId}": {
     /** Gets information about a participant project species. */
     get: operations["getParticipantProjectSpecies"];
@@ -3705,17 +3709,9 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     SpeciesForParticipantProjectPayload: {
-      /** Format: int64 */
-      participantProjectSpeciesId: number;
-      participantProjectSpeciesRationale?: string;
-      /** @enum {string} */
-      participantProjectSpeciesSubmissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
-      /** Format: int64 */
-      projectId: number;
-      speciesCommonName?: string;
-      /** Format: int64 */
-      speciesId: number;
-      speciesScientificName: string;
+      participantProjectSpecies: components["schemas"]["ParticipantProjectSpeciesPayload"];
+      project: components["schemas"]["ProjectPayload"];
+      species: components["schemas"]["SpeciesResponseElement"];
     };
     SpeciesLookupCommonNamePayload: {
       /** @description ISO 639-1 two-letter language code indicating the name's language. Some common names in the server's taxonomic database are not tagged with languages; this value will not be present for those names. */
@@ -4970,6 +4966,22 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Creates a new participant project species entry. */
+  getParticipantProjectSpeciesSnapshot: {
+    parameters: {
+      path: {
+        submissionId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": string;
         };
       };
     };

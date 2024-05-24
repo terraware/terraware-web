@@ -19,7 +19,7 @@ import { SpeciesForParticipantProject } from 'src/types/ParticipantProjectSpecie
 import EditSpeciesModal from './EditSpeciesModal';
 
 export default function SpeciesDeliverableCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
-  const { column, index, row, value, reloadData, onRowClick } = props;
+  const { column, index, row, reloadData, onRowClick } = props;
 
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
@@ -47,7 +47,7 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
     }
   };
 
-  if (column.key === 'speciesScientificName') {
+  if (column.key === 'species.scientificName') {
     return (
       <CellRenderer
         column={column}
@@ -62,20 +62,30 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
                 projectSpecies={row as SpeciesForParticipantProject}
               />
             )}
-            {isAcceleratorRoute ? createLinkToAcceleratorSpecies(value) : createLinkToSpecies(value)}
+            {isAcceleratorRoute
+              ? createLinkToAcceleratorSpecies(row?.species?.scientificName)
+              : createLinkToSpecies(row?.species?.scientificName)}
           </>
         }
       />
     );
   }
 
-  if (column.key === 'participantProjectSpeciesSubmissionStatus') {
+  if (column.key === 'participantProjectSpecies.submissionStatus') {
     return (
       <CellRenderer
         column={column}
         index={index}
         row={row}
-        value={activeLocale ? <DeliverableStatusBadge status={value as DeliverableStatusType} /> : ''}
+        value={
+          activeLocale ? (
+            <DeliverableStatusBadge
+              status={row?.participantProjectSpecies?.submissionStatus as DeliverableStatusType}
+            />
+          ) : (
+            ''
+          )
+        }
       />
     );
   }
@@ -85,11 +95,8 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
       const request = dispatch(
         requestUpdateParticipantProjectSpecies({
           participantProjectSpecies: {
-            id: row.participantProjectSpeciesId,
+            ...row.participantProjectSpecies,
             feedback,
-            projectId: row.projectId,
-            rationale: row.rationale,
-            speciesId: row.speciesId,
             submissionStatus: 'Rejected',
           },
         })
@@ -125,11 +132,8 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
       const request = dispatch(
         requestUpdateParticipantProjectSpecies({
           participantProjectSpecies: {
-            id: row.participantProjectSpeciesId,
-            speciesId: row.speciesId,
-            projectId: row.projectId,
+            ...row.participantProjectSpecies,
             submissionStatus: 'Approved',
-            rationale: row.rationale,
           },
         })
       );
@@ -151,6 +155,14 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
         }
       />
     );
+  }
+
+  if (column.key === 'species.commonName') {
+    return <CellRenderer {...props} value={row.species.commonName} />;
+  }
+
+  if (column.key === 'participantProjectSpecies.rationale') {
+    return <CellRenderer {...props} value={row.participantProjectSpecies.rationale} />;
   }
 
   return <CellRenderer {...props} />;
