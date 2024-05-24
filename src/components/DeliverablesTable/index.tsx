@@ -21,6 +21,7 @@ import TableWithSearchFilters from '../TableWithSearchFilters';
 import DeliverableCellRenderer from './DeliverableCellRenderer';
 
 interface DeliverablesTableProps {
+  acceleratorProjects?: AcceleratorOrgProject[];
   columns: (activeLocale: string | null) => TableColumnType[];
   extraTableFilters?: SearchNodePayload[];
   filterModifiers?: (filters: FilterConfig[]) => FilterConfig[];
@@ -38,6 +39,7 @@ const defaultSearchOrder: SearchSortOrder = {
 };
 
 const DeliverablesTable = ({
+  acceleratorProjects,
   columns,
   extraTableFilters,
   filterModifiers,
@@ -51,12 +53,7 @@ const DeliverablesTable = ({
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
   const { selectedOrganization } = useOrganization();
-  const { acceleratorOrgs } = useAcceleratorOrgs(true);
   const { selectedParticipant } = useParticipants(participantId);
-
-  // TODO we should move this logic out of this component. It should be general purpose and we should not be calling
-  // accelerator related APIs on the participant side of things
-  const acceleratorProjects = useMemo(() => (acceleratorOrgs || [])?.flatMap((org) => org.projects), [acceleratorOrgs]);
 
   const [deliverables, setDeliverables] = useState<ListDeliverablesElement[]>([]);
   const [deliverablesSearchRequestId, setDeliverablesSearchRequestId] = useState('');
