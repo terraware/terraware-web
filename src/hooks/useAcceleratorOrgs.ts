@@ -27,7 +27,10 @@ export const useAcceleratorOrgs = (includeParticipants?: boolean): Response => {
 
   useEffect(() => {
     if (result?.status === 'error') {
-      snackbar.toastError();
+      // TODO this need to come back when we are only making this request in the accelerator side of things. Currently
+      // this call happens in the participant deliverables table, showing a random error since they don't have
+      // accelerator admin permissions.
+      // snackbar.toastError();
     }
   }, [result?.status, snackbar]);
 
