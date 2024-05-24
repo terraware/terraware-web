@@ -75,10 +75,6 @@ export interface paths {
     /** Creates a new participant project species entry for every project ID and species ID pairing. */
     post: operations["assignParticipantProjectSpecies"];
   };
-  "/api/v1/accelerator/projects/species/snapshots/{submissionId}": {
-    /** Creates a new participant project species entry. */
-    post: operations["getParticipantProjectSpeciesSnapshot"];
-  };
   "/api/v1/accelerator/projects/species/{participantProjectSpeciesId}": {
     /** Gets information about a participant project species. */
     get: operations["getParticipantProjectSpecies"];
@@ -106,6 +102,10 @@ export interface paths {
   "/api/v1/accelerator/projects/{projectId}/species": {
     /** Gets all species associated to a participant project. */
     get: operations["getSpeciesForProject"];
+  };
+  "/api/v1/accelerator/projects/{projectId}/species/snapshots/{deliverableId}": {
+    /** Creates a new participant project species entry. */
+    get: operations["getParticipantProjectSpeciesSnapshot"];
   };
   "/api/v1/accelerator/projects/{projectId}/votes": {
     /**
@@ -4970,22 +4970,6 @@ export interface operations {
       };
     };
   };
-  /** Creates a new participant project species entry. */
-  getParticipantProjectSpeciesSnapshot: {
-    parameters: {
-      path: {
-        submissionId: number;
-      };
-    };
-    responses: {
-      /** @description The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": string;
-        };
-      };
-    };
-  };
   /** Gets information about a participant project species. */
   getParticipantProjectSpecies: {
     parameters: {
@@ -5157,6 +5141,23 @@ export interface operations {
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Creates a new participant project species entry. */
+  getParticipantProjectSpeciesSnapshot: {
+    parameters: {
+      path: {
+        projectId: number;
+        deliverableId: number;
+      };
+    };
+    responses: {
+      /** @description The file was successfully retrieved. */
+      200: {
+        content: {
+          "*/*": string;
         };
       };
     };

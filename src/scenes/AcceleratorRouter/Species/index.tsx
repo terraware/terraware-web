@@ -21,6 +21,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import ApproveDeliverableDialog from '../Deliverables/ApproveDeliverableDialog';
 import RejectDialog from '../Deliverables/RejectDialog';
+import DownloadSpeciesSnapshotModal from './DownloadSpeciesSnapshotModal';
 import RejectedBox from './RejectedBox';
 
 const useStyles = makeStyles((theme: Theme) => ({

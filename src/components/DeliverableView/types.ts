@@ -8,4 +8,5 @@ export type ViewProps = {
 
 export type EditProps = ViewProps & {
   callToAction?: ReactNode;
+  optionsMenu?: ReactNode;
 };

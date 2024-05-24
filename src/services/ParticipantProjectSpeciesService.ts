@@ -2,11 +2,15 @@ import { paths } from 'src/api/types/generated-schema';
 import { ParticipantProjectSpecies, SubmissionStatus } from 'src/types/ParticipantProjectSpecies';
 
 import HttpService, { Response2 } from './HttpService';
+import axios from './axios';
+import axios from './axios';
 
 const ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR =
   '/api/v1/accelerator/projects/species/{participantProjectSpeciesId}';
 const ENDPOINT_PARTICIPANT_PROJECT_SPECIES = '/api/v1/accelerator/projects/species';
 const ENDPOINT_PARTICIPANT_PROJECT_SPECIES_ASSIGN = '/api/v1/accelerator/projects/species/assign';
+const ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SUBMISSION_SNAPSHOT =
+  '/api/v1/accelerator/projects/{projectId}/species/snapshots/{deliverableId}';
 const ENDPOINT_PARTICIPANT_PROJECTS_FOR_SPECIES = '/api/v1/accelerator/species/{speciesId}/projects';
 const ENDPOINT_PARTICIPANT_SPECIES_FOR_PROJECT = '/api/v1/accelerator/projects/{projectId}/species';
 
@@ -33,6 +37,9 @@ type GetProjectsForSpeciesResponse =
 
 type GetSpeciesForProjectResponse =
   paths[typeof ENDPOINT_PARTICIPANT_SPECIES_FOR_PROJECT]['get']['responses'][200]['content']['application/json'];
+
+type GetSubmissionSnapshotResponse =
+  paths[typeof ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SUBMISSION_SNAPSHOT]['get']['responses'][200]['content']['*/*'];
 
 export type UpdateRequestPayload =
   paths[typeof ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR]['put']['requestBody']['content']['application/json'];
@@ -70,6 +77,15 @@ const deleteMany = (participantProjectSpeciesIds: number[]): Promise<Response2<D
     entity,
   });
 };
+
+const downloadSnapshot = async (deliverableId: number, projectId: number): Promise<GetSubmissionSnapshotResponse | undefined> => {
+  try {
+    const result = await axios.get<GetSubmissionSnapshotResponse>(ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SUBMISSION_SNAPSHOT.replace('{submissionId}', `${submissionId}`))
+    return result.data;
+  } catch (e) {
+    return undefined;
+  }
+}
 
 const get = (participantProjectSpeciesId: number): Promise<Response2<GetResponse>> =>
   HttpService.root(ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR).get2<GetResponse>({
@@ -112,11 +128,12 @@ const update = (participantProjectSpecies: ParticipantProjectSpecies): Promise<R
 const ParticipantProjectSpeciesService = {
   assign,
   create,
+  deleteMany,
+  downloadSnapshot,
   get,
+  getProjectsForSpecies,
   list,
   update,
-  deleteMany,
-  getProjectsForSpecies,
 };
 
 export default ParticipantProjectSpeciesService;

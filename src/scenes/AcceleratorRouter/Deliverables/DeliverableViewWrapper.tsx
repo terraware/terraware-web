@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { Box, useTheme } from '@mui/material';
+import { useTheme } from '@mui/material';
 import { Button, DropdownItem } from '@terraware/web-components';
 
 import useUpdateDeliverable from 'src/components/DeliverableView/useUpdateDeliverable';
@@ -90,7 +90,7 @@ const DeliverableViewWrapper = () => {
   const callToAction = useMemo(() => {
     return (
       isAllowed('UPDATE_SUBMISSION_STATUS') && (
-        <Box display='flex' flexDirection='row' flexGrow={0} marginRight={theme.spacing(3)} justifyContent='right'>
+        <>
           <Button
             disabled={deliverable?.status === 'Rejected'}
             id='rejectDeliverable'
@@ -107,11 +107,20 @@ const DeliverableViewWrapper = () => {
             onClick={() => void setShowApproveDialog(true)}
             size='medium'
           />
-          <OptionsMenu onOptionItemClick={onOptionItemClick} optionItems={optionItems} />
-        </Box>
+        </>
       )
     );
-  }, [deliverable?.status, isAllowed, onOptionItemClick, optionItems, theme]);
+  }, [deliverable?.status, isAllowed, theme]);
+
+  const optionsMenu = useMemo(
+    () =>
+      isAllowed('UPDATE_SUBMISSION_STATUS') && (
+        <>
+          <OptionsMenu onOptionItemClick={onOptionItemClick} optionItems={optionItems} />
+        </>
+      ),
+    [isAllowed, onOptionItemClick, optionItems]
+  );
 
   if (deliverable) {
     return (
@@ -128,6 +137,7 @@ const DeliverableViewWrapper = () => {
         {deliverable.type === 'Document' ? (
           <DocumentDeliverableView
             callToAction={callToAction}
+            optionsMenu={optionsMenu}
             deliverable={deliverable}
             isBusy={requestStatus === 'pending'}
             showRejectDialog={() => setShowRejectDialog(true)}
@@ -135,6 +145,7 @@ const DeliverableViewWrapper = () => {
         ) : (
           <SpeciesDeliverableView
             callToAction={callToAction}
+            optionsMenu={optionsMenu}
             deliverable={deliverable}
             isBusy={requestStatus === 'pending'}
             showRejectDialog={() => setShowRejectDialog(true)}
