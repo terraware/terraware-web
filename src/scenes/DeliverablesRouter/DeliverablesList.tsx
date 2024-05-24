@@ -9,8 +9,8 @@ import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import TfMain from 'src/components/common/TfMain';
-import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization, useOrganization } from 'src/providers';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
 import theme from 'src/theme';
 import { ListDeliverablesElement } from 'src/types/Deliverables';
@@ -66,7 +66,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
 
 const DeliverablesList = (): JSX.Element => {
   const { activeLocale } = useLocalization();
-  const { availableProjects } = useProjects();
+  const { participantProjects } = useParticipantData();
   const { selectedOrganization } = useOrganization();
 
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number }>({ projectId: undefined });
@@ -136,7 +136,7 @@ const DeliverablesList = (): JSX.Element => {
             <Grid item sx={{ marginLeft: theme.spacing(1.5) }}>
               <ProjectsDropdown
                 allowUnselect
-                availableProjects={availableProjects}
+                availableProjects={participantProjects}
                 record={projectFilter}
                 setRecord={setProjectFilter}
                 label={''}
@@ -145,7 +145,7 @@ const DeliverablesList = (): JSX.Element => {
           </Grid>
         </>
       ) : null,
-    [activeLocale, availableProjects, projectFilter]
+    [activeLocale, participantProjects, projectFilter]
   );
 
   return (
