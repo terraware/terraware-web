@@ -51,7 +51,9 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
     setSelectableSpecies(speciesToAdd);
   }, [allSpecies, participantProjectSpecies]);
 
-  const [record, setRecord, onChange] = useForm<Partial<CreateParticipantProjectSpeciesRequestPayload>>(undefined);
+  const [record, setRecord, onChange] = useForm<Partial<CreateParticipantProjectSpeciesRequestPayload>>({
+    projectId: -1,
+  });
   const { activeLocale } = useLocalization();
 
   useEffect(() => {

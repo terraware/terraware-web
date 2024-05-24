@@ -16,7 +16,6 @@ import Select from 'src/components/common/Select/Select';
 import TextField from 'src/components/common/Textfield/Textfield';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { useParticipantProjectSpeciesData } from 'src/providers/ParticipantProject/ParticipantProjectSpeciesContext';
 import { useLocalization } from 'src/providers/hooks';
 import { SpeciesService } from 'src/services';
 import strings from 'src/strings';
@@ -37,6 +36,7 @@ import {
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 
+import { ProjectSpecies } from './AddToProjectModal';
 import SpeciesProjectsTable from './SpeciesProjectsTable';
 
 const useStyles = makeStyles(() => ({
@@ -53,10 +53,10 @@ type SpeciesDetailsFormProps = {
   participantProjectSpeciesRecord?: ParticipantProjectSpecies;
   record: Species;
   setNameFormatError: React.Dispatch<React.SetStateAction<string | string[]>>;
-  onAdd?: (ids: number[]) => void;
+  onAdd?: (projectSpecies: ProjectSpecies[]) => void;
   onRemoveNew?: (ids: number[]) => void;
   onRemoveExisting?: (ids: number[]) => void;
-  addedProjectsIds?: number[];
+  addedProjectsSpecies?: ProjectSpecies[];
   removedProjectsIds?: number[];
   setRecord?: React.Dispatch<React.SetStateAction<Species>>;
 };
@@ -66,13 +66,12 @@ export default function SpeciesDetailsForm({
   gridSize,
   nameFormatError,
   onChange,
-  participantProjectSpeciesRecord,
   record,
   setNameFormatError,
   onAdd,
   onRemoveNew,
   onRemoveExisting,
-  addedProjectsIds,
+  addedProjectsSpecies,
   removedProjectsIds,
   setRecord,
 }: SpeciesDetailsFormProps): JSX.Element {
@@ -91,7 +90,6 @@ export default function SpeciesDetailsForm({
   const { isMobile } = useDeviceInfo();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { orgHasParticipants } = useParticipantData();
-  const { currentParticipantProjectSpecies } = useParticipantProjectSpeciesData();
 
   const openTooltipLearnMoreModal = (data: TooltipLearnMoreModalData) => {
     setTooltipLearnMoreModalData(data);
@@ -440,7 +438,7 @@ export default function SpeciesDetailsForm({
             onAdd={onAdd}
             onRemoveExisting={onRemoveExisting}
             onRemoveNew={onRemoveNew}
-            addedProjectsIds={addedProjectsIds}
+            addedProjectsSpecies={addedProjectsSpecies}
             removedProjectsIds={removedProjectsIds}
           />
         )}

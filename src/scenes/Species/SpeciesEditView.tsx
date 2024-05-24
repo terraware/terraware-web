@@ -10,7 +10,7 @@ import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers/hooks';
 import {
-  requestAssignParticipantProjectSpecies,
+  requestAddManyParticipantProjectSpecies,
   requestDeleteManyParticipantProjectSpecies,
 } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import {
@@ -20,11 +20,14 @@ import {
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import SpeciesDetailsForm from 'src/scenes/Species/SpeciesDetailsForm';
 import { SpeciesService } from 'src/services';
+import { CreateParticipantProjectSpeciesRequestPayload } from 'src/services/ParticipantProjectSpeciesService';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
+
+import { ProjectSpecies } from './AddToProjectModal';
 
 function initSpecies(species?: Species): Species {
   return (
@@ -46,7 +49,7 @@ export default function SpeciesEditView(): JSX.Element {
   const [record, setRecord, onChange] = useForm<Species>(initSpecies());
   const snackbar = useSnackbar();
   const [nameFormatError, setNameFormatError] = useState<string | string[]>('');
-  const [addedProjectsIds, setAddedProjectsIds] = useState<number[]>();
+  const [addedProjectsSpecies, setAddedProjectsSpecies] = useState<ProjectSpecies[]>();
   const [removedProjectsIds, setRemovedProjectsIds] = useState<number[]>();
 
   const [addRequestId, setAddRequestId] = useState<string>('');
@@ -60,15 +63,15 @@ export default function SpeciesEditView(): JSX.Element {
   };
 
   const onRemoveNewHandler = (removedIds: number[]) => {
-    setAddedProjectsIds((oldProjectsIds: number[] | undefined) => {
-      const newIds = oldProjectsIds?.filter((oPId) => !removedIds.includes(oPId));
-      return newIds;
+    setAddedProjectsSpecies((oldProjectsSpecies: ProjectSpecies[] | undefined) => {
+      const newProjectSpecies = oldProjectsSpecies?.filter((oPS) => !removedIds.includes(oPS.project.id));
+      return newProjectSpecies;
     });
   };
 
-  const onAddHandler = (addedIds: number[]) => {
-    setAddedProjectsIds((oldProjectsIds: number[] | undefined) => {
-      return oldProjectsIds ? [...oldProjectsIds, ...addedIds] : addedIds;
+  const onAddHandler = (addedProjectSpecies: ProjectSpecies[]) => {
+    setAddedProjectsSpecies((oldProjectSpecies: ProjectSpecies[] | undefined) => {
+      return oldProjectSpecies ? [...oldProjectSpecies, ...addedProjectSpecies] : addedProjectSpecies;
     });
   };
 
@@ -138,13 +141,21 @@ export default function SpeciesEditView(): JSX.Element {
           const request = dispatch(requestDeleteManyParticipantProjectSpecies(removedProjectsIds));
           setRemoveRequestId(request.requestId);
         }
-        if (addedProjectsIds && speciesId) {
-          const request = dispatch(
-            requestAssignParticipantProjectSpecies({ projectIds: addedProjectsIds, speciesIds: [Number(speciesId)] })
-          );
+        if (addedProjectsSpecies && speciesId) {
+          const createRequests = addedProjectsSpecies.map((aPS) => {
+            return {
+              projectId: aPS.project.id,
+              speciesId: Number(speciesId),
+              speciesNativeCategory: aPS.nativeCategory,
+            } as CreateParticipantProjectSpeciesRequestPayload;
+          });
+          const request = dispatch(requestAddManyParticipantProjectSpecies(createRequests));
           setAddRequestId(request.requestId);
         }
-        if ((!removedProjectsIds || !removedProjectsIds.length) && (!addedProjectsIds || !addedProjectsIds.length)) {
+        if (
+          (!removedProjectsIds || !removedProjectsIds.length) &&
+          (!addedProjectsSpecies || !addedProjectsSpecies.length)
+        ) {
           goToSpecies(record.id);
         }
       } else {
@@ -186,7 +197,7 @@ export default function SpeciesEditView(): JSX.Element {
             onAdd={onAddHandler}
             onRemoveExisting={onRemoveExistingHandler}
             onRemoveNew={onRemoveNewHandler}
-            addedProjectsIds={addedProjectsIds}
+            addedProjectsSpecies={addedProjectsSpecies}
             removedProjectsIds={removedProjectsIds}
           />
         </Box>

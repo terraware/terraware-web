@@ -16,7 +16,7 @@ import { ParticipantProjectForSpecies } from 'src/types/ParticipantProjectSpecie
 import { Project } from 'src/types/Project';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import AddToProjectModal from './AddToProjectModal';
+import AddToProjectModal, { ProjectSpecies } from './AddToProjectModal';
 import RemoveProjectsDialog from './RemoveProjectsDialog';
 import SpeciesProjectsCellRenderer from './SpeciesProjectsCellRenderer';
 
@@ -37,10 +37,10 @@ const viewColumns = (): TableColumnType[] => [
 type SpeciesProjectsTableProps = {
   speciesId: number;
   editMode: boolean;
-  onAdd?: (ids: number[]) => void;
+  onAdd?: (projectsSpecies: ProjectSpecies[]) => void;
   onRemoveNew?: (ids: number[]) => void;
   onRemoveExisting?: (ids: number[]) => void;
-  addedProjectsIds?: number[];
+  addedProjectsSpecies?: ProjectSpecies[];
   removedProjectsIds?: number[];
 };
 
@@ -50,7 +50,7 @@ export default function SpeciesProjectsTable({
   onAdd,
   onRemoveNew,
   onRemoveExisting,
-  addedProjectsIds,
+  addedProjectsSpecies,
   removedProjectsIds,
 }: SpeciesProjectsTableProps): JSX.Element {
   const dispatch = useAppDispatch();
@@ -105,27 +105,30 @@ export default function SpeciesProjectsTable({
         }) || [];
     }
 
-    if (addedProjectsIds) {
-      const newProjects = addedProjectsIds?.map((id) => {
+    if (addedProjectsSpecies) {
+      const newProjects = addedProjectsSpecies?.map((pS) => {
         return {
-          participantProjectSpeciesId: id,
+          participantProjectSpeciesId: pS.project.id,
           participantProjectSpeciesSubmissionStatus: 'Not Submitted',
-          projectId: id,
-          projectName: allProjects?.find((proj) => proj.id === id)?.name,
+          projectId: pS.project.id,
+          projectName: allProjects?.find((proj) => proj.id === pS.project.id)?.name,
           speciesId,
+          participantProjectSpeciesNativeCategory: pS.nativeCategory,
         } as ParticipantProjectForSpecies;
       });
       updatedResults = [...updatedResults, ...newProjects];
     }
 
     setFilteredResults(updatedResults);
-  }, [addedProjectsIds, removedProjectsIds, searchResults]);
+  }, [addedProjectsSpecies, removedProjectsIds, searchResults]);
 
-  const onAddHandler = (addedIds: number[]) => {
+  const onAddHandler = (projectsSpeciesAdded: ProjectSpecies[]) => {
     // only add new project if it's not already added
-    const netNewIds = addedIds.filter((id) => !searchResults?.find((sr) => Number(sr.projectId) === id));
-    if (netNewIds.length > 0 && onAdd) {
-      onAdd(netNewIds);
+    const netNewProj = projectsSpeciesAdded.filter(
+      (pS) => !searchResults?.find((sr) => Number(sr.projectId) === pS.project.id)
+    );
+    if (netNewProj.length > 0 && onAdd) {
+      onAdd(netNewProj);
     }
   };
 
@@ -177,7 +180,7 @@ export default function SpeciesProjectsTable({
           onSubmit={onRemoveHandler}
         />
       )}
-      {openedAddToProjectModal && (
+      {openedAddToProjectModal && selectableProjects && (
         <AddToProjectModal onClose={onCloseAddToProject} onSubmit={onAddHandler} projects={selectableProjects} />
       )}
       <Grid item xs={12}>

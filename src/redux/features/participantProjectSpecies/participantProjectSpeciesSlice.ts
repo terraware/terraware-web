@@ -8,6 +8,7 @@ import {
 } from 'src/types/ParticipantProjectSpecies';
 
 import {
+  requestAddManyParticipantProjectSpecies,
   requestAssignParticipantProjectSpecies,
   requestCreateParticipantProjectSpecies,
   requestDeleteManyParticipantProjectSpecies,
@@ -56,6 +57,20 @@ export const participantProjectSpeciesDeleteManySlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     buildReducers(requestDeleteManyParticipantProjectSpecies)(builder);
+  },
+});
+
+/**
+ * Add Participant Project Species
+ */
+const initialStateParticipantProjectAddMany: { [key: string]: StatusT<boolean> } = {};
+
+export const participantProjectSpeciesAddManySlice = createSlice({
+  name: 'participantProjectSpeciesAddManySlice',
+  initialState: initialStateParticipantProjectAddMany,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestAddManyParticipantProjectSpecies)(builder);
   },
 });
 
@@ -120,6 +135,7 @@ const participantProjectSpeciesReducers = {
   participantProjectSpeciesAssign: participantProjectSpeciesAssignSlice.reducer,
   participantProjectSpeciesCreate: participantProjectSpeciesCreateSlice.reducer,
   participantProjectSpeciesDeleteMany: participantProjectSpeciesDeleteManySlice.reducer,
+  participantProjectSpeciesAddMany: participantProjectSpeciesAddManySlice.reducer,
   participantProjectSpeciesGet: participantProjectSpeciesGetSlice.reducer,
   participantProjectSpeciesList: participantProjectSpeciesListSlice.reducer,
   participantProjectSpeciesUpdate: participantProjectSpeciesUpdateSlice.reducer,

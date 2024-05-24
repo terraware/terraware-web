@@ -1,44 +1,59 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React from 'react';
 
-import { Grid, useTheme } from '@mui/material';
-import { MultiSelect } from '@terraware/web-components';
+import { Box, Grid, useTheme } from '@mui/material';
+import { Dropdown, SelectT } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
+import { getSpeciesNativeCategoryOptions } from 'src/types/ParticipantProjectSpecies';
 import { Project } from 'src/types/Project';
+import useForm from 'src/utils/useForm';
 
 export interface AddToProjectModalProps {
   onClose: (reload?: boolean) => void;
-  onSubmit: (ids: number[]) => void;
-  projects?: Project[];
+  onSubmit: (projectsSpeciesAdded: ProjectSpecies[]) => void;
+  projects: Project[];
 }
+
+export type ProjectSpecies = {
+  project: Project;
+  nativeCategory?: string;
+};
 
 export default function AddToProjectModal(props: AddToProjectModalProps): JSX.Element {
   const { onClose, onSubmit, projects } = props;
   const theme = useTheme();
 
-  const [selectedProjectIds, setSelectedProjectIds] = useState<number[]>([]);
-
-  const handleOnAdd = useCallback((value: number) => {
-    setSelectedProjectIds((prev) => [...prev, value]);
-  }, []);
-
-  const handleOnRemove = useCallback((value: number) => {
-    setSelectedProjectIds((prev) => prev.filter((prevValue) => prevValue !== value));
-  }, []);
+  const [projectsSpeciesAdded, setProjectsSpeciesAdded] = useForm<ProjectSpecies[]>([{ project: projects[0] }]);
 
   const save = () => {
-    if (selectedProjectIds.length > 0) {
-      onSubmit(selectedProjectIds);
+    if (projectsSpeciesAdded.length > 0) {
+      onSubmit(projectsSpeciesAdded);
       onClose();
     }
   };
 
-  const options: Map<number, string> = useMemo(
-    () => new Map((projects || []).map((project) => [project.id, project.name])),
-    [projects]
-  );
+  const { activeLocale } = useLocalization();
+
+  const onAddProjectSpecies = () => {
+    const updatedProjects = [...projectsSpeciesAdded];
+    updatedProjects.push({ project: projects[0] });
+
+    setProjectsSpeciesAdded(updatedProjects);
+  };
+
+  const onProjectSpeciesChange = (id: string, value: any, index: number) => {
+    const updatedProjects = [...projectsSpeciesAdded];
+    if (id === 'nativeCategory') {
+      updatedProjects[index].nativeCategory = value;
+    } else {
+      updatedProjects[index].project = value;
+    }
+
+    setProjectsSpeciesAdded(updatedProjects);
+  };
 
   return (
     <DialogBox
@@ -59,18 +74,55 @@ export default function AddToProjectModal(props: AddToProjectModalProps): JSX.El
       ]}
     >
       <Grid container textAlign={'left'}>
-        <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
-          <MultiSelect<number, string>
-            id={'project'}
-            label={strings.PROJECT}
-            onAdd={handleOnAdd}
-            onRemove={handleOnRemove}
-            options={options}
-            selectedOptions={selectedProjectIds}
-            valueRenderer={(value) => value}
-            fullWidth
+        {projectsSpeciesAdded.map((ps, index) => {
+          return (
+            <Box
+              sx={{ borderBottom: `1px solid ${theme.palette.TwClrBaseGray300}`, paddingBottom: 2, marginBottom: 2 }}
+              key={`project-${index}`}
+            >
+              <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+                <SelectT<Project>
+                  id='project'
+                  label={strings.PROJECT}
+                  placeholder={strings.SELECT}
+                  options={projects || []}
+                  onChange={(project) => onProjectSpeciesChange('project', project, index)}
+                  selectedValue={ps.project}
+                  fullWidth={true}
+                  isEqual={(a: Project, b: Project) => a.id === b.id}
+                  renderOption={(project: Project) => project?.name || ''}
+                  displayLabel={(project: Project) => project?.name || ''}
+                  toT={(name: string) => ({ name }) as Project}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+                <Dropdown
+                  id='nativeCategory'
+                  selectedValue={ps?.nativeCategory}
+                  onChange={(value) => onProjectSpeciesChange('nativeCategory', value, index)}
+                  options={getSpeciesNativeCategoryOptions(activeLocale)}
+                  label={strings.NATIVE_NON_NATIVE}
+                  aria-label={strings.NATIVE_NON_NATIVE}
+                  placeholder={strings.SELECT}
+                  fixedMenu
+                  required
+                  fullWidth={true}
+                />
+              </Grid>
+            </Box>
+          );
+        })}
+
+        {projectsSpeciesAdded.length < projects.length && (
+          <Button
+            label={strings.ADD_PROJECT}
+            type='productive'
+            priority='ghost'
+            onClick={onAddProjectSpecies}
+            icon='iconAdd'
           />
-        </Grid>
+        )}
       </Grid>
     </DialogBox>
   );

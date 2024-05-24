@@ -3181,6 +3181,7 @@ export interface components {
       projectName: string;
       /** Format: int64 */
       speciesId: number;
+      participantProjectSpeciesNativeCategory?: "Native" | "Non-native";
     };
     ParticipantProjectPayload: {
       /** Format: int64 */
