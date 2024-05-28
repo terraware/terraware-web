@@ -3,7 +3,6 @@ import { ParticipantProjectSpecies, SubmissionStatus } from 'src/types/Participa
 
 import HttpService, { Response2 } from './HttpService';
 import axios from './axios';
-import axios from './axios';
 
 const ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR =
   '/api/v1/accelerator/projects/species/{participantProjectSpeciesId}';
@@ -78,14 +77,22 @@ const deleteMany = (participantProjectSpeciesIds: number[]): Promise<Response2<D
   });
 };
 
-const downloadSnapshot = async (deliverableId: number, projectId: number): Promise<GetSubmissionSnapshotResponse | undefined> => {
+const downloadSnapshot = async (
+  deliverableId: number,
+  projectId: number
+): Promise<GetSubmissionSnapshotResponse | undefined> => {
   try {
-    const result = await axios.get<GetSubmissionSnapshotResponse>(ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SUBMISSION_SNAPSHOT.replace('{submissionId}', `${submissionId}`))
+    const result = await axios.get<GetSubmissionSnapshotResponse>(
+      ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SUBMISSION_SNAPSHOT.replace('{projectId}', `${projectId}`).replace(
+        '{deliverableId}',
+        `${deliverableId}`
+      )
+    );
     return result.data;
   } catch (e) {
     return undefined;
   }
-}
+};
 
 const get = (participantProjectSpeciesId: number): Promise<Response2<GetResponse>> =>
   HttpService.root(ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR).get2<GetResponse>({
