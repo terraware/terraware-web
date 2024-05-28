@@ -20,7 +20,6 @@ export default function SpeciesProjectsCellRenderer(props: RendererProps<TableRo
     if (value) {
       return (
         <CellRenderer
-          style={{ width: '40px' }}
           index={index}
           column={column}
           value={
@@ -37,7 +36,6 @@ export default function SpeciesProjectsCellRenderer(props: RendererProps<TableRo
   if (column.key === 'participantProjectSpeciesSubmissionStatus') {
     return (
       <CellRenderer
-        style={{ width: '50px' }}
         index={index}
         column={column}
         value={activeLocale ? <DeliverableStatusBadge status={value as DeliverableStatusType} /> : ''}
