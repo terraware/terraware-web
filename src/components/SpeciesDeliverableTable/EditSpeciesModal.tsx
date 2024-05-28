@@ -49,7 +49,7 @@ export default function EditSpeciesModal(props: EditSpeciesModalProps): JSX.Elem
 
     const request = dispatch(
       requestUpdateParticipantProjectSpecies({
-        participantProjectSpecies: record.participantProjectSpecies
+        participantProjectSpecies: record.participantProjectSpecies,
       })
     );
     setRequestId(request.requestId);
