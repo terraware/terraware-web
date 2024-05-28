@@ -44,12 +44,22 @@ const DocumentDeliverableView = (props: Props): JSX.Element => {
     [activeLocale]
   );
 
+  const rightComponent = useMemo(
+    () => (
+      <Box display='flex' flexDirection='row' flexGrow={0} marginRight={theme.spacing(3)} justifyContent='right'>
+        {props.callToAction}
+        {props.optionsMenu}
+      </Box>
+    ),
+    []
+  );
+
   if (isMobile) {
     return <MobileMessage {...viewProps} />;
   }
 
   return (
-    <Page title={<TitleBar {...viewProps} />} rightComponent={props.callToAction} crumbs={crumbs}>
+    <Page title={<TitleBar {...viewProps} />} rightComponent={rightComponent} crumbs={crumbs}>
       {props.isBusy && <BusySpinner />}
       <Box display='flex' flexDirection='column' flexGrow={1}>
         <RejectedDeliverableMessage {...viewProps} />
