@@ -72,6 +72,7 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
   if (column.key === 'participantProjectSpeciesSubmissionStatus') {
     return (
       <CellRenderer
+        style={{ width: '50px' }}
         column={column}
         index={index}
         row={row}
@@ -101,6 +102,7 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
 
     return (
       <CellRenderer
+        style={{ width: '50px' }}
         column={column}
         index={index}
         row={row}
@@ -138,6 +140,7 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
 
     return (
       <CellRenderer
+        style={{ width: '50px' }}
         column={column}
         index={index}
         row={row}
