@@ -103,6 +103,10 @@ export interface paths {
     /** Gets all species associated to a participant project. */
     get: operations["getSpeciesForProject"];
   };
+  "/api/v1/accelerator/projects/{projectId}/species/snapshots/{deliverableId}": {
+    /** Creates a new participant project species entry. */
+    get: operations["getParticipantProjectSpeciesSnapshot"];
+  };
   "/api/v1/accelerator/projects/{projectId}/votes": {
     /**
      * Gets vote selections for a single project.
@@ -1709,7 +1713,6 @@ export interface components {
       rationale?: string;
       /** Format: int64 */
       speciesId: number;
-      speciesNativeCategory?: "Native" | "Non-native";
     };
     CreateParticipantRequestPayload: {
       /**
@@ -3181,7 +3184,6 @@ export interface components {
       projectName: string;
       /** Format: int64 */
       speciesId: number;
-      participantProjectSpeciesNativeCategory?: "Native" | "Non-native";
     };
     ParticipantProjectPayload: {
       /** Format: int64 */
@@ -3707,18 +3709,9 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     SpeciesForParticipantProjectPayload: {
-      /** Format: int64 */
-      participantProjectSpeciesId: number;
-      participantProjectSpeciesRationale?: string;
-      /** @enum {string} */
-      participantProjectSpeciesSubmissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
-      /** Format: int64 */
-      projectId: number;
-      speciesCommonName?: string;
-      /** Format: int64 */
-      speciesId: number;
-      speciesScientificName: string;
-      participantProjectSpeciesNativeCategory?: "Native" | "Non-native";
+      participantProjectSpecies: components["schemas"]["ParticipantProjectSpeciesPayload"];
+      project: components["schemas"]["ProjectPayload"];
+      species: components["schemas"]["SpeciesResponseElement"];
     };
     SpeciesLookupCommonNamePayload: {
       /** @description ISO 639-1 two-letter language code indicating the name's language. Some common names in the server's taxonomic database are not tagged with languages; this value will not be present for those names. */
@@ -5148,6 +5141,23 @@ export interface operations {
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Creates a new participant project species entry. */
+  getParticipantProjectSpeciesSnapshot: {
+    parameters: {
+      path: {
+        projectId: number;
+        deliverableId: number;
+      };
+    };
+    responses: {
+      /** @description The file was successfully retrieved. */
+      200: {
+        content: {
+          "*/*": string;
         };
       };
     };

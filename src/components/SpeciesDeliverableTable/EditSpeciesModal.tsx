@@ -46,20 +46,14 @@ export default function EditSpeciesModal(props: EditSpeciesModalProps): JSX.Elem
   }, [result, snackbar]);
 
   const save = () => {
-    if (!record.participantProjectSpeciesRationale) {
+    if (!record.participantProjectSpecies.rationale) {
       setError(strings.GENERIC_ERROR);
       return;
     }
 
     const request = dispatch(
       requestUpdateParticipantProjectSpecies({
-        participantProjectSpecies: {
-          id: record.participantProjectSpeciesId,
-          projectId: record.projectId,
-          rationale: record.participantProjectSpeciesRationale,
-          speciesId: record.speciesId,
-          submissionStatus: record.participantProjectSpeciesSubmissionStatus,
-        },
+        participantProjectSpecies: record.participantProjectSpecies,
       })
     );
     setRequestId(request.requestId);
@@ -97,9 +91,9 @@ export default function EditSpeciesModal(props: EditSpeciesModalProps): JSX.Elem
           </Typography>
           <Link
             fontSize='16px'
-            to={APP_PATHS.SPECIES_DETAILS.replace(':speciesId', projectSpecies.speciesId.toString())}
+            to={APP_PATHS.SPECIES_DETAILS.replace(':speciesId', projectSpecies.species.id.toString())}
           >
-            {projectSpecies.speciesScientificName}
+            {projectSpecies.species.scientificName}
           </Link>
         </Grid>
         <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
@@ -122,9 +116,9 @@ export default function EditSpeciesModal(props: EditSpeciesModalProps): JSX.Elem
             id='rationale'
             label={strings.RATIONALE}
             type='textarea'
-            value={record?.participantProjectSpeciesRationale}
+            value={record?.participantProjectSpecies.rationale}
             onChange={onChangeRationale}
-            errorText={error && !record?.participantProjectSpeciesRationale ? strings.REQUIRED_FIELD : ''}
+            errorText={error && !record?.participantProjectSpecies.rationale ? strings.REQUIRED_FIELD : ''}
           />
         </Grid>
       </Grid>

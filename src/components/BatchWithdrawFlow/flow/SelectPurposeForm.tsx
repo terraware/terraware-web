@@ -511,10 +511,10 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const getOutplantLabel = () => {
     return (
       <>
-        {strings.OUTPLANT}
-        {noReadySeedlings && <IconTooltip placement='top' title={strings.OUTPLANTS_REQUIRE_READY_SEEDLINGS} />}
+        {strings.PLANTING}
+        {noReadySeedlings && <IconTooltip placement='top' title={strings.PLANTINGS_REQUIRE_READY_SEEDLINGS} />}
         {!noReadySeedlings && outplantDisabled && (
-          <IconTooltip placement='top' title={strings.OUTPLANTS_REQUIRE_PLANTING_SITES} />
+          <IconTooltip placement='top' title={strings.PLANTINGS_REQUIRE_PLANTING_SITES} />
         )}
       </>
     );

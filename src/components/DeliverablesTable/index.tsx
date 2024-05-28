@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { TableColumnType } from '@terraware/web-components';
 
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
-import { useAcceleratorOrgs } from 'src/hooks/useAcceleratorOrgs';
 import { useParticipants } from 'src/hooks/useParticipants';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
@@ -21,6 +20,7 @@ import TableWithSearchFilters from '../TableWithSearchFilters';
 import DeliverableCellRenderer from './DeliverableCellRenderer';
 
 interface DeliverablesTableProps {
+  acceleratorProjects?: AcceleratorOrgProject[];
   columns: (activeLocale: string | null) => TableColumnType[];
   extraTableFilters?: SearchNodePayload[];
   filterModifiers?: (filters: FilterConfig[]) => FilterConfig[];
@@ -38,6 +38,7 @@ const defaultSearchOrder: SearchSortOrder = {
 };
 
 const DeliverablesTable = ({
+  acceleratorProjects,
   columns,
   extraTableFilters,
   filterModifiers,
@@ -51,10 +52,7 @@ const DeliverablesTable = ({
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
   const { selectedOrganization } = useOrganization();
-  const { acceleratorOrgs } = useAcceleratorOrgs(true);
   const { selectedParticipant } = useParticipants(participantId);
-
-  const acceleratorProjects = useMemo(() => acceleratorOrgs?.flatMap((org) => org.projects), [acceleratorOrgs]);
 
   const [deliverables, setDeliverables] = useState<ListDeliverablesElement[]>([]);
   const [deliverablesSearchRequestId, setDeliverablesSearchRequestId] = useState('');

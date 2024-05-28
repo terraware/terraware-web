@@ -25,8 +25,8 @@ export default function AccessionTests() {
     await page.getByLabel('Close').click();
     await page.getByPlaceholder('Collectors').click();
     await page.getByPlaceholder('Collectors').fill('Alex');
-    await page.locator('#collectionSiteName').getByRole('textbox').click();
-    await page.locator('#collectionSiteName').getByRole('textbox').fill("Alex's Mansion");
+    await page.locator('#collectionSiteName').click();
+    await page.locator('#collectionSiteName').fill("Alex's Mansion");
     await page.locator('#collectionSiteLandowner').getByRole('textbox').click();
     await page.locator('#collectionSiteLandowner').getByRole('textbox').fill('Ashtyn');
     await page.getByRole('button', { name: 'Add GPS Coordinates' }).click();
