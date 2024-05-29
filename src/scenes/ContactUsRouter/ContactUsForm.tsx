@@ -52,9 +52,17 @@ const ContactUsForm = () => {
   const { types } = useSupportData();
   const requestTypeId = useMemo(() => Number(pathParams.requestTypeId), [pathParams]);
 
-  const requestType = useMemo(() => {
-    return types.find((item) => item.requestTypeId === requestTypeId);
-  }, [types, requestTypeId]);
+  const requestType = useMemo(
+    () => types?.find((item) => item.requestTypeId === requestTypeId),
+    [types, requestTypeId]
+  );
+
+  useEffect(() => {
+    // Navigate to contact us page for unrecognized form type.
+    if (types !== undefined && requestType === undefined) {
+      goToContactUs();
+    }
+  }, [types, requestType]);
 
   const [supportRequest, , onChangeSupportRequest] = useForm<SupportRequest>({
     attachmentIds: [],

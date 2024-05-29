@@ -22,7 +22,7 @@ const SupportProvider = ({ children }: Props) => {
     selectSupportRequestTypesByRequest(listSupportRequestTypesRequestId)
   );
 
-  const [supportRequestTypes, setSupportRequestTypes] = useState<ServiceRequestType[]>([]);
+  const [supportRequestTypes, setSupportRequestTypes] = useState<ServiceRequestType[]>();
 
   const [supportData, setSupportData] = useState<SupportData>({
     types: supportRequestTypes,
