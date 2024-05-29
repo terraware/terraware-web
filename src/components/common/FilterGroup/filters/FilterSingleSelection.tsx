@@ -1,22 +1,11 @@
 import React from 'react';
 
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem } from '@terraware/web-components';
 import { Option } from '@terraware/web-components/components/table/types';
 
 import strings from 'src/strings';
 import { FieldNodePayload } from 'src/types/Search';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  box: {
-    padding: theme.spacing(1.75),
-  },
-  item: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-}));
 
 interface Props {
   field: string;
@@ -27,7 +16,7 @@ interface Props {
 }
 
 export default function SingleSelection(props: Props): JSX.Element {
-  const classes = useStyles();
+  const theme = useTheme();
 
   const options = [...props.options];
   const indexEnabledNull = options.findIndex((o) => o.value === null && o.disabled === false);
@@ -70,7 +59,7 @@ export default function SingleSelection(props: Props): JSX.Element {
   };
 
   return (
-    <div id={`filter-list-${props.field}`} className={classes.box}>
+    <Box id={`filter-list-${props.field}`} sx={{ padding: theme.spacing(1.75) }}>
       <Dropdown
         options={options.map(({ label, value }) => ({ label, value }) as DropdownItem)}
         onChange={(val) => handleChange(val)}
@@ -78,6 +67,6 @@ export default function SingleSelection(props: Props): JSX.Element {
         fullWidth={true}
         disabled={options.length === 0}
       />
-    </div>
+    </Box>
   );
 }

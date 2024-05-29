@@ -1,19 +1,11 @@
 import React, { useCallback, useState } from 'react';
 
 import { Box, Grid } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
-
-const useStyles = makeStyles(() => ({
-  icon: {
-    marginLeft: '-1px',
-    marginTop: '-1px',
-  },
-}));
 
 interface InternalCommentProps<T> {
   entity: T;
@@ -21,8 +13,6 @@ interface InternalCommentProps<T> {
 }
 
 function InternalComment<T extends { internalComment?: string }>({ entity, update }: InternalCommentProps<T>) {
-  const classes = useStyles();
-
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [internalComment, setInternalComment] = useState(entity.internalComment || '');
 
@@ -40,12 +30,15 @@ function InternalComment<T extends { internalComment?: string }>({ entity, updat
       <Box display='flex' alignItems='center'>
         <strong>{strings.INTERNAL_COMMENTS}</strong>
         <Button
-          className={classes.icon}
           icon='iconEdit'
           onClick={toggleDialog}
           priority='ghost'
           size='small'
           type='passive'
+          style={{
+            marginLeft: '-1px',
+            marginTop: '-1px',
+          }}
         />
       </Box>
       <TextField

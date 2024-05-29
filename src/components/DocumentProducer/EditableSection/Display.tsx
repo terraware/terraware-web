@@ -1,18 +1,11 @@
 import React from 'react';
 
 import { Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 
 import { VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValueValue } from 'src/types/documentProducer/VariableValue';
 
 import DisplayVariableValue from './DisplayVariableValue';
-
-const useStyles = makeStyles(() => ({
-  sectionText: {
-    fontSize: '16px',
-  },
-}));
 
 export type EditableSectionDisplayProps = {
   docId: number;
@@ -41,11 +34,9 @@ type SectionValueProps = {
 };
 
 const SectionValue = ({ pddId, value, allVariables }: SectionValueProps): React.ReactElement | null => {
-  const classes = useStyles();
-
   switch (value.type) {
     case 'SectionText':
-      return <span className={classes.sectionText}>{value.textValue}</span>;
+      return <span style={{ fontSize: '16px' }}>{value.textValue}</span>;
     case 'SectionVariable':
       const reference = value.usageType === 'Reference';
       const variable = allVariables.find((v) => v.id === value.variableId);

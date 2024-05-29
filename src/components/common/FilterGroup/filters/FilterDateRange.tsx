@@ -1,24 +1,12 @@
 import React from 'react';
 
-import { Grid, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Grid, useTheme } from '@mui/material';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
 import { isValid } from 'date-fns';
 
 import DatePicker from 'src/components/common/DatePicker';
 import strings from 'src/strings';
 import { FieldNodePayload } from 'src/types/Search';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  box: {
-    padding: theme.spacing(1.75),
-  },
-  flexContainer: {
-    alignItems: 'center',
-    display: 'flex',
-    justifyContent: 'center',
-  },
-}));
 
 interface Props {
   field: string;
@@ -28,7 +16,7 @@ interface Props {
 }
 
 export default function DateRange(props: Props): JSX.Element {
-  const classes = useStyles();
+  const theme = useTheme();
   const [startDate, setStartDate] = React.useState(props.values[0]);
   const [endDate, setEndDate] = React.useState(props.values[1]);
 
@@ -64,7 +52,7 @@ export default function DateRange(props: Props): JSX.Element {
   };
 
   return (
-    <div className={classes.box}>
+    <Box sx={{ padding: theme.spacing(1.75) }}>
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <DatePicker
@@ -85,6 +73,6 @@ export default function DateRange(props: Props): JSX.Element {
           />
         </Grid>
       </Grid>
-    </div>
+    </Box>
   );
 }

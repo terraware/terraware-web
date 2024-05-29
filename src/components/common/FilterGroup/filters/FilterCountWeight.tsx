@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { Grid } from '@mui/material';
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Grid, useTheme } from '@mui/material';
 
 import Checkbox from 'src/components/common/Checkbox';
 import Divisor from 'src/components/common/Divisor';
@@ -11,18 +9,6 @@ import TextField from 'src/components/common/TextField';
 import strings from 'src/strings';
 import { AndNodePayload, FieldNodePayload, OrNodePayload, SearchNodePayload } from 'src/types/Search';
 import { weightUnits } from 'src/units';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  box: {
-    width: '100%',
-    padding: theme.spacing(1.75),
-  },
-  flexContainer: {
-    alignItems: 'center',
-    display: 'flex',
-    justifyContent: 'center',
-  },
-}));
 
 export type WEIGHT_QUANTITY_FIELDS = 'remainingQuantity' | 'totalQuantity' | 'withdrawalQuantity';
 export const COUNT_WEIGHT_VALID_FIELDS: Record<WEIGHT_QUANTITY_FIELDS, string[]> = {
@@ -43,7 +29,7 @@ export default function FilterCountWeight(props: Props): JSX.Element {
   const fields = COUNT_WEIGHT_VALID_FIELDS[props.field as WEIGHT_QUANTITY_FIELDS];
   const defaultWeightUnit = 'Grams' as Unit;
 
-  const classes = useStyles();
+  const theme = useTheme();
   const filter = React.useRef<OrNodePayload>();
   const [countMinValue, setCountMinValue] = React.useState<(string | null) | undefined>();
   const [countMaxValue, setCountMaxValue] = React.useState<(string | null) | undefined>();
@@ -160,7 +146,12 @@ export default function FilterCountWeight(props: Props): JSX.Element {
   };
 
   return (
-    <div className={classes.box}>
+    <Box
+      sx={{
+        width: '100%',
+        padding: theme.spacing(1.75),
+      }}
+    >
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Checkbox
@@ -220,6 +211,6 @@ export default function FilterCountWeight(props: Props): JSX.Element {
           />
         </Grid>
       </Grid>
-    </div>
+    </Box>
   );
 }
