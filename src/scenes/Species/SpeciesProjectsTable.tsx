@@ -22,6 +22,7 @@ import SpeciesProjectsCellRenderer from './SpeciesProjectsCellRenderer';
 
 const columns = (): TableColumnType[] => [
   { key: 'projectName', name: strings.PROJECT, type: 'string' },
+  { key: 'participantProjectSpeciesNativeStatus', name: strings.NATIVE_NON_NATIVE, type: 'string' },
   { key: 'participantProjectSpeciesSubmissionStatus', name: strings.STATUS, type: 'string' },
 ];
 

@@ -14,6 +14,7 @@ import {
   requestDeleteManyParticipantProjectSpecies,
 } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import {
+  selectParticipantProjectSpeciesAddManyRequest,
   selectParticipantProjectSpeciesAssignRequest,
   selectParticipantProjectSpeciesDeleteManyRequest,
 } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
@@ -54,7 +55,7 @@ export default function SpeciesEditView(): JSX.Element {
 
   const [addRequestId, setAddRequestId] = useState<string>('');
   const [removeRequestId, setRemoveRequestId] = useState<string>('');
-  const addedResult = useAppSelector(selectParticipantProjectSpeciesAssignRequest(addRequestId));
+  const addedResult = useAppSelector(selectParticipantProjectSpeciesAddManyRequest(addRequestId));
   const removedResult = useAppSelector(selectParticipantProjectSpeciesDeleteManyRequest(removeRequestId));
   const dispatch = useAppDispatch();
 

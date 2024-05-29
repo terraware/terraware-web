@@ -103,10 +103,6 @@ export interface paths {
     /** Gets all species associated to a participant project. */
     get: operations["getSpeciesForProject"];
   };
-  "/api/v1/accelerator/projects/{projectId}/species/snapshots/{deliverableId}": {
-    /** Creates a new participant project species entry. */
-    get: operations["getParticipantProjectSpeciesSnapshot"];
-  };
   "/api/v1/accelerator/projects/{projectId}/votes": {
     /**
      * Gets vote selections for a single project.
@@ -643,6 +639,13 @@ export interface paths {
     get: operations["listRequestTypes"];
     /** Submit support request types. */
     post: operations["submitRequest"];
+  };
+  "/api/v1/support/attachment": {
+    /**
+     * Upload a temporary attachment.
+     * @description Uploads an attachment, which can be assigned to a support request during submission.
+     */
+    post: operations["uploadAttachment"];
   };
   "/api/v1/timeseries": {
     /** Lists the timeseries for one or more devices. */
@@ -1713,6 +1716,8 @@ export interface components {
       rationale?: string;
       /** Format: int64 */
       speciesId: number;
+      /** @enum {string} */
+      speciesNativeCategory?: "Native" | "Non-native";
     };
     CreateParticipantRequestPayload: {
       /**
@@ -3178,6 +3183,8 @@ export interface components {
       /** Format: int64 */
       participantProjectSpeciesId: number;
       /** @enum {string} */
+      participantProjectSpeciesNativeCategory?: "Native" | "Non-native";
+      /** @enum {string} */
       participantProjectSpeciesSubmissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
       /** Format: int64 */
       projectId: number;
@@ -3883,6 +3890,8 @@ export interface components {
       originalName?: string;
     };
     SubmitSupportRequestPayload: {
+      attachmentComment?: string;
+      attachmentIds?: string[];
       description: string;
       /** Format: int32 */
       requestTypeId: number;
@@ -3924,6 +3933,10 @@ export interface components {
       /** Format: int32 */
       species: number;
       status: components["schemas"]["SuccessOrError"];
+    };
+    TemporaryAttachment: {
+      filename: string;
+      temporaryAttachmentId: string;
     };
     TimeZonePayload: {
       /**
@@ -4406,6 +4419,10 @@ export interface components {
       id?: number;
       /** Format: date */
       startDate: string;
+    };
+    UploadAttachmentResponsePayload: {
+      attachments: components["schemas"]["TemporaryAttachment"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     UploadDeliverableDocumentResponsePayload: {
       /** Format: int64 */
@@ -5141,23 +5158,6 @@ export interface operations {
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Creates a new participant project species entry. */
-  getParticipantProjectSpeciesSnapshot: {
-    parameters: {
-      path: {
-        projectId: number;
-        deliverableId: number;
-      };
-    };
-    responses: {
-      /** @description The file was successfully retrieved. */
-      200: {
-        content: {
-          "*/*": string;
         };
       };
     };
@@ -7966,6 +7966,28 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SubmitSupportRequestResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Upload a temporary attachment.
+   * @description Uploads an attachment, which can be assigned to a support request during submission.
+   */
+  uploadAttachment: {
+    requestBody?: {
+      content: {
+        "multipart/form-data": {
+          /** Format: binary */
+          file: string;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadAttachmentResponsePayload"];
         };
       };
     };
