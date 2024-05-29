@@ -644,6 +644,13 @@ export interface paths {
     /** Submit support request types. */
     post: operations["submitRequest"];
   };
+  "/api/v1/support/attachment": {
+    /**
+     * Upload a temporary attachment.
+     * @description Uploads an attachment, which can be assigned to a support request during submission.
+     */
+    post: operations["uploadAttachment"];
+  };
   "/api/v1/timeseries": {
     /** Lists the timeseries for one or more devices. */
     get: operations["listTimeseries"];
@@ -3883,6 +3890,8 @@ export interface components {
       originalName?: string;
     };
     SubmitSupportRequestPayload: {
+      attachmentComment?: string;
+      attachmentIds?: string[];
       description: string;
       /** Format: int32 */
       requestTypeId: number;
@@ -3924,6 +3933,10 @@ export interface components {
       /** Format: int32 */
       species: number;
       status: components["schemas"]["SuccessOrError"];
+    };
+    TemporaryAttachment: {
+      filename: string;
+      temporaryAttachmentId: string;
     };
     TimeZonePayload: {
       /**
@@ -4406,6 +4419,10 @@ export interface components {
       id?: number;
       /** Format: date */
       startDate: string;
+    };
+    UploadAttachmentResponsePayload: {
+      attachments: components["schemas"]["TemporaryAttachment"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     UploadDeliverableDocumentResponsePayload: {
       /** Format: int64 */
@@ -7966,6 +7983,28 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SubmitSupportRequestResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Upload a temporary attachment.
+   * @description Uploads an attachment, which can be assigned to a support request during submission.
+   */
+  uploadAttachment: {
+    requestBody?: {
+      content: {
+        "multipart/form-data": {
+          /** Format: binary */
+          file: string;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadAttachmentResponsePayload"];
         };
       };
     };

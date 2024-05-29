@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { Grid, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
@@ -15,14 +16,16 @@ import { requestSubmitSupportRequest } from 'src/redux/features/support/supportA
 import { selectSupportRequestSubmitRequest } from 'src/redux/features/support/supportSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { SupportRequest } from 'src/types/Support';
+import { AttachmentRequest, SupportRequest } from 'src/types/Support';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import ContactUsAttachments from './ContactUsAttachments';
 import { useSupportData } from './provider/Context';
 
 const ContactUsForm = () => {
   const dispatch = useAppDispatch();
+  const { isDesktop } = useDeviceInfo();
   const { activeLocale } = useLocalization();
   const { user } = useUser();
   const theme = useTheme();
@@ -54,16 +57,41 @@ const ContactUsForm = () => {
   }, [types, requestTypeId]);
 
   const [supportRequest, , onChangeSupportRequest] = useForm<SupportRequest>({
+    attachmentIds: [],
     description: '',
     summary: '',
     requestTypeId: requestTypeId,
   });
 
+  const [errorSummary, setErrorSummary] = useState<string>('');
+  const [errorDescription, setErrorDescription] = useState<string>('');
+
   // Submit request
   const [submitSupportRequestId, setSubmitSupportRequestId] = useState<string>('');
   const submitSupportRequest = useAppSelector(selectSupportRequestSubmitRequest(submitSupportRequestId));
 
-  const saveParticipantProject = useCallback(() => {
+  const onChangeAttachments = useCallback(
+    (attachments: AttachmentRequest[]) => {
+      onChangeSupportRequest(
+        'attachmentIds',
+        attachments.map(({ temporaryAttachmentId }) => temporaryAttachmentId)
+      );
+    },
+    [supportRequest]
+  );
+
+  const submit = useCallback(() => {
+    if (!supportRequest.summary) {
+      setErrorSummary(strings.REQUIRED_FIELD);
+    } else {
+      setErrorSummary('');
+    }
+
+    if (!supportRequest.description) {
+      setErrorDescription(strings.REQUIRED_FIELD);
+    } else {
+      setErrorDescription('');
+    }
     if (supportRequest.summary && supportRequest.description) {
       const dispatched = dispatch(requestSubmitSupportRequest(supportRequest));
       setSubmitSupportRequestId(dispatched.requestId);
@@ -71,7 +99,7 @@ const ContactUsForm = () => {
   }, [supportRequest, dispatch]);
 
   const handleOnSave = useCallback(() => {
-    saveParticipantProject();
+    submit();
   }, [supportRequest]);
 
   useEffect(() => {
@@ -111,7 +139,7 @@ const ContactUsForm = () => {
             <Grid item xs={12}>
               {requestType?.description}
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={isDesktop ? 6 : 12}>
               <Textfield
                 id={'name'}
                 label={strings.NAME}
@@ -120,7 +148,7 @@ const ContactUsForm = () => {
                 disabled
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={isDesktop ? 6 : 12}>
               <Textfield id={'email'} label={strings.EMAIL} value={user?.email} type={'text'} disabled />
             </Grid>
             <Grid item xs={12}>
@@ -130,6 +158,8 @@ const ContactUsForm = () => {
                 onChange={(value) => onChangeSupportRequest('summary', value as string)}
                 value={supportRequest.summary}
                 type={'text'}
+                errorText={errorSummary}
+                required={true}
               />
             </Grid>
             <Grid item xs={12}>
@@ -140,7 +170,15 @@ const ContactUsForm = () => {
                 value={supportRequest.description}
                 styles={styles}
                 type={'textarea'}
+                errorText={errorDescription}
+                required={true}
               />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography fontSize={'14px'} lineHeight={'24px'} fontWeight={400} marginBottom={theme.spacing(1)}>
+                {strings.ATTACHMENTS}
+              </Typography>
+              <ContactUsAttachments onChange={onChangeAttachments} />
             </Grid>
           </Grid>
         </Card>

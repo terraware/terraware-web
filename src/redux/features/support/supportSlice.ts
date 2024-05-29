@@ -1,9 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import { ServiceRequestType } from 'src/types/Support';
+import { ServiceRequestType, TemporaryAttachment } from 'src/types/Support';
 
-import { requestListSupportRequestTypes, requestSubmitSupportRequest } from './supportAsyncThunks';
+import {
+  requestListSupportRequestTypes,
+  requestSubmitSupportRequest,
+  requestUploadAttachment,
+} from './supportAsyncThunks';
 
 /**
  * Simple response to know if the list support request types were successful
@@ -33,7 +37,22 @@ export const supportRequestSubmitSlice = createSlice({
   },
 });
 
+/**
+ * Simple response to know if the attachment was uploaded
+ */
+const initialStateSupportAttachmentUpload: { [key: string]: StatusT<TemporaryAttachment[]> } = {};
+
+export const supportAttachmentUploadSlice = createSlice({
+  name: 'supportAttachmentUploadSlice',
+  initialState: initialStateSupportAttachmentUpload,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestUploadAttachment)(builder);
+  },
+});
+
 const supportReducers = {
+  supportAttachmentUpload: supportAttachmentUploadSlice.reducer,
   supportRequestTypes: supportRequestTypesListSlice.reducer,
   supportRequestSubmit: supportRequestSubmitSlice.reducer,
 };
