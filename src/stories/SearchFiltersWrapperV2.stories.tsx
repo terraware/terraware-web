@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
 import { Container, Grid } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Story } from '@storybook/react';
 
 import Card from 'src/components/common/Card';
