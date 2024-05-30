@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Theme, Typography, useTheme } from '@mui/material';
+import { Box, SxProps, Theme, Typography, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import Link from 'src/components/common/Link';
@@ -82,16 +82,17 @@ type EmptyMessageProps = {
   onClick?: () => void;
   className?: string;
   rowItems?: RowItem[];
+  sx?: SxProps;
 };
 
 export default function EmptyMessage(props: EmptyMessageProps): JSX.Element {
-  const { title, text, buttonText, onClick, className, rowItems } = props;
+  const { title, text, buttonText, onClick, className, rowItems, sx } = props;
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const classes = useStyles({ isMobile });
 
   return (
-    <div className={`${classes.mainContainer} ${className ?? ''}`}>
+    <Box className={`${classes.mainContainer} ${className ?? ''}`} sx={sx}>
       {title && <h3 className={classes.title}>{title}</h3>}
       {text && <p className={classes.text}>{text}</p>}
       {rowItems !== undefined && (
@@ -136,6 +137,6 @@ export default function EmptyMessage(props: EmptyMessageProps): JSX.Element {
         </div>
       )}
       {onClick && buttonText && <Button label={buttonText} onClick={onClick} />}
-    </div>
+    </Box>
   );
 }

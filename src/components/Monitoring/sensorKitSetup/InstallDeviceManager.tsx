@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, useTheme } from '@mui/material';
 
 import { connectDeviceManager, getDeviceManager } from 'src/api/deviceManager/deviceManager';
 import getHelpEmail from 'src/components/common/HelpEmail';
@@ -12,24 +11,6 @@ import { Facility } from 'src/types/Facility';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import FlowStep, { FlowError } from './FlowStep';
-
-interface StyleProps {
-  isMobile: boolean;
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  installDeviceManager: {
-    width: (props: StyleProps) => (props.isMobile ? '100%' : '432px'),
-    fontStyle: 'italic',
-  },
-  spinnerContainer: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  downloadInProgress: {
-    marginLeft: theme.spacing(2),
-  },
-}));
 
 type InstallDeviceManagerProps = {
   seedBank: Facility;
@@ -42,7 +23,7 @@ type InstallDeviceManagerProps = {
 
 export default function InstallDeviceManager(props: InstallDeviceManagerProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
-  const classes = useStyles({ isMobile });
+  const theme = useTheme();
   const { seedBank, active, completed, onNext, deviceManager, reloadData } = props;
   const [flowError, setFlowError] = useState<FlowError | undefined>();
   const [initialized, setInitialized] = useState<boolean>(false);
@@ -192,18 +173,30 @@ export default function InstallDeviceManager(props: InstallDeviceManagerProps): 
       title={strings.SENSOR_KIT_SET_UP_DEVICE_MANAGER}
       completed={completed}
       footer={
-        <div className={classes.installDeviceManager}>
+        <Box
+          sx={{
+            width: isMobile ? '100%' : '432px',
+            fontStyle: 'italic',
+          }}
+        >
           {updateFinished && <span>{strings.DOWNLOAD_COMPLETE}</span>}
           {!updateFinished && pollingStartedOn > 0 && flowError === undefined && (
-            <div className={classes.spinnerContainer}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
               <ProgressCircle size='small' determinate={true} value={progressPercentage} />
-              <span className={classes.downloadInProgress}>{strings.DOWNLOAD_IN_PROGRESS}</span>
-            </div>
+              <Box component='span' sx={{ marginLeft: theme.spacing(2) }}>
+                {strings.DOWNLOAD_IN_PROGRESS}
+              </Box>
+            </Box>
           )}
           {!updateFinished && (flowError !== undefined || !pollingStartedOn) && (
             <span>{strings.WAITING_TO_DOWNLOAD}</span>
           )}
-        </div>
+        </Box>
       }
     >
       <div>{strings.SENSOR_KIT_SET_UP_DEVICE_MANAGER_DESCRIPTION}</div>

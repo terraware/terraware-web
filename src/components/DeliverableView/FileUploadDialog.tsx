@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, CircularProgress, Theme, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, CircularProgress, useTheme } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
 
 import {
@@ -14,27 +13,6 @@ import strings from 'src/strings';
 import { Deliverable, UploadDeliverableDocumentRequest } from 'src/types/Deliverables';
 import useSnackbar from 'src/utils/useSnackbar';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  description: {
-    marginTop: theme.spacing(2),
-  },
-  spinner: {
-    height: '100px',
-    width: '100px',
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    margin: 'auto',
-    '& .MuiCircularProgress-svg': {
-      color: theme.palette.TwClrIcnBrand,
-      height: '100px',
-      width: '100px',
-    },
-  },
-}));
-
 export type FileUploadDialogProps = {
   deliverable: Deliverable;
   files: File[];
@@ -46,7 +24,6 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
   const [requestId, setRequestId] = useState<string>('');
   const [description, setDescription] = useState<string[]>(files.map(() => ''));
   const theme = useTheme();
-  const classes = useStyles();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const uploadResult = useAppSelector(selectDeliverablesEditRequest(requestId));
@@ -124,12 +101,30 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
       title={strings.SUBMIT_DOCUMENT}
     >
       <Box display='flex' flexDirection='column'>
-        {uploadResult?.status === 'pending' && <CircularProgress className={classes.spinner} size='100' />}
+        {uploadResult?.status === 'pending' && (
+          <CircularProgress
+            size='100'
+            sx={{
+              height: '100px',
+              width: '100px',
+              position: 'absolute',
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+              margin: 'auto',
+              '& .MuiCircularProgress-svg': {
+                color: theme.palette.TwClrIcnBrand,
+                height: '100px',
+                width: '100px',
+              },
+            }}
+          />
+        )}
         {files.map((file, index) => (
           <Box key={`${file.name}_${index}`} textAlign='left' sx={index < files.length - 1 ? blockStyle : {}}>
             <Textfield display id={`name_${index}`} label={strings.FILE_NAME} type='text' value={file.name} />
             <Textfield
-              className={classes.description}
               errorText={validate && !description[index] ? strings.REQUIRED_FIELD : ''}
               id={`description_${index}`}
               label={strings.DESCRIPTION}
@@ -137,6 +132,7 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
               required
               type='text'
               value={description[index]}
+              styles={{ textarea: { marginTop: theme.spacing(2) } }}
             />
           </Box>
         ))}

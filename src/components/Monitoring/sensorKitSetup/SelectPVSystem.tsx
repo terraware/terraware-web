@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { makeStyles } from '@mui/styles';
+import { Box } from '@mui/material';
 
 import { createDevice, listDeviceTemplates } from 'src/api/device/device';
 import { listFacilityDevicesById } from 'src/api/facility/facility';
@@ -12,16 +12,6 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Select from '../../common/Select/Select';
 import FlowStep, { FlowError } from './FlowStep';
 
-interface StyleProps {
-  isMobile: boolean;
-}
-
-const useStyles = makeStyles(() => ({
-  selectPvSystem: {
-    width: (props: StyleProps) => (props.isMobile ? '100%' : '432px'),
-  },
-}));
-
 type SelectPVSystemProps = {
   seedBank: Facility;
   active: boolean;
@@ -31,7 +21,6 @@ type SelectPVSystemProps = {
 
 export default function SelectPVSystem(props: SelectPVSystemProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
-  const classes = useStyles({ isMobile });
   const { seedBank, active, completed, onNext } = props;
   const [availablePVSystems, setAvailablePVSystems] = useState<DeviceTemplate[]>([]);
   const [selectedPVSystem, setSelectedPVSystem] = useState<DeviceTemplate | undefined>();
@@ -143,7 +132,7 @@ export default function SelectPVSystem(props: SelectPVSystemProps): JSX.Element 
       completed={completed}
       footerError={showError}
       footer={
-        <div className={classes.selectPvSystem}>
+        <Box sx={{ width: isMobile ? '100%' : '432px' }}>
           <Select
             id='select-pv-system'
             selectedValue={selectedPVSystem?.name}
@@ -155,7 +144,7 @@ export default function SelectPVSystem(props: SelectPVSystemProps): JSX.Element 
             fullWidth={true}
             errorText={showError ? strings.REQUIRED_FIELD : ''}
           />
-        </div>
+        </Box>
       }
     >
       <div>{strings.SENSOR_KIT_SET_UP_PV_SYSTEM_DESCRIPTION}</div>

@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react';
 
-import { Popover, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Popover, useTheme } from '@mui/material';
 import { Button, Tooltip } from '@terraware/web-components';
 
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
@@ -10,17 +9,6 @@ import { FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
 
 import { FilterConfig } from './index';
 
-const useStyles = makeStyles((_theme: Theme) => ({
-  popoverContainer: {
-    '& .MuiPaper-root': {
-      border: `1px solid ${_theme.palette.TwClrBaseGray300}`,
-      borderRadius: '8px',
-      overflow: 'visible',
-      width: '480px',
-    },
-  },
-}));
-
 interface IconFiltersProps {
   filters: FilterConfig[];
   setCurrentFilters: (filters: Record<string, any>) => void;
@@ -28,7 +16,7 @@ interface IconFiltersProps {
 }
 
 const IconFilters = ({ filters, setCurrentFilters, currentFilters }: IconFiltersProps) => {
-  const classes = useStyles();
+  const theme = useTheme();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -92,7 +80,14 @@ const IconFilters = ({ filters, setCurrentFilters, currentFilters }: IconFilters
           vertical: 'top',
           horizontal: 'center',
         }}
-        className={classes.popoverContainer}
+        sx={{
+          '& .MuiPaper-root': {
+            border: `1px solid ${theme.palette.TwClrBaseGray300}`,
+            borderRadius: '8px',
+            overflow: 'visible',
+            width: '480px',
+          },
+        }}
       >
         <FilterGroup
           initialFilters={currentFilters}

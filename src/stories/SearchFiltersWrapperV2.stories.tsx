@@ -8,15 +8,7 @@ import Card from 'src/components/common/Card';
 import SearchFiltersWrapperV2, { FilterConfig, SearchProps } from 'src/components/common/SearchFiltersWrapperV2';
 import TfMain from 'src/components/common/TfMain';
 
-const useStyles = makeStyles(() => ({
-  mainContainer: {
-    padding: 0,
-  },
-}));
-
 const SearchFiltersWrapperV2Template: Story<SearchProps> = (args) => {
-  const classes = useStyles();
-
   const [search, setSearch] = useState<string>(args.search);
   const [filters, setFilters] = useState<Record<string, any>>({});
 
@@ -24,7 +16,7 @@ const SearchFiltersWrapperV2Template: Story<SearchProps> = (args) => {
 
   return (
     <TfMain>
-      <Container maxWidth={false} className={classes.mainContainer}>
+      <Container maxWidth={false} sx={{ padding: 0 }}>
         <Card flushMobile>
           <Grid item xs={12} sx={{ display: 'flex', marginBottom: '16px', alignItems: 'center' }}>
             <SearchFiltersWrapperV2
