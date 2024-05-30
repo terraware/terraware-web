@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/32</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
@@ -135,29 +135,7 @@
 <a name='L70'></a><a href='#L70'>70</a>
 <a name='L71'></a><a href='#L71'>71</a>
 <a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a>
-<a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a>
-<a name='L77'></a><a href='#L77'>77</a>
-<a name='L78'></a><a href='#L78'>78</a>
-<a name='L79'></a><a href='#L79'>79</a>
-<a name='L80'></a><a href='#L80'>80</a>
-<a name='L81'></a><a href='#L81'>81</a>
-<a name='L82'></a><a href='#L82'>82</a>
-<a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L73'></a><a href='#L73'>73</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -231,23 +209,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
 &nbsp;
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem } from '@terraware/web-components';
 import { Option } from '@terraware/web-components/components/table/types';
 &nbsp;
 import strings from 'src/strings';
 import { FieldNodePayload } from 'src/types/Search';
-&nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  box: {
-    padding: theme.spacing(1.75),
-  },
-  item: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-}));
 &nbsp;
 interface Props {
   field: string;
@@ -258,7 +225,7 @@ interface Props {
 }
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >SingleSelection(</span>props: Props): JSX.Element {
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
+  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
 &nbsp;
   const options = <span class="cstat-no" title="statement not covered" >[...props.options];</span>
   const indexEnabledNull = <span class="cstat-no" title="statement not covered" >options.findIndex(<span class="fstat-no" title="function not covered" >(o</span>) =&gt; <span class="cstat-no" title="statement not covered" >o.value === null &amp;&amp; o.disabled === false)</span>;</span>
@@ -301,7 +268,7 @@ export default function <span class="fstat-no" title="function not covered" >Sin
   };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;div id={`filter-list-${props.field}`} className={classes.box}&gt;
+    &lt;Box id={`filter-list-${props.field}`} sx={{ padding: theme.spacing(1.75) }}&gt;
       &lt;Dropdown
         options={options.map(<span class="fstat-no" title="function not covered" >({</span> label, value }) =&gt; <span class="cstat-no" title="statement not covered" >({ label, value }) as DropdownItem)</span>}
         onChange={<span class="fstat-no" title="function not covered" >(v</span>al) =&gt; <span class="cstat-no" title="statement not covered" >handleChange(val)}</span>
@@ -309,7 +276,7 @@ export default function <span class="fstat-no" title="function not covered" >Sin
         fullWidth={true}
         disabled={options.length === 0}
       /&gt;
-    &lt;/div&gt;
+    &lt;/Box&gt;
   );
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -319,7 +286,7 @@ export default function <span class="fstat-no" title="function not covered" >Sin
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-28T19:17:54.332Z
+                at 2024-05-30T03:24:53.953Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

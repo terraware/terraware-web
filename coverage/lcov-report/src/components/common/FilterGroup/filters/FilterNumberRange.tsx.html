@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
@@ -128,31 +128,7 @@
 <a name='L63'></a><a href='#L63'>63</a>
 <a name='L64'></a><a href='#L64'>64</a>
 <a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a>
-<a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a>
-<a name='L77'></a><a href='#L77'>77</a>
-<a name='L78'></a><a href='#L78'>78</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L66'></a><a href='#L66'>66</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -219,24 +195,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
 &nbsp;
-import { Grid, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Grid, useTheme } from '@mui/material';
 &nbsp;
 import strings from 'src/strings';
 import { FieldNodePayload } from 'src/types/Search';
 &nbsp;
 import TextField from '../../../common/TextField';
-&nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  box: {
-    padding: theme.spacing(1.75),
-  },
-  flexContainer: {
-    alignItems: 'center',
-    display: 'flex',
-    justifyContent: 'center',
-  },
-}));
 &nbsp;
 interface Props {
   field: string;
@@ -246,7 +210,7 @@ interface Props {
 }
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >NumberRange(</span>props: Props): JSX.Element {
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
+  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const [minValue, setMinValue] = <span class="cstat-no" title="statement not covered" >React.useState(props.values[0] || null);</span>
   const [maxValue, setMaxValue] = <span class="cstat-no" title="statement not covered" >React.useState(props.values[1] || null);</span>
 &nbsp;
@@ -282,7 +246,7 @@ export default function <span class="fstat-no" title="function not covered" >Num
   };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;div className={classes.box}&gt;
+    &lt;Box sx={{ padding: theme.spacing(1.75) }}&gt;
       &lt;Grid container spacing={2}&gt;
         &lt;Grid item xs={6}&gt;
           &lt;TextField id='minValue' value={minValue} onChange={onChange} label={strings.MIN} /&gt;
@@ -291,7 +255,7 @@ export default function <span class="fstat-no" title="function not covered" >Num
           &lt;TextField id='maxValue' value={maxValue} onChange={onChange} label={strings.MAX} /&gt;
         &lt;/Grid&gt;
       &lt;/Grid&gt;
-    &lt;/div&gt;
+    &lt;/Box&gt;
   );
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -301,7 +265,7 @@ export default function <span class="fstat-no" title="function not covered" >Num
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-28T19:17:54.332Z
+                at 2024-05-30T03:24:53.953Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

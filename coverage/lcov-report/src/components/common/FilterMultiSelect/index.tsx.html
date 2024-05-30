@@ -39,7 +39,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
@@ -251,16 +251,7 @@
 <a name='L186'></a><a href='#L186'>186</a>
 <a name='L187'></a><a href='#L187'>187</a>
 <a name='L188'></a><a href='#L188'>188</a>
-<a name='L189'></a><a href='#L189'>189</a>
-<a name='L190'></a><a href='#L190'>190</a>
-<a name='L191'></a><a href='#L191'>191</a>
-<a name='L192'></a><a href='#L192'>192</a>
-<a name='L193'></a><a href='#L193'>193</a>
-<a name='L194'></a><a href='#L194'>194</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L189'></a><a href='#L189'>189</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -272,9 +263,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -318,6 +306,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -425,7 +415,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -441,6 +430,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -460,14 +450,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 &nbsp;
 import Checkbox from '../Checkbox';
 &nbsp;
-interface StyleProps {
-  isMobile?: boolean;
-}
-&nbsp;
 const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  button: {
-    width: <span class="fstat-no" title="function not covered" >(p</span>rops: StyleProps) =&gt; (<span class="cstat-no" title="statement not covered" >props.isMobile ? '100%' : 'auto')</span>,
-  },
   multiSelectStyle: {
     height: '100%',
     width: '100%',
@@ -512,6 +495,8 @@ export default function <span class="fstat-no" title="function not covered" >Fil
   const [selection, setSelection] = <span class="cstat-no" title="statement not covered" >useState(initialSelection);</span>
   const [multiSelectOptions, setMultiSelectOptions] = <span class="cstat-no" title="statement not covered" >useState&lt;Map&lt;T | null, string&gt;&gt;(new Map());</span>
   const [isNotPresentFilterSelected, setIsNotPresentFilterSelected] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(selection[0] === null);</span>
+&nbsp;
+  const buttonStyles = <span class="cstat-no" title="statement not covered" >{ width: isMobile ? '100%' : 'auto' };</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const optionsMap = <span class="cstat-no" title="statement not covered" >new Map&lt;T, string&gt;(options.map(<span class="fstat-no" title="function not covered" >(o</span>ption) =&gt; <span class="cstat-no" title="statement not covered" >[option, renderOption(option)])</span>);</span>
@@ -618,25 +603,25 @@ export default function <span class="fstat-no" title="function not covered" >Fil
         }}
       &gt;
         &lt;Button
-          className={classes.button}
           onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >onCancel()}</span>
           type='passive'
           priority='secondary'
           label={strings.CANCEL}
+          style={buttonStyles}
         /&gt;
         &lt;Button
-          className={classes.button}
           onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >clearFilters()}</span>
           type='passive'
           priority='secondary'
           label={strings.RESET}
+          style={buttonStyles}
         /&gt;
         &lt;Button
-          className={classes.button}
           onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >onConfirm(selection)}</span>
           type='productive'
           priority='primary'
           label={strings.APPLY}
+          style={buttonStyles}
         /&gt;
       &lt;/Box&gt;
     &lt;/Box&gt;
@@ -649,7 +634,7 @@ export default function <span class="fstat-no" title="function not covered" >Fil
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-28T19:17:54.332Z
+                at 2024-05-30T03:24:53.953Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

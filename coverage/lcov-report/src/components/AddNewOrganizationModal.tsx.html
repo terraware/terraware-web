@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/90</span>
+                <span class='fraction'>0/88</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/86</span>
+                <span class='fraction'>0/85</span>
             </div>
         
             
@@ -365,10 +365,7 @@
 <a name='L300'></a><a href='#L300'>300</a>
 <a name='L301'></a><a href='#L301'>301</a>
 <a name='L302'></a><a href='#L302'>302</a>
-<a name='L303'></a><a href='#L303'>303</a>
-<a name='L304'></a><a href='#L304'>304</a>
-<a name='L305'></a><a href='#L305'>305</a>
-<a name='L306'></a><a href='#L306'>306</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L303'></a><a href='#L303'>303</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -399,12 +396,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -412,7 +403,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -650,9 +640,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -676,8 +670,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 &nbsp;
-import { Box, Grid, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Grid, useTheme } from '@mui/material';
 import { Checkbox, Dropdown } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 &nbsp;
@@ -704,12 +697,6 @@ import { APP_PATHS } from '../constants';
 import DialogBox from './common/ScrollableDialogBox';
 import TextField from './common/Textfield/Textfield';
 &nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  otherDetails: {
-    marginTop: theme.spacing(1),
-  },
-}));
-&nbsp;
 type LocationTypesSelected = Record&lt;ManagedLocationType, boolean&gt;;
 &nbsp;
 export type AddNewOrganizationModalProps = {
@@ -718,11 +705,11 @@ export type AddNewOrganizationModalProps = {
 };
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >AddNewOrganizationModal(</span>props: AddNewOrganizationModalProps): JSX.Element {
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const { reloadOrganizations } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
   const { onCancel, open } = <span class="cstat-no" title="statement not covered" >props;</span>
+  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const { isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const [nameError, setNameError] = <span class="cstat-no" title="statement not covered" >useState('');</span>
@@ -950,7 +937,6 @@ export default function <span class="fstat-no" title="function not covered" >Add
           {newOrganization.organizationType === 'Other' &amp;&amp; (
             &lt;TextField
               required
-              className={classes.otherDetails}
               type='text'
               label={strings.DESCRIBE_ORGANIZATION_TYPE_DETAILS}
               id='create-org-question-website'
@@ -960,6 +946,11 @@ export default function <span class="fstat-no" title="function not covered" >Add
 <span class="cstat-no" title="statement not covered" >                setOrganizationTypeDetailsError('');</span>
               }}
               errorText={organizationTypeDetailsError}
+              styles={{
+                textarea: {
+                  marginTop: theme.spacing(1),
+                },
+              }}
               value={newOrganization.organizationTypeDetails}
             /&gt;
           )}
@@ -985,7 +976,7 @@ export default function <span class="fstat-no" title="function not covered" >Add
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-28T19:17:54.332Z
+                at 2024-05-30T03:24:53.953Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -123,24 +123,7 @@
 <a name='L58'></a><a href='#L58'>58</a>
 <a name='L59'></a><a href='#L59'>59</a>
 <a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L61'></a><a href='#L61'>61</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -172,6 +155,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -189,27 +185,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useState } from 'react';
 &nbsp;
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { useTheme } from '@mui/material';
 import { Icon, PopoverMultiSelect } from '@terraware/web-components';
 &nbsp;
 import { useMapPortalContainer } from 'src/components/Map/MapRenderUtils';
 &nbsp;
 export type MapLayer = 'Planting Site' | 'Zones' | 'Sub-Zones' | 'Monitoring Plots';
-&nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  layerButton: {
-    border: `1px solid ${theme.palette.TwClrBaseGray300}`,
-    borderRadius: '4px',
-    backgroundColor: theme.palette.TwClrBg,
-    cursor: 'pointer',
-    height: '24px',
-    minWidth: '24px',
-    display: 'flex',
-    alignItems: 'center',
-    padding: `0 ${theme.spacing(0.5)}`,
-  },
-}));
 &nbsp;
 type MapLayerSelectProps = {
   initialSelection: MapLayer[];
@@ -222,7 +203,7 @@ export default function <span class="fstat-no" title="function not covered" >Map
   onUpdateSelection,
   menuSections,
 }: MapLayerSelectProps): JSX.Element | null {
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
+  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const mapPortalContainer = <span class="cstat-no" title="statement not covered" >useMapPortalContainer();</span>
   const [anchorEl, setAnchorEl] = <span class="cstat-no" title="statement not covered" >useState&lt;null | HTMLElement&gt;(null);</span>
   const handleClick = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>vent?: React.MouseEvent&lt;HTMLButtonElement, MouseEvent&gt; | undefined) =&gt; {</span>
@@ -243,7 +224,20 @@ export default function <span class="fstat-no" title="function not covered" >Map
         onChange={onUpdateSelection}
         menuAlign='right'
       /&gt;
-      &lt;button onClick={handleClick} className={classes.layerButton}&gt;
+      &lt;button
+        onClick={handleClick}
+        style={{
+          border: `1px solid ${theme.palette.TwClrBaseGray300}`,
+          borderRadius: '4px',
+          backgroundColor: theme.palette.TwClrBg,
+          cursor: 'pointer',
+          height: '24px',
+          minWidth: '24px',
+          display: 'flex',
+          alignItems: 'center',
+          padding: `0 ${theme.spacing(0.5)}`,
+        }}
+      &gt;
         &lt;Icon name='iconLayers' size='small' /&gt;
       &lt;/button&gt;
     &lt;/&gt;
@@ -256,7 +250,7 @@ export default function <span class="fstat-no" title="function not covered" >Map
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-28T19:17:54.332Z
+                at 2024-05-30T03:24:53.953Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
