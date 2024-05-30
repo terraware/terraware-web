@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Grid, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Grid, useTheme } from '@mui/material';
 import { Checkbox, Dropdown } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -29,12 +28,6 @@ import { APP_PATHS } from '../constants';
 import DialogBox from './common/ScrollableDialogBox';
 import TextField from './common/Textfield/Textfield';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  otherDetails: {
-    marginTop: theme.spacing(1),
-  },
-}));
-
 type LocationTypesSelected = Record<ManagedLocationType, boolean>;
 
 export type AddNewOrganizationModalProps = {
@@ -43,11 +36,11 @@ export type AddNewOrganizationModalProps = {
 };
 
 export default function AddNewOrganizationModal(props: AddNewOrganizationModalProps): JSX.Element {
-  const classes = useStyles();
   const { reloadOrganizations } = useOrganization();
   const { activeLocale } = useLocalization();
   const navigate = useNavigate();
   const { onCancel, open } = props;
+  const theme = useTheme();
   const snackbar = useSnackbar();
   const { isDesktop } = useDeviceInfo();
   const [nameError, setNameError] = useState('');
@@ -275,7 +268,6 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
           {newOrganization.organizationType === 'Other' && (
             <TextField
               required
-              className={classes.otherDetails}
               type='text'
               label={strings.DESCRIBE_ORGANIZATION_TYPE_DETAILS}
               id='create-org-question-website'
@@ -285,6 +277,11 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
                 setOrganizationTypeDetailsError('');
               }}
               errorText={organizationTypeDetailsError}
+              styles={{
+                textarea: {
+                  marginTop: theme.spacing(1),
+                },
+              }}
               value={newOrganization.organizationTypeDetails}
             />
           )}

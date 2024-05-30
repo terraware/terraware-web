@@ -1,20 +1,9 @@
 import React from 'react';
 
-import { Box, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';
 
 import strings from 'src/strings';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  buttonSpacing: {
-    marginRight: theme.spacing(2),
-  },
-  icon: {
-    width: '150px',
-    height: '150px',
-  },
-}));
 
 export type VideoDialogProps = {
   description: string | JSX.Element[];
@@ -27,7 +16,6 @@ export type VideoDialogProps = {
 
 export default function VideoDialog(props: VideoDialogProps): JSX.Element {
   const { description, link, open, onClose, onDontShowAgain, title } = props;
-  const classes = useStyles();
   const theme = useTheme();
 
   const buttons = (): JSX.Element[] => {
@@ -42,8 +30,8 @@ export default function VideoDialog(props: VideoDialogProps): JSX.Element {
         label={strings.DONT_SHOW_AGAIN}
         priority='secondary'
         type='passive'
-        className={classes.buttonSpacing}
         key='button-1'
+        style={{ marginRight: theme.spacing(2) }}
       />
     );
 

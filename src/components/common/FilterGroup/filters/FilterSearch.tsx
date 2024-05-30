@@ -1,17 +1,10 @@
 import React from 'react';
 
-import { TextField, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, TextField, useTheme } from '@mui/material';
 
 import strings from 'src/strings';
 import { FieldNodePayload } from 'src/types/Search';
 import { parseSearchTerm } from 'src/utils/search';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  box: {
-    padding: theme.spacing(1.75),
-  },
-}));
 
 interface Props {
   field: string;
@@ -22,7 +15,7 @@ interface Props {
 }
 
 export default function Search(props: Props): JSX.Element {
-  const classes = useStyles();
+  const theme = useTheme();
   const [search, setSearch] = React.useState(props.value || '');
 
   React.useEffect(() => {
@@ -47,7 +40,7 @@ export default function Search(props: Props): JSX.Element {
   };
 
   return (
-    <div className={classes.box}>
+    <Box sx={{ padding: theme.spacing(1.75) }}>
       <TextField
         id={props.field ?? ''}
         fullWidth={true}
@@ -60,6 +53,6 @@ export default function Search(props: Props): JSX.Element {
           onSearch(event.target.value);
         }}
       />
-    </div>
+    </Box>
   );
 }

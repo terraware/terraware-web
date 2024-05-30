@@ -1,23 +1,11 @@
 import React from 'react';
 
-import { Grid, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Grid, useTheme } from '@mui/material';
 
 import strings from 'src/strings';
 import { FieldNodePayload } from 'src/types/Search';
 
 import TextField from '../../../common/TextField';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  box: {
-    padding: theme.spacing(1.75),
-  },
-  flexContainer: {
-    alignItems: 'center',
-    display: 'flex',
-    justifyContent: 'center',
-  },
-}));
 
 interface Props {
   field: string;
@@ -27,7 +15,7 @@ interface Props {
 }
 
 export default function NumberRange(props: Props): JSX.Element {
-  const classes = useStyles();
+  const theme = useTheme();
   const [minValue, setMinValue] = React.useState(props.values[0] || null);
   const [maxValue, setMaxValue] = React.useState(props.values[1] || null);
 
@@ -63,7 +51,7 @@ export default function NumberRange(props: Props): JSX.Element {
   };
 
   return (
-    <div className={classes.box}>
+    <Box sx={{ padding: theme.spacing(1.75) }}>
       <Grid container spacing={2}>
         <Grid item xs={6}>
           <TextField id='minValue' value={minValue} onChange={onChange} label={strings.MIN} />
@@ -72,6 +60,6 @@ export default function NumberRange(props: Props): JSX.Element {
           <TextField id='maxValue' value={maxValue} onChange={onChange} label={strings.MAX} />
         </Grid>
       </Grid>
-    </div>
+    </Box>
   );
 }

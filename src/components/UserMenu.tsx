@@ -1,8 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { useTheme } from '@mui/material';
 import { DropdownItem, PopoverMenu } from '@terraware/web-components';
 
 import { APP_PATHS } from 'src/constants';
@@ -12,20 +11,12 @@ import useEnvironment from 'src/utils/useEnvironment';
 
 import strings from '../../src/strings';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  userName: {
-    fontSize: '16px',
-    paddingLeft: '8px',
-    color: theme.palette.TwClrTxt,
-  },
-}));
-
 type UserMenuProps = {
   hasOrganizations?: boolean;
 };
 
 export default function UserMenu({}: UserMenuProps): JSX.Element {
-  const classes = useStyles();
+  const theme = useTheme();
   const { user } = useUser();
   const { isProduction } = useEnvironment();
   const navigate = useNavigate();
@@ -69,7 +60,13 @@ export default function UserMenu({}: UserMenuProps): JSX.Element {
   return (
     <PopoverMenu
       anchor={
-        <span className={classes.userName}>
+        <span
+          style={{
+            fontSize: '16px',
+            paddingLeft: '8px',
+            color: theme.palette.TwClrTxt,
+          }}
+        >
           {user?.firstName} {user?.lastName}
         </span>
       }
