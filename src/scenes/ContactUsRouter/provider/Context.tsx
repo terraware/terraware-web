@@ -1,9 +1,9 @@
 import { createContext, useContext } from 'react';
 
-import { ServiceRequestType } from 'src/types/Support';
+import { SupportRequestType } from 'src/types/Support';
 
 export type SupportData = {
-  types?: ServiceRequestType[];
+  types?: SupportRequestType[];
 };
 
 // default values pointing to nothing

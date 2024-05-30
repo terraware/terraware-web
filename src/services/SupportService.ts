@@ -1,5 +1,5 @@
 import { paths } from 'src/api/types/generated-schema';
-import { ServiceRequestType, SupportRequest } from 'src/types/Support';
+import { SupportRequest, SupportRequestType } from 'src/types/Support';
 
 import HttpService, { Response, Response2 } from './HttpService';
 
@@ -18,7 +18,7 @@ type UploadAttachmentServerResponse =
   paths[typeof SUPPORT_ATTACHMENT_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 export type ServiceRequestTypeData = {
-  types: ServiceRequestType[];
+  types: SupportRequestType[];
 };
 
 const httpSupport = HttpService.root(SUPPORT_ENDPOINT);

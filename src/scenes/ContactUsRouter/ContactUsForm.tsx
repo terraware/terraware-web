@@ -16,7 +16,13 @@ import { requestSubmitSupportRequest } from 'src/redux/features/support/supportA
 import { selectSupportRequestSubmitRequest } from 'src/redux/features/support/supportSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { AttachmentRequest, SupportRequest } from 'src/types/Support';
+import {
+  AttachmentRequest,
+  SupportRequest,
+  SupportRequestType,
+  getSupportRequestInstructions,
+  getSupportRequestName,
+} from 'src/types/Support';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -29,7 +35,7 @@ const ContactUsForm = () => {
   const { activeLocale } = useLocalization();
   const { user } = useUser();
   const theme = useTheme();
-  const pathParams = useParams<{ requestTypeId: string }>();
+  const pathParams = useParams<{ requestType: string }>();
   const snackbar = useSnackbar();
   const { goToContactUs } = useNavigateTo();
 
@@ -50,26 +56,43 @@ const ContactUsForm = () => {
   );
 
   const { types } = useSupportData();
-  const requestTypeId = useMemo(() => Number(pathParams.requestTypeId), [pathParams]);
 
-  const requestType = useMemo(
-    () => types?.find((item) => item.requestTypeId === requestTypeId),
-    [types, requestTypeId]
-  );
+  const supportRequestType: SupportRequestType | undefined = useMemo(() => {
+    switch (pathParams.requestType) {
+      case 'bug-report':
+        return 'Bug Report';
+      case 'contact-us':
+        return 'Contact Us';
+      case 'feature-request':
+        return 'Feature Request';
+      default:
+        return undefined;
+    }
+  }, [pathParams]);
 
   useEffect(() => {
-    // Navigate to contact us page for unrecognized form type.
-    if (types !== undefined && requestType === undefined) {
+    // Navigate to contact us page for unrecognized or unsupported form type.
+    if (
+      types !== undefined &&
+      supportRequestType !== undefined &&
+      types.find((item) => item === supportRequestType) === undefined
+    ) {
       goToContactUs();
     }
-  }, [types, requestType]);
+  }, [types, supportRequestType]);
 
   const [supportRequest, , onChangeSupportRequest] = useForm<SupportRequest>({
     attachmentIds: [],
     description: '',
     summary: '',
-    requestTypeId: requestTypeId,
+    requestType: supportRequestType ?? 'Contact Us',
   });
+
+  useEffect(() => {
+    if (supportRequestType) {
+      onChangeSupportRequest('requestType', supportRequestType);
+    }
+  }, [supportRequestType]);
 
   const [errorSummary, setErrorSummary] = useState<string>('');
   const [errorDescription, setErrorDescription] = useState<string>('');
@@ -124,8 +147,18 @@ const ContactUsForm = () => {
     }
   }, [submitSupportRequest, snackbar]);
 
+  const supportRequestTitle = useMemo(
+    () => (supportRequestType ? getSupportRequestName(supportRequestType) : ''),
+    [supportRequestType]
+  );
+
+  const supportRequestInstructions = useMemo(
+    () => (supportRequestType ? getSupportRequestInstructions(supportRequestType) : ''),
+    [supportRequestType]
+  );
+
   return (
-    <Page crumbs={crumbs} title={requestType?.name || ''}>
+    <Page crumbs={crumbs} title={supportRequestTitle}>
       <PageForm
         busy={submitSupportRequest?.status === 'pending'}
         cancelID='cancelSupportRequest'
@@ -145,7 +178,7 @@ const ContactUsForm = () => {
         >
           <Grid container columnSpacing={theme.spacing(2)} rowSpacing={theme.spacing(2)}>
             <Grid item xs={12}>
-              {requestType?.description}
+              {supportRequestInstructions}
             </Grid>
             <Grid item xs={isDesktop ? 6 : 12}>
               <Textfield

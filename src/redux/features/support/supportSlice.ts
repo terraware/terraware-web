@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import { ServiceRequestType, TemporaryAttachment } from 'src/types/Support';
+import { SupportRequestType, TemporaryAttachment } from 'src/types/Support';
 
 import {
   requestListSupportRequestTypes,
@@ -12,7 +12,7 @@ import {
 /**
  * Simple response to know if the list support request types were successful
  */
-const initialSupportRequestTypes: { [key: string]: StatusT<ServiceRequestType[]> } = {};
+const initialSupportRequestTypes: { [key: string]: StatusT<SupportRequestType[]> } = {};
 
 export const supportRequestTypesListSlice = createSlice({
   name: 'supportRequestTypesListSlice',

@@ -2,11 +2,11 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { SupportService } from 'src/services';
 import strings from 'src/strings';
-import { ServiceRequestType, SupportRequest } from 'src/types/Support';
+import { SupportRequest, SupportRequestType } from 'src/types/Support';
 
 export const requestListSupportRequestTypes = createAsyncThunk(
   'support/list',
-  async (): Promise<ServiceRequestType[]> => {
+  async (): Promise<SupportRequestType[]> => {
     const response = await SupportService.listSupportRequestTypes();
 
     if (response !== null && response.requestSucceeded) {

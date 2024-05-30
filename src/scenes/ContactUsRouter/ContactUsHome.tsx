@@ -18,6 +18,7 @@ import { useLocalization } from 'src/providers';
 import { selectAppVersion } from 'src/redux/features/appVersion/appVersionSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { getSupportRequestDescription, getSupportRequestIconName, getSupportRequestName } from 'src/types/Support';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import { useSupportData } from './provider/Context';
@@ -94,10 +95,11 @@ export default function ContactUsHome(): JSX.Element {
     () =>
       (types ?? []).map(
         (item): ListItemContent => ({
-          title: item.name,
-          description: item.description,
-          buttonText: item.name,
-          onClick: () => goToContactUsForm(item.requestTypeId),
+          icon: getSupportRequestIconName(item),
+          title: getSupportRequestName(item),
+          description: getSupportRequestDescription(item),
+          buttonText: getSupportRequestName(item),
+          onClick: () => goToContactUsForm(item),
         })
       ),
     [types]
