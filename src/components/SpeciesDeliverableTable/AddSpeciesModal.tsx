@@ -45,7 +45,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
 
   useEffect(() => {
     const speciesToAdd = allSpecies?.filter((species) => {
-      return !participantProjectSpecies?.find((_species) => species.id === _species.speciesId);
+      return !participantProjectSpecies?.find((_species) => species.id === _species.species.id);
     });
     setSelectableSpecies(speciesToAdd);
   }, [allSpecies, participantProjectSpecies]);

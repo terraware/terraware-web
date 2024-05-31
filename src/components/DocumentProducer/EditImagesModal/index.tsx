@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-import { Box, Grid, Theme, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Grid, useTheme } from '@mui/material';
 import { Button, Textfield } from '@terraware/web-components';
 
 import PageDialog from 'src/components/DocumentProducer/PageDialog';
@@ -26,22 +25,6 @@ import { getImagePath } from 'src/utils/images';
 
 import PhotoSelector, { PhotoWithAttributes } from './PhotoSelector';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  removePhoto: {
-    position: 'absolute',
-    top: -10,
-    right: -10,
-    backgroundColor: theme.palette.TwClrBgDanger,
-  },
-  thumbnail: {
-    margin: 'auto auto',
-    objectFit: 'contain',
-    display: 'flex',
-    maxWidth: '120px',
-    maxHeight: '120px',
-  },
-}));
-
 export type EditImagesModalProps = {
   variable: ImageVariableWithValues;
   onFinish: () => void;
@@ -52,7 +35,6 @@ export type EditImagesModalProps = {
 const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
   const { variable, onFinish, onCancel, docId } = props;
   const theme = useTheme();
-  const classes = useStyles();
   const [imagesCopy, setImagesCopy] = useState(variable.values);
   const [deletedImages, setDeletedImages] = useState<VariableValueImageValue[]>();
   const [newImages, setNewImages] = useState<PhotoWithAttributes[]>();
@@ -198,13 +180,24 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
                   icon='iconTrashCan'
                   onClick={() => removeFileAtIndex(index)}
                   size='small'
-                  className={classes.removePhoto}
+                  style={{
+                    position: 'absolute',
+                    top: -10,
+                    right: -10,
+                    backgroundColor: theme.palette.TwClrBgDanger,
+                  }}
                 />
                 <img
                   height='120px'
                   src={getImagePath(docId, image.id, 120, 120)}
-                  className={classes.thumbnail}
                   alt='doc'
+                  style={{
+                    margin: 'auto auto',
+                    objectFit: 'contain',
+                    display: 'flex',
+                    maxWidth: '120px',
+                    maxHeight: '120px',
+                  }}
                 />
               </Box>
               <Box paddingLeft={theme.spacing(3)} width='100%'>

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-import { Box, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import { Option } from '@terraware/web-components/components/table/types';
 
@@ -16,22 +15,6 @@ import MultipleSelection from './filters/FilterMultipleSelection';
 import FilterNumberRange from './filters/FilterNumberRange';
 import Search from './filters/FilterSearch';
 import SingleSelection from './filters/FilterSingleSelection';
-
-interface StyleProps {
-  isMobile?: boolean;
-  isDesktop?: boolean;
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  divider: {
-    maxWidth: '90%',
-    border: 'none',
-    borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-  },
-  button: {
-    width: (props: StyleProps) => (props.isMobile ? '100%' : 'auto'),
-  },
-}));
 
 export type FilterField = {
   name: string;
@@ -62,7 +45,10 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
   const { initialFilters, fields, values, onConfirm, onCancel, noScroll, optionsRenderer } = props;
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const classes = useStyles({ isMobile });
+
+  const buttonStyles = {
+    width: isMobile ? '100%' : 'auto',
+  };
 
   // the filters defined by this filter group
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>(initialFilters);
@@ -105,7 +91,15 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
 
           return (
             <Box key={f.name}>
-              {index > 0 && <hr className={classes.divider} />}
+              {index > 0 && (
+                <hr
+                  style={{
+                    maxWidth: '90%',
+                    border: 'none',
+                    borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+                  }}
+                />
+              )}
               {f.showLabel !== false ? (
                 <Typography fontSize='14px' fontWeight={600} margin={theme.spacing(2, 2, 0, 2)}>
                   {f.label}
@@ -185,26 +179,14 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
           background: theme.palette.TwClrBgSecondary,
         }}
       >
+        <Button onClick={onCancel} type='passive' priority='secondary' label={strings.CANCEL} style={buttonStyles} />
+        <Button onClick={clearFilters} type='passive' priority='secondary' label={strings.RESET} style={buttonStyles} />
         <Button
-          className={classes.button}
-          onClick={onCancel}
-          type='passive'
-          priority='secondary'
-          label={strings.CANCEL}
-        />
-        <Button
-          className={classes.button}
-          onClick={clearFilters}
-          type='passive'
-          priority='secondary'
-          label={strings.RESET}
-        />
-        <Button
-          className={classes.button}
           onClick={() => onConfirm(filters)}
           type='productive'
           priority='primary'
           label={strings.APPLY}
+          style={buttonStyles}
         />
       </Box>
     </Box>

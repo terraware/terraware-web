@@ -32,6 +32,7 @@ import {
   Collectors2,
   SeedBank2Selector,
 } from './properties';
+import CollectionSiteName from './properties/CollectionSiteName';
 
 const SubTitleStyle = {
   fontSize: '20px',
@@ -216,14 +217,7 @@ export default function CreateAccession(): JSX.Element | null {
               justifyContent='space-between'
             >
               <Grid item xs={gridSize()} sx={{ ...marginTop, marginRight: isMobile ? 0 : theme.spacing(2) }}>
-                <Textfield
-                  id='collectionSiteName'
-                  value={record.collectionSiteName}
-                  onChange={(value) => onChange('collectionSiteName', value)}
-                  type='text'
-                  label={strings.COLLECTION_SITE}
-                  tooltipTitle={strings.TOOLTIP_ACCESSIONS_ADD_COLLECTING_SITE}
-                />
+                <CollectionSiteName onChange={onChange} collectionSiteName={record?.collectionSiteName} />
               </Grid>
               <Grid item xs={gridSize()} sx={marginTop}>
                 <Textfield

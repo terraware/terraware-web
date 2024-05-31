@@ -16,7 +16,7 @@ const SpeciesDeliverableStatusMessage = ({ deliverable, species }: Props): JSX.E
   const { activeLocale } = useLocalization();
   const theme = useTheme();
 
-  const rejectedSpecies = species?.filter((s) => s.participantProjectSpeciesSubmissionStatus === 'Rejected');
+  const rejectedSpecies = species?.filter((s) => s.participantProjectSpecies.submissionStatus === 'Rejected');
 
   return !activeLocale ? null : (
     <>
@@ -48,7 +48,7 @@ const SpeciesDeliverableStatusMessage = ({ deliverable, species }: Props): JSX.E
             body={
               <ul>
                 {rejectedSpecies.map((species, index) => (
-                  <li key={index}>{species.speciesScientificName}</li>
+                  <li key={index}>{species.species.scientificName}</li>
                 ))}
               </ul>
             }

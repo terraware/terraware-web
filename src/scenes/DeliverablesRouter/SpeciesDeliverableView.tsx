@@ -48,7 +48,7 @@ const SpeciesDeliverableView = (props: Props): JSX.Element => {
   const submitButtonIsDisabled = useMemo(() => {
     return (
       !ppsSearchResults?.data?.length ||
-      ppsSearchResults?.data?.every((species) => species.participantProjectSpeciesSubmissionStatus === 'Approved')
+      ppsSearchResults?.data?.every((species) => species.participantProjectSpecies.submissionStatus === 'Approved')
     );
   }, [ppsSearchResults]);
 
