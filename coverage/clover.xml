@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1717190848581" clover="3.2.0">
-  <project timestamp="1717190848581" name="All files">
+<coverage generated="1717196836671" clover="3.2.0">
+  <project timestamp="1717196836671" name="All files">
     <metrics statements="22251" coveredstatements="929" conditionals="14032" coveredconditionals="228" methods="6926" coveredmethods="162" elements="43209" coveredelements="1319" complexity="0" loc="22251" ncloc="22251" packages="209" files="981" classes="981"/>
     <package name="src">
       <metrics statements="161" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="37" coveredmethods="0"/>
@@ -4489,9 +4489,9 @@
       </file>
       <file name="TextAreaDisplay.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectField/TextAreaDisplay.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="7" count="0" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
-        <line num="9" count="0" type="stmt"/>
-        <line num="11" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
       </file>
       <file name="TextAreaEdit.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ProjectField/TextAreaEdit.tsx">
         <metrics statements="11" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>

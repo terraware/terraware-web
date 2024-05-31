@@ -1,3 +1,4 @@
+68bc47bfc8 SW-5470 Don't overflow container if text is too long (#2678)
 03115de8ee SW-5417: Remove makeStyles everywhere in Terraware web (#2) (#2675)
 c600c82c2b SW-5428: Saving while adding Project to species fails with 404 (#2676)
 d4d41904b1 SW-5023: Accessions: Ability to add and edit photo files in web app (#2665)
