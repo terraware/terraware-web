@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/79</span>
+                <span class='fraction'>0/76</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/78</span>
+                <span class='fraction'>0/76</span>
             </div>
         
             
@@ -268,14 +268,7 @@
 <a name='L203'></a><a href='#L203'>203</a>
 <a name='L204'></a><a href='#L204'>204</a>
 <a name='L205'></a><a href='#L205'>205</a>
-<a name='L206'></a><a href='#L206'>206</a>
-<a name='L207'></a><a href='#L207'>207</a>
-<a name='L208'></a><a href='#L208'>208</a>
-<a name='L209'></a><a href='#L209'>209</a>
-<a name='L210'></a><a href='#L210'>210</a>
-<a name='L211'></a><a href='#L211'>211</a>
-<a name='L212'></a><a href='#L212'>212</a>
-<a name='L213'></a><a href='#L213'>213</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L206'></a><a href='#L206'>206</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -294,30 +287,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -460,6 +434,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -489,8 +475,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useState } from 'react';
 &nbsp;
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, useTheme } from '@mui/material';
 &nbsp;
 import { connectDeviceManager, getDeviceManager } from 'src/api/deviceManager/deviceManager';
 import getHelpEmail from 'src/components/common/HelpEmail';
@@ -501,24 +486,6 @@ import { Facility } from 'src/types/Facility';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 &nbsp;
 import FlowStep, { FlowError } from './FlowStep';
-&nbsp;
-interface StyleProps {
-  isMobile: boolean;
-}
-&nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  installDeviceManager: {
-    width: <span class="fstat-no" title="function not covered" >(p</span>rops: StyleProps) =&gt; (<span class="cstat-no" title="statement not covered" >props.isMobile ? '100%' : '432px')</span>,
-    fontStyle: 'italic',
-  },
-  spinnerContainer: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  downloadInProgress: {
-    marginLeft: theme.spacing(2),
-  },
-}));
 &nbsp;
 type InstallDeviceManagerProps = {
   seedBank: Facility;
@@ -531,7 +498,7 @@ type InstallDeviceManagerProps = {
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >InstallDeviceManager(</span>props: InstallDeviceManagerProps): JSX.Element {
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles({ isMobile });</span>
+  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { seedBank, active, completed, onNext, deviceManager, reloadData } = <span class="cstat-no" title="statement not covered" >props;</span>
   const [flowError, setFlowError] = <span class="cstat-no" title="statement not covered" >useState&lt;FlowError | undefined&gt;();</span>
   const [initialized, setInitialized] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
@@ -681,18 +648,30 @@ export default function <span class="fstat-no" title="function not covered" >Ins
       title={strings.SENSOR_KIT_SET_UP_DEVICE_MANAGER}
       completed={completed}
       footer={
-        &lt;div className={classes.installDeviceManager}&gt;
+        &lt;Box
+          sx={{
+            width: isMobile ? '100%' : '432px',
+            fontStyle: 'italic',
+          }}
+        &gt;
           {updateFinished &amp;&amp; &lt;span&gt;{strings.DOWNLOAD_COMPLETE}&lt;/span&gt;}
           {!updateFinished &amp;&amp; pollingStartedOn &gt; 0 &amp;&amp; flowError === undefined &amp;&amp; (
-            &lt;div className={classes.spinnerContainer}&gt;
+            &lt;Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            &gt;
               &lt;ProgressCircle size='small' determinate={true} value={progressPercentage} /&gt;
-              &lt;span className={classes.downloadInProgress}&gt;{strings.DOWNLOAD_IN_PROGRESS}&lt;/span&gt;
-            &lt;/div&gt;
+              &lt;Box component='span' sx={{ marginLeft: theme.spacing(2) }}&gt;
+                {strings.DOWNLOAD_IN_PROGRESS}
+              &lt;/Box&gt;
+            &lt;/Box&gt;
           )}
           {!updateFinished &amp;&amp; (flowError !== undefined || !pollingStartedOn) &amp;&amp; (
             &lt;span&gt;{strings.WAITING_TO_DOWNLOAD}&lt;/span&gt;
           )}
-        &lt;/div&gt;
+        &lt;/Box&gt;
       }
     &gt;
       &lt;div&gt;{strings.SENSOR_KIT_SET_UP_DEVICE_MANAGER_DESCRIPTION}&lt;/div&gt;
@@ -706,7 +685,7 @@ export default function <span class="fstat-no" title="function not covered" >Ins
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-31T00:22:07.958Z
+                at 2024-05-31T21:27:27.890Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

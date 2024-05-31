@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/48</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/47</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
@@ -179,18 +179,7 @@
 <a name='L114'></a><a href='#L114'>114</a>
 <a name='L115'></a><a href='#L115'>115</a>
 <a name='L116'></a><a href='#L116'>116</a>
-<a name='L117'></a><a href='#L117'>117</a>
-<a name='L118'></a><a href='#L118'>118</a>
-<a name='L119'></a><a href='#L119'>119</a>
-<a name='L120'></a><a href='#L120'>120</a>
-<a name='L121'></a><a href='#L121'>121</a>
-<a name='L122'></a><a href='#L122'>122</a>
-<a name='L123'></a><a href='#L123'>123</a>
-<a name='L124'></a><a href='#L124'>124</a>
-<a name='L125'></a><a href='#L125'>125</a>
-<a name='L126'></a><a href='#L126'>126</a>
-<a name='L127'></a><a href='#L127'>127</a>
-<a name='L128'></a><a href='#L128'>128</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L117'></a><a href='#L117'>117</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -207,21 +196,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -319,7 +297,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useState } from 'react';
 &nbsp;
-import { makeStyles } from '@mui/styles';
+import { Box } from '@mui/material';
 &nbsp;
 import { listDeviceManagers } from 'src/api/deviceManager/deviceManager';
 import strings from 'src/strings';
@@ -330,16 +308,6 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import TextField from '../../common/Textfield/Textfield';
 import FlowStep, { FlowError } from './FlowStep';
 &nbsp;
-interface StyleProps {
-  isMobile: boolean;
-}
-&nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  sensorKitId: {
-    width: <span class="fstat-no" title="function not covered" >(p</span>rops: StyleProps) =&gt; (<span class="cstat-no" title="statement not covered" >props.isMobile ? '100%' : '432px')</span>,
-  },
-}));
-&nbsp;
 type SensorKitIDProps = {
   seedBank: Facility;
   active: boolean;
@@ -349,7 +317,6 @@ type SensorKitIDProps = {
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >SensorKitID(</span>props: SensorKitIDProps): JSX.Element {
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles({ isMobile });</span>
   const { seedBank, active, completed, onNext } = <span class="cstat-no" title="statement not covered" >props;</span>
   const [sensorKitId, setSensorKitId] = <span class="cstat-no" title="statement not covered" >useState&lt;string | undefined&gt;();</span>
   const [error, setError] = <span class="cstat-no" title="statement not covered" >useState&lt;string | undefined&gt;();</span>
@@ -427,7 +394,7 @@ export default function <span class="fstat-no" title="function not covered" >Sen
       completed={completed}
       footerError={!!error}
       footer={
-        &lt;div className={classes.sensorKitId}&gt;
+        &lt;Box sx={{ width: isMobile ? '100%' : '432px' }}&gt;
           &lt;TextField
             id='sensor-kit-id'
             label={strings.ENTER_SIX_DIGIT_KEY}
@@ -437,7 +404,7 @@ export default function <span class="fstat-no" title="function not covered" >Sen
             errorText={error}
             placeholder={strings.SENSOR_KIT_ID_PLACEHOLDER}
           /&gt;
-        &lt;/div&gt;
+        &lt;/Box&gt;
       }
     &gt;
       &lt;div&gt;{strings.SENSOR_KIT_SET_UP_SENSOR_KIT_ID_DESCRIPTION}&lt;/div&gt;
@@ -451,7 +418,7 @@ export default function <span class="fstat-no" title="function not covered" >Sen
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-31T00:22:07.958Z
+                at 2024-05-31T21:27:27.890Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

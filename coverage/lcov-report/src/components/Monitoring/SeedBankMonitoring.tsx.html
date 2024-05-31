@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -160,39 +160,7 @@
 <a name='L95'></a><a href='#L95'>95</a>
 <a name='L96'></a><a href='#L96'>96</a>
 <a name='L97'></a><a href='#L97'>97</a>
-<a name='L98'></a><a href='#L98'>98</a>
-<a name='L99'></a><a href='#L99'>99</a>
-<a name='L100'></a><a href='#L100'>100</a>
-<a name='L101'></a><a href='#L101'>101</a>
-<a name='L102'></a><a href='#L102'>102</a>
-<a name='L103'></a><a href='#L103'>103</a>
-<a name='L104'></a><a href='#L104'>104</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L98'></a><a href='#L98'>98</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -241,7 +209,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -271,8 +259,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useState } from 'react';
 &nbsp;
-import { Grid, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Grid, useTheme } from '@mui/material';
 &nbsp;
 import { useOrganization } from 'src/providers/hooks';
 import strings from 'src/strings';
@@ -284,31 +271,6 @@ import EmptyStateContent from '../emptyStatePages/EmptyStateContent';
 import SensorKitSetup from './SensorKitSetup';
 import SeedBankDashboard from './dashboard/SeedBankDashboard';
 &nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  placeholder: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-  },
-  text: {
-    fontSize: '24px',
-  },
-  message: {
-    margin: '0 auto',
-    width: '50%',
-    marginTop: '10%',
-  },
-  notSetUpContent: {
-    background: theme.palette.TwClrBg,
-    border: `1px solid transparent`,
-    borderRadius: '24px',
-    margin: 'auto',
-    marginTop: `max(10vh, ${theme.spacing(8)}px)`,
-    maxWidth: '800px',
-    padding: '24px',
-  },
-}));
-&nbsp;
 type SeedBankMonitoringProps = {
   seedBank: Facility;
   reloadData: () =&gt; void;
@@ -317,8 +279,8 @@ type SeedBankMonitoringProps = {
 };
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >Monitoring(</span>props: SeedBankMonitoringProps): JSX.Element {
+  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const { seedBank, reloadData, monitoringPreferences, updatePreferences } = <span class="cstat-no" title="statement not covered" >props;</span>
   const [onboarding, setOnboarding] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const isConfigured = <span class="cstat-no" title="statement not covered" >seedBank.connectionState === 'Configured';</span>
@@ -338,7 +300,17 @@ export default function <span class="fstat-no" title="function not covered" >Mon
         &lt;&gt;
           {isAdmin(selectedOrganization) ? (
             &lt;Grid item xs={12} marginTop='10%'&gt;
-              &lt;div className={classes.notSetUpContent}&gt;
+              &lt;Box
+                sx={{
+                  background: theme.palette.TwClrBg,
+                  border: `1px solid transparent`,
+                  borderRadius: '24px',
+                  margin: 'auto',
+                  marginTop: `max(10vh, ${theme.spacing(8)}px)`,
+                  maxWidth: '800px',
+                  padding: '24px',
+                }}
+              &gt;
                 &lt;EmptyStateContent
                   title={strings.SET_UP_YOUR_SENSOR_KIT}
                   subtitle={strings.SET_UP_YOUR_SENSOR_KIT_MSG}
@@ -346,27 +318,37 @@ export default function <span class="fstat-no" title="function not covered" >Mon
                   buttonText={strings.SET_UP}
                   onClickButton={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setOnboarding(true)}</span>
                 /&gt;
-              &lt;/div&gt;
+              &lt;/Box&gt;
             &lt;/Grid&gt;
           ) : (
             &lt;EmptyMessage
-              className={classes.message}
               title={strings.REACH_OUT_TO_ADMIN_TITLE}
               text={strings.NO_SEEDBANKS_SET_UP_NON_ADMIN_MSG}
+              sx={{
+                margin: '0 auto',
+                width: '50%',
+                marginTop: '10%',
+              }}
             /&gt;
           )}
         &lt;/&gt;
       )}
       {isConfigured &amp;&amp; !onboarding &amp;&amp; (
-        &lt;div className={classes.placeholder}&gt;
-          &lt;span className={classes.text}&gt;
+        &lt;Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
+          }}
+        &gt;
+          &lt;Box component='span' sx={{ fontSize: '24px' }}&gt;
             &lt;SeedBankDashboard
               seedBank={seedBank}
               monitoringPreferences={monitoringPreferences}
               updatePreferences={updatePreferences}
             /&gt;
-          &lt;/span&gt;
-        &lt;/div&gt;
+          &lt;/Box&gt;
+        &lt;/Box&gt;
       )}
       {onboarding &amp;&amp; &lt;SensorKitSetup seedBank={seedBank} onFinish={onFinishOnboarding} reloadData={reloadData} /&gt;}
     &lt;/&gt;
@@ -379,7 +361,7 @@ export default function <span class="fstat-no" title="function not covered" >Mon
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-31T00:22:07.958Z
+                at 2024-05-31T21:27:27.890Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
@@ -39,7 +39,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
@@ -114,27 +114,7 @@
 <a name='L49'></a><a href='#L49'>49</a>
 <a name='L50'></a><a href='#L50'>50</a>
 <a name='L51'></a><a href='#L51'>51</a>
-<a name='L52'></a><a href='#L52'>52</a>
-<a name='L53'></a><a href='#L53'>53</a>
-<a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L52'></a><a href='#L52'>52</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -150,6 +130,16 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -177,8 +167,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useState } from 'react';
 &nbsp;
-import { Snackbar as SnackbarUI } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Snackbar as SnackbarUI } from '@mui/material';
 import { Message } from '@terraware/web-components';
 &nbsp;
 import { selectSnackbar } from 'src/redux/features/snackbar/snackbarSelectors';
@@ -187,26 +176,22 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Snackbar } from 'src/types/Snackbar';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 &nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  mainSnackbar: {
+export default function <span class="fstat-no" title="function not covered" >ToastSnackbar(</span>): JSX.Element {
+  const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
+  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
+  const [snackbar, setSnackbar] = <span class="cstat-no" title="statement not covered" >useState&lt;Snackbar | null&gt;();</span>
+  const snackbarData = <span class="cstat-no" title="statement not covered" >useAppSelector(selectSnackbar('toast'));</span>
+&nbsp;
+  const mainSnackbarStyles = <span class="cstat-no" title="statement not covered" >{</span>
     '&amp;.MuiSnackbar-anchorOriginTopCenter': {
       top: '32px',
     },
     '&amp;.MuiSnackbar-anchorOriginBottomCenter': {
       bottom: '32px',
     },
-  },
-  toastContainer: {
-    width: '100%',
-  },
-}));
+  };
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >ToastSnackbar(</span>): JSX.Element {
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
-  const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
-  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
-  const [snackbar, setSnackbar] = <span class="cstat-no" title="statement not covered" >useState&lt;Snackbar | null&gt;();</span>
-  const snackbarData = <span class="cstat-no" title="statement not covered" >useAppSelector(selectSnackbar('toast'));</span>
+  const toastContainerStyles = <span class="cstat-no" title="statement not covered" >{ width: '100%' };</span>
 &nbsp;
   const handleClose = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    dispatch(clearSnackbar({ type: 'toast' }));</span>
@@ -223,11 +208,11 @@ export default function <span class="fstat-no" title="function not covered" >Toa
       onClose={handleClose}
       autoHideDuration={5000}
       id='snackbar'
-      className={classes.mainSnackbar}
+      sx={mainSnackbarStyles}
     &gt;
-      &lt;div className={classes.toastContainer}&gt;
+      &lt;Box sx={toastContainerStyles}&gt;
         {snackbar &amp;&amp; &lt;Message type='toast' title={snackbar.title} body={snackbar.msg} priority={snackbar.priority} /&gt;}
-      &lt;/div&gt;
+      &lt;/Box&gt;
     &lt;/SnackbarUI&gt;
   );
 }
@@ -238,7 +223,7 @@ export default function <span class="fstat-no" title="function not covered" >Toa
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-31T00:22:07.958Z
+                at 2024-05-31T21:27:27.890Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

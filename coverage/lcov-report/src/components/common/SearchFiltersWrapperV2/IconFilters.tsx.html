@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -170,24 +170,7 @@
 <a name='L105'></a><a href='#L105'>105</a>
 <a name='L106'></a><a href='#L106'>106</a>
 <a name='L107'></a><a href='#L107'>107</a>
-<a name='L108'></a><a href='#L108'>108</a>
-<a name='L109'></a><a href='#L109'>109</a>
-<a name='L110'></a><a href='#L110'>110</a>
-<a name='L111'></a><a href='#L111'>111</a>
-<a name='L112'></a><a href='#L112'>112</a>
-<a name='L113'></a><a href='#L113'>113</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<a name='L108'></a><a href='#L108'>108</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -251,6 +234,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -289,8 +279,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useMemo, useState } from 'react';
 &nbsp;
-import { Popover, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Popover, useTheme } from '@mui/material';
 import { Button, Tooltip } from '@terraware/web-components';
 &nbsp;
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
@@ -299,17 +288,6 @@ import { FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
 &nbsp;
 import { FilterConfig } from './index';
 &nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(_</span>theme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  popoverContainer: {
-    '&amp; .MuiPaper-root': {
-      border: `1px solid ${_theme.palette.TwClrBaseGray300}`,
-      borderRadius: '8px',
-      overflow: 'visible',
-      width: '480px',
-    },
-  },
-}));
-&nbsp;
 interface IconFiltersProps {
   filters: FilterConfig[];
   setCurrentFilters: (filters: Record&lt;string, any&gt;) =&gt; void;
@@ -317,7 +295,7 @@ interface IconFiltersProps {
 }
 &nbsp;
 const IconFilters = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> filters, setCurrentFilters, currentFilters }: IconFiltersProps) =&gt; {</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
+  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
 &nbsp;
   const [anchorEl, setAnchorEl] = <span class="cstat-no" title="statement not covered" >useState&lt;null | HTMLElement&gt;(null);</span>
 &nbsp;
@@ -381,7 +359,14 @@ const IconFilters = <span class="cstat-no" title="statement not covered" ><span 
           vertical: 'top',
           horizontal: 'center',
         }}
-        className={classes.popoverContainer}
+        sx={{
+          '&amp; .MuiPaper-root': {
+            border: `1px solid ${theme.palette.TwClrBaseGray300}`,
+            borderRadius: '8px',
+            overflow: 'visible',
+            width: '480px',
+          },
+        }}
       &gt;
         &lt;FilterGroup
           initialFilters={currentFilters}
@@ -406,7 +391,7 @@ export default IconFilters;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-31T00:22:07.958Z
+                at 2024-05-31T21:27:27.890Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

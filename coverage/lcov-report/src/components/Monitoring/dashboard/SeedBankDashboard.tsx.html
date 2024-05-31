@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/101</span>
+                <span class='fraction'>0/103</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/95</span>
+                <span class='fraction'>0/98</span>
             </div>
         
             
@@ -334,36 +334,7 @@
 <a name='L269'></a><a href='#L269'>269</a>
 <a name='L270'></a><a href='#L270'>270</a>
 <a name='L271'></a><a href='#L271'>271</a>
-<a name='L272'></a><a href='#L272'>272</a>
-<a name='L273'></a><a href='#L273'>273</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L272'></a><a href='#L272'>272</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -409,6 +380,33 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -610,8 +608,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 &nbsp;
-import { Grid, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Grid, useTheme } from '@mui/material';
 &nbsp;
 import { listDeviceManagers } from 'src/api/deviceManager/deviceManager';
 import { listFacilityDevices } from 'src/api/facility/facility';
@@ -632,33 +629,6 @@ import { timePeriods } from './Common';
 import PVBatteryChart from './PVBatteryChart';
 import TemperatureHumidityChart from './TemperatureHumidityChart';
 &nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  graphContainer: {
-    backgroundColor: theme.palette.TwClrBg,
-    borderRadius: '24px',
-    padding: theme.spacing(3),
-  },
-  panelTitle: {
-    display: 'flex',
-    alignItems: 'center',
-    fontSize: '20px',
-    fontWeight: 600,
-    margin: theme.spacing(0, 0, 3, 1),
-&nbsp;
-    '&amp; p': {
-      margin: theme.spacing(0, 1),
-    },
-  },
-  panelIcon: {
-    fill: theme.palette.TwClrIcnSecondary,
-  },
-  panelValue: {
-    fontWeight: 600,
-    fontSize: '32px',
-    margin: 0,
-  },
-}));
-&nbsp;
 type SeedBankDashboardProps = {
   seedBank: Facility;
   monitoringPreferences: { [key: string]: unknown };
@@ -666,8 +636,8 @@ type SeedBankDashboardProps = {
 };
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >SeedBankDashboard(</span>props: SeedBankDashboardProps): JSX.Element {
-  const { isMobile, isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles({ isDesktop });</span>
+  const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
+  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
   const query = <span class="cstat-no" title="statement not covered" >useQuery();</span>
   const stateLocation = <span class="cstat-no" title="statement not covered" >useStateLocation();</span>
@@ -681,6 +651,33 @@ export default function <span class="fstat-no" title="function not covered" >See
   const [defaultSensor, setDefaultSensor] = <span class="cstat-no" title="statement not covered" >useState&lt;Device&gt;();</span>
   const tz = <span class="cstat-no" title="statement not covered" >useLocationTimeZone().get(seedBank);</span>
   const [tzSelected, setTzSelected] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;(tz.id);</span>
+&nbsp;
+  const graphContainerStyles = <span class="cstat-no" title="statement not covered" >{</span>
+    backgroundColor: theme.palette.TwClrBg,
+    borderRadius: '24px',
+    padding: theme.spacing(3),
+  };
+&nbsp;
+  const panelTitleStyles = <span class="cstat-no" title="statement not covered" >{</span>
+    display: 'flex',
+    alignItems: 'center',
+    fontSize: '20px',
+    fontWeight: 600,
+    margin: theme.spacing(0, 0, 3, 1),
+    '&amp; p': {
+      margin: theme.spacing(0, 1),
+    },
+  };
+&nbsp;
+  const panelIconStyles = <span class="cstat-no" title="statement not covered" >{</span>
+    fill: theme.palette.TwClrIcnSecondary,
+  };
+&nbsp;
+  const panelValueStyles = <span class="cstat-no" title="statement not covered" >{</span>
+    fontWeight: 600,
+    fontSize: '32px',
+    margin: 0,
+  };
 &nbsp;
   const onChangeTimeZone = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(n</span>ewTimeZone: TimeZoneDescription | undefined) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (newTimeZone) {</span>
@@ -831,30 +828,30 @@ export default function <span class="fstat-no" title="function not covered" >See
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Grid container spacing={3} marginTop={0}&gt;
       &lt;Grid item xs={gridSize()}&gt;
-        &lt;div className={classes.graphContainer}&gt;
-          &lt;div className={classes.panelTitle}&gt;
-            &lt;Icon name='chargingBattery' size='medium' className={classes.panelIcon} /&gt;
+        &lt;Box sx={graphContainerStyles}&gt;
+          &lt;Box sx={panelTitleStyles}&gt;
+            &lt;Icon name='chargingBattery' size='medium' style={panelIconStyles} /&gt;
             &lt;p&gt;{strings.PV_BATTERY_CHARGE}&lt;/p&gt;
-          &lt;/div&gt;
-          &lt;p className={classes.panelValue}&gt;{batteryLevel || strings.NO_DATA_YET}&lt;/p&gt;
-        &lt;/div&gt;
+          &lt;/Box&gt;
+          &lt;p style={panelValueStyles}&gt;{batteryLevel || strings.NO_DATA_YET}&lt;/p&gt;
+        &lt;/Box&gt;
       &lt;/Grid&gt;
       &lt;Grid item xs={gridSize()}&gt;
-        &lt;div className={classes.graphContainer}&gt;
-          &lt;div className={classes.panelTitle}&gt;
-            &lt;Icon name='wifi' size='medium' className={classes.panelIcon} /&gt;
+        &lt;Box sx={graphContainerStyles}&gt;
+          &lt;Box sx={panelTitleStyles}&gt;
+            &lt;Icon name='wifi' size='medium' style={panelIconStyles} /&gt;
             &lt;p&gt;{strings.SEED_BANK_INTERNET}&lt;/p&gt;
-          &lt;/div&gt;
-          &lt;p className={classes.panelValue}&gt;{deviceManager?.isOnline ? strings.CONNECTED : strings.NOT_CONNECTED}&lt;/p&gt;
-        &lt;/div&gt;
+          &lt;/Box&gt;
+          &lt;p style={panelValueStyles}&gt;{deviceManager?.isOnline ? strings.CONNECTED : strings.NOT_CONNECTED}&lt;/p&gt;
+        &lt;/Box&gt;
       &lt;/Grid&gt;
       &lt;Grid item xs={gridSize()}&gt;
-        &lt;div className={classes.graphContainer}&gt;
-          &lt;div className={classes.panelTitle}&gt;
+        &lt;Box sx={graphContainerStyles}&gt;
+          &lt;Box sx={panelTitleStyles}&gt;
             &lt;p&gt;{strings.TIME_ZONE}&lt;/p&gt;
-          &lt;/div&gt;
+          &lt;/Box&gt;
           &lt;TimeZoneSelector selectedTimeZone={tzSelected} onTimeZoneSelected={onChangeTimeZone} /&gt;
-        &lt;/div&gt;
+        &lt;/Box&gt;
       &lt;/Grid&gt;
       &lt;Grid item xs={12}&gt;
         &lt;TemperatureHumidityChart
@@ -886,7 +883,7 @@ export default function <span class="fstat-no" title="function not covered" >See
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-31T00:22:07.958Z
+                at 2024-05-31T21:27:27.890Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

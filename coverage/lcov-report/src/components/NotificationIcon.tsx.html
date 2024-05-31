@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
@@ -120,7 +120,23 @@
 <a name='L55'></a><a href='#L55'>55</a>
 <a name='L56'></a><a href='#L56'>56</a>
 <a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -136,26 +152,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -180,56 +184,58 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
 &nbsp;
 import { CalendarToday, Warning, WifiTethering } from '@mui/icons-material';
-import { Fab, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Fab, useTheme } from '@mui/material';
 &nbsp;
 import { NotificationCriticality } from 'src/types/Notifications';
-&nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  fab: {
-    width: '36px',
-    height: '36px',
-    '&amp;:hover': {
-      backgroundColor: theme.palette.secondary,
-    },
-  },
-  stateNotification: {
-    backgroundColor: theme.palette.accent[1],
-    '&amp;:hover': {
-      backgroundColor: theme.palette.accent[1],
-    },
-  },
-  dateNotification: {
-    backgroundColor: theme.palette.accent[2],
-    '&amp;:hover': {
-      backgroundColor: theme.palette.accent[2],
-    },
-  },
-}));
 &nbsp;
 interface Props {
   type: NotificationCriticality;
 }
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >NotificationIcon(</span>{ type }: Props): JSX.Element {
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
+  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
+&nbsp;
+  const fabStyles = <span class="cstat-no" title="statement not covered" >{</span>
+    width: '36px',
+    height: '36px',
+    '&amp;:hover': {
+      backgroundColor: theme.palette.secondary,
+    },
+  };
+&nbsp;
+  const stateNotificationStyles = <span class="cstat-no" title="statement not covered" >{</span>
+    ...fabStyles,
+    backgroundColor: theme.palette.accent[1],
+    '&amp;:hover': {
+      backgroundColor: theme.palette.accent[1],
+    },
+  };
+&nbsp;
+  const dateNotificationStyles = <span class="cstat-no" title="statement not covered" >{</span>
+    ...fabStyles,
+    backgroundColor: theme.palette.accent[2],
+    '&amp;:hover': {
+      backgroundColor: theme.palette.accent[2],
+    },
+  };
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  if (type === 'Error') {</span>
 <span class="cstat-no" title="statement not covered" >    return (</span>
-      &lt;Fab color='secondary' aria-label='add' className={classes.fab}&gt;
+      &lt;Fab color='secondary' aria-label='add' sx={fabStyles}&gt;
         &lt;Warning htmlColor='#fff' fontSize='small' /&gt;
       &lt;/Fab&gt;
     );
   }
 <span class="cstat-no" title="statement not covered" >  if (type === 'Info') {</span>
 <span class="cstat-no" title="statement not covered" >    return (</span>
-      &lt;Fab color='secondary' aria-label='add' className={`${classes.fab} ${classes.dateNotification}`}&gt;
+      &lt;Fab color='secondary' aria-label='add' sx={dateNotificationStyles}&gt;
         &lt;CalendarToday htmlColor='#fff' fontSize='small' /&gt;
       &lt;/Fab&gt;
     );
   }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Fab color='secondary' aria-label='add' className={`${classes.fab} ${classes.stateNotification}`}&gt;
+    &lt;Fab color='secondary' aria-label='add' sx={stateNotificationStyles}&gt;
       &lt;WifiTethering htmlColor='#fff' fontSize='small' /&gt;
     &lt;/Fab&gt;
   );
@@ -241,7 +247,7 @@ export default function <span class="fstat-no" title="function not covered" >Not
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-05-31T00:22:07.958Z
+                at 2024-05-31T21:27:27.890Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
