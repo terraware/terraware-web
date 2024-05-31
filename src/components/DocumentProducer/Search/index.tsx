@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react';
 
-import { Grid, Popover, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Grid, Popover, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { Tooltip } from '@terraware/web-components';
 import { Button, PillList } from '@terraware/web-components';
@@ -9,20 +8,6 @@ import { Button, PillList } from '@terraware/web-components';
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import strings from 'src/strings';
 import { FieldOptionsMap } from 'src/types/Search';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  searchField: {
-    width: '300px',
-  },
-  popoverContainer: {
-    '& .MuiPaper-root': {
-      border: `1px solid ${theme.palette.TwClrBaseGray300}`,
-      borderRadius: '8px',
-      overflow: 'visible',
-      width: '320px',
-    },
-  },
-}));
 
 export type SearchFiltersProp = {
   filterColumns: FilterField[];
@@ -41,7 +26,7 @@ export type SearchProps = {
 };
 
 const Search = ({ searchValue, onSearch, filterProps }: SearchProps): JSX.Element => {
-  const classes = useStyles();
+  const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleFilterClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -82,11 +67,11 @@ const Search = ({ searchValue, onSearch, filterProps }: SearchProps): JSX.Elemen
           label=''
           id='search'
           type='text'
-          className={classes.searchField}
           iconRight='cancel'
           onClickRightIcon={() => onSearch('')}
           value={searchValue}
           onChange={(value: any) => onSearch(value as string)}
+          styles={{ textarea: { width: '300px' } }}
         />
         {filterProps && (
           <>
@@ -112,7 +97,14 @@ const Search = ({ searchValue, onSearch, filterProps }: SearchProps): JSX.Elemen
                 vertical: 'top',
                 horizontal: 'center',
               }}
-              className={classes.popoverContainer}
+              sx={{
+                '& .MuiPaper-root': {
+                  border: `1px solid ${theme.palette.TwClrBaseGray300}`,
+                  borderRadius: '8px',
+                  overflow: 'visible',
+                  width: '320px',
+                },
+              }}
             >
               <FilterGroup
                 initialFilters={filterProps.filters}

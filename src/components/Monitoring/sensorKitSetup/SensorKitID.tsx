@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { makeStyles } from '@mui/styles';
+import { Box } from '@mui/material';
 
 import { listDeviceManagers } from 'src/api/deviceManager/deviceManager';
 import strings from 'src/strings';
@@ -11,16 +11,6 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import TextField from '../../common/Textfield/Textfield';
 import FlowStep, { FlowError } from './FlowStep';
 
-interface StyleProps {
-  isMobile: boolean;
-}
-
-const useStyles = makeStyles(() => ({
-  sensorKitId: {
-    width: (props: StyleProps) => (props.isMobile ? '100%' : '432px'),
-  },
-}));
-
 type SensorKitIDProps = {
   seedBank: Facility;
   active: boolean;
@@ -30,7 +20,6 @@ type SensorKitIDProps = {
 
 export default function SensorKitID(props: SensorKitIDProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
-  const classes = useStyles({ isMobile });
   const { seedBank, active, completed, onNext } = props;
   const [sensorKitId, setSensorKitId] = useState<string | undefined>();
   const [error, setError] = useState<string | undefined>();
@@ -108,7 +97,7 @@ export default function SensorKitID(props: SensorKitIDProps): JSX.Element {
       completed={completed}
       footerError={!!error}
       footer={
-        <div className={classes.sensorKitId}>
+        <Box sx={{ width: isMobile ? '100%' : '432px' }}>
           <TextField
             id='sensor-kit-id'
             label={strings.ENTER_SIX_DIGIT_KEY}
@@ -118,7 +107,7 @@ export default function SensorKitID(props: SensorKitIDProps): JSX.Element {
             errorText={error}
             placeholder={strings.SENSOR_KIT_ID_PLACEHOLDER}
           />
-        </div>
+        </Box>
       }
     >
       <div>{strings.SENSOR_KIT_SET_UP_SENSOR_KIT_ID_DESCRIPTION}</div>

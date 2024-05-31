@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { Box, Theme, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, useTheme } from '@mui/material';
 import { DropdownItem, PopoverMenu } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
@@ -29,32 +28,12 @@ export const useMapViewStyle = (): [MapViewStyle, (style: MapViewStyle) => void]
   );
 };
 
-const useStyles = makeStyles((theme: Theme) => ({
-  viewControl: {
-    '& .MuiButtonBase-root': {
-      padding: 0,
-    },
-    '& .MuiButtonBase-root.MuiMenuItem-root': {
-      fontSize: '12px',
-    },
-    '& svg': {
-      marginLeft: 0,
-    },
-  },
-  viewControlSelected: {
-    fontSize: '12px',
-    paddingLeft: theme.spacing(0.5),
-    color: theme.palette.TwClrTxt,
-  },
-}));
-
 export type MapViewStyleControlProps = {
   mapViewStyle?: MapViewStyle;
   onChangeMapViewStyle: (style: MapViewStyle) => void;
 };
 
 const MapViewStyleControl = ({ mapViewStyle, onChangeMapViewStyle }: MapViewStyleControlProps): JSX.Element | null => {
-  const classes = useStyles();
   const theme = useTheme();
   const { activeLocale } = useLocalization();
   const mapPortalContainer = useMapPortalContainer();
@@ -90,14 +69,29 @@ const MapViewStyleControl = ({ mapViewStyle, onChangeMapViewStyle }: MapViewStyl
         borderRadius: '4px',
         display: 'flex',
         alignItems: 'center',
+        '& .MuiButtonBase-root': {
+          padding: 0,
+        },
+        '& .MuiButtonBase-root.MuiMenuItem-root': {
+          fontSize: '12px',
+        },
+        '& svg': {
+          marginLeft: 0,
+        },
       }}
-      className={classes.viewControl}
     >
       <PopoverMenu
         anchor={
-          <span className={classes.viewControlSelected}>
+          <Box
+            component='span'
+            sx={{
+              fontSize: '12px',
+              paddingLeft: theme.spacing(0.5),
+              color: theme.palette.TwClrTxt,
+            }}
+          >
             {mapViewStyle === 'Outdoors' ? strings.OUTDOORS : strings.SATELLITE}
-          </span>
+          </Box>
         }
         menuSections={[viewOptions]}
         onClick={setMapViewStyle}

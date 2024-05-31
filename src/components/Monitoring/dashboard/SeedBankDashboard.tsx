@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Grid, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Grid, useTheme } from '@mui/material';
 
 import { listDeviceManagers } from 'src/api/deviceManager/deviceManager';
 import { listFacilityDevices } from 'src/api/facility/facility';
@@ -23,33 +22,6 @@ import { timePeriods } from './Common';
 import PVBatteryChart from './PVBatteryChart';
 import TemperatureHumidityChart from './TemperatureHumidityChart';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  graphContainer: {
-    backgroundColor: theme.palette.TwClrBg,
-    borderRadius: '24px',
-    padding: theme.spacing(3),
-  },
-  panelTitle: {
-    display: 'flex',
-    alignItems: 'center',
-    fontSize: '20px',
-    fontWeight: 600,
-    margin: theme.spacing(0, 0, 3, 1),
-
-    '& p': {
-      margin: theme.spacing(0, 1),
-    },
-  },
-  panelIcon: {
-    fill: theme.palette.TwClrIcnSecondary,
-  },
-  panelValue: {
-    fontWeight: 600,
-    fontSize: '32px',
-    margin: 0,
-  },
-}));
-
 type SeedBankDashboardProps = {
   seedBank: Facility;
   monitoringPreferences: { [key: string]: unknown };
@@ -57,8 +29,8 @@ type SeedBankDashboardProps = {
 };
 
 export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.Element {
-  const { isMobile, isDesktop } = useDeviceInfo();
-  const classes = useStyles({ isDesktop });
+  const { isMobile } = useDeviceInfo();
+  const theme = useTheme();
   const navigate = useNavigate();
   const query = useQuery();
   const stateLocation = useStateLocation();
@@ -72,6 +44,33 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
   const [defaultSensor, setDefaultSensor] = useState<Device>();
   const tz = useLocationTimeZone().get(seedBank);
   const [tzSelected, setTzSelected] = useState<string>(tz.id);
+
+  const graphContainerStyles = {
+    backgroundColor: theme.palette.TwClrBg,
+    borderRadius: '24px',
+    padding: theme.spacing(3),
+  };
+
+  const panelTitleStyles = {
+    display: 'flex',
+    alignItems: 'center',
+    fontSize: '20px',
+    fontWeight: 600,
+    margin: theme.spacing(0, 0, 3, 1),
+    '& p': {
+      margin: theme.spacing(0, 1),
+    },
+  };
+
+  const panelIconStyles = {
+    fill: theme.palette.TwClrIcnSecondary,
+  };
+
+  const panelValueStyles = {
+    fontWeight: 600,
+    fontSize: '32px',
+    margin: 0,
+  };
 
   const onChangeTimeZone = (newTimeZone: TimeZoneDescription | undefined) => {
     if (newTimeZone) {
@@ -222,30 +221,30 @@ export default function SeedBankDashboard(props: SeedBankDashboardProps): JSX.El
   return (
     <Grid container spacing={3} marginTop={0}>
       <Grid item xs={gridSize()}>
-        <div className={classes.graphContainer}>
-          <div className={classes.panelTitle}>
-            <Icon name='chargingBattery' size='medium' className={classes.panelIcon} />
+        <Box sx={graphContainerStyles}>
+          <Box sx={panelTitleStyles}>
+            <Icon name='chargingBattery' size='medium' style={panelIconStyles} />
             <p>{strings.PV_BATTERY_CHARGE}</p>
-          </div>
-          <p className={classes.panelValue}>{batteryLevel || strings.NO_DATA_YET}</p>
-        </div>
+          </Box>
+          <p style={panelValueStyles}>{batteryLevel || strings.NO_DATA_YET}</p>
+        </Box>
       </Grid>
       <Grid item xs={gridSize()}>
-        <div className={classes.graphContainer}>
-          <div className={classes.panelTitle}>
-            <Icon name='wifi' size='medium' className={classes.panelIcon} />
+        <Box sx={graphContainerStyles}>
+          <Box sx={panelTitleStyles}>
+            <Icon name='wifi' size='medium' style={panelIconStyles} />
             <p>{strings.SEED_BANK_INTERNET}</p>
-          </div>
-          <p className={classes.panelValue}>{deviceManager?.isOnline ? strings.CONNECTED : strings.NOT_CONNECTED}</p>
-        </div>
+          </Box>
+          <p style={panelValueStyles}>{deviceManager?.isOnline ? strings.CONNECTED : strings.NOT_CONNECTED}</p>
+        </Box>
       </Grid>
       <Grid item xs={gridSize()}>
-        <div className={classes.graphContainer}>
-          <div className={classes.panelTitle}>
+        <Box sx={graphContainerStyles}>
+          <Box sx={panelTitleStyles}>
             <p>{strings.TIME_ZONE}</p>
-          </div>
+          </Box>
           <TimeZoneSelector selectedTimeZone={tzSelected} onTimeZoneSelected={onChangeTimeZone} />
-        </div>
+        </Box>
       </Grid>
       <Grid item xs={12}>
         <TemperatureHumidityChart

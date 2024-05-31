@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, useTheme } from '@mui/material';
 
 import { listFacilityDevicesById } from 'src/api/facility/facility';
 import getHelpEmail from 'src/components/common/HelpEmail';
@@ -12,22 +11,6 @@ import { Facility } from 'src/types/Facility';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import FlowStep, { FlowError } from './FlowStep';
-
-interface StyleProps {
-  isMobile: boolean;
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  detectSensors: {
-    width: (props: StyleProps) => (props.isMobile ? '100%' : '432px'),
-    fontStyle: 'italic',
-    display: 'flex',
-    alignItems: 'center',
-  },
-  detectInProgress: {
-    marginLeft: theme.spacing(2),
-  },
-}));
 
 const TOTAL_SENSORS = 14;
 
@@ -40,7 +23,7 @@ type DetectSensorsProps = {
 
 export default function DetectSensors(props: DetectSensorsProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
-  const classes = useStyles({ isMobile });
+  const theme = useTheme();
   const { seedBank, active, completed, onNext } = props;
   const [flowError, setFlowError] = useState<FlowError | undefined>();
   const [initialized, setInitialized] = useState<boolean>(false);
@@ -143,18 +126,25 @@ export default function DetectSensors(props: DetectSensorsProps): JSX.Element {
       title={strings.SENSOR_KIT_SET_UP_DETECT_SENSORS}
       completed={completed}
       footer={
-        <div className={classes.detectSensors}>
+        <Box
+          sx={{
+            width: isMobile ? '100%' : '432px',
+            fontStyle: 'italic',
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
           <ProgressCircle
             size='small'
             determinate={true}
             value={(sensorsFound.length / TOTAL_SENSORS) * 100}
             hideValue={true}
           />
-          <span className={classes.detectInProgress}>
+          <Box component='span' sx={{ marginLeft: theme.spacing(2) }}>
             {detectFinished && strings.ALL_SENSORS_FOUND}
             {!detectFinished && strings.formatString(strings.SENSORS_FOUND, sensorsFound.length, TOTAL_SENSORS)}
-          </span>
-        </div>
+          </Box>
+        </Box>
       }
     >
       <div>{strings.SENSOR_KIT_SET_UP_DETECT_SENSORS_DESCRIPTION}</div>

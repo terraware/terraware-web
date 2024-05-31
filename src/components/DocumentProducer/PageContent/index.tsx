@@ -1,22 +1,7 @@
 import React from 'react';
 
-import { Box, CircularProgress, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import { Button, IconName } from '@terraware/web-components';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  spinner: {
-    height: '40px',
-    width: '40px',
-    position: 'relative',
-    margin: 'auto',
-    '& .MuiCircularProgress-svg': {
-      color: theme.palette.TwClrIcnBrand,
-      height: '40px',
-      width: '40px',
-    },
-  },
-}));
 
 export type SecondaryButtonProps = {
   title?: string;
@@ -33,12 +18,23 @@ export type PageContentProps = {
 
 const PageContent = ({ title, secondaryButton, children, styles }: PageContentProps): JSX.Element => {
   const theme = useTheme();
-  const classes = useStyles();
 
   if (!children) {
     return (
       <Box marginTop='32px' display='flex' flexDirection='row' flexGrow={1}>
-        <CircularProgress className={classes.spinner} />
+        <CircularProgress
+          sx={{
+            height: '40px',
+            width: '40px',
+            position: 'relative',
+            margin: 'auto',
+            '& .MuiCircularProgress-svg': {
+              color: theme.palette.TwClrIcnBrand,
+              height: '40px',
+              width: '40px',
+            },
+          }}
+        />
       </Box>
     );
   }

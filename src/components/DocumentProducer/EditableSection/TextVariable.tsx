@@ -1,23 +1,8 @@
 import React from 'react';
 
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, useTheme } from '@mui/material';
 import { Icon, IconName } from '@terraware/web-components';
 import { RenderElementProps } from 'slate-react';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  variable: {
-    color: theme.palette.TwClrTxt,
-    backgroundColor: '#e9e2ba',
-    margin: '0 1px',
-    padding: '0 1px',
-    '& .icon-container': {
-      position: 'relative',
-      top: '3px',
-      cursor: 'pointer',
-    },
-  },
-}));
 
 type TextVariableProps = RenderElementProps & {
   icon?: IconName;
@@ -26,10 +11,25 @@ type TextVariableProps = RenderElementProps & {
 };
 
 export default function TextVariable(props: TextVariableProps): React.ReactElement {
-  const classes = useStyles();
+  const theme = useTheme();
 
   return (
-    <span contentEditable={false} className={classes.variable} {...props.attributes}>
+    <Box
+      component='span'
+      contentEditable={false}
+      sx={{
+        color: theme.palette.TwClrTxt,
+        backgroundColor: '#e9e2ba',
+        margin: '0 1px',
+        padding: '0 1px',
+        '& .icon-container': {
+          position: 'relative',
+          top: '3px',
+          cursor: 'pointer',
+        },
+      }}
+      {...props.attributes}
+    >
       {props.children}
       {props.displayValue}
       &nbsp;
@@ -38,6 +38,6 @@ export default function TextVariable(props: TextVariableProps): React.ReactEleme
           <Icon name={props.icon} />
         </span>
       )}
-    </span>
+    </Box>
   );
 }

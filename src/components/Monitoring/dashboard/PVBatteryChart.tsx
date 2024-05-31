@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 import { Chart } from 'chart.js';
 import 'chartjs-adapter-luxon';
@@ -32,55 +31,6 @@ declare global {
   }
 }
 
-interface StyleProps {
-  isMobile: boolean;
-  isDesktop: boolean;
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  graphContainer: {
-    backgroundColor: theme.palette.TwClrBg,
-    borderRadius: '24px',
-    padding: '24px',
-  },
-  graphTitleContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    margin: theme.spacing(0, 0, 3, 1),
-  },
-  graphTitleIcon: {
-    fill: theme.palette.TwClrIcnSecondary,
-  },
-  graphTitle: {
-    fontWeight: 600,
-    fontSize: '20px',
-    margin: theme.spacing(0, 1),
-  },
-  dropDownsContainer: {
-    display: 'flex',
-  },
-  chartContainer: {
-    marginTop: '40px',
-  },
-  legendContainer: {
-    marginBottom: '32px',
-    padding: (props: StyleProps) => (props.isMobile ? 0 : '0 78px 0 41px'),
-
-    '& ul': {
-      display: (props: StyleProps) => (props.isMobile ? 'block' : 'flex'),
-
-      '& li': {
-        marginLeft: (props: StyleProps) => (props.isMobile ? 0 : '10px'),
-      },
-    },
-  },
-  chartResizableParent: {
-    position: 'relative',
-    width: (props: StyleProps) => (props.isDesktop ? 'calc(100vw - 300px)' : 'calc(100vw - 136px)'),
-    paddingRight: theme.spacing(4),
-  },
-}));
-
 type PVBatteryChartProps = {
   BMU?: Device;
   defaultTimePeriod?: string;
@@ -90,7 +40,7 @@ type PVBatteryChartProps = {
 
 export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element {
   const { isMobile, isDesktop } = useDeviceInfo();
-  const classes = useStyles({ isMobile, isDesktop });
+  const theme = useTheme();
   const { BMU, defaultTimePeriod, updateTimePeriodPreferences, timeZone } = props;
   const [selectedPVBatteryPeriod, setSelectedPVBatteryPeriod] = useState<string>();
   const { activeLocale } = useLocalization();
@@ -252,25 +202,63 @@ export default function PVBatteryChart(props: PVBatteryChartProps): JSX.Element 
   const pvBatteryRef = React.useRef<HTMLCanvasElement>(null);
 
   return (
-    <div className={classes.graphContainer}>
-      <div className={classes.graphTitleContainer}>
-        <Icon name='futures' size='medium' className={classes.graphTitleIcon} />
-        <p className={classes.graphTitle}>{strings.PV_BATTERY}</p>
-      </div>
-      <div className={classes.dropDownsContainer}>
+    <Box
+      sx={{
+        backgroundColor: theme.palette.TwClrBg,
+        borderRadius: '24px',
+        padding: '24px',
+      }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          margin: theme.spacing(0, 0, 3, 1),
+        }}
+      >
+        <Icon name='futures' size='medium' style={{ fill: theme.palette.TwClrIcnSecondary }} />
+        <p
+          style={{
+            fontWeight: 600,
+            fontSize: '20px',
+            margin: theme.spacing(0, 1),
+          }}
+        >
+          {strings.PV_BATTERY}
+        </p>
+      </Box>
+      <Box sx={{ display: 'flex' }}>
         <Dropdown
           options={timePeriods()}
           onChange={onChangePVBatterySelectedPeriod}
           selectedValue={selectedPVBatteryPeriod}
           label={strings.TIME_PERIOD}
         />
-      </div>
-      <div className={classes.chartContainer}>
-        <div id='legend-container-pvbattery' className={classes.legendContainer} />
-        <div className={classes.chartResizableParent}>
+      </Box>
+      <Box sx={{ marginTop: '40px' }}>
+        <Box
+          id='legend-container-pvbattery'
+          sx={{
+            marginBottom: '32px',
+            padding: isMobile ? 0 : '0 78px 0 41px',
+            '& ul': {
+              display: isMobile ? 'block' : 'flex',
+              '& li': {
+                marginLeft: isMobile ? 0 : '10px',
+              },
+            },
+          }}
+        />
+        <Box
+          sx={{
+            position: 'relative',
+            width: isDesktop ? 'calc(100vw - 300px)' : 'calc(100vw - 136px)',
+            paddingRight: theme.spacing(4),
+          }}
+        >
           <canvas id='pvBatteryChart' ref={pvBatteryRef} />
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   );
 }
