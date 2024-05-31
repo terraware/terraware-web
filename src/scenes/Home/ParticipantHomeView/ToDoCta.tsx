@@ -29,7 +29,14 @@ const ToDoCta = ({ toDo }: ToDoCtaProps) => {
     }
   }, [goToDeliverable, goToModuleEventSession, toDo]);
 
-  return <Button style={isMobile ? { width: '100%' } : {}} label={strings.VIEW} onClick={handleOnClick} />;
+  return (
+    <Button
+      priority={'secondary'}
+      style={isMobile ? { width: '100%' } : {}}
+      label={strings.VIEW}
+      onClick={handleOnClick}
+    />
+  );
 };
 
 export default ToDoCta;
