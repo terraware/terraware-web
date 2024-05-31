@@ -1,3 +1,1 @@
-95e2f17fc6 SW-5417: Remove makeStyles everywhere in Terraware web (#1) (#2674)
-d3eeb7e8cf SW-5420 Fix column widths in species projects list view (#2671)
-fbefe0c810 SW-5421 Update with backend types when fetching all species for a given project ID (#2667)
+d4d41904b1 SW-5023: Accessions: Ability to add and edit photo files in web app (#2665)
