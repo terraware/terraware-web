@@ -1,4 +1,5 @@
 import React, { Box, Grid, Typography, useTheme } from '@mui/material';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Button from 'src/components/common/button/Button';
 import useNavigateTo from 'src/hooks/useNavigateTo';
@@ -15,6 +16,7 @@ interface ModuleEntryProps {
 const ModuleEntry = ({ module, projectId }: ModuleEntryProps) => {
   const theme = useTheme();
   const { goToModule } = useNavigateTo();
+  const { isDesktop, isMobile } = useDeviceInfo();
 
   return (
     <Box
@@ -23,24 +25,34 @@ const ModuleEntry = ({ module, projectId }: ModuleEntryProps) => {
       sx={{ '&:last-child': { border: 'none' } }}
     >
       <Grid container display={'flex'} justifyContent={'space-between'} marginBottom={theme.spacing(1)}>
-        <Grid item>
+        <Grid item xs={isDesktop ? undefined : 12}>
           <Typography
             component={'span'}
             fontSize={'20px'}
             fontWeight={600}
             lineHeight={'28px'}
             marginRight={theme.spacing(3)}
+            whiteSpace={'nowrap'}
           >
             {module.title}
           </Typography>
 
+          {isMobile && <br />}
+
           {module?.startDate && module?.endDate && (
-            <Typography component={'span'}>{getDateRangeString(module?.startDate, module?.endDate)}</Typography>
+            <Typography component={'span'} fontSize={'16px'} fontWeight={400} lineHeight={'24px'} whiteSpace={'nowrap'}>
+              {getDateRangeString(module?.startDate, module?.endDate)}
+            </Typography>
           )}
         </Grid>
 
-        <Grid item>
-          <Button onClick={() => goToModule(projectId, module.id)} label={strings.VIEW} priority={'secondary'} />
+        <Grid item xs={isDesktop ? undefined : 12}>
+          <Button
+            onClick={() => goToModule(projectId, module.id)}
+            label={strings.VIEW}
+            priority={'secondary'}
+            style={isMobile ? { width: '100%' } : {}}
+          />
         </Grid>
       </Grid>
 

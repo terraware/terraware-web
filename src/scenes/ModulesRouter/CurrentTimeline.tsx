@@ -1,4 +1,5 @@
 import React, { Box, Grid, Typography, useTheme } from '@mui/material';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
@@ -7,6 +8,7 @@ const CurrentTimeline = (): JSX.Element => {
   const theme = useTheme();
 
   const { currentParticipant } = useParticipantData();
+  const { isDesktop } = useDeviceInfo();
 
   // TODO these will probably come from the BE, not sure if they will be attached to the project, or cohort, or some
   // other data model, so for now they are hard coded.
@@ -55,7 +57,12 @@ const CurrentTimeline = (): JSX.Element => {
           <Typography fontWeight={600}>{strings.CURRENT_TIMELINE}</Typography>
         </Grid>
         <Grid item>
-          <Grid display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
+          <Grid
+            display={'flex'}
+            flexDirection={isDesktop ? 'row' : 'column'}
+            justifyContent={'space-between'}
+            alignItems={'center'}
+          >
             {displayPhases.map((phase, index) => {
               const isActivePhase = phase.phaseEnum === currentParticipant?.cohortPhase;
 
@@ -65,33 +72,44 @@ const CurrentTimeline = (): JSX.Element => {
                     <Grid item key={index + 0.5}>
                       <Box
                         borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}
-                        width={'45px'}
+                        borderLeft={`1px solid ${theme.palette.TwClrBgTertiary}`}
+                        height={isDesktop ? undefined : '40px'}
+                        width={isDesktop ? '40px' : undefined}
                         marginX={theme.spacing(2)}
-                        marginTop={theme.spacing(3)}
+                        marginY={isDesktop ? undefined : theme.spacing(3)}
                       />
                     </Grid>
                   ) : null}
-                  <Grid item key={index} color={theme.palette.TwClrBaseBlack} alignSelf={'start'}>
-                    <Box
-                      bgcolor={isActivePhase ? theme.palette.TwClrBgBrand : ''}
-                      width={'100%'}
-                      marginBottom={theme.spacing(1)}
-                      borderRadius={theme.spacing(0.5)}
-                      padding={theme.spacing(0.5)}
-                      minHeight={theme.spacing(3)}
-                    >
-                      {isActivePhase ? (
-                        <Typography
-                          color={theme.palette.TwClrBaseWhite}
-                          fontWeight={600}
-                          fontSize={'12px'}
-                          lineHeight={'16px'}
-                          textAlign={'center'}
-                        >
-                          {strings.YOU_ARE_HERE}
-                        </Typography>
-                      ) : null}
-                    </Box>
+                  <Grid
+                    item
+                    key={index}
+                    color={theme.palette.TwClrBaseBlack}
+                    alignSelf={'start'}
+                    xs={isDesktop ? undefined : 12}
+                  >
+                    {(isDesktop || isActivePhase) && (
+                      <Box
+                        bgcolor={isActivePhase ? theme.palette.TwClrBgBrand : ''}
+                        width={'100%'}
+                        marginBottom={theme.spacing(1)}
+                        borderRadius={theme.spacing(0.5)}
+                        padding={theme.spacing(0.5)}
+                        minHeight={theme.spacing(3)}
+                      >
+                        {isActivePhase && (
+                          <Typography
+                            color={theme.palette.TwClrBaseWhite}
+                            fontWeight={600}
+                            fontSize={'12px'}
+                            lineHeight={'16px'}
+                            textAlign={'center'}
+                          >
+                            {strings.YOU_ARE_HERE}
+                          </Typography>
+                        )}
+                      </Box>
+                    )}
+
                     <Typography fontWeight={600} marginBottom={theme.spacing(1)}>
                       {phase.phase}
                     </Typography>
