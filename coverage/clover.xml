@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1717202567594" clover="3.2.0">
-  <project timestamp="1717202567594" name="All files">
-    <metrics statements="22255" coveredstatements="929" conditionals="14034" coveredconditionals="228" methods="6928" coveredmethods="162" elements="43217" coveredelements="1319" complexity="0" loc="22255" ncloc="22255" packages="209" files="981" classes="981"/>
+<coverage generated="1717202986140" clover="3.2.0">
+  <project timestamp="1717202986140" name="All files">
+    <metrics statements="22258" coveredstatements="929" conditionals="14055" coveredconditionals="228" methods="6928" coveredmethods="162" elements="43241" coveredelements="1319" complexity="0" loc="22258" ncloc="22258" packages="209" files="981" classes="981"/>
     <package name="src">
       <metrics statements="161" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -15349,7 +15349,7 @@
         <line num="25" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
-        <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="32" count="0" type="stmt"/>
       </file>
       <file name="ToDoDate.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/ParticipantHomeView/ToDoDate.tsx">
         <metrics statements="9" coveredstatements="0" conditionals="9" coveredconditionals="0" methods="2" coveredmethods="0"/>
@@ -17049,26 +17049,28 @@
       </file>
     </package>
     <package name="src.scenes.ModulesRouter">
-      <metrics statements="90" coveredstatements="0" conditionals="68" coveredconditionals="0" methods="28" coveredmethods="0"/>
+      <metrics statements="93" coveredstatements="0" conditionals="89" coveredconditionals="0" methods="28" coveredmethods="0"/>
       <file name="CurrentTimeline.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ModulesRouter/CurrentTimeline.tsx">
-        <metrics statements="11" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="3" coveredmethods="0"/>
-        <line num="6" count="0" type="stmt"/>
+        <metrics statements="12" coveredstatements="0" conditionals="19" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
-        <line num="9" count="0" type="stmt"/>
-        <line num="13" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
-        <line num="47" count="0" type="stmt"/>
-        <line num="48" count="0" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="60" count="0" type="stmt"/>
-        <line num="62" count="0" type="stmt"/>
-      </file>
-      <file name="ListModulesContent.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ModulesRouter/ListModulesContent.tsx">
-        <metrics statements="3" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="8" count="0" type="stmt"/>
         <line num="10" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+      </file>
+      <file name="ListModulesContent.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ModulesRouter/ListModulesContent.tsx">
+        <metrics statements="4" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
       </file>
       <file name="ListView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ModulesRouter/ListView.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -17121,12 +17123,13 @@
         <line num="80" count="0" type="stmt"/>
       </file>
       <file name="ModuleEntry.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ModulesRouter/ModuleEntry.tsx">
-        <metrics statements="5" coveredstatements="0" conditionals="5" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="15" count="0" type="stmt"/>
+        <metrics statements="6" coveredstatements="0" conditionals="13" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="16" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
       </file>
       <file name="ModuleEventSessionView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ModulesRouter/ModuleEventSessionView.tsx">
         <metrics statements="17" coveredstatements="0" conditionals="26" coveredconditionals="0" methods="6" coveredmethods="0"/>
