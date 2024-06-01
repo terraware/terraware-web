@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react';
 
 import { Box, Grid, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Message } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
@@ -10,21 +9,12 @@ import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
 import { ParticipantProjectSpecies } from 'src/types/ParticipantProjectSpecies';
 
-const useStyles = makeStyles(() => ({
-  icon: {
-    marginLeft: '-1px',
-    marginTop: '-1px',
-  },
-}));
-
 interface RejectedBoxProps {
   participantProjectSpecies: ParticipantProjectSpecies;
   onSubmit: (feedback: string) => void;
 }
 
 const RejectedBox = ({ participantProjectSpecies, onSubmit }: RejectedBoxProps) => {
-  const classes = useStyles();
-
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [feedback, setFeedback] = useState(participantProjectSpecies.feedback || '');
 
@@ -48,13 +38,16 @@ const RejectedBox = ({ participantProjectSpecies, onSubmit }: RejectedBoxProps) 
               <Typography>{participantProjectSpecies.feedback}</Typography>
               <Box textAlign='right'>
                 <Button
-                  className={classes.icon}
                   icon='iconEdit'
                   onClick={toggleDialog}
                   priority='secondary'
                   size='small'
                   type='passive'
                   label={strings.EDIT_FEEDBACK}
+                  style={{
+                    marginLeft: '-1px',
+                    marginTop: '-1px',
+                  }}
                 />
               </Box>
             </Box>

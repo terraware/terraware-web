@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 
 import { useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
@@ -11,9 +11,10 @@ type BackToLinkProps = {
   to: string;
   className?: string;
   replace?: boolean;
+  style?: CSSProperties;
 };
 
-export default function BackToLink({ id, name, to, className, replace }: BackToLinkProps): JSX.Element {
+export default function BackToLink({ id, name, to, className, replace, style = {} }: BackToLinkProps): JSX.Element {
   const theme = useTheme();
 
   return (
@@ -26,6 +27,7 @@ export default function BackToLink({ id, name, to, className, replace }: BackToL
         alignItems: 'center',
         display: 'flex',
         width: 'fit-content',
+        ...style,
       }}
     >
       <Icon
