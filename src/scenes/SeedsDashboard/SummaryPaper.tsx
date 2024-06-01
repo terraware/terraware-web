@@ -1,19 +1,11 @@
 import React from 'react';
 
-import { Box, CircularProgress, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import { IconName } from '@terraware/web-components';
 
 import PanelTitle from 'src/components/PanelTitle';
 import Icon from 'src/components/common/icon/Icon';
 import strings from 'src/strings';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  icon: {
-    fill: theme.palette.TwClrIcnSecondary,
-    marginRight: theme.spacing(1),
-  },
-}));
 
 interface Props {
   id: string;
@@ -26,12 +18,19 @@ interface Props {
 }
 
 export default function SummaryPaper({ id, title, icon, statistic, loading, error, tooltipTitle }: Props): JSX.Element {
-  const classes = useStyles();
   const theme = useTheme();
+
   return (
     <>
       <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: theme.spacing(3) }}>
-        <Icon name={icon} className={classes.icon} size='medium' />
+        <Icon
+          name={icon}
+          size='medium'
+          style={{
+            fill: theme.palette.TwClrIcnSecondary,
+            marginRight: theme.spacing(1),
+          }}
+        />
         <PanelTitle title={title} gutterBottom={false} tooltipTitle={tooltipTitle} />
       </Box>
       {error && strings.GENERIC_ERROR}

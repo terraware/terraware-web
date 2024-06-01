@@ -1,23 +1,14 @@
 import React from 'react';
 
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { useTheme } from '@mui/material';
 
 import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  link: {
-    color: theme.palette.TwClrBaseGreen500,
-    fontWeight: 600,
-    textDecoration: 'none',
-  },
-}));
-
 export default function WithdrawalRenderer(props: RendererProps<TableRowType>): JSX.Element {
-  const classes = useStyles();
+  const theme = useTheme();
 
   const { column, row, value, index } = props;
 
@@ -32,7 +23,11 @@ export default function WithdrawalRenderer(props: RendererProps<TableRowType>): 
               ':batchId',
               row.batchId
             )}
-            className={classes.link}
+            style={{
+              color: theme.palette.TwClrBaseGreen500,
+              fontWeight: 600,
+              textDecoration: 'none',
+            }}
           >
             {value}
           </Link>

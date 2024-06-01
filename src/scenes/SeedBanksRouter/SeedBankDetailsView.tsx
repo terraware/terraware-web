@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Grid, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import BackToLink from 'src/components/common/BackToLink';
@@ -18,15 +17,6 @@ import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import TextField from '../../components/common/Textfield/Textfield';
 import TfMain from '../../components/common/TfMain';
 import Button from '../../components/common/button/Button';
-
-const useStyles = makeStyles(() => ({
-  titleWithButton: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-}));
 
 export default function SeedBankDetailsView(): JSX.Element {
   const { selectedOrganization } = useOrganization();
@@ -51,8 +41,6 @@ export default function SeedBankDetailsView(): JSX.Element {
     }
   }, [seedBankId, selectedOrganization, navigate]);
 
-  const classes = useStyles();
-
   const goToEditSeedBank = () => {
     if (seedBankId) {
       const editSeedBankLocation = {
@@ -76,7 +64,17 @@ export default function SeedBankDetailsView(): JSX.Element {
         <Grid item xs={12} marginBottom={theme.spacing(3)}>
           <BackToLink id='back' to={APP_PATHS.SEED_BANKS} name={strings.SEED_BANKS} />
         </Grid>
-        <Grid item xs={12} padding={theme.spacing(0, 3)} className={classes.titleWithButton}>
+        <Grid
+          item
+          xs={12}
+          padding={theme.spacing(0, 3)}
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
           <Typography fontSize='20px' fontWeight={600} margin={0}>
             {seedBank?.name}
           </Typography>

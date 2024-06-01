@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Grid, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
@@ -26,28 +25,6 @@ import TextField from '../../components/common/Textfield/Textfield';
 import TfMain from '../../components/common/TfMain';
 import SeedBanksCellRenderer from './TableCellRenderer';
 
-const useStyles = makeStyles(() => ({
-  title: {
-    marginTop: 0,
-    marginBottom: 0,
-    fontSize: '24px',
-    fontWeight: 600,
-  },
-  centered: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-  },
-  searchField: {
-    width: '300px',
-  },
-  searchBar: {
-    display: 'flex',
-    marginBottom: '16px',
-  },
-}));
-
 type SeedBanksListProps = {
   organization: Organization;
 };
@@ -61,7 +38,6 @@ const columns = (): TableColumnType[] => [
 export default function SeedBanksListView({ organization }: SeedBanksListProps): JSX.Element {
   const timeZones = useTimeZones();
   const defaultTimeZone = useDefaultTimeZone().get();
-  const classes = useStyles();
   const theme = useTheme();
   const navigate = useNavigate();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
@@ -113,9 +89,27 @@ export default function SeedBanksListView({ organization }: SeedBanksListProps):
       <PageHeaderWrapper nextElement={contentRef.current}>
         <Grid container paddingBottom={theme.spacing(4)} paddingLeft={isMobile ? 0 : theme.spacing(3)}>
           <Grid item xs={8}>
-            <h1 className={classes.title}>{strings.SEED_BANKS}</h1>
+            <h1
+              style={{
+                marginTop: 0,
+                marginBottom: 0,
+                fontSize: '24px',
+                fontWeight: 600,
+              }}
+            >
+              {strings.SEED_BANKS}
+            </h1>
           </Grid>
-          <Grid item xs={4} className={classes.centered}>
+          <Grid
+            item
+            xs={4}
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'flex-end',
+            }}
+          >
             {isAdmin(organization) &&
               (isMobile ? (
                 <Button id='new-facility' icon='plus' onClick={goToNewSeedBank} size='medium' />
@@ -134,18 +128,27 @@ export default function SeedBanksListView({ organization }: SeedBanksListProps):
       </PageHeaderWrapper>
       <Card flushMobile>
         <Grid container ref={contentRef}>
-          <Grid item xs={12} className={classes.searchBar}>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: 'flex',
+              marginBottom: '16px',
+            }}
+          >
             <TextField
               placeholder={strings.SEARCH}
               iconLeft='search'
               label=''
               id='search'
               type='text'
-              className={classes.searchField}
               onChange={(value) => onChangeSearch('search', value)}
               value={temporalSearchValue}
               iconRight='cancel'
               onClickRightIcon={clearSearch}
+              styles={{
+                textarea: { width: '300px' },
+              }}
             />
           </Grid>
           <Grid item xs={12}>
