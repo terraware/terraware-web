@@ -18,6 +18,7 @@ import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import DownloadSpeciesSnapshotModal from '../Species/DownloadSpeciesSnapshotModal';
+import ApprovedDeliverableMessage from './ApprovedDeliverableMessage';
 import RejectedDeliverableMessage from './RejectedDeliverableMessage';
 
 export type Props = EditProps & {
@@ -46,7 +47,7 @@ const SpeciesDeliverableView = (props: Props): JSX.Element => {
   const onOptionItemClick = useCallback((optionItem: DropdownItem) => {
     switch (optionItem.value) {
       case 'download_snapshot': {
-        console.log('download');
+        setShowDownloadModal(true);
         break;
       }
     }
@@ -103,6 +104,7 @@ const SpeciesDeliverableView = (props: Props): JSX.Element => {
       <Page title={<TitleBar {...viewProps} />} rightComponent={rightComponent} crumbs={crumbs}>
         {props.isBusy && <BusySpinner />}
         <Box display='flex' flexDirection='column' flexGrow={1}>
+          <ApprovedDeliverableMessage {...viewProps} />
           <RejectedDeliverableMessage {...viewProps} />
           <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
             <Metadata {...viewProps} />
