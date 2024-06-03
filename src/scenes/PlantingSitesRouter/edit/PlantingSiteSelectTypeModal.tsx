@@ -1,17 +1,10 @@
 import React, { useState } from 'react';
 
-import { FormControlLabel, Radio, RadioGroup, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { FormControlLabel, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';
 
 import strings from 'src/strings';
 import { SiteType } from 'src/types/PlantingSite';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  buttonSpacing: {
-    marginRight: theme.spacing(2),
-  },
-}));
 
 export type PlantingSiteSelectTypeModalProps = {
   open: boolean;
@@ -21,7 +14,6 @@ export type PlantingSiteSelectTypeModalProps = {
 
 export default function PlantingSiteSelectTypeModal(props: PlantingSiteSelectTypeModalProps): JSX.Element {
   const { open, onNext, onClose } = props;
-  const classes = useStyles();
   const theme = useTheme();
   const [detailed, setDetailed] = useState<boolean | null>(null);
 
@@ -57,8 +49,8 @@ export default function PlantingSiteSelectTypeModal(props: PlantingSiteSelectTyp
           label={strings.CANCEL}
           priority='secondary'
           type='passive'
-          className={classes.buttonSpacing}
           key='button-1'
+          style={{ marginRight: theme.spacing(2) }}
         />,
         <Button onClick={handleNext} id='next' label={strings.NEXT} key='button-2' disabled={detailed === null} />,
       ]}

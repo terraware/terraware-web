@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import SeedBankMonitoring from 'src/components/Monitoring/SeedBankMonitoring';
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -19,48 +18,6 @@ import { Facility } from 'src/types/Facility';
 import { getAllSeedBanks, isAdmin } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-interface StyleProps {
-  isMobile: boolean;
-  isDesktop: boolean;
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  mainTitle: {
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
-  message: {
-    margin: '0 auto',
-    marginTop: (props: StyleProps) => (props.isMobile ? '32px' : '80px'),
-    maxWidth: '800px',
-    padding: '24px 48px 48px',
-  },
-  titleRootContainer: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  titleContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    paddingLeft: (props: StyleProps) => theme.spacing(props.isDesktop ? 3 : 0),
-    paddingTop: (props: StyleProps) => theme.spacing(props.isMobile ? 2 : 0),
-  },
-  contentContainer: {
-    width: '100%',
-  },
-  divider: {
-    margin: theme.spacing(0, 2),
-    width: '1px',
-    height: '32px',
-    backgroundColor: theme.palette.TwClrBgTertiary,
-  },
-  seedBankLabel: {
-    margin: '0 8px 0 0',
-    fontWeight: 500,
-    fontSize: '16px',
-  },
-}));
-
 type MonitoringProps = {
   hasSeedBanks: boolean;
   reloadData: () => void;
@@ -70,7 +27,6 @@ export default function MonitoringView(props: MonitoringProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const organizationId = selectedOrganization.id;
   const { isDesktop, isMobile } = useDeviceInfo();
-  const classes = useStyles({ isDesktop, isMobile });
   const theme = useTheme();
   const navigate = useNavigate();
   const { hasSeedBanks, reloadData } = props;
@@ -79,6 +35,26 @@ export default function MonitoringView(props: MonitoringProps): JSX.Element {
   const [monitoringPreferences, setMonitoringPreferences] = useState<{ [key: string]: unknown }>();
   const { seedBankId } = useParams<{ seedBankId: string }>();
   const contentRef = useRef(null);
+
+  const messageStyles = {
+    margin: '0 auto',
+    marginTop: isMobile ? '32px' : '80px',
+    maxWidth: '800px',
+    padding: '24px 48px 48px',
+  };
+
+  const titleContainerStyles = {
+    display: 'flex',
+    alignItems: 'center',
+    paddingLeft: theme.spacing(isDesktop ? 3 : 0),
+    paddingTop: theme.spacing(isMobile ? 2 : 0),
+  };
+
+  const seedBankLabelStyles = {
+    margin: '0 8px 0 0',
+    fontWeight: 500,
+    fontSize: '16px',
+  };
 
   const goToSeedBanks = () => {
     const seedBanksLocation = {
@@ -155,7 +131,19 @@ export default function MonitoringView(props: MonitoringProps): JSX.Element {
         {hasSeedBanks ? (
           <>
             <PageHeaderWrapper nextElement={contentRef.current} nextElementInitialMargin={-24}>
-              <Grid item xs={12} marginBottom={theme.spacing(4)} className={isMobile ? '' : classes.titleRootContainer}>
+              <Grid
+                item
+                xs={12}
+                marginBottom={theme.spacing(4)}
+                sx={
+                  isMobile
+                    ? {}
+                    : {
+                        display: 'flex',
+                        alignItems: 'center',
+                      }
+                }
+              >
                 {isMobile ? (
                   <>
                     <Box display='flex'>
@@ -168,8 +156,8 @@ export default function MonitoringView(props: MonitoringProps): JSX.Element {
                         </Grid>
                       ) : null}
                     </Box>
-                    <Grid item xs={12} className={classes.titleContainer} paddingTop='12px'>
-                      <p className={classes.seedBankLabel}>{strings.SEED_BANK}</p>
+                    <Grid item xs={12} paddingTop='12px' sx={titleContainerStyles}>
+                      <p style={seedBankLabelStyles}>{strings.SEED_BANK}</p>
                       <Select
                         options={seedBanks.map((sb) => sb?.name || '')}
                         onChange={onChangeSeedBank}
@@ -179,10 +167,17 @@ export default function MonitoringView(props: MonitoringProps): JSX.Element {
                   </>
                 ) : (
                   <>
-                    <Grid item xs={10} alignItems='center' className={classes.titleContainer}>
+                    <Grid item xs={10} alignItems='center' sx={titleContainerStyles}>
                       {getPageHeading()}
-                      <div className={classes.divider} />
-                      <p className={classes.seedBankLabel}>{strings.SEED_BANK}</p>
+                      <Box
+                        sx={{
+                          margin: theme.spacing(0, 2),
+                          width: '1px',
+                          height: '32px',
+                          backgroundColor: theme.palette.TwClrBgTertiary,
+                        }}
+                      />
+                      <p style={seedBankLabelStyles}>{strings.SEED_BANK}</p>
                       <Select
                         options={seedBanks.map((sb) => sb?.name || '')}
                         onChange={onChangeSeedBank}
@@ -201,36 +196,36 @@ export default function MonitoringView(props: MonitoringProps): JSX.Element {
             </PageHeaderWrapper>
 
             {selectedSeedBank && monitoringPreferences && (
-              <div ref={contentRef} className={classes.contentContainer}>
+              <Box ref={contentRef} sx={{ width: '100%' }}>
                 <SeedBankMonitoring
                   monitoringPreferences={monitoringPreferences}
                   updatePreferences={(data) => updateMonitoringPreferences(data)}
                   seedBank={selectedSeedBank}
                   reloadData={reloadData}
                 />
-              </div>
+              </Box>
             )}
           </>
         ) : isAdmin(selectedOrganization) ? (
-          <Grid item xs={12} className={isMobile ? '' : classes.titleContainer} flexDirection='column'>
+          <Grid item xs={12} flexDirection='column' sx={isMobile ? {} : titleContainerStyles}>
             {getPageHeading()}
             <PageSnackbar />
             <EmptyMessage
-              className={classes.message}
               title={strings.NO_SEEDBANKS_ADMIN_TITLE}
               text={strings.NO_SEEDBANKS_MONITORING_ADMIN_MSG}
               buttonText={strings.GO_TO_SEED_BANKS}
               onClick={goToSeedBanks}
+              sx={messageStyles}
             />
           </Grid>
         ) : (
-          <Grid item xs={12} className={isMobile ? '' : classes.titleContainer} flexDirection='column'>
+          <Grid item xs={12} flexDirection='column' sx={isMobile ? {} : titleContainerStyles}>
             {getPageHeading()}
             <PageSnackbar />
             <EmptyMessage
-              className={classes.message}
               title={strings.REACH_OUT_TO_ADMIN_TITLE}
               text={strings.NO_SEEDBANKS_MONITORING_NON_ADMIN_MSG}
+              sx={messageStyles}
             />
           </Grid>
         )}

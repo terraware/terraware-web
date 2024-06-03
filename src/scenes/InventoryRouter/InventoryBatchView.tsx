@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Button, Tabs } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -33,27 +32,6 @@ type InventoryBatchProps = {
   species: Species[];
 };
 
-const useStyles = makeStyles(() => ({
-  fullWidth: {
-    width: '100%',
-  },
-  tabs: {
-    '& .MuiTabPanel-root[hidden]': {
-      flexGrow: 0,
-    },
-    '& .MuiTabPanel-root': {
-      display: 'flex',
-      flexDirection: 'column',
-      flexGrow: 1,
-    },
-    '& >.MuiBox-root': {
-      display: 'flex',
-      flexDirection: 'column',
-      flexGrow: 1,
-    },
-  },
-}));
-
 const initializeTab = (tab: string | null): 'details' | 'history' => {
   if (tab === 'history') {
     return 'history';
@@ -63,7 +41,6 @@ const initializeTab = (tab: string | null): 'details' | 'history' => {
 
 export default function InventoryBatchView({ origin, species }: InventoryBatchProps) {
   const dispatch = useAppDispatch();
-  const classes = useStyles();
   const contentRef = useRef(null);
   const theme = useTheme();
   const query = useQuery();
@@ -200,7 +177,6 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
           {isWithdrawable && batchId && (
             <Box margin={isMobile ? theme.spacing(2, 2, 0, 2) : 0} display='flex' flexGrow={isMobile ? 1 : 0}>
               <Button
-                className={isMobile ? classes.fullWidth : ''}
                 label={strings.WITHDRAW}
                 onClick={() =>
                   navigate({
@@ -208,6 +184,7 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
                     search: `?batchId=${batchId.toString()}&source=${window.location.pathname}`,
                   })
                 }
+                style={isMobile ? { width: '100%' } : {}}
               />
             </Box>
           )}
@@ -220,7 +197,26 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
         {batch && (
           <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
             <BatchSummary batch={batch} reloadData={fetchBatch} />
-            <Box display='flex' flexDirection='column' flexGrow={1} className={classes.tabs}>
+            <Box
+              display='flex'
+              flexDirection='column'
+              flexGrow={1}
+              sx={{
+                '& .MuiTabPanel-root[hidden]': {
+                  flexGrow: 0,
+                },
+                '& .MuiTabPanel-root': {
+                  display: 'flex',
+                  flexDirection: 'column',
+                  flexGrow: 1,
+                },
+                '& >.MuiBox-root': {
+                  display: 'flex',
+                  flexDirection: 'column',
+                  flexGrow: 1,
+                },
+              }}
+            >
               <Tabs
                 activeTab={activeTab}
                 onTabChange={onTabChange}
