@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Snackbar as SnackbarUI } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Snackbar as SnackbarUI } from '@mui/material';
 import { Message } from '@terraware/web-components';
 
 import { selectSnackbar } from 'src/redux/features/snackbar/snackbarSelectors';
@@ -10,26 +9,22 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Snackbar } from 'src/types/Snackbar';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-const useStyles = makeStyles(() => ({
-  mainSnackbar: {
+export default function ToastSnackbar(): JSX.Element {
+  const { isMobile } = useDeviceInfo();
+  const dispatch = useAppDispatch();
+  const [snackbar, setSnackbar] = useState<Snackbar | null>();
+  const snackbarData = useAppSelector(selectSnackbar('toast'));
+
+  const mainSnackbarStyles = {
     '&.MuiSnackbar-anchorOriginTopCenter': {
       top: '32px',
     },
     '&.MuiSnackbar-anchorOriginBottomCenter': {
       bottom: '32px',
     },
-  },
-  toastContainer: {
-    width: '100%',
-  },
-}));
+  };
 
-export default function ToastSnackbar(): JSX.Element {
-  const classes = useStyles();
-  const { isMobile } = useDeviceInfo();
-  const dispatch = useAppDispatch();
-  const [snackbar, setSnackbar] = useState<Snackbar | null>();
-  const snackbarData = useAppSelector(selectSnackbar('toast'));
+  const toastContainerStyles = { width: '100%' };
 
   const handleClose = () => {
     dispatch(clearSnackbar({ type: 'toast' }));
@@ -46,11 +41,11 @@ export default function ToastSnackbar(): JSX.Element {
       onClose={handleClose}
       autoHideDuration={5000}
       id='snackbar'
-      className={classes.mainSnackbar}
+      sx={mainSnackbarStyles}
     >
-      <div className={classes.toastContainer}>
+      <Box sx={toastContainerStyles}>
         {snackbar && <Message type='toast' title={snackbar.title} body={snackbar.msg} priority={snackbar.priority} />}
-      </div>
+      </Box>
     </SnackbarUI>
   );
 }

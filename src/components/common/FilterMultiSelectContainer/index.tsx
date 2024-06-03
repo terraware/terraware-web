@@ -1,50 +1,10 @@
 import React, { useCallback, useState } from 'react';
 
-import { Popover, Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Popover, Typography, useTheme } from '@mui/material';
 
 import FilterMultiSelect from 'src/components/common/FilterMultiSelect';
 import Icon from 'src/components/common/icon/Icon';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  dropdown: {
-    cursor: 'pointer',
-    border: `1px solid ${theme.palette.TwClrBrdrSecondary}`,
-    borderRadius: '8px',
-    width: '176px',
-    height: '40px',
-    padding: theme.spacing(1, 2, 1, 1),
-    marginTop: theme.spacing(0.5),
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
-  dropdownDisabled: {
-    color: theme.palette.TwClrTxtTertiary,
-  },
-  dropdownIconRight: {
-    height: '24px',
-    width: '24px',
-  },
-  popoverContainer: {
-    '& .MuiPaper-root': {
-      borderRadius: '8px',
-      overflow: 'visible',
-      width: '480px',
-    },
-  },
-  mobileContainer: {
-    borderRadius: '8px',
-    overflow: 'visible',
-    position: 'fixed',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    maxHeight: '90%',
-    width: '90%',
-    zIndex: 1300,
-  },
-}));
 
 type FilterMultiSelectContainerProps<T> = {
   disabled?: boolean;
@@ -74,7 +34,7 @@ export default function FilterMultiSelectContainer<T extends Record<string, (str
   } = props;
 
   const { isMobile } = useDeviceInfo();
-  const classes = useStyles({ isMobile });
+  const theme = useTheme();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [optionsVisible, setOptionsVisible] = useState(false);
@@ -147,12 +107,46 @@ export default function FilterMultiSelectContainer<T extends Record<string, (str
 
   return (
     <div>
-      <div className={`${classes.dropdown}${disabled ? ` ${classes.dropdownDisabled}` : ''}`} onClick={handleClick}>
+      <Box
+        onClick={handleClick}
+        sx={{
+          cursor: 'pointer',
+          border: `1px solid ${theme.palette.TwClrBrdrSecondary}`,
+          borderRadius: '8px',
+          width: '176px',
+          height: '40px',
+          padding: theme.spacing(1, 2, 1, 1),
+          marginTop: theme.spacing(0.5),
+          display: 'flex',
+          justifyContent: 'space-between',
+          ...(disabled ? { color: theme.palette.TwClrTxtTertiary } : {}),
+        }}
+      >
         <Typography>{label}</Typography>
-        <Icon name={Boolean(anchorEl) ? 'chevronUp' : 'chevronDown'} className={classes.dropdownIconRight} />
-      </div>
+        <Icon
+          name={Boolean(anchorEl) ? 'chevronUp' : 'chevronDown'}
+          style={{
+            height: '24px',
+            width: '24px',
+          }}
+        />
+      </Box>
       {isMobile && Boolean(anchorEl) ? (
-        <div className={classes.mobileContainer}>{renderFilterMultiSelect()}</div>
+        <Box
+          sx={{
+            borderRadius: '8px',
+            overflow: 'visible',
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            maxHeight: '90%',
+            width: '90%',
+            zIndex: 1300,
+          }}
+        >
+          {renderFilterMultiSelect()}
+        </Box>
       ) : (
         <Popover
           id='pre-exposed-filter-popover'
@@ -167,7 +161,13 @@ export default function FilterMultiSelectContainer<T extends Record<string, (str
             vertical: 'top',
             horizontal: 'left',
           }}
-          className={classes.popoverContainer}
+          sx={{
+            '& .MuiPaper-root': {
+              borderRadius: '8px',
+              overflow: 'visible',
+              width: '480px',
+            },
+          }}
           onClickCapture={(event) => {
             // If the captured event is not for the backdrop, do nothing
             const eventIsBackdropClick = Array.from((event.target as HTMLElement).classList?.values() || []).some(

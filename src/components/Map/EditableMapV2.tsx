@@ -12,8 +12,7 @@ import ReactMapGL, {
   Source,
 } from 'react-map-gl';
 
-import { Box, Theme, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, useTheme } from '@mui/material';
 import bbox from '@turf/bbox';
 import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
 
@@ -35,24 +34,6 @@ import useMapboxToken from 'src/utils/useMapboxToken';
 import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
 import UndoRedoControl from './UndoRedoControl';
 import { getMapDrawingLayer, getMapErrorLayer, toMultiPolygon } from './utils';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  sliceTool: {
-    '& .mapbox-gl-draw_polygon': {
-      backgroundImage: 'url("/assets/icon-slice.svg")',
-      backgroundColor: 'transparent',
-      backgroundPosition: 'center',
-      backgroundSize: '20px',
-      backgroundRepeat: 'no-repeat',
-      height: '29px',
-      width: '29px',
-      padding: '9px',
-    },
-    '& .mapbox-gl-draw_polygon.active': {
-      backgroundColor: getRgbaFromHex(theme.palette.TwClrBaseGray100 as string, 0.5),
-    },
-  },
-}));
 
 // Callback to select one feature from among list of features on the map that overlap the click target.
 export type LayerFeature = MapboxGeoJSONFeature;
@@ -100,7 +81,6 @@ export default function EditableMap({
   const visible = useIsVisible(containerRef);
   const theme = useTheme();
   const [mapViewStyle, onChangeMapViewStyle] = useMapViewStyle();
-  const classes = useStyles();
 
   const onMapError = useCallback(
     (event: any) => {
@@ -309,7 +289,6 @@ export default function EditableMap({
 
   return (
     <Box
-      className={isSliceTool ? classes.sliceTool : ''}
       ref={containerRef}
       display='flex'
       flexDirection='column'
@@ -322,6 +301,23 @@ export default function EditableMap({
         '& .mapboxgl-map': {
           borderRadius: theme.spacing(2),
         },
+        ...(isSliceTool
+          ? {
+              '& .mapbox-gl-draw_polygon': {
+                backgroundImage: 'url("/assets/icon-slice.svg")',
+                backgroundColor: 'transparent',
+                backgroundPosition: 'center',
+                backgroundSize: '20px',
+                backgroundRepeat: 'no-repeat',
+                height: '29px',
+                width: '29px',
+                padding: '9px',
+              },
+              '& .mapbox-gl-draw_polygon.active': {
+                backgroundColor: getRgbaFromHex(theme.palette.TwClrBaseGray100 as string, 0.5),
+              },
+            }
+          : {}),
       }}
     >
       {firstVisible && (

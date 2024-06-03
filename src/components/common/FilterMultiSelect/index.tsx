@@ -9,14 +9,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import Checkbox from '../Checkbox';
 
-interface StyleProps {
-  isMobile?: boolean;
-}
-
 const useStyles = makeStyles(() => ({
-  button: {
-    width: (props: StyleProps) => (props.isMobile ? '100%' : 'auto'),
-  },
   multiSelectStyle: {
     height: '100%',
     width: '100%',
@@ -61,6 +54,8 @@ export default function FilterMultiSelect<T>(props: FilterMultiSelectProps<T>): 
   const [selection, setSelection] = useState(initialSelection);
   const [multiSelectOptions, setMultiSelectOptions] = useState<Map<T | null, string>>(new Map());
   const [isNotPresentFilterSelected, setIsNotPresentFilterSelected] = useState<boolean>(selection[0] === null);
+
+  const buttonStyles = { width: isMobile ? '100%' : 'auto' };
 
   useEffect(() => {
     const optionsMap = new Map<T, string>(options.map((option) => [option, renderOption(option)]));
@@ -167,25 +162,25 @@ export default function FilterMultiSelect<T>(props: FilterMultiSelectProps<T>): 
         }}
       >
         <Button
-          className={classes.button}
           onClick={() => onCancel()}
           type='passive'
           priority='secondary'
           label={strings.CANCEL}
+          style={buttonStyles}
         />
         <Button
-          className={classes.button}
           onClick={() => clearFilters()}
           type='passive'
           priority='secondary'
           label={strings.RESET}
+          style={buttonStyles}
         />
         <Button
-          className={classes.button}
           onClick={() => onConfirm(selection)}
           type='productive'
           priority='primary'
           label={strings.APPLY}
+          style={buttonStyles}
         />
       </Box>
     </Box>

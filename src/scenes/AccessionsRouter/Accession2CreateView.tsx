@@ -7,12 +7,13 @@ import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import PageForm from 'src/components/common/PageForm';
+import SelectPhotos from 'src/components/common/SelectPhotos';
 import SpeciesSelector from 'src/components/common/SpeciesSelector';
 import Textfield from 'src/components/common/Textfield/Textfield';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useProjects } from 'src/hooks/useProjects';
-import { useOrganization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import SeedBankService, { AccessionPostRequestBody } from 'src/services/SeedBankService';
 import strings from 'src/strings';
 import { accessionCreateStates } from 'src/types/Accession';
@@ -42,7 +43,10 @@ const MANDATORY_FIELDS = ['speciesId', 'collectedDate', 'receivedDate', 'state',
 
 type MandatoryField = (typeof MANDATORY_FIELDS)[number];
 
-export default function CreateAccession(): JSX.Element {
+export const MAX_ACCESSION_PHOTOS = 10;
+
+export default function CreateAccession(): JSX.Element | null {
+  const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const navigate = useNavigate();
@@ -54,6 +58,11 @@ export default function CreateAccession(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const [collectedDateError, setCollectedDateError] = useState<string>();
   const [receivedDateError, setReceivedDateError] = useState<string>();
+  const [photos, setPhotos] = useState<File[]>([]);
+
+  const onPhotosChanged = (photosList: File[]) => {
+    setPhotos(photosList);
+  };
 
   const onCollectedDateError = (error?: string) => {
     setCollectedDateError(error);
@@ -135,6 +144,11 @@ export default function CreateAccession(): JSX.Element {
     }
     const response = await SeedBankService.createAccession(record);
     if (response.requestSucceeded) {
+      if (photos.length) {
+        // upload photos
+        await SeedBankService.uploadAccessionPhotos(response.id, photos);
+      }
+
       navigate(accessionsDatabase, { replace: true });
       navigate({
         pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', response.id.toString()),
@@ -146,7 +160,7 @@ export default function CreateAccession(): JSX.Element {
 
   const gridSize = () => (isMobile ? 12 : 6);
 
-  return (
+  return !activeLocale ? null : (
     <TfMain>
       <PageForm
         cancelID='cancelCreateAccession'
@@ -252,6 +266,26 @@ export default function CreateAccession(): JSX.Element {
             </Grid>
             <SeedBank2Selector record={record} onChange={onChange} validate={validateFields} />
           </Grid>
+
+          <Box sx={marginTop}>
+            <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px'>
+              {strings.PHOTOS}
+            </Typography>
+
+            <Box
+              sx={{
+                marginLeft: `-${theme.spacing(3)}`,
+                marginRight: `-${theme.spacing(3)}`,
+                marginTop: `-${theme.spacing(1)}`,
+              }}
+            >
+              <SelectPhotos
+                maxPhotos={MAX_ACCESSION_PHOTOS}
+                multipleSelection={true}
+                onPhotosChanged={onPhotosChanged}
+              />
+            </Box>
+          </Box>
         </Container>
       </PageForm>
     </TfMain>

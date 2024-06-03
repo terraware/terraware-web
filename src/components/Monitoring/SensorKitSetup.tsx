@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Theme } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import { Container, Grid } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 
 import { listDeviceManagers } from 'src/api/deviceManager/deviceManager';
 import { listFacilityDevicesById } from 'src/api/facility/facility';
@@ -20,39 +19,6 @@ import SelectPVSystem from './sensorKitSetup/SelectPVSystem';
 import SensorKitID from './sensorKitSetup/SensorKitID';
 import SensorLocations from './sensorKitSetup/SensorLocations';
 
-interface StyleProps {
-  isMobile: boolean;
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  mobileSetupContainer: {
-    padding: 0,
-  },
-  setupInfo: {
-    textAlign: 'center',
-    lineHeight: '28px',
-    fontSize: '16px',
-    marginTop: theme.spacing(5),
-    marginBottom: theme.spacing(5),
-  },
-  setupTitle: {
-    fontWeight: 'bold',
-    fontSize: '18px',
-    lineHeight: '28px',
-  },
-  text: {
-    textAlign: 'center',
-    fontSize: '14px',
-    margin: 'auto auto',
-  },
-  onboardingContainer: {
-    display: 'flex',
-    margin: (props: StyleProps) => (props.isMobile ? `auto auto ${theme.spacing(3)}` : 'auto'),
-    marginTop: theme.spacing(5),
-    justifyContent: 'center',
-  },
-}));
-
 type SetupFlowState = 'PVSystem' | 'SensorKitID' | 'DeviceManager' | 'DetectSensors' | 'SensorLocations' | 'Configure';
 
 type SensorKitSetupProps = {
@@ -67,7 +33,7 @@ type Completed = {
 
 export default function SensorKitSetup(props: SensorKitSetupProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
-  const classes = useStyles({ isMobile });
+  const theme = useTheme();
   const { seedBank, onFinish, reloadData } = props;
   const [flowState, setFlowState] = useState<SetupFlowState | undefined>();
   const [completedSteps, setCompletedSteps] = useState<Completed>({});
@@ -151,13 +117,37 @@ export default function SensorKitSetup(props: SensorKitSetupProps): JSX.Element 
   }, [seedBank.id]);
 
   return (
-    <Container maxWidth={false} className={isMobile ? classes.mobileSetupContainer : ''}>
-      <div className={classes.setupInfo}>
-        <div className={classes.setupTitle}>{strings.SENSOR_KIT_SET_UP_TITLE} &#127881;</div>
+    <Container maxWidth={false} sx={{ ...(isMobile ? { padding: 0 } : {}) }}>
+      <Box
+        sx={{
+          textAlign: 'center',
+          lineHeight: '28px',
+          fontSize: '16px',
+          marginTop: theme.spacing(5),
+          marginBottom: theme.spacing(5),
+        }}
+      >
+        <Box
+          sx={{
+            fontWeight: 'bold',
+            fontSize: '18px',
+            lineHeight: '28px',
+          }}
+        >
+          {strings.SENSOR_KIT_SET_UP_TITLE} &#127881;
+        </Box>
         <div>{strings.SENSOR_KIT_SET_UP_DESCRIPTION}</div>
         <div>{strings.SENSOR_KIT_SET_UP_TIME}</div>
-      </div>
-      <Grid container className={classes.onboardingContainer}>
+      </Box>
+      <Grid
+        container
+        sx={{
+          display: 'flex',
+          margin: isMobile ? `auto auto ${theme.spacing(3)}` : 'auto',
+          marginTop: theme.spacing(5),
+          justifyContent: 'center',
+        }}
+      >
         <SelectPVSystem
           active={flowState === 'PVSystem'}
           onNext={() => setCompletedAndNext('PVSystem', 'SensorKitID')}

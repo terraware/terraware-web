@@ -9,8 +9,7 @@ import ReactMapGL, {
   Source,
 } from 'react-map-gl';
 
-import { Box, Theme, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 
 /**
@@ -42,41 +41,6 @@ const mapboxImpl: any = mapboxgl;
 // @tslint
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 mapboxImpl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default; /* tslint:disable-line */
-
-const useStyles = makeStyles((theme: Theme) => ({
-  viewControl: {
-    '& .MuiButtonBase-root': {
-      padding: 0,
-    },
-    '& .MuiButtonBase-root.MuiMenuItem-root': {
-      fontSize: '12px',
-    },
-    '& svg': {
-      marginLeft: 0,
-    },
-  },
-  viewControlSelected: {
-    fontSize: '12px',
-    paddingLeft: theme.spacing(0.5),
-    color: theme.palette.TwClrTxt,
-  },
-  bottomLeftControl: {
-    height: 'max-content',
-    position: 'absolute',
-    left: theme.spacing(2),
-    bottom: theme.spacing(4),
-    width: 'max-content',
-    zIndex: 1000,
-  },
-  topRightControl: {
-    height: 'max-content',
-    position: 'absolute',
-    right: theme.spacing(2),
-    top: theme.spacing(2),
-    width: 'max-content',
-    zIndex: 1000,
-  },
-}));
 
 type FeatureStateId = Record<string, Record<string, number | undefined>>;
 
@@ -121,7 +85,7 @@ export default function Map(props: MapProps): JSX.Element {
     topRightMapControl,
     bottomLeftMapControl,
   } = props;
-  const classes = useStyles();
+  const theme = useTheme();
   const [geoData, setGeoData] = useState<any[]>();
   const [layerIds, setLayerIds] = useState<string[]>([]);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
@@ -491,8 +455,34 @@ export default function Map(props: MapProps): JSX.Element {
               {renderedPopup}
             </Popup>
           )}
-          {topRightMapControl && <div className={classes.topRightControl}>{topRightMapControl}</div>}
-          {bottomLeftMapControl && <div className={classes.bottomLeftControl}>{bottomLeftMapControl}</div>}
+          {topRightMapControl && (
+            <div
+              style={{
+                height: 'max-content',
+                position: 'absolute',
+                right: theme.spacing(2),
+                top: theme.spacing(2),
+                width: 'max-content',
+                zIndex: 1000,
+              }}
+            >
+              {topRightMapControl}
+            </div>
+          )}
+          {bottomLeftMapControl && (
+            <div
+              style={{
+                height: 'max-content',
+                position: 'absolute',
+                left: theme.spacing(2),
+                bottom: theme.spacing(4),
+                width: 'max-content',
+                zIndex: 1000,
+              }}
+            >
+              {bottomLeftMapControl}
+            </div>
+          )}
         </ReactMapGL>
       )}
     </Box>

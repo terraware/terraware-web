@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Container, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Container, useTheme } from '@mui/material';
 
 import PageHeader from 'src/components/PageHeader';
 import EmptyMessage from 'src/components/common/EmptyMessage';
@@ -19,34 +18,6 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import ImportSpeciesModal, { downloadCsvTemplate } from '../../scenes/Species/ImportSpeciesModal';
 import TfMain from '../common/TfMain';
-
-interface StyleProps {
-  isMobile: boolean;
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  mainContainer: {
-    marginBottom: theme.spacing(8),
-    padding: '0',
-  },
-  content: {
-    background: theme.palette.TwClrBg,
-    borderRadius: '24px',
-    margin: 'auto',
-    marginTop: `max(10vh, ${theme.spacing(8)}px)`,
-    maxWidth: '800px',
-    padding: '24px',
-  },
-  message: {
-    margin: '0 auto',
-    marginTop: '10%',
-    maxWidth: '800px',
-    width: (props: StyleProps) => (props.isMobile ? 'auto' : '800px'),
-  },
-  spacer: {
-    padding: theme.spacing(3),
-  },
-}));
 
 type PageContent = {
   title1?: string;
@@ -71,7 +42,7 @@ export default function EmptyStatePage({
 }: EmptyStatePageProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
-  const classes = useStyles({ isMobile });
+  const theme = useTheme();
   const navigate = useNavigate();
   const snackbar = useSnackbar();
 
@@ -270,7 +241,7 @@ export default function EmptyStatePage({
   };
 
   const spacer = () => {
-    return <div className={classes.spacer} />;
+    return <Box sx={{ padding: theme.spacing(3) }} />;
   };
 
   return (
@@ -289,10 +260,28 @@ export default function EmptyStatePage({
         </>
       )}
       {content.listItems.length === 0 && content.linkLocation === undefined ? (
-        <EmptyMessage className={classes.message} title={content.title2} text={content.subtitle} />
+        <EmptyMessage
+          title={content.title2}
+          text={content.subtitle}
+          sx={{
+            margin: '0 auto',
+            marginTop: '10%',
+            maxWidth: '800px',
+            width: isMobile ? 'auto' : '800px',
+          }}
+        />
       ) : (
-        <Container className={classes.mainContainer}>
-          <div className={classes.content}>
+        <Container sx={{ marginBottom: theme.spacing(8), padding: '0' }}>
+          <Box
+            sx={{
+              background: theme.palette.TwClrBg,
+              borderRadius: '24px',
+              margin: 'auto',
+              marginTop: `max(10vh, ${theme.spacing(8)}px)`,
+              maxWidth: '800px',
+              padding: '24px',
+            }}
+          >
             <EmptyStateContent
               title={content.title2}
               subtitle={content.subtitle}
@@ -301,7 +290,7 @@ export default function EmptyStatePage({
               buttonIcon={content.buttonIcon}
               onClickButton={goToNewLocation}
             />
-          </div>
+          </Box>
         </Container>
       )}
     </TfMain>

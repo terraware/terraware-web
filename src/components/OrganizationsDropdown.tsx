@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { makeStyles } from '@mui/styles';
 import { DropdownItem, PopoverMenu } from '@terraware/web-components';
 
 import { APP_PATHS } from 'src/constants';
@@ -11,14 +10,7 @@ import { Organization } from 'src/types/Organization';
 
 import AddNewOrganizationModal from './AddNewOrganizationModal';
 
-const useStyles = makeStyles(() => ({
-  anchorText: {
-    fontSize: '16px',
-  },
-}));
-
 export default function OrganizationsDropdown(): JSX.Element {
-  const classes = useStyles();
   const { selectedOrganization, setSelectedOrganization, organizations } = useOrganization();
   const navigate = useNavigate();
   const [newOrganizationModalOpened, setNewOrganizationModalOpened] = useState(false);
@@ -55,7 +47,7 @@ export default function OrganizationsDropdown(): JSX.Element {
     <div>
       <AddNewOrganizationModal open={newOrganizationModalOpened} onCancel={onCloseCreateOrganizationModal} />
       <PopoverMenu
-        anchor={<p className={classes.anchorText}>{selectedOrganization.name}</p>}
+        anchor={<p style={{ fontSize: '16px' }}>{selectedOrganization.name}</p>}
         menuSections={[
           organizations?.map((organization) => ({ label: organization.name, value: organization.id.toString() })) || [],
           [{ label: strings.CREATE_NEW_ORGANIZATION, value: '0' }],

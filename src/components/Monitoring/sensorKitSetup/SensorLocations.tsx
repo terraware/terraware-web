@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Grid, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Grid, useTheme } from '@mui/material';
 
 import { updateDevice } from 'src/api/device/device';
 import strings from 'src/strings';
@@ -12,16 +11,6 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import Select from '../../common/Select/Select';
 import FlowStep, { FlowError } from './FlowStep';
 import { LOCATIONS } from './Locations';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  location: {
-    paddingTop: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-  },
-  gridContainer: {
-    alignItems: 'end',
-  },
-}));
 
 type Location = {
   [name: string]: Device;
@@ -36,7 +25,7 @@ type SensorLocationsProps = {
 };
 
 export default function SensorLocations(props: SensorLocationsProps): JSX.Element {
-  const classes = useStyles();
+  const theme = useTheme();
   const { seedBank, active, completed, onNext, sensors } = props;
   const [flowError, setFlowError] = useState<FlowError | undefined>();
   const [processing, setProcessing] = useState<boolean>(false);
@@ -141,9 +130,17 @@ export default function SensorLocations(props: SensorLocationsProps): JSX.Elemen
       buttonText={strings.DONE}
     >
       <div>{strings.SENSOR_KIT_SET_UP_SENSOR_LOCATIONS_DESCRIPTION}</div>
-      <Grid container xs={12} className={classes.gridContainer}>
+      <Grid container xs={12} sx={{ alignItems: 'end' }}>
         {LOCATIONS.map((location) => (
-          <Grid item xs={isMobile ? 12 : 4} key={location.name} className={classes.location}>
+          <Grid
+            item
+            xs={isMobile ? 12 : 4}
+            key={location.name}
+            sx={{
+              paddingTop: theme.spacing(2),
+              paddingRight: theme.spacing(2),
+            }}
+          >
             <Select
               id={location.name}
               selectedValue={assignedLocations[location.name]?.name || ''}
