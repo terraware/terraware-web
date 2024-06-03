@@ -15,7 +15,6 @@ import {
 } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import {
   selectParticipantProjectSpeciesAddManyRequest,
-  selectParticipantProjectSpeciesAssignRequest,
   selectParticipantProjectSpeciesDeleteManyRequest,
 } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
