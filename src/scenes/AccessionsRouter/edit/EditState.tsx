@@ -1,18 +1,11 @@
 import React from 'react';
 
-import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, Icon } from '@terraware/web-components';
 
 import { AccessionService } from 'src/services';
 import strings from 'src/strings';
 import { Accession, AccessionState, stateName } from 'src/types/Accession';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  messageIcon: {
-    fill: theme.palette.TwClrIcn,
-  },
-}));
 
 export interface EditStateProps {
   accession: Accession;
@@ -22,7 +15,6 @@ export interface EditStateProps {
 }
 
 export default function EditState(props: EditStateProps): JSX.Element {
-  const classes = useStyles();
   const theme = useTheme();
   const { accession, record, onChange, error } = props;
 
@@ -61,7 +53,7 @@ export default function EditState(props: EditStateProps): JSX.Element {
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Icon name='warning' className={classes.messageIcon} size='large' />
+            <Icon name='warning' size='large' style={{ fill: theme.palette.TwClrIcn }} />
             <Typography sx={{ color: theme.palette.TwClrTxt, fontSize: '14px', paddingLeft: 0.5 }}>
               {strings.UPDATE_STATUS_WARNING}
             </Typography>
