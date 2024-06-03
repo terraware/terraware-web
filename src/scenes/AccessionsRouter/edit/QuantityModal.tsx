@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
-import { Box, FormControlLabel, Grid, Radio, RadioGroup, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, FormControlLabel, Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
 import { Dropdown, Icon, Textfield } from '@terraware/web-components';
+import { SelectStyles } from '@terraware/web-components/components/Select/SelectT';
 import _ from 'lodash';
 
 import ConvertedValue from 'src/components/ConvertedValue';
@@ -20,21 +20,6 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import EditState from './EditState';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  addIcon: {
-    fill: theme.palette.TwClrIcnBrand,
-    height: '20px',
-    width: '20px',
-  },
-  units: {
-    marginLeft: theme.spacing(0.5),
-  },
-  subset: {
-    borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-    paddingTop: theme.spacing(2),
-  },
-}));
-
 export interface QuantityModalProps {
   open: boolean;
   accession: Accession;
@@ -47,7 +32,7 @@ export interface QuantityModalProps {
 interface UnitsSelectorProps {
   onChange: (newValue: string) => void;
   selectedValue: any;
-  className?: string | undefined;
+  selectStyles?: SelectStyles;
 }
 
 function UnitsSelector(props: UnitsSelectorProps): JSX.Element {
@@ -60,7 +45,7 @@ function UnitsSelector(props: UnitsSelectorProps): JSX.Element {
       onChange={props.onChange}
       selectedValue={props.selectedValue}
       fullWidth={true}
-      className={props.className}
+      selectStyles={props.selectStyles}
     />
   );
 }
@@ -81,7 +66,6 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   const [totalWeightError, setTotalWeightError] = useState('');
   const [remainingQuantityNotes, setRemainingQuantityNotes] = useState<string>('');
   const [remainingQuantityNotesError, setRemainingQuantityNotesError] = useState<boolean>(false);
-  const classes = useStyles();
 
   const quantityChanged = useMemo(() => {
     if (!accession.remainingQuantity) {
@@ -325,7 +309,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
                         ? record.estimatedWeight?.units
                         : record.remainingQuantity?.units
                     }
-                    className={classes.units}
+                    selectStyles={{ inputContainer: { marginLeft: theme.spacing(0.5) } }}
                   />
                 </Box>
               </Box>
@@ -364,13 +348,25 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
               <Box display='flex' justifyContent='flex-start'>
                 <Link id='addNotes' onClick={showSubset} fontSize='16px'>
                   <Box display='flex' alignItems='center'>
-                    <Icon name='iconAdd' className={classes.addIcon} />
+                    <Icon
+                      name='iconAdd'
+                      style={{
+                        fill: theme.palette.TwClrIcnBrand,
+                        height: '20px',
+                        width: '20px',
+                      }}
+                    />
                     &nbsp;{`${strings.ADD_SUBSET_WEIGHT_AND_COUNT}`}
                   </Box>
                 </Link>
               </Box>
             ) : (
-              <Box className={classes.subset}>
+              <Box
+                sx={{
+                  borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+                  paddingTop: theme.spacing(2),
+                }}
+              >
                 <Grid container item justifyContent='space-between'>
                   <Grid container item xs={isMobile ? 12 : 7} spacing={1}>
                     <Grid item xs={8} textAlign='left'>

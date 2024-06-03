@@ -2,8 +2,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, Container, Grid, useTheme } from '@mui/material';
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { BusySpinner } from '@terraware/web-components';
 
 import PageHeader from 'src/components/PageHeader';
@@ -25,39 +23,9 @@ import useStateLocation from 'src/utils/useStateLocation';
 
 import CheckInAllConfirmationDialog from './CheckInAllConfirmationDialog';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  mainContainer: {
-    padding: 0,
-  },
-  downloadReport: {
-    background: theme.palette.common.black,
-    color: theme.palette.common.white,
-    marginLeft: theme.spacing(2),
-    '&:hover, &:focus': {
-      backgroundColor: `${theme.palette.common.black}!important`,
-    },
-  },
-  addAccession: {
-    marginLeft: theme.spacing(2),
-    color: theme.palette.common.white,
-  },
-  checkinMessage: {
-    marginBottom: theme.spacing(6),
-  },
-  title: {
-    fontSize: '18px',
-    color: theme.palette.gray[800],
-    fontWeight: 600,
-  },
-  tableHead: {
-    whiteSpace: 'nowrap',
-  },
-}));
-
 export default function CheckIn(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
-  const classes = useStyles();
   const theme = useTheme();
   const navigate = useNavigate();
   const location = useStateLocation();
@@ -176,7 +144,7 @@ export default function CheckIn(): JSX.Element {
           }
         />
       </PageHeaderWrapper>
-      <Container ref={contentRef} maxWidth={false} className={classes.mainContainer}>
+      <Container ref={contentRef} maxWidth={false} sx={{ padding: 0 }}>
         <Grid container spacing={3}>
           {pendingAccessionsById && (
             <Grid item xs={12}>

@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { useTheme } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import Link from 'src/components/common/Link';
@@ -11,17 +10,6 @@ import strings from 'src/strings';
 import CellRenderer, { TableRowType } from '../../components/common/table/TableCellRenderer';
 import { RendererProps } from '../../components/common/table/types';
 import { BatchHistoryItemForTable } from './BatchHistory';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  link: {
-    color: theme.palette.TwClrBaseGreen500,
-    fontWeight: 600,
-    textDecoration: 'none',
-  },
-  text: {
-    fontSize: '14px',
-  },
-}));
 
 export const getEventType = (batchHistoryItem: BatchHistoryItemForTable) => {
   if (
@@ -41,9 +29,15 @@ export const getEventType = (batchHistoryItem: BatchHistoryItemForTable) => {
 };
 
 export default function BatchHistoryRenderer(props: RendererProps<TableRowType>): JSX.Element {
-  const classes = useStyles();
+  const theme = useTheme();
 
   const { column, row, value, index, onRowClick } = props;
+
+  const linkStyles = {
+    color: theme.palette.TwClrBaseGreen500,
+    fontWeight: 600,
+    textDecoration: 'none',
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const rowClick = (event?: React.SyntheticEvent) => {
@@ -58,7 +52,7 @@ export default function BatchHistoryRenderer(props: RendererProps<TableRowType>)
         index={index}
         column={column}
         value={
-          <Link onClick={rowClick} className={classes.link}>
+          <Link onClick={rowClick} style={linkStyles}>
             {getDateDisplayValue(value)}
           </Link>
         }
@@ -76,7 +70,7 @@ export default function BatchHistoryRenderer(props: RendererProps<TableRowType>)
           value={
             <Link
               to={APP_PATHS.NURSERY_WITHDRAWALS_DETAILS.replace(':withdrawalId', row.withdrawalId)}
-              className={classes.link}
+              style={linkStyles}
             >
               {getEventType(row as BatchHistoryItemForTable)}
             </Link>

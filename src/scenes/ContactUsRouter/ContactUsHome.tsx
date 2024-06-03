@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Button } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -23,15 +22,6 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import { useSupportData } from './provider/Context';
 
-const useStyles = makeStyles(() => ({
-  title: {
-    fontSize: '24px',
-    fontWeight: 600,
-    lineHeight: '32px',
-    margin: '0 0 12px 16px',
-  },
-}));
-
 type ListItemContent = {
   icon?: IconName;
   title: string;
@@ -41,7 +31,6 @@ type ListItemContent = {
 };
 export default function ContactUsHome(): JSX.Element {
   const { activeLocale } = useLocalization();
-  const classes = useStyles();
   const { isMobile, isDesktop } = useDeviceInfo();
   const docLinks = useDocLinks();
   const appVersion = useAppSelector(selectAppVersion);
@@ -115,7 +104,16 @@ export default function ContactUsHome(): JSX.Element {
 
   return (
     <TfMain>
-      <h1 className={classes.title}>{strings.CONTACT_US}</h1>
+      <h1
+        style={{
+          fontSize: '24px',
+          fontWeight: 600,
+          lineHeight: '32px',
+          margin: '0 0 12px 16px',
+        }}
+      >
+        {strings.CONTACT_US}
+      </h1>
       <PageSnackbar />
       <Card flushMobile>
         <Grid
