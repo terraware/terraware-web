@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/60</span>
+                <span class='fraction'>0/57</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/56</span>
+                <span class='fraction'>0/54</span>
             </div>
         
             
@@ -284,13 +284,7 @@
 <a name='L219'></a><a href='#L219'>219</a>
 <a name='L220'></a><a href='#L220'>220</a>
 <a name='L221'></a><a href='#L221'>221</a>
-<a name='L222'></a><a href='#L222'>222</a>
-<a name='L223'></a><a href='#L223'>223</a>
-<a name='L224'></a><a href='#L224'>224</a>
-<a name='L225'></a><a href='#L225'>225</a>
-<a name='L226'></a><a href='#L226'>226</a>
-<a name='L227'></a><a href='#L227'>227</a>
-<a name='L228'></a><a href='#L228'>228</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L222'></a><a href='#L222'>222</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -325,15 +319,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -453,6 +438,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -521,7 +509,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 &nbsp;
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { MultiPolygon } from 'geojson';
 &nbsp;
 import PlantingSiteMapEditor from 'src/components/Map/PlantingSiteMapEditor';
@@ -552,17 +539,9 @@ type CreatePlantingSiteProps = {
   reloadPlantingSites: () =&gt; void;
 };
 &nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  form: {
-    display: 'flex',
-    flexGrow: 1,
-  },
-}));
-&nbsp;
 export default function <span class="fstat-no" title="function not covered" >CreatePlantingSite(</span>props: CreatePlantingSiteProps): JSX.Element {
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const { reloadPlantingSites } = <span class="cstat-no" title="statement not covered" >props;</span>
   const { plantingSiteId } = <span class="cstat-no" title="statement not covered" >useParams&lt;{ plantingSiteId: string }&gt;();</span>
   const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
@@ -681,7 +660,10 @@ export default function <span class="fstat-no" title="function not covered" >Cre
         saveID='saveCreatePlantingSite'
         onCancel={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >goToPlantingSite(record.id)}</span>
         onSave={onSave}
-        className={classes.form}
+        style={{
+          display: 'flex',
+          flexGrow: 1,
+        }}
       &gt;
         &lt;Container maxWidth={false} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, paddingRight: 0 }}&gt;
           {loaded &amp;&amp; (
@@ -751,7 +733,7 @@ export default function <span class="fstat-no" title="function not covered" >Cre
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-03T18:23:29.764Z
+                at 2024-06-03T19:37:05.996Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

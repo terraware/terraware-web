@@ -371,11 +371,7 @@
 <a name='L306'></a><a href='#L306'>306</a>
 <a name='L307'></a><a href='#L307'>307</a>
 <a name='L308'></a><a href='#L308'>308</a>
-<a name='L309'></a><a href='#L309'>309</a>
-<a name='L310'></a><a href='#L310'>310</a>
-<a name='L311'></a><a href='#L311'>311</a>
-<a name='L312'></a><a href='#L312'>312</a>
-<a name='L313'></a><a href='#L313'>313</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L309'></a><a href='#L309'>309</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -439,19 +435,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -662,8 +645,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -708,19 +700,6 @@ import TextVariable from './TextVariable';
 import { editorDisplayVariableWithValues, editorValueFromVariableValue, variableValueFromEditorValue } from './helpers';
 &nbsp;
 const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  editor: {
-    borderRadius: '8px',
-    border: `1px solid ${theme.palette.TwClrBrdrSecondary}`,
-    padding: theme.spacing(1),
-    backgroundColor: theme.palette.TwClrBg,
-    fontFamily: 'Inter',
-    fontSize: '16px',
-    overflow: 'scroll',
-    resize: 'vertical',
-  },
-  placeholder: {
-    top: `${theme.spacing(1)} !important`,
-  },
   variableDropdown: {
     background: theme.palette.TwClrBg,
     borderRadius: '8px',
@@ -970,15 +949,24 @@ const SectionEdit = <span class="cstat-no" title="statement not covered" ><span 
       &lt;Box marginTop={theme.spacing(2)}&gt;
         &lt;Slate editor={editor} initialValue={initialValue} onChange={onChange}&gt;
           &lt;Editable
-            className={classes.editor}
             renderElement={renderElement}
             onKeyDown={onKeyDown}
             placeholder={strings.PLACEHOLDER}
             renderPlaceholder={<span class="fstat-no" title="function not covered" >({</span> children, attributes }) =&gt; (
-<span class="cstat-no" title="statement not covered" >              &lt;div className={classes.placeholder} {...attributes}&gt;</span>
+<span class="cstat-no" title="statement not covered" >              &lt;Box sx={{ top: `${theme.spacing(1)} !important` }} {...attributes}&gt;</span>
                 {children}
-              &lt;/div&gt;
+              &lt;/Box&gt;
             )}
+            style={{
+              borderRadius: '8px',
+              border: `1px solid ${theme.palette.TwClrBrdrSecondary}`,
+              padding: theme.spacing(1),
+              backgroundColor: theme.palette.TwClrBg,
+              fontFamily: 'Inter',
+              fontSize: '16px',
+              overflow: 'scroll',
+              resize: 'vertical',
+            }}
           /&gt;
         &lt;/Slate&gt;
       &lt;/Box&gt;
@@ -1006,7 +994,7 @@ export default SectionEdit;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-03T18:23:29.764Z
+                at 2024-06-03T19:37:05.996Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

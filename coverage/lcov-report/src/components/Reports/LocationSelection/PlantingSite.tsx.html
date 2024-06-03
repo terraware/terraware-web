@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/109</span>
+                <span class='fraction'>0/108</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/97</span>
+                <span class='fraction'>0/96</span>
             </div>
         
             
@@ -557,7 +557,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -937,7 +937,7 @@ import { Box, Grid } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 &nbsp;
 import { LocationSectionProps } from 'src/components/Reports/LocationSelection';
-import { InfoField, useInfoCardStyles } from 'src/components/Reports/LocationSelection/InfoField';
+import { InfoField, infoCardStyles } from 'src/components/Reports/LocationSelection/InfoField';
 import PlantingSiteSpeciesCellRenderer from 'src/components/Reports/LocationSelection/PlantingSitesSpeciesCellRenderer';
 import { transformNumericValue } from 'src/components/Reports/LocationSelection/util';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
@@ -991,7 +991,7 @@ const LocationSectionPlantingSite = <span class="cstat-no" title="statement not 
   const { editable, location, onUpdateLocation, validate } = <span class="cstat-no" title="statement not covered" >props;</span>
 &nbsp;
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useInfoCardStyles();</span>
+&nbsp;
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const defaultTimeZone = <span class="cstat-no" title="statement not covered" >useDefaultTimeZone();</span>
@@ -1263,7 +1263,7 @@ const LocationSectionPlantingSite = <span class="cstat-no" title="statement not 
               isEditable={false}
               title={strings.MOST_RECENT_OBSERVATION}
               contents={`${latestObservation.startDate} - ${latestObservation.completedDate}`}
-              className={classes.infoCardStyle}
+              sx={infoCardStyles}
             /&gt;
           &lt;/Grid&gt;
           &lt;Grid item xs={smallItemGridWidth()}&gt;
@@ -1271,7 +1271,7 @@ const LocationSectionPlantingSite = <span class="cstat-no" title="statement not 
               isEditable={false}
               title={strings.NUMBER_OF_PLOTS_IN_MOST_RECENT_OBSERVATION}
               contents={numberOfPlots || ''}
-              className={classes.infoCardStyle}
+              sx={infoCardStyles}
             /&gt;
           &lt;/Grid&gt;
           &lt;Grid item xs={smallItemGridWidth()}&gt;
@@ -1279,7 +1279,7 @@ const LocationSectionPlantingSite = <span class="cstat-no" title="statement not 
               isEditable={false}
               title={strings.CURRENT_NEXT_OBSERVATION}
               contents={currentNextObservationDates}
-              className={classes.infoCardStyle}
+              sx={infoCardStyles}
             /&gt;
           &lt;/Grid&gt;
           &lt;Grid item xs={smallItemGridWidth()}&gt;
@@ -1287,7 +1287,7 @@ const LocationSectionPlantingSite = <span class="cstat-no" title="statement not 
               isEditable={false}
               title={strings.TOTAL_PLANTS_OBSERVED}
               contents={latestObservation.totalPlants}
-              className={classes.infoCardStyle}
+              sx={infoCardStyles}
             /&gt;
           &lt;/Grid&gt;
           &lt;Grid item xs={smallItemGridWidth()}&gt;
@@ -1295,7 +1295,7 @@ const LocationSectionPlantingSite = <span class="cstat-no" title="statement not 
               isEditable={false}
               title={strings.LIVE_PLANTS_OBSERVED}
               contents={livePlants || ''}
-              className={classes.infoCardStyle}
+              sx={infoCardStyles}
             /&gt;
           &lt;/Grid&gt;
           &lt;Grid item xs={smallItemGridWidth()}&gt;
@@ -1303,7 +1303,7 @@ const LocationSectionPlantingSite = <span class="cstat-no" title="statement not 
               isEditable={false}
               title={strings.DEAD_PLANTS_OBSERVED}
               contents={deadPlants || ''}
-              className={classes.infoCardStyle}
+              sx={infoCardStyles}
             /&gt;
           &lt;/Grid&gt;
           &lt;Grid item xs={smallItemGridWidth()}&gt;
@@ -1311,7 +1311,7 @@ const LocationSectionPlantingSite = <span class="cstat-no" title="statement not 
               isEditable={false}
               title={strings.SPECIES_OBSERVED}
               contents={latestObservation.totalSpecies}
-              className={classes.infoCardStyle}
+              sx={infoCardStyles}
             /&gt;
           &lt;/Grid&gt;
           &lt;Grid item xs={smallItemGridWidth()}&gt;
@@ -1319,7 +1319,7 @@ const LocationSectionPlantingSite = <span class="cstat-no" title="statement not 
               isEditable={false}
               title={strings.MARKED_AS_PLANTING_COMPLETE}
               contents={markedAsComplete}
-              className={classes.infoCardStyle}
+              sx={infoCardStyles}
             /&gt;
           &lt;/Grid&gt;
           &lt;Grid item xs={smallItemGridWidth()}&gt;
@@ -1327,7 +1327,7 @@ const LocationSectionPlantingSite = <span class="cstat-no" title="statement not 
               isEditable={false}
               title={strings.MORTALITY_RATE_PERCENT}
               contents={latestObservation.mortalityRate}
-              className={classes.infoCardStyle}
+              sx={infoCardStyles}
             /&gt;
           &lt;/Grid&gt;
           {!estimatedPlants &amp;&amp; (
@@ -1336,7 +1336,7 @@ const LocationSectionPlantingSite = <span class="cstat-no" title="statement not 
                 isEditable={false}
                 title={strings.PLANTING_PROGRESS_PERCENT}
                 contents={reportedPlants?.progressPercent || ''}
-                className={classes.infoCardStyle}
+                sx={infoCardStyles}
               /&gt;
             &lt;/Grid&gt;
           )}
@@ -1346,7 +1346,7 @@ const LocationSectionPlantingSite = <span class="cstat-no" title="statement not 
                 isEditable={false}
                 title={strings.PLANTING_DENSITY_OF_PLANTED_ZONES}
                 contents={plantingDensityForZones}
-                className={classes.infoCardStyle}
+                sx={infoCardStyles}
               /&gt;
             &lt;/Grid&gt;
           )}
@@ -1355,7 +1355,7 @@ const LocationSectionPlantingSite = <span class="cstat-no" title="statement not 
               isEditable={false}
               title={strings.EST_TOTAL_PLANTS_PLANTING_DENSITY_AREA}
               contents={estimatedPlants ? `${estimatedPlants} ${strings.PLANTS_PER_HECTARE}` : ''}
-              className={classes.infoCardStyle}
+              sx={infoCardStyles}
             /&gt;
           &lt;/Grid&gt;
         &lt;/&gt;
@@ -1372,7 +1372,7 @@ export default LocationSectionPlantingSite;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-03T18:23:29.764Z
+                at 2024-06-03T19:37:05.996Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

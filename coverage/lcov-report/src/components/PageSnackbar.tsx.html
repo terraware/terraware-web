@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
@@ -186,20 +186,7 @@
 <a name='L121'></a><a href='#L121'>121</a>
 <a name='L122'></a><a href='#L122'>122</a>
 <a name='L123'></a><a href='#L123'>123</a>
-<a name='L124'></a><a href='#L124'>124</a>
-<a name='L125'></a><a href='#L125'>125</a>
-<a name='L126'></a><a href='#L126'>126</a>
-<a name='L127'></a><a href='#L127'>127</a>
-<a name='L128'></a><a href='#L128'>128</a>
-<a name='L129'></a><a href='#L129'>129</a>
-<a name='L130'></a><a href='#L130'>130</a>
-<a name='L131'></a><a href='#L131'>131</a>
-<a name='L132'></a><a href='#L132'>132</a>
-<a name='L133'></a><a href='#L133'>133</a>
-<a name='L134'></a><a href='#L134'>134</a>
-<a name='L135'></a><a href='#L135'>135</a>
-<a name='L136'></a><a href='#L136'>136</a>
-<a name='L137'></a><a href='#L137'>137</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L124'></a><a href='#L124'>124</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -209,29 +196,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -295,9 +259,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -338,8 +312,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 &nbsp;
-import { Snackbar as SnackbarUI } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Snackbar as SnackbarUI } from '@mui/material';
 import { Button, Message } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 &nbsp;
@@ -350,28 +323,6 @@ import { clearSnackbar } from 'src/redux/features/snackbar/snackbarSlice';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Snackbar } from 'src/types/Snackbar';
 import { SNACKBAR_PAGE_CLOSE_KEY } from 'src/utils/useSnackbar';
-&nbsp;
-interface StyleProps {
-  isMobile?: boolean;
-}
-&nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  fullWidth: {
-    width: '100%',
-  },
-  mainSnackbar: {
-    '&amp;.MuiSnackbar-anchorOriginTopCenter': {
-      top: '0px',
-    },
-    '&amp;.MuiSnackbar-root': {
-      position: 'relative',
-      margin: '32px 0px',
-      left: <span class="fstat-no" title="function not covered" >(p</span>rops: StyleProps) =&gt; (<span class="cstat-no" title="statement not covered" >props.isMobile ? '0px' : '50%')</span>,
-      transform: <span class="fstat-no" title="function not covered" >(p</span>rops: StyleProps) =&gt; (<span class="cstat-no" title="statement not covered" >props.isMobile ? 'translateX(0)' : 'translateX(-50%)')</span>,
-      zIndex: 0,
-    },
-  },
-}));
 &nbsp;
 export type PageSnackbarProps = {
   pageKey?: string;
@@ -431,7 +382,6 @@ type SnackbarMessageProps = {
 &nbsp;
 function <span class="fstat-no" title="function not covered" >SnackbarMessage(</span>{ snack, onClose }: SnackbarMessageProps): JSX.Element {
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles({ isMobile });</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;SnackbarUI
@@ -440,9 +390,20 @@ function <span class="fstat-no" title="function not covered" >SnackbarMessage(</
       onClose={onClose}
       autoHideDuration={null}
       id='page-snackbar'
-      className={classes.mainSnackbar}
+      sx={{
+        '&amp;.MuiSnackbar-anchorOriginTopCenter': {
+          top: '0px',
+        },
+        '&amp;.MuiSnackbar-root': {
+          position: 'relative',
+          margin: '32px 0px',
+          left: isMobile ? '0px' : '50%',
+          transform: isMobile ? 'translateX(0)' : 'translateX(-50%)',
+          zIndex: 0,
+        },
+      }}
     &gt;
-      &lt;div className={classes.fullWidth}&gt;
+      &lt;Box sx={{ width: '100%' }}&gt;
         {snack &amp;&amp; (
           &lt;Message
             type='page'
@@ -467,7 +428,7 @@ function <span class="fstat-no" title="function not covered" >SnackbarMessage(</
             }
           /&gt;
         )}
-      &lt;/div&gt;
+      &lt;/Box&gt;
     &lt;/SnackbarUI&gt;
   );
 }
@@ -478,7 +439,7 @@ function <span class="fstat-no" title="function not covered" >SnackbarMessage(</
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-03T18:23:29.764Z
+                at 2024-06-03T19:37:05.996Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

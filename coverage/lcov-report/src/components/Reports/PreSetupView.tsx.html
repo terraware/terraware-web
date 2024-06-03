@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
@@ -118,38 +118,13 @@
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
 <a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -167,6 +142,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -192,8 +176,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
 import { useNavigate } from 'react-router-dom';
 &nbsp;
-import { Container, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Container, useTheme } from '@mui/material';
 &nbsp;
 import PageHeader from 'src/components/PageHeader';
 import TfMain from 'src/components/common/TfMain';
@@ -202,26 +185,10 @@ import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 &nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  mainContainer: {
-    marginBottom: theme.spacing(8),
-    padding: '0',
-  },
-  content: {
-    background: theme.palette.TwClrBg,
-    borderRadius: '24px',
-    margin: 'auto',
-    marginTop: <span class="fstat-no" title="function not covered" >(p</span>rops: { isMobile: boolean }) =&gt;
-<span class="cstat-no" title="statement not covered" >      props.isMobile ? `max(10vh, ${theme.spacing(8)}px)` : theme.spacing(8),</span>
-    maxWidth: '800px',
-    padding: '24px',
-  },
-}));
-&nbsp;
 const PreSetupView = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
   const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles({ isMobile });</span>
+  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
 &nbsp;
   const goToSettings = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    navigate({</span>
@@ -232,8 +199,17 @@ const PreSetupView = <span class="cstat-no" title="statement not covered" ><span
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;TfMain backgroundImageVisible={true}&gt;
       &lt;PageHeader title={strings.REPORTS} /&gt;
-      &lt;Container className={classes.mainContainer}&gt;
-        &lt;div className={classes.content}&gt;
+      &lt;Container sx={{ marginBottom: theme.spacing(8), padding: '0' }}&gt;
+        &lt;Box
+          sx={{
+            background: theme.palette.TwClrBg,
+            borderRadius: '24px',
+            margin: 'auto',
+            marginTop: isMobile ? `max(10vh, ${theme.spacing(8)}px)` : theme.spacing(8),
+            maxWidth: '800px',
+            padding: '24px',
+          }}
+        &gt;
           &lt;EmptyStateContent
             title={strings.REPORTS_SETTINGS}
             subtitle={[strings.REPORTS_PRE_SETUP_SUBTITLE, strings.REPORTS_PRE_SETUP_SUBTITLE_2]}
@@ -245,7 +221,7 @@ const PreSetupView = <span class="cstat-no" title="statement not covered" ><span
             buttonText={strings.REPORTS_SETUP_CTA}
             onClickButton={goToSettings}
           /&gt;
-        &lt;/div&gt;
+        &lt;/Box&gt;
       &lt;/Container&gt;
     &lt;/TfMain&gt;
   );
@@ -259,7 +235,7 @@ export default PreSetupView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-03T18:23:29.764Z
+                at 2024-06-03T19:37:05.996Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

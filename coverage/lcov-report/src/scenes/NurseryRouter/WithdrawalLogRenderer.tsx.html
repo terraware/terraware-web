@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
@@ -39,7 +39,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
@@ -190,13 +190,7 @@
 <a name='L125'></a><a href='#L125'>125</a>
 <a name='L126'></a><a href='#L126'>126</a>
 <a name='L127'></a><a href='#L127'>127</a>
-<a name='L128'></a><a href='#L128'>128</a>
-<a name='L129'></a><a href='#L129'>129</a>
-<a name='L130'></a><a href='#L130'>130</a>
-<a name='L131'></a><a href='#L131'>131</a>
-<a name='L132'></a><a href='#L132'>132</a>
-<a name='L133'></a><a href='#L133'>133</a>
-<a name='L134'></a><a href='#L134'>134</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L128'></a><a href='#L128'>128</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -215,22 +209,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -247,6 +232,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -332,8 +320,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 &nbsp;
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { useTheme } from '@mui/material';
 &nbsp;
 import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS } from 'src/constants';
@@ -346,24 +333,16 @@ import { RendererProps } from '../../components/common/table/types';
 import UndoWithdrawalModal from './UndoWithdrawalModal';
 import WithdrawalHistoryMenu from './WithdrawalHistoryMenu';
 &nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  link: {
-    color: theme.palette.TwClrTxtBrand,
-    textDecoration: 'none',
-  },
-  undone: {
-    textDecoration: 'line-through',
-  },
-  text: {
-    fontSize: '14px',
-  },
-}));
-&nbsp;
 export default function <span class="fstat-no" title="function not covered" >WithdrawalLogRenderer(</span>props: RendererProps&lt;TableRowType&gt;): JSX.Element {
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
+  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
 &nbsp;
   const { column, row, value, index, onRowClick, reloadData } = <span class="cstat-no" title="statement not covered" >props;</span>
   const { NURSERY_TRANSFER } = <span class="cstat-no" title="statement not covered" >NurseryWithdrawalPurposes;</span>
+&nbsp;
+  const linkStyles = <span class="cstat-no" title="statement not covered" >{</span>
+    color: theme.palette.TwClrTxtBrand,
+    textDecoration: 'none',
+  };
 &nbsp;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const rowClick = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>vent?: React.SyntheticEvent) =&gt; {</span>
@@ -382,7 +361,10 @@ export default function <span class="fstat-no" title="function not covered" >Wit
 <span class="cstat-no" title="statement not covered" >    return (</span>
       &lt;Link
         to={nurseryWithdrawalDetailLocation}
-        className={`${classes.link} ${row.undoneByWithdrawalId ? classes.undone : ''}`}
+        style={{
+          ...linkStyles,
+          ...(row.undoneByWithdrawalId ? { textDecoration: 'line-through' } : {}),
+        }}
       &gt;
         {iValue as React.ReactNode}
       &lt;/Link&gt;
@@ -394,7 +376,7 @@ export default function <span class="fstat-no" title="function not covered" >Wit
 <span class="cstat-no" title="statement not covered" >    return (</span>
       &lt;p&gt;
         {`${strings.UNDO} `}
-        &lt;Link to={nurseryWithdrawalDetailLocation} className={`${classes.link}`}&gt;
+        &lt;Link to={nurseryWithdrawalDetailLocation} style={linkStyles}&gt;
           {date as React.ReactNode}
         &lt;/Link&gt;
       &lt;/p&gt;
@@ -469,7 +451,7 @@ export default function <span class="fstat-no" title="function not covered" >Wit
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-03T18:23:29.764Z
+                at 2024-06-03T19:37:05.996Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

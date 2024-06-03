@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/105</span>
+                <span class='fraction'>0/102</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/100</span>
+                <span class='fraction'>0/98</span>
             </div>
         
             
@@ -406,13 +406,7 @@
 <a name='L341'></a><a href='#L341'>341</a>
 <a name='L342'></a><a href='#L342'>342</a>
 <a name='L343'></a><a href='#L343'>343</a>
-<a name='L344'></a><a href='#L344'>344</a>
-<a name='L345'></a><a href='#L345'>345</a>
-<a name='L346'></a><a href='#L346'>346</a>
-<a name='L347'></a><a href='#L347'>347</a>
-<a name='L348'></a><a href='#L348'>348</a>
-<a name='L349'></a><a href='#L349'>349</a>
-<a name='L350'></a><a href='#L350'>350</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L344'></a><a href='#L344'>344</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -450,17 +444,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -487,7 +472,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -725,6 +709,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -765,7 +753,6 @@
 import { useNavigate } from 'react-router-dom';
 &nbsp;
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { BusySpinner, Button, Message } from '@terraware/web-components';
 &nbsp;
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -798,14 +785,6 @@ import { OnValidate } from './types';
 export type EditorProps = {
   site: DraftPlantingSite;
 };
-&nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    flexGrow: 1,
-  },
-}));
 &nbsp;
 /**
  * Check if user has already completed certain steps and mark them as completed.
@@ -842,7 +821,6 @@ export default function <span class="fstat-no" title="function not covered" >Edi
   const contentRef = <span class="cstat-no" title="statement not covered" >useRef(null);</span>
   const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const docLinks = <span class="cstat-no" title="statement not covered" >useDocLinks();</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
 &nbsp;
@@ -1075,7 +1053,11 @@ export default function <span class="fstat-no" title="function not covered" >Edi
           onSaveAndClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >onSave(true)}</span>
           onStartOver={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setShowStartOver(true)}</span>
           steps={steps}
-          className={classes.container}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            flexGrow: 1,
+          }}
         &gt;
           {pageMessage &amp;&amp; (
             &lt;Box marginTop={theme.spacing(6)}&gt;
@@ -1117,7 +1099,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-03T18:23:29.764Z
+                at 2024-06-03T19:37:05.996Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

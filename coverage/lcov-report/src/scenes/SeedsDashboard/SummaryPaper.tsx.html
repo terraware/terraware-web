@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
@@ -110,18 +110,9 @@
 <a name='L45'></a><a href='#L45'>45</a>
 <a name='L46'></a><a href='#L46'>46</a>
 <a name='L47'></a><a href='#L47'>47</a>
-<a name='L48'></a><a href='#L48'>48</a>
-<a name='L49'></a><a href='#L49'>49</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L48'></a><a href='#L48'>48</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -140,8 +131,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -161,20 +159,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
 &nbsp;
-import { Box, CircularProgress, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import { IconName } from '@terraware/web-components';
 &nbsp;
 import PanelTitle from 'src/components/PanelTitle';
 import Icon from 'src/components/common/icon/Icon';
 import strings from 'src/strings';
-&nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  icon: {
-    fill: theme.palette.TwClrIcnSecondary,
-    marginRight: theme.spacing(1),
-  },
-}));
 &nbsp;
 interface Props {
   id: string;
@@ -187,12 +177,19 @@ interface Props {
 }
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >SummaryPaper(</span>{ id, title, icon, statistic, loading, error, tooltipTitle }: Props): JSX.Element {
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;&gt;
       &lt;Box sx={{ display: 'flex', alignItems: 'center', marginBottom: theme.spacing(3) }}&gt;
-        &lt;Icon name={icon} className={classes.icon} size='medium' /&gt;
+        &lt;Icon
+          name={icon}
+          size='medium'
+          style={{
+            fill: theme.palette.TwClrIcnSecondary,
+            marginRight: theme.spacing(1),
+          }}
+        /&gt;
         &lt;PanelTitle title={title} gutterBottom={false} tooltipTitle={tooltipTitle} /&gt;
       &lt;/Box&gt;
       {error &amp;&amp; strings.GENERIC_ERROR}
@@ -214,7 +211,7 @@ export default function <span class="fstat-no" title="function not covered" >Sum
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-03T18:23:29.764Z
+                at 2024-06-03T19:37:05.996Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

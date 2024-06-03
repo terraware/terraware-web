@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -157,11 +157,7 @@
 <a name='L92'></a><a href='#L92'>92</a>
 <a name='L93'></a><a href='#L93'>93</a>
 <a name='L94'></a><a href='#L94'>94</a>
-<a name='L95'></a><a href='#L95'>95</a>
-<a name='L96'></a><a href='#L96'>96</a>
-<a name='L97'></a><a href='#L97'>97</a>
-<a name='L98'></a><a href='#L98'>98</a>
-<a name='L99'></a><a href='#L99'>99</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L95'></a><a href='#L95'>95</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -170,13 +166,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -190,7 +179,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -262,7 +254,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useState } from 'react';
 &nbsp;
 import { Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Button } from '@terraware/web-components';
 &nbsp;
 import Link from 'src/components/common/Link';
@@ -274,21 +265,18 @@ import { Batch } from 'src/types/Batch';
 import ChangeQuantityModal from './ChangeQuantityModal';
 import QuantitiesMenu from './QuantitiesMenu';
 &nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  text: {
-    fontSize: '14px',
-  },
-}));
-&nbsp;
 export type ModalValuesType = {
   type: string;
   openChangeQuantityModal: boolean;
 };
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >BatchesCellRenderer(</span>props: RendererProps&lt;TableRowType&gt;): JSX.Element {
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const { column, row, value, index, onRowClick } = <span class="cstat-no" title="statement not covered" >props;</span>
   const [modalValues, setModalValues] = <span class="cstat-no" title="statement not covered" >useState({ type: 'germinating', openChangeQuantityModal: false });</span>
+&nbsp;
+  const textStyles = <span class="cstat-no" title="statement not covered" >{</span>
+    fontSize: '14px',
+  };
 &nbsp;
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const rowClick = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>vent?: React.SyntheticEvent) =&gt; {</span>
@@ -302,7 +290,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
   };
 &nbsp;
   const createText = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>Value: React.ReactNode | unknown[]) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return &lt;Typography className={classes.text}&gt;{iValue as React.ReactNode}&lt;/Typography&gt;;</span>
+<span class="cstat-no" title="statement not covered" >    return &lt;Typography sx={textStyles}&gt;{iValue as React.ReactNode}&lt;/Typography&gt;;</span>
   };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (column.key === 'withdraw') {</span>
@@ -319,8 +307,8 @@ export default function <span class="fstat-no" title="function not covered" >Bat
               onClick={rowClick}
               size='small'
               priority='secondary'
-              className={classes.text}
               disabled={Number(row.totalQuantity) + Number(row.germinatingQuantity) === 0}
+              style={textStyles}
             /&gt;
           }
         /&gt;
@@ -364,7 +352,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-03T18:23:29.764Z
+                at 2024-06-03T19:37:05.996Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

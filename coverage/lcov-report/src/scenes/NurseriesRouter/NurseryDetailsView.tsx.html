@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
@@ -232,9 +232,7 @@
 <a name='L167'></a><a href='#L167'>167</a>
 <a name='L168'></a><a href='#L168'>168</a>
 <a name='L169'></a><a href='#L169'>169</a>
-<a name='L170'></a><a href='#L170'>170</a>
-<a name='L171'></a><a href='#L171'>171</a>
-<a name='L172'></a><a href='#L172'>172</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L170'></a><a href='#L170'>170</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -246,16 +244,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -288,8 +276,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -307,6 +293,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -409,7 +405,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 &nbsp;
 import { Grid, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 &nbsp;
 import BackToLink from 'src/components/common/BackToLink';
 import { APP_PATHS } from 'src/constants';
@@ -425,15 +420,6 @@ import TextField from '../../components/common/Textfield/Textfield';
 import TfMain from '../../components/common/TfMain';
 import Button from '../../components/common/button/Button';
 import NurserySubLocations from './NurserySubLocations';
-&nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  titleWithButton: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-}));
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >NurseryDetailsView(</span>): JSX.Element {
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
@@ -458,8 +444,6 @@ export default function <span class="fstat-no" title="function not covered" >Nur
     }
   }, [nurseryId, selectedOrganization, navigate]);
 &nbsp;
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
-&nbsp;
   const goToEditNursery = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (nurseryId) {</span>
       const editNurseryLocation = <span class="cstat-no" title="statement not covered" >{</span>
@@ -483,7 +467,17 @@ export default function <span class="fstat-no" title="function not covered" >Nur
         &lt;Grid item xs={12} marginBottom={theme.spacing(3)}&gt;
           &lt;BackToLink id='back' to={APP_PATHS.NURSERIES} name={strings.NURSERIES} /&gt;
         &lt;/Grid&gt;
-        &lt;Grid item xs={12} padding={theme.spacing(0, 3)} className={classes.titleWithButton}&gt;
+        &lt;Grid
+          item
+          xs={12}
+          padding={theme.spacing(0, 3)}
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        &gt;
           &lt;Typography fontSize='20px' fontWeight={600}&gt;
             {nursery?.name}
           &lt;/Typography&gt;
@@ -583,7 +577,7 @@ export default function <span class="fstat-no" title="function not covered" >Nur
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-03T18:23:29.764Z
+                at 2024-06-03T19:37:05.996Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

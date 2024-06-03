@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
@@ -166,28 +166,7 @@
 <a name='L101'></a><a href='#L101'>101</a>
 <a name='L102'></a><a href='#L102'>102</a>
 <a name='L103'></a><a href='#L103'>103</a>
-<a name='L104'></a><a href='#L104'>104</a>
-<a name='L105'></a><a href='#L105'>105</a>
-<a name='L106'></a><a href='#L106'>106</a>
-<a name='L107'></a><a href='#L107'>107</a>
-<a name='L108'></a><a href='#L108'>108</a>
-<a name='L109'></a><a href='#L109'>109</a>
-<a name='L110'></a><a href='#L110'>110</a>
-<a name='L111'></a><a href='#L111'>111</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L104'></a><a href='#L104'>104</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -220,13 +199,20 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -285,8 +271,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useMemo } from 'react';
 &nbsp;
-import { Box, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 &nbsp;
 import FormattedNumber from 'src/components/common/FormattedNumber';
@@ -295,19 +280,6 @@ import { APP_PATHS } from 'src/constants';
 import { selectSubzoneSpeciesPopulations } from 'src/redux/features/tracking/sitePopulationSelector';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-&nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  speciesList: {
-    margin: 0,
-    paddingLeft: theme.spacing(3),
-  },
-  withdrawalHistoryLink: {
-    textAlign: 'left',
-    fontSize: '16px',
-    fontWeight: 400,
-    marginTop: theme.spacing(3),
-  },
-}));
 &nbsp;
 type PlantingProgressMapDialogProps = {
   id: number;
@@ -327,7 +299,6 @@ export default function <span class="fstat-no" title="function not covered" >Pla
   busy,
 }: PlantingProgressMapDialogProps): JSX.Element {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const species = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectSubzoneSpeciesPopulations(state, id))</span>;</span>
   const totalPlants = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    return Object.values(species).reduce(<span class="fstat-no" title="function not covered" >(p</span>rev, curr) =&gt; <span class="cstat-no" title="statement not covered" >prev + curr,</span> 0);</span>
@@ -337,7 +308,15 @@ export default function <span class="fstat-no" title="function not covered" >Pla
     const filterParam = <span class="cstat-no" title="statement not covered" >`subzoneName=${encodeURIComponent(subzoneName)}&amp;siteName=${encodeURIComponent(siteName)}`;</span>
     const url = <span class="cstat-no" title="statement not covered" >`${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history&amp;${filterParam}`;</span>
 <span class="cstat-no" title="statement not covered" >    return (</span>
-      &lt;Link className={classes.withdrawalHistoryLink} to={url}&gt;
+      &lt;Link
+        to={url}
+        style={{
+          textAlign: 'left',
+          fontSize: '16px',
+          fontWeight: 400,
+          marginTop: theme.spacing(3),
+        }}
+      &gt;
         {strings.SEE_WITHDRAWAL_HISTORY}
       &lt;/Link&gt;
     );
@@ -361,7 +340,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
           &lt;FormattedNumber value={totalPlants} /&gt;
           &amp;nbsp;{strings.SEEDLINGS_SENT}
         &lt;/Typography&gt;
-        &lt;ul className={classes.speciesList}&gt;
+        &lt;ul style={{ margin: 0, paddingLeft: theme.spacing(3) }}&gt;
           {Object.keys(species).map(<span class="fstat-no" title="function not covered" >(s</span>peciesName) =&gt; (
 <span class="cstat-no" title="statement not covered" >            &lt;li key={speciesName}&gt;</span>
               &lt;Typography fontSize='16px' fontWeight={400}&gt;
@@ -400,7 +379,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-03T18:23:29.764Z
+                at 2024-06-03T19:37:05.996Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

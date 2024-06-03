@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/103</span>
+                <span class='fraction'>0/100</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/41</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/90</span>
+                <span class='fraction'>0/88</span>
             </div>
         
             
@@ -430,13 +430,7 @@
 <a name='L365'></a><a href='#L365'>365</a>
 <a name='L366'></a><a href='#L366'>366</a>
 <a name='L367'></a><a href='#L367'>367</a>
-<a name='L368'></a><a href='#L368'>368</a>
-<a name='L369'></a><a href='#L369'>369</a>
-<a name='L370'></a><a href='#L370'>370</a>
-<a name='L371'></a><a href='#L371'>371</a>
-<a name='L372'></a><a href='#L372'>372</a>
-<a name='L373'></a><a href='#L373'>373</a>
-<a name='L374'></a><a href='#L374'>374</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L368'></a><a href='#L368'>368</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -462,17 +456,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -513,7 +496,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -765,6 +747,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -812,7 +800,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useMemo, useState } from 'react';
 &nbsp;
 import { Box, Grid, Popover, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Button, PillListItem, Textfield, Tooltip } from '@terraware/web-components';
 import { PillList } from '@terraware/web-components';
 &nbsp;
@@ -835,16 +822,6 @@ import { SearchNodePayload } from 'src/types/Search';
 import { Species } from 'src/types/Species';
 import { getAllNurseries } from 'src/utils/organization';
 import useForm from 'src/utils/useForm';
-&nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  popoverContainer: {
-    '&amp; .MuiPaper-root': {
-      borderRadius: '8px',
-      overflow: 'visible',
-      width: '480px',
-    },
-  },
-}));
 &nbsp;
 const initialFilters: Record&lt;string, SearchNodePayload&gt; = <span class="cstat-no" title="statement not covered" >{</span>
   showEmptyBatches: {
@@ -884,7 +861,6 @@ export default function <span class="fstat-no" title="function not covered" >Sea
 &nbsp;
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
 &nbsp;
@@ -1156,7 +1132,13 @@ export default function <span class="fstat-no" title="function not covered" >Sea
                 vertical: 'top',
                 horizontal: 'center',
               }}
-              className={classes.popoverContainer}
+              sx={{
+                '&amp; .MuiPaper-root': {
+                  borderRadius: '8px',
+                  overflow: 'visible',
+                  width: '480px',
+                },
+              }}
             &gt;
               &lt;FilterGroup
                 initialFilters={filterGroupFilters}
@@ -1189,7 +1171,7 @@ export default function <span class="fstat-no" title="function not covered" >Sea
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-03T18:23:29.764Z
+                at 2024-06-03T19:37:05.996Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

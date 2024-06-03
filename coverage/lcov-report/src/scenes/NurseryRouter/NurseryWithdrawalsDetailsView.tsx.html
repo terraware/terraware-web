@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/51</span>
+                <span class='fraction'>0/48</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/49</span>
+                <span class='fraction'>0/47</span>
             </div>
         
             
@@ -353,13 +353,7 @@
 <a name='L288'></a><a href='#L288'>288</a>
 <a name='L289'></a><a href='#L289'>289</a>
 <a name='L290'></a><a href='#L290'>290</a>
-<a name='L291'></a><a href='#L291'>291</a>
-<a name='L292'></a><a href='#L292'>292</a>
-<a name='L293'></a><a href='#L293'>293</a>
-<a name='L294'></a><a href='#L294'>294</a>
-<a name='L295'></a><a href='#L295'>295</a>
-<a name='L296'></a><a href='#L296'>296</a>
-<a name='L297'></a><a href='#L297'>297</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L291'></a><a href='#L291'>291</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -389,7 +383,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -411,14 +404,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -566,6 +551,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -658,8 +646,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 &nbsp;
-import { Box, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Message, Tabs } from '@terraware/web-components';
 &nbsp;
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -685,13 +672,6 @@ import NonOutplantWithdrawalContent from './WithdrawalDetails/NonOutplantWithdra
 import ReassignmentTabPanelContent from './WithdrawalDetails/ReassignmentTabPanelContent';
 import WithdrawalTabPanelContent from './WithdrawalDetails/WithdrawalTabPanelContent';
 &nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  backToWithdrawals: {
-    marginLeft: 0,
-    marginTop: theme.spacing(2),
-  },
-}));
-&nbsp;
 export interface WithdrawalSummary {
   id: string;
   delivery_id: string;
@@ -716,7 +696,6 @@ export default function <span class="fstat-no" title="function not covered" >Nur
 }: NurseryWithdrawalsDetailsViewProps): JSX.Element {
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { withdrawalId } = <span class="cstat-no" title="statement not covered" >useParams&lt;{ withdrawalId: string }&gt;();</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
@@ -872,8 +851,11 @@ export default function <span class="fstat-no" title="function not covered" >Nur
             &lt;BackToLink
               id='back'
               to={`${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history`}
-              className={classes.backToWithdrawals}
               name={strings.WITHDRAWAL_HISTORY}
+              style={{
+                marginLeft: 0,
+                marginTop: theme.spacing(2),
+              }}
             /&gt;
           &lt;/Box&gt;
           &lt;Box
@@ -958,7 +940,7 @@ export default function <span class="fstat-no" title="function not covered" >Nur
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-03T18:23:29.764Z
+                at 2024-06-03T19:37:05.996Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

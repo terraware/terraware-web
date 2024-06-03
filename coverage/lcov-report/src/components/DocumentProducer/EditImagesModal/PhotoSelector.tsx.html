@@ -360,11 +360,7 @@
 <a name='L295'></a><a href='#L295'>295</a>
 <a name='L296'></a><a href='#L296'>296</a>
 <a name='L297'></a><a href='#L297'>297</a>
-<a name='L298'></a><a href='#L298'>298</a>
-<a name='L299'></a><a href='#L299'>299</a>
-<a name='L300'></a><a href='#L300'>300</a>
-<a name='L301'></a><a href='#L301'>301</a>
-<a name='L302'></a><a href='#L302'>302</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L298'></a><a href='#L298'>298</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -437,22 +433,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -592,6 +572,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -615,6 +600,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -681,22 +673,6 @@ export type PhotoChooserErrorType = {
 };
 &nbsp;
 const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  removePhoto: {
-    position: 'absolute',
-    top: -10,
-    right: -10,
-    backgroundColor: theme.palette.TwClrBgDanger,
-  },
-  hiddenInput: {
-    display: 'none',
-  },
-  icon: {
-    height: '120px',
-    width: '120px',
-  },
-  button: {
-    marginTop: theme.spacing(3),
-  },
   error: {
     width: 'auto',
     marginBottom: theme.spacing(2),
@@ -894,7 +870,12 @@ export default function <span class="fstat-no" title="function not covered" >Pho
                     icon='iconTrashCan'
                     onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >removeFileAtIndex(index)}</span>
                     size='small'
-                    className={classes.removePhoto}
+                    style={{
+                      position: 'absolute',
+                      top: -10,
+                      right: -10,
+                      backgroundColor: theme.palette.TwClrBgDanger,
+                    }}
                   /&gt;
                   &lt;img height='120px' src={fileData.url} alt={files[index]?.name} className={classes.thumbnail} /&gt;
                 &lt;/Box&gt;
@@ -935,7 +916,14 @@ export default function <span class="fstat-no" title="function not covered" >Pho
         padding={theme.spacing(3)}
         sx={{ background: theme.palette.TwClrBg }}
       &gt;
-        &lt;Icon name='blobbyGrayIconImage' className={classes.icon} size='xlarge' /&gt;
+        &lt;Icon
+          name='blobbyGrayIconImage'
+          size='xlarge'
+          style={{
+            height: '120px',
+            width: '120px',
+          }}
+        /&gt;
         &lt;Typography color={theme.palette.TwClrTxt} fontSize={14} fontWeight={600} margin={theme.spacing(0, 0, 1)}&gt;
           {!editing &amp;&amp; (files.length &gt; 0 &amp;&amp; !multipleSelection ? files[0].name : uploadText)}
         &lt;/Typography&gt;
@@ -949,10 +937,10 @@ export default function <span class="fstat-no" title="function not covered" >Pho
         &lt;input
           type='file'
           ref={inputRef}
-          className={classes.hiddenInput}
           onChange={onFileChosen}
           accept='image/jpeg,image/png'
           multiple={multipleSelection || false}
+          style={{ display: 'none' }}
         /&gt;
         &lt;Button
           onClick={onChooseFileHandler}
@@ -960,7 +948,7 @@ export default function <span class="fstat-no" title="function not covered" >Pho
           label={!multipleSelection &amp;&amp; (files.length === 1 || editing) ? replaceFileText : chooseFileText}
           priority='secondary'
           type='passive'
-          className={classes.button}
+          style={{ marginTop: theme.spacing(3) }}
         /&gt;
       &lt;/Box&gt;
     &lt;/Box&gt;
@@ -973,7 +961,7 @@ export default function <span class="fstat-no" title="function not covered" >Pho
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-03T18:23:29.764Z
+                at 2024-06-03T19:37:05.996Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

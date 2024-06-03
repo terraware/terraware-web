@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/103</span>
+                <span class='fraction'>0/100</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/27</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/97</span>
+                <span class='fraction'>0/95</span>
             </div>
         
             
@@ -342,13 +342,7 @@
 <a name='L277'></a><a href='#L277'>277</a>
 <a name='L278'></a><a href='#L278'>278</a>
 <a name='L279'></a><a href='#L279'>279</a>
-<a name='L280'></a><a href='#L280'>280</a>
-<a name='L281'></a><a href='#L281'>281</a>
-<a name='L282'></a><a href='#L282'>282</a>
-<a name='L283'></a><a href='#L283'>283</a>
-<a name='L284'></a><a href='#L284'>284</a>
-<a name='L285'></a><a href='#L285'>285</a>
-<a name='L286'></a><a href='#L286'>286</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L280'></a><a href='#L280'>280</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -375,14 +369,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -395,7 +381,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -576,6 +561,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -636,8 +624,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 &nbsp;
-import { Box, CircularProgress, Grid, Theme, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, CircularProgress, Grid, useTheme } from '@mui/material';
 import { ErrorBox, TableColumnType } from '@terraware/web-components';
 &nbsp;
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -661,13 +648,6 @@ import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
 import ReassignmentRenderer, { Reassignment, ReassignmentRowType, ZoneInfo } from './ReassignmentRenderer';
 &nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  backToWithdrawals: {
-    marginLeft: 0,
-    marginTop: theme.spacing(2),
-  },
-}));
-&nbsp;
 const columns = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span>: TableColumnType[] =&gt; <span class="cstat-no" title="statement not covered" >[</span></span>
   { key: 'species', name: strings.SPECIES, type: 'string' },
   { key: 'siteName', name: strings.PLANTING_SITE, type: 'string' },
@@ -680,7 +660,6 @@ const columns = <span class="cstat-no" title="statement not covered" ><span clas
 ];
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >NurseryReassignmentView(</span>): JSX.Element {
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const query = <span class="cstat-no" title="statement not covered" >useQuery();</span>
   const { user } = <span class="cstat-no" title="statement not covered" >useUser();</span>
   const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter();</span>
@@ -867,8 +846,11 @@ export default function <span class="fstat-no" title="function not covered" >Nur
           &lt;BackToLink
             id='back'
             to={`${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history`}
-            className={classes.backToWithdrawals}
             name={strings.WITHDRAWAL_HISTORY}
+            style={{
+              marginLeft: 0,
+              marginTop: theme.spacing(2),
+            }}
           /&gt;
         &lt;/Box&gt;
         &lt;Box marginTop={theme.spacing(3)}&gt;
@@ -925,7 +907,7 @@ export default function <span class="fstat-no" title="function not covered" >Nur
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-03T18:23:29.764Z
+                at 2024-06-03T19:37:05.996Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

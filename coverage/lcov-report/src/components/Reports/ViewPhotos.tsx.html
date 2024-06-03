@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/32</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/31</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -185,14 +185,7 @@
 <a name='L120'></a><a href='#L120'>120</a>
 <a name='L121'></a><a href='#L121'>121</a>
 <a name='L122'></a><a href='#L122'>122</a>
-<a name='L123'></a><a href='#L123'>123</a>
-<a name='L124'></a><a href='#L124'>124</a>
-<a name='L125'></a><a href='#L125'>125</a>
-<a name='L126'></a><a href='#L126'>126</a>
-<a name='L127'></a><a href='#L127'>127</a>
-<a name='L128'></a><a href='#L128'>128</a>
-<a name='L129'></a><a href='#L129'>129</a>
-<a name='L130'></a><a href='#L130'>130</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L123'></a><a href='#L123'>123</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -212,24 +205,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -311,8 +286,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -323,8 +309,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useState } from 'react';
 &nbsp;
-import { Box, Theme, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, useTheme } from '@mui/material';
 import { Button, ViewPhotosDialog } from '@terraware/web-components';
 &nbsp;
 import ReportService, { REPORT_PHOTO_ENDPOINT } from 'src/services/ReportService';
@@ -341,29 +326,12 @@ type PhotosSectionProps = {
 &nbsp;
 type ReportPhotoWithUrl = ReportPhoto &amp; { url: string };
 &nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  removePhoto: {
-    position: 'absolute',
-    top: -10,
-    right: -10,
-    backgroundColor: theme.palette.TwClrBgDanger,
-  },
-  thumbnail: {
-    margin: 'auto auto',
-    objectFit: 'contain',
-    display: 'flex',
-    maxWidth: '120px',
-    maxHeight: '120px',
-  },
-}));
-&nbsp;
 export default function <span class="fstat-no" title="function not covered" >ViewPhotos(</span>{ reportId, onPhotoRemove, editable }: PhotosSectionProps): JSX.Element {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const [photos, setPhotos] = <span class="cstat-no" title="statement not covered" >useState&lt;ReportPhotoWithUrl[]&gt;([]);</span>
   const [photosModalOpened, setPhotosModalOpened] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
   const [selectedSlide, setSelectedSlide] = <span class="cstat-no" title="statement not covered" >useState(0);</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -432,16 +400,27 @@ export default function <span class="fstat-no" title="function not covered" >Vie
                 icon='iconTrashCan'
                 onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >removePhoto(photo.id, index)}</span>
                 size='small'
-                className={classes.removePhoto}
+                style={{
+                  position: 'absolute',
+                  top: -10,
+                  right: -10,
+                  backgroundColor: theme.palette.TwClrBgDanger,
+                }}
               /&gt;
             )}
             &lt;img
-              className={classes.thumbnail}
               src={`${photo.url}?maxHeight=120&amp;maxWidth=120`}
               alt={`${index}`}
               onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; {
 <span class="cstat-no" title="statement not covered" >                setSelectedSlide(index);</span>
 <span class="cstat-no" title="statement not covered" >                setPhotosModalOpened(true);</span>
+              }}
+              style={{
+                margin: 'auto auto',
+                objectFit: 'contain',
+                display: 'flex',
+                maxWidth: '120px',
+                maxHeight: '120px',
               }}
             /&gt;
           &lt;/Box&gt;
@@ -457,7 +436,7 @@ export default function <span class="fstat-no" title="function not covered" >Vie
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-03T18:23:29.764Z
+                at 2024-06-03T19:37:05.996Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

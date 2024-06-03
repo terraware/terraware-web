@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/37</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/35</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
@@ -219,10 +219,7 @@
 <a name='L154'></a><a href='#L154'>154</a>
 <a name='L155'></a><a href='#L155'>155</a>
 <a name='L156'></a><a href='#L156'>156</a>
-<a name='L157'></a><a href='#L157'>157</a>
-<a name='L158'></a><a href='#L158'>158</a>
-<a name='L159'></a><a href='#L159'>159</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L157'></a><a href='#L157'>157</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -251,25 +248,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -347,7 +325,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -383,7 +379,6 @@
 import { useNavigate } from 'react-router-dom';
 &nbsp;
 import { Grid, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 &nbsp;
 import PageSnackbar from 'src/components/PageSnackbar';
 import ProjectCellRenderer from 'src/components/Projects/ProjectCellRenderer';
@@ -403,24 +398,6 @@ import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 &nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  title: {
-    margin: 0,
-    fontSize: '24px',
-    fontWeight: 600,
-  },
-  centered: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-    marginBottom: '32px',
-  },
-  searchField: {
-    width: '300px',
-  },
-}));
-&nbsp;
 const columns = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span>: TableColumnType[] =&gt; <span class="cstat-no" title="statement not covered" >[</span></span>
   { key: 'name', name: strings.NAME, type: 'string' },
   { key: 'description', name: strings.DESCRIPTION, type: 'string' },
@@ -428,7 +405,6 @@ const columns = <span class="cstat-no" title="statement not covered" ><span clas
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >ProjectsList(</span>): JSX.Element {
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
   const [temporalSearchValue, setTemporalSearchValue] = <span class="cstat-no" title="statement not covered" >useState('');</span>
@@ -483,9 +459,27 @@ export default function <span class="fstat-no" title="function not covered" >Pro
       &lt;PageHeaderWrapper nextElement={contentRef.current}&gt;
         &lt;Grid container paddingBottom={theme.spacing(4)} paddingLeft={isMobile ? 0 : theme.spacing(3)}&gt;
           &lt;Grid item xs={8}&gt;
-            &lt;h1 className={classes.title}&gt;{strings.PROJECTS}&lt;/h1&gt;
+            &lt;h1
+              style={{
+                margin: 0,
+                fontSize: '24px',
+                fontWeight: 600,
+              }}
+            &gt;
+              {strings.PROJECTS}
+            &lt;/h1&gt;
           &lt;/Grid&gt;
-          &lt;Grid item xs={4} className={classes.centered}&gt;
+          &lt;Grid
+            item
+            xs={4}
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'flex-end',
+              marginBottom: '32px',
+            }}
+          &gt;
             {isMobile ? (
               &lt;Button id='new-project' icon='plus' onClick={goToNewProject} size='medium' /&gt;
             ) : (
@@ -504,11 +498,11 @@ export default function <span class="fstat-no" title="function not covered" >Pro
               label=''
               id='search'
               type='text'
-              className={classes.searchField}
               onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChangeSearch('search', value)}</span>
               value={temporalSearchValue}
               iconRight='cancel'
               onClickRightIcon={clearSearch}
+              styles={{ textarea: { width: '300px' } }}
             /&gt;
           &lt;/Grid&gt;
 &nbsp;
@@ -544,7 +538,7 @@ export default function <span class="fstat-no" title="function not covered" >Pro
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-03T18:23:29.764Z
+                at 2024-06-03T19:37:05.996Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
