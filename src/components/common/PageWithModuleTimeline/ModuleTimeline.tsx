@@ -51,6 +51,7 @@ const ModuleTimeline = () => {
   const projectModuleList = useAppSelector(selectProjectModuleList(requestId));
   const dispatch = useAppDispatch();
   const [projectModules, setProjectModules] = useState<Module[] | undefined>();
+  const useDataFromParticipantData = activeModules && currentParticipant && modules;
 
   useEffect(() => {
     if (projectId) {
@@ -65,62 +66,28 @@ const ModuleTimeline = () => {
     }
   }, [projectModuleList]);
 
-  if (!(activeModules && currentParticipant && modules)) {
-    if (project) {
-      const activeIndex = projectModules?.findIndex((module) => module.isActive);
-
-      return (
-        <Box maxWidth={'206px'}>
-          {project.cohortPhase && (
-            <Box sx={{ marginBottom: '24px', paddingRight: '16px' }}>
-              <Badge label={project.cohortPhase || ''} />
-            </Box>
-          )}
-
-          <Box sx={{ width: 180 }}>
-            <Stepper activeStep={activeIndex} orientation='vertical'>
-              {projectModules?.map((module, index) => (
-                <Step key={module.id}>
-                  <StepLabel
-                    icon={<AltStepIcon activeStep={activeIndex || -1} index={index} />}
-                    sx={{ fontWeight: 600, '.MuiStepLabel-label.Mui-disabled': { fontWeight: 600 } }}
-                  >
-                    {module.title}
-                    <br />
-                    <Typography component='span' style={{ fontSize: '14px', fontWeight: 400 }}>
-                      {module.name}
-                    </Typography>
-                  </StepLabel>
-                </Step>
-              ))}
-            </Stepper>
-          </Box>
-        </Box>
-      );
-    } else {
-      return null;
-    }
-  }
-
+  const modulesToUse = useDataFromParticipantData ? modules : projectModules;
   // Find first active index. TODO upgrade stepper to handle multiple active steps
-  const activeIndex = modules.findIndex(
-    (module) => activeModules.find((active) => module.id === active.id) != undefined
-  );
+  const activeIndex = useDataFromParticipantData
+    ? modules?.findIndex((module) => activeModules?.find((active) => module.id === active.id) != undefined)
+    : projectModules?.findIndex((module) => module.isActive);
 
   return (
     <Box maxWidth={'206px'}>
-      {currentParticipant.cohortPhase && (
+      {(currentParticipant?.cohortPhase || project?.cohortPhase) && (
         <Box sx={{ marginBottom: '24px', paddingRight: '16px' }}>
-          <Badge label={currentParticipant.cohortPhase || ''} />
+          <Badge
+            label={useDataFromParticipantData ? currentParticipant.cohortPhase || '' : project?.cohortPhase || ''}
+          />
         </Box>
       )}
 
       <Box sx={{ width: 180 }}>
         <Stepper activeStep={activeIndex} orientation='vertical'>
-          {modules.map((module, index) => (
+          {modulesToUse?.map((module, index) => (
             <Step key={module.id}>
               <StepLabel
-                icon={<AltStepIcon activeStep={activeIndex} index={index} />}
+                icon={<AltStepIcon activeStep={activeIndex || -1} index={index} />}
                 sx={{ fontWeight: 600, '.MuiStepLabel-label.Mui-disabled': { fontWeight: 600 } }}
               >
                 {module.title}
