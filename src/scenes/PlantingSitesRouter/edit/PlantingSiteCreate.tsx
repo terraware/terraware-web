@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { MultiPolygon } from 'geojson';
 
 import PlantingSiteMapEditor from 'src/components/Map/PlantingSiteMapEditor';
@@ -33,17 +32,9 @@ type CreatePlantingSiteProps = {
   reloadPlantingSites: () => void;
 };
 
-const useStyles = makeStyles(() => ({
-  form: {
-    display: 'flex',
-    flexGrow: 1,
-  },
-}));
-
 export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
-  const classes = useStyles();
   const { reloadPlantingSites } = props;
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const navigate = useNavigate();
@@ -162,7 +153,10 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
         saveID='saveCreatePlantingSite'
         onCancel={() => goToPlantingSite(record.id)}
         onSave={onSave}
-        className={classes.form}
+        style={{
+          display: 'flex',
+          flexGrow: 1,
+        }}
       >
         <Container maxWidth={false} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, paddingRight: 0 }}>
           {loaded && (

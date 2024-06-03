@@ -1,19 +1,10 @@
 import React, { useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Autocomplete } from '@terraware/web-components';
 
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-
-const useStyles = makeStyles(() => ({
-  horizontal: {
-    '& .MuiAutocomplete-root': {
-      width: '100%',
-    },
-  },
-}));
 
 export type SubzoneInfo = {
   id: number | string;
@@ -50,7 +41,6 @@ export default function SubzoneSelector(props: SubzoneSelectorProps): JSX.Elemen
   } = props;
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const classes = useStyles();
 
   const zoneToDropdownItem = (zone?: ZoneInfo) =>
     zone ? { label: zone.name, value: zone.id } : { label: '', value: '' };
@@ -116,7 +106,13 @@ export default function SubzoneSelector(props: SubzoneSelectorProps): JSX.Elemen
       display='flex'
       flexWrap='wrap'
       flexDirection={isMobile ? 'column' : 'row'}
-      className={horizontalLayout ? `${classes.horizontal}` : ''}
+      sx={
+        horizontalLayout
+          ? {
+              '& .MuiAutocomplete-root': { width: '100%' },
+            }
+          : {}
+      }
     >
       <Box
         flex={1}

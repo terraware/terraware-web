@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Box, CircularProgress, Grid, Theme, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, CircularProgress, Grid, useTheme } from '@mui/material';
 import { ErrorBox, TableColumnType } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -26,13 +25,6 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import ReassignmentRenderer, { Reassignment, ReassignmentRowType, ZoneInfo } from './ReassignmentRenderer';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  backToWithdrawals: {
-    marginLeft: 0,
-    marginTop: theme.spacing(2),
-  },
-}));
-
 const columns = (): TableColumnType[] => [
   { key: 'species', name: strings.SPECIES, type: 'string' },
   { key: 'siteName', name: strings.PLANTING_SITE, type: 'string' },
@@ -45,7 +37,6 @@ const columns = (): TableColumnType[] => [
 ];
 
 export default function NurseryReassignmentView(): JSX.Element {
-  const classes = useStyles();
   const query = useQuery();
   const { user } = useUser();
   const numberFormatter = useNumberFormatter();
@@ -232,8 +223,11 @@ export default function NurseryReassignmentView(): JSX.Element {
           <BackToLink
             id='back'
             to={`${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history`}
-            className={classes.backToWithdrawals}
             name={strings.WITHDRAWAL_HISTORY}
+            style={{
+              marginLeft: 0,
+              marginTop: theme.spacing(2),
+            }}
           />
         </Box>
         <Box marginTop={theme.spacing(3)}>

@@ -14,22 +14,6 @@ export type PhotoChooserErrorType = {
 };
 
 const useStyles = makeStyles((theme: Theme) => ({
-  removePhoto: {
-    position: 'absolute',
-    top: -10,
-    right: -10,
-    backgroundColor: theme.palette.TwClrBgDanger,
-  },
-  hiddenInput: {
-    display: 'none',
-  },
-  icon: {
-    height: '120px',
-    width: '120px',
-  },
-  button: {
-    marginTop: theme.spacing(3),
-  },
   error: {
     width: 'auto',
     marginBottom: theme.spacing(2),
@@ -227,7 +211,12 @@ export default function PhotoChooser(props: PhotoChooserProps): JSX.Element {
                     icon='iconTrashCan'
                     onClick={() => removeFileAtIndex(index)}
                     size='small'
-                    className={classes.removePhoto}
+                    style={{
+                      position: 'absolute',
+                      top: -10,
+                      right: -10,
+                      backgroundColor: theme.palette.TwClrBgDanger,
+                    }}
                   />
                   <img height='120px' src={fileData.url} alt={files[index]?.name} className={classes.thumbnail} />
                 </Box>
@@ -268,7 +257,14 @@ export default function PhotoChooser(props: PhotoChooserProps): JSX.Element {
         padding={theme.spacing(3)}
         sx={{ background: theme.palette.TwClrBg }}
       >
-        <Icon name='blobbyGrayIconImage' className={classes.icon} size='xlarge' />
+        <Icon
+          name='blobbyGrayIconImage'
+          size='xlarge'
+          style={{
+            height: '120px',
+            width: '120px',
+          }}
+        />
         <Typography color={theme.palette.TwClrTxt} fontSize={14} fontWeight={600} margin={theme.spacing(0, 0, 1)}>
           {!editing && (files.length > 0 && !multipleSelection ? files[0].name : uploadText)}
         </Typography>
@@ -282,10 +278,10 @@ export default function PhotoChooser(props: PhotoChooserProps): JSX.Element {
         <input
           type='file'
           ref={inputRef}
-          className={classes.hiddenInput}
           onChange={onFileChosen}
           accept='image/jpeg,image/png'
           multiple={multipleSelection || false}
+          style={{ display: 'none' }}
         />
         <Button
           onClick={onChooseFileHandler}
@@ -293,7 +289,7 @@ export default function PhotoChooser(props: PhotoChooserProps): JSX.Element {
           label={!multipleSelection && (files.length === 1 || editing) ? replaceFileText : chooseFileText}
           priority='secondary'
           type='passive'
-          className={classes.button}
+          style={{ marginTop: theme.spacing(3) }}
         />
       </Box>
     </Box>

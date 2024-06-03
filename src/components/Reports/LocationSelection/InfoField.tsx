@@ -1,10 +1,14 @@
 import React from 'react';
 
-import { makeStyles } from '@mui/styles';
 import { Textfield } from '@terraware/web-components';
 
 import DatePicker from 'src/components/common/DatePicker';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
+
+export const infoCardStyles = {
+  padding: 0,
+  'white-space': 'pre',
+};
 
 type InfoFieldProps = {
   id: string;
@@ -22,13 +26,6 @@ type InfoFieldProps = {
   tooltipTitle?: string;
 };
 
-export const useInfoCardStyles = makeStyles(() => ({
-  infoCardStyle: {
-    padding: 0,
-    'white-space': 'pre',
-  },
-}));
-
 export const InfoField = (props: InfoFieldProps): JSX.Element => {
   const {
     id,
@@ -45,7 +42,6 @@ export const InfoField = (props: InfoFieldProps): JSX.Element => {
     minDate,
     tooltipTitle,
   } = props;
-  const classes = useInfoCardStyles();
 
   return editable ? (
     type === 'text' ? (
@@ -82,8 +78,8 @@ export const InfoField = (props: InfoFieldProps): JSX.Element => {
       isEditable={false}
       title={label}
       contents={value.toString() ?? '0'}
-      className={classes.infoCardStyle}
       titleInfoTooltip={tooltipTitle}
+      sx={infoCardStyles}
     />
   );
 };

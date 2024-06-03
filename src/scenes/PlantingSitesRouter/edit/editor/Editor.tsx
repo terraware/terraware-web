@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { BusySpinner, Button, Message } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -35,14 +34,6 @@ import { OnValidate } from './types';
 export type EditorProps = {
   site: DraftPlantingSite;
 };
-
-const useStyles = makeStyles(() => ({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    flexGrow: 1,
-  },
-}));
 
 /**
  * Check if user has already completed certain steps and mark them as completed.
@@ -79,7 +70,6 @@ export default function Editor(props: EditorProps): JSX.Element {
   const contentRef = useRef(null);
   const navigate = useNavigate();
   const theme = useTheme();
-  const classes = useStyles();
   const docLinks = useDocLinks();
   const { isMobile } = useDeviceInfo();
 
@@ -312,7 +302,11 @@ export default function Editor(props: EditorProps): JSX.Element {
           onSaveAndClose={() => onSave(true)}
           onStartOver={() => setShowStartOver(true)}
           steps={steps}
-          className={classes.container}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            flexGrow: 1,
+          }}
         >
           {pageMessage && (
             <Box marginTop={theme.spacing(6)}>

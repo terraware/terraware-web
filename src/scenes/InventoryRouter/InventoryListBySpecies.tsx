@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { CircularProgress, Container, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, CircularProgress, Container, Typography, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
@@ -21,17 +20,6 @@ import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
 import { useNumberFormatter } from 'src/utils/useNumber';
-
-const useStyles = makeStyles(() => ({
-  mainContainer: {
-    padding: '32px 0',
-  },
-  spinnerContainer: {
-    position: 'fixed',
-    top: '50%',
-    left: '50%',
-  },
-}));
 
 const columns = (): TableColumnType[] => [
   {
@@ -78,7 +66,6 @@ type InventoryListBySpeciesProps = {
 };
 
 export default function InventoryListBySpecies({ setReportData }: InventoryListBySpeciesProps) {
-  const classes = useStyles();
   const { selectedOrganization } = useOrganization();
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
   const [showResults, setShowResults] = useState(false);
@@ -214,11 +201,17 @@ export default function InventoryListBySpecies({ setReportData }: InventoryListB
           origin='Species'
         />
       ) : searchResults === null ? (
-        <div className={classes.spinnerContainer}>
+        <Box
+          sx={{
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+          }}
+        >
           <CircularProgress />
-        </div>
+        </Box>
       ) : (
-        <Container maxWidth={false} className={classes.mainContainer}>
+        <Container maxWidth={false} sx={{ padding: '32px 0' }}>
           <EmptyStatePage backgroundImageVisible={false} pageName={'Inventory'} reloadData={onApplyFilters} />
         </Container>
       )}

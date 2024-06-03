@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { BusySpinner, FormButton } from '@terraware/web-components';
 import produce from 'immer';
 
@@ -27,18 +26,11 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import useReportFiles from './useReportFiles';
 
-const useStyles = makeStyles(() => ({
-  form: {
-    paddingBottom: '250px',
-  },
-}));
-
 export default function ReportEdit(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
   const { reportId } = useParams<{ reportId: string }>();
   const { user } = useUser();
   const theme = useTheme();
-  const classes = useStyles();
 
   const navigate = useNavigate();
 
@@ -512,7 +504,6 @@ export default function ReportEdit(): JSX.Element {
       </Box>
       {report && (
         <PageForm
-          className={classes.form}
           cancelID='cancelEdits'
           saveID='submitReport'
           onCancel={() => gotoReportView(false)}
@@ -522,6 +513,7 @@ export default function ReportEdit(): JSX.Element {
           }
           cancelButtonText={strings.CANCEL}
           additionalRightButtons={rightButtons}
+          style={{ paddingBottom: '250px' }}
         >
           {report &&
             (showAnnual ? (

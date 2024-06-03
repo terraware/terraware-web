@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, List, ListItem, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Button, DropdownItem } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -25,16 +24,6 @@ import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import BoundariesAndZones from './BoundariesAndZones';
 import SimplePlantingSite from './SimplePlantingSite';
 
-const useStyles = makeStyles(() => ({
-  titleWithButton: {
-    alignItems: 'center',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    minHeight: '50px',
-  },
-}));
-
 export type GenericSiteViewProps<T extends MinimalPlantingSite> = {
   editDisabled?: boolean;
   editUrl: string;
@@ -53,7 +42,6 @@ export default function GenericSiteView<T extends MinimalPlantingSite>({
   zoneViewUrl,
 }: GenericSiteViewProps<T>): JSX.Element {
   const { isMobile } = useDeviceInfo();
-  const classes = useStyles();
   const theme = useTheme();
   const navigate = useNavigate();
   const tz = useLocationTimeZone().get(plantingSite);
@@ -102,7 +90,18 @@ export default function GenericSiteView<T extends MinimalPlantingSite>({
       <Grid item xs={12} marginBottom={theme.spacing(3)}>
         <BackToLink id='back' to={APP_PATHS.PLANTING_SITES} name={strings.PLANTING_SITES} />
       </Grid>
-      <Grid item xs={12} padding={theme.spacing(0, 3)} className={classes.titleWithButton}>
+      <Grid
+        item
+        xs={12}
+        padding={theme.spacing(0, 3)}
+        sx={{
+          alignItems: 'center',
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          minHeight: '50px',
+        }}
+      >
         <Typography fontSize='20px' fontWeight={600}>
           {plantingSite?.name}
         </Typography>

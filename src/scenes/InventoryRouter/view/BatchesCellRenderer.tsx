@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 import { Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Button } from '@terraware/web-components';
 
 import Link from 'src/components/common/Link';
@@ -13,21 +12,18 @@ import { Batch } from 'src/types/Batch';
 import ChangeQuantityModal from './ChangeQuantityModal';
 import QuantitiesMenu from './QuantitiesMenu';
 
-const useStyles = makeStyles(() => ({
-  text: {
-    fontSize: '14px',
-  },
-}));
-
 export type ModalValuesType = {
   type: string;
   openChangeQuantityModal: boolean;
 };
 
 export default function BatchesCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
-  const classes = useStyles();
   const { column, row, value, index, onRowClick } = props;
   const [modalValues, setModalValues] = useState({ type: 'germinating', openChangeQuantityModal: false });
+
+  const textStyles = {
+    fontSize: '14px',
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const rowClick = (event?: React.SyntheticEvent) => {
@@ -41,7 +37,7 @@ export default function BatchesCellRenderer(props: RendererProps<TableRowType>):
   };
 
   const createText = (iValue: React.ReactNode | unknown[]) => {
-    return <Typography className={classes.text}>{iValue as React.ReactNode}</Typography>;
+    return <Typography sx={textStyles}>{iValue as React.ReactNode}</Typography>;
   };
 
   if (column.key === 'withdraw') {
@@ -58,8 +54,8 @@ export default function BatchesCellRenderer(props: RendererProps<TableRowType>):
               onClick={rowClick}
               size='small'
               priority='secondary'
-              className={classes.text}
               disabled={Number(row.totalQuantity) + Number(row.germinatingQuantity) === 0}
+              style={textStyles}
             />
           }
         />

@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Container, Grid, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem, Tabs } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -115,40 +114,6 @@ export type BatchInventoryResult = {
   'totalQuantity(raw)': string;
 };
 
-interface StyleProps {
-  isMobile: boolean;
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  tabs: {
-    '& .MuiTabPanel-root[hidden]': {
-      flexGrow: 0,
-    },
-    '& .MuiTabPanel-root': {
-      display: 'flex',
-      flexDirection: 'column',
-      flexGrow: 1,
-    },
-    '& >.MuiBox-root': {
-      display: 'flex',
-      flexDirection: 'column',
-      flexGrow: 1,
-    },
-  },
-  mainContainer: {
-    padding: '32px 0',
-  },
-  message: {
-    margin: '0 auto',
-    maxWidth: '800px',
-    padding: '48px',
-    width: (props: StyleProps) => (props.isMobile ? 'auto' : '800px'),
-  },
-  actionMenuIcon: {
-    fill: theme.palette.TwClrTxtBrand,
-  },
-}));
-
 type InventoryProps = {
   hasNurseries: boolean;
   hasSpecies: boolean;
@@ -170,7 +135,6 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const classes = useStyles({ isMobile });
   const navigate = useNavigate();
   const location = useStateLocation();
   const { hasNurseries, hasSpecies } = props;
@@ -182,6 +146,13 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
   const [activeTab, setActiveTab] = useState<InventoryListType>(tab);
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [reportData, setReportData] = useState<SearchInventoryParams>();
+
+  const messageStyles = {
+    margin: '0 auto',
+    maxWidth: '800px',
+    padding: '48px',
+    width: isMobile ? 'auto' : '800px',
+  };
 
   const onTabChange = useCallback(
     async (newTab: string) => {
@@ -308,7 +279,27 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
         </Box>
       </PageHeaderWrapper>
       <PageSnackbar />
-      <Box ref={contentRef} display='flex' flexDirection='column' flexGrow={1} className={classes.tabs}>
+      <Box
+        ref={contentRef}
+        display='flex'
+        flexDirection='column'
+        flexGrow={1}
+        sx={{
+          '& .MuiTabPanel-root[hidden]': {
+            flexGrow: 0,
+          },
+          '& .MuiTabPanel-root': {
+            display: 'flex',
+            flexDirection: 'column',
+            flexGrow: 1,
+          },
+          '& >.MuiBox-root': {
+            display: 'flex',
+            flexDirection: 'column',
+            flexGrow: 1,
+          },
+        }}
+      >
         {isOnboarded ? (
           <Tabs
             activeTab={activeTab}
@@ -332,18 +323,14 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
             ]}
           />
         ) : (
-          <Container maxWidth={false} className={classes.mainContainer}>
+          <Container maxWidth={false} sx={{ padding: '32px 0' }}>
             {isAdmin(selectedOrganization) ? (
-              <EmptyMessage
-                className={classes.message}
-                title={strings.ONBOARDING_ADMIN_TITLE}
-                rowItems={getEmptyState()}
-              />
+              <EmptyMessage title={strings.ONBOARDING_ADMIN_TITLE} rowItems={getEmptyState()} sx={messageStyles} />
             ) : (
               <EmptyMessage
-                className={classes.message}
                 title={strings.REACH_OUT_TO_ADMIN_TITLE}
                 text={strings.NO_NURSERIES_NON_ADMIN_MSG}
+                sx={messageStyles}
               />
             )}
           </Container>
