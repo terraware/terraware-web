@@ -102,7 +102,7 @@ export default function ContactUsHome(): JSX.Element {
           onClick: () => goToContactUsForm(item),
         })
       ),
-    [types]
+    [activeLocale, types]
   );
 
   const listItemContent = useMemo(() => {
