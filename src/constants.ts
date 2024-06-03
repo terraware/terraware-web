@@ -43,7 +43,7 @@ export enum APP_PATHS {
   BATCH_WITHDRAW = '/batch/withdraw',
   CHECKIN = '/checkin',
   CONTACT_US = '/contactus',
-  CONTACT_US_FORM = '/contactus/:requestTypeId',
+  CONTACT_US_FORM = '/contactus/:requestType',
   DELIVERABLES = '/deliverables',
   DELIVERABLE_VIEW = '/deliverables/:deliverableId/submissions/:projectId',
   ERROR = '/error',

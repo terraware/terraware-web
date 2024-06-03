@@ -644,6 +644,13 @@ export interface paths {
     /** Submit support request types. */
     post: operations["submitRequest"];
   };
+  "/api/v1/support/attachment": {
+    /**
+     * Upload a temporary attachment.
+     * @description Uploads an attachment, which can be assigned to a support request during submission.
+     */
+    post: operations["uploadAttachment"];
+  };
   "/api/v1/timeseries": {
     /** Lists the timeseries for one or more devices. */
     get: operations["listTimeseries"];
@@ -1713,6 +1720,8 @@ export interface components {
       rationale?: string;
       /** Format: int64 */
       speciesId: number;
+      /** @enum {string} */
+      speciesNativeCategory?: "Native" | "Non-native";
     };
     CreateParticipantRequestPayload: {
       /**
@@ -2748,7 +2757,7 @@ export interface components {
     };
     ListSupportRequestTypesResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
-      types: components["schemas"]["ServiceRequestType"][];
+      types: ("Bug Report" | "Feature Request" | "Contact Us")[];
     };
     ListTimeZoneNamesResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
@@ -3177,6 +3186,8 @@ export interface components {
       activeDeliverableId?: number;
       /** Format: int64 */
       participantProjectSpeciesId: number;
+      /** @enum {string} */
+      participantProjectSpeciesNativeCategory?: "Native" | "Non-native";
       /** @enum {string} */
       participantProjectSpeciesSubmissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
       /** Format: int64 */
@@ -3695,12 +3706,6 @@ export interface components {
       body: string;
       subject: string;
     };
-    ServiceRequestType: {
-      description: string;
-      name: string;
-      /** Format: int32 */
-      requestTypeId: number;
-    };
     SimpleErrorResponsePayload: {
       error: components["schemas"]["ErrorDetails"];
       status: components["schemas"]["SuccessOrError"];
@@ -3883,9 +3888,11 @@ export interface components {
       originalName?: string;
     };
     SubmitSupportRequestPayload: {
+      attachmentComment?: string;
+      attachmentIds?: string[];
       description: string;
-      /** Format: int32 */
-      requestTypeId: number;
+      /** @enum {string} */
+      requestType: "Bug Report" | "Feature Request" | "Contact Us";
       summary: string;
     };
     SubmitSupportRequestResponsePayload: {
@@ -3924,6 +3931,10 @@ export interface components {
       /** Format: int32 */
       species: number;
       status: components["schemas"]["SuccessOrError"];
+    };
+    TemporaryAttachment: {
+      filename: string;
+      temporaryAttachmentId: string;
     };
     TimeZonePayload: {
       /**
@@ -4406,6 +4417,10 @@ export interface components {
       id?: number;
       /** Format: date */
       startDate: string;
+    };
+    UploadAttachmentResponsePayload: {
+      attachments: components["schemas"]["TemporaryAttachment"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     UploadDeliverableDocumentResponsePayload: {
       /** Format: int64 */
@@ -7966,6 +7981,28 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SubmitSupportRequestResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Upload a temporary attachment.
+   * @description Uploads an attachment, which can be assigned to a support request during submission.
+   */
+  uploadAttachment: {
+    requestBody?: {
+      content: {
+        "multipart/form-data": {
+          /** Format: binary */
+          file: string;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadAttachmentResponsePayload"];
         };
       };
     };

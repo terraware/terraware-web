@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 import { ModuleContentType } from 'src/types/Module';
+import { SupportRequestType, getSupportRequestSubpath } from 'src/types/Support';
 
 export default function useNavigateTo() {
   const navigate = useNavigate();
@@ -13,8 +14,10 @@ export default function useNavigateTo() {
         navigate({ pathname: APP_PATHS.CONTACT_US });
       },
 
-      goToContactUsForm: (requestTypeId: number) => {
-        navigate({ pathname: APP_PATHS.CONTACT_US_FORM.replace(':requestTypeId', `${requestTypeId}`) });
+      goToContactUsForm: (requestType: SupportRequestType) => {
+        navigate({
+          pathname: APP_PATHS.CONTACT_US_FORM.replace(':requestType', getSupportRequestSubpath(requestType)),
+        });
       },
 
       goToDeliverable: (deliverableId: number, projectId: number) =>
