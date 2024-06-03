@@ -103,6 +103,10 @@ export interface paths {
     /** Gets all species associated to a participant project. */
     get: operations["getSpeciesForProject"];
   };
+  "/api/v1/accelerator/projects/{projectId}/species/snapshots/{deliverableId}": {
+    /** Creates a new participant project species entry. */
+    get: operations["getParticipantProjectSpeciesSnapshot"];
+  };
   "/api/v1/accelerator/projects/{projectId}/votes": {
     /**
      * Gets vote selections for a single project.
@@ -546,6 +550,8 @@ export interface paths {
      * @description If there was already a photo with the specified filename, replaces it.
      */
     post: operations["uploadPhoto"];
+    /** Delete one photo for an accession. */
+    delete: operations["deletePhoto"];
   };
   "/api/v1/seedbank/clock": {
     /**
@@ -2753,7 +2759,7 @@ export interface components {
     };
     ListSupportRequestTypesResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
-      types: components["schemas"]["ServiceRequestType"][];
+      types: ("Bug Report" | "Feature Request" | "Contact Us")[];
     };
     ListTimeZoneNamesResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
@@ -3702,12 +3708,6 @@ export interface components {
       body: string;
       subject: string;
     };
-    ServiceRequestType: {
-      description: string;
-      name: string;
-      /** Format: int32 */
-      requestTypeId: number;
-    };
     SimpleErrorResponsePayload: {
       error: components["schemas"]["ErrorDetails"];
       status: components["schemas"]["SuccessOrError"];
@@ -3893,8 +3893,8 @@ export interface components {
       attachmentComment?: string;
       attachmentIds?: string[];
       description: string;
-      /** Format: int32 */
-      requestTypeId: number;
+      /** @enum {string} */
+      requestType: "Bug Report" | "Feature Request" | "Contact Us";
       summary: string;
     };
     SubmitSupportRequestResponsePayload: {
@@ -5158,6 +5158,23 @@ export interface operations {
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Creates a new participant project species entry. */
+  getParticipantProjectSpeciesSnapshot: {
+    parameters: {
+      path: {
+        projectId: number;
+        deliverableId: number;
+      };
+    };
+    responses: {
+      /** @description The file was successfully retrieved. */
+      200: {
+        content: {
+          "*/*": string;
         };
       };
     };
@@ -7486,6 +7503,29 @@ export interface operations {
         };
       };
       /** @description The specified accession does not exist. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Delete one photo for an accession. */
+  deletePhoto: {
+    parameters: {
+      path: {
+        id: number;
+        photoFilename: string;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The accession does not exist. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
