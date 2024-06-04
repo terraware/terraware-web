@@ -210,6 +210,13 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
     ) as JSX.Element[];
   }, [activeLocale]);
 
+  const tutorialTitle = useMemo(() => {
+    if (!activeLocale) {
+      return '';
+    }
+    return strings.formatString(strings.TUTORIAL_PREFIX, strings.ADDING_ZONE_BOUNDARIES).toString();
+  }, [activeLocale]);
+
   const onEditableBoundaryChanged = async (editableBoundary?: FeatureCollection) => {
     // pick the latest geometry that was drawn
     const cutWithFeature = getLatestFeature(zonesData?.editableBoundary, editableBoundary);
@@ -333,7 +340,7 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
       <StepTitleDescription
         description={description}
         dontShowAgainPreferenceName='dont-show-site-zone-boundaries-instructions'
-        title={strings.SITE_ZONE_BOUNDARIES}
+        title={tutorialTitle}
         tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_zone_boundary_instructions_video'
         tutorialTitle={strings.ADDING_ZONE_BOUNDARIES}
