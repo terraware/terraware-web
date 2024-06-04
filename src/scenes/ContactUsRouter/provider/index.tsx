@@ -5,7 +5,7 @@ import isEnabled from 'src/features';
 import { requestListSupportRequestTypes } from 'src/redux/features/support/supportAsyncThunks';
 import { selectSupportRequestTypesByRequest } from 'src/redux/features/support/supportSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { ServiceRequestType } from 'src/types/Support';
+import { SupportRequestType } from 'src/types/Support';
 
 import { SupportContext, SupportData } from './Context';
 
@@ -22,7 +22,7 @@ const SupportProvider = ({ children }: Props) => {
     selectSupportRequestTypesByRequest(listSupportRequestTypesRequestId)
   );
 
-  const [supportRequestTypes, setSupportRequestTypes] = useState<ServiceRequestType[]>([]);
+  const [supportRequestTypes, setSupportRequestTypes] = useState<SupportRequestType[]>();
 
   const [supportData, setSupportData] = useState<SupportData>({
     types: supportRequestTypes,

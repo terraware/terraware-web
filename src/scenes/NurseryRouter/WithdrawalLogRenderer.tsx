@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { useTheme } from '@mui/material';
 
 import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS } from 'src/constants';
@@ -15,24 +14,16 @@ import { RendererProps } from '../../components/common/table/types';
 import UndoWithdrawalModal from './UndoWithdrawalModal';
 import WithdrawalHistoryMenu from './WithdrawalHistoryMenu';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  link: {
-    color: theme.palette.TwClrTxtBrand,
-    textDecoration: 'none',
-  },
-  undone: {
-    textDecoration: 'line-through',
-  },
-  text: {
-    fontSize: '14px',
-  },
-}));
-
 export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>): JSX.Element {
-  const classes = useStyles();
+  const theme = useTheme();
 
   const { column, row, value, index, onRowClick, reloadData } = props;
   const { NURSERY_TRANSFER } = NurseryWithdrawalPurposes;
+
+  const linkStyles = {
+    color: theme.palette.TwClrTxtBrand,
+    textDecoration: 'none',
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const rowClick = (event?: React.SyntheticEvent) => {
@@ -51,7 +42,10 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
     return (
       <Link
         to={nurseryWithdrawalDetailLocation}
-        className={`${classes.link} ${row.undoneByWithdrawalId ? classes.undone : ''}`}
+        style={{
+          ...linkStyles,
+          ...(row.undoneByWithdrawalId ? { textDecoration: 'line-through' } : {}),
+        }}
       >
         {iValue as React.ReactNode}
       </Link>
@@ -63,7 +57,7 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
     return (
       <p>
         {`${strings.UNDO} `}
-        <Link to={nurseryWithdrawalDetailLocation} className={`${classes.link}`}>
+        <Link to={nurseryWithdrawalDetailLocation} style={linkStyles}>
           {date as React.ReactNode}
         </Link>
       </p>

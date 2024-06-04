@@ -1,18 +1,11 @@
 import React, { useMemo, useState } from 'react';
 
-import { Box, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Typography, useTheme } from '@mui/material';
 
 import TextWithLink from 'src/components/common/TextWithLink';
 import VideoDialog from 'src/components/common/VideoDialog';
 import { DocType, useDocLinks } from 'src/docLinks';
 import { useUser } from 'src/providers';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  clickableText: {
-    marginLeft: theme.spacing(0.5),
-  },
-}));
 
 export type Description = {
   handlePrefix?: (prefix: string) => string | JSX.Element[];
@@ -44,7 +37,6 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
     tutorialTitle,
   } = props;
   const theme = useTheme();
-  const classes = useStyles();
   const docLinks = useDocLinks();
   const { userPreferences, updateUserPreferences } = useUser();
 
@@ -90,13 +82,13 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
         >
           {line.hasTutorial ? (
             <TextWithLink
-              className={classes.clickableText}
               fontSize='14px'
               handlePrefix={line.handlePrefix}
               handleSuffix={line.handleSuffix}
               onClick={() => setShowModal(true)}
               text={line.text as string}
               key={index}
+              style={{ marginLeft: theme.spacing(0.5) }}
             />
           ) : (
             line.text

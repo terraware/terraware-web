@@ -4,3 +4,5 @@ export const selectSupportRequestTypesByRequest = (requestId: string) => (state:
   state.supportRequestTypes[requestId];
 export const selectSupportRequestSubmitRequest = (requestId: string) => (state: RootState) =>
   state.supportRequestSubmit[requestId];
+export const selectSupportUploadAttachmentRequest = (requestId: string) => (state: RootState) =>
+  state.supportAttachmentUpload[requestId];

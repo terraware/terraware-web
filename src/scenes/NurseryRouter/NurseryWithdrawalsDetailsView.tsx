@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Message, Tabs } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -28,13 +27,6 @@ import NonOutplantWithdrawalContent from './WithdrawalDetails/NonOutplantWithdra
 import ReassignmentTabPanelContent from './WithdrawalDetails/ReassignmentTabPanelContent';
 import WithdrawalTabPanelContent from './WithdrawalDetails/WithdrawalTabPanelContent';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  backToWithdrawals: {
-    marginLeft: 0,
-    marginTop: theme.spacing(2),
-  },
-}));
-
 export interface WithdrawalSummary {
   id: string;
   delivery_id: string;
@@ -59,7 +51,6 @@ export default function NurseryWithdrawalsDetailsView({
 }: NurseryWithdrawalsDetailsViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
-  const classes = useStyles();
   const theme = useTheme();
   const { withdrawalId } = useParams<{ withdrawalId: string }>();
   const { isMobile } = useDeviceInfo();
@@ -215,8 +206,11 @@ export default function NurseryWithdrawalsDetailsView({
             <BackToLink
               id='back'
               to={`${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history`}
-              className={classes.backToWithdrawals}
               name={strings.WITHDRAWAL_HISTORY}
+              style={{
+                marginLeft: 0,
+                marginTop: theme.spacing(2),
+              }}
             />
           </Box>
           <Box

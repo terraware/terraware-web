@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Popover, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Button, PillListItem, Textfield, Tooltip } from '@terraware/web-components';
 import { PillList } from '@terraware/web-components';
 
@@ -24,16 +23,6 @@ import { SearchNodePayload } from 'src/types/Search';
 import { Species } from 'src/types/Species';
 import { getAllNurseries } from 'src/utils/organization';
 import useForm from 'src/utils/useForm';
-
-const useStyles = makeStyles(() => ({
-  popoverContainer: {
-    '& .MuiPaper-root': {
-      borderRadius: '8px',
-      overflow: 'visible',
-      width: '480px',
-    },
-  },
-}));
 
 const initialFilters: Record<string, SearchNodePayload> = {
   showEmptyBatches: {
@@ -73,7 +62,6 @@ export default function Search(props: SearchProps): JSX.Element | null {
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
-  const classes = useStyles();
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
 
@@ -345,7 +333,13 @@ export default function Search(props: SearchProps): JSX.Element | null {
                 vertical: 'top',
                 horizontal: 'center',
               }}
-              className={classes.popoverContainer}
+              sx={{
+                '& .MuiPaper-root': {
+                  borderRadius: '8px',
+                  overflow: 'visible',
+                  width: '480px',
+                },
+              }}
             >
               <FilterGroup
                 initialFilters={filterGroupFilters}

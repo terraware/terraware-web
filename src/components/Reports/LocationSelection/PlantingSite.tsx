@@ -4,7 +4,7 @@ import { Box, Grid } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 
 import { LocationSectionProps } from 'src/components/Reports/LocationSelection';
-import { InfoField, useInfoCardStyles } from 'src/components/Reports/LocationSelection/InfoField';
+import { InfoField, infoCardStyles } from 'src/components/Reports/LocationSelection/InfoField';
 import PlantingSiteSpeciesCellRenderer from 'src/components/Reports/LocationSelection/PlantingSitesSpeciesCellRenderer';
 import { transformNumericValue } from 'src/components/Reports/LocationSelection/util';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
@@ -58,7 +58,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
   const { editable, location, onUpdateLocation, validate } = props;
 
   const { isMobile } = useDeviceInfo();
-  const classes = useInfoCardStyles();
+
   const { selectedOrganization } = useOrganization();
   const dispatch = useAppDispatch();
   const defaultTimeZone = useDefaultTimeZone();
@@ -330,7 +330,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
               isEditable={false}
               title={strings.MOST_RECENT_OBSERVATION}
               contents={`${latestObservation.startDate} - ${latestObservation.completedDate}`}
-              className={classes.infoCardStyle}
+              sx={infoCardStyles}
             />
           </Grid>
           <Grid item xs={smallItemGridWidth()}>
@@ -338,7 +338,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
               isEditable={false}
               title={strings.NUMBER_OF_PLOTS_IN_MOST_RECENT_OBSERVATION}
               contents={numberOfPlots || ''}
-              className={classes.infoCardStyle}
+              sx={infoCardStyles}
             />
           </Grid>
           <Grid item xs={smallItemGridWidth()}>
@@ -346,7 +346,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
               isEditable={false}
               title={strings.CURRENT_NEXT_OBSERVATION}
               contents={currentNextObservationDates}
-              className={classes.infoCardStyle}
+              sx={infoCardStyles}
             />
           </Grid>
           <Grid item xs={smallItemGridWidth()}>
@@ -354,7 +354,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
               isEditable={false}
               title={strings.TOTAL_PLANTS_OBSERVED}
               contents={latestObservation.totalPlants}
-              className={classes.infoCardStyle}
+              sx={infoCardStyles}
             />
           </Grid>
           <Grid item xs={smallItemGridWidth()}>
@@ -362,7 +362,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
               isEditable={false}
               title={strings.LIVE_PLANTS_OBSERVED}
               contents={livePlants || ''}
-              className={classes.infoCardStyle}
+              sx={infoCardStyles}
             />
           </Grid>
           <Grid item xs={smallItemGridWidth()}>
@@ -370,7 +370,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
               isEditable={false}
               title={strings.DEAD_PLANTS_OBSERVED}
               contents={deadPlants || ''}
-              className={classes.infoCardStyle}
+              sx={infoCardStyles}
             />
           </Grid>
           <Grid item xs={smallItemGridWidth()}>
@@ -378,7 +378,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
               isEditable={false}
               title={strings.SPECIES_OBSERVED}
               contents={latestObservation.totalSpecies}
-              className={classes.infoCardStyle}
+              sx={infoCardStyles}
             />
           </Grid>
           <Grid item xs={smallItemGridWidth()}>
@@ -386,7 +386,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
               isEditable={false}
               title={strings.MARKED_AS_PLANTING_COMPLETE}
               contents={markedAsComplete}
-              className={classes.infoCardStyle}
+              sx={infoCardStyles}
             />
           </Grid>
           <Grid item xs={smallItemGridWidth()}>
@@ -394,7 +394,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
               isEditable={false}
               title={strings.MORTALITY_RATE_PERCENT}
               contents={latestObservation.mortalityRate}
-              className={classes.infoCardStyle}
+              sx={infoCardStyles}
             />
           </Grid>
           {!estimatedPlants && (
@@ -403,7 +403,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
                 isEditable={false}
                 title={strings.PLANTING_PROGRESS_PERCENT}
                 contents={reportedPlants?.progressPercent || ''}
-                className={classes.infoCardStyle}
+                sx={infoCardStyles}
               />
             </Grid>
           )}
@@ -413,7 +413,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
                 isEditable={false}
                 title={strings.PLANTING_DENSITY_OF_PLANTED_ZONES}
                 contents={plantingDensityForZones}
-                className={classes.infoCardStyle}
+                sx={infoCardStyles}
               />
             </Grid>
           )}
@@ -422,7 +422,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
               isEditable={false}
               title={strings.EST_TOTAL_PLANTS_PLANTING_DENSITY_AREA}
               contents={estimatedPlants ? `${estimatedPlants} ${strings.PLANTS_PER_HECTARE}` : ''}
-              className={classes.infoCardStyle}
+              sx={infoCardStyles}
             />
           </Grid>
         </>

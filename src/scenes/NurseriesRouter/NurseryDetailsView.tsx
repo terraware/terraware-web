@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Grid, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 
 import BackToLink from 'src/components/common/BackToLink';
 import { APP_PATHS } from 'src/constants';
@@ -18,15 +17,6 @@ import TextField from '../../components/common/Textfield/Textfield';
 import TfMain from '../../components/common/TfMain';
 import Button from '../../components/common/button/Button';
 import NurserySubLocations from './NurserySubLocations';
-
-const useStyles = makeStyles(() => ({
-  titleWithButton: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-}));
 
 export default function NurseryDetailsView(): JSX.Element {
   const { selectedOrganization } = useOrganization();
@@ -51,8 +41,6 @@ export default function NurseryDetailsView(): JSX.Element {
     }
   }, [nurseryId, selectedOrganization, navigate]);
 
-  const classes = useStyles();
-
   const goToEditNursery = () => {
     if (nurseryId) {
       const editNurseryLocation = {
@@ -76,7 +64,17 @@ export default function NurseryDetailsView(): JSX.Element {
         <Grid item xs={12} marginBottom={theme.spacing(3)}>
           <BackToLink id='back' to={APP_PATHS.NURSERIES} name={strings.NURSERIES} />
         </Grid>
-        <Grid item xs={12} padding={theme.spacing(0, 3)} className={classes.titleWithButton}>
+        <Grid
+          item
+          xs={12}
+          padding={theme.spacing(0, 3)}
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
           <Typography fontSize='20px' fontWeight={600}>
             {nursery?.name}
           </Typography>

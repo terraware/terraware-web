@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { Popover, Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Popover, Typography, useTheme } from '@mui/material';
 
 import { PillListItemWithEmptyValue } from 'src/components/ProjectNewView/flow/ProjectEntitySearch';
 import { ProjectEntityFilters } from 'src/components/ProjectNewView/flow/useProjectEntitySelection';
@@ -10,42 +9,6 @@ import Icon from 'src/components/common/icon/Icon';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  dropdown: {
-    cursor: 'pointer',
-    border: `1px solid ${theme.palette.TwClrBrdrSecondary}`,
-    borderRadius: '4px',
-    width: '176px',
-    height: '40px',
-    padding: theme.spacing(1, 2, 1, 1),
-    marginTop: theme.spacing(0.5),
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
-  dropdownIconRight: {
-    height: '24px',
-    width: '24px',
-  },
-  popoverContainer: {
-    '& .MuiPaper-root': {
-      borderRadius: '8px',
-      overflow: 'visible',
-      width: '480px',
-    },
-  },
-  mobileContainer: {
-    borderRadius: '8px',
-    overflow: 'visible',
-    position: 'fixed',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    maxHeight: '90%',
-    width: '90%',
-    zIndex: 1300,
-  },
-}));
 
 export interface EntitySpecificFilterConfig {
   filterKey: string;
@@ -67,7 +30,7 @@ export default function ProjectEntityFilter(props: ProjectEntityFilterProps): JS
 
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
-  const classes = useStyles({ isMobile });
+  const theme = useTheme();
 
   const [anchorEl, setAnchorEl] = useState<undefined | HTMLElement>();
 
@@ -98,12 +61,43 @@ export default function ProjectEntityFilter(props: ProjectEntityFilterProps): JS
 
   return (
     <div>
-      <div className={classes.dropdown} onClick={handleClick}>
+      <Box
+        onClick={handleClick}
+        sx={{
+          cursor: 'pointer',
+          border: `1px solid ${theme.palette.TwClrBrdrSecondary}`,
+          borderRadius: '4px',
+          width: '176px',
+          height: '40px',
+          padding: theme.spacing(1, 2, 1, 1),
+          marginTop: theme.spacing(0.5),
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}
+      >
         <Typography>{label}</Typography>
-        <Icon name={isOpen ? 'chevronUp' : 'chevronDown'} className={classes.dropdownIconRight} />
-      </div>
+        <Icon
+          name={isOpen ? 'chevronUp' : 'chevronDown'}
+          style={{
+            height: '24px',
+            width: '24px',
+          }}
+        />
+      </Box>
       {isMobile && isOpen ? (
-        <div className={classes.mobileContainer}>
+        <Box
+          sx={{
+            borderRadius: '8px',
+            overflow: 'visible',
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            maxHeight: '90%',
+            width: '90%',
+            zIndex: 1300,
+          }}
+        >
           <FilterMultiSelect
             filterKey={filterKey}
             initialSelection={initialSelection}
@@ -114,7 +108,7 @@ export default function ProjectEntityFilter(props: ProjectEntityFilterProps): JS
             renderOption={renderOption}
             {...notPresentFilterConfig}
           />
-        </div>
+        </Box>
       ) : (
         <Popover
           id='pre-exposed-filter-popover'
@@ -129,7 +123,13 @@ export default function ProjectEntityFilter(props: ProjectEntityFilterProps): JS
             vertical: 'top',
             horizontal: 'left',
           }}
-          className={classes.popoverContainer}
+          sx={{
+            '& .MuiPaper-root': {
+              borderRadius: '8px',
+              overflow: 'visible',
+              width: '480px',
+            },
+          }}
         >
           <FilterMultiSelect
             filterKey={filterKey}

@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Grid, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import ProjectCellRenderer from 'src/components/Projects/ProjectCellRenderer';
@@ -22,24 +21,6 @@ import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-const useStyles = makeStyles(() => ({
-  title: {
-    margin: 0,
-    fontSize: '24px',
-    fontWeight: 600,
-  },
-  centered: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-    marginBottom: '32px',
-  },
-  searchField: {
-    width: '300px',
-  },
-}));
-
 const columns = (): TableColumnType[] => [
   { key: 'name', name: strings.NAME, type: 'string' },
   { key: 'description', name: strings.DESCRIPTION, type: 'string' },
@@ -47,7 +28,6 @@ const columns = (): TableColumnType[] => [
 
 export default function ProjectsList(): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const classes = useStyles();
   const theme = useTheme();
   const navigate = useNavigate();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
@@ -102,9 +82,27 @@ export default function ProjectsList(): JSX.Element {
       <PageHeaderWrapper nextElement={contentRef.current}>
         <Grid container paddingBottom={theme.spacing(4)} paddingLeft={isMobile ? 0 : theme.spacing(3)}>
           <Grid item xs={8}>
-            <h1 className={classes.title}>{strings.PROJECTS}</h1>
+            <h1
+              style={{
+                margin: 0,
+                fontSize: '24px',
+                fontWeight: 600,
+              }}
+            >
+              {strings.PROJECTS}
+            </h1>
           </Grid>
-          <Grid item xs={4} className={classes.centered}>
+          <Grid
+            item
+            xs={4}
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'flex-end',
+              marginBottom: '32px',
+            }}
+          >
             {isMobile ? (
               <Button id='new-project' icon='plus' onClick={goToNewProject} size='medium' />
             ) : (
@@ -123,11 +121,11 @@ export default function ProjectsList(): JSX.Element {
               label=''
               id='search'
               type='text'
-              className={classes.searchField}
               onChange={(value) => onChangeSearch('search', value)}
               value={temporalSearchValue}
               iconRight='cancel'
               onClickRightIcon={clearSearch}
+              styles={{ textarea: { width: '300px' } }}
             />
           </Grid>
 

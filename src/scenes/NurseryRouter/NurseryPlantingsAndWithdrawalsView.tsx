@@ -5,7 +5,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Tabs } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -22,30 +21,11 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import NurseryWithdrawals from './NurseryWithdrawalsTabContent';
 import PlantingProgress from './PlantingProgressTabContent';
 
-const useStyles = makeStyles(() => ({
-  tabs: {
-    '& .MuiTabPanel-root[hidden]': {
-      flexGrow: 0,
-    },
-    '& .MuiTabPanel-root': {
-      display: 'flex',
-      flexDirection: 'column',
-      flexGrow: 1,
-    },
-    '& >.MuiBox-root': {
-      display: 'flex',
-      flexDirection: 'column',
-      flexGrow: 1,
-    },
-  },
-}));
-
 type NurseryWithdrawalsProps = {
   reloadTracking: () => void;
 };
 
 export default function NurseryPlantingsAndWithdrawalsView({ reloadTracking }: NurseryWithdrawalsProps): JSX.Element {
-  const classes = useStyles();
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
@@ -99,7 +79,21 @@ export default function NurseryPlantingsAndWithdrawalsView({ reloadTracking }: N
             flexDirection='column'
             flexGrow={1}
             maxWidth='100%'
-            className={classes.tabs}
+            sx={{
+              '& .MuiTabPanel-root[hidden]': {
+                flexGrow: 0,
+              },
+              '& .MuiTabPanel-root': {
+                display: 'flex',
+                flexDirection: 'column',
+                flexGrow: 1,
+              },
+              '& >.MuiBox-root': {
+                display: 'flex',
+                flexDirection: 'column',
+                flexGrow: 1,
+              },
+            }}
           >
             <Tabs
               activeTab={activeTab}

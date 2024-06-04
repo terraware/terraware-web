@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Button } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
@@ -17,16 +16,9 @@ import PhaseScores from './PhaseScores';
 import { useScoringData } from './ScoringContext';
 import useScoresUpdate from './useScoresUpdate';
 
-const useStyles = makeStyles(() => ({
-  form: {
-    width: '100%',
-  },
-}));
-
 const ScorecardEditView = () => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const classes = useStyles();
   const { crumbs, hasData, phase0Scores, phase1Scores, projectId, projectName, status } = useScoringData();
   const { update, status: updateStatus } = useScoresUpdate(projectId);
   const { goToParticipantProject } = useNavigateTo();
@@ -96,7 +88,7 @@ const ScorecardEditView = () => {
         onCancel={onCancel}
         onSave={onSave}
         saveID='saveEditScorecard'
-        className={classes.form}
+        style={{ width: '100%' }}
       >
         <Card style={{ width: '100%' }}>
           <Box display='flex' flexDirection='row' flexGrow={0} margin={theme.spacing(3)} justifyContent='right'>

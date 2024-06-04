@@ -19,19 +19,6 @@ import TextVariable from './TextVariable';
 import { editorDisplayVariableWithValues, editorValueFromVariableValue, variableValueFromEditorValue } from './helpers';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  editor: {
-    borderRadius: '8px',
-    border: `1px solid ${theme.palette.TwClrBrdrSecondary}`,
-    padding: theme.spacing(1),
-    backgroundColor: theme.palette.TwClrBg,
-    fontFamily: 'Inter',
-    fontSize: '16px',
-    overflow: 'scroll',
-    resize: 'vertical',
-  },
-  placeholder: {
-    top: `${theme.spacing(1)} !important`,
-  },
   variableDropdown: {
     background: theme.palette.TwClrBg,
     borderRadius: '8px',
@@ -281,15 +268,24 @@ const SectionEdit = ({
       <Box marginTop={theme.spacing(2)}>
         <Slate editor={editor} initialValue={initialValue} onChange={onChange}>
           <Editable
-            className={classes.editor}
             renderElement={renderElement}
             onKeyDown={onKeyDown}
             placeholder={strings.PLACEHOLDER}
             renderPlaceholder={({ children, attributes }) => (
-              <div className={classes.placeholder} {...attributes}>
+              <Box sx={{ top: `${theme.spacing(1)} !important` }} {...attributes}>
                 {children}
-              </div>
+              </Box>
             )}
+            style={{
+              borderRadius: '8px',
+              border: `1px solid ${theme.palette.TwClrBrdrSecondary}`,
+              padding: theme.spacing(1),
+              backgroundColor: theme.palette.TwClrBg,
+              fontFamily: 'Inter',
+              fontSize: '16px',
+              overflow: 'scroll',
+              resize: 'vertical',
+            }}
           />
         </Slate>
       </Box>

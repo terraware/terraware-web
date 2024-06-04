@@ -14,7 +14,7 @@ const ContactUsRouter = (): JSX.Element => {
     <SupportProvider>
       <Routes>
         <Route path={'/'} element={<ContactUsHome />} />
-        {featureEnabled && <Route path={'/:requestTypeId'} element={<ContactUsForm />} />}
+        {featureEnabled && <Route path={'/:requestType'} element={<ContactUsForm />} />}
         <Route path={'*'} element={<Navigate to={APP_PATHS.CONTACT_US} />} />
       </Routes>
     </SupportProvider>

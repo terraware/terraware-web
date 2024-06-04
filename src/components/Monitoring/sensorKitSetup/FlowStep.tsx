@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Grid, Theme } from '@mui/material';
+import { Box, Grid, Theme, useTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import Button from 'src/components/common/button/Button';
@@ -16,34 +16,6 @@ interface StyleProps {
 }
 
 const useStyles = makeStyles((theme: Theme) => ({
-  setupTitle: {
-    fontWeight: 'bold',
-    fontSize: '18px',
-    lineHeight: '28px',
-  },
-  flowContent: {
-    marginTop: theme.spacing(2),
-  },
-  flowFooter: {
-    display: 'flex',
-    marginTop: theme.spacing(2),
-    alignItems: 'end',
-  },
-  flowFooterError: {
-    alignItems: 'center',
-  },
-  icon: {
-    marginRight: theme.spacing(1),
-  },
-  titleContainer: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  gridItem: {
-    display: 'flex',
-    justifyContent: 'center',
-    marginBottom: theme.spacing(3),
-  },
   errorBox: {
     width: '100%',
     marginBottom: theme.spacing(2),
@@ -78,6 +50,7 @@ type FlowStepProps = {
 
 export default function FlowStep(props: FlowStepProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
+  const theme = useTheme();
   const classes = useStyles({ isMobile });
   const {
     flowState,
@@ -95,21 +68,50 @@ export default function FlowStep(props: FlowStepProps): JSX.Element {
   } = props;
 
   return (
-    <Grid item xs={12} className={classes.gridItem}>
+    <Grid
+      item
+      xs={12}
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        marginBottom: theme.spacing(3),
+      }}
+    >
       <Expandable
         title={
-          <div className={classes.titleContainer}>
-            {completed && <Icon name='checkmark' className={classes.icon} />}
-            <span className={classes.setupTitle}>{title}</span>
-          </div>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            {completed && <Icon name='checkmark' style={{ marginRight: theme.spacing(1) }} />}
+            <Box
+              component='span'
+              sx={{
+                fontWeight: 'bold',
+                fontSize: '18px',
+                lineHeight: '28px',
+              }}
+            >
+              {title}
+            </Box>
+          </Box>
         }
         opened={active}
         disabled={!active}
       >
-        <div className={classes.flowContent}>
+        <Box sx={{ marginTop: theme.spacing(2) }}>
           {flowError !== undefined && <ErrorBox {...flowError} className={classes.errorBox} />}
           {children}
-          <div className={classes.flowFooter + (footerError ? ' ' + classes.flowFooterError : '')}>
+          <Box
+            sx={{
+              display: 'flex',
+              marginTop: theme.spacing(2),
+              alignItems: 'end',
+              ...(footerError ? { alignItems: 'center' } : {}),
+            }}
+          >
             <span>{footer}</span>
             {showNext && (
               <Button
@@ -122,8 +124,8 @@ export default function FlowStep(props: FlowStepProps): JSX.Element {
                 className={footer === undefined ? '' : classes.button}
               />
             )}
-          </div>
-        </div>
+          </Box>
+        </Box>
       </Expandable>
     </Grid>
   );
