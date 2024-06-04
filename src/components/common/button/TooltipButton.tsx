@@ -6,7 +6,7 @@ import Tooltip from '@terraware/web-components/components/Tooltip/Tooltip';
 import Button from './Button';
 
 export type TooltipButtonProps = {
-  tooltip?: string; // if not undefined, hovering overt the button will show a tooltip
+  tooltip?: string; // if not undefined, hovering over the button will show a tooltip
 };
 
 const TooltipButton = (props: TooltipButtonProps & ButtonProps): JSX.Element => {
