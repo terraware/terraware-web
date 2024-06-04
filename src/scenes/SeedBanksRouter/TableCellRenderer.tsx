@@ -13,7 +13,7 @@ export default function SeedBanksCellRenderer(props: RendererProps<TableRowType>
     const seedBankLocation = {
       pathname: APP_PATHS.SEED_BANKS_VIEW.replace(':seedBankId', row.id.toString()),
     };
-    return <Link to={seedBankLocation.pathname}>{iValue as React.ReactNode}</Link>;
+    return <Link fontSize='16px' to={seedBankLocation.pathname}>{iValue as React.ReactNode}</Link>;
   };
 
   if (column.key === 'name') {

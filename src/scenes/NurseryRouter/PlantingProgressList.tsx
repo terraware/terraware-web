@@ -243,7 +243,7 @@ const DetailsRenderer =
         : `siteName=${encodeURIComponent(row.siteName)}`;
       const url = `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history&${filterParam}`;
       return (
-        <Link to={url}>
+        <Link fontSize='16px' to={url}>
           <FormattedNumber value={row.totalSeedlingsSent} />
         </Link>
       );

@@ -28,7 +28,7 @@ export default function PlantingSitesCellRenderer(props: RendererProps<TableRowT
 
     const to = plantingSiteViewUrl.replace(':plantingSiteId', row.id.toString());
 
-    return <Link to={to}>{iValue as React.ReactNode}</Link>;
+    return <Link fontSize='16px' to={to}>{iValue as React.ReactNode}</Link>;
   };
 
   if (column.key === 'name') {

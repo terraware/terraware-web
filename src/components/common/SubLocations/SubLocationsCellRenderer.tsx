@@ -33,11 +33,11 @@ export default function SubLocationsCellRenderer({
       if (!renderLink || !facilityId) {
         return data;
       }
-      return <Link to={renderLink(facilityId, locationName)}>{data}</Link>;
+      return <Link fontSize='16px' to={renderLink(facilityId, locationName)}>{data}</Link>;
     };
 
     const createLinkToName = (locationName: string) => {
-      return <Link onClick={rowClick}>{locationName}</Link>;
+      return <Link fontSize='16px' onClick={rowClick}>{locationName}</Link>;
     };
 
     if (column.key === 'activeAccessions' || column.key === 'activeBatches') {

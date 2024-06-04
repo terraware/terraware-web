@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   link: {
     color: theme.palette.TwClrTxtBrand,
     textDecoration: 'none',
+    fontSize: '16px'
   },
   undone: {
     textDecoration: 'line-through',

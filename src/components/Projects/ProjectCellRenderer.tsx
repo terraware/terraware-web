@@ -12,7 +12,7 @@ export default function ProjectCellRenderer(props: RendererProps<TableRowType>):
     const projectLocation = {
       pathname: APP_PATHS.PROJECT_VIEW.replace(':projectId', row.id.toString()),
     };
-    return <Link to={projectLocation.pathname}>{row.name}</Link>;
+    return <Link fontSize='16px' to={projectLocation.pathname}>{row.name}</Link>;
   };
 
   if (column.key === 'name') {

@@ -28,6 +28,7 @@ export default function WithdrawalRenderer(props: RendererProps<TableRowType>): 
         column={column}
         value={
           <Link
+            fontSize='16px'
             to={APP_PATHS.INVENTORY_BATCH_FOR_SPECIES.replace(':speciesId', row.speciesId).replace(
               ':batchId',
               row.batchId

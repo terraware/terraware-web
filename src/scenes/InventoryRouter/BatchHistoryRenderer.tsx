@@ -55,7 +55,7 @@ export default function BatchHistoryRenderer(props: RendererProps<TableRowType>)
         index={index}
         column={column}
         value={
-          <Link onClick={rowClick} className={classes.link}>
+          <Link fontSize='16px' onClick={rowClick} className={classes.link}>
             {getDateDisplayValue(value)}
           </Link>
         }
@@ -72,6 +72,7 @@ export default function BatchHistoryRenderer(props: RendererProps<TableRowType>)
           column={column}
           value={
             <Link
+              fontSize='16px'
               to={APP_PATHS.NURSERY_WITHDRAWALS_DETAILS.replace(':withdrawalId', row.withdrawalId)}
               className={classes.link}
             >

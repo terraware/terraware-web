@@ -48,7 +48,7 @@ export default function SearchCellRenderer(props: RendererProps<SearchResponseEl
       <CellRenderer
         index={index}
         column={column}
-        value={<Link to={APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', `${row.id}`)}>{`${value}`}</Link>}
+        value={<Link fontSize='16px' to={APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', `${row.id}`)}>{`${value}`}</Link>}
         row={row}
       />
     );

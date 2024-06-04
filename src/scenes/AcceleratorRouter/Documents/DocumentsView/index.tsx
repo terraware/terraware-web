@@ -53,7 +53,7 @@ export default function DocumentsView(): JSX.Element {
               {...props}
               value={
                 <Link
-                  to={APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_VIEW.replace(':documentId', `${props.row.id}`)}
+                fontSize='16px' to={APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_VIEW.replace(':documentId', `${props.row.id}`)}
                 >
                   {props.row.name}
                 </Link>

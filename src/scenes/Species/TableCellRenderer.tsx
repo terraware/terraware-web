@@ -53,7 +53,7 @@ export default function SpeciesCellRenderer(props: RendererProps<TableRowType>):
 
   const createLinkToSpeciesDetail = (iValue: ReactNode | unknown[]) => {
     return (
-      <Link to={APP_PATHS.SPECIES_DETAILS.replace(':speciesId', row.id.toString())}>{iValue as React.ReactNode}</Link>
+      <Link fontSize='16px' to={APP_PATHS.SPECIES_DETAILS.replace(':speciesId', row.id.toString())}>{iValue as React.ReactNode}</Link>
     );
   };
 

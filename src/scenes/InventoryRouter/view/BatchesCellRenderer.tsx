@@ -37,7 +37,7 @@ export default function BatchesCellRenderer(props: RendererProps<TableRowType>):
   };
 
   const createLinkToBatch = (iValue: React.ReactNode | unknown[]) => {
-    return <Link onClick={rowClick}>{iValue as React.ReactNode}</Link>;
+    return <Link fontSize='16px' onClick={rowClick}>{iValue as React.ReactNode}</Link>;
   };
 
   const createText = (iValue: React.ReactNode | unknown[]) => {
