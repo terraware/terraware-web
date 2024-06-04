@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/129</span>
+                <span class='fraction'>0/126</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/35</span>
+                <span class='fraction'>0/34</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/127</span>
+                <span class='fraction'>0/125</span>
             </div>
         
             
@@ -491,10 +491,7 @@
 <a name='L426'></a><a href='#L426'>426</a>
 <a name='L427'></a><a href='#L427'>427</a>
 <a name='L428'></a><a href='#L428'>428</a>
-<a name='L429'></a><a href='#L429'>429</a>
-<a name='L430'></a><a href='#L430'>430</a>
-<a name='L431'></a><a href='#L431'>431</a>
-<a name='L432'></a><a href='#L432'>432</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L429'></a><a href='#L429'>429</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -526,14 +523,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -542,7 +531,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -551,7 +539,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -833,6 +820,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -927,8 +921,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useState } from 'react';
 &nbsp;
-import { Box, FormControlLabel, Grid, Radio, RadioGroup, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, FormControlLabel, Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
 import { SelectT, Textfield } from '@terraware/web-components';
 import { Dropdown } from '@terraware/web-components';
 import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
@@ -957,14 +950,6 @@ import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { getSubstratesAccordingToType } from 'src/utils/viabilityTest';
 import { withdrawalPurposes } from 'src/utils/withdrawalPurposes';
 &nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  withdraw: {
-    borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-    borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-    paddingTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
-  },
-}));
 export interface WithdrawDialogProps {
   open: boolean;
   accession: Accession;
@@ -994,7 +979,6 @@ export default function <span class="fstat-no" title="function not covered" >Wit
   const tz = <span class="cstat-no" title="statement not covered" >useLocationTimeZone().get(selectedSeedBank);</span>
   const [timeZone, setTimeZone] = <span class="cstat-no" title="statement not covered" >useState(tz.id);</span>
   const [isByWeight, setIsByWeight] = <span class="cstat-no" title="statement not covered" >useState(accession.remainingQuantity?.units === 'Seeds' ? false : true);</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const [withdrawalQty, setWithdrawalQty] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;(0);</span>
   const [withdrawalUnits, setWithdrawalUnits] = <span class="cstat-no" title="statement not covered" >useState&lt;Unit['value']&gt;('Grams');</span>
   const [withdrawalValid, setWithdrawalValid] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
@@ -1270,7 +1254,14 @@ export default function <span class="fstat-no" title="function not covered" >Wit
             &lt;/Grid&gt;
           &lt;/&gt;
         ) : null}
-        &lt;Box className={classes.withdraw}&gt;
+        &lt;Box
+          sx={{
+            borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+            borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+            paddingTop: theme.spacing(2),
+            marginBottom: theme.spacing(2),
+          }}
+        &gt;
           &lt;Grid item xs={12} textAlign='left'&gt;
             &lt;Typography color={theme.palette.TwClrTxtSecondary} display='flex' fontSize={14}&gt;
               {strings.WITHDRAW_BY}
@@ -1363,7 +1354,7 @@ export default function <span class="fstat-no" title="function not covered" >Wit
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-04T18:40:52.879Z
+                at 2024-06-04T20:40:40.670Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

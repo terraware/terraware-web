@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
@@ -148,25 +148,10 @@
 <a name='L83'></a><a href='#L83'>83</a>
 <a name='L84'></a><a href='#L84'>84</a>
 <a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a>
-<a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L86'></a><a href='#L86'>86</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -202,6 +187,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -243,8 +235,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useState } from 'react';
 &nbsp;
-import { Grid, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Grid, useTheme } from '@mui/material';
 &nbsp;
 import { useOrganization } from 'src/providers/hooks';
 import strings from 'src/strings';
@@ -255,16 +246,6 @@ import DialogBox from '../../components/common/DialogBox/DialogBox';
 import Select from '../../components/common/Select/Select';
 import Button from '../../components/common/button/Button';
 &nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  spacing: {
-    marginRight: theme.spacing(2),
-  },
-  mainGrid: {
-    textAlign: 'left',
-    marginTop: Number(theme.spacing(2)) / 2,
-  },
-}));
-&nbsp;
 export type SelectSeedBankProps = {
   open: boolean;
   onClose: (facility?: Facility) =&gt; void;
@@ -272,7 +253,7 @@ export type SelectSeedBankProps = {
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >SelectSeedBankModal(</span>props: SelectSeedBankProps): JSX.Element {
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
+  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { open, onClose } = <span class="cstat-no" title="statement not covered" >props;</span>
   const [selectedFacility, setSelectedFacility] = <span class="cstat-no" title="statement not covered" >useState&lt;Facility | undefined&gt;();</span>
 &nbsp;
@@ -303,14 +284,21 @@ export default function <span class="fstat-no" title="function not covered" >Sel
           label={strings.CANCEL}
           priority='secondary'
           type='passive'
-          className={classes.spacing}
           key='button-1'
+          style={{ marginRight: theme.spacing(2) }}
         /&gt;,
         &lt;Button onClick={onSelect} id='select-seed-bank' label={strings.SELECT_BUTTON} key='button-2' /&gt;,
       ]}
       message={strings.SELECT_SEED_BANK_INFO}
     &gt;
-      &lt;Grid container spacing={4} className={classes.mainGrid}&gt;
+      &lt;Grid
+        container
+        spacing={4}
+        sx={{
+          textAlign: 'left',
+          marginTop: Number(theme.spacing(2)) / 2,
+        }}
+      &gt;
         &lt;Grid item xs={12}&gt;
           &lt;Select
             id='seedBank'
@@ -337,7 +325,7 @@ export default function <span class="fstat-no" title="function not covered" >Sel
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-04T18:40:52.879Z
+                at 2024-06-04T20:40:40.670Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/107</span>
+                <span class='fraction'>0/104</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/33</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/102</span>
+                <span class='fraction'>0/100</span>
             </div>
         
             
@@ -450,10 +450,7 @@
 <a name='L385'></a><a href='#L385'>385</a>
 <a name='L386'></a><a href='#L386'>386</a>
 <a name='L387'></a><a href='#L387'>387</a>
-<a name='L388'></a><a href='#L388'>388</a>
-<a name='L389'></a><a href='#L389'>389</a>
-<a name='L390'></a><a href='#L390'>390</a>
-<a name='L391'></a><a href='#L391'>391</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L388'></a><a href='#L388'>388</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -490,26 +487,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -828,6 +807,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -845,8 +839,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useMemo, useState } from 'react';
 &nbsp;
-import { Box, Container, Divider, Grid, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Container, Divider, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox, Dropdown, Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
@@ -880,26 +873,9 @@ export interface BatchDetailsModalProps {
   reload: () =&gt; void;
 }
 &nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  removePhoto: {
-    position: 'absolute',
-    top: -10,
-    right: -10,
-    backgroundColor: theme.palette.TwClrBgDanger,
-  },
-  thumbnail: {
-    margin: 'auto auto',
-    objectFit: 'contain',
-    display: 'flex',
-    maxWidth: '120px',
-    maxHeight: '120px',
-  },
-}));
-&nbsp;
 type BatchPhotoWithUrl = BatchPhoto &amp; { url: string };
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >BatchDetailsModal(</span>props: BatchDetailsModalProps): JSX.Element | null {
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const numberFormatter = <span class="cstat-no" title="statement not covered" >useNumberFormatter();</span>
   const { user } = <span class="cstat-no" title="statement not covered" >useUser();</span>
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
@@ -1219,9 +1195,24 @@ export default function <span class="fstat-no" title="function not covered" >Bat
                   icon='iconTrashCan'
                   onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >removePhoto(photo.id, index)}</span>
                   size='small'
-                  className={classes.removePhoto}
+                  style={{
+                    position: 'absolute',
+                    top: -10,
+                    right: -10,
+                    backgroundColor: theme.palette.TwClrBgDanger,
+                  }}
                 /&gt;
-                &lt;img className={classes.thumbnail} src={`${photo.url}?maxHeight=120&amp;maxWidth=120`} alt={`${index}`} /&gt;
+                &lt;img
+                  src={`${photo.url}?maxHeight=120&amp;maxWidth=120`}
+                  alt={`${index}`}
+                  style={{
+                    margin: 'auto auto',
+                    objectFit: 'contain',
+                    display: 'flex',
+                    maxWidth: '120px',
+                    maxHeight: '120px',
+                  }}
+                /&gt;
               &lt;/Box&gt;
             ))}
           &lt;/Box&gt;
@@ -1240,7 +1231,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-04T18:40:52.879Z
+                at 2024-06-04T20:40:40.670Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

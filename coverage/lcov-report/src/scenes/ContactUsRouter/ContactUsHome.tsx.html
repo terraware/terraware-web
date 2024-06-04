@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/29</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/28</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
@@ -265,9 +265,7 @@
 <a name='L200'></a><a href='#L200'>200</a>
 <a name='L201'></a><a href='#L201'>201</a>
 <a name='L202'></a><a href='#L202'>202</a>
-<a name='L203'></a><a href='#L203'>203</a>
-<a name='L204'></a><a href='#L204'>204</a>
-<a name='L205'></a><a href='#L205'>205</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L203'></a><a href='#L203'>203</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -292,7 +290,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -300,16 +297,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -383,6 +370,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -474,7 +470,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useMemo } from 'react';
 &nbsp;
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Button } from '@terraware/web-components';
 &nbsp;
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -496,15 +491,6 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 &nbsp;
 import { useSupportData } from './provider/Context';
 &nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  title: {
-    fontSize: '24px',
-    fontWeight: 600,
-    lineHeight: '32px',
-    margin: '0 0 12px 16px',
-  },
-}));
-&nbsp;
 type ListItemContent = {
   icon?: IconName;
   title: string;
@@ -514,7 +500,6 @@ type ListItemContent = {
 };
 export default function <span class="fstat-no" title="function not covered" >ContactUsHome(</span>): JSX.Element {
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const { isMobile, isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const docLinks = <span class="cstat-no" title="statement not covered" >useDocLinks();</span>
   const appVersion = <span class="cstat-no" title="statement not covered" >useAppSelector(selectAppVersion);</span>
@@ -588,7 +573,16 @@ export default function <span class="fstat-no" title="function not covered" >Con
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;TfMain&gt;
-      &lt;h1 className={classes.title}&gt;{strings.CONTACT_US}&lt;/h1&gt;
+      &lt;h1
+        style={{
+          fontSize: '24px',
+          fontWeight: 600,
+          lineHeight: '32px',
+          margin: '0 0 12px 16px',
+        }}
+      &gt;
+        {strings.CONTACT_US}
+      &lt;/h1&gt;
       &lt;PageSnackbar /&gt;
       &lt;Card flushMobile&gt;
         &lt;Grid
@@ -682,7 +676,7 @@ export default function <span class="fstat-no" title="function not covered" >Con
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-04T18:40:52.879Z
+                at 2024-06-04T20:40:40.670Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

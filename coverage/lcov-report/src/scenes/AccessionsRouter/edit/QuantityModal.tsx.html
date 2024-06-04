@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/92</span>
+                <span class='fraction'>0/89</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/91</span>
+                <span class='fraction'>0/89</span>
             </div>
         
             
@@ -474,11 +474,7 @@
 <a name='L409'></a><a href='#L409'>409</a>
 <a name='L410'></a><a href='#L410'>410</a>
 <a name='L411'></a><a href='#L411'>411</a>
-<a name='L412'></a><a href='#L412'>412</a>
-<a name='L413'></a><a href='#L413'>413</a>
-<a name='L414'></a><a href='#L414'>414</a>
-<a name='L415'></a><a href='#L415'>415</a>
-<a name='L416'></a><a href='#L416'>416</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L412'></a><a href='#L412'>412</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -500,20 +496,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -530,7 +512,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -561,7 +542,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -831,6 +811,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -895,9 +887,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useMemo, useState } from 'react';
 &nbsp;
-import { Box, FormControlLabel, Grid, Radio, RadioGroup, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, FormControlLabel, Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
 import { Dropdown, Icon, Textfield } from '@terraware/web-components';
+import { SelectStyles } from '@terraware/web-components/components/Select/SelectT';
 import _ from 'lodash';
 &nbsp;
 import ConvertedValue from 'src/components/ConvertedValue';
@@ -915,21 +907,6 @@ import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
 import EditState from './EditState';
 &nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  addIcon: {
-    fill: theme.palette.TwClrIcnBrand,
-    height: '20px',
-    width: '20px',
-  },
-  units: {
-    marginLeft: theme.spacing(0.5),
-  },
-  subset: {
-    borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-    paddingTop: theme.spacing(2),
-  },
-}));
-&nbsp;
 export interface QuantityModalProps {
   open: boolean;
   accession: Accession;
@@ -942,7 +919,7 @@ export interface QuantityModalProps {
 interface UnitsSelectorProps {
   onChange: (newValue: string) =&gt; void;
   selectedValue: any;
-  className?: string | undefined;
+  selectStyles?: SelectStyles;
 }
 &nbsp;
 function <span class="fstat-no" title="function not covered" >UnitsSelector(</span>props: UnitsSelectorProps): JSX.Element {
@@ -955,7 +932,7 @@ function <span class="fstat-no" title="function not covered" >UnitsSelector(</sp
       onChange={props.onChange}
       selectedValue={props.selectedValue}
       fullWidth={true}
-      className={props.className}
+      selectStyles={props.selectStyles}
     /&gt;
   );
 }
@@ -976,7 +953,6 @@ export default function <span class="fstat-no" title="function not covered" >Qua
   const [totalWeightError, setTotalWeightError] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const [remainingQuantityNotes, setRemainingQuantityNotes] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const [remainingQuantityNotesError, setRemainingQuantityNotesError] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
 &nbsp;
   const quantityChanged = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!accession.remainingQuantity) {</span>
@@ -1220,7 +1196,7 @@ export default function <span class="fstat-no" title="function not covered" >Qua
                         ? record.estimatedWeight?.units
                         : record.remainingQuantity?.units
                     }
-                    className={classes.units}
+                    selectStyles={{ inputContainer: { marginLeft: theme.spacing(0.5) } }}
                   /&gt;
                 &lt;/Box&gt;
               &lt;/Box&gt;
@@ -1259,13 +1235,25 @@ export default function <span class="fstat-no" title="function not covered" >Qua
               &lt;Box display='flex' justifyContent='flex-start'&gt;
                 &lt;Link id='addNotes' onClick={showSubset} fontSize='16px'&gt;
                   &lt;Box display='flex' alignItems='center'&gt;
-                    &lt;Icon name='iconAdd' className={classes.addIcon} /&gt;
+                    &lt;Icon
+                      name='iconAdd'
+                      style={{
+                        fill: theme.palette.TwClrIcnBrand,
+                        height: '20px',
+                        width: '20px',
+                      }}
+                    /&gt;
                     &amp;nbsp;{`${strings.ADD_SUBSET_WEIGHT_AND_COUNT}`}
                   &lt;/Box&gt;
                 &lt;/Link&gt;
               &lt;/Box&gt;
             ) : (
-              &lt;Box className={classes.subset}&gt;
+              &lt;Box
+                sx={{
+                  borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+                  paddingTop: theme.spacing(2),
+                }}
+              &gt;
                 &lt;Grid container item justifyContent='space-between'&gt;
                   &lt;Grid container item xs={isMobile ? 12 : 7} spacing={1}&gt;
                     &lt;Grid item xs={8} textAlign='left'&gt;
@@ -1315,7 +1303,7 @@ export default function <span class="fstat-no" title="function not covered" >Qua
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-04T18:40:52.879Z
+                at 2024-06-04T20:40:40.670Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/82</span>
+                <span class='fraction'>0/79</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/80</span>
+                <span class='fraction'>0/78</span>
             </div>
         
             
@@ -314,20 +314,7 @@
 <a name='L249'></a><a href='#L249'>249</a>
 <a name='L250'></a><a href='#L250'>250</a>
 <a name='L251'></a><a href='#L251'>251</a>
-<a name='L252'></a><a href='#L252'>252</a>
-<a name='L253'></a><a href='#L253'>253</a>
-<a name='L254'></a><a href='#L254'>254</a>
-<a name='L255'></a><a href='#L255'>255</a>
-<a name='L256'></a><a href='#L256'>256</a>
-<a name='L257'></a><a href='#L257'>257</a>
-<a name='L258'></a><a href='#L258'>258</a>
-<a name='L259'></a><a href='#L259'>259</a>
-<a name='L260'></a><a href='#L260'>260</a>
-<a name='L261'></a><a href='#L261'>261</a>
-<a name='L262'></a><a href='#L262'>262</a>
-<a name='L263'></a><a href='#L263'>263</a>
-<a name='L264'></a><a href='#L264'>264</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L252'></a><a href='#L252'>252</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -363,7 +350,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -373,16 +359,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -592,7 +568,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useMemo, useState } from 'react';
 &nbsp;
 import { Grid, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { TableColumnType } from '@terraware/web-components';
 import { Option } from '@terraware/web-components/components/table/types';
 &nbsp;
@@ -616,16 +591,6 @@ import { getUserDisplayName } from 'src/utils/user';
 import BatchHistoryRenderer from './BatchHistoryRenderer';
 import EventDetailsModal from './EventDetailsModal';
 &nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  searchField: {
-    width: '300px',
-  },
-  searchBar: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-}));
-&nbsp;
 const columns = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span>: TableColumnType[] =&gt; <span class="cstat-no" title="statement not covered" >[</span></span>
   { key: 'createdTime', name: strings.DATE, type: 'date' },
   { key: 'type', name: strings.EVENT, type: 'string' },
@@ -646,7 +611,6 @@ export type BatchHistoryItemForTable = BatchHistoryItem &amp; {
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >BatchHistory(</span>{ batchId, nurseryName }: BatchHistoryProps): JSX.Element {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const [search, setSearch] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const [filters, setFilters] = <span class="cstat-no" title="statement not covered" >useState&lt;Record&lt;string, any&gt;&gt;({});</span>
   const [filterOptions, setFilterOptions] = <span class="cstat-no" title="statement not covered" >useState&lt;FieldOptionsMap&gt;({});</span>
@@ -831,7 +795,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
       &lt;Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt} marginBottom={theme.spacing(1)}&gt;
         {strings.HISTORY}
       &lt;/Typography&gt;
-      &lt;Grid item xs={12} className={classes.searchBar}&gt;
+      &lt;Grid item xs={12} sx={{ display: 'flex', alignItems: 'center' }}&gt;
         &lt;Search {...searchProps} /&gt;
       &lt;/Grid&gt;
       &lt;Grid item xs={12}&gt;
@@ -859,7 +823,7 @@ export default function <span class="fstat-no" title="function not covered" >Bat
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-04T18:40:52.879Z
+                at 2024-06-04T20:40:40.670Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
