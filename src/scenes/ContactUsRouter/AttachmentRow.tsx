@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { Grid, Typography, useTheme } from '@mui/material';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Button from 'src/components/common/button/Button';
 import { selectSupportUploadAttachmentRequest } from 'src/redux/features/support/supportSelectors';
@@ -18,7 +19,9 @@ type AttachmentRowProps = {
 
 const AttachmentRow = ({ attachment, onChange, onRemove }: AttachmentRowProps) => {
   const theme = useTheme();
+  const { isDesktop } = useDeviceInfo();
 
+  const { filename, requestId } = attachment;
   const attachmentRequest = useAppSelector(selectSupportUploadAttachmentRequest(attachment.requestId));
 
   useEffect(() => {
@@ -27,11 +30,16 @@ const AttachmentRow = ({ attachment, onChange, onRemove }: AttachmentRowProps) =
         ? attachmentRequest.data[0].temporaryAttachmentId
         : undefined;
 
-    const newAttachment = { ...attachment, status: attachmentRequest.status, temporaryAttachmentId };
-    if (newAttachment !== attachment && onChange) {
+    const newAttachment: AttachmentRequest = {
+      filename,
+      requestId,
+      status: attachmentRequest.status,
+      temporaryAttachmentId,
+    };
+    if (newAttachment.status !== attachment.status && onChange) {
       onChange(newAttachment);
     }
-  }, [attachment, attachmentRequest, onChange]);
+  }, [attachmentRequest, onChange]);
 
   return (
     <Grid
@@ -61,7 +69,7 @@ const AttachmentRow = ({ attachment, onChange, onRemove }: AttachmentRowProps) =
         <Button
           priority={'secondary'}
           icon={'iconTrashCan'}
-          label={strings.REMOVE}
+          label={isDesktop ? strings.REMOVE : undefined}
           onClick={() => {
             onRemove && onRemove(attachment);
           }}
