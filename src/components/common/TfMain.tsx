@@ -1,6 +1,6 @@
 import React, { CSSProperties } from 'react';
 
-import { useTheme } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -15,8 +15,9 @@ export default function TfMain({ backgroundImageVisible, children, style }: Prop
   const theme = useTheme();
 
   return (
-    <main
-      style={{
+    <Box
+      component='main'
+      sx={{
         // TODO: uncomment this line when updating to the new green color theme
         // background: 'linear-gradient(180deg, #FBF9F9 0%, #EFF5EF 100%)',
         minHeight: '100vh',
@@ -47,6 +48,6 @@ export default function TfMain({ backgroundImageVisible, children, style }: Prop
       }}
     >
       {children}
-    </main>
+    </Box>
   );
 }
