@@ -35,7 +35,11 @@ const OrgObservationsRenderer =
         ':observationId',
         row.observationId.toString()
       );
-      return <Link fontSize='16px' to={url}>{date as React.ReactNode}</Link>;
+      return (
+        <Link fontSize='16px' to={url}>
+          {date as React.ReactNode}
+        </Link>
+      );
     };
 
     // don't render data if we don't have data

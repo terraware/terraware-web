@@ -23,7 +23,11 @@ export default function ParticipantsCellRenderer(props: RendererProps<TableRowTy
 
   const createLinkToParticipant = () => {
     const to = APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW.replace(':participantId', `${row.id}`);
-    return <Link fontSize='16px' to={to}>{value as React.ReactNode}</Link>;
+    return (
+      <Link fontSize='16px' to={to}>
+        {value as React.ReactNode}
+      </Link>
+    );
   };
 
   if (column.key === 'name') {

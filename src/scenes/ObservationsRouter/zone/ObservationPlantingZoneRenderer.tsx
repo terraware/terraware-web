@@ -26,7 +26,11 @@ const ObservationPlantingZoneRenderer =
         .replace(':observationId', observationId.toString())
         .replace(':plantingZoneId', plantingZoneId.toString())
         .replace(':monitoringPlotId', row.monitoringPlotId.toString());
-      return <Link fontSize='16px' to={url}>{name as React.ReactNode}</Link>;
+      return (
+        <Link fontSize='16px' to={url}>
+          {name as React.ReactNode}
+        </Link>
+      );
     };
 
     // don't render data if we don't have data

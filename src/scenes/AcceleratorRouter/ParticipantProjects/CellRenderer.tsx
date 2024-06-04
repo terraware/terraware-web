@@ -24,7 +24,11 @@ export default function ParticipantProjectsCellRenderer(props: RendererProps<Tab
 
   const createLinkToProject = () => {
     const to = APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${row.id}`);
-    return <Link fontSize='16px' to={to}>{value as React.ReactNode}</Link>;
+    return (
+      <Link fontSize='16px' to={to}>
+        {value as React.ReactNode}
+      </Link>
+    );
   };
 
   if (column.key === 'name') {

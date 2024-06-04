@@ -42,7 +42,11 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
       to += `?${queryString}`;
     }
 
-    return <Link fontSize='16px' to={to}>{iValue as React.ReactNode}</Link>;
+    return (
+      <Link fontSize='16px' to={to}>
+        {iValue as React.ReactNode}
+      </Link>
+    );
   };
 
   const createLinkToInventorySpeciesDetail = (iValue: React.ReactNode | unknown[]) =>

@@ -141,7 +141,11 @@ const DetailsRenderer =
         .replace(':plantingSiteId', plantingSiteId.toString())
         .replace(':zoneId', zoneId.toString())
         .replace(':subzoneId', row.id.toString());
-      return <Link fontSize='16px' to={url}>{row.fullName as React.ReactNode}</Link>;
+      return (
+        <Link fontSize='16px' to={url}>
+          {row.fullName as React.ReactNode}
+        </Link>
+      );
     };
 
     if (column.key === 'fullName') {

@@ -38,12 +38,20 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
   }, [result]);
 
   const createLinkToSpecies = (iValue: React.ReactNode | unknown[]) => {
-    return <Link fontSize='16px' onClick={() => setOpenedEditSpeciesModal(true)}>{iValue as React.ReactNode}</Link>;
+    return (
+      <Link fontSize='16px' onClick={() => setOpenedEditSpeciesModal(true)}>
+        {iValue as React.ReactNode}
+      </Link>
+    );
   };
 
   const createLinkToAcceleratorSpecies = (iValue: React.ReactNode | unknown[]) => {
     if (onRowClick) {
-      return <Link fontSize='16px' onClick={() => onRowClick()}>{iValue as React.ReactNode}</Link>;
+      return (
+        <Link fontSize='16px' onClick={() => onRowClick()}>
+          {iValue as React.ReactNode}
+        </Link>
+      );
     }
   };
 

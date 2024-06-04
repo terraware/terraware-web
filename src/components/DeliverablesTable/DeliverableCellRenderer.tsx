@@ -29,7 +29,11 @@ export default function DeliverableCellRenderer(props: RendererProps<TableRowTyp
   const createLinkToDeliverable = (iValue: React.ReactNode | unknown[]) => {
     const deliverableUrl = isAcceleratorRoute ? APP_PATHS.ACCELERATOR_DELIVERABLE_VIEW : APP_PATHS.DELIVERABLE_VIEW;
     const to = deliverableUrl.replace(':deliverableId', `${row.id}`).replace(':projectId', `${row.projectId}`);
-    return <Link fontSize='16px' to={to}>{iValue as React.ReactNode}</Link>;
+    return (
+      <Link fontSize='16px' to={to}>
+        {iValue as React.ReactNode}
+      </Link>
+    );
   };
 
   if (column.key === 'name' && row.isAllowedRead) {
