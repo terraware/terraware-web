@@ -164,8 +164,7 @@ const ContactUsForm = () => {
 
   // Confirming that no uploads are pending.
   const uploadCompleted = useMemo(
-    () =>
-      allAttachments.map((attachment) => attachment.status !== 'pending').reduce((prev, curr) => prev && curr, true),
+    () => allAttachments.every((attachment) => attachment.status !== 'pending'),
     [allAttachments]
   );
 
