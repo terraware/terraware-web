@@ -60,8 +60,7 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
         <VideoDialog
           description={tutorialDescription}
           link={docLinks[tutorialDocLinkKey]}
-          onClose={() => onClose()}
-          onDontShowAgain={userPreferenceControlled ? () => onClose(true) : undefined}
+          onClose={() => onClose(true)}
           open={showModal}
           title={tutorialTitle}
         />

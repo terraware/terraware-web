@@ -105,6 +105,15 @@ export default function Exclusions({ onValidate, site }: ExclusionsProps): JSX.E
     ) as JSX.Element[];
   }, [activeLocale]);
 
+  const tutorialTitle = useMemo(() => {
+    if (!activeLocale) {
+      return '';
+    }
+    return strings
+      .formatString(strings.TUTORIAL_PREFIX, strings.PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_TITLE)
+      .toString();
+  }, [activeLocale]);
+
   /**
    * Check for errors and mark annotations.
    */
@@ -131,7 +140,7 @@ export default function Exclusions({ onValidate, site }: ExclusionsProps): JSX.E
         title={strings.SITE_EXCLUSION_AREAS_OPTIONAL}
         tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_exclusions_boundary_instructions_video'
-        tutorialTitle={strings.PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_TITLE}
+        tutorialTitle={tutorialTitle}
       />
       <EditableMap
         editableBoundary={exclusions}

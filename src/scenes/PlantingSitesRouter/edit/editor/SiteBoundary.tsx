@@ -147,6 +147,13 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
     ) as JSX.Element[];
   }, [activeLocale]);
 
+  const tutorialTitle = useMemo(() => {
+    if (!activeLocale) {
+      return '';
+    }
+    return strings.formatString(strings.TUTORIAL_PREFIX, strings.PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE).toString();
+  }, [activeLocale]);
+
   /**
    * Check for errors and mark annotations.
    */
@@ -177,7 +184,7 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
         title={strings.SITE_BOUNDARY}
         tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_boundary_instructions_video'
-        tutorialTitle={strings.PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE}
+        tutorialTitle={tutorialTitle}
       />
       <EditableMap
         editableBoundary={siteBoundaryData?.siteBoundary}

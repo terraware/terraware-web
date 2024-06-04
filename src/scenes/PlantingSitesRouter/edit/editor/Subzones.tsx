@@ -264,6 +264,13 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
     ) as JSX.Element[];
   }, [activeLocale]);
 
+  const tutorialTitle = useMemo(() => {
+    if (!activeLocale) {
+      return '';
+    }
+    return strings.formatString(strings.TUTORIAL_PREFIX, strings.ADDING_SUBZONE_BOUNDARIES).toString();
+  }, [activeLocale]);
+
   // when we have a new polygon, add it to the subzones list after carving out the overlapping region in the zone.
   const onEditableBoundaryChanged = async (editableBoundary?: FeatureCollection) => {
     // pick the latest geometry that was drawn
@@ -422,7 +429,7 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
         title={strings.SITE_SUBZONE_BOUNDARIES}
         tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_subzone_boundary_instructions_video'
-        tutorialTitle={strings.ADDING_SUBZONE_BOUNDARIES}
+        tutorialTitle={tutorialTitle}
       />
       <EditableMap
         activeContext={activeContext}
