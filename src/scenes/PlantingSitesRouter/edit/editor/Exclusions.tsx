@@ -87,7 +87,6 @@ export default function Exclusions({ onValidate, site }: ExclusionsProps): JSX.E
               hasTutorial: true,
               handlePrefix: (prefix: string) =>
                 strings.formatString(prefix, <MapIcon icon='polygon' />) as JSX.Element[],
-              handleSuffix: (suffix: string) => strings.formatString(suffix, '', strings.SAVE) as string,
             },
             { text: strings.SITE_EXCLUSION_AREAS_DESCRIPTION_2 },
           ]
