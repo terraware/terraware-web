@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/55</span>
+                <span class='fraction'>0/59</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/35</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/53</span>
+                <span class='fraction'>0/57</span>
             </div>
         
             
@@ -255,7 +255,13 @@
 <a name='L190'></a><a href='#L190'>190</a>
 <a name='L191'></a><a href='#L191'>191</a>
 <a name='L192'></a><a href='#L192'>192</a>
-<a name='L193'></a><a href='#L193'>193</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a>
+<a name='L197'></a><a href='#L197'>197</a>
+<a name='L198'></a><a href='#L198'>198</a>
+<a name='L199'></a><a href='#L199'>199</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -375,7 +381,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -402,6 +407,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -564,13 +576,12 @@ export default function <span class="fstat-no" title="function not covered" >Sit
     }
     const data: Description[] = <span class="cstat-no" title="statement not covered" >[</span>
       { text: strings.SITE_BOUNDARY_DESCRIPTION_0 },
-      { text: strings.SITE_BOUNDARY_DESCRIPTION_1 },
       {
-        text: strings.SITE_BOUNDARY_DESCRIPTION_2,
+        text: strings.SITE_BOUNDARY_DESCRIPTION_1,
         hasTutorial: true,
         handlePrefix: <span class="fstat-no" title="function not covered" >(p</span>refix: string) =&gt; <span class="cstat-no" title="statement not covered" >strings.formatString(prefix, &lt;MapIcon icon='polygon' /&gt;) as JSX.Element[],</span>
       },
-      { text: strings.SITE_BOUNDARY_DESCRIPTION_WARN, isWarning: true, isBold: true },
+      { text: strings.SITE_BOUNDARY_DESCRIPTION_2, isBold: true },
     ];
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (!mode) {</span>
@@ -594,6 +605,13 @@ export default function <span class="fstat-no" title="function not covered" >Sit
       strings.PLANTING_SITE_CREATE_INSTRUCTIONS_DESCRIPTION,
       &lt;MapIcon centerAligned icon='polygon' /&gt;
     ) as JSX.Element[];
+  }, [activeLocale]);
+&nbsp;
+  const tutorialTitle = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (!activeLocale) {</span>
+<span class="cstat-no" title="statement not covered" >      return '';</span>
+    }
+<span class="cstat-no" title="statement not covered" >    return strings.formatString(strings.TUTORIAL_PREFIX, strings.PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE).toString();</span>
   }, [activeLocale]);
 &nbsp;
   /**
@@ -626,7 +644,7 @@ export default function <span class="fstat-no" title="function not covered" >Sit
         title={strings.SITE_BOUNDARY}
         tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_boundary_instructions_video'
-        tutorialTitle={strings.PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE}
+        tutorialTitle={tutorialTitle}
       /&gt;
       &lt;EditableMap
         editableBoundary={siteBoundaryData?.siteBoundary}
@@ -646,7 +664,7 @@ export default function <span class="fstat-no" title="function not covered" >Sit
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-04T15:17:21.734Z
+                at 2024-06-04T18:29:06.131Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
