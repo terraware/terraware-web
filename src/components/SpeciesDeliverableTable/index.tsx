@@ -22,6 +22,7 @@ import TableCellRenderer from './TableCellRenderer';
 const columns = (): TableColumnType[] => [
   { key: 'species.scientificName', name: strings.SCIENTIFIC_NAME, type: 'string' },
   { key: 'species.commonName', name: strings.COMMON_NAME, type: 'string' },
+  { key: 'participantProjectSpecies.speciesNativeCategory', name: strings.NATIVE_NON_NATIVE, type: 'string' },
   { key: 'participantProjectSpecies.rationale', name: strings.RATIONALE, type: 'string' },
   { key: 'participantProjectSpecies.submissionStatus', name: strings.STATUS, type: 'string' },
 ];

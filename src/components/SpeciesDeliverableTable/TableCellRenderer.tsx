@@ -168,5 +168,9 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
     return <CellRenderer {...props} value={row.participantProjectSpecies.rationale} />;
   }
 
+  if (column.key === 'participantProjectSpecies.speciesNativeCategory') {
+    return <CellRenderer {...props} value={row.participantProjectSpecies.speciesNativeCategory} />;
+  }
+
   return <CellRenderer {...props} />;
 }

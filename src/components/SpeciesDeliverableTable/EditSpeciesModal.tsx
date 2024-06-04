@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from 'react';
 
 import { Grid, Typography, useTheme } from '@mui/material';
+import { Dropdown } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import { useLocalization } from 'src/providers';
 import { requestUpdateParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { selectParticipantProjectSpeciesUpdateRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { SpeciesForParticipantProject } from 'src/types/ParticipantProjectSpecies';
+import {
+  SpeciesForParticipantProject,
+  SpeciesNativeCategory,
+  getSpeciesNativeCategoryOptions,
+} from 'src/types/ParticipantProjectSpecies';
+import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import Link from '../common/Link';
@@ -30,7 +37,8 @@ export default function EditSpeciesModal(props: EditSpeciesModalProps): JSX.Elem
   const snackbar = useSnackbar();
 
   const [error, setError] = useState('');
-  const [record, setRecord] = useState<SpeciesForParticipantProject>(projectSpecies);
+  const [record, setRecord] = useForm<SpeciesForParticipantProject>(projectSpecies);
+  const { activeLocale } = useLocalization();
 
   useEffect(() => {
     if (result?.status === 'error') {
@@ -56,10 +64,25 @@ export default function EditSpeciesModal(props: EditSpeciesModalProps): JSX.Elem
   };
 
   const onChangeRationale = (rationale: unknown) => {
-    setRecord((prev) => ({
-      ...prev,
-      participantProjectSpeciesRationale: `${rationale}`,
-    }));
+    setRecord((prev) => {
+      const previousParticipantProjectSpecies = { ...prev.participantProjectSpecies };
+      previousParticipantProjectSpecies.rationale = rationale as string;
+      return {
+        ...prev,
+        participantProjectSpecies: previousParticipantProjectSpecies,
+      };
+    });
+  };
+
+  const onChangeNativeCategory = (value: unknown) => {
+    setRecord((prev) => {
+      const previousParticipantProjectSpecies = { ...prev.participantProjectSpecies };
+      previousParticipantProjectSpecies.speciesNativeCategory = value as SpeciesNativeCategory;
+      return {
+        ...prev,
+        participantProjectSpecies: previousParticipantProjectSpecies,
+      };
+    });
   };
 
   return (
@@ -91,6 +114,20 @@ export default function EditSpeciesModal(props: EditSpeciesModalProps): JSX.Elem
           >
             {projectSpecies.species.scientificName}
           </Link>
+        </Grid>
+        <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+          <Dropdown
+            id='speciesNativeCategory'
+            selectedValue={record?.participantProjectSpecies.speciesNativeCategory}
+            onChange={(value) => onChangeNativeCategory(value)}
+            options={getSpeciesNativeCategoryOptions(activeLocale)}
+            label={strings.NATIVE_NON_NATIVE}
+            aria-label={strings.NATIVE_NON_NATIVE}
+            placeholder={strings.SELECT}
+            fixedMenu
+            required
+            fullWidth={true}
+          />
         </Grid>
         <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
           <TextField

@@ -550,6 +550,8 @@ export interface paths {
      * @description If there was already a photo with the specified filename, replaces it.
      */
     post: operations["uploadPhoto"];
+    /** Delete one photo for an accession. */
+    delete: operations["deletePhoto"];
   };
   "/api/v1/seedbank/clock": {
     /**
@@ -7501,6 +7503,29 @@ export interface operations {
         };
       };
       /** @description The specified accession does not exist. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Delete one photo for an accession. */
+  deletePhoto: {
+    parameters: {
+      path: {
+        id: number;
+        photoFilename: string;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The accession does not exist. */
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];

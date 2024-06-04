@@ -46,6 +46,28 @@ export const requestDeleteManyParticipantProjectSpecies = createAsyncThunk(
   }
 );
 
+export const requestAddManyParticipantProjectSpecies = createAsyncThunk(
+  'participantProjectSpecies/add-many',
+  async (participantProjectSpecies: CreateParticipantProjectSpeciesRequestPayload[], { rejectWithValue }) => {
+    let allSucceded = true;
+
+    const promises = participantProjectSpecies.map((ppS) => ParticipantProjectSpeciesService.create(ppS));
+
+    const results = await Promise.all(promises);
+
+    results.forEach((res) => {
+      if (!res.requestSucceeded) {
+        allSucceded = false;
+      }
+    });
+
+    if (allSucceded) {
+      return true;
+    }
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
 export const requestGetParticipantProjectSpecies = createAsyncThunk(
   'participantProjectSpecies/get-one',
   async (participantProjectSpeciesId: number, { rejectWithValue }) => {
