@@ -109,6 +109,7 @@ export default function SpeciesCellRenderer(props: RendererProps<TableRowType>):
         column={column}
         value={
           <TextTruncated
+            fontSize={16}
             stringList={(value ?? []) as string[]}
             columnWidth={100}
             listSeparator={strings.LIST_SEPARATOR_SECONDARY}

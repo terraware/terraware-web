@@ -35,7 +35,7 @@ export default function ParticipantsCellRenderer(props: RendererProps<TableRowTy
   }
 
   if (column.key === 'projects.name') {
-    return <CellRenderer {...props} value={<TextTruncated stringList={value as string[]} />} />;
+    return <CellRenderer {...props} value={<TextTruncated fontSize={16} stringList={value as string[]} />} />;
   }
 
   return <CellRenderer {...props} />;

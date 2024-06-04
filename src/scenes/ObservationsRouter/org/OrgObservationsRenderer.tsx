@@ -27,7 +27,7 @@ const OrgObservationsRenderer =
 
     const getTruncatedNames = (inputNames: string) => {
       const names = inputNames.split('\r');
-      return <TextTruncated stringList={names} />;
+      return <TextTruncated fontSize={16} stringList={names} />;
     };
 
     const createLinkToSiteObservation = (date: string) => {

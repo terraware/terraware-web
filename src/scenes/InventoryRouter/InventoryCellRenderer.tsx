@@ -30,7 +30,7 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
 
   const getNamesList = (names: string) => {
     const namesArray = names.split('\r');
-    return <TextTruncated stringList={namesArray} />;
+    return <TextTruncated fontSize={16} stringList={namesArray} />;
   };
 
   const createLinkWithQuery = (path: string, iValue: React.ReactNode | unknown[]) => {
