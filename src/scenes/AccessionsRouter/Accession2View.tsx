@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Grid, Link as LinkMUI, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Grid, Link as LinkMUI, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem, Icon, Tabs } from '@terraware/web-components';
 import _ from 'lodash';
 import { DateTime } from 'luxon';
@@ -45,26 +44,6 @@ import ViewViabilityTestModal from './viabilityTesting/ViewViabilityTestModal';
 import DetailPanel from './view/DetailPanel';
 import WithdrawModal from './withdraw/WithdrawModal';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  fullSizeButton: {
-    width: '100%',
-  },
-  addIconEnabled: {
-    fill: theme.palette.TwClrIcnBrand,
-    height: '20px',
-    width: '20px',
-  },
-  addIconDisabled: {
-    fill: theme.palette.TwClrBaseGray300,
-    height: '20px',
-    width: '20px',
-  },
-  backToAccessions: {
-    marginLeft: 0,
-    marginTop: theme.spacing(2),
-  },
-}));
-
 export default function Accession2View(): JSX.Element {
   const { user } = useUser();
   const { selectedOrganization } = useOrganization();
@@ -90,11 +69,27 @@ export default function Accession2View(): JSX.Element {
   const snackbar = useSnackbar();
   const userCanEdit = !isContributor(selectedOrganization);
   const { isMobile, isTablet } = useDeviceInfo();
-  const classes = useStyles({ isMobile });
+  const theme = useTheme();
   const themeObj = useTheme();
   const contentRef = useRef(null);
   const { activeLocale } = useLocalization();
   const locationTimeZone = useLocationTimeZone();
+
+  const fullSizeButtonStyles = {
+    width: '100%',
+  };
+
+  const addIconEnableStyles = {
+    fill: theme.palette.TwClrIcnBrand,
+    height: '20px',
+    width: '20px',
+  };
+
+  const addIconDisabledStyles = {
+    fill: theme.palette.TwClrBaseGray300,
+    height: '20px',
+    width: '20px',
+  };
 
   const seedBankTimeZone = useMemo(() => {
     const facility = accession?.facilityId
@@ -296,7 +291,7 @@ export default function Accession2View(): JSX.Element {
           onClick={() => setOpenWithdrawModal(true)}
           label={strings.WITHDRAW}
           size='small'
-          className={fullSize ? classes.fullSizeButton : ''}
+          style={fullSize ? fullSizeButtonStyles : {}}
         />
       );
     }
@@ -508,8 +503,11 @@ export default function Accession2View(): JSX.Element {
             <BackToLink
               id='back'
               to={APP_PATHS.ACCESSIONS}
-              className={classes.backToAccessions}
               name={strings.ACCESSIONS}
+              style={{
+                marginLeft: 0,
+                marginTop: theme.spacing(2),
+              }}
             />
           </Box>
           <Box padding={isMobile ? themeObj.spacing(3, 0, 4, 0) : themeObj.spacing(3, 3, 4, 3)}>
@@ -542,7 +540,7 @@ export default function Accession2View(): JSX.Element {
                       onClick={() => checkInAccession()}
                       label={strings.CHECK_IN}
                       size='medium'
-                      className={classes.fullSizeButton}
+                      style={fullSizeButtonStyles}
                     />
                   ) : (
                     renderWithdrawalButton(true)
@@ -652,14 +650,14 @@ export default function Accession2View(): JSX.Element {
               ) : quantityEditable ? (
                 <LinkMUI sx={{ ...linkStyle, fontSize: '14px' }} onClick={() => setOpenQuantityModal(true)}>
                   <Box display='flex' alignItems='center'>
-                    <Icon name='iconAdd' className={classes.addIconEnabled} />
+                    <Icon name='iconAdd' style={addIconEnableStyles} />
                     &nbsp;{strings.ADD}
                   </Box>
                 </LinkMUI>
               ) : (
                 <Typography color={themeObj.palette.TwClrTxtTertiary} sx={{ pointerEvents: 'none', fontSize: '14px' }}>
                   <Box display='flex' alignItems='center'>
-                    <Icon name='iconAdd' className={classes.addIconDisabled} />
+                    <Icon name='iconAdd' style={addIconDisabledStyles} />
                     &nbsp;{strings.ADD}
                   </Box>
                 </Typography>
@@ -684,14 +682,14 @@ export default function Accession2View(): JSX.Element {
               ) : viabilityEditable ? (
                 <LinkMUI sx={{ ...linkStyle, fontSize: '14px' }} onClick={() => setOpenViabilityModal(true)}>
                   <Box display='flex' alignItems='center'>
-                    <Icon name='iconAdd' className={classes.addIconEnabled} />
+                    <Icon name='iconAdd' style={addIconEnableStyles} />
                     &nbsp;{strings.ADD}
                   </Box>
                 </LinkMUI>
               ) : (
                 <Typography color={themeObj.palette.TwClrTxtTertiary} sx={{ pointerEvents: 'none', fontSize: '14px' }}>
                   <Box display='flex' alignItems='center'>
-                    <Icon name='iconAdd' className={classes.addIconDisabled} />
+                    <Icon name='iconAdd' style={addIconDisabledStyles} />
                     &nbsp;{strings.ADD}
                   </Box>
                 </Typography>

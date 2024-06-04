@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, useTheme } from '@mui/material';
 
 import { SpeciesService } from 'src/services';
 import strings from 'src/strings';
@@ -9,38 +8,6 @@ import { SpeciesProblemElement } from 'src/types/Species';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import Button from '../../components/common/button/Button';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  tooltipContainer: {
-    padding: '24px',
-
-    '& p': {
-      margin: 0,
-    },
-  },
-  spacing: {
-    marginRight: theme.spacing(1),
-  },
-  verticalSpacing: {
-    marginTop: theme.spacing(1),
-  },
-  buttonsContainer: {
-    background: theme.palette.TwClrBgSecondary,
-    display: 'flex',
-    borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-    padding: theme.spacing(2, 3),
-    borderRadius: '0 0 6px 6px',
-  },
-  value: {
-    fontSize: '14px',
-    color: theme.palette.TwClrTxt,
-    fontWeight: 400,
-    paddingTop: '4px',
-  },
-  noBold: {
-    fontWeight: 400,
-  },
-}));
 
 type ProblemTooltipProps = {
   problems: SpeciesProblemElement[];
@@ -56,8 +23,24 @@ export default function ProblemTooltip({
   reloadData,
   onRowClick,
 }: ProblemTooltipProps): JSX.Element {
-  const classes = useStyles();
+  const theme = useTheme();
   const snackbar = useSnackbar();
+
+  const spacingStyles = {
+    marginRight: theme.spacing(1),
+  };
+
+  const valueStyles = {
+    fontSize: '14px',
+    color: theme.palette.TwClrTxt,
+    fontWeight: 400,
+    paddingTop: '4px',
+  };
+
+  const noBoldStyles = {
+    fontWeight: 400,
+  };
+
   const ignoreFix = async (problemId: number) => {
     await SpeciesService.ignoreProblemSuggestion(problemId);
     setOpenedTooltip(false);
@@ -115,19 +98,32 @@ export default function ProblemTooltip({
 
   return (
     <div>
-      <div className={classes.tooltipContainer}>
-        <p className={classes.noBold}>{strings.ISSUE}</p>
-        <p className={classes.value}>{problemType}</p>
+      <Box
+        sx={{
+          padding: '24px',
+          '& p': {
+            margin: 0,
+          },
+        }}
+      >
+        <p style={noBoldStyles}>{strings.ISSUE}</p>
+        <p style={valueStyles}>{problemType}</p>
         {problems[0].suggestedValue ? (
-          <div className={classes.verticalSpacing}>
-            <p className={classes.noBold}>{strings.SUGGESTION}</p>
-            <p className={classes.value}>
-              {strings.formatString(strings.CHANGE_TO, <b>{problems[0].suggestedValue}</b>)}
-            </p>
-          </div>
+          <Box sx={{ marginTop: theme.spacing(1) }}>
+            <p style={noBoldStyles}>{strings.SUGGESTION}</p>
+            <p style={valueStyles}>{strings.formatString(strings.CHANGE_TO, <b>{problems[0].suggestedValue}</b>)}</p>
+          </Box>
         ) : null}
-      </div>
-      <div className={classes.buttonsContainer}>
+      </Box>
+      <Box
+        sx={{
+          background: theme.palette.TwClrBgSecondary,
+          display: 'flex',
+          borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+          padding: theme.spacing(2, 3),
+          borderRadius: '0 0 6px 6px',
+        }}
+      >
         {problems[0].suggestedValue ? (
           <>
             <Button
@@ -136,7 +132,7 @@ export default function ProblemTooltip({
               label={strings.CANCEL}
               priority='secondary'
               type='passive'
-              className={classes.spacing}
+              style={spacingStyles}
             />
             <Button
               onClick={(event) => handleIgnore(problems[0].id, event)}
@@ -144,7 +140,7 @@ export default function ProblemTooltip({
               label={strings.IGNORE}
               priority='secondary'
               type='passive'
-              className={classes.spacing}
+              style={spacingStyles}
             />
             <Button
               onClick={(event) => handleAccept(problems[0].id, event)}
@@ -160,18 +156,18 @@ export default function ProblemTooltip({
               label={strings.IGNORE}
               priority='secondary'
               type='passive'
-              className={classes.spacing}
+              style={spacingStyles}
             />
             <Button
               onClick={(event) => handleEdit(event)}
               label={strings.EDIT}
               priority='secondary'
               type='passive'
-              className={classes.spacing}
+              style={spacingStyles}
             />
           </>
         )}
-      </div>
+      </Box>
     </div>
   );
 }

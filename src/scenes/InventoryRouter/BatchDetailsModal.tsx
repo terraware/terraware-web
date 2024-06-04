@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
-import { Box, Container, Divider, Grid, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Container, Divider, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox, Dropdown, Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
@@ -35,26 +34,9 @@ export interface BatchDetailsModalProps {
   reload: () => void;
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
-  removePhoto: {
-    position: 'absolute',
-    top: -10,
-    right: -10,
-    backgroundColor: theme.palette.TwClrBgDanger,
-  },
-  thumbnail: {
-    margin: 'auto auto',
-    objectFit: 'contain',
-    display: 'flex',
-    maxWidth: '120px',
-    maxHeight: '120px',
-  },
-}));
-
 type BatchPhotoWithUrl = BatchPhoto & { url: string };
 
 export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.Element | null {
-  const classes = useStyles();
   const numberFormatter = useNumberFormatter();
   const { user } = useUser();
   const { selectedOrganization } = useOrganization();
@@ -374,9 +356,24 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
                   icon='iconTrashCan'
                   onClick={() => removePhoto(photo.id, index)}
                   size='small'
-                  className={classes.removePhoto}
+                  style={{
+                    position: 'absolute',
+                    top: -10,
+                    right: -10,
+                    backgroundColor: theme.palette.TwClrBgDanger,
+                  }}
                 />
-                <img className={classes.thumbnail} src={`${photo.url}?maxHeight=120&maxWidth=120`} alt={`${index}`} />
+                <img
+                  src={`${photo.url}?maxHeight=120&maxWidth=120`}
+                  alt={`${index}`}
+                  style={{
+                    margin: 'auto auto',
+                    objectFit: 'contain',
+                    display: 'flex',
+                    maxWidth: '120px',
+                    maxHeight: '120px',
+                  }}
+                />
               </Box>
             ))}
           </Box>

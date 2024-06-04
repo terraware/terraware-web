@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
 import { Box, Divider, Grid, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -21,18 +20,7 @@ export interface EventDetailsModalProps {
   batchId: number;
 }
 
-const useStyles = makeStyles(() => ({
-  thumbnail: {
-    margin: 'auto auto',
-    objectFit: 'contain',
-    display: 'flex',
-    maxWidth: '120px',
-    maxHeight: '120px',
-  },
-}));
-
 export default function EventDetailsModal(props: EventDetailsModalProps): JSX.Element {
-  const classes = useStyles();
   const { onClose, selectedEvent, batchId } = props;
   const theme = useTheme();
   const { selectedOrganization } = useOrganization();
@@ -363,7 +351,17 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
               marginTop={1}
               border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
             >
-              <img className={classes.thumbnail} src={`${photoUrl}?maxHeight=120`} alt={`new`} />
+              <img
+                src={`${photoUrl}?maxHeight=120`}
+                alt={`new`}
+                style={{
+                  margin: 'auto auto',
+                  objectFit: 'contain',
+                  display: 'flex',
+                  maxWidth: '120px',
+                  maxHeight: '120px',
+                }}
+              />
             </Box>
           </Grid>
         )}

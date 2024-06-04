@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Dropdown } from '@terraware/web-components';
 
 import PieChart from 'src/components/common/Chart/PieChart';
@@ -15,17 +14,10 @@ type LiveDeadPlantsPerSpeciesCardProps = {
   plantingSiteId: number;
 };
 
-const useStyles = makeStyles(() => ({
-  maxDropdownWidth: {
-    maxWidth: '228px',
-  },
-}));
-
 export default function LiveDeadPlantsPerSpeciesCard({
   plantingSiteId,
 }: LiveDeadPlantsPerSpeciesCardProps): JSX.Element {
   const theme = useTheme();
-  const classes = useStyles();
   const defaultTimeZone = useDefaultTimeZone();
   const observation = useAppSelector((state) =>
     selectLatestObservation(state, plantingSiteId, defaultTimeZone.get().id)
@@ -88,8 +80,12 @@ export default function LiveDeadPlantsPerSpeciesCard({
             label=''
             options={allSpecies}
             selectedValue={selectedSpecies}
-            className={classes.maxDropdownWidth}
             fullWidth={true}
+            selectStyles={{
+              inputContainer: {
+                maxWidth: '228px',
+              },
+            }}
           />
           {showChart && (
             <Box marginTop={theme.spacing(3)}>

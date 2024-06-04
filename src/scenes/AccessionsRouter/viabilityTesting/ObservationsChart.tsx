@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
 import { useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Chart } from 'chart.js';
 import { DateTime } from 'luxon';
 
@@ -10,18 +9,11 @@ import { ViabilityTestResult } from 'src/types/Accession';
 import { newChart } from '../../../components/common/Chart';
 import { useLocalization } from '../../../providers';
 
-const useStyles = makeStyles(() => ({
-  chart: {
-    height: '180px',
-  },
-}));
-
 export interface Props {
   observations: ViabilityTestResult[];
 }
 
 export default function ObservationsChart({ observations }: Props): JSX.Element {
-  const classes = useStyles();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const chartRef = useRef<Chart | null>(null);
   const { activeLocale } = useLocalization();
@@ -132,5 +124,5 @@ export default function ObservationsChart({ observations }: Props): JSX.Element 
     // eslint-disable-next-line
   }, [activeLocale, observations]);
 
-  return <canvas id='myChart' ref={canvasRef} className={classes.chart} />;
+  return <canvas id='myChart' ref={canvasRef} style={{ height: '180px' }} />;
 }

@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Grid, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Grid, useTheme } from '@mui/material';
 import { DropdownItem, SortOrder } from '@terraware/web-components';
 import { Tooltip } from '@terraware/web-components';
 import _ from 'lodash';
@@ -53,37 +52,6 @@ type SpeciesListProps = {
   species: Species[];
 };
 
-const useStyles = makeStyles((theme: Theme) => ({
-  pageTitle: {
-    fontSize: '24px',
-    lineHeight: '32px',
-    fontWeight: 600,
-    margin: 0,
-  },
-  titleContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingBottom: theme.spacing(4),
-    paddingLeft: theme.spacing(3),
-  },
-  createSpeciesMessage: {
-    margin: '0 auto',
-    width: '50%',
-    marginTop: '10%',
-  },
-  searchBar: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  icon: {
-    fill: theme.palette.TwClrIcnSecondary,
-  },
-  headerIconContainer: {
-    marginLeft: '12px',
-  },
-}));
-
 const BE_SORTED_FIELDS = ['scientificName', 'commonName', 'conservationCategory', 'familyName', 'seedStorageBehavior'];
 
 // These need to be in the same order as in the import template.
@@ -100,7 +68,7 @@ const CSV_FIELDS = [
 
 export default function SpeciesListView({ reloadData, species }: SpeciesListProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const classes = useStyles();
+  const theme = useTheme();
   const [importSpeciesModalOpen, setImportSpeciesModalOpen] = useState(false);
   const [checkDataModalOpen, setCheckDataModalOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
@@ -334,9 +302,9 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const [problemsColumn] = useState<TableColumnType>({
     key: 'problems',
     name: (
-      <span className={classes.headerIconContainer}>
-        <Icon name='warning' className={classes.icon} />
-      </span>
+      <Box component='span' sx={{ marginLeft: '12px' }}>
+        <Icon name='warning' style={{ fill: theme.palette.TwClrIcnSecondary }} />
+      </Box>
     ),
     type: 'string',
   });
@@ -636,8 +604,27 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
       />
       <Grid container>
         <PageHeaderWrapper nextElement={contentRef.current}>
-          <Grid item xs={12} className={classes.titleContainer}>
-            <h1 className={classes.pageTitle}>{strings.SPECIES}</h1>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              paddingBottom: theme.spacing(4),
+              paddingLeft: theme.spacing(3),
+            }}
+          >
+            <h1
+              style={{
+                fontSize: '24px',
+                lineHeight: '32px',
+                fontWeight: 600,
+                margin: 0,
+              }}
+            >
+              {strings.SPECIES}
+            </h1>
             {species && species.length > 0 && !isMobile && userCanEdit && (
               <div>
                 <Button id='add-species' label={strings.ADD_SPECIES} icon='plus' onClick={onNewSpecies} size='medium' />
@@ -657,7 +644,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
       </Grid>
       <Card flushMobile>
         <Grid container>
-          <Grid item xs={12} className={classes.searchBar}>
+          <Grid item xs={12} sx={{ display: 'flex', alignItems: 'center' }}>
             <SearchFiltersWrapperV2
               currentFilters={filters}
               featuredFilters={featuredFilters}
@@ -707,11 +694,15 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
             </Grid>
           ) : (
             <EmptyMessage
-              className={classes.createSpeciesMessage}
               title={strings.ADD_A_SPECIES}
               text={strings.SPECIES_EMPTY_MSG_BODY}
               buttonText={strings.ADD_SPECIES}
               onClick={onNewSpecies}
+              sx={{
+                margin: '0 auto',
+                width: '50%',
+                marginTop: '10%',
+              }}
             />
           )}
         </Grid>

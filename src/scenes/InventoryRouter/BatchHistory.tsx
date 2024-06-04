@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Grid, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { TableColumnType } from '@terraware/web-components';
 import { Option } from '@terraware/web-components/components/table/types';
 
@@ -25,16 +24,6 @@ import { getUserDisplayName } from 'src/utils/user';
 import BatchHistoryRenderer from './BatchHistoryRenderer';
 import EventDetailsModal from './EventDetailsModal';
 
-const useStyles = makeStyles(() => ({
-  searchField: {
-    width: '300px',
-  },
-  searchBar: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-}));
-
 const columns = (): TableColumnType[] => [
   { key: 'createdTime', name: strings.DATE, type: 'date' },
   { key: 'type', name: strings.EVENT, type: 'string' },
@@ -55,7 +44,6 @@ export type BatchHistoryItemForTable = BatchHistoryItem & {
 
 export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps): JSX.Element {
   const theme = useTheme();
-  const classes = useStyles();
   const [search, setSearch] = useState<string>('');
   const [filters, setFilters] = useState<Record<string, any>>({});
   const [filterOptions, setFilterOptions] = useState<FieldOptionsMap>({});
@@ -240,7 +228,7 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
       <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt} marginBottom={theme.spacing(1)}>
         {strings.HISTORY}
       </Typography>
-      <Grid item xs={12} className={classes.searchBar}>
+      <Grid item xs={12} sx={{ display: 'flex', alignItems: 'center' }}>
         <Search {...searchProps} />
       </Grid>
       <Grid item xs={12}>
