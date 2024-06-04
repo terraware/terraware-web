@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1717525746836" clover="3.2.0">
-  <project timestamp="1717525746836" name="All files">
-    <metrics statements="22373" coveredstatements="932" conditionals="14148" coveredconditionals="228" methods="6938" coveredmethods="162" elements="43459" coveredelements="1322" complexity="0" loc="22373" ncloc="22373" packages="209" files="985" classes="985"/>
+<coverage generated="1717526453555" clover="3.2.0">
+  <project timestamp="1717526453555" name="All files">
+    <metrics statements="22378" coveredstatements="932" conditionals="14152" coveredconditionals="228" methods="6939" coveredmethods="162" elements="43469" coveredelements="1322" complexity="0" loc="22378" ncloc="22378" packages="209" files="986" classes="986"/>
     <package name="src">
       <metrics statements="161" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -7692,9 +7692,17 @@
       </file>
     </package>
     <package name="src.components.common.button">
-      <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <metrics statements="5" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
       <file name="Button.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/button/Button.tsx">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="TooltipButton.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/button/TooltipButton.tsx">
+        <metrics statements="5" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="15" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.common.icon">
@@ -20951,7 +20959,7 @@
       </file>
     </package>
     <package name="src.scenes.PlantingSitesRouter.view">
-      <metrics statements="296" coveredstatements="0" conditionals="230" coveredconditionals="0" methods="105" coveredmethods="0"/>
+      <metrics statements="296" coveredstatements="0" conditionals="232" coveredconditionals="0" methods="105" coveredmethods="0"/>
       <file name="BoundariesAndZones.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantingSitesRouter/view/BoundariesAndZones.tsx">
         <metrics statements="57" coveredstatements="0" conditionals="48" coveredconditionals="0" methods="25" coveredmethods="0"/>
         <line num="25" count="0" type="stmt"/>
@@ -21013,8 +21021,7 @@
         <line num="225" count="0" type="stmt"/>
       </file>
       <file name="GenericSiteView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantingSitesRouter/view/GenericSiteView.tsx">
-        <metrics statements="30" coveredstatements="0" conditionals="33" coveredconditionals="0" methods="9" coveredmethods="0"/>
-        <line num="44" count="0" type="stmt"/>
+        <metrics statements="30" coveredstatements="0" conditionals="35" coveredconditionals="0" methods="9" coveredmethods="0"/>
         <line num="45" count="0" type="stmt"/>
         <line num="46" count="0" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
@@ -21022,28 +21029,29 @@
         <line num="49" count="0" type="stmt"/>
         <line num="50" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
-        <line num="52" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="54" count="0" type="stmt"/>
-        <line num="55" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="56" count="0" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
-        <line num="62" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="63" count="0" type="stmt"/>
-        <line num="66" count="0" type="stmt"/>
-        <line num="70" count="0" type="stmt"/>
-        <line num="71" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="73" count="0" type="stmt"/>
-        <line num="74" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="75" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="56" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="63" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="72" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="75" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="76" count="0" type="stmt"/>
-        <line num="78" count="0" type="stmt"/>
-        <line num="83" count="0" type="stmt"/>
-        <line num="84" count="0" type="cond" truecount="0" falsecount="3"/>
-        <line num="88" count="0" type="stmt"/>
-        <line num="120" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="121" count="0" type="stmt"/>
-        <line num="174" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="85" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="124" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="125" count="0" type="stmt"/>
+        <line num="179" count="0" type="stmt"/>
       </file>
       <file name="GenericZoneView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantingSitesRouter/view/GenericZoneView.tsx">
         <metrics statements="33" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="11" coveredmethods="0"/>
