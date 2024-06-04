@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, List, ListItem, Typography, useTheme } from '@mui/material';
-import { Button, DropdownItem } from '@terraware/web-components';
+import { DropdownItem } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { DateTime } from 'luxon';
@@ -12,6 +12,7 @@ import BackToLink from 'src/components/common/BackToLink';
 import Card from 'src/components/common/Card';
 import { View } from 'src/components/common/ListMapSelector';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import TooltipButton from 'src/components/common/button/TooltipButton';
 import { APP_PATHS } from 'src/constants';
 import { useProjects } from 'src/hooks/useProjects';
 import { RootState } from 'src/redux/rootReducer';
@@ -105,26 +106,30 @@ export default function GenericSiteView<T extends MinimalPlantingSite>({
         <Typography fontSize='20px' fontWeight={600}>
           {plantingSite?.name}
         </Typography>
-        {editDisabled !== true && (
+        {
           <Box display='flex' alignItems='center'>
-            <Button
+            <TooltipButton
+              disabled={editDisabled}
               icon='iconEdit'
               label={isMobile ? undefined : strings.EDIT_PLANTING_SITE}
               priority='primary'
               size='medium'
+              tooltip={editDisabled ? strings.SITE_EDIT_DISABLED_TOOLTIP : undefined}
               onClick={goToEditPlantingSite}
             />
-            <OptionsMenu
-              size='small'
-              onOptionItemClick={(item: DropdownItem) => {
-                if (item.value === 'delete-planting-site') {
-                  onDelete();
-                }
-              }}
-              optionItems={[{ label: strings.DELETE, value: 'delete-planting-site', type: 'destructive' }]}
-            />
+            {editDisabled !== true && (
+              <OptionsMenu
+                size='small'
+                onOptionItemClick={(item: DropdownItem) => {
+                  if (item.value === 'delete-planting-site') {
+                    onDelete();
+                  }
+                }}
+                optionItems={[{ label: strings.DELETE, value: 'delete-planting-site', type: 'destructive' }]}
+              />
+            )}
           </Box>
-        )}
+        }
       </Grid>
       <Grid item xs={12}>
         <PageSnackbar />
