@@ -70,7 +70,7 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
       </Typography>
       {description.map((line: Description, index: number) => (
         <Typography
-          display='flex'
+          display='inline'
           alignItems='center'
           key={index}
           fontSize='14px'
@@ -78,6 +78,7 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
           lineHeight='20px'
           color={line.isWarning ? theme.palette.TwClrIcnWarning : theme.palette.TwClrTxt}
           margin={theme.spacing(1, 0)}
+          whiteSpace={'line-wrap'}
         >
           {line.hasTutorial ? (
             <TextWithLink

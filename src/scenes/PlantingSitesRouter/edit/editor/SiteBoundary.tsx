@@ -115,13 +115,12 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
     }
     const data: Description[] = [
       { text: strings.SITE_BOUNDARY_DESCRIPTION_0 },
-      { text: strings.SITE_BOUNDARY_DESCRIPTION_1 },
       {
-        text: strings.SITE_BOUNDARY_DESCRIPTION_2,
+        text: strings.SITE_BOUNDARY_DESCRIPTION_1,
         hasTutorial: true,
         handlePrefix: (prefix: string) => strings.formatString(prefix, <MapIcon icon='polygon' />) as JSX.Element[],
       },
-      { text: strings.SITE_BOUNDARY_DESCRIPTION_WARN, isWarning: true, isBold: true },
+      { text: strings.SITE_BOUNDARY_DESCRIPTION_2, isBold: true },
     ];
 
     if (!mode) {
