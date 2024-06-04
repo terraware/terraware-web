@@ -10,9 +10,9 @@ import { getHighestGlobalRole } from 'src/types/GlobalRoles';
 
 const useStyles = makeStyles(() => ({
   text: {
-    fontSize: '14px',
+    fontSize: '16px',
     '& > p': {
-      fontSize: '14px',
+      fontSize: '16px',
     },
   },
 }));

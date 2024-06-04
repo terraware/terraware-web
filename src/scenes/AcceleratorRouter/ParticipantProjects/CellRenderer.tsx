@@ -11,9 +11,9 @@ import { CohortPhaseType, getPhaseString } from 'src/types/Cohort';
 
 const useStyles = makeStyles(() => ({
   text: {
-    fontSize: '14px',
+    fontSize: '16px',
     '& > p': {
-      fontSize: '14px',
+      fontSize: '16px',
     },
   },
 }));

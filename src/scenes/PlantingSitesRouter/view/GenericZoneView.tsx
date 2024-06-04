@@ -22,9 +22,9 @@ import { MinimalPlantingSite } from 'src/types/Tracking';
 
 const useStyles = makeStyles(() => ({
   text: {
-    fontSize: '14px',
+    fontSize: '16px',
     '& > p': {
-      fontSize: '14px',
+      fontSize: '16px',
     },
   },
 }));

@@ -17,10 +17,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: theme.palette.TwClrBaseGreen500,
     fontWeight: 600,
     textDecoration: 'none',
-  },
-  text: {
-    fontSize: '14px',
-  },
+  }
 }));
 
 export const getEventType = (batchHistoryItem: BatchHistoryItemForTable) => {

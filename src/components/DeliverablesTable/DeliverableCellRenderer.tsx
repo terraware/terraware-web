@@ -13,9 +13,9 @@ import { DeliverableStatusType } from 'src/types/Deliverables';
 
 const useStyles = makeStyles(() => ({
   text: {
-    fontSize: '14px',
+    fontSize: '16px',
     '& > p': {
-      fontSize: '14px',
+      fontSize: '16px',
     },
   },
 }));
