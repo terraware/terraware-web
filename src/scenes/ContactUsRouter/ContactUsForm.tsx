@@ -94,6 +94,8 @@ const ContactUsForm = () => {
     }
   }, [supportRequestType]);
 
+  const [allAttachments, setAllAttachments] = useState<AttachmentRequest[]>([]);
+
   const [errorSummary, setErrorSummary] = useState<string>('');
   const [errorDescription, setErrorDescription] = useState<string>('');
 
@@ -103,9 +105,12 @@ const ContactUsForm = () => {
 
   const onChangeAttachments = useCallback(
     (attachments: AttachmentRequest[]) => {
+      setAllAttachments(attachments);
       onChangeSupportRequest(
         'attachmentIds',
-        attachments.map(({ temporaryAttachmentId }) => temporaryAttachmentId)
+        attachments
+          .filter((attachment) => attachment.status === 'success')
+          .map(({ temporaryAttachmentId }) => temporaryAttachmentId)
       );
     },
     [supportRequest]
@@ -145,16 +150,22 @@ const ContactUsForm = () => {
       snackbar.toastSuccess(strings.formatString(strings.THANK_YOU_FOR_CONTACTING_SUPPORT, `${issueKey}`));
       goToContactUs();
     }
-  }, [submitSupportRequest, snackbar]);
+  }, [activeLocale, submitSupportRequest, snackbar]);
 
   const supportRequestTitle = useMemo(
     () => (supportRequestType ? getSupportRequestName(supportRequestType) : ''),
-    [supportRequestType]
+    [activeLocale, supportRequestType]
   );
 
   const supportRequestInstructions = useMemo(
     () => (supportRequestType ? getSupportRequestInstructions(supportRequestType) : ''),
-    [supportRequestType]
+    [activeLocale, supportRequestType]
+  );
+
+  // Confirming that no uploads are pending.
+  const uploadCompleted = useMemo(
+    () => allAttachments.every((attachment) => attachment.status !== 'pending'),
+    [allAttachments]
   );
 
   return (
@@ -166,6 +177,7 @@ const ContactUsForm = () => {
         onSave={() => handleOnSave()}
         saveID='submitSupportRequest'
         saveButtonText={strings.SUBMIT}
+        saveDisabled={!uploadCompleted}
       >
         <Card
           style={{
