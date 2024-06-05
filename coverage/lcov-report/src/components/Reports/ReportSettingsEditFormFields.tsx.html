@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
@@ -192,14 +192,7 @@
 <a name='L127'></a><a href='#L127'>127</a>
 <a name='L128'></a><a href='#L128'>128</a>
 <a name='L129'></a><a href='#L129'>129</a>
-<a name='L130'></a><a href='#L130'>130</a>
-<a name='L131'></a><a href='#L131'>131</a>
-<a name='L132'></a><a href='#L132'>132</a>
-<a name='L133'></a><a href='#L133'>133</a>
-<a name='L134'></a><a href='#L134'>134</a>
-<a name='L135'></a><a href='#L135'>135</a>
-<a name='L136'></a><a href='#L136'>136</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L130'></a><a href='#L130'>130</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -229,16 +222,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -259,6 +242,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -337,7 +325,6 @@
 import { useNavigate } from 'react-router-dom';
 &nbsp;
 import { Grid, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Button, Checkbox } from '@terraware/web-components';
 &nbsp;
 import { useOrganization } from 'src/providers';
@@ -363,21 +350,11 @@ interface ReportsSettingsCheckboxConfig {
   value: boolean | undefined;
 }
 &nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  checkbox: {
-    marginTop: 0,
-    '&amp; span[class*="-label"]': {
-      fontWeight: 500,
-    },
-  },
-}));
-&nbsp;
 const ReportSettingsEditFormFields = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> isEditing, onChange, reportsSettings }: ReportSettingsEditFormFieldsProps) =&gt; {</span>
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
 &nbsp;
   const projects = <span class="cstat-no" title="statement not covered" >useAppSelector(selectProjects);</span>
 &nbsp;
@@ -397,13 +374,18 @@ const ReportSettingsEditFormFields = <span class="cstat-no" title="statement not
             id={key}
             name={key}
             value={value}
-            className={classes.checkbox}
             disabled={!isEditing}
+            sx={{
+              marginTop: 0,
+              '&amp; span[class*="-label"]': {
+                fontWeight: 500,
+              },
+            }}
           /&gt;
         &lt;/Grid&gt;
       );
     },
-    [classes.checkbox, isEditing, onChange, theme]
+    [isEditing, onChange, theme]
   );
 &nbsp;
   const getProjectName = <span class="cstat-no" title="statement not covered" >useCallback(</span>
@@ -475,7 +457,7 @@ export default ReportSettingsEditFormFields;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-05T03:20:23.963Z
+                at 2024-06-05T03:33:38.017Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

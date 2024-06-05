@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/31</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
@@ -203,20 +203,7 @@
 <a name='L138'></a><a href='#L138'>138</a>
 <a name='L139'></a><a href='#L139'>139</a>
 <a name='L140'></a><a href='#L140'>140</a>
-<a name='L141'></a><a href='#L141'>141</a>
-<a name='L142'></a><a href='#L142'>142</a>
-<a name='L143'></a><a href='#L143'>143</a>
-<a name='L144'></a><a href='#L144'>144</a>
-<a name='L145'></a><a href='#L145'>145</a>
-<a name='L146'></a><a href='#L146'>146</a>
-<a name='L147'></a><a href='#L147'>147</a>
-<a name='L148'></a><a href='#L148'>148</a>
-<a name='L149'></a><a href='#L149'>149</a>
-<a name='L150'></a><a href='#L150'>150</a>
-<a name='L151'></a><a href='#L151'>151</a>
-<a name='L152'></a><a href='#L152'>152</a>
-<a name='L153'></a><a href='#L153'>153</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L141'></a><a href='#L141'>141</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -246,7 +233,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -257,15 +243,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -346,9 +323,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -361,6 +335,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -371,7 +347,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 &nbsp;
 import { Box } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { TableColumnType } from '@terraware/web-components';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
 &nbsp;
@@ -388,15 +363,6 @@ import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelector
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-&nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  text: {
-    fontSize: '14px',
-    '&amp; &gt; p': {
-      fontSize: '14px',
-    },
-  },
-}));
 &nbsp;
 const columns = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span>: TableColumnType[] =&gt; <span class="cstat-no" title="statement not covered" >[</span></span>
   {
@@ -418,7 +384,6 @@ const columns = <span class="cstat-no" title="statement not covered" ><span clas
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >PlantingSiteZoneView(</span>): JSX.Element {
   const [search, setSearch] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
   const defaultTimeZone = <span class="cstat-no" title="statement not covered" >useDefaultTimeZone();</span>
 &nbsp;
@@ -483,7 +448,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             columns={columns}
             rows={plantingZone?.plantingSubzones[0]?.monitoringPlots ?? []}
             orderBy='monitoringPlotName'
-            Renderer={DetailsRenderer(classes, timeZone)}
+            Renderer={DetailsRenderer(timeZone)}
           /&gt;
         &lt;/Box&gt;
       &lt;/Card&gt;
@@ -492,28 +457,27 @@ export default function <span class="fstat-no" title="function not covered" >Pla
 }
 &nbsp;
 const DetailsRenderer =
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  (c</span>lasses: any, timeZone: string) =&gt;</span>
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  (t</span>imeZone: string) =&gt;</span>
   // eslint-disable-next-line react/display-name
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  (p</span>rops: RendererProps&lt;TableRowType&gt;): JSX.Element =&gt; {</span>
     const { column, row, value } = <span class="cstat-no" title="statement not covered" >props;</span>
 &nbsp;
+    const textStyles = <span class="cstat-no" title="statement not covered" >{</span>
+      fontSize: '14px',
+      '&amp; &gt; p': {
+        fontSize: '14px',
+      },
+    };
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    if (column.key === 'completedTime') {</span>
 <span class="cstat-no" title="statement not covered" >      return (</span>
-        &lt;CellRenderer
-          {...props}
-          value={value ? getDateDisplayValue(value as string, timeZone) : ''}
-          className={classes.text}
-        /&gt;
+        &lt;CellRenderer {...props} value={value ? getDateDisplayValue(value as string, timeZone) : ''} sx={textStyles} /&gt;
       );
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (column.key === 'isPermanent') {</span>
 <span class="cstat-no" title="statement not covered" >      return (</span>
-        &lt;CellRenderer
-          {...props}
-          value={row.isPermanent ? strings.PERMANENT : strings.TEMPORARY}
-          className={classes.text}
-        /&gt;
+        &lt;CellRenderer {...props} value={row.isPermanent ? strings.PERMANENT : strings.TEMPORARY} sx={textStyles} /&gt;
       );
     }
 &nbsp;
@@ -526,7 +490,7 @@ const DetailsRenderer =
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-05T03:20:23.963Z
+                at 2024-06-05T03:33:38.017Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

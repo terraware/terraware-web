@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/98</span>
+                <span class='fraction'>0/95</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/44</span>
+                <span class='fraction'>0/43</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/93</span>
+                <span class='fraction'>0/91</span>
             </div>
         
             
@@ -504,15 +504,7 @@
 <a name='L439'></a><a href='#L439'>439</a>
 <a name='L440'></a><a href='#L440'>440</a>
 <a name='L441'></a><a href='#L441'>441</a>
-<a name='L442'></a><a href='#L442'>442</a>
-<a name='L443'></a><a href='#L443'>443</a>
-<a name='L444'></a><a href='#L444'>444</a>
-<a name='L445'></a><a href='#L445'>445</a>
-<a name='L446'></a><a href='#L446'>446</a>
-<a name='L447'></a><a href='#L447'>447</a>
-<a name='L448'></a><a href='#L448'>448</a>
-<a name='L449'></a><a href='#L449'>449</a>
-<a name='L450'></a><a href='#L450'>450</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L442'></a><a href='#L442'>442</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -553,7 +545,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -583,13 +574,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -964,7 +948,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useState } from 'react';
 &nbsp;
 import { Grid } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Dropdown, MultiSelect } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 &nbsp;
@@ -1002,12 +985,6 @@ import useDebounce from 'src/utils/useDebounce';
 import { ProjectSpecies } from './AddToProjectModal';
 import SpeciesProjectsTable from './SpeciesProjectsTable';
 &nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  blockCheckbox: {
-    display: 'block',
-  },
-}));
-&nbsp;
 type SpeciesDetailsFormProps = {
   additionalFields?: JSX.Element;
   gridSize: number;
@@ -1039,7 +1016,6 @@ export default function <span class="fstat-no" title="function not covered" >Spe
   setRecord,
 }: SpeciesDetailsFormProps): JSX.Element {
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const [optionsForName, setOptionsForName] = <span class="cstat-no" title="statement not covered" >useState&lt;string[]&gt;();</span>
   const [optionsForCommonName, setOptionsForCommonName] = <span class="cstat-no" title="statement not covered" >useState&lt;string[]&gt;();</span>
   const [newScientificName, setNewScientificName] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
@@ -1242,7 +1218,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             label={strings.RARE}
             onChange={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >onChange('rare', !record.rare)}</span>
             value={record.rare}
-            className={classes.blockCheckbox}
+            sx={{ display: 'block' }}
           /&gt;
         &lt;/Grid&gt;
         &lt;Grid item xs={gridSize}&gt;
@@ -1417,7 +1393,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-05T03:20:23.963Z
+                at 2024-06-05T03:33:38.017Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -143,8 +143,7 @@
 <a name='L78'></a><a href='#L78'>78</a>
 <a name='L79'></a><a href='#L79'>79</a>
 <a name='L80'></a><a href='#L80'>80</a>
-<a name='L81'></a><a href='#L81'>81</a>
-<a name='L82'></a><a href='#L82'>82</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L81'></a><a href='#L81'>81</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -157,26 +156,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -216,6 +195,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -228,7 +226,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useMemo } from 'react';
 &nbsp;
 import { Box } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Tabs } from '@terraware/web-components';
 &nbsp;
 import Page from 'src/components/Page';
@@ -239,28 +236,9 @@ import ParticipantsList from 'src/scenes/AcceleratorRouter/Participants/Particip
 import strings from 'src/strings';
 import useStickyTabs from 'src/utils/useStickyTabs';
 &nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  tabs: {
-    '&amp; .MuiTabPanel-root[hidden]': {
-      flexGrow: 0,
-    },
-    '&amp; .MuiTabPanel-root': {
-      display: 'flex',
-      flexDirection: 'column',
-      flexGrow: 1,
-    },
-    '&amp; &gt;.MuiBox-root': {
-      display: 'flex',
-      flexDirection: 'column',
-      flexGrow: 1,
-    },
-  },
-}));
-&nbsp;
 const OverviewView = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
   const { isAllowed } = <span class="cstat-no" title="statement not covered" >useUser();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
 &nbsp;
   const tabs = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!activeLocale) {</span>
@@ -298,7 +276,26 @@ const OverviewView = <span class="cstat-no" title="statement not covered" ><span
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Page title={strings.OVERVIEW} contentStyle={{ display: 'block' }}&gt;
-      &lt;Box display='flex' flexDirection='column' flexGrow={1} className={classes.tabs}&gt;
+      &lt;Box
+        display='flex'
+        flexDirection='column'
+        flexGrow={1}
+        sx={{
+          '&amp; .MuiTabPanel-root[hidden]': {
+            flexGrow: 0,
+          },
+          '&amp; .MuiTabPanel-root': {
+            display: 'flex',
+            flexDirection: 'column',
+            flexGrow: 1,
+          },
+          '&amp; &gt;.MuiBox-root': {
+            display: 'flex',
+            flexDirection: 'column',
+            flexGrow: 1,
+          },
+        }}
+      &gt;
         &lt;Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} /&gt;
       &lt;/Box&gt;
     &lt;/Page&gt;
@@ -313,7 +310,7 @@ export default OverviewView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-05T03:20:23.963Z
+                at 2024-06-05T03:33:38.017Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

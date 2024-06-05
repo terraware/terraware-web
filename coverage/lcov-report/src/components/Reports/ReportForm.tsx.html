@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/61</span>
+                <span class='fraction'>0/60</span>
             </div>
         
             
@@ -39,7 +39,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
@@ -444,11 +444,7 @@
 <a name='L379'></a><a href='#L379'>379</a>
 <a name='L380'></a><a href='#L380'>380</a>
 <a name='L381'></a><a href='#L381'>381</a>
-<a name='L382'></a><a href='#L382'>382</a>
-<a name='L383'></a><a href='#L383'>383</a>
-<a name='L384'></a><a href='#L384'>384</a>
-<a name='L385'></a><a href='#L385'>385</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L382'></a><a href='#L382'>382</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -470,17 +466,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -526,11 +511,20 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -833,8 +827,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useState } from 'react';
 &nbsp;
-import { Container, Grid, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { Checkbox, Textfield } from '@terraware/web-components';
 &nbsp;
 import LocationSection from 'src/components/Reports/LocationSelection';
@@ -854,17 +847,6 @@ import { ReportSeedBank } from 'src/types/Report';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 &nbsp;
 const MAX_PHOTOS = <span class="cstat-no" title="statement not covered" >30;</span>
-&nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  infoCardStyle: {
-    padding: 0,
-  },
-  section: {
-    padding: 0,
-    marginLeft: theme.spacing(3),
-    borderBottom: `solid 1px ${theme.palette.TwClrBrdrTertiary}`,
-  },
-}));
 &nbsp;
 export type ReportFormProps = {
   editable: boolean;
@@ -908,13 +890,22 @@ export default function <span class="fstat-no" title="function not covered" >Rep
 &nbsp;
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const { isMobile, isTablet } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
 &nbsp;
   const [summaryOfProgress, setSummaryOfProgress] = <span class="cstat-no" title="statement not covered" >useState(draftReport.summaryOfProgress ?? '');</span>
   const [projectNotes, setProjectNotes] = <span class="cstat-no" title="statement not covered" >useState(draftReport.notes ?? '');</span>
   const [photoCount, setPhotoCount] = <span class="cstat-no" title="statement not covered" >useState(0);</span>
+&nbsp;
+  const infoCardStyle = <span class="cstat-no" title="statement not covered" >{</span>
+    padding: 0,
+  };
+&nbsp;
+  const sectionStyles = <span class="cstat-no" title="statement not covered" >{</span>
+    padding: 0,
+    marginLeft: theme.spacing(3),
+    borderBottom: `solid 1px ${theme.palette.TwClrBrdrTertiary}`,
+  };
 &nbsp;
   // We check the project name because a project can be deleted, and if that happens the ID will not be present
   const isProjectReport = <span class="cstat-no" title="statement not covered" >!!draftReport.projectName;</span>
@@ -1002,7 +993,7 @@ export default function <span class="fstat-no" title="function not covered" >Rep
           isEditable={false}
           title={strings.ORGANIZATION}
           contents={draftReport.organizationName ?? ''}
-          className={classes.infoCardStyle}
+          sx={infoCardStyle}
         /&gt;
       &lt;/Grid&gt;
       &lt;Grid item xs={smallItemGridWidth()}&gt;
@@ -1010,7 +1001,7 @@ export default function <span class="fstat-no" title="function not covered" >Rep
           isEditable={false}
           title={strings.SEED_BANKS}
           contents={`${draftReport?.seedBanks?.filter(<span class="fstat-no" title="function not covered" >(s</span>b) =&gt; <span class="cstat-no" title="statement not covered" >sb.selected)</span>?.length}` ?? '0'}
-          className={classes.infoCardStyle}
+          sx={infoCardStyle}
         /&gt;
       &lt;/Grid&gt;
       &lt;Grid item xs={smallItemGridWidth()}&gt;
@@ -1018,7 +1009,7 @@ export default function <span class="fstat-no" title="function not covered" >Rep
           isEditable={false}
           title={strings.NURSERIES}
           contents={`${draftReport?.nurseries?.filter(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.selected)</span>?.length}` ?? '0'}
-          className={classes.infoCardStyle}
+          sx={infoCardStyle}
         /&gt;
       &lt;/Grid&gt;
       &lt;Grid item xs={smallItemGridWidth()}&gt;
@@ -1026,7 +1017,7 @@ export default function <span class="fstat-no" title="function not covered" >Rep
           isEditable={false}
           title={strings.PLANTING_SITES}
           contents={`${draftReport?.plantingSites?.filter(<span class="fstat-no" title="function not covered" >(p</span>s) =&gt; <span class="cstat-no" title="statement not covered" >ps.selected)</span>?.length}` ?? '0'}
-          className={classes.infoCardStyle}
+          sx={infoCardStyle}
         /&gt;
       &lt;/Grid&gt;
       &lt;Grid item xs={mediumItemGridWidth()}&gt;
@@ -1113,7 +1104,7 @@ export default function <span class="fstat-no" title="function not covered" >Rep
         {allSeedbanks ? (
           allSeedbanks.map(<span class="fstat-no" title="function not covered" >(s</span>eedbank, index) =&gt; (
 <span class="cstat-no" title="statement not covered" >            &lt;Grid key={index} container spacing={theme.spacing(3)} margin={0}&gt;</span>
-              {index !== 0 &amp;&amp; &lt;Grid item xs={12} className={classes.section} /&gt;}
+              {index !== 0 &amp;&amp; &lt;Grid item xs={12} sx={sectionStyles} /&gt;}
               &lt;Grid item xs={12}&gt;
                 {LocationCheckbox(seedbank.name, seedbank.selected, `seedbank-${index}`, index, 'seedBanks')}
               &lt;/Grid&gt;
@@ -1147,7 +1138,7 @@ export default function <span class="fstat-no" title="function not covered" >Rep
         {allNurseries ? (
           allNurseries.map(<span class="fstat-no" title="function not covered" >(n</span>ursery, index) =&gt; (
 <span class="cstat-no" title="statement not covered" >            &lt;Grid key={index} container spacing={theme.spacing(3)} margin={0}&gt;</span>
-              {index !== 0 &amp;&amp; &lt;Grid item xs={12} className={classes.section} /&gt;}
+              {index !== 0 &amp;&amp; &lt;Grid item xs={12} sx={sectionStyles} /&gt;}
               &lt;Grid item xs={12}&gt;
                 {LocationCheckbox(nursery.name, nursery.selected, `nursery-${index}`, index, 'nurseries')}
               &lt;/Grid&gt;
@@ -1182,7 +1173,7 @@ export default function <span class="fstat-no" title="function not covered" >Rep
         {allPlantingSites ? (
           allPlantingSites.map(<span class="fstat-no" title="function not covered" >(p</span>lantingSite, index) =&gt; (
 <span class="cstat-no" title="statement not covered" >            &lt;Grid key={index} container spacing={theme.spacing(3)} margin={0}&gt;</span>
-              {index !== 0 &amp;&amp; &lt;Grid item xs={12} className={classes.section} /&gt;}
+              {index !== 0 &amp;&amp; &lt;Grid item xs={12} sx={sectionStyles} /&gt;}
               &lt;Grid item xs={12}&gt;
                 {LocationCheckbox(
                   plantingSite.name,
@@ -1222,7 +1213,7 @@ export default function <span class="fstat-no" title="function not covered" >Rep
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-05T03:20:23.963Z
+                at 2024-06-05T03:33:38.017Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

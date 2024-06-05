@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
@@ -148,23 +148,8 @@
 <a name='L83'></a><a href='#L83'>83</a>
 <a name='L84'></a><a href='#L84'>84</a>
 <a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -184,6 +169,23 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -236,8 +238,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
 &nbsp;
 import { FiberManualRecord } from '@mui/icons-material';
-import { TableCell, Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, TableCell, Typography, useTheme } from '@mui/material';
 &nbsp;
 import Link from 'src/components/common/Link';
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
@@ -245,24 +246,9 @@ import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { SearchResponseElement } from 'src/types/Search';
 &nbsp;
-const statusStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  flex: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  statusIndicator: {
-    fontSize: theme.typography.overline.fontSize,
-  },
-  inactive: {
-    display: 'flex',
-    alignItems: 'center',
-    color: theme.palette.neutral[600],
-  },
-}));
-&nbsp;
 export default function <span class="fstat-no" title="function not covered" >SearchCellRenderer(</span>props: RendererProps&lt;SearchResponseElement&gt;): JSX.Element {
   const { column, value, index, row } = <span class="cstat-no" title="statement not covered" >props;</span>
-  const classes = <span class="cstat-no" title="statement not covered" >statusStyles();</span>
+  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
 &nbsp;
   const id = <span class="cstat-no" title="statement not covered" >`row${index}-${column.key}`;</span>
 <span class="cstat-no" title="statement not covered" >  if (column.key === 'active' &amp;&amp; typeof value === 'string' &amp;&amp; value) {</span>
@@ -270,10 +256,27 @@ export default function <span class="fstat-no" title="function not covered" >Sea
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return (</span>
       &lt;TableCell id={id} align='left'&gt;
-        &lt;div className={classes.flex}&gt;
-          &lt;FiberManualRecord color={active ? 'primary' : 'disabled'} className={classes.statusIndicator} /&gt;
-          &lt;Typography classes={{ root: active ? undefined : classes.inactive }}&gt;{value}&lt;/Typography&gt;
-        &lt;/div&gt;
+        &lt;Box sx={{ display: 'flex', alignItems: 'center' }}&gt;
+          &lt;FiberManualRecord
+            color={active ? 'primary' : 'disabled'}
+            sx={{ fontSize: theme.typography.overline.fontSize }}
+          /&gt;
+          &lt;Typography
+            sx={
+              active
+                ? undefined
+                : {
+                    '&amp;.MuiTypography-root': {
+                      display: 'flex',
+                      alignItems: 'center',
+                      color: theme.palette.neutral[600],
+                    },
+                  }
+            }
+          &gt;
+            {value}
+          &lt;/Typography&gt;
+        &lt;/Box&gt;
       &lt;/TableCell&gt;
     );
   }
@@ -325,7 +328,7 @@ export default function <span class="fstat-no" title="function not covered" >Sea
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-05T03:20:23.963Z
+                at 2024-06-05T03:33:38.017Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

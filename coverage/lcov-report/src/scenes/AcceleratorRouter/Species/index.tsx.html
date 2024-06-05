@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/43</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/42</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
@@ -559,22 +559,7 @@
 <a name='L494'></a><a href='#L494'>494</a>
 <a name='L495'></a><a href='#L495'>495</a>
 <a name='L496'></a><a href='#L496'>496</a>
-<a name='L497'></a><a href='#L497'>497</a>
-<a name='L498'></a><a href='#L498'>498</a>
-<a name='L499'></a><a href='#L499'>499</a>
-<a name='L500'></a><a href='#L500'>500</a>
-<a name='L501'></a><a href='#L501'>501</a>
-<a name='L502'></a><a href='#L502'>502</a>
-<a name='L503'></a><a href='#L503'>503</a>
-<a name='L504'></a><a href='#L504'>504</a>
-<a name='L505'></a><a href='#L505'>505</a>
-<a name='L506'></a><a href='#L506'>506</a>
-<a name='L507'></a><a href='#L507'>507</a>
-<a name='L508'></a><a href='#L508'>508</a>
-<a name='L509'></a><a href='#L509'>509</a>
-<a name='L510'></a><a href='#L510'>510</a>
-<a name='L511'></a><a href='#L511'>511</a>
-<a name='L512'></a><a href='#L512'>512</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L497'></a><a href='#L497'>497</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -599,21 +584,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1087,8 +1057,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useMemo, useState } from 'react';
 &nbsp;
-import { Box, Grid, GridProps, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Grid, GridProps, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 &nbsp;
@@ -1110,23 +1079,9 @@ import ApproveDeliverableDialog from '../Deliverables/ApproveDeliverableDialog';
 import RejectDialog from '../Deliverables/RejectDialog';
 import RejectedBox from './RejectedBox';
 &nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  titleWithButton: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: theme.spacing(4),
-  },
-  blockCheckbox: {
-    display: 'block',
-  },
-}));
-&nbsp;
 export default function <span class="fstat-no" title="function not covered" >SpeciesDetailView(</span>): JSX.Element {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const { goToParticipantProjectSpeciesEdit } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const { projectId } = <span class="cstat-no" title="statement not covered" >useProject();</span>
@@ -1401,7 +1356,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
 <span class="cstat-no" title="statement not covered" >                    return;</span>
                   }}
                   value={currentSpecies.rare}
-                  className={classes.blockCheckbox}
+                  sx={{ display: 'block' }}
                 /&gt;
               &lt;/GridItemWrapper&gt;
               &lt;GridItemWrapper&gt;
@@ -1603,7 +1558,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-05T03:20:23.963Z
+                at 2024-06-05T03:33:38.017Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

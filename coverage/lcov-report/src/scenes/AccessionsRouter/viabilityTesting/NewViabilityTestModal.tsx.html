@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/255</span>
+                <span class='fraction'>0/252</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/64</span>
+                <span class='fraction'>0/63</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/252</span>
+                <span class='fraction'>0/250</span>
             </div>
         
             
@@ -805,15 +805,7 @@
 <a name='L740'></a><a href='#L740'>740</a>
 <a name='L741'></a><a href='#L741'>741</a>
 <a name='L742'></a><a href='#L742'>742</a>
-<a name='L743'></a><a href='#L743'>743</a>
-<a name='L744'></a><a href='#L744'>744</a>
-<a name='L745'></a><a href='#L745'>745</a>
-<a name='L746'></a><a href='#L746'>746</a>
-<a name='L747'></a><a href='#L747'>747</a>
-<a name='L748'></a><a href='#L748'>748</a>
-<a name='L749'></a><a href='#L749'>749</a>
-<a name='L750'></a><a href='#L750'>750</a>
-<a name='L751'></a><a href='#L751'>751</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L743'></a><a href='#L743'>743</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -850,7 +842,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -860,13 +851,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1567,7 +1551,6 @@
 &nbsp;
 import { Close } from '@mui/icons-material';
 import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Button, Checkbox, DialogBox, SelectT, Textfield } from '@terraware/web-components';
 import { Dropdown } from '@terraware/web-components';
 import { preventDefaultEvent, useDeviceInfo } from '@terraware/web-components/utils';
@@ -1600,12 +1583,6 @@ import { getSubstratesAccordingToType } from 'src/utils/viabilityTest';
 &nbsp;
 import ViabilityResultModal from './ViabilityResultModal';
 &nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  checkbox: {
-    marginTop: 0,
-  },
-}));
-&nbsp;
 export interface NewViabilityTestModalProps {
   open: boolean;
   accession: Accession;
@@ -1618,7 +1595,6 @@ export interface NewViabilityTestModalProps {
 export default function <span class="fstat-no" title="function not covered" >NewViabilityTestModal(</span>props: NewViabilityTestModalProps): JSX.Element {
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const { onClose, open, accession, user, reload, viabilityTest } = <span class="cstat-no" title="statement not covered" >props;</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
 &nbsp;
   const [record, setRecord, onChange] = <span class="cstat-no" title="statement not covered" >useForm(viabilityTest);</span>
   const [users, setUsers] = <span class="cstat-no" title="statement not covered" >useState&lt;OrganizationUser[]&gt;();</span>
@@ -2292,7 +2268,7 @@ export default function <span class="fstat-no" title="function not covered" >New
                       name='markAsComplete'
                       value={testCompleted}
                       disabled={readOnly}
-                      className={classes.checkbox}
+                      sx={{ marginTop: 0 }}
                     /&gt;
                   )}
                 &lt;/Box&gt;
@@ -2320,7 +2296,7 @@ export default function <span class="fstat-no" title="function not covered" >New
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-05T03:20:23.963Z
+                at 2024-06-05T03:33:38.017Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

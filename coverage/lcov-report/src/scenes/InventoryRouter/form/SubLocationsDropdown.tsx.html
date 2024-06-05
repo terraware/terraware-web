@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
@@ -129,14 +129,7 @@
 <a name='L64'></a><a href='#L64'>64</a>
 <a name='L65'></a><a href='#L65'>65</a>
 <a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a>
-<a name='L74'></a><a href='#L74'>74</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L67'></a><a href='#L67'>67</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -145,14 +138,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -167,15 +152,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -201,6 +183,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -211,7 +197,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
 &nbsp;
-import { makeStyles } from '@mui/styles';
 import { MultiSelect } from '@terraware/web-components';
 &nbsp;
 import strings from 'src/strings';
@@ -225,13 +210,6 @@ type SubLocationsDropdownProps&lt;T extends { subLocationIds?: number[] } | unde
   setRecord: (setFn: (previousValue: T) =&gt; T) =&gt; void;
 };
 &nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  multiSelectStyle: {
-    height: '100%',
-    width: '100%',
-  },
-}));
-&nbsp;
 function <span class="fstat-no" title="function not covered" >SubLocationsDropdown&lt;</span>T extends { subLocationIds?: number[] } | undefined&gt;({
   availableSubLocations,
   minimal,
@@ -239,8 +217,6 @@ function <span class="fstat-no" title="function not covered" >SubLocationsDropdo
   record,
   setRecord,
 }: SubLocationsDropdownProps&lt;T&gt;) {
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
-&nbsp;
   const handleOnBlur = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (onBlur) {</span>
 <span class="cstat-no" title="statement not covered" >      onBlur(record);</span>
@@ -249,7 +225,6 @@ function <span class="fstat-no" title="function not covered" >SubLocationsDropdo
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;MultiSelect&lt;number, string&gt;
-      className={classes.multiSelectStyle}
       fullWidth={true}
       label={!minimal ? strings.SUB_LOCATIONS : undefined}
       onAdd={<span class="fstat-no" title="function not covered" >(s</span>ubLocationId: number) =&gt; {
@@ -275,6 +250,10 @@ function <span class="fstat-no" title="function not covered" >SubLocationsDropdo
       options={new Map(availableSubLocations?.map(<span class="fstat-no" title="function not covered" >(s</span>ubLocation) =&gt; <span class="cstat-no" title="statement not covered" >[subLocation.id, subLocation.name])</span>)}
       valueRenderer={<span class="fstat-no" title="function not covered" >(v</span>al: string) =&gt; <span class="cstat-no" title="statement not covered" >val}</span>
       selectedOptions={record?.subLocationIds || []}
+      sx={{
+        height: '100%',
+        width: '100%',
+      }}
       placeHolder={strings.SELECT}
       onBlur={handleOnBlur}
     /&gt;
@@ -289,7 +268,7 @@ export default SubLocationsDropdown;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-05T03:20:23.963Z
+                at 2024-06-05T03:33:38.017Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

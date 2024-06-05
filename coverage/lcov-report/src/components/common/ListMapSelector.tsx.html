@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -144,30 +144,7 @@
 <a name='L79'></a><a href='#L79'>79</a>
 <a name='L80'></a><a href='#L80'>80</a>
 <a name='L81'></a><a href='#L81'>81</a>
-<a name='L82'></a><a href='#L82'>82</a>
-<a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a>
-<a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a>
-<a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L82'></a><a href='#L82'>82</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -189,7 +166,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -245,8 +227,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
 &nbsp;
-import { Box, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, SxProps, Typography, useTheme } from '@mui/material';
 &nbsp;
 import strings from 'src/strings';
 import { getRgbaFromHex } from 'src/utils/color';
@@ -254,19 +235,6 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 &nbsp;
 import Icon from './icon/Icon';
 import { IconName } from './icon/icons';
-&nbsp;
-const useStyles = <span class="cstat-no" title="statement not covered" >makeStyles(<span class="fstat-no" title="function not covered" >(t</span>heme: Theme) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-  icon: {
-    '&amp; path': {
-      fill: theme.palette.TwClrBaseGray500,
-    },
-  },
-  box: {
-    display: 'inline-flex',
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-  },
-}));
 &nbsp;
 export type View = 'list' | 'map';
 &nbsp;
@@ -277,9 +245,14 @@ export type ListMapSelectorProps = {
 };
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >ListMapSelector(</span>{ defaultView, view, onView }: ListMapSelectorProps): JSX.Element {
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
+&nbsp;
+  const boxStyles: SxProps = <span class="cstat-no" title="statement not covered" >{</span>
+    display: 'inline-flex',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  };
 &nbsp;
   const renderSelector = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>electorView: View) =&gt; {</span>
     const iconName: IconName = <span class="cstat-no" title="statement not covered" >selectorView === 'list' ? 'iconList' : 'iconTreasureMap';</span>
@@ -287,13 +260,13 @@ export default function <span class="fstat-no" title="function not covered" >Lis
     const isSelected = <span class="cstat-no" title="statement not covered" >view === selectorView;</span>
 <span class="cstat-no" title="statement not covered" >    return (</span>
       &lt;Box
-        className={classes.box}
         width={isMobile ? '32px' : 'auto'}
         minWidth={isMobile ? '32px' : '67px'}
         borderRadius={theme.spacing(0.75)}
         padding={theme.spacing(0.5)}
         gap={theme.spacing(0.75)}
         sx={{
+          ...boxStyles,
           background: isSelected ? theme.palette.TwClrBaseWhite : 'transparent',
           boxShadow: isSelected
             ? `0.0px 2.0px 4.0px 0px ${getRgbaFromHex(theme.palette.TwClrBaseGray800 as string, 0.2)}`
@@ -302,7 +275,7 @@ export default function <span class="fstat-no" title="function not covered" >Lis
         }}
         onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >onView(selectorView)}</span>
       &gt;
-        &lt;Icon name={iconName} size='medium' className={classes.icon} /&gt;
+        &lt;Icon name={iconName} size='medium' fillColor={theme.palette.TwClrBaseGray500} /&gt;
         {!isMobile &amp;&amp; (
           &lt;Typography
             fontSize='16px'
@@ -320,13 +293,13 @@ export default function <span class="fstat-no" title="function not covered" >Lis
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Box
-      className={classes.box}
       justifyContent='space-between'
       minWidth={isMobile ? '76px' : '152px'}
       borderRadius={theme.spacing(1)}
       padding={theme.spacing(0.5)}
       gap={theme.spacing(0.5)}
       style={{ backgroundColor: theme.palette.TwClrBgSecondary }}
+      sx={boxStyles}
     &gt;
       {renderSelector(defaultView === 'list' ? 'list' : 'map')}
       {renderSelector(defaultView !== 'list' ? 'list' : 'map')}
@@ -340,7 +313,7 @@ export default function <span class="fstat-no" title="function not covered" >Lis
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-05T03:20:23.963Z
+                at 2024-06-05T03:33:38.017Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
