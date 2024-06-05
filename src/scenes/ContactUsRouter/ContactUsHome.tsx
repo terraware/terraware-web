@@ -86,8 +86,9 @@ export default function ContactUsHome(): JSX.Element {
   );
 
   const jiraListItems = useMemo(() => {
-    const allSupportRequestTypes: SupportRequestType[] = ['Bug Report', 'Feature Request', 'Contact Us'];
-    return allSupportRequestTypes
+    // Set the support request types ordering before filtering out unsupported ones
+    const orderedSupportRequestTypes: SupportRequestType[] = ['Bug Report', 'Feature Request', 'Contact Us'];
+    return orderedSupportRequestTypes
       .filter((type) => (types ?? []).includes(type))
       .map(
         (type): ListItemContent => ({
