@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { Grid } from '@mui/material';
 import { FileChooser } from '@terraware/web-components';
@@ -8,6 +8,7 @@ import { useAppDispatch } from 'src/redux/store';
 import strings from 'src/strings';
 import { AttachmentRequest } from 'src/types/Support';
 
+import AttachmentLimitReachedMessage from './AttachmentLimitReachedMessage';
 import AttachmentRow from './AttachmentRow';
 
 type AttachmentsProps = {
@@ -54,17 +55,26 @@ const ContactUsAttachments = ({ maxFiles, onChange }: AttachmentsProps): JSX.Ele
     [attachments, onChange]
   );
 
+  const attachmentLimitReached = useMemo(
+    () => (maxFiles ? attachments.length >= maxFiles : false),
+    [attachments.length, maxFiles]
+  );
+
   return (
     <>
       <Grid item xs={12}>
-        <FileChooser
-          chooseFileText={strings.CHOOSE_FILE}
-          maxFiles={maxFiles}
-          multipleSelection
-          setFiles={handleFiles}
-          uploadDescription={strings.UPLOAD_FILES_DESCRIPTION}
-          uploadText={strings.UPLOAD_FILES_TITLE}
-        />
+        {!attachmentLimitReached && (
+          <FileChooser
+            acceptFileType={'image/*, video/*'}
+            chooseFileText={strings.CHOOSE_FILE}
+            maxFiles={maxFiles}
+            multipleSelection
+            setFiles={handleFiles}
+            uploadDescription={strings.UPLOAD_FILES_DESCRIPTION}
+            uploadText={strings.ATTACH_IMAGES_OR_VIDEOS}
+          />
+        )}
+        {attachmentLimitReached && maxFiles && <AttachmentLimitReachedMessage maxFiles={maxFiles} />}
       </Grid>
       {attachments.map((attachment) => (
         <AttachmentRow
