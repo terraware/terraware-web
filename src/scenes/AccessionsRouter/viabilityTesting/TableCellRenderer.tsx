@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { Box, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 
 import Link from 'src/components/common/Link';
@@ -12,16 +11,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import { getCutTestViabilityPercent } from './utils';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  syncIcon: {
-    '& path': {
-      fill: theme.palette.TwClrIcnWarning,
-    },
-  },
-}));
-
 export default function Renderer(props: RendererProps<TableRowType>): JSX.Element {
-  const classes = useStyles();
   const theme = useTheme();
   const { column, row, index } = props;
   const defaultProps = { column, row, index };
@@ -102,7 +92,10 @@ export default function Renderer(props: RendererProps<TableRowType>): JSX.Elemen
 
     if (testType !== 'Cut' && (!row.endDate || row.viabilityPercent === undefined || !row.testResults?.length)) {
       return (
-        <CellRenderer {...defaultProps} value={getValue(<Icon name='iconSynced' className={classes.syncIcon} />)} />
+        <CellRenderer
+          {...defaultProps}
+          value={getValue(<Icon name='iconSynced' fillColor={theme.palette.TwClrIcnWarning} />)}
+        />
       );
     }
 

@@ -1,23 +1,11 @@
 import React from 'react';
 
-import { makeStyles } from '@mui/styles';
-
 import strings from 'src/strings';
 import { OrganizationUser } from 'src/types/User';
 
 import DialogBox from '../../components/common/DialogBox/DialogBox';
 import Select from '../../components/common/Select/Select';
 import Button from '../../components/common/button/Button';
-
-const useStyles = makeStyles(() => ({
-  select: {
-    width: '100%',
-    textAlign: 'left',
-    '& .textfield-container': {
-      width: '100%',
-    },
-  },
-}));
 
 export interface AssignNewOwnerDialogProps {
   open: boolean;
@@ -29,7 +17,6 @@ export interface AssignNewOwnerDialogProps {
 }
 
 export default function AssignNewOwnerDialog(props: AssignNewOwnerDialogProps): JSX.Element {
-  const classes = useStyles();
   const { onClose, open, onSubmit, people, setNewOwner, selectedOwner } = props;
 
   return (
@@ -59,7 +46,13 @@ export default function AssignNewOwnerDialog(props: AssignNewOwnerDialogProps): 
           })}
           onChange={(newValue: string) => setNewOwner(people.find((person) => person.email === newValue))}
           selectedValue={selectedOwner?.email}
-          className={classes.select}
+          sx={{
+            width: '100%',
+            textAlign: 'left',
+            '& .textfield-container': {
+              width: '100%',
+            },
+          }}
         />
       </div>
     </DialogBox>
