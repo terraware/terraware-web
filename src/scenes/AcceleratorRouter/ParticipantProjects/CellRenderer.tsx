@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { makeStyles } from '@mui/styles';
-
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
@@ -9,17 +7,7 @@ import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { CohortPhaseType, getPhaseString } from 'src/types/Cohort';
 
-const useStyles = makeStyles(() => ({
-  text: {
-    fontSize: '14px',
-    '& > p': {
-      fontSize: '14px',
-    },
-  },
-}));
-
 export default function ParticipantProjectsCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
-  const classes = useStyles();
   const { column, row, value } = props;
 
   const createLinkToProject = () => {
@@ -28,7 +16,18 @@ export default function ParticipantProjectsCellRenderer(props: RendererProps<Tab
   };
 
   if (column.key === 'name') {
-    return <CellRenderer {...props} value={createLinkToProject()} className={classes.text} />;
+    return (
+      <CellRenderer
+        {...props}
+        value={createLinkToProject()}
+        sx={{
+          fontSize: '14px',
+          '& > p': {
+            fontSize: '14px',
+          },
+        }}
+      />
+    );
   }
 
   if (column.key === 'participant_cohort_phase') {

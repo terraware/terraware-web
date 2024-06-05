@@ -1,24 +1,12 @@
 import React from 'react';
 
-import { makeStyles } from '@mui/styles';
-
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 
-const useStyles = makeStyles(() => ({
-  text: {
-    fontSize: '14px',
-    '& > p': {
-      fontSize: '14px',
-    },
-  },
-}));
-
 export default function ParticipantsCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
-  const classes = useStyles();
   const { column, row, value } = props;
 
   const createLinkToParticipant = () => {
@@ -27,7 +15,18 @@ export default function ParticipantsCellRenderer(props: RendererProps<TableRowTy
   };
 
   if (column.key === 'name') {
-    return <CellRenderer {...props} value={createLinkToParticipant()} className={classes.text} />;
+    return (
+      <CellRenderer
+        {...props}
+        value={createLinkToParticipant()}
+        sx={{
+          fontSize: '14px',
+          '& > p': {
+            fontSize: '14px',
+          },
+        }}
+      />
+    );
   }
 
   if (column.key === 'projects.name') {

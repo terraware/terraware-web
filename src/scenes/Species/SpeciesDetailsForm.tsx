@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
 import { Grid } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Dropdown, MultiSelect } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -39,12 +38,6 @@ import useDebounce from 'src/utils/useDebounce';
 import { ProjectSpecies } from './AddToProjectModal';
 import SpeciesProjectsTable from './SpeciesProjectsTable';
 
-const useStyles = makeStyles(() => ({
-  blockCheckbox: {
-    display: 'block',
-  },
-}));
-
 type SpeciesDetailsFormProps = {
   additionalFields?: JSX.Element;
   gridSize: number;
@@ -76,7 +69,6 @@ export default function SpeciesDetailsForm({
   setRecord,
 }: SpeciesDetailsFormProps): JSX.Element {
   const { activeLocale } = useLocalization();
-  const classes = useStyles();
   const [optionsForName, setOptionsForName] = useState<string[]>();
   const [optionsForCommonName, setOptionsForCommonName] = useState<string[]>();
   const [newScientificName, setNewScientificName] = useState(false);
@@ -279,7 +271,7 @@ export default function SpeciesDetailsForm({
             label={strings.RARE}
             onChange={() => onChange('rare', !record.rare)}
             value={record.rare}
-            className={classes.blockCheckbox}
+            sx={{ display: 'block' }}
           />
         </Grid>
         <Grid item xs={gridSize}>

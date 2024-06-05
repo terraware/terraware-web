@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Container, Grid } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { SortOrder, TableColumnType, TableRowType } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
@@ -25,12 +24,6 @@ interface TableWithSearchFiltersProps extends Omit<OrderPreservedTablePropsFull<
   title?: string;
 }
 
-const useStyles = makeStyles(() => ({
-  mainContainer: {
-    padding: 0,
-  },
-}));
-
 const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
   const {
     columns,
@@ -47,7 +40,6 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
   } = props;
 
   const { activeLocale } = useLocalization();
-  const classes = useStyles();
 
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
   const [searchValue, setSearchValue] = useState('');
@@ -135,7 +127,7 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
   }, [extraTableFilters]);
 
   return (
-    <Container maxWidth={false} className={classes.mainContainer}>
+    <Container maxWidth={false} sx={{ padding: 0 }}>
       <Card busy={busy} flushMobile rightComponent={rightComponent} title={title}>
         <Grid item xs={12} sx={{ display: 'flex', marginBottom: '16px', alignItems: 'center' }}>
           <SearchFiltersWrapperV2

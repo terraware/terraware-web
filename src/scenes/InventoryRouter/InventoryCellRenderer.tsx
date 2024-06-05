@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 
-import { makeStyles } from '@mui/styles';
-
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
@@ -13,20 +11,17 @@ import strings from 'src/strings';
 import { Batch } from 'src/types/Batch';
 import useQuery from 'src/utils/useQuery';
 
-const useStyles = makeStyles(() => ({
-  text: {
+export default function InventoryCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
+  const query = useQuery();
+  const { column, row, value, index, reloadData } = props;
+  const [modalValues, setModalValues] = useState({ type: 'germinating', openChangeQuantityModal: false });
+
+  const textStyles = {
     fontSize: '14px',
     '& > p': {
       fontSize: '14px',
     },
-  },
-}));
-
-export default function InventoryCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
-  const classes = useStyles();
-  const query = useQuery();
-  const { column, row, value, index, reloadData } = props;
-  const [modalValues, setModalValues] = useState({ type: 'germinating', openChangeQuantityModal: false });
+  };
 
   const getNamesList = (names: string) => {
     const namesArray = names.split('\r');
@@ -55,15 +50,11 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
     createLinkWithQuery(APP_PATHS.INVENTORY_BATCH.replace(':batchId', row.batchId.toString()), iValue);
 
   if (column.key === 'facilityInventories' && typeof value === 'string') {
-    return (
-      <CellRenderer index={index} column={column} value={getNamesList(value)} row={row} className={classes.text} />
-    );
+    return <CellRenderer index={index} column={column} value={getNamesList(value)} row={row} sx={textStyles} />;
   }
 
   if (column.key === 'subLocations' && typeof value === 'string') {
-    return (
-      <CellRenderer index={index} column={column} value={getNamesList(value)} row={row} className={classes.text} />
-    );
+    return <CellRenderer index={index} column={column} value={getNamesList(value)} row={row} sx={textStyles} />;
   }
 
   if (column.key === 'species_scientificName') {
@@ -73,7 +64,7 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
         column={column}
         value={row.species_id ? createLinkToInventorySpeciesDetail(value) : strings.DELETED_SPECIES}
         row={row}
-        className={classes.text}
+        sx={textStyles}
       />
     );
   }
@@ -85,7 +76,7 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
         column={column}
         value={row.facility_id ? createLinkToInventoryNurseryDetail(value) : undefined}
         row={row}
-        className={classes.text}
+        sx={textStyles}
       />
     );
   }
@@ -97,7 +88,7 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
         column={column}
         value={row.batchId ? createLinkToInventoryBatchDetail(value) : undefined}
         row={row}
-        className={classes.text}
+        sx={textStyles}
       />
     );
   }
@@ -125,5 +116,5 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
     );
   }
 
-  return <CellRenderer {...props} className={classes.text} />;
+  return <CellRenderer {...props} sx={textStyles} />;
 }

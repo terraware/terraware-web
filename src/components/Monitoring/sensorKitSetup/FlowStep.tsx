@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { Box, Grid, Theme, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Grid, useTheme } from '@mui/material';
 
 import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
@@ -10,21 +9,6 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import ErrorBox from '../../common/ErrorBox/ErrorBox';
 import Expandable from '../../common/Expandable';
 import Icon from '../../common/icon/Icon';
-
-interface StyleProps {
-  isMobile: boolean;
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  errorBox: {
-    width: '100%',
-    marginBottom: theme.spacing(2),
-  },
-  button: {
-    marginLeft: (props: StyleProps) => theme.spacing(props.isMobile ? 1 : 3),
-    marginBottom: '4px',
-  },
-}));
 
 export type FlowError = {
   title?: string;
@@ -51,7 +35,6 @@ type FlowStepProps = {
 export default function FlowStep(props: FlowStepProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const classes = useStyles({ isMobile });
   const {
     flowState,
     title,
@@ -102,7 +85,15 @@ export default function FlowStep(props: FlowStepProps): JSX.Element {
         disabled={!active}
       >
         <Box sx={{ marginTop: theme.spacing(2) }}>
-          {flowError !== undefined && <ErrorBox {...flowError} className={classes.errorBox} />}
+          {flowError !== undefined && (
+            <ErrorBox
+              {...flowError}
+              sx={{
+                width: '100%',
+                marginBottom: theme.spacing(2),
+              }}
+            />
+          )}
           {children}
           <Box
             sx={{
@@ -121,7 +112,10 @@ export default function FlowStep(props: FlowStepProps): JSX.Element {
                 priority='secondary'
                 size='small'
                 disabled={disableNext}
-                className={footer === undefined ? '' : classes.button}
+                sx={{
+                  marginLeft: theme.spacing(isMobile ? 1 : 3),
+                  marginBottom: '4px',
+                }}
               />
             )}
           </Box>

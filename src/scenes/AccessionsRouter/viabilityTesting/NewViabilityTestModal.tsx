@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 import { Close } from '@mui/icons-material';
 import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Button, Checkbox, DialogBox, SelectT, Textfield } from '@terraware/web-components';
 import { Dropdown } from '@terraware/web-components';
 import { preventDefaultEvent, useDeviceInfo } from '@terraware/web-components/utils';
@@ -35,12 +34,6 @@ import { getSubstratesAccordingToType } from 'src/utils/viabilityTest';
 
 import ViabilityResultModal from './ViabilityResultModal';
 
-const useStyles = makeStyles(() => ({
-  checkbox: {
-    marginTop: 0,
-  },
-}));
-
 export interface NewViabilityTestModalProps {
   open: boolean;
   accession: Accession;
@@ -53,7 +46,6 @@ export interface NewViabilityTestModalProps {
 export default function NewViabilityTestModal(props: NewViabilityTestModalProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { onClose, open, accession, user, reload, viabilityTest } = props;
-  const classes = useStyles();
 
   const [record, setRecord, onChange] = useForm(viabilityTest);
   const [users, setUsers] = useState<OrganizationUser[]>();
@@ -727,7 +719,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
                       name='markAsComplete'
                       value={testCompleted}
                       disabled={readOnly}
-                      className={classes.checkbox}
+                      sx={{ marginTop: 0 }}
                     />
                   )}
                 </Box>

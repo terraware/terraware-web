@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 
-import { Box, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Typography, useTheme } from '@mui/material';
 import { Autocomplete, Button, DropdownItem } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { isKeyHotkey } from 'is-hotkey';
@@ -17,23 +16,6 @@ import InsertOptionsDropdown from './InsertOptionsDropdown';
 import TextChunk from './TextChunk';
 import TextVariable from './TextVariable';
 import { editorDisplayVariableWithValues, editorValueFromVariableValue, variableValueFromEditorValue } from './helpers';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  variableDropdown: {
-    background: theme.palette.TwClrBg,
-    borderRadius: '8px',
-  },
-  recommendedVariable: {
-    borderRadius: 0,
-    padding: `0 ${theme.spacing(1)}`,
-    margin: 0,
-    backgroundColor: '#e9e2ba',
-    color: theme.palette.TwClrTxt,
-    fontWeight: 400,
-    minHeight: 'fit-content',
-    minWidth: 'fit-content',
-  },
-}));
 
 // Required type definitions for slatejs (https://docs.slatejs.org/concepts/12-typescript):
 export type CustomElement = {
@@ -73,7 +55,6 @@ const SectionEdit = ({
 }: EditableSectionEditProps): JSX.Element => {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const classes = useStyles();
   const [editor] = useState(() => withInlines(withReact(createEditor())));
   const [openEditVariableModal, setOpenEditVariableModal] = useState<boolean>(false);
   const [clickedVariable, setClickedVariable] = useState<VariableWithValues>();
@@ -216,7 +197,6 @@ const SectionEdit = ({
               {recommendedVariables.map((variable) => (
                 <Button
                   key={`variable-${variable.id}`}
-                  className={classes.recommendedVariable}
                   rightIcon='iconAdd'
                   priority='ghost'
                   type='productive'
@@ -228,6 +208,16 @@ const SectionEdit = ({
                     } else {
                       insertVariable(variable);
                     }
+                  }}
+                  sx={{
+                    borderRadius: 0,
+                    padding: `0 ${theme.spacing(1)}`,
+                    margin: 0,
+                    backgroundColor: '#e9e2ba',
+                    color: theme.palette.TwClrTxt,
+                    fontWeight: 400,
+                    minHeight: 'fit-content',
+                    minWidth: 'fit-content',
                   }}
                 />
               ))}
@@ -244,7 +234,6 @@ const SectionEdit = ({
         </Typography>
         <Box ref={variableDropdownRef} flexGrow={1}>
           <Autocomplete
-            className={classes.variableDropdown}
             onChange={(value) => {
               if (!value || !(value as DropdownItem).value) {
                 return;
@@ -261,6 +250,10 @@ const SectionEdit = ({
               label: v.name,
               value: v,
             }))}
+            sx={{
+              background: theme.palette.TwClrBg,
+              borderRadius: '8px',
+            }}
           />
         </Box>
       </Box>

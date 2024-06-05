@@ -2,7 +2,6 @@ import React, { useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { TableColumnType } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
@@ -19,15 +18,6 @@ import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { ZoneAggregation } from 'src/types/Observations';
 import { MinimalPlantingSite } from 'src/types/Tracking';
-
-const useStyles = makeStyles(() => ({
-  text: {
-    fontSize: '14px',
-    '& > p': {
-      fontSize: '14px',
-    },
-  },
-}));
 
 const columns = (): TableColumnType[] => [
   {
@@ -69,7 +59,6 @@ export default function GenericZoneView({
   zoneSelector,
 }: Props): JSX.Element {
   const [search, setSearch] = useState<string>('');
-  const classes = useStyles();
   const navigate = useNavigate();
   const { plantingSiteId, zoneId } = useParams<{ plantingSiteId: string; zoneId: string }>();
 
@@ -118,7 +107,7 @@ export default function GenericZoneView({
             columns={columns}
             rows={plantingZone?.plantingSubzones ?? []}
             orderBy='fullName'
-            Renderer={DetailsRenderer(classes, Number(plantingSiteId), Number(zoneId), subzoneViewUrl)}
+            Renderer={DetailsRenderer(Number(plantingSiteId), Number(zoneId), subzoneViewUrl)}
           />
         </Box>
       </Card>
@@ -127,10 +116,17 @@ export default function GenericZoneView({
 }
 
 const DetailsRenderer =
-  (classes: any, plantingSiteId: number, zoneId: number, subzoneViewUrl: string) =>
+  (plantingSiteId: number, zoneId: number, subzoneViewUrl: string) =>
   // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row } = props;
+
+    const textStyles = {
+      fontSize: '14px',
+      '& > p': {
+        fontSize: '14px',
+      },
+    };
 
     const createLinkToSubzone = () => {
       if (row.monitoringPlots.length === 0) {
@@ -145,14 +141,12 @@ const DetailsRenderer =
     };
 
     if (column.key === 'fullName') {
-      return <CellRenderer {...props} value={createLinkToSubzone()} className={classes.text} />;
+      return <CellRenderer {...props} value={createLinkToSubzone()} sx={textStyles} />;
     }
 
     if (column.key === 'monitoringPlots') {
       const numMonitoringPlots = row.monitoringPlots.length;
-      return (
-        <CellRenderer {...props} value={numMonitoringPlots > 0 ? numMonitoringPlots : ''} className={classes.text} />
-      );
+      return <CellRenderer {...props} value={numMonitoringPlots > 0 ? numMonitoringPlots : ''} sx={textStyles} />;
     }
 
     return <CellRenderer {...props} />;

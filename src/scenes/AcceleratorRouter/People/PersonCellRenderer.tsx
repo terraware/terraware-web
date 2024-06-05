@@ -1,24 +1,12 @@
 import React from 'react';
 
-import { makeStyles } from '@mui/styles';
-
 import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { getHighestGlobalRole } from 'src/types/GlobalRoles';
 
-const useStyles = makeStyles(() => ({
-  text: {
-    fontSize: '14px',
-    '& > p': {
-      fontSize: '14px',
-    },
-  },
-}));
-
 export default function PersonCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
-  const classes = useStyles();
   const { column, row, index, value } = props;
 
   const createLinkToPerson = (iValue: React.ReactNode | unknown[]) => {
@@ -33,7 +21,12 @@ export default function PersonCellRenderer(props: RendererProps<TableRowType>): 
         column={column}
         value={createLinkToPerson(value)}
         row={row}
-        className={classes.text}
+        sx={{
+          fontSize: '14px',
+          '& > p': {
+            fontSize: '14px',
+          },
+        }}
       />
     );
   }

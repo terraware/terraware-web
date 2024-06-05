@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 
 import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
@@ -9,19 +8,16 @@ import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 
-const useStyles = makeStyles(() => ({
-  text: {
+export default function PlantingSitesCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
+  const { column, row, value, index } = props;
+  const isDraft = row.isDraft;
+
+  const textStyles = {
     fontSize: '14px',
     '& > p': {
       fontSize: '14px',
     },
-  },
-}));
-
-export default function PlantingSitesCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
-  const classes = useStyles();
-  const { column, row, value, index } = props;
-  const isDraft = row.isDraft;
+  };
 
   const createLinkToPlantingSiteView = (iValue: React.ReactNode | unknown[]) => {
     const plantingSiteViewUrl = isDraft ? APP_PATHS.PLANTING_SITES_DRAFT_VIEW : APP_PATHS.PLANTING_SITES_VIEW;
@@ -38,24 +34,18 @@ export default function PlantingSitesCellRenderer(props: RendererProps<TableRowT
         column={column}
         value={createLinkToPlantingSiteView(value)}
         row={row}
-        className={classes.text}
+        sx={textStyles}
       />
     );
   }
 
   if (column.key === 'draft') {
     return (
-      <CellRenderer
-        index={index}
-        column={column}
-        value={isDraft ? <DraftBadge /> : null}
-        row={row}
-        className={classes.text}
-      />
+      <CellRenderer index={index} column={column} value={isDraft ? <DraftBadge /> : null} row={row} sx={textStyles} />
     );
   }
 
-  return <CellRenderer {...props} className={classes.text} />;
+  return <CellRenderer {...props} sx={textStyles} />;
 }
 
 /**

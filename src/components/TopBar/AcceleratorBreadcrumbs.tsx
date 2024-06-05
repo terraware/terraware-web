@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { Grid, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Grid, useTheme } from '@mui/material';
 import { Separator } from '@terraware/web-components';
 
 import Link from 'src/components/common/Link';
@@ -10,33 +9,8 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  link: {
-    height: '32px',
-    lineHeight: '32px',
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-  },
-  selected: {
-    backgroundColor: theme.palette.TwClrBgAccent,
-    borderRadius: '16px',
-    color: theme.palette.TwClrBaseWhite,
-    fontFamily: 'Inter',
-    fontSize: '16px',
-    fontWeight: 500,
-    padding: '0.5em 0.8em',
-    userSelect: 'none',
-  },
-  separator: {
-    color: theme.palette.TwClrBaseGray300,
-    fontSize: '16px',
-    margin: '0 1em',
-    userSelect: 'none',
-  },
-}));
-
 export default function AcceleratorBreadcrumbs(): JSX.Element | null {
-  const classes = useStyles();
+  const theme = useTheme();
   const { isAcceleratorRoute, isAllowedViewConsole } = useAcceleratorConsole();
   const { activeLocale } = useLocalization();
 
@@ -50,8 +24,30 @@ export default function AcceleratorBreadcrumbs(): JSX.Element | null {
         <Link fontSize={16} to={APP_PATHS.HOME}>
           Terraware
         </Link>
-        <span className={classes.separator}>/</span>
-        <span className={classes.selected}>{strings.ACCELERATOR_CONSOLE}</span>
+        <span
+          style={{
+            color: theme.palette.TwClrBaseGray300,
+            fontSize: '16px',
+            margin: '0 1em',
+            userSelect: 'none',
+          }}
+        >
+          /
+        </span>
+        <span
+          style={{
+            backgroundColor: theme.palette.TwClrBgAccent,
+            borderRadius: '16px',
+            color: theme.palette.TwClrBaseWhite,
+            fontFamily: 'Inter',
+            fontSize: '16px',
+            fontWeight: 500,
+            padding: '0.5em 0.8em',
+            userSelect: 'none',
+          }}
+        >
+          {strings.ACCELERATOR_CONSOLE}
+        </span>
       </div>
     );
   }
@@ -61,7 +57,17 @@ export default function AcceleratorBreadcrumbs(): JSX.Element | null {
       <div>
         <Grid container>
           <Grid item>
-            <Link className={classes.link} fontSize={16} lineHeight='32px' to={APP_PATHS.ACCELERATOR}>
+            <Link
+              fontSize={16}
+              lineHeight='32px'
+              to={APP_PATHS.ACCELERATOR}
+              style={{
+                height: '32px',
+                lineHeight: '32px',
+                marginLeft: theme.spacing(1),
+                marginRight: theme.spacing(1),
+              }}
+            >
               {strings.ACCELERATOR_CONSOLE}
             </Link>
           </Grid>

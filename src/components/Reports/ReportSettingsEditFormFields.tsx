@@ -2,7 +2,6 @@ import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Grid, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Button, Checkbox } from '@terraware/web-components';
 
 import { useOrganization } from 'src/providers';
@@ -28,21 +27,11 @@ interface ReportsSettingsCheckboxConfig {
   value: boolean | undefined;
 }
 
-const useStyles = makeStyles(() => ({
-  checkbox: {
-    marginTop: 0,
-    '& span[class*="-label"]': {
-      fontWeight: 500,
-    },
-  },
-}));
-
 const ReportSettingsEditFormFields = ({ isEditing, onChange, reportsSettings }: ReportSettingsEditFormFieldsProps) => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const navigate = useNavigate();
   const { selectedOrganization } = useOrganization();
-  const classes = useStyles();
 
   const projects = useAppSelector(selectProjects);
 
@@ -62,13 +51,18 @@ const ReportSettingsEditFormFields = ({ isEditing, onChange, reportsSettings }: 
             id={key}
             name={key}
             value={value}
-            className={classes.checkbox}
             disabled={!isEditing}
+            sx={{
+              marginTop: 0,
+              '& span[class*="-label"]': {
+                fontWeight: 500,
+              },
+            }}
           />
         </Grid>
       );
     },
-    [classes.checkbox, isEditing, onChange, theme]
+    [isEditing, onChange, theme]
   );
 
   const getProjectName = useCallback(

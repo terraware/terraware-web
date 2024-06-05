@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 import { Portal } from '@mui/base';
 import { Box, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Button } from '@terraware/web-components';
 
 import { useMapPortalContainer } from 'src/components/Map/MapRenderUtils';
@@ -11,15 +10,6 @@ import ReplaceObservationPlotModal from 'src/scenes/ObservationsRouter/replacePl
 import strings from 'src/strings';
 import { ObservationMonitoringPlotResultsPayload, ObservationState } from 'src/types/Observations';
 import { isManagerOrHigher } from 'src/utils/organization';
-
-const useStyles = makeStyles(() => ({
-  button: {
-    marginLeft: 'auto',
-    '&:focus': {
-      outline: 'none',
-    },
-  },
-}));
 
 type TooltipContentsProps = {
   monitoringPlot: ObservationMonitoringPlotResultsPayload;
@@ -32,7 +22,6 @@ type TooltipContentsProps = {
 export default function TooltipContents(props: TooltipContentsProps): JSX.Element {
   const { monitoringPlot, observationId, observationState, plantingSiteId, title } = props;
   const theme = useTheme();
-  const classes = useStyles();
   const mapPortalContainer = useMapPortalContainer();
   const { selectedOrganization } = useOrganization();
   const [showReplacePlotModal, setShowReplacePlotModal] = useState<boolean>(false);
@@ -88,12 +77,17 @@ export default function TooltipContents(props: TooltipContentsProps): JSX.Elemen
         {!monitoringPlot?.completedTime && replaceObservationPlotEnabled && (
           <Box display='flex' padding={theme.spacing(2)} sx={{ backgroundColor: theme.palette.TwClrBgSecondary }}>
             <Button
-              className={classes.button}
               id='reassignPlot'
               label={`${strings.REQUEST_REASSIGNMENT}...`}
               type='passive'
               onClick={() => setShowReplacePlotModal(true)}
               priority='secondary'
+              sx={{
+                marginLeft: 'auto',
+                '&:focus': {
+                  outline: 'none',
+                },
+              }}
             />
           </Box>
         )}

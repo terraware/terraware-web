@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { makeStyles } from '@mui/styles';
 import { MultiSelect } from '@terraware/web-components';
 
 import strings from 'src/strings';
@@ -14,13 +13,6 @@ type SubLocationsDropdownProps<T extends { subLocationIds?: number[] } | undefin
   setRecord: (setFn: (previousValue: T) => T) => void;
 };
 
-const useStyles = makeStyles(() => ({
-  multiSelectStyle: {
-    height: '100%',
-    width: '100%',
-  },
-}));
-
 function SubLocationsDropdown<T extends { subLocationIds?: number[] } | undefined>({
   availableSubLocations,
   minimal,
@@ -28,8 +20,6 @@ function SubLocationsDropdown<T extends { subLocationIds?: number[] } | undefine
   record,
   setRecord,
 }: SubLocationsDropdownProps<T>) {
-  const classes = useStyles();
-
   const handleOnBlur = () => {
     if (onBlur) {
       onBlur(record);
@@ -38,7 +28,6 @@ function SubLocationsDropdown<T extends { subLocationIds?: number[] } | undefine
 
   return (
     <MultiSelect<number, string>
-      className={classes.multiSelectStyle}
       fullWidth={true}
       label={!minimal ? strings.SUB_LOCATIONS : undefined}
       onAdd={(subLocationId: number) => {
@@ -64,6 +53,10 @@ function SubLocationsDropdown<T extends { subLocationIds?: number[] } | undefine
       options={new Map(availableSubLocations?.map((subLocation) => [subLocation.id, subLocation.name]))}
       valueRenderer={(val: string) => val}
       selectedOptions={record?.subLocationIds || []}
+      sx={{
+        height: '100%',
+        width: '100%',
+      }}
       placeHolder={strings.SELECT}
       onBlur={handleOnBlur}
     />

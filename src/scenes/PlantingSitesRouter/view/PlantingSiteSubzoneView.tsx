@@ -2,7 +2,6 @@ import React, { useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Box } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { TableColumnType } from '@terraware/web-components';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
 
@@ -19,15 +18,6 @@ import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelector
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-
-const useStyles = makeStyles(() => ({
-  text: {
-    fontSize: '14px',
-    '& > p': {
-      fontSize: '14px',
-    },
-  },
-}));
 
 const columns = (): TableColumnType[] => [
   {
@@ -49,7 +39,6 @@ const columns = (): TableColumnType[] => [
 
 export default function PlantingSiteZoneView(): JSX.Element {
   const [search, setSearch] = useState<string>('');
-  const classes = useStyles();
   const navigate = useNavigate();
   const defaultTimeZone = useDefaultTimeZone();
 
@@ -114,7 +103,7 @@ export default function PlantingSiteZoneView(): JSX.Element {
             columns={columns}
             rows={plantingZone?.plantingSubzones[0]?.monitoringPlots ?? []}
             orderBy='monitoringPlotName'
-            Renderer={DetailsRenderer(classes, timeZone)}
+            Renderer={DetailsRenderer(timeZone)}
           />
         </Box>
       </Card>
@@ -123,28 +112,27 @@ export default function PlantingSiteZoneView(): JSX.Element {
 }
 
 const DetailsRenderer =
-  (classes: any, timeZone: string) =>
+  (timeZone: string) =>
   // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
 
+    const textStyles = {
+      fontSize: '14px',
+      '& > p': {
+        fontSize: '14px',
+      },
+    };
+
     if (column.key === 'completedTime') {
       return (
-        <CellRenderer
-          {...props}
-          value={value ? getDateDisplayValue(value as string, timeZone) : ''}
-          className={classes.text}
-        />
+        <CellRenderer {...props} value={value ? getDateDisplayValue(value as string, timeZone) : ''} sx={textStyles} />
       );
     }
 
     if (column.key === 'isPermanent') {
       return (
-        <CellRenderer
-          {...props}
-          value={row.isPermanent ? strings.PERMANENT : strings.TEMPORARY}
-          className={classes.text}
-        />
+        <CellRenderer {...props} value={row.isPermanent ? strings.PERMANENT : strings.TEMPORARY} sx={textStyles} />
       );
     }
 

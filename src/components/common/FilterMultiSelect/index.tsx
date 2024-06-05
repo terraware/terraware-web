@@ -1,20 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Button, MultiSelect } from '@terraware/web-components';
 
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import Checkbox from '../Checkbox';
-
-const useStyles = makeStyles(() => ({
-  multiSelectStyle: {
-    height: '100%',
-    width: '100%',
-  },
-}));
 
 type FilterMultiSelectProps<T> = {
   filterKey: string;
@@ -49,7 +41,6 @@ export default function FilterMultiSelect<T>(props: FilterMultiSelectProps<T>): 
 
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const classes = useStyles({ isMobile });
 
   const [selection, setSelection] = useState(initialSelection);
   const [multiSelectOptions, setMultiSelectOptions] = useState<Map<T | null, string>>(new Map());
@@ -115,7 +106,6 @@ export default function FilterMultiSelect<T>(props: FilterMultiSelectProps<T>): 
         }}
       >
         <MultiSelect<T | null, string>
-          className={classes.multiSelectStyle}
           fullWidth={true}
           onAdd={onAdd}
           onRemove={onRemove}
@@ -127,6 +117,10 @@ export default function FilterMultiSelect<T>(props: FilterMultiSelectProps<T>): 
           optionsVisible={optionsVisible}
           onBlur={onBlur}
           onFocus={onFocus}
+          sx={{
+            height: '100%',
+            width: '100%',
+          }}
         />
 
         {notPresentFilterShown && (

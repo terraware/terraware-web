@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { Box, Grid, GridProps, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Grid, GridProps, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
@@ -23,23 +22,9 @@ import ApproveDeliverableDialog from '../Deliverables/ApproveDeliverableDialog';
 import RejectDialog from '../Deliverables/RejectDialog';
 import RejectedBox from './RejectedBox';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  titleWithButton: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: theme.spacing(4),
-  },
-  blockCheckbox: {
-    display: 'block',
-  },
-}));
-
 export default function SpeciesDetailView(): JSX.Element {
   const theme = useTheme();
   const { activeLocale } = useLocalization();
-  const classes = useStyles();
   const { goToParticipantProjectSpeciesEdit } = useNavigateTo();
   const { isMobile } = useDeviceInfo();
   const { projectId } = useProject();
@@ -314,7 +299,7 @@ export default function SpeciesDetailView(): JSX.Element {
                     return;
                   }}
                   value={currentSpecies.rare}
-                  className={classes.blockCheckbox}
+                  sx={{ display: 'block' }}
                 />
               </GridItemWrapper>
               <GridItemWrapper>
