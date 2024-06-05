@@ -136,23 +136,24 @@ export default function ContactUsHome(): JSX.Element {
               </Typography>
             </Grid>
 
-            <Grid xs={12} sx={{ display: 'flex', alignItems: 'center' }}>
-              <Typography fontSize='16px'>
+            <Grid xs={12} flexDirection={'column'}>
+              <Typography fontSize='16px' display={'inline'}>
                 <TextWithLink
                   href={docLinks.terraformation}
                   isExternal={true}
                   text={strings.TERRAWARE_IS_SOFTWARE}
                   fontSize='16px'
+                  style={{ position: 'relative', bottom: '1px' }}
                 />
               </Typography>
-            </Grid>
-            <Grid xs={12} sx={{ display: 'flex', alignItems: 'center' }}>
-              <Typography fontSize='16px'>
+              {' ' /* whitespace between the sentences */}
+              <Typography fontSize='16px' display={'inline'}>
                 <TextWithLink
                   href={docLinks.terraformation_software_solutions}
                   isExternal={true}
                   text={strings.FOR_A_FULL_OVERVIEW}
                   fontSize='16px'
+                  style={{ position: 'relative', bottom: '1px' }}
                 />
               </Typography>
             </Grid>
