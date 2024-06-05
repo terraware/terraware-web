@@ -29,6 +29,9 @@ import useSnackbar from 'src/utils/useSnackbar';
 import ContactUsAttachments from './ContactUsAttachments';
 import { useSupportData } from './provider/Context';
 
+const MAX_FILES_LIMIT = 10;
+const MAX_FILE_SIZE = 200;
+
 const ContactUsForm = () => {
   const dispatch = useAppDispatch();
   const { isDesktop } = useDeviceInfo();
@@ -168,6 +171,11 @@ const ContactUsForm = () => {
     [allAttachments]
   );
 
+  const attachmentDescription = useMemo(
+    () => strings.formatString(strings.ATTACHMENT_DESCRIPTION, MAX_FILES_LIMIT, MAX_FILE_SIZE),
+    [activeLocale]
+  );
+
   return (
     <Page crumbs={crumbs} title={supportRequestTitle}>
       <PageForm
@@ -228,10 +236,27 @@ const ContactUsForm = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <Typography fontSize={'14px'} lineHeight={'24px'} fontWeight={400} marginBottom={theme.spacing(1)}>
+              <Typography
+                fontSize={'14px'}
+                lineHeight={'24px'}
+                fontWeight={400}
+                marginBottom={theme.spacing(1)}
+                marginInlineEnd={theme.spacing(1)}
+                display={'inline'}
+              >
                 {strings.ATTACHMENTS}
               </Typography>
-              <ContactUsAttachments onChange={onChangeAttachments} />
+              <Typography
+                fontSize={'14px'}
+                color={theme.palette.TwClrTxtSecondary}
+                lineHeight={'24px'}
+                fontWeight={400}
+                marginBottom={theme.spacing(1)}
+                display={'inline'}
+              >
+                {attachmentDescription}
+              </Typography>
+              <ContactUsAttachments maxFiles={MAX_FILES_LIMIT} onChange={onChangeAttachments} />
             </Grid>
           </Grid>
         </Card>
