@@ -118,7 +118,7 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
       {
         text: strings.SITE_BOUNDARY_DESCRIPTION_1,
         hasTutorial: true,
-        handlePrefix: (prefix: string) => strings.formatString(prefix, <MapIcon icon='polygon' />) as JSX.Element[],
+        handlePrefix: (prefix: string) => strings.formatString(prefix, <MapIcon centerAligned={true} icon='polygon' />) as JSX.Element[],
       },
       { text: strings.SITE_BOUNDARY_DESCRIPTION_2, isBold: true },
     ];
@@ -144,13 +144,6 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
       strings.PLANTING_SITE_CREATE_INSTRUCTIONS_DESCRIPTION,
       <MapIcon centerAligned icon='polygon' />
     ) as JSX.Element[];
-  }, [activeLocale]);
-
-  const tutorialTitle = useMemo(() => {
-    if (!activeLocale) {
-      return '';
-    }
-    return strings.formatString(strings.TUTORIAL_PREFIX, strings.PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE).toString();
   }, [activeLocale]);
 
   /**
@@ -179,11 +172,11 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
       <StepTitleDescription
         description={description}
         dontShowAgainPreferenceName='dont-show-site-boundary-instructions'
-        minHeight='230px'
+        minHeight='180px'
         title={strings.SITE_BOUNDARY}
         tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_boundary_instructions_video'
-        tutorialTitle={tutorialTitle}
+        tutorialTitle={strings.PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE}
       />
       <EditableMap
         editableBoundary={siteBoundaryData?.siteBoundary}

@@ -189,7 +189,7 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
             {
               text: strings.SITE_ZONE_BOUNDARIES_DESCRIPTION_1,
               hasTutorial: true,
-              handlePrefix: (prefix: string) => strings.formatString(prefix, <MapIcon icon='slice' />) as JSX.Element[],
+              handlePrefix: (prefix: string) => strings.formatString(prefix, <MapIcon centerAligned={true} icon='slice' />) as JSX.Element[],
             },
             {
               text: strings.SITE_ZONE_BOUNDARIES_SIZE,
@@ -208,13 +208,6 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
       strings.ADDING_ZONE_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,
       <MapIcon centerAligned icon='slice' />
     ) as JSX.Element[];
-  }, [activeLocale]);
-
-  const tutorialTitle = useMemo(() => {
-    if (!activeLocale) {
-      return '';
-    }
-    return strings.formatString(strings.TUTORIAL_PREFIX, strings.ADDING_ZONE_BOUNDARIES).toString();
   }, [activeLocale]);
 
   const onEditableBoundaryChanged = async (editableBoundary?: FeatureCollection) => {
@@ -340,7 +333,7 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
       <StepTitleDescription
         description={description}
         dontShowAgainPreferenceName='dont-show-site-zone-boundaries-instructions'
-        title={tutorialTitle}
+        title={strings.ADDING_ZONE_BOUNDARIES}
         tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_zone_boundary_instructions_video'
         tutorialTitle={strings.ADDING_ZONE_BOUNDARIES}

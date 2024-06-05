@@ -5,7 +5,8 @@ import { Box, Typography, useTheme } from '@mui/material';
 import TextWithLink from 'src/components/common/TextWithLink';
 import VideoDialog from 'src/components/common/VideoDialog';
 import { DocType, useDocLinks } from 'src/docLinks';
-import { useUser } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
+import strings from 'src/strings';
 
 export type Description = {
   handlePrefix?: (prefix: string) => string | JSX.Element[];
@@ -36,6 +37,7 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
     tutorialDocLinkKey,
     tutorialTitle,
   } = props;
+  const { activeLocale } = useLocalization();
   const theme = useTheme();
   const docLinks = useDocLinks();
   const { userPreferences, updateUserPreferences } = useUser();
@@ -47,6 +49,14 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
   );
   const [showModal, setShowModal] = useState<boolean>(userPreferenceControlled);
 
+  const titleWithPrefix = useMemo(() => {
+    if (!activeLocale || !tutorialTitle) {
+      return '';
+    }
+    return strings.formatString(strings.TUTORIAL_PREFIX, tutorialTitle).toString();
+  }, [activeLocale, tutorialTitle]);
+
+
   const onClose = (dontShowAgain?: boolean) => {
     setShowModal(false);
     if (dontShowAgain && !!dontShowAgainPreferenceName) {
@@ -56,13 +66,13 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
 
   return (
     <Box marginBottom={theme.spacing(2)} display='flex' flexDirection='column' minHeight={minHeight}>
-      {tutorialDescription && tutorialDocLinkKey && tutorialTitle && (
+      {tutorialDescription && tutorialDocLinkKey && titleWithPrefix && (
         <VideoDialog
           description={tutorialDescription}
           link={docLinks[tutorialDocLinkKey]}
           onClose={() => onClose(true)}
           open={showModal}
-          title={tutorialTitle}
+          title={titleWithPrefix}
         />
       )}
       <Typography fontSize='20px' fontWeight={600} lineHeight='28px' color={theme.palette.TwClrTxt}>
@@ -88,7 +98,7 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
               onClick={() => setShowModal(true)}
               text={line.text as string}
               key={index}
-              style={{ marginLeft: theme.spacing(0.5) }}
+              style={{ position: 'relative', bottom: '2px' }}
             />
           ) : (
             line.text
