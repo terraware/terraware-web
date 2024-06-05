@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { ErrorBox, TableColumnType } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -43,14 +42,6 @@ type BatchWithdrawalForTable = {
   projectName: string;
   error: { [key: string]: string | undefined };
 };
-
-const useStyles = makeStyles(() => ({
-  error: {
-    '& .error-box--container': {
-      alignItems: 'center',
-    },
-  },
-}));
 
 const defaultTableColumns = (): TableColumnType[] => [
   {
@@ -117,7 +108,6 @@ const { OUTPLANT } = NurseryWithdrawalPurposes;
 export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps): JSX.Element {
   const { onNext, onCancel, saveText, batches, nurseryWithdrawal, filterProjectId } = props;
 
-  const classes = useStyles();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
@@ -327,7 +317,14 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
     >
       {errorPageMessage && (
         <Box sx={{ marginTop: 5, marginBottom: 3 }}>
-          <ErrorBox text={errorPageMessage} className={classes.error} />
+          <ErrorBox
+            text={errorPageMessage}
+            sx={{
+              '& .error-box--container': {
+                alignItems: 'center',
+              },
+            }}
+          />
         </Box>
       )}
       <Container

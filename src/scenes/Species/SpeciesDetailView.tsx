@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Grid, GridProps, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Grid, GridProps, Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
 import { Button, DropdownItem } from '@terraware/web-components';
 
@@ -25,26 +24,12 @@ import TfMain from '../../components/common/TfMain';
 import DeleteSpeciesModal from './DeleteSpeciesModal';
 import SpeciesProjectsTable from './SpeciesProjectsTable';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  titleWithButton: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: theme.spacing(4),
-  },
-  blockCheckbox: {
-    display: 'block',
-  },
-}));
-
 type SpeciesDetailViewProps = {
   reloadData: () => void;
 };
 
 export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps): JSX.Element {
   const theme = useTheme();
-  const classes = useStyles();
   const [species, setSpecies] = useState<Species>();
   const navigate = useNavigate();
   const { isMobile } = useDeviceInfo();
@@ -121,7 +106,18 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
         <Grid item xs={12} marginBottom={theme.spacing(3)}>
           <BackToLink id='back' to={APP_PATHS.SPECIES} name={strings.SPECIES} />
         </Grid>
-        <Grid item xs={12} padding={theme.spacing(0, 3)} className={classes.titleWithButton}>
+        <Grid
+          item
+          xs={12}
+          padding={theme.spacing(0, 3)}
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: theme.spacing(4),
+          }}
+        >
           <Typography fontSize='20px' fontWeight={600}>
             {species?.scientificName}
           </Typography>
@@ -203,8 +199,8 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               onChange={() => {
                 return;
               }}
+              sx={{ display: 'block' }}
               value={species?.rare}
-              className={classes.blockCheckbox}
             />
           </GridItemWrapper>
           {/* TODO this will eventually come from the participant project species, not the org species */}

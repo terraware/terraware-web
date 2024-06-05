@@ -1,7 +1,6 @@
 import React, { ReactNode, useState } from 'react';
 
-import { ClickAwayListener, IconButton, Theme, Tooltip } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { ClickAwayListener, IconButton, Tooltip, useTheme } from '@mui/material';
 
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
@@ -15,39 +14,8 @@ import CellRenderer, { TableRowType } from '../../components/common/table/TableC
 import { RendererProps } from '../../components/common/table/types';
 import ProblemTooltip from './ProblemTooltip';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  icon: {
-    fill: theme.palette.TwClrIcnWarning,
-  },
-  iconContainer: {
-    borderRadius: 0,
-    fontSize: '16px',
-    height: '48px',
-  },
-  customPopper: {
-    pointerEvents: 'all',
-  },
-  customTooltip: {
-    padding: 0,
-    background: theme.palette.TwClrBg,
-    border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-    boxShadow: `0px 4px 8px ${getRgbaFromHex(theme.palette.TwClrShdw as string, 0.2)}`,
-    borderRadius: '7px',
-    color: theme.palette.TwClrTxt,
-    fontSize: '12px',
-    maxWidth: '350px',
-
-    '& .MuiTooltip-arrow': {
-      color: theme.palette.TwClrTxtInverse,
-      '&:before': {
-        border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-      },
-    },
-  },
-}));
-
 export default function SpeciesCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
-  const classes = useStyles();
+  const theme = useTheme();
   const { column, row, value, index, onRowClick, reloadData } = props;
   const [openedTooltip, setOpenedTooltip] = useState(false);
 
@@ -87,10 +55,38 @@ export default function SpeciesCellRenderer(props: RendererProps<TableRowType>):
                 }
                 arrow
                 open={openedTooltip}
-                classes={{ popper: classes.customPopper, tooltip: classes.customTooltip }}
+                sx={{
+                  '& .MuiTooltip-popper': {
+                    pointerEvents: 'all',
+                  },
+                  '& .MuiTooltip-tooltip': {
+                    padding: 0,
+                    background: theme.palette.TwClrBg,
+                    border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+                    boxShadow: `0px 4px 8px ${getRgbaFromHex(theme.palette.TwClrShdw as string, 0.2)}`,
+                    borderRadius: '7px',
+                    color: theme.palette.TwClrTxt,
+                    fontSize: '12px',
+                    maxWidth: '350px',
+
+                    '& .MuiTooltip-arrow': {
+                      color: theme.palette.TwClrTxtInverse,
+                      '&:before': {
+                        border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+                      },
+                    },
+                  },
+                }}
               >
-                <IconButton className={classes.iconContainer} onClick={(event) => handleClick(event)}>
-                  <Icon name='warning' className={classes.icon} />
+                <IconButton
+                  onClick={(event) => handleClick(event)}
+                  sx={{
+                    borderRadius: 0,
+                    fontSize: '16px',
+                    height: '48px',
+                  }}
+                >
+                  <Icon name='warning' style={{ fill: theme.palette.TwClrIcnWarning }} />
                 </IconButton>
               </Tooltip>
             </ClickAwayListener>

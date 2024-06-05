@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { makeStyles } from '@mui/styles';
-
 import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
 import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
@@ -11,18 +9,8 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers';
 import { DeliverableStatusType } from 'src/types/Deliverables';
 
-const useStyles = makeStyles(() => ({
-  text: {
-    fontSize: '14px',
-    '& > p': {
-      fontSize: '14px',
-    },
-  },
-}));
-
 export default function DeliverableCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { activeLocale } = useLocalization();
-  const classes = useStyles();
   const { column, row, index, value } = props;
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
@@ -39,7 +27,12 @@ export default function DeliverableCellRenderer(props: RendererProps<TableRowTyp
         column={column}
         value={createLinkToDeliverable(value)}
         row={row}
-        className={classes.text}
+        sx={{
+          fontSize: '14px',
+          '& > p': {
+            fontSize: '14px',
+          },
+        }}
       />
     );
   }

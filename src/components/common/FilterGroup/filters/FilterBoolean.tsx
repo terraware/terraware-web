@@ -1,19 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
 import { Box } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Checkbox, theme } from '@terraware/web-components';
 
 import { FieldNodePayload } from 'src/types/Search';
-
-const useStyles = makeStyles(() => ({
-  checkbox: {
-    marginTop: 0,
-    '& span[class*="-label"]': {
-      fontWeight: 500,
-    },
-  },
-}));
 
 interface Props {
   field: string;
@@ -23,7 +13,6 @@ interface Props {
 }
 
 export default function FilterBoolean(props: Props): JSX.Element {
-  const classes = useStyles();
   const [value, setValue] = useState(props.value);
 
   useEffect(() => {
@@ -52,7 +41,12 @@ export default function FilterBoolean(props: Props): JSX.Element {
         id={props.field}
         name={props.field}
         value={value}
-        className={classes.checkbox}
+        sx={{
+          marginTop: 0,
+          '& span[class*="-label"]': {
+            fontWeight: 500,
+          },
+        }}
       />
     </Box>
   );
