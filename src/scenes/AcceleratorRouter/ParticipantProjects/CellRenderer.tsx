@@ -12,7 +12,11 @@ export default function ParticipantProjectsCellRenderer(props: RendererProps<Tab
 
   const createLinkToProject = () => {
     const to = APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${row.id}`);
-    return <Link to={to}>{value as React.ReactNode}</Link>;
+    return (
+      <Link fontSize='16px' to={to}>
+        {value as React.ReactNode}
+      </Link>
+    );
   };
 
   if (column.key === 'name') {
@@ -21,9 +25,9 @@ export default function ParticipantProjectsCellRenderer(props: RendererProps<Tab
         {...props}
         value={createLinkToProject()}
         sx={{
-          fontSize: '14px',
+          fontSize: '16px',
           '& > p': {
-            fontSize: '14px',
+            fontSize: '16px',
           },
         }}
       />
@@ -39,7 +43,7 @@ export default function ParticipantProjectsCellRenderer(props: RendererProps<Tab
   }
 
   if (column.key === 'landUseModelTypes.landUseModelType') {
-    return <CellRenderer {...props} value={<TextTruncated stringList={value as string[]} />} />;
+    return <CellRenderer {...props} value={<TextTruncated fontSize={16} stringList={value as string[]} />} />;
   }
 
   return <CellRenderer {...props} />;
