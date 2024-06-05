@@ -2,35 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useMap } from 'react-map-gl';
 
 import { Box, IconButton, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Button, Icon } from '@terraware/web-components';
-
-import strings from 'src/strings';
-import { MapPopupRenderer, MapSourceProperties } from 'src/types/Map';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  popup: {
-    '& > .mapboxgl-popup-content': {
-      borderRadius: '8px',
-      padding: '10px',
-    },
-  },
-  button: {
-    marginLeft: theme.spacing(2),
-    '&:focus': {
-      outline: 'none',
-    },
-  },
-  tooltip: {
-    '& .mapboxgl-popup-content': {
-      borderRadius: theme.spacing(1),
-      padding: 0,
-    },
-    '& .mapboxgl-popup-close-button': {
-      display: 'none',
-    },
-  },
-}));
 
 export const mapTooltipDialogStyle = (theme: Theme) => ({
   tooltip: {
@@ -43,45 +15,6 @@ export const mapTooltipDialogStyle = (theme: Theme) => ({
     },
   },
 });
-
-/**
- * Species / plants renderer
- */
-export function useSpeciesPlantsRenderer(subzonesWithPlants: any): MapPopupRenderer {
-  const theme = useTheme();
-  const classes = useStyles();
-
-  const textStyle = {
-    fontWeight: 400,
-    fontSize: '16px',
-    color: theme.palette.TwClrBaseBlack as string,
-  };
-
-  return {
-    className: classes.popup,
-    render: (data: MapSourceProperties): JSX.Element => {
-      const { id } = data;
-      const populations = subzonesWithPlants[id.toString()];
-
-      if (!populations) {
-        return (
-          <Box display='flex' justifyContent='center' padding={1}>
-            <Typography sx={textStyle}>{strings.NO_PLANTS}</Typography>
-          </Box>
-        );
-      }
-
-      return (
-        <MapTooltip
-          properties={populations.map((population: any) => ({
-            key: population.totalPlants,
-            value: population.species_scientificName,
-          }))}
-        />
-      );
-    },
-  };
-}
 
 /**
  * Full screen map container ref for Portals
@@ -182,7 +115,13 @@ export type MapTooltipDialogProps = {
 export const MapTooltipDialog = (props: MapTooltipDialogProps): JSX.Element => {
   const { cancelButton, children, onClose, saveButton, title } = props;
   const theme = useTheme();
-  const classes = useStyles();
+
+  const buttonStyles = {
+    marginLeft: theme.spacing(2),
+    '&:focus': {
+      outline: 'none',
+    },
+  };
 
   return (
     <Box borderRadius={theme.spacing(1)} display='flex' flexDirection='column'>
@@ -210,23 +149,17 @@ export const MapTooltipDialog = (props: MapTooltipDialogProps): JSX.Element => {
       >
         {cancelButton && (
           <Button
-            className={classes.button}
             id='cancel'
             key='cancel'
             label={cancelButton.title}
             onClick={cancelButton.onClick}
             priority='secondary'
+            sx={buttonStyles}
             type='passive'
           />
         )}
         {saveButton && (
-          <Button
-            className={classes.button}
-            id='save'
-            key='save'
-            label={saveButton.title}
-            onClick={saveButton.onClick}
-          />
+          <Button id='save' key='save' label={saveButton.title} onClick={saveButton.onClick} sx={buttonStyles} />
         )}
       </Box>
     </Box>

@@ -15,12 +15,7 @@ import { getShortDate } from 'src/utils/dateFormatter';
 const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies', 'mortalityRate'];
 
 const OrgObservationsRenderer =
-  (
-    theme: Theme,
-    classes: any,
-    locale: string | undefined | null,
-    goToRescheduleObservation: (observationId: number) => void
-  ) =>
+  (theme: Theme, locale: string | undefined | null, goToRescheduleObservation: (observationId: number) => void) =>
   // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
@@ -44,7 +39,18 @@ const OrgObservationsRenderer =
     }
 
     if (column.key === 'plantingZones' || column.key === 'plantingSubzones') {
-      return <CellRenderer {...props} value={getTruncatedNames(value as string)} className={classes.text} />;
+      return (
+        <CellRenderer
+          {...props}
+          value={getTruncatedNames(value as string)}
+          sx={{
+            fontSize: '14px',
+            '& > p': {
+              fontSize: '14px',
+            },
+          }}
+        />
+      );
     }
 
     if (column.key === 'completedDate') {

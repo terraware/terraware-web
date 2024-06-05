@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { TableColumnType } from '@terraware/web-components';
 
 import Table from 'src/components/common/table';
@@ -15,15 +14,6 @@ import { Observation, ObservationPlantingZoneResults, ObservationResults } from 
 import { isAdmin } from 'src/utils/organization';
 
 import OrgObservationsRenderer from './OrgObservationsRenderer';
-
-const useStyles = makeStyles(() => ({
-  text: {
-    fontSize: '14px',
-    '& > p': {
-      fontSize: '14px',
-    },
-  },
-}));
 
 const defaultColumns = (): TableColumnType[] => [
   {
@@ -93,7 +83,6 @@ export default function OrgObservationsListView({
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
   const [results, setResults] = useState<any>([]);
-  const classes = useStyles();
   const theme = useTheme();
   const navigate = useNavigate();
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
@@ -150,7 +139,7 @@ export default function OrgObservationsListView({
         columns={columns}
         rows={results}
         orderBy='completedDate'
-        Renderer={OrgObservationsRenderer(theme, classes, activeLocale, goToRescheduleObservation)}
+        Renderer={OrgObservationsRenderer(theme, activeLocale, goToRescheduleObservation)}
       />
     </Box>
   );
