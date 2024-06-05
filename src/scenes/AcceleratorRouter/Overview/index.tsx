@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 
 import { Box } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Tabs } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
@@ -12,28 +11,9 @@ import ParticipantsList from 'src/scenes/AcceleratorRouter/Participants/Particip
 import strings from 'src/strings';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
-const useStyles = makeStyles(() => ({
-  tabs: {
-    '& .MuiTabPanel-root[hidden]': {
-      flexGrow: 0,
-    },
-    '& .MuiTabPanel-root': {
-      display: 'flex',
-      flexDirection: 'column',
-      flexGrow: 1,
-    },
-    '& >.MuiBox-root': {
-      display: 'flex',
-      flexDirection: 'column',
-      flexGrow: 1,
-    },
-  },
-}));
-
 const OverviewView = () => {
   const { isAllowed } = useUser();
   const { activeLocale } = useLocalization();
-  const classes = useStyles();
 
   const tabs = useMemo(() => {
     if (!activeLocale) {
@@ -71,7 +51,26 @@ const OverviewView = () => {
 
   return (
     <Page title={strings.OVERVIEW} contentStyle={{ display: 'block' }}>
-      <Box display='flex' flexDirection='column' flexGrow={1} className={classes.tabs}>
+      <Box
+        display='flex'
+        flexDirection='column'
+        flexGrow={1}
+        sx={{
+          '& .MuiTabPanel-root[hidden]': {
+            flexGrow: 0,
+          },
+          '& .MuiTabPanel-root': {
+            display: 'flex',
+            flexDirection: 'column',
+            flexGrow: 1,
+          },
+          '& >.MuiBox-root': {
+            display: 'flex',
+            flexDirection: 'column',
+            flexGrow: 1,
+          },
+        }}
+      >
         <Tabs activeTab={activeTab} onTabChange={onTabChange} tabs={tabs} />
       </Box>
     </Page>

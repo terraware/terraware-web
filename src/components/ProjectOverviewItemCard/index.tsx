@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-import { Box, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 
 import ProjectAssignModal from 'src/components/ProjectAssignModal';
@@ -21,15 +20,6 @@ interface OverviewItemCardProjectProps<T extends { id: number; projectId?: numbe
   onUnAssign?: () => void;
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
-  addIcon: {
-    fill: theme.palette.TwClrIcnBrand,
-    height: '20px',
-    width: '20px',
-    marginRight: '5px',
-  },
-}));
-
 const ProjectOverviewItemCard = <T extends { id: number; projectId?: number }>({
   entity,
   reloadData,
@@ -38,7 +28,7 @@ const ProjectOverviewItemCard = <T extends { id: number; projectId?: number }>({
 }: OverviewItemCardProjectProps<T>) => {
   const { selectedOrganization } = useOrganization();
   const userCanEdit = !isContributor(selectedOrganization);
-  const classes = useStyles();
+  const theme = useTheme();
 
   const projects = useAppSelector(selectProjects);
   const entityProject = projects?.find((project) => project.id === entity?.projectId);
@@ -55,7 +45,15 @@ const ProjectOverviewItemCard = <T extends { id: number; projectId?: number }>({
           {entityProject?.name ?? (
             <Link onClick={() => setIsProjectAssignModalOpen(true)}>
               <Box display='flex' alignItems='center'>
-                <Icon name='iconAdd' className={classes.addIcon} />
+                <Icon
+                  name='iconAdd'
+                  style={{
+                    fill: theme.palette.TwClrIcnBrand,
+                    height: '20px',
+                    width: '20px',
+                    marginRight: '5px',
+                  }}
+                />
                 {strings.ADD_TO_PROJECT}
               </Box>
             </Link>
