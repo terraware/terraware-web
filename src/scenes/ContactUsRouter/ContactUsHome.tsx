@@ -145,9 +145,7 @@ export default function ContactUsHome(): JSX.Element {
                   fontSize='16px'
                   style={{ position: 'relative', bottom: '1px' }}
                 />
-              </Typography>
-              {' ' /* whitespace between the sentences */}
-              <Typography fontSize='16px' display={'inline'}>
+                {' ' /* whi tespace between the sentences */}
                 <TextWithLink
                   href={docLinks.terraformation_software_solutions}
                   isExternal={true}
