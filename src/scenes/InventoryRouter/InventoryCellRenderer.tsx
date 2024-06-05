@@ -17,15 +17,15 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
   const [modalValues, setModalValues] = useState({ type: 'germinating', openChangeQuantityModal: false });
 
   const textStyles = {
-    fontSize: '14px',
+    fontSize: '16px',
     '& > p': {
-      fontSize: '14px',
+      fontSize: '16px',
     },
   };
 
   const getNamesList = (names: string) => {
     const namesArray = names.split('\r');
-    return <TextTruncated stringList={namesArray} />;
+    return <TextTruncated fontSize={16} stringList={namesArray} />;
   };
 
   const createLinkWithQuery = (path: string, iValue: React.ReactNode | unknown[]) => {
@@ -37,7 +37,11 @@ export default function InventoryCellRenderer(props: RendererProps<TableRowType>
       to += `?${queryString}`;
     }
 
-    return <Link to={to}>{iValue as React.ReactNode}</Link>;
+    return (
+      <Link fontSize='16px' to={to}>
+        {iValue as React.ReactNode}
+      </Link>
+    );
   };
 
   const createLinkToInventorySpeciesDetail = (iValue: React.ReactNode | unknown[]) =>

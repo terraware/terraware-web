@@ -22,7 +22,7 @@ const OrgObservationsRenderer =
 
     const getTruncatedNames = (inputNames: string) => {
       const names = inputNames.split('\r');
-      return <TextTruncated stringList={names} />;
+      return <TextTruncated fontSize={16} stringList={names} />;
     };
 
     const createLinkToSiteObservation = (date: string) => {
@@ -30,7 +30,11 @@ const OrgObservationsRenderer =
         ':observationId',
         row.observationId.toString()
       );
-      return <Link to={url}>{date as React.ReactNode}</Link>;
+      return (
+        <Link fontSize='16px' to={url}>
+          {date as React.ReactNode}
+        </Link>
+      );
     };
 
     // don't render data if we don't have data
@@ -44,9 +48,9 @@ const OrgObservationsRenderer =
           {...props}
           value={getTruncatedNames(value as string)}
           sx={{
-            fontSize: '14px',
+            fontSize: '16px',
             '& > p': {
-              fontSize: '14px',
+              fontSize: '16px',
             },
           }}
         />

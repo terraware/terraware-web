@@ -20,6 +20,7 @@ export default function DocumentCellRenderer(props: RendererProps<TableRowType>)
               row.id
             )}
             target='_blank'
+            fontSize='16px'
           >
             {row.documentStore}
           </Link>

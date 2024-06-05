@@ -15,9 +15,9 @@ export type PlantingSiteSpeciesCellRendererProps = {
 
 export default function PlantingSiteSpeciesCellRenderer({ editMode, validate }: PlantingSiteSpeciesCellRendererProps) {
   const textStyles = {
-    fontSize: '14px',
+    fontSize: '16px',
     '& > p': {
-      fontSize: '14px',
+      fontSize: '16px',
       overflow: 'visible',
     },
   };

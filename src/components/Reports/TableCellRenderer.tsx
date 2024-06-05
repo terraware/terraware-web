@@ -13,7 +13,7 @@ export default function ReportsCellRenderer(
   const { column, row, index } = props;
 
   if (column.key === 'name') {
-    return <CellRenderer index={index} column={column} value={<ReportLink report={row} />} row={row} />;
+    return <CellRenderer index={index} column={column} value={<ReportLink fontSize='16px' report={row} />} row={row} />;
   }
 
   if (column.key === 'status') {

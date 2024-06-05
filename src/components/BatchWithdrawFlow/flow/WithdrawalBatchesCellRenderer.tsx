@@ -30,9 +30,9 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
   };
 
   const textStyles = {
-    fontSize: '14px',
+    fontSize: '16px',
     '& > p': {
-      fontSize: '14px',
+      fontSize: '16px',
       overflow: 'visible',
     },
   };
@@ -46,6 +46,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
   const createLinkToBatchDetail = (iValue: React.ReactNode | unknown[]) => {
     return (
       <Link
+        fontSize='16px'
         to={`${APP_PATHS.INVENTORY_ITEM_FOR_SPECIES.replace(':speciesId', row.speciesId.toString())}?batch=${iValue}`}
         target='_blank'
       >
