@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { Box, Container, Grid, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Container, Grid, useTheme } from '@mui/material';
 
 import Link from 'src/components/common/Link';
 import Button from 'src/components/common/button/Button';
@@ -25,70 +24,6 @@ const DEFAULT_EMPTY_STATE_CONTENT_STYLES = {
   subtitleLineHeight: '24px',
   listContainerVerticalMargin: '24px',
 };
-
-const useStyles = makeStyles((theme: Theme) => ({
-  container: {
-    fontWeight: 400,
-    maxWidth: '1500px',
-    textAlign: 'center',
-  },
-  title: (props: EmptyStateStyleProps) => ({
-    fontSize: props.titleFontSize,
-    fontWeight: 600,
-    lineHeight: props.titleLineHeight,
-    margin: theme.spacing(3, 0, 2, 0),
-  }),
-  subtitle: (props: EmptyStateStyleProps) => ({
-    fontSize: props.subtitleFontSize,
-    lineHeight: props.subtitleLineHeight,
-    margin: '0 auto',
-    marginBottom: theme.spacing(3),
-    maxWidth: '700px',
-  }),
-  listItem: {
-    flex: '1 1 auto',
-    maxWidth: '220px',
-    textAlign: 'center',
-    margin: (props: EmptyStateStyleProps) => (props.isMobile ? theme.spacing(4, 3, 0, 3) : theme.spacing(0, 3)),
-    '&:first-child': {
-      marginTop: 0,
-    },
-    padding: (props: EmptyStateStyleProps) => (props.isMobile ? '20px 0' : '0 5px'),
-  },
-  listItemIcon: {
-    width: '205px',
-    height: '128px',
-  },
-  listItemTitle: {
-    fontWeight: 'bold',
-    lineHeight: '20px',
-    margin: '0 auto',
-    marginTop: theme.spacing(2),
-  },
-  listItemDescription: {
-    margin: '0 auto',
-  },
-  listItemDescriptionWithButton: {
-    margin: '0 auto',
-    fontSize: '12px',
-  },
-  button: {
-    marginBottom: theme.spacing(3),
-  },
-  footNote: {
-    fontSize: '12px',
-    lineHeight: '16px',
-    margin: '0 auto',
-    maxWidth: '550px',
-    marginBottom: '24px',
-  },
-  noSpacing: {
-    margin: 0,
-  },
-  subButton: {
-    marginTop: theme.spacing(2),
-  },
-}));
 
 export type ListItemContent = {
   icon: IconName;
@@ -115,7 +50,9 @@ type EmptyStateContentProps = {
 export default function EmptyStateContent(props: EmptyStateContentProps): JSX.Element {
   const { title, subtitle, listItems, buttonText, buttonIcon, onClickButton, footnote, styles } = props;
   const { isMobile } = useDeviceInfo();
-  const classes = useStyles({ ...(styles || DEFAULT_EMPTY_STATE_CONTENT_STYLES), isMobile });
+  const theme = useTheme();
+
+  const emptyStateStyles = styles || DEFAULT_EMPTY_STATE_CONTENT_STYLES;
 
   const subtitleParagraphs: string[] = typeof subtitle === 'string' ? [subtitle] : subtitle;
 
@@ -127,10 +64,34 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
   };
 
   return (
-    <Container className={classes.container}>
-      <h1 className={classes.title}>{title}</h1>
+    <Container
+      sx={{
+        fontWeight: 400,
+        maxWidth: '1500px',
+        textAlign: 'center',
+      }}
+    >
+      <h1
+        style={{
+          fontSize: emptyStateStyles.titleFontSize,
+          fontWeight: 600,
+          lineHeight: emptyStateStyles.titleLineHeight,
+          margin: theme.spacing(3, 0, 2, 0),
+        }}
+      >
+        {title}
+      </h1>
       {subtitleParagraphs.map((para, index) => (
-        <p className={classes.subtitle} key={index}>
+        <p
+          key={index}
+          style={{
+            fontSize: emptyStateStyles.subtitleFontSize,
+            lineHeight: emptyStateStyles.subtitleLineHeight,
+            margin: '0 auto',
+            marginBottom: theme.spacing(3),
+            maxWidth: '700px',
+          }}
+        >
           {para}
         </p>
       ))}
@@ -148,11 +109,51 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
       >
         {listItems?.map((item, index) => {
           return (
-            <Grid item xs={gridSize()} key={`${item.title}-${index}`} className={`${classes.listItem}`}>
-              <Icon name={item.icon} className={classes.listItemIcon} />
-              {item.title && <p className={classes.listItemTitle}>{item.title}</p>}
+            <Grid
+              item
+              xs={gridSize()}
+              key={`${item.title}-${index}`}
+              sx={{
+                flex: '1 1 auto',
+                maxWidth: '220px',
+                textAlign: 'center',
+                margin: isMobile ? theme.spacing(4, 3, 0, 3) : theme.spacing(0, 3),
+                '&:first-child': {
+                  marginTop: 0,
+                },
+                padding: isMobile ? '20px 0' : '0 5px',
+              }}
+            >
+              <Icon
+                name={item.icon}
+                style={{
+                  width: '205px',
+                  height: '128px',
+                }}
+              />
+              {item.title && (
+                <p
+                  style={{
+                    fontWeight: 'bold',
+                    lineHeight: '20px',
+                    margin: '0 auto',
+                    marginTop: theme.spacing(2),
+                  }}
+                >
+                  {item.title}
+                </p>
+              )}
               <div>
-                <p className={item.buttonText ? classes.listItemDescriptionWithButton : classes.listItemDescription}>
+                <p
+                  style={
+                    item.buttonText
+                      ? {
+                          margin: '0 auto',
+                          fontSize: '12px',
+                        }
+                      : { margin: '0 auto' }
+                  }
+                >
                   {item.description}
                 </p>
                 {item.linkText && item.onLinkClick && (
@@ -164,10 +165,10 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
               {item.buttonText && item.onClickButton && (
                 <Button
                   size='medium'
-                  className={classes.subButton}
                   label={item.buttonText}
                   onClick={item.onClickButton}
                   icon={item.buttonIcon}
+                  sx={{ marginTop: theme.spacing(2) }}
                 />
               )}
             </Grid>
@@ -175,18 +176,32 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
         })}
       </Box>
       {buttonText && onClickButton && (
-        <Button size='medium' icon={buttonIcon} className={classes.button} label={buttonText} onClick={onClickButton} />
+        <Button
+          size='medium'
+          icon={buttonIcon}
+          label={buttonText}
+          onClick={onClickButton}
+          sx={{ marginBottom: theme.spacing(3) }}
+        />
       )}
       {footnote && (
-        <div className={classes.footNote}>
+        <Box
+          sx={{
+            fontSize: '12px',
+            lineHeight: '16px',
+            margin: '0 auto',
+            maxWidth: '550px',
+            marginBottom: '24px',
+          }}
+        >
           {footnote.map((note, index) => {
             return (
-              <p className={classes.noSpacing} key={`note-${index}`}>
+              <p key={`note-${index}`} style={{ margin: 0 }}>
                 {note}
               </p>
             );
           })}
-        </div>
+        </Box>
       )}
     </Container>
   );

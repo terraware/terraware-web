@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { Box, Container, Popover, Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Container, Popover, Typography, useTheme } from '@mui/material';
 import { Button, PillList, PillListItem, Tooltip } from '@terraware/web-components';
 import { DatabaseColumn, Option } from '@terraware/web-components/components/table/types';
 
@@ -13,75 +12,6 @@ import strings from 'src/strings';
 import { FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
 import useDebounce from 'src/utils/useDebounce';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-
-interface StyleProps {
-  isMobile?: boolean;
-  isDesktop?: boolean;
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  mainContainer: {
-    margin: theme.spacing(2, 0, 0, 0),
-    padding: theme.spacing(0),
-    display: 'flex',
-    flexDirection: 'column',
-    gap: theme.spacing(1),
-  },
-  filtersContainer: {
-    minHeight: '32px',
-    display: 'flex',
-    flexDirection: (props: StyleProps) => (props.isMobile ? 'column' : 'row'),
-    flexWrap: (props: StyleProps) => (props.isMobile ? 'nowrap' : 'wrap'),
-    alignItems: (props: StyleProps) => (props.isMobile ? 'flex-start' : 'center'),
-    gap: theme.spacing(1),
-    marginTop: `-${theme.spacing(1)}`,
-    marginBottom: '8px',
-  },
-  searchField: {
-    width: '300px',
-    marginTop: theme.spacing(-0.5),
-  },
-  preExpFilterDropdown: {
-    cursor: 'pointer',
-    border: `1px solid ${theme.palette.TwClrBrdrSecondary}`,
-    borderRadius: '4px',
-    width: '176px',
-    height: '40px',
-    padding: theme.spacing(1, 2, 1, 1),
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
-  preExpFilterIconRight: {
-    height: '24px',
-    width: '24px',
-  },
-  popoverContainer: {
-    '& .MuiPaper-root': {
-      borderRadius: '8px',
-      overflow: 'visible',
-      width: (props: StyleProps) => (props.isMobile ? '90%' : '480px'),
-    },
-  },
-  mobileContainer: {
-    borderRadius: '8px',
-    overflow: 'visible',
-    position: 'fixed',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    maxHeight: '90%',
-    width: '90%',
-    zIndex: 1300,
-  },
-  filterIconContainer: {
-    borderRadius: 0,
-    fontSize: '16px',
-    padding: 0,
-  },
-  filterIcon: {
-    fill: theme.palette.TwClrIcnSecondary,
-  },
-}));
 
 const getSearchTermFromFilters = (filters: Record<string, SearchNodePayload>): string => {
   const filterValues = filters.searchTermFilter;
@@ -101,8 +31,17 @@ interface Props {
 export default function Filters(props: Props): JSX.Element {
   const { columns, searchColumns, preExpFilterColumns, filters, availableValues, allValues, onChange } = props;
 
-  const { isMobile, isDesktop } = useDeviceInfo();
-  const classes = useStyles({ isMobile, isDesktop });
+  const { isMobile } = useDeviceInfo();
+  const theme = useTheme();
+
+  const popoverContainerStyles = {
+    '& .MuiPaper-root': {
+      borderRadius: '8px',
+      overflow: 'visible',
+      width: isMobile ? '90%' : '480px',
+    },
+  };
+
   const [searchTerm, setSearchTerm] = React.useState(getSearchTermFromFilters(filters));
   const searchTermCallback = useCallback(
     (value: string) => {
@@ -228,19 +167,42 @@ export default function Filters(props: Props): JSX.Element {
   };
 
   return (
-    <Container maxWidth={false} className={classes.mainContainer}>
-      <Box className={classes.filtersContainer}>
+    <Container
+      maxWidth={false}
+      sx={{
+        margin: theme.spacing(2, 0, 0, 0),
+        padding: theme.spacing(0),
+        display: 'flex',
+        flexDirection: 'column',
+        gap: theme.spacing(1),
+      }}
+    >
+      <Box
+        sx={{
+          minHeight: '32px',
+          display: 'flex',
+          flexDirection: isMobile ? 'column' : 'row',
+          flexWrap: isMobile ? 'nowrap' : 'wrap',
+          alignItems: isMobile ? 'flex-start' : 'center',
+          gap: theme.spacing(1),
+          marginTop: `-${theme.spacing(1)}`,
+          marginBottom: '8px',
+        }}
+      >
         <TextField
           placeholder={strings.SEARCH}
           iconLeft='search'
           label=''
           id='search'
           type='text'
-          className={classes.searchField}
           onChange={onChangeSearch}
           value={searchTerm}
           iconRight='cancel'
           onClickRightIcon={onClearSearch}
+          sx={{
+            width: '300px',
+            marginTop: theme.spacing(-0.5),
+          }}
         />
         {preExpFilterColumns.map((preExpFilterColumn, index) => {
           const valuesAvailable =
@@ -254,20 +216,43 @@ export default function Filters(props: Props): JSX.Element {
 
           return (
             <div key={index}>
-              <div
-                className={classes.preExpFilterDropdown}
+              <Box
                 onClick={(event) => handlePreExpFilterClick(event, preExpFilterColumn.key)}
+                sx={{
+                  cursor: 'pointer',
+                  border: `1px solid ${theme.palette.TwClrBrdrSecondary}`,
+                  borderRadius: '4px',
+                  width: '176px',
+                  height: '40px',
+                  padding: theme.spacing(1, 2, 1, 1),
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                }}
               >
                 <Typography>
                   {`${preExpFilterColumn.name}${numPreExpSelected > 0 ? ' (' + numPreExpSelected + ')' : ''}`}
                 </Typography>
                 <Icon
                   name={Boolean(preExpAnchorEls[preExpFilterColumn.key]) ? 'chevronUp' : 'chevronDown'}
-                  className={classes.preExpFilterIconRight}
+                  style={{ height: '24px', width: '24px' }}
                 />
-              </div>
+              </Box>
               {isMobile && Boolean(preExpAnchorEls[preExpFilterColumn.key]) ? (
-                <div className={classes.mobileContainer}>{renderFilterMultiSelect(preExpFilterColumn)}</div>
+                <Box
+                  sx={{
+                    borderRadius: '8px',
+                    overflow: 'visible',
+                    position: 'fixed',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    maxHeight: '90%',
+                    width: '90%',
+                    zIndex: 1300,
+                  }}
+                >
+                  {renderFilterMultiSelect(preExpFilterColumn)}
+                </Box>
               ) : (
                 <Popover
                   id='pre-exposed-filter-popover'
@@ -282,7 +267,7 @@ export default function Filters(props: Props): JSX.Element {
                     vertical: 'top',
                     horizontal: 'left',
                   }}
-                  className={classes.popoverContainer}
+                  sx={popoverContainerStyles}
                 >
                   {renderFilterMultiSelect(preExpFilterColumn)}
                 </Popover>
@@ -312,7 +297,7 @@ export default function Filters(props: Props): JSX.Element {
             vertical: 'top',
             horizontal: 'left',
           }}
-          className={classes.popoverContainer}
+          sx={popoverContainerStyles}
         >
           <FilterGroup
             initialFilters={filters}

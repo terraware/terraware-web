@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Box, Grid, IconButton, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
 import { Button, DatePicker, Dropdown, DropdownItem, Icon, Textfield } from '@terraware/web-components';
 
 import Link from 'src/components/common/Link';
@@ -15,19 +14,6 @@ import {
   VariableValueTextValue,
   VariableValueValue,
 } from 'src/types/documentProducer/VariableValue';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  formElement: {
-    margin: theme.spacing(1, 0),
-  },
-  formElementInput: {
-    margin: theme.spacing(1, 0),
-    flex: 1,
-  },
-  disabledIcon: {
-    opacity: 0.5,
-  },
-}));
 
 export type VariableDetailsInputProps = {
   values?: VariableValueValue[];
@@ -50,13 +36,13 @@ const VariableDetailsInput = ({
   sectionsUsed,
   onSectionClicked,
 }: VariableDetailsInputProps): JSX.Element => {
-  const classes = useStyles();
-
   const [value, setValue] = useState<string | number>();
   const [citation, setCitation] = useState<string>();
   const [title, setTitle] = useState<string>();
   const [valuesList, setValuesList] = useState<string[]>();
   const theme = useTheme();
+
+  const formElementStyles = { margin: theme.spacing(1, 0) };
 
   const valueError = useCallback(() => (value ? '' : strings.REQUIRED_FIELD), [value]);
 
@@ -283,30 +269,30 @@ const VariableDetailsInput = ({
     <>
       <Textfield
         autoFocus
-        className={classes.formElement}
         id='name'
         label={strings.NAME}
         type='text'
         value={variable?.name}
         display={true}
+        styles={{ textarea: formElementStyles }}
       />
       <Textfield
-        className={classes.formElement}
         id='description'
         label={strings.DESCRIPTION}
         type='text'
         value={variable?.description}
         display={true}
+        styles={{ textarea: formElementStyles }}
       />
       {variable?.type === 'Date' && (
         <DatePicker
-          className={classes.formElement}
           id='value'
           label={strings.VALUE}
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
           value={value?.toString()}
           errorText={validate ? valueError() : ''}
           aria-label='select date'
+          sx={formElementStyles}
         />
       )}
       {variable?.type === 'Text' && (
@@ -315,13 +301,13 @@ const VariableDetailsInput = ({
             <Box key={index} mb={2} display='flex' alignItems='center' sx={{ position: 'relative' }}>
               <Textfield
                 key={`input-${index}`}
-                className={classes.formElementInput}
                 id='value'
                 label={index === 0 ? strings.VALUE : ''}
                 type={'text'}
                 onChange={(newValue: any) => onChangeValueHandler(newValue, 'value', index)}
                 value={iValue?.toString()}
                 errorText={validate ? valueError() : ''}
+                sx={{ margin: theme.spacing(1, 0), flex: 1 }}
               />
               {variable.isList && (
                 <IconButton
@@ -336,7 +322,7 @@ const VariableDetailsInput = ({
                     name='cancel'
                     size='medium'
                     fillColor={theme.palette.TwClrIcn}
-                    className={index === 0 ? classes.disabledIcon : ''}
+                    style={index === 0 ? { opacity: 0.5 } : {}}
                   />
                 </IconButton>
               )}
@@ -347,7 +333,6 @@ const VariableDetailsInput = ({
       )}
       {(variable?.type === 'Number' || variable?.type === 'Link') && (
         <Textfield
-          className={classes.formElement}
           id='value'
           label={strings.VALUE}
           type={variable?.type === 'Number' ? 'number' : 'text'}
@@ -355,6 +340,7 @@ const VariableDetailsInput = ({
           value={value?.toString()}
           errorText={validate ? valueError() : ''}
           helperText={variable?.type === 'Number' ? strings.ROUNDED_INFO : ''}
+          sx={formElementStyles}
         />
       )}
       {variable?.type === 'Select' && (
@@ -369,11 +355,11 @@ const VariableDetailsInput = ({
 
       {variable?.type === 'Link' && (
         <Textfield
-          className={classes.formElement}
           id='title'
           label={strings.TITLE}
           type='text'
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'title')}
+          sx={formElementStyles}
           value={title}
         />
       )}
@@ -381,22 +367,22 @@ const VariableDetailsInput = ({
       <Grid container>
         <Grid item xs={6}>
           <Textfield
-            className={classes.formElement}
             id='type'
             label={strings.TYPE}
             type='text'
             value={variable?.type}
             display={true}
+            sx={formElementStyles}
           />
         </Grid>
         <Grid item xs={6}>
           <Textfield
-            className={classes.formElement}
             id='instances'
             label={strings.INSTANCES}
             type='text'
             value={sectionsUsed?.length ?? 0}
             display={true}
+            sx={formElementStyles}
           />
         </Grid>
         {sectionsUsed && (
@@ -423,11 +409,11 @@ const VariableDetailsInput = ({
         )}
       </Grid>
       <Textfield
-        className={classes.formElement}
         id='citation'
         label={strings.CITATION}
         type='text'
         onChange={(newValue: any) => onChangeValueHandler(newValue, 'citation')}
+        sx={formElementStyles}
         value={citation}
       />
     </>

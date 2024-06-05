@@ -1,48 +1,10 @@
 import React from 'react';
 
-import { Box, Container, Grid, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import BackToLink from 'src/components/common/BackToLink';
 import Title from 'src/components/common/Title';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  mainContainer: {
-    '&.MuiContainer-root': {
-      paddingLeft: 0,
-      paddingRight: 0,
-      paddingBottom: theme.spacing(4),
-    },
-  },
-  container: {
-    maxWidth: '100%',
-  },
-  pageTitle: {
-    fontSize: '24px',
-    lineHeight: '32px',
-    fontWeight: 600,
-  },
-  subtitle: {
-    fontWeight: 400,
-    paddingTop: theme.spacing(1.5),
-    fontSize: '14px',
-    lineHeight: '20px',
-  },
-  flex: {
-    display: 'flex',
-  },
-  back: {
-    marginBottom: theme.spacing(3),
-  },
-  backToLink: {
-    marginLeft: 0,
-    marginBottom: theme.spacing(3),
-  },
-  mainContent: {
-    width: '100%',
-  },
-}));
 
 interface Props {
   back?: boolean;
@@ -73,7 +35,6 @@ export default function PageHeader({
   snackbarPageKey,
   titleClassName,
 }: Props): JSX.Element {
-  const classes = useStyles();
   const theme = useTheme();
 
   const getPageHeading = () => {
@@ -83,11 +44,29 @@ export default function PageHeader({
   };
 
   return (
-    <Container maxWidth={false} className={classes.mainContainer}>
-      <Grid container spacing={0} className={classes.container}>
+    <Container
+      maxWidth={false}
+      sx={{
+        '&.MuiContainer-root': {
+          paddingLeft: 0,
+          paddingRight: 0,
+          paddingBottom: theme.spacing(4),
+        },
+      }}
+    >
+      <Grid container spacing={0} sx={{ maxWidth: '100%' }}>
         <Grid item xs={12}>
           {back && backUrl && backName && (
-            <BackToLink id='back' to={backUrl} className={classes.backToLink} replace={back} name={backName} />
+            <BackToLink
+              id='back'
+              to={backUrl}
+              replace={back}
+              name={backName}
+              style={{
+                marginLeft: 0,
+                marginBottom: theme.spacing(3),
+              }}
+            />
           )}
         </Grid>
         {page && parentPage && title && (
@@ -95,15 +74,19 @@ export default function PageHeader({
             {getPageHeading()}
           </Grid>
         )}
-        <Grid item xs={12} className={classes.flex}>
-          <div className={classes.mainContent}>
+        <Grid item xs={12} sx={{ display: 'flex' }}>
+          <Box sx={{ width: '100%' }}>
             <Box padding={theme.spacing(0, 3, children?.some((el) => el) ? 3 : 0, 3)}>
               <Box display='flex' justifyContent='space-between' alignItems='center'>
                 <Typography
                   id='title'
                   variant='h4'
-                  className={`${classes.pageTitle} ${titleClassName}`}
-                  sx={{ fontSize: '24px', lineHeight: '32px', fontWeight: 600 }}
+                  className={titleClassName}
+                  sx={{
+                    fontSize: '24px',
+                    lineHeight: '32px',
+                    fontWeight: 600,
+                  }}
                 >
                   {title || getPageHeading()}
                 </Typography>
@@ -111,14 +94,23 @@ export default function PageHeader({
                 {!!rightComponent && <div>{rightComponent}</div>}
               </Box>
               {subtitle && (
-                <Typography id='subtitle' variant='h6' className={classes.subtitle}>
+                <Typography
+                  id='subtitle'
+                  variant='h6'
+                  sx={{
+                    fontWeight: 400,
+                    paddingTop: theme.spacing(1.5),
+                    fontSize: '14px',
+                    lineHeight: '20px',
+                  }}
+                >
                   {subtitle}
                 </Typography>
               )}
             </Box>
             <PageSnackbar pageKey={snackbarPageKey} />
             {children}
-          </div>
+          </Box>
         </Grid>
       </Grid>
     </Container>

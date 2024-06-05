@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Button,
+  ButtonBase,
   ClickAwayListener,
   Divider,
   MenuItem,
@@ -12,11 +13,9 @@ import {
   Paper,
   Popper,
   Slide,
-  Theme,
   Typography,
   useTheme,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 
 import { APP_PATHS } from 'src/constants';
 import { useUser } from 'src/providers';
@@ -29,70 +28,6 @@ import useEnvironment from 'src/utils/useEnvironment';
 import AddNewOrganizationModal from './AddNewOrganizationModal';
 import Icon from './common/icon/Icon';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  icon: {
-    alignItems: 'center',
-    backgroundColor: '#F1F0EC',
-    borderRadius: '50%',
-    color: theme.palette.TwClrTxt,
-    display: 'flex',
-    fontWeight: 500,
-    height: '32px',
-    justifyContent: 'center',
-    width: '32px',
-  },
-  largeIcon: {
-    width: '40px',
-    height: '40px',
-  },
-  closeButton: {
-    background: 'none',
-    border: 'none',
-    cursor: 'pointer',
-    marginLeft: 'auto',
-    height: 'auto',
-    paddingBottom: '16px',
-  },
-  closeIcon: {
-    fill: theme.palette.TwClrIcnSecondary,
-  },
-  userMenuOpened: {
-    '& .blurred': {
-      backdropFilter: 'blur(8px)',
-      background: getRgbaFromHex(theme.palette.TwClrBgSecondary as string, 0.8),
-      height: '100%',
-      alignItems: 'center',
-      position: 'fixed',
-      zIndex: 1300,
-      inset: '0px',
-      overflowY: 'scroll',
-    },
-  },
-  menuItem: {
-    fontSize: '14px',
-    padding: '16px 16px',
-    display: 'flex',
-    fontWeight: 500,
-    borderRadius: '16px',
-  },
-  menuItemSelected: {
-    backgroundColor: theme.palette.TwClrBgGhostActive,
-  },
-  menuList: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  divider: {
-    background: theme.palette.TwClrBrdrTertiary,
-    '&.MuiDivider-root': {
-      margin: theme.spacing(1, 2, 1, 2),
-    },
-  },
-  avatarButton: {
-    minWidth: 'auto',
-  },
-}));
-
 type SmallDeviceUserMenuProps = {
   onLogout: () => void;
   hasOrganizations?: boolean;
@@ -103,7 +38,6 @@ export default function SmallDeviceUserMenu({
 }: SmallDeviceUserMenuProps): JSX.Element | null {
   const { selectedOrganization, setSelectedOrganization, organizations } = useOrganization();
   const { user } = useUser();
-  const classes = useStyles();
   const theme = useTheme();
   const navigate = useNavigate();
   const [newOrganizationModalOpened, setNewOrganizationModalOpened] = useState(false);
@@ -111,6 +45,26 @@ export default function SmallDeviceUserMenu({
   const anchorRef = React.useRef<HTMLButtonElement>(null);
   const { isProduction } = useEnvironment();
   const iconLetter = user?.firstName?.charAt(0) || user?.lastName?.charAt(0) || user?.email?.charAt(0);
+
+  const iconStyles = {
+    alignItems: 'center',
+    backgroundColor: '#F1F0EC',
+    borderRadius: '50%',
+    color: theme.palette.TwClrTxt,
+    display: 'flex',
+    fontWeight: 500,
+    height: '32px',
+    justifyContent: 'center',
+    width: '32px',
+  };
+
+  const menuItemStyles = {
+    fontSize: '14px',
+    padding: '16px 16px',
+    display: 'flex',
+    fontWeight: 500,
+    borderRadius: '16px',
+  };
 
   const navigateTo = (url: string) => {
     navigate(url);
@@ -153,10 +107,25 @@ export default function SmallDeviceUserMenu({
   };
 
   return (
-    <div className={open ? classes.userMenuOpened : ''}>
+    <Box
+      sx={[
+        open && {
+          '& .blurred': {
+            backdropFilter: 'blur(8px)',
+            background: getRgbaFromHex(theme.palette.TwClrBgSecondary as string, 0.8),
+            height: '100%',
+            alignItems: 'center',
+            position: 'fixed',
+            zIndex: 1300,
+            inset: '0px',
+            overflowY: 'scroll',
+          },
+        },
+      ]}
+    >
       <AddNewOrganizationModal open={newOrganizationModalOpened} onCancel={onCloseCreateOrganizationModal} />
-      <Button ref={anchorRef} id='composition-button' onClick={handleToggle} className={classes.avatarButton}>
-        <div className={classes.icon}>{iconLetter}</div>
+      <Button ref={anchorRef} id='composition-button' onClick={handleToggle} sx={{ minWidth: 'auto' }}>
+        <Box sx={iconStyles}>{iconLetter}</Box>
       </Button>
       <div className='blurred'>
         <Popper
@@ -174,13 +143,22 @@ export default function SmallDeviceUserMenu({
                   autoFocusItem={open}
                   id='composition-menu'
                   aria-labelledby='composition-button'
-                  sx={{ padding: '24px' }}
-                  className={classes.menuList}
+                  sx={{ display: 'flex', flexDirection: 'column', padding: '24px' }}
                 >
                   <Box sx={{ display: 'flex' }}>
-                    <button onClick={handleClose} className={classes.closeButton}>
-                      <Icon name='close' size='medium' className={classes.closeIcon} />
-                    </button>
+                    <ButtonBase
+                      onClick={handleClose}
+                      sx={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        marginLeft: 'auto',
+                        height: 'auto',
+                        paddingBottom: '16px',
+                      }}
+                    >
+                      <Icon name='close' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
+                    </ButtonBase>
                   </Box>
                   <Typography
                     sx={{
@@ -202,7 +180,7 @@ export default function SmallDeviceUserMenu({
                       paddingBottom: '12px',
                     }}
                   >
-                    <div className={`${classes.icon} ${classes.largeIcon}`}>{iconLetter}</div>
+                    <Box sx={[iconStyles, { width: '40px', height: '40px' }]}>{iconLetter}</Box>
                     <div>
                       <Typography sx={{ height: '24px', paddingLeft: '8px', color: theme.palette.TwClrTxt }}>
                         {user?.firstName} {user?.lastName}
@@ -225,7 +203,7 @@ export default function SmallDeviceUserMenu({
                       navigateTo(APP_PATHS.MY_ACCOUNT);
                       handleClose(e);
                     }}
-                    className={classes.menuItem}
+                    sx={menuItemStyles}
                   >
                     {strings.MY_ACCOUNT}
                   </MenuItem>
@@ -234,11 +212,19 @@ export default function SmallDeviceUserMenu({
                       onLogout();
                       handleClose(e);
                     }}
-                    className={classes.menuItem}
+                    sx={menuItemStyles}
                   >
                     {strings.LOG_OUT}
                   </MenuItem>
-                  <Divider className={classes.divider} sx={{ margin: '16px 0' }} />
+                  <Divider
+                    sx={{
+                      background: theme.palette.TwClrBrdrTertiary,
+                      '&.MuiDivider-root': {
+                        margin: theme.spacing(1, 2, 1, 2),
+                      },
+                      margin: '16px 0',
+                    }}
+                  />
                   <Typography
                     sx={{
                       paddingLeft: '16px',
@@ -260,12 +246,13 @@ export default function SmallDeviceUserMenu({
                               selectOrganization(org);
                               handleClose(e);
                             }}
-                            className={
-                              selectedOrganization.id === org.id
-                                ? `${classes.menuItem} ${classes.menuItemSelected}`
-                                : classes.menuItem
-                            }
                             key={`item-${index}`}
+                            sx={[
+                              menuItemStyles,
+                              selectedOrganization.id === org.id && {
+                                backgroundColor: theme.palette.TwClrBgGhostActive,
+                              },
+                            ]}
                           >
                             {org.name}
                           </MenuItem>
@@ -278,7 +265,7 @@ export default function SmallDeviceUserMenu({
                       handleClose(e);
                       setNewOrganizationModalOpened(true);
                     }}
-                    className={classes.menuItem}
+                    sx={menuItemStyles}
                   >
                     <Icon name='plus' />
                     <div style={{ paddingLeft: '8px' }}>{strings.CREATE_NEW_ORGANIZATION}</div>
@@ -290,7 +277,7 @@ export default function SmallDeviceUserMenu({
                           navigateTo(APP_PATHS.OPT_IN);
                           handleClose(e);
                         }}
-                        className={classes.menuItem}
+                        sx={menuItemStyles}
                       >
                         {strings.OPT_IN}
                       </MenuItem>
@@ -302,6 +289,6 @@ export default function SmallDeviceUserMenu({
           </Slide>
         </Popper>
       </div>
-    </div>
+    </Box>
   );
 }
