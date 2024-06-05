@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/142</span>
+                <span class='fraction'>0/138</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/76</span>
+                <span class='fraction'>0/74</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/38</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/132</span>
+                <span class='fraction'>0/128</span>
             </div>
         
             
@@ -518,13 +518,7 @@
 <a name='L453'></a><a href='#L453'>453</a>
 <a name='L454'></a><a href='#L454'>454</a>
 <a name='L455'></a><a href='#L455'>455</a>
-<a name='L456'></a><a href='#L456'>456</a>
-<a name='L457'></a><a href='#L457'>457</a>
-<a name='L458'></a><a href='#L458'>458</a>
-<a name='L459'></a><a href='#L459'>459</a>
-<a name='L460'></a><a href='#L460'>460</a>
-<a name='L461'></a><a href='#L461'>461</a>
-<a name='L462'></a><a href='#L462'>462</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L456'></a><a href='#L456'>456</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -715,22 +709,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -741,6 +726,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1176,7 +1164,8 @@ export default function <span class="fstat-no" title="function not covered" >Zon
             {
               text: strings.SITE_ZONE_BOUNDARIES_DESCRIPTION_1,
               hasTutorial: true,
-              handlePrefix: <span class="fstat-no" title="function not covered" >(p</span>refix: string) =&gt; <span class="cstat-no" title="statement not covered" >strings.formatString(prefix, &lt;MapIcon icon='slice' /&gt;) as JSX.Element[],</span>
+              handlePrefix: <span class="fstat-no" title="function not covered" >(p</span>refix: string) =&gt;
+<span class="cstat-no" title="statement not covered" >                strings.formatString(prefix, &lt;MapIcon centerAligned={true} icon='slice' /&gt;) as JSX.Element[],</span>
             },
             {
               text: strings.SITE_ZONE_BOUNDARIES_SIZE,
@@ -1195,13 +1184,6 @@ export default function <span class="fstat-no" title="function not covered" >Zon
       strings.ADDING_ZONE_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,
       &lt;MapIcon centerAligned icon='slice' /&gt;
     ) as JSX.Element[];
-  }, [activeLocale]);
-&nbsp;
-  const tutorialTitle = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!activeLocale) {</span>
-<span class="cstat-no" title="statement not covered" >      return '';</span>
-    }
-<span class="cstat-no" title="statement not covered" >    return strings.formatString(strings.TUTORIAL_PREFIX, strings.ADDING_ZONE_BOUNDARIES).toString();</span>
   }, [activeLocale]);
 &nbsp;
   const onEditableBoundaryChanged = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >as</span>ync (editableBoundary?: FeatureCollection) =&gt; {</span>
@@ -1327,7 +1309,7 @@ export default function <span class="fstat-no" title="function not covered" >Zon
       &lt;StepTitleDescription
         description={description}
         dontShowAgainPreferenceName='dont-show-site-zone-boundaries-instructions'
-        title={tutorialTitle}
+        title={strings.ADDING_ZONE_BOUNDARIES}
         tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_zone_boundary_instructions_video'
         tutorialTitle={strings.ADDING_ZONE_BOUNDARIES}
@@ -1453,7 +1435,7 @@ const TooltipContents = <span class="cstat-no" title="statement not covered" ><s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-04T21:09:57.934Z
+                at 2024-06-05T03:20:23.963Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
