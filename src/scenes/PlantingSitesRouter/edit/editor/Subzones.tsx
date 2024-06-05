@@ -239,7 +239,8 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
             {
               text: strings.SITE_SUBZONE_BOUNDARIES_DESCRIPTION_1,
               hasTutorial: true,
-              handlePrefix: (prefix: string) => strings.formatString(prefix, <MapIcon centerAligned={true}  icon='slice' />) as JSX.Element[],
+              handlePrefix: (prefix: string) =>
+                strings.formatString(prefix, <MapIcon centerAligned={true} icon='slice' />) as JSX.Element[],
             },
             {
               text: strings.formatString(

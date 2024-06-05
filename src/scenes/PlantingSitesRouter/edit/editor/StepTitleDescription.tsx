@@ -56,7 +56,6 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
     return strings.formatString(strings.TUTORIAL_PREFIX, tutorialTitle).toString();
   }, [activeLocale, tutorialTitle]);
 
-
   const onClose = (dontShowAgain?: boolean) => {
     setShowModal(false);
     if (dontShowAgain && !!dontShowAgainPreferenceName) {

@@ -118,7 +118,8 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
       {
         text: strings.SITE_BOUNDARY_DESCRIPTION_1,
         hasTutorial: true,
-        handlePrefix: (prefix: string) => strings.formatString(prefix, <MapIcon centerAligned={true} icon='polygon' />) as JSX.Element[],
+        handlePrefix: (prefix: string) =>
+          strings.formatString(prefix, <MapIcon centerAligned={true} icon='polygon' />) as JSX.Element[],
       },
       { text: strings.SITE_BOUNDARY_DESCRIPTION_2, isBold: true },
     ];

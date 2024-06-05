@@ -189,7 +189,8 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
             {
               text: strings.SITE_ZONE_BOUNDARIES_DESCRIPTION_1,
               hasTutorial: true,
-              handlePrefix: (prefix: string) => strings.formatString(prefix, <MapIcon centerAligned={true} icon='slice' />) as JSX.Element[],
+              handlePrefix: (prefix: string) =>
+                strings.formatString(prefix, <MapIcon centerAligned={true} icon='slice' />) as JSX.Element[],
             },
             {
               text: strings.SITE_ZONE_BOUNDARIES_SIZE,
