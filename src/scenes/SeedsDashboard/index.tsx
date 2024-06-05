@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, CircularProgress, Container, Grid, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, CircularProgress, Container, Grid, SxProps, Typography, useTheme } from '@mui/material';
 import Cookies from 'cookies-js';
 
 import MainPaper from 'src/components/MainPaper';
@@ -20,36 +19,6 @@ import strings from 'src/strings';
 import { AccessionState, stateName } from 'src/types/Accession';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  accessionsLink: {
-    marginRight: '12px',
-  },
-  mainContainer: {
-    padding: 0,
-  },
-  messageIcon: {
-    fill: theme.palette.TwClrIcnInfo,
-  },
-  paper: {
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
-    alignItems: 'start',
-    borderRadius: '24px',
-    border: 'none',
-    backgroundColor: theme.palette.TwClrBg,
-    padding: theme.spacing(3),
-  },
-  spinnerContainer: {
-    position: 'fixed',
-    top: '50%',
-    left: 'calc(50% + 100px)',
-  },
-  accessionsByStatusIcon: {
-    fill: theme.palette.TwClrIcnSecondary,
-  },
-}));
-
 Cookies.defaults = {
   path: '/',
   secure: true,
@@ -57,7 +26,6 @@ Cookies.defaults = {
 
 export default function SeedSummary(): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const classes = useStyles();
   const navigate = useNavigate();
   // populateSummaryInterval value is only being used when it is set.
   const [, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
@@ -66,6 +34,17 @@ export default function SeedSummary(): JSX.Element {
   const errorOccurred = summary ? !summary.requestSucceeded : false;
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
+
+  const paperStyles: SxProps = {
+    display: 'flex',
+    overflow: 'auto',
+    flexDirection: 'column',
+    alignItems: 'start',
+    borderRadius: '24px',
+    border: 'none',
+    backgroundColor: theme.palette.TwClrBg,
+    padding: theme.spacing(3),
+  };
 
   useEffect(() => {
     if (selectedOrganization) {
@@ -126,7 +105,7 @@ export default function SeedSummary(): JSX.Element {
         parentPage={strings.SEEDS}
         snackbarPageKey={'seeds'}
       />
-      <Container maxWidth={false} className={classes.mainContainer}>
+      <Container maxWidth={false} sx={{ padding: 0 }}>
         {selectedOrganization && summary ? (
           <Grid container spacing={3}>
             {isEmptyState === true && (
@@ -143,7 +122,7 @@ export default function SeedSummary(): JSX.Element {
                   }}
                 >
                   <Box sx={{ flexGrow: 0, marginRight: '18px' }}>
-                    <Icon name='info' className={classes.messageIcon} size='large' />
+                    <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='large' />
                   </Box>
                   <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
                     <Typography
@@ -176,7 +155,7 @@ export default function SeedSummary(): JSX.Element {
             <Grid item xs={12}>
               <Grid container spacing={3}>
                 <Grid item xs={cardGridSize()}>
-                  <MainPaper className={classes.paper}>
+                  <MainPaper sx={paperStyles}>
                     <SummaryPaper
                       id='seedCount'
                       title={strings.TOTAL_SEED_COUNT}
@@ -192,7 +171,7 @@ export default function SeedSummary(): JSX.Element {
                   </MainPaper>
                 </Grid>
                 <Grid item xs={cardGridSize()}>
-                  <MainPaper className={classes.paper}>
+                  <MainPaper sx={paperStyles}>
                     <SummaryPaper
                       id='sessions'
                       title={strings.TOTAL_ACTIVE_ACCESSIONS}
@@ -205,7 +184,7 @@ export default function SeedSummary(): JSX.Element {
                   </MainPaper>
                 </Grid>
                 <Grid item xs={cardGridSize()}>
-                  <MainPaper className={classes.paper}>
+                  <MainPaper sx={paperStyles}>
                     <SummaryPaper
                       id='species'
                       title={strings.NUMBER_OF_SPECIES}
@@ -226,7 +205,7 @@ export default function SeedSummary(): JSX.Element {
                     }}
                   >
                     <Box display='flex' alignContent='center' alignItems='center'>
-                      <Icon name='futures' size='medium' className={classes.accessionsByStatusIcon} />
+                      <Icon fillColor={theme.palette.TwClrIcnSecondary} name='futures' size='medium' />
                       <Typography
                         fontSize='20px'
                         fontWeight={600}
@@ -247,7 +226,7 @@ export default function SeedSummary(): JSX.Element {
                         </Grid>
                       ))}
                     </Grid>
-                    <Link className={classes.accessionsLink} to={`${APP_PATHS.ACCESSIONS}?stage=}`} fontSize='16px'>
+                    <Link to={`${APP_PATHS.ACCESSIONS}?stage=}`} fontSize='16px' style={{ marginRight: '12px' }}>
                       {strings.SEE_ALL_ACCESSIONS}
                     </Link>
                   </Box>
@@ -256,9 +235,15 @@ export default function SeedSummary(): JSX.Element {
             </Grid>
           </Grid>
         ) : (
-          <div className={classes.spinnerContainer}>
+          <Box
+            sx={{
+              position: 'fixed',
+              top: '50%',
+              left: 'calc(50% + 100px)',
+            }}
+          >
             <CircularProgress />
-          </div>
+          </Box>
         )}
       </Container>
     </TfMain>

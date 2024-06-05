@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { Box, Container, Grid, Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Container, Grid, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import PageHeader from 'src/components/PageHeader';
@@ -11,37 +10,11 @@ import { useOrganization, useUser } from 'src/providers';
 import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  main: {
-    [theme.breakpoints.down('xl')]: {
-      background:
-        'url(/assets/home-bg-right-layer-z4.svg) no-repeat 753px 100%/auto 285px, ' +
-        'url(/assets/home-bg-left-layer-z4.svg) no-repeat 0 100%/auto 295px, ' +
-        'url(/assets/home-bg-water-z2.svg) repeat-x 0 100%/auto 180px, ' +
-        'url(/assets/home-bg-left-z4.svg) no-repeat 0 100%/auto 295px, ' +
-        'url(/assets/home-bg-right-z3.svg) no-repeat 911px 100%/auto 400px',
-      backgroundAttachment: 'fixed',
-    },
-    [theme.breakpoints.up('xl')]: {
-      background:
-        'url(/assets/home-bg-right-layer-z4.svg) no-repeat 100% 100%/auto 285px, ' +
-        'url(/assets/home-bg-left-layer-z4.svg) no-repeat 0 100%/auto 295px, ' +
-        'url(/assets/home-bg-water-z2.svg) repeat-x 0 100%/auto 180px, ' +
-        'url(/assets/home-bg-left-z4.svg) no-repeat 0 100%/auto 295px, ' +
-        'url(/assets/home-bg-right-z3.svg) no-repeat 100% 100%/auto 400px',
-      backgroundAttachment: 'fixed',
-    },
-    minHeight: '100vh',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-}));
-
 const TerrawareHomeView = () => {
   const { user } = useUser();
   const { selectedOrganization } = useOrganization();
   const { isTablet, isMobile } = useDeviceInfo();
-  const classes = useStyles({ isMobile });
+  const theme = useTheme();
 
   const primaryGridSize = () => {
     if (isMobile) {
@@ -61,7 +34,32 @@ const TerrawareHomeView = () => {
   };
 
   return (
-    <main className={classes.main}>
+    <Box
+      component='main'
+      sx={{
+        [theme.breakpoints.down('xl')]: {
+          background:
+            'url(/assets/home-bg-right-layer-z4.svg) no-repeat 753px 100%/auto 285px, ' +
+            'url(/assets/home-bg-left-layer-z4.svg) no-repeat 0 100%/auto 295px, ' +
+            'url(/assets/home-bg-water-z2.svg) repeat-x 0 100%/auto 180px, ' +
+            'url(/assets/home-bg-left-z4.svg) no-repeat 0 100%/auto 295px, ' +
+            'url(/assets/home-bg-right-z3.svg) no-repeat 911px 100%/auto 400px',
+          backgroundAttachment: 'fixed',
+        },
+        [theme.breakpoints.up('xl')]: {
+          background:
+            'url(/assets/home-bg-right-layer-z4.svg) no-repeat 100% 100%/auto 285px, ' +
+            'url(/assets/home-bg-left-layer-z4.svg) no-repeat 0 100%/auto 295px, ' +
+            'url(/assets/home-bg-water-z2.svg) repeat-x 0 100%/auto 180px, ' +
+            'url(/assets/home-bg-left-z4.svg) no-repeat 0 100%/auto 295px, ' +
+            'url(/assets/home-bg-right-z3.svg) no-repeat 100% 100%/auto 400px',
+          backgroundAttachment: 'fixed',
+        },
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
       <Box paddingRight={'24px'}>
         <PageHeader
           title={user?.firstName ? strings.formatString(strings.WELCOME_PERSON, user.firstName) : strings.WELCOME}
@@ -131,7 +129,7 @@ const TerrawareHomeView = () => {
           </Grid>
         </Container>
       </Box>
-    </main>
+    </Box>
   );
 };
 

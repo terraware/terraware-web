@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { makeStyles } from '@mui/styles';
+import { SxProps } from '@mui/material';
 import { RendererProps, TableRowType } from '@terraware/web-components';
 import { Textfield } from '@terraware/web-components';
 
@@ -8,30 +8,19 @@ import CellRenderer from 'src/components/common/table/TableCellRenderer';
 import strings from 'src/strings';
 import { Species, getGrowthFormString } from 'src/types/Species';
 
-const useStyles = makeStyles(() => ({
-  text: {
-    fontSize: '14px',
-    '& > p': {
-      fontSize: '14px',
-      overflow: 'visible',
-    },
-  },
-  input: {
-    maxWidth: '140px',
-
-    '& label': {
-      whiteSpace: 'break-spaces',
-    },
-  },
-}));
-
 export type PlantingSiteSpeciesCellRendererProps = {
   editMode: boolean;
   validate?: boolean;
 };
 
 export default function PlantingSiteSpeciesCellRenderer({ editMode, validate }: PlantingSiteSpeciesCellRendererProps) {
-  const classes = useStyles();
+  const textStyles = {
+    fontSize: '14px',
+    '& > p': {
+      fontSize: '14px',
+      overflow: 'visible',
+    },
+  };
 
   // eslint-disable-next-line react/display-name
   return (props: RendererProps<TableRowType>): JSX.Element => {
@@ -44,8 +33,13 @@ export default function PlantingSiteSpeciesCellRenderer({ editMode, validate }: 
             initialValue={row[id]}
             isPercentage={column.key === 'mortalityRateInField'}
             onConfirmEdit={onRowClick}
-            className={classes.input}
             validate={validate}
+            sx={{
+              maxWidth: '140px',
+              '& label': {
+                whiteSpace: 'break-spaces',
+              },
+            }}
           />
         );
       }
@@ -56,18 +50,10 @@ export default function PlantingSiteSpeciesCellRenderer({ editMode, validate }: 
     }
 
     if (editMode && (column.key === 'totalPlanted' || column.key === 'mortalityRateInField')) {
-      return (
-        <CellRenderer
-          index={index}
-          column={column}
-          value={createInput(column.key)}
-          row={row}
-          className={classes.text}
-        />
-      );
+      return <CellRenderer index={index} column={column} value={createInput(column.key)} row={row} sx={textStyles} />;
     }
 
-    return <CellRenderer {...props} className={classes.text} />;
+    return <CellRenderer {...props} sx={textStyles} />;
   };
 }
 
@@ -76,12 +62,13 @@ type TableCellInputProps = {
   initialValue: string;
   isPercentage?: boolean;
   onConfirmEdit: (value: string | undefined) => void;
-  className: string;
+  className?: string;
+  sx?: SxProps;
   validate?: boolean;
 };
 
 function TableCellInput(props: TableCellInputProps): JSX.Element {
-  const { id, initialValue, isPercentage, onConfirmEdit, className, validate } = props;
+  const { id, initialValue, isPercentage, onConfirmEdit, className, sx, validate } = props;
   const [inputValue, setInputValue] = useState(initialValue);
   const inputInvalid = inputValue === null || inputValue === undefined || inputValue === '';
 
@@ -107,6 +94,7 @@ function TableCellInput(props: TableCellInputProps): JSX.Element {
       min={0}
       max={isPercentage ? 100 : undefined}
       errorText={validate && inputInvalid ? strings.REQUIRED_FIELD : ''}
+      sx={sx}
     />
   );
 }
