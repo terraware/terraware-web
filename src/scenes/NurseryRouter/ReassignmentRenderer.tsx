@@ -4,30 +4,12 @@
 import React from 'react';
 
 import { Box, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Autocomplete, DropdownItem, Textfield } from '@terraware/web-components';
 
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import strings from 'src/strings';
 import { NumericFormatter } from 'src/types/Number';
-
-const useStyles = makeStyles(() => ({
-  subzone: {
-    minWidth: '175px',
-  },
-  input: {
-    maxWidth: '88px',
-  },
-  text: {
-    minWidth: '150px',
-  },
-  cell: {
-    '&.MuiTableCell-root': {
-      height: '76px',
-    },
-  },
-}));
 
 export type SubzoneInfo = {
   id: number;
@@ -66,10 +48,19 @@ export type ReassignmentRendererProps = {
 
 export default function ReassignmentRenderer({ zones, setReassignment, numericFormatter }: ReassignmentRendererProps) {
   return function ReassignmentlCellRenderer(props: RendererProps<ReassignmentRowType>): JSX.Element {
-    const classes = useStyles();
     const { column, row } = props;
     const { numPlants, originalZone, originalSubzone, reassignment } = row;
     const { plantingId, newSubzoneId, newZoneId, error, quantity, notes } = reassignment;
+
+    const subzoneStyles = {
+      minWidth: '175px',
+    };
+
+    const cellStyles = {
+      '&.MuiTableCell-root': {
+        height: '76px',
+      },
+    };
 
     const zoneOptions: DropdownItem[] = zones
       .filter((zone) => zone.subzones.some((subzone) => subzone.id !== originalSubzone.id))
@@ -120,11 +111,11 @@ export default function ReassignmentRenderer({ zones, setReassignment, numericFo
           options={zoneOptions}
           freeSolo={false}
           hideClearIcon={true}
-          className={classes.subzone}
+          sx={subzoneStyles}
         />
       );
 
-      return <CellRenderer {...props} value={value} className={classes.cell} />;
+      return <CellRenderer {...props} value={value} sx={cellStyles} />;
     }
 
     if (column.key === 'newSubzone') {
@@ -142,11 +133,11 @@ export default function ReassignmentRenderer({ zones, setReassignment, numericFo
           options={subzoneOptions}
           freeSolo={false}
           hideClearIcon={false}
-          className={classes.subzone}
+          sx={subzoneStyles}
         />
       );
 
-      return <CellRenderer {...props} value={value} className={classes.cell} />;
+      return <CellRenderer {...props} value={value} sx={cellStyles} />;
     }
 
     if (column.key === 'reassign') {
@@ -160,7 +151,7 @@ export default function ReassignmentRenderer({ zones, setReassignment, numericFo
             value={quantity?.toString()}
             label={''}
             errorText={error}
-            className={classes.input}
+            styles={{ textarea: { maxWidth: '88px' } }}
           />
           <Typography paddingLeft={1} paddingTop={error ? '10px' : 0}>
             / {numericFormatter.format(numPlants)}
@@ -168,7 +159,7 @@ export default function ReassignmentRenderer({ zones, setReassignment, numericFo
         </Box>
       );
 
-      return <CellRenderer {...props} value={value} className={classes.cell} />;
+      return <CellRenderer {...props} value={value} sx={cellStyles} />;
     }
 
     if (column.key === 'notes') {
@@ -179,11 +170,11 @@ export default function ReassignmentRenderer({ zones, setReassignment, numericFo
           onChange={(text: any) => setReassignment({ ...reassignment, notes: text })}
           value={notes}
           label={''}
-          className={classes.text}
+          styles={{ textarea: { minWidth: '150px' } }}
         />
       );
 
-      return <CellRenderer {...props} value={value} className={classes.cell} />;
+      return <CellRenderer {...props} value={value} sx={cellStyles} />;
     }
 
     if (column.key === 'originalSubzone') {
