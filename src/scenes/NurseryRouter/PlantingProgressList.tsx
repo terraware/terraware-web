@@ -224,9 +224,9 @@ const DetailsRenderer = (props: RendererProps<TableRowType>): JSX.Element => {
   const { column, row } = props;
 
   const textStyles = {
-    fontSize: '14px',
+    fontSize: '16px',
     '& > p': {
-      fontSize: '14px',
+      fontSize: '16px',
     },
   };
 
@@ -236,7 +236,7 @@ const DetailsRenderer = (props: RendererProps<TableRowType>): JSX.Element => {
       : `siteName=${encodeURIComponent(row.siteName)}`;
     const url = `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawal_history&${filterParam}`;
     return (
-      <Link to={url}>
+      <Link fontSize='16px' to={url}>
         <FormattedNumber value={row.totalSeedlingsSent} />
       </Link>
     );

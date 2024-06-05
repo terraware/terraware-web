@@ -11,7 +11,11 @@ export default function ParticipantsCellRenderer(props: RendererProps<TableRowTy
 
   const createLinkToParticipant = () => {
     const to = APP_PATHS.ACCELERATOR_PARTICIPANTS_VIEW.replace(':participantId', `${row.id}`);
-    return <Link to={to}>{value as React.ReactNode}</Link>;
+    return (
+      <Link fontSize='16px' to={to}>
+        {value as React.ReactNode}
+      </Link>
+    );
   };
 
   if (column.key === 'name') {
@@ -20,9 +24,9 @@ export default function ParticipantsCellRenderer(props: RendererProps<TableRowTy
         {...props}
         value={createLinkToParticipant()}
         sx={{
-          fontSize: '14px',
+          fontSize: '16px',
           '& > p': {
-            fontSize: '14px',
+            fontSize: '16px',
           },
         }}
       />
@@ -30,7 +34,7 @@ export default function ParticipantsCellRenderer(props: RendererProps<TableRowTy
   }
 
   if (column.key === 'projects.name') {
-    return <CellRenderer {...props} value={<TextTruncated stringList={value as string[]} />} />;
+    return <CellRenderer {...props} value={<TextTruncated fontSize={16} stringList={value as string[]} />} />;
   }
 
   return <CellRenderer {...props} />;

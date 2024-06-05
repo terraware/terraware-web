@@ -6,9 +6,10 @@ import { ListReport } from 'src/types/Report';
 
 interface ReportLinkProps {
   report: ListReport & { organizationName?: string };
+  fontSize?: string | number;
 }
 
-const ReportLink = ({ report }: ReportLinkProps) => {
+const ReportLink = ({ report, fontSize }: ReportLinkProps) => {
   const reportLocation = {
     pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', report.id.toString()),
   };
@@ -22,7 +23,7 @@ const ReportLink = ({ report }: ReportLinkProps) => {
     reportName += ` ${report.organizationName} [Org]`;
   }
 
-  return <Link to={reportLocation.pathname}>{reportName}</Link>;
+  return <Link fontSize={fontSize ?? '14px'} to={reportLocation.pathname}>{reportName}</Link>;
 };
 
 export default ReportLink;
