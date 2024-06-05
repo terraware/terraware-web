@@ -17,7 +17,12 @@ import { useLocalization } from 'src/providers';
 import { selectAppVersion } from 'src/redux/features/appVersion/appVersionSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { getSupportRequestDescription, getSupportRequestIconName, getSupportRequestName } from 'src/types/Support';
+import {
+  SupportRequestType,
+  getSupportRequestDescription,
+  getSupportRequestIconName,
+  getSupportRequestName,
+} from 'src/types/Support';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import { useSupportData } from './provider/Context';
@@ -80,19 +85,21 @@ export default function ContactUsHome(): JSX.Element {
     [activeLocale]
   );
 
-  const jiraListItems = useMemo(
-    () =>
-      (types ?? []).map(
-        (item): ListItemContent => ({
-          icon: getSupportRequestIconName(item),
-          title: getSupportRequestName(item),
-          description: getSupportRequestDescription(item),
-          buttonText: getSupportRequestName(item),
-          onClick: () => goToContactUsForm(item),
+  const jiraListItems = useMemo(() => {
+    // Set the support request types ordering before filtering out unsupported ones
+    const orderedSupportRequestTypes: SupportRequestType[] = ['Bug Report', 'Feature Request', 'Contact Us'];
+    return orderedSupportRequestTypes
+      .filter((type) => (types ?? []).includes(type))
+      .map(
+        (type): ListItemContent => ({
+          icon: getSupportRequestIconName(type),
+          title: getSupportRequestName(type),
+          description: getSupportRequestDescription(type),
+          buttonText: getSupportRequestName(type),
+          onClick: () => goToContactUsForm(type),
         })
-      ),
-    [activeLocale, types]
-  );
+      );
+  }, [activeLocale, types]);
 
   const listItemContent = useMemo(() => {
     if (featureEnabled && jiraListItems.length > 0) {
