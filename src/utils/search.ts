@@ -8,13 +8,18 @@ function escapeRegExp(input: string) {
 }
 
 /**
- * Parse the text search term and return the query and the type of search, Fuzzy or PhraseMatch.
+ * Parse the text search term and return the query and the type of search. If the query is
+ * surrounded by double quotes, the type is PhraseMatch. Otherwise it is the value of defaultType,
+ * which is Fuzzy by default.
  */
-const parseSearchTerm = (searchTerm: string): { type: SearchType; values: string[] } => {
+const parseSearchTerm = (
+  searchTerm: string,
+  defaultType: SearchType = 'Fuzzy'
+): { type: SearchType; values: string[] } => {
   const phraseMatchQuery = removeDoubleQuotes(searchTerm);
 
   return {
-    type: phraseMatchQuery ? 'PhraseMatch' : 'Fuzzy',
+    type: phraseMatchQuery ? 'PhraseMatch' : defaultType,
     values: [phraseMatchQuery || searchTerm],
   };
 };
