@@ -21,6 +21,7 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
   const { NURSERY_TRANSFER } = NurseryWithdrawalPurposes;
 
   const linkStyles = {
+    fontSize: '16px',
     color: theme.palette.TwClrTxtBrand,
     textDecoration: 'none',
   };

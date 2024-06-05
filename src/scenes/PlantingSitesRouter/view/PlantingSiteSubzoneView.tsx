@@ -118,9 +118,9 @@ const DetailsRenderer =
     const { column, row, value } = props;
 
     const textStyles = {
-      fontSize: '14px',
+      fontSize: '16px',
       '& > p': {
-        fontSize: '14px',
+        fontSize: '16px',
       },
     };
 

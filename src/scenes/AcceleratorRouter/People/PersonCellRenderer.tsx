@@ -11,7 +11,11 @@ export default function PersonCellRenderer(props: RendererProps<TableRowType>): 
 
   const createLinkToPerson = (iValue: React.ReactNode | unknown[]) => {
     const to = APP_PATHS.ACCELERATOR_PERSON.replace(':userId', `${row.id}`);
-    return <Link to={to}>{iValue as React.ReactNode}</Link>;
+    return (
+      <Link fontSize='16px' to={to}>
+        {iValue as React.ReactNode}
+      </Link>
+    );
   };
 
   if (column.key === 'email') {
@@ -22,9 +26,9 @@ export default function PersonCellRenderer(props: RendererProps<TableRowType>): 
         value={createLinkToPerson(value)}
         row={row}
         sx={{
-          fontSize: '14px',
+          fontSize: '16px',
           '& > p': {
-            fontSize: '14px',
+            fontSize: '16px',
           },
         }}
       />
