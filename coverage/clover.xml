@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1717621599984" clover="3.2.0">
-  <project timestamp="1717621599984" name="All files">
-    <metrics statements="22289" coveredstatements="932" conditionals="14161" coveredconditionals="228" methods="6872" coveredmethods="162" elements="43322" coveredelements="1322" complexity="0" loc="22289" ncloc="22289" packages="209" files="987" classes="987"/>
+<coverage generated="1717632459234" clover="3.2.0">
+  <project timestamp="1717632459234" name="All files">
+    <metrics statements="22289" coveredstatements="932" conditionals="14162" coveredconditionals="228" methods="6872" coveredmethods="162" elements="43323" coveredelements="1322" complexity="0" loc="22289" ncloc="22289" packages="209" files="987" classes="987"/>
     <package name="src">
       <metrics statements="161" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -25234,7 +25234,7 @@
       </file>
     </package>
     <package name="src.utils">
-      <metrics statements="442" coveredstatements="154" conditionals="236" coveredconditionals="60" methods="149" coveredmethods="32"/>
+      <metrics statements="442" coveredstatements="154" conditionals="237" coveredconditionals="60" methods="149" coveredmethods="32"/>
       <file name="acl.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/acl.ts">
         <metrics statements="32" coveredstatements="28" conditionals="16" coveredconditionals="11" methods="11" coveredmethods="6"/>
         <line num="59" count="1" type="stmt"/>
@@ -25441,25 +25441,25 @@
         <line num="12" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
       <file name="search.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/search.ts">
-        <metrics statements="18" coveredstatements="13" conditionals="8" coveredconditionals="4" methods="5" coveredmethods="2"/>
+        <metrics statements="18" coveredstatements="13" conditionals="9" coveredconditionals="4" methods="5" coveredmethods="2"/>
         <line num="7" count="0" type="stmt"/>
-        <line num="13" count="4" type="stmt"/>
-        <line num="14" count="0" type="stmt"/>
+        <line num="15" count="4" type="cond" truecount="0" falsecount="1"/>
         <line num="16" count="0" type="stmt"/>
-        <line num="25" count="4" type="stmt"/>
-        <line num="26" count="11" type="cond" truecount="2" falsecount="0"/>
-        <line num="27" count="2" type="stmt"/>
-        <line num="29" count="9" type="stmt"/>
-        <line num="30" count="9" type="stmt"/>
-        <line num="36" count="4" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="38" count="0" type="stmt"/>
-        <line num="44" count="4" type="stmt"/>
-        <line num="45" count="54" type="stmt"/>
-        <line num="46" count="54" type="stmt"/>
-        <line num="47" count="54" type="cond" truecount="2" falsecount="0"/>
-        <line num="48" count="1" type="stmt"/>
-        <line num="50" count="53" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="27" count="4" type="stmt"/>
+        <line num="28" count="11" type="cond" truecount="2" falsecount="0"/>
+        <line num="29" count="2" type="stmt"/>
+        <line num="31" count="9" type="stmt"/>
+        <line num="32" count="9" type="stmt"/>
+        <line num="38" count="4" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="46" count="4" type="stmt"/>
+        <line num="47" count="54" type="stmt"/>
+        <line num="48" count="54" type="stmt"/>
+        <line num="49" count="54" type="cond" truecount="2" falsecount="0"/>
+        <line num="50" count="1" type="stmt"/>
+        <line num="52" count="53" type="stmt"/>
       </file>
       <file name="searchAndSort.ts" path="/home/runner/work/terraware-web/terraware-web/src/utils/searchAndSort.ts">
         <metrics statements="86" coveredstatements="81" conditionals="58" coveredconditionals="44" methods="21" coveredmethods="20"/>
