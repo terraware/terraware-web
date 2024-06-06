@@ -770,6 +770,10 @@ export interface paths {
     /** Creates a new planting site. */
     post: operations["createPlantingSite"];
   };
+  "/api/v1/tracking/sites/validate": {
+    /** Validates the definition of a new planting site. */
+    post: operations["validatePlantingSite"];
+  };
   "/api/v1/tracking/sites/{id}": {
     /**
      * Gets information about a specific planting site.
@@ -816,6 +820,10 @@ export interface paths {
      * @description WARNING! This operation is not reversible.
      */
     delete: operations["deleteMyself"];
+  };
+  "/api/v1/users/me/cookies": {
+    /** Updates the current user's cookie consent selection. */
+    put: operations["updateCookieConsent"];
   };
   "/api/v1/users/me/preferences": {
     /** Gets the current user's preferences. */
@@ -2806,11 +2814,13 @@ export interface components {
     };
     NewPlantingSubzonePayload: {
       boundary: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
+      /** @description Name of this planting subzone. Two subzones in the same planting zone may not have the same name, but using the same subzone name in different planting zones is valid. */
       name: string;
     };
     /** @description List of planting zones to create. If present and not empty, "boundary" must also be specified. */
     NewPlantingZonePayload: {
       boundary: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
+      /** @description Name of this planting zone. Two zones in the same planting site may not have the same name. */
       name: string;
       plantingSubzones?: components["schemas"]["NewPlantingSubzonePayload"][];
       targetPlantingDensity?: number;
@@ -3290,6 +3300,16 @@ export interface components {
       progressPercent?: number;
       /** Format: int32 */
       totalPlants: number;
+    };
+    PlantingSiteValidationProblemPayload: {
+      /** @description If the problem is a conflict between two planting zones or two subzones, the list of the conflicting zone or subzone names. */
+      conflictsWith?: string[];
+      /** @description If the problem relates to a particular subzone, its name. If this is present, plantingZone will also be present and will be the name of the zone that contains this subzone. */
+      plantingSubzone?: string;
+      /** @description If the problem relates to a particular planting zone, its name. */
+      plantingZone?: string;
+      /** @enum {string} */
+      problemType: "CannotRemovePlantedSubzone" | "CannotSplitSubzone" | "CannotSplitZone" | "DuplicateSubzoneName" | "DuplicateZoneName" | "ExclusionWithoutBoundary" | "SiteTooLarge" | "SubzoneBoundaryChanged" | "SubzoneBoundaryOverlaps" | "SubzoneInExclusionArea" | "SubzoneNotInZone" | "ZoneBoundaryChanged" | "ZoneBoundaryOverlaps" | "ZoneHasNoSubzones" | "ZoneNotInSite" | "ZoneTooSmall" | "ZonesWithoutSiteBoundary";
     };
     PlantingSubzonePayload: {
       /** @description Area of planting subzone in hectares. */
@@ -4337,6 +4357,10 @@ export interface components {
       /** @enum {string} */
       status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
     };
+    UpdateUserCookieConsentRequestPayload: {
+      /** @description If true, the user consents to the use of analytics cookies. If false, they decline. */
+      cookiesConsented: boolean;
+    };
     UpdateUserPreferencesRequestPayload: {
       /**
        * Format: int64
@@ -4499,6 +4523,13 @@ export interface components {
       voteOption?: "No" | "Conditional" | "Yes";
     };
     UserProfilePayload: {
+      /** @description If true, the user has consented to the use of analytics cookies. If false, the user has declined. If null, the user has not made a consent selection yet. */
+      cookiesConsented?: boolean;
+      /**
+       * Format: date-time
+       * @description If the user has selected whether or not to consent to analytics cookies, the date and time of the selection.
+       */
+      cookiesConsentedTime?: string;
       /**
        * @description Two-letter code of the user's country.
        * @example US
@@ -4535,6 +4566,13 @@ export interface components {
       /** Format: int64 */
       id: number;
       lastName?: string;
+    };
+    ValidatePlantingSiteResponsePayload: {
+      /** @description True if the request was valid. */
+      isValid: boolean;
+      /** @description List of validation problems found, if any. Empty if the request is valid. */
+      problems: components["schemas"]["PlantingSiteValidationProblemPayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     VersionsEntryPayload: {
       appName: string;
@@ -8030,6 +8068,18 @@ export interface operations {
           "application/json": components["schemas"]["UploadAttachmentResponsePayload"];
         };
       };
+      /** @description The request was too large. */
+      413: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** @description The media type is not supported. */
+      415: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
     };
   };
   /** Lists the timeseries for one or more devices. */
@@ -8602,6 +8652,22 @@ export interface operations {
       };
     };
   };
+  /** Validates the definition of a new planting site. */
+  validatePlantingSite: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreatePlantingSiteRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ValidatePlantingSiteResponsePayload"];
+        };
+      };
+    };
+  };
   /**
    * Gets information about a specific planting site.
    * @description Includes information about the site's planting zones and subzones.
@@ -8781,6 +8847,22 @@ export interface operations {
    * @description WARNING! This operation is not reversible.
    */
   deleteMyself: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Updates the current user's cookie consent selection. */
+  updateCookieConsent: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateUserCookieConsentRequestPayload"];
+      };
+    };
     responses: {
       /** @description OK */
       200: {
