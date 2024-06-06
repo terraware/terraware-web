@@ -55,21 +55,25 @@ const cachedTimeZone: CachedTimeZone = {
  * get current/active user
  */
 const getUser = async (): Promise<UserResponse> => {
-  const response: UserResponse = await httpCurrentUser.get<UserServerResponse, UserData>({}, (data) => ({
-    user: data?.user
-      ? {
-          countryCode: data.user.countryCode,
-          email: data.user.email,
-          emailNotificationsEnabled: data.user.emailNotificationsEnabled,
-          firstName: data.user.firstName,
-          globalRoles: data.user.globalRoles,
-          id: data.user.id,
-          lastName: data.user.lastName,
-          locale: data.user.locale,
-          timeZone: data.user.timeZone,
-        }
-      : undefined,
-  }));
+  const response: UserResponse = await httpCurrentUser.get<UserServerResponse, UserData>({}, (data) => {
+    return {
+      user: data?.user
+        ? {
+            cookiesConsented: data.user.cookiesConsented,
+            cookiesConsentedTime: data.user.cookiesConsentedTime,
+            countryCode: data.user.countryCode,
+            email: data.user.email,
+            emailNotificationsEnabled: data.user.emailNotificationsEnabled,
+            firstName: data.user.firstName,
+            globalRoles: data.user.globalRoles,
+            id: data.user.id,
+            lastName: data.user.lastName,
+            locale: data.user.locale,
+            timeZone: data.user.timeZone,
+          }
+        : undefined,
+    };
+  });
 
   if (response.user) {
     CachedUserService.setUser(response.user);
@@ -110,11 +114,20 @@ const updateUser = async (user: User, options: UpdateOptions = {}): Promise<Resp
   if (user.emailNotificationsEnabled !== undefined) {
     entity.emailNotificationsEnabled = user.emailNotificationsEnabled;
   }
+
   const response: Response = await httpCurrentUser.put({ entity });
+
   getUser();
+
   if (user.timeZone && !options.skipAcknowledgeTimeZone) {
     await PreferencesService.updateUserPreferences({ timeZoneAcknowledgedOnMs: Date.now() });
   }
+  if (typeof user.cookiesConsented === 'boolean') {
+    await PreferencesService.updateUserCookieConsentPreferences({ cookiesConsented: user.cookiesConsented });
+  }
+
+  getUser();
+
   return response;
 };
 
