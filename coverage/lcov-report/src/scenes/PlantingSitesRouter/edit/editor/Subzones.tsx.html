@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/160</span>
+                <span class='fraction'>0/159</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/151</span>
+                <span class='fraction'>0/150</span>
             </div>
         
             
@@ -573,8 +573,7 @@
 <a name='L508'></a><a href='#L508'>508</a>
 <a name='L509'></a><a href='#L509'>509</a>
 <a name='L510'></a><a href='#L510'>510</a>
-<a name='L511'></a><a href='#L511'>511</a>
-<a name='L512'></a><a href='#L512'>512</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L511'></a><a href='#L511'>511</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1029,7 +1028,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1076,8 +1074,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1113,7 +1111,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import { OnValidate } from './types';
-import useStyles from './useMapStyle';
+import useMapStyle from './useMapStyle';
 import {
   IdGenerator,
   cutOverlappingBoundaries,
@@ -1198,8 +1196,8 @@ export default function <span class="fstat-no" title="function not covered" >Sub
     fixedBoundaries: featureSiteSubzones(site),
   });
   const [overridePopupInfo, setOverridePopupInfo] = <span class="cstat-no" title="statement not covered" >useState&lt;PopupInfo | undefined&gt;();</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
+  const mapStyles = <span class="cstat-no" title="statement not covered" >useMapStyle(theme);</span>
   const getRenderAttributes = <span class="cstat-no" title="statement not covered" >useRenderAttributes();</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
@@ -1450,7 +1448,7 @@ export default function <span class="fstat-no" title="function not covered" >Sub
 &nbsp;
   const popupRenderer = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span>: MapPopupRenderer =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
-      className: `${classes.tooltip} ${classes.box}`,
+      sx: [mapStyles.tooltip, mapStyles.box],
       render: <span class="fstat-no" title="function not covered" >(p</span>roperties: MapSourceProperties, onClose?: () =&gt; void): JSX.Element | null =&gt; {
         const { id, name } = <span class="cstat-no" title="statement not covered" >properties;</span>
 &nbsp;
@@ -1491,7 +1489,7 @@ export default function <span class="fstat-no" title="function not covered" >Sub
         );
       },
     }),
-    [classes.box, classes.tooltip, selectedZone, setSubzonesData, subzones]
+    [selectedZone, setSubzonesData, subzones]
   );
 &nbsp;
   const activeContext = <span class="cstat-no" title="statement not covered" >useMemo&lt;MapEntityOptions | undefined&gt;(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -1540,7 +1538,6 @@ const TooltipContents = <span class="cstat-no" title="statement not covered" ><s
   const [nameError, setNameError] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const [validate, setValidate] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
 &nbsp;
   const validateInput = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span>: boolean =&gt; {</span>
     let hasNameErrors = <span class="cstat-no" title="statement not covered" >true;</span>
@@ -1584,13 +1581,13 @@ const TooltipContents = <span class="cstat-no" title="statement not covered" ><s
         &lt;Typography&gt;{strings.PLANTING_SITE_ZONE_NAME_HELP}&lt;/Typography&gt;
         &lt;Textfield
           autoFocus={true}
-          className={classes.textInput}
           label={strings.NAME}
           id='subzone-name'
           type='text'
           onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >setSubzoneName(value as string)}</span>
           value={subzoneName}
           errorText={nameError}
+          sx={{ marginTop: theme.spacing(1.5) }}
         /&gt;
       &lt;/Box&gt;
     &lt;/MapTooltipDialog&gt;
@@ -1603,7 +1600,7 @@ const TooltipContents = <span class="cstat-no" title="statement not covered" ><s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-06T18:41:18.742Z
+                at 2024-06-06T19:30:13.567Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

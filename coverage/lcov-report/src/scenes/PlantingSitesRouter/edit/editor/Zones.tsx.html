@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/138</span>
+                <span class='fraction'>0/137</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/128</span>
+                <span class='fraction'>0/127</span>
             </div>
         
             
@@ -517,8 +517,7 @@
 <a name='L452'></a><a href='#L452'>452</a>
 <a name='L453'></a><a href='#L453'>453</a>
 <a name='L454'></a><a href='#L454'>454</a>
-<a name='L455'></a><a href='#L455'>455</a>
-<a name='L456'></a><a href='#L456'>456</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L455'></a><a href='#L455'>455</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -896,7 +895,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -955,7 +953,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -966,6 +963,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1000,7 +998,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import { OnValidate } from './types';
-import useStyles from './useMapStyle';
+import useMapStyle from './useMapStyle';
 import {
   IdGenerator,
   cutOverlappingBoundaries,
@@ -1062,8 +1060,8 @@ export default function <span class="fstat-no" title="function not covered" >Zon
     fixedBoundaries: featureSiteZones(site),
   });
   const [overridePopupInfo, setOverridePopupInfo] = <span class="cstat-no" title="statement not covered" >useState&lt;PopupInfo | undefined&gt;();</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
+  const mapStyles = <span class="cstat-no" title="statement not covered" >useMapStyle(theme);</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const getRenderAttributes = <span class="cstat-no" title="statement not covered" >useRenderAttributes();</span>
   const activeLocale = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
@@ -1254,7 +1252,7 @@ export default function <span class="fstat-no" title="function not covered" >Zon
 &nbsp;
   const popupRenderer = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span>: MapPopupRenderer =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
-      className: `${classes.tooltip} ${classes.box}`,
+      sx: [mapStyles.tooltip, mapStyles.box],
       render: <span class="fstat-no" title="function not covered" >(p</span>roperties: MapSourceProperties, onClose?: () =&gt; void): JSX.Element | null =&gt; {
         const { id, name, targetPlantingDensity } = <span class="cstat-no" title="statement not covered" >properties;</span>
 &nbsp;
@@ -1301,7 +1299,7 @@ export default function <span class="fstat-no" title="function not covered" >Zon
         );
       },
     }),
-    [classes.box, classes.tooltip, setZonesData, zones]
+    [setZonesData, zones]
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
@@ -1351,7 +1349,6 @@ const TooltipContents = <span class="cstat-no" title="statement not covered" ><s
   const [densityError, setDensityError] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const [validate, setValidate] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const classes = <span class="cstat-no" title="statement not covered" >useStyles();</span>
 &nbsp;
   const validateInput = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span>: boolean =&gt; {</span>
     let hasNameErrors = <span class="cstat-no" title="statement not covered" >true;</span>
@@ -1407,22 +1404,22 @@ const TooltipContents = <span class="cstat-no" title="statement not covered" ><s
         &lt;Typography&gt;{strings.PLANTING_SITE_ZONE_NAME_HELP}&lt;/Typography&gt;
         &lt;Textfield
           autoFocus
-          className={classes.textInput}
           label={strings.NAME}
           id='zone-name'
           type='text'
           onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >setZoneName(value as string)}</span>
           value={zoneName}
           errorText={nameError}
+          sx={{ marginTop: theme.spacing(1.5) }}
         /&gt;
         &lt;Textfield
-          className={classes.textInput}
           label={strings.TARGET_PLANTING_DENSITY}
           id='target-planting-density'
           type='number'
           onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >setDensity(value as number)}</span>
           value={density}
           errorText={densityError}
+          sx={{ marginTop: theme.spacing(1.5) }}
         /&gt;
       &lt;/Box&gt;
     &lt;/MapTooltipDialog&gt;
@@ -1435,7 +1432,7 @@ const TooltipContents = <span class="cstat-no" title="statement not covered" ><s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-06T18:41:18.742Z
+                at 2024-06-06T19:30:13.567Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
