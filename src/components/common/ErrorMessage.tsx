@@ -1,5 +1,4 @@
 import { Box, Theme, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Icon } from '@terraware/web-components';
 
 type ErrorMessageProps = {

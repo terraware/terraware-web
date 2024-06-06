@@ -11,7 +11,6 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Dropdown, DropdownItem, IconTooltip, Textfield } from '@terraware/web-components';
 import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
 
@@ -38,29 +37,6 @@ import { useNumberFormatter } from 'src/utils/useNumber';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
-const useStyles = makeStyles(() => ({
-  withdrawnQuantity: {
-    '&> #withdrawnQuantity': {
-      height: '44px',
-    },
-  },
-  notReadyQuantityWithdrawn: {
-    '&> #notReadyQuantityWithdrawn': {
-      height: '44px',
-    },
-  },
-  readyQuantityWithdrawn: {
-    '&> #readyQuantityWithdrawn': {
-      height: '44px',
-    },
-  },
-  germinatingQuantityWithdrawn: {
-    '&> #germinatingQuantityWithdrawn': {
-      height: '44px',
-    },
-  },
-}));
-
 type SelectPurposeFormProps = {
   onNext: (withdrawal: NurseryWithdrawalRequest) => void;
   batches: SearchResponseElement[];
@@ -82,7 +58,6 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const classes = useStyles();
 
   const plantingSites = useAppSelector(selectPlantingSites);
   const projects = useAppSelector(selectProjects);
@@ -724,7 +699,11 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                       type='number'
                       value={withdrawnQuantity}
                       errorText={fieldsErrors.withdrawnQuantity}
-                      className={classes.withdrawnQuantity}
+                      sx={{
+                        '&> #withdrawnQuantity': {
+                          height: '44px',
+                        },
+                      }}
                     />
                   </Grid>
                   <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? 0 : 1}>
@@ -753,9 +732,13 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         type='number'
                         value={germinatingQuantityWithdrawn}
                         tooltipTitle={strings.TOOLTIP_GERMINATING_QUANTITY}
-                        className={classes.germinatingQuantityWithdrawn}
                         errorText={fieldsErrors.germinatingQuantityWithdrawn}
                         required
+                        sx={{
+                          '&> #germinatingQuantityWithdrawn': {
+                            height: '44px',
+                          },
+                        }}
                       />
                     </Grid>
                   </Grid>
@@ -771,9 +754,13 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         type='number'
                         value={notReadyQuantityWithdrawn}
                         tooltipTitle={strings.TOOLTIP_NOT_READY_QUANTITY}
-                        className={classes.notReadyQuantityWithdrawn}
                         errorText={fieldsErrors.notReadyQuantityWithdrawn}
                         required
+                        sx={{
+                          '&> #notReadyQuantityWithdrawn': {
+                            height: '44px',
+                          },
+                        }}
                       />
                     </Grid>
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? 0 : 1}>
@@ -798,9 +785,13 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         type='number'
                         value={readyQuantityWithdrawn}
                         tooltipTitle={strings.TOOLTIP_READY_QUANTITY}
-                        className={classes.readyQuantityWithdrawn}
                         errorText={fieldsErrors.readyQuantityWithdrawn}
                         required
+                        sx={{
+                          '&> #readyQuantityWithdrawn': {
+                            height: '44px',
+                          },
+                        }}
                       />
                     </Grid>
                     <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? 0 : 1}>

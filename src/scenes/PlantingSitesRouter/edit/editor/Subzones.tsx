@@ -26,7 +26,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import { OnValidate } from './types';
-import useStyles from './useMapStyle';
+import useMapStyle from './useMapStyle';
 import {
   IdGenerator,
   cutOverlappingBoundaries,
@@ -111,8 +111,8 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
     fixedBoundaries: featureSiteSubzones(site),
   });
   const [overridePopupInfo, setOverridePopupInfo] = useState<PopupInfo | undefined>();
-  const classes = useStyles();
   const theme = useTheme();
+  const mapStyles = useMapStyle(theme);
   const getRenderAttributes = useRenderAttributes();
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
@@ -363,7 +363,7 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
 
   const popupRenderer = useMemo(
     (): MapPopupRenderer => ({
-      className: `${classes.tooltip} ${classes.box}`,
+      sx: [mapStyles.tooltip, mapStyles.box],
       render: (properties: MapSourceProperties, onClose?: () => void): JSX.Element | null => {
         const { id, name } = properties;
 
@@ -404,7 +404,7 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
         );
       },
     }),
-    [classes.box, classes.tooltip, selectedZone, setSubzonesData, subzones]
+    [selectedZone, setSubzonesData, subzones]
   );
 
   const activeContext = useMemo<MapEntityOptions | undefined>(() => {
@@ -453,7 +453,6 @@ const TooltipContents = ({ name, onClose, onUpdate, subzoneNamesInUse }: Tooltip
   const [nameError, setNameError] = useState<string>('');
   const [validate, setValidate] = useState<boolean>(false);
   const theme = useTheme();
-  const classes = useStyles();
 
   const validateInput = useCallback((): boolean => {
     let hasNameErrors = true;
@@ -497,13 +496,13 @@ const TooltipContents = ({ name, onClose, onUpdate, subzoneNamesInUse }: Tooltip
         <Typography>{strings.PLANTING_SITE_ZONE_NAME_HELP}</Typography>
         <Textfield
           autoFocus={true}
-          className={classes.textInput}
           label={strings.NAME}
           id='subzone-name'
           type='text'
           onChange={(value) => setSubzoneName(value as string)}
           value={subzoneName}
           errorText={nameError}
+          sx={{ marginTop: theme.spacing(1.5) }}
         />
       </Box>
     </MapTooltipDialog>

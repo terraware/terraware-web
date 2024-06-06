@@ -25,7 +25,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import { OnValidate } from './types';
-import useStyles from './useMapStyle';
+import useMapStyle from './useMapStyle';
 import {
   IdGenerator,
   cutOverlappingBoundaries,
@@ -87,8 +87,8 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
     fixedBoundaries: featureSiteZones(site),
   });
   const [overridePopupInfo, setOverridePopupInfo] = useState<PopupInfo | undefined>();
-  const classes = useStyles();
   const theme = useTheme();
+  const mapStyles = useMapStyle(theme);
   const snackbar = useSnackbar();
   const getRenderAttributes = useRenderAttributes();
   const activeLocale = useLocalization();
@@ -279,7 +279,7 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
 
   const popupRenderer = useMemo(
     (): MapPopupRenderer => ({
-      className: `${classes.tooltip} ${classes.box}`,
+      sx: [mapStyles.tooltip, mapStyles.box],
       render: (properties: MapSourceProperties, onClose?: () => void): JSX.Element | null => {
         const { id, name, targetPlantingDensity } = properties;
 
@@ -326,7 +326,7 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
         );
       },
     }),
-    [classes.box, classes.tooltip, setZonesData, zones]
+    [setZonesData, zones]
   );
 
   return (
@@ -376,7 +376,6 @@ const TooltipContents = ({
   const [densityError, setDensityError] = useState<string>('');
   const [validate, setValidate] = useState<boolean>(false);
   const theme = useTheme();
-  const classes = useStyles();
 
   const validateInput = useCallback((): boolean => {
     let hasNameErrors = true;
@@ -432,22 +431,22 @@ const TooltipContents = ({
         <Typography>{strings.PLANTING_SITE_ZONE_NAME_HELP}</Typography>
         <Textfield
           autoFocus
-          className={classes.textInput}
           label={strings.NAME}
           id='zone-name'
           type='text'
           onChange={(value) => setZoneName(value as string)}
           value={zoneName}
           errorText={nameError}
+          sx={{ marginTop: theme.spacing(1.5) }}
         />
         <Textfield
-          className={classes.textInput}
           label={strings.TARGET_PLANTING_DENSITY}
           id='target-planting-density'
           type='number'
           onChange={(value) => setDensity(value as number)}
           value={density}
           errorText={densityError}
+          sx={{ marginTop: theme.spacing(1.5) }}
         />
       </Box>
     </MapTooltipDialog>

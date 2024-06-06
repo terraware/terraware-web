@@ -402,7 +402,15 @@ export default function Map(props: MapProps): JSX.Element {
   let destroying = false;
 
   return (
-    <Box sx={{ display: 'flex', flexGrow: 1, height: '100%', minHeight: 250, position: 'relative' }} ref={containerRef}>
+    <Box
+      ref={containerRef}
+      sx={[
+        { display: 'flex', flexGrow: 1, height: '100%', minHeight: 250, position: 'relative' },
+        // popup renderer sx styles are applied to the container because the Popup component
+        // doesn't support the sx prop
+        ...(Array.isArray(popupRenderer?.sx) ? popupRenderer.sx : [popupRenderer?.sx]),
+      ]}
+    >
       {bannerMessage && <MapBanner message={bannerMessage} />}
       {firstVisible && (
         <ReactMapGL

@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 
 import { PlantingSiteMap } from 'src/components/Map';
 import MapDateSelect from 'src/components/common/MapDateSelect';
@@ -16,17 +15,6 @@ import { ObservationResults } from 'src/types/Observations';
 import { PlantingSite } from 'src/types/Tracking';
 import { regexMatch } from 'src/utils/search';
 
-const useStyles = makeStyles(() => ({
-  popover: {
-    '&.mapboxgl-popup': {
-      maxWidth: '324px !important', // !important to override a default mapbox style
-    },
-    '& .mapboxgl-popup-content': {
-      padding: '0px !important',
-    },
-  },
-}));
-
 type ObservationMapViewProps = SearchProps & {
   observationsResults?: ObservationResults[];
   selectedPlantingSite: PlantingSite;
@@ -38,8 +26,6 @@ export default function ObservationMapView({
   filtersProps,
   selectedPlantingSite,
 }: ObservationMapViewProps): JSX.Element {
-  const classes = useStyles();
-
   const observationsDates = useMemo(() => {
     const uniqueDates = new Set(observationsResults?.map((obs) => obs.completedDate || obs.startDate));
 
@@ -181,7 +167,14 @@ export default function ObservationMapView({
             }
             contextRenderer={{
               render: contextRenderer,
-              className: classes.popover,
+              sx: {
+                '.mapboxgl-popup': {
+                  maxWidth: '324px !important', // !important to override a default mapbox style
+                },
+                '.mapboxgl-popup .mapboxgl-popup-content': {
+                  padding: '0px !important',
+                },
+              },
             }}
             highlightEntities={hasSearchCriteria ? searchZoneEntities : []}
             focusEntities={

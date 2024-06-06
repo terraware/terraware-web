@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Box, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { RendererProps, TableRowType } from '@terraware/web-components';
 import { Textfield } from '@terraware/web-components';
 
@@ -11,39 +10,38 @@ import { APP_PATHS } from 'src/constants';
 import { useUser } from 'src/providers';
 import { useNumberFormatter } from 'src/utils/useNumber';
 
-const useStyles = makeStyles(() => ({
-  quantityContainer: {
+export default function WithdrawalBatchesCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
+  const { user } = useUser();
+  const numberFormatter = useNumberFormatter()(user?.locale);
+  const { column, row, value, index, onRowClick } = props;
+
+  const inputStyles = {
+    maxWidth: '108px',
+    '& label': {
+      whiteSpace: 'break-spaces',
+      textAlign: 'left',
+    },
+  };
+
+  const quantityContainerStyles = {
     '& .textfield .textfield-value input': {
       textAlign: 'right',
     },
-  },
-  text: {
+  };
+
+  const textStyles = {
     fontSize: '16px',
     '& > p': {
       fontSize: '16px',
       overflow: 'visible',
     },
-  },
-  input: {
-    maxWidth: '108px',
+  };
 
-    '& label': {
-      whiteSpace: 'break-spaces',
-      textAlign: 'left',
-    },
-  },
-  cell: {
+  const cellStyles = {
     '&.MuiTableCell-root': {
       height: '76px',
     },
-  },
-}));
-
-export default function WithdrawalBatchesCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
-  const classes = useStyles();
-  const { user } = useUser();
-  const numberFormatter = useNumberFormatter()(user?.locale);
-  const { column, row, value, index, onRowClick } = props;
+  };
 
   const createLinkToBatchDetail = (iValue: React.ReactNode | unknown[]) => {
     return (
@@ -64,7 +62,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
           display='flex'
           alignItems={row.error[id] ? 'start' : 'center'}
           justifyContent='end'
-          className={classes.quantityContainer}
+          sx={quantityContainerStyles}
         >
           <Textfield
             id={id}
@@ -73,7 +71,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
             value={row[id]}
             label={''}
             errorText={row.error[id]}
-            className={classes.input}
+            sx={inputStyles}
             min={0}
           />
           <Typography paddingLeft={1} paddingTop={row.error[id] ? '10px' : 0}>
@@ -92,7 +90,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
           display='flex'
           alignItems={row.error.readyQuantityWithdrawn ? 'start' : 'center'}
           justifyContent='end'
-          className={classes.quantityContainer}
+          sx={quantityContainerStyles}
         >
           <Textfield
             id='readyQuantityWithdrawn'
@@ -101,7 +99,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
             value={row.readyQuantityWithdrawn}
             label={''}
             errorText={row.error.readyQuantityWithdrawn}
-            className={classes.input}
+            sx={inputStyles}
             min={0}
           />
         </Box>
@@ -116,7 +114,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
         column={column}
         value={createLinkToBatchDetail(value)}
         row={row}
-        className={`${classes.text} ${classes.cell}`}
+        sx={[textStyles, cellStyles]}
       />
     );
   }
@@ -128,7 +126,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
         column={column}
         value={createQuantityInput('germinatingQuantityWithdrawn', 'germinatingQuantity')}
         row={row}
-        className={`${classes.text} ${classes.cell}`}
+        sx={[textStyles, cellStyles]}
       />
     );
   }
@@ -140,7 +138,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
         column={column}
         value={createQuantityInput('readyQuantityWithdrawn', 'readyQuantity')}
         row={row}
-        className={`${classes.text} ${classes.cell}`}
+        sx={[textStyles, cellStyles]}
       />
     );
   }
@@ -152,13 +150,13 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
         column={column}
         value={createQuantityInput('notReadyQuantityWithdrawn', 'notReadyQuantity')}
         row={row}
-        className={`${classes.text} ${classes.cell}`}
+        sx={[textStyles, cellStyles]}
       />
     );
   }
 
   if (column.key === 'totalQuantity') {
-    return <CellRenderer index={index} column={column} row={row} value={row.totalQuantity} className={classes.text} />;
+    return <CellRenderer index={index} column={column} row={row} value={row.totalQuantity} sx={textStyles} />;
   }
 
   if (column.key === 'totalWithdraw') {
@@ -170,7 +168,7 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
           +row.readyQuantityWithdrawn + +row.notReadyQuantityWithdrawn + +row.germinatingQuantityWithdrawn
         )}
         row={row}
-        className={classes.text}
+        sx={textStyles}
       />
     );
   }
@@ -182,10 +180,10 @@ export default function WithdrawalBatchesCellRenderer(props: RendererProps<Table
         column={column}
         value={createReadyOutplantInput(value)}
         row={row}
-        className={`${classes.text} ${classes.cell}`}
+        sx={[textStyles, cellStyles]}
       />
     );
   }
 
-  return <CellRenderer {...props} className={classes.text} />;
+  return <CellRenderer {...props} sx={textStyles} />;
 }

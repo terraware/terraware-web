@@ -2,6 +2,7 @@
 import React from 'react';
 import { LayerProps } from 'react-map-gl';
 
+import { SxProps } from '@mui/material';
 import { Feature, FeatureCollection, GeoJsonProperties, MultiPolygon, Polygon } from 'geojson';
 import mapboxgl, { Expression } from 'mapbox-gl';
 
@@ -113,6 +114,7 @@ export type MapPopupRenderer = {
   className?: string;
   render: (properties: MapSourceProperties, onClose?: () => void) => JSX.Element | null;
   style?: object;
+  sx?: SxProps;
 };
 
 /**

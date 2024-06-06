@@ -2,8 +2,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { Box, CircularProgress, Container, Grid, useTheme } from '@mui/material';
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { DropdownItem, Message } from '@terraware/web-components';
 import { DatabaseColumn } from '@terraware/web-components/components/table/types';
 import _ from 'lodash';
@@ -48,78 +46,6 @@ import Filters from './Filters';
 import ImportAccessionsModal from './ImportAccessionsModal';
 import SearchCellRenderer from './TableCellRenderer';
 import { columnsIndexed } from './columns';
-
-interface StyleProps {
-  isMobile: boolean;
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  mainContainer: {
-    padding: 0,
-  },
-  downloadReport: {
-    background: theme.palette.common.black,
-    color: theme.palette.common.white,
-    marginLeft: theme.spacing(2),
-    '&:hover, &:focus': {
-      backgroundColor: `${theme.palette.common.black}!important`,
-    },
-  },
-  addAccession: {
-    marginLeft: theme.spacing(2),
-    color: theme.palette.common.white,
-  },
-  addAccessionIcon: {
-    color: theme.palette.common.white,
-  },
-  checkinMessage: {
-    marginBottom: theme.spacing(1),
-  },
-  checkInContent: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '24px',
-  },
-  checkInButton: {
-    marginTop: theme.spacing(2),
-    marginRight: (props: StyleProps) => (props.isMobile ? 0 : theme.spacing(3)),
-    marginLeft: (props: StyleProps) => (props.isMobile ? theme.spacing(1) : 0),
-    '&.mobile': {
-      minWidth: '70px',
-    },
-    height: 'auto',
-  },
-  message: {
-    margin: '0 auto',
-    maxWidth: '800px',
-    padding: '48px',
-    width: '800px',
-  },
-  checkInText: {
-    marginBottom: 0,
-  },
-  buttonSpc: {
-    marginRight: '8px',
-    '&:last-child': {
-      marginRight: '0',
-    },
-  },
-  requestMobileMessage: {
-    marginBottom: '32px',
-  },
-  spinnerContainer: {
-    position: 'fixed',
-    top: '50%',
-    left: 'calc(50% + 100px)',
-  },
-  headerButtonsContainer: {
-    display: 'flex',
-    '& .button--medium': {
-      fontSize: '14px',
-    },
-  },
-}));
 
 const filterSelectFields = (fields: string[]): string[] => {
   const columns = columnsIndexed();
@@ -167,12 +93,18 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const { activeLocale } = useLocalization();
   const { reloadUserPreferences } = useUser();
   const { isMobile } = useDeviceInfo();
-  const classes = useStyles({ isMobile });
   const theme = useTheme();
   const navigate = useNavigate();
   const query = useQuery();
   const location = useStateLocation();
   const { sessionFilters, setSessionFilters } = useSessionFilters('accessions');
+
+  const messageStyles = {
+    margin: '0 auto',
+    maxWidth: '800px',
+    padding: '48px',
+    width: '800px',
+  };
 
   const projects = useAppSelector(selectProjects);
 
@@ -754,7 +686,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
             )}
           </PageHeader>
         </PageHeaderWrapper>
-        <Container ref={contentRef} maxWidth={false} className={classes.mainContainer}>
+        <Container ref={contentRef} maxWidth={false} sx={{ padding: 0 }}>
           {selectedOrganization && unfilteredResults ? (
             <Card>
               {isOnboarded ? (
@@ -813,27 +745,29 @@ export default function Database(props: DatabaseProps): JSX.Element {
               ) : isAdmin(selectedOrganization) ? (
                 <>
                   {!isMobile && emptyStateSpacer()}
-                  <EmptyMessage
-                    className={classes.message}
-                    title={strings.ONBOARDING_ADMIN_TITLE}
-                    rowItems={getEmptyState()}
-                  />
+                  <EmptyMessage title={strings.ONBOARDING_ADMIN_TITLE} rowItems={getEmptyState()} sx={messageStyles} />
                 </>
               ) : (
                 <>
                   {!isMobile && emptyStateSpacer()}
                   <EmptyMessage
-                    className={classes.message}
                     title={strings.REACH_OUT_TO_ADMIN_TITLE}
                     text={strings.NO_SEEDBANKS_NON_ADMIN_MSG}
+                    sx={messageStyles}
                   />
                 </>
               )}
             </Card>
           ) : (
-            <div className={classes.spinnerContainer}>
+            <Box
+              sx={{
+                position: 'fixed',
+                top: '50%',
+                left: 'calc(50% + 100px)',
+              }}
+            >
               <CircularProgress />
-            </div>
+            </Box>
           )}
         </Container>
       </TfMain>

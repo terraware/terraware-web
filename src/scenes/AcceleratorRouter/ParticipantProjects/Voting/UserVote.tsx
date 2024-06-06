@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 
 import { Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Dropdown, DropdownItem, Textfield } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
@@ -11,15 +10,6 @@ import { UserIdentity, getUserDisplayName } from 'src/utils/user';
 
 import VoteBadge from './VoteBadge';
 import VoteRowGrid from './VoteRowGrid';
-
-const useStyles = makeStyles(() => ({
-  textareaEdit: {
-    '& .textfield-value': {
-      maxWidth: '500px',
-      minHeight: '100px',
-    },
-  },
-}));
 
 /**
  * Read-only view of user vote
@@ -81,7 +71,6 @@ export const UserVoteEdit = ({
   voteOption,
 }: UserVoteEditProps): JSX.Element => {
   const theme = useTheme();
-  const classes = useStyles();
   const { activeLocale } = useLocalization();
 
   const voteOptions: DropdownItem[] = useMemo(() => {
@@ -115,13 +104,18 @@ export const UserVoteEdit = ({
         <VoteRowGrid
           rightChild={
             <Textfield
-              className={classes.textareaEdit}
               errorText={validate && !conditionalInfo ? strings.REQUIRED_FIELD : ''}
               id='vote-conditional-info'
               label={strings.COMMENTS}
               onChange={(value) => onConditionalInfoChange(value as string)}
               preserveNewlines
               required
+              sx={{
+                '& .textfield-value': {
+                  maxWidth: '500px',
+                  minHeight: '100px',
+                },
+              }}
               type='textarea'
               value={conditionalInfo}
             />

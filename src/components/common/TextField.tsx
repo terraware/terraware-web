@@ -1,6 +1,6 @@
 import React, { KeyboardEventHandler } from 'react';
 
-import { TextField as MUITextField } from '@mui/material';
+import { TextField as MUITextField, SxProps } from '@mui/material';
 
 export interface Props {
   id: string;
@@ -18,6 +18,7 @@ export interface Props {
   placeholder?: string;
   required?: boolean;
   autocomplete?: string;
+  sx?: SxProps;
 }
 
 export default function TextField(props: Props): JSX.Element {
@@ -51,6 +52,7 @@ export default function TextField(props: Props): JSX.Element {
       helperText={props.helperText}
       required={props.required}
       autoComplete={props.autocomplete}
+      sx={props.sx}
     />
   );
 }

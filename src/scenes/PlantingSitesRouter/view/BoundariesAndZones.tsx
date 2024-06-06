@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
 
 import ListMapView from 'src/components/ListMapView';
@@ -21,17 +20,6 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import PlantingSiteDetailsTable from './PlantingSiteDetailsTable';
-
-export const useMapTooltipStyles = makeStyles(() => ({
-  popup: {
-    '& > .mapboxgl-popup-content': {
-      borderRadius: '8px',
-      padding: '10px',
-      width: 'fit-content',
-      maxWidth: '350px',
-    },
-  },
-}));
 
 type BoundariesAndZonesProps = {
   data: ZoneAggregation[];
@@ -94,7 +82,6 @@ type PlantingSiteMapViewProps = {
 };
 
 function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapViewProps): JSX.Element | null {
-  const classes = useMapTooltipStyles();
   const [searchZoneEntities, setSearchZoneEntities] = useState<MapEntityId[]>([]);
   const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(['Planting Site', 'Zones', 'Monitoring Plots']);
   const defaultTimeZone = useDefaultTimeZone();
@@ -148,7 +135,14 @@ function PlantingSiteMapView({ plantingSite, data, search }: PlantingSiteMapView
         focusEntities={searchZoneEntities.length ? searchZoneEntities : [{ sourceId: 'sites', id: plantingSite.id }]}
         contextRenderer={{
           render: contextRenderer(plantingSite, data, timeZone),
-          className: classes.popup,
+          sx: {
+            '.mapboxgl-popup .mapboxgl-popup-content': {
+              borderRadius: '8px',
+              padding: '10px',
+              width: 'fit-content',
+              maxWidth: '350px',
+            },
+          },
         }}
         topRightMapControl={
           <MapLayerSelect

@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
-import { Theme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 import { Chart } from 'chart.js';
 import 'chartjs-adapter-luxon';
@@ -34,59 +33,6 @@ declare global {
   }
 }
 
-interface StyleProps {
-  isMobile: boolean;
-  isDesktop: boolean;
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  graphContainer: {
-    backgroundColor: theme.palette.TwClrBg,
-    borderRadius: '24px',
-    padding: '24px',
-  },
-  graphTitleContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    margin: theme.spacing(0, 0, 3, 1),
-  },
-  graphTitleIcon: {
-    fill: theme.palette.TwClrIcnSecondary,
-  },
-  graphTitle: {
-    fontWeight: 600,
-    fontSize: '20px',
-    margin: theme.spacing(0, 1),
-  },
-  dropDownsContainer: {
-    display: 'flex',
-  },
-  dropDowns: {
-    display: 'block',
-    margin: theme.spacing(0, 2, 2, 0),
-  },
-  chartContainer: {
-    marginTop: '40px',
-  },
-  legendContainer: {
-    marginBottom: '32px',
-    padding: (props: StyleProps) => (props.isMobile ? 0 : '0 55px 0 41px'),
-
-    '& ul': {
-      display: (props: StyleProps) => (props.isMobile ? 'block ' : 'flex'),
-
-      '& li': {
-        marginLeft: (props: StyleProps) => (props.isMobile ? 0 : '10px'),
-      },
-    },
-  },
-  chartResizableParent: {
-    position: 'relative',
-    width: (props: StyleProps) => (props.isDesktop ? 'calc(100vw - 300px)' : 'calc(100vw - 136px)'),
-    paddingRight: `${theme.spacing(4)}px`,
-  },
-}));
-
 type TemperatureHumidityChartProps = {
   availableLocations?: Device[];
   defaultSensor?: Device;
@@ -98,7 +44,7 @@ type TemperatureHumidityChartProps = {
 
 export default function TemperatureHumidityChart(props: TemperatureHumidityChartProps): JSX.Element {
   const { isMobile, isDesktop } = useDeviceInfo();
-  const classes = useStyles({ isMobile, isDesktop });
+  const theme = useTheme();
   const {
     availableLocations,
     defaultSensor,
@@ -112,6 +58,11 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
   const { activeLocale } = useLocalization();
   const numberFormatter = useNumberFormatter();
   const numericFormatter = useMemo(() => numberFormatter(activeLocale), [activeLocale, numberFormatter]);
+
+  const dropdownStyles = {
+    display: 'block',
+    margin: theme.spacing(0, 2, 2, 0),
+  };
 
   useEffect(() => {
     if (defaultSensor) {
@@ -492,33 +443,71 @@ export default function TemperatureHumidityChart(props: TemperatureHumidityChart
   const chartRef = React.useRef<HTMLCanvasElement>(null);
 
   return (
-    <div className={classes.graphContainer}>
-      <div className={classes.graphTitleContainer}>
-        <Icon name='futures' size='medium' className={classes.graphTitleIcon} />
-        <p className={classes.graphTitle}>{strings.TEMPERATURE_AND_HUMIDITY_SENSOR_DATA}</p>
-      </div>
-      <div className={isMobile ? '' : classes.dropDownsContainer}>
+    <Box
+      sx={{
+        backgroundColor: theme.palette.TwClrBg,
+        borderRadius: '24px',
+        padding: '24px',
+      }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          margin: theme.spacing(0, 0, 3, 1),
+        }}
+      >
+        <Icon fillColor={theme.palette.TwClrIcnSecondary} name='futures' size='medium' />
+        <p
+          style={{
+            fontWeight: 600,
+            fontSize: '20px',
+            margin: theme.spacing(0, 1),
+          }}
+        >
+          {strings.TEMPERATURE_AND_HUMIDITY_SENSOR_DATA}
+        </p>
+      </Box>
+      <Box sx={isMobile ? undefined : { display: 'flex' }}>
         <Select
-          className={classes.dropDowns}
           options={availableLocations?.filter((location) => location.type === 'sensor').map((aL) => aL.name)}
           selectedValue={selectedLocation?.name}
           onChange={onChangeLocation}
           label={strings.LOCATION}
+          sx={dropdownStyles}
         />
         <Dropdown
-          className={classes.dropDowns}
           options={timePeriods()}
           onChange={onChangeSelectedPeriod}
           selectedValue={selectedPeriod}
           label={strings.TIME_PERIOD}
+          sx={dropdownStyles}
         />
-      </div>
-      <div className={classes.chartContainer}>
-        <div id='legend-container-th' className={classes.legendContainer} />
-        <div className={classes.chartResizableParent}>
+      </Box>
+      <Box sx={{ marginTop: '40px' }}>
+        <Box
+          id='legend-container-th'
+          sx={{
+            marginBottom: '32px',
+            padding: isMobile ? 0 : '0 55px 0 41px',
+            '& ul': {
+              display: isMobile ? 'block ' : 'flex',
+              '& li': {
+                marginLeft: isMobile ? 0 : '10px',
+              },
+            },
+          }}
+        />
+        <Box
+          sx={{
+            position: 'relative',
+            width: isDesktop ? 'calc(100vw - 300px)' : 'calc(100vw - 136px)',
+            paddingRight: `${theme.spacing(4)}px`,
+          }}
+        >
           <canvas id='temperatureHumidityChart' ref={chartRef} />
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   );
 }
