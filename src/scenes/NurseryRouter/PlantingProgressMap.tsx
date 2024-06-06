@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 
 import { PlantingSiteMap } from 'src/components/Map';
 import { useOrganization } from 'src/providers';
@@ -22,16 +21,6 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import PlantingProgressMapDialog from './PlantingProgressMapDialog';
 
-export const useStyles = makeStyles(() => ({
-  popup: {
-    '& > .mapboxgl-popup-content': {
-      borderRadius: '8px',
-      padding: '0',
-      minWidth: '320px',
-    },
-  },
-}));
-
 type PlantingProgressMapProps = {
   plantingSiteId: number;
   reloadTracking: () => void;
@@ -39,7 +28,6 @@ type PlantingProgressMapProps = {
 
 export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: PlantingProgressMapProps): JSX.Element {
   const theme = useTheme();
-  const classes = useStyles();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const org = useOrganization();
@@ -157,8 +145,14 @@ export default function PlantingProgressMap({ plantingSiteId, reloadTracking }: 
               busy={dispatching}
             />
           ),
-          className: classes.popup,
           anchor: 'bottom',
+          sx: {
+            '.mapboxgl-popup .mapboxgl-popup-content': {
+              borderRadius: '8px',
+              padding: '0',
+              minWidth: '320px',
+            },
+          },
         }}
       />
     </>

@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 
 import { PlantingSiteMap } from 'src/components/Map';
 import { MapTooltip, TooltipProperty } from 'src/components/Map/MapRenderUtils';
@@ -19,17 +18,6 @@ import { getRgbaFromHex } from 'src/utils/color';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-export const useStyles = makeStyles(() => ({
-  popup: {
-    '& > .mapboxgl-popup-content': {
-      borderRadius: '8px',
-      padding: '10px',
-      width: 'fit-content',
-      maxWidth: '350px',
-    },
-  },
-}));
-
 type ZoneLevelDataMapProps = {
   plantingSiteId: number;
 };
@@ -38,7 +26,6 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
   const theme = useTheme();
   const locale = useLocalization();
   const defaultTimeZone = useDefaultTimeZone();
-  const classes = useStyles();
   const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
   const zoneProgress = useAppSelector((state) => selectZoneProgress(state, plantingSiteId));
   const zoneStats = useAppSelector(selectZonePopulationStats);
@@ -208,7 +195,14 @@ export default function ZoneLevelDataMap({ plantingSiteId }: ZoneLevelDataMapPro
           focusEntities={focusEntities}
           contextRenderer={{
             render: getContextRenderer(),
-            className: classes.popup,
+            sx: {
+              '.mapboxgl-popup .mapboxgl-popup-content': {
+                borderRadius: '8px',
+                padding: '10px',
+                width: 'fit-content',
+                maxWidth: '350px',
+              },
+            },
           }}
         />
       ) : (

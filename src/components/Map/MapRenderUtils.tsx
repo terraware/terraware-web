@@ -1,20 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useMap } from 'react-map-gl';
 
-import { Box, IconButton, Theme, Typography, useTheme } from '@mui/material';
+import { Box, IconButton, Typography, useTheme } from '@mui/material';
 import { Button, Icon } from '@terraware/web-components';
-
-export const mapTooltipDialogStyle = (theme: Theme) => ({
-  tooltip: {
-    '& .mapboxgl-popup-content': {
-      borderRadius: theme.spacing(1),
-      padding: 0,
-    },
-    '& .mapboxgl-popup-close-button': {
-      display: 'none',
-    },
-  },
-});
 
 /**
  * Full screen map container ref for Portals
