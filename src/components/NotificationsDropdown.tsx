@@ -10,11 +10,9 @@ import {
   ListItemIcon,
   ListItemText,
   Popover,
-  Theme,
   styled,
   useTheme,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { Button, Tooltip } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
@@ -259,7 +257,6 @@ function NotificationItem(props: NotificationItemProps): JSX.Element {
   const { isMobile, isDesktop } = useDeviceInfo();
   const [inFocus, setInFocus] = useState<boolean>(false);
   const theme = useTheme();
-  const classes = useStyles({ isMobile });
   const { notification, markAsRead, reloadOrganizationData } = props;
   const { id, title, body, localUrl, createdTime, isRead, notificationCriticality, hideDate } = notification;
   const criticality = notificationCriticality.toLowerCase();

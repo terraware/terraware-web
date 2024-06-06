@@ -25,7 +25,6 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import { OnValidate } from './types';
-import useStyles from './useMapStyle';
 import useMapStyle from './useMapStyle';
 import {
   IdGenerator,
@@ -88,7 +87,6 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
     fixedBoundaries: featureSiteZones(site),
   });
   const [overridePopupInfo, setOverridePopupInfo] = useState<PopupInfo | undefined>();
-  const classes = useStyles();
   const theme = useTheme();
   const mapStyles = useMapStyle(theme);
   const snackbar = useSnackbar();
@@ -328,7 +326,7 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
         );
       },
     }),
-    [classes.box, classes.tooltip, setZonesData, zones]
+    [setZonesData, zones]
   );
 
   return (
@@ -378,7 +376,6 @@ const TooltipContents = ({
   const [densityError, setDensityError] = useState<string>('');
   const [validate, setValidate] = useState<boolean>(false);
   const theme = useTheme();
-  const classes = useStyles();
 
   const validateInput = useCallback((): boolean => {
     let hasNameErrors = true;

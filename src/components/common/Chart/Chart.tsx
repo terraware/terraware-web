@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { Theme, useTheme } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { useTheme } from '@mui/material';
 import { Chart as ChartJS, ChartTypeRegistry } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { AnnotationPluginOptions } from 'chartjs-plugin-annotation/types/options';
@@ -30,13 +29,6 @@ export interface StyleProps {
   minHeight?: string;
   maxWidth?: string;
 }
-
-const useStyles = makeStyles<Theme, StyleProps>(() => ({
-  chart: {
-    minHeight: (props) => props.minHeight ?? '200px',
-    maxWidth: (props) => props.maxWidth ?? undefined,
-  },
-}));
 
 export type BaseChartProps = {
   chartId: string;
@@ -94,7 +86,6 @@ function ChartContent(props: ChartContentProps): JSX.Element {
     xAxisLabel,
     yAxisLabel,
   } = props;
-  const classes = useStyles({ minHeight, maxWidth });
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [chart, setChart] = useState<ChartJS | null>(null);
   const theme = useTheme();
@@ -205,5 +196,14 @@ function ChartContent(props: ChartContentProps): JSX.Element {
     }
   }, [chart, chartData, showLegend, barAnnotations, customTooltipTitles, barThickness, elementColor, theme]);
 
-  return <canvas id={chartId} ref={canvasRef} className={classes.chart} />;
+  return (
+    <canvas
+      id={chartId}
+      ref={canvasRef}
+      style={{
+        minHeight: minHeight ?? '200px',
+        maxWidth: maxWidth ?? undefined,
+      }}
+    />
+  );
 }
