@@ -12,6 +12,7 @@ import strings from 'src/strings';
 import { FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
 import useDebounce from 'src/utils/useDebounce';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import TableDensitySettingsButton from 'src/components/common/table/TableDensitySettingsButton';
 
 const getSearchTermFromFilters = (filters: Record<string, SearchNodePayload>): string => {
   const filterValues = filters.searchTermFilter;
@@ -314,6 +315,8 @@ export default function Filters(props: Props): JSX.Element {
             }}
           />
         </Popover>
+
+        <TableDensitySettingsButton />
       </Box>
       <PillList data={filterPillItems} onRemove={removeFilter} />
     </Container>
