@@ -3956,7 +3956,7 @@
   dependencies:
     defer-to-connect "^2.0.1"
 
-"@terraware/web-components@^3.0.19":
+"@terraware/web-components@^3.0.21":
   version "3.0.21"
   resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-3.0.21.tgz#b1a5dd562a3d9675f660d605cdf7460ebc3e20e8"
   integrity sha512-touG0qJ0vJIfAV0IVHDKrMgJog9WfbozBxMMEa3PVODghmUsL21MzeT992BFhY79aVAmtw6vGPnefc6xJRG/SA==

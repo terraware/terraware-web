@@ -2,9 +2,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { TableColumnType, TableRowType, Table as WebComponentsTable } from '@terraware/web-components';
 import { LocalizationProps, Props, TextAlignment } from '@terraware/web-components/components/table';
+import { TableDensityType } from '@terraware/web-components/components/table/types';
 import _ from 'lodash';
 
-import { useLocalization, useOrganization } from 'src/providers';
+import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { PreferencesService } from 'src/services';
 import strings from 'src/strings';
 
@@ -56,6 +57,12 @@ interface TableProps<T> extends Omit<Props<T>, keyof LocalizationProps> {
 }
 
 export function BaseTable<T extends TableRowType>(props: TableProps<T>): JSX.Element {
+  const { userPreferences } = useUser();
+  const tableDensity: TableDensityType = useMemo(
+    () => props.density ?? (userPreferences['tableDensity'] as TableDensityType) ?? 'comfortable',
+    [props.density, userPreferences['tableDensity']]
+  );
+
   const addAlignment = useMemo(() => {
     return props.columns.map((col) => {
       if (col.type === 'number') {
@@ -70,6 +77,7 @@ export function BaseTable<T extends TableRowType>(props: TableProps<T>): JSX.Ele
     ...props,
     booleanFalseText: strings.NO,
     booleanTrueText: strings.YES,
+    density: tableDensity,
     editText: strings.EDIT,
     renderNumSelectedText,
     ...(props.showPagination !== false ? { renderPaginationText } : {}),
