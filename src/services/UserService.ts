@@ -116,17 +116,15 @@ const updateUser = async (user: User, options: UpdateOptions = {}): Promise<Resp
   }
 
   const response: Response = await httpCurrentUser.put({ entity });
+  if (response.requestSucceeded && typeof user.cookiesConsented === 'boolean') {
+    await PreferencesService.updateUserCookieConsentPreferences({ cookiesConsented: user.cookiesConsented });
+  }
 
   getUser();
 
   if (user.timeZone && !options.skipAcknowledgeTimeZone) {
     await PreferencesService.updateUserPreferences({ timeZoneAcknowledgedOnMs: Date.now() });
   }
-  if (typeof user.cookiesConsented === 'boolean') {
-    await PreferencesService.updateUserCookieConsentPreferences({ cookiesConsented: user.cookiesConsented });
-  }
-
-  getUser();
 
   return response;
 };
