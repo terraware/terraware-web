@@ -817,6 +817,10 @@ export interface paths {
      */
     delete: operations["deleteMyself"];
   };
+  "/api/v1/users/me/cookies": {
+    /** Updates the current user's cookie consent selection. */
+    put: operations["updateCookieConsent"];
+  };
   "/api/v1/users/me/preferences": {
     /** Gets the current user's preferences. */
     get: operations["getUserPreferences"];
@@ -4337,6 +4341,10 @@ export interface components {
       /** @enum {string} */
       status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
     };
+    UpdateUserCookieConsentRequestPayload: {
+      /** @description If true, the user consents to the use of analytics cookies. If false, they decline. */
+      cookiesConsented: boolean;
+    };
     UpdateUserPreferencesRequestPayload: {
       /**
        * Format: int64
@@ -4499,6 +4507,13 @@ export interface components {
       voteOption?: "No" | "Conditional" | "Yes";
     };
     UserProfilePayload: {
+      /** @description If true, the user has consented to the use of analytics cookies. If false, the user has declined. If null, the user has not made a consent selection yet. */
+      cookiesConsented?: boolean;
+      /**
+       * Format: date-time
+       * @description If the user has selected whether or not to consent to analytics cookies, the date and time of the selection.
+       */
+      cookiesConsentedTime?: string;
       /**
        * @description Two-letter code of the user's country.
        * @example US
@@ -8781,6 +8796,22 @@ export interface operations {
    * @description WARNING! This operation is not reversible.
    */
   deleteMyself: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Updates the current user's cookie consent selection. */
+  updateCookieConsent: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateUserCookieConsentRequestPayload"];
+      };
+    };
     responses: {
       /** @description OK */
       200: {
