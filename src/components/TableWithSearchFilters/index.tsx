@@ -10,6 +10,8 @@ import { useLocalization } from 'src/providers';
 import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { parseSearchTerm } from 'src/utils/search';
 import useDebounce from 'src/utils/useDebounce';
+import TableDensitySettingsButton from '../common/table/TableDensitySettingsButton';
+import { TableDensityType } from '@terraware/web-components/components/table/types';
 
 interface TableWithSearchFiltersProps extends Omit<OrderPreservedTablePropsFull<TableRowType>, 'columns' | 'orderBy'> {
   busy?: boolean;
@@ -126,6 +128,16 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
     });
   }, [extraTableFilters]);
 
+    const [tableDensity, setTableDensity] = useState<TableDensityType>();
+
+    // Shortcut method to update table state before preference update round-trip
+    const handleTableDensityChange = useCallback(
+      (density: TableDensityType) => {
+        setTableDensity(density);
+      },
+      [setTableDensity]
+    );
+
   return (
     <Container maxWidth={false} sx={{ padding: 0 }}>
       <Card busy={busy} flushMobile rightComponent={rightComponent} title={title}>
@@ -137,12 +149,14 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
             setCurrentFilters={setFilters}
             featuredFilters={_featuredFilters}
           />
+          <TableDensitySettingsButton density={tableDensity} onChange={handleTableDensityChange}/>
         </Grid>
 
         <Grid item xs={12}>
           <OrderPreservedTable
             {...tableProps}
             columns={() => columns(activeLocale)}
+            density={tableDensity}
             orderBy={searchSortOrder.field}
             order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
             sortHandler={onSortChange}
