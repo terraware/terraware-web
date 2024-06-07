@@ -11,6 +11,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import FeaturedFilters from './FeaturedFilters';
 import IconFilters from './IconFilters';
+import TableDensitySettingsButton from '../table/TableDensitySettingsButton';
 
 export type SearchInputProps = {
   search: string;
