@@ -141,6 +141,8 @@ export default function SearchFiltersWrapper({
         )}
 
         {filtersProps && <IconFilters filtersProps={filtersProps} />}
+
+        <TableDensitySettingsButton />
       </Grid>
 
       {filterPillData.length > 0 && (

@@ -5,8 +5,6 @@ import { Box, useTheme } from '@mui/material';
 import Card from 'src/components/common/Card';
 import ListMapSelector, { View } from 'src/components/common/ListMapSelector';
 
-import TableDensitySettingsButton from '../common/table/TableDensitySettingsButton';
-
 /**
  * Props include an optional search component for the top left.
  * List and map components are optional, absence of either will
@@ -41,7 +39,6 @@ export default function ListMapView({ search, list, map, onView, style, initialV
     >
       <Box display='flex' flexDirection='row' justifyContent='space-between' alignItems='center'>
         {search}
-        <TableDensitySettingsButton />
         <ListMapSelector defaultView={initialView} view={view} onView={updateView} />
       </Box>
       <Box
