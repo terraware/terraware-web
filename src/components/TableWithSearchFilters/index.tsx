@@ -148,8 +148,8 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
             currentFilters={filters}
             setCurrentFilters={setFilters}
             featuredFilters={_featuredFilters}
+            rightComponent={<TableDensitySettingsButton density={tableDensity} onChange={handleTableDensityChange} />}
           />
-          <TableDensitySettingsButton density={tableDensity} onChange={handleTableDensityChange} />
         </Grid>
 
         <Grid item xs={12}>
