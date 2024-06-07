@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 
 import { DropdownItem, Tooltip } from '@terraware/web-components';
-import PopoverMenu from '@terraware/web-components/components/PopoverMenu/Popover'
+import PopoverMenu from '@terraware/web-components/components/PopoverMenu/Popover';
 import { TableDensityType } from '@terraware/web-components/components/table/types';
 
 import Button from 'src/components/common/button/Button';
@@ -31,7 +31,7 @@ const TableDensitySettingsButton = ({ density, onChange }: DensitySettingsProp) 
   const options = useMemo(
     () => [
       {
-        label: activeLocale ? strings.DENSITY_COMPACT : '', 
+        label: activeLocale ? strings.DENSITY_COMPACT : '',
         value: 'compact',
       },
       {
@@ -63,12 +63,13 @@ const TableDensitySettingsButton = ({ density, onChange }: DensitySettingsProp) 
   return (
     <>
       <Tooltip title={strings.DENSITY_SETTINGS}>
-        <Button 
-          id='updateTableDensity' 
-          onClick={(event) => event && handleClick(event)} 
+        <Button
+          id='updateTableDensity'
+          onClick={(event) => event && handleClick(event)}
           type='passive'
-          priority='ghost' 
-          icon='iconSettings' />
+          priority='ghost'
+          icon='iconSettings'
+        />
       </Tooltip>
       <PopoverMenu
         sections={[options]}
