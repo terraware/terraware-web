@@ -8,6 +8,7 @@ import FilterGroup from 'src/components/common/FilterGroup';
 import FilterMultiSelect from 'src/components/common/FilterMultiSelect';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Icon from 'src/components/common/icon/Icon';
+import TableDensitySettingsButton from 'src/components/common/table/TableDensitySettingsButton';
 import strings from 'src/strings';
 import { FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
 import useDebounce from 'src/utils/useDebounce';
@@ -314,6 +315,8 @@ export default function Filters(props: Props): JSX.Element {
             }}
           />
         </Popover>
+
+        <TableDensitySettingsButton />
       </Box>
       <PillList data={filterPillItems} onRemove={removeFilter} />
     </Container>
