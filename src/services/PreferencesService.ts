@@ -38,9 +38,9 @@ type PreferencesServerResponse =
 type UpdatePreferencesPayloadType =
   paths[typeof PREFERENCES_ENDPOINT]['put']['requestBody']['content']['application/json'];
 
-type UpdateUserCookieConsentRequestPayload =
+export type UpdateUserCookieConsentRequestPayload =
   paths[typeof COOKIE_CONSENT_ENDPOINT]['put']['requestBody']['content']['application/json'];
-type UpdateUserCookieConsentResponsePayload = components['schemas']['SimpleSuccessResponsePayload'];
+export type UpdateUserCookieConsentResponsePayload = components['schemas']['SimpleSuccessResponsePayload'];
 
 // http services
 const httpPreferences = HttpService.root(PREFERENCES_ENDPOINT);
@@ -111,7 +111,7 @@ const updateUserPreferences = async (toUpdate: Preferences): Promise<UpdateRespo
 };
 
 // set user cookie preferences
-const updateUserCookieConsentPreferences = async (payload: UpdateUserCookieConsentRequestPayload) =>
+const updateUserCookieConsentPreferences = (payload: UpdateUserCookieConsentRequestPayload) =>
   httpCookieConsent.put2<UpdateUserCookieConsentResponsePayload>({ entity: payload });
 
 // set org preferences
