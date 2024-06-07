@@ -116,8 +116,9 @@ const updateUser = async (user: User, options: UpdateOptions = {}): Promise<Resp
   }
 
   const response: Response = await httpCurrentUser.put({ entity });
-  if (response.requestSucceeded && typeof user.cookiesConsented === 'boolean') {
-    await PreferencesService.updateUserCookieConsentPreferences({ cookiesConsented: user.cookiesConsented });
+  if (response.requestSucceeded && typeof user.cookiesConsented === 'string') {
+    const cookiesConsented = user.cookiesConsented === 'true';
+    await PreferencesService.updateUserCookieConsentPreferences({ cookiesConsented });
   }
 
   getUser();

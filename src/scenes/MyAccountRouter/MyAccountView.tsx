@@ -1,7 +1,7 @@
-import React, { CSSProperties, useEffect, useRef, useState } from 'react';
+import React, { CSSProperties, ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, FormControlLabel, Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem } from '@terraware/web-components';
 
 import RegionSelector from 'src/components/RegionSelector';
@@ -205,6 +205,7 @@ const MyAccountContent = ({
     setPreferredWeightSystemSelected((userPreferences?.preferredWeightSystem as string) || 'metric');
     setLocaleSelected(selectedLocale);
     setSelectedRows([]);
+    onChange('cookiesConsented', user.cookiesConsented);
     navigate(APP_PATHS.MY_ACCOUNT);
   };
 
@@ -541,6 +542,32 @@ const MyAccountContent = ({
                   value={record.emailNotificationsEnabled}
                   onChange={(value) => onChange('emailNotificationsEnabled', value)}
                 />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}>
+                  {strings.COOKIES}
+                </Typography>
+                <RadioGroup
+                  name='radio-buttons-cookies-consent'
+                  onChange={(_event, value) => onChange('cookiesConsented', value)}
+                  value={record.cookiesConsented}
+                >
+                  <Grid item xs={12} textAlign='left' display='flex' flexDirection='row'>
+                    <FormControlLabel
+                      control={<Radio />}
+                      disabled={!edit}
+                      label={strings.COOKIES_ACCEPT}
+                      value={true}
+                    />
+                    <FormControlLabel
+                      control={<Radio />}
+                      disabled={!edit}
+                      label={strings.COOKIES_DECLINE}
+                      value={false}
+                    />
+                  </Grid>
+                </RadioGroup>
+                <Typography fontSize='14px'>{strings.MY_ACCOUNT_COOKIES_DESC}</Typography>
               </Grid>
             </Grid>
           </Box>
