@@ -2,16 +2,16 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Container, Grid } from '@mui/material';
 import { SortOrder, TableColumnType, TableRowType } from '@terraware/web-components';
+import { TableDensityType } from '@terraware/web-components/components/table/types';
 
 import Card from 'src/components/common/Card';
 import SearchFiltersWrapperV2, { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import { default as OrderPreservedTable, OrderPreservedTablePropsFull } from 'src/components/common/table';
+import TableDensitySettingsButton from 'src/components/common/table/TableDensitySettingsButton';
 import { useLocalization } from 'src/providers';
 import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { parseSearchTerm } from 'src/utils/search';
 import useDebounce from 'src/utils/useDebounce';
-import TableDensitySettingsButton from '../common/table/TableDensitySettingsButton';
-import { TableDensityType } from '@terraware/web-components/components/table/types';
 
 interface TableWithSearchFiltersProps extends Omit<OrderPreservedTablePropsFull<TableRowType>, 'columns' | 'orderBy'> {
   busy?: boolean;
@@ -128,15 +128,15 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
     });
   }, [extraTableFilters]);
 
-    const [tableDensity, setTableDensity] = useState<TableDensityType>();
+  const [tableDensity, setTableDensity] = useState<TableDensityType>();
 
-    // Shortcut method to update table state before preference update round-trip
-    const handleTableDensityChange = useCallback(
-      (density: TableDensityType) => {
-        setTableDensity(density);
-      },
-      [setTableDensity]
-    );
+  // Shortcut method to update table state before preference update round-trip
+  const handleTableDensityChange = useCallback(
+    (density: TableDensityType) => {
+      setTableDensity(density);
+    },
+    [setTableDensity]
+  );
 
   return (
     <Container maxWidth={false} sx={{ padding: 0 }}>
@@ -149,7 +149,7 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
             setCurrentFilters={setFilters}
             featuredFilters={_featuredFilters}
           />
-          <TableDensitySettingsButton density={tableDensity} onChange={handleTableDensityChange}/>
+          <TableDensitySettingsButton density={tableDensity} onChange={handleTableDensityChange} />
         </Grid>
 
         <Grid item xs={12}>
