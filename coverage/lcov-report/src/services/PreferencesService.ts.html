@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">94.44% </span>
+                <span class="strong">92.5% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>34/36</span>
+                <span class='fraction'>37/40</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85.71% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>6/7</span>
+                <span class='fraction'>6/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">94.44% </span>
+                <span class="strong">92.5% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>34/36</span>
+                <span class='fraction'>37/40</span>
             </div>
         
             
@@ -192,7 +192,18 @@
 <a name='L127'></a><a href='#L127'>127</a>
 <a name='L128'></a><a href='#L128'>128</a>
 <a name='L129'></a><a href='#L129'>129</a>
-<a name='L130'></a><a href='#L130'>130</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a>
+<a name='L141'></a><a href='#L141'>141</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -225,6 +236,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -232,6 +244,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -300,6 +317,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -321,7 +342,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { paths } from 'src/api/types/generated-schema';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { components, paths } from 'src/api/types/generated-schema';
 &nbsp;
 import CachedUserService from './CachedUserService';
 import HttpService, { Response } from './HttpService';
@@ -353,6 +375,7 @@ export type UpdateResponse = Response &amp; {
 };
 &nbsp;
 // end point
+const COOKIE_CONSENT_ENDPOINT = '/api/v1/users/me/cookies';
 const PREFERENCES_ENDPOINT = '/api/v1/users/me/preferences';
 &nbsp;
 type PreferencesServerResponse =
@@ -360,8 +383,13 @@ type PreferencesServerResponse =
 type UpdatePreferencesPayloadType =
   paths[typeof PREFERENCES_ENDPOINT]['put']['requestBody']['content']['application/json'];
 &nbsp;
-// http service
+export type UpdateUserCookieConsentRequestPayload =
+  paths[typeof COOKIE_CONSENT_ENDPOINT]['put']['requestBody']['content']['application/json'];
+export type UpdateUserCookieConsentResponsePayload = components['schemas']['SimpleSuccessResponsePayload'];
+&nbsp;
+// http services
 const httpPreferences = HttpService.root(PREFERENCES_ENDPOINT);
+const httpCookieConsent = HttpService.root(COOKIE_CONSENT_ENDPOINT);
 &nbsp;
 // primary get preferences code with optional org
 const getPreferences = async (organizationId: string = ''): Promise&lt;UserPreferencesResponse&gt; =&gt; {
@@ -427,6 +455,10 @@ const updateUserPreferences = async (toUpdate: Preferences): Promise&lt;UpdateRe
   return response;
 };
 &nbsp;
+// set user cookie preferences
+const updateUserCookieConsentPreferences = <span class="fstat-no" title="function not covered" >(p</span>ayload: UpdateUserCookieConsentRequestPayload) =&gt;
+<span class="cstat-no" title="statement not covered" >  httpCookieConsent.put2&lt;UpdateUserCookieConsentResponsePayload&gt;({ entity: payload });</span>
+&nbsp;
 // set org preferences
 const updateUserOrgPreferences = async (organizationId: number, toUpdate: Preferences): Promise&lt;UpdateResponse&gt; =&gt; {
   const response: UpdateResponse = await updatePreferences(toUpdate, organizationId);
@@ -446,6 +478,7 @@ const PreferencesService = {
   getUserPreferences,
   getUserOrgPreferences,
   updateUserPreferences,
+  updateUserCookieConsentPreferences,
   updateUserOrgPreferences,
 };
 &nbsp;
@@ -457,7 +490,7 @@ export default PreferencesService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-07T20:30:37.492Z
+                at 2024-06-07T21:11:45.441Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -9361,7 +9361,69 @@
 <a name='L9296'></a><a href='#L9296'>9296</a>
 <a name='L9297'></a><a href='#L9297'>9297</a>
 <a name='L9298'></a><a href='#L9298'>9298</a>
-<a name='L9299'></a><a href='#L9299'>9299</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L9299'></a><a href='#L9299'>9299</a>
+<a name='L9300'></a><a href='#L9300'>9300</a>
+<a name='L9301'></a><a href='#L9301'>9301</a>
+<a name='L9302'></a><a href='#L9302'>9302</a>
+<a name='L9303'></a><a href='#L9303'>9303</a>
+<a name='L9304'></a><a href='#L9304'>9304</a>
+<a name='L9305'></a><a href='#L9305'>9305</a>
+<a name='L9306'></a><a href='#L9306'>9306</a>
+<a name='L9307'></a><a href='#L9307'>9307</a>
+<a name='L9308'></a><a href='#L9308'>9308</a>
+<a name='L9309'></a><a href='#L9309'>9309</a>
+<a name='L9310'></a><a href='#L9310'>9310</a>
+<a name='L9311'></a><a href='#L9311'>9311</a>
+<a name='L9312'></a><a href='#L9312'>9312</a>
+<a name='L9313'></a><a href='#L9313'>9313</a>
+<a name='L9314'></a><a href='#L9314'>9314</a>
+<a name='L9315'></a><a href='#L9315'>9315</a>
+<a name='L9316'></a><a href='#L9316'>9316</a>
+<a name='L9317'></a><a href='#L9317'>9317</a>
+<a name='L9318'></a><a href='#L9318'>9318</a>
+<a name='L9319'></a><a href='#L9319'>9319</a>
+<a name='L9320'></a><a href='#L9320'>9320</a>
+<a name='L9321'></a><a href='#L9321'>9321</a>
+<a name='L9322'></a><a href='#L9322'>9322</a>
+<a name='L9323'></a><a href='#L9323'>9323</a>
+<a name='L9324'></a><a href='#L9324'>9324</a>
+<a name='L9325'></a><a href='#L9325'>9325</a>
+<a name='L9326'></a><a href='#L9326'>9326</a>
+<a name='L9327'></a><a href='#L9327'>9327</a>
+<a name='L9328'></a><a href='#L9328'>9328</a>
+<a name='L9329'></a><a href='#L9329'>9329</a>
+<a name='L9330'></a><a href='#L9330'>9330</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -19478,6 +19540,10 @@ export interface paths {
      */
     delete: operations["deleteMyself"];
   };
+  "/api/v1/users/me/cookies": {
+    /** Updates the current user's cookie consent selection. */
+    put: operations["updateCookieConsent"];
+  };
   "/api/v1/users/me/preferences": {
     /** Gets the current user's preferences. */
     get: operations["getUserPreferences"];
@@ -22998,6 +23064,10 @@ export interface components {
       /** @enum {string} */
       status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
     };
+    UpdateUserCookieConsentRequestPayload: {
+      /** @description If true, the user consents to the use of analytics cookies. If false, they decline. */
+      cookiesConsented: boolean;
+    };
     UpdateUserPreferencesRequestPayload: {
       /**
        * Format: int64
@@ -23160,6 +23230,13 @@ export interface components {
       voteOption?: "No" | "Conditional" | "Yes";
     };
     UserProfilePayload: {
+      /** @description If true, the user has consented to the use of analytics cookies. If false, the user has declined. If null, the user has not made a consent selection yet. */
+      cookiesConsented?: boolean;
+      /**
+       * Format: date-time
+       * @description If the user has selected whether or not to consent to analytics cookies, the date and time of the selection.
+       */
+      cookiesConsentedTime?: string;
       /**
        * @description Two-letter code of the user's country.
        * @example US
@@ -27451,6 +27528,22 @@ export interface operations {
       };
     };
   };
+  /** Updates the current user's cookie consent selection. */
+  updateCookieConsent: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateUserCookieConsentRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
   /** Gets the current user's preferences. */
   getUserPreferences: {
     parameters: {
@@ -27964,7 +28057,7 @@ export interface operations {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-07T20:30:37.492Z
+                at 2024-06-07T21:11:45.441Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

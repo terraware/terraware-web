@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">43.54% </span>
+                <span class="strong">43.75% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>27/62</span>
+                <span class='fraction'>28/64</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">21.87% </span>
+                <span class="strong">27.77% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>7/32</span>
+                <span class='fraction'>10/36</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">45% </span>
+                <span class="strong">44.44% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>27/60</span>
+                <span class='fraction'>28/63</span>
             </div>
         
             
@@ -273,7 +273,18 @@
 <a name='L208'></a><a href='#L208'>208</a>
 <a name='L209'></a><a href='#L209'>209</a>
 <a name='L210'></a><a href='#L210'>210</a>
-<a name='L211'></a><a href='#L211'>211</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L211'></a><a href='#L211'>211</a>
+<a name='L212'></a><a href='#L212'>212</a>
+<a name='L213'></a><a href='#L213'>213</a>
+<a name='L214'></a><a href='#L214'>214</a>
+<a name='L215'></a><a href='#L215'>215</a>
+<a name='L216'></a><a href='#L216'>216</a>
+<a name='L217'></a><a href='#L217'>217</a>
+<a name='L218'></a><a href='#L218'>218</a>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -331,6 +342,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -385,10 +400,17 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -540,21 +562,25 @@ const cachedTimeZone: CachedTimeZone = {
  * get current/active user
  */
 const getUser = async (): Promise&lt;UserResponse&gt; =&gt; {
-  const response: UserResponse = await httpCurrentUser.get&lt;UserServerResponse, UserData&gt;({}, <span class="fstat-no" title="function not covered" >(d</span>ata) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
-    user: data?.user
-      ? {
-          countryCode: data.user.countryCode,
-          email: data.user.email,
-          emailNotificationsEnabled: data.user.emailNotificationsEnabled,
-          firstName: data.user.firstName,
-          globalRoles: data.user.globalRoles,
-          id: data.user.id,
-          lastName: data.user.lastName,
-          locale: data.user.locale,
-          timeZone: data.user.timeZone,
-        }
-      : undefined,
-  }));
+  const response: UserResponse = await httpCurrentUser.get&lt;UserServerResponse, UserData&gt;({}, <span class="fstat-no" title="function not covered" >(d</span>ata) =&gt; {
+<span class="cstat-no" title="statement not covered" >    return {</span>
+      user: data?.user
+        ? {
+            cookiesConsented: data.user.cookiesConsented,
+            cookiesConsentedTime: data.user.cookiesConsentedTime,
+            countryCode: data.user.countryCode,
+            email: data.user.email,
+            emailNotificationsEnabled: data.user.emailNotificationsEnabled,
+            firstName: data.user.firstName,
+            globalRoles: data.user.globalRoles,
+            id: data.user.id,
+            lastName: data.user.lastName,
+            locale: data.user.locale,
+            timeZone: data.user.timeZone,
+          }
+        : undefined,
+    };
+  });
 &nbsp;
   <span class="missing-if-branch" title="else path not taken" >E</span>if (response.user) {
     CachedUserService.setUser(response.user);
@@ -595,11 +621,18 @@ const updateUser = async (user: User, options: UpdateOptions = {}): Promise&lt;R
   <span class="missing-if-branch" title="else path not taken" >E</span>if (user.emailNotificationsEnabled !== undefined) {
     entity.emailNotificationsEnabled = user.emailNotificationsEnabled;
   }
+&nbsp;
   const response: Response = await httpCurrentUser.put({ entity });
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (response.requestSucceeded &amp;&amp; typeof user.cookiesConsented === 'boolean') {
+<span class="cstat-no" title="statement not covered" >    await PreferencesService.updateUserCookieConsentPreferences({ cookiesConsented: user.cookiesConsented });</span>
+  }
+&nbsp;
   getUser();
+&nbsp;
   <span class="missing-if-branch" title="if path not taken" >I</span>if (user.timeZone &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >!options.skipAcknowledgeTimeZone)</span> {
 <span class="cstat-no" title="statement not covered" >    await PreferencesService.updateUserPreferences({ timeZoneAcknowledgedOnMs: Date.now() });</span>
   }
+&nbsp;
   return response;
 };
 &nbsp;
@@ -700,7 +733,7 @@ export default UserService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-07T20:30:37.492Z
+                at 2024-06-07T21:11:45.441Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

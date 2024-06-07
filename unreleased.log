@@ -1,3 +1,4 @@
+f43e9da2e3 SW-5502: FE - Create utility to check users consent status (#2707)
 3d38698880 Bump new web-components version to non-rc build (#2712)
 14ad1e0aa3 SW-5493 Added table density to TableWithSearchFilters component (#2711)
 78f7babaf6 SW-5491/SW-5492 Added table settings button to common search filter (#2708)
