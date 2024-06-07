@@ -8,11 +8,11 @@ import FilterGroup from 'src/components/common/FilterGroup';
 import FilterMultiSelect from 'src/components/common/FilterMultiSelect';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Icon from 'src/components/common/icon/Icon';
+import TableDensitySettingsButton from 'src/components/common/table/TableDensitySettingsButton';
 import strings from 'src/strings';
 import { FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
 import useDebounce from 'src/utils/useDebounce';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import TableDensitySettingsButton from 'src/components/common/table/TableDensitySettingsButton';
 
 const getSearchTermFromFilters = (filters: Record<string, SearchNodePayload>): string => {
   const filterValues = filters.searchTermFilter;
