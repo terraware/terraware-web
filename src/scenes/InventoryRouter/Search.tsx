@@ -5,6 +5,7 @@ import { Button, PillListItem, Textfield, Tooltip } from '@terraware/web-compone
 import { PillList } from '@terraware/web-components';
 
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
+import TableDensitySettingsButton from 'src/components/common/table/TableDensitySettingsButton';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
@@ -23,7 +24,6 @@ import { SearchNodePayload } from 'src/types/Search';
 import { Species } from 'src/types/Species';
 import { getAllNurseries } from 'src/utils/organization';
 import useForm from 'src/utils/useForm';
-import TableDensitySettingsButton from 'src/components/common/table/TableDensitySettingsButton';
 
 const initialFilters: Record<string, SearchNodePayload> = {
   showEmptyBatches: {
