@@ -5,13 +5,13 @@ import { PillList, Textfield } from '@terraware/web-components';
 import { Option } from '@terraware/web-components/components/table/types';
 
 import { FilterField } from 'src/components/common/FilterGroup';
+import TableDensitySettingsButton from 'src/components/common/table/TableDensitySettingsButton';
 import strings from 'src/strings';
 import { FieldOptionsMap, FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import FeaturedFilters from './FeaturedFilters';
 import IconFilters from './IconFilters';
-import TableDensitySettingsButton from '../table/TableDensitySettingsButton';
 
 export type SearchInputProps = {
   search: string;
