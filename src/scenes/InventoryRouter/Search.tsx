@@ -5,6 +5,7 @@ import { Button, PillListItem, Textfield, Tooltip } from '@terraware/web-compone
 import { PillList } from '@terraware/web-components';
 
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
+import TableDensitySettingsButton from 'src/components/common/table/TableDensitySettingsButton';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
@@ -358,6 +359,8 @@ export default function Search(props: SearchProps): JSX.Element | null {
             </Popover>
           </Box>
         )}
+
+        <TableDensitySettingsButton />
       </Grid>
       <Grid display='flex' flexDirection='row' alignItems='center' sx={{ marginTop: theme.spacing(2) }}>
         <PillList data={filterPillData} onRemove={onRemovePillList} />
