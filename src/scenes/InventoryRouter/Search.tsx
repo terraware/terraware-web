@@ -23,6 +23,7 @@ import { SearchNodePayload } from 'src/types/Search';
 import { Species } from 'src/types/Species';
 import { getAllNurseries } from 'src/utils/organization';
 import useForm from 'src/utils/useForm';
+import TableDensitySettingsButton from 'src/components/common/table/TableDensitySettingsButton';
 
 const initialFilters: Record<string, SearchNodePayload> = {
   showEmptyBatches: {
@@ -358,6 +359,8 @@ export default function Search(props: SearchProps): JSX.Element | null {
             </Popover>
           </Box>
         )}
+
+        <TableDensitySettingsButton />
       </Grid>
       <Grid display='flex' flexDirection='row' alignItems='center' sx={{ marginTop: theme.spacing(2) }}>
         <PillList data={filterPillData} onRemove={onRemovePillList} />
