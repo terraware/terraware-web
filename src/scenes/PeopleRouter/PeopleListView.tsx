@@ -365,7 +365,7 @@ export default function PeopleListView(): JSX.Element {
               value={temporalSearchValue}
               iconRight='cancel'
               onClickRightIcon={clearSearch}
-              styles={{ textarea: { width: '300px' } }}
+              sx={{ width: '300px' }}
             />
           </Grid>
 

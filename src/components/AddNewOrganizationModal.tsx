@@ -277,11 +277,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
                 setOrganizationTypeDetailsError('');
               }}
               errorText={organizationTypeDetailsError}
-              styles={{
-                textarea: {
-                  marginTop: theme.spacing(1),
-                },
-              }}
+              sx={{ marginTop: theme.spacing(1) }}
               value={newOrganization.organizationTypeDetails}
             />
           )}

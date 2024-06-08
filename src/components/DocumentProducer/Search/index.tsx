@@ -71,7 +71,7 @@ const Search = ({ searchValue, onSearch, filterProps }: SearchProps): JSX.Elemen
           onClickRightIcon={() => onSearch('')}
           value={searchValue}
           onChange={(value: any) => onSearch(value as string)}
-          styles={{ textarea: { width: '300px' } }}
+          sx={{ width: '300px' }}
         />
         {filterProps && (
           <>

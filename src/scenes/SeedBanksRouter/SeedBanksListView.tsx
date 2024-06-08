@@ -146,9 +146,7 @@ export default function SeedBanksListView({ organization }: SeedBanksListProps):
               value={temporalSearchValue}
               iconRight='cancel'
               onClickRightIcon={clearSearch}
-              styles={{
-                textarea: { width: '300px' },
-              }}
+              sx={{ width: '300px' }}
             />
           </Grid>
           <Grid item xs={12}>
