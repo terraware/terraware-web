@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1717794706133" clover="3.2.0">
-  <project timestamp="1717794706133" name="All files">
+<coverage generated="1717817227710" clover="3.2.0">
+  <project timestamp="1717817227710" name="All files">
     <metrics statements="22283" coveredstatements="936" conditionals="14182" coveredconditionals="231" methods="6839" coveredmethods="162" elements="43304" coveredelements="1329" complexity="0" loc="22283" ncloc="22283" packages="209" files="988" classes="988"/>
     <package name="src">
       <metrics statements="161" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="37" coveredmethods="0"/>
@@ -461,7 +461,7 @@
         <line num="253" count="0" type="stmt"/>
         <line num="276" count="0" type="stmt"/>
         <line num="277" count="0" type="stmt"/>
-        <line num="295" count="0" type="stmt"/>
+        <line num="291" count="0" type="stmt"/>
       </file>
       <file name="ConvertedValue.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/ConvertedValue.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
