@@ -274,7 +274,7 @@ const VariableDetailsInput = ({
         type='text'
         value={variable?.name}
         display={true}
-        styles={{ textarea: formElementStyles }}
+        sx={formElementStyles}
       />
       <Textfield
         id='description'
@@ -282,7 +282,7 @@ const VariableDetailsInput = ({
         type='text'
         value={variable?.description}
         display={true}
-        styles={{ textarea: formElementStyles }}
+        sx={formElementStyles}
       />
       {variable?.type === 'Date' && (
         <DatePicker

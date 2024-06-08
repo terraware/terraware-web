@@ -151,7 +151,7 @@ export default function ReassignmentRenderer({ zones, setReassignment, numericFo
             value={quantity?.toString()}
             label={''}
             errorText={error}
-            styles={{ textarea: { maxWidth: '88px' } }}
+            sx={{ maxWidth: '88px' }}
           />
           <Typography paddingLeft={1} paddingTop={error ? '10px' : 0}>
             / {numericFormatter.format(numPlants)}
@@ -170,7 +170,7 @@ export default function ReassignmentRenderer({ zones, setReassignment, numericFo
           onChange={(text: any) => setReassignment({ ...reassignment, notes: text })}
           value={notes}
           label={''}
-          styles={{ textarea: { minWidth: '150px' } }}
+          sx={{ minWidth: '150px' }}
         />
       );
 

@@ -132,7 +132,7 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
               required
               type='text'
               value={description[index]}
-              styles={{ textarea: { marginTop: theme.spacing(2) } }}
+              sx={{ marginTop: theme.spacing(2) }}
             />
           </Box>
         ))}
