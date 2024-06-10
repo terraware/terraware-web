@@ -368,26 +368,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
         });
 
         if (requestId === getRequestId('accessions_search')) {
-          const processedResults = apiResponse?.map((result: SearchResponseElementWithId) => {
-            // The "geolocations" value, if present, is a list of child objects each of which has
-            // a "coordinates" field which is a string with comma-separated latitude and longitude.
-            // For display in the table view, we need to turn it into a single string.
-            let coordinatesList = '';
-            (result.geolocations as any[])?.forEach((gl, index) => {
-              if (index === 0) {
-                coordinatesList = gl.coordinates;
-              } else {
-                coordinatesList += `\r${gl.coordinates}`;
-              }
-            });
-
-            return {
-              ...result,
-              'geolocations.coordinates': coordinatesList,
-            };
-          });
-
-          setSearchResults(processedResults);
+          setSearchResults(apiResponse);
         }
       };
 

@@ -84,5 +84,10 @@ export default function SearchCellRenderer(props: RendererProps<SearchResponseEl
     return <CellRenderer index={index} column={column} value={`${value}%`} row={row} />;
   }
 
+  if (column.key === 'geolocations.coordinates') {
+    const coordinatesValue = ((row.geolocations || []) as any[]).map((gl) => gl.coordinates).join('; ');
+    return <CellRenderer index={index} column={column} value={coordinatesValue} row={row} />;
+  }
+
   return <CellRenderer {...props} />;
 }
