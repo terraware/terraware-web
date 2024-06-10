@@ -79,6 +79,7 @@ export function growthForms(activeLocale: string | null) {
     { label: strings.FORB, value: 'Forb' },
     { label: strings.FUNGUS, value: 'Fungus' },
     { label: strings.GRAMINOID, value: 'Graminoid' },
+    { label: strings.HERB, value: 'Herb' },
     { label: strings.LIANA, value: 'Liana' },
     { label: strings.LICHEN, value: 'Lichen' },
     { label: strings.MANGROVE, value: 'Mangrove' },
@@ -97,6 +98,22 @@ export function storageBehaviors(useLocalizedValues = false) {
     { label: strings.ORTHODOX, value: useLocalizedValues ? strings.ORTHODOX : 'Orthodox' },
     { label: strings.RECALCITRANT, value: useLocalizedValues ? strings.RECALCITRANT : 'Recalcitrant' },
     { label: strings.INTERMEDIATE, value: useLocalizedValues ? strings.INTERMEDIATE : 'Intermediate' },
+    {
+      label: strings.INTERMEDIATE_COOL_TEMPERATURE_SENSITIVE,
+      value: useLocalizedValues
+        ? strings.INTERMEDIATE_COOL_TEMPERATURE_SENSITIVE
+        : 'Intermediate - Cool Temperature Sensitive',
+    },
+    {
+      label: strings.INTERMEDIATE_PARTIAL_DESICCATION_TOLERANT,
+      value: useLocalizedValues
+        ? strings.INTERMEDIATE_PARTIAL_DESICCATION_TOLERANT
+        : 'Intermediate - Partial Desiccation Tolerant',
+    },
+    {
+      label: strings.INTERMEDIATE_SHORT_LIVED,
+      value: useLocalizedValues ? strings.INTERMEDIATE_SHORT_LIVED : 'Intermediate - Short Lived',
+    },
     { label: strings.LIKELY_ORTHODOX, value: useLocalizedValues ? strings.LIKELY_ORTHODOX : 'Likely Orthodox' },
     {
       label: strings.LIKELY_RECALCITRANT,
@@ -162,6 +179,8 @@ export function getGrowthFormString(species: Species): string {
           return strings.FUNGUS;
         case 'Graminoid':
           return strings.GRAMINOID;
+        case 'Herb':
+          return strings.HERB;
         case 'Liana':
           return strings.LIANA;
         case 'Lichen':
