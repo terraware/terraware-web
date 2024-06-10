@@ -167,8 +167,45 @@ export function successionalGroups(): { label: string; value: SuccessionalGroup 
   ];
 }
 
-export function getGrowthFormString(species: Species): string {
-  return (species.growthForms || [])
+export function getEcosystemTypesString(species?: Species): string {
+  return (species?.ecosystemTypes || [])
+    .map((ecosystemType) => {
+      switch (ecosystemType) {
+        case 'Boreal forests/Taiga':
+          return strings.ECOSYSTEM_BOREAL_FOREST_TAIGA;
+        case 'Deserts and xeric shrublands':
+          return strings.ECOSYSTEM_DESERT_XERIC_SHRUBLAND;
+        case 'Flooded grasslands and savannas':
+          return strings.ECOSYSTEM_FLOODED_GRASSLAND_SAVANNA;
+        case 'Mangroves':
+          return strings.ECOSYSTEM_MANGROVE;
+        case 'Mediterranean forests, woodlands and scrubs':
+          return strings.ECOSYSTEM_MEDITERRANEAN_FOREST;
+        case 'Montane grasslands and shrublands':
+          return strings.ECOSYSTEM_MONTANE_GRASSLAND_SHRUBLAND;
+        case 'Temperate broad leaf and mixed forests':
+          return strings.ECOSYSTEM_TEMPERATE_BROADLEAF_MIXED_FOREST;
+        case 'Temperate coniferous forest':
+          return strings.ECOSYSTEM_TEMPERATE_CONIFEROUS_FOREST;
+        case 'Temperate grasslands, savannas and shrublands':
+          return strings.ECOSYSTEM_TEMPERATE_GRASSLAND_SAVANNA_SHRUBLAND;
+        case 'Tropical and subtropical coniferous forests':
+          return strings.ECOSYSTEM_TROPICAL_CONIFEROUS_FOREST;
+        case 'Tropical and subtropical dry broad leaf forests':
+          return strings.ECOSYSTEM_TROPICAL_DRY_BROADLEAF_FOREST;
+        case 'Tropical and subtropical grasslands, savannas and shrublands':
+          return strings.ECOSYSTEM_TROPICAL_GRASSLAND_SAVANNA_SHRUBLAND;
+        case 'Tropical and subtropical moist broad leaf forests':
+          return strings.ECOSYSTEM_TROPICAL_MOIST_BROADLEAF_FOREST;
+        case 'Tundra':
+          return strings.ECOSYSTEM_TUNDRA;
+      }
+    })
+    .join(', ');
+}
+
+export function getGrowthFormsString(species?: Species): string {
+  return (species?.growthForms || [])
     .map((growthForm) => {
       switch (growthForm) {
         case 'Fern':
@@ -203,6 +240,73 @@ export function getGrowthFormString(species: Species): string {
           return strings.VINE;
         default:
           return `${growthForm}`;
+      }
+    })
+    .join(', ');
+}
+
+export function getPlantMaterialSourcingMethodsString(species?: Species): string {
+  return (species?.plantMaterialSourcingMethods || [])
+    .map((plantMaterialSourcingMethod) => {
+      switch (plantMaterialSourcingMethod) {
+        case 'Mangrove propagules':
+          return strings.PLANT_MATERIAL_SOURCE_METHOD_MANGROVE_PROPAGULES;
+        case 'Other':
+          return strings.OTHER;
+        case 'Seed collection & germination':
+          return strings.PLANT_MATERIAL_SOURCE_METHOD_SEED_COLLECTION_AND_GERMINATION;
+        case 'Seed purchase & germination':
+          return strings.PLANT_MATERIAL_SOURCE_METHOD_SEED_PURCHASE_AND_GERMINATION;
+        case 'Seedling purchase':
+          return strings.PLANT_MATERIAL_SOURCE_METHOD_SEEDLING_PURCHASE;
+        case 'Vegetative propagation':
+          return strings.PLANT_MATERIAL_SOURCE_METHOD_VEGETATIVE_PROPAGATION;
+        case 'Wildling harvest':
+          return strings.PLANT_MATERIAL_SOURCE_METHOD_WILDLING_HARVEST;
+      }
+    })
+    .join(', ');
+}
+
+export function getSeedStorageBehaviorString(species?: Species): string {
+  switch (species?.seedStorageBehavior) {
+    case 'Intermediate':
+      return strings.INTERMEDIATE;
+    case 'Intermediate - Cool Temperature Sensitive':
+      return strings.INTERMEDIATE_COOL_TEMPERATURE_SENSITIVE;
+    case 'Intermediate - Partial Desiccation Tolerant':
+      return strings.INTERMEDIATE_PARTIAL_DESICCATION_TOLERANT;
+    case 'Intermediate - Short Lived':
+      return strings.INTERMEDIATE_SHORT_LIVED;
+    case 'Likely Intermediate':
+      return strings.LIKELY_INTERMEDIATE;
+    case 'Likely Orthodox':
+      return strings.LIKELY_ORTHODOX;
+    case 'Likely Recalcitrant':
+      return strings.LIKELY_RECALCITRANT;
+    case 'Orthodox':
+      return strings.ORTHODOX;
+    case 'Recalcitrant':
+      return strings.RECALCITRANT;
+    case 'Unknown':
+      return strings.UNKNOWN;
+    case undefined:
+      return '';
+  }
+}
+
+export function getSuccessionalGroupsString(species?: Species): string {
+  return (species?.successionalGroups || [])
+    .map((successionalGroup) => {
+      switch (successionalGroup) {
+        case 'Early secondary':
+          return strings.SUCCESSIONAL_GROUP_EARLY_SECONDARY;
+        case 'Late secondary':
+          return strings.SUCCESSIONAL_GROUP_LATE_SECONDARY;
+        case 'Mature':
+          return strings.SUCCESSIONAL_GROUP_MATURE;
+        case 'Pioneer':
+          return strings.SUCCESSIONAL_GROUP_PIONEER;
       }
     })
     .join(', ');
