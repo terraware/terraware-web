@@ -198,7 +198,7 @@ function sections(system?: string): Section[] {
     {
       name: strings.SEED_COLLECTION,
       options: [
-        [columns.speciesName, columns.species_commonName, columns.species_familyName],
+        [columns.speciesName, columns.species_commonName, columns.species_familyName, columns.plantId],
         [
           columns.collectedDate,
           columns.collectionSiteName,

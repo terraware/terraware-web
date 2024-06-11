@@ -192,7 +192,11 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
               {`${strings.COLLECTED_FROM}${numPlants === undefined ? '' : ' ' + numPlants}${
                 collectionSource && collectionSource !== 'Other' ? ' ' + collectionSource : ''
               } ${isNotPlural ? strings.PLANT : strings.PLANTS.toLowerCase()}`}
-              {accession.plantId ? <Typography>{`${strings.PLANT_ID}: ${accession.plantId}`}</Typography> : ''}
+              {accession.plantId ? (
+                <Typography>{`${strings.PLANT_ID_IF_APPLICABLE}: ${accession.plantId}`}</Typography>
+              ) : (
+                ''
+              )}
               {accession.notes ? (
                 <Box marginTop={2} display='flex'>
                   <Typography>

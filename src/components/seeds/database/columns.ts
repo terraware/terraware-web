@@ -169,6 +169,12 @@ function columns(): DatabaseColumn[] {
       type: 'string',
       filter: { type: 'search' },
     },
+    {
+      key: 'plantId',
+      name: strings.PLANT_ID,
+      type: 'string',
+      filter: { type: 'search' },
+    },
   ];
 }
 
