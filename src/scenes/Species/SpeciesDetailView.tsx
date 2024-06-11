@@ -14,7 +14,14 @@ import { useParticipantData } from 'src/providers/Participant/ParticipantContext
 import { useOrganization } from 'src/providers/hooks';
 import { SpeciesService } from 'src/services';
 import strings from 'src/strings';
-import { Species } from 'src/types/Species';
+import {
+  Species,
+  getEcosystemTypesString,
+  getGrowthFormsString,
+  getPlantMaterialSourcingMethodsString,
+  getSeedStorageBehaviorString,
+  getSuccessionalGroupsString,
+} from 'src/types/Species';
 import { isContributor } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -184,7 +191,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
             <TextField
               id={'growthForms'}
               label={strings.GROWTH_FORM}
-              value={species?.growthForms?.join(', ')}
+              value={getGrowthFormsString(species)}
               type='text'
               aria-label='date-picker'
               display={true}
@@ -227,7 +234,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
             <TextField
               id={'successionalGroup'}
               label={strings.SUCCESSIONAL_GROUP}
-              value={species?.successionalGroups?.join(', ')}
+              value={getSuccessionalGroupsString(species)}
               type='text'
               display={true}
             />
@@ -236,7 +243,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
             <TextField
               id={'ecosystemType'}
               label={strings.ECOSYSTEM_TYPE}
-              value={species?.ecosystemTypes?.join(', ')}
+              value={getEcosystemTypesString(species)}
               type='text'
               display={true}
             />
@@ -265,7 +272,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
             <TextField
               id={'seedStorageBehavior'}
               label={strings.SEED_STORAGE_BEHAVIOR}
-              value={species?.seedStorageBehavior}
+              value={getSeedStorageBehaviorString(species)}
               type='text'
               display={true}
             />
@@ -274,7 +281,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
             <TextField
               id={'plantMaterialSourcingMethod'}
               label={strings.PLANT_MATERIAL_SOURCING_METHOD}
-              value={species?.plantMaterialSourcingMethods?.join(', ')}
+              value={getPlantMaterialSourcingMethodsString(species)}
               type='text'
               display={true}
               tooltipTitle={

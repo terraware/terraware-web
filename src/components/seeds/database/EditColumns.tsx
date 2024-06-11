@@ -204,6 +204,7 @@ function sections(system?: string): Section[] {
           columns.collectionSiteName,
           columns.collectionSiteLandowner,
           columns.collectionSiteNotes,
+          columns['geolocations.coordinates'],
         ],
         [columns.ageYears, columns.ageMonths],
       ],
