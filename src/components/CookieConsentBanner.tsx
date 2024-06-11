@@ -73,13 +73,14 @@ export default function CookieConsentBanner() {
               <TextWithLink href={docLinks.cookie_policy} isExternal text={strings.COOKIES_LEARN_MORE} />
             </Box>
 
-            <Box sx={{ display: 'flex', flexDirection: 'row', height: '40px' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', height: '40px', width: isMobile ? '100%' : 'auto' }}>
               <Button
                 label={strings.DECLINE}
                 onClick={() => {
                   updateUserCookieConsent(false);
                 }}
                 priority='secondary'
+                sx={{ width: isMobile ? '50%' : 'auto' }}
                 type='productive'
               />
               <Button
@@ -88,6 +89,7 @@ export default function CookieConsentBanner() {
                   updateUserCookieConsent(true);
                 }}
                 priority='primary'
+                sx={{ width: isMobile ? '50%' : 'auto' }}
                 type='productive'
               />
             </Box>
