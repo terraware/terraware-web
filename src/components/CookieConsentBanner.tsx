@@ -35,7 +35,7 @@ export default function CookieConsentBanner() {
       ? Date.now() - new Date(user.cookiesConsentedTime).valueOf() > ONE_YEAR_IN_MILLISECONDS
       : false;
 
-    if (user && (!user?.cookiesConsented || cookiesConsentedTimeIsGreaterThanOneYear)) {
+    if (user && (typeof user?.cookiesConsented !== 'boolean' || cookiesConsentedTimeIsGreaterThanOneYear)) {
       setVisible(true);
     }
   }, [user]);
