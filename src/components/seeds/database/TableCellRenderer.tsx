@@ -4,9 +4,11 @@ import { FiberManualRecord } from '@mui/icons-material';
 import { Box, TableCell, Typography, useTheme } from '@mui/material';
 
 import Link from 'src/components/common/Link';
+import TextTruncated from 'src/components/common/TextTruncated';
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import strings from 'src/strings';
 import { SearchResponseElement } from 'src/types/Search';
 
 export default function SearchCellRenderer(props: RendererProps<SearchResponseElement>): JSX.Element {
@@ -82,6 +84,18 @@ export default function SearchCellRenderer(props: RendererProps<SearchResponseEl
 
   if (column.key === 'totalViabilityPercent' && value !== undefined) {
     return <CellRenderer index={index} column={column} value={`${value}%`} row={row} />;
+  }
+
+  if (column.key === 'geolocations.coordinates') {
+    const coordinatesValues = ((row.geolocations || []) as any[]).map((gl) => gl.coordinates);
+    return (
+      <CellRenderer
+        index={index}
+        column={column}
+        row={row}
+        value={<TextTruncated stringList={coordinatesValues} listSeparator={strings.LIST_SEPARATOR_SECONDARY} />}
+      />
+    );
   }
 
   return <CellRenderer {...props} />;
