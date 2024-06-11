@@ -31,11 +31,17 @@ export default function CookieConsentBanner() {
   }, []);
 
   useEffect(() => {
+    if (!user) {
+      return;
+    }
+
     const cookiesConsentedTimeIsGreaterThanOneYear = user?.cookiesConsentedTime
       ? Date.now() - new Date(user.cookiesConsentedTime).valueOf() > ONE_YEAR_IN_MILLISECONDS
       : false;
 
-    if (user && (typeof user?.cookiesConsented !== 'boolean' || cookiesConsentedTimeIsGreaterThanOneYear)) {
+    // if user.cookiesConsented is not a boolean, it means the user has not seen the banner yet
+    // if the user has seen the banner but it has been more than a year since they consented, show the banner again
+    if (typeof user?.cookiesConsented !== 'boolean' || cookiesConsentedTimeIsGreaterThanOneYear) {
       setVisible(true);
     }
   }, [user]);
