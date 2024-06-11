@@ -47,6 +47,7 @@ export default function UserMenu({}: UserMenuProps): JSX.Element {
     const items: DropdownItem[] = [
       { label: strings.MY_ACCOUNT, value: APP_PATHS.MY_ACCOUNT },
       { label: strings.PRIVACY_POLICY, value: 'privacyPolicy' },
+      { label: strings.HELP_SUPPORT, value: APP_PATHS.HELP_SUPPORT },
       { label: strings.LOG_OUT, value: 'logOut' },
     ];
 

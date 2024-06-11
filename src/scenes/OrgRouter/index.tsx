@@ -20,8 +20,8 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import AccessionsRouter from 'src/scenes/AccessionsRouter';
 import BatchBulkWithdrawView from 'src/scenes/BatchBulkWithdrawView';
 import CheckIn from 'src/scenes/CheckIn';
-import ContactUsRouter from 'src/scenes/ContactUsRouter';
 import DeliverablesRouter from 'src/scenes/DeliverablesRouter';
+import HelpSupportRouter from 'src/scenes/HelpSupportRouter';
 import Home from 'src/scenes/Home';
 import InventoryRouter from 'src/scenes/InventoryRouter';
 import MonitoringRouter from 'src/scenes/MonitoringRouter';
@@ -249,7 +249,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
               element={<PlantingSites reloadTracking={reloadPlantingSites} />}
             />
             <Route path={'/nursery/*'} element={<NurseryRouter />} />
-            <Route path={APP_PATHS.CONTACT_US + '/*'} element={<ContactUsRouter />} />
+            <Route path={APP_PATHS.HELP_SUPPORT + '/*'} element={<HelpSupportRouter />} />
             <Route path={APP_PATHS.MY_ACCOUNT + '/*'} element={<MyAccountRouter />} />
             <Route path={APP_PATHS.REPORTS + '/*'} element={<ReportsRouter />} />
             <Route path={APP_PATHS.OBSERVATIONS + '/*'} element={<ObservationsRouter />} />

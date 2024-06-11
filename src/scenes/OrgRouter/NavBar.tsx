@@ -46,7 +46,6 @@ export default function NavBar({
   const isAccessionDashboardRoute = useMatch({ path: APP_PATHS.SEEDS_DASHBOARD + '/', end: false });
   const isAccessionsRoute = useMatch({ path: APP_PATHS.ACCESSIONS + '/', end: false });
   const isCheckinRoute = useMatch({ path: APP_PATHS.CHECKIN + '/', end: false });
-  const isContactUsRoute = useMatch({ path: APP_PATHS.CONTACT_US + '/', end: false });
   const isDeliverablesRoute = useMatch({ path: APP_PATHS.DELIVERABLES + '/', end: false });
   const isDeliverableViewRoute = useMatch({ path: APP_PATHS.DELIVERABLE_VIEW + '/', end: false });
   const isHomeRoute = useMatch({ path: APP_PATHS.HOME + '/', end: false });
@@ -378,16 +377,6 @@ export default function NavBar({
       )}
 
       <NavFooter>
-        <NavItem
-          label={strings.CONTACT_US}
-          icon='mail'
-          selected={!!isContactUsRoute}
-          onClick={() => {
-            closeAndNavigateTo(APP_PATHS.CONTACT_US);
-          }}
-          id='contactus'
-        />
-
         <LocaleSelector transparent={true} />
       </NavFooter>
     </Navbar>

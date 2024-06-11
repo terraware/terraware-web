@@ -556,6 +556,7 @@ HECTARES_PLANTED_DESCRIPTION_3_INCOMPLETE,"Currently, {0} out of {1} subzones ar
 HECTARES_PLANTED_DESCRIPTION_4,"For observations, we only assign monitoring plots that we know are a part of these subzones.",
 HECTARES_PLANTED_DESCRIPTION_LINK,Go to Withdrawals,
 HEIGHT_AT_MATURITY,Height at Maturity (cm),
+HELP_SUPPORT,Help & Support,
 HERB,Herb,A growth form of a plant
 HIGHEST,Highest,
 HIGHEST_AND_LOWEST_MORTALITY_RATE_CARD_TITLE,Which zones have the highest and lowest mortality rates?,
