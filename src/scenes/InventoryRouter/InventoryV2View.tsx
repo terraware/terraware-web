@@ -231,7 +231,7 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
   };
 
   return (
-    <TfMain backgroundImageVisible={!isOnboarded}>
+    <TfMain>
       <ImportInventoryModal open={importInventoryModalOpen} onClose={() => setImportInventoryModalOpen(false)} />
       {reportData && (
         <DownloadReportModal

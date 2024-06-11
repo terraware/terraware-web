@@ -31,7 +31,6 @@ export type PlantsPrimaryPageViewProps = {
 export default function PlantsPrimaryPageView({
   actionButton,
   children,
-  isEmptyState,
   onSelect,
   plantingSites,
   selectedPlantingSiteId,
@@ -64,7 +63,7 @@ export default function PlantsPrimaryPageView({
   }
 
   return (
-    <TfMain backgroundImageVisible={isEmptyState}>
+    <TfMain>
       <PageHeaderWrapper nextElement={contentRef.current}>
         <Grid item xs={12} paddingLeft={theme.spacing(3)} marginBottom={theme.spacing(4)}>
           <Grid item xs={12} display={isMobile ? 'block' : 'flex'} alignItems='center'>
