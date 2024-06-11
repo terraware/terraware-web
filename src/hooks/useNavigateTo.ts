@@ -10,8 +10,8 @@ export default function useNavigateTo() {
 
   return useMemo(
     () => ({
-      goToContactUs: () => {
-        navigate({ pathname: APP_PATHS.CONTACT_US });
+      goToHelpSupport: () => {
+        navigate({ pathname: APP_PATHS.HELP_SUPPORT });
       },
 
       goToContactUsForm: (requestType: SupportRequestType) => {

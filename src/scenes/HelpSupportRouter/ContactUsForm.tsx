@@ -40,7 +40,7 @@ const ContactUsForm = () => {
   const theme = useTheme();
   const pathParams = useParams<{ requestType: string }>();
   const snackbar = useSnackbar();
-  const { goToContactUs } = useNavigateTo();
+  const { goToHelpSupport } = useNavigateTo();
 
   const styles: Record<string, Record<string, unknown>> = {
     textarea: {
@@ -51,8 +51,8 @@ const ContactUsForm = () => {
   const crumbs: Crumb[] = useMemo(
     () => [
       {
-        name: activeLocale ? strings.CONTACT_US : '',
-        to: APP_PATHS.CONTACT_US,
+        name: activeLocale ? strings.HELP_SUPPORT : '',
+        to: APP_PATHS.HELP_SUPPORT,
       },
     ],
     [activeLocale]
@@ -80,7 +80,7 @@ const ContactUsForm = () => {
       supportRequestType !== undefined &&
       types.find((item) => item === supportRequestType) === undefined
     ) {
-      goToContactUs();
+      goToHelpSupport();
     }
   }, [types, supportRequestType]);
 
@@ -151,7 +151,7 @@ const ContactUsForm = () => {
     } else if (submitSupportRequest.status === 'success') {
       const issueKey = submitSupportRequest.data;
       snackbar.toastSuccess(strings.formatString(strings.THANK_YOU_FOR_CONTACTING_SUPPORT, `${issueKey}`));
-      goToContactUs();
+      goToHelpSupport();
     }
   }, [activeLocale, submitSupportRequest, snackbar]);
 
@@ -181,7 +181,7 @@ const ContactUsForm = () => {
       <PageForm
         busy={submitSupportRequest?.status === 'pending'}
         cancelID='cancelSupportRequest'
-        onCancel={() => goToContactUs()}
+        onCancel={() => goToHelpSupport()}
         onSave={() => handleOnSave()}
         saveID='submitSupportRequest'
         saveButtonText={strings.SUBMIT}

@@ -101,13 +101,6 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
       />
 
       <NavFooter>
-        <NavItem
-          icon='mail'
-          id='contactus'
-          label={strings.CONTACT_US}
-          onClick={() => closeAndNavigateTo(APP_PATHS.CONTACT_US)}
-        />
-
         <LocaleSelector transparent={true} />
       </NavFooter>
     </Navbar>

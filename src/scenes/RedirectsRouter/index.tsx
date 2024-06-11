@@ -10,7 +10,7 @@ const RedirectsRouter = () => {
       {/* In alphabetical order for easy reference with APP_PATHS, except for /home which must go last */}
       {/* <Route path={APP_PATHS.ACCESSIONS + '/*'} element={<Navigate to={APP_PATHS.ACCESSIONS} />} /> */}
       <Route path={APP_PATHS.CHECKIN + '/'} element={<Navigate to={APP_PATHS.CHECKIN} />} />
-      <Route path={APP_PATHS.CONTACT_US + '/'} element={<Navigate to={APP_PATHS.CONTACT_US} />} />
+      <Route path={APP_PATHS.HELP_SUPPORT + '/'} element={<Navigate to={APP_PATHS.HELP_SUPPORT} />} />
       <Route path={APP_PATHS.ORGANIZATION + '/'} element={<Navigate to={APP_PATHS.ORGANIZATION} />} />
       <Route path={APP_PATHS.PEOPLE + '/'} element={<Navigate to={APP_PATHS.PEOPLE} />} />
       <Route path={APP_PATHS.PROJECTS + '/'} element={<Navigate to={APP_PATHS.PROJECTS} />} />

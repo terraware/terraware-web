@@ -34,7 +34,7 @@ type ListItemContent = {
   buttonText: string;
   onClick: () => void;
 };
-export default function ContactUsHome(): JSX.Element {
+export default function HelpSupportHome(): JSX.Element {
   const { activeLocale } = useLocalization();
   const { isMobile, isDesktop } = useDeviceInfo();
   const docLinks = useDocLinks();
@@ -119,7 +119,7 @@ export default function ContactUsHome(): JSX.Element {
           margin: '0 0 12px 16px',
         }}
       >
-        {strings.CONTACT_US}
+        {strings.HELP_SUPPORT}
       </h1>
       <PageSnackbar />
       <Card flushMobile>
