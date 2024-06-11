@@ -8,10 +8,12 @@ import RegionSelector from 'src/components/RegionSelector';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import WeightSystemSelector from 'src/components/WeightSystemSelector';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import TextWithLink from 'src/components/common/TextWithLink';
 import TfMain from 'src/components/common/TfMain';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { useDocLinks } from 'src/docLinks';
 import { useLocalization, useUser } from 'src/providers';
 import { useTimeZones } from 'src/providers';
 import {
@@ -121,6 +123,7 @@ const MyAccountContent = ({
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
   const { userPreferences, reloadUserPreferences } = useUser();
   const snackbar = useSnackbar();
+  const docLinks = useDocLinks();
   const contentRef = useRef(null);
   const { activeLocale, selectedLocale, setSelectedLocale } = useLocalization();
   const [countries, setCountries] = useState<Country[]>();
@@ -567,7 +570,8 @@ const MyAccountContent = ({
                     />
                   </Grid>
                 </RadioGroup>
-                <Typography fontSize='14px'>{strings.MY_ACCOUNT_COOKIES_DESC}</Typography>
+                <Typography>{strings.COOKIES_DESCRIPTION}</Typography>
+                <TextWithLink href={docLinks.cookie_policy} isExternal text={strings.COOKIES_LEARN_MORE} />
               </Grid>
             </Grid>
           </Box>
