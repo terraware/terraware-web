@@ -1,3 +1,4 @@
+ad5a8b9c09 SW-5437 Add accession GPS coordinates to table view (#2713)
 d714227f38 SW-5518 Localize species enum values on details page (#2718)
 3de075a5ba SW-5073 Update species enum values, names (#2717)
 dd8702d485 SW-5515: FE - Search textfield for Projects and People are stretched to full width, instead of 300px (#2714)
