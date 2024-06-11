@@ -1,29 +1,29 @@
 import { Action, combineReducers } from '@reduxjs/toolkit';
 
-import cohortsReducers from 'src/redux/features/cohorts/cohortsSlice';
-import deliverablesReducers from 'src/redux/features/deliverables/deliverablesSlice';
-import draftPlantingSiteReducers from 'src/redux/features/draftPlantingSite/draftPlantingSiteSlice';
-import globalRolesReducers from 'src/redux/features/globalRoles/globalRolesSlice';
-import projectsReducers from 'src/redux/features/projects/projectsSlice';
-import reportsSettingsReducers from 'src/redux/features/reportsSettings/reportsSettingsSlice';
-import speciesReducers from 'src/redux/features/species';
-
 import acceleratorReducers from './features/accelerator/acceleratorSlice';
 import accessionsReducers from './features/accessions/accessionsSlice';
 import appVersionReducers from './features/appVersion/appVersionSlice';
 import batchesReducers from './features/batches/batchesSlice';
+import cohortsReducers from './features/cohorts/cohortsSlice';
+import deliverablesReducers from './features/deliverables/deliverablesSlice';
 import documentProducerReducers from './features/documentProducer';
+import draftPlantingSiteReducers from './features/draftPlantingSite/draftPlantingSiteSlice';
+import globalRolesReducers from './features/globalRoles/globalRolesSlice';
 import messageReducers from './features/message/messageSlice';
 import moduleReducers from './features/modules/modulesSlice';
 import observationsReducers from './features/observations/observationsSlice';
 import participantProjectSpeciesReducers from './features/participantProjectSpecies/participantProjectSpeciesSlice';
 import participantProjectsReducers from './features/participantProjects/participantProjectsSlice';
 import participantsReducers from './features/participants/participantsSlice';
+import plantingSiteReducers from './features/plantingSite/plantingSiteSlice';
 import plantingsReducers from './features/plantings/plantingsSlice';
 import projectToDoReducers from './features/projectToDo/projectToDoSlice';
+import projectsReducers from './features/projects/projectsSlice';
+import reportsSettingsReducers from './features/reportsSettings/reportsSettingsSlice';
 import scoresReducers from './features/scores/scoresSlice';
 import snackbarReducers from './features/snackbar/snackbarSlice';
-import { speciesAsyncThunkReducers } from './features/species/speciesSlice';
+import speciesReducers from './features/species';
+import speciesAsyncThunkReducers from './features/species/speciesSlice';
 import subLocationsReducers from './features/subLocations/subLocationsSlice';
 import supportReducers from './features/support/supportSlice';
 import trackingReducers from './features/tracking/trackingSlice';
@@ -49,6 +49,7 @@ export const reducers = {
   ...participantProjectsReducers,
   ...participantProjectSpeciesReducers,
   ...plantingsReducers,
+  ...plantingSiteReducers,
   ...projectsReducers,
   ...projectToDoReducers,
   ...reportsSettingsReducers,
