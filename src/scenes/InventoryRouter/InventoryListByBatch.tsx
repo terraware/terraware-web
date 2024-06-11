@@ -210,7 +210,7 @@ export default function InventoryListByBatch({ setReportData }: InventoryListByB
         </Box>
       ) : (
         <Container maxWidth={false} sx={{ padding: '32px 0' }}>
-          <EmptyStatePage backgroundImageVisible={false} pageName={'Inventory'} reloadData={onApplyFilters} />
+          <EmptyStatePage pageName={'Inventory'} reloadData={onApplyFilters} />
         </Container>
       )}
     </Card>

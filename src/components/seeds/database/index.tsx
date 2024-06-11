@@ -618,7 +618,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           <SelectSeedBankModal open={selectSeedBankForImportModalOpen} onClose={onSeedBankForImportSelected} />
         </>
       )}
-      <TfMain backgroundImageVisible={!isOnboarded}>
+      <TfMain>
         <EditColumns open={editColumnsModalOpen} value={displayColumnNames} onClose={onCloseEditColumnsModal} />
         {selectedOrganization && (
           <DownloadReportModal

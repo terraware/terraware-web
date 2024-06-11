@@ -30,16 +30,11 @@ type PageContent = {
 };
 
 type EmptyStatePageProps = {
-  backgroundImageVisible?: boolean;
   pageName: 'Species' | 'SeedBanks' | 'Nurseries' | 'Inventory' | 'PlantingSites' | 'Projects';
   reloadData?: () => void;
 };
 
-export default function EmptyStatePage({
-  backgroundImageVisible = true,
-  pageName,
-  reloadData,
-}: EmptyStatePageProps): JSX.Element {
+export default function EmptyStatePage({ pageName, reloadData }: EmptyStatePageProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
@@ -245,7 +240,7 @@ export default function EmptyStatePage({
   };
 
   return (
-    <TfMain backgroundImageVisible={backgroundImageVisible}>
+    <TfMain>
       {selectedOrganization && (
         <>
           <ImportSpeciesModal open={importSpeciesModalOpened} onClose={onCloseImportSpeciesModal} />

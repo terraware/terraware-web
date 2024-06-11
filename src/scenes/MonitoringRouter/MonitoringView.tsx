@@ -126,7 +126,7 @@ export default function MonitoringView(props: MonitoringProps): JSX.Element {
   );
 
   return (
-    <TfMain backgroundImageVisible={!hasSeedBanks}>
+    <TfMain>
       <Grid container>
         {hasSeedBanks ? (
           <>

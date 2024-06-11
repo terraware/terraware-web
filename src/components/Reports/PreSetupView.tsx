@@ -22,7 +22,7 @@ const PreSetupView = () => {
   };
 
   return (
-    <TfMain backgroundImageVisible={true}>
+    <TfMain>
       <PageHeader title={strings.REPORTS} />
       <Container sx={{ marginBottom: theme.spacing(8), padding: '0' }}>
         <Box

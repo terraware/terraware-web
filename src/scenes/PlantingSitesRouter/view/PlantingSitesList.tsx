@@ -134,7 +134,7 @@ export default function PlantingSitesList(): JSX.Element {
   }, [selectedOrganization, onSearch]);
 
   if (plantingSites && filtersEmpty() && !plantingSites.length) {
-    return <EmptyStatePage backgroundImageVisible={true} pageName={'PlantingSites'} />;
+    return <EmptyStatePage pageName={'PlantingSites'} />;
   }
 
   return (
