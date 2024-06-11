@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { Box, CssBaseline, StyledEngineProvider, useTheme } from '@mui/material';
 
 import AppBootstrap from 'src/AppBootstrap';
+import CookieConsentBanner from 'src/components/CookieConsentBanner';
 import ToastSnackbar from 'src/components/ToastSnackbar';
 import TopBar from 'src/components/TopBar/TopBar';
 import TopBarContent from 'src/components/TopBar/TopBarContent';
@@ -78,6 +79,7 @@ function AppContent() {
     <StyledEngineProvider injectFirst>
       <CssBaseline />
       <ToastSnackbar />
+      <CookieConsentBanner />
       <TopBar>
         <TopBarContent setShowNavBar={setShowNavBar} />
       </TopBar>

@@ -3,6 +3,7 @@ import { SupportedLocaleId } from 'src/strings/locales';
 
 export type DocType =
   | 'contact_us'
+  | 'cookie_policy'
   | 'planting_site_create_boundary_instructions_video'
   | 'planting_site_create_exclusions_boundary_instructions_video'
   | 'planting_site_create_subzone_boundary_instructions_video'
@@ -19,6 +20,7 @@ type DocLink = Record<DocType, string>;
 const DOC_LINKS: Record<SupportedLocaleId, DocLink> = {
   en: {
     contact_us: 'https://www.terraformation.com/contact-us/terraware-support-contact-us',
+    cookie_policy: 'https://www.terraformation.com/cookie-policy',
     planting_site_create_boundary_instructions_video:
       'https://player.vimeo.com/video/911493236?h=b8b5555693&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479',
     planting_site_create_exclusions_boundary_instructions_video:
@@ -36,6 +38,7 @@ const DOC_LINKS: Record<SupportedLocaleId, DocLink> = {
   },
   es: {
     contact_us: 'https://www.terraformation.com/contact-us/soporte-terraware-contactenos',
+    cookie_policy: 'https://www.terraformation.com/cookie-policy',
     planting_site_create_boundary_instructions_video:
       'https://player.vimeo.com/video/911493236?h=b8b5555693&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479',
     planting_site_create_exclusions_boundary_instructions_video:
