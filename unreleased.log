@@ -1,3 +1,4 @@
+25303d863b Updated translations from Phrase (#2729)
 be29381327 SW-4813 Implemented hooks for planting site creation (#2723)
 71141e239a SW-5520: Implemented redux for planting site create, validate, update, delete (#2720)
 746e16f3d1 SW-5487 Rename Contact Us to Help & Support; move to menu (#2727)
