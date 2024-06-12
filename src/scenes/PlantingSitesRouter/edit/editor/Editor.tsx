@@ -30,6 +30,7 @@ import StartOverConfirmation from './StartOverConfirmation';
 import Subzones from './Subzones';
 import Zones from './Zones';
 import { OnValidate } from './types';
+import usePlantingSiteValidate from 'src/scenes/PlantingSitesRouter/hooks/usePlantingSiteValidate';
 
 export type EditorProps = {
   site: DraftPlantingSite;
@@ -89,6 +90,7 @@ export default function Editor(props: EditorProps): JSX.Element {
   const { onFinishCreate, createDraft, createDraftStatus, createdDraft } = useDraftPlantingSiteCreate();
   const { onFinishUpdate, updateDraft, updateDraftStatus, updatedDraft } = useDraftPlantingSiteUpdate();
   const { createPlantingSite, createPlantingSiteStatus } = usePlantingSiteCreate();
+  const { validateSite, validateSiteStatus, isValid, problems } = usePlantingSiteValidate();
 
   // update local state when draft is created
   useEffect(() => {
