@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1718210107489" clover="3.2.0">
-  <project timestamp="1718210107489" name="All files">
-    <metrics statements="22400" coveredstatements="937" conditionals="14260" coveredconditionals="231" methods="6870" coveredmethods="162" elements="43530" coveredelements="1330" complexity="0" loc="22400" ncloc="22400" packages="210" files="992" classes="992"/>
+<coverage generated="1718214509451" clover="3.2.0">
+  <project timestamp="1718214509451" name="All files">
+    <metrics statements="22400" coveredstatements="937" conditionals="14263" coveredconditionals="231" methods="6870" coveredmethods="162" elements="43533" coveredelements="1330" complexity="0" loc="22400" ncloc="22400" packages="210" files="992" classes="992"/>
     <package name="src">
       <metrics statements="161" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -16541,7 +16541,7 @@
       </file>
     </package>
     <package name="src.scenes.InventoryRouter.form">
-      <metrics statements="198" coveredstatements="0" conditionals="170" coveredconditionals="0" methods="69" coveredmethods="0"/>
+      <metrics statements="198" coveredstatements="0" conditionals="173" coveredconditionals="0" methods="69" coveredmethods="0"/>
       <file name="AccessionsDropdown.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/InventoryRouter/form/AccessionsDropdown.tsx">
         <metrics statements="5" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="20" count="0" type="stmt"/>
@@ -16551,7 +16551,7 @@
         <line num="37" count="0" type="stmt"/>
       </file>
       <file name="BatchDetailsForm.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/InventoryRouter/form/BatchDetailsForm.tsx">
-        <metrics statements="110" coveredstatements="0" conditionals="109" coveredconditionals="0" methods="28" coveredmethods="0"/>
+        <metrics statements="110" coveredstatements="0" conditionals="112" coveredconditionals="0" methods="28" coveredmethods="0"/>
         <line num="42" count="0" type="stmt"/>
         <line num="46" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
@@ -16656,12 +16656,12 @@
         <line num="262" count="0" type="stmt"/>
         <line num="266" count="0" type="stmt"/>
         <line num="276" count="0" type="stmt"/>
-        <line num="347" count="0" type="stmt"/>
-        <line num="365" count="0" type="stmt"/>
-        <line num="385" count="0" type="stmt"/>
-        <line num="407" count="0" type="stmt"/>
-        <line num="416" count="0" type="stmt"/>
-        <line num="453" count="0" type="stmt"/>
+        <line num="349" count="0" type="stmt"/>
+        <line num="367" count="0" type="stmt"/>
+        <line num="387" count="0" type="stmt"/>
+        <line num="409" count="0" type="stmt"/>
+        <line num="418" count="0" type="stmt"/>
+        <line num="455" count="0" type="stmt"/>
       </file>
       <file name="NurseryDropdownV2.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/InventoryRouter/form/NurseryDropdownV2.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="4" coveredmethods="0"/>
