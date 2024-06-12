@@ -23,12 +23,7 @@ const ProjectFieldTextAreaDisplay = ({ label, value }: ProjectFieldProps) => {
         <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={600} marginBottom={theme.spacing(1)}>
           {label}
         </Typography>
-        <Typography
-          fontSize={'16px'}
-          lineHeight={'24px'}
-          fontWeight={400}
-          sx={{ wordBreak: 'break-word' }}
-        >
+        <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={400} sx={{ wordBreak: 'break-word' }}>
           {valueElements}
         </Typography>
       </Box>
