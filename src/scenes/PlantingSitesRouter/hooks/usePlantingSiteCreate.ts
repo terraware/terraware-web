@@ -55,13 +55,13 @@ export default function usePlantingSiteCreate(): Response {
       const dispatched = dispatch(requestDeleteDraft(createRequest.id));
       setDeleteDraftRequestId(dispatched.requestId);
     }
-  }, [createRequest, createResult?.status, snackbar]);
+  }, [createRequest, createResult?.status, dispatch]);
 
   useEffect(() => {
     if (deleteDraftResult?.status === 'success' && createResult.data) {
       goToPlantingSiteView(createResult.data);
     }
-  }, [deleteDraftResult, createResult, goToPlantingSiteView, snackbar]);
+  }, [deleteDraftResult, createResult, dispatch, goToPlantingSiteView]);
 
   return useMemo<Response>(
     () => ({
