@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1718153842286" clover="3.2.0">
-  <project timestamp="1718153842286" name="All files">
-    <metrics statements="22369" coveredstatements="937" conditionals="14248" coveredconditionals="231" methods="6862" coveredmethods="162" elements="43479" coveredelements="1330" complexity="0" loc="22369" ncloc="22369" packages="210" files="992" classes="992"/>
+<coverage generated="1718154560681" clover="3.2.0">
+  <project timestamp="1718154560681" name="All files">
+    <metrics statements="22400" coveredstatements="937" conditionals="14260" coveredconditionals="231" methods="6870" coveredmethods="162" elements="43530" coveredelements="1330" complexity="0" loc="22400" ncloc="22400" packages="210" files="992" classes="992"/>
     <package name="src">
       <metrics statements="161" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -8319,7 +8319,7 @@
       </file>
     </package>
     <package name="src.hooks">
-      <metrics statements="170" coveredstatements="25" conditionals="59" coveredconditionals="6" methods="65" coveredmethods="11"/>
+      <metrics statements="171" coveredstatements="25" conditionals="59" coveredconditionals="6" methods="66" coveredmethods="11"/>
       <file name="useAcceleratorConsole.ts" path="/home/runner/work/terraware-web/terraware-web/src/hooks/useAcceleratorConsole.ts">
         <metrics statements="5" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="7" count="0" type="stmt"/>
@@ -8394,7 +8394,7 @@
         <line num="26" count="0" type="stmt"/>
       </file>
       <file name="useNavigateTo.ts" path="/home/runner/work/terraware-web/terraware-web/src/hooks/useNavigateTo.ts">
-        <metrics statements="26" coveredstatements="0" conditionals="3" coveredconditionals="0" methods="18" coveredmethods="0"/>
+        <metrics statements="27" coveredstatements="0" conditionals="3" coveredconditionals="0" methods="19" coveredmethods="0"/>
         <line num="9" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
@@ -8421,6 +8421,7 @@
         <line num="94" count="0" type="stmt"/>
         <line num="100" count="0" type="stmt"/>
         <line num="114" count="0" type="stmt"/>
+        <line num="121" count="0" type="stmt"/>
       </file>
       <file name="useParticipant.ts" path="/home/runner/work/terraware-web/terraware-web/src/hooks/useParticipant.ts">
         <metrics statements="14" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="4" coveredmethods="0"/>
@@ -20836,7 +20837,7 @@
       </file>
     </package>
     <package name="src.scenes.PlantingSitesRouter.hooks">
-      <metrics statements="76" coveredstatements="0" conditionals="25" coveredconditionals="0" methods="20" coveredmethods="0"/>
+      <metrics statements="106" coveredstatements="0" conditionals="37" coveredconditionals="0" methods="27" coveredmethods="0"/>
       <file name="useDraftPlantingSiteCreate.ts" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteCreate.ts">
         <metrics statements="28" coveredstatements="0" conditionals="9" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="39" count="0" type="stmt"/>
@@ -20917,16 +20918,46 @@
         <line num="84" count="0" type="stmt"/>
       </file>
       <file name="usePlantingSiteCreate.ts" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantingSitesRouter/hooks/usePlantingSiteCreate.ts">
-        <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>
-        <line num="22" count="0" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
-        <line num="27" count="0" type="cond" truecount="0" falsecount="2"/>
+        <metrics statements="24" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="6" coveredmethods="0"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="48" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="54" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="61" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
       </file>
       <file name="usePlantingSiteValidate.ts" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantingSitesRouter/hooks/usePlantingSiteValidate.ts">
-        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <metrics statements="12" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.PlantingSitesRouter.view">
