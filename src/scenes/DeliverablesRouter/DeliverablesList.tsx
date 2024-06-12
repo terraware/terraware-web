@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
 import { Grid, Typography } from '@mui/material';
-import { Separator, TableColumnType } from '@terraware/web-components';
+import { Separator } from '@terraware/web-components';
 
 import DeliverablesTable from 'src/components/DeliverablesTable';
 import PageHeader from 'src/components/PageHeader';
@@ -22,47 +22,6 @@ import {
   searchAndSort as genericSearchAndSort,
   modifySearchNode,
 } from 'src/utils/searchAndSort';
-
-const columns = (activeLocale: string | null): TableColumnType[] =>
-  activeLocale
-    ? [
-        {
-          key: 'name',
-          name: strings.DELIVERABLE_NAME,
-          type: 'string',
-        },
-        {
-          key: 'dueDate',
-          name: strings.DUE_DATE,
-          type: 'date',
-        },
-        {
-          key: 'type',
-          name: strings.TYPE,
-          type: 'string',
-        },
-        {
-          key: 'numDocuments',
-          name: strings.DOCUMENTS,
-          type: 'number',
-        },
-        {
-          key: 'category',
-          name: strings.CATEGORY,
-          type: 'string',
-        },
-        {
-          key: 'projectName',
-          name: strings.PROJECT,
-          type: 'string',
-        },
-        {
-          key: 'status',
-          name: strings.STATUS,
-          type: 'string',
-        },
-      ]
-    : [];
 
 const DeliverablesList = (): JSX.Element => {
   const { activeLocale } = useLocalization();
@@ -155,7 +114,6 @@ const DeliverablesList = (): JSX.Element => {
       </PageHeaderWrapper>
 
       <DeliverablesTable
-        columns={columns}
         extraTableFilters={extraTableFilters}
         filterModifiers={filterModifiers}
         organizationId={selectedOrganization.id}
