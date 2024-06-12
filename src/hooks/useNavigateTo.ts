@@ -116,6 +116,9 @@ export default function useNavigateTo() {
             .replace(':projectId', `${projectId}`)
             .replace(':deliverableId', `${deliverableId}`)
         ),
+
+      goToPlantingSiteView: (plantingSiteId: number) =>
+        navigate(APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', `${plantingSiteId}`)),
     }),
     [navigate]
   );
