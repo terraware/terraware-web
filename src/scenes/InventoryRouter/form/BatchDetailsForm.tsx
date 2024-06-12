@@ -330,13 +330,15 @@ export default function BatchDetailsForm(props: BatchDetailsFormProps): JSX.Elem
               </Grid>
             )}
 
-            <Grid item xs={12} padding={dropdownPadding}>
-              <ProjectsDropdown<FormRecord>
-                availableProjects={availableProjects}
-                record={record}
-                setRecord={setRecord}
-              />
-            </Grid>
+            {availableProjects && availableProjects.length > 0 && (
+              <Grid item xs={12} padding={dropdownPadding}>
+                <ProjectsDropdown<FormRecord>
+                  availableProjects={availableProjects}
+                  record={record}
+                  setRecord={setRecord}
+                />
+              </Grid>
+            )}
 
             <Grid item xs={gridSize()} paddingLeft={paddingSeparator}>
               <DatePicker
