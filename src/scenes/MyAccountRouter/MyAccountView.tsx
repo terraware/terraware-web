@@ -552,7 +552,7 @@ const MyAccountContent = ({
                 </Typography>
                 <RadioGroup
                   name='radio-buttons-cookies-consent'
-                  onChange={(_event, value) => onChange('cookiesConsented', value)}
+                  onChange={(_event, value) => onChange('cookiesConsented', value === 'true' ? true : false)}
                   value={record.cookiesConsented}
                 >
                   <Grid item xs={12} textAlign='left' display='flex' flexDirection='row'>
