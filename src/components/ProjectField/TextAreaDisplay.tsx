@@ -1,13 +1,12 @@
 import React from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
+import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
 import { ProjectFieldProps } from '.';
 
 const ProjectFieldTextAreaDisplay = ({ label, value }: ProjectFieldProps) => {
   const theme = useTheme();
-  const valueLines = value ? `${value}`.split('\n') : null;
-  const valueElements = valueLines?.flatMap((line) => [<br key='break' />, line])?.slice(1);
 
   return (
     <Grid
@@ -23,9 +22,19 @@ const ProjectFieldTextAreaDisplay = ({ label, value }: ProjectFieldProps) => {
         <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={600} marginBottom={theme.spacing(1)}>
           {label}
         </Typography>
-        <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={400} sx={{ wordBreak: 'break-word' }}>
-          {valueElements}
-        </Typography>
+        {typeof value === 'string' && (
+          <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={400}>
+            <TextField
+              id=''
+              label=''
+              type='textarea'
+              display={true}
+              preserveNewlines={true}
+              value={value}
+              sx={{ wordBreak: 'break-word' }}
+            />
+          </Typography>
+        )}
       </Box>
     </Grid>
   );
