@@ -16,11 +16,7 @@ import { searchPlantingSiteZones } from 'src/redux/features/observations/plantin
 import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import BoundariesAndZones from 'src/scenes/PlantingSitesRouter/view/BoundariesAndZones';
-import TrackingService, {
-  PlantingSiteId,
-  PlantingSitePostRequestBody,
-  PlantingSitePutRequestBody,
-} from 'src/services/TrackingService';
+import TrackingService, { PlantingSitePostRequestBody, PlantingSitePutRequestBody } from 'src/services/TrackingService';
 import strings from 'src/strings';
 import { PlantingSite, UpdatedPlantingSeason } from 'src/types/Tracking';
 import useForm from 'src/utils/useForm';
@@ -112,8 +108,9 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
         projectId: record.projectId,
         timeZone: record.timeZone,
       };
+      // TODO use redux here
       response = await TrackingService.createPlantingSite(newPlantingSite);
-      id = (response as PlantingSiteId).id;
+      id = response.data?.id || -1;
     } else {
       const updatedPlantingSite: PlantingSitePutRequestBody = {
         boundary: record.boundary,
@@ -123,6 +120,7 @@ export default function CreatePlantingSite(props: CreatePlantingSiteProps): JSX.
         projectId: record.projectId,
         timeZone: record.timeZone,
       };
+      // TODO use redux here
       response = await TrackingService.updatePlantingSite(record.id, updatedPlantingSite);
     }
 

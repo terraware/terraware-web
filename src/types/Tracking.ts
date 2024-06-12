@@ -6,11 +6,12 @@ export type PlantingZone = components['schemas']['PlantingZonePayload'];
 export type PlantingSubzone = components['schemas']['PlantingSubzonePayload'];
 
 // geometry and types of geometries
+export type Polygon = components['schemas']['Polygon'];
 export type MultiPolygon = components['schemas']['MultiPolygon'];
 
 // Search API always returns strings
 export type PlantingSiteSearchResult = {
-  boundary?: MultiPolygon;
+  boundary?: MultiPolygon | Polygon;
   id: string;
   name: string;
   description?: string;

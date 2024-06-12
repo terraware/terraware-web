@@ -58,7 +58,9 @@ export const speciesUpdateSlice = createSlice({
   },
 });
 
-export const speciesAsyncThunkReducers = {
+const speciesAsyncThunkReducers = {
   speciesGetOne: speciesGetOneSlice.reducer,
   speciesUpdate: speciesUpdateSlice.reducer,
 };
+
+export default speciesAsyncThunkReducers;
