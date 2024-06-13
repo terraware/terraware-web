@@ -1,3 +1,5 @@
+d83d623ec6 SW-5548 Updated deliverable lists with new columns (#2732)
+1221cb1a3c SW-4842 Used validate in Draft update step (#2733)
 494193fd8b Fix the router path used for the document producer (#2725)
 50eb53c2a0 SW-5513 Don't show empty inventory project dropdown (#2730)
 25303d863b Updated translations from Phrase (#2729)
