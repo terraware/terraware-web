@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import isEnabled from 'src/features';
 import { requestListSupportRequestTypes } from 'src/redux/features/support/supportAsyncThunks';
 import { selectSupportRequestTypesByRequest } from 'src/redux/features/support/supportSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -15,7 +14,6 @@ export type Props = {
 
 const SupportProvider = ({ children }: Props) => {
   const dispatch = useAppDispatch();
-  const featureEnabled = isEnabled('Terraware Support Forms');
 
   const [listSupportRequestTypesRequestId, setListSupportRequestTypesRequestId] = useState<string>('');
   const listSupportRequestTypesRequest = useAppSelector(
@@ -29,11 +27,11 @@ const SupportProvider = ({ children }: Props) => {
   });
 
   useEffect(() => {
-    if (featureEnabled) {
+    if (!supportRequestTypes || supportRequestTypes.length < 3) {
       const listSupportRequestTypesRequest = dispatch(requestListSupportRequestTypes());
       setListSupportRequestTypesRequestId(listSupportRequestTypesRequest.requestId);
     }
-  }, [featureEnabled]);
+  }, [supportRequestTypes]);
 
   useEffect(() => {
     if (
