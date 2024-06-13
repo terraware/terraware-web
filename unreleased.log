@@ -1,3 +1,4 @@
+40dd3a0f55 SW-5528, SW-5529 Line breaks in profile fields (#2731)
 d83d623ec6 SW-5548 Updated deliverable lists with new columns (#2732)
 1221cb1a3c SW-4842 Used validate in Draft update step (#2733)
 494193fd8b Fix the router path used for the document producer (#2725)
