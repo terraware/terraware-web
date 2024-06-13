@@ -27,7 +27,7 @@ const SupportProvider = ({ children }: Props) => {
   });
 
   useEffect(() => {
-    if (!supportRequestTypes || supportRequestTypes.length < 3) {
+    if (supportRequestTypes === undefined) {
       const listSupportRequestTypesRequest = dispatch(requestListSupportRequestTypes());
       setListSupportRequestTypesRequestId(listSupportRequestTypesRequest.requestId);
     }
