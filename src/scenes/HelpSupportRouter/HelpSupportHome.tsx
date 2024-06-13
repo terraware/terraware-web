@@ -14,7 +14,7 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import {
-  SupportRequestType,
+  ORDERED_SUPPORT_REQUEST_TYPES,
   getSupportRequestDescription,
   getSupportRequestIconName,
   getSupportRequestName,
@@ -50,19 +50,15 @@ export default function HelpSupportHome(): JSX.Element {
   );
 
   const jiraListItems = useMemo(() => {
-    // Set the support request types ordering before filtering out unsupported ones
-    const orderedSupportRequestTypes: SupportRequestType[] = ['Bug Report', 'Feature Request', 'Contact Us'];
-    return orderedSupportRequestTypes
-      .filter((type) => (types ?? []).includes(type))
-      .map(
-        (type): ListItemContent => ({
-          icon: getSupportRequestIconName(type),
-          title: getSupportRequestName(type),
-          description: getSupportRequestDescription(type),
-          buttonText: getSupportRequestName(type),
-          onClick: () => goToContactUsForm(type),
-        })
-      );
+    return ORDERED_SUPPORT_REQUEST_TYPES.filter((type) => (types ?? []).includes(type)).map(
+      (type): ListItemContent => ({
+        icon: getSupportRequestIconName(type),
+        title: getSupportRequestName(type),
+        description: getSupportRequestDescription(type),
+        buttonText: getSupportRequestName(type),
+        onClick: () => goToContactUsForm(type),
+      })
+    );
   }, [activeLocale, types]);
 
   const listItemContent = useMemo(() => [knowledgeBaseItem, ...jiraListItems], [jiraListItems, knowledgeBaseItem]);
