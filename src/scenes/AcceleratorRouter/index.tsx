@@ -87,7 +87,7 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
             <Route path={`${APP_PATHS.ACCELERATOR_PROJECT_VIEW}/*`} element={<ParticipantProjects />} />
 
             {documentProducerEnabled && (
-              <Route path={APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS} element={<DocumentsRouter />} />
+              <Route path={`${APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS}/*`} element={<DocumentsRouter />} />
             )}
             <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_OVERVIEW} />} />
           </Routes>
