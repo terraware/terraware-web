@@ -5,20 +5,16 @@ import { Button } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
-import getHelpEmail from 'src/components/common/HelpEmail';
 import TextWithLink from 'src/components/common/TextWithLink';
 import TfMain from 'src/components/common/TfMain';
 import Icon from 'src/components/common/icon/Icon';
 import { IconName } from 'src/components/common/icon/icons';
 import { useDocLinks } from 'src/docLinks';
-import isEnabled from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
-import { selectAppVersion } from 'src/redux/features/appVersion/appVersionSelectors';
-import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import {
-  SupportRequestType,
+  ORDERED_SUPPORT_REQUEST_TYPES,
   getSupportRequestDescription,
   getSupportRequestIconName,
   getSupportRequestName,
@@ -38,11 +34,9 @@ export default function HelpSupportHome(): JSX.Element {
   const { activeLocale } = useLocalization();
   const { isMobile, isDesktop } = useDeviceInfo();
   const docLinks = useDocLinks();
-  const appVersion = useAppSelector(selectAppVersion);
   const theme = useTheme();
   const { goToContactUsForm } = useNavigateTo();
   const { types } = useSupportData();
-  const featureEnabled = isEnabled('Terraware Support Forms');
 
   const knowledgeBaseItem: ListItemContent = useMemo(
     () => ({
@@ -55,59 +49,19 @@ export default function HelpSupportHome(): JSX.Element {
     [activeLocale]
   );
 
-  const defaultListItems: ListItemContent[] = useMemo(
-    () => [
-      {
-        icon: 'bug',
-        title: strings.TITLE_REPORT_PROBLEM,
-        description: strings.formatString(
-          strings.DESCRIPTION_REPORT_PROBLEM,
-          <i>`&quot;`{appVersion || 'n/a'}`&quot;`</i>
-        ) as string,
-        buttonText: strings.REPORT_PROBLEM,
-        onClick: () => window.open(`${docLinks.report_a_problem}?build=${appVersion || ''}`),
-      },
-      {
-        icon: 'sparkles',
-        title: strings.TITLE_REQUEST_FEATURE,
-        description: strings.DESCRIPTION_REQUEST_FEATURE,
-        buttonText: strings.REQUEST_FEATURE,
-        onClick: () => window.open(docLinks.request_a_feature),
-      },
-      {
-        icon: 'mail',
-        title: strings.CONTACT_US,
-        description: strings.formatString(strings.CONTACT_US_DESCRIPTION, getHelpEmail()) as string,
-        buttonText: strings.CONTACT_US,
-        onClick: () => window.open(docLinks.contact_us),
-      },
-    ],
-    [activeLocale]
-  );
-
   const jiraListItems = useMemo(() => {
-    // Set the support request types ordering before filtering out unsupported ones
-    const orderedSupportRequestTypes: SupportRequestType[] = ['Bug Report', 'Feature Request', 'Contact Us'];
-    return orderedSupportRequestTypes
-      .filter((type) => (types ?? []).includes(type))
-      .map(
-        (type): ListItemContent => ({
-          icon: getSupportRequestIconName(type),
-          title: getSupportRequestName(type),
-          description: getSupportRequestDescription(type),
-          buttonText: getSupportRequestName(type),
-          onClick: () => goToContactUsForm(type),
-        })
-      );
+    return ORDERED_SUPPORT_REQUEST_TYPES.filter((type) => (types ?? []).includes(type)).map(
+      (type): ListItemContent => ({
+        icon: getSupportRequestIconName(type),
+        title: getSupportRequestName(type),
+        description: getSupportRequestDescription(type),
+        buttonText: getSupportRequestName(type),
+        onClick: () => goToContactUsForm(type),
+      })
+    );
   }, [activeLocale, types]);
 
-  const listItemContent = useMemo(() => {
-    if (featureEnabled && jiraListItems.length > 0) {
-      return [knowledgeBaseItem, ...jiraListItems];
-    } else {
-      return [knowledgeBaseItem, ...defaultListItems];
-    }
-  }, [defaultListItems, featureEnabled, jiraListItems, knowledgeBaseItem]);
+  const listItemContent = useMemo(() => [knowledgeBaseItem, ...jiraListItems], [jiraListItems, knowledgeBaseItem]);
 
   return (
     <TfMain>
