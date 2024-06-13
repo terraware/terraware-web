@@ -16,6 +16,8 @@ export type AttachmentRequest = {
   temporaryAttachmentId?: string;
 };
 
+export const ORDERED_SUPPORT_REQUEST_TYPES: SupportRequestType[] = ['Bug Report', 'Feature Request', 'Contact Us'];
+
 export const getSupportRequestName = (type: SupportRequestType): string => {
   switch (type) {
     case 'Bug Report':
