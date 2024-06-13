@@ -21,7 +21,6 @@ import DeliverableCellRenderer from './DeliverableCellRenderer';
 
 interface DeliverablesTableProps {
   acceleratorProjects?: AcceleratorOrgProject[];
-  columns: (activeLocale: string | null) => TableColumnType[];
   extraTableFilters?: SearchNodePayload[];
   filterModifiers?: (filters: FilterConfig[]) => FilterConfig[];
   isAcceleratorRoute?: boolean;
@@ -31,6 +30,42 @@ interface DeliverablesTableProps {
   tableId: string;
 }
 
+const columns = (activeLocale: string | null): TableColumnType[] =>
+  activeLocale
+    ? [
+        {
+          key: 'name',
+          name: strings.DELIVERABLE_NAME,
+          type: 'string',
+        },
+        {
+          key: 'dueDate',
+          name: strings.DUE_DATE,
+          type: 'date',
+        },
+        {
+          key: 'status',
+          name: strings.STATUS,
+          type: 'string',
+        },
+        {
+          key: 'projectName',
+          name: strings.PROJECT,
+          type: 'string',
+        },
+        {
+          key: 'module',
+          name: strings.MODULE,
+          type: 'string',
+        },
+        {
+          key: 'category',
+          name: strings.CATEGORY,
+          type: 'string',
+        },
+      ]
+    : [];
+
 const fuzzySearchColumns = ['name', 'projectName'];
 const defaultSearchOrder: SearchSortOrder = {
   field: 'name',
@@ -39,7 +74,6 @@ const defaultSearchOrder: SearchSortOrder = {
 
 const DeliverablesTable = ({
   acceleratorProjects,
-  columns,
   extraTableFilters,
   filterModifiers,
   isAcceleratorRoute,

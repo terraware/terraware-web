@@ -31,6 +31,10 @@ export default function DeliverableCellRenderer(props: RendererProps<TableRowTyp
         column={column}
         value={createLinkToDeliverable(value)}
         row={row}
+        style={{
+          maxWidth: '500px',
+          textOverflow: 'ellipsis',
+        }}
         sx={{
           fontSize: '16px',
           '& > p': {
@@ -50,6 +54,10 @@ export default function DeliverableCellRenderer(props: RendererProps<TableRowTyp
         row={row}
       />
     );
+  }
+
+  if (column.key === 'module') {
+    return <CellRenderer index={index} column={column} value={`${row.moduleTitle} - ${row.moduleName}`} row={row} />;
   }
 
   return <CellRenderer {...props} />;

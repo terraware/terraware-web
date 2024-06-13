@@ -2605,6 +2605,10 @@ export interface components {
       dueDate: string;
       /** Format: int64 */
       id: number;
+      /** Format: int64 */
+      moduleId: number;
+      moduleName: string;
+      moduleTitle: string;
       name: string;
       /**
        * Format: int32

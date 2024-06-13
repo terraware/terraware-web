@@ -731,6 +731,7 @@ MISSING_SUBSET_WEIGHT_ERROR_COUNT,You must enter a subset weight in order to wit
 MISSING_SUBSET_WEIGHT_ERROR_NURSERY,You must enter in a subset weight in order to withdraw to a nursery. This can be done by editing the quantity of this accession.,
 MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST,You must enter in a subset weight in order to create a viability test. This can be done by editing the quantity of this accession.,
 MODULE_CONTENT,Module Content,
+MODULE,Module,
 MODULES,Modules,
 MONITORING,Monitoring,
 MONITORING_CARD_DESCRIPTION,Add seed banks to your organization and then monitor things like temperature and humidity through their sensor kits.,
