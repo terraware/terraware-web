@@ -18,6 +18,7 @@ import SearchService from './SearchService';
  */
 
 const PLANTING_SITES_ENDPOINT = '/api/v1/tracking/sites';
+const PLANTING_SITES_VALIDATE_ENDPOINT = '/api/v1/tracking/sites/validate';
 const PLANTING_SITE_ENDPOINT = '/api/v1/tracking/sites/{id}';
 const DELIVERY_ENDPOINT = '/api/v1/tracking/deliveries/{id}';
 const REASSIGN_ENDPOINT = '/api/v1/tracking/deliveries/{id}/reassign';
@@ -70,6 +71,7 @@ export type SiteReportedPlantsData = {
 };
 
 const httpPlantingSites = HttpService.root(PLANTING_SITES_ENDPOINT);
+const httpPlantingSitesValidate = HttpService.root(PLANTING_SITES_VALIDATE_ENDPOINT);
 const httpPlantingSite = HttpService.root(PLANTING_SITE_ENDPOINT);
 
 /**
@@ -113,7 +115,7 @@ const createPlantingSite = async (
 const validatePlantingSite = async (
   entity: CreatePlantingSiteRequestPayload
 ): Promise<Response2<ValidatePlantingSiteResponsePayload>> => {
-  return httpPlantingSites.post2<ValidatePlantingSiteResponsePayload>({ entity });
+  return httpPlantingSitesValidate.post2<ValidatePlantingSiteResponsePayload>({ entity });
 };
 
 /**

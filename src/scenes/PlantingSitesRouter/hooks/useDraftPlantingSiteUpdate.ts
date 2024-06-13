@@ -10,6 +10,8 @@ import strings from 'src/strings';
 import { DraftPlantingSite, OptionalSiteEditStep, SiteEditStep } from 'src/types/PlantingSite';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import usePlantingSiteValidate from './usePlantingSiteValidate';
+
 /**
  * Data type for request and response in hook functions.
  * Also is a container to pass state data back to client.
@@ -50,15 +52,39 @@ export default function useDraftPlantingSiteUpdate(): Response {
   const [requestId, setRequestId] = useState<string>('');
   const draftResult = useAppSelector(selectDraftPlantingSiteEdit(requestId));
 
-  const updateDraft = useCallback(
-    (request: Data, redirectToDraft: boolean) => {
+  const { validateDraft, validateSite, validateSiteStatus, isValid, problems } = usePlantingSiteValidate();
+
+  const _validateDraft = useCallback(
+    (request: Data) => {
+      validateSite(request.draft);
+    },
+    [validateSite]
+  );
+
+  const _updateDraft = useCallback(
+    (request: Data) => {
       const dispatched = dispatch(requestUpdateDraft(request.draft));
       setRequestId(dispatched.requestId);
-      setDraftRequest(request);
-      setRedirect(redirectToDraft);
     },
     [dispatch]
   );
+
+  useEffect(() => {
+    if (draftRequest && validateDraft === draftRequest.draft) {
+      if (validateSiteStatus === 'success') {
+        if (isValid) {
+          _updateDraft(draftRequest);
+        } else {
+          // TODO: Show detailed erros on map according to designs
+          snackbar.toastError('Failed to validate planting site.');
+          // TODO: Remove debug logs
+          console.log('Server responded with problems during validation: ', problems);
+        }
+      } else if (validateSiteStatus === 'error') {
+        snackbar.toastError(strings.GENERIC_ERROR);
+      }
+    }
+  }, [_updateDraft, draftRequest, validateDraft, validateSiteStatus, isValid]);
 
   useEffect(() => {
     if (draftResult?.status === 'error') {
@@ -77,6 +103,15 @@ export default function useDraftPlantingSiteUpdate(): Response {
     }
   }, [draftRequest, draftResult?.status, navigate, redirect, snackbar]);
 
+  const updateDraft = useCallback(
+    (request: Data, redirectToDraft: boolean) => {
+      setDraftRequest(request);
+      setRedirect(redirectToDraft);
+      _validateDraft(request);
+    },
+    [_validateDraft]
+  );
+
   return useMemo<Response>(
     () => ({
       onFinishUpdate: () => {
@@ -87,6 +122,6 @@ export default function useDraftPlantingSiteUpdate(): Response {
       updateDraftStatus: draftResult?.status,
       updatedDraft,
     }),
-    [updateDraft, updatedDraft, draftResult?.status]
+    [problems, validateDraft, validateSiteStatus, updateDraft, updatedDraft, draftResult?.status]
   );
 }

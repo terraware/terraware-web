@@ -11,6 +11,8 @@ import strings from 'src/strings';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import usePlantingSiteValidate from './usePlantingSiteValidate';
+
 export type Response = {
   createPlantingSite: (draft: DraftPlantingSite) => void;
   createPlantingSiteStatus?: Statuses;
@@ -35,13 +37,47 @@ export default function usePlantingSiteCreate(): Response {
   const [deleteDraftRequestId, setDeleteDraftRequestId] = useState<string>('');
   const deleteDraftResult = useAppSelector(selectDraftPlantingSiteEdit(deleteDraftRequestId));
 
-  const createSite = useCallback(
+  const { validateDraft, validateSite, validateSiteStatus, isValid, problems } = usePlantingSiteValidate();
+
+  const _validateDraft = useCallback(
+    (draft: DraftPlantingSite) => {
+      validateSite(draft);
+    },
+    [validateSite]
+  );
+
+  const _createSite = useCallback(
     (draft: DraftPlantingSite) => {
       const dispatched = dispatch(createPlantingSite(draft));
       setCreateRequest(draft);
       setRequestId(dispatched.requestId);
     },
     [dispatch]
+  );
+
+  useEffect(() => {
+    if (createRequest && validateDraft === createRequest) {
+      if (validateSiteStatus === 'success') {
+        if (isValid) {
+          _createSite(createRequest);
+        } else {
+          // TODO: Show detailed erros on map according to designs
+          snackbar.toastError('Failed to validate planting site.');
+          // TODO: Remove debug logs
+          console.log('Server responded with problems during validation: ', problems);
+        }
+      } else if (validateSiteStatus === 'error') {
+        snackbar.toastError(strings.GENERIC_ERROR);
+      }
+    }
+  }, [_createSite, createRequest, validateDraft, validateSiteStatus, isValid]);
+
+  const createSite = useCallback(
+    (draft: DraftPlantingSite) => {
+      setCreateRequest(draft);
+      _validateDraft(draft);
+    },
+    [_validateDraft]
   );
 
   useEffect(() => {
@@ -59,9 +95,10 @@ export default function usePlantingSiteCreate(): Response {
 
   useEffect(() => {
     if (deleteDraftResult?.status === 'success' && createResult.data) {
+      snackbar.toastSuccess(strings.PLANTING_SITE_SAVED);
       goToPlantingSiteView(createResult.data);
     }
-  }, [deleteDraftResult, createResult, dispatch, goToPlantingSiteView]);
+  }, [deleteDraftResult, createResult, dispatch, goToPlantingSiteView, snackbar]);
 
   return useMemo<Response>(
     () => ({

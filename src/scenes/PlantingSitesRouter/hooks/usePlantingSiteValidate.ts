@@ -9,6 +9,7 @@ import { DraftPlantingSite, PlantingSiteProblem } from 'src/types/PlantingSite';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export type Response = {
+  validateDraft?: DraftPlantingSite;
   validateSite: (draft: DraftPlantingSite) => void;
   validateSiteStatus: Statuses;
   isValid?: boolean;
@@ -22,11 +23,13 @@ export default function usePlantingSiteValidate(): Response {
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
 
+  const [currentDraft, setCurrentDraft] = useState<DraftPlantingSite>();
   const [requestId, setRequestId] = useState<string>('');
   const validateResult = useAppSelector(selectPlantingSiteValidate(requestId));
 
   const validateSite = useCallback(
     (draft: DraftPlantingSite) => {
+      setCurrentDraft(draft);
       const dispatched = dispatch(validatePlantingSite(draft));
       setRequestId(dispatched.requestId);
     },
@@ -41,11 +44,12 @@ export default function usePlantingSiteValidate(): Response {
 
   return useMemo<Response>(
     () => ({
+      validateDraft: currentDraft,
       validateSite,
       validateSiteStatus: validateResult?.status,
       isValid: validateResult?.data?.isValid,
       problems: validateResult?.data?.problems,
     }),
-    [validateSite, validateResult]
+    [currentDraft, validateSite, validateResult]
   );
 }
