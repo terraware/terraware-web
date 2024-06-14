@@ -1,4 +1,10 @@
-import { DraftPlantingSite, DraftPlantingSitePayload, SiteEditStep, SiteType } from 'src/types/PlantingSite';
+import {
+  CreatePlantingSiteRequestPayload,
+  DraftPlantingSite,
+  DraftPlantingSitePayload,
+  SiteEditStep,
+  SiteType,
+} from 'src/types/PlantingSite';
 import { MinimalPlantingZone, MultiPolygon, PlantingSeason } from 'src/types/Tracking';
 
 /**
@@ -81,4 +87,32 @@ export const toDraft = (payload: DraftPlantingSitePayload): DraftPlantingSite =>
   };
 
   return draft;
+};
+
+export const fromDraftToCreate = (site: DraftPlantingSite): CreatePlantingSiteRequestPayload => {
+  const {
+    boundary,
+    description,
+    exclusion,
+    name,
+    organizationId,
+    plantingSeasons,
+    plantingZones,
+    projectId,
+    timeZone,
+  } = site;
+
+  const payload: CreatePlantingSiteRequestPayload = {
+    boundary,
+    description,
+    exclusion,
+    name,
+    organizationId,
+    plantingSeasons,
+    plantingZones,
+    projectId,
+    timeZone,
+  };
+
+  return payload;
 };
