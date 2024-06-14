@@ -1,11 +1,13 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Grid, useTheme } from '@mui/material';
-import { TableDensityType } from '@terraware/web-components/components/table/types';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import TextField from 'src/components/common/Textfield/Textfield';
+import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import TableDensitySettingsButton from 'src/components/common/table/TableDensitySettingsButton';
@@ -22,9 +24,6 @@ import useDebounce from 'src/utils/useDebounce';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-import PageHeaderWrapper from '../../components/common/PageHeaderWrapper';
-import TextField from '../../components/common/Textfield/Textfield';
-import TfMain from '../../components/common/TfMain';
 import SeedBanksCellRenderer from './TableCellRenderer';
 
 type SeedBanksListProps = {
@@ -85,17 +84,6 @@ export default function SeedBanksListView({ organization }: SeedBanksListProps):
 
     refreshSearch();
   }, [debouncedSearchTerm, organization, timeZones, defaultTimeZone]);
-
-  // Table density will default to user preference if undefined. Used to skip preference update roundtrip
-  const [tableDensity, setTableDensity] = useState<TableDensityType>();
-
-  // Shortcut method to update table state before preference update round-trip
-  const handleTableDensityChange = useCallback(
-    (density: TableDensityType) => {
-      setTableDensity(density);
-    },
-    [setTableDensity]
-  );
 
   return (
     <TfMain>
@@ -161,7 +149,7 @@ export default function SeedBanksListView({ organization }: SeedBanksListProps):
               onClickRightIcon={clearSearch}
               sx={{ width: '300px' }}
             />
-            <TableDensitySettingsButton density={tableDensity} onChange={handleTableDensityChange} />
+            <TableDensitySettingsButton />
           </Grid>
           <Grid item xs={12}>
             <div>
@@ -170,7 +158,6 @@ export default function SeedBanksListView({ organization }: SeedBanksListProps):
                   <Table
                     id='seed-banks-table'
                     columns={columns}
-                    density={tableDensity}
                     rows={results}
                     orderBy='name'
                     Renderer={SeedBanksCellRenderer}

@@ -2,12 +2,13 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { TableColumnType, TableRowType, Table as WebComponentsTable } from '@terraware/web-components';
 import { LocalizationProps, Props, TextAlignment } from '@terraware/web-components/components/table';
-import { TableDensityType } from '@terraware/web-components/components/table/types';
 import _ from 'lodash';
 
-import { useLocalization, useOrganization, useUser } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { PreferencesService } from 'src/services';
 import strings from 'src/strings';
+
+import useTableDensity from './useTableDensity';
 
 function renderPaginationText(from: number, to: number, total: number): string {
   if (total > 0) {
@@ -57,11 +58,7 @@ interface TableProps<T> extends Omit<Props<T>, keyof LocalizationProps> {
 }
 
 export function BaseTable<T extends TableRowType>(props: TableProps<T>): JSX.Element {
-  const { userPreferences } = useUser();
-  const tableDensity: TableDensityType = useMemo(
-    () => props.density ?? (userPreferences['tableDensity'] as TableDensityType) ?? 'comfortable',
-    [props.density, userPreferences['tableDensity']]
-  );
+  const { tableDensity } = useTableDensity();
 
   const addAlignment = useMemo(() => {
     return props.columns.map((col) => {

@@ -1,13 +1,15 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, TableColumnType } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
-import { TableDensityType } from '@terraware/web-components/components/table/types';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
+import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import TfMain from 'src/components/common/TfMain';
 import Table from 'src/components/common/table';
 import TableDensitySettingsButton from 'src/components/common/table/TableDensitySettingsButton';
 import { APP_PATHS } from 'src/constants';
@@ -21,9 +23,6 @@ import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-import PageSnackbar from '../../components/PageSnackbar';
-import PageHeaderWrapper from '../../components/common/PageHeaderWrapper';
-import TfMain from '../../components/common/TfMain';
 import NurseriesCellRenderer from './TableCellRenderer';
 
 const columns = (): TableColumnType[] => [
@@ -84,17 +83,6 @@ export default function NurseriesListView({ organization }: NurseriesListProps):
     refreshSearch();
   }, [debouncedSearchTerm, organization, timeZones, defaultTimeZone]);
 
-  // Table density will default to user preference if undefined. Used to skip preference update roundtrip
-  const [tableDensity, setTableDensity] = useState<TableDensityType>();
-
-  // Shortcut method to update table state before preference update round-trip
-  const handleTableDensityChange = useCallback(
-    (density: TableDensityType) => {
-      setTableDensity(density);
-    },
-    [setTableDensity]
-  );
-
   return (
     <TfMain>
       <PageHeaderWrapper nextElement={contentRef.current}>
@@ -145,14 +133,13 @@ export default function NurseriesListView({ organization }: NurseriesListProps):
                 onClickRightIcon={clearSearch}
               />
             </Box>
-            <TableDensitySettingsButton density={tableDensity} onChange={handleTableDensityChange} />
+            <TableDensitySettingsButton />
           </Grid>
           <Grid item xs={12}>
             {results && (
               <Table
                 id='nurseries-table'
                 columns={columns}
-                density={tableDensity}
                 rows={results}
                 orderBy='name'
                 Renderer={NurseriesCellRenderer}

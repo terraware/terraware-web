@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Grid, useTheme } from '@mui/material';
-import { TableDensityType } from '@terraware/web-components/components/table/types';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import ProjectCellRenderer from 'src/components/Projects/ProjectCellRenderer';
@@ -80,17 +79,6 @@ export default function ProjectsList(): JSX.Element {
     setTemporalSearchValue(value as string);
   };
 
-  // Table density will default to user preference if undefined. Used to skip preference update roundtrip
-  const [tableDensity, setTableDensity] = useState<TableDensityType>();
-
-  // Shortcut method to update table state before preference update round-trip
-  const handleTableDensityChange = useCallback(
-    (density: TableDensityType) => {
-      setTableDensity(density);
-    },
-    [setTableDensity]
-  );
-
   return (
     <TfMain>
       <PageHeaderWrapper nextElement={contentRef.current}>
@@ -148,7 +136,7 @@ export default function ProjectsList(): JSX.Element {
               onClickRightIcon={clearSearch}
               sx={{ width: '300px' }}
             />
-            <TableDensitySettingsButton density={tableDensity} onChange={handleTableDensityChange} />
+            <TableDensitySettingsButton />
           </Grid>
 
           <Grid item xs={12}>
@@ -159,7 +147,6 @@ export default function ProjectsList(): JSX.Element {
                     <Table
                       id='projects-table'
                       columns={columns}
-                      density={tableDensity}
                       rows={results}
                       orderBy='name'
                       Renderer={ProjectCellRenderer}
