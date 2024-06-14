@@ -2,10 +2,12 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { PillList, PillListItem, TableColumnType, Textfield } from '@terraware/web-components';
+import { TableDensityType } from '@terraware/web-components/components/table/types';
 
 import Card from 'src/components/common/Card';
 import FilterMultiSelectContainer from 'src/components/common/FilterMultiSelectContainer';
 import Table from 'src/components/common/table';
+import TableDensitySettingsButton from 'src/components/common/table/TableDensitySettingsButton';
 import { SortOrder } from 'src/components/common/table/sort';
 import isEnabled from 'src/features';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
@@ -103,6 +105,17 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
     return featureFlagSites ? columnsData : columnsData.filter((column) => column.key !== 'draft');
   }, [featureFlagSites]);
 
+  // Table density will default to user preference if undefined. Used to skip preference update roundtrip
+  const [tableDensity, setTableDensity] = useState<TableDensityType>();
+
+  // Shortcut method to update table state before preference update round-trip
+  const handleTableDensityChange = useCallback(
+    (density: TableDensityType) => {
+      setTableDensity(density);
+    },
+    [setTableDensity]
+  );
+
   return (
     <Card flushMobile>
       <Box display='flex' flexDirection='row' alignItems='center' gap={theme.spacing(1)}>
@@ -128,6 +141,8 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
           options={projects?.map((project: Project) => project.id) ?? []}
           renderOption={(id: string | number) => projects?.find((project) => project.id === id)?.name ?? ''}
         />
+
+        <TableDensitySettingsButton density={tableDensity} onChange={handleTableDensityChange} />
       </Box>
 
       <Grid display='flex' flexDirection='row' alignItems='center' sx={{ marginTop: theme.spacing(2) }}>
@@ -141,6 +156,7 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
               <Table
                 id='planting-sites-table'
                 columns={tableColumns}
+                density={tableDensity}
                 rows={results}
                 orderBy='name'
                 Renderer={PlantingSitesCellRenderer}

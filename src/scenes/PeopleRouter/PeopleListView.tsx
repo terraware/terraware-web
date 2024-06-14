@@ -2,11 +2,13 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 import { Grid, useTheme } from '@mui/material';
+import { TableDensityType } from '@terraware/web-components/components/table/types';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
+import TableDensitySettingsButton from 'src/components/common/table/TableDensitySettingsButton';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
@@ -288,6 +290,17 @@ export default function PeopleListView(): JSX.Element {
     [selectedPeopleRows]
   );
 
+  // Table density will default to user preference if undefined. Used to skip preference update roundtrip
+  const [tableDensity, setTableDensity] = useState<TableDensityType>();
+
+  // Shortcut method to update table state before preference update round-trip
+  const handleTableDensityChange = useCallback(
+    (density: TableDensityType) => {
+      setTableDensity(density);
+    },
+    [setTableDensity]
+  );
+
   return (
     <TfMain>
       {selectedPeopleRows.length > 0 && (
@@ -354,7 +367,14 @@ export default function PeopleListView(): JSX.Element {
       </PageHeaderWrapper>
       <Card flushMobile>
         <Grid container ref={contentRef}>
-          <Grid item xs={12} marginBottom='16px'>
+          <Grid
+            item
+            xs={12}
+            marginBottom='16px'
+            sx={{
+              display: 'flex',
+            }}
+          >
             <TextField
               placeholder={strings.SEARCH}
               iconLeft='search'
@@ -367,6 +387,7 @@ export default function PeopleListView(): JSX.Element {
               onClickRightIcon={clearSearch}
               sx={{ width: '300px' }}
             />
+            <TableDensitySettingsButton density={tableDensity} onChange={handleTableDensityChange} />
           </Grid>
 
           <Grid item xs={12}>
@@ -377,6 +398,7 @@ export default function PeopleListView(): JSX.Element {
                     <Table
                       id='people-table'
                       columns={columns}
+                      density={tableDensity}
                       rows={results}
                       orderBy='name'
                       Renderer={TableCellRenderer}
