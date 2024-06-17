@@ -81,7 +81,7 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
           <RemoveSpeciesDialog
             onClose={onCloseRemoveSpecies}
             open={showConfirmDialog}
-            speciesToRemove={selectedRows.map((row) => row.id)}
+            speciesToRemove={selectedRows.map((row) => row.participantProjectSpecies.id)}
           />
 
           {openedAddSpeciesModal && (
