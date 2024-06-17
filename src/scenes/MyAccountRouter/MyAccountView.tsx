@@ -1,17 +1,19 @@
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, FormControlLabel, Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem } from '@terraware/web-components';
 
 import RegionSelector from 'src/components/RegionSelector';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import WeightSystemSelector from 'src/components/WeightSystemSelector';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import TextWithLink from 'src/components/common/TextWithLink';
 import TfMain from 'src/components/common/TfMain';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { useDocLinks } from 'src/docLinks';
 import { useLocalization, useUser } from 'src/providers';
 import { useTimeZones } from 'src/providers';
 import {
@@ -121,6 +123,7 @@ const MyAccountContent = ({
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
   const { userPreferences, reloadUserPreferences } = useUser();
   const snackbar = useSnackbar();
+  const docLinks = useDocLinks();
   const contentRef = useRef(null);
   const { activeLocale, selectedLocale, setSelectedLocale } = useLocalization();
   const [countries, setCountries] = useState<Country[]>();
@@ -205,6 +208,7 @@ const MyAccountContent = ({
     setPreferredWeightSystemSelected((userPreferences?.preferredWeightSystem as string) || 'metric');
     setLocaleSelected(selectedLocale);
     setSelectedRows([]);
+    onChange('cookiesConsented', user.cookiesConsented);
     navigate(APP_PATHS.MY_ACCOUNT);
   };
 
@@ -541,6 +545,33 @@ const MyAccountContent = ({
                   value={record.emailNotificationsEnabled}
                   onChange={(value) => onChange('emailNotificationsEnabled', value)}
                 />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}>
+                  {strings.COOKIES}
+                </Typography>
+                <RadioGroup
+                  name='radio-buttons-cookies-consent'
+                  onChange={(_event, value) => onChange('cookiesConsented', value === 'true' ? true : false)}
+                  value={record.cookiesConsented}
+                >
+                  <Grid item xs={12} textAlign='left' display='flex' flexDirection='row'>
+                    <FormControlLabel
+                      control={<Radio />}
+                      disabled={!edit}
+                      label={strings.COOKIES_ACCEPT}
+                      value={true}
+                    />
+                    <FormControlLabel
+                      control={<Radio />}
+                      disabled={!edit}
+                      label={strings.COOKIES_DECLINE}
+                      value={false}
+                    />
+                  </Grid>
+                </RadioGroup>
+                <Typography>{strings.COOKIES_DESCRIPTION}</Typography>
+                <TextWithLink href={docLinks.cookie_policy} isExternal text={strings.COOKIES_LEARN_MORE} />
               </Grid>
             </Grid>
           </Box>

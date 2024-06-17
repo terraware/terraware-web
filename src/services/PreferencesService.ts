@@ -111,8 +111,18 @@ const updateUserPreferences = async (toUpdate: Preferences): Promise<UpdateRespo
 };
 
 // set user cookie preferences
-const updateUserCookieConsentPreferences = (payload: UpdateUserCookieConsentRequestPayload) =>
-  httpCookieConsent.put2<UpdateUserCookieConsentResponsePayload>({ entity: payload });
+const updateUserCookieConsentPreferences = async (
+  payload: UpdateUserCookieConsentRequestPayload
+): Promise<Response> => {
+  const response: Response = await httpCookieConsent.put2<UpdateUserCookieConsentResponsePayload>({ entity: payload });
+
+  if (response.requestSucceeded) {
+    // TODO: remove after user preferences is in redux
+    CachedUserService.setUserCookieConsentPreferences(payload.cookiesConsented);
+  }
+
+  return response;
+};
 
 // set org preferences
 const updateUserOrgPreferences = async (organizationId: number, toUpdate: Preferences): Promise<UpdateResponse> => {
