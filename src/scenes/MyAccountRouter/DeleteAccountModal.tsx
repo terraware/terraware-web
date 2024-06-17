@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useMixpanel } from 'react-mixpanel-browser';
 
 import { BusySpinner } from '@terraware/web-components';
 
@@ -15,11 +16,13 @@ export interface DeleteAccountModalProps {
 export default function DeleteAccountModal({ onCancel }: DeleteAccountModalProps): JSX.Element {
   const [busy, setBusy] = useState<boolean>(false);
   const snackbar = useSnackbar();
+  const mixpanel = useMixpanel();
 
   const deleteUser = async () => {
     setBusy(true);
     const response = await UserService.deleteUser();
     if (response.requestSucceeded) {
+      mixpanel?.reset();
       window.location.href = `/sso/logout`;
     } else {
       setBusy(false);

@@ -1,59 +1,6 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Google Tag Manager -->
-    <script>
-      function gtm(w, d, s, l, i, auth) {
-        w[l] = w[l] || [];
-        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-        var f = d.getElementsByTagName(s)[0],
-          j = d.createElement(s),
-          dl = l != 'dataLayer' ? '&l=' + l : '';
-        j.async = true;
-        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl + auth;
-        f.parentNode.insertBefore(j, f);
-      }
-      function gtmConfig(userId, internalUser, tagId, auth) {
-        window.dataLayer = window.dataLayer || [];
-        if (userId) {
-          window.dataLayer.push({ user_id: userId });
-        }
-        if (internalUser) {
-          window.dataLayer.push({ internal_user: internalUser });
-        }
-        gtm(window, document, 'script', 'dataLayer', tagId, auth);
-      }
-      if (window.location.hostname.match(/^(www.)?staging.terraware.io$/i)) {
-        window.INIT_GTAG = function (userId, internalUser) {
-          gtmConfig(
-            userId,
-            internalUser,
-            'GTM-TNX8NWM',
-            '&gtm_auth=Iwp9NkwNGO7TelQuq94FhQ&gtm_preview=env-7&gtm_cookies_win=x'
-          );
-        };
-      } else if (window.location.hostname.match(/^(www.)?terraware.io$/i)) {
-        window.INIT_GTAG = function (userId, internalUser) {
-          gtmConfig(
-            userId,
-            internalUser,
-            'GTM-TNX8NWM',
-            '&gtm_auth=oxl4mxgvnvET8ov_75EuYA&gtm_preview=env-1&gtm_cookies_win=x'
-          );
-        };
-      } else {
-        // Uncomment this function to track non-staging/prod environments
-        //window.INIT_GTAG = function (userId, internalUser) {
-        //  gtmConfig(
-        //    userId,
-        //    internalUser,
-        //    'GTM-TNX8NWM',
-        //    '&gtm_auth=1591mjZEVL_pulZkOX4gWg&gtm_preview=env-11&gtm_cookies_win=x'
-        //  );
-        //};
-      }
-    </script>
-    <!-- End Google Tag Manager -->
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

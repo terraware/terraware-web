@@ -1,4 +1,5 @@
 import React from 'react';
+import { useMixpanel } from 'react-mixpanel-browser';
 import { useNavigate } from 'react-router-dom';
 
 import { useTheme } from '@mui/material';
@@ -21,8 +22,10 @@ export default function UserMenu({}: UserMenuProps): JSX.Element {
   const { isProduction } = useEnvironment();
   const navigate = useNavigate();
   const docLinks = useDocLinks();
+  const mixpanel = useMixpanel();
 
   const onHandleLogout = () => {
+    mixpanel?.reset();
     window.location.href = `/sso/logout`;
   };
 
