@@ -50,7 +50,7 @@ function AppContent() {
   const [showNavBar, setShowNavBar] = useState(true);
 
   useEffect(() => {
-    if (user) {
+    if (user && mixpanel) {
       if (user.cookiesConsented === true) {
         mixpanel.identify(user.id);
         mixpanel.people.set({
@@ -63,7 +63,7 @@ function AppContent() {
         mixpanel.optOutOfTracking();
       }
     }
-  }, [user]);
+  }, [user, mixpanel]);
 
   useEffect(() => {
     if (type === 'mobile' || type === 'tablet') {
