@@ -12,6 +12,7 @@ import ReactMapGL, {
   Source,
 } from 'react-map-gl';
 
+import { AddressAutofillFeatureSuggestion } from '@mapbox/search-js-core';
 import { Box, useTheme } from '@mui/material';
 import bbox from '@turf/bbox';
 import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
@@ -31,6 +32,7 @@ import {
 import { getRgbaFromHex } from 'src/utils/color';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
+import MapSearchBox from './MapSearchBox';
 import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
 import UndoRedoControl from './UndoRedoControl';
 import { getMapDrawingLayer, getMapErrorLayer, toMultiPolygon } from './utils';
@@ -320,6 +322,17 @@ export default function EditableMap({
           : {}),
       }}
     >
+      <MapSearchBox
+        onSelect={(features: AddressAutofillFeatureSuggestion[] | null) => {
+          if (features && features.length > 0) {
+            const coordiantes = features[0].geometry.coordinates;
+            mapRef?.current?.flyTo({
+              center: [coordiantes[0], coordiantes[1]],
+              essential: true,
+            });
+          }
+        }}
+      />
       {firstVisible && (
         <>
           <ReactMapGL
