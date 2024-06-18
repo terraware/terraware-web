@@ -1416,7 +1416,7 @@ SITE_SUBZONE_BOUNDARIES_TOO_SMALL,One or more Subzones have a boundary smaller t
 SITE_SUBZONE_BOUNDARY_TOO_SMALL,Subzone boundary smaller than 25m x 25m,
 SITE_WITH_NAME_EXISTS,Site with this name already exists.,
 SITE_ZONE_BOUNDARIES,Zone Boundaries,
-SITE_ZONE_BOUNDARIES_DESCRIPTION_0,"A Zone is a strata (vegetation layer) of the planting site where planting and growing conditions are similar. Each planting site must have at least one zone and usually no more than five. An example of a Zone is the slope of an east-facing hill, where sunlight and soil conditions are similar.",
+SITE_ZONE_BOUNDARIES_DESCRIPTION_0,"A Zone is a stratum (vegetation layer) of the planting site where planting and growing conditions are similar. Each planting site must have at least one zone and usually no more than five. An example of a Zone is the slope of an east-facing hill, where sunlight and soil conditions are similar.",
 SITE_ZONE_BOUNDARIES_DESCRIPTION_1,Draw the Zones of your planting site below. Use the slice tool {0} to create polygons within the site boundaries for Zones. [Watch a tutorial] about adding Zone boundaries.,
 SITE_ZONE_BOUNDARIES_SIZE,Zones should have a minimum size of 100m x 100m.,
 SITE_ZONE_BOUNDARIES_TOO_SMALL,One or more zones have a boundary smaller than 100m x 100m,
