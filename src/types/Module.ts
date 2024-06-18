@@ -78,6 +78,7 @@ export type ModuleDeliverable = {
   dueDate: DateTime;
   status: DeliverableStatusType;
   type: DeliverableTypeType;
+  'type(raw)'?: string;
 };
 
 export type ModuleContentType = keyof Pick<Module, 'additionalResources' | 'preparationMaterials'>;
