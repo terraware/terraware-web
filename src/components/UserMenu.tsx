@@ -25,7 +25,7 @@ export default function UserMenu({}: UserMenuProps): JSX.Element {
   const mixpanel = useMixpanel();
 
   const onHandleLogout = () => {
-    mixpanel.reset();
+    mixpanel?.reset();
     window.location.href = `/sso/logout`;
   };
 

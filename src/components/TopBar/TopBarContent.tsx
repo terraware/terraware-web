@@ -57,12 +57,12 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   };
 
   const onHandleLogout = () => {
-    mixpanel.reset();
+    mixpanel?.reset();
     window.location.href = `/sso/logout`;
   };
 
   const handleTopBarClick = () => {
-    mixpanel.track('TopBarHome', { my_custom_prop: 'foo' });
+    mixpanel?.track('TopBarHome', { my_custom_prop: 'foo' });
     navigate(APP_PATHS.HOME);
     console.log('Here!');
   };

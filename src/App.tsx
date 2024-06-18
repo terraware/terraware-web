@@ -34,6 +34,8 @@ const MIXPANEL_TOKEN = isProduction
       ? '189f8a16494df135f5207a433213f708'
       : undefined;
 const MIXPANEL_CONFIG = {
+  opt_out_persistence_by_default: true,
+  opt_out_tracking_by_default: true,
   track_pageview: 'url-with-path',
 };
 
@@ -42,28 +44,13 @@ function AppContent() {
   useAppVersion();
 
   const { isDesktop, type } = useDeviceInfo();
-  const { user, isAllowed } = useUser();
+  const { isAllowed } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const theme = useTheme();
-  const mixpanel = useMixpanel();
 
   const [showNavBar, setShowNavBar] = useState(true);
 
-  useEffect(() => {
-    if (user && mixpanel) {
-      if (user.cookiesConsented === true) {
-        mixpanel.identify(user.id);
-        mixpanel.people.set({
-          $email: user.email,
-          $locale: user.locale,
-          $emailNotifsEnabled: user.emailNotificationsEnabled,
-          $countryCode: user.countryCode,
-        });
-      } else {
-        mixpanel.optOutOfTracking();
-      }
-    }
-  }, [user, mixpanel]);
+  
 
   useEffect(() => {
     if (type === 'mobile' || type === 'tablet') {
@@ -133,6 +120,32 @@ function AppContent() {
 }
 
 export default function App(): JSX.Element {
+
+  const mixpanel = useMixpanel();
+  const { user } = useUser();
+
+  useEffect(() => {
+    console.log("USE_EFFECT");
+    console.log(user?.cookiesConsented);
+    console.log(mixpanel);
+    if (user && mixpanel) {
+      if (user.cookiesConsented === true) {
+        console.log("OPTED_IN");
+        mixpanel.opt_in_tracking();
+        mixpanel.identify(user.id);
+        mixpanel.people.set({
+          $email: user.email,
+          $locale: user.locale,
+          $emailNotifsEnabled: user.emailNotificationsEnabled,
+          $countryCode: user.countryCode,
+        });
+      } else {
+        console.log("OPTED_OUT!");
+        mixpanel.optOutOfTracking();
+      }
+    }
+  }, [user, mixpanel]);
+
   return (
     <MixpanelProvider config={MIXPANEL_CONFIG} token={MIXPANEL_TOKEN}>
       <Provider store={store}>

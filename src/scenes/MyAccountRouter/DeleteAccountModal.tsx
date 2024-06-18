@@ -22,7 +22,7 @@ export default function DeleteAccountModal({ onCancel }: DeleteAccountModalProps
     setBusy(true);
     const response = await UserService.deleteUser();
     if (response.requestSucceeded) {
-      mixpanel.reset();
+      mixpanel?.reset();
       window.location.href = `/sso/logout`;
     } else {
       setBusy(false);
