@@ -6,8 +6,12 @@ import { Button, TableColumnType } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
+import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import TfMain from 'src/components/common/TfMain';
 import Table from 'src/components/common/table';
+import TableDensitySettingsButton from 'src/components/common/table/TableDensitySettingsButton';
 import { APP_PATHS } from 'src/constants';
 import { useTimeZones } from 'src/providers';
 import { FacilityService } from 'src/services';
@@ -19,9 +23,6 @@ import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-import PageSnackbar from '../../components/PageSnackbar';
-import PageHeaderWrapper from '../../components/common/PageHeaderWrapper';
-import TfMain from '../../components/common/TfMain';
 import NurseriesCellRenderer from './TableCellRenderer';
 
 const columns = (): TableColumnType[] => [
@@ -110,7 +111,15 @@ export default function NurseriesListView({ organization }: NurseriesListProps):
       </PageHeaderWrapper>
       <Card flushMobile>
         <Grid container ref={contentRef}>
-          <Grid item xs={12} marginBottom={theme.spacing(2)}>
+          <Grid
+            item
+            xs={12}
+            marginBottom={theme.spacing(2)}
+            flexDirection={'row'}
+            sx={{
+              display: 'flex',
+            }}
+          >
             <Box width='300px'>
               <TextField
                 placeholder={strings.SEARCH}
@@ -124,6 +133,7 @@ export default function NurseriesListView({ organization }: NurseriesListProps):
                 onClickRightIcon={clearSearch}
               />
             </Box>
+            <TableDensitySettingsButton />
           </Grid>
           <Grid item xs={12}>
             {results && (

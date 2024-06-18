@@ -21,6 +21,8 @@ import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+import TableDensitySettingsButton from '../common/table/TableDensitySettingsButton';
+
 const columns = (): TableColumnType[] => [
   { key: 'name', name: strings.NAME, type: 'string' },
   { key: 'description', name: strings.DESCRIPTION, type: 'string' },
@@ -114,7 +116,14 @@ export default function ProjectsList(): JSX.Element {
       </PageHeaderWrapper>
       <Card flushMobile>
         <Grid container ref={contentRef}>
-          <Grid item xs={12} marginBottom='16px'>
+          <Grid
+            item
+            xs={12}
+            marginBottom='16px'
+            sx={{
+              display: 'flex',
+            }}
+          >
             <TextField
               placeholder={strings.SEARCH}
               iconLeft='search'
@@ -127,6 +136,7 @@ export default function ProjectsList(): JSX.Element {
               onClickRightIcon={clearSearch}
               sx={{ width: '300px' }}
             />
+            <TableDensitySettingsButton />
           </Grid>
 
           <Grid item xs={12}>
