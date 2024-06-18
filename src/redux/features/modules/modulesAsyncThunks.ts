@@ -99,12 +99,13 @@ export const requestListModuleDeliverables = createAsyncThunk(
     return deliverableSearchResults.map(
       (result) =>
         ({
+          category: result.category,
           moduleId: result.module_id,
           projectId: result.project_id,
-          ...result,
           dueDate: DateTime.fromISO(result.dueDate),
-          module_id: undefined,
-          project_id: undefined,
+          id: result.id,
+          name: result.name,
+          status: result.status,
           type: result['type(raw)'],
         }) as ModuleDeliverable
     );
