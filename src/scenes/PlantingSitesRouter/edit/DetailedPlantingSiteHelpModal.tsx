@@ -4,7 +4,7 @@ import { Typography } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';
 
 import TextWithLink from 'src/components/common/TextWithLink';
-import { useDocLinks } from 'src/docLinks';
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 
 export type DetailedPlantingSiteHelpModalProps = {
@@ -14,7 +14,7 @@ export type DetailedPlantingSiteHelpModalProps = {
 
 export default function DetailedPlantingSiteHelpModal(props: DetailedPlantingSiteHelpModalProps): JSX.Element {
   const { open, onClose } = props;
-  const docLinks = useDocLinks();
+  APP_PATHS.HELP_SUPPORT_FORM;
 
   return (
     <DialogBox
@@ -26,7 +26,7 @@ export default function DetailedPlantingSiteHelpModal(props: DetailedPlantingSit
       middleButtons={[<Button onClick={onClose} id='done' label={strings.DONE} key='button-1' />]}
     >
       <Typography>
-        <TextWithLink href={docLinks.contact_us} isExternal text={strings.PLANTING_SITE_CREATE_DETAILED_HELP} />
+        <TextWithLink href={APP_PATHS.HELP_SUPPORT} text={strings.PLANTING_SITE_CREATE_DETAILED_HELP} />
       </Typography>
     </DialogBox>
   );

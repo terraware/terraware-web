@@ -6,7 +6,6 @@ import { BusySpinner, Button, DialogBox } from '@terraware/web-components';
 
 import TextWithLink from 'src/components/common/TextWithLink';
 import { APP_PATHS } from 'src/constants';
-import { useDocLinks } from 'src/docLinks';
 import { selectPlantingsForSite } from 'src/redux/features/plantings/plantingsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import { TrackingService } from 'src/services';
@@ -24,7 +23,6 @@ export default function DeletePlantingSiteModal(props: DeletePlantingSiteModalPr
   const [busy, setBusy] = useState<boolean>(false);
   const navigate = useNavigate();
   const snackbar = useSnackbar();
-  const docLinks = useDocLinks();
   const hasPlantings = useAppSelector((state) => selectPlantingsForSite(state, plantingSite.id)).length > 0;
 
   const deleteHandler = async () => {
@@ -73,7 +71,7 @@ export default function DeletePlantingSiteModal(props: DeletePlantingSiteModalPr
       >
         <Typography sx={{ paddingTop: 3 }}>
           {hasPlantings ? (
-            <TextWithLink href={docLinks.contact_us} text={strings.DELETE_PLANTING_SITE_CONTACT_US} />
+            <TextWithLink href={APP_PATHS.HELP_SUPPORT} text={strings.DELETE_PLANTING_SITE_CONTACT_US} />
           ) : (
             strings.ARE_YOU_SURE
           )}

@@ -2,15 +2,12 @@ import { useLocalization } from 'src/providers';
 import { SupportedLocaleId } from 'src/strings/locales';
 
 export type DocType =
-  | 'contact_us'
   | 'cookie_policy'
   | 'planting_site_create_boundary_instructions_video'
   | 'planting_site_create_exclusions_boundary_instructions_video'
   | 'planting_site_create_subzone_boundary_instructions_video'
   | 'planting_site_create_zone_boundary_instructions_video'
   | 'privacy_policy'
-  | 'report_a_problem'
-  | 'request_a_feature'
   | 'terraformation'
   | 'terraformation_software_solutions'
   | 'knowledge_base';
@@ -19,7 +16,6 @@ type DocLink = Record<DocType, string>;
 
 const DOC_LINKS: Record<SupportedLocaleId, DocLink> = {
   en: {
-    contact_us: 'https://www.terraformation.com/contact-us/terraware-support-contact-us',
     cookie_policy: 'https://www.terraformation.com/cookie-policy',
     planting_site_create_boundary_instructions_video:
       'https://player.vimeo.com/video/911493236?h=b8b5555693&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479',
@@ -30,14 +26,11 @@ const DOC_LINKS: Record<SupportedLocaleId, DocLink> = {
     planting_site_create_zone_boundary_instructions_video:
       'https://player.vimeo.com/video/911493480?h=788ba11fe4&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479',
     privacy_policy: 'https://www.terraformation.com/privacy-policy',
-    report_a_problem: 'https://www.terraformation.com/contact-us/terraware-support-bug-report',
-    request_a_feature: 'https://www.terraformation.com/contact-us/terraware-support-feature-request',
     terraformation: 'https://www.terraformation.com',
     terraformation_software_solutions: 'https://www.terraformation.com/solutions/software',
     knowledge_base: 'https://knowledge.terraformation.com/',
   },
   es: {
-    contact_us: 'https://www.terraformation.com/contact-us/soporte-terraware-contactenos',
     cookie_policy: 'https://www.terraformation.com/cookie-policy',
     planting_site_create_boundary_instructions_video:
       'https://player.vimeo.com/video/911493236?h=b8b5555693&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479',
@@ -48,8 +41,6 @@ const DOC_LINKS: Record<SupportedLocaleId, DocLink> = {
     planting_site_create_zone_boundary_instructions_video:
       'https://player.vimeo.com/video/911493480?h=788ba11fe4&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479',
     privacy_policy: 'https://www.terraformation.com/politica-de-privacidad',
-    report_a_problem: 'https://www.terraformation.com/contact-us/soporte-terraware-informe-de-un-problema',
-    request_a_feature: 'https://www.terraformation.com/contact-us/soporte-terraware-solicite-una-funcion',
     terraformation: 'https://www.terraformation.com',
     terraformation_software_solutions: 'https://www.terraformation.com/solutions/software',
     knowledge_base: 'https://knowledge.terraformation.com/',
