@@ -86,6 +86,7 @@ export const LearnMoreModalContentGrowthForm = (): JSX.Element => {
     [strings.SHRUB_TREE, strings.LEARN_MORE_GROWTH_FORM_SHRUB_TREE],
     [strings.SUBSHRUB, strings.LEARN_MORE_GROWTH_FORM_SUBSHRUB],
     [strings.MULTIPLE_FORMS, strings.LEARN_MORE_GROWTH_FORM_MULTIPLE_FORMS],
+    [strings.HERB, strings.LEARN_MORE_GROWTH_FORM_HERB],
   ]
     .sort((a, b) => collator.compare(a[0], b[0]))
     .map(([name, description], index) => (
