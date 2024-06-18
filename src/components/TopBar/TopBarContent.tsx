@@ -1,4 +1,5 @@
 import React from 'react';
+import { useMixpanel } from 'react-mixpanel-browser';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, IconButton, useTheme } from '@mui/material';
@@ -29,6 +30,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   const { isDesktop } = useDeviceInfo();
   const { user } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const mixpanel = useMixpanel();
 
   const logoStyles = {
     width: 137,
@@ -55,14 +57,21 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   };
 
   const onHandleLogout = () => {
+    mixpanel.reset();
     window.location.href = `/sso/logout`;
+  };
+
+  const handleTopBarClick = () => {
+    mixpanel.track('TopBarHome', { my_custom_prop: 'foo' });
+    navigate(APP_PATHS.HOME);
+    console.log('Here!');
   };
 
   return isDesktop ? (
     <>
       <Box sx={leftStyles}>
         <Box sx={logoStyles}>
-          <Link to={APP_PATHS.HOME}>
+          <Link onClick={() => handleTopBarClick()}>
             <Svg.Logo style={logoStyles} />
           </Link>
         </Box>

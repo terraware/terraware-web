@@ -1,4 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { MixpanelProvider } from 'react-mixpanel-browser';
+import { useMixpanel } from 'react-mixpanel-browser';
 import { Provider } from 'react-redux';
 
 import { Box, CssBaseline, StyledEngineProvider, useTheme } from '@mui/material';
@@ -15,20 +17,53 @@ import { useLocalization, useUser } from 'src/providers';
 import { store } from 'src/redux/store';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useEnvironment from 'src/utils/useEnvironment';
 
 const AcceleratorRouter = React.lazy(() => import('src/scenes/AcceleratorRouter'));
 const TerrawareRouter = React.lazy(() => import('src/scenes/TerrawareRouter'));
+
+// Mixpanel setup
+// Set this to true to enable Mixpanel tracking for the Terraware Dev project
+const enableMixpanelDev = false;
+const { isProduction, isStaging, isDev } = useEnvironment();
+const MIXPANEL_TOKEN = isProduction
+  ? 'a2ea671ce64976806e4b0aeac55a0dab'
+  : isStaging
+    ? '1a92141fe08a3514530f48f7e8056bf0'
+    : isDev && enableMixpanelDev
+      ? '189f8a16494df135f5207a433213f708'
+      : undefined;
+const MIXPANEL_CONFIG = {
+  track_pageview: 'url-with-path',
+};
 
 function AppContent() {
   // manager hooks
   useAppVersion();
 
   const { isDesktop, type } = useDeviceInfo();
-  const { isAllowed } = useUser();
+  const { user, isAllowed } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const theme = useTheme();
+  const mixpanel = useMixpanel();
 
   const [showNavBar, setShowNavBar] = useState(true);
+
+  useEffect(() => {
+    if (user) {
+      if (user.cookiesConsented === true) {
+        mixpanel.identify(user.id);
+        mixpanel.people.set({
+          $email: user.email,
+          $locale: user.locale,
+          $emailNotifsEnabled: user.emailNotificationsEnabled,
+          $countryCode: user.countryCode,
+        });
+      } else {
+        mixpanel.optOutOfTracking();
+      }
+    }
+  }, [user]);
 
   useEffect(() => {
     if (type === 'mobile' || type === 'tablet') {
@@ -99,10 +134,12 @@ function AppContent() {
 
 export default function App(): JSX.Element {
   return (
-    <Provider store={store}>
-      <AppBootstrap>
-        <AppContent />
-      </AppBootstrap>
-    </Provider>
+    <MixpanelProvider config={MIXPANEL_CONFIG} token={MIXPANEL_TOKEN}>
+      <Provider store={store}>
+        <AppBootstrap>
+          <AppContent />
+        </AppBootstrap>
+      </Provider>
+    </MixpanelProvider>
   );
 }
