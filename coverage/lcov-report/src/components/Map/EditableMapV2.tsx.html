@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/84</span>
+                <span class='fraction'>0/87</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/67</span>
+                <span class='fraction'>0/71</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/29</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/78</span>
+                <span class='fraction'>0/81</span>
             </div>
         
             
@@ -444,7 +444,20 @@
 <a name='L379'></a><a href='#L379'>379</a>
 <a name='L380'></a><a href='#L380'>380</a>
 <a name='L381'></a><a href='#L381'>381</a>
-<a name='L382'></a><a href='#L382'>382</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L382'></a><a href='#L382'>382</a>
+<a name='L383'></a><a href='#L383'>383</a>
+<a name='L384'></a><a href='#L384'>384</a>
+<a name='L385'></a><a href='#L385'>385</a>
+<a name='L386'></a><a href='#L386'>386</a>
+<a name='L387'></a><a href='#L387'>387</a>
+<a name='L388'></a><a href='#L388'>388</a>
+<a name='L389'></a><a href='#L389'>389</a>
+<a name='L390'></a><a href='#L390'>390</a>
+<a name='L391'></a><a href='#L391'>391</a>
+<a name='L392'></a><a href='#L392'>392</a>
+<a name='L393'></a><a href='#L393'>393</a>
+<a name='L394'></a><a href='#L394'>394</a>
+<a name='L395'></a><a href='#L395'>395</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -516,6 +529,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -734,6 +749,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -760,6 +779,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -839,6 +865,7 @@ import ReactMapGL, {
   Source,
 } from 'react-map-gl';
 &nbsp;
+import { AddressAutofillFeatureSuggestion } from '@mapbox/search-js-core';
 import { Box, useTheme } from '@mui/material';
 import bbox from '@turf/bbox';
 import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
@@ -858,6 +885,7 @@ import {
 import { getRgbaFromHex } from 'src/utils/color';
 import useMapboxToken from 'src/utils/useMapboxToken';
 &nbsp;
+import MapSearchBox from './MapSearchBox';
 import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
 import UndoRedoControl from './UndoRedoControl';
 import { getMapDrawingLayer, getMapErrorLayer, toMultiPolygon } from './utils';
@@ -1147,6 +1175,17 @@ export default function <span class="fstat-no" title="function not covered" >Edi
           : {}),
       }}
     &gt;
+      &lt;MapSearchBox
+        onSelect={<span class="fstat-no" title="function not covered" >(f</span>eatures: AddressAutofillFeatureSuggestion[] | null) =&gt; {
+<span class="cstat-no" title="statement not covered" >          if (features &amp;&amp; features.length &gt; 0) {</span>
+            const coordinates = <span class="cstat-no" title="statement not covered" >features[0].geometry.coordinates;</span>
+<span class="cstat-no" title="statement not covered" >            mapRef?.current?.flyTo({</span>
+              center: [coordinates[0], coordinates[1]],
+              essential: true,
+            });
+          }
+        }}
+      /&gt;
       {firstVisible &amp;&amp; (
         &lt;&gt;
           &lt;ReactMapGL
@@ -1213,7 +1252,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-18T17:09:35.849Z
+                at 2024-06-18T17:23:41.244Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
