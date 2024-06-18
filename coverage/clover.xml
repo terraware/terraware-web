@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1718747103320" clover="3.2.0">
-  <project timestamp="1718747103320" name="All files">
+<coverage generated="1718750662470" clover="3.2.0">
+  <project timestamp="1718750662470" name="All files">
     <metrics statements="22520" coveredstatements="941" conditionals="14336" coveredconditionals="231" methods="6900" coveredmethods="162" elements="43756" coveredelements="1334" complexity="0" loc="22520" ncloc="22520" packages="210" files="996" classes="996"/>
     <package name="src">
       <metrics statements="160" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="37" coveredmethods="0"/>
@@ -6263,19 +6263,19 @@
         <line num="72" count="0" type="stmt"/>
         <line num="73" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="75" count="0" type="stmt"/>
-        <line num="90" count="0" type="stmt"/>
-        <line num="92" count="0" type="stmt"/>
-        <line num="97" count="0" type="stmt"/>
-        <line num="100" count="0" type="stmt"/>
+        <line num="91" count="0" type="stmt"/>
+        <line num="93" count="0" type="stmt"/>
+        <line num="98" count="0" type="stmt"/>
         <line num="101" count="0" type="stmt"/>
-        <line num="120" count="0" type="stmt"/>
+        <line num="102" count="0" type="stmt"/>
         <line num="121" count="0" type="stmt"/>
-        <line num="131" count="0" type="stmt"/>
+        <line num="122" count="0" type="stmt"/>
         <line num="132" count="0" type="stmt"/>
-        <line num="165" count="0" type="stmt"/>
+        <line num="133" count="0" type="stmt"/>
         <line num="166" count="0" type="stmt"/>
-        <line num="183" count="0" type="stmt"/>
+        <line num="167" count="0" type="stmt"/>
         <line num="184" count="0" type="stmt"/>
+        <line num="185" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.TopBar">
