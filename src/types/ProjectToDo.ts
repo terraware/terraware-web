@@ -57,7 +57,8 @@ export type DeliverableSearchResultType = {
   name: string;
   position: number;
   status: DeliverableStatusType | null;
-  type: DeliverableTypeType;
+  type: string;
+  'type(raw)': DeliverableTypeType;
 };
 
 export class DeliverableToDoItem implements ToDoItem {
@@ -82,7 +83,7 @@ export class DeliverableToDoItem implements ToDoItem {
     this.position = searchResult.position;
     this.projectId = searchResult.project_id;
     this.status = searchResult.status ?? 'Not Submitted';
-    this.type = searchResult.type;
+    this.type = searchResult['type(raw)'];
   }
 
   isCompleted = (): boolean => this.status == 'Approved' || this.status == 'Not Needed';
