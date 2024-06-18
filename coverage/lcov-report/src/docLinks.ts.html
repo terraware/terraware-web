@@ -118,19 +118,7 @@
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
 <a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -147,12 +135,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -195,15 +177,12 @@
 import { SupportedLocaleId } from 'src/strings/locales';
 &nbsp;
 export type DocType =
-  | 'contact_us'
   | 'cookie_policy'
   | 'planting_site_create_boundary_instructions_video'
   | 'planting_site_create_exclusions_boundary_instructions_video'
   | 'planting_site_create_subzone_boundary_instructions_video'
   | 'planting_site_create_zone_boundary_instructions_video'
   | 'privacy_policy'
-  | 'report_a_problem'
-  | 'request_a_feature'
   | 'terraformation'
   | 'terraformation_software_solutions'
   | 'knowledge_base';
@@ -212,7 +191,6 @@ type DocLink = Record&lt;DocType, string&gt;;
 &nbsp;
 const DOC_LINKS: Record&lt;SupportedLocaleId, DocLink&gt; = <span class="cstat-no" title="statement not covered" >{</span>
   en: {
-    contact_us: 'https://www.terraformation.com/contact-us/terraware-support-contact-us',
     cookie_policy: 'https://www.terraformation.com/cookie-policy',
     planting_site_create_boundary_instructions_video:
       'https://player.vimeo.com/video/911493236?h=b8b5555693&amp;amp;badge=0&amp;amp;autopause=0&amp;amp;player_id=0&amp;amp;app_id=58479',
@@ -223,14 +201,11 @@ const DOC_LINKS: Record&lt;SupportedLocaleId, DocLink&gt; = <span class="cstat-n
     planting_site_create_zone_boundary_instructions_video:
       'https://player.vimeo.com/video/911493480?h=788ba11fe4&amp;amp;badge=0&amp;amp;autopause=0&amp;amp;player_id=0&amp;amp;app_id=58479',
     privacy_policy: 'https://www.terraformation.com/privacy-policy',
-    report_a_problem: 'https://www.terraformation.com/contact-us/terraware-support-bug-report',
-    request_a_feature: 'https://www.terraformation.com/contact-us/terraware-support-feature-request',
     terraformation: 'https://www.terraformation.com',
     terraformation_software_solutions: 'https://www.terraformation.com/solutions/software',
     knowledge_base: 'https://knowledge.terraformation.com/',
   },
   es: {
-    contact_us: 'https://www.terraformation.com/contact-us/soporte-terraware-contactenos',
     cookie_policy: 'https://www.terraformation.com/cookie-policy',
     planting_site_create_boundary_instructions_video:
       'https://player.vimeo.com/video/911493236?h=b8b5555693&amp;amp;badge=0&amp;amp;autopause=0&amp;amp;player_id=0&amp;amp;app_id=58479',
@@ -241,8 +216,6 @@ const DOC_LINKS: Record&lt;SupportedLocaleId, DocLink&gt; = <span class="cstat-n
     planting_site_create_zone_boundary_instructions_video:
       'https://player.vimeo.com/video/911493480?h=788ba11fe4&amp;amp;badge=0&amp;amp;autopause=0&amp;amp;player_id=0&amp;amp;app_id=58479',
     privacy_policy: 'https://www.terraformation.com/politica-de-privacidad',
-    report_a_problem: 'https://www.terraformation.com/contact-us/soporte-terraware-informe-de-un-problema',
-    request_a_feature: 'https://www.terraformation.com/contact-us/soporte-terraware-solicite-una-funcion',
     terraformation: 'https://www.terraformation.com',
     terraformation_software_solutions: 'https://www.terraformation.com/solutions/software',
     knowledge_base: 'https://knowledge.terraformation.com/',
@@ -262,7 +235,7 @@ export const useDocLinks = <span class="cstat-no" title="statement not covered" 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-18T12:30:34.946Z
+                at 2024-06-18T17:09:35.849Z
             </div>
         <script src="../prettify.js"></script>
         <script>
