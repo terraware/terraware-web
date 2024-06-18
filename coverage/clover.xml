@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1718731421914" clover="3.2.0">
-  <project timestamp="1718731421914" name="All files">
-    <metrics statements="22516" coveredstatements="940" conditionals="14334" coveredconditionals="231" methods="6899" coveredmethods="162" elements="43749" coveredelements="1333" complexity="0" loc="22516" ncloc="22516" packages="210" files="996" classes="996"/>
+<coverage generated="1718739179491" clover="3.2.0">
+  <project timestamp="1718739179491" name="All files">
+    <metrics statements="22516" coveredstatements="940" conditionals="14336" coveredconditionals="231" methods="6899" coveredmethods="162" elements="43751" coveredelements="1333" complexity="0" loc="22516" ncloc="22516" packages="210" files="996" classes="996"/>
     <package name="src">
       <metrics statements="160" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -15156,7 +15156,7 @@
       </file>
     </package>
     <package name="src.scenes.DeliverablesRouter">
-      <metrics statements="95" coveredstatements="0" conditionals="58" coveredconditionals="0" methods="29" coveredmethods="0"/>
+      <metrics statements="95" coveredstatements="0" conditionals="60" coveredconditionals="0" methods="29" coveredmethods="0"/>
       <file name="DeliverableViewWrapper.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/DeliverablesRouter/DeliverableViewWrapper.tsx">
         <metrics statements="9" coveredstatements="0" conditionals="5" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="9" count="0" type="stmt"/>
@@ -15232,7 +15232,7 @@
         <line num="14" count="0" type="stmt"/>
       </file>
       <file name="SpeciesDeliverableStatusMessage.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/DeliverablesRouter/SpeciesDeliverableStatusMessage.tsx">
-        <metrics statements="6" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <metrics statements="6" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
