@@ -66,7 +66,8 @@ export type ModuleDeliverableSearchResult = {
   category: DeliverableCategoryType;
   dueDate: string;
   status: DeliverableStatusType;
-  type: DeliverableTypeType;
+  type: string;
+  'type(raw)'?: DeliverableTypeType;
 };
 
 export type ModuleDeliverable = {
@@ -78,7 +79,6 @@ export type ModuleDeliverable = {
   dueDate: DateTime;
   status: DeliverableStatusType;
   type: DeliverableTypeType;
-  'type(raw)'?: string;
 };
 
 export type ModuleContentType = keyof Pick<Module, 'additionalResources' | 'preparationMaterials'>;

@@ -75,8 +75,7 @@ export default function SpeciesProjectsTable({
 
   const addToProjectButtonIsDisabled = useMemo(() => {
     return (
-      selectableProjects?.length < 1 ||
-      !currentDeliverables?.find((deliverable) => deliverable['type(raw)'] === 'Species')
+      selectableProjects?.length < 1 || !currentDeliverables?.find((deliverable) => deliverable.type === 'Species')
     );
   }, [currentDeliverables, selectableProjects]);
 

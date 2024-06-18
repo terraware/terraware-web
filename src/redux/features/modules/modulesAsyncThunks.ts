@@ -105,6 +105,7 @@ export const requestListModuleDeliverables = createAsyncThunk(
           dueDate: DateTime.fromISO(result.dueDate),
           module_id: undefined,
           project_id: undefined,
+          type: result['type(raw)'],
         }) as ModuleDeliverable
     );
   }
