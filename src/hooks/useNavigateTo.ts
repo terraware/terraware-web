@@ -16,7 +16,7 @@ export default function useNavigateTo() {
 
       goToContactUsForm: (requestType: SupportRequestType) => {
         navigate({
-          pathname: APP_PATHS.CONTACT_US_FORM.replace(':requestType', getSupportRequestSubpath(requestType)),
+          pathname: APP_PATHS.HELP_SUPPORT_FORM.replace(':requestType', getSupportRequestSubpath(requestType)),
         });
       },
 
