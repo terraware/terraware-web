@@ -325,9 +325,9 @@ export default function EditableMap({
       <MapSearchBox
         onSelect={(features: AddressAutofillFeatureSuggestion[] | null) => {
           if (features && features.length > 0) {
-            const coordiantes = features[0].geometry.coordinates;
+            const coordinates = features[0].geometry.coordinates;
             mapRef?.current?.flyTo({
-              center: [coordiantes[0], coordiantes[1]],
+              center: [coordinates[0], coordinates[1]],
               essential: true,
             });
           }

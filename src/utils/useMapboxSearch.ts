@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   AddressAutofillCore,
@@ -32,9 +32,11 @@ const useMapboxSearch = (): MapboxSearch => {
   const [suggestText, setSuggestText] = useState<string>();
   const { toastError } = useSnackbar();
 
-  session.addEventListener('suggesterror', () => {
-    toastError(strings.GENERIC_ERROR);
-  });
+  useEffect(() => {
+    session.addEventListener('suggesterror', () => {
+      toastError(strings.GENERIC_ERROR);
+    });
+  }, [toastError, session]);
 
   const suggest = useCallback(
     async (nextSuggestText: string) => {
