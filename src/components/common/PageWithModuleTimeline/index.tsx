@@ -10,6 +10,7 @@ import ModuleTimeline from './ModuleTimeline';
 const PageWithModuleTimeline = (props: PageProps) => {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
+  const { contentStyle, titleStyle } = props;
 
   const desktopContainerStyles = {
     paddingTop: 0,
@@ -26,7 +27,12 @@ const PageWithModuleTimeline = (props: PageProps) => {
           width: '100%',
         }}
       >
-        <Page {...props} containerStyles={isMobile ? {} : desktopContainerStyles} />
+        <Page
+          {...props}
+          containerStyles={isMobile ? {} : desktopContainerStyles}
+          contentStyle={contentStyle}
+          titleStyle={titleStyle}
+        />
       </Grid>
       <Grid item sx={{ display: { xs: 'none', sm: 'none', md: 'none', lg: 'block', xl: 'block' } }} minWidth={'206px'}>
         <ModuleTimeline />
