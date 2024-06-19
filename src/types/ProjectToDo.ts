@@ -1,6 +1,8 @@
 import { isInTheFuture } from '@terraware/web-components/utils/date';
 import { DateTime } from 'luxon';
 
+import { DeliverableSearchResultType, EventSearchResultType } from 'src/services/ToDoService';
+
 import { DeliverableCategoryType, DeliverableStatusType, DeliverableTypeType } from './Deliverables';
 import { ModuleEventSessionStatus, ModuleEventType } from './Module';
 
@@ -47,19 +49,6 @@ export interface ToDoItem {
   getSection(): ToDoSection;
 }
 
-export type DeliverableSearchResultType = {
-  id: number;
-  module_id: number;
-  module_name: string;
-  project_id: number;
-  category: DeliverableCategoryType;
-  dueDate: string;
-  name: string;
-  position: number;
-  status: DeliverableStatusType | null;
-  type: DeliverableTypeType;
-};
-
 export class DeliverableToDoItem implements ToDoItem {
   id: number;
   moduleId: number;
@@ -77,10 +66,10 @@ export class DeliverableToDoItem implements ToDoItem {
     this.category = searchResult.category;
     this.dueDate = DateTime.fromISO(searchResult.dueDate);
     this.name = searchResult.name;
-    this.moduleId = searchResult.module_id;
-    this.moduleName = searchResult.module_name;
+    this.moduleId = searchResult.moduleId;
+    this.moduleName = searchResult.moduleName;
     this.position = searchResult.position;
-    this.projectId = searchResult.project_id;
+    this.projectId = searchResult.projectId;
     this.status = searchResult.status ?? 'Not Submitted';
     this.type = searchResult.type;
   }
@@ -131,16 +120,6 @@ export class DeliverableToDoItem implements ToDoItem {
   };
 }
 
-export type EventSearchResultType = {
-  id: number;
-  module_id: number;
-  module_name: string;
-  projects_id: number;
-  startTime: string;
-  status: ModuleEventSessionStatus;
-  type: ModuleEventType;
-};
-
 export class EventToDoItem implements ToDoItem {
   id: number;
   moduleId: number;
@@ -152,9 +131,9 @@ export class EventToDoItem implements ToDoItem {
 
   constructor(searchResult: EventSearchResultType) {
     this.id = searchResult.id;
-    this.moduleId = searchResult.module_id;
-    this.moduleName = searchResult.module_name;
-    this.projectId = searchResult.projects_id;
+    this.moduleId = searchResult.moduleId;
+    this.moduleName = searchResult.moduleName;
+    this.projectId = searchResult.projectId;
     this.startTime = DateTime.fromISO(searchResult.startTime);
     this.status = searchResult.status;
     this.type = searchResult.type;
