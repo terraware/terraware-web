@@ -58,17 +58,6 @@ export const getEventStatus = (status: ModuleEventSessionStatus) => {
   }
 };
 
-export type ModuleDeliverableSearchResult = {
-  id: number;
-  module_id: number;
-  project_id: number;
-  name: string;
-  category: DeliverableCategoryType;
-  dueDate: string;
-  status: DeliverableStatusType;
-  type: DeliverableTypeType;
-};
-
 export type ModuleDeliverable = {
   id: number;
   moduleId: number;
