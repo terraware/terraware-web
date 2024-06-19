@@ -24,7 +24,7 @@ const TerrawareRouter = React.lazy(() => import('src/scenes/TerrawareRouter'));
 
 // Mixpanel setup
 // Set this to true to enable Mixpanel tracking for the Terraware Dev project
-const enableMixpanelDev = false;
+const enableMixpanelDev = true;
 const { isProduction, isStaging, isDev } = useEnvironment();
 const MIXPANEL_TOKEN = isProduction
   ? 'a2ea671ce64976806e4b0aeac55a0dab'
@@ -44,13 +44,31 @@ function AppContent() {
   useAppVersion();
 
   const { isDesktop, type } = useDeviceInfo();
-  const { isAllowed } = useUser();
+  const { user, isAllowed } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const theme = useTheme();
+  const mixpanel = useMixpanel();
 
   const [showNavBar, setShowNavBar] = useState(true);
 
-  
+  useEffect(() => {
+    console.log(user?.cookiesConsented);
+    console.log(mixpanel);
+    if (user && mixpanel) {
+      if (user.cookiesConsented === true) {
+        mixpanel.opt_in_tracking();
+        mixpanel.identify(user.id);
+        mixpanel.people.set({
+          $email: user.email,
+          $locale: user.locale,
+          $emailNotifsEnabled: user.emailNotificationsEnabled,
+          $countryCode: user.countryCode,
+        });
+      } else {
+        mixpanel.opt_out_tracking();
+      }
+    }
+  }, [user, mixpanel]);
 
   useEffect(() => {
     if (type === 'mobile' || type === 'tablet') {
@@ -120,31 +138,6 @@ function AppContent() {
 }
 
 export default function App(): JSX.Element {
-
-  const mixpanel = useMixpanel();
-  const { user } = useUser();
-
-  useEffect(() => {
-    console.log("USE_EFFECT");
-    console.log(user?.cookiesConsented);
-    console.log(mixpanel);
-    if (user && mixpanel) {
-      if (user.cookiesConsented === true) {
-        console.log("OPTED_IN");
-        mixpanel.opt_in_tracking();
-        mixpanel.identify(user.id);
-        mixpanel.people.set({
-          $email: user.email,
-          $locale: user.locale,
-          $emailNotifsEnabled: user.emailNotificationsEnabled,
-          $countryCode: user.countryCode,
-        });
-      } else {
-        console.log("OPTED_OUT!");
-        mixpanel.optOutOfTracking();
-      }
-    }
-  }, [user, mixpanel]);
 
   return (
     <MixpanelProvider config={MIXPANEL_CONFIG} token={MIXPANEL_TOKEN}>
