@@ -52,8 +52,6 @@ function AppContent() {
   const [showNavBar, setShowNavBar] = useState(true);
 
   useEffect(() => {
-    console.log(user?.cookiesConsented);
-    console.log(mixpanel);
     if (user && mixpanel) {
       if (user.cookiesConsented === true) {
         mixpanel.opt_in_tracking();

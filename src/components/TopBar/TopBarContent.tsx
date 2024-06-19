@@ -62,9 +62,8 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   };
 
   const handleTopBarClick = () => {
-    mixpanel?.track('TopBarHome', { my_custom_prop: 'foo' });
+    mixpanel?.track('TopBarHome');
     navigate(APP_PATHS.HOME);
-    console.log('Here!');
   };
 
   return isDesktop ? (
