@@ -136,7 +136,6 @@ function AppContent() {
 }
 
 export default function App(): JSX.Element {
-
   return (
     <MixpanelProvider config={MIXPANEL_CONFIG} token={MIXPANEL_TOKEN}>
       <Provider store={store}>
