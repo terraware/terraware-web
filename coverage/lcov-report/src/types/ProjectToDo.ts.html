@@ -251,47 +251,15 @@
 <a name='L186'></a><a href='#L186'>186</a>
 <a name='L187'></a><a href='#L187'>187</a>
 <a name='L188'></a><a href='#L188'>188</a>
-<a name='L189'></a><a href='#L189'>189</a>
-<a name='L190'></a><a href='#L190'>190</a>
-<a name='L191'></a><a href='#L191'>191</a>
-<a name='L192'></a><a href='#L192'>192</a>
-<a name='L193'></a><a href='#L193'>193</a>
-<a name='L194'></a><a href='#L194'>194</a>
-<a name='L195'></a><a href='#L195'>195</a>
-<a name='L196'></a><a href='#L196'>196</a>
-<a name='L197'></a><a href='#L197'>197</a>
-<a name='L198'></a><a href='#L198'>198</a>
-<a name='L199'></a><a href='#L199'>199</a>
-<a name='L200'></a><a href='#L200'>200</a>
-<a name='L201'></a><a href='#L201'>201</a>
-<a name='L202'></a><a href='#L202'>202</a>
-<a name='L203'></a><a href='#L203'>203</a>
-<a name='L204'></a><a href='#L204'>204</a>
-<a name='L205'></a><a href='#L205'>205</a>
-<a name='L206'></a><a href='#L206'>206</a>
-<a name='L207'></a><a href='#L207'>207</a>
-<a name='L208'></a><a href='#L208'>208</a>
-<a name='L209'></a><a href='#L209'>209</a>
-<a name='L210'></a><a href='#L210'>210</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L189'></a><a href='#L189'>189</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -401,16 +369,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -484,6 +442,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { isInTheFuture } from '@terraware/web-components/utils/date';
 import { DateTime } from 'luxon';
 &nbsp;
+import { DeliverableSearchResultType, EventSearchResultType } from 'src/services/ToDoService';
+&nbsp;
 import { DeliverableCategoryType, DeliverableStatusType, DeliverableTypeType } from './Deliverables';
 import { ModuleEventSessionStatus, ModuleEventType } from './Module';
 &nbsp;
@@ -530,19 +490,6 @@ export interface ToDoItem {
   getSection(): ToDoSection;
 }
 &nbsp;
-export type DeliverableSearchResultType = {
-  id: number;
-  module_id: number;
-  module_name: string;
-  project_id: number;
-  category: DeliverableCategoryType;
-  dueDate: string;
-  name: string;
-  position: number;
-  status: DeliverableStatusType | null;
-  type: DeliverableTypeType;
-};
-&nbsp;
 export class DeliverableToDoItem implements ToDoItem {
   id: number;
   moduleId: number;
@@ -560,10 +507,10 @@ export class DeliverableToDoItem implements ToDoItem {
 <span class="cstat-no" title="statement not covered" >    this.category = searchResult.category;</span>
 <span class="cstat-no" title="statement not covered" >    this.dueDate = DateTime.fromISO(searchResult.dueDate);</span>
 <span class="cstat-no" title="statement not covered" >    this.name = searchResult.name;</span>
-<span class="cstat-no" title="statement not covered" >    this.moduleId = searchResult.module_id;</span>
-<span class="cstat-no" title="statement not covered" >    this.moduleName = searchResult.module_name;</span>
+<span class="cstat-no" title="statement not covered" >    this.moduleId = searchResult.moduleId;</span>
+<span class="cstat-no" title="statement not covered" >    this.moduleName = searchResult.moduleName;</span>
 <span class="cstat-no" title="statement not covered" >    this.position = searchResult.position;</span>
-<span class="cstat-no" title="statement not covered" >    this.projectId = searchResult.project_id;</span>
+<span class="cstat-no" title="statement not covered" >    this.projectId = searchResult.projectId;</span>
 <span class="cstat-no" title="statement not covered" >    this.status = searchResult.status ?? 'Not Submitted';</span>
 <span class="cstat-no" title="statement not covered" >    this.type = searchResult.type;</span>
   }
@@ -614,16 +561,6 @@ export class DeliverableToDoItem implements ToDoItem {
   };
 }
 &nbsp;
-export type EventSearchResultType = {
-  id: number;
-  module_id: number;
-  module_name: string;
-  projects_id: number;
-  startTime: string;
-  status: ModuleEventSessionStatus;
-  type: ModuleEventType;
-};
-&nbsp;
 export class EventToDoItem implements ToDoItem {
   id: number;
   moduleId: number;
@@ -635,9 +572,9 @@ export class EventToDoItem implements ToDoItem {
 &nbsp;
 <span class="fstat-no" title="function not covered" >  co</span>nstructor(searchResult: EventSearchResultType) {
 <span class="cstat-no" title="statement not covered" >    this.id = searchResult.id;</span>
-<span class="cstat-no" title="statement not covered" >    this.moduleId = searchResult.module_id;</span>
-<span class="cstat-no" title="statement not covered" >    this.moduleName = searchResult.module_name;</span>
-<span class="cstat-no" title="statement not covered" >    this.projectId = searchResult.projects_id;</span>
+<span class="cstat-no" title="statement not covered" >    this.moduleId = searchResult.moduleId;</span>
+<span class="cstat-no" title="statement not covered" >    this.moduleName = searchResult.moduleName;</span>
+<span class="cstat-no" title="statement not covered" >    this.projectId = searchResult.projectId;</span>
 <span class="cstat-no" title="statement not covered" >    this.startTime = DateTime.fromISO(searchResult.startTime);</span>
 <span class="cstat-no" title="statement not covered" >    this.status = searchResult.status;</span>
 <span class="cstat-no" title="statement not covered" >    this.type = searchResult.type;</span>
@@ -697,7 +634,7 @@ export const compareToDoItems = <span class="cstat-no" title="statement not cove
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-18T22:44:21.805Z
+                at 2024-06-19T18:41:47.180Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
