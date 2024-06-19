@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1718823654560" clover="3.2.0">
-  <project timestamp="1718823654560" name="All files">
-    <metrics statements="22540" coveredstatements="941" conditionals="14346" coveredconditionals="231" methods="6906" coveredmethods="162" elements="43792" coveredelements="1334" complexity="0" loc="22540" ncloc="22540" packages="210" files="997" classes="997"/>
+<coverage generated="1718827622190" clover="3.2.0">
+  <project timestamp="1718827622190" name="All files">
+    <metrics statements="22540" coveredstatements="941" conditionals="14355" coveredconditionals="231" methods="6906" coveredmethods="162" elements="43801" coveredelements="1334" complexity="0" loc="22540" ncloc="22540" packages="210" files="997" classes="997"/>
     <package name="src">
       <metrics statements="160" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="37" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -5966,9 +5966,9 @@
       </file>
     </package>
     <package name="src.components.SpeciesDeliverableTable">
-      <metrics statements="177" coveredstatements="0" conditionals="81" coveredconditionals="0" methods="57" coveredmethods="0"/>
+      <metrics statements="177" coveredstatements="0" conditionals="90" coveredconditionals="0" methods="57" coveredmethods="0"/>
       <file name="AddSpeciesModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/SpeciesDeliverableTable/AddSpeciesModal.tsx">
-        <metrics statements="47" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="19" coveredmethods="0"/>
+        <metrics statements="47" coveredstatements="0" conditionals="29" coveredconditionals="0" methods="19" coveredmethods="0"/>
         <line num="31" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
@@ -5999,7 +5999,7 @@
         <line num="75" count="0" type="stmt"/>
         <line num="81" count="0" type="stmt"/>
         <line num="82" count="0" type="stmt"/>
-        <line num="86" count="0" type="cond" truecount="0" falsecount="6"/>
+        <line num="86" count="0" type="cond" truecount="0" falsecount="7"/>
         <line num="87" count="0" type="stmt"/>
         <line num="88" count="0" type="stmt"/>
         <line num="91" count="0" type="stmt"/>
