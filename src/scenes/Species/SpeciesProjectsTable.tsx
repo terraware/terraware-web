@@ -108,7 +108,7 @@ export default function SpeciesProjectsTable({
       );
     });
     setSelectableProjects(pendingProjects || []);
-  }, [allProjects, filteredResults, currentDeliverables]);
+  }, [allProjects, currentDeliverables, filteredResults]);
 
   useEffect(() => {
     let updatedResults = searchResults ?? [];
