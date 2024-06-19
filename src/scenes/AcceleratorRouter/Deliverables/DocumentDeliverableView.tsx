@@ -61,7 +61,7 @@ const DocumentDeliverableView = (props: Props): JSX.Element => {
   return (
     <Page title={<TitleBar {...viewProps} />} rightComponent={rightComponent} crumbs={crumbs}>
       {props.isBusy && <BusySpinner />}
-      <Box display='flex' flexDirection='column' flexGrow={1}>
+      <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>
         <RejectedDeliverableMessage {...viewProps} />
         <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
           <Metadata {...viewProps} />

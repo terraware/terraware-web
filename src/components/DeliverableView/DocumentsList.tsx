@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 
-import { Grid, TableContainer } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
@@ -45,8 +45,8 @@ const DocumentsList = (props: DocumentsListProps): JSX.Element => {
   );
 
   return (
-    <Grid item xs={12}>
-      <TableContainer sx={{ overflowX: 'scroll' }}>
+    <Box display='flex' flexDirection='column'>
+      <Grid item xs={12}>
         <Table
           id={'documents-list' + isAcceleratorRoute ? '-admin' : ''}
           columns={() => props.columns}
@@ -56,8 +56,8 @@ const DocumentsList = (props: DocumentsListProps): JSX.Element => {
           Renderer={DocumentCellRenderer}
           sortHandler={onSortChange}
         />
-      </TableContainer>
-    </Grid>
+      </Grid>
+    </Box>
   );
 };
 

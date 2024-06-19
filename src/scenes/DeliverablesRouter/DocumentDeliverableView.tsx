@@ -53,7 +53,7 @@ const DocumentDeliverableView = (props: Props): JSX.Element => {
   return (
     <Page title={<TitleBar {...props} />} crumbs={crumbs}>
       {props.isBusy && <BusySpinner />}
-      <Box display='flex' flexDirection='column' flexGrow={1}>
+      <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>
         <RejectedDeliverableMessage {...viewProps} />
         {documentLimitReached && <DocumentLimitReachedMessage maxFiles={MAX_FILES_LIMIT} />}
         <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
