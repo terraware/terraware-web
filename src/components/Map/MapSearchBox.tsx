@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { CSSProperties, useCallback, useEffect, useState } from 'react';
 
 import { AddressAutofillFeatureSuggestion, AddressAutofillSuggestion } from '@mapbox/search-js-core';
 import { Autocomplete, TextField } from '@mui/material';
@@ -8,9 +8,10 @@ import useMapboxSearch from 'src/utils/useMapboxSearch';
 
 export type MapSearchBoxProp = {
   onSelect?: (features: AddressAutofillFeatureSuggestion[] | null) => void;
+  style?: CSSProperties;
 };
 
-const MapSearchBox = ({ onSelect }: MapSearchBoxProp) => {
+const MapSearchBox = ({ onSelect, style }: MapSearchBoxProp) => {
   const { clear, retrieve, suggest } = useMapboxSearch();
   const [value, setValue] = useState<AddressAutofillSuggestion>();
   const [inputValue, setInputValue] = useState<string>('');
@@ -47,7 +48,7 @@ const MapSearchBox = ({ onSelect }: MapSearchBoxProp) => {
   return (
     <Autocomplete
       id='mapbox-suggestions'
-      sx={{ width: 1000 }}
+      sx={{ width: 1000, ...style }}
       getOptionLabel={(option: AddressAutofillSuggestion) => `${option.feature_name}, ${option.full_address}`}
       filterOptions={(x) => x}
       options={options}
