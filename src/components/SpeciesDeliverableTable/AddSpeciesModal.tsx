@@ -83,7 +83,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
       ...record,
     } as CreateParticipantProjectSpeciesRequestPayload;
 
-    if (!payload || !payload.projectId || !payload.rationale || !payload.speciesId) {
+    if (!payload || !payload.projectId || !payload.rationale || !payload.speciesId || !payload.speciesNativeCategory) {
       setError(strings.REQUIRED_FIELD);
       return;
     }
@@ -149,7 +149,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             displayLabel={(species: Species) => species?.scientificName || ''}
             toT={(scientificName: string) => ({ scientificName }) as Species}
             required
-            errorText={error}
+            errorText={error && !record?.speciesId ? error : ''}
           />
         </Grid>
         <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
@@ -164,6 +164,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             fixedMenu
             required
             fullWidth={true}
+            errorText={error && !record?.speciesNativeCategory ? error : ''}
           />
         </Grid>
         <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
@@ -173,7 +174,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             type='textarea'
             value={record?.rationale}
             onChange={onChangeRationale}
-            errorText={error && !record?.rationale ? strings.REQUIRED_FIELD : ''}
+            errorText={error && !record?.rationale ? error : ''}
             required
           />
         </Grid>
