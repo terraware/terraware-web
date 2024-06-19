@@ -27,7 +27,12 @@ export default function ListView(): JSX.Element {
     'deliverables are due.';
 
   return (
-    <PageWithModuleTimeline title={strings.ALL_MODULES} isLoading={!currentParticipant}>
+    <PageWithModuleTimeline
+      title={strings.ALL_MODULES}
+      isLoading={!currentParticipant}
+      contentStyle={{ paddingLeft: '24px' }}
+      titleStyle={{ marginBottom: 2 }}
+    >
       <Box sx={{ paddingBottom: 2 }}>
         <ListViewHeader />
       </Box>

@@ -41,7 +41,7 @@ const TerrawareHomeView = () => {
         flexDirection: 'column',
       }}
     >
-      <Box paddingRight={'24px'}>
+      <Box paddingRight={'24px'} paddingLeft={isMobile ? '24px' : 0}>
         <PageHeader
           title={user?.firstName ? strings.formatString(strings.WELCOME_PERSON, user.firstName) : strings.WELCOME}
           subtitle=''

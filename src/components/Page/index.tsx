@@ -20,6 +20,7 @@ export type PrimaryButtonType = ButtonType & {
 export type PageProps = {
   children?: React.ReactNode;
   containerStyles?: CSSProperties;
+  titleStyle?: CSSProperties;
   contentStyle?: Record<string, string | number>;
   crumbs?: Crumb[];
   hierarchicalCrumbs?: boolean;
@@ -36,6 +37,7 @@ export default function Page({
   children,
   containerStyles,
   contentStyle,
+  titleStyle,
   crumbs,
   hierarchicalCrumbs,
   isLoading,
@@ -68,12 +70,12 @@ export default function Page({
             <Grid item xs={8}>
               <Typography
                 sx={{
-                  marginTop: theme.spacing(3),
                   marginBottom: theme.spacing(4),
                   paddingLeft: theme.spacing(3),
                   fontSize: '24px',
                   fontWeight: 600,
                   color: theme.palette.TwClrBaseGray800,
+                  ...titleStyle,
                 }}
               >
                 {title}
