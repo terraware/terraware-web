@@ -5,27 +5,17 @@ import PopoverMenu from '@terraware/web-components/components/PopoverMenu/Popove
 import { TableDensityType } from '@terraware/web-components/components/table/types';
 
 import Button from 'src/components/common/button/Button';
-import { useLocalization, useUser } from 'src/providers';
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 
-export type DensitySettingsProp = {
-  density?: TableDensityType;
-  onChange?: (density: TableDensityType) => void;
-};
+import useTableDensity from './useTableDensity';
 
-const TableDensitySettingsButton = ({ density, onChange }: DensitySettingsProp) => {
+const TableDensitySettingsButton = () => {
   const { activeLocale } = useLocalization();
-  const { updateUserPreferences, userPreferences } = useUser();
-  const tableDensity: TableDensityType = useMemo(
-    () => density ?? (userPreferences['tableDensity'] as TableDensityType) ?? 'comfortable',
-    [density, userPreferences]
-  );
+  const { tableDensity, setTableDensity } = useTableDensity();
 
   const saveTableDensity = (newDensity: TableDensityType) => {
-    if (onChange) {
-      onChange(newDensity);
-    }
-    updateUserPreferences({ tableDensity: newDensity });
+    setTableDensity(newDensity);
   };
 
   const options = useMemo(

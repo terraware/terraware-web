@@ -10,7 +10,6 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TextWithLink from 'src/components/common/TextWithLink';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
-import { useDocLinks } from 'src/docLinks';
 import { useLocalization } from 'src/providers';
 import useDraftPlantingSiteCreate from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteCreate';
 import useDraftPlantingSiteUpdate from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteUpdate';
@@ -70,7 +69,6 @@ export default function Editor(props: EditorProps): JSX.Element {
   const contentRef = useRef(null);
   const navigate = useNavigate();
   const theme = useTheme();
-  const docLinks = useDocLinks();
   const { isMobile } = useDeviceInfo();
 
   const [showPageMessage, setShowPageMessage] = useState<boolean>(true);
@@ -254,13 +252,13 @@ export default function Editor(props: EditorProps): JSX.Element {
     if (showPageMessage && !isSimpleSite && currentStep === 'details') {
       return (
         <Box>
-          <TextWithLink href={docLinks.contact_us} isExternal text={strings.PLANTING_SITE_CREATE_DETAILED_HELP} />
+          <TextWithLink href={APP_PATHS.HELP_SUPPORT} text={strings.PLANTING_SITE_CREATE_DETAILED_HELP} />
         </Box>
       );
     } else {
       return null;
     }
-  }, [currentStep, docLinks, isSimpleSite, showPageMessage]);
+  }, [currentStep, isSimpleSite, showPageMessage]);
 
   return (
     <TfMain>

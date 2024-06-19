@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Container, Grid } from '@mui/material';
 import { SortOrder, TableColumnType, TableRowType } from '@terraware/web-components';
-import { TableDensityType } from '@terraware/web-components/components/table/types';
 
 import Card from 'src/components/common/Card';
 import SearchFiltersWrapperV2, { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
@@ -128,16 +127,6 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
     });
   }, [extraTableFilters]);
 
-  const [tableDensity, setTableDensity] = useState<TableDensityType>();
-
-  // Shortcut method to update table state before preference update round-trip
-  const handleTableDensityChange = useCallback(
-    (density: TableDensityType) => {
-      setTableDensity(density);
-    },
-    [setTableDensity]
-  );
-
   return (
     <Container maxWidth={false} sx={{ padding: 0 }}>
       <Card busy={busy} flushMobile rightComponent={rightComponent} title={title}>
@@ -148,7 +137,7 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
             currentFilters={filters}
             setCurrentFilters={setFilters}
             featuredFilters={_featuredFilters}
-            rightComponent={<TableDensitySettingsButton density={tableDensity} onChange={handleTableDensityChange} />}
+            rightComponent={<TableDensitySettingsButton />}
           />
         </Grid>
 
@@ -156,7 +145,6 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
           <OrderPreservedTable
             {...tableProps}
             columns={() => columns(activeLocale)}
-            density={tableDensity}
             orderBy={searchSortOrder.field}
             order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
             sortHandler={onSortChange}

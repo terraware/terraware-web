@@ -5,8 +5,12 @@ import { Grid, useTheme } from '@mui/material';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import TextField from 'src/components/common/Textfield/Textfield';
+import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
+import TableDensitySettingsButton from 'src/components/common/table/TableDensitySettingsButton';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { useTimeZones } from 'src/providers';
@@ -20,9 +24,6 @@ import useDebounce from 'src/utils/useDebounce';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-import PageHeaderWrapper from '../../components/common/PageHeaderWrapper';
-import TextField from '../../components/common/Textfield/Textfield';
-import TfMain from '../../components/common/TfMain';
 import SeedBanksCellRenderer from './TableCellRenderer';
 
 type SeedBanksListProps = {
@@ -148,6 +149,7 @@ export default function SeedBanksListView({ organization }: SeedBanksListProps):
               onClickRightIcon={clearSearch}
               sx={{ width: '300px' }}
             />
+            <TableDensitySettingsButton />
           </Grid>
           <Grid item xs={12}>
             <div>

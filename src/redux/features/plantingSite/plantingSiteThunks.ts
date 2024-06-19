@@ -4,12 +4,12 @@ import { TrackingService } from 'src/services';
 import { PlantingSitePutRequestBody } from 'src/services/TrackingService';
 import strings from 'src/strings';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
-import { fromDraft } from 'src/utils/draftPlantingSiteUtils';
+import { fromDraftToCreate } from 'src/utils/draftPlantingSiteUtils';
 
 export const createPlantingSite = createAsyncThunk(
   'createPlantingSite',
   async (draft: DraftPlantingSite, { rejectWithValue }) => {
-    const payload = fromDraft(draft);
+    const payload = fromDraftToCreate(draft);
     const response = await TrackingService.createPlantingSite(payload);
 
     if (response && response.requestSucceeded && response.data) {
@@ -23,7 +23,7 @@ export const createPlantingSite = createAsyncThunk(
 export const validatePlantingSite = createAsyncThunk(
   'validatePlantingSite',
   async (draft: DraftPlantingSite, { rejectWithValue }) => {
-    const payload = fromDraft(draft);
+    const payload = fromDraftToCreate(draft);
     const response = await TrackingService.validatePlantingSite(payload);
 
     if (response && response.requestSucceeded && response.data) {
