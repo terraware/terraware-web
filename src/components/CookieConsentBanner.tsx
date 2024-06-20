@@ -6,8 +6,6 @@ import TextWithLink from 'src/components/common/TextWithLink';
 import Button from 'src/components/common/button/Button';
 import { useDocLinks } from 'src/docLinks';
 import { useLocalization, useUser } from 'src/providers';
-import { requestUserCookieConsentUpdate } from 'src/redux/features/user/usersAsyncThunks';
-import { useAppDispatch } from 'src/redux/store';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -16,23 +14,20 @@ const ONE_YEAR_IN_MILLISECONDS = 365 * 24 * 60 * 60 * 1000;
 export default function CookieConsentBanner() {
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
-  const { user, reloadUser } = useUser();
+  const { user, updateUserCookieConsent } = useUser();
   const theme = useTheme();
-  const dispatch = useAppDispatch();
   const docLinks = useDocLinks();
 
   const [confirmed, setConfirmed] = useState(false);
   const [visible, setVisible] = useState(false);
 
-  const updateUserCookieConsent = useCallback(
-    async (consent: boolean) => {
-      setVisible(false);
-      await dispatch(requestUserCookieConsentUpdate({ cookiesConsented: consent }));
-      reloadUser();
-      setConfirmed(true);
-    },
-    [dispatch, reloadUser]
-  );
+  const setUserCookieConsent = useCallback((consent: boolean) => {
+    console.log('dispatching requestUserCookieConsentUpdate now...');
+    updateUserCookieConsent(consent);
+    setVisible(false);
+    setConfirmed(true);
+    console.log('reloadUser called');
+  }, []);
 
   useEffect(() => {
     if (!user) {
@@ -87,7 +82,7 @@ export default function CookieConsentBanner() {
               <Button
                 label={strings.DECLINE}
                 onClick={() => {
-                  updateUserCookieConsent(false);
+                  setUserCookieConsent(false);
                 }}
                 priority='secondary'
                 sx={{ width: isMobile ? '50%' : 'auto' }}
@@ -96,7 +91,7 @@ export default function CookieConsentBanner() {
               <Button
                 label={strings.ACCEPT}
                 onClick={() => {
-                  updateUserCookieConsent(true);
+                  setUserCookieConsent(true);
                 }}
                 priority='primary'
                 sx={{ width: isMobile ? '50%' : 'auto' }}
