@@ -106,6 +106,7 @@ jobs:
         env:
           REACT_APP_TERRAWARE_API: ''
           REACT_APP_TERRAWARE_FE_BUILD_VERSION: ${{ env.APP_VERSION }}
+          REACT_APP_MIXPANEL_TOKEN: ${{ secrets[env.MIXPANEL_SECRET] }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
