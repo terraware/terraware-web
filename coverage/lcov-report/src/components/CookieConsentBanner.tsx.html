@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
@@ -167,12 +167,7 @@
 <a name='L102'></a><a href='#L102'>102</a>
 <a name='L103'></a><a href='#L103'>103</a>
 <a name='L104'></a><a href='#L104'>104</a>
-<a name='L105'></a><a href='#L105'>105</a>
-<a name='L106'></a><a href='#L106'>106</a>
-<a name='L107'></a><a href='#L107'>107</a>
-<a name='L108'></a><a href='#L108'>108</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L105'></a><a href='#L105'>105</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -186,7 +181,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -285,8 +279,6 @@ import TextWithLink from 'src/components/common/TextWithLink';
 import Button from 'src/components/common/button/Button';
 import { useDocLinks } from 'src/docLinks';
 import { useLocalization, useUser } from 'src/providers';
-import { requestUserCookieConsentUpdate } from 'src/redux/features/user/usersAsyncThunks';
-import { useAppDispatch } from 'src/redux/store';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 &nbsp;
@@ -295,18 +287,17 @@ const ONE_YEAR_IN_MILLISECONDS = <span class="cstat-no" title="statement not cov
 export default function <span class="fstat-no" title="function not covered" >CookieConsentBanner(</span>) {
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
-  const { user } = <span class="cstat-no" title="statement not covered" >useUser();</span>
+  const { user, updateUserCookieConsent } = <span class="cstat-no" title="statement not covered" >useUser();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const docLinks = <span class="cstat-no" title="statement not covered" >useDocLinks();</span>
 &nbsp;
   const [confirmed, setConfirmed] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
   const [visible, setVisible] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
 &nbsp;
-  const updateUserCookieConsent = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(c</span>onsent: boolean) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    dispatch(requestUserCookieConsentUpdate({ cookiesConsented: consent }));</span>
-<span class="cstat-no" title="statement not covered" >    setConfirmed(true);</span>
+  const setUserCookieConsent = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(c</span>onsent: boolean) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    updateUserCookieConsent(consent);</span>
 <span class="cstat-no" title="statement not covered" >    setVisible(false);</span>
+<span class="cstat-no" title="statement not covered" >    setConfirmed(true);</span>
   }, []);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -362,7 +353,7 @@ export default function <span class="fstat-no" title="function not covered" >Coo
               &lt;Button
                 label={strings.DECLINE}
                 onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; {
-<span class="cstat-no" title="statement not covered" >                  updateUserCookieConsent(false);</span>
+<span class="cstat-no" title="statement not covered" >                  setUserCookieConsent(false);</span>
                 }}
                 priority='secondary'
                 sx={{ width: isMobile ? '50%' : 'auto' }}
@@ -371,7 +362,7 @@ export default function <span class="fstat-no" title="function not covered" >Coo
               &lt;Button
                 label={strings.ACCEPT}
                 onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; {
-<span class="cstat-no" title="statement not covered" >                  updateUserCookieConsent(true);</span>
+<span class="cstat-no" title="statement not covered" >                  setUserCookieConsent(true);</span>
                 }}
                 priority='primary'
                 sx={{ width: isMobile ? '50%' : 'auto' }}
@@ -391,7 +382,7 @@ export default function <span class="fstat-no" title="function not covered" >Coo
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-20T20:04:21.009Z
+                at 2024-06-20T23:24:07.889Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
