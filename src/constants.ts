@@ -50,8 +50,6 @@ export enum APP_PATHS {
   HELP_SUPPORT = '/help-support',
   HELP_SUPPORT_FORM = '/help-support/:requestType',
   HOME = '/home',
-  MONITORING = '/monitoring',
-  MONITORING_SEED_BANK = '/monitoring/:seedBankId',
   NURSERIES = '/nurseries',
   NURSERIES_EDIT = '/nurseries/:nurseryId/edit',
   NURSERIES_NEW = '/nurseries/new',

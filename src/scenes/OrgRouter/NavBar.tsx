@@ -52,7 +52,6 @@ export default function NavBar({
   const isPeopleRoute = useMatch({ path: APP_PATHS.PEOPLE + '/', end: false });
   const isSpeciesRoute = useMatch({ path: APP_PATHS.SPECIES + '/', end: false });
   const isOrganizationRoute = useMatch({ path: APP_PATHS.ORGANIZATION + '/', end: false });
-  const isMonitoringRoute = useMatch({ path: APP_PATHS.MONITORING + '/', end: false });
   const isSeedbanksRoute = useMatch({ path: APP_PATHS.SEED_BANKS + '/', end: false });
   const isNurseriesRoute = useMatch({ path: APP_PATHS.NURSERIES + '/', end: false });
   const isInventoryRoute = useMatch({ path: APP_PATHS.INVENTORY + '/', end: false });
@@ -276,14 +275,6 @@ export default function NavBar({
               closeAndNavigateTo(APP_PATHS.ACCESSIONS);
             }}
             id='accessions'
-          />
-          <NavItem
-            label={strings.MONITORING}
-            selected={!!isMonitoringRoute}
-            onClick={() => {
-              closeAndNavigateTo(APP_PATHS.MONITORING);
-            }}
-            id='monitoring'
           />
         </SubNavbar>
       </NavItem>

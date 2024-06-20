@@ -96,17 +96,6 @@ const TerrawareHomeView = () => {
                 linkStyle={'plain'}
               />
             </Grid>
-            <Grid item xs={secondaryGridSize()}>
-              <PageCard
-                id='monitoringHomeCard'
-                name={strings.MONITORING}
-                icon='monitoringNav'
-                description={strings.MONITORING_CARD_DESCRIPTION}
-                link={APP_PATHS.MONITORING}
-                linkText={strings.formatString(strings.GO_TO, strings.MONITORING) as string}
-                linkStyle={'plain'}
-              />
-            </Grid>
           </Grid>
         </Container>
       </Box>
