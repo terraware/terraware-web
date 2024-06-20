@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/97</span>
+                <span class='fraction'>0/95</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/36</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/97</span>
+                <span class='fraction'>0/95</span>
             </div>
         
             
@@ -438,16 +438,7 @@
 <a name='L373'></a><a href='#L373'>373</a>
 <a name='L374'></a><a href='#L374'>374</a>
 <a name='L375'></a><a href='#L375'>375</a>
-<a name='L376'></a><a href='#L376'>376</a>
-<a name='L377'></a><a href='#L377'>377</a>
-<a name='L378'></a><a href='#L378'>378</a>
-<a name='L379'></a><a href='#L379'>379</a>
-<a name='L380'></a><a href='#L380'>380</a>
-<a name='L381'></a><a href='#L381'>381</a>
-<a name='L382'></a><a href='#L382'>382</a>
-<a name='L383'></a><a href='#L383'>383</a>
-<a name='L384'></a><a href='#L384'>384</a>
-<a name='L385'></a><a href='#L385'>385</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L376'></a><a href='#L376'>376</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -514,7 +505,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -696,9 +686,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -710,11 +697,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -885,7 +867,6 @@ export default function <span class="fstat-no" title="function not covered" >Nav
   const isPeopleRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.PEOPLE + '/', end: false });</span>
   const isSpeciesRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.SPECIES + '/', end: false });</span>
   const isOrganizationRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.ORGANIZATION + '/', end: false });</span>
-  const isMonitoringRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.MONITORING + '/', end: false });</span>
   const isSeedbanksRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.SEED_BANKS + '/', end: false });</span>
   const isNurseriesRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.NURSERIES + '/', end: false });</span>
   const isInventoryRoute = <span class="cstat-no" title="statement not covered" >useMatch({ path: APP_PATHS.INVENTORY + '/', end: false });</span>
@@ -1110,14 +1091,6 @@ export default function <span class="fstat-no" title="function not covered" >Nav
             }}
             id='accessions'
           /&gt;
-          &lt;NavItem
-            label={strings.MONITORING}
-            selected={!!isMonitoringRoute}
-            onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; {
-<span class="cstat-no" title="statement not covered" >              closeAndNavigateTo(APP_PATHS.MONITORING);</span>
-            }}
-            id='monitoring'
-          /&gt;
         &lt;/SubNavbar&gt;
       &lt;/NavItem&gt;
       &lt;NavItem label={strings.SEEDLINGS} icon='iconSeedling' id='seedlings'&gt;
@@ -1222,7 +1195,7 @@ export default function <span class="fstat-no" title="function not covered" >Nav
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-19T22:34:18.793Z
+                at 2024-06-20T14:32:52.304Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
