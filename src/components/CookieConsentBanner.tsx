@@ -16,7 +16,7 @@ const ONE_YEAR_IN_MILLISECONDS = 365 * 24 * 60 * 60 * 1000;
 export default function CookieConsentBanner() {
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
-  const { user } = useUser();
+  const { user, reloadUser } = useUser();
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const docLinks = useDocLinks();
@@ -24,11 +24,14 @@ export default function CookieConsentBanner() {
   const [confirmed, setConfirmed] = useState(false);
   const [visible, setVisible] = useState(false);
 
-  const updateUserCookieConsent = useCallback((consent: boolean) => {
-    dispatch(requestUserCookieConsentUpdate({ cookiesConsented: consent }));
-    setConfirmed(true);
-    setVisible(false);
-  }, []);
+  const updateUserCookieConsent = useCallback(
+    (consent: boolean) => {
+      dispatch(requestUserCookieConsentUpdate({ payload: { cookiesConsented: consent }, reloadUser }));
+      setConfirmed(true);
+      setVisible(false);
+    },
+    [dispatch, reloadUser]
+  );
 
   useEffect(() => {
     if (!user) {
