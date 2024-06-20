@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { Dropdown, SelectT } from '@terraware/web-components';
@@ -27,9 +27,15 @@ export default function AddToProjectModal(props: AddToProjectModalProps): JSX.El
   const theme = useTheme();
 
   const [projectsSpeciesAdded, setProjectsSpeciesAdded] = useForm<ProjectSpecies[]>([{ project: projects[0] }]);
+  const [error, setError] = useState('');
 
   const save = () => {
     if (projectsSpeciesAdded.length > 0) {
+      if (!projectsSpeciesAdded.every((ps) => ps.nativeCategory)) {
+        setError(strings.REQUIRED_FIELD);
+        return;
+      }
+
       onSubmit(projectsSpeciesAdded);
       onClose();
     }
@@ -108,6 +114,7 @@ export default function AddToProjectModal(props: AddToProjectModalProps): JSX.El
                   fixedMenu
                   required
                   fullWidth={true}
+                  errorText={error && !ps.nativeCategory ? error : ''}
                 />
               </Grid>
             </Box>

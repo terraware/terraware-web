@@ -50,8 +50,8 @@ export default function EditSpeciesModal(props: EditSpeciesModalProps): JSX.Elem
   }, [result, snackbar]);
 
   const save = () => {
-    if (!record.participantProjectSpecies.rationale) {
-      setError(strings.GENERIC_ERROR);
+    if (!record.participantProjectSpecies.rationale || !record?.participantProjectSpecies.speciesNativeCategory) {
+      setError(strings.REQUIRED_FIELD);
       return;
     }
 
@@ -127,6 +127,7 @@ export default function EditSpeciesModal(props: EditSpeciesModalProps): JSX.Elem
             fixedMenu
             required
             fullWidth={true}
+            errorText={error && !record?.participantProjectSpecies.speciesNativeCategory ? error : ''}
           />
         </Grid>
         <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
@@ -137,7 +138,7 @@ export default function EditSpeciesModal(props: EditSpeciesModalProps): JSX.Elem
             type='textarea'
             value={record?.participantProjectSpecies.rationale}
             onChange={onChangeRationale}
-            errorText={error && !record?.participantProjectSpecies.rationale ? strings.REQUIRED_FIELD : ''}
+            errorText={error && !record?.participantProjectSpecies.rationale ? error : ''}
           />
         </Grid>
       </Grid>
