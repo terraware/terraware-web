@@ -329,6 +329,7 @@ export default function EditableMap({
             mapRef?.current?.flyTo({
               center: [coordinates[0], coordinates[1]],
               essential: true,
+              zoom: 10, // https://docs.mapbox.com/help/glossary/zoom-level/
             });
           }
         }}
