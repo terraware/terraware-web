@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1718908984661" clover="3.2.0">
-  <project timestamp="1718908984661" name="All files">
-    <metrics statements="21767" coveredstatements="941" conditionals="13917" coveredconditionals="231" methods="6726" coveredmethods="162" elements="42410" coveredelements="1334" complexity="0" loc="21767" ncloc="21767" packages="205" files="978" classes="978"/>
+<coverage generated="1718910343660" clover="3.2.0">
+  <project timestamp="1718910343660" name="All files">
+    <metrics statements="21761" coveredstatements="941" conditionals="13913" coveredconditionals="231" methods="6720" coveredmethods="162" elements="42394" coveredelements="1334" complexity="0" loc="21761" ncloc="21761" packages="205" files="978" classes="978"/>
     <package name="src">
       <metrics statements="170" coveredstatements="0" conditionals="126" coveredconditionals="0" methods="38" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -1595,7 +1595,7 @@
       </file>
     </package>
     <package name="src.components.DeliverablesTable">
-      <metrics statements="59" coveredstatements="0" conditionals="37" coveredconditionals="0" methods="22" coveredmethods="0"/>
+      <metrics statements="53" coveredstatements="0" conditionals="33" coveredconditionals="0" methods="16" coveredmethods="0"/>
       <file name="DeliverableCellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverablesTable/DeliverableCellRenderer.tsx">
         <metrics statements="14" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="13" count="0" type="stmt"/>
@@ -1614,7 +1614,7 @@
         <line num="63" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverablesTable/index.tsx">
-        <metrics statements="45" coveredstatements="0" conditionals="25" coveredconditionals="0" methods="20" coveredmethods="0"/>
+        <metrics statements="39" coveredstatements="0" conditionals="21" coveredconditionals="0" methods="14" coveredmethods="0"/>
         <line num="33" count="0" type="stmt"/>
         <line num="34" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="69" count="0" type="stmt"/>
@@ -1641,25 +1641,19 @@
         <line num="136" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="137" count="0" type="stmt"/>
         <line num="140" count="0" type="stmt"/>
-        <line num="142" count="0" type="stmt"/>
         <line num="146" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="149" count="0" type="stmt"/>
         <line num="151" count="0" type="stmt"/>
         <line num="152" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="153" count="0" type="stmt"/>
-        <line num="158" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="161" count="0" type="stmt"/>
-        <line num="163" count="0" type="stmt"/>
-        <line num="164" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="156" count="0" type="stmt"/>
         <line num="165" count="0" type="stmt"/>
-        <line num="168" count="0" type="stmt"/>
-        <line num="177" count="0" type="stmt"/>
+        <line num="170" count="0" type="stmt"/>
+        <line num="172" count="0" type="stmt"/>
+        <line num="179" count="0" type="stmt"/>
+        <line num="181" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="182" count="0" type="stmt"/>
-        <line num="184" count="0" type="stmt"/>
-        <line num="191" count="0" type="stmt"/>
-        <line num="193" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="194" count="0" type="stmt"/>
-        <line num="198" count="0" type="stmt"/>
+        <line num="186" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.DocumentProducer.DocumentMetadataEdit">
