@@ -114,7 +114,12 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
       return;
     }
     const data: Description[] = [
-      { text: strings.SITE_BOUNDARY_DESCRIPTION_0 },
+      {
+        text:
+          site.siteType === 'detailed'
+            ? strings.SITE_BOUNDARY_DESCRIPTION_0
+            : `${strings.SITE_BOUNDARY_DESCRIPTION_0} ${strings.SITE_BOUNDARY_SIMPLE_SITE_NOTE}`,
+      },
       {
         text: strings.SITE_BOUNDARY_DESCRIPTION_1,
         hasTutorial: true,
