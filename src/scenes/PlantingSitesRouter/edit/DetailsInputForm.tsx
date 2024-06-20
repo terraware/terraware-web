@@ -88,7 +88,7 @@ export default function DetailsInputForm<T extends MinimalPlantingSite>({
 
   useEffect(() => {
     const allSites = [...(plantingSites || []), ...(draftSites?.data || [])];
-    const otherSiteNames = allSites.filter((site) => site.id !== record.id).map((site) => site.name);
+    const otherSiteNames = allSites.filter((site) => Number(site.id) !== record.id).map((site) => site.name);
     setUsedNames(new Set(otherSiteNames));
   }, [draftSites, plantingSites, record.id]);
 
