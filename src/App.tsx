@@ -32,8 +32,6 @@ const MIXPANEL_CONFIG = {
 function AppContent() {
   // manager hooks
   useAppVersion();
-  console.log("MIXPANEL_TOKEN")
-  console.log(MIXPANEL_TOKEN);
   const { isDesktop, type } = useDeviceInfo();
   const { user, isAllowed } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
