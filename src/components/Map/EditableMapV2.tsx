@@ -376,6 +376,7 @@ export default function EditableMap({
             {popupInfo && popupRenderer && renderedPopup && (
               <Popup
                 anchor={popupRenderer.anchor ?? 'top'}
+                closeButton={false}
                 key={popupInfo.id}
                 longitude={Number(popupInfo.lng)}
                 latitude={Number(popupInfo.lat)}
