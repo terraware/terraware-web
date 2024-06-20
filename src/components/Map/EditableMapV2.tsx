@@ -354,6 +354,7 @@ export default function EditableMap({
               display: 'flex',
               flexGrow: 1,
               flexDirection: 'column',
+              minHeight: '640px',
               ...style,
             }}
             initialViewState={initialViewState}
