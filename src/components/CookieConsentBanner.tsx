@@ -25,10 +25,11 @@ export default function CookieConsentBanner() {
   const [visible, setVisible] = useState(false);
 
   const updateUserCookieConsent = useCallback(
-    (consent: boolean) => {
-      dispatch(requestUserCookieConsentUpdate({ payload: { cookiesConsented: consent }, reloadUser }));
-      setConfirmed(true);
+    async (consent: boolean) => {
       setVisible(false);
+      await dispatch(requestUserCookieConsentUpdate({ cookiesConsented: consent }));
+      reloadUser();
+      setConfirmed(true);
     },
     [dispatch, reloadUser]
   );

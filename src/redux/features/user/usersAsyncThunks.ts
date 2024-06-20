@@ -34,15 +34,11 @@ export const requestSearchUserByEmail = createAsyncThunk(
 
 export const requestUserCookieConsentUpdate = createAsyncThunk(
   'users/cookie-consent/update',
-  async (
-    { payload, reloadUser }: { payload: UpdateUserCookieConsentRequestPayload; reloadUser: () => void },
-    { rejectWithValue }
-  ) => {
+  async (payload: UpdateUserCookieConsentRequestPayload, { rejectWithValue }) => {
     const response: Response2<UpdateUserCookieConsentResponsePayload> =
       await PreferencesService.updateUserCookieConsentPreferences(payload);
 
     if (response.requestSucceeded) {
-      reloadUser();
       return response;
     }
 
