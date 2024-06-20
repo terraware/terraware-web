@@ -63,7 +63,7 @@ const MapSearchBox = ({ onSelect, style }: MapSearchBoxProp) => {
       onInputChange={(event, newInputValue: string) => {
         setInputValue(newInputValue);
       }}
-      renderInput={(params) => <TextField {...params} label={strings.LOCATION} fullWidth />}
+      renderInput={(params) => <TextField {...params} label={strings.ENTER_LOCATION} fullWidth />}
     />
   );
 };
