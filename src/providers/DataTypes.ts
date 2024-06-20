@@ -12,6 +12,7 @@ export type ProvidedUserData = {
   isAllowed: (permission: GlobalRolePermission, metadata?: unknown) => boolean;
   reloadUser: () => void;
   reloadUserPreferences: () => void;
+  updateUserCookieConsent: (consent: boolean) => Promise<void>;
   updateUserPreferences: (preferences: PreferencesType) => Promise<boolean>;
   user?: User;
   userPreferences: PreferencesType;
