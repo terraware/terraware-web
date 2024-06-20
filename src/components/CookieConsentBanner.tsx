@@ -22,11 +22,9 @@ export default function CookieConsentBanner() {
   const [visible, setVisible] = useState(false);
 
   const setUserCookieConsent = useCallback((consent: boolean) => {
-    console.log('dispatching requestUserCookieConsentUpdate now...');
     updateUserCookieConsent(consent);
     setVisible(false);
     setConfirmed(true);
-    console.log('reloadUser called');
   }, []);
 
   useEffect(() => {
