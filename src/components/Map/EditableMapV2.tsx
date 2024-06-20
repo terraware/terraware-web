@@ -54,6 +54,7 @@ export type EditableMapProps = {
   popupRenderer?: MapPopupRenderer;
   readOnlyBoundary?: RenderableReadOnlyBoundary[];
   setMode?: (mode: MapEditorMode) => void;
+  showSearchBox?: boolean;
   style?: object;
 };
 
@@ -70,6 +71,7 @@ export default function EditableMap({
   popupRenderer,
   readOnlyBoundary,
   setMode,
+  showSearchBox,
   style,
 }: EditableMapProps): JSX.Element {
   const { mapId, refreshToken, token } = useMapboxToken();
@@ -322,18 +324,21 @@ export default function EditableMap({
           : {}),
       }}
     >
-      <MapSearchBox
-        onSelect={(features: AddressAutofillFeatureSuggestion[] | null) => {
-          if (features && features.length > 0) {
-            const coordinates = features[0].geometry.coordinates;
-            mapRef?.current?.flyTo({
-              center: [coordinates[0], coordinates[1]],
-              essential: true,
-              zoom: 10, // https://docs.mapbox.com/help/glossary/zoom-level/
-            });
-          }
-        }}
-      />
+      {showSearchBox === true && (
+        <MapSearchBox
+          onSelect={(features: AddressAutofillFeatureSuggestion[] | null) => {
+            if (features && features.length > 0) {
+              const coordinates = features[0].geometry.coordinates;
+              mapRef?.current?.flyTo({
+                center: [coordinates[0], coordinates[1]],
+                essential: true,
+                zoom: 10, // https://docs.mapbox.com/help/glossary/zoom-level/
+              });
+            }
+          }}
+          style={{ paddingBottom: theme.spacing(4) }}
+        />
+      )}
       {firstVisible && (
         <>
           <ReactMapGL

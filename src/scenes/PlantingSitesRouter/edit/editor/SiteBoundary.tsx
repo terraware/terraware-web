@@ -186,6 +186,7 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
         onRedo={redo}
         onUndo={undo}
         setMode={setMode}
+        showSearchBox
       />
     </Box>
   );
