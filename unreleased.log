@@ -1,3 +1,4 @@
+fc347c33b8 SW-5573/SW-5574 Adding padding, shouldShow prop to MapSearchBox and map (#2758)
 b5de9ce153 SW-5572 Added zoom option to flyTo (#2760)
 29cba7d4d8 SW-5571 Remove default popup x button (#2759)
 3baf69ac55 SW-5555 Remove Monitoring UI (#2756)
