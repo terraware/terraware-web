@@ -16,6 +16,7 @@ export const UserContext = createContext<ProvidedUserData>({
   },
   userPreferences: {},
   bootstrapped: false,
+  updateUserCookieConsent: () => Promise.resolve(),
   updateUserPreferences: () => Promise.resolve(true),
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isAllowed: (_: GlobalRolePermission, __?: unknown) => false,
