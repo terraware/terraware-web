@@ -1,3 +1,5 @@
+b5de9ce153 SW-5572 Added zoom option to flyTo (#2760)
+29cba7d4d8 SW-5571 Remove default popup x button (#2759)
 3baf69ac55 SW-5555 Remove Monitoring UI (#2756)
 23c69ef397 SW-5533: Can't add Species to Project (from Species page) even when Deliverable is active (#2757)
 7bef04539f SW-5539: Native/Non-Native is marked required but adding a species without a value is allowed (#2753)
