@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1718910343660" clover="3.2.0">
-  <project timestamp="1718910343660" name="All files">
-    <metrics statements="21761" coveredstatements="941" conditionals="13913" coveredconditionals="231" methods="6720" coveredmethods="162" elements="42394" coveredelements="1334" complexity="0" loc="21761" ncloc="21761" packages="205" files="978" classes="978"/>
+<coverage generated="1718910717683" clover="3.2.0">
+  <project timestamp="1718910717683" name="All files">
+    <metrics statements="21765" coveredstatements="941" conditionals="13927" coveredconditionals="231" methods="6721" coveredmethods="162" elements="42413" coveredelements="1334" complexity="0" loc="21765" ncloc="21765" packages="205" files="978" classes="978"/>
     <package name="src">
       <metrics statements="170" coveredstatements="0" conditionals="126" coveredconditionals="0" methods="38" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -5184,7 +5184,7 @@
       </file>
     </package>
     <package name="src.components.SpeciesDeliverableTable">
-      <metrics statements="177" coveredstatements="0" conditionals="90" coveredconditionals="0" methods="57" coveredmethods="0"/>
+      <metrics statements="177" coveredstatements="0" conditionals="96" coveredconditionals="0" methods="57" coveredmethods="0"/>
       <file name="AddSpeciesModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/SpeciesDeliverableTable/AddSpeciesModal.tsx">
         <metrics statements="47" coveredstatements="0" conditionals="29" coveredconditionals="0" methods="19" coveredmethods="0"/>
         <line num="31" count="0" type="stmt"/>
@@ -5236,7 +5236,7 @@
         <line num="159" count="0" type="stmt"/>
       </file>
       <file name="EditSpeciesModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/SpeciesDeliverableTable/EditSpeciesModal.tsx">
-        <metrics statements="33" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="8" coveredmethods="0"/>
+        <metrics statements="33" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="32" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
@@ -5253,7 +5253,7 @@
         <line num="47" count="0" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
         <line num="52" count="0" type="stmt"/>
-        <line num="53" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="53" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="54" count="0" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
         <line num="58" count="0" type="stmt"/>
@@ -21307,36 +21307,40 @@
       </file>
     </package>
     <package name="src.scenes.Species">
-      <metrics statements="697" coveredstatements="0" conditionals="420" coveredconditionals="0" methods="203" coveredmethods="0"/>
+      <metrics statements="701" coveredstatements="0" conditionals="428" coveredconditionals="0" methods="204" coveredmethods="0"/>
       <file name="AddToProjectModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Species/AddToProjectModal.tsx">
-        <metrics statements="27" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="12" coveredmethods="0"/>
+        <metrics statements="31" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="13" coveredmethods="0"/>
         <line num="26" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
-        <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="38" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="33" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="34" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
         <line num="40" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="42" count="0" type="stmt"/>
         <line num="44" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
         <line num="48" count="0" type="stmt"/>
-        <line num="49" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="50" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="55" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="56" count="0" type="stmt"/>
         <line num="58" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="78" count="0" type="stmt"/>
-        <line num="89" count="0" type="stmt"/>
-        <line num="92" count="0" type="stmt"/>
-        <line num="93" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="94" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="95" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="100" count="0" type="stmt"/>
         <line num="103" count="0" type="stmt"/>
+        <line num="104" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="105" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="106" count="0" type="stmt"/>
+        <line num="114" count="0" type="stmt"/>
       </file>
       <file name="CheckDataModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Species/CheckDataModal.tsx">
         <metrics statements="43" coveredstatements="0" conditionals="47" coveredconditionals="0" methods="10" coveredmethods="0"/>
