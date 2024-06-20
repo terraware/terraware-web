@@ -17,22 +17,12 @@ import { useLocalization, useUser } from 'src/providers';
 import { store } from 'src/redux/store';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import useEnvironment from 'src/utils/useEnvironment';
 
 const AcceleratorRouter = React.lazy(() => import('src/scenes/AcceleratorRouter'));
 const TerrawareRouter = React.lazy(() => import('src/scenes/TerrawareRouter'));
 
 // Mixpanel setup
-// Set this to true to enable Mixpanel tracking for the Terraware Dev project
-const enableMixpanelDev = true;
-const { isProduction, isStaging, isDev } = useEnvironment();
-const MIXPANEL_TOKEN = isProduction
-  ? 'a2ea671ce64976806e4b0aeac55a0dab'
-  : isStaging
-    ? '1a92141fe08a3514530f48f7e8056bf0'
-    : isDev && enableMixpanelDev
-      ? '189f8a16494df135f5207a433213f708'
-      : undefined;
+const MIXPANEL_TOKEN = process.env.REACT_APP_MIXPANEL_TOKEN;
 const MIXPANEL_CONFIG = {
   opt_out_persistence_by_default: true,
   opt_out_tracking_by_default: true,
@@ -42,7 +32,8 @@ const MIXPANEL_CONFIG = {
 function AppContent() {
   // manager hooks
   useAppVersion();
-
+  console.log("MIXPANEL_TOKEN")
+  console.log(MIXPANEL_TOKEN);
   const { isDesktop, type } = useDeviceInfo();
   const { user, isAllowed } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
