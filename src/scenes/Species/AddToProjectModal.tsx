@@ -83,7 +83,12 @@ export default function AddToProjectModal(props: AddToProjectModalProps): JSX.El
         {projectsSpeciesAdded.map((ps, index) => {
           return (
             <Box
-              sx={{ borderBottom: `1px solid ${theme.palette.TwClrBaseGray300}`, paddingBottom: 2, marginBottom: 2 }}
+              sx={{
+                borderBottom:
+                  projectsSpeciesAdded.length > 1 ? `1px solid ${theme.palette.TwClrBaseGray300}` : undefined,
+                paddingBottom: 2,
+                marginBottom: 2,
+              }}
               key={`project-${index}`}
             >
               <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
