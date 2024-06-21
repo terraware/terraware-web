@@ -99,16 +99,10 @@ export default function SpeciesProjectsTable({
   useEffect(() => {
     const assignedProjectsIds = filteredResults?.map((fr) => Number(fr.projectId));
     const pendingProjects = allProjects?.filter((project) => {
-      // only show projects that are not already assigned to the species and have a species deliverable
-      return (
-        !assignedProjectsIds?.includes(project.id) &&
-        currentDeliverables?.find(
-          (deliverable) => deliverable.type === 'Species' && deliverable.projectId === project.id
-        )
-      );
+      return !assignedProjectsIds?.includes(project.id);
     });
     setSelectableProjects(pendingProjects || []);
-  }, [allProjects, currentDeliverables, filteredResults]);
+  }, [filteredResults, allProjects]);
 
   useEffect(() => {
     let updatedResults = searchResults ?? [];
