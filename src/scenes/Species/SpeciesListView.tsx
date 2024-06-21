@@ -22,7 +22,7 @@ import SearchFiltersWrapperV2, { FilterConfig } from 'src/components/common/Sear
 import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import { OrderPreserveableTable as Table } from 'src/components/common/table';
-import TableDensitySettingsButton from 'src/components/common/table/TableDensitySettingsButton';
+import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
@@ -666,7 +666,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
                       icon='iconExport'
                     />
                   </Tooltip>
-                  <TableDensitySettingsButton />
+                  <TableSettingsButton />
                 </>
               }
             />
