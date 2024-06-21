@@ -267,6 +267,7 @@ CULTIVATED_EX_SITU_DESCRIPTION,"Plantas que se han cultivado en un vivero, área
 CURRENT_NEXT_OBSERVATION,Observación actual/siguiente,
 CURRENT_PHASE,Fase actual,
 CURRENT_TIMELINE,Cronología actual,
+CUSTOMIZE_COLUMNS,Personalizar columnas...,
 CUSTOMIZE_TABLE_COLUMNS,Personalizar las columnas de la tabla,
 CUSTOMIZE_TABLE_COLUMNS_DESCRIPTION,Seleccione las columnas que desee añadir. Deseleccione las columnas que desee eliminar.,
 CUT_TEST,Prueba de corte,
