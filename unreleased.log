@@ -1,3 +1,4 @@
+803d0f910e SW-5509 Move "Customize table columns" menu item to new "Settings" gear icon (#2771)
 8f171383f4 Revert "SW-5533: Can't add Species to Project (from Species page) even when Deliverable is active" (#2773)
 4efe646792 SW-5543: Approve/Reject... buttons states not affected by species status (#2770)
 fde1f662ce SW-5545 Document deliverable approve button should be disabled immediately after approving (#2772)
