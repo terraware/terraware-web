@@ -357,6 +357,7 @@ export default function EditableMap({
               minHeight: '640px',
               ...style,
             }}
+            styleDiffing
             initialViewState={initialViewState}
             interactiveLayerIds={interactiveLayerIds ?? []}
             onClick={onMapClick}
