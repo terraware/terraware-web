@@ -129,7 +129,9 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
               onClick={() => setShowRejectDialog(true)}
               priority='secondary'
               type='destructive'
-              disabled={row.submissionStatus === 'Rejected'}
+              disabled={
+                row.submissionStatus === 'Rejected' || row?.participantProjectSpecies.submissionStatus === 'Rejected'
+              }
             />
           </>
         }
@@ -161,7 +163,9 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
             label={strings.APPROVE}
             onClick={() => approveHandler()}
             priority='secondary'
-            disabled={row.submissionStatus === 'Approved'}
+            disabled={
+              row.submissionStatus === 'Approved' || row?.participantProjectSpecies.submissionStatus === 'Approved'
+            }
           />
         }
       />
