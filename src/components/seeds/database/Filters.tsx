@@ -27,10 +27,20 @@ interface Props {
   availableValues: FieldValuesPayload;
   allValues: FieldValuesPayload;
   onChange: (filters: Record<string, SearchNodePayload>) => void;
+  customizeColumns: () => void;
 }
 
 export default function Filters(props: Props): JSX.Element {
-  const { columns, searchColumns, preExpFilterColumns, filters, availableValues, allValues, onChange } = props;
+  const {
+    columns,
+    searchColumns,
+    preExpFilterColumns,
+    filters,
+    availableValues,
+    allValues,
+    onChange,
+    customizeColumns,
+  } = props;
 
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
@@ -316,7 +326,9 @@ export default function Filters(props: Props): JSX.Element {
           />
         </Popover>
 
-        <TableDensitySettingsButton />
+        <TableDensitySettingsButton
+          extraSections={[[{ label: strings.CUSTOMIZE_COLUMNS, value: 'customizeColumns', onClick: customizeColumns }]]}
+        />
       </Box>
       <PillList data={filterPillItems} onRemove={removeFilter} />
     </Container>
