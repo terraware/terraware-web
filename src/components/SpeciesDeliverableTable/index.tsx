@@ -19,21 +19,9 @@ import AddSpeciesModal from './AddSpeciesModal';
 import RemoveSpeciesDialog from './RemoveSpeciesDialog';
 import TableCellRenderer from './TableCellRenderer';
 
-export function descendingComparator<T>(
-  a: T,
-  b: T,
-  orderBy: keyof T | string,
-  order: SortOrder,
-  splitDots?: boolean
-): number {
+function descendingComparator<T>(a: T, b: T, orderBy: keyof T | string, order: SortOrder): number {
   const getValue = (obj: any, path: string) => {
-    if (splitDots) {
-      const parts = path.split('.');
-
-      return parts.reduce((acc, part) => acc && acc[part], obj);
-    }
-
-    return obj[path];
+    return path.split('.').reduce((acc, part) => acc && acc[part], obj);
   };
 
   const aValue = getValue(a, orderBy as string) ?? '';
