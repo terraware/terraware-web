@@ -51,7 +51,7 @@ const DocumentDeliverableView = (props: Props): JSX.Element => {
         {props.optionsMenu}
       </Box>
     ),
-    []
+    [props.callToAction, props.optionsMenu]
   );
 
   if (isMobile) {
