@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { TableColumnType, TableRowType } from '@terraware/web-components';
+import { SortOrder, TableColumnType, TableRowType } from '@terraware/web-components';
 
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
@@ -18,6 +18,73 @@ import { Deliverable } from 'src/types/Deliverables';
 import AddSpeciesModal from './AddSpeciesModal';
 import RemoveSpeciesDialog from './RemoveSpeciesDialog';
 import TableCellRenderer from './TableCellRenderer';
+
+export function descendingComparator<T>(
+  a: T,
+  b: T,
+  orderBy: keyof T | string,
+  order: SortOrder,
+  splitDots?: boolean
+): number {
+  const getValue = (obj: any, path: string) => {
+    if (splitDots) {
+      const parts = path.split('.');
+
+      return parts.reduce((acc, part) => acc && acc[part], obj);
+    }
+
+    return obj[path];
+  };
+
+  const aValue = getValue(a, orderBy as string) ?? '';
+  const bValue = getValue(b, orderBy as string) ?? '';
+
+  const numCompareResult = descendingNumComparator(aValue, bValue);
+  if (numCompareResult !== null) {
+    return order === 'desc' ? numCompareResult : -numCompareResult;
+  }
+
+  // blank values at the end always (any order)
+  if (isEmptyValue(aValue.toString()) && isEmptyValue(bValue.toString())) {
+    return 0;
+  }
+
+  if (isEmptyValue(aValue.toString())) {
+    return 1;
+  }
+
+  if (isEmptyValue(bValue.toString())) {
+    return -1;
+  }
+
+  if (bValue < aValue) {
+    return order === 'desc' ? -1 : 1;
+  }
+  if (bValue > aValue) {
+    return order === 'desc' ? 1 : -1;
+  }
+
+  return 0;
+}
+
+function isEmptyValue(value?: string): boolean {
+  if (value === '' || value === null || value?.toString().trim() === '' || value === undefined) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function descendingNumComparator<T>(a: T, b: T): number | null {
+  const aNumValue = Number(a);
+  const bNumValue = Number(b);
+
+  if (!isNaN(aNumValue) && !isNaN(bNumValue)) {
+    return bNumValue - aNumValue;
+  }
+
+  return null;
+}
 
 const columns = (): TableColumnType[] => [
   { key: 'species.scientificName', name: strings.SCIENTIFIC_NAME, type: 'string' },
@@ -128,8 +195,8 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
             selectedRows={selectedRows}
             setSelectedRows={setSelectedRows}
             showCheckbox={!isAcceleratorRoute}
-            sortSplitDots
             showTopBar={true}
+            sortComparator={descendingComparator}
             topBarButtons={[
               {
                 buttonText: strings.REMOVE,
