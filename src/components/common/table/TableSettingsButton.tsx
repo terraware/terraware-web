@@ -14,7 +14,7 @@ interface Props {
   extraSections?: Section[];
 }
 
-export default function TableDensitySettingsButton(props: Props): JSX.Element {
+export default function TableSettingsButton(props: Props): JSX.Element {
   const { extraSections } = props;
   const { activeLocale } = useLocalization();
   const { tableDensity, setTableDensity } = useTableDensity();
@@ -63,7 +63,7 @@ export default function TableDensitySettingsButton(props: Props): JSX.Element {
 
   return (
     <>
-      <Tooltip title={strings.DENSITY_SETTINGS}>
+      <Tooltip title={strings.SETTINGS}>
         <Button
           id='updateTableDensity'
           onClick={(event) => event && handleClick(event)}

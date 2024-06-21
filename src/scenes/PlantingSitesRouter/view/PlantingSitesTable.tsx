@@ -6,7 +6,7 @@ import { PillList, PillListItem, TableColumnType, Textfield } from '@terraware/w
 import Card from 'src/components/common/Card';
 import FilterMultiSelectContainer from 'src/components/common/FilterMultiSelectContainer';
 import Table from 'src/components/common/table';
-import TableDensitySettingsButton from 'src/components/common/table/TableDensitySettingsButton';
+import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { SortOrder } from 'src/components/common/table/sort';
 import isEnabled from 'src/features';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
@@ -130,7 +130,7 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
           renderOption={(id: string | number) => projects?.find((project) => project.id === id)?.name ?? ''}
         />
 
-        <TableDensitySettingsButton />
+        <TableSettingsButton />
       </Box>
 
       <Grid display='flex' flexDirection='row' alignItems='center' sx={{ marginTop: theme.spacing(2) }}>
