@@ -128,6 +128,7 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
             selectedRows={selectedRows}
             setSelectedRows={setSelectedRows}
             showCheckbox={!isAcceleratorRoute}
+            sortSplitDots
             showTopBar={true}
             topBarButtons={[
               {
