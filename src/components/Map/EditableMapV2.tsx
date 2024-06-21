@@ -291,6 +291,11 @@ export default function EditableMap({
   // This is to catch up on an already initalized active context.
   const onLoad = useCallback(() => void selectActiveContext(), [selectActiveContext]);
 
+  const mapStyle = useMemo(
+    () => MapViewStyles[mapViewStyle],
+    [mapViewStyle]
+  )
+
   return (
     <Box
       ref={containerRef}
@@ -346,7 +351,7 @@ export default function EditableMap({
             onError={onMapError}
             ref={mapRef}
             mapboxAccessToken={token}
-            mapStyle={MapViewStyles[mapViewStyle]}
+            mapStyle={mapStyle}
             style={{
               position: 'relative',
               width: '100%',
