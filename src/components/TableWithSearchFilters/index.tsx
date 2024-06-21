@@ -6,7 +6,7 @@ import { SortOrder, TableColumnType, TableRowType } from '@terraware/web-compone
 import Card from 'src/components/common/Card';
 import SearchFiltersWrapperV2, { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import { default as OrderPreservedTable, OrderPreservedTablePropsFull } from 'src/components/common/table';
-import TableDensitySettingsButton from 'src/components/common/table/TableDensitySettingsButton';
+import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { useLocalization } from 'src/providers';
 import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { parseSearchTerm } from 'src/utils/search';
@@ -137,7 +137,7 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
             currentFilters={filters}
             setCurrentFilters={setFilters}
             featuredFilters={_featuredFilters}
-            rightComponent={<TableDensitySettingsButton />}
+            rightComponent={<TableSettingsButton />}
           />
         </Grid>
 
