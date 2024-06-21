@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1718996103642" clover="3.2.0">
-  <project timestamp="1718996103642" name="All files">
-    <metrics statements="21768" coveredstatements="941" conditionals="13929" coveredconditionals="231" methods="6723" coveredmethods="162" elements="42420" coveredelements="1334" complexity="0" loc="21768" ncloc="21768" packages="205" files="978" classes="978"/>
+<coverage generated="1718998095889" clover="3.2.0">
+  <project timestamp="1718998095889" name="All files">
+    <metrics statements="21768" coveredstatements="941" conditionals="13933" coveredconditionals="231" methods="6723" coveredmethods="162" elements="42424" coveredelements="1334" complexity="0" loc="21768" ncloc="21768" packages="205" files="978" classes="978"/>
     <package name="src">
       <metrics statements="170" coveredstatements="0" conditionals="126" coveredconditionals="0" methods="38" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -5183,7 +5183,7 @@
       </file>
     </package>
     <package name="src.components.SpeciesDeliverableTable">
-      <metrics statements="177" coveredstatements="0" conditionals="96" coveredconditionals="0" methods="57" coveredmethods="0"/>
+      <metrics statements="177" coveredstatements="0" conditionals="100" coveredconditionals="0" methods="57" coveredmethods="0"/>
       <file name="AddSpeciesModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/SpeciesDeliverableTable/AddSpeciesModal.tsx">
         <metrics statements="47" coveredstatements="0" conditionals="29" coveredconditionals="0" methods="19" coveredmethods="0"/>
         <line num="31" count="0" type="stmt"/>
@@ -5296,7 +5296,7 @@
         <line num="61" count="0" type="stmt"/>
       </file>
       <file name="TableCellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/SpeciesDeliverableTable/TableCellRenderer.tsx">
-        <metrics statements="44" coveredstatements="0" conditionals="29" coveredconditionals="0" methods="12" coveredmethods="0"/>
+        <metrics statements="44" coveredstatements="0" conditionals="33" coveredconditionals="0" methods="12" coveredmethods="0"/>
         <line num="22" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
@@ -5328,19 +5328,19 @@
         <line num="118" count="0" type="stmt"/>
         <line num="126" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="129" count="0" type="stmt"/>
-        <line num="140" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="141" count="0" type="stmt"/>
-        <line num="142" count="0" type="stmt"/>
-        <line num="150" count="0" type="stmt"/>
-        <line num="153" count="0" type="stmt"/>
-        <line num="162" count="0" type="stmt"/>
-        <line num="171" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="172" count="0" type="stmt"/>
+        <line num="142" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="143" count="0" type="stmt"/>
+        <line num="144" count="0" type="stmt"/>
+        <line num="152" count="0" type="stmt"/>
+        <line num="155" count="0" type="stmt"/>
+        <line num="164" count="0" type="stmt"/>
         <line num="175" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="176" count="0" type="stmt"/>
         <line num="179" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="180" count="0" type="stmt"/>
-        <line num="183" count="0" type="stmt"/>
+        <line num="183" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="184" count="0" type="stmt"/>
+        <line num="187" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/SpeciesDeliverableTable/index.tsx">
         <metrics statements="31" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="14" coveredmethods="0"/>
