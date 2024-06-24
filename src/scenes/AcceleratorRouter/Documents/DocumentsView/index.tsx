@@ -11,20 +11,20 @@ import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { selectDocuments } from 'src/redux/features/documentProducer/documents/documentsSelector';
 import { requestListDocuments } from 'src/redux/features/documentProducer/documents/documentsThunks';
-import { selectMethodologies } from 'src/redux/features/documentProducer/methodologies/methodologiesSelector';
-import { requestListMethodologies } from 'src/redux/features/documentProducer/methodologies/methodologiesThunks';
+import { selectDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesSelector';
+import { requestListDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Document } from 'src/types/documentProducer/Document';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import DocumentsEmptyPage from './DocumentsEmptyPage';
-import { getMethodologyName } from './helpers';
+import { getDocumentTemplateName } from './helpers';
 
 const tableColumns: TableColumnType[] = [
   { key: 'name', name: strings.NAME, type: 'string' },
   { key: 'organizationName', name: strings.ORGANIZATION, type: 'string' },
-  { key: 'methodologyId', name: strings.METHODOLOGY, type: 'string' },
+  { key: 'documentTemplateId', name: strings.DOCUMENT_TEMPLATE, type: 'string' },
   { key: 'versions', name: strings.VERSIONS, type: 'number' },
   { key: 'createdTime', name: strings.CREATED, type: 'date' },
   { key: 'modifiedTime', name: strings.LAST_EDITED, type: 'date' },
@@ -42,7 +42,7 @@ export default function DocumentsView(): JSX.Element {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [requestId, setRequestId] = useState('');
   const documentsResponse = useAppSelector(selectDocuments(requestId));
-  const { methodologies, error: methodologiesError } = useAppSelector(selectMethodologies);
+  const { documentTemplates, error: documentTemplatesError } = useAppSelector(selectDocumentTemplates);
 
   const tableCellRenderer = useCallback(
     (props: RendererProps<Document>): JSX.Element => {
@@ -61,22 +61,22 @@ export default function DocumentsView(): JSX.Element {
               }
             />
           );
-        case 'methodologyId':
-          return <CellRenderer {...props} value={getMethodologyName(props.row.methodologyId, methodologies)} />;
+        case 'documentTemplateId':
+          return <CellRenderer {...props} value={getDocumentTemplateName(props.row.documentTemplateId, documentTemplates)} />;
         case 'status':
           return <CellRenderer {...props} value={<StatusBadge status={props.row.status} />} />;
         default:
           return <CellRenderer {...props} />;
       }
     },
-    [methodologies]
+    [documentTemplates]
   );
 
   useEffect(() => {
     const request = dispatch(requestListDocuments());
     setRequestId(request.requestId);
 
-    dispatch(requestListMethodologies());
+    dispatch(requestListDocumentTemplates());
   }, [dispatch]);
 
   useEffect(() => {
@@ -92,10 +92,10 @@ export default function DocumentsView(): JSX.Element {
   }, [snackbar, documentsResponse]);
 
   useEffect(() => {
-    if (methodologiesError) {
+    if (documentTemplatesError) {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [snackbar, methodologiesError]);
+  }, [snackbar, documentTemplatesError]);
 
   useEffect(() => {
     if (documents) {

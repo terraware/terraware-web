@@ -1,4 +1,4 @@
-import { components, operations } from './generated-schema';
+import { components, operations } from 'src/api/types/generated-schema';
 
 export type VariableValuesListResponse = components['schemas']['ListVariableValuesResponsePayload'];
 

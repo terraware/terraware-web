@@ -32,7 +32,7 @@ export default function EditVariableModal({ variable, onFinish, onCancel, docId,
       return (
         <EditableTableEdit
           variable={variable as TableVariableWithValues}
-          pddId={docId}
+          documentId={docId}
           onFinish={onFinish}
           onCancel={onCancel}
         />

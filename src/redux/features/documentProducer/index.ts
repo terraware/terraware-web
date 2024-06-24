@@ -1,11 +1,11 @@
 import { documentProducerDocumentsReducers } from './documents/documentsSlice';
-import { documentProducerMethodologiesReducers } from './methodologies/methodologiesSlice';
+import { documentProducerDocumentTemplatesReducers } from './documentTemplates/documentTemplatesSlice';
 import { documentProducerVariableValuesReducers } from './values/valuesSlice';
 import { documentProducerVariablesReducers } from './variables/variablesSlice';
 
 const documentProducerReducers = {
   ...documentProducerDocumentsReducers,
-  ...documentProducerMethodologiesReducers,
+  ...documentProducerDocumentTemplatesReducers,
   ...documentProducerVariablesReducers,
   ...documentProducerVariableValuesReducers,
 };

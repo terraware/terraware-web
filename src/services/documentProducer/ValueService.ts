@@ -5,8 +5,8 @@ import {
   VariableValuesListResponse,
 } from 'src/types/documentProducer/VariableValue';
 
-const VALUES_ENDPOINT = '/api/v1/pdds/{docId}/values';
-const IMAGES_ENDPOINT = '/api/v1/pdds/{docId}/images';
+const VALUES_ENDPOINT = '/api/v1/documents/{docId}/values';
+const IMAGES_ENDPOINT = '/api/v1/documents/{docId}/images';
 
 const getValues = async (docId: number): Promise<Response2<VariableValuesListResponse>> =>
   await HttpService.root(VALUES_ENDPOINT.replace('{docId}', docId.toString())).get2({});

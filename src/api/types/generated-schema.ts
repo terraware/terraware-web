@@ -179,6 +179,104 @@ export interface paths {
      */
     post: operations["deviceUnresponsive"];
   };
+  "/api/v1/document-producer/documents": {
+    /** Gets a list of all the documents. */
+    get: operations["listDocuments"];
+    /** Creates a new document. */
+    post: operations["createDocument"];
+  };
+  "/api/v1/document-producer/documents/{documentId}/images": {
+    /** Save an image to a new variable value. */
+    post: operations["uploadImageValue"];
+  };
+  "/api/v1/document-producer/documents/{documentId}/images/{valueId}": {
+    /**
+     * Gets the contents of an image variable value.
+     * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
+     */
+    get: operations["getImageValue"];
+  };
+  "/api/v1/document-producer/documents/{documentId}/upgrade": {
+    /**
+     * Upgrades a document to a newer manifest.
+     * @description The manifest must be for the same document template as the existing manifest.
+     */
+    post: operations["upgradeManifest"];
+  };
+  "/api/v1/document-producer/documents/{documentId}/values": {
+    /**
+     * Get the values of the variables in a document.
+     * @description This may be used to fetch the full set of current values (the default behavior), the values from a saved version (if maxValueId is specified), or to poll for recent edits (if minValueId is specified).
+     */
+    get: operations["listVariableValues"];
+    /**
+     * Update the values of the variables in a document.
+     * @description Make a list of changes to a document's variable values. The changes are applied in order and are treated as an atomic unit. That is, the changes will either all succeed or all fail; there won't be a case where some of the changes are applied and some aren't. See the payload descriptions for more details about the operations you can perform on values.
+     */
+    post: operations["updateVariableValues"];
+  };
+  "/api/v1/document-producer/documents/{documentId}/versions": {
+    /** Saves a version of a document. */
+    post: operations["createSavedDocumentVersion"];
+  };
+  "/api/v1/document-producer/documents/{documentId}/versions/{versionId}": {
+    /** Gets details of a specific saved version of a document. */
+    get: operations["getSavedDocumentVersion"];
+    /** Updates a saved version of a document. */
+    put: operations["updateSavedDocumentVersion"];
+  };
+  "/api/v1/document-producer/documents/{id}": {
+    /** Gets a document. */
+    get: operations["getDocument"];
+    /** Updates a document. */
+    put: operations["updateDocument"];
+  };
+  "/api/v1/document-producer/documents/{id}/history": {
+    /** Gets the history of a document. This includes both information about document edits and information about saved versions. */
+    get: operations["getDocumentHistory"];
+  };
+  "/api/v1/document-producer/projects/{projectId}/images": {
+    /** Save an image to a new variable value. */
+    post: operations["uploadProjectImageValue"];
+  };
+  "/api/v1/document-producer/projects/{projectId}/images/{valueId}": {
+    /**
+     * Gets the contents of an image variable value.
+     * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
+     */
+    get: operations["getProjectImageValue"];
+  };
+  "/api/v1/document-producer/projects/{projectId}/owners": {
+    /**
+     * List the owners of a project's variables.
+     * @description Only variables that actually have owners are returned.
+     */
+    get: operations["listVariableOwners"];
+  };
+  "/api/v1/document-producer/projects/{projectId}/owners/{variableId}": {
+    /** Update or remove the owner of a variable in a project. */
+    put: operations["updateVariableOwner"];
+  };
+  "/api/v1/document-producer/projects/{projectId}/values": {
+    /**
+     * Get the values of the variables in a project.
+     * @description This may be used to fetch the full set of current values (the default behavior), the values from a saved version (if maxValueId is specified), or to poll for recent edits (if minValueId is specified).
+     */
+    get: operations["listProjectVariableValues"];
+    /**
+     * Update the values of the variables in a project.
+     * @description Make a list of changes to a project's variable values. The changes are applied in order and are treated as an atomic unit. That is, the changes will either all succeed or all fail; there won't be a case where some of the changes are applied and some aren't. See the payload descriptions for more details about the operations you can perform on values.
+     */
+    post: operations["updateProjectVariableValues"];
+  };
+  "/api/v1/document-producer/templates": {
+    /** Gets a list of all the valid document templates. */
+    get: operations["listDocumentTemplates"];
+  };
+  "/api/v1/document-producer/variables": {
+    /** List the variables within a given manifest. */
+    get: operations["listVariables"];
+  };
   "/api/v1/facilities": {
     /** Lists all accessible facilities. */
     get: operations["listAllFacilities"];
@@ -1090,6 +1188,27 @@ export interface components {
       successStories?: string;
       sustainableDevelopmentGoals: components["schemas"]["GoalProgressPayloadV1"][];
     };
+    /**
+     * @description Operation that appends a new value to a variable. If the variable does not have an existing value, creates the value with list position 0.
+     *
+     * If the variable has an existing value and it is NOT a list, replaces the existing value. In this case, the new list position will be 0.
+     *
+     * If the variable has existing values and it IS a list, creates the value with a list position 1 greater than the currently-highest position, that is, appends the value to the list.
+     *
+     * If the variable is a table column and no rowValueId is specified, associates the new value with the most recently appended row. You MUST append a row value before appending the values of the columns.
+     */
+    AppendValueOperationPayload: WithRequired<{
+      operation: "Append";
+    } & Omit<components["schemas"]["ValueOperationPayload"], "operation"> & {
+      /**
+       * Format: int64
+       * @description If the variable is a table column and the new value should be appended to an existing row, the existing row's value ID.
+       */
+      rowValueId?: number;
+      value?: components["schemas"]["NewValuePayload"];
+      /** Format: int64 */
+      variableId?: number;
+    }, "value" | "variableId">;
     AssignParticipantProjectSpeciesPayload: {
       projectIds: number[];
       speciesIds: number[];
@@ -1560,6 +1679,19 @@ export interface components {
        */
       verbosity?: number;
     };
+    CreateDocumentRequestPayload: {
+      /** Format: int64 */
+      documentTemplateId: number;
+      name: string;
+      /** Format: int64 */
+      ownedBy: number;
+      /** Format: int64 */
+      projectId: number;
+    };
+    CreateDocumentResponsePayload: {
+      document: components["schemas"]["DocumentPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     CreateDraftPlantingSiteRequestPayload: {
       /** @description In-progress state of the draft. This includes map data and other information needed by the client. It is treated as opaque data by the server. */
       data: {
@@ -1777,6 +1909,15 @@ export interface components {
       id: number;
       status: components["schemas"]["SuccessOrError"];
     };
+    CreateSavedDocumentVersionRequestPayload: {
+      /** @default false */
+      isSubmitted?: boolean;
+      name: string;
+    };
+    CreateSavedDocumentVersionResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      version: components["schemas"]["DocumentSavedVersionPayload"];
+    };
     CreateSpeciesResponsePayload: {
       /** Format: int64 */
       id: number;
@@ -1852,6 +1993,9 @@ export interface components {
       /** @description Quantity of seeds withdrawn. If this quantity is in weight and the remaining quantity of the accession is in seeds or vice versa, the accession must have a subset weight and count. */
       withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
     };
+    DateVariablePayload: {
+      type: "Date";
+    } & Omit<components["schemas"]["VariablePayload"], "type">;
     DeleteGlobalRolesRequestPayload: {
       userIds: number[];
     };
@@ -1869,6 +2013,19 @@ export interface components {
        */
       userId?: number;
     };
+    /**
+     * @description Operation that deletes a value from a variable. Deletion is non-destructive; this actually creates a new value with its own value ID, where the new value is marked as deleted. This "is deleted" value is included in incremental value query results.
+     *
+     * If the variable is a list and there are other values with higher list positions, the remaining items will be renumbered such that the list remains contiguously numbered starting at 0.
+     *
+     * If the variable is a table, or in other words if the value is a table row, any values associated with the row are also deleted. The row itself gets a new value that is marked as deleted, and the new values that are created to delete the row's contents are associated with this newly-created deleted row value.
+     */
+    DeleteValueOperationPayload: WithRequired<{
+      operation: "Delete";
+    } & Omit<components["schemas"]["ValueOperationPayload"], "operation"> & {
+      /** Format: int64 */
+      valueId?: number;
+    }, "existingValueId" | "valueId">;
     DeliverablePayload: {
       /** @enum {string} */
       category: "Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files";
@@ -2022,6 +2179,78 @@ export interface components {
        */
       lastRespondedTime?: string;
     };
+    /** @description History entry about the creation of the document. This is always the last element in the reverse-chronological list of history events. It has the same information as the createdBy and createdTime fields in DocumentPayload. */
+    DocumentHistoryCreatedPayload: WithRequired<{
+      type: "Created";
+    } & Omit<components["schemas"]["DocumentHistoryPayload"], "type">, "createdBy" | "createdTime" | "type">;
+    /** @description History entry about a document being edited. This represents the most recent edit by the given user; if the same user edits the document multiple times in a row, only the last edit will be listed in the history. */
+    DocumentHistoryEditedPayload: WithRequired<{
+      type: "Edited";
+    } & Omit<components["schemas"]["DocumentHistoryPayload"], "type">, "createdBy" | "createdTime" | "type">;
+    DocumentHistoryPayload: {
+      /** Format: int64 */
+      createdBy: number;
+      /** Format: date-time */
+      createdTime: string;
+      /** @enum {string} */
+      type: "Created" | "Edited" | "Saved";
+    };
+    /** @description History entry about a saved version of a document. The maxVariableValueId and variableManifestId may be used to retrieve the contents of the saved version. */
+    DocumentHistorySavedPayload: WithRequired<{
+      type: "Saved";
+    } & Omit<components["schemas"]["DocumentHistoryPayload"], "type"> & {
+      isSubmitted?: boolean;
+      /** Format: int64 */
+      maxVariableValueId?: number;
+      name?: string;
+      /** Format: int64 */
+      variableManifestId?: number;
+      /** Format: int64 */
+      versionId?: number;
+    }, "createdBy" | "createdTime" | "isSubmitted" | "maxVariableValueId" | "name" | "type" | "variableManifestId" | "versionId">;
+    DocumentPayload: {
+      /** Format: int64 */
+      createdBy: number;
+      /** Format: date-time */
+      createdTime: string;
+      /** Format: int64 */
+      documentTemplateId: number;
+      /** Format: int64 */
+      id: number;
+      /** Format: int64 */
+      modifiedBy: number;
+      /** Format: date-time */
+      modifiedTime: string;
+      name: string;
+      /** Format: int64 */
+      ownedBy: number;
+      /** Format: int64 */
+      projectId: number;
+      /** @enum {string} */
+      status: "Draft" | "Locked" | "Published" | "Ready" | "Submitted";
+      /** Format: int64 */
+      variableManifestId: number;
+    };
+    /** @description Information about a saved version of a document. The maxVariableValueId and variableManifestId may be used to retrieve the contents of the saved version. */
+    DocumentSavedVersionPayload: {
+      /** Format: int64 */
+      createdBy: number;
+      /** Format: date-time */
+      createdTime: string;
+      isSubmitted: boolean;
+      /** Format: int64 */
+      maxVariableValueId: number;
+      name: string;
+      /** Format: int64 */
+      variableManifestId: number;
+      /** Format: int64 */
+      versionId: number;
+    };
+    DocumentTemplatePayload: {
+      /** Format: int64 */
+      id: number;
+      name: string;
+    };
     DraftPlantingSitePayload: {
       /**
        * Format: int64
@@ -2065,6 +2294,84 @@ export interface components {
     };
     ErrorDetails: {
       message: string;
+    };
+    ExistingDateValuePayload: WithRequired<{
+      type: "Date";
+    } & Omit<components["schemas"]["ExistingValuePayload"], "type"> & {
+      /** Format: date */
+      dateValue?: string;
+    }, "dateValue" | "id" | "listPosition" | "type">;
+    /** @description Represents the deletion of an earlier value at the same location. This is only included when you are querying for incremental changes to a document's values. */
+    ExistingDeletedValuePayload: WithRequired<{
+      type: "Deleted";
+    } & Omit<components["schemas"]["ExistingValuePayload"], "type">, "id" | "listPosition" | "type">;
+    /** @description Metadata about an image. The actual image data (e.g., the JPEG or PNG file) must be retrieved in a separate request using the value ID in this payload. */
+    ExistingImageValuePayload: WithRequired<{
+      type: "Image";
+    } & Omit<components["schemas"]["ExistingValuePayload"], "type"> & {
+      caption?: string;
+    }, "id" | "listPosition" | "type">;
+    ExistingLinkValuePayload: WithRequired<{
+      type: "Link";
+    } & Omit<components["schemas"]["ExistingValuePayload"], "type"> & {
+      title?: string;
+      /** Format: uri */
+      url?: string;
+    }, "id" | "listPosition" | "type" | "url">;
+    ExistingNumberValuePayload: WithRequired<{
+      type: "Number";
+    } & Omit<components["schemas"]["ExistingValuePayload"], "type"> & {
+      numberValue?: number;
+    }, "id" | "listPosition" | "numberValue" | "type">;
+    ExistingSectionTextValuePayload: WithRequired<{
+      type: "SectionText";
+    } & Omit<components["schemas"]["ExistingValuePayload"], "type"> & {
+      textValue?: string;
+    }, "id" | "listPosition" | "textValue" | "type">;
+    ExistingSectionVariableValuePayload: WithRequired<{
+      type: "SectionVariable";
+    } & Omit<components["schemas"]["ExistingValuePayload"], "type"> & ({
+      /** @enum {string} */
+      displayStyle?: "Inline" | "Block";
+      /** @enum {string} */
+      usageType?: "Injection" | "Reference";
+      /** Format: int64 */
+      variableId?: number;
+    }), "id" | "listPosition" | "type" | "usageType" | "variableId">;
+    ExistingSelectValuePayload: WithRequired<{
+      type: "Select";
+    } & Omit<components["schemas"]["ExistingValuePayload"], "type"> & {
+      optionValues?: number[];
+    }, "id" | "listPosition" | "optionValues" | "type">;
+    /** @description A row in a table. Each row has its own value ID. ExistingVariableValuesPayload includes this ID for values of variables that are defined as columns of a table. */
+    ExistingTableValuePayload: WithRequired<{
+      type: "Table";
+    } & Omit<components["schemas"]["ExistingValuePayload"], "type">, "id" | "listPosition" | "type">;
+    ExistingTextValuePayload: WithRequired<{
+      type: "Text";
+    } & Omit<components["schemas"]["ExistingValuePayload"], "type"> & {
+      textValue?: string;
+    }, "id" | "listPosition" | "textValue" | "type">;
+    /** @description Values of this variable or this table cell. When getting the full set of values for a document, this will be the complete list of this variable's values in order of list position. When getting incremental changes to a document, this is only the items that have changed, and existing items won't be present. For example, if a variable is a list and has 3 values, and a fourth value is added, the incremental list of values in this payload will have one item and its list position will be 3 (since lists are 0-indexed). */
+    ExistingValuePayload: {
+      citation?: string;
+      /** Format: int64 */
+      id: number;
+      /** Format: int32 */
+      listPosition: number;
+      /** @enum {string} */
+      type: "Date" | "Deleted" | "Image" | "Link" | "Number" | "SectionText" | "SectionVariable" | "Select" | "Table" | "Text";
+    };
+    ExistingVariableValuesPayload: {
+      /**
+       * Format: int64
+       * @description If this is the value of a table cell, the ID of the row it's part of.
+       */
+      rowValueId?: number;
+      /** @description Values of this variable or this table cell. When getting the full set of values for a document, this will be the complete list of this variable's values in order of list position. When getting incremental changes to a document, this is only the items that have changed, and existing items won't be present. For example, if a variable is a list and has 3 values, and a fourth value is added, the incremental list of values in this payload will have one item and its list position will be 3 (since lists are 0-indexed). */
+      values: (components["schemas"]["ExistingDateValuePayload"] | components["schemas"]["ExistingDeletedValuePayload"] | components["schemas"]["ExistingImageValuePayload"] | components["schemas"]["ExistingLinkValuePayload"] | components["schemas"]["ExistingNumberValuePayload"] | components["schemas"]["ExistingSectionTextValuePayload"] | components["schemas"]["ExistingSectionVariableValuePayload"] | components["schemas"]["ExistingSelectValuePayload"] | components["schemas"]["ExistingTableValuePayload"] | components["schemas"]["ExistingTextValuePayload"])[];
+      /** Format: int64 */
+      variableId: number;
     };
     FacilityPayload: {
       /** Format: date */
@@ -2175,6 +2482,15 @@ export interface components {
     };
     GetDeviceResponsePayload: {
       device: components["schemas"]["DeviceConfig"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetDocumentHistoryResponsePayload: {
+      /** @description List of events in the document's history in reverse chronological order. The last element is always the "Created" event. */
+      history: (components["schemas"]["DocumentHistoryCreatedPayload"] | components["schemas"]["DocumentHistoryEditedPayload"] | components["schemas"]["DocumentHistorySavedPayload"])[];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetDocumentResponsePayload: {
+      document: components["schemas"]["DocumentPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
     GetDraftPlantingSiteResponsePayload: {
@@ -2384,6 +2700,10 @@ export interface components {
       projects: components["schemas"]["ProjectReportSettingsPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetSavedDocumentVersionResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      version: components["schemas"]["DocumentSavedVersionPayload"];
+    };
     GetSeedBankV1: {
       /** Format: date */
       buildCompletedDate?: string;
@@ -2573,6 +2893,9 @@ export interface components {
       goal: "NoPoverty" | "ZeroHunger" | "GoodHealth" | "QualityEducation" | "GenderEquality" | "CleanWater" | "AffordableEnergy" | "DecentWork" | "Industry" | "ReducedInequalities" | "SustainableCities" | "ResponsibleConsumption" | "ClimateAction" | "LifeBelowWater" | "LifeOnLand" | "Peace" | "Partnerships";
       progress?: string;
     };
+    ImageVariablePayload: {
+      type: "Image";
+    } & Omit<components["schemas"]["VariablePayload"], "type">;
     LineString: WithRequired<{
       type: "LineString";
     } & Omit<components["schemas"]["Geometry"], "type"> & {
@@ -2580,6 +2903,9 @@ export interface components {
       /** @enum {string} */
       type?: "LineString";
     }, "coordinates" | "type">;
+    LinkVariablePayload: {
+      type: "Link";
+    } & Omit<components["schemas"]["VariablePayload"], "type">;
     ListAcceleratorOrganizationsResponsePayload: {
       organizations: components["schemas"]["AcceleratorOrganizationPayload"][];
       status: components["schemas"]["SuccessOrError"];
@@ -2640,6 +2966,14 @@ export interface components {
     ListDeviceTemplatesResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
       templates: components["schemas"]["DeviceTemplatePayload"][];
+    };
+    ListDocumentTemplatesResponsePayload: {
+      documentTemplates: components["schemas"]["DocumentTemplatePayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListDocumentsResponsePayload: {
+      documents: components["schemas"]["DocumentPayload"][];
+      status: components["schemas"]["SuccessOrError"];
     };
     ListFacilitiesResponse: {
       facilities: components["schemas"]["FacilityPayload"][];
@@ -2781,6 +3115,24 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
       timeseries: components["schemas"]["TimeseriesPayload"][];
     };
+    ListVariableOwnersResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      variables: components["schemas"]["VariableOwnersResponseElement"][];
+    };
+    ListVariableValuesResponsePayload: {
+      /**
+       * Format: int64
+       * @description The next unused value ID. You can pass this back to the endpoint as the minValueId parameter to poll for newly-updated values.
+       */
+      nextValueId: number;
+      status: components["schemas"]["SuccessOrError"];
+      /** @description Variable values organized by variable ID and table row. If you are getting incremental values (that is, you passed minValueId to the endpoint) this list may include values of type "Deleted" to indicate that existing values were deleted and not replaced with new values. */
+      values: components["schemas"]["ExistingVariableValuesPayload"][];
+    };
+    ListVariablesResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      variables: (components["schemas"]["DateVariablePayload"] | components["schemas"]["ImageVariablePayload"] | components["schemas"]["LinkVariablePayload"] | components["schemas"]["NumberVariablePayload"] | components["schemas"]["SectionVariablePayload"] | components["schemas"]["SelectVariablePayload"] | components["schemas"]["TableVariablePayload"] | components["schemas"]["TextVariablePayload"])[];
+    };
     ListViabilityTestsResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
       viabilityTests: components["schemas"]["GetViabilityTestPayload"][];
@@ -2810,6 +3162,34 @@ export interface components {
       /** @enum {string} */
       type?: "MultiPolygon";
     }, "coordinates" | "type">;
+    NewDateValuePayload: WithRequired<{
+      type: "Date";
+    } & Omit<components["schemas"]["NewValuePayload"], "type"> & {
+      citation?: string;
+      /** Format: date */
+      dateValue?: string;
+    }, "dateValue">;
+    /** @description Updated metadata about an image value. May only be used in Update operations, and cannot be used to replace the actual image data. */
+    NewImageValuePayload: {
+      type: "Image";
+    } & Omit<components["schemas"]["NewValuePayload"], "type"> & {
+      caption?: string;
+      citation?: string;
+    };
+    NewLinkValuePayload: WithRequired<{
+      type: "Link";
+    } & Omit<components["schemas"]["NewValuePayload"], "type"> & {
+      citation?: string;
+      title?: string;
+      /** Format: uri */
+      url?: string;
+    }, "url">;
+    NewNumberValuePayload: WithRequired<{
+      type: "Number";
+    } & Omit<components["schemas"]["NewValuePayload"], "type"> & {
+      citation?: string;
+      numberValue?: number;
+    }, "numberValue">;
     NewPlantingSeasonPayload: {
       /** Format: date */
       endDate: string;
@@ -2828,6 +3208,45 @@ export interface components {
       name: string;
       plantingSubzones?: components["schemas"]["NewPlantingSubzonePayload"][];
       targetPlantingDensity?: number;
+    };
+    NewSectionTextValuePayload: WithRequired<{
+      type: "SectionText";
+    } & Omit<components["schemas"]["NewValuePayload"], "type"> & {
+      /** @description Citation for this chunk of text. If you want text with multiple citations at different positions, you can split it into multiple text values and put a citation on each of them. */
+      citation?: string;
+      textValue?: string;
+    }, "textValue">;
+    NewSectionVariableValuePayload: WithRequired<{
+      type: "SectionVariable";
+    } & Omit<components["schemas"]["NewValuePayload"], "type"> & ({
+      /** @enum {string} */
+      displayStyle?: "Inline" | "Block";
+      /** @enum {string} */
+      usageType?: "Injection" | "Reference";
+      /** Format: int64 */
+      variableId?: number;
+    }), "usageType" | "variableId">;
+    NewSelectValuePayload: WithRequired<{
+      type: "Select";
+    } & Omit<components["schemas"]["NewValuePayload"], "type"> & {
+      citation?: string;
+      optionIds?: number[];
+    }, "optionIds">;
+    NewTableValuePayload: {
+      type: "Table";
+    } & Omit<components["schemas"]["NewValuePayload"], "type"> & {
+      /** @description Citations on table values can be used if you want a citation that is associated with the table as a whole rather than with individual cells, or if you want a citation on an empty table: append a row with no column values but with a citation. */
+      citation?: string;
+    };
+    NewTextValuePayload: WithRequired<{
+      type: "Text";
+    } & Omit<components["schemas"]["NewValuePayload"], "type"> & {
+      citation?: string;
+      textValue?: string;
+    }, "textValue">;
+    /** @description Supertype for payloads that represent new variable values. See the descriptions of individual payload types for more details. */
+    NewValuePayload: {
+      type: string;
     };
     /** @description Search criterion that matches results that do not match a set of search criteria. */
     NotNodePayload: WithRequired<{
@@ -2856,6 +3275,14 @@ export interface components {
       organizationId?: number;
       title: string;
     };
+    NumberVariablePayload: WithRequired<{
+      type: "Number";
+    } & Omit<components["schemas"]["VariablePayload"], "type"> & {
+      /** Format: int32 */
+      decimalPlaces?: number;
+      maxValue?: number;
+      minValue?: number;
+    }, "decimalPlaces">;
     NurserySummaryPayload: {
       /** Format: int64 */
       germinatingQuantity: number;
@@ -3598,6 +4025,27 @@ export interface components {
       removedMonitoringPlotIds: number[];
       status: components["schemas"]["SuccessOrError"];
     };
+    /**
+     * @description Operation that replaces all the values of a variable with new ones. This is an "upsert" operation: it replaces any existing values, or creates new values if there weren't already any.
+     *
+     * This operation may not be used with table variables.
+     *
+     * If the variable is a list and previously had more values than are included in this payload, the existing values with higher-numbered list positions are deleted.
+     *
+     * If the variable is not a list, it is invalid for this payload to include more than one value.
+     */
+    ReplaceValuesOperationPayload: WithRequired<{
+      operation: "Replace";
+    } & Omit<components["schemas"]["ValueOperationPayload"], "operation"> & {
+      /**
+       * Format: int64
+       * @description If the variable is a table column, the value ID of the row whose values should be replaced.
+       */
+      rowValueId?: number;
+      values?: components["schemas"]["NewValuePayload"][];
+      /** Format: int64 */
+      variableId?: number;
+    }, "values" | "variableId">;
     RescheduleObservationRequestPayload: {
       /**
        * Format: date
@@ -3696,6 +4144,14 @@ export interface components {
         [key: string]: components["schemas"]["FieldValuesPayload"];
       };
     };
+    SectionVariablePayload: WithRequired<{
+      type: "Section";
+    } & Omit<components["schemas"]["VariablePayload"], "type"> & {
+      children?: components["schemas"]["SectionVariablePayload"][];
+      /** @description IDs of variables that this section recommends. */
+      recommends?: number[];
+      renderHeading?: boolean;
+    }, "children" | "recommends" | "renderHeading">;
     SeedCountSummaryPayload: {
       /**
        * Format: int64
@@ -3727,6 +4183,19 @@ export interface components {
       /** @enum {string} */
       units: "Seeds" | "Grams" | "Milligrams" | "Kilograms" | "Ounces" | "Pounds";
     };
+    SelectOptionPayload: {
+      description?: string;
+      /** Format: int64 */
+      id: number;
+      name: string;
+      renderedText?: string;
+    };
+    SelectVariablePayload: WithRequired<{
+      type: "Select";
+    } & Omit<components["schemas"]["VariablePayload"], "type"> & {
+      isMultiple?: boolean;
+      options?: components["schemas"]["SelectOptionPayload"][];
+    }, "isMultiple" | "options">;
     SendFacilityAlertRequestPayload: {
       /** @description Alert body in plain text. HTML alerts are not supported yet. */
       body: string;
@@ -3958,10 +4427,27 @@ export interface components {
       species: number;
       status: components["schemas"]["SuccessOrError"];
     };
+    TableColumnPayload: {
+      isHeader: boolean;
+      variable: components["schemas"]["VariablePayload"];
+    };
+    TableVariablePayload: WithRequired<{
+      type: "Table";
+    } & Omit<components["schemas"]["VariablePayload"], "type"> & ({
+      columns?: components["schemas"]["TableColumnPayload"][];
+      /** @enum {string} */
+      tableStyle?: "Horizontal" | "Vertical";
+    }), "columns" | "tableStyle">;
     TemporaryAttachment: {
       filename: string;
       temporaryAttachmentId: string;
     };
+    TextVariablePayload: WithRequired<{
+      type: "Text";
+    } & Omit<components["schemas"]["VariablePayload"], "type"> & ({
+      /** @enum {string} */
+      textType?: "SingleLine" | "MultiLine";
+    }), "textType">;
     TimeZonePayload: {
       /**
        * @description Time zone name in IANA tz database format
@@ -4179,6 +4665,11 @@ export interface components {
        */
       verbosity?: number;
     };
+    UpdateDocumentRequestPayload: {
+      name: string;
+      /** Format: int64 */
+      ownedBy: number;
+    };
     UpdateDraftPlantingSiteRequestPayload: {
       /** @description In-progress state of the draft. This includes map data and other information needed by the client. It is treated as opaque data by the server. */
       data: {
@@ -4352,6 +4843,9 @@ export interface components {
       /** @description Per-project report settings. If a project is missing from this list, its settings will revert to the defaults. */
       projects: components["schemas"]["ProjectReportSettingsPayload"][];
     };
+    UpdateSavedDocumentVersionRequestPayload: {
+      isSubmitted: boolean;
+    };
     UpdateSubLocationRequestPayload: {
       name: string;
     };
@@ -4395,6 +4889,31 @@ export interface components {
        * @example America/New_York
        */
       timeZone?: string;
+    };
+    /**
+     * @description Operation that replaces a single existing value with a new one. The new value will have the same list position as the existing one.
+     *
+     * This operation may not be used with table variables.
+     *
+     * If the variable is a table column, the new value will be contained in the same row as the existing one.
+     */
+    UpdateValueOperationPayload: WithRequired<{
+      operation: "Update";
+    } & Omit<components["schemas"]["ValueOperationPayload"], "operation"> & {
+      value?: components["schemas"]["NewValuePayload"];
+      /** Format: int64 */
+      valueId?: number;
+    }, "existingValueId" | "value" | "valueId">;
+    UpdateVariableOwnerRequestPayload: {
+      /**
+       * Format: int64
+       * @description New owner of the variable, or null if the variable should have no owner.
+       */
+      ownedBy?: number;
+    };
+    UpdateVariableValuesRequestPayload: {
+      /** @description List of operations to perform on the document's values. The operations are applied in order, and atomically: if any of them fail, none of them will be applied. */
+      operations: (components["schemas"]["AppendValueOperationPayload"] | components["schemas"]["DeleteValueOperationPayload"] | components["schemas"]["ReplaceValuesOperationPayload"] | components["schemas"]["UpdateValueOperationPayload"])[];
     };
     UpdateViabilityTestRequestPayload: {
       /** Format: date */
@@ -4448,6 +4967,13 @@ export interface components {
       /** Format: date */
       startDate: string;
     };
+    UpgradeManifestRequestPayload: {
+      /**
+       * Format: int64
+       * @description ID of manifest to upgrade the document to. This must be greater than the document's current manifest ID (downgrades are not supported) and must be for the same document template as the current manifest.
+       */
+      variableManifestId: number;
+    };
     UploadAttachmentResponsePayload: {
       attachments: components["schemas"]["TemporaryAttachment"][];
       status: components["schemas"]["SuccessOrError"];
@@ -4464,6 +4990,11 @@ export interface components {
        */
       id: number;
       status: components["schemas"]["SuccessOrError"];
+    };
+    UploadImageFileResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      /** Format: int64 */
+      valueId: number;
     };
     UploadPlotPhotoRequestPayload: {
       gpsCoordinates: components["schemas"]["Point"];
@@ -4577,6 +5108,31 @@ export interface components {
       /** @description List of validation problems found, if any. Empty if the request is valid. */
       problems: components["schemas"]["PlantingSiteValidationProblemPayload"][];
       status: components["schemas"]["SuccessOrError"];
+    };
+    /** @description Supertype of the payloads that describe which operations to perform on a variable's value(s). See the descriptions of the individual operations for details. */
+    ValueOperationPayload: {
+      /** Format: int64 */
+      existingValueId?: number;
+      operation: string;
+    };
+    VariableOwnersResponseElement: {
+      /** Format: int64 */
+      ownedBy: number;
+      /** Format: int64 */
+      variableId: number;
+    };
+    VariablePayload: {
+      description?: string;
+      /** Format: int64 */
+      id: number;
+      isList: boolean;
+      name: string;
+      /** Format: int32 */
+      position?: number;
+      /** @description IDs of sections that recommend this variable. */
+      recommendedBy?: number[];
+      /** @enum {string} */
+      type: "Number" | "Text" | "Date" | "Image" | "Select" | "Table" | "Link" | "Section";
     };
     VersionsEntryPayload: {
       appName: string;
@@ -5634,6 +6190,498 @@ export interface operations {
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets a list of all the documents. */
+  listDocuments: {
+    parameters: {
+      query?: {
+        /** @description If present, only list documents for this project. */
+        projectId?: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListDocumentsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Creates a new document. */
+  createDocument: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateDocumentRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateDocumentResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Save an image to a new variable value. */
+  uploadImageValue: {
+    parameters: {
+      path: {
+        documentId: number;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": {
+          caption?: string;
+          citation?: string;
+          /** Format: binary */
+          file: string;
+          /**
+           * Format: int32
+           * @description If the variable is a list, which list position to use for the value. If not specified, the server will use the next available list position if the variable is a list, or will replace any existing image if the variable is not a list.
+           */
+          listPosition?: number;
+          /**
+           * Format: int64
+           * @description If the variable is a table column, value ID of the row the value should belong to.
+           */
+          rowValueId?: number;
+          /** Format: int64 */
+          variableId: number;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadImageFileResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Gets the contents of an image variable value.
+   * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
+   */
+  getImageValue: {
+    parameters: {
+      query?: {
+        /** @description Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
+        maxWidth?: string;
+        /** @description Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
+        maxHeight?: string;
+      };
+      path: {
+        documentId: number;
+        valueId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": string;
+          "image/jpeg": string;
+          "image/png": string;
+        };
+      };
+    };
+  };
+  /**
+   * Upgrades a document to a newer manifest.
+   * @description The manifest must be for the same document template as the existing manifest.
+   */
+  upgradeManifest: {
+    parameters: {
+      path: {
+        documentId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpgradeManifestRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+      /** @description The document does not exist or the requested manifest does not exist. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** @description The requested manifest is for a different document template than the current one. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Get the values of the variables in a document.
+   * @description This may be used to fetch the full set of current values (the default behavior), the values from a saved version (if maxValueId is specified), or to poll for recent edits (if minValueId is specified).
+   */
+  listVariableValues: {
+    parameters: {
+      query?: {
+        /** @description If specified, only return values with this ID or higher. Use this to poll for incremental updates to a document. Incremental results may include values of type 'Deleted' in cases where, e.g., elements have been removed from a list. */
+        minValueId?: number;
+        /** @description If specified, only return values with this ID or lower. Use this to retrieve saved document versions. */
+        maxValueId?: number;
+      };
+      path: {
+        documentId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListVariableValuesResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Update the values of the variables in a document.
+   * @description Make a list of changes to a document's variable values. The changes are applied in order and are treated as an atomic unit. That is, the changes will either all succeed or all fail; there won't be a case where some of the changes are applied and some aren't. See the payload descriptions for more details about the operations you can perform on values.
+   */
+  updateVariableValues: {
+    parameters: {
+      path: {
+        documentId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateVariableValuesRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Saves a version of a document. */
+  createSavedDocumentVersion: {
+    parameters: {
+      path: {
+        documentId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateSavedDocumentVersionRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateSavedDocumentVersionResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+      /** @description The document has no values to save. */
+      409: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets details of a specific saved version of a document. */
+  getSavedDocumentVersion: {
+    parameters: {
+      path: {
+        documentId: number;
+        versionId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetSavedDocumentVersionResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Updates a saved version of a document. */
+  updateSavedDocumentVersion: {
+    parameters: {
+      path: {
+        documentId: number;
+        versionId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateSavedDocumentVersionRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets a document. */
+  getDocument: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetDocumentResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Updates a document. */
+  updateDocument: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateDocumentRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets the history of a document. This includes both information about document edits and information about saved versions. */
+  getDocumentHistory: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetDocumentHistoryResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Save an image to a new variable value. */
+  uploadProjectImageValue: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody?: {
+      content: {
+        "application/json": {
+          caption?: string;
+          citation?: string;
+          /** Format: binary */
+          file: string;
+          /**
+           * Format: int32
+           * @description If the variable is a list, which list position to use for the value. If not specified, the server will use the next available list position if the variable is a list, or will replace any existing image if the variable is not a list.
+           */
+          listPosition?: number;
+          /**
+           * Format: int64
+           * @description If the variable is a table column, value ID of the row the value should belong to.
+           */
+          rowValueId?: number;
+          /** Format: int64 */
+          variableId: number;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UploadImageFileResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Gets the contents of an image variable value.
+   * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
+   */
+  getProjectImageValue: {
+    parameters: {
+      query?: {
+        /** @description Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
+        maxWidth?: string;
+        /** @description Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
+        maxHeight?: string;
+      };
+      path: {
+        projectId: number;
+        valueId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": string;
+          "image/jpeg": string;
+          "image/png": string;
+        };
+      };
+    };
+  };
+  /**
+   * List the owners of a project's variables.
+   * @description Only variables that actually have owners are returned.
+   */
+  listVariableOwners: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListVariableOwnersResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Update or remove the owner of a variable in a project. */
+  updateVariableOwner: {
+    parameters: {
+      path: {
+        projectId: number;
+        variableId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateVariableOwnerRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Get the values of the variables in a project.
+   * @description This may be used to fetch the full set of current values (the default behavior), the values from a saved version (if maxValueId is specified), or to poll for recent edits (if minValueId is specified).
+   */
+  listProjectVariableValues: {
+    parameters: {
+      query?: {
+        /** @description If specified, only return values with this ID or higher. Use this to poll for incremental updates to a document. Incremental results may include values of type 'Deleted' in cases where, e.g., elements have been removed from a list. */
+        minValueId?: number;
+        /** @description If specified, only return values with this ID or lower. Use this to retrieve saved document versions. */
+        maxValueId?: number;
+      };
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListVariableValuesResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Update the values of the variables in a project.
+   * @description Make a list of changes to a project's variable values. The changes are applied in order and are treated as an atomic unit. That is, the changes will either all succeed or all fail; there won't be a case where some of the changes are applied and some aren't. See the payload descriptions for more details about the operations you can perform on values.
+   */
+  updateProjectVariableValues: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateVariableValuesRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets a list of all the valid document templates. */
+  listDocumentTemplates: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListDocumentTemplatesResponsePayload"];
+        };
+      };
+    };
+  };
+  /** List the variables within a given manifest. */
+  listVariables: {
+    parameters: {
+      query: {
+        manifestId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListVariablesResponsePayload"];
         };
       };
     };

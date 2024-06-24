@@ -1,10 +1,10 @@
-import { Methodology } from 'src/types/documentProducer/Methodology';
+import { DocumentTemplate } from 'src/types/documentProducer/DocumentTemplate';
 import { memoize } from 'src/utils/memoize';
 
-export const getMethodologyName = memoize((methodologyId: number, methodologies: Methodology[] | undefined): string => {
-  const methodology = (methodologies || []).find((_methodology) => _methodology.id === methodologyId);
-  if (!methodology) {
+export const getDocumentTemplateName = memoize((documentTemplateId: number, documentTemplates: DocumentTemplate[] | undefined): string => {
+  const documentTemplate = (documentTemplates || []).find((_documentTemplate) => _documentTemplate.id === documentTemplateId);
+  if (!documentTemplate) {
     return '';
   }
-  return methodology.name;
+  return documentTemplate.name;
 });

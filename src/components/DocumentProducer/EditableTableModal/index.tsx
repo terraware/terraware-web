@@ -26,12 +26,12 @@ import { VariableTableCell, cellValue, getCellValues, newValueFromEntry } from '
 
 type EditableTableEditProps = {
   variable: TableVariableWithValues;
-  pddId: number;
+  documentId: number;
   onFinish: () => void;
   onCancel: () => void;
 };
 
-const EditableTableEdit = ({ variable, pddId, onCancel, onFinish }: EditableTableEditProps) => {
+const EditableTableEdit = ({ variable, documentId, onCancel, onFinish }: EditableTableEditProps) => {
   const columns = useMemo<TableColumn[]>(() => variable.columns, [variable]);
   const initialCellValues = useMemo<VariableTableCell[][]>(
     () =>
@@ -57,7 +57,7 @@ const EditableTableEdit = ({ variable, pddId, onCancel, onFinish }: EditableTabl
     }
     const update: UpdateVariableValuesRequestWithDocId = {
       operations: [],
-      docId: pddId,
+      docId: documentId,
     };
 
     initialCellValues.forEach((row) => {
@@ -135,7 +135,7 @@ const EditableTableEdit = ({ variable, pddId, onCancel, onFinish }: EditableTabl
     // dispatch
     const request = dispatch(requestUpdateVariableValues(update));
     setRequestId(request.requestId);
-  }, [initialCellValues, cellValues, columns.length, dispatch, pddId, variable.id]);
+  }, [initialCellValues, cellValues, columns.length, dispatch, documentId, variable.id]);
 
   const setCellValue = (rowNum: number, colNum: number, newValue: string | number) => {
     const newCellValues: VariableTableCell[][] = [];
