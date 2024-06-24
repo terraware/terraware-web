@@ -34,6 +34,7 @@ import {
   getLatestFeature,
   plantingZoneToFeature,
   toZoneFeature,
+  zoneNameGenerator,
 } from './utils';
 
 export type ZonesProps = {
@@ -219,7 +220,17 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
     const onSuccess = (cutZones: GeometryFeature[]) => {
       // if it is feasible to cut zones without making them too small, create new fixed zone boundaries and clear the cut geometry
       const idGenerator = IdGenerator(cutZones);
-      const zonesWithIds = cutZones.map((zone) => toZoneFeature(zone, idGenerator)) as GeometryFeature[];
+      const usedNames: Set<string> = new Set(
+        (zones?.features ?? []).map((f) => f.properties?.name).filter((name) => !!name)
+      );
+      const zonesWithIds = cutZones.map((zone) => {
+        if (!zone.properties?.name) {
+          const zoneName = zoneNameGenerator(usedNames);
+          zone.properties = { ...zone.properties, name: zoneName };
+          usedNames.add(zoneName);
+        }
+        return toZoneFeature(zone, idGenerator);
+      }) as GeometryFeature[];
 
       setZonesData({
         editableBoundary: emptyBoundary(),
