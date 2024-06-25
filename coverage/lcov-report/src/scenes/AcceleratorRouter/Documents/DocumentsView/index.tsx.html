@@ -197,7 +197,9 @@
 <a name='L132'></a><a href='#L132'>132</a>
 <a name='L133'></a><a href='#L133'>133</a>
 <a name='L134'></a><a href='#L134'>134</a>
-<a name='L135'></a><a href='#L135'>135</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -262,6 +264,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -342,22 +346,22 @@ import StatusBadge from 'src/components/DocumentProducer/StatusBadge';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { selectDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesSelector';
+import { requestListDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesThunks';
 import { selectDocuments } from 'src/redux/features/documentProducer/documents/documentsSelector';
 import { requestListDocuments } from 'src/redux/features/documentProducer/documents/documentsThunks';
-import { selectMethodologies } from 'src/redux/features/documentProducer/methodologies/methodologiesSelector';
-import { requestListMethodologies } from 'src/redux/features/documentProducer/methodologies/methodologiesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Document } from 'src/types/documentProducer/Document';
 import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
 import DocumentsEmptyPage from './DocumentsEmptyPage';
-import { getMethodologyName } from './helpers';
+import { getDocumentTemplateName } from './helpers';
 &nbsp;
 const tableColumns: TableColumnType[] = <span class="cstat-no" title="statement not covered" >[</span>
   { key: 'name', name: strings.NAME, type: 'string' },
   { key: 'organizationName', name: strings.ORGANIZATION, type: 'string' },
-  { key: 'methodologyId', name: strings.METHODOLOGY, type: 'string' },
+  { key: 'documentTemplateId', name: strings.DOCUMENT_TEMPLATE, type: 'string' },
   { key: 'versions', name: strings.VERSIONS, type: 'number' },
   { key: 'createdTime', name: strings.CREATED, type: 'date' },
   { key: 'modifiedTime', name: strings.LAST_EDITED, type: 'date' },
@@ -375,7 +379,7 @@ export default function <span class="fstat-no" title="function not covered" >Doc
   const [documents, setDocuments] = <span class="cstat-no" title="statement not covered" >useState&lt;Document[]&gt;([]);</span>
   const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const documentsResponse = <span class="cstat-no" title="statement not covered" >useAppSelector(selectDocuments(requestId));</span>
-  const { methodologies, error: methodologiesError } = <span class="cstat-no" title="statement not covered" >useAppSelector(selectMethodologies);</span>
+  const { documentTemplates, error: documentTemplatesError } = <span class="cstat-no" title="statement not covered" >useAppSelector(selectDocumentTemplates);</span>
 &nbsp;
   const tableCellRenderer = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (p</span>rops: RendererProps&lt;Document&gt;): JSX.Element =&gt; {
@@ -394,22 +398,24 @@ export default function <span class="fstat-no" title="function not covered" >Doc
               }
             /&gt;
           );
-        case 'methodologyId':
-<span class="cstat-no" title="statement not covered" >          return &lt;CellRenderer {...props} value={getMethodologyName(props.row.methodologyId, methodologies)} /&gt;;</span>
+        case 'documentTemplateId':
+<span class="cstat-no" title="statement not covered" >          return (</span>
+            &lt;CellRenderer {...props} value={getDocumentTemplateName(props.row.documentTemplateId, documentTemplates)} /&gt;
+          );
         case 'status':
 <span class="cstat-no" title="statement not covered" >          return &lt;CellRenderer {...props} value={&lt;StatusBadge status={props.row.status} /&gt;} /&gt;;</span>
         default:
 <span class="cstat-no" title="statement not covered" >          return &lt;CellRenderer {...props} /&gt;;</span>
       }
     },
-    [methodologies]
+    [documentTemplates]
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const request = <span class="cstat-no" title="statement not covered" >dispatch(requestListDocuments());</span>
 <span class="cstat-no" title="statement not covered" >    setRequestId(request.requestId);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    dispatch(requestListMethodologies());</span>
+<span class="cstat-no" title="statement not covered" >    dispatch(requestListDocumentTemplates());</span>
   }, [dispatch]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -425,10 +431,10 @@ export default function <span class="fstat-no" title="function not covered" >Doc
   }, [snackbar, documentsResponse]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (methodologiesError) {</span>
+<span class="cstat-no" title="statement not covered" >    if (documentTemplatesError) {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError(strings.GENERIC_ERROR);</span>
     }
-  }, [snackbar, methodologiesError]);
+  }, [snackbar, documentTemplatesError]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (documents) {</span>
@@ -472,7 +478,7 @@ export default function <span class="fstat-no" title="function not covered" >Doc
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-25T19:12:10.117Z
+                at 2024-06-25T19:31:40.111Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

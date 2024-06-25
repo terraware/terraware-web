@@ -414,13 +414,13 @@ import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
+import { selectDocumentTemplate } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesSelector';
+import { requestListDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesThunks';
 import { selectGetDocument } from 'src/redux/features/documentProducer/documents/documentsSelector';
 import {
   requestGetDocument,
   requestUpgradeManifest,
 } from 'src/redux/features/documentProducer/documents/documentsThunks';
-import { selectMethodology } from 'src/redux/features/documentProducer/methodologies/methodologiesSelector';
-import { requestListMethodologies } from 'src/redux/features/documentProducer/methodologies/methodologiesThunks';
 import { useSelectorProcessor } from 'src/redux/hooks/useSelectorProcessor';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -442,46 +442,46 @@ export default function <span class="fstat-no" title="function not covered" >Doc
   const documentId = <span class="cstat-no" title="statement not covered" >Number(documentIdParam);</span>
 &nbsp;
   const [document, setDocument] = <span class="cstat-no" title="statement not covered" >useState&lt;Document&gt;();</span>
-  const methodology = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectMethodology(state, document?.methodologyId ?? -1))</span>;</span>
+  const documentTemplate = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectDocumentTemplate(state, document?.documentTemplateId ?? -1))</span>;</span>
 &nbsp;
   const [showUpgradeModal, setShowUpgradeModal] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
 &nbsp;
-  const latestManifestId = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >methodology?.variableManifestId ?? -1,</span> [methodology]);</span>
+  const latestManifestId = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >documentTemplate?.variableManifestId ?? -1,</span> [documentTemplate]);</span>
 &nbsp;
-  const pddSelect = <span class="cstat-no" title="statement not covered" >useAppSelector(selectGetDocument(documentId));</span>
+  const documentSelect = <span class="cstat-no" title="statement not covered" >useAppSelector(selectGetDocument(documentId));</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  useSelectorProcessor(pddSelect, setDocument, {</span>
+<span class="cstat-no" title="statement not covered" >  useSelectorProcessor(documentSelect, setDocument, {</span>
     handleError: true,
     onError: goToDocuments,
   });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    dispatch(requestListMethodologies);</span>
+<span class="cstat-no" title="statement not covered" >    dispatch(requestListDocumentTemplates);</span>
   }, [dispatch]);
 &nbsp;
-  const fetchPdd = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+  const fetchDocument = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    dispatch(requestGetDocument(documentId));</span>
   }, [dispatch, documentId]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    fetchPdd();</span>
-  }, [fetchPdd]);
+<span class="cstat-no" title="statement not covered" >    fetchDocument();</span>
+  }, [fetchDocument]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (document?.variableManifestId &amp;&amp; document.variableManifestId &lt; latestManifestId) {</span>
 <span class="cstat-no" title="statement not covered" >      setShowUpgradeModal(true);</span>
     }
-  }, [document, methodology, latestManifestId]);
+  }, [document, documentTemplate, latestManifestId]);
 &nbsp;
   const onUpgradeManifest = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (documentId &amp;&amp; latestManifestId) {</span>
 <span class="cstat-no" title="statement not covered" >      await dispatch(</span>
         requestUpgradeManifest({ id: `${documentId}`, payload: { variableManifestId: latestManifestId } })
       );
-<span class="cstat-no" title="statement not covered" >      fetchPdd();</span>
+<span class="cstat-no" title="statement not covered" >      fetchDocument();</span>
     }
 <span class="cstat-no" title="statement not covered" >    setShowUpgradeModal(false);</span>
-  }, [dispatch, documentId, latestManifestId, fetchPdd]);
+  }, [dispatch, documentId, latestManifestId, fetchDocument]);
 &nbsp;
   const onDismissUpgradeManifest = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setShowUpgradeModal(false);</span>
@@ -559,7 +559,7 @@ export default function <span class="fstat-no" title="function not covered" >Doc
         alignItems='flex-start'
       &gt;
         &lt;DocumentMetadata document={document} /&gt;
-        &lt;DocumentActions document={document} onPddUpdate={fetchPdd} /&gt;
+        &lt;DocumentActions document={document} onDocumentUpdate={fetchDocument} /&gt;
       &lt;/Box&gt;
       &lt;Box marginTop={3} display='flex' flexDirection='row' flexGrow={1}&gt;
         &lt;Box display='flex' flexGrow={1}&gt;
@@ -577,7 +577,7 @@ export default function <span class="fstat-no" title="function not covered" >Doc
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-25T19:12:10.117Z
+                at 2024-06-25T19:31:40.111Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

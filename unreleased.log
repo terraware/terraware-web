@@ -1,3 +1,4 @@
+27c00653ec Sync up FE with BE (#2779)
 3e3602e9d9 SW-5533: Can't add Species to Project (from Species page) even when Deliverable is active (#2780)
 944f990f64 SW-5567: Species multi select fields are missing hover/active styling (#2777)
 803d0f910e SW-5509 Move "Customize table columns" menu item to new "Settings" gear icon (#2771)

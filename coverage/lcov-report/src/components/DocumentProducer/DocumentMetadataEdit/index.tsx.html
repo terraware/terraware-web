@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/31</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
@@ -39,7 +39,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
@@ -214,22 +214,7 @@
 <a name='L149'></a><a href='#L149'>149</a>
 <a name='L150'></a><a href='#L150'>150</a>
 <a name='L151'></a><a href='#L151'>151</a>
-<a name='L152'></a><a href='#L152'>152</a>
-<a name='L153'></a><a href='#L153'>153</a>
-<a name='L154'></a><a href='#L154'>154</a>
-<a name='L155'></a><a href='#L155'>155</a>
-<a name='L156'></a><a href='#L156'>156</a>
-<a name='L157'></a><a href='#L157'>157</a>
-<a name='L158'></a><a href='#L158'>158</a>
-<a name='L159'></a><a href='#L159'>159</a>
-<a name='L160'></a><a href='#L160'>160</a>
-<a name='L161'></a><a href='#L161'>161</a>
-<a name='L162'></a><a href='#L162'>162</a>
-<a name='L163'></a><a href='#L163'>163</a>
-<a name='L164'></a><a href='#L164'>164</a>
-<a name='L165'></a><a href='#L165'>165</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L152'></a><a href='#L152'>152</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -266,8 +251,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -279,6 +262,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -321,18 +307,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -398,64 +372,63 @@ import { styled } from '@mui/material/styles';
 import { Dropdown, Textfield } from '@terraware/web-components';
 import isString from 'lodash/isString';
 &nbsp;
-import { selectMethodologies } from 'src/redux/features/documentProducer/methodologies/methodologiesSelector';
-import { requestListMethodologies } from 'src/redux/features/documentProducer/methodologies/methodologiesThunks';
+import { selectDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesSelector';
+import { requestListDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { User } from 'src/types/User';
 import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
-import { getDocumentOwnerOptions, getMethodologyName, getMethodologyOptions } from './helpers';
+import { getDocumentOwnerOptions, getDocumentTemplateName, getDocumentTemplateOptions } from './helpers';
 &nbsp;
 export type DocumentMetadataEditProps = {
-  associatedOrganization?: string;
-  setAssociatedOrganization: (organization: string) =&gt; void;
   documentName?: string;
   setDocumentName: (name: string) =&gt; void;
   documentOwner?: string;
   setDocumentOwner: (userId: string) =&gt; void;
-  methodologyId?: string;
-  setMethodologyId?: (methodlogyId: string) =&gt; void;
+  documentTemplateId?: string;
+  setDocumentTemplateId?: (methodlogyId: string) =&gt; void;
   isEdit?: boolean;
   formValid?: boolean;
 };
 &nbsp;
 const DocumentMetadataEdit = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span></span>
-  associatedOrganization,
-  setAssociatedOrganization,
   documentName,
   setDocumentName,
   documentOwner,
   setDocumentOwner,
-  methodologyId,
-  setMethodologyId,
+  documentTemplateId,
+  setDocumentTemplateId,
   isEdit,
   formValid,
 }: DocumentMetadataEditProps): JSX.Element =&gt; {
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
-  const { methodologies, error: getMethodologiesError } = <span class="cstat-no" title="statement not covered" >useAppSelector(selectMethodologies);</span>
+  const { documentTemplates, error: getDocumentTemplatesError } = <span class="cstat-no" title="statement not covered" >useAppSelector(selectDocumentTemplates);</span>
 &nbsp;
   // TODO we don't have redux for this, should it only be TF accelerator users? Or all admins?
   // const { data: users, error: getUsersError } = useAppSelector(selectUsers);
   const users: User[] = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >[],</span> []);</span>
   const getUsersError = <span class="cstat-no" title="statement not covered" >null;</span>
 &nbsp;
-  const methodologyOptions = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >getMethodologyOptions(methodologies || []),</span> [methodologies]);</span>
+  const documentTemplateOptions = <span class="cstat-no" title="statement not covered" >useMemo(</span>
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >getDocumentTemplateOptions(documentTemplates || []),</span>
+    [documentTemplates]
+  );
   const documentOwnerOptions = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >getDocumentOwnerOptions(users || []),</span> [users]);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    dispatch(requestListMethodologies());</span>
+<span class="cstat-no" title="statement not covered" >    dispatch(requestListDocumentTemplates());</span>
     // TODO we don't have redux for this, should it only be TF accelerator users? Or all admins?
     // dispatch(requestListUsers());
   }, [dispatch]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (getMethodologiesError) {</span>
+<span class="cstat-no" title="statement not covered" >    if (getDocumentTemplatesError) {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError(strings.GENERIC_ERROR);</span>
     }
-  }, [snackbar, getMethodologiesError]);
+  }, [snackbar, getDocumentTemplatesError]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (getUsersError) {</span>
@@ -487,37 +460,25 @@ const DocumentMetadataEdit = <span class="cstat-no" title="statement not covered
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;&gt;
       &lt;FormField&gt;
-        &lt;Textfield
-          id='associated-organization'
-          label={strings.DOCUMENTS_ADD_FORM_ASSOC_ORG}
-          type='text'
-          value={associatedOrganization}
-          errorText={getErrorText(associatedOrganization)}
-          onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: unknown) =&gt; <span class="cstat-no" title="statement not covered" >handleTextFieldChange(value, setAssociatedOrganization)}</span>
-          required
-        /&gt;
-      &lt;/FormField&gt;
-&nbsp;
-      &lt;FormField&gt;
         {isEdit ? (
           &lt;Textfield
-            id='methodology'
-            label={strings.DOCUMENTS_ADD_FORM_METHODOLOGY}
+            id='documentTemplate'
+            label={strings.DOCUMENTS_ADD_FORM_DOCUMENT_TEMPLATE}
             type='text'
-            value={getMethodologyName(methodologies ?? [], methodologyId)}
+            value={getDocumentTemplateName(documentTemplates ?? [], documentTemplateId)}
             display={true}
             required
           /&gt;
         ) : (
           &lt;Dropdown
-            id='methodology'
+            id='documentTemplate'
             placeholder={strings.SELECT}
-            selectedValue={methodologyId}
-            options={methodologyOptions}
-            onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: string) =&gt; <span class="cstat-no" title="statement not covered" >setMethodologyId &amp;&amp; setMethodologyId(value)}</span>
+            selectedValue={documentTemplateId}
+            options={documentTemplateOptions}
+            onChange={<span class="fstat-no" title="function not covered" >(v</span>alue: string) =&gt; <span class="cstat-no" title="statement not covered" >setDocumentTemplateId &amp;&amp; setDocumentTemplateId(value)}</span>
             hideClearIcon={true}
-            label={strings.DOCUMENTS_ADD_FORM_METHODOLOGY}
-            errorText={getErrorText(methodologyId)}
+            label={strings.DOCUMENTS_ADD_FORM_DOCUMENT_TEMPLATE}
+            errorText={getErrorText(documentTemplateId)}
             autocomplete
             required
           /&gt;
@@ -562,7 +523,7 @@ export default DocumentMetadataEdit;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-25T19:12:10.117Z
+                at 2024-06-25T19:31:40.111Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

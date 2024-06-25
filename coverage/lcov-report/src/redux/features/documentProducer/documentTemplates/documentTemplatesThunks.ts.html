@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/redux/features/documentProducer/methodologies/methodologiesSelector.ts</title>
+    <title>Code coverage report for src/redux/features/documentProducer/documentTemplates/documentTemplatesThunks.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../../../prettify.css" />
     <link rel="stylesheet" href="../../../../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../../index.html">All files</a> / <a href="index.html">src/redux/features/documentProducer/methodologies</a> methodologiesSelector.ts</h1>
+        <h1><a href="../../../../../index.html">All files</a> / <a href="index.html">src/redux/features/documentProducer/documentTemplates</a> documentTemplatesThunks.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -84,7 +84,16 @@
 <a name='L19'></a><a href='#L19'>19</a>
 <a name='L20'></a><a href='#L20'>20</a>
 <a name='L21'></a><a href='#L21'>21</a>
-<a name='L22'></a><a href='#L22'>22</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -98,34 +107,52 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/* eslint-disable @typescript-eslint/no-unused-vars */
-import createCachedSelector from 're-reselect';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Dispatch } from 'redux';
 &nbsp;
 import { RootState } from 'src/redux/rootReducer';
-import { Methodology } from 'src/types/documentProducer/Methodology';
+import DocumentTemplateService from 'src/services/documentProducer/DocumentTemplateService';
 &nbsp;
-import { MethodologiesData } from './methodologiesSlice';
+import { selectDocumentTemplates } from './documentTemplatesSelector';
+import { setDocumentTemplates } from './documentTemplatesSlice';
 &nbsp;
-export const selectMethodologies = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState): MethodologiesData =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  state.documentProducerMethodologies.listMethodologies;</span>
+const hasFetchedDocumentTemplates = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tate: RootState): boolean =&gt;</span>
+<span class="cstat-no" title="statement not covered" >  (selectDocumentTemplates(state).documentTemplates || []).length &gt; 0;</span>
 &nbsp;
-export const selectMethodology = <span class="cstat-no" title="statement not covered" >createCachedSelector(</span>
-<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, methodologyId: number) =&gt; <span class="cstat-no" title="statement not covered" >state.documentProducerMethodologies.listMethodologies as any,</span>
-<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, methodologyId: number) =&gt; <span class="cstat-no" title="statement not covered" >methodologyId,</span>
-<span class="fstat-no" title="function not covered" >  (r</span>esponse, methodologyId) =&gt; {
-<span class="cstat-no" title="statement not covered" >    if (response &amp;&amp; response.methodologies) {</span>
-<span class="cstat-no" title="statement not covered" >      return response.methodologies.find(<span class="fstat-no" title="function not covered" >(m</span>: Methodology) =&gt; <span class="cstat-no" title="statement not covered" >m.id === methodologyId)</span>;</span>
+export const requestListDocumentTemplates = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  return <span class="fstat-no" title="function not covered" >as</span>ync (dispatch: Dispatch, _getState: () =&gt; RootState): Promise&lt;void&gt; =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (hasFetchedDocumentTemplates(_getState())) {</span>
+<span class="cstat-no" title="statement not covered" >      return;</span>
     }
-<span class="cstat-no" title="statement not covered" >    return null;</span>
-  }
-)(<span class="fstat-no" title="function not covered" >(s</span>tate: RootState, methodologyId: number) =&gt; <span class="cstat-no" title="statement not covered" >methodologyId)</span>;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    try {</span>
+      const response = <span class="cstat-no" title="statement not covered" >await DocumentTemplateService.getDocumentTemplates();</span>
+&nbsp;
+      const documentTemplates = <span class="cstat-no" title="statement not covered" >response.data?.documentTemplates;</span>
+      const error = <span class="cstat-no" title="statement not covered" >response.error;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      dispatch(setDocumentTemplates({ documentTemplates, error }));</span>
+    } catch (e) {
+      // tslint:disable-next-line: no-console
+<span class="cstat-no" title="statement not covered" >      console.error('Error dispatching list documentTemplates', e);</span>
+    }
+  };
+};
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -133,7 +160,7 @@ export const selectMethodology = <span class="cstat-no" title="statement not cov
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-25T19:12:10.117Z
+                at 2024-06-25T19:31:40.111Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

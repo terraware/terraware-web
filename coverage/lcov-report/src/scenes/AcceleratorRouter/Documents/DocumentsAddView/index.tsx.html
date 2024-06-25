@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/27</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
@@ -144,9 +144,7 @@
 <a name='L79'></a><a href='#L79'>79</a>
 <a name='L80'></a><a href='#L80'>80</a>
 <a name='L81'></a><a href='#L81'>81</a>
-<a name='L82'></a><a href='#L82'>82</a>
-<a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L82'></a><a href='#L82'>82</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -169,7 +167,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -177,6 +174,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -212,8 +210,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -249,21 +245,21 @@ const DocumentsAddView = <span class="cstat-no" title="statement not covered" ><
   const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const createDocSelector = <span class="cstat-no" title="statement not covered" >useAppSelector(selectDocumentRequest(requestId));</span>
 &nbsp;
-  const [associatedOrganization, setAssociatedOrganization] = <span class="cstat-no" title="statement not covered" >useState('');</span>
-  const [methodologyId, setMethodologyId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
+  const [documentTemplateId, setDocumentTemplateId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const [documentName, setDocumentName] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const [documentOwner, setDocumentOwner] = <span class="cstat-no" title="statement not covered" >useState('');</span>
 &nbsp;
   const [formValid, setFormValid] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;();</span>
 &nbsp;
-  const isFormValid = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >associatedOrganization &amp;&amp; methodologyId &amp;&amp; documentName &amp;&amp; documentOwner;</span></span>
+  const isFormValid = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >documentTemplateId &amp;&amp; documentName &amp;&amp; documentOwner;</span></span>
 &nbsp;
   const saveNewDoc = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
     const doc: CreateDocumentPayload = <span class="cstat-no" title="statement not covered" >{</span>
-      organizationName: associatedOrganization,
-      methodologyId: parseInt(methodologyId, 10),
+      documentTemplateId: parseInt(documentTemplateId, 10),
       name: documentName,
       ownedBy: parseInt(documentOwner, 10),
+      // TODO - documents are related to projects now, so this will need to be plumbed up
+      projectId: -1,
     };
     const request = <span class="cstat-no" title="statement not covered" >dispatch(requestCreateDocument(doc));</span>
 <span class="cstat-no" title="statement not covered" >    setRequestId(request.requestId);</span>
@@ -295,14 +291,12 @@ const DocumentsAddView = <span class="cstat-no" title="statement not covered" ><
       &gt;
         &lt;PageContent styles={{ width: '568px', margin: 'auto' }}&gt;
           &lt;DocumentMetadataEdit
-            associatedOrganization={associatedOrganization}
-            setAssociatedOrganization={<span class="fstat-no" title="function not covered" >(v</span>alue: string) =&gt; <span class="cstat-no" title="statement not covered" >setAssociatedOrganization(value)}</span>
             documentName={documentName}
             setDocumentName={<span class="fstat-no" title="function not covered" >(v</span>alue: string) =&gt; <span class="cstat-no" title="statement not covered" >setDocumentName(value)}</span>
             documentOwner={documentOwner}
             setDocumentOwner={<span class="fstat-no" title="function not covered" >(v</span>alue: string) =&gt; <span class="cstat-no" title="statement not covered" >setDocumentOwner(value)}</span>
-            methodologyId={methodologyId}
-            setMethodologyId={<span class="fstat-no" title="function not covered" >(v</span>alue: string) =&gt; <span class="cstat-no" title="statement not covered" >setMethodologyId(value)}</span>
+            documentTemplateId={documentTemplateId}
+            setDocumentTemplateId={<span class="fstat-no" title="function not covered" >(v</span>alue: string) =&gt; <span class="cstat-no" title="statement not covered" >setDocumentTemplateId(value)}</span>
             formValid={formValid}
           /&gt;
         &lt;/PageContent&gt;
@@ -319,7 +313,7 @@ export default DocumentsAddView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-25T19:12:10.117Z
+                at 2024-06-25T19:31:40.111Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
@@ -144,10 +144,7 @@
 <a name='L79'></a><a href='#L79'>79</a>
 <a name='L80'></a><a href='#L80'>80</a>
 <a name='L81'></a><a href='#L81'>81</a>
-<a name='L82'></a><a href='#L82'>82</a>
-<a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a>
-<a name='L85'></a><a href='#L85'>85</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L82'></a><a href='#L82'>82</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -164,7 +161,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -216,8 +212,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -249,7 +243,6 @@ export type UpdateMetadataProps = {
 };
 &nbsp;
 const UpdateMetadata = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> doc, onFinish }: UpdateMetadataProps): JSX.Element =&gt; {</span>
-  const [associatedOrganization, setAssociatedOrganization] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;(doc.organizationName);</span>
   const [documentName, setDocumentName] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;(doc.name);</span>
   const [documentOwner, setDocumentOwner] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;(doc.ownedBy.toString());</span>
   const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
@@ -258,7 +251,7 @@ const UpdateMetadata = <span class="cstat-no" title="statement not covered" ><sp
 &nbsp;
   const selector = <span class="cstat-no" title="statement not covered" >useAppSelector(selectDocumentRequest(requestId));</span>
 &nbsp;
-  const isFormValid = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >associatedOrganization &amp;&amp; documentName &amp;&amp; documentOwner;</span></span>
+  const isFormValid = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >documentName &amp;&amp; documentOwner;</span></span>
 &nbsp;
   const save = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!isFormValid()) {</span>
@@ -271,7 +264,7 @@ const UpdateMetadata = <span class="cstat-no" title="statement not covered" ><sp
     const request = <span class="cstat-no" title="statement not covered" >dispatch(</span>
       requestUpdateDocument({
         id: doc.id,
-        payload: { organizationName: associatedOrganization, name: documentName, ownedBy: parseInt(documentOwner, 10) },
+        payload: { name: documentName, ownedBy: parseInt(documentOwner, 10) },
       })
     );
 <span class="cstat-no" title="statement not covered" >    setRequestId(request.requestId);</span>
@@ -300,13 +293,11 @@ const UpdateMetadata = <span class="cstat-no" title="statement not covered" ><sp
       ]}
     &gt;
       &lt;DocumentMetadataEdit
-        associatedOrganization={associatedOrganization}
-        setAssociatedOrganization={<span class="fstat-no" title="function not covered" >(v</span>alue: string) =&gt; <span class="cstat-no" title="statement not covered" >setAssociatedOrganization(value)}</span>
         documentName={documentName}
         setDocumentName={<span class="fstat-no" title="function not covered" >(v</span>alue: string) =&gt; <span class="cstat-no" title="statement not covered" >setDocumentName(value)}</span>
         documentOwner={documentOwner}
         setDocumentOwner={<span class="fstat-no" title="function not covered" >(v</span>alue: string) =&gt; <span class="cstat-no" title="statement not covered" >setDocumentOwner(value)}</span>
-        methodologyId={doc.methodologyId.toString()}
+        documentTemplateId={doc.documentTemplateId.toString()}
         formValid={formValid}
         isEdit={true}
       /&gt;
@@ -322,7 +313,7 @@ export default UpdateMetadata;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-25T19:12:10.117Z
+                at 2024-06-25T19:31:40.111Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
