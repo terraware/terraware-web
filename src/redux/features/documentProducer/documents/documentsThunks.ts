@@ -12,8 +12,8 @@ import {
 
 export const requestGetDocument = createAsyncThunk('getDocument', async (id: number, { rejectWithValue }) => {
   const response = await DocumentService.getDocument(id);
-  if (response.requestSucceeded && response.data?.pdd) {
-    return response.data.pdd;
+  if (response.requestSucceeded && response.data?.document) {
+    return response.data.document;
   }
 
   return rejectWithValue(response.error || strings.GENERIC_ERROR);
@@ -21,8 +21,8 @@ export const requestGetDocument = createAsyncThunk('getDocument', async (id: num
 
 export const requestListDocuments = createAsyncThunk('listDocuments', async (_, { rejectWithValue }) => {
   const response = await DocumentService.getDocuments();
-  if (response.requestSucceeded && response.data?.pdds) {
-    return response.data.pdds;
+  if (response.requestSucceeded && response.data?.documents) {
+    return response.data.documents;
   }
 
   return rejectWithValue(response.error || strings.GENERIC_ERROR);
@@ -30,10 +30,10 @@ export const requestListDocuments = createAsyncThunk('listDocuments', async (_, 
 
 export const requestCreateDocument = createAsyncThunk(
   'createDocument',
-  async (pdd: CreateDocumentPayload, { rejectWithValue }) => {
-    const response = await DocumentService.createDocument(pdd);
-    if (response.requestSucceeded && response.data?.pdd) {
-      return response.data.pdd;
+  async (document: CreateDocumentPayload, { rejectWithValue }) => {
+    const response = await DocumentService.createDocument(document);
+    if (response.requestSucceeded && response.data?.document) {
+      return response.data.document;
     }
 
     return rejectWithValue(response.error || strings.GENERIC_ERROR);

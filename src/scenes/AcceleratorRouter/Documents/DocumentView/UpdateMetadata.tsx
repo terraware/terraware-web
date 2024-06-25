@@ -16,7 +16,6 @@ export type UpdateMetadataProps = {
 };
 
 const UpdateMetadata = ({ doc, onFinish }: UpdateMetadataProps): JSX.Element => {
-  const [associatedOrganization, setAssociatedOrganization] = useState<string>(doc.organizationName);
   const [documentName, setDocumentName] = useState<string>(doc.name);
   const [documentOwner, setDocumentOwner] = useState<string>(doc.ownedBy.toString());
   const [requestId, setRequestId] = useState<string>('');
@@ -25,7 +24,7 @@ const UpdateMetadata = ({ doc, onFinish }: UpdateMetadataProps): JSX.Element => 
 
   const selector = useAppSelector(selectDocumentRequest(requestId));
 
-  const isFormValid = () => associatedOrganization && documentName && documentOwner;
+  const isFormValid = () => documentName && documentOwner;
 
   const save = () => {
     if (!isFormValid()) {
@@ -38,7 +37,7 @@ const UpdateMetadata = ({ doc, onFinish }: UpdateMetadataProps): JSX.Element => 
     const request = dispatch(
       requestUpdateDocument({
         id: doc.id,
-        payload: { organizationName: associatedOrganization, name: documentName, ownedBy: parseInt(documentOwner, 10) },
+        payload: { name: documentName, ownedBy: parseInt(documentOwner, 10) },
       })
     );
     setRequestId(request.requestId);
@@ -67,13 +66,11 @@ const UpdateMetadata = ({ doc, onFinish }: UpdateMetadataProps): JSX.Element => 
       ]}
     >
       <DocumentMetadataEdit
-        associatedOrganization={associatedOrganization}
-        setAssociatedOrganization={(value: string) => setAssociatedOrganization(value)}
         documentName={documentName}
         setDocumentName={(value: string) => setDocumentName(value)}
         documentOwner={documentOwner}
         setDocumentOwner={(value: string) => setDocumentOwner(value)}
-        methodologyId={doc.methodologyId.toString()}
+        documentTemplateId={doc.documentTemplateId.toString()}
         formValid={formValid}
         isEdit={true}
       />

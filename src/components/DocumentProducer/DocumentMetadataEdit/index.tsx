@@ -5,64 +5,63 @@ import { styled } from '@mui/material/styles';
 import { Dropdown, Textfield } from '@terraware/web-components';
 import isString from 'lodash/isString';
 
-import { selectMethodologies } from 'src/redux/features/documentProducer/methodologies/methodologiesSelector';
-import { requestListMethodologies } from 'src/redux/features/documentProducer/methodologies/methodologiesThunks';
+import { selectDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesSelector';
+import { requestListDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { User } from 'src/types/User';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import { getDocumentOwnerOptions, getMethodologyName, getMethodologyOptions } from './helpers';
+import { getDocumentOwnerOptions, getDocumentTemplateName, getDocumentTemplateOptions } from './helpers';
 
 export type DocumentMetadataEditProps = {
-  associatedOrganization?: string;
-  setAssociatedOrganization: (organization: string) => void;
   documentName?: string;
   setDocumentName: (name: string) => void;
   documentOwner?: string;
   setDocumentOwner: (userId: string) => void;
-  methodologyId?: string;
-  setMethodologyId?: (methodlogyId: string) => void;
+  documentTemplateId?: string;
+  setDocumentTemplateId?: (methodlogyId: string) => void;
   isEdit?: boolean;
   formValid?: boolean;
 };
 
 const DocumentMetadataEdit = ({
-  associatedOrganization,
-  setAssociatedOrganization,
   documentName,
   setDocumentName,
   documentOwner,
   setDocumentOwner,
-  methodologyId,
-  setMethodologyId,
+  documentTemplateId,
+  setDocumentTemplateId,
   isEdit,
   formValid,
 }: DocumentMetadataEditProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const snackbar = useSnackbar();
-  const { methodologies, error: getMethodologiesError } = useAppSelector(selectMethodologies);
+  const { documentTemplates, error: getDocumentTemplatesError } = useAppSelector(selectDocumentTemplates);
 
   // TODO we don't have redux for this, should it only be TF accelerator users? Or all admins?
   // const { data: users, error: getUsersError } = useAppSelector(selectUsers);
   const users: User[] = useMemo(() => [], []);
   const getUsersError = null;
 
-  const methodologyOptions = useMemo(() => getMethodologyOptions(methodologies || []), [methodologies]);
+  const documentTemplateOptions = useMemo(
+    () => getDocumentTemplateOptions(documentTemplates || []),
+    [documentTemplates]
+  );
   const documentOwnerOptions = useMemo(() => getDocumentOwnerOptions(users || []), [users]);
 
   useEffect(() => {
-    dispatch(requestListMethodologies());
+    dispatch(requestListDocumentTemplates());
     // TODO we don't have redux for this, should it only be TF accelerator users? Or all admins?
     // dispatch(requestListUsers());
   }, [dispatch]);
 
   useEffect(() => {
-    if (getMethodologiesError) {
+    if (getDocumentTemplatesError) {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [snackbar, getMethodologiesError]);
+  }, [snackbar, getDocumentTemplatesError]);
 
   useEffect(() => {
     if (getUsersError) {
@@ -94,37 +93,25 @@ const DocumentMetadataEdit = ({
   return (
     <>
       <FormField>
-        <Textfield
-          id='associated-organization'
-          label={strings.DOCUMENTS_ADD_FORM_ASSOC_ORG}
-          type='text'
-          value={associatedOrganization}
-          errorText={getErrorText(associatedOrganization)}
-          onChange={(value: unknown) => handleTextFieldChange(value, setAssociatedOrganization)}
-          required
-        />
-      </FormField>
-
-      <FormField>
         {isEdit ? (
           <Textfield
-            id='methodology'
-            label={strings.DOCUMENTS_ADD_FORM_METHODOLOGY}
+            id='documentTemplate'
+            label={strings.DOCUMENTS_ADD_FORM_DOCUMENT_TEMPLATE}
             type='text'
-            value={getMethodologyName(methodologies ?? [], methodologyId)}
+            value={getDocumentTemplateName(documentTemplates ?? [], documentTemplateId)}
             display={true}
             required
           />
         ) : (
           <Dropdown
-            id='methodology'
+            id='documentTemplate'
             placeholder={strings.SELECT}
-            selectedValue={methodologyId}
-            options={methodologyOptions}
-            onChange={(value: string) => setMethodologyId && setMethodologyId(value)}
+            selectedValue={documentTemplateId}
+            options={documentTemplateOptions}
+            onChange={(value: string) => setDocumentTemplateId && setDocumentTemplateId(value)}
             hideClearIcon={true}
-            label={strings.DOCUMENTS_ADD_FORM_METHODOLOGY}
-            errorText={getErrorText(methodologyId)}
+            label={strings.DOCUMENTS_ADD_FORM_DOCUMENT_TEMPLATE}
+            errorText={getErrorText(documentTemplateId)}
             autocomplete
             required
           />

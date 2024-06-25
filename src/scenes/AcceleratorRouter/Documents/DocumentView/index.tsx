@@ -11,13 +11,13 @@ import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
+import { selectDocumentTemplate } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesSelector';
+import { requestListDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesThunks';
 import { selectGetDocument } from 'src/redux/features/documentProducer/documents/documentsSelector';
 import {
   requestGetDocument,
   requestUpgradeManifest,
 } from 'src/redux/features/documentProducer/documents/documentsThunks';
-import { selectMethodology } from 'src/redux/features/documentProducer/methodologies/methodologiesSelector';
-import { requestListMethodologies } from 'src/redux/features/documentProducer/methodologies/methodologiesThunks';
 import { useSelectorProcessor } from 'src/redux/hooks/useSelectorProcessor';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -39,46 +39,46 @@ export default function DocumentView(): JSX.Element {
   const documentId = Number(documentIdParam);
 
   const [document, setDocument] = useState<Document>();
-  const methodology = useAppSelector((state) => selectMethodology(state, document?.methodologyId ?? -1));
+  const documentTemplate = useAppSelector((state) => selectDocumentTemplate(state, document?.documentTemplateId ?? -1));
 
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
-  const latestManifestId = useMemo(() => methodology?.variableManifestId ?? -1, [methodology]);
+  const latestManifestId = useMemo(() => documentTemplate?.variableManifestId ?? -1, [documentTemplate]);
 
-  const pddSelect = useAppSelector(selectGetDocument(documentId));
+  const documentSelect = useAppSelector(selectGetDocument(documentId));
 
-  useSelectorProcessor(pddSelect, setDocument, {
+  useSelectorProcessor(documentSelect, setDocument, {
     handleError: true,
     onError: goToDocuments,
   });
 
   useEffect(() => {
-    dispatch(requestListMethodologies);
+    dispatch(requestListDocumentTemplates);
   }, [dispatch]);
 
-  const fetchPdd = useCallback(() => {
+  const fetchDocument = useCallback(() => {
     dispatch(requestGetDocument(documentId));
   }, [dispatch, documentId]);
 
   useEffect(() => {
-    fetchPdd();
-  }, [fetchPdd]);
+    fetchDocument();
+  }, [fetchDocument]);
 
   useEffect(() => {
     if (document?.variableManifestId && document.variableManifestId < latestManifestId) {
       setShowUpgradeModal(true);
     }
-  }, [document, methodology, latestManifestId]);
+  }, [document, documentTemplate, latestManifestId]);
 
   const onUpgradeManifest = useCallback(async () => {
     if (documentId && latestManifestId) {
       await dispatch(
         requestUpgradeManifest({ id: `${documentId}`, payload: { variableManifestId: latestManifestId } })
       );
-      fetchPdd();
+      fetchDocument();
     }
     setShowUpgradeModal(false);
-  }, [dispatch, documentId, latestManifestId, fetchPdd]);
+  }, [dispatch, documentId, latestManifestId, fetchDocument]);
 
   const onDismissUpgradeManifest = useCallback(() => {
     setShowUpgradeModal(false);
@@ -156,7 +156,7 @@ export default function DocumentView(): JSX.Element {
         alignItems='flex-start'
       >
         <DocumentMetadata document={document} />
-        <DocumentActions document={document} onPddUpdate={fetchPdd} />
+        <DocumentActions document={document} onDocumentUpdate={fetchDocument} />
       </Box>
       <Box marginTop={3} display='flex' flexDirection='row' flexGrow={1}>
         <Box display='flex' flexGrow={1}>

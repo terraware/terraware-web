@@ -1,15 +1,15 @@
-import { components } from './generated-schema';
+import { components } from 'src/api/types/generated-schema';
 
-export type Document = components['schemas']['PddPayload'];
+export type Document = components['schemas']['DocumentPayload'];
 
-export type DocumentGetResponse = components['schemas']['GetPddResponsePayload'];
+export type DocumentGetResponse = components['schemas']['GetDocumentResponsePayload'];
 
-export type DocumentListResponse = components['schemas']['ListPddsResponsePayload'];
+export type DocumentListResponse = components['schemas']['ListDocumentsResponsePayload'];
 
-export type CreateDocumentPayload = components['schemas']['CreatePddRequestPayload'];
-export type CreateDocumentResponse = components['schemas']['CreatePddResponsePayload'];
+export type CreateDocumentPayload = components['schemas']['CreateDocumentRequestPayload'];
+export type CreateDocumentResponse = components['schemas']['CreateDocumentResponsePayload'];
 
-export type UpdateDocumentPayload = components['schemas']['UpdatePddRequestPayload'];
+export type UpdateDocumentPayload = components['schemas']['UpdateDocumentRequestPayload'];
 export type UpdateDocumentResponse = components['schemas']['SimpleSuccessResponsePayload'];
 
 export type UpgradeManifestPayload = components['schemas']['UpgradeManifestRequestPayload'];
@@ -19,9 +19,9 @@ export type DocumentStatus = Document['status'];
 
 export type DocumentHistoryGetResponse = components['schemas']['GetDocumentHistoryResponsePayload'];
 
-export type DocumentHistoryCreatedPayload = components['schemas']['PddHistoryCreatedPayload'];
-export type DocumentHistoryEditedPayload = components['schemas']['PddHistoryEditedPayload'];
-export type DocumentHistorySavedPayload = components['schemas']['PddHistorySavedPayload'];
+export type DocumentHistoryCreatedPayload = components['schemas']['DocumentHistoryCreatedPayload'];
+export type DocumentHistoryEditedPayload = components['schemas']['DocumentHistoryEditedPayload'];
+export type DocumentHistorySavedPayload = components['schemas']['DocumentHistorySavedPayload'];
 
 export type DocumentHistoryEvent = (
   | DocumentHistoryCreatedPayload
@@ -31,7 +31,7 @@ export type DocumentHistoryEvent = (
   docId: number;
 };
 
-export type CreateSavedDocVersionPayload = components['schemas']['CreateSavedPddVersionRequestPayload'];
-export type CreateSavedDocVersionResponsePayload = components['schemas']['CreateSavedPddVersionResponsePayload'];
+export type CreateSavedDocVersionPayload = components['schemas']['CreateSavedDocumentVersionRequestPayload'];
+export type CreateSavedDocVersionResponsePayload = components['schemas']['CreateSavedDocumentVersionResponsePayload'];
 
-export type UpdateSavedDocVersionPayload = components['schemas']['UpdateSavedPddVersionRequestPayload'];
+export type UpdateSavedDocVersionPayload = components['schemas']['UpdateSavedDocumentVersionRequestPayload'];
