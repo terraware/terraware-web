@@ -20,11 +20,11 @@ import RemoveSpeciesDialog from './RemoveSpeciesDialog';
 import TableCellRenderer from './TableCellRenderer';
 
 const columns = (): TableColumnType[] => [
-  { key: 'species.scientificName', name: strings.SCIENTIFIC_NAME, type: 'string' },
-  { key: 'species.commonName', name: strings.COMMON_NAME, type: 'string' },
-  { key: 'participantProjectSpecies.speciesNativeCategory', name: strings.NATIVE_NON_NATIVE, type: 'string' },
-  { key: 'participantProjectSpecies.rationale', name: strings.RATIONALE, type: 'string' },
-  { key: 'participantProjectSpecies.submissionStatus', name: strings.STATUS, type: 'string' },
+  { key: 'species_scientificName', name: strings.SCIENTIFIC_NAME, type: 'string' },
+  { key: 'species_commonName', name: strings.COMMON_NAME, type: 'string' },
+  { key: 'participantProjectSpecies_speciesNativeCategory', name: strings.NATIVE_NON_NATIVE, type: 'string' },
+  { key: 'participantProjectSpecies_rationale', name: strings.RATIONALE, type: 'string' },
+  { key: 'participantProjectSpecies_submissionStatus', name: strings.STATUS, type: 'string' },
 ];
 
 const consoleColumns = (): TableColumnType[] => [
@@ -50,6 +50,17 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [openedAddSpeciesModal, setOpenedAddSpeciesModal] = useState(false);
+
+  const rows = useMemo(() => {
+    return (participantProjectSpecies?.data || []).map((value) => ({
+      ...value,
+      species_scientificName: value.species.scientificName,
+      species_commonName: value.species.commonName,
+      participantProjectSpecies_speciesNativeCategory: value.participantProjectSpecies.speciesNativeCategory,
+      participantProjectSpecies_rationale: value.participantProjectSpecies.rationale,
+      participantProjectSpecies_submissionStatus: value.participantProjectSpecies.submissionStatus,
+    }));
+  }, [participantProjectSpecies]);
 
   const addSpeciesToProjectButtonIsDisabled = useMemo(() => {
     return !currentDeliverables?.find((deliverable) => deliverable.id === deliverable.id);
@@ -124,7 +135,7 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
             id='species-deliverable-table'
             orderBy='speciesScientificName'
             Renderer={TableCellRenderer}
-            rows={participantProjectSpecies?.data || []}
+            rows={rows}
             selectedRows={selectedRows}
             setSelectedRows={setSelectedRows}
             showCheckbox={!isAcceleratorRoute}
