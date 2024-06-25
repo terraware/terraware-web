@@ -414,6 +414,7 @@ export default function Map(props: MapProps): JSX.Element {
       {bannerMessage && <MapBanner message={bannerMessage} />}
       {firstVisible && (
         <ReactMapGL
+          renderWorldCopies={false}
           key={mapId}
           mapboxAccessToken={token}
           mapStyle={MapViewStyles[mapViewStyle]}

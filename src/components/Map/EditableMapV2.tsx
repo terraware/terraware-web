@@ -342,6 +342,7 @@ export default function EditableMap({
       {firstVisible && (
         <>
           <ReactMapGL
+            renderWorldCopies={false}
             key={mapId}
             onError={onMapError}
             ref={mapRef}

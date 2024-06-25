@@ -89,6 +89,7 @@ export default function EditableMap({ boundary, onBoundaryChanged, style }: Edit
             {instructionsForMode(mode)}
           </Typography>
           <ReactMapGL
+            renderWorldCopies={false}
             key={mapId}
             onError={onMapError}
             ref={mapRef}
