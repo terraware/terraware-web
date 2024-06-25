@@ -278,7 +278,7 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
         const idGenerator = IdGenerator(Object.values(subzones).flatMap((sz) => sz.features));
         const subzonesWithIds = leftOrderedFeatures(cutSubzones).map(({ feature: subzone }) => {
           if (subzone && subzone.properties && !subzone.properties.name) {
-            const subzoneName = subzoneNameGenerator(usedNames);
+            const subzoneName = subzoneNameGenerator(usedNames, strings.SUBZONE);
             subzone.properties.name = subzoneName;
             usedNames.add(subzoneName);
           }

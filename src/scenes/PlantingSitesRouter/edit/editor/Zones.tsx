@@ -57,7 +57,7 @@ const createDraftSiteWith = (site: DraftPlantingSite) => (cutZones: GeometryFeat
     defaultZonePayload({
       boundary: toMultiPolygon(zone.geometry) as MultiPolygon,
       id: index,
-      name: `${index}`, // temporary name for error checking
+      name: zoneNameGenerator(new Set<string>(), strings.ZONE),
       targetPlantingDensity: zone.properties?.targetPlantingDensity ?? 1500,
     })
   ),
@@ -225,7 +225,7 @@ export default function Zones({ onValidate, site }: ZonesProps): JSX.Element {
       );
       const zonesWithIds = cutZones.map((zone) => {
         if (!zone.properties?.name) {
-          const zoneName = zoneNameGenerator(usedNames);
+          const zoneName = zoneNameGenerator(usedNames, strings.ZONE);
           zone.properties = { ...zone.properties, name: zoneName };
           usedNames.add(zoneName);
         }

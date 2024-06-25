@@ -32,7 +32,7 @@ export type SiteBoundaryProps = {
 const createPlantingZonesWith = (boundary?: MultiPolygon): MinimalPlantingZone[] | undefined =>
   boundary?.coordinates.flatMap((coordinates: Position[][], index: number) => {
     const zoneBoundary: MultiPolygon = { type: 'MultiPolygon', coordinates: [coordinates] };
-    const zoneName = zoneNameGenerator();
+    const zoneName = zoneNameGenerator(new Set<string>(), strings.ZONE);
     return defaultZonePayload({
       boundary: zoneBoundary,
       id: index,
