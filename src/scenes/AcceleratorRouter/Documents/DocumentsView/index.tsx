@@ -9,10 +9,10 @@ import StatusBadge from 'src/components/DocumentProducer/StatusBadge';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { selectDocuments } from 'src/redux/features/documentProducer/documents/documentsSelector';
-import { requestListDocuments } from 'src/redux/features/documentProducer/documents/documentsThunks';
 import { selectDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesSelector';
 import { requestListDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesThunks';
+import { selectDocuments } from 'src/redux/features/documentProducer/documents/documentsSelector';
+import { requestListDocuments } from 'src/redux/features/documentProducer/documents/documentsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Document } from 'src/types/documentProducer/Document';
@@ -62,7 +62,9 @@ export default function DocumentsView(): JSX.Element {
             />
           );
         case 'documentTemplateId':
-          return <CellRenderer {...props} value={getDocumentTemplateName(props.row.documentTemplateId, documentTemplates)} />;
+          return (
+            <CellRenderer {...props} value={getDocumentTemplateName(props.row.documentTemplateId, documentTemplates)} />
+          );
         case 'status':
           return <CellRenderer {...props} value={<StatusBadge status={props.row.status} />} />;
         default:

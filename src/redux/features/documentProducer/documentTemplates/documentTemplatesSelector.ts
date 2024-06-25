@@ -10,7 +10,8 @@ export const selectDocumentTemplates = (state: RootState): DocumentTemplatesData
   state.documentProducerDocumentTemplates.listDocumentTemplates;
 
 export const selectDocumentTemplate = createCachedSelector(
-  (state: RootState, documentTemplateId: number) => state.documentProducerDocumentTemplates.listDocumentTemplates as any,
+  (state: RootState, documentTemplateId: number) =>
+    state.documentProducerDocumentTemplates.listDocumentTemplates as any,
   (state: RootState, documentTemplateId: number) => documentTemplateId,
   (response, documentTemplateId) => {
     if (response && response.documentTemplates) {
