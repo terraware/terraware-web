@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "license": "Apache-2.0",
-  "type": "module",
   "scripts": {
     "start": "craco start",
     "build": "craco --max_old_space_size=4096 build",

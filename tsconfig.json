@@ -23,6 +23,9 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src"
+    "src/**/*"
+  ],
+  "exclude": [
+    "eslint.config.js"
   ]
 }
