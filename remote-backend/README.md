@@ -43,6 +43,8 @@ in that case you can point your browser at Node's HTTP listen port (`http://loca
 
 # Local environment with production build using remote backend
 
+**These instructions have only been tested on macOS**
+
 Sometimes we may want to test things out locally against a production build using a remote backend.
 
 After following the steps above to set up your localhost SSL cert, you can build and run a production version
@@ -57,7 +59,7 @@ yarn build
 docker build --no-cache -t terraware-web-local-1 .
 
 ## Run the docker image (pointing to a staging environment)
-docker run --env SERVER_URL=https://staging.yourdomain.com -p 80:80 -v ./build:/usr/share/nginx/html terraware-web-local-1
+docker run --env SERVER_URL=https://staging.yourdomain.com -p 80:80 -v "$(pwd)/build:/usr/share/nginx/html" terraware-web-local-1
 ```
 
 A container with a production build of the React app is now running. The next step is to turn on the remote backend proxy, but we
