@@ -1,7 +1,7 @@
 import { Feature } from 'geojson';
 import { GeometryFeature } from 'src/types/Map';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
-import { alphabetName, cutOverlappingBoundaries, getLatestFeature, subzoneNameGenerator } from './utils';
+import { alphabetName, cutOverlappingBoundaries, getLatestFeature, subzoneNameGenerator, zoneNameGenerator } from './utils';
 import {
   cutOnNoOverlapFeature,
   cutOnOverlapFeature,
@@ -11,6 +11,7 @@ import {
   featureCollection2,
   featureCollection3,
 } from 'src/components/Map/testdata';
+import strings from 'src/strings';
 
 const createDraftSiteWith = (cutBoundaries: GeometryFeature[]): DraftPlantingSite => {
   return {
@@ -25,33 +26,69 @@ const createDraftSiteWith = (cutBoundaries: GeometryFeature[]): DraftPlantingSit
 };
 
 describe('subzoneNameGenerator', () => {
+  const prefix = 'subzone';
+
   test("should return 'A' when there are no used names", () => {
     const usedNames = new Set<string>();
-    expect(subzoneNameGenerator(usedNames)).toBe('A');
+    expect(subzoneNameGenerator(usedNames, prefix)).toBe(`${prefix} A`);
   });
 
   test('should return the next unused name', () => {
-    const usedNames = new Set<string>(['A', 'B', 'C', 'D']);
-    expect(subzoneNameGenerator(usedNames)).toBe('E');
+    const usedNames = new Set<string>([`${prefix} A`, `${prefix} B`, `${prefix} C`, `${prefix} D`]);
+    expect(subzoneNameGenerator(usedNames, prefix)).toBe(`${prefix} E`);
   });
 
   test('should return the next incremented characters sequence in the name', () => {
     const asciiA = 'A'.charCodeAt(0);
     // A to Z, simpler to map from ascii to char here
     const usedNames = new Set<string>(
-      Array.from({ length: 26 }, (_, index) => asciiA + index).map((ascii) => String.fromCharCode(ascii))
+      Array
+        .from({ length: 26 }, (_, index) => asciiA + index)
+        .map((ascii) => String.fromCharCode(ascii))
+        .map((name) => `${prefix} ${name}`)
     );
-    expect(subzoneNameGenerator(usedNames)).toBe('AA');
+    expect(subzoneNameGenerator(usedNames, prefix)).toBe(`${prefix} AA`);
   });
 
   test('should be able to handle names with many character positions', () => {
-    const asciiA = 'A'.charCodeAt(0);
     const usedNames = new Set<string>();
     // 5000 is 'GJH'
     for (let i = 1; i <= 5000; i++) {
-      usedNames.add(alphabetName(i));
+      usedNames.add(`${prefix} ${alphabetName(i)}`);
     }
-    expect(subzoneNameGenerator(usedNames)).toBe('GJI');
+    expect(subzoneNameGenerator(usedNames, prefix)).toBe(`${prefix} GJI`);
+  });
+});
+
+
+describe('zoneNameGenerator', () => {
+  const prefix = 'zone';
+
+  test("should return '01' when there are no used names", () => {
+    const usedNames = new Set<string>();
+    expect(zoneNameGenerator(usedNames, prefix)).toBe(`${prefix} 01`);
+  });
+
+  test('should return the next unused name', () => {
+    const usedNames = new Set<string>([`${prefix} 01`, `${prefix} 02`, `${prefix} 03`, `${prefix} 04`]);
+    expect(zoneNameGenerator(usedNames, prefix)).toBe(`${prefix} 05`);
+  });
+
+  test('should return with no padding in double digits', () => {
+    const usedNames = new Set<string>(
+      Array.from({ length: 9 }, (_, index) => `${prefix} 0${index + 1}`)
+    );
+    expect(zoneNameGenerator(usedNames, prefix)).toBe(`${prefix} 10`);
+  });
+
+  test('should be able to handle names with many positions', () => {
+    const usedNames = new Set<string>();
+    // 5000 is 'GJH'
+    for (let i = 1; i <= 5000; i++) {
+      const num = `${i}`.padStart(2, '0');
+      usedNames.add(`${prefix} ${num}`);
+    }
+    expect(zoneNameGenerator(usedNames, prefix)).toBe(`${prefix} 5001`);
   });
 });
 

@@ -20,7 +20,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import { OnValidate } from './types';
-import { boundingAreaHectares, defaultZonePayload } from './utils';
+import { boundingAreaHectares, defaultZonePayload, zoneNameGenerator } from './utils';
 import { findErrors } from './utils';
 
 export type SiteBoundaryProps = {
@@ -32,10 +32,11 @@ export type SiteBoundaryProps = {
 const createPlantingZonesWith = (boundary?: MultiPolygon): MinimalPlantingZone[] | undefined =>
   boundary?.coordinates.flatMap((coordinates: Position[][], index: number) => {
     const zoneBoundary: MultiPolygon = { type: 'MultiPolygon', coordinates: [coordinates] };
+    const zoneName = zoneNameGenerator(new Set<string>(), strings.ZONE);
     return defaultZonePayload({
       boundary: zoneBoundary,
       id: index,
-      name: `${strings.ZONE}${index + 1}`,
+      name: zoneName,
       targetPlantingDensity: 1500,
     });
   });

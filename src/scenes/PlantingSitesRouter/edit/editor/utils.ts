@@ -15,7 +15,7 @@ export type DefaultZonePayload = Omit<MinimalPlantingZone, 'plantingSubzones'>;
 
 export const defaultZonePayload = (payload: DefaultZonePayload): MinimalPlantingZone => {
   const { boundary, id, name, targetPlantingDensity } = payload;
-  const subzoneName = 'A';
+  const subzoneName = subzoneNameGenerator(new Set(), strings.SUBZONE);
 
   return {
     boundary,
@@ -119,13 +119,30 @@ export const alphabetName = (position: number): string => {
  * BA - BZ
  * and so on.
  */
-export const subzoneNameGenerator = (usedNames: Set<string>): string => {
+export const subzoneNameGenerator = (usedNames: Set<string>, prefix?: string): string => {
   let nextNameIndex = 0;
   let nextName = '';
 
   do {
-    nextName = alphabetName(++nextNameIndex);
+    const subzoneNameVal = alphabetName(++nextNameIndex);
+    nextName = prefix ? `${prefix} ${subzoneNameVal}` : subzoneNameVal;
   } while (usedNames.has(nextName));
+
+  return nextName;
+};
+
+/**
+ * Zone name generator.
+ * Generates names in numerical order, with 2 digits with leading 0
+ */
+export const zoneNameGenerator = (usedNames?: Set<string>, prefix?: string): string => {
+  let nextNameIndex = 0;
+  let nextName = '';
+
+  do {
+    const zoneNum = `${++nextNameIndex}`.padStart(2, '0');
+    nextName = prefix ? `${prefix} ${zoneNum}` : zoneNum;
+  } while (usedNames && usedNames.has(nextName));
 
   return nextName;
 };
