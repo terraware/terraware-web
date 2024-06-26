@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import bbox from '@turf/bbox';
 import bboxPolygon from '@turf/bbox-polygon';
 import centroid from '@turf/centroid';
-import { Feature, FeatureCollection, MultiPolygon, Position } from 'geojson';
+import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
 import _ from 'lodash';
 
 import { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
@@ -29,17 +29,19 @@ export type SiteBoundaryProps = {
 };
 
 // create default planting zones off the site boundary
-const createPlantingZonesWith = (boundary?: MultiPolygon): MinimalPlantingZone[] | undefined =>
-  boundary?.coordinates.flatMap((coordinates: Position[][], index: number) => {
-    const zoneBoundary: MultiPolygon = { type: 'MultiPolygon', coordinates: [coordinates] };
-    const zoneName = zoneNameGenerator(new Set<string>(), strings.ZONE);
-    return defaultZonePayload({
-      boundary: zoneBoundary,
-      id: index,
-      name: zoneName,
-      targetPlantingDensity: 1500,
-    });
+const createPlantingZoneWith = (boundary?: MultiPolygon): MinimalPlantingZone | undefined => {
+  if (!boundary) {
+    return undefined;
+  }
+  const zoneBoundary: MultiPolygon = { type: 'MultiPolygon', coordinates: boundary.coordinates };
+  const zoneName = zoneNameGenerator(new Set<string>(), strings.ZONE);
+  return defaultZonePayload({
+    boundary: zoneBoundary,
+    id: 0,
+    name: zoneName,
+    targetPlantingDensity: 1500,
   });
+};
 
 const featureSiteBoundary = (id: number, boundary?: MultiPolygon): FeatureCollection | undefined =>
   !boundary
@@ -104,7 +106,8 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
         return;
       } else {
         // create one zone per disjoint polygon in the site boundary
-        const plantingZones = createPlantingZonesWith(boundary);
+        const plantingZone = createPlantingZoneWith(boundary);
+        const plantingZones = plantingZone ? [plantingZone] : [];
         onValidate.apply(false, { boundary, plantingZones });
       }
     }
@@ -158,11 +161,13 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
    */
   const onEditableBoundaryChanged = async (editableBoundary?: FeatureCollection) => {
     const newBoundary = (editableBoundary && unionMultiPolygons(editableBoundary)) || undefined;
+    const plantingZone = createPlantingZoneWith(newBoundary);
+    const plantingZones = plantingZone ? [plantingZone] : [];
     const errors = await findErrors(
       {
         ...site,
         boundary: newBoundary,
-        plantingZones: createPlantingZonesWith(newBoundary),
+        plantingZones: plantingZones,
       },
       'site_boundary',
       []
