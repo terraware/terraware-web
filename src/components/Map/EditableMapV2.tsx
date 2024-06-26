@@ -362,6 +362,7 @@ export default function EditableMap({
             interactiveLayerIds={interactiveLayerIds ?? []}
             onClick={onMapClick}
             onLoad={onLoad}
+            onStyleData={onLoad}
           >
             {mapLayers}
             {errorLayer}
