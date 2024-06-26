@@ -1,3 +1,4 @@
+8f1c32fc25 Site boundary with multiple polygons all get assigned to one zone (#2786)
 1538650ee0 SW-5538 Hydrate the API results into a format that is easily consumable by the table (#2785)
 b87b5f9288 SW-5532: Can't click out of native/non-native dropdown without selecting an option first (#2787)
 4909c28950 SW-5569 Updated planting zone default name generation (#2781)
