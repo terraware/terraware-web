@@ -179,48 +179,75 @@ export const getMapDrawingLayer = (source: MapSourceRenderProperties, sourceId: 
 };
 
 /**
- * Cut source polygons into smaller polygons
+ * Overlay a new polygon onto the exisitng features, and subtracting the intersection from existing features
+ * to preserve the disjoint set property. The result is expected to be a disjoint set of polygons spanning the entire
+ * boundary. Empty polygons are removed as well.
+ *
  * @param source
- *  The source polygons that need to be split into smaller polygons
- * @param cutWith
- *  The polygon to use as the overlap check in order to cut polygons
+ *  The source polygons, that should span the boundary.
+ * @param newPolygon
+ *  The polygon to be overlayed onto the polygon. Areas outside the boundary will be trimmed and removed.
  * @returns
- *  List of polygons that were cut as a result of overlaps with cutWith
- *  Null if there was no overlap
+ *  The resulting list of polygons.
+ *  Null if there was no overlap. Which means the new polygon is outside the boundary
  */
-export const cutPolygons = (source: GeometryFeature[], cutWith: Geometry): GeometryFeature[] | null => {
-  if (cutWith.type !== 'Polygon' && cutWith.type !== 'MultiPolygon') {
+export const overlayAndSubtract = (source: GeometryFeature[], newPolygon: Geometry): GeometryFeature[] | null => {
+  if (newPolygon.type !== 'Polygon' && newPolygon.type !== 'MultiPolygon') {
     return null;
   }
 
-  const intersections = source.map((poly) => intersect(cutWith, poly));
+  const intersections = source.map((poly) => intersect(newPolygon, poly));
+
   if (!intersections.some((f) => f !== null)) {
     return null;
   }
 
-  const splitFeatures = intersections.reduce((acc, curr, index) => {
-    const originalFeature = source[index];
+  const newFeature = intersections.reduce((acc, curr) => {
+    // If it has intersection
     if (curr !== null) {
-      const subtracted = originalFeature.properties?.isFixed ? null : difference(originalFeature, curr);
+      // If there is not previous intersection
+      if (acc === null) {
+        return curr;
+      } else {
+        return union(acc, curr);
+      }
+    }
+    return acc;
+  });
+
+  // Subtract intersection from each of the existing zone
+  const newFeatures = intersections.reduce((acc, curr, index) => {
+    const originalFeature = source[index];
+
+    // If there is an overlap and existing feautre can be cut
+    if (curr !== null && !originalFeature.properties?.isFixed) {
+      const subtracted = difference(originalFeature, curr);
       if (subtracted !== null) {
         const subtractedPolys = toMultiPolygon(subtracted.geometry);
-        if (subtractedPolys !== null && subtractedPolys.coordinates.length) {
-          // split disjoint polygons into separate features
-          const subtractedFeatures = subtractedPolys.coordinates.map((coords, coordsIndex) => {
-            const f = coordsIndex === 0 ? originalFeature : { ...originalFeature, properties: {}, id: undefined };
-            return {
-              ...f,
-              geometry: { type: 'MultiPolygon', coordinates: [coords] },
-            };
-          }) as GeometryFeature[];
-          return [...acc, ...subtractedFeatures, curr];
+        if (subtractedPolys !== null) {
+          const subtractedFeature = {
+            ...originalFeature,
+            geometry: { type: 'MultiPolygon', coordinates: subtractedPolys?.coordinates },
+          } as GeometryFeature;
+          return [...acc, subtractedFeature];
         }
+      } else {
+        // The original polygon is completely covered by the new polygon. Remove it.
+        return acc;
       }
     }
     return [...acc, originalFeature];
   }, [] as GeometryFeature[]);
 
-  return _.isEqual(splitFeatures, source) ? null : splitFeatures;
+  const newCoords = newFeature ? toMultiPolygon(newFeature.geometry) : null;
+  if (newCoords !== null) {
+    newFeatures.push({
+      ...newFeature,
+      geometry: { type: 'MultiPolygon', coordinates: newCoords.coordinates },
+    } as GeometryFeature);
+  }
+
+  return _.isEqual(newFeatures, source) ? null : newFeatures;
 };
 
 /**

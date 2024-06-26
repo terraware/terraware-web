@@ -174,7 +174,7 @@ describe('cutBoundaries', () => {
       onError
     );
     expect(success).toBe(1);
-    expect(cutBoundaries).toBe(4);
+    expect(cutBoundaries).toBe(3);
     expect(cutData).toEqual([
       {
         type: 'Feature',
@@ -194,22 +194,6 @@ describe('cutBoundaries', () => {
         },
         properties: { hello: 'world' },
         id: 0,
-      },
-      {
-        type: 'Feature',
-        properties: {},
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            [
-              [7.5, 5],
-              [10, 5],
-              [10, 10],
-              [7.5, 10],
-              [7.5, 5],
-            ],
-          ],
-        },
       },
       {
         type: 'Feature',
@@ -234,14 +218,16 @@ describe('cutBoundaries', () => {
         type: 'Feature',
         properties: {},
         geometry: {
-          type: 'Polygon',
+          type: 'MultiPolygon',
           coordinates: [
             [
-              [10, 5],
-              [12.5, 5],
-              [12.5, 10],
-              [10, 10],
-              [10, 5],
+              [
+                [7.5, 5],
+                [12.5, 5],
+                [12.5, 10],
+                [7.5, 10],
+                [7.5, 5],
+              ],
             ],
           ],
         },
@@ -265,7 +251,7 @@ describe('cutBoundaries', () => {
     expect(success).toBe(0);
     expect(cutBoundaries).toBe(0);
     expect(error).toBe(1);
-    expect(errorAnnotations).toBe(4);
+    expect(errorAnnotations).toBe(2);
     expect(errorData).toEqual([
       {
         type: 'Feature',
@@ -288,22 +274,6 @@ describe('cutBoundaries', () => {
       },
       {
         type: 'Feature',
-        properties: { errorText: '--', fill: true },
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            [
-              [7.5, 1],
-              [7.5001, 1],
-              [7.5001, 1.001],
-              [7.5, 1.001],
-              [7.5, 1],
-            ],
-          ],
-        },
-      },
-      {
-        type: 'Feature',
         geometry: {
           type: 'MultiPolygon',
           coordinates: [
@@ -320,22 +290,6 @@ describe('cutBoundaries', () => {
         },
         properties: { errorText: '--', fill: true },
         id: 2,
-      },
-      {
-        type: 'Feature',
-        properties: { errorText: '--', fill: true },
-        geometry: {
-          type: 'Polygon',
-          coordinates: [
-            [
-              [12.4999, 1],
-              [12.5, 1],
-              [12.5, 1.001],
-              [12.4999, 1.001],
-              [12.4999, 1],
-            ],
-          ],
-        },
       },
     ]);
   });
