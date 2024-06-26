@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">63.09% </span>
+                <span class="strong">66.3% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>53/84</span>
+                <span class='fraction'>61/92</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60.52% </span>
+                <span class="strong">61.36% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>23/38</span>
+                <span class='fraction'>27/44</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">41.66% </span>
+                <span class="strong">44% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>10/24</span>
+                <span class='fraction'>11/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">64.19% </span>
+                <span class="strong">67.41% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>52/81</span>
+                <span class='fraction'>60/89</span>
             </div>
         
             
@@ -338,7 +338,24 @@
 <a name='L273'></a><a href='#L273'>273</a>
 <a name='L274'></a><a href='#L274'>274</a>
 <a name='L275'></a><a href='#L275'>275</a>
-<a name='L276'></a><a href='#L276'>276</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L276'></a><a href='#L276'>276</a>
+<a name='L277'></a><a href='#L277'>277</a>
+<a name='L278'></a><a href='#L278'>278</a>
+<a name='L279'></a><a href='#L279'>279</a>
+<a name='L280'></a><a href='#L280'>280</a>
+<a name='L281'></a><a href='#L281'>281</a>
+<a name='L282'></a><a href='#L282'>282</a>
+<a name='L283'></a><a href='#L283'>283</a>
+<a name='L284'></a><a href='#L284'>284</a>
+<a name='L285'></a><a href='#L285'>285</a>
+<a name='L286'></a><a href='#L286'>286</a>
+<a name='L287'></a><a href='#L287'>287</a>
+<a name='L288'></a><a href='#L288'>288</a>
+<a name='L289'></a><a href='#L289'>289</a>
+<a name='L290'></a><a href='#L290'>290</a>
+<a name='L291'></a><a href='#L291'>291</a>
+<a name='L292'></a><a href='#L292'>292</a>
+<a name='L293'></a><a href='#L293'>293</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -465,6 +482,23 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">5034x</span>
+<span class="cline-any cline-yes">5034x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">5017x</span>
+<span class="cline-any cline-yes">5017x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
@@ -630,7 +664,7 @@ export type DefaultZonePayload = Omit&lt;MinimalPlantingZone, 'plantingSubzones'
 &nbsp;
 export const defaultZonePayload = <span class="fstat-no" title="function not covered" >(p</span>ayload: DefaultZonePayload): MinimalPlantingZone =&gt; {
   const { boundary, id, name, targetPlantingDensity } = <span class="cstat-no" title="statement not covered" >payload;</span>
-  const subzoneName = <span class="cstat-no" title="statement not covered" >'A';</span>
+  const subzoneName = <span class="cstat-no" title="statement not covered" >subzoneNameGenerator(new Set(), strings.SUBZONE);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return {</span>
     boundary,
@@ -734,13 +768,30 @@ export const alphabetName = (position: number): string =&gt; {
  * BA - BZ
  * and so on.
  */
-export const subzoneNameGenerator = (usedNames: Set&lt;string&gt;): string =&gt; {
+export const subzoneNameGenerator = (usedNames: Set&lt;string&gt;, prefix?: string): string =&gt; {
   let nextNameIndex = 0;
   let nextName = '';
 &nbsp;
   do {
-    nextName = alphabetName(++nextNameIndex);
+    const subzoneNameVal = alphabetName(++nextNameIndex);
+    nextName = prefix ? `${prefix} ${subzoneNameVal}` : <span class="branch-1 cbranch-no" title="branch not covered" >subzoneNameVal;</span>
   } while (usedNames.has(nextName));
+&nbsp;
+  return nextName;
+};
+&nbsp;
+/**
+ * Zone name generator.
+ * Generates names in numerical order, with 2 digits with leading 0
+ */
+export const zoneNameGenerator = (usedNames?: Set&lt;string&gt;, prefix?: string): string =&gt; {
+  let nextNameIndex = 0;
+  let nextName = '';
+&nbsp;
+  do {
+    const zoneNum = `${++nextNameIndex}`.padStart(2, '0');
+    nextName = prefix ? `${prefix} ${zoneNum}` : <span class="branch-1 cbranch-no" title="branch not covered" >zoneNum;</span>
+  } while (usedNames &amp;&amp; usedNames.has(nextName));
 &nbsp;
   return nextName;
 };
@@ -895,7 +946,7 @@ export const findErrors = async (
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-25T19:31:40.111Z
+                at 2024-06-26T04:23:11.938Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
