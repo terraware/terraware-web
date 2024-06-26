@@ -3,6 +3,10 @@ version: '3.8'
 
 services:
   local-https:
+    # Uncomment if you want to have this remote backend point to a
+    # running container with the FE in it, see README for more info
+    # environment:
+    # - 'SERVER_URL=http://host.docker.internal'
     build: '.'
     ports:
       - '443:443'

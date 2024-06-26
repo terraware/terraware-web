@@ -40,3 +40,48 @@ proxy.
 
 You don't need to run the HTTPS proxy if you're testing with a local terraware-server instance;
 in that case you can point your browser at Node's HTTP listen port (`http://localhost:3000`).
+
+# Local environment with production build using remote backend
+
+Sometimes we may want to test things out locally against a production build using a remote backend.
+
+After following the steps above to set up your localhost SSL cert, you can build and run a production version
+of the frontend by following these steps:
+
+```
+# All commands below run from the repository root
+## Build the site using `yarn`
+yarn build
+
+## Build the docker image
+docker build --no-cache -t terraware-web-local-1 .
+
+## Run the docker image (pointing to a staging environment)
+docker run --env SERVER_URL=https://staging.yourdomain.com -p 80:80 -v ./build:/usr/share/nginx/html terraware-web-local-1
+```
+
+A container with a production build of the React app is now running. The next step is to turn on the remote backend proxy, but we
+need to modify the SERVER_URL so that it points to our running FE app container. Add (or uncomment) these lines to the `local-https`
+service in the `docker-compose.yml` in this directory:
+
+```
+ environment:
+   - 'SERVER_URL=http://host.docker.internal'
+```
+
+Now, when you visit https://localhost, we will load the FE through the production-build container. This application will attempt to
+resolve any API requests to the `SERVER_URL` provided to the running `terraware-web-local-1`. The request flow should look like this:
+
+```
+browser ----> localhost
+                 |
+                 |
+                 v
+       terraware-web-local-1 ----> react app
+                                      |
+                                      |
+                                      v
+staging terraware <----- remote-backend_local-https_1
+```
+
+If you need to make changes to the production build, simply run `yarn build` again and your changes will be synced into the running `terraware-web-local-1` container
