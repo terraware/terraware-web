@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/31</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
@@ -213,7 +213,18 @@
 <a name='L148'></a><a href='#L148'>148</a>
 <a name='L149'></a><a href='#L149'>149</a>
 <a name='L150'></a><a href='#L150'>150</a>
-<a name='L151'></a><a href='#L151'>151</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L151'></a><a href='#L151'>151</a>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a>
+<a name='L155'></a><a href='#L155'>155</a>
+<a name='L156'></a><a href='#L156'>156</a>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -265,6 +276,17 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -385,11 +407,11 @@ import RemoveSpeciesDialog from './RemoveSpeciesDialog';
 import TableCellRenderer from './TableCellRenderer';
 &nbsp;
 const columns = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span>: TableColumnType[] =&gt; <span class="cstat-no" title="statement not covered" >[</span></span>
-  { key: 'species.scientificName', name: strings.SCIENTIFIC_NAME, type: 'string' },
-  { key: 'species.commonName', name: strings.COMMON_NAME, type: 'string' },
-  { key: 'participantProjectSpecies.speciesNativeCategory', name: strings.NATIVE_NON_NATIVE, type: 'string' },
-  { key: 'participantProjectSpecies.rationale', name: strings.RATIONALE, type: 'string' },
-  { key: 'participantProjectSpecies.submissionStatus', name: strings.STATUS, type: 'string' },
+  { key: 'species_scientificName', name: strings.SCIENTIFIC_NAME, type: 'string' },
+  { key: 'species_commonName', name: strings.COMMON_NAME, type: 'string' },
+  { key: 'participantProjectSpecies_speciesNativeCategory', name: strings.NATIVE_NON_NATIVE, type: 'string' },
+  { key: 'participantProjectSpecies_rationale', name: strings.RATIONALE, type: 'string' },
+  { key: 'participantProjectSpecies_submissionStatus', name: strings.STATUS, type: 'string' },
 ];
 &nbsp;
 const consoleColumns = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span>: TableColumnType[] =&gt; <span class="cstat-no" title="statement not covered" >[</span></span>
@@ -415,6 +437,17 @@ const SpeciesDeliverableTable = <span class="cstat-no" title="statement not cove
   const [selectedRows, setSelectedRows] = <span class="cstat-no" title="statement not covered" >useState&lt;TableRowType[]&gt;([]);</span>
   const [showConfirmDialog, setShowConfirmDialog] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
   const [openedAddSpeciesModal, setOpenedAddSpeciesModal] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
+&nbsp;
+  const rows = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    return (participantProjectSpecies?.data || []).map(<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+      ...value,
+      species_scientificName: value.species.scientificName,
+      species_commonName: value.species.commonName,
+      participantProjectSpecies_speciesNativeCategory: value.participantProjectSpecies.speciesNativeCategory,
+      participantProjectSpecies_rationale: value.participantProjectSpecies.rationale,
+      participantProjectSpecies_submissionStatus: value.participantProjectSpecies.submissionStatus,
+    }));
+  }, [participantProjectSpecies]);
 &nbsp;
   const addSpeciesToProjectButtonIsDisabled = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    return !currentDeliverables?.find(<span class="fstat-no" title="function not covered" >(d</span>eliverable) =&gt; <span class="cstat-no" title="statement not covered" >deliverable.id === deliverable.id)</span>;</span>
@@ -489,7 +522,7 @@ const SpeciesDeliverableTable = <span class="cstat-no" title="statement not cove
             id='species-deliverable-table'
             orderBy='speciesScientificName'
             Renderer={TableCellRenderer}
-            rows={participantProjectSpecies?.data || []}
+            rows={rows}
             selectedRows={selectedRows}
             setSelectedRows={setSelectedRows}
             showCheckbox={!isAcceleratorRoute}
@@ -520,7 +553,7 @@ export default SpeciesDeliverableTable;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-26T19:47:21.262Z
+                at 2024-06-26T20:05:40.260Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

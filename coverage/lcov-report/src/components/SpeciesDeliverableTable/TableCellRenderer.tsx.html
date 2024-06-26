@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/44</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/33</span>
+                <span class='fraction'>0/27</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/44</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
@@ -237,21 +237,7 @@
 <a name='L172'></a><a href='#L172'>172</a>
 <a name='L173'></a><a href='#L173'>173</a>
 <a name='L174'></a><a href='#L174'>174</a>
-<a name='L175'></a><a href='#L175'>175</a>
-<a name='L176'></a><a href='#L176'>176</a>
-<a name='L177'></a><a href='#L177'>177</a>
-<a name='L178'></a><a href='#L178'>178</a>
-<a name='L179'></a><a href='#L179'>179</a>
-<a name='L180'></a><a href='#L180'>180</a>
-<a name='L181'></a><a href='#L181'>181</a>
-<a name='L182'></a><a href='#L182'>182</a>
-<a name='L183'></a><a href='#L183'>183</a>
-<a name='L184'></a><a href='#L184'>184</a>
-<a name='L185'></a><a href='#L185'>185</a>
-<a name='L186'></a><a href='#L186'>186</a>
-<a name='L187'></a><a href='#L187'>187</a>
-<a name='L188'></a><a href='#L188'>188</a>
-<a name='L189'></a><a href='#L189'>189</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L175'></a><a href='#L175'>175</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -350,8 +336,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -423,18 +407,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -496,7 +468,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
     }
   };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (column.key === 'species.scientificName') {</span>
+<span class="cstat-no" title="statement not covered" >  if (column.key === 'species_scientificName') {</span>
 <span class="cstat-no" title="statement not covered" >    return (</span>
       &lt;CellRenderer
         column={column}
@@ -512,15 +484,15 @@ export default function <span class="fstat-no" title="function not covered" >Spe
               /&gt;
             )}
             {isAcceleratorRoute
-              ? createLinkToAcceleratorSpecies(row?.species?.scientificName)
-              : createLinkToSpecies(row?.species?.scientificName)}
+              ? createLinkToAcceleratorSpecies(row?.species_scientificName)
+              : createLinkToSpecies(row?.species_scientificName)}
           &lt;/&gt;
         }
       /&gt;
     );
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (column.key === 'participantProjectSpecies.submissionStatus') {</span>
+<span class="cstat-no" title="statement not covered" >  if (column.key === 'participantProjectSpecies_submissionStatus') {</span>
 <span class="cstat-no" title="statement not covered" >    return (</span>
       &lt;CellRenderer
         style={{ width: '50px' }}
@@ -529,9 +501,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
         row={row}
         value={
           activeLocale ? (
-            &lt;DeliverableStatusBadge
-              status={row?.participantProjectSpecies?.submissionStatus as DeliverableStatusType}
-            /&gt;
+            &lt;DeliverableStatusBadge status={row?.participantProjectSpecies_submissionStatus as DeliverableStatusType} /&gt;
           ) : (
             ''
           )
@@ -571,7 +541,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
               priority='secondary'
               type='destructive'
               disabled={
-                row.submissionStatus === 'Rejected' || row?.participantProjectSpecies.submissionStatus === 'Rejected'
+                row.submissionStatus === 'Rejected' || row?.participantProjectSpecies_submissionStatus === 'Rejected'
               }
             /&gt;
           &lt;/&gt;
@@ -605,24 +575,12 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >approveHandler()}</span>
             priority='secondary'
             disabled={
-              row.submissionStatus === 'Approved' || row?.participantProjectSpecies.submissionStatus === 'Approved'
+              row.submissionStatus === 'Approved' || row?.participantProjectSpecies_submissionStatus === 'Approved'
             }
           /&gt;
         }
       /&gt;
     );
-  }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  if (column.key === 'species.commonName') {</span>
-<span class="cstat-no" title="statement not covered" >    return &lt;CellRenderer {...props} value={row.species.commonName} /&gt;;</span>
-  }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  if (column.key === 'participantProjectSpecies.rationale') {</span>
-<span class="cstat-no" title="statement not covered" >    return &lt;CellRenderer {...props} value={row.participantProjectSpecies.rationale} /&gt;;</span>
-  }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  if (column.key === 'participantProjectSpecies.speciesNativeCategory') {</span>
-<span class="cstat-no" title="statement not covered" >    return &lt;CellRenderer {...props} value={row.participantProjectSpecies.speciesNativeCategory} /&gt;;</span>
   }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return &lt;CellRenderer {...props} /&gt;;</span>
@@ -634,7 +592,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-26T19:47:21.262Z
+                at 2024-06-26T20:05:40.260Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
