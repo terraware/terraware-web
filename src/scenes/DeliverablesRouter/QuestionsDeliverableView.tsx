@@ -15,7 +15,6 @@ import Card from 'src/components/common/Card';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
-import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { requestListParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { selectParticipantProjectSpeciesListRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
@@ -138,7 +137,6 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
   const { currentParticipantProject } = useParticipantData();
-  const { currentDeliverable: deliverable } = useDeliverableData();
   const { status: requestStatus } = useUpdateDeliverable();
 
   // TODO: replace with actual question/answer data
