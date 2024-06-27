@@ -141,6 +141,7 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
   const { currentDeliverable: deliverable } = useDeliverableData();
   const { status: requestStatus } = useUpdateDeliverable();
 
+  // TODO: replace with actual question/answer data
   const ppsSearchResults = useAppSelector(selectParticipantProjectSpeciesListRequest(projectId));
 
   const submitButtonIsDisabled = useMemo(() => {
