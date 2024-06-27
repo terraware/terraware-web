@@ -8,7 +8,6 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
-import isEnabled from 'src/features';
 import { useLocalization } from 'src/providers';
 import { useOrganization, useTimeZones } from 'src/providers/hooks';
 import PlantingSiteTypeSelect from 'src/scenes/PlantingSitesRouter/edit/PlantingSiteTypeSelect';
@@ -41,7 +40,6 @@ export default function PlantingSitesList(): JSX.Element {
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, 250);
   const { isMobile } = useDeviceInfo();
-  const featureFlagSites = isEnabled('User Detailed Sites');
 
   const filtersEmpty = useCallback(() => !filters.projectIds || filters.projectIds.length === 0, [filters]);
 
@@ -55,11 +53,9 @@ export default function PlantingSitesList(): JSX.Element {
         TrackingService.searchPlantingSites(selectedOrganization.id, searchFields, searchSortOrder),
       ];
 
-      if (featureFlagSites) {
-        searchRequests.push(
-          DraftPlantingSiteService.searchDraftPlantingSites(selectedOrganization.id, searchFields, searchSortOrder)
-        );
-      }
+      searchRequests.push(
+        DraftPlantingSiteService.searchDraftPlantingSites(selectedOrganization.id, searchFields, searchSortOrder)
+      );
 
       // batch the search requests
       const results = await Promise.allSettled(searchRequests);
@@ -83,7 +79,7 @@ export default function PlantingSitesList(): JSX.Element {
         ];
       }, [] as PlantingSiteSearchResult[]);
 
-      if (featureFlagSites && sites.some((site) => site.isDraft)) {
+      if (sites.some((site) => site.isDraft)) {
         // sort merged results by sort order
         return sortResults(sites, activeLocale, searchSortOrder, [
           'id',
@@ -96,7 +92,7 @@ export default function PlantingSitesList(): JSX.Element {
 
       return sites;
     },
-    [activeLocale, defaultTimeZone, featureFlagSites, searchSortOrder, selectedOrganization.id, timeZones]
+    [activeLocale, defaultTimeZone, searchSortOrder, selectedOrganization.id, timeZones]
   );
 
   const onSearch = useCallback(async () => {
