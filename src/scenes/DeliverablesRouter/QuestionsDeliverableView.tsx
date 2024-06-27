@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { BusySpinner } from '@terraware/web-components';
+import { BusySpinner, Message } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
@@ -29,6 +29,7 @@ import QuestionsDeliverableStatusMessage from './QuestionsDeliverableStatusMessa
 type QuestionDeliverableItem = {
   answer: string;
   description: string;
+  feedback?: string;
   internal?: boolean;
   question: string;
   submissionStatus: DeliverableStatusType;
@@ -36,41 +37,42 @@ type QuestionDeliverableItem = {
 
 const QA_SETS: QuestionDeliverableItem[] = [
   {
-    answer: '',
+    answer: 'Treemendo.us, Incorporated.',
     description: 'Official/full legal name under which your organization is registered.',
     question: 'What is the name of your organization?',
-    submissionStatus: 'In Review',
+    submissionStatus: 'Approved',
   },
   {
-    answer: '',
+    answer: 'Yal Ankovic',
     description: 'Name of the person responsible for the partnership.',
     question: 'What is the full name of the main contact of your organization?',
+    submissionStatus: 'Approved',
+  },
+  {
+    answer: 'yal.ankovic@treemendo.us',
+    description: '',
+    feedback: 'Please provide a valid email address.',
+    question: 'What is the email address of the main contact?',
     submissionStatus: 'Rejected',
   },
   {
-    answer: '',
+    answer: 'Ghana',
     description: '',
-    question: 'What is the email address of the main contact?',
+    question: 'In what country is your reforestation project located?',
     submissionStatus: 'In Review',
   },
   {
-    answer: '',
-    description: '',
-    question: 'In what country is your reforestation project located?',
-    submissionStatus: 'Not Submitted',
-  },
-  {
-    answer: '',
+    answer: 'Single Location',
     description: 'Specify if the project occurs in more than one site (planting area).',
     internal: true,
     question: '[Internal] Does the project include single or multiple location(s)?',
-    submissionStatus: 'Not Submitted',
+    submissionStatus: 'In Review',
   },
   {
-    answer: '',
+    answer: 'No',
     description: '',
     question: 'Is this a mangrove project?',
-    submissionStatus: 'Not Submitted',
+    submissionStatus: 'In Review',
   },
 ];
 
@@ -97,7 +99,7 @@ const QuestionAnswerSet = ({ item }: { item: QuestionDeliverableItem }): JSX.Ele
 
   return (
     <Box sx={{ marginBottom: theme.spacing(4) }}>
-      <Box sx={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
+      <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
         <DeliverableStatusBadge status={item.submissionStatus} />
       </Box>
       <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>{item.question}</Typography>
@@ -113,6 +115,11 @@ const QuestionAnswerSet = ({ item }: { item: QuestionDeliverableItem }): JSX.Ele
         >
           {item.description}
         </Typography>
+      )}
+      {!!item.feedback && (
+        <Box marginBottom={theme.spacing(2)}>
+          <Message body={item.feedback} priority='critical' type='page' />
+        </Box>
       )}
       <Typography>{item?.answer ? item.answer : '--'}</Typography>
     </Box>
