@@ -345,7 +345,11 @@ export default function EditableMap({
                 style={{ paddingBottom: theme.spacing(4) }}
               />
             )}
-            <MapSettingsButton mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
+            <MapSettingsButton
+              mapViewStyle={mapViewStyle}
+              onChangeMapViewStyle={onChangeMapViewStyle}
+              onClose={selectActiveContext}
+            />
           </Box>
           <ReactMapGL
             key={mapId}

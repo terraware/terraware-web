@@ -11,9 +11,14 @@ import { MapViewStyle } from 'src/types/Map';
 export type MapSettingsButtonProp = {
   mapViewStyle: MapViewStyle;
   onChangeMapViewStyle: (style: MapViewStyle) => void;
+  onClose?: () => void;
 };
 
-export default function MapSettingsButton({ mapViewStyle, onChangeMapViewStyle }: MapSettingsButtonProp): JSX.Element {
+export default function MapSettingsButton({
+  mapViewStyle,
+  onChangeMapViewStyle,
+  onClose,
+}: MapSettingsButtonProp): JSX.Element {
   const { activeLocale } = useLocalization();
 
   const mapStyleOptions = useMemo<DropdownItem[]>(() => {
@@ -40,6 +45,9 @@ export default function MapSettingsButton({ mapViewStyle, onChangeMapViewStyle }
   };
   const handleClose = () => {
     setAnchorEl(null);
+    if (onClose) {
+      onClose();
+    }
   };
 
   return (
