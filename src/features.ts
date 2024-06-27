@@ -1,7 +1,7 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName = 'Show Production View' | 'User Detailed Sites' | 'Document Producer';
+export type FeatureName = 'Show Production View' | 'Document Producer';
 
 export type Feature = {
   name: FeatureName;
@@ -34,15 +34,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     ],
     get: env().isForcedProductionView,
     set: env().forceProductionView,
-  },
-  {
-    name: 'User Detailed Sites',
-    preferenceName: 'enableUserDetailedSites',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['User drawn detailed sites'],
-    disclosure: ['This is WIP'],
   },
   {
     name: 'Document Producer',

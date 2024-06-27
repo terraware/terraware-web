@@ -8,7 +8,6 @@ import FilterMultiSelectContainer from 'src/components/common/FilterMultiSelectC
 import Table from 'src/components/common/table';
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { SortOrder } from 'src/components/common/table/sort';
-import isEnabled from 'src/features';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -59,7 +58,6 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
   const { results, setTemporalSearchValue, temporalSearchValue, setSearchSortOrder, filters, setFilters } = props;
 
   const theme = useTheme();
-  const featureFlagSites = isEnabled('User Detailed Sites');
 
   const projects = useAppSelector(selectProjects);
 
@@ -98,11 +96,6 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
     },
     [filterPillData, filters, setFilters]
   );
-
-  const tableColumns = useCallback(() => {
-    const columnsData = columns();
-    return featureFlagSites ? columnsData : columnsData.filter((column) => column.key !== 'draft');
-  }, [featureFlagSites]);
 
   return (
     <Card flushMobile>
@@ -143,7 +136,7 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
             <Grid item xs={12}>
               <Table
                 id='planting-sites-table'
-                columns={tableColumns}
+                columns={columns}
                 rows={results}
                 orderBy='name'
                 Renderer={PlantingSitesCellRenderer}
