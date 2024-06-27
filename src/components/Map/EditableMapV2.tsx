@@ -33,7 +33,8 @@ import { getRgbaFromHex } from 'src/utils/color';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
 import MapSearchBox from './MapSearchBox';
-import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
+import { useMapViewStyle } from './MapViewStyleControl';
+import MapViewStyleSwitch from './MapViewStyleSwitch';
 import UndoRedoControl from './UndoRedoControl';
 import { getMapDrawingLayer, getMapErrorLayer, toMultiPolygon } from './utils';
 
@@ -291,6 +292,8 @@ export default function EditableMap({
   // This is to catch up on an already initalized active context.
   const onLoad = useCallback(() => void selectActiveContext(), [selectActiveContext]);
 
+  const mapStyle = useMemo(() => MapViewStyles[mapViewStyle], [mapViewStyle]);
+
   return (
     <Box
       ref={containerRef}
@@ -324,29 +327,38 @@ export default function EditableMap({
           : {}),
       }}
     >
-      {showSearchBox === true && (
-        <MapSearchBox
-          onSelect={(features: AddressAutofillFeatureSuggestion[] | null) => {
-            if (features && features.length > 0) {
-              const coordinates = features[0].geometry.coordinates;
-              mapRef?.current?.flyTo({
-                center: [coordinates[0], coordinates[1]],
-                essential: true,
-                zoom: 10, // https://docs.mapbox.com/help/glossary/zoom-level/
-              });
-            }
-          }}
-          style={{ paddingBottom: theme.spacing(4) }}
-        />
-      )}
       {firstVisible && (
         <>
+          <Box
+            display='flex'
+            flexDirection='row-reverse'
+            justifyContent='space-between'
+            alignItems='center'
+            paddingBottom={theme.spacing(4)}
+          >
+            <MapViewStyleSwitch mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
+            {showSearchBox === true && (
+              <MapSearchBox
+                onSelect={(features: AddressAutofillFeatureSuggestion[] | null) => {
+                  if (features && features.length > 0) {
+                    const coordinates = features[0].geometry.coordinates;
+                    mapRef?.current?.flyTo({
+                      center: [coordinates[0], coordinates[1]],
+                      essential: true,
+                      zoom: 10, // https://docs.mapbox.com/help/glossary/zoom-level/
+                    });
+                  }
+                }}
+              />
+            )}
+          </Box>
           <ReactMapGL
             key={mapId}
             onError={onMapError}
             ref={mapRef}
             mapboxAccessToken={token}
-            mapStyle={MapViewStyles[mapViewStyle]}
+            mapStyle={mapStyle}
+            styleDiffing={false}
             style={{
               position: 'relative',
               width: '100%',
@@ -365,7 +377,6 @@ export default function EditableMap({
             {mapLayers}
             {errorLayer}
             <FullscreenControl position='top-left' />
-            <MapViewStyleControl mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
             <EditableMapDraw
               boundary={editableBoundary}
               onBoundaryCreated={onEditableBoundaryChanged}
