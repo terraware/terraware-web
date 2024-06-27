@@ -1,3 +1,4 @@
+686e524c23 Move mapStyle selection outside of Map (#2790)
 d24af4e854 Add README instructions on running a local copy of a production build with a remote backend (#2788)
 8f1c32fc25 Site boundary with multiple polygons all get assigned to one zone (#2786)
 1538650ee0 SW-5538 Hydrate the API results into a format that is easily consumable by the table (#2785)
