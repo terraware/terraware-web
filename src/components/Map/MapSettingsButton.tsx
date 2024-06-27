@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { DropdownItem, Tooltip } from '@terraware/web-components';
 import PopoverMenu from '@terraware/web-components/components/PopoverMenu/Popover';
@@ -43,12 +43,16 @@ export default function MapSettingsButton({
   const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
-    if (onClose) {
-      onClose();
-    }
   };
+
+  useEffect(() => {
+    if (anchorEl === null) {
+      onClose?.();
+    }
+  }, [anchorEl])
 
   return (
     <>
