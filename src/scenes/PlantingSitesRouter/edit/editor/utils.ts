@@ -3,7 +3,7 @@ import bbox from '@turf/bbox';
 import bboxPolygon from '@turf/bbox-polygon';
 import { Feature, FeatureCollection, MultiPolygon, Polygon, Position } from 'geojson';
 
-import { cutPolygons, toFeature } from 'src/components/Map/utils';
+import { overlayAndSubtract, toFeature } from 'src/components/Map/utils';
 import strings from 'src/strings';
 import { GeometryFeature } from 'src/types/Map';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
@@ -212,8 +212,9 @@ export const cutOverlappingBoundaries = async (
     onError([]);
     return;
   }
-  // cut new polygons using the cut geometry overlapping the fixed boundaries
-  const cutBoundaries = cutPolygons(source.features as GeometryFeature[], cutWithFeature.geometry) || [];
+
+  // overlay new polygon over existing polygons
+  const cutBoundaries = overlayAndSubtract(source.features as GeometryFeature[], cutWithFeature.geometry) || [];
 
   if (!cutBoundaries.length) {
     onError([]);
@@ -281,7 +282,7 @@ export const findErrors = async (
     const minimumSideDimension = errorCheckLevel === 'subzone' ? 25 : 100;
     const minArea = minimumSideDimension * minimumSideDimension * SQ_M_TO_HECTARES;
 
-    // check if the cut polygons are too small to be boundaries (in which case, we won't create new fixed boundaries using the cut polygons)
+    // check if the new polygons are too small to be boundaries (in which case, we won't create new fixed boundaries using the new polygons)
     // mark them as error annotations instead
     const errors = cutBoundaries
       .filter((boundary) => boundingAreaHectares(boundary.geometry) < minArea)
