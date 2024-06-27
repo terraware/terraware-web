@@ -1,3 +1,4 @@
+3fa103a324 Update tw-tf-logo.png (#2784)
 2249e53166 SW-5575 Update simple site description (#2793)
 cb0ef204dc Implemented zone cutting that does not split disjointed polygons, and 'overwrite boundary' behavior (#2789)
 686e524c23 Move mapStyle selection outside of Map (#2790)
