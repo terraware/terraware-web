@@ -14,21 +14,17 @@ import ReactMapGL, {
 
 import { AddressAutofillFeatureSuggestion } from '@mapbox/search-js-core';
 import { Box, useTheme } from '@mui/material';
-import { Dropdown, DropdownItem } from '@terraware/web-components';
 import bbox from '@turf/bbox';
 import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
 
 import EditableMapDraw, { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
 import { useIsVisible } from 'src/hooks/useIsVisible';
-import { useLocalization } from 'src/providers';
-import strings from 'src/strings';
 import {
   MapDrawingLayer,
   MapEntityId,
   MapEntityOptions,
   MapErrorLayer,
   MapPopupRenderer,
-  MapViewStyle,
   MapViewStyles,
   PopupInfo,
   RenderableReadOnlyBoundary,
@@ -37,6 +33,7 @@ import { getRgbaFromHex } from 'src/utils/color';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
 import MapSearchBox from './MapSearchBox';
+import MapSettingsButton from './MapSettingsButton';
 import { useMapViewStyle } from './MapViewStyleControl';
 import UndoRedoControl from './UndoRedoControl';
 import { getMapDrawingLayer, getMapErrorLayer, toMultiPolygon } from './utils';
@@ -78,7 +75,6 @@ export default function EditableMap({
   showSearchBox,
   style,
 }: EditableMapProps): JSX.Element {
-  const { activeLocale } = useLocalization();
   const { mapId, refreshToken, token } = useMapboxToken();
   const [editMode, setEditMode] = useState<MapEditorMode>();
   const [firstVisible, setFirstVisible] = useState<boolean>(false);
@@ -296,15 +292,7 @@ export default function EditableMap({
   // This is to catch up on an already initalized active context.
   const onLoad = useCallback(() => void selectActiveContext(), [selectActiveContext]);
 
-  const mapStyleOptions = useMemo<DropdownItem[]>(() => {
-    if (!activeLocale) {
-      return [];
-    }
-    return [
-      { label: strings.OUTDOORS, value: 'Outdoors' },
-      { label: strings.SATELLITE, value: 'Satellite' },
-    ];
-  }, [activeLocale]);
+  const mapStyle = useMemo(() => MapViewStyles[mapViewStyle], [mapViewStyle]);
 
   return (
     <Box
@@ -339,37 +327,32 @@ export default function EditableMap({
           : {}),
       }}
     >
-      <Dropdown
-        id='mapStyle'
-        label='Map style'
-        selectedValue={mapViewStyle}
-        options={mapStyleOptions}
-        onChange={(value) => onChangeMapViewStyle(value as MapViewStyle)}
-        sx={{ paddingBottom: theme.spacing(4) }}
-      />
-      {showSearchBox === true && (
-        <MapSearchBox
-          onSelect={(features: AddressAutofillFeatureSuggestion[] | null) => {
-            if (features && features.length > 0) {
-              const coordinates = features[0].geometry.coordinates;
-              mapRef?.current?.flyTo({
-                center: [coordinates[0], coordinates[1]],
-                essential: true,
-                zoom: 10, // https://docs.mapbox.com/help/glossary/zoom-level/
-              });
-            }
-          }}
-          style={{ paddingBottom: theme.spacing(4) }}
-        />
-      )}
       {firstVisible && (
         <>
+          <Box display={'flex'} flexDirection={'row'}>
+            {showSearchBox === true && (
+              <MapSearchBox
+                onSelect={(features: AddressAutofillFeatureSuggestion[] | null) => {
+                  if (features && features.length > 0) {
+                    const coordinates = features[0].geometry.coordinates;
+                    mapRef?.current?.flyTo({
+                      center: [coordinates[0], coordinates[1]],
+                      essential: true,
+                      zoom: 10, // https://docs.mapbox.com/help/glossary/zoom-level/
+                    });
+                  }
+                }}
+                style={{ paddingBottom: theme.spacing(4) }}
+              />
+            )}
+            <MapSettingsButton mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
+          </Box>
           <ReactMapGL
             key={mapId}
             onError={onMapError}
             ref={mapRef}
             mapboxAccessToken={token}
-            mapStyle={MapViewStyles[mapViewStyle]}
+            mapStyle={mapStyle}
             styleDiffing={false}
             style={{
               position: 'relative',
