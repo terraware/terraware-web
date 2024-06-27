@@ -27,10 +27,10 @@ export default function MapSettingsButton({ mapViewStyle, onChangeMapViewStyle }
   }, [activeLocale]);
 
   const handleItemSelected = (item: DropdownItem) => {
+    handleClose();
     if (mapStyleOptions.find((opt) => opt.value === item.value)) {
       onChangeMapViewStyle(item.value);
     }
-    handleClose();
   };
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
