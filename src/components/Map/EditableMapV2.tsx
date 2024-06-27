@@ -25,6 +25,7 @@ import {
   MapEntityOptions,
   MapErrorLayer,
   MapPopupRenderer,
+  MapViewStyle,
   MapViewStyles,
   PopupInfo,
   RenderableReadOnlyBoundary,
@@ -33,9 +34,12 @@ import { getRgbaFromHex } from 'src/utils/color';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
 import MapSearchBox from './MapSearchBox';
-import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
+import { useMapViewStyle } from './MapViewStyleControl';
 import UndoRedoControl from './UndoRedoControl';
 import { getMapDrawingLayer, getMapErrorLayer, toMultiPolygon } from './utils';
+import { Dropdown, DropdownItem } from '@terraware/web-components';
+import { useLocalization } from 'src/providers';
+import strings from 'src/strings';
 
 // Callback to select one feature from among list of features on the map that overlap the click target.
 export type LayerFeature = MapboxGeoJSONFeature;
@@ -74,6 +78,7 @@ export default function EditableMap({
   showSearchBox,
   style,
 }: EditableMapProps): JSX.Element {
+  const { activeLocale } = useLocalization();
   const { mapId, refreshToken, token } = useMapboxToken();
   const [editMode, setEditMode] = useState<MapEditorMode>();
   const [firstVisible, setFirstVisible] = useState<boolean>(false);
@@ -291,6 +296,17 @@ export default function EditableMap({
   // This is to catch up on an already initalized active context.
   const onLoad = useCallback(() => void selectActiveContext(), [selectActiveContext]);
 
+  const mapStyleOptions = useMemo<DropdownItem[]>(() => {
+    if (!activeLocale) {
+      return [];
+    }
+    return [
+      { label: strings.OUTDOORS, value: 'Outdoors' },
+      { label: strings.SATELLITE, value: 'Satellite' },
+    ];
+  }, [activeLocale]);
+  
+
   return (
     <Box
       ref={containerRef}
@@ -324,6 +340,14 @@ export default function EditableMap({
           : {}),
       }}
     >
+      <Dropdown
+        id='mapStyle'
+        label='Map style'
+        selectedValue={mapViewStyle}
+        options={mapStyleOptions}
+        onChange={(value) => onChangeMapViewStyle(value as MapViewStyle)}
+        sx={{ paddingBottom: theme.spacing(4) }}
+      />
       {showSearchBox === true && (
         <MapSearchBox
           onSelect={(features: AddressAutofillFeatureSuggestion[] | null) => {
@@ -362,12 +386,10 @@ export default function EditableMap({
             interactiveLayerIds={interactiveLayerIds ?? []}
             onClick={onMapClick}
             onLoad={onLoad}
-            onStyleData={onLoad}
           >
             {mapLayers}
             {errorLayer}
             <FullscreenControl position='top-left' />
-            <MapViewStyleControl mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
             <EditableMapDraw
               boundary={editableBoundary}
               onBoundaryCreated={onEditableBoundaryChanged}
