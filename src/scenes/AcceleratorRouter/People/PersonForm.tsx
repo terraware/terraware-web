@@ -6,31 +6,47 @@ import { MultiSelect, Textfield } from '@terraware/web-components';
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import { useLocalization, useUser } from 'src/providers/hooks';
+import { PersonData } from 'src/scenes/AcceleratorRouter/People/PersonContext';
 import strings from 'src/strings';
+import { DeliverableCategories, DeliverableCategoryType, categoryLabel } from 'src/types/Deliverables';
 import { USER_GLOBAL_ROLES, UserWithGlobalRoles, getGlobalRole } from 'src/types/GlobalRoles';
 import { User, UserGlobalRole } from 'src/types/User';
 import { isAllowed } from 'src/utils/acl';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 type PersonFormProps = {
-  busy?: boolean;
   emailEnabled?: boolean;
   emailError?: string;
-  user?: User;
+  personData?: PersonData;
   onCancel: () => void;
-  onChange?: (person: User) => void;
-  onSave: (person: User) => void;
+  onChange?: (person: PersonData) => void;
+  onSave: (person: PersonData) => void;
 };
 
 export default function PersonForm(props: PersonFormProps): JSX.Element {
-  const { busy, emailEnabled, emailError, user, onCancel, onChange, onSave } = props;
+  const { emailEnabled, emailError, personData, onCancel, onChange, onSave } = props;
 
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
   const { user: activeUser } = useUser();
   const theme = useTheme();
 
-  const [localRecord, setLocalRecord] = useState<Partial<User>>({});
+  const [localUserRecord, setLocalUserRecord] = useState<Partial<User>>({});
+  const [localDeliverableCategories, setLocalDeliverableCategories] = useState<DeliverableCategoryType[]>([]);
+
+  const deliverableCategoryDropdownOptions = useMemo(() => {
+    const options = new Map<string, string>([]);
+
+    if (!activeLocale || !activeUser) {
+      return options;
+    }
+
+    for (const deliverableCategory of DeliverableCategories) {
+      options.set(deliverableCategory, categoryLabel(deliverableCategory));
+    }
+
+    return options;
+  }, [activeLocale, activeUser]);
 
   const globalRoleDropdownOptions = useMemo(() => {
     const options = new Map<string, string>([]);
@@ -49,50 +65,74 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
   }, [activeLocale, activeUser]);
 
   const updateField = useCallback((field: keyof UserWithGlobalRoles, value: any) => {
-    setLocalRecord((prev) => ({
+    setLocalUserRecord((prev) => ({
       ...prev,
       [field]: value,
     }));
   }, []);
 
   const onAddGlobalRole = useCallback((globalRole: string) => {
-    setLocalRecord((prev) => ({
+    setLocalUserRecord((prev) => ({
       ...prev,
       globalRoles: [...(prev.globalRoles || []), globalRole as UserGlobalRole],
     }));
   }, []);
 
   const onRemoveGlobalRole = useCallback((globalRole: string) => {
-    setLocalRecord((prev) => ({
+    setLocalUserRecord((prev) => ({
       ...prev,
       globalRoles: (prev.globalRoles || []).filter((_globalRole) => _globalRole !== globalRole),
     }));
   }, []);
 
+  const onAddDeliverableCategory = useCallback((categoryToAdd: string) => {
+    setLocalDeliverableCategories((prev) => [...prev, categoryToAdd as DeliverableCategoryType]);
+  }, []);
+
+  const onRemoveDeliverableCategory = useCallback((categoryToRemove: string) => {
+    setLocalDeliverableCategories((prev) => prev.filter((category) => category !== categoryToRemove));
+  }, []);
+
   const onSaveHandler = () => {
-    if (!localRecord.email || emailError) {
+    if (!localUserRecord.email || emailError || !personData) {
       return;
     }
 
     onSave({
-      ...(localRecord as User),
+      ...personData,
+      deliverableCategories: localDeliverableCategories,
+      user: localUserRecord as User,
     });
   };
 
   useEffect(() => {
-    if (user) {
-      setLocalRecord(user);
+    if (personData?.user) {
+      setLocalUserRecord(personData.user);
     }
-  }, [user]);
+    if (personData?.deliverableCategories) {
+      setLocalDeliverableCategories(personData.deliverableCategories);
+    }
+  }, [personData]);
 
   useEffect(() => {
-    if (onChange) {
-      onChange(localRecord as User);
+    if (onChange && personData) {
+      onChange({
+        ...personData,
+        deliverableCategories: localDeliverableCategories,
+        user: localUserRecord as User,
+        userId: localUserRecord?.id || -1,
+      });
     }
-  }, [localRecord, onChange]);
+  }, [localDeliverableCategories, localUserRecord]);
 
   return (
-    <PageForm busy={busy} cancelID='cancelEditUser' onCancel={onCancel} onSave={onSaveHandler} saveID='saveUser'>
+    <PageForm
+      busy={personData?.isBusy}
+      cancelID='cancelEditUser'
+      onCancel={onCancel}
+      onSave={onSaveHandler}
+      saveID='saveUser'
+    >
       <Container
         maxWidth={false}
         sx={{
@@ -112,7 +152,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
               label={strings.EMAIL}
               onChange={(value) => updateField('email', value)}
               type='text'
-              value={localRecord.email}
+              value={localUserRecord.email}
               disabled={!emailEnabled}
             />
           </Grid>
@@ -122,7 +162,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
               label={strings.FIRST_NAME}
               onChange={(value) => updateField('firstName', value)}
               type='text'
-              value={localRecord.firstName}
+              value={localUserRecord.firstName}
               disabled
             />
           </Grid>
@@ -132,7 +172,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
               label={strings.LAST_NAME}
               onChange={(value) => updateField('lastName', value)}
               type='text'
-              value={localRecord.lastName}
+              value={localUserRecord.lastName}
               disabled
             />
           </Grid>
@@ -144,8 +184,20 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
               options={globalRoleDropdownOptions}
               placeHolder={strings.SELECT}
               valueRenderer={(v) => v}
-              selectedOptions={localRecord.globalRoles || []}
+              selectedOptions={localUserRecord.globalRoles || []}
               label={strings.ROLE}
+            />
+          </Grid>
+          <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+            <MultiSelect<string, string>
+              fullWidth
+              onAdd={onAddDeliverableCategory}
+              onRemove={onRemoveDeliverableCategory}
+              options={deliverableCategoryDropdownOptions}
+              placeHolder={strings.SELECT}
+              valueRenderer={(v) => v}
+              selectedOptions={localDeliverableCategories?.toSorted()}
+              label={strings.CATEGORIES}
             />
           </Grid>
         </Card>

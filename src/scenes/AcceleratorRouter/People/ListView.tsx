@@ -58,6 +58,11 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           type: 'string',
         },
         {
+          key: 'deliverableCategories',
+          name: strings.CATEGORIES,
+          type: 'string',
+        },
+        {
           key: 'createdTime',
           name: strings.DATE_ADDED,
           type: 'date',
