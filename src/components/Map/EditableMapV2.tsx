@@ -33,7 +33,7 @@ import { getRgbaFromHex } from 'src/utils/color';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
 import MapSearchBox from './MapSearchBox';
-import MapSettingsButton from './MapSettingsButton';
+import MapViewStyleSwitch from './MapViewStyleSwitch';
 import { useMapViewStyle } from './MapViewStyleControl';
 import UndoRedoControl from './UndoRedoControl';
 import { getMapDrawingLayer, getMapErrorLayer, toMultiPolygon } from './utils';
@@ -345,10 +345,9 @@ export default function EditableMap({
                 style={{ paddingBottom: theme.spacing(4) }}
               />
             )}
-            <MapSettingsButton
+            <MapViewStyleSwitch
               mapViewStyle={mapViewStyle}
               onChangeMapViewStyle={onChangeMapViewStyle}
-              onClose={selectActiveContext}
             />
           </Box>
           <ReactMapGL
