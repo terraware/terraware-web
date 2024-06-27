@@ -4,6 +4,7 @@ import useFetchDeliverable from 'src/components/DeliverableView/useFetchDelivera
 import Page from 'src/components/Page';
 
 import DocumentDeliverableView from './DocumentDeliverableView';
+import QuestionsDeliverableView from './QuestionsDeliverableView';
 import SpeciesDeliverableView from './SpeciesDeliverableView';
 
 const DeliverableViewWrapper = () => {
@@ -15,6 +16,8 @@ const DeliverableViewWrapper = () => {
     switch (deliverable.type) {
       case 'Document':
         return <DocumentDeliverableView deliverable={deliverable} />;
+      case 'Questions':
+        return <QuestionsDeliverableView deliverable={deliverable} />;
       case 'Species':
         return <SpeciesDeliverableView deliverable={deliverable} />;
       default:
