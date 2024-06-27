@@ -1,3 +1,5 @@
+2249e53166 SW-5575 Update simple site description (#2793)
+cb0ef204dc Implemented zone cutting that does not split disjointed polygons, and 'overwrite boundary' behavior (#2789)
 686e524c23 Move mapStyle selection outside of Map (#2790)
 d24af4e854 Add README instructions on running a local copy of a production build with a remote backend (#2788)
 8f1c32fc25 Site boundary with multiple polygons all get assigned to one zone (#2786)
