@@ -347,6 +347,7 @@ export default function EditableMap({
             ref={mapRef}
             mapboxAccessToken={token}
             mapStyle={MapViewStyles[mapViewStyle]}
+            styleDiffing={false}
             style={{
               position: 'relative',
               width: '100%',

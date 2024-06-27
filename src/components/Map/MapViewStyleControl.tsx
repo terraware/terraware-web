@@ -38,10 +38,15 @@ const MapViewStyleControl = ({ mapViewStyle, onChangeMapViewStyle }: MapViewStyl
   const { activeLocale } = useLocalization();
   const mapPortalContainer = useMapPortalContainer();
 
-  const setMapViewStyle = (item: DropdownItem) => {
-    const style: MapViewStyle = item.value === 'Outdoors' ? 'Outdoors' : 'Satellite';
-    onChangeMapViewStyle(style);
-  };
+  const setMapViewStyle = useCallback(
+    (item: DropdownItem) => {
+      const style: MapViewStyle = item.value === 'Outdoors' ? 'Outdoors' : 'Satellite';
+      if (style !== mapViewStyle) {
+        onChangeMapViewStyle(style);
+      }
+    },
+    [mapViewStyle, onChangeMapViewStyle]
+  );
 
   const viewOptions = useMemo<DropdownItem[]>(() => {
     if (!activeLocale) {
