@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/51</span>
+                <span class='fraction'>0/49</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/39</span>
+                <span class='fraction'>0/35</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/49</span>
+                <span class='fraction'>0/47</span>
             </div>
         
             
@@ -250,12 +250,7 @@
 <a name='L185'></a><a href='#L185'>185</a>
 <a name='L186'></a><a href='#L186'>186</a>
 <a name='L187'></a><a href='#L187'>187</a>
-<a name='L188'></a><a href='#L188'>188</a>
-<a name='L189'></a><a href='#L189'>189</a>
-<a name='L190'></a><a href='#L190'>190</a>
-<a name='L191'></a><a href='#L191'>191</a>
-<a name='L192'></a><a href='#L192'>192</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L188'></a><a href='#L188'>188</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -297,7 +292,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -312,8 +306,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -455,7 +447,6 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
-import isEnabled from 'src/features';
 import { useLocalization } from 'src/providers';
 import { useOrganization, useTimeZones } from 'src/providers/hooks';
 import PlantingSiteTypeSelect from 'src/scenes/PlantingSitesRouter/edit/PlantingSiteTypeSelect';
@@ -488,7 +479,6 @@ export default function <span class="fstat-no" title="function not covered" >Pla
   const [temporalSearchValue, setTemporalSearchValue] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const debouncedSearchTerm = <span class="cstat-no" title="statement not covered" >useDebounce(temporalSearchValue, 250);</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
-  const featureFlagSites = <span class="cstat-no" title="statement not covered" >isEnabled('User Detailed Sites');</span>
 &nbsp;
   const filtersEmpty = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >!filters.projectIds || filters.projectIds.length === 0,</span> [filters]);</span>
 &nbsp;
@@ -502,11 +492,9 @@ export default function <span class="fstat-no" title="function not covered" >Pla
         TrackingService.searchPlantingSites(selectedOrganization.id, searchFields, searchSortOrder),
       ];
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      if (featureFlagSites) {</span>
-<span class="cstat-no" title="statement not covered" >        searchRequests.push(</span>
-          DraftPlantingSiteService.searchDraftPlantingSites(selectedOrganization.id, searchFields, searchSortOrder)
-        );
-      }
+<span class="cstat-no" title="statement not covered" >      searchRequests.push(</span>
+        DraftPlantingSiteService.searchDraftPlantingSites(selectedOrganization.id, searchFields, searchSortOrder)
+      );
 &nbsp;
       // batch the search requests
       const results = <span class="cstat-no" title="statement not covered" >await Promise.allSettled(searchRequests);</span>
@@ -530,7 +518,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
         ];
       }, [] as PlantingSiteSearchResult[]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      if (featureFlagSites &amp;&amp; sites.some(<span class="fstat-no" title="function not covered" >(s</span>ite) =&gt; <span class="cstat-no" title="statement not covered" >site.isDraft)</span>) {</span>
+<span class="cstat-no" title="statement not covered" >      if (sites.some(<span class="fstat-no" title="function not covered" >(s</span>ite) =&gt; <span class="cstat-no" title="statement not covered" >site.isDraft)</span>) {</span>
         // sort merged results by sort order
 <span class="cstat-no" title="statement not covered" >        return sortResults(sites, activeLocale, searchSortOrder, [</span>
           'id',
@@ -543,7 +531,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      return sites;</span>
     },
-    [activeLocale, defaultTimeZone, featureFlagSites, searchSortOrder, selectedOrganization.id, timeZones]
+    [activeLocale, defaultTimeZone, searchSortOrder, selectedOrganization.id, timeZones]
   );
 &nbsp;
   const onSearch = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
@@ -643,7 +631,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-06-27T18:57:35.960Z
+                at 2024-06-27T19:41:54.257Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
