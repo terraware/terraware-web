@@ -14,11 +14,14 @@ import ReactMapGL, {
 
 import { AddressAutofillFeatureSuggestion } from '@mapbox/search-js-core';
 import { Box, useTheme } from '@mui/material';
+import { Dropdown, DropdownItem } from '@terraware/web-components';
 import bbox from '@turf/bbox';
 import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
 
 import EditableMapDraw, { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
 import { useIsVisible } from 'src/hooks/useIsVisible';
+import { useLocalization } from 'src/providers';
+import strings from 'src/strings';
 import {
   MapDrawingLayer,
   MapEntityId,
@@ -37,9 +40,6 @@ import MapSearchBox from './MapSearchBox';
 import { useMapViewStyle } from './MapViewStyleControl';
 import UndoRedoControl from './UndoRedoControl';
 import { getMapDrawingLayer, getMapErrorLayer, toMultiPolygon } from './utils';
-import { Dropdown, DropdownItem } from '@terraware/web-components';
-import { useLocalization } from 'src/providers';
-import strings from 'src/strings';
 
 // Callback to select one feature from among list of features on the map that overlap the click target.
 export type LayerFeature = MapboxGeoJSONFeature;
@@ -305,7 +305,6 @@ export default function EditableMap({
       { label: strings.SATELLITE, value: 'Satellite' },
     ];
   }, [activeLocale]);
-  
 
   return (
     <Box
