@@ -33,8 +33,8 @@ import { getRgbaFromHex } from 'src/utils/color';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
 import MapSearchBox from './MapSearchBox';
-import MapViewStyleSwitch from './MapViewStyleSwitch';
 import { useMapViewStyle } from './MapViewStyleControl';
+import MapViewStyleSwitch from './MapViewStyleSwitch';
 import UndoRedoControl from './UndoRedoControl';
 import { getMapDrawingLayer, getMapErrorLayer, toMultiPolygon } from './utils';
 
@@ -329,7 +329,14 @@ export default function EditableMap({
     >
       {firstVisible && (
         <>
-          <Box display={'flex'} flexDirection={'row'}>
+          <Box
+            display='flex'
+            flexDirection='row-reverse'
+            justifyContent='space-between'
+            alignItems='center'
+            paddingBottom={theme.spacing(4)}
+          >
+            <MapViewStyleSwitch mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
             {showSearchBox === true && (
               <MapSearchBox
                 onSelect={(features: AddressAutofillFeatureSuggestion[] | null) => {
@@ -342,13 +349,8 @@ export default function EditableMap({
                     });
                   }
                 }}
-                style={{ paddingBottom: theme.spacing(4) }}
               />
             )}
-            <MapViewStyleSwitch
-              mapViewStyle={mapViewStyle}
-              onChangeMapViewStyle={onChangeMapViewStyle}
-            />
           </Box>
           <ReactMapGL
             key={mapId}

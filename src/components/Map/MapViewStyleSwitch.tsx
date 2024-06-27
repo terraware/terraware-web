@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
+
 import strings from 'src/strings';
 import { MapViewStyle } from 'src/types/Map';
 import { getRgbaFromHex } from 'src/utils/color';
@@ -83,7 +84,7 @@ const MapViewStyleSwitch = ({ mapViewStyle, onChangeMapViewStyle }: MapViewStyle
     >
       {renderSelector('Outdoors')}
       {renderSelector('Satellite')}
-  </Box>
+    </Box>
   );
 };
 
