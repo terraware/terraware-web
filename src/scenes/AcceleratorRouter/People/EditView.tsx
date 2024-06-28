@@ -1,20 +1,21 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
-import { useAppDispatch } from 'src/redux/store';
+import { UserWithDeliverableCategories } from 'src/scenes/AcceleratorRouter/People/UserWithDeliverableCategories';
+import useUpdatePerson from 'src/scenes/AcceleratorRouter/People/useUpdatePerson';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
-import { PersonData, usePersonData } from './PersonContext';
+import { usePersonData } from './PersonContext';
 import PersonForm from './PersonForm';
 
 const EditView = () => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useStateLocation();
   const personData = usePersonData();
-  const { update, user, userId } = personData;
+  const updatePerson = useUpdatePerson();
+  const { user, userId } = personData;
 
   const goToViewPerson = useCallback(
     () => navigate(getLocation(APP_PATHS.ACCELERATOR_PERSON.replace(':userId', `${userId}`), location)),
@@ -22,17 +23,21 @@ const EditView = () => {
   );
 
   const handleOnSave = useCallback(
-    (record: PersonData) => {
-      if (record.user) {
-        update(record.user, record.deliverableCategories || [], goToViewPerson);
-      }
+    (record: UserWithDeliverableCategories) => {
+      updatePerson.update(record);
     },
-    [dispatch, goToViewPerson, update]
+    [updatePerson]
   );
+
+  useEffect(() => {
+    if (updatePerson.succeeded) {
+      goToViewPerson();
+    }
+  }, [updatePerson]);
 
   return (
     <Page title={user?.email || ''} contentStyle={{ display: 'flex', flexDirection: 'column' }}>
-      {user && <PersonForm personData={personData} onSave={handleOnSave} onCancel={goToViewPerson} />}
+      {user && <PersonForm busy={updatePerson.busy} onSave={handleOnSave} onCancel={goToViewPerson} user={user} />}
     </Page>
   );
 };

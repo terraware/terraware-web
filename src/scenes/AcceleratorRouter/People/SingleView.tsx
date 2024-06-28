@@ -23,7 +23,7 @@ const SingleView = () => {
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
   const theme = useTheme();
-  const { deliverableCategories, user, userId } = usePersonData();
+  const { user, userId } = usePersonData();
 
   const canEdit = isAllowed('ASSIGN_SOME_GLOBAL_ROLES');
 
@@ -49,6 +49,15 @@ const SingleView = () => {
       },
     ],
     [activeLocale]
+  );
+
+  const deliverableCategories = useMemo(
+    () =>
+      user?.deliverableCategories
+        ?.map((category) => categoryLabel(category))
+        ?.toSorted()
+        ?.join(strings.LIST_SEPARATOR),
+    [user]
   );
 
   return (
@@ -80,10 +89,7 @@ const SingleView = () => {
               id='deliverableCategories'
               label={strings.CATEGORIES}
               type='text'
-              value={deliverableCategories
-                ?.map((category) => categoryLabel(category))
-                ?.toSorted()
-                ?.join(strings.LIST_SEPARATOR)}
+              value={deliverableCategories}
               display={true}
             />
           </Grid>

@@ -6,7 +6,9 @@ import { APP_PATHS } from 'src/constants';
 import { requestSearchUserByEmail } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUserByEmailRequest } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { PersonData, usePersonData } from 'src/scenes/AcceleratorRouter/People/PersonContext';
+import { usePersonData } from 'src/scenes/AcceleratorRouter/People/PersonContext';
+import { UserWithDeliverableCategories } from 'src/scenes/AcceleratorRouter/People/UserWithDeliverableCategories';
+import useUpdatePerson from 'src/scenes/AcceleratorRouter/People/useUpdatePerson';
 import strings from 'src/strings';
 import useDebounce from 'src/utils/useDebounce';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
@@ -18,9 +20,10 @@ const NewView = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useStateLocation();
+  const updatePerson = useUpdatePerson();
 
   const personData = usePersonData();
-  const { setUserId, update } = personData;
+  const { setUserId, user } = personData;
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const debouncedEmail = useDebounce(email, 1000);
@@ -34,19 +37,17 @@ const NewView = () => {
   );
 
   const handleOnSave = useCallback(
-    (record: PersonData) => {
-      if (record.user) {
-        update(record.user, record.deliverableCategories || [], goToPeople);
-      }
+    (record: UserWithDeliverableCategories) => {
+      updatePerson.update(record);
     },
-    [goToPeople, update]
+    [updatePerson]
   );
 
   const handleOnChange = useCallback(
-    (personData: PersonData) => {
-      if (personData.user?.email) {
+    (record: UserWithDeliverableCategories) => {
+      if (record.email) {
         setEmailError('');
-        setEmail(personData.user.email);
+        setEmail(record.email);
       }
     },
     [setEmail]
@@ -80,15 +81,22 @@ const NewView = () => {
     }
   }, [searchRequest]);
 
+  useEffect(() => {
+    if (updatePerson.succeeded) {
+      goToPeople();
+    }
+  }, [updatePerson]);
+
   return (
     <Page title={strings.ADD_PERSON} contentStyle={{ display: 'flex', flexDirection: 'column' }}>
       <PersonForm
+        busy={updatePerson.busy}
         emailEnabled
         emailError={emailError}
         onSave={handleOnSave}
-        personData={personData}
         onCancel={goToPeople}
         onChange={handleOnChange}
+        user={user}
       />
     </Page>
   );

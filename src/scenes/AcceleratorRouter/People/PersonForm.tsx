@@ -6,33 +6,33 @@ import { MultiSelect, Textfield } from '@terraware/web-components';
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import { useLocalization, useUser } from 'src/providers/hooks';
-import { PersonData } from 'src/scenes/AcceleratorRouter/People/PersonContext';
+import { UserWithDeliverableCategories } from 'src/scenes/AcceleratorRouter/People/UserWithDeliverableCategories';
 import strings from 'src/strings';
 import { DeliverableCategories, DeliverableCategoryType, categoryLabel } from 'src/types/Deliverables';
 import { USER_GLOBAL_ROLES, UserWithGlobalRoles, getGlobalRole } from 'src/types/GlobalRoles';
-import { User, UserGlobalRole } from 'src/types/User';
+import { UserGlobalRole } from 'src/types/User';
 import { isAllowed } from 'src/utils/acl';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 type PersonFormProps = {
+  busy?: boolean;
   emailEnabled?: boolean;
   emailError?: string;
-  personData?: PersonData;
+  user?: UserWithDeliverableCategories;
   onCancel: () => void;
-  onChange?: (person: PersonData) => void;
-  onSave: (person: PersonData) => void;
+  onChange?: (person: UserWithDeliverableCategories) => void;
+  onSave: (person: UserWithDeliverableCategories) => void;
 };
 
 export default function PersonForm(props: PersonFormProps): JSX.Element {
-  const { emailEnabled, emailError, personData, onCancel, onChange, onSave } = props;
+  const { busy, emailEnabled, emailError, user, onCancel, onChange, onSave } = props;
 
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
   const { user: activeUser } = useUser();
   const theme = useTheme();
 
-  const [localUserRecord, setLocalUserRecord] = useState<Partial<User>>({});
-  const [localDeliverableCategories, setLocalDeliverableCategories] = useState<DeliverableCategoryType[]>([]);
+  const [localRecord, setLocalRecord] = useState<Partial<UserWithDeliverableCategories>>({});
 
   const deliverableCategoryDropdownOptions = useMemo(() => {
     const options = new Map<string, string>([]);
@@ -65,74 +65,66 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
   }, [activeLocale, activeUser]);
 
   const updateField = useCallback((field: keyof UserWithGlobalRoles, value: any) => {
-    setLocalUserRecord((prev) => ({
+    setLocalRecord((prev) => ({
       ...prev,
       [field]: value,
     }));
   }, []);
 
+  const onAddDeliverableCategory = useCallback((deliverableCategory: string) => {
+    setLocalRecord((prev) => ({
+      ...prev,
+      deliverableCategories: [...(prev.deliverableCategories || []), deliverableCategory as DeliverableCategoryType],
+    }));
+  }, []);
+
+  const onRemoveDeliverableCategory = useCallback((deliverableCategory: string) => {
+    setLocalRecord((prev) => ({
+      ...prev,
+      deliverableCategories: (prev.deliverableCategories || []).filter(
+        (_deliverableCategory) => _deliverableCategory !== deliverableCategory
+      ),
+    }));
+  }, []);
+
   const onAddGlobalRole = useCallback((globalRole: string) => {
-    setLocalUserRecord((prev) => ({
+    setLocalRecord((prev) => ({
       ...prev,
       globalRoles: [...(prev.globalRoles || []), globalRole as UserGlobalRole],
     }));
   }, []);
 
   const onRemoveGlobalRole = useCallback((globalRole: string) => {
-    setLocalUserRecord((prev) => ({
+    setLocalRecord((prev) => ({
       ...prev,
       globalRoles: (prev.globalRoles || []).filter((_globalRole) => _globalRole !== globalRole),
     }));
   }, []);
 
-  const onAddDeliverableCategory = useCallback((categoryToAdd: string) => {
-    setLocalDeliverableCategories((prev) => [...prev, categoryToAdd as DeliverableCategoryType]);
-  }, []);
-
-  const onRemoveDeliverableCategory = useCallback((categoryToRemove: string) => {
-    setLocalDeliverableCategories((prev) => prev.filter((category) => category !== categoryToRemove));
-  }, []);
-
   const onSaveHandler = () => {
-    if (!localUserRecord.email || emailError || !personData) {
+    if (!localRecord.email || emailError) {
       return;
     }
 
     onSave({
-      ...personData,
-      deliverableCategories: localDeliverableCategories,
-      user: localUserRecord as User,
+      ...(localRecord as UserWithDeliverableCategories),
     });
   };
 
   useEffect(() => {
-    if (personData?.user) {
-      setLocalUserRecord(personData.user);
+    if (user) {
+      setLocalRecord(user);
     }
-    if (personData?.deliverableCategories) {
-      setLocalDeliverableCategories(personData.deliverableCategories);
-    }
-  }, [personData]);
+  }, [user]);
 
   useEffect(() => {
-    if (onChange && personData) {
-      onChange({
-        ...personData,
-        deliverableCategories: localDeliverableCategories,
-        user: localUserRecord as User,
-        userId: localUserRecord?.id || -1,
-      });
+    if (onChange) {
+      onChange(localRecord as UserWithDeliverableCategories);
     }
-  }, [localDeliverableCategories, localUserRecord]);
+  }, [localRecord, onChange]);
 
   return (
-    <PageForm
-      busy={personData?.isBusy}
-      cancelID='cancelEditUser'
-      onCancel={onCancel}
-      onSave={onSaveHandler}
-      saveID='saveUser'
-    >
+    <PageForm busy={busy} cancelID='cancelEditUser' onCancel={onCancel} onSave={onSaveHandler} saveID='saveUser'>
       <Container
         maxWidth={false}
         sx={{
@@ -152,7 +144,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
               label={strings.EMAIL}
               onChange={(value) => updateField('email', value)}
               type='text'
-              value={localUserRecord.email}
+              value={localRecord.email}
               disabled={!emailEnabled}
             />
           </Grid>
@@ -162,7 +154,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
               label={strings.FIRST_NAME}
               onChange={(value) => updateField('firstName', value)}
               type='text'
-              value={localUserRecord.firstName}
+              value={localRecord.firstName}
               disabled
             />
           </Grid>
@@ -172,7 +164,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
               label={strings.LAST_NAME}
               onChange={(value) => updateField('lastName', value)}
               type='text'
-              value={localUserRecord.lastName}
+              value={localRecord.lastName}
               disabled
             />
           </Grid>
@@ -184,7 +176,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
               options={globalRoleDropdownOptions}
               placeHolder={strings.SELECT}
               valueRenderer={(v) => v}
-              selectedOptions={localUserRecord.globalRoles || []}
+              selectedOptions={localRecord.globalRoles || []}
               label={strings.ROLE}
             />
           </Grid>
@@ -196,7 +188,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
               options={deliverableCategoryDropdownOptions}
               placeHolder={strings.SELECT}
               valueRenderer={(v) => v}
-              selectedOptions={localDeliverableCategories?.toSorted()}
+              selectedOptions={localRecord.deliverableCategories?.toSorted() || []}
               label={strings.CATEGORIES}
             />
           </Grid>
