@@ -146,6 +146,7 @@ const DeliverableViewWrapper = () => {
         ) : deliverable.type === 'Questions' ? (
           <QuestionsDeliverableView
             callToAction={callToAction}
+            optionsMenu={optionsMenu}
             deliverable={deliverable}
             isBusy={requestStatus === 'pending'}
             showRejectDialog={() => setShowRejectDialog(true)}
