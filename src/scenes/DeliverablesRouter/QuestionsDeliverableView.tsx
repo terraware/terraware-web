@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Message } from '@terraware/web-components';
@@ -15,6 +15,7 @@ import Card from 'src/components/common/Card';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
+import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { requestListParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { selectParticipantProjectSpeciesListRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
@@ -24,6 +25,7 @@ import { DeliverableStatusType } from 'src/types/Deliverables';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import QuestionsDeliverableStatusMessage from './QuestionsDeliverableStatusMessage';
+import SubmitDeliverableDialog from './SubmitDeliverableDialog';
 
 type QuestionDeliverableItem = {
   answer: string;
@@ -137,10 +139,13 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
   const { currentParticipantProject } = useParticipantData();
+  const { currentDeliverable: deliverable } = useDeliverableData();
   const { status: requestStatus } = useUpdateDeliverable();
 
   // TODO: replace with actual question/answer data
   const ppsSearchResults = useAppSelector(selectParticipantProjectSpeciesListRequest(projectId));
+
+  const [showSubmitDialog, setShowSubmitDialog] = useState<boolean>(false);
 
   const submitButtonIsDisabled = useMemo(() => {
     return (
@@ -148,6 +153,13 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
       ppsSearchResults?.data?.every((species) => species.participantProjectSpecies.submissionStatus === 'Approved')
     );
   }, [ppsSearchResults]);
+
+  const submitDeliverable = useCallback(() => {
+    if (deliverable?.id !== undefined) {
+      alert('TODO: Submit Deliverable');
+    }
+    setShowSubmitDialog(false);
+  }, [deliverable]);
 
   useEffect(() => {
     if (!currentParticipantProject?.id) {
@@ -191,9 +203,7 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
         <Button
           disabled={submitButtonIsDisabled}
           label={strings.SUBMIT_FOR_APPROVAL}
-          onClick={() => {
-            alert('TODO: Submit Deliverable for Approval');
-          }}
+          onClick={() => setShowSubmitDialog(true)}
           size='medium'
           id='submit-deliverable'
         />
@@ -202,16 +212,26 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
   }, []);
 
   return (
-    <Page crumbs={crumbs} rightComponent={actionMenu} title={<TitleBar {...props} />}>
-      {(props.isBusy || requestStatus === 'pending') && <BusySpinner />}
-      <Box display='flex' flexDirection='column' flexGrow={1}>
-        <QuestionsDeliverableStatusMessage {...viewProps} questions={ppsSearchResults?.data || []} />
-        <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-          <Metadata {...viewProps} />
-          <QuestionAnswerSets items={QA_SETS} />
-        </Card>
-      </Box>
-    </Page>
+    <>
+      {deliverable && showSubmitDialog && (
+        <SubmitDeliverableDialog
+          onClose={() => setShowSubmitDialog(false)}
+          onSubmit={submitDeliverable}
+          submitMessage={strings.SUBMIT_QUESTIONNAIRE_CONFIRMATION}
+        />
+      )}
+
+      <Page crumbs={crumbs} rightComponent={actionMenu} title={<TitleBar {...props} />}>
+        {(props.isBusy || requestStatus === 'pending') && <BusySpinner />}
+        <Box display='flex' flexDirection='column' flexGrow={1}>
+          <QuestionsDeliverableStatusMessage {...viewProps} questions={ppsSearchResults?.data || []} />
+          <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+            <Metadata {...viewProps} />
+            <QuestionAnswerSets items={QA_SETS} />
+          </Card>
+        </Box>
+      </Page>
+    </>
   );
 };
 
