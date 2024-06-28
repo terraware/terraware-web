@@ -57,7 +57,6 @@ const PersonProvider = ({ children }: Props) => {
   }, [dispatch, userId]);
 
   const reload = useCallback(() => {
-    console.log(userId);
     reloadCategories();
     reloadUser();
   }, [reloadCategories, reloadUser]);
@@ -134,7 +133,7 @@ const PersonProvider = ({ children }: Props) => {
     }
   }, [onUpdateSuccess, updateCategoriesRequest, updateGlobalRolesRequest]);
 
-  useEffect(() => reload(), [reload]);
+  useEffect(reload, [reload]);
 
   return <PersonContext.Provider value={personData}>{children}</PersonContext.Provider>;
 };
