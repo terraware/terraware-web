@@ -44,7 +44,7 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
 
   return (
     <>
-      <Page title={<TitleBar {...viewProps} />} rightComponent={viewProps.callToAction} crumbs={crumbs}>
+      <Page crumbs={crumbs} rightComponent={viewProps.callToAction} title={<TitleBar {...viewProps} />}>
         {props.isBusy && <BusySpinner />}
         <Box display='flex' flexDirection='column' flexGrow={1}>
           <ApprovedDeliverableMessage {...viewProps} />
