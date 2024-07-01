@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/46</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/46</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
@@ -168,18 +168,7 @@
 <a name='L103'></a><a href='#L103'>103</a>
 <a name='L104'></a><a href='#L104'>104</a>
 <a name='L105'></a><a href='#L105'>105</a>
-<a name='L106'></a><a href='#L106'>106</a>
-<a name='L107'></a><a href='#L107'>107</a>
-<a name='L108'></a><a href='#L108'>108</a>
-<a name='L109'></a><a href='#L109'>109</a>
-<a name='L110'></a><a href='#L110'>110</a>
-<a name='L111'></a><a href='#L111'>111</a>
-<a name='L112'></a><a href='#L112'>112</a>
-<a name='L113'></a><a href='#L113'>113</a>
-<a name='L114'></a><a href='#L114'>114</a>
-<a name='L115'></a><a href='#L115'>115</a>
-<a name='L116'></a><a href='#L116'>116</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L106'></a><a href='#L106'>106</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -207,8 +196,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -221,7 +208,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -261,16 +247,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -298,15 +278,14 @@ import { useNavigate } from 'react-router-dom';
 &nbsp;
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
-import { requestUpdateGlobalRolesUser } from 'src/redux/features/globalRoles/globalRolesAsyncThunks';
-import { selectGlobalRolesUserUpdateRequest } from 'src/redux/features/globalRoles/globalRolesSelectors';
 import { requestSearchUserByEmail } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUserByEmailRequest } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { usePersonData } from 'src/scenes/AcceleratorRouter/People/PersonContext';
+import { UserWithDeliverableCategories } from 'src/scenes/AcceleratorRouter/People/UserWithDeliverableCategories';
+import useUpdatePerson from 'src/scenes/AcceleratorRouter/People/useUpdatePerson';
 import strings from 'src/strings';
-import { User } from 'src/types/User';
 import useDebounce from 'src/utils/useDebounce';
-import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { isTerraformationEmail } from 'src/utils/user';
 &nbsp;
@@ -316,9 +295,10 @@ const NewView = <span class="cstat-no" title="statement not covered" ><span clas
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
   const location = <span class="cstat-no" title="statement not covered" >useStateLocation();</span>
-  const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
+  const updatePerson = <span class="cstat-no" title="statement not covered" >useUpdatePerson();</span>
 &nbsp;
-  const [user, setUser] = <span class="cstat-no" title="statement not covered" >useState&lt;User&gt;();</span>
+  const personData = <span class="cstat-no" title="statement not covered" >usePersonData();</span>
+  const { setUserId, user } = <span class="cstat-no" title="statement not covered" >personData;</span>
   const [email, setEmail] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const [emailError, setEmailError] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const debouncedEmail = <span class="cstat-no" title="statement not covered" >useDebounce(email, 1000);</span>
@@ -326,24 +306,20 @@ const NewView = <span class="cstat-no" title="statement not covered" ><span clas
   const [searchRequestId, setSearchRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const searchRequest = <span class="cstat-no" title="statement not covered" >useAppSelector(selectUserByEmailRequest(searchRequestId));</span>
 &nbsp;
-  const [saveRequestId, setSaveRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
-  const saveRequest = <span class="cstat-no" title="statement not covered" >useAppSelector(selectGlobalRolesUserUpdateRequest(saveRequestId));</span>
-&nbsp;
   const goToPeople = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >navigate(getLocation(APP_PATHS.ACCELERATOR_PEOPLE, location)),</span>
     [navigate, location]
   );
 &nbsp;
   const handleOnSave = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (r</span>ecord: User) =&gt; {
-      const request = <span class="cstat-no" title="statement not covered" >dispatch(requestUpdateGlobalRolesUser({ user: record, globalRoles: record.globalRoles }));</span>
-<span class="cstat-no" title="statement not covered" >      setSaveRequestId(request.requestId);</span>
+<span class="fstat-no" title="function not covered" >    (r</span>ecord: UserWithDeliverableCategories) =&gt; {
+<span class="cstat-no" title="statement not covered" >      updatePerson.update(record);</span>
     },
-    [dispatch]
+    [updatePerson]
   );
 &nbsp;
-  const handeOnChange = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (r</span>ecord: User) =&gt; {
+  const handleOnChange = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (r</span>ecord: UserWithDeliverableCategories) =&gt; {
 <span class="cstat-no" title="statement not covered" >      if (record.email) {</span>
 <span class="cstat-no" title="statement not covered" >        setEmailError('');</span>
 <span class="cstat-no" title="statement not covered" >        setEmail(record.email);</span>
@@ -368,40 +344,34 @@ const NewView = <span class="cstat-no" title="statement not covered" ><span clas
   }, [debouncedEmail, dispatch]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!saveRequest) {</span>
-<span class="cstat-no" title="statement not covered" >      return;</span>
-    }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    if (saveRequest.status === 'success') {</span>
-<span class="cstat-no" title="statement not covered" >      goToPeople();</span>
-    } else <span class="cstat-no" title="statement not covered" >if (saveRequest.status === 'error') {</span>
-<span class="cstat-no" title="statement not covered" >      snackbar.toastError(strings.GENERIC_ERROR);</span>
-    }
-  }, [goToPeople, saveRequest, snackbar]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!searchRequest) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (searchRequest.status === 'success' &amp;&amp; searchRequest.data?.user) {</span>
 <span class="cstat-no" title="statement not covered" >      setEmailError('');</span>
-<span class="cstat-no" title="statement not covered" >      setUser(searchRequest.data?.user);</span>
+<span class="cstat-no" title="statement not covered" >      setUserId(searchRequest.data.user.id);</span>
     } else <span class="cstat-no" title="statement not covered" >if (searchRequest.status === 'error') {</span>
 <span class="cstat-no" title="statement not covered" >      setEmailError(strings.USER_WITH_EMAIL_DOES_NOT_EXIST);</span>
     }
   }, [searchRequest]);
 &nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (updatePerson.succeeded) {</span>
+<span class="cstat-no" title="statement not covered" >      goToPeople();</span>
+    }
+  }, [updatePerson]);
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Page title={strings.ADD_PERSON} contentStyle={{ display: 'flex', flexDirection: 'column' }}&gt;
       &lt;PersonForm
-        busy={saveRequest?.status === 'pending'}
+        busy={updatePerson.busy}
         emailEnabled
         emailError={emailError}
         onSave={handleOnSave}
-        user={user}
         onCancel={goToPeople}
-        onChange={handeOnChange}
+        onChange={handleOnChange}
+        user={user}
       /&gt;
     &lt;/Page&gt;
   );
@@ -415,7 +385,7 @@ export default NewView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-01T18:36:46.152Z
+                at 2024-07-01T18:46:29.898Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
