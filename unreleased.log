@@ -1,2 +1,3 @@
+c577d24c1f SW-5565 Remove unused device manager API code (#2802)
 3ced3ce685 Sync the types with the backend (#2801)
 fff10c422a Fix invalid DOM nesting warnings in console (#2797)
