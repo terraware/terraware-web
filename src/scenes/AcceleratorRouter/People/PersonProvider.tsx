@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
@@ -22,26 +22,14 @@ const PersonProvider = ({ children }: Props) => {
   const [userId, setUserId] = useState(Number(pathParams.userId || -1));
 
   const getUserRequest = useAppSelector(selectUserRequest(userId));
-  const [getCategoriesRequestId, setGetCategoriesRequestId] = useState('');
-  const getCategoriesRequest = useAppSelector(selectUserDeliverableCategoriesGetRequest(getCategoriesRequestId));
+  const getCategoriesRequest = useAppSelector(selectUserDeliverableCategoriesGetRequest(userId));
 
-  const reloadCategories = useCallback(() => {
-    if (userId !== -1) {
-      const getCategoriesRequest = dispatch(requestGetUserDeliverableCategories(userId));
-      setGetCategoriesRequestId(getCategoriesRequest.requestId);
-    }
-  }, [dispatch, userId]);
-
-  const reloadUser = useCallback(() => {
+  useEffect(() => {
     if (userId !== -1) {
       void dispatch(requestGetUser(userId));
+      void dispatch(requestGetUserDeliverableCategories(userId));
     }
   }, [dispatch, userId]);
-
-  const reload = useCallback(() => {
-    reloadCategories();
-    reloadUser();
-  }, [reloadCategories, reloadUser]);
 
   const [personData, setPersonData] = useState<PersonData>({ setUserId, userId });
 
@@ -61,12 +49,12 @@ const PersonProvider = ({ children }: Props) => {
           userId,
         });
       }
-    } else if (getUserRequest.status === 'error') {
+    } else if (getUserRequest.status === 'error' || getCategoriesRequest.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
   }, [getCategoriesRequest, getUserRequest, userId, snackbar]);
 
-  useEffect(reload, [reload]);
+  // useEffect(reload, [reload]);
 
   return <PersonContext.Provider value={personData}>{children}</PersonContext.Provider>;
 };

@@ -11,14 +11,14 @@ import {
 /**
  * Deliverable categories for user.
  */
-const initialStateUserDeliverableCategoriesGet: { [requestId: string]: StatusT<UserDeliverableCategoriesData> } = {};
+const initialStateUserDeliverableCategoriesGet: { [userId: number]: StatusT<UserDeliverableCategoriesData> } = {};
 
 export const userDeliverableCategoriesGetSlice = createSlice({
   name: 'userDeliverableCategoriesGetSlice',
   initialState: initialStateUserDeliverableCategoriesGet,
   reducers: {},
   extraReducers: (builder) => {
-    buildReducers(requestGetUserDeliverableCategories)(builder);
+    buildReducers(requestGetUserDeliverableCategories, true)(builder);
   },
 });
 

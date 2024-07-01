@@ -19,11 +19,12 @@ export const requestGetUserDeliverableCategories = createAsyncThunk(
 
 export const requestUpdateUserDeliverableCategories = createAsyncThunk(
   'userDeliverableCategories/update-for-user',
-  async (request: { user: User; deliverableCategories: DeliverableCategoryType[] }, { rejectWithValue }) => {
+  async (request: { user: User; deliverableCategories: DeliverableCategoryType[] }, { dispatch, rejectWithValue }) => {
     const { user, deliverableCategories } = request;
 
     const response = await UserDeliverableCategoriesService.update(user, deliverableCategories);
     if (response && response.requestSucceeded) {
+      dispatch(requestGetUserDeliverableCategories(user.id));
       return user.id;
     }
 
