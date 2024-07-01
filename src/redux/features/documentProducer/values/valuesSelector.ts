@@ -8,10 +8,11 @@ export const selectVariablesValues = (state: RootState, docId: number | string) 
   state.documentProducerVariableValuesList[docId];
 
 export const selectGetVariableValues = createCachedSelector(
-  (state: RootState, docId: number | string, variableId: number) => state.documentProducerVariableValuesList[docId],
-  (state: RootState, docId: number | string, variableId: number) => docId,
-  (state: RootState, docId: number | string, variableId: number) => variableId,
-  (response, docId, variableId) => {
+  (state: RootState, projectId: number | string, variableId: number) =>
+    state.documentProducerVariableValuesList[projectId],
+  (state: RootState, projectId: number | string, variableId: number) => projectId,
+  (state: RootState, projectId: number | string, variableId: number) => variableId,
+  (response, projectId, variableId) => {
     if (response?.data) {
       const variableValueToReturn = response.data.find(
         (variableValue: VariableValue) => variableValue.variableId === variableId
@@ -24,7 +25,7 @@ export const selectGetVariableValues = createCachedSelector(
       return response;
     }
   }
-)((state: RootState, docId: number | string, variableId: number) => variableId);
+)((state: RootState, projectId: number | string, variableId: number) => variableId);
 
 export const selectUpdateVariableValues = (requestId: string) => (state: RootState) =>
   state.documentProducerVariableValuesUpdate[requestId];

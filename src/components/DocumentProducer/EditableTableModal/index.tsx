@@ -18,7 +18,7 @@ import {
 import {
   AppendVariableValueOperation,
   NewSelectValuePayload,
-  UpdateVariableValuesRequestWithDocId,
+  UpdateVariableValuesRequestWithProjectId,
   VariableValueSelectValue,
 } from 'src/types/documentProducer/VariableValue';
 
@@ -26,12 +26,12 @@ import { VariableTableCell, cellValue, getCellValues, newValueFromEntry } from '
 
 type EditableTableEditProps = {
   variable: TableVariableWithValues;
-  documentId: number;
+  projectId: number;
   onFinish: () => void;
   onCancel: () => void;
 };
 
-const EditableTableEdit = ({ variable, documentId, onCancel, onFinish }: EditableTableEditProps) => {
+const EditableTableEdit = ({ variable, projectId, onCancel, onFinish }: EditableTableEditProps) => {
   const columns = useMemo<TableColumn[]>(() => variable.columns, [variable]);
   const initialCellValues = useMemo<VariableTableCell[][]>(
     () =>
@@ -55,9 +55,9 @@ const EditableTableEdit = ({ variable, documentId, onCancel, onFinish }: Editabl
     if (columns.length === 0) {
       return;
     }
-    const update: UpdateVariableValuesRequestWithDocId = {
+    const update: UpdateVariableValuesRequestWithProjectId = {
       operations: [],
-      docId: documentId,
+      projectId: projectId,
     };
 
     initialCellValues.forEach((row) => {
@@ -135,7 +135,7 @@ const EditableTableEdit = ({ variable, documentId, onCancel, onFinish }: Editabl
     // dispatch
     const request = dispatch(requestUpdateVariableValues(update));
     setRequestId(request.requestId);
-  }, [initialCellValues, cellValues, columns.length, dispatch, documentId, variable.id]);
+  }, [initialCellValues, cellValues, columns.length, dispatch, projectId, variable.id]);
 
   const setCellValue = (rowNum: number, colNum: number, newValue: string | number) => {
     const newCellValues: VariableTableCell[][] = [];
