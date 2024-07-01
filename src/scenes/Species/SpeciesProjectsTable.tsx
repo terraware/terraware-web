@@ -1,12 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Box, Grid, Typography } from '@mui/material';
-import { Button, TableRowType } from '@terraware/web-components';
+import { TableRowType } from '@terraware/web-components';
 import { TableColumnType } from '@terraware/web-components/components/table/types';
 
 import Table from 'src/components/common/table';
 import { useOrganization } from 'src/providers';
-import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { requestGetProjectsForSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { selectProjectsForSpeciesRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
@@ -58,7 +57,6 @@ export default function SpeciesProjectsTable({
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const { selectedOrganization } = useOrganization();
-  const { currentDeliverables } = useParticipantData();
 
   const allProjects = useAppSelector(selectProjects);
 
@@ -72,12 +70,6 @@ export default function SpeciesProjectsTable({
   const [reload, setReload] = useState(false);
   const [openedAddToProjectModal, setOpenedAddToProjectModal] = useState(false);
   const [selectableProjects, setSelectableProjects] = useState<Project[]>([]);
-
-  const addToProjectButtonIsDisabled = useMemo(() => {
-    return (
-      selectableProjects?.length < 1 || !currentDeliverables?.find((deliverable) => deliverable.type === 'Species')
-    );
-  }, [currentDeliverables, selectableProjects]);
 
   useEffect(() => {
     void dispatch(requestProjects(selectedOrganization.id));
@@ -205,17 +197,6 @@ export default function SpeciesProjectsTable({
             <Typography fontSize='20px' fontWeight={600}>
               {strings.PROJECTS}
             </Typography>
-            {editMode && (
-              <Button
-                disabled={addToProjectButtonIsDisabled}
-                icon='plus'
-                id='add-species-to-project'
-                label={strings.ADD_TO_PROJECT}
-                onClick={() => setOpenedAddToProjectModal(true)}
-                priority='secondary'
-                size='medium'
-              />
-            )}
           </Box>
         </Grid>
         <Grid item xs={12}>

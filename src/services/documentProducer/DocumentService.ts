@@ -14,12 +14,12 @@ import {
   UpgradeManifestResponse,
 } from 'src/types/documentProducer/Document';
 
-const DOCUMENTS_ENDPOINT = '/api/v1/pdds';
-const DOCUMENT_ENDPOINT = '/api/v1/pdds/{id}';
-const DOCUMENT_HISTORY_ENDPOINT = '/api/v1/pdds/{id}/history';
-const DOCUMENT_VERSIONS_ENDPOINT = '/api/v1/pdds/{docId}/versions';
-const DOCUMENT_VERSION_ENDPOINT = '/api/v1/pdds/{docId}/versions/{versionId}';
-const DOCUMENT_UPGRADE_ENDPOINT = '/api/v1/pdds/{id}/upgrade';
+const DOCUMENTS_ENDPOINT = '/api/v1/document-producer/documents';
+const DOCUMENT_ENDPOINT = '/api/v1/document-producer/documents/{id}';
+const DOCUMENT_HISTORY_ENDPOINT = '/api/v1/document-producer/documents/{id}/history';
+const DOCUMENT_VERSIONS_ENDPOINT = '/api/v1/document-producer/documents/{docId}/versions';
+const DOCUMENT_VERSION_ENDPOINT = '/api/v1/document-producer/documents/{docId}/versions/{versionId}';
+const DOCUMENT_UPGRADE_ENDPOINT = '/api/v1/document-producer/documents/{id}/upgrade';
 
 const getDocument = async (id: number): Promise<Response2<DocumentGetResponse>> =>
   await HttpService.root(DOCUMENT_ENDPOINT).get2({

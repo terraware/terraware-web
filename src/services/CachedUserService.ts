@@ -23,6 +23,11 @@ const setUserPreferences = (preferences: Record<string, any>) => {
   userPreferences.global = { ...preferences };
 };
 
+// set current user cookie consent preferences
+const setUserCookieConsentPreferences = (cookiesConsented: boolean) => {
+  userPreferences.global = { ...(userPreferences.global || {}), cookiesConsented };
+};
+
 // set current user org preferences
 const setUserOrgPreferences = (organizationId: number, preferences: Record<string, any>) => {
   userPreferences[organizationId.toString()] = { ...preferences };
@@ -45,6 +50,7 @@ const getUserOrgPreferences = (organizationId: number): Record<string, any> => (
 const CachedUserService = {
   getUser,
   getUserPreferences,
+  setUserCookieConsentPreferences,
   getUserOrgPreferences,
   setUser,
   setUserPreferences,

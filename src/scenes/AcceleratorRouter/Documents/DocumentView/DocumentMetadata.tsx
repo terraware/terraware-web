@@ -2,8 +2,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
-import { selectMethodologies } from 'src/redux/features/documentProducer/methodologies/methodologiesSelector';
-import { requestListMethodologies } from 'src/redux/features/documentProducer/methodologies/methodologiesThunks';
+import { selectDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesSelector';
+import { requestListDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesThunks';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useSelectorProcessor } from 'src/redux/hooks/useSelectorProcessor';
@@ -14,14 +14,14 @@ import { Document } from 'src/types/documentProducer/Document';
 import { getDateTimeDisplayValue } from 'src/utils/dateFormatter';
 import { getUserDisplayName } from 'src/utils/user';
 
-import { getMethodologyName } from '../DocumentsView/helpers';
+import { getDocumentTemplateName } from '../DocumentsView/helpers';
 
 export type DocumentMetadataProps = {
   document: Document;
 };
 
 const DocumentMetadata = ({ document }: DocumentMetadataProps): JSX.Element => {
-  const { organizationName, name, methodologyId, ownedBy, modifiedBy, modifiedTime } = document;
+  const { name, documentTemplateId, ownedBy, modifiedBy, modifiedTime } = document;
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -30,13 +30,13 @@ const DocumentMetadata = ({ document }: DocumentMetadataProps): JSX.Element => {
 
   const ownedBySelector = useAppSelector(selectUser(ownedBy));
   const modifiedBySelector = useAppSelector(selectUser(modifiedBy));
-  const { methodologies } = useAppSelector(selectMethodologies);
+  const { documentTemplates } = useAppSelector(selectDocumentTemplates);
 
   useSelectorProcessor(ownedBySelector, setOwnedByUser);
   useSelectorProcessor(modifiedBySelector, setModifiedByUser);
 
   useEffect(() => {
-    dispatch(requestListMethodologies());
+    dispatch(requestListDocumentTemplates());
   }, [dispatch]);
 
   useEffect(() => {
@@ -47,16 +47,13 @@ const DocumentMetadata = ({ document }: DocumentMetadataProps): JSX.Element => {
   const ownedByName = useMemo(() => getUserDisplayName(ownedByUser), [ownedByUser]);
   const modifiedByName = useMemo(() => getUserDisplayName(modifiedByUser), [modifiedByUser]);
   const modifiedTimeDisplay = useMemo(() => getDateTimeDisplayValue(new Date(modifiedTime).getTime()), [modifiedTime]);
-  const methodologyName = useMemo(
-    () => getMethodologyName(methodologies ?? [], methodologyId),
-    [methodologies, methodologyId]
+  const documentTemplateName = useMemo(
+    () => getDocumentTemplateName(documentTemplates ?? [], documentTemplateId),
+    [documentTemplates, documentTemplateId]
   );
 
   return (
     <Box display='flex' flexDirection='column' marginTop={3}>
-      <Typography fontWeight={400} fontSize='14px' lineHeight='20px' color={theme.palette.TwClrTxt}>
-        {organizationName}
-      </Typography>
       <Typography
         fontWeight={600}
         fontSize='24px'
@@ -74,7 +71,7 @@ const DocumentMetadata = ({ document }: DocumentMetadataProps): JSX.Element => {
         component='pre'
         whiteSpace='pre-wrap'
       >
-        {strings.METHODOLOGY}: {methodologyName}
+        {strings.DOCUMENT_TEMPLATE}: {documentTemplateName}
         <br />
         {strings.DOCUMENT_OWNER}: {ownedByName}
         <br />

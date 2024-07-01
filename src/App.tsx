@@ -1,9 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { MixpanelProvider } from 'react-mixpanel-browser';
+import { useMixpanel } from 'react-mixpanel-browser';
 import { Provider } from 'react-redux';
 
 import { Box, CssBaseline, StyledEngineProvider, useTheme } from '@mui/material';
 
 import AppBootstrap from 'src/AppBootstrap';
+import CookieConsentBanner from 'src/components/CookieConsentBanner';
 import ToastSnackbar from 'src/components/ToastSnackbar';
 import TopBar from 'src/components/TopBar/TopBar';
 import TopBarContent from 'src/components/TopBar/TopBarContent';
@@ -18,16 +21,41 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 const AcceleratorRouter = React.lazy(() => import('src/scenes/AcceleratorRouter'));
 const TerrawareRouter = React.lazy(() => import('src/scenes/TerrawareRouter'));
 
+// Mixpanel setup
+const MIXPANEL_TOKEN = process.env.REACT_APP_MIXPANEL_TOKEN;
+const MIXPANEL_CONFIG = {
+  opt_out_persistence_by_default: true,
+  opt_out_tracking_by_default: true,
+  track_pageview: 'url-with-path',
+};
+
 function AppContent() {
   // manager hooks
   useAppVersion();
-
   const { isDesktop, type } = useDeviceInfo();
-  const { isAllowed } = useUser();
+  const { user, isAllowed } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const theme = useTheme();
+  const mixpanel = useMixpanel();
 
   const [showNavBar, setShowNavBar] = useState(true);
+
+  useEffect(() => {
+    if (user && mixpanel) {
+      if (user.cookiesConsented === true) {
+        mixpanel.opt_in_tracking();
+        mixpanel.identify(user.id);
+        mixpanel.people.set({
+          $email: user.email,
+          $locale: user.locale,
+          $emailNotifsEnabled: user.emailNotificationsEnabled,
+          $countryCode: user.countryCode,
+        });
+      } else {
+        mixpanel.opt_out_tracking();
+      }
+    }
+  }, [user, mixpanel]);
 
   useEffect(() => {
     if (type === 'mobile' || type === 'tablet') {
@@ -78,6 +106,7 @@ function AppContent() {
     <StyledEngineProvider injectFirst>
       <CssBaseline />
       <ToastSnackbar />
+      <CookieConsentBanner />
       <TopBar>
         <TopBarContent setShowNavBar={setShowNavBar} />
       </TopBar>
@@ -97,10 +126,12 @@ function AppContent() {
 
 export default function App(): JSX.Element {
   return (
-    <Provider store={store}>
-      <AppBootstrap>
-        <AppContent />
-      </AppBootstrap>
-    </Provider>
+    <MixpanelProvider config={MIXPANEL_CONFIG} token={MIXPANEL_TOKEN}>
+      <Provider store={store}>
+        <AppBootstrap>
+          <AppContent />
+        </AppBootstrap>
+      </Provider>
+    </MixpanelProvider>
   );
 }

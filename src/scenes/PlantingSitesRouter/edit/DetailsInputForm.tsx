@@ -6,7 +6,6 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import LocationTimeZoneSelector from 'src/components/LocationTimeZoneSelector';
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
-import isEnabled from 'src/features';
 import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization, useOrganization } from 'src/providers';
 import { selectDraftPlantingSites } from 'src/redux/features/draftPlantingSite/draftPlantingSiteSelectors';
@@ -46,7 +45,6 @@ export default function DetailsInputForm<T extends MinimalPlantingSite>({
   const [showSaveValidationErrors, setShowSaveValidationErrors] = useState(false);
   const [usedNames, setUsedNames] = useState<Set<string>>();
   const { availableProjects } = useProjects(record);
-  const detailedSitesEnabled = isEnabled('User Detailed Sites');
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const dispatch = useAppDispatch();
@@ -88,7 +86,7 @@ export default function DetailsInputForm<T extends MinimalPlantingSite>({
 
   useEffect(() => {
     const allSites = [...(plantingSites || []), ...(draftSites?.data || [])];
-    const otherSiteNames = allSites.filter((site) => site.id !== record.id).map((site) => site.name);
+    const otherSiteNames = allSites.filter((site) => Number(site.id) !== record.id).map((site) => site.name);
     setUsedNames(new Set(otherSiteNames));
   }, [draftSites, plantingSites, record.id]);
 
@@ -148,7 +146,7 @@ export default function DetailsInputForm<T extends MinimalPlantingSite>({
           tooltip={strings.TOOLTIP_TIME_ZONE_PLANTING_SITE}
         />
       </Grid>
-      {(record?.plantingZones || detailedSitesEnabled) && effectiveTimeZone && (
+      {record?.plantingZones && effectiveTimeZone && (
         <Grid item xs={gridSize()}>
           <TextField
             label={strings.UPCOMING_PLANTING_SEASONS}

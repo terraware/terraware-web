@@ -24,7 +24,6 @@ import DeliverablesRouter from 'src/scenes/DeliverablesRouter';
 import HelpSupportRouter from 'src/scenes/HelpSupportRouter';
 import Home from 'src/scenes/Home';
 import InventoryRouter from 'src/scenes/InventoryRouter';
-import MonitoringRouter from 'src/scenes/MonitoringRouter';
 import MyAccountRouter from 'src/scenes/MyAccountRouter';
 import NurseriesRouter from 'src/scenes/NurseriesRouter';
 import NurseryRouter from 'src/scenes/NurseryRouter';
@@ -164,7 +163,6 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
       (location.pathname.startsWith(APP_PATHS.SPECIES) && !selectedOrgHasSpecies()) ||
       (location.pathname.startsWith(APP_PATHS.ACCESSIONS) &&
         (!selectedOrgHasSeedBanks() || !selectedOrgHasSpecies())) ||
-      (location.pathname.startsWith(APP_PATHS.MONITORING) && !selectedOrgHasSeedBanks()) ||
       (location.pathname.startsWith(APP_PATHS.INVENTORY) && (!selectedOrgHasNurseries() || !selectedOrgHasSpecies())) ||
       (location.pathname.startsWith(APP_PATHS.SEED_BANKS) && !selectedOrgHasSeedBanks()) ||
       (location.pathname.startsWith(APP_PATHS.NURSERIES) && !selectedOrgHasNurseries()) ||
@@ -216,7 +214,6 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
               path={APP_PATHS.ACCESSIONS + '/*'}
               element={<AccessionsRouter setWithdrawalCreated={setWithdrawalCreated} />}
             />
-            <Route path={APP_PATHS.MONITORING + '/*'} element={<MonitoringRouter />} />
             <Route path={APP_PATHS.SPECIES + '/*'} element={<SpeciesRouter />} />
             <Route path={APP_PATHS.ORGANIZATION + '/*'} element={<OrganizationRouter />} />
             <Route path={APP_PATHS.PEOPLE + '/*'} element={<PeopleRouter />} />

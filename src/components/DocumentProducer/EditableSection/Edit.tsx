@@ -40,6 +40,7 @@ type EditableSectionEditProps = {
   setSectionValues: (values: VariableValueValue[] | undefined) => void;
   allVariables: VariableWithValues[];
   docId: number;
+  projectId: number;
   onUpdate: () => void;
   manifestId: number;
 };
@@ -50,6 +51,7 @@ const SectionEdit = ({
   setSectionValues,
   allVariables,
   docId,
+  projectId,
   onUpdate,
   manifestId,
 }: EditableSectionEditProps): JSX.Element => {
@@ -176,7 +178,7 @@ const SectionEdit = ({
       {openEditVariableModal && clickedVariable && (
         <EditVariableModal
           variable={clickedVariable}
-          docId={docId}
+          projectId={projectId}
           onFinish={variableUpdated}
           onCancel={() => setOpenEditVariableModal(false)}
           manifestId={manifestId}

@@ -5,11 +5,17 @@ import { Grid, useTheme } from '@mui/material';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import TextField from 'src/components/common/Textfield/Textfield';
+import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
+import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
+import AssignNewOwnerDialog from 'src/scenes/MyAccountRouter/AssignNewOwnerModal';
+import DeleteOrgDialog from 'src/scenes/MyAccountRouter/DeleteOrgModal';
 import { OrganizationService, OrganizationUserService, Response } from 'src/services';
 import { SearchService } from 'src/services';
 import strings from 'src/strings';
@@ -23,11 +29,6 @@ import useDebounce from 'src/utils/useDebounce';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import PageHeaderWrapper from '../../components/common/PageHeaderWrapper';
-import TextField from '../../components/common/Textfield/Textfield';
-import TfMain from '../../components/common/TfMain';
-import AssignNewOwnerDialog from '../MyAccountRouter/AssignNewOwnerModal';
-import DeleteOrgDialog from '../MyAccountRouter/DeleteOrgModal';
 import CannotRemovePeopleDialog from './CannotRemovePeopleModal';
 import RemovePeopleDialog from './RemovePeopleModal';
 import TableCellRenderer from './TableCellRenderer';
@@ -354,7 +355,14 @@ export default function PeopleListView(): JSX.Element {
       </PageHeaderWrapper>
       <Card flushMobile>
         <Grid container ref={contentRef}>
-          <Grid item xs={12} marginBottom='16px'>
+          <Grid
+            item
+            xs={12}
+            marginBottom='16px'
+            sx={{
+              display: 'flex',
+            }}
+          >
             <TextField
               placeholder={strings.SEARCH}
               iconLeft='search'
@@ -367,6 +375,7 @@ export default function PeopleListView(): JSX.Element {
               onClickRightIcon={clearSearch}
               sx={{ width: '300px' }}
             />
+            <TableSettingsButton />
           </Grid>
 
           <Grid item xs={12}>

@@ -4,16 +4,16 @@ import { Response2 } from 'src/services/HttpService';
 import ValueService from 'src/services/documentProducer/ValueService';
 import strings from 'src/strings';
 import {
-  ReplaceSectionValuesOperationPayload,
-  UpdateVariableValuesRequestWithDocId,
-  UploadImageValueRequestPayloadWithDocId,
+  ReplaceSectionValuesOperationPayloadWithProjectId,
+  UpdateVariableValuesRequestWithProjectId,
+  UploadImageValueRequestPayloadWithProjectId,
   VariableValuesListResponse,
 } from 'src/types/documentProducer/VariableValue';
 
 export const requestListVariablesValues = createAsyncThunk(
   'listVariablesValues',
-  async (docId: number, { rejectWithValue }) => {
-    const response: Response2<VariableValuesListResponse> = await ValueService.getValues(docId);
+  async (projectId: number, { rejectWithValue }) => {
+    const response: Response2<VariableValuesListResponse> = await ValueService.getValues(projectId);
     if (response.requestSucceeded && response.data?.values) {
       return response.data.values;
     }
@@ -24,8 +24,8 @@ export const requestListVariablesValues = createAsyncThunk(
 
 export const requestUpdateVariableValues = createAsyncThunk(
   'updateVariableValues',
-  async ({ operations, docId }: UpdateVariableValuesRequestWithDocId, { rejectWithValue }) => {
-    const response = await ValueService.updateValue(docId, operations);
+  async ({ operations, projectId }: UpdateVariableValuesRequestWithProjectId, { rejectWithValue }) => {
+    const response = await ValueService.updateValue(projectId, operations);
     if (response.requestSucceeded) {
       return Boolean(true);
     }
@@ -36,8 +36,8 @@ export const requestUpdateVariableValues = createAsyncThunk(
 
 export const requestUpdateSectionVariableValues = createAsyncThunk(
   'updateVariableValues',
-  async ({ variableId, values, docId }: ReplaceSectionValuesOperationPayload, { rejectWithValue }) => {
-    const response = await ValueService.updateValue(docId, [{ operation: 'Replace', variableId, values }]);
+  async ({ variableId, values, projectId }: ReplaceSectionValuesOperationPayloadWithProjectId, { rejectWithValue }) => {
+    const response = await ValueService.updateValue(projectId, [{ operation: 'Replace', variableId, values }]);
     if (response.requestSucceeded) {
       return Boolean(true);
     }
@@ -49,10 +49,10 @@ export const requestUpdateSectionVariableValues = createAsyncThunk(
 export const requestUploadImageValue = createAsyncThunk(
   'uploadImageValue',
   async (
-    { variableId, file, caption, citation, docId }: UploadImageValueRequestPayloadWithDocId,
+    { variableId, file, caption, citation, projectId }: UploadImageValueRequestPayloadWithProjectId,
     { rejectWithValue }
   ) => {
-    const response = await ValueService.uploadImageValue(docId, variableId, file, citation, caption);
+    const response = await ValueService.uploadImageValue(projectId, variableId, file, citation, caption);
     if (response.requestSucceeded) {
       return Boolean(true);
     }

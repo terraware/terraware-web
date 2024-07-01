@@ -135,23 +135,11 @@ const DeliverablesTable = ({
     // the participant view already has a projects filter above the table
     if (isAcceleratorRoute) {
       filters.unshift({
-        field: 'project_id',
+        field: 'projectName',
         options: (selectedParticipant?.projects || projectsFilterOptions || [])?.map(
-          (project: Project | AcceleratorOrgProject) => `${project.id}`
+          (project: Project | AcceleratorOrgProject) => `${project.name}`
         ),
-        searchNodeCreator: (values: (number | string | null)[]) => ({
-          field: 'projectId',
-          operation: 'field',
-          type: 'Exact',
-          values: values.map((value: number | string | null): string | null => (value === null ? value : `${value}`)),
-        }),
         label: strings.PROJECTS,
-        renderOption: (id: string | number) => getFilterProjectName(id),
-        pillValueRenderer: (values: (string | number | null)[]) =>
-          values
-            .map((value: string | number | null) => (value === null ? value : getFilterProjectName(value)))
-            .filter((value) => value)
-            .join(', '),
       });
     }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -9,6 +9,11 @@ import Typography from '@mui/material/Typography';
 import { Badge } from '@terraware/web-components';
 
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
+import { useProjectData } from 'src/providers/Project/ProjectContext';
+import { requestListModules } from 'src/redux/features/modules/modulesAsyncThunks';
+import { selectProjectModuleList } from 'src/redux/features/modules/modulesSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { Module } from 'src/types/Module';
 
 type AltStepIconProps = {
   activeStep: number;
@@ -41,30 +46,48 @@ const AltStepIcon = ({ activeStep, index }: AltStepIconProps) => {
 
 const ModuleTimeline = () => {
   const { activeModules, modules, currentParticipant } = useParticipantData();
+  const { project, projectId } = useProjectData();
+  const [requestId, setRequestId] = useState('');
+  const projectModuleList = useAppSelector(selectProjectModuleList(requestId));
+  const dispatch = useAppDispatch();
+  const [projectModules, setProjectModules] = useState<Module[] | undefined>();
+  const useDataFromParticipantData = activeModules && currentParticipant && modules;
 
-  if (!(activeModules && currentParticipant && modules)) {
-    return null;
-  }
+  useEffect(() => {
+    if (projectId) {
+      const request = dispatch(requestListModules(projectId));
+      setRequestId(request.requestId);
+    }
+  }, [projectId]);
 
+  useEffect(() => {
+    if (projectModuleList?.status === 'success') {
+      setProjectModules(projectModuleList.data);
+    }
+  }, [projectModuleList]);
+
+  const modulesToUse = useDataFromParticipantData ? modules : projectModules;
   // Find first active index. TODO upgrade stepper to handle multiple active steps
-  const activeIndex = modules.findIndex(
-    (module) => activeModules.find((active) => module.id === active.id) != undefined
-  );
+  const activeIndex = useDataFromParticipantData
+    ? modules?.findIndex((module) => activeModules?.find((active) => module.id === active.id) != undefined)
+    : projectModules?.findIndex((module) => module.isActive);
 
   return (
     <Box maxWidth={'206px'}>
-      {currentParticipant.cohortPhase && (
+      {(currentParticipant?.cohortPhase || project?.cohortPhase) && (
         <Box sx={{ marginBottom: '24px', paddingRight: '16px' }}>
-          <Badge label={currentParticipant.cohortPhase || ''} />
+          <Badge
+            label={useDataFromParticipantData ? currentParticipant.cohortPhase || '' : project?.cohortPhase || ''}
+          />
         </Box>
       )}
 
       <Box sx={{ width: 180 }}>
         <Stepper activeStep={activeIndex} orientation='vertical'>
-          {modules.map((module, index) => (
+          {modulesToUse?.map((module, index) => (
             <Step key={module.id}>
               <StepLabel
-                icon={<AltStepIcon activeStep={activeIndex} index={index} />}
+                icon={<AltStepIcon activeStep={activeIndex || -1} index={index} />}
                 sx={{ fontWeight: 600, '.MuiStepLabel-label.Mui-disabled': { fontWeight: 600 } }}
               >
                 {module.title}

@@ -1,31 +1,26 @@
 import React, { useMemo, useState } from 'react';
 
 import { DropdownItem, Tooltip } from '@terraware/web-components';
-import PopoverMenu from '@terraware/web-components/components/PopoverMenu/Popover';
+import PopoverMenu, { Section } from '@terraware/web-components/components/PopoverMenu/Popover';
 import { TableDensityType } from '@terraware/web-components/components/table/types';
 
 import Button from 'src/components/common/button/Button';
-import { useLocalization, useUser } from 'src/providers';
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 
-export type DensitySettingsProp = {
-  density?: TableDensityType;
-  onChange?: (density: TableDensityType) => void;
-};
+import useTableDensity from './useTableDensity';
 
-const TableDensitySettingsButton = ({ density, onChange }: DensitySettingsProp) => {
+interface Props {
+  extraSections?: Section[];
+}
+
+export default function TableSettingsButton(props: Props): JSX.Element {
+  const { extraSections } = props;
   const { activeLocale } = useLocalization();
-  const { updateUserPreferences, userPreferences } = useUser();
-  const tableDensity: TableDensityType = useMemo(
-    () => density ?? (userPreferences['tableDensity'] as TableDensityType) ?? 'comfortable',
-    [density, userPreferences]
-  );
+  const { tableDensity, setTableDensity } = useTableDensity();
 
   const saveTableDensity = (newDensity: TableDensityType) => {
-    if (onChange) {
-      onChange(newDensity);
-    }
-    updateUserPreferences({ tableDensity: newDensity });
+    setTableDensity(newDensity);
   };
 
   const options = useMemo(
@@ -47,7 +42,13 @@ const TableDensitySettingsButton = ({ density, onChange }: DensitySettingsProp) 
   );
 
   const handleItemSelected = (item: DropdownItem) => {
-    saveTableDensity(item.value as TableDensityType);
+    if (options.find((opt) => opt.value === item.value)) {
+      saveTableDensity(item.value as TableDensityType);
+    } else {
+      if (item.onClick) {
+        item.onClick();
+      }
+    }
     handleClose();
   };
 
@@ -62,7 +63,7 @@ const TableDensitySettingsButton = ({ density, onChange }: DensitySettingsProp) 
 
   return (
     <>
-      <Tooltip title={strings.DENSITY_SETTINGS}>
+      <Tooltip title={strings.SETTINGS}>
         <Button
           id='updateTableDensity'
           onClick={(event) => event && handleClick(event)}
@@ -72,7 +73,7 @@ const TableDensitySettingsButton = ({ density, onChange }: DensitySettingsProp) 
         />
       </Tooltip>
       <PopoverMenu
-        sections={[options]}
+        sections={extraSections ? [...extraSections, options] : [options]}
         handleClick={handleItemSelected}
         anchorElement={anchorEl}
         setAnchorElement={setAnchorEl}
@@ -80,6 +81,4 @@ const TableDensitySettingsButton = ({ density, onChange }: DensitySettingsProp) 
       />
     </>
   );
-};
-
-export default TableDensitySettingsButton;
+}

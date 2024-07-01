@@ -20,6 +20,7 @@ import Edit from './Edit';
 
 type EditableSectionProps = {
   docId: number;
+  projectId: number;
   section: SectionVariableWithValues;
   allVariables: VariableWithValues[];
   onUpdate: () => void;
@@ -28,6 +29,7 @@ type EditableSectionProps = {
 
 export default function EditableSectionContainer({
   docId,
+  projectId,
   section,
   allVariables,
   onUpdate,
@@ -65,7 +67,7 @@ export default function EditableSectionContainer({
         operation: 'Replace',
         variableId: section.id,
         values: (editSectionValues as (NewSectionTextValuePayload | NewSectionVariableValuePayload)[]) ?? [],
-        docId,
+        projectId,
       })
     );
     setRequestId(request.requestId);
@@ -120,6 +122,7 @@ export default function EditableSectionContainer({
         setSectionValues={setEditSectionValues}
         allVariables={allVariables}
         docId={docId}
+        projectId={projectId}
         onUpdate={onUpdateHandler}
         manifestId={manifestId}
       />

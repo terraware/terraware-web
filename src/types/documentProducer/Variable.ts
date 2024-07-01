@@ -1,7 +1,8 @@
 import { isArray } from 'lodash';
 
+import { components } from 'src/api/types/generated-schema';
+
 import { VariableValue, VariableValueImageValue, VariableValueTableValue, VariableValueValue } from './VariableValue';
-import { components } from './generated-schema';
 
 export type VariableListResponse = components['schemas']['ListVariablesResponsePayload'];
 

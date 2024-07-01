@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Grid, useTheme } from '@mui/material';
 import { DropdownItem, SortOrder } from '@terraware/web-components';
 import { Tooltip } from '@terraware/web-components';
-import { TableDensityType } from '@terraware/web-components/components/table/types';
 import _ from 'lodash';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -23,7 +22,7 @@ import SearchFiltersWrapperV2, { FilterConfig } from 'src/components/common/Sear
 import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import { OrderPreserveableTable as Table } from 'src/components/common/table';
-import TableDensitySettingsButton from 'src/components/common/table/TableDensitySettingsButton';
+import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
@@ -584,17 +583,6 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     );
   };
 
-  // Table density will default to user preference if undefined. Used to skip preference update roundtrip
-  const [tableDensity, setTableDensity] = useState<TableDensityType>();
-
-  // Shortcut method to update table state before preference update round-trip
-  const handleTableDensityChange = useCallback(
-    (density: TableDensityType) => {
-      setTableDensity(density);
-    },
-    [setTableDensity]
-  );
-
   return (
     <TfMain>
       <CheckDataModal
@@ -678,7 +666,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
                       icon='iconExport'
                     />
                   </Tooltip>
-                  <TableDensitySettingsButton density={tableDensity} onChange={handleTableDensityChange} />
+                  <TableSettingsButton />
                 </>
               }
             />
@@ -696,7 +684,6 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
                   }}
                   id='species-table'
                   columns={selectedColumns}
-                  density={tableDensity}
                   rows={results}
                   orderBy={'scientificName'}
                   showTopBar={false}

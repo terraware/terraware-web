@@ -3,7 +3,7 @@ import bbox from '@turf/bbox';
 import bboxPolygon from '@turf/bbox-polygon';
 import { Feature, FeatureCollection, MultiPolygon, Polygon, Position } from 'geojson';
 
-import { cutPolygons, toFeature } from 'src/components/Map/utils';
+import { overlayAndSubtract, toFeature } from 'src/components/Map/utils';
 import strings from 'src/strings';
 import { GeometryFeature } from 'src/types/Map';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
@@ -15,7 +15,7 @@ export type DefaultZonePayload = Omit<MinimalPlantingZone, 'plantingSubzones'>;
 
 export const defaultZonePayload = (payload: DefaultZonePayload): MinimalPlantingZone => {
   const { boundary, id, name, targetPlantingDensity } = payload;
-  const subzoneName = 'A';
+  const subzoneName = subzoneNameGenerator(new Set(), strings.SUBZONE);
 
   return {
     boundary,
@@ -119,13 +119,30 @@ export const alphabetName = (position: number): string => {
  * BA - BZ
  * and so on.
  */
-export const subzoneNameGenerator = (usedNames: Set<string>): string => {
+export const subzoneNameGenerator = (usedNames: Set<string>, prefix?: string): string => {
   let nextNameIndex = 0;
   let nextName = '';
 
   do {
-    nextName = alphabetName(++nextNameIndex);
+    const subzoneNameVal = alphabetName(++nextNameIndex);
+    nextName = prefix ? `${prefix} ${subzoneNameVal}` : subzoneNameVal;
   } while (usedNames.has(nextName));
+
+  return nextName;
+};
+
+/**
+ * Zone name generator.
+ * Generates names in numerical order, with 2 digits with leading 0
+ */
+export const zoneNameGenerator = (usedNames?: Set<string>, prefix?: string): string => {
+  let nextNameIndex = 0;
+  let nextName = '';
+
+  do {
+    const zoneNum = `${++nextNameIndex}`.padStart(2, '0');
+    nextName = prefix ? `${prefix} ${zoneNum}` : zoneNum;
+  } while (usedNames && usedNames.has(nextName));
 
   return nextName;
 };
@@ -195,8 +212,9 @@ export const cutOverlappingBoundaries = async (
     onError([]);
     return;
   }
-  // cut new polygons using the cut geometry overlapping the fixed boundaries
-  const cutBoundaries = cutPolygons(source.features as GeometryFeature[], cutWithFeature.geometry) || [];
+
+  // overlay new polygon over existing polygons
+  const cutBoundaries = overlayAndSubtract(source.features as GeometryFeature[], cutWithFeature.geometry) || [];
 
   if (!cutBoundaries.length) {
     onError([]);
@@ -264,7 +282,7 @@ export const findErrors = async (
     const minimumSideDimension = errorCheckLevel === 'subzone' ? 25 : 100;
     const minArea = minimumSideDimension * minimumSideDimension * SQ_M_TO_HECTARES;
 
-    // check if the cut polygons are too small to be boundaries (in which case, we won't create new fixed boundaries using the cut polygons)
+    // check if the new polygons are too small to be boundaries (in which case, we won't create new fixed boundaries using the new polygons)
     // mark them as error annotations instead
     const errors = cutBoundaries
       .filter((boundary) => boundingAreaHectares(boundary.geometry) < minArea)

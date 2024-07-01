@@ -41,7 +41,7 @@ const TerrawareHomeView = () => {
         flexDirection: 'column',
       }}
     >
-      <Box paddingRight={'24px'}>
+      <Box paddingRight={'24px'} paddingLeft={isMobile ? '24px' : 0}>
         <PageHeader
           title={user?.firstName ? strings.formatString(strings.WELCOME_PERSON, user.firstName) : strings.WELCOME}
           subtitle=''
@@ -93,17 +93,6 @@ const TerrawareHomeView = () => {
                 description={strings.ACCESSIONS_CARD_DESCRIPTION}
                 link={APP_PATHS.ACCESSIONS}
                 linkText={strings.formatString(strings.GO_TO, strings.ACCESSIONS) as string}
-                linkStyle={'plain'}
-              />
-            </Grid>
-            <Grid item xs={secondaryGridSize()}>
-              <PageCard
-                id='monitoringHomeCard'
-                name={strings.MONITORING}
-                icon='monitoringNav'
-                description={strings.MONITORING_CARD_DESCRIPTION}
-                link={APP_PATHS.MONITORING}
-                linkText={strings.formatString(strings.GO_TO, strings.MONITORING) as string}
                 linkStyle={'plain'}
               />
             </Grid>

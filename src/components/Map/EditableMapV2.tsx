@@ -12,6 +12,7 @@ import ReactMapGL, {
   Source,
 } from 'react-map-gl';
 
+import { AddressAutofillFeatureSuggestion } from '@mapbox/search-js-core';
 import { Box, useTheme } from '@mui/material';
 import bbox from '@turf/bbox';
 import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
@@ -31,7 +32,9 @@ import {
 import { getRgbaFromHex } from 'src/utils/color';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
-import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
+import MapSearchBox from './MapSearchBox';
+import { useMapViewStyle } from './MapViewStyleControl';
+import MapViewStyleSwitch from './MapViewStyleSwitch';
 import UndoRedoControl from './UndoRedoControl';
 import { getMapDrawingLayer, getMapErrorLayer, toMultiPolygon } from './utils';
 
@@ -52,6 +55,7 @@ export type EditableMapProps = {
   popupRenderer?: MapPopupRenderer;
   readOnlyBoundary?: RenderableReadOnlyBoundary[];
   setMode?: (mode: MapEditorMode) => void;
+  showSearchBox?: boolean;
   style?: object;
 };
 
@@ -68,6 +72,7 @@ export default function EditableMap({
   popupRenderer,
   readOnlyBoundary,
   setMode,
+  showSearchBox,
   style,
 }: EditableMapProps): JSX.Element {
   const { mapId, refreshToken, token } = useMapboxToken();
@@ -287,6 +292,8 @@ export default function EditableMap({
   // This is to catch up on an already initalized active context.
   const onLoad = useCallback(() => void selectActiveContext(), [selectActiveContext]);
 
+  const mapStyle = useMemo(() => MapViewStyles[mapViewStyle], [mapViewStyle]);
+
   return (
     <Box
       ref={containerRef}
@@ -322,12 +329,36 @@ export default function EditableMap({
     >
       {firstVisible && (
         <>
+          <Box
+            display='flex'
+            flexDirection='row-reverse'
+            justifyContent='space-between'
+            alignItems='center'
+            paddingBottom={theme.spacing(4)}
+          >
+            <MapViewStyleSwitch mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
+            {showSearchBox === true && (
+              <MapSearchBox
+                onSelect={(features: AddressAutofillFeatureSuggestion[] | null) => {
+                  if (features && features.length > 0) {
+                    const coordinates = features[0].geometry.coordinates;
+                    mapRef?.current?.flyTo({
+                      center: [coordinates[0], coordinates[1]],
+                      essential: true,
+                      zoom: 10, // https://docs.mapbox.com/help/glossary/zoom-level/
+                    });
+                  }
+                }}
+              />
+            )}
+          </Box>
           <ReactMapGL
             key={mapId}
             onError={onMapError}
             ref={mapRef}
             mapboxAccessToken={token}
-            mapStyle={MapViewStyles[mapViewStyle]}
+            mapStyle={mapStyle}
+            styleDiffing={false}
             style={{
               position: 'relative',
               width: '100%',
@@ -335,6 +366,7 @@ export default function EditableMap({
               display: 'flex',
               flexGrow: 1,
               flexDirection: 'column',
+              minHeight: '640px',
               ...style,
             }}
             initialViewState={initialViewState}
@@ -345,7 +377,6 @@ export default function EditableMap({
             {mapLayers}
             {errorLayer}
             <FullscreenControl position='top-left' />
-            <MapViewStyleControl mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
             <EditableMapDraw
               boundary={editableBoundary}
               onBoundaryCreated={onEditableBoundaryChanged}
@@ -363,6 +394,7 @@ export default function EditableMap({
             {popupInfo && popupRenderer && renderedPopup && (
               <Popup
                 anchor={popupRenderer.anchor ?? 'top'}
+                closeButton={false}
                 key={popupInfo.id}
                 longitude={Number(popupInfo.lng)}
                 latitude={Number(popupInfo.lat)}

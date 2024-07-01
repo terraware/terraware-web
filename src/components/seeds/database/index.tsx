@@ -582,10 +582,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
         onDownloadReport();
         break;
       }
-      case 'tableColumns': {
-        onOpenEditColumnsModal();
-        break;
-      }
     }
   };
 
@@ -656,7 +652,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
                     optionItems={[
                       { label: strings.IMPORT, value: 'import' },
                       { label: strings.EXPORT, value: 'export' },
-                      { label: strings.CUSTOMIZE_TABLE_COLUMNS, value: 'tableColumns' },
                     ]}
                   />
                 </>
@@ -705,6 +700,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
                         searchColumns={searchTermColumns}
                         preExpFilterColumns={preExpFilterColumns}
                         onChange={onFilterChange}
+                        customizeColumns={onOpenEditColumnsModal}
                       />
                     )}
 

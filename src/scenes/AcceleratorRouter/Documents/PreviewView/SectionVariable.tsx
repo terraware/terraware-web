@@ -15,14 +15,14 @@ import { getPrintValue } from './render';
 type SectionVariableProps = {
   sectionVariable: SectionVariableWithValues & { relevantVariables: VariableWithValues[] };
   sectionVariableValue: VariableValueValue;
-  docId: number;
+  projectId: number;
   suppressCaptions?: boolean;
 };
 
 const SectionVariable = ({
   sectionVariable,
   sectionVariableValue,
-  docId,
+  projectId,
   suppressCaptions,
 }: SectionVariableProps): React.ReactElement => {
   const injectedValue = sectionVariable.variableValues.find(
@@ -51,7 +51,7 @@ const SectionVariable = ({
   if (sourceImageVariable) {
     return (
       <PreviewImage
-        docId={docId}
+        projectId={projectId}
         combinedInjectedValue={combinedInjectedValue}
         sectionVariable={sectionVariable}
         sourceImageVariable={sourceImageVariable}
