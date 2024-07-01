@@ -1,3 +1,4 @@
+5a6d0701bd1 Bump eslint from 9.0.0 to 9.6.0 (#2799)
 6ecd6909461 Bump typescript-eslint from 7.7.0 to 7.15.0 (#2804)
 8309d898079 Update JamesIves/github-pages-deploy-action action to v4.6.1 (#1840)
 ebe3ed5538f Update dependency eslint-plugin-storybook to ^0.8.0 (#2562)
