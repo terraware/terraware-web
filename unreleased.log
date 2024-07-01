@@ -1,3 +1,4 @@
-c577d24c1f SW-5565 Remove unused device manager API code (#2802)
-3ced3ce685 Sync the types with the backend (#2801)
-fff10c422a Fix invalid DOM nesting warnings in console (#2797)
+0573167f82a SW-5583 Updated variable service endpoints to use projectIds (#2803)
+c577d24c1fe SW-5565 Remove unused device manager API code (#2802)
+3ced3ce6856 Sync the types with the backend (#2801)
+fff10c422a6 Fix invalid DOM nesting warnings in console (#2797)
