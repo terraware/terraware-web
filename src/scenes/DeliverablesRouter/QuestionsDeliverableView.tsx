@@ -16,15 +16,14 @@ import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
-import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { requestListParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
-import { selectParticipantProjectSpeciesListRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
+import { requestListDeliverableVariablesValues } from 'src/redux/features/documentProducer/values/valuesThunks';
+import { selectDeliverableVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
+import { requestListDeliverableVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-import QuestionsDeliverableStatusMessage from './QuestionsDeliverableStatusMessage';
 import SubmitDeliverableDialog from './SubmitDeliverableDialog';
 
 type QuestionDeliverableItem = {
@@ -133,26 +132,28 @@ export type Props = EditProps & {
 
 const QuestionsDeliverableView = (props: Props): JSX.Element => {
   const { ...viewProps }: ViewProps = props;
+  const deliverableId = viewProps.deliverable.id;
   const projectId = viewProps.deliverable.projectId;
 
   const dispatch = useAppDispatch();
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
-  const { currentParticipantProject } = useParticipantData();
   const { currentDeliverable: deliverable } = useDeliverableData();
   const { status: requestStatus } = useUpdateDeliverable();
 
-  // TODO: replace with actual question/answer data
-  const ppsSearchResults = useAppSelector(selectParticipantProjectSpeciesListRequest(projectId));
+  const variablesWithValues = useAppSelector((state) =>
+    selectDeliverableVariablesWithValues(state, deliverableId, projectId)
+  );
+  console.log({ variablesWithValues });
 
   const [showSubmitDialog, setShowSubmitDialog] = useState<boolean>(false);
 
-  const submitButtonIsDisabled = useMemo(() => {
-    return (
-      !ppsSearchResults?.data?.length ||
-      ppsSearchResults?.data?.every((species) => species.participantProjectSpecies.submissionStatus === 'Approved')
-    );
-  }, [ppsSearchResults]);
+  // const submitButtonIsDisabled = useMemo(() => {
+  //   return (
+  //     !ppsSearchResults?.data?.length ||
+  //     ppsSearchResults?.data?.every((species) => species.participantProjectSpecies.submissionStatus === 'Approved')
+  //   );
+  // }, [ppsSearchResults]);
 
   const submitDeliverable = useCallback(() => {
     if (deliverable?.id !== undefined) {
@@ -162,12 +163,13 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
   }, [deliverable]);
 
   useEffect(() => {
-    if (!currentParticipantProject?.id) {
+    if (!(deliverableId && projectId)) {
       return;
     }
 
-    void dispatch(requestListParticipantProjectSpecies(projectId));
-  }, []);
+    void dispatch(requestListDeliverableVariables(deliverableId));
+    void dispatch(requestListDeliverableVariablesValues({ deliverableId, projectId }));
+  }, [deliverableId, projectId]);
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -201,7 +203,8 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
           priority='secondary'
         />
         <Button
-          disabled={submitButtonIsDisabled}
+          // disabled={submitButtonIsDisabled}
+          disabled={false}
           label={strings.SUBMIT_FOR_APPROVAL}
           onClick={() => setShowSubmitDialog(true)}
           size='medium'
@@ -224,7 +227,7 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
       <Page crumbs={crumbs} rightComponent={actionMenu} title={<TitleBar {...props} />}>
         {(props.isBusy || requestStatus === 'pending') && <BusySpinner />}
         <Box display='flex' flexDirection='column' flexGrow={1}>
-          <QuestionsDeliverableStatusMessage {...viewProps} questions={ppsSearchResults?.data || []} />
+          {/* <QuestionsDeliverableStatusMessage {...viewProps} questions={ppsSearchResults?.data || []} /> */}
           <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
             <Metadata {...viewProps} />
             <QuestionAnswerSets items={QA_SETS} />

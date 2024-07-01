@@ -16,3 +16,15 @@ export const requestListVariables = createAsyncThunk(
     return rejectWithValue(response.error || strings.GENERIC_ERROR);
   }
 );
+
+export const requestListDeliverableVariables = createAsyncThunk(
+  'listDeliverableVariables',
+  async (deliverableId: number, { rejectWithValue }) => {
+    const response: Response2<VariableListResponse> = await VariableService.getDeliverableVariables(deliverableId);
+    if (response && response.requestSucceeded && response.data) {
+      return response.data.variables;
+    }
+
+    return rejectWithValue(response.error || strings.GENERIC_ERROR);
+  }
+);

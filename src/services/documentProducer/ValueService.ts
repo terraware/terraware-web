@@ -8,22 +8,29 @@ import {
 const VALUES_ENDPOINT = '/api/v1/document-producer/projects/{projectId}/values';
 const IMAGES_ENDPOINT = '/api/v1/document-producer/projects/{projectId}/images';
 
-const getValues = async (projectId: number): Promise<Response2<VariableValuesListResponse>> =>
-  await HttpService.root(VALUES_ENDPOINT.replace('{projectId}', projectId.toString())).get2({});
+const getDeliverableValues = (params: {
+  deliverableId: number;
+  projectId: number;
+}): Promise<Response2<VariableValuesListResponse>> =>
+  HttpService.root(VALUES_ENDPOINT.replace('{projectId}', `${params.projectId}`)).get2({
+    params: {
+      deliverableId: `${params.deliverableId}`,
+    },
+  });
 
-const updateValue = async (
-  projectId: number,
-  operations: Operation[]
-): Promise<Response2<VariableValuesListResponse>> => {
+const getValues = (projectId: number): Promise<Response2<VariableValuesListResponse>> =>
+  HttpService.root(VALUES_ENDPOINT.replace('{projectId}', projectId.toString())).get2({});
+
+const updateValue = (projectId: number, operations: Operation[]): Promise<Response2<VariableValuesListResponse>> => {
   const entity: UpdateVariableValuesRequestPayload = {
     operations,
   };
-  return await HttpService.root(VALUES_ENDPOINT.replace('{projectId}', projectId.toString())).post({
+  return HttpService.root(VALUES_ENDPOINT.replace('{projectId}', projectId.toString())).post({
     entity,
   });
 };
 
-const uploadImageValue = async (
+const uploadImageValue = (
   projectId: number,
   variableId: number,
   file: File,
@@ -31,13 +38,14 @@ const uploadImageValue = async (
   caption?: string
 ): Promise<Response2<VariableValuesListResponse>> => {
   const headers = { 'content-type': 'multipart/form-data' };
-  return await HttpService.root(IMAGES_ENDPOINT.replace('{projectId}', projectId.toString())).post({
+  return HttpService.root(IMAGES_ENDPOINT.replace('{projectId}', projectId.toString())).post({
     entity: { file, caption, citation, variableId },
     headers,
   });
 };
 
 const VariableService = {
+  getDeliverableValues,
   getValues,
   updateValue,
   uploadImageValue,
