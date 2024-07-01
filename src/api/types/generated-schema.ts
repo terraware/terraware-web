@@ -937,6 +937,12 @@ export interface paths {
     /** Get a user by ID, if they exist, only ordinary users are supported. */
     get: operations["getUser"];
   };
+  "/api/v1/users/{userId}/deliverableCategories": {
+    /** Get the list of deliverable categories assigned to a user. */
+    get: operations["getUserDeliverableCategories"];
+    /** Update which deliverable categories are assigned to a user. */
+    put: operations["updateUserDeliverableCategories"];
+  };
   "/api/v1/users/{userId}/globalRoles": {
     /** Apply the supplied global roles to the user. */
     post: operations["updateGlobalRoles"];
@@ -2797,6 +2803,10 @@ export interface components {
     };
     GetUploadStatusResponsePayload: {
       details: components["schemas"]["GetUploadStatusDetailsPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetUserDeliverableCategoriesResponsePayload: {
+      deliverableCategories: ("Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files")[];
       status: components["schemas"]["SuccessOrError"];
     };
     GetUserPreferencesResponsePayload: {
@@ -4872,6 +4882,10 @@ export interface components {
       /** @description If true, the user consents to the use of analytics cookies. If false, they decline. */
       cookiesConsented: boolean;
     };
+    UpdateUserDeliverableCategoriesRequestPayload: {
+      /** @description New set of category assignments. Existing assignments that aren't included here will be removed from the user. */
+      deliverableCategories: ("Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files")[];
+    };
     UpdateUserPreferencesRequestPayload: {
       /**
        * Format: int64
@@ -5114,6 +5128,7 @@ export interface components {
     UserWithGlobalRolesPayload: {
       /** Format: date-time */
       createdTime: string;
+      deliverableCategories: ("Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files")[];
       email: string;
       firstName?: string;
       globalRoles: ("Super-Admin" | "Accelerator Admin" | "TF Expert" | "Read Only")[];
@@ -10019,6 +10034,43 @@ export interface operations {
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Get the list of deliverable categories assigned to a user. */
+  getUserDeliverableCategories: {
+    parameters: {
+      path: {
+        userId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetUserDeliverableCategoriesResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Update which deliverable categories are assigned to a user. */
+  updateUserDeliverableCategories: {
+    parameters: {
+      path: {
+        userId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateUserDeliverableCategoriesRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };

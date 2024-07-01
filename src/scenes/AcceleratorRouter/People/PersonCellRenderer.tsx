@@ -1,9 +1,11 @@
 import React from 'react';
 
 import Link from 'src/components/common/Link';
+import TextTruncated from 'src/components/common/TextTruncated';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { DeliverableCategoryType, categoryLabel } from 'src/types/Deliverables';
 import { getHighestGlobalRole } from 'src/types/GlobalRoles';
 
 export default function PersonCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
@@ -37,6 +39,21 @@ export default function PersonCellRenderer(props: RendererProps<TableRowType>): 
 
   if (column.key === 'globalRoles') {
     return <CellRenderer index={index} column={column} value={getHighestGlobalRole(row.globalRoles)} row={row} />;
+  }
+
+  if (column.key === 'deliverableCategories') {
+    const categories = row.deliverableCategories
+      .map((category: DeliverableCategoryType) => categoryLabel(category))
+      .toSorted();
+
+    return (
+      <CellRenderer
+        index={index}
+        column={column}
+        row={row}
+        value={<TextTruncated stringList={categories} columnWidth={400} fontSize={16} />}
+      />
+    );
   }
 
   return <CellRenderer {...props} />;
