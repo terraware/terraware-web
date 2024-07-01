@@ -54,8 +54,6 @@ const PersonProvider = ({ children }: Props) => {
     }
   }, [getCategoriesRequest, getUserRequest, userId, snackbar]);
 
-  // useEffect(reload, [reload]);
-
   return <PersonContext.Provider value={personData}>{children}</PersonContext.Provider>;
 };
 
