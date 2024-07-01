@@ -24,7 +24,7 @@ import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import SpeciesDeliverableStatusMessage from './SpeciesDeliverableStatusMessage';
-import SubmitSpeciesDeliverableDialog from './SubmitDeliverableDialog';
+import SubmitDeliverableDialog from './SubmitDeliverableDialog';
 
 export type Props = EditProps & {
   isBusy?: boolean;
@@ -84,7 +84,7 @@ const SpeciesDeliverableView = (props: Props): JSX.Element => {
   return (
     <>
       {deliverable && showSubmitDialog && (
-        <SubmitSpeciesDeliverableDialog onClose={() => setShowSubmitDialog(false)} onSubmit={submitDeliverable} />
+        <SubmitDeliverableDialog onClose={() => setShowSubmitDialog(false)} onSubmit={submitDeliverable} />
       )}
 
       <Page

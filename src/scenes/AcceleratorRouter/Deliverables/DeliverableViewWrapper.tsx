@@ -13,6 +13,7 @@ import { DeliverableStatusType } from 'src/types/Deliverables';
 
 import ApproveDeliverableDialog from './ApproveDeliverableDialog';
 import DocumentDeliverableView from './DocumentDeliverableView';
+import QuestionsDeliverableView from './QuestionsDeliverableView';
 import RejectDialog from './RejectDialog';
 import SpeciesDeliverableView from './SpeciesDeliverableView';
 
@@ -136,6 +137,14 @@ const DeliverableViewWrapper = () => {
 
         {deliverable.type === 'Document' ? (
           <DocumentDeliverableView
+            callToAction={callToAction}
+            optionsMenu={optionsMenu}
+            deliverable={deliverable}
+            isBusy={requestStatus === 'pending'}
+            showRejectDialog={() => setShowRejectDialog(true)}
+          />
+        ) : deliverable.type === 'Questions' ? (
+          <QuestionsDeliverableView
             callToAction={callToAction}
             optionsMenu={optionsMenu}
             deliverable={deliverable}
