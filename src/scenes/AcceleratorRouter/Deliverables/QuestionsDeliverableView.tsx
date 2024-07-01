@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { BusySpinner, Button, Message } from '@terraware/web-components';
+import { BusySpinner, Button, Message, Select } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
@@ -110,6 +110,7 @@ const QuestionAnswerSet = ({
   const theme = useTheme();
 
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
+  const [editing, setEditing] = useState(false);
 
   const rejectItem = () => {
     return true;
@@ -120,7 +121,7 @@ const QuestionAnswerSet = ({
   };
 
   const onEditItem = () => {
-    return true;
+    setEditing(true);
   };
 
   return (
@@ -138,9 +139,19 @@ const QuestionAnswerSet = ({
           '& .actions': {
             display: 'none',
           },
+          padding: 2,
+          borderRadius: 2,
         }}
       >
-        <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px', display: 'flex', alignItems: 'center' }}>
+        <Box
+          sx={{
+            float: 'right',
+            marginBottom: '16px',
+            marginLeft: '16px',
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
           <DeliverableStatusBadge status={item.submissionStatus} />
           <Box className='actions'>
             <Button
@@ -183,12 +194,26 @@ const QuestionAnswerSet = ({
             {item.description}
           </Typography>
         )}
+        {editing && <Select onChange={(newValue: string) => console.log(newValue)}></Select>}
         {!!item.feedback && (
           <Box marginBottom={theme.spacing(2)}>
             <Message body={item.feedback} priority='critical' type='page' />
           </Box>
         )}
-        <Typography>{item?.answer ? item.answer : '--'}</Typography>
+        <Typography>{!editing && item?.answer ? item.answer : '--'}</Typography>
+        {editing && (
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button
+              id='cancel'
+              label={strings.CANCEL}
+              type='passive'
+              onClick={() => setEditing(false)}
+              priority='secondary'
+              key='button-1'
+            />
+            <Button id={'save'} onClick={() => true} label={strings.SAVE} key='button-2' priority='secondary' />
+          </Box>
+        )}
       </Box>
     </>
   );
