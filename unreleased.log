@@ -1,3 +1,4 @@
+3855b4dbf47 Bump undici from 5.28.3 to 5.28.4 (#2471)
 12a9e961058 Bump ws from 6.2.2 to 6.2.3 (#2747)
 0573167f82a SW-5583 Updated variable service endpoints to use projectIds (#2803)
 c577d24c1fe SW-5565 Remove unused device manager API code (#2802)
