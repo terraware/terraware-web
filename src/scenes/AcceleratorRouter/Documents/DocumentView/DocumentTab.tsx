@@ -24,12 +24,12 @@ const DocumentTab = ({ document }: DocumentProps): JSX.Element => {
 
   useEffect(() => {
     dispatch(requestListVariables(document.variableManifestId));
-    dispatch(requestListVariablesValues(document.id));
-  }, [dispatch, document.variableManifestId, document.id]);
+    dispatch(requestListVariablesValues(document.projectId));
+  }, [dispatch, document.variableManifestId, document.projectId]);
 
   const onUpdate = () => {
     dispatch(requestListVariables(document.variableManifestId));
-    dispatch(requestListVariablesValues(document.id));
+    dispatch(requestListVariablesValues(document.projectId));
   };
 
   const renderVariable = (variable: VariableWithValues) => {
@@ -56,6 +56,7 @@ const DocumentTab = ({ document }: DocumentProps): JSX.Element => {
         <EditableSectionContainer
           key={`component-${section.position}`}
           docId={document.id}
+          projectId={document.projectId}
           section={section}
           allVariables={variables ?? []}
           onUpdate={onUpdate}

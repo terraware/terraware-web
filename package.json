@@ -161,13 +161,13 @@
     "babel-plugin-named-exports-order": "^0.0.2",
     "btoa": "^1.2.1",
     "csv": "^6.2.8",
-    "eslint": "^9.0.0",
+    "eslint": "^9.6.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jest-react": "^0.1.0",
     "eslint-plugin-jsdoc": "^48.2.3",
     "eslint-plugin-prefer-arrow": "^1.2.3",
     "eslint-plugin-react": "^7.34.1",
-    "eslint-plugin-storybook": "^0.6.15",
+    "eslint-plugin-storybook": "^0.8.0",
     "esm": "^3.2.25",
     "express": "^4.19.2",
     "globals": "^15.0.0",
@@ -187,7 +187,7 @@
     "start-server-and-test": "^2.0.3",
     "storybook": "^7.0.12",
     "typescript": "^5.0.0",
-    "typescript-eslint": "^7.7.0",
+    "typescript-eslint": "^7.15.0",
     "webpack-dev-middleware": "^5.3.4"
   },
   "resolutions": {
@@ -195,6 +195,6 @@
     "fork-ts-checker-webpack-plugin": "^6.5.3",
     "wrap-ansi": "7.0.0",
     "string-width": "4.1.0",
-    "strip-ansi": "6.0.0"
+    "strip-ansi": "6.0.1"
   }
 }

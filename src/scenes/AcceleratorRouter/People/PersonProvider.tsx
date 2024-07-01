@@ -3,9 +3,10 @@ import { useParams } from 'react-router-dom';
 
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUserRequest } from 'src/redux/features/user/usersSelectors';
+import { requestGetUserDeliverableCategories } from 'src/redux/features/userDeliverableCategories/userDeliverableCategoriesAsyncThunks';
+import { selectUserDeliverableCategoriesGetRequest } from 'src/redux/features/userDeliverableCategories/userDeliverableCategoriesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { User } from 'src/types/User';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { PersonContext, PersonData } from './PersonContext';
@@ -18,37 +19,40 @@ const PersonProvider = ({ children }: Props) => {
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const pathParams = useParams<{ userId: string }>();
-  const userId = Number(pathParams.userId);
+  const [userId, setUserId] = useState(Number(pathParams.userId || -1));
 
-  const [personData, setPersonData] = useState<PersonData>({ userId });
-
-  const [user, setUser] = useState<User>();
-  const userRequest = useAppSelector(selectUserRequest(userId));
+  const getUserRequest = useAppSelector(selectUserRequest(userId));
+  const getCategoriesRequest = useAppSelector(selectUserDeliverableCategoriesGetRequest(userId));
 
   useEffect(() => {
     if (userId !== -1) {
       void dispatch(requestGetUser(userId));
+      void dispatch(requestGetUserDeliverableCategories(userId));
     }
-  }, [userId, dispatch]);
+  }, [dispatch, userId]);
+
+  const [personData, setPersonData] = useState<PersonData>({ setUserId, userId });
 
   useEffect(() => {
-    if (!userRequest) {
+    if (!getUserRequest || !getCategoriesRequest) {
       return;
     }
 
-    if (userRequest.status === 'success') {
-      setUser(userRequest.data?.user);
-    } else if (userRequest.status === 'error') {
+    if (getUserRequest.status === 'success' && getCategoriesRequest.status === 'success') {
+      const user = getUserRequest.data?.user;
+      const deliverableCategories = getCategoriesRequest.data?.deliverableCategories || [];
+
+      if (user) {
+        setPersonData({
+          setUserId,
+          user: { ...user, deliverableCategories },
+          userId,
+        });
+      }
+    } else if (getUserRequest.status === 'error' || getCategoriesRequest.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [userRequest, snackbar]);
-
-  useEffect(() => {
-    setPersonData({
-      user,
-      userId,
-    });
-  }, [userId, user]);
+  }, [getCategoriesRequest, getUserRequest, userId, snackbar]);
 
   return <PersonContext.Provider value={personData}>{children}</PersonContext.Provider>;
 };

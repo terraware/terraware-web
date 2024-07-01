@@ -23,7 +23,7 @@ export const getSourceImageVariable = (
 };
 
 type PreviewImageProps = {
-  docId: number;
+  projectId: number;
   combinedInjectedValue: CombinedInjectedValue;
   sectionVariable: SectionVariableWithValues & { relevantVariables: VariableWithValues[] };
   sourceImageVariable: ImageVariable;
@@ -31,7 +31,7 @@ type PreviewImageProps = {
 };
 
 export const PreviewImage = ({
-  docId,
+  projectId,
   combinedInjectedValue,
   sectionVariable,
   sourceImageVariable,
@@ -53,7 +53,7 @@ export const PreviewImage = ({
 
           return (
             <div className='image-container' key={`image-${index}`}>
-              <img width='75%' src={getImagePath(docId, img.id)} alt='doc' />
+              <img width='75%' src={getImagePath(projectId, img.id)} alt='doc' />
               {!suppressCaptions && (
                 <p className='caption'>
                   Figure {(relevantImageVariable as any).figure} {imgValue.caption}{' '}

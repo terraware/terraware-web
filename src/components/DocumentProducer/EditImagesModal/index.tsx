@@ -29,11 +29,11 @@ export type EditImagesModalProps = {
   variable: ImageVariableWithValues;
   onFinish: () => void;
   onCancel: () => void;
-  docId: number;
+  projectId: number;
 };
 
 const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
-  const { variable, onFinish, onCancel, docId } = props;
+  const { variable, onFinish, onCancel, projectId } = props;
   const theme = useTheme();
   const [imagesCopy, setImagesCopy] = useState(variable.values);
   const [deletedImages, setDeletedImages] = useState<VariableValueImageValue[]>();
@@ -67,7 +67,7 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
             file: newImage.file,
             caption: newImage.caption,
             citation: newImage.citation,
-            docId,
+            projectId,
           })
         );
 
@@ -94,7 +94,7 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
     const request = dispatch(
       requestUpdateVariableValues({
         operations,
-        docId,
+        projectId,
       })
     );
     setRequestId(request.requestId);
@@ -189,7 +189,7 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
                 />
                 <img
                   height='120px'
-                  src={getImagePath(docId, image.id, 120, 120)}
+                  src={getImagePath(projectId, image.id, 120, 120)}
                   alt='doc'
                   style={{
                     margin: 'auto auto',

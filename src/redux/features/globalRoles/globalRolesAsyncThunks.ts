@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
+import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import GlobalRolesService from 'src/services/GlobalRolesService';
 import { Response } from 'src/services/HttpService';
 import strings from 'src/strings';
@@ -43,11 +44,12 @@ export const requestDeleteGlobalRolesForUsers = createAsyncThunk(
 
 export const requestUpdateGlobalRolesUser = createAsyncThunk(
   'globalRoles/update-for-user',
-  async (request: { user: User; globalRoles: UserGlobalRole[] }, { rejectWithValue }) => {
+  async (request: { user: User; globalRoles: UserGlobalRole[] }, { dispatch, rejectWithValue }) => {
     const { user, globalRoles } = request;
 
     const response: Response = await GlobalRolesService.update(user, globalRoles);
     if (response && response.requestSucceeded) {
+      dispatch(requestGetUser(user.id));
       return user.id;
     }
 

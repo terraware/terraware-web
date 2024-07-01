@@ -31,8 +31,8 @@ export default function PreviewDocument({ doc }: PreviewDocumentProps): ReactEle
 
   useEffect(() => {
     dispatch(requestListVariables(doc.variableManifestId));
-    dispatch(requestListVariablesValues(doc.id));
-  }, [dispatch, doc.variableManifestId, doc.id]);
+    dispatch(requestListVariablesValues(doc.projectId));
+  }, [dispatch, doc.variableManifestId, doc.projectId]);
 
   const [sectionVariables, setSectionVariables] = useState<SectionVariableWithValues[]>([]);
   const [titleSection, setTitleSection] = useState<SectionVariableWithValues>();
@@ -70,6 +70,7 @@ export default function PreviewDocument({ doc }: PreviewDocumentProps): ReactEle
               isTopLevel={sectionVariable.renderHeading}
               key={index}
               docId={doc.id}
+              projectId={doc.projectId}
             />
           );
         })}

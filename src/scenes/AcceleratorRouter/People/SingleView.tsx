@@ -11,6 +11,7 @@ import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
+import { categoryLabel } from 'src/types/Deliverables';
 import { getHighestGlobalRole } from 'src/types/GlobalRoles';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
@@ -50,6 +51,15 @@ const SingleView = () => {
     [activeLocale]
   );
 
+  const deliverableCategories = useMemo(
+    () =>
+      user?.deliverableCategories
+        ?.map((category) => categoryLabel(category))
+        ?.toSorted()
+        ?.join(strings.LIST_SEPARATOR),
+    [user]
+  );
+
   return (
     <Page crumbs={crumbs} title={user?.email || ''} rightComponent={rightComponent}>
       <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, borderRadius: '24px' }}>
@@ -65,12 +75,21 @@ const SingleView = () => {
           </Grid>
         </Grid>
         <Grid container spacing={3} sx={{ marginTop: theme.spacing(1) }}>
-          <Grid item xs={12}>
+          <Grid item xs={4}>
             <TextField
               label={strings.ROLE}
               id='globalRoles'
               type='text'
               value={getHighestGlobalRole(user?.globalRoles)}
+              display={true}
+            />
+          </Grid>
+          <Grid item xs={8}>
+            <TextField
+              id='deliverableCategories'
+              label={strings.CATEGORIES}
+              type='text'
+              value={deliverableCategories}
               display={true}
             />
           </Grid>

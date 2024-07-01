@@ -9,6 +9,7 @@ interface PreviewSectionProps {
   isTopLevel: boolean;
   sectionVariableWithRelevantVariables: SectionVariableWithValues & { relevantVariables: VariableWithValues[] };
   docId: number;
+  projectId: number;
   suppressCaptions?: boolean;
 }
 
@@ -16,6 +17,7 @@ const PreviewSection = ({
   sectionVariableWithRelevantVariables,
   isTopLevel,
   docId,
+  projectId,
   suppressCaptions,
 }: PreviewSectionProps): ReactElement | null => {
   const isLeaf = !sectionVariableWithRelevantVariables.renderHeading;
@@ -43,7 +45,7 @@ const PreviewSection = ({
                   sectionVariable={sectionVariableWithRelevantVariables}
                   sectionVariableValue={value}
                   key={index}
-                  docId={docId}
+                  projectId={projectId}
                   suppressCaptions={suppressCaptions}
                 />
               );
@@ -82,6 +84,7 @@ const PreviewSection = ({
               isTopLevel={false}
               key={index}
               docId={docId}
+              projectId={projectId}
               suppressCaptions={suppressCaptions}
             />
           );

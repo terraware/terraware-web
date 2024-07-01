@@ -13,17 +13,23 @@ type EditVariableModalProps = {
   variable: VariableWithValues;
   onFinish: () => void;
   onCancel: () => void;
-  docId: number;
+  projectId: number;
   manifestId: number;
 };
 
-export default function EditVariableModal({ variable, onFinish, onCancel, docId, manifestId }: EditVariableModalProps) {
+export default function EditVariableModal({
+  variable,
+  onFinish,
+  onCancel,
+  projectId,
+  manifestId,
+}: EditVariableModalProps) {
   switch (variable.type) {
     case 'Image':
       return (
         <EditImagesModal
           variable={variable as ImageVariableWithValues}
-          docId={docId}
+          projectId={projectId}
           onFinish={onFinish}
           onCancel={onCancel}
         />
@@ -32,7 +38,7 @@ export default function EditVariableModal({ variable, onFinish, onCancel, docId,
       return (
         <EditableTableEdit
           variable={variable as TableVariableWithValues}
-          documentId={docId}
+          projectId={projectId}
           onFinish={onFinish}
           onCancel={onCancel}
         />
@@ -42,7 +48,9 @@ export default function EditVariableModal({ variable, onFinish, onCancel, docId,
     case 'Select':
     case 'Number':
     case 'Text':
-      return <EditVariable variableId={variable.id} documentId={docId} onFinish={onFinish} manifestId={manifestId} />;
+      return (
+        <EditVariable variableId={variable.id} projectId={projectId} onFinish={onFinish} manifestId={manifestId} />
+      );
     default:
       return null;
   }

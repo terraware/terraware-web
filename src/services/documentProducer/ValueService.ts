@@ -5,30 +5,33 @@ import {
   VariableValuesListResponse,
 } from 'src/types/documentProducer/VariableValue';
 
-const VALUES_ENDPOINT = '/api/v1/documents/{docId}/values';
-const IMAGES_ENDPOINT = '/api/v1/documents/{docId}/images';
+const VALUES_ENDPOINT = '/api/v1/document-producer/projects/{projectId}/values';
+const IMAGES_ENDPOINT = '/api/v1/document-producer/projects/{projectId}/images';
 
-const getValues = async (docId: number): Promise<Response2<VariableValuesListResponse>> =>
-  await HttpService.root(VALUES_ENDPOINT.replace('{docId}', docId.toString())).get2({});
+const getValues = async (projectId: number): Promise<Response2<VariableValuesListResponse>> =>
+  await HttpService.root(VALUES_ENDPOINT.replace('{projectId}', projectId.toString())).get2({});
 
-const updateValue = async (docId: number, operations: Operation[]): Promise<Response2<VariableValuesListResponse>> => {
+const updateValue = async (
+  projectId: number,
+  operations: Operation[]
+): Promise<Response2<VariableValuesListResponse>> => {
   const entity: UpdateVariableValuesRequestPayload = {
     operations,
   };
-  return await HttpService.root(VALUES_ENDPOINT.replace('{docId}', docId.toString())).post({
+  return await HttpService.root(VALUES_ENDPOINT.replace('{projectId}', projectId.toString())).post({
     entity,
   });
 };
 
 const uploadImageValue = async (
-  docId: number,
+  projectId: number,
   variableId: number,
   file: File,
   citation?: string,
   caption?: string
 ): Promise<Response2<VariableValuesListResponse>> => {
   const headers = { 'content-type': 'multipart/form-data' };
-  return await HttpService.root(IMAGES_ENDPOINT.replace('{docId}', docId.toString())).post({
+  return await HttpService.root(IMAGES_ENDPOINT.replace('{projectId}', projectId.toString())).post({
     entity: { file, caption, citation, variableId },
     headers,
   });

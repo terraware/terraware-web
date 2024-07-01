@@ -105,6 +105,10 @@ export type UpdateVariableValuesRequestWithDocId = UpdateVariableValuesRequestPa
   docId: number;
 };
 
+export type UpdateVariableValuesRequestWithProjectId = UpdateVariableValuesRequestPayload & {
+  projectId: number;
+};
+
 export type UpdateTextVariableValueRequestWithDocId = Omit<
   components['schemas']['UpdateValueOperationPayload'],
   'value'
@@ -113,10 +117,22 @@ export type UpdateTextVariableValueRequestWithDocId = Omit<
   value: NewTextValuePayload | NewNumberValuePayload | NewImageValuePayload | NewSelectValuePayload;
 };
 
+export type UpdateTextVariableValueRequestWithProjectId = Omit<
+  components['schemas']['UpdateValueOperationPayload'],
+  'value'
+> & {
+  projectId: number;
+  value: NewTextValuePayload | NewNumberValuePayload | NewImageValuePayload | NewSelectValuePayload;
+};
+
 export type DeleteVariableValueOperation = components['schemas']['DeleteValueOperationPayload'];
 
 export type DeleteVariableValueRequestWithDocId = components['schemas']['DeleteValueOperationPayload'] & {
   docId: number;
+};
+
+export type DeleteVariableValueRequestWithProjectId = components['schemas']['DeleteValueOperationPayload'] & {
+  projectId: number;
 };
 
 export type NewValuePayload = components['schemas']['NewValuePayload'];
@@ -127,6 +143,10 @@ export type AppendVariableValueOperation = components['schemas']['AppendValueOpe
 
 export type AppendVariableRequestWithDocId = components['schemas']['UpdateValueOperationPayload'] & {
   docId: number;
+};
+
+export type AppendVariableRequestWithProjectId = components['schemas']['UpdateValueOperationPayload'] & {
+  projectId: number;
 };
 
 export type Operation =
@@ -146,6 +166,10 @@ export type UploadImageValueRequestPayloadWithDocId = UploadImageValueRequestPay
   docId: number;
 };
 
+export type UploadImageValueRequestPayloadWithProjectId = UploadImageValueRequestPayload & {
+  projectId: number;
+};
+
 export type AppendVariableValueRequestWithDocId = Omit<
   components['schemas']['AppendValueOperationPayload'],
   'value'
@@ -163,10 +187,18 @@ export type NewSectionTextValuePayload = components['schemas']['NewSectionTextVa
 
 export type NewSectionVariableValuePayload = components['schemas']['NewSectionVariableValuePayload'];
 
-export type ReplaceSectionValuesOperationPayload = Omit<
+export type ReplaceSectionValuesOperationPayloadWithDocId = Omit<
   components['schemas']['ReplaceValuesOperationPayload'],
   'values'
 > & {
   docId: number;
+  values: (NewSectionTextValuePayload | NewSectionVariableValuePayload)[];
+};
+
+export type ReplaceSectionValuesOperationPayloadWithProjectId = Omit<
+  components['schemas']['ReplaceValuesOperationPayload'],
+  'values'
+> & {
+  projectId: number;
   values: (NewSectionTextValuePayload | NewSectionVariableValuePayload)[];
 };

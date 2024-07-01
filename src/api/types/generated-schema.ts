@@ -278,7 +278,7 @@ export interface paths {
     get: operations["listDocumentTemplates"];
   };
   "/api/v1/document-producer/variables": {
-    /** List the variables within a given manifest. */
+    /** List the variables within a given manifest or deliverable. */
     get: operations["listVariables"];
   };
   "/api/v1/facilities": {
@@ -936,6 +936,12 @@ export interface paths {
   "/api/v1/users/{userId}": {
     /** Get a user by ID, if they exist, only ordinary users are supported. */
     get: operations["getUser"];
+  };
+  "/api/v1/users/{userId}/deliverableCategories": {
+    /** Get the list of deliverable categories assigned to a user. */
+    get: operations["getUserDeliverableCategories"];
+    /** Update which deliverable categories are assigned to a user. */
+    put: operations["updateUserDeliverableCategories"];
   };
   "/api/v1/users/{userId}/globalRoles": {
     /** Apply the supplied global roles to the user. */
@@ -2797,6 +2803,10 @@ export interface components {
     };
     GetUploadStatusResponsePayload: {
       details: components["schemas"]["GetUploadStatusDetailsPayload"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetUserDeliverableCategoriesResponsePayload: {
+      deliverableCategories: ("Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files")[];
       status: components["schemas"]["SuccessOrError"];
     };
     GetUserPreferencesResponsePayload: {
@@ -4872,6 +4882,10 @@ export interface components {
       /** @description If true, the user consents to the use of analytics cookies. If false, they decline. */
       cookiesConsented: boolean;
     };
+    UpdateUserDeliverableCategoriesRequestPayload: {
+      /** @description New set of category assignments. Existing assignments that aren't included here will be removed from the user. */
+      deliverableCategories: ("Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files")[];
+    };
     UpdateUserPreferencesRequestPayload: {
       /**
        * Format: int64
@@ -5114,6 +5128,7 @@ export interface components {
     UserWithGlobalRolesPayload: {
       /** Format: date-time */
       createdTime: string;
+      deliverableCategories: ("Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files")[];
       email: string;
       firstName?: string;
       globalRoles: ("Super-Admin" | "Accelerator Admin" | "TF Expert" | "Read Only")[];
@@ -6636,6 +6651,8 @@ export interface operations {
   listProjectVariableValues: {
     parameters: {
       query?: {
+        /** @description If specified, only return values that belong to variables that are associated to the given ID */
+        deliverableId?: number;
         /** @description If specified, only return values with this ID or higher. Use this to poll for incremental updates to a document. Incremental results may include values of type 'Deleted' in cases where, e.g., elements have been removed from a list. */
         minValueId?: number;
         /** @description If specified, only return values with this ID or lower. Use this to retrieve saved document versions. */
@@ -6711,11 +6728,12 @@ export interface operations {
       };
     };
   };
-  /** List the variables within a given manifest. */
+  /** List the variables within a given manifest or deliverable. */
   listVariables: {
     parameters: {
-      query: {
-        manifestId: number;
+      query?: {
+        deliverableId?: number;
+        manifestId?: number;
       };
     };
     responses: {
@@ -10016,6 +10034,43 @@ export interface operations {
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Get the list of deliverable categories assigned to a user. */
+  getUserDeliverableCategories: {
+    parameters: {
+      path: {
+        userId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetUserDeliverableCategoriesResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Update which deliverable categories are assigned to a user. */
+  updateUserDeliverableCategories: {
+    parameters: {
+      path: {
+        userId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateUserDeliverableCategoriesRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };

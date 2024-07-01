@@ -33,14 +33,14 @@ import {
 export type EditVariableProps = {
   onFinish: (edited: boolean) => void;
   manifestId: number;
-  documentId: number;
+  projectId: number;
   variableId: number;
   sectionsUsed?: string[];
   onSectionClicked?: (sectionNumber: string) => void;
 };
 
 const EditVariable = (props: EditVariableProps): JSX.Element => {
-  const { onFinish, manifestId, documentId, variableId, sectionsUsed, onSectionClicked } = props;
+  const { onFinish, manifestId, projectId, variableId, sectionsUsed, onSectionClicked } = props;
   const dispatch = useAppDispatch();
   const [validate, setValidate] = useState<boolean>(false);
   const [hasErrors, setHasErrors] = useState<boolean>(false);
@@ -50,7 +50,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
   const [removedValues, setRemovedValues] = useState<VariableValueValue[]>();
 
   const selector = useAppSelector((state) => selectGetVariable(state, manifestId, variableId));
-  const valuesSelector = useAppSelector((state) => selectGetVariableValues(state, documentId, variableId));
+  const valuesSelector = useAppSelector((state) => selectGetVariableValues(state, projectId, variableId));
   useSelectorProcessor(selector, setVariable);
   useSelectorProcessor(valuesSelector, setValues);
 
@@ -110,7 +110,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
                 operations: [
                   { operation: 'Update', valueId: valueIdToUpdate, value: newValue, existingValueId: valueIdToUpdate },
                 ],
-                docId: documentId,
+                projectId: projectId,
               })
             );
             setRequestId(request.requestId);
@@ -118,7 +118,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
             const request = dispatch(
               requestUpdateVariableValues({
                 operations: [{ operation: 'Append', variableId, value: newValue }],
-                docId: documentId,
+                projectId: projectId,
               })
             );
             setRequestId(request.requestId);
@@ -152,7 +152,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
           const request = dispatch(
             requestUpdateVariableValues({
               operations,
-              docId: documentId,
+              projectId: projectId,
             })
           );
           setRequestId(request.requestId);
