@@ -23,6 +23,7 @@ export default function TitlePage({ doc, titleSection, variables }: TitlePagePro
           sectionVariableWithRelevantVariables={{ ...titleSection, relevantVariables }}
           isTopLevel={false}
           docId={doc.id}
+          projectId={doc.projectId}
           suppressCaptions={true}
         />
       )}

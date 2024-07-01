@@ -269,12 +269,16 @@ export interface paths {
      */
     post: operations["updateProjectVariableValues"];
   };
+  "/api/v1/document-producer/projects/{projectId}/workflow/{variableId}": {
+    /** Update the workflow details for a variable in a project. */
+    put: operations["updateVariableWorkflowDetails"];
+  };
   "/api/v1/document-producer/templates": {
     /** Gets a list of all the valid document templates. */
     get: operations["listDocumentTemplates"];
   };
   "/api/v1/document-producer/variables": {
-    /** List the variables within a given manifest. */
+    /** List the variables within a given manifest or deliverable. */
     get: operations["listVariables"];
   };
   "/api/v1/facilities": {
@@ -2053,7 +2057,7 @@ export interface components {
       /** Format: uri */
       templateUrl?: string;
       /** @enum {string} */
-      type: "Document" | "Species";
+      type: "Document" | "Species" | "Questions";
     };
     /** @description If the withdrawal was an outplanting to a planting site, the delivery that was created. Not present for other withdrawal purposes. */
     DeliveryPayload: {
@@ -2363,11 +2367,20 @@ export interface components {
       type: "Date" | "Deleted" | "Image" | "Link" | "Number" | "SectionText" | "SectionVariable" | "Select" | "Table" | "Text";
     };
     ExistingVariableValuesPayload: {
+      /** @description User-visible feedback from reviewer. Not populated for table cell values. */
+      feedback?: string;
+      /** @description Internal comment from reviewer. Only populated if the current user has permission to read internal comments. Not populated for table cell values. */
+      internalComment?: string;
       /**
        * Format: int64
        * @description If this is the value of a table cell, the ID of the row it's part of.
        */
       rowValueId?: number;
+      /**
+       * @description Current status of this variable. Not populated for table cell values.
+       * @enum {string}
+       */
+      status?: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Incomplete" | "Complete";
       /** @description Values of this variable or this table cell. When getting the full set of values for a document, this will be the complete list of this variable's values in order of list position. When getting incremental changes to a document, this is only the items that have changed, and existing items won't be present. For example, if a variable is a list and has 3 values, and a fourth value is added, the incremental list of values in this payload will have one item and its list position will be 3 (since lists are 0-indexed). */
       values: (components["schemas"]["ExistingDateValuePayload"] | components["schemas"]["ExistingDeletedValuePayload"] | components["schemas"]["ExistingImageValuePayload"] | components["schemas"]["ExistingLinkValuePayload"] | components["schemas"]["ExistingNumberValuePayload"] | components["schemas"]["ExistingSectionTextValuePayload"] | components["schemas"]["ExistingSectionVariableValuePayload"] | components["schemas"]["ExistingSelectValuePayload"] | components["schemas"]["ExistingTableValuePayload"] | components["schemas"]["ExistingTextValuePayload"])[];
       /** Format: int64 */
@@ -2953,7 +2966,7 @@ export interface components {
       /** @enum {string} */
       status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
       /** @enum {string} */
-      type: "Document" | "Species";
+      type: "Document" | "Species" | "Questions";
     };
     ListDeliverablesResponsePayload: {
       deliverables: components["schemas"]["ListDeliverablesElement"][];
@@ -4915,6 +4928,12 @@ export interface components {
       /** @description List of operations to perform on the document's values. The operations are applied in order, and atomically: if any of them fail, none of them will be applied. */
       operations: (components["schemas"]["AppendValueOperationPayload"] | components["schemas"]["DeleteValueOperationPayload"] | components["schemas"]["ReplaceValuesOperationPayload"] | components["schemas"]["UpdateValueOperationPayload"])[];
     };
+    UpdateVariableWorkflowDetailsRequestPayload: {
+      feedback?: string;
+      internalComment?: string;
+      /** @enum {string} */
+      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Incomplete" | "Complete";
+    };
     UpdateViabilityTestRequestPayload: {
       /** Format: date */
       endDate?: string;
@@ -6617,6 +6636,8 @@ export interface operations {
   listProjectVariableValues: {
     parameters: {
       query?: {
+        /** @description If specified, only return values that belong to variables that are associated to the given ID */
+        deliverableId?: number;
         /** @description If specified, only return values with this ID or higher. Use this to poll for incremental updates to a document. Incremental results may include values of type 'Deleted' in cases where, e.g., elements have been removed from a list. */
         minValueId?: number;
         /** @description If specified, only return values with this ID or lower. Use this to retrieve saved document versions. */
@@ -6659,6 +6680,28 @@ export interface operations {
       };
     };
   };
+  /** Update the workflow details for a variable in a project. */
+  updateVariableWorkflowDetails: {
+    parameters: {
+      path: {
+        projectId: number;
+        variableId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateVariableWorkflowDetailsRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
   /** Gets a list of all the valid document templates. */
   listDocumentTemplates: {
     responses: {
@@ -6670,11 +6713,12 @@ export interface operations {
       };
     };
   };
-  /** List the variables within a given manifest. */
+  /** List the variables within a given manifest or deliverable. */
   listVariables: {
     parameters: {
-      query: {
-        manifestId: number;
+      query?: {
+        deliverableId?: number;
+        manifestId?: number;
       };
     };
     responses: {

@@ -111,8 +111,8 @@ const DocumentVariablesTab = ({ document: doc, setSelectedTab }: DocumentVariabl
 
   useEffect(() => {
     dispatch(requestListVariables(doc.variableManifestId));
-    dispatch(requestListVariablesValues(doc.id));
-  }, [dispatch, doc.variableManifestId, doc.id]);
+    dispatch(requestListVariablesValues(doc.projectId));
+  }, [dispatch, doc.variableManifestId, doc.projectId]);
 
   const containingSections = useCallback(
     (variableId?: number) => (acc: string[], currentVal: SectionVariableWithValues) => {
@@ -163,7 +163,7 @@ const DocumentVariablesTab = ({ document: doc, setSelectedTab }: DocumentVariabl
 
   const onUpdate = () => {
     dispatch(requestListVariables(doc.variableManifestId));
-    dispatch(requestListVariablesValues(doc.id));
+    dispatch(requestListVariablesValues(doc.projectId));
   };
 
   const props = {
@@ -187,7 +187,7 @@ const DocumentVariablesTab = ({ document: doc, setSelectedTab }: DocumentVariabl
 
   const onFinish = (updated: boolean) => {
     if (updated) {
-      dispatch(requestListVariablesValues(doc.id));
+      dispatch(requestListVariablesValues(doc.projectId));
     }
   };
 
@@ -200,7 +200,7 @@ const DocumentVariablesTab = ({ document: doc, setSelectedTab }: DocumentVariabl
             onFinish(updated);
           }}
           manifestId={doc.variableManifestId}
-          documentId={doc.id}
+          projectId={doc.projectId}
           variableId={selectedVariableId || -1}
           sectionsUsed={sectionsUsed}
           onSectionClicked={onSectionClicked}
