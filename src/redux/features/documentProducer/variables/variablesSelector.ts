@@ -12,6 +12,8 @@ import {
 } from 'src/types/documentProducer/Variable';
 import { VariableValue } from 'src/types/documentProducer/VariableValue';
 
+import { deliverableCompositeKeyFn } from '../../deliverables/deliverablesSlice';
+
 export const selectVariables = (state: RootState, manifestId: number | string) =>
   state.documentProducerVariables[manifestId];
 
@@ -183,3 +185,33 @@ export const selectVariablesWithValues = createCachedSelector(
     }
   }
 )((state: RootState, manifestId: number | string, documentId: number) => `${documentId}-${manifestId}`);
+
+export const selectDeliverableVariablesWithValues = createCachedSelector(
+  (state: RootState, deliverableId: number, projectId: number) =>
+    state.documentProducerDeliverableVariables[deliverableId],
+  (state: RootState, deliverableId: number, projectId: number) =>
+    state.documentProducerDeliverableVariableValues[deliverableCompositeKeyFn({ deliverableId, projectId })],
+  (variableList, valueList) => {
+    if (variableList?.data && valueList?.data) {
+      const variables = variableList.data;
+      const values = valueList.data;
+
+      let topLevelSectionPosition = 0;
+      const output = variableList.data.map((v: Variable) => {
+        if (v.type === 'Section' && v.renderHeading) {
+          topLevelSectionPosition++;
+        }
+        return associateValues(v, values, variables, topLevelSectionPosition);
+      });
+
+      return {
+        ...getCombinedProps(variableList, valueList),
+        data: output,
+      };
+    } else {
+      return [];
+    }
+  }
+)((state: RootState, deliverableId: number, projectId: number) =>
+  deliverableCompositeKeyFn({ deliverableId, projectId })
+);

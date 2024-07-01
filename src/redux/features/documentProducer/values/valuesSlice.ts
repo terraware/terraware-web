@@ -3,7 +3,13 @@ import { ActionReducerMapBuilder, createSlice } from '@reduxjs/toolkit';
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { VariableValue } from 'src/types/documentProducer/VariableValue';
 
-import { requestListVariablesValues, requestUpdateVariableValues, requestUploadImageValue } from './valuesThunks';
+import { deliverableCompositeKeyFn } from '../../deliverables/deliverablesSlice';
+import {
+  requestListDeliverableVariablesValues,
+  requestListVariablesValues,
+  requestUpdateVariableValues,
+  requestUploadImageValue,
+} from './valuesThunks';
 
 /**
  * Variable Values List
@@ -18,6 +24,15 @@ const variableValuesListSlice = createSlice({
   reducers: {},
   extraReducers: (builder: ActionReducerMapBuilder<VariableValuesListState>) => {
     buildReducers(requestListVariablesValues, true)(builder);
+  },
+});
+
+const deliverableVariableValuesListSlice = createSlice({
+  name: 'deliverableVariableValuesListSlice',
+  initialState: initialVariableValuesListState,
+  reducers: {},
+  extraReducers: (builder: ActionReducerMapBuilder<VariableValuesListState>) => {
+    buildReducers(requestListDeliverableVariablesValues, true, deliverableCompositeKeyFn)(builder);
   },
 });
 
@@ -54,6 +69,7 @@ const variableValuesImageUploadSlice = createSlice({
 });
 
 export const documentProducerVariableValuesReducers = {
+  documentProducerDeliverableVariableValues: deliverableVariableValuesListSlice.reducer,
   documentProducerVariableValuesImageUpload: variableValuesImageUploadSlice.reducer,
   documentProducerVariableValuesList: variableValuesListSlice.reducer,
   documentProducerVariableValuesUpdate: variableValuesUpdateSlice.reducer,

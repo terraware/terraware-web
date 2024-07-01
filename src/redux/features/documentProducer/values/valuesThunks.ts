@@ -10,6 +10,18 @@ import {
   VariableValuesListResponse,
 } from 'src/types/documentProducer/VariableValue';
 
+export const requestListDeliverableVariablesValues = createAsyncThunk(
+  'listDeliverableVariablesValues',
+  async (params: { deliverableId: number; projectId: number }, { rejectWithValue }) => {
+    const response: Response2<VariableValuesListResponse> = await ValueService.getDeliverableValues(params);
+    if (response.requestSucceeded && response.data?.values) {
+      return response.data.values;
+    }
+
+    return rejectWithValue(response.error || strings.GENERIC_ERROR);
+  }
+);
+
 export const requestListVariablesValues = createAsyncThunk(
   'listVariablesValues',
   async (projectId: number, { rejectWithValue }) => {

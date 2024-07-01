@@ -12,6 +12,10 @@ export type VariableType = components['schemas']['ExistingValuePayload']['type']
 
 export type Column = components['schemas']['TableColumnPayload'];
 
+export type LinkVariable = components['schemas']['LinkVariablePayload'];
+
+export type SectionVariable = components['schemas']['SectionVariablePayload'];
+
 export type DateVariable = components['schemas']['DateVariablePayload'];
 
 export type TextVariable = components['schemas']['TextVariablePayload'];
@@ -36,7 +40,9 @@ export type VariableUnion =
   | TableVariable
   | NumberVariable
   | SelectVariable
-  | DateVariable;
+  | DateVariable
+  | LinkVariable
+  | SectionVariable;
 
 export type Section = components['schemas']['SectionVariablePayload'];
 
