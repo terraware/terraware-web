@@ -269,7 +269,7 @@ const DeliverableVariableDetailsInput = ({
         type='text'
         value={variable?.name}
         display={true}
-        sx={formElementStyles}
+        sx={[formElementStyles, { '& p.textfield-value--display': { fontWeight: '600' } }]}
       />
       {variable?.description && (
         <Textfield
