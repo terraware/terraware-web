@@ -40,8 +40,10 @@ const DeliverableEditVariable = (props: EditVariableProps): JSX.Element => {
   const [values, setValues] = useState<VariableValueValue[]>(variable.values);
   const [removedValues, setRemovedValues] = useState<VariableValueValue[]>();
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const results = useAppSelector(selectUpdateVariableValues(updateVariableRequestId));
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const save = () => {
     setValidate(true);
     if (hasErrors) {
@@ -148,6 +150,7 @@ const DeliverableEditVariable = (props: EditVariableProps): JSX.Element => {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onCancel = () => {
     setUpdateVariableRequestId('');
     onFinish(false);
