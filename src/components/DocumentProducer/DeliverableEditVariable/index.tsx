@@ -16,6 +16,7 @@ export type DeliverableEditVariableProps = {
 const DeliverableEditVariable = (props: DeliverableEditVariableProps): JSX.Element => {
   const { setHasErrors, setValues, variable } = props;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [removedValues, setRemovedValues] = useState<VariableValueValue[]>();
 
   const onAddRemovedValue = (newRemovedValue: VariableValueValue) => {
