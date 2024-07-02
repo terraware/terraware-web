@@ -8,15 +8,38 @@ import {
 const VALUES_ENDPOINT = '/api/v1/document-producer/projects/{projectId}/values';
 const IMAGES_ENDPOINT = '/api/v1/document-producer/projects/{projectId}/images';
 
-const getDeliverableValues = (params: {
+// type ExistingVariableValuesPayload = components['schemas']['ExistingVariableValuesPayload'];
+
+const getDeliverableValues = async (params: {
   deliverableId: number;
   projectId: number;
-}): Promise<Response2<VariableValuesListResponse>> =>
-  HttpService.root(VALUES_ENDPOINT.replace('{projectId}', `${params.projectId}`)).get2({
+}): Promise<Response2<VariableValuesListResponse>> => {
+  const result = await HttpService.root(
+    VALUES_ENDPOINT.replace('{projectId}', `${params.projectId}`)
+  ).get2<VariableValuesListResponse>({
     params: {
       deliverableId: `${params.deliverableId}`,
     },
   });
+
+  if (result.data?.values) {
+    return {
+      ...result,
+      data: {
+        ...result.data,
+        values: result.data.values.map((value) => ({
+          // Set default values for workflow details if they do not exist
+          internalComment: undefined,
+          feedback: undefined,
+          status: undefined,
+          ...value,
+        })),
+      },
+    };
+  } else {
+    return result;
+  }
+};
 
 const getValues = (projectId: number): Promise<Response2<VariableValuesListResponse>> =>
   HttpService.root(VALUES_ENDPOINT.replace('{projectId}', projectId.toString())).get2({});
