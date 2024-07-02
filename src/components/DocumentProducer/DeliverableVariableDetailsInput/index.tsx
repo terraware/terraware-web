@@ -1,9 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
+import { Box, IconButton, useTheme } from '@mui/material';
 import { Button, DatePicker, Dropdown, DropdownItem, Icon, Textfield } from '@terraware/web-components';
 
-import Link from 'src/components/common/Link';
 import strings from 'src/strings';
 import { SelectOptionPayload, SelectVariable, Variable } from 'src/types/documentProducer/Variable';
 import {
@@ -22,8 +21,6 @@ export type DeliverableVariableDetailsInputProps = {
   setHasErrors: (has: boolean) => void;
   variable?: Variable;
   addRemovedValue: (value: VariableValueValue) => void;
-  sectionsUsed?: string[];
-  onSectionClicked?: (sectionNumber: string) => void;
 };
 
 const DeliverableVariableDetailsInput = ({
@@ -33,8 +30,6 @@ const DeliverableVariableDetailsInput = ({
   setHasErrors,
   variable,
   addRemovedValue,
-  sectionsUsed,
-  onSectionClicked,
 }: DeliverableVariableDetailsInputProps): JSX.Element => {
   const [value, setValue] = useState<string | number>();
   const [citation, setCitation] = useState<string>();
@@ -270,7 +265,7 @@ const DeliverableVariableDetailsInput = ({
       <Textfield
         autoFocus
         id='name'
-        label={strings.NAME}
+        label=''
         type='text'
         value={variable?.name}
         display={true}
@@ -278,7 +273,7 @@ const DeliverableVariableDetailsInput = ({
       />
       <Textfield
         id='description'
-        label={strings.DESCRIPTION}
+        label=''
         type='text'
         value={variable?.description}
         display={true}
@@ -287,7 +282,7 @@ const DeliverableVariableDetailsInput = ({
       {variable?.type === 'Date' && (
         <DatePicker
           id='value'
-          label={strings.VALUE}
+          label=''
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
           value={value?.toString()}
           errorText={validate ? valueError() : ''}
@@ -302,7 +297,7 @@ const DeliverableVariableDetailsInput = ({
               <Textfield
                 key={`input-${index}`}
                 id='value'
-                label={index === 0 ? strings.VALUE : ''}
+                label=''
                 type={'text'}
                 onChange={(newValue: any) => onChangeValueHandler(newValue, 'value', index)}
                 value={iValue?.toString()}
@@ -334,7 +329,7 @@ const DeliverableVariableDetailsInput = ({
       {(variable?.type === 'Number' || variable?.type === 'Link') && (
         <Textfield
           id='value'
-          label={strings.VALUE}
+          label=''
           type={variable?.type === 'Number' ? 'number' : 'text'}
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
           value={value?.toString()}
@@ -346,7 +341,7 @@ const DeliverableVariableDetailsInput = ({
       {variable?.type === 'Select' && (
         <Dropdown
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
-          label={strings.VALUE}
+          label=''
           options={getOptions()}
           selectedValue={value}
           fullWidth={true}
@@ -363,59 +358,6 @@ const DeliverableVariableDetailsInput = ({
           value={title}
         />
       )}
-
-      <Grid container>
-        <Grid item xs={6}>
-          <Textfield
-            id='type'
-            label={strings.TYPE}
-            type='text'
-            value={variable?.type}
-            display={true}
-            sx={formElementStyles}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Textfield
-            id='instances'
-            label={strings.INSTANCES}
-            type='text'
-            value={sectionsUsed?.length ?? 0}
-            display={true}
-            sx={formElementStyles}
-          />
-        </Grid>
-        {sectionsUsed && (
-          <Grid item xs={12}>
-            <Typography
-              sx={{
-                color: theme.palette.TwClrTxtSecondary,
-                fontSize: '14px',
-                fontWeight: 400,
-                marginBottom: theme.spacing(1.5),
-              }}
-            >
-              {strings.SECTIONS_USED}
-            </Typography>
-            <Box marginBottom={theme.spacing(1.5)}>
-              {sectionsUsed?.map((s, index) => (
-                <>
-                  {index > 0 ? ', ' : ''}
-                  <Link onClick={() => onSectionClicked && onSectionClicked(s)}>{s}</Link>
-                </>
-              ))}
-            </Box>
-          </Grid>
-        )}
-      </Grid>
-      <Textfield
-        id='citation'
-        label={strings.CITATION}
-        type='text'
-        onChange={(newValue: any) => onChangeValueHandler(newValue, 'citation')}
-        sx={formElementStyles}
-        value={citation}
-      />
     </>
   );
 };
