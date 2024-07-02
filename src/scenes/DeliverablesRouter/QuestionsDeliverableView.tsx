@@ -139,7 +139,7 @@ const QuestionsDeliverableView = (props: Props): JSX.Element | null => {
               }}
             >
               {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => (
-                <Box sx={{ marginBottom: theme.spacing(4) }}>
+                <Box key={index} sx={{ marginBottom: theme.spacing(4) }}>
                   <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
                     {/* <DeliverableStatusBadge status={variableWithValues.status} /> */}
                   </Box>
