@@ -14,6 +14,7 @@ import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
 import { requestListDeliverableVariablesValues } from 'src/redux/features/documentProducer/values/valuesThunks';
@@ -26,87 +27,17 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import SubmitDeliverableDialog from './SubmitDeliverableDialog';
 
-const QuestionAnswerSets = ({
-  projectId,
-  variablesWithValues,
-}: {
-  projectId: number;
-  variablesWithValues: VariableWithValues[];
-}): JSX.Element => {
-  const theme = useTheme();
-
-  return (
-    <Box
-      sx={{
-        borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-        marginBottom: theme.spacing(4),
-        paddingTop: theme.spacing(3),
-      }}
-    >
-      {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => (
-        <QuestionAnswerSet key={index} projectId={projectId} variableWithValues={variableWithValues} />
-      ))}
-    </Box>
-  );
-};
-
-const QuestionAnswerSet = ({
-  projectId,
-  variableWithValues,
-}: {
-  projectId: number;
-  variableWithValues: VariableWithValues;
-}): JSX.Element => {
-  const theme = useTheme();
-  console.log({ variableWithValues });
-
-  const onFinish = (...args: unknown[]) => {
-    console.log({ onFinish: args });
-  };
-
-  return (
-    <Box sx={{ marginBottom: theme.spacing(4) }}>
-      <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
-        {/* <DeliverableStatusBadge status={variableWithValues.status} /> */}
-      </Box>
-      <DeliverableEditVariable variable={variableWithValues} projectId={projectId} onFinish={onFinish} />
-      {/* <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>{item.question}</Typography>
-      {!!item.description && (
-        <Typography
-          sx={{
-            color: 'rgba(0, 0, 0, 0.54)',
-            fontSize: '14px',
-            fontStyle: 'italic',
-            lineHeight: '20px',
-            marginBottom: '16px',
-          }}
-        >
-          {item.description}
-        </Typography>
-      )}
-      {!!item.feedback && (
-        <Box marginBottom={theme.spacing(2)}>
-          <Message body={item.feedback} priority='critical' type='page' />
-        </Box>
-      )}
-      <Typography>{item?.answer ? item.answer : '--'}</Typography> */}
-    </Box>
-  );
-};
-
 export type Props = EditProps & {
   isBusy?: boolean;
 };
 
-const QuestionsDeliverableView = (props: Props): JSX.Element => {
-  const { ...viewProps }: ViewProps = props;
-  const deliverableId = viewProps.deliverable.id;
-  const projectId = viewProps.deliverable.projectId;
-
+const QuestionsDeliverableView = (props: Props): JSX.Element | null => {
   const dispatch = useAppDispatch();
+  const theme = useTheme();
+  const { goToDeliverableEdit } = useNavigateTo();
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
-  const { currentDeliverable: deliverable } = useDeliverableData();
+  const { currentDeliverable: deliverable, deliverableId, projectId } = useDeliverableData();
   const { status: requestStatus } = useUpdateDeliverable();
 
   const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
@@ -149,10 +80,6 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
     [activeLocale]
   );
 
-  if (isMobile) {
-    return <MobileMessage {...viewProps} />;
-  }
-
   const actionMenu = useMemo(() => {
     if (!activeLocale) {
       return null;
@@ -164,9 +91,7 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
           id='edit-deliverable'
           icon='iconEdit'
           label={isMobile ? '' : strings.EDIT}
-          onClick={() => {
-            alert('TODO: Edit Deliverable');
-          }}
+          onClick={() => goToDeliverableEdit(deliverableId, projectId)}
           size='medium'
           priority='secondary'
         />
@@ -181,6 +106,14 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
       </Box>
     );
   }, []);
+
+  if (!deliverable) {
+    return null;
+  }
+
+  if (isMobile) {
+    return <MobileMessage deliverable={deliverable} />;
+  }
 
   return (
     <>
@@ -197,8 +130,43 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
         <Box display='flex' flexDirection='column' flexGrow={1}>
           {/* <QuestionsDeliverableStatusMessage {...viewProps} questions={ppsSearchResults?.data || []} /> */}
           <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-            <Metadata {...viewProps} />
-            <QuestionAnswerSets projectId={projectId} variablesWithValues={variablesWithValues} />
+            <Metadata deliverable={deliverable} />
+            <Box
+              sx={{
+                borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+                marginBottom: theme.spacing(4),
+                paddingTop: theme.spacing(3),
+              }}
+            >
+              {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => (
+                <Box sx={{ marginBottom: theme.spacing(4) }}>
+                  <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
+                    {/* <DeliverableStatusBadge status={variableWithValues.status} /> */}
+                  </Box>
+                  <DeliverableEditVariable variable={variableWithValues} projectId={projectId} />
+                  {/* <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>{item.question}</Typography>
+                  {!!item.description && (
+                    <Typography
+                      sx={{
+                        color: 'rgba(0, 0, 0, 0.54)',
+                        fontSize: '14px',
+                        fontStyle: 'italic',
+                        lineHeight: '20px',
+                        marginBottom: '16px',
+                      }}
+                    >
+                      {item.description}
+                    </Typography>
+                  )}
+                  {!!item.feedback && (
+                    <Box marginBottom={theme.spacing(2)}>
+                      <Message body={item.feedback} priority='critical' type='page' />
+                    </Box>
+                  )}
+                  <Typography>{item?.answer ? item.answer : '--'}</Typography> */}
+                </Box>
+              ))}
+            </Box>
           </Card>
         </Box>
       </Page>
