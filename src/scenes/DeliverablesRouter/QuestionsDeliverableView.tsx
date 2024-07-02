@@ -7,7 +7,7 @@ import { Crumb } from 'src/components/BreadCrumbs';
 import Metadata from 'src/components/DeliverableView/Metadata';
 import MobileMessage from 'src/components/DeliverableView/MobileMessage';
 import TitleBar from 'src/components/DeliverableView/TitleBar';
-import { EditProps, ViewProps } from 'src/components/DeliverableView/types';
+import { EditProps } from 'src/components/DeliverableView/types';
 import useUpdateDeliverable from 'src/components/DeliverableView/useUpdateDeliverable';
 import DeliverableEditVariable from 'src/components/DocumentProducer/DeliverableEditVariable';
 import Page from 'src/components/Page';
