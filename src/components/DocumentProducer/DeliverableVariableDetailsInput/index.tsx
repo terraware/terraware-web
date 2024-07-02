@@ -278,7 +278,15 @@ const DeliverableVariableDetailsInput = ({
           type='text'
           value={variable?.description}
           display={true}
-          sx={formElementStyles}
+          sx={{
+            '& p.textfield-value--display': {
+              color: theme.palette.TwClrTxtSecondary,
+              fontSize: '14px',
+              fontStyle: 'italic',
+              fontWeight: 400,
+              lineHeight: '20px',
+            },
+          }}
         />
       )}
       {variable?.type === 'Date' && (
