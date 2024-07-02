@@ -271,14 +271,16 @@ const DeliverableVariableDetailsInput = ({
         display={true}
         sx={formElementStyles}
       />
-      <Textfield
-        id='description'
-        label=''
-        type='text'
-        value={variable?.description}
-        display={true}
-        sx={formElementStyles}
-      />
+      {variable?.description && (
+        <Textfield
+          id='description'
+          label=''
+          type='text'
+          value={variable?.description}
+          display={true}
+          sx={formElementStyles}
+        />
+      )}
       {variable?.type === 'Date' && (
         <DatePicker
           id='value'
