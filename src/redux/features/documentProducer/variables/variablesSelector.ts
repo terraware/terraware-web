@@ -186,6 +186,45 @@ export const selectVariablesWithValues = createCachedSelector(
   }
 )((state: RootState, manifestId: number | string, documentId: number) => `${documentId}-${manifestId}`);
 
+const associateDeliverableVariableValues = (
+  variable: Variable,
+  values: VariableValue[],
+  variableList: VariableUnion[]
+): VariableWithValues => {
+  const currentValue = values.find((val: VariableValue) => val.variableId === variable.id);
+
+  const variablesInVariable: number[] = (currentValue?.values || [])
+    .map((value) => ('variableId' in value ? value.variableId : false))
+    .filter((value): value is number => value === 0 || !!value);
+
+  // Link up the variable values that are referenced within this variable
+  const variableValues = values.filter(
+    (val) => val.variableId === variable.id || variablesInVariable.includes(val.variableId)
+  );
+
+  if (variable.type === 'Table') {
+    let columns: TableColumnWithValues[] = [];
+    if (variable.columns) {
+      columns = variable.columns.map((col) => ({
+        ...col,
+        variable: associateDeliverableVariableValues(col.variable as Variable, values, variableList),
+      }));
+    }
+    return {
+      ...variable,
+      columns,
+      values: currentValue?.values ?? [],
+      variableValues,
+    };
+  }
+
+  return {
+    ...variable,
+    values: currentValue?.values ?? [],
+    variableValues,
+  };
+};
+
 export const selectDeliverableVariablesWithValues = createCachedSelector(
   (state: RootState, deliverableId: number, projectId: number) =>
     state.documentProducerDeliverableVariables[deliverableId],
@@ -196,18 +235,7 @@ export const selectDeliverableVariablesWithValues = createCachedSelector(
       const variables = variableList.data;
       const values = valueList.data;
 
-      let topLevelSectionPosition = 0;
-      const output = variableList.data.map((v: Variable) => {
-        if (v.type === 'Section' && v.renderHeading) {
-          topLevelSectionPosition++;
-        }
-        return associateValues(v, values, variables, topLevelSectionPosition);
-      });
-
-      return {
-        ...getCombinedProps(variableList, valueList),
-        data: output,
-      };
+      return variableList.data.map((v: Variable) => associateDeliverableVariableValues(v, values, variables));
     } else {
       return [];
     }

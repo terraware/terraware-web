@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Typography, useTheme } from '@mui/material';
-import { BusySpinner, Message } from '@terraware/web-components';
+import { Box, useTheme } from '@mui/material';
+import { BusySpinner } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
-import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
 import Metadata from 'src/components/DeliverableView/Metadata';
 import MobileMessage from 'src/components/DeliverableView/MobileMessage';
 import TitleBar from 'src/components/DeliverableView/TitleBar';
 import { EditProps, ViewProps } from 'src/components/DeliverableView/types';
 import useUpdateDeliverable from 'src/components/DeliverableView/useUpdateDeliverable';
+import DeliverableEditVariable from 'src/components/DocumentProducer/DeliverableEditVariable';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import Button from 'src/components/common/button/Button';
@@ -21,62 +21,18 @@ import { selectDeliverableVariablesWithValues } from 'src/redux/features/documen
 import { requestListDeliverableVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { DeliverableStatusType } from 'src/types/Deliverables';
+import { VariableWithValues } from 'src/types/documentProducer/Variable';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import SubmitDeliverableDialog from './SubmitDeliverableDialog';
 
-type QuestionDeliverableItem = {
-  answer: string;
-  description: string;
-  feedback?: string;
-  internal?: boolean;
-  question: string;
-  submissionStatus: DeliverableStatusType;
-};
-
-const QA_SETS: QuestionDeliverableItem[] = [
-  {
-    answer: 'Treemendo.us, Incorporated.',
-    description: 'Official/full legal name under which your organization is registered.',
-    question: 'What is the name of your organization?',
-    submissionStatus: 'Approved',
-  },
-  {
-    answer: 'Yal Ankovic',
-    description: 'Name of the person responsible for the partnership.',
-    question: 'What is the full name of the main contact of your organization?',
-    submissionStatus: 'Approved',
-  },
-  {
-    answer: 'yal.ankovic@treemendo.us',
-    description: '',
-    feedback: 'Please provide a valid email address.',
-    question: 'What is the email address of the main contact?',
-    submissionStatus: 'Rejected',
-  },
-  {
-    answer: 'Ghana',
-    description: '',
-    question: 'In what country is your reforestation project located?',
-    submissionStatus: 'In Review',
-  },
-  {
-    answer: 'Single Location',
-    description: 'Specify if the project occurs in more than one site (planting area).',
-    internal: true,
-    question: '[Internal] Does the project include single or multiple location(s)?',
-    submissionStatus: 'In Review',
-  },
-  {
-    answer: 'No',
-    description: '',
-    question: 'Is this a mangrove project?',
-    submissionStatus: 'In Review',
-  },
-];
-
-const QuestionAnswerSets = ({ items }: { items: QuestionDeliverableItem[] }): JSX.Element => {
+const QuestionAnswerSets = ({
+  projectId,
+  variablesWithValues,
+}: {
+  projectId: number;
+  variablesWithValues: VariableWithValues[];
+}): JSX.Element => {
   const theme = useTheme();
 
   return (
@@ -87,22 +43,34 @@ const QuestionAnswerSets = ({ items }: { items: QuestionDeliverableItem[] }): JS
         paddingTop: theme.spacing(3),
       }}
     >
-      {items.map((item, index) => (
-        <QuestionAnswerSet key={`item-${index}`} item={item} />
+      {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => (
+        <QuestionAnswerSet key={index} projectId={projectId} variableWithValues={variableWithValues} />
       ))}
     </Box>
   );
 };
 
-const QuestionAnswerSet = ({ item }: { item: QuestionDeliverableItem }): JSX.Element => {
+const QuestionAnswerSet = ({
+  projectId,
+  variableWithValues,
+}: {
+  projectId: number;
+  variableWithValues: VariableWithValues;
+}): JSX.Element => {
   const theme = useTheme();
+  console.log({ variableWithValues });
+
+  const onFinish = (...args: unknown[]) => {
+    console.log({ onFinish: args });
+  };
 
   return (
     <Box sx={{ marginBottom: theme.spacing(4) }}>
       <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
-        <DeliverableStatusBadge status={item.submissionStatus} />
+        {/* <DeliverableStatusBadge status={variableWithValues.status} /> */}
       </Box>
-      <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>{item.question}</Typography>
+      <DeliverableEditVariable variable={variableWithValues} projectId={projectId} onFinish={onFinish} />
+      {/* <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>{item.question}</Typography>
       {!!item.description && (
         <Typography
           sx={{
@@ -121,7 +89,7 @@ const QuestionAnswerSet = ({ item }: { item: QuestionDeliverableItem }): JSX.Ele
           <Message body={item.feedback} priority='critical' type='page' />
         </Box>
       )}
-      <Typography>{item?.answer ? item.answer : '--'}</Typography>
+      <Typography>{item?.answer ? item.answer : '--'}</Typography> */}
     </Box>
   );
 };
@@ -141,7 +109,7 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
   const { currentDeliverable: deliverable } = useDeliverableData();
   const { status: requestStatus } = useUpdateDeliverable();
 
-  const variablesWithValues = useAppSelector((state) =>
+  const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
     selectDeliverableVariablesWithValues(state, deliverableId, projectId)
   );
   console.log({ variablesWithValues });
@@ -230,7 +198,7 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
           {/* <QuestionsDeliverableStatusMessage {...viewProps} questions={ppsSearchResults?.data || []} /> */}
           <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
             <Metadata {...viewProps} />
-            <QuestionAnswerSets items={QA_SETS} />
+            <QuestionAnswerSets projectId={projectId} variablesWithValues={variablesWithValues} />
           </Card>
         </Box>
       </Page>
