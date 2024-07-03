@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, Message, Select } from '@terraware/web-components';
@@ -9,12 +9,18 @@ import Metadata from 'src/components/DeliverableView/Metadata';
 import MobileMessage from 'src/components/DeliverableView/MobileMessage';
 import TitleBar from 'src/components/DeliverableView/TitleBar';
 import { EditProps } from 'src/components/DeliverableView/types';
+import DeliverableDisplayVariableValue from 'src/components/DocumentProducer/DeliverableDisplayVariableValue';
+import DeliverableEditVariable from 'src/components/DocumentProducer/DeliverableEditVariable';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
+import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
+import { selectDeliverableVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
+import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
+import { VariableWithValues } from 'src/types/documentProducer/Variable';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import ApprovedDeliverableMessage from './ApprovedDeliverableMessage';
@@ -26,86 +32,16 @@ export type Props = EditProps & {
   showRejectDialog: () => void;
 };
 
-type QuestionDeliverableItem = {
-  answer: string;
-  description: string;
-  feedback?: string;
-  internal?: boolean;
-  question: string;
-  submissionStatus: DeliverableStatusType;
-};
-
-const QA_SETS: QuestionDeliverableItem[] = [
-  {
-    answer: 'Treemendo.us, Incorporated.',
-    description: 'Official/full legal name under which your organization is registered.',
-    question: 'What is the name of your organization?',
-    submissionStatus: 'Approved',
-  },
-  {
-    answer: 'Yal Ankovic',
-    description: 'Name of the person responsible for the partnership.',
-    question: 'What is the full name of the main contact of your organization?',
-    submissionStatus: 'Approved',
-  },
-  {
-    answer: 'yal.ankovic@treemendo.us',
-    description: '',
-    feedback: 'Please provide a valid email address.',
-    question: 'What is the email address of the main contact?',
-    submissionStatus: 'Rejected',
-  },
-  {
-    answer: 'Ghana',
-    description: '',
-    question: 'In what country is your reforestation project located?',
-    submissionStatus: 'In Review',
-  },
-  {
-    answer: 'Single Location',
-    description: 'Specify if the project occurs in more than one site (planting area).',
-    internal: true,
-    question: '[Internal] Does the project include single or multiple location(s)?',
-    submissionStatus: 'In Review',
-  },
-  {
-    answer: 'No',
-    description: '',
-    question: 'Is this a mangrove project?',
-    submissionStatus: 'In Review',
-  },
-];
-
-const QuestionAnswerSets = ({
-  items,
-  optionsMenu,
-}: {
-  items: QuestionDeliverableItem[];
-  optionsMenu: React.ReactNode;
-}): JSX.Element => {
-  const theme = useTheme();
-
-  return (
-    <Box
-      sx={{
-        borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-        marginBottom: theme.spacing(4),
-        paddingTop: theme.spacing(3),
-      }}
-    >
-      {items.map((item, index) => (
-        <QuestionAnswerSet key={`item-${index}`} item={item} optionsMenu={optionsMenu} />
-      ))}
-    </Box>
-  );
-};
-
-const QuestionAnswerSet = ({
+const QuestionBox = ({
   item,
   optionsMenu,
+  projectId,
+  index,
 }: {
-  item: QuestionDeliverableItem;
+  item: VariableWithValues;
   optionsMenu: React.ReactNode;
+  projectId: number;
+  index: number;
 }): JSX.Element => {
   const theme = useTheme();
 
@@ -125,7 +61,7 @@ const QuestionAnswerSet = ({
   };
 
   return (
-    <>
+    <Box key={`question-${index}`}>
       {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectItem} />}
       <Box
         sx={{
@@ -152,35 +88,37 @@ const QuestionAnswerSet = ({
             alignItems: 'center',
           }}
         >
-          <DeliverableStatusBadge status={item.submissionStatus} />
+          {/* <DeliverableStatusBadge status={item.submissionStatus} /> */}
           <Box className='actions'>
-            <Button
-              id='edit'
-              label={strings.EDIT}
-              onClick={onEditItem}
-              icon='iconEdit'
-              priority='secondary'
-              className='edit-button'
-              size='small'
-              type='passive'
-            />
+            {!editing && (
+              <Button
+                id='edit'
+                label={strings.EDIT}
+                onClick={onEditItem}
+                icon='iconEdit'
+                priority='secondary'
+                className='edit-button'
+                size='small'
+                type='passive'
+              />
+            )}
             <Button
               label={strings.REJECT_ACTION}
               onClick={() => setShowRejectDialog(true)}
               priority='secondary'
               type='destructive'
-              disabled={item.submissionStatus === 'Rejected'}
+              // disabled={item.submissionStatus === 'Rejected'}
             />
             <Button
               label={strings.APPROVE}
               onClick={approveItem}
               priority='secondary'
-              disabled={item.submissionStatus === 'Approved'}
+              // disabled={item.submissionStatus === 'Approved'}
             />
             {optionsMenu}
           </Box>
         </Box>
-        <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>{item.question}</Typography>
+        <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>{item.name}</Typography>
         {!!item.description && (
           <Typography
             sx={{
@@ -194,13 +132,13 @@ const QuestionAnswerSet = ({
             {item.description}
           </Typography>
         )}
-        {editing && <Select onChange={(newValue: string) => console.log(newValue)}></Select>}
-        {!!item.feedback && (
+        {editing && <DeliverableEditVariable variable={item} setHasErrors={() => true} setValues={() => true} />}
+        {/* {!!item.feedback && (
           <Box marginBottom={theme.spacing(2)}>
             <Message body={item.feedback} priority='critical' type='page' />
           </Box>
-        )}
-        <Typography>{!editing && item?.answer ? item.answer : '--'}</Typography>
+        )} */}
+        <Typography>{!editing && <DeliverableDisplayVariableValue projectId={projectId} variable={item} />}</Typography>
         {editing && (
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button
@@ -215,7 +153,7 @@ const QuestionAnswerSet = ({
           </Box>
         )}
       </Box>
-    </>
+    </Box>
   );
 };
 
@@ -223,6 +161,12 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
   const { optionsMenu, ...viewProps }: Props = props;
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
+  const { currentDeliverable: deliverable, deliverableId, projectId } = useDeliverableData();
+  const theme = useTheme();
+
+  const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
+    selectDeliverableVariablesWithValues(state, deliverableId, projectId)
+  );
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -255,7 +199,11 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
             }}
           >
             <Metadata {...viewProps} />
-            <QuestionAnswerSets items={QA_SETS} optionsMenu={optionsMenu} />
+            {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => {
+              return (
+                <QuestionBox item={variableWithValues} optionsMenu={optionsMenu} projectId={projectId} index={index} />
+              );
+            })}
           </Card>
         </Box>
       </Page>
