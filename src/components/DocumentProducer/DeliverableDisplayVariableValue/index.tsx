@@ -33,7 +33,11 @@ export default function DeliverableDisplayVariableValue({
     case 'Number':
     case 'Date':
     case 'Link':
-      return <span style={variableStyles}>{variable.values.map((v) => displayValue(v)).join(', ')}</span>;
+      return (
+        <span style={variableStyles}>
+          {variable.values.length ? variable.values.map((v) => displayValue(v)).join(', ') : '--'}
+        </span>
+      );
     case 'Image':
       return (
         <>
