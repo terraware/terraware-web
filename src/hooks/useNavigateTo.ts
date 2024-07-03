@@ -28,6 +28,14 @@ export default function useNavigateTo() {
           ),
         }),
 
+      goToDeliverableEdit: (deliverableId: number, projectId: number) =>
+        navigate({
+          pathname: APP_PATHS.DELIVERABLE_EDIT.replace(':deliverableId', `${deliverableId}`).replace(
+            ':projectId',
+            `${projectId}`
+          ),
+        }),
+
       goToDocuments: () =>
         navigate({
           pathname: APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS,
