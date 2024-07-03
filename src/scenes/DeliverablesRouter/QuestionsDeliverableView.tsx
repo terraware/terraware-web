@@ -9,7 +9,7 @@ import MobileMessage from 'src/components/DeliverableView/MobileMessage';
 import TitleBar from 'src/components/DeliverableView/TitleBar';
 import { EditProps } from 'src/components/DeliverableView/types';
 import useUpdateDeliverable from 'src/components/DeliverableView/useUpdateDeliverable';
-import DeliverableEditVariable from 'src/components/DocumentProducer/DeliverableEditVariable';
+import DeliverableDisplayVariableValue from 'src/components/DocumentProducer/DeliverableDisplayVariableValue';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import Button from 'src/components/common/button/Button';
@@ -143,7 +143,6 @@ const QuestionsDeliverableView = (props: Props): JSX.Element | null => {
                   <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
                     {/* <DeliverableStatusBadge status={variableWithValues.status} /> */}
                   </Box>
-                  <DeliverableEditVariable variable={variableWithValues} projectId={projectId} />
                   <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>{variableWithValues.name}</Typography>
                   {!!variableWithValues.description && (
                     <Typography
@@ -159,12 +158,12 @@ const QuestionsDeliverableView = (props: Props): JSX.Element | null => {
                       {variableWithValues.description}
                     </Typography>
                   )}
-                  {!!item.feedback && (
+                  {/* {!!item.feedback && (
                     <Box marginBottom={theme.spacing(2)}>
                       <Message body={item.feedback} priority='critical' type='page' />
                     </Box>
-                  )}
-                  <Typography>{item?.answer ? item.answer : '--'}</Typography> */}
+                  )} */}
+                  <DeliverableDisplayVariableValue projectId={projectId} variable={variableWithValues} />
                 </Box>
               ))}
             </Box>
