@@ -53,7 +53,6 @@ const QuestionsDeliverableEditView = (): JSX.Element | null => {
       return;
     }
 
-    console.log('dispatch');
     void dispatch(requestListDeliverableVariables(deliverableId));
     void dispatch(requestListDeliverableVariablesValues({ deliverableId, projectId }));
   }, [deliverableId, projectId]);
