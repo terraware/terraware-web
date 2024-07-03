@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { Grid } from '@mui/material';
 
@@ -10,24 +10,12 @@ import DeliverableVariableDetailsInput from '../DeliverableVariableDetailsInput'
 export type DeliverableEditVariableProps = {
   setHasErrors: (variableId: number, hasErrors: boolean) => void;
   setValues: (variableId: number, values: VariableValueValue[]) => void;
+  setRemovedValues: (variableId: number, values: VariableValueValue) => void;
   variable: VariableWithValues;
 };
 
 const DeliverableEditVariable = (props: DeliverableEditVariableProps): JSX.Element => {
-  const { setHasErrors, setValues, variable } = props;
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [removedValues, setRemovedValues] = useState<VariableValueValue[]>();
-
-  const onAddRemovedValue = (newRemovedValue: VariableValueValue) => {
-    setRemovedValues((prev) => {
-      if (prev) {
-        return [...prev, newRemovedValue];
-      } else {
-        return [newRemovedValue];
-      }
-    });
-  };
+  const { setHasErrors, setRemovedValues, setValues, variable } = props;
 
   return (
     <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
@@ -38,7 +26,7 @@ const DeliverableEditVariable = (props: DeliverableEditVariableProps): JSX.Eleme
           validate={true}
           setHasErrors={(hasErrors: boolean) => setHasErrors(variable.id, hasErrors)}
           variable={variable}
-          addRemovedValue={onAddRemovedValue}
+          addRemovedValue={(removedValue: VariableValueValue) => setRemovedValues(variable.id, removedValue)}
         />
       </Grid>
     </Grid>

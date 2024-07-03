@@ -39,7 +39,8 @@ const QuestionsDeliverableEditView = (): JSX.Element | null => {
   const { currentDeliverable: deliverable, deliverableId, projectId } = useDeliverableData();
 
   const [errors, setErrors] = useState<Map<number, boolean>>(new Map());
-  const [pendingValues, setPendingValues] = useState<Map<number, VariableValueValue[]>>(new Map());
+  const [pendingVariableValues, setPendingVariableValues] = useState<Map<number, VariableValueValue[]>>(new Map());
+  const [removedVariableValues, setRemovedVariableValues] = useState<Map<number, VariableValueValue>>(new Map());
   const [updateVariableRequestId, setUpdateVariableRequestId] = useState<string>('');
 
   const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
@@ -52,6 +53,7 @@ const QuestionsDeliverableEditView = (): JSX.Element | null => {
       return;
     }
 
+    console.log('dispatch');
     void dispatch(requestListDeliverableVariables(deliverableId));
     void dispatch(requestListDeliverableVariablesValues({ deliverableId, projectId }));
   }, [deliverableId, projectId]);
@@ -68,105 +70,108 @@ const QuestionsDeliverableEditView = (): JSX.Element | null => {
       return;
     }
 
-    if (pendingValues.keys.length === 0) {
+    if (pendingVariableValues.keys.length === 0) {
       return;
     }
 
-    // TODO collect operations for all pending variable values and dispatch one request
-    let newValue:
-      | NewDateValuePayload
-      | NewTextValuePayload
-      | NewNumberValuePayload
-      | NewSelectValuePayload
-      | NewLinkValuePayload
-      | undefined;
+    const operations: Operation[] = [];
 
-    let newValues: NewTextValuePayload[] = [];
-    let valueIdToUpdate = -1;
-
-    if (variable.type === 'Text') {
-      const firstValue = values[0] as VariableValueTextValue;
-      valueIdToUpdate = firstValue.id;
-
-      newValues = values.reduce((acc: NewTextValuePayload[], nV: VariableValueValue) => {
-        if (nV.type === 'Text') {
-          acc.push({ type: 'Text', textValue: nV.textValue });
-        }
-        return acc;
-      }, []);
-    }
-
-    if (variable.type === 'Number') {
-      const firstValue = values[0] as VariableValueNumberValue;
-      valueIdToUpdate = firstValue.id;
-      newValue = { type: 'Number', numberValue: firstValue.numberValue, citation: firstValue.citation };
-    }
-
-    if (variable.type === 'Select') {
-      const firstValue = values[0] as VariableValueSelectValue;
-      valueIdToUpdate = firstValue.id;
-      newValue = { type: 'Select', optionIds: firstValue.optionValues, citation: firstValue.citation };
-    }
-
-    if (variable.type === 'Date') {
-      const firstValue = values[0] as VariableValueDateValue;
-      valueIdToUpdate = firstValue.id;
-      newValue = { type: 'Date', dateValue: firstValue.dateValue, citation: firstValue.citation };
-    }
-
-    if (variable.type === 'Link') {
-      const firstValue = values[0] as VariableValueLinkValue;
-      valueIdToUpdate = firstValue.id;
-      newValue = { type: 'Link', url: firstValue.url, citation: firstValue.citation, title: firstValue.title };
-    }
-
-    if (newValue) {
-      if (values[0].id !== -1) {
-        const request = dispatch(
-          requestUpdateVariableValues({
-            operations: [
-              { operation: 'Update', valueId: valueIdToUpdate, value: newValue, existingValueId: valueIdToUpdate },
-            ],
-            projectId: projectId,
-          })
-        );
-        setUpdateVariableRequestId(request.requestId);
-      } else {
-        const request = dispatch(
-          requestUpdateVariableValues({
-            operations: [{ operation: 'Append', variableId: variable.id, value: newValue }],
-            projectId: projectId,
-          })
-        );
-        setUpdateVariableRequestId(request.requestId);
+    pendingVariableValues.forEach((pendingValues, variableId) => {
+      const variable = variablesWithValues.find((variableWithValues) => variableWithValues.id === variableId);
+      if (!variable) {
+        // TODO figure out error handling for this case
+        console.log('Variable not found');
+        return;
       }
-    }
 
-    if (newValues) {
-      const operations: Operation[] = [];
-      newValues.forEach((nV, index) => {
-        if (values[index].id !== -1) {
+      let newValue:
+        | NewDateValuePayload
+        | NewTextValuePayload
+        | NewNumberValuePayload
+        | NewSelectValuePayload
+        | NewLinkValuePayload
+        | undefined;
+
+      let newValues: NewTextValuePayload[] = [];
+      let valueIdToUpdate = -1;
+
+      if (variable.type === 'Text') {
+        const firstValue = pendingValues[0] as VariableValueTextValue;
+        valueIdToUpdate = firstValue.id;
+
+        newValues = pendingValues.reduce((acc: NewTextValuePayload[], nV: VariableValueValue) => {
+          if (nV.type === 'Text') {
+            acc.push({ type: 'Text', textValue: nV.textValue });
+          }
+          return acc;
+        }, []);
+      }
+
+      if (variable.type === 'Number') {
+        const firstValue = pendingValues[0] as VariableValueNumberValue;
+        valueIdToUpdate = firstValue.id;
+        newValue = { type: 'Number', numberValue: firstValue.numberValue, citation: firstValue.citation };
+      }
+
+      if (variable.type === 'Select') {
+        const firstValue = pendingValues[0] as VariableValueSelectValue;
+        valueIdToUpdate = firstValue.id;
+        newValue = { type: 'Select', optionIds: firstValue.optionValues, citation: firstValue.citation };
+      }
+
+      if (variable.type === 'Date') {
+        const firstValue = pendingValues[0] as VariableValueDateValue;
+        valueIdToUpdate = firstValue.id;
+        newValue = { type: 'Date', dateValue: firstValue.dateValue, citation: firstValue.citation };
+      }
+
+      if (variable.type === 'Link') {
+        const firstValue = pendingValues[0] as VariableValueLinkValue;
+        valueIdToUpdate = firstValue.id;
+        newValue = { type: 'Link', url: firstValue.url, citation: firstValue.citation, title: firstValue.title };
+      }
+
+      if (newValue) {
+        if (pendingValues[0].id !== -1) {
           operations.push({
             operation: 'Update',
-            valueId: values[index].id,
-            value: nV,
-            existingValueId: values[index].id,
+            valueId: valueIdToUpdate,
+            value: newValue,
+            existingValueId: valueIdToUpdate,
           });
         } else {
-          operations.push({ operation: 'Append', variableId: variable.id, value: nV });
+          operations.push({ operation: 'Append', variableId: variable.id, value: newValue });
         }
-      });
+      }
 
-      // delete list of values removed
-      if (removedValues) {
-        removedValues.forEach((rV) => {
+      if (newValues) {
+        newValues.forEach((nV, index) => {
+          if (pendingValues[index].id !== -1) {
+            operations.push({
+              operation: 'Update',
+              valueId: pendingValues[index].id,
+              value: nV,
+              existingValueId: pendingValues[index].id,
+            });
+          } else {
+            operations.push({ operation: 'Append', variableId: variable.id, value: nV });
+          }
+        });
+
+        // delete list of values removed
+        const removedValue = removedVariableValues.get(variable.id);
+        if (removedValue) {
           operations.push({
             operation: 'Delete',
-            valueId: rV.id,
-            existingValueId: rV.id,
+            valueId: removedValue.id,
+            existingValueId: removedValue.id,
           });
-        });
+        }
       }
+    });
+
+    if (operations.length > 0) {
+      console.log({ operations });
       const request = dispatch(
         requestUpdateVariableValues({
           operations,
@@ -178,11 +183,20 @@ const QuestionsDeliverableEditView = (): JSX.Element | null => {
   };
 
   const setHasErrors = (variableId: number, hasErrors: boolean) => {
-    setErrors(new Map(errors).set(variableId, hasErrors));
+    setErrors((prev) => {
+      if (prev.get(variableId) === undefined) {
+        return new Map(errors).set(variableId, hasErrors);
+      }
+      return prev;
+    });
   };
 
   const setValues = (variableId: number, values: VariableValueValue[]) => {
-    setPendingValues(new Map(pendingValues).set(variableId, values));
+    setPendingVariableValues(new Map(pendingVariableValues).set(variableId, values));
+  };
+
+  const setRemovedValues = (variableId: number, value: VariableValueValue) => {
+    setRemovedVariableValues(new Map(removedVariableValues).set(variableId, value));
   };
 
   if (!deliverable) {
@@ -214,6 +228,7 @@ const QuestionsDeliverableEditView = (): JSX.Element | null => {
                 <DeliverableEditVariable
                   variable={variableWithValues}
                   setHasErrors={setHasErrors}
+                  setRemovedValues={setRemovedValues}
                   setValues={setValues}
                 />
               </Box>
