@@ -15,11 +15,11 @@ import {
 } from 'src/types/documentProducer/VariableValue';
 
 export type DeliverableVariableDetailsInputProps = {
-  values?: VariableValueValue[];
+  values: VariableValueValue[];
   setValues: (values: VariableValueValue[]) => void;
   validate: boolean;
   setHasErrors: (has: boolean) => void;
-  variable?: Variable;
+  variable: Variable;
   addRemovedValue: (value: VariableValueValue) => void;
 };
 
@@ -32,7 +32,6 @@ const DeliverableVariableDetailsInput = ({
   addRemovedValue,
 }: DeliverableVariableDetailsInputProps): JSX.Element => {
   const [value, setValue] = useState<string | number>();
-  const [citation, setCitation] = useState<string>();
   const [title, setTitle] = useState<string>();
   const [valuesList, setValuesList] = useState<string[]>();
   const theme = useTheme();
@@ -58,30 +57,25 @@ const DeliverableVariableDetailsInput = ({
 
   useEffect(() => {
     if (values?.length) {
-      if (variable?.type === 'Text') {
+      if (variable.type === 'Text') {
         const textValues = values as VariableValueTextValue[];
         setValue(textValues[0].textValue);
-        setCitation(textValues[0].citation);
       }
-      if (variable?.type === 'Number') {
+      if (variable.type === 'Number') {
         const numberValues = values as VariableValueNumberValue[];
         setValue(numberValues[0].numberValue.toString());
-        setCitation(numberValues[0].citation);
       }
-      if (variable?.type === 'Select') {
+      if (variable.type === 'Select') {
         const selectValues = values as VariableValueSelectValue[];
         setValue(selectValues[0].optionValues[0]);
-        setCitation(selectValues[0].citation);
       }
-      if (variable?.type === 'Date') {
+      if (variable.type === 'Date') {
         const selectValues = values as VariableValueDateValue[];
         setValue(selectValues[0].dateValue);
-        setCitation(selectValues[0].citation);
       }
-      if (variable?.type === 'Link') {
+      if (variable.type === 'Link') {
         const selectValues = values as VariableValueLinkValue[];
         setValue(selectValues[0].url);
-        setCitation(selectValues[0].citation);
         setTitle(selectValues[0].title);
       }
     }
@@ -96,126 +90,93 @@ const DeliverableVariableDetailsInput = ({
   }, [valueError, setHasErrors]);
 
   const onChangeValueHandler = (newValue: any, id: string, index: number = 0) => {
-    if (id === 'citation') {
-      setCitation(newValue);
-    } else if (id === 'title') {
+    console.log({ newValue });
+    if (id === 'title') {
       setTitle(newValue);
-    } else if (variable?.type !== 'Text') {
+    } else if (variable.type !== 'Text') {
       setValue(newValue);
     }
+
     if (newValue !== undefined) {
-      if (variable?.type === 'Text') {
+      if (variable.type === 'Text') {
         if (values) {
           const textValues = values as VariableValueTextValue[];
           const newValues = textValues.map((tv) => ({ ...tv }));
           if (newValues[index]) {
-            if (id === 'citation') {
-              newValues[index].citation = newValue;
-            } else {
-              newValues[index].textValue = newValue;
-            }
+            newValues[index].textValue = newValue;
           } else {
-            if (id === 'citation') {
-              newValues.push({
-                id: -1,
-                listPosition: newValues.length,
-                textValue: '',
-                type: 'Text',
-                citation: newValue,
-              });
-            } else {
-              newValues.push({ id: -1, listPosition: newValues.length, textValue: newValue, type: 'Text' });
-            }
+            newValues.push({ id: -1, listPosition: newValues.length, textValue: newValue, type: 'Text' });
           }
           setValues(newValues);
         } else {
-          if (id === 'citation') {
-            setValues([{ id: -1, listPosition: 0, textValue: '', type: 'Text', citation: newValue }]);
-          } else {
-            setValues([{ id: -1, listPosition: 0, textValue: newValue, type: 'Text' }]);
-          }
+          setValues([{ id: -1, listPosition: 0, textValue: newValue, type: 'Text' }]);
         }
       }
 
-      if (variable?.type === 'Number') {
-        if (values) {
+      if (variable.type === 'Number') {
+        if (values.length > 0) {
+          console.log({ values });
           const numberValues = values as VariableValueNumberValue[];
           const newValues = numberValues.map((nv) => ({ ...nv }));
-          if (id === 'citation') {
-            newValues[0].citation = newValue;
-          } else {
-            newValues[0].numberValue = newValue;
-          }
+          console.log({ numberValues, newValues });
+
+          newValues[0].numberValue = newValue;
+
+          console.log({ newValues });
           setValues(newValues);
         } else {
-          if (id === 'citation') {
-            setValues([{ id: -1, listPosition: 0, numberValue: 0, type: 'Number', citation: newValue }]);
-          } else {
-            setValues([{ id: -1, listPosition: 0, numberValue: newValue, type: 'Number' }]);
-          }
+          setValues([{ id: -1, listPosition: 0, numberValue: newValue, type: 'Number' }]);
         }
       }
 
-      if (variable?.type === 'Select') {
-        if (values) {
+      if (variable.type === 'Select') {
+        if (values.length > 0) {
           const selectValues = values as VariableValueSelectValue[];
           const newValues = selectValues.map((sv) => ({ ...sv }));
-          if (id === 'citation') {
-            newValues[0].citation = newValue;
-          } else {
-            newValues[0].optionValues = [newValue];
-          }
+
+          newValues[0].optionValues = [newValue];
+
           setValues(newValues);
         } else {
-          if (id === 'citation') {
-            setValues([{ id: -1, listPosition: 0, optionValues: [], type: 'Select', citation: newValue }]);
-          } else {
-            setValues([{ id: -1, listPosition: 0, optionValues: [newValue], type: 'Select' }]);
-          }
+          setValues([{ id: -1, listPosition: 0, optionValues: [newValue], type: 'Select' }]);
         }
       }
-      if (variable?.type === 'Date') {
-        if (values) {
+
+      if (variable.type === 'Date') {
+        if (values.length > 0) {
           const dateValues = values as VariableValueDateValue[];
           const newValues = dateValues.map((dv) => ({ ...dv }));
-          if (id === 'citation') {
-            newValues[0].citation = newValue;
-          } else {
-            newValues[0].dateValue = newValue;
-          }
+
+          newValues[0].dateValue = newValue;
+
           setValues(newValues);
         } else {
           setValues([{ id: -1, listPosition: 0, dateValue: newValue, type: 'Date' }]);
         }
       }
-      if (variable?.type === 'Link') {
-        if (values) {
+
+      if (variable.type === 'Link') {
+        if (values.length > 0) {
           const linkValues = values as VariableValueLinkValue[];
           const newValues = linkValues.map((lv) => ({ ...lv }));
-          if (id === 'citation') {
-            newValues[0].citation = newValue;
-          } else if (id === 'title') {
+          if (id === 'title') {
             newValues[0].title = newValue;
           } else {
             newValues[0].url = newValue;
           }
           setValues(newValues);
         } else {
-          if (id === 'citation') {
-            setValues([{ id: -1, listPosition: 0, url: value?.toString() || '', type: 'Link', citation: newValue }]);
-          } else if (id === 'title') {
-            setValues([
-              { id: -1, listPosition: 0, url: value?.toString() || '', type: 'Link', title: newValue, citation },
-            ]);
+          if (id === 'title') {
+            setValues([{ id: -1, listPosition: 0, url: value?.toString() || '', type: 'Link', title: newValue }]);
           } else {
-            setValues([{ id: -1, listPosition: 0, url: newValue, type: 'Link', title, citation }]);
+            setValues([{ id: -1, listPosition: 0, url: newValue, type: 'Link', title }]);
           }
         }
       }
     } else {
       // if newValue is undefined, remove it from values
-      if (variable?.type === 'Text') {
-        if (values) {
+      if (variable.type === 'Text') {
+        if (values.length > 0) {
           const newValues = values.map((tv) => ({ ...tv }));
           newValues.splice(index, 1);
           setValues(newValues);
@@ -260,6 +221,8 @@ const DeliverableVariableDetailsInput = ({
     });
   };
 
+  console.log({ variableType: variable.type });
+
   return (
     <>
       <Textfield
@@ -267,16 +230,17 @@ const DeliverableVariableDetailsInput = ({
         id='name'
         label=''
         type='text'
-        value={variable?.name}
+        value={variable.name}
         display={true}
         sx={[formElementStyles, { '& p.textfield-value--display': { fontWeight: '600' } }]}
       />
-      {variable?.description && (
+
+      {variable.description && (
         <Textfield
           id='description'
           label=''
           type='text'
-          value={variable?.description}
+          value={variable.description}
           display={true}
           sx={{
             '& p.textfield-value--display': {
@@ -289,7 +253,8 @@ const DeliverableVariableDetailsInput = ({
           }}
         />
       )}
-      {variable?.type === 'Date' && (
+
+      {variable.type === 'Date' && (
         <DatePicker
           id='value'
           label=''
@@ -300,7 +265,8 @@ const DeliverableVariableDetailsInput = ({
           sx={formElementStyles}
         />
       )}
-      {variable?.type === 'Text' && (
+
+      {variable.type === 'Text' && (
         <>
           {valuesList?.map((iValue, index) => (
             <Box key={index} mb={2} display='flex' alignItems='center' sx={{ position: 'relative' }}>
@@ -336,19 +302,21 @@ const DeliverableVariableDetailsInput = ({
           {variable.isList && <Button priority='ghost' label={strings.ADD} icon='iconAdd' onClick={addInput} />}
         </>
       )}
-      {(variable?.type === 'Number' || variable?.type === 'Link') && (
+
+      {(variable.type === 'Number' || variable.type === 'Link') && (
         <Textfield
           id='value'
           label=''
-          type={variable?.type === 'Number' ? 'number' : 'text'}
+          type={variable.type === 'Number' ? 'number' : 'text'}
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
           value={value?.toString()}
           errorText={validate ? valueError() : ''}
-          helperText={variable?.type === 'Number' ? strings.ROUNDED_INFO : ''}
+          helperText={variable.type === 'Number' ? strings.ROUNDED_INFO : ''}
           sx={formElementStyles}
         />
       )}
-      {variable?.type === 'Select' && (
+
+      {variable.type === 'Select' && (
         <Dropdown
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
           label=''
@@ -358,7 +326,7 @@ const DeliverableVariableDetailsInput = ({
         />
       )}
 
-      {variable?.type === 'Link' && (
+      {variable.type === 'Link' && (
         <Textfield
           id='title'
           label={strings.TITLE}
