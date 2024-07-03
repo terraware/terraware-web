@@ -22,7 +22,7 @@ const DeliverableProvider = ({ children }: Props) => {
 
   const [currentDeliverable, setCurrentDeliverable] = useState<Deliverable>();
 
-  const [deliverableData, setDeliverableData] = useState<DeliverableData>({ deliverableId });
+  const [deliverableData, setDeliverableData] = useState<DeliverableData>({ deliverableId, projectId });
 
   useEffect(() => {
     if (deliverable) {
@@ -34,6 +34,7 @@ const DeliverableProvider = ({ children }: Props) => {
     setDeliverableData({
       currentDeliverable,
       deliverableId,
+      projectId,
     });
   }, [currentDeliverable, deliverableId]);
 
