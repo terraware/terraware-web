@@ -144,19 +144,18 @@ const QuestionsDeliverableView = (props: Props): JSX.Element | null => {
                     {/* <DeliverableStatusBadge status={variableWithValues.status} /> */}
                   </Box>
                   <DeliverableEditVariable variable={variableWithValues} projectId={projectId} />
-                  <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>{variableWithValues.name}</Typography>
-                  {!!variableWithValues.description && (
+                  {/* <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>{item.question}</Typography>
+                  {!!item.description && (
                     <Typography
                       sx={{
-                        color: theme.palette.TwClrTxtSecondary,
+                        color: 'rgba(0, 0, 0, 0.54)',
                         fontSize: '14px',
                         fontStyle: 'italic',
-                        fontWeight: 400,
                         lineHeight: '20px',
                         marginBottom: '16px',
                       }}
                     >
-                      {variableWithValues.description}
+                      {item.description}
                     </Typography>
                   )}
                   {!!item.feedback && (
