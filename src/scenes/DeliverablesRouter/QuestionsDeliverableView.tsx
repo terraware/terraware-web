@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
