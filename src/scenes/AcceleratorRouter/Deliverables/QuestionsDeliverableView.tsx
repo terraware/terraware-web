@@ -1,10 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { BusySpinner, Button, Message, Select } from '@terraware/web-components';
+import { BusySpinner, Button } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
-import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
 import Metadata from 'src/components/DeliverableView/Metadata';
 import MobileMessage from 'src/components/DeliverableView/MobileMessage';
 import TitleBar from 'src/components/DeliverableView/TitleBar';
@@ -19,7 +18,6 @@ import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext
 import { selectDeliverableVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
 import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { DeliverableStatusType } from 'src/types/Deliverables';
 import { VariableWithValues } from 'src/types/documentProducer/Variable';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -132,7 +130,14 @@ const QuestionBox = ({
             {item.description}
           </Typography>
         )}
-        {editing && <DeliverableEditVariable variable={item} setHasErrors={() => true} setValues={() => true} />}
+        {editing && (
+          <DeliverableEditVariable
+            variable={item}
+            setHasErrors={() => true}
+            setRemovedValues={() => true}
+            setValues={() => true}
+          />
+        )}
         {/* {!!item.feedback && (
           <Box marginBottom={theme.spacing(2)}>
             <Message body={item.feedback} priority='critical' type='page' />
@@ -161,8 +166,7 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
   const { optionsMenu, ...viewProps }: Props = props;
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
-  const { currentDeliverable: deliverable, deliverableId, projectId } = useDeliverableData();
-  const theme = useTheme();
+  const { deliverableId, projectId } = useDeliverableData();
 
   const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
     selectDeliverableVariablesWithValues(state, deliverableId, projectId)
@@ -201,7 +205,13 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
             <Metadata {...viewProps} />
             {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => {
               return (
-                <QuestionBox item={variableWithValues} optionsMenu={optionsMenu} projectId={projectId} index={index} />
+                <QuestionBox
+                  item={variableWithValues}
+                  optionsMenu={optionsMenu}
+                  projectId={projectId}
+                  index={index}
+                  key={index}
+                />
               );
             })}
           </Card>
