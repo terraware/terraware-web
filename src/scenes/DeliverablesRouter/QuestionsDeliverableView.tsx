@@ -158,6 +158,7 @@ const QuestionsDeliverableView = (props: Props): JSX.Element | null => {
                       {variableWithValues.description}
                     </Typography>
                   )}
+                  {/* I think feedback may need to be moved within DeliverableDisplayVariableValue, but I'm not 100% sure */}
                   {/* {!!item.feedback && (
                     <Box marginBottom={theme.spacing(2)}>
                       <Message body={item.feedback} priority='critical' type='page' />
