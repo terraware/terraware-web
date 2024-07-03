@@ -22,7 +22,6 @@ export default function DeliverableDisplayVariableValue({
 
   const variableStyles = {
     color: theme.palette.TwClrTxt,
-    backgroundColor: '#e9e2ba',
     fontSize: '16px',
     margin: '0 1px',
     padding: '0 1px',
