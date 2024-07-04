@@ -1,8 +1,9 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button } from '@terraware/web-components';
 
+import { components } from 'src/api/types/generated-schema';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Metadata from 'src/components/DeliverableView/Metadata';
 import MobileMessage from 'src/components/DeliverableView/MobileMessage';
@@ -15,10 +16,16 @@ import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
+import {
+  requestListDeliverableVariablesValues,
+  requestUpdateVariableValues,
+} from 'src/redux/features/documentProducer/values/valuesThunks';
 import { selectDeliverableVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
-import { useAppSelector } from 'src/redux/store';
+import { requestListDeliverableVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { VariableWithValues } from 'src/types/documentProducer/Variable';
+import { VariableValueValue } from 'src/types/documentProducer/VariableValue';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import ApprovedDeliverableMessage from './ApprovedDeliverableMessage';
@@ -35,16 +42,21 @@ const QuestionBox = ({
   optionsMenu,
   projectId,
   index,
+  reload,
 }: {
   item: VariableWithValues;
   optionsMenu: React.ReactNode;
   projectId: number;
   index: number;
+  reload: () => void;
 }): JSX.Element => {
   const theme = useTheme();
 
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
   const [editing, setEditing] = useState(false);
+
+  const [values, setValues] = useState<VariableValueValue[]>([]);
+  const dispatch = useAppDispatch();
 
   const rejectItem = () => {
     return true;
@@ -58,8 +70,22 @@ const QuestionBox = ({
     setEditing(true);
   };
 
+  const onValuesChanged = (variableId: number, values: VariableValueValue[]) => {
+    setValues(values);
+  };
+
+  const onSave = async () => {
+    const operations: components['schemas']['AppendValueOperationPayload'][] = [];
+    values.forEach((val) => {
+      operations.push({ operation: 'Append', variableId: item.id, value: val });
+    });
+
+    await dispatch(requestUpdateVariableValues({ operations, projectId }));
+    reload();
+    setEditing(false);
+  };
   return (
-    <Box key={`question-${index}`}>
+    <Box key={`question-${index}`} onMouseLeave={() => setEditing(false)}>
       {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectItem} />}
       <Box
         sx={{
@@ -135,7 +161,8 @@ const QuestionBox = ({
             variable={item}
             setHasErrors={() => true}
             setRemovedValues={() => true}
-            setValues={() => true}
+            setValues={onValuesChanged}
+            showInternalComment={true}
           />
         )}
         {/* {!!item.feedback && (
@@ -154,7 +181,7 @@ const QuestionBox = ({
               priority='secondary'
               key='button-1'
             />
-            <Button id={'save'} onClick={() => true} label={strings.SAVE} key='button-2' priority='secondary' />
+            <Button id={'save'} onClick={onSave} label={strings.SAVE} key='button-2' priority='secondary' />
           </Box>
         )}
       </Box>
@@ -167,6 +194,21 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
   const { deliverableId, projectId } = useDeliverableData();
+  const dispatch = useAppDispatch();
+
+  const reload = () => {
+    void dispatch(requestListDeliverableVariables(deliverableId));
+    void dispatch(requestListDeliverableVariablesValues({ deliverableId, projectId }));
+  };
+
+  useEffect(() => {
+    if (!(deliverableId && projectId)) {
+      return;
+    }
+
+    void dispatch(requestListDeliverableVariables(deliverableId));
+    void dispatch(requestListDeliverableVariablesValues({ deliverableId, projectId }));
+  }, [deliverableId, projectId]);
 
   const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
     selectDeliverableVariablesWithValues(state, deliverableId, projectId)
@@ -211,6 +253,7 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
                   projectId={projectId}
                   index={index}
                   key={index}
+                  reload={reload}
                 />
               );
             })}

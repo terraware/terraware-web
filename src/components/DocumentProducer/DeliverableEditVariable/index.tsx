@@ -12,6 +12,7 @@ export type DeliverableEditVariableProps = {
   setValues: (variableId: number, values: VariableValueValue[]) => void;
   setRemovedValues: (variableId: number, values: VariableValueValue) => void;
   variable: VariableWithValues;
+  showInternalComment?: boolean;
 };
 
 const DeliverableEditVariable = (props: DeliverableEditVariableProps): JSX.Element => {
@@ -19,6 +20,9 @@ const DeliverableEditVariable = (props: DeliverableEditVariableProps): JSX.Eleme
 
   return (
     <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
+      <Grid item xs={12}>
+        {/* {showInternalComment && <InternalComment entity={variable} update={() => true} />} */}
+      </Grid>
       <Grid item xs={12}>
         <DeliverableVariableDetailsInput
           values={variable.values}
