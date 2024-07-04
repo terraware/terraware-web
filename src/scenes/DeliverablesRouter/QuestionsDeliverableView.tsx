@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { BusySpinner } from '@terraware/web-components';
+import { BusySpinner, Message } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Metadata from 'src/components/DeliverableView/Metadata';
@@ -139,35 +139,41 @@ const QuestionsDeliverableView = (props: Props): JSX.Element | null => {
                 paddingTop: theme.spacing(3),
               }}
             >
-              {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => (
-                <Box key={index} sx={{ marginBottom: theme.spacing(4) }}>
-                  <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
-                    {/* <DeliverableStatusBadge status={variableWithValues.status} /> */}
-                  </Box>
-                  <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>{variableWithValues.name}</Typography>
-                  {!!variableWithValues.description && (
-                    <Typography
-                      sx={{
-                        color: theme.palette.TwClrTxtSecondary,
-                        fontSize: '14px',
-                        fontStyle: 'italic',
-                        fontWeight: 400,
-                        lineHeight: '20px',
-                        marginBottom: '16px',
-                      }}
-                    >
-                      {variableWithValues.description}
-                    </Typography>
-                  )}
-                  {/* I think feedback may need to be moved within DeliverableDisplayVariableValue, but I'm not 100% sure */}
-                  {/* {!!item.feedback && (
-                    <Box marginBottom={theme.spacing(2)}>
-                      <Message body={item.feedback} priority='critical' type='page' />
+              {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => {
+                // not sure if we should be joining the feedback or just grabbing the first/last one associated with a variableValue
+                const feedback = variableWithValues.variableValues
+                  .filter((variableValue) => variableValue.feedback)
+                  .join(', ');
+
+                return (
+                  <Box key={index} sx={{ marginBottom: theme.spacing(4) }}>
+                    <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
+                      {/* <DeliverableStatusBadge status={variableWithValues.status} /> */}
                     </Box>
-                  )} */}
-                  <DeliverableDisplayVariableValue projectId={projectId} variable={variableWithValues} />
-                </Box>
-              ))}
+                    <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>{variableWithValues.name}</Typography>
+                    {!!variableWithValues.description && (
+                      <Typography
+                        sx={{
+                          color: theme.palette.TwClrTxtSecondary,
+                          fontSize: '14px',
+                          fontStyle: 'italic',
+                          fontWeight: 400,
+                          lineHeight: '20px',
+                          marginBottom: '16px',
+                        }}
+                      >
+                        {variableWithValues.description}
+                      </Typography>
+                    )}
+                    {!!feedback && (
+                      <Box marginBottom={theme.spacing(2)}>
+                        <Message body={feedback} priority='critical' type='page' />
+                      </Box>
+                    )}
+                    <DeliverableDisplayVariableValue projectId={projectId} variable={variableWithValues} />
+                  </Box>
+                );
+              })}
             </Box>
           </Card>
         </Box>
