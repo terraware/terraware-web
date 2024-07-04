@@ -25,6 +25,7 @@ import strings from 'src/strings';
 import { VariableWithValues } from 'src/types/documentProducer/Variable';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+import QuestionsDeliverableStatusMessage from './QuestionsDeliverableStatusMessage';
 import SubmitDeliverableDialog from './SubmitDeliverableDialog';
 
 export type Props = EditProps & {
@@ -128,7 +129,7 @@ const QuestionsDeliverableView = (props: Props): JSX.Element | null => {
       <Page crumbs={crumbs} rightComponent={actionMenu} title={<TitleBar {...props} />}>
         {(props.isBusy || requestStatus === 'pending') && <BusySpinner />}
         <Box display='flex' flexDirection='column' flexGrow={1}>
-          {/* <QuestionsDeliverableStatusMessage {...viewProps} questions={ppsSearchResults?.data || []} /> */}
+          <QuestionsDeliverableStatusMessage deliverable={deliverable} variables={variablesWithValues} />
           <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
             <Metadata deliverable={deliverable} />
             <Box
