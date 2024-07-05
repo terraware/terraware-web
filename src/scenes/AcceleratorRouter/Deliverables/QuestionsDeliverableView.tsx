@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { BusySpinner, Button } from '@terraware/web-components';
+import { BusySpinner, Button, DropdownItem, Message } from '@terraware/web-components';
 
 import { components } from 'src/api/types/generated-schema';
 import { Crumb } from 'src/components/BreadCrumbs';
@@ -13,6 +13,7 @@ import DeliverableDisplayVariableValue from 'src/components/DocumentProducer/Del
 import DeliverableEditVariable from 'src/components/DocumentProducer/DeliverableEditVariable';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
+import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
@@ -20,17 +21,25 @@ import {
   requestListDeliverableVariablesValues,
   requestUpdateVariableValues,
 } from 'src/redux/features/documentProducer/values/valuesThunks';
-import { selectDeliverableVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
-import { requestListDeliverableVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
+import {
+  selectDeliverableVariablesWithValues,
+  selectUpdateVariableWorkflowDetails,
+} from 'src/redux/features/documentProducer/variables/variablesSelector';
+import {
+  requestListDeliverableVariables,
+  requestUpdateVariableWorkflowDetails,
+} from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { VariableWithValues } from 'src/types/documentProducer/Variable';
+import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValueValue } from 'src/types/documentProducer/VariableValue';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import ApprovedDeliverableMessage from './ApprovedDeliverableMessage';
 import RejectDialog from './RejectDialog';
 import RejectedDeliverableMessage from './RejectedDeliverableMessage';
+import VariableStatusBadge from './VariableStatusBadge';
+import InternalComment from 'src/components/DeliverableView/InternalComment';
 
 export type Props = EditProps & {
   isBusy?: boolean;
@@ -39,13 +48,11 @@ export type Props = EditProps & {
 
 const QuestionBox = ({
   item,
-  optionsMenu,
   projectId,
   index,
   reload,
 }: {
   item: VariableWithValues;
-  optionsMenu: React.ReactNode;
   projectId: number;
   index: number;
   reload: () => void;
@@ -54,16 +61,31 @@ const QuestionBox = ({
 
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
   const [editing, setEditing] = useState(false);
-
   const [values, setValues] = useState<VariableValueValue[]>([]);
   const dispatch = useAppDispatch();
+  const [requestId, setRequestId] = useState('');
+  const { activeLocale } = useLocalization();
+  const updateResponse = useAppSelector(selectUpdateVariableWorkflowDetails(requestId));
 
-  const rejectItem = () => {
-    return true;
+  useEffect(() => {
+    if (updateResponse.status === 'success') {
+      reload();
+    }
+  }, [updateResponse]);
+
+  const setStatus = (status: VariableStatusType, feedback?: string) => {
+    const request = dispatch(
+      requestUpdateVariableWorkflowDetails({ status, feedback, projectId, variableId: item.id })
+    );
+    setRequestId(request.requestId);
+  };
+
+  const rejectItem = (feedback: string) => {
+    setStatus('Rejected', feedback);
   };
 
   const approveItem = () => {
-    return true;
+    setStatus('Approved');
   };
 
   const onEditItem = () => {
@@ -84,6 +106,46 @@ const QuestionBox = ({
     reload();
     setEditing(false);
   };
+
+  const onOptionItemClick = useCallback(
+    (optionItem: DropdownItem) => {
+      switch (optionItem.value) {
+        case 'needs_translation': {
+          setStatus('Needs Translation');
+          break;
+        }
+        case 'not_needed': {
+          setStatus('Not Needed');
+          break;
+        }
+      }
+    },
+    [setStatus]
+  );
+
+  const optionItems = useMemo(
+    (): DropdownItem[] =>
+      activeLocale
+        ? [
+            {
+              label: strings.formatString(strings.STATUS_WITH_STATUS, strings.NEEDS_TRANSLATION) as string,
+              value: 'needs_translation',
+              disabled:
+                item.variableValues &&
+                item.variableValues.length > 0 &&
+                item.variableValues[0].status === 'Needs Translation',
+            },
+            {
+              label: strings.formatString(strings.STATUS_WITH_STATUS, strings.NOT_NEEDED) as string,
+              value: 'not_needed',
+              disabled:
+                item.variableValues && item.variableValues.length > 0 && item.variableValues[0].status === 'Not Needed',
+            },
+          ]
+        : [],
+    [activeLocale, item.variableValues]
+  );
+
   return (
     <Box key={`question-${index}`} onMouseLeave={() => setEditing(false)}>
       {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectItem} />}
@@ -112,7 +174,9 @@ const QuestionBox = ({
             alignItems: 'center',
           }}
         >
-          {/* <DeliverableStatusBadge status={item.submissionStatus} /> */}
+          {item.variableValues && item.variableValues.length && (
+            <VariableStatusBadge status={item.variableValues[0].status} />
+          )}
           <Box className='actions'>
             {!editing && (
               <Button
@@ -131,15 +195,19 @@ const QuestionBox = ({
               onClick={() => setShowRejectDialog(true)}
               priority='secondary'
               type='destructive'
-              // disabled={item.submissionStatus === 'Rejected'}
+              disabled={
+                item.variableValues && item.variableValues.length > 0 && item.variableValues[0].status === 'Rejected'
+              }
             />
             <Button
               label={strings.APPROVE}
               onClick={approveItem}
               priority='secondary'
-              // disabled={item.submissionStatus === 'Approved'}
+              disabled={
+                item.variableValues && item.variableValues.length > 0 && item.variableValues[0].status === 'Approved'
+              }
             />
-            {optionsMenu}
+            <OptionsMenu onOptionItemClick={onOptionItemClick} optionItems={optionItems} />
           </Box>
         </Box>
         <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>{item.name}</Typography>
@@ -156,20 +224,25 @@ const QuestionBox = ({
             {item.description}
           </Typography>
         )}
+        { item.variableValues && item.variableValues.length > 0 && item.variableValues[0].internalComment && <InternalComment entity={item.variableValues[0]} update={() => true} /> }
         {editing && (
           <DeliverableEditVariable
             variable={item}
             setHasErrors={() => true}
             setRemovedValues={() => true}
             setValues={onValuesChanged}
-            showInternalComment={true}
           />
         )}
-        {/* {!!item.feedback && (
+        {item.variableValues && item.variableValues.length > 0 && item.variableValues[0].feedback && (
           <Box marginBottom={theme.spacing(2)}>
-            <Message body={item.feedback} priority='critical' type='page' />
+            <Message
+              body={`${strings.ANSWER_NOT_ACCEPETED} ${item.variableValues[0].feedback}`}
+              priority='critical'
+              type='page'
+            />
+            { editing && }
           </Box>
-        )} */}
+        )}
         <Typography>{!editing && <DeliverableDisplayVariableValue projectId={projectId} variable={item} />}</Typography>
         {editing && (
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -190,7 +263,7 @@ const QuestionBox = ({
 };
 
 const QuestionsDeliverableView = (props: Props): JSX.Element => {
-  const { optionsMenu, ...viewProps }: Props = props;
+  const { ...viewProps }: Props = props;
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
   const { deliverableId, projectId } = useDeliverableData();
@@ -249,7 +322,6 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
               return (
                 <QuestionBox
                   item={variableWithValues}
-                  optionsMenu={optionsMenu}
                   projectId={projectId}
                   index={index}
                   key={index}

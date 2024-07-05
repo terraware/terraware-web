@@ -3,7 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Response2 } from 'src/services/HttpService';
 import VariableService from 'src/services/documentProducer/VariableService';
 import strings from 'src/strings';
-import { VariableListResponse } from 'src/types/documentProducer/Variable';
+import { UpdateVariableWorkflowDetailsPayload, VariableListResponse } from 'src/types/documentProducer/Variable';
 
 export const requestListVariables = createAsyncThunk(
   'listVariables',
@@ -23,6 +23,25 @@ export const requestListDeliverableVariables = createAsyncThunk(
     const response: Response2<VariableListResponse> = await VariableService.getDeliverableVariables(deliverableId);
     if (response && response.requestSucceeded && response.data) {
       return response.data.variables;
+    }
+
+    return rejectWithValue(response.error || strings.GENERIC_ERROR);
+  }
+);
+
+export const requestUpdateVariableWorkflowDetails = createAsyncThunk(
+  'updateVariableWorkflowDetails',
+  async (
+    {
+      projectId,
+      variableId,
+      ...rest
+    }: UpdateVariableWorkflowDetailsPayload & { projectId: number; variableId: number },
+    { rejectWithValue }
+  ) => {
+    const response = await VariableService.updateVariableWorkflowDetails(projectId, variableId, rest);
+    if (response.requestSucceeded) {
+      return Boolean(true);
     }
 
     return rejectWithValue(response.error || strings.GENERIC_ERROR);

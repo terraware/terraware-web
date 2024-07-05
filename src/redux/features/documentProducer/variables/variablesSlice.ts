@@ -3,7 +3,11 @@ import { ActionReducerMapBuilder, createSlice } from '@reduxjs/toolkit';
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { Variable } from 'src/types/documentProducer/Variable';
 
-import { requestListDeliverableVariables, requestListVariables } from './variablesThunks';
+import {
+  requestListDeliverableVariables,
+  requestListVariables,
+  requestUpdateVariableWorkflowDetails,
+} from './variablesThunks';
 
 type VariablesState = Record<string, StatusT<Variable[]>>;
 
@@ -27,7 +31,24 @@ const deliverableVariablesSlice = createSlice({
   },
 });
 
+/**
+ * Variable Values Update
+ */
+type VariableWorkflowDetailsUpdateState = Record<string, StatusT<number>>;
+
+const initialVariableWorkflowDetailsUpdateSlice: VariableWorkflowDetailsUpdateState = {};
+
+const variableWorkflowDetailsUpdateSlice = createSlice({
+  name: 'variableWorkflowDetailsUpdateSlice',
+  initialState: initialVariableWorkflowDetailsUpdateSlice,
+  reducers: {},
+  extraReducers: (builder: ActionReducerMapBuilder<VariableWorkflowDetailsUpdateState>) => {
+    buildReducers(requestUpdateVariableWorkflowDetails)(builder);
+  },
+});
+
 export const documentProducerVariablesReducers = {
   documentProducerVariables: variablesSlice.reducer,
   documentProducerDeliverableVariables: deliverableVariablesSlice.reducer,
+  variableWorkflowDetailsUpdate: variableWorkflowDetailsUpdateSlice.reducer,
 };
