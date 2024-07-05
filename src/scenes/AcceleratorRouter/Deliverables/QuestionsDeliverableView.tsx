@@ -62,6 +62,7 @@ const QuestionBox = ({
 
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
   const [editing, setEditing] = useState(false);
+  const [displayActions, setDisplyActions] = useState(false);
   const [values, setValues] = useState<VariableValueValue[]>([]);
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState('');
@@ -212,7 +213,7 @@ const QuestionBox = ({
               },
             },
             '& .actions': {
-              display: 'none',
+              display: displayActions ? 'block' : 'none',
             },
             padding: 2,
             borderRadius: 2,
@@ -260,7 +261,11 @@ const QuestionBox = ({
                   item.variableValues && item.variableValues.length > 0 && item.variableValues[0].status === 'Approved'
                 }
               />
-              <OptionsMenu onOptionItemClick={onOptionItemClick} optionItems={optionItems} />
+              <OptionsMenu
+                onOptionItemClick={onOptionItemClick}
+                optionItems={optionItems}
+                onOpen={() => setDisplyActions(true)}
+              />
             </Box>
           </Box>
           <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>{item.name}</Typography>
