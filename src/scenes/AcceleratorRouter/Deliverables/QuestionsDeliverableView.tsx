@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Typography, useTheme } from '@mui/material';
-import { BusySpinner, Button, DropdownItem, Message } from '@terraware/web-components';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { BusySpinner, Button, DialogBox, DropdownItem, Message } from '@terraware/web-components';
+import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
 import { components } from 'src/api/types/generated-schema';
 import { Crumb } from 'src/components/BreadCrumbs';
@@ -38,8 +39,8 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import ApprovedDeliverableMessage from './ApprovedDeliverableMessage';
 import RejectDialog from './RejectDialog';
 import RejectedDeliverableMessage from './RejectedDeliverableMessage';
+import VariableInternalComment from './VariableInternalComment';
 import VariableStatusBadge from './VariableStatusBadge';
-import InternalComment from 'src/components/DeliverableView/InternalComment';
 
 export type Props = EditProps & {
   isBusy?: boolean;
@@ -66,16 +67,22 @@ const QuestionBox = ({
   const [requestId, setRequestId] = useState('');
   const { activeLocale } = useLocalization();
   const updateResponse = useAppSelector(selectUpdateVariableWorkflowDetails(requestId));
+  const [showEditFeedbackModal, setShowEditFeedbackModal] = useState(false);
+  const [modalFeedback, setModalFeedback] = useState(
+    item.variableValues && item.variableValues.length > 0 && item.variableValues[0].feedback
+      ? item.variableValues[0].feedback
+      : ''
+  );
 
   useEffect(() => {
-    if (updateResponse.status === 'success') {
+    if (updateResponse?.status === 'success') {
       reload();
     }
   }, [updateResponse]);
 
-  const setStatus = (status: VariableStatusType, feedback?: string) => {
+  const setStatus = (status: VariableStatusType, feedback?: string, internalComment?: string) => {
     const request = dispatch(
-      requestUpdateVariableWorkflowDetails({ status, feedback, projectId, variableId: item.id })
+      requestUpdateVariableWorkflowDetails({ status, feedback, internalComment, projectId, variableId: item.id })
     );
     setRequestId(request.requestId);
   };
@@ -90,6 +97,14 @@ const QuestionBox = ({
 
   const onEditItem = () => {
     setEditing(true);
+  };
+
+  const onUpdateInternalComment = (internalComment: string) => {
+    const currentStatus: VariableStatusType =
+      item.variableValues && item.variableValues.length > 0 && item.variableValues[0].status
+        ? item.variableValues[0].status || 'Not Submitted'
+        : 'Not Submitted';
+    setStatus(currentStatus, undefined, internalComment);
   };
 
   const onValuesChanged = (variableId: number, values: VariableValueValue[]) => {
@@ -147,118 +162,176 @@ const QuestionBox = ({
   );
 
   return (
-    <Box key={`question-${index}`} onMouseLeave={() => setEditing(false)}>
-      {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectItem} />}
-      <Box
-        sx={{
-          marginBottom: theme.spacing(4),
-          '&:hover': {
-            background: theme.palette.TwClrBgHover,
-            '.actions': {
-              display: 'block',
-            },
-          },
-          '& .actions': {
-            display: 'none',
-          },
-          padding: 2,
-          borderRadius: 2,
-        }}
-      >
+    <>
+      {showEditFeedbackModal && (
+        <DialogBox
+          onClose={() => setShowEditFeedbackModal(false)}
+          open={showEditFeedbackModal}
+          title={strings.REJECT}
+          size='large'
+          middleButtons={[
+            <Button
+              id='cancelEditFeedback'
+              label={strings.CANCEL}
+              priority='secondary'
+              type='passive'
+              onClick={() => setShowEditFeedbackModal(false)}
+              key='button-1'
+            />,
+            <Button
+              id='updateFeedback'
+              label={strings.SAVE}
+              onClick={() => setStatus('Rejected', modalFeedback)}
+              key='button-2'
+            />,
+          ]}
+        >
+          <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
+            <Grid item xs={12}>
+              <TextField
+                label={''}
+                type='textarea'
+                id='feedback'
+                onChange={(value) => setModalFeedback(value as string)}
+                value={modalFeedback}
+                preserveNewlines
+              />
+            </Grid>
+          </Grid>
+        </DialogBox>
+      )}
+      <Box key={`question-${index}`} onMouseLeave={() => setEditing(false)}>
+        {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectItem} />}
         <Box
           sx={{
-            float: 'right',
-            marginBottom: '16px',
-            marginLeft: '16px',
-            display: 'flex',
-            alignItems: 'center',
+            marginBottom: theme.spacing(4),
+            '&:hover': {
+              background: theme.palette.TwClrBgHover,
+              '.actions': {
+                display: 'block',
+              },
+            },
+            '& .actions': {
+              display: 'none',
+            },
+            padding: 2,
+            borderRadius: 2,
           }}
         >
-          {item.variableValues && item.variableValues.length && (
-            <VariableStatusBadge status={item.variableValues[0].status} />
-          )}
-          <Box className='actions'>
-            {!editing && (
-              <Button
-                id='edit'
-                label={strings.EDIT}
-                onClick={onEditItem}
-                icon='iconEdit'
-                priority='secondary'
-                className='edit-button'
-                size='small'
-                type='passive'
-              />
-            )}
-            <Button
-              label={strings.REJECT_ACTION}
-              onClick={() => setShowRejectDialog(true)}
-              priority='secondary'
-              type='destructive'
-              disabled={
-                item.variableValues && item.variableValues.length > 0 && item.variableValues[0].status === 'Rejected'
-              }
-            />
-            <Button
-              label={strings.APPROVE}
-              onClick={approveItem}
-              priority='secondary'
-              disabled={
-                item.variableValues && item.variableValues.length > 0 && item.variableValues[0].status === 'Approved'
-              }
-            />
-            <OptionsMenu onOptionItemClick={onOptionItemClick} optionItems={optionItems} />
-          </Box>
-        </Box>
-        <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>{item.name}</Typography>
-        {!!item.description && (
-          <Typography
+          <Box
             sx={{
-              color: 'rgba(0, 0, 0, 0.54)',
-              fontSize: '14px',
-              fontStyle: 'italic',
-              lineHeight: '20px',
+              float: 'right',
               marginBottom: '16px',
+              marginLeft: '16px',
+              display: 'flex',
+              alignItems: 'center',
             }}
           >
-            {item.description}
+            <VariableStatusBadge
+              status={item.variableValues && item.variableValues.length > 0 ? item.variableValues[0].status : undefined}
+            />
+            <Box className='actions'>
+              {!editing && (
+                <Button
+                  id='edit'
+                  label={strings.EDIT}
+                  onClick={onEditItem}
+                  icon='iconEdit'
+                  priority='secondary'
+                  className='edit-button'
+                  size='small'
+                  type='passive'
+                />
+              )}
+              <Button
+                label={strings.REJECT_ACTION}
+                onClick={() => setShowRejectDialog(true)}
+                priority='secondary'
+                type='destructive'
+                disabled={
+                  item.variableValues && item.variableValues.length > 0 && item.variableValues[0].status === 'Rejected'
+                }
+              />
+              <Button
+                label={strings.APPROVE}
+                onClick={approveItem}
+                priority='secondary'
+                disabled={
+                  item.variableValues && item.variableValues.length > 0 && item.variableValues[0].status === 'Approved'
+                }
+              />
+              <OptionsMenu onOptionItemClick={onOptionItemClick} optionItems={optionItems} />
+            </Box>
+          </Box>
+          <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>{item.name}</Typography>
+          {!!item.description && (
+            <Typography
+              sx={{
+                color: 'rgba(0, 0, 0, 0.54)',
+                fontSize: '14px',
+                fontStyle: 'italic',
+                lineHeight: '20px',
+                marginBottom: '16px',
+              }}
+            >
+              {item.description}
+            </Typography>
+          )}
+          <VariableInternalComment variable={item} update={onUpdateInternalComment} editing={editing} />
+          {editing && (
+            <DeliverableEditVariable
+              variable={item}
+              setHasErrors={() => true}
+              setRemovedValues={() => true}
+              setValues={onValuesChanged}
+            />
+          )}
+          {item.variableValues && item.variableValues.length > 0 && item.variableValues[0].feedback && (
+            <Box marginBottom={theme.spacing(2)} display='flex' alignItems='center'>
+              <Message
+                body={
+                  <Typography>
+                    <span style={{ fontWeight: 600 }}>{strings.ANSWER_NOT_ACCEPETED}</span>{' '}
+                    {item.variableValues[0].feedback}
+                    {editing && (
+                      <Button
+                        icon='iconEdit'
+                        onClick={() => setShowEditFeedbackModal(true)}
+                        priority='ghost'
+                        size='small'
+                        type='passive'
+                        style={{
+                          marginLeft: '-1px',
+                          marginTop: '-1px',
+                        }}
+                      />
+                    )}
+                  </Typography>
+                }
+                priority='critical'
+                type='page'
+              />
+            </Box>
+          )}
+          <Typography>
+            {!editing && <DeliverableDisplayVariableValue projectId={projectId} variable={item} />}
           </Typography>
-        )}
-        { item.variableValues && item.variableValues.length > 0 && item.variableValues[0].internalComment && <InternalComment entity={item.variableValues[0]} update={() => true} /> }
-        {editing && (
-          <DeliverableEditVariable
-            variable={item}
-            setHasErrors={() => true}
-            setRemovedValues={() => true}
-            setValues={onValuesChanged}
-          />
-        )}
-        {item.variableValues && item.variableValues.length > 0 && item.variableValues[0].feedback && (
-          <Box marginBottom={theme.spacing(2)}>
-            <Message
-              body={`${strings.ANSWER_NOT_ACCEPETED} ${item.variableValues[0].feedback}`}
-              priority='critical'
-              type='page'
-            />
-            { editing && }
-          </Box>
-        )}
-        <Typography>{!editing && <DeliverableDisplayVariableValue projectId={projectId} variable={item} />}</Typography>
-        {editing && (
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button
-              id='cancel'
-              label={strings.CANCEL}
-              type='passive'
-              onClick={() => setEditing(false)}
-              priority='secondary'
-              key='button-1'
-            />
-            <Button id={'save'} onClick={onSave} label={strings.SAVE} key='button-2' priority='secondary' />
-          </Box>
-        )}
+          {editing && (
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <Button
+                id='cancel'
+                label={strings.CANCEL}
+                type='passive'
+                onClick={() => setEditing(false)}
+                priority='secondary'
+                key='button-1'
+              />
+              <Button id={'save'} onClick={onSave} label={strings.SAVE} key='button-2' priority='secondary' />
+            </Box>
+          )}
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 
