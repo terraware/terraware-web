@@ -130,14 +130,7 @@ const QuestionBox = ({
             {item.description}
           </Typography>
         )}
-        {editing && (
-          <DeliverableEditVariable
-            variable={item}
-            setHasErrors={() => true}
-            setRemovedValues={() => true}
-            setValues={() => true}
-          />
-        )}
+        {editing && <DeliverableEditVariable variable={item} setRemovedValues={() => true} setValues={() => true} />}
         {/* {!!item.feedback && (
           <Box marginBottom={theme.spacing(2)}>
             <Message body={item.feedback} priority='critical' type='page' />

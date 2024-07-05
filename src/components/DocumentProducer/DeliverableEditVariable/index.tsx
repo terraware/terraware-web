@@ -8,14 +8,15 @@ import { VariableValueValue } from 'src/types/documentProducer/VariableValue';
 import DeliverableVariableDetailsInput from '../DeliverableVariableDetailsInput';
 
 export type DeliverableEditVariableProps = {
-  setHasErrors: (variableId: number, hasErrors: boolean) => void;
   setValues: (variableId: number, values: VariableValueValue[]) => void;
   setRemovedValues: (variableId: number, values: VariableValueValue) => void;
   variable: VariableWithValues;
 };
 
+// TODO I think this component should go away, it is only two grid wrappers around the input, they should either
+// go into the input or be controller in the parent
 const DeliverableEditVariable = (props: DeliverableEditVariableProps): JSX.Element => {
-  const { setHasErrors, setRemovedValues, setValues, variable } = props;
+  const { setRemovedValues, setValues, variable } = props;
 
   return (
     <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
@@ -23,8 +24,6 @@ const DeliverableEditVariable = (props: DeliverableEditVariableProps): JSX.Eleme
         <DeliverableVariableDetailsInput
           values={variable.values}
           setValues={(newValues: VariableValueValue[]) => setValues(variable.id, newValues)}
-          validate={true}
-          setHasErrors={(hasErrors: boolean) => setHasErrors(variable.id, hasErrors)}
           variable={variable}
           addRemovedValue={(removedValue: VariableValueValue) => setRemovedValues(variable.id, removedValue)}
         />
