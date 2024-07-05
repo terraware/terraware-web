@@ -20,6 +20,7 @@ const DeliverableEditVariable = (props: DeliverableEditVariableProps): JSX.Eleme
 
   return (
     <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
+      <Grid item xs={12}></Grid>
       <Grid item xs={12}>
         <DeliverableVariableDetailsInput
           values={variable.values}
