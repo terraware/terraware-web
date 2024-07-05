@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Box, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 
 import Metadata from 'src/components/DeliverableView/Metadata';
-import DeliverableEditVariable from 'src/components/DocumentProducer/DeliverableEditVariable';
+import DeliverableVariableDetailsInput from 'src/components/DocumentProducer/DeliverableVariableDetailsInput';
 import Card from 'src/components/common/Card';
 import WrappedPageForm from 'src/components/common/PageForm';
 import useNavigateTo from 'src/hooks/useNavigateTo';
@@ -16,6 +16,7 @@ import {
 import { selectDeliverableVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
 import { requestListDeliverableVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
 import { VariableWithValues } from 'src/types/documentProducer/Variable';
 import {
   NewDateValuePayload,
@@ -31,14 +32,15 @@ import {
   VariableValueTextValue,
   VariableValueValue,
 } from 'src/types/documentProducer/VariableValue';
+import useSnackbar from 'src/utils/useSnackbar';
 
 const QuestionsDeliverableEditView = (): JSX.Element | null => {
   const dispatch = useAppDispatch();
-  const { goToDeliverable } = useNavigateTo();
   const theme = useTheme();
+  const snackbar = useSnackbar();
+  const { goToDeliverable } = useNavigateTo();
   const { currentDeliverable: deliverable, deliverableId, projectId } = useDeliverableData();
 
-  const [errors, setErrors] = useState<Map<number, boolean>>(new Map());
   const [pendingVariableValues, setPendingVariableValues] = useState<Map<number, VariableValueValue[]>>(new Map());
   const [removedVariableValues, setRemovedVariableValues] = useState<Map<number, VariableValueValue>>(new Map());
   const [updateVariableRequestId, setUpdateVariableRequestId] = useState<string>('');
@@ -46,7 +48,6 @@ const QuestionsDeliverableEditView = (): JSX.Element | null => {
   const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
     selectDeliverableVariablesWithValues(state, deliverableId, projectId)
   );
-  console.log({ variablesWithValues });
 
   useEffect(() => {
     if (!(deliverableId && projectId)) {
@@ -62,14 +63,22 @@ const QuestionsDeliverableEditView = (): JSX.Element | null => {
   }, [deliverableId, projectId]);
 
   const results = useAppSelector(selectUpdateVariableValues(updateVariableRequestId));
-  console.log({ results });
 
-  const handleOnSave = () => {
-    if (errors.keys.length > 0) {
+  useEffect(() => {
+    if (!results) {
       return;
     }
 
-    if (pendingVariableValues.keys.length === 0) {
+    if (results.status === 'success') {
+      snackbar.toastSuccess(strings.CHANGES_SAVED);
+      goToDeliverable(deliverableId, projectId);
+    } else if (results.status === 'error') {
+      snackbar.toastError(strings.GENERIC_ERROR);
+    }
+  }, [deliverableId, projectId, results]);
+
+  const handleOnSave = () => {
+    if (pendingVariableValues.size === 0) {
       return;
     }
 
@@ -181,15 +190,6 @@ const QuestionsDeliverableEditView = (): JSX.Element | null => {
     }
   };
 
-  const setHasErrors = (variableId: number, hasErrors: boolean) => {
-    setErrors((prev) => {
-      if (prev.get(variableId) === undefined) {
-        return new Map(errors).set(variableId, hasErrors);
-      }
-      return prev;
-    });
-  };
-
   const setValues = (variableId: number, values: VariableValueValue[]) => {
     setPendingVariableValues(new Map(pendingVariableValues).set(variableId, values));
   };
@@ -224,12 +224,18 @@ const QuestionsDeliverableEditView = (): JSX.Element | null => {
                 <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
                   {/* <DeliverableStatusBadge status={variableWithValues.status} /> */}
                 </Box>
-                <DeliverableEditVariable
-                  variable={variableWithValues}
-                  setHasErrors={setHasErrors}
-                  setRemovedValues={setRemovedValues}
-                  setValues={setValues}
-                />
+                <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
+                  <Grid item xs={12}>
+                    <DeliverableVariableDetailsInput
+                      values={variableWithValues.values}
+                      setValues={(newValues: VariableValueValue[]) => setValues(variableWithValues.id, newValues)}
+                      variable={variableWithValues}
+                      addRemovedValue={(removedValue: VariableValueValue) =>
+                        setRemovedValues(variableWithValues.id, removedValue)
+                      }
+                    />
+                  </Grid>
+                </Grid>
               </Box>
             ))}
           </Box>

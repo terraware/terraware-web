@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Box, IconButton, useTheme } from '@mui/material';
 import { Button, DatePicker, Dropdown, DropdownItem, Icon, Textfield } from '@terraware/web-components';
@@ -17,8 +17,6 @@ import {
 export type DeliverableVariableDetailsInputProps = {
   values: VariableValueValue[];
   setValues: (values: VariableValueValue[]) => void;
-  validate: boolean;
-  setHasErrors: (has: boolean) => void;
   variable: Variable;
   addRemovedValue: (value: VariableValueValue) => void;
 };
@@ -26,8 +24,6 @@ export type DeliverableVariableDetailsInputProps = {
 const DeliverableVariableDetailsInput = ({
   values,
   setValues,
-  validate,
-  setHasErrors,
   variable,
   addRemovedValue,
 }: DeliverableVariableDetailsInputProps): JSX.Element => {
@@ -37,8 +33,6 @@ const DeliverableVariableDetailsInput = ({
   const theme = useTheme();
 
   const formElementStyles = { margin: theme.spacing(1, 0) };
-
-  const valueError = useCallback(() => (value ? '' : strings.REQUIRED_FIELD), [value]);
 
   useEffect(() => {
     if (values) {
@@ -80,14 +74,6 @@ const DeliverableVariableDetailsInput = ({
       }
     }
   }, [variable, values]);
-
-  useEffect(() => {
-    if (valueError()) {
-      setHasErrors(true);
-    } else {
-      setHasErrors(false);
-    }
-  }, [valueError, setHasErrors]);
 
   const onChangeValueHandler = (newValue: any, id: string, index: number = 0) => {
     console.log({ newValue });
@@ -260,7 +246,6 @@ const DeliverableVariableDetailsInput = ({
           label=''
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
           value={value?.toString()}
-          errorText={validate ? valueError() : ''}
           aria-label='select date'
           sx={formElementStyles}
         />
@@ -277,7 +262,6 @@ const DeliverableVariableDetailsInput = ({
                 type={'text'}
                 onChange={(newValue: any) => onChangeValueHandler(newValue, 'value', index)}
                 value={iValue?.toString()}
-                errorText={validate ? valueError() : ''}
                 sx={{ margin: theme.spacing(1, 0), flex: 1 }}
               />
               {variable.isList && (
@@ -310,7 +294,6 @@ const DeliverableVariableDetailsInput = ({
           type={variable.type === 'Number' ? 'number' : 'text'}
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
           value={value?.toString()}
-          errorText={validate ? valueError() : ''}
           helperText={variable.type === 'Number' ? strings.ROUNDED_INFO : ''}
           sx={formElementStyles}
         />

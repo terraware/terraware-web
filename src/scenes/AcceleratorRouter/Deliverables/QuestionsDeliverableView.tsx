@@ -285,12 +285,7 @@ const QuestionBox = ({
           )}
           <VariableInternalComment variable={item} update={onUpdateInternalComment} editing={editing} />
           {editing && (
-            <DeliverableEditVariable
-              variable={item}
-              setHasErrors={() => true}
-              setRemovedValues={() => true}
-              setValues={onValuesChanged}
-            />
+            <DeliverableEditVariable variable={item} setRemovedValues={() => true} setValues={onValuesChanged} />
           )}
           {item.variableValues && item.variableValues.length > 0 && item.variableValues[0].feedback && (
             <Box marginBottom={theme.spacing(2)} display='flex' alignItems='center'>
