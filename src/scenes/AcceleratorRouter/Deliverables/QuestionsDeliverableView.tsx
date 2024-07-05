@@ -265,6 +265,7 @@ const QuestionBox = ({
                 onOptionItemClick={onOptionItemClick}
                 optionItems={optionItems}
                 onOpen={() => setDisplyActions(true)}
+                onClose={() => setDisplyActions(false)}
               />
             </Box>
           </Box>
