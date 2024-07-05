@@ -9,16 +9,30 @@ export type OptionsMenuProps = {
   optionItems: DropdownItem[];
   onOptionItemClick?: (optionItem: DropdownItem) => void;
   size?: 'medium' | 'small';
+  onOpen?: () => void;
+  onClose?: () => void;
 };
 
-export default function OptionsMenu({ optionItems, onOptionItemClick, size }: OptionsMenuProps): JSX.Element {
+export default function OptionsMenu({
+  optionItems,
+  onOptionItemClick,
+  size,
+  onOpen,
+  onClose,
+}: OptionsMenuProps): JSX.Element {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<HTMLElement | null>(null);
 
   const handleClickActionMenuButton = (event: React.MouseEvent<HTMLElement>) => {
+    if (onOpen) {
+      onOpen();
+    }
     setActionMenuAnchorEl(event.currentTarget);
   };
 
   const handleCloseActionMenu = () => {
+    if (onClose) {
+      onClose();
+    }
     setActionMenuAnchorEl(null);
   };
 

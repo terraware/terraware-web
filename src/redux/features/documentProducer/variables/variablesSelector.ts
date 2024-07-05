@@ -243,3 +243,6 @@ export const selectDeliverableVariablesWithValues = createCachedSelector(
 )((state: RootState, deliverableId: number, projectId: number) =>
   deliverableCompositeKeyFn({ deliverableId, projectId })
 );
+
+export const selectUpdateVariableWorkflowDetails = (requestId: string) => (state: RootState) =>
+  state.variableWorkflowDetailsUpdate[requestId];
