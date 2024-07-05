@@ -41,7 +41,7 @@ export const requestUpdateVariableWorkflowDetails = createAsyncThunk(
   ) => {
     const response = await VariableService.updateVariableWorkflowDetails(variableId, projectId, rest);
     if (response.requestSucceeded) {
-      return Boolean(true);
+      return true;
     }
 
     return rejectWithValue(response.error || strings.GENERIC_ERROR);
