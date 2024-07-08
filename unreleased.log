@@ -1,3 +1,4 @@
+d1398ce8cc0 Update generated types to reflect endpoint removals (#2822)
 daf65147abb SW-5600 Welcome Emails - Fix blurry email images (#2807)
 cb0f90b94d1 Updated translations from Phrase (#2805)
 25bab7175f2 Add cached selector for fetching deliverable-specific variables and values for a given project (#2806)
