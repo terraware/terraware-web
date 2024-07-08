@@ -62,6 +62,7 @@ export default function OptionsMenu({
         handleClick={onItemClick}
         anchorElement={actionMenuAnchorEl}
         setAnchorElement={setActionMenuAnchorEl}
+        onClose={onClose}
       />
     </>
   );
