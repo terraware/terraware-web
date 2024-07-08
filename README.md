@@ -99,7 +99,7 @@ yarn docker:stop    # don't forget to stop the server when you're done
 If you want to examine or change the database that's used for your local testing, you can run the PostgreSQL interactive command-line client. This will only work after you've run `scripts/resetdb.sh` or `yarn docker:start`.
 
 ```shell
-docker-compose exec postgres psql -U postgres terraware
+docker compose exec postgres psql -U postgres terraware
 ```
 
 To exit the PostgreSQL client, type `\quit` or hit control-D.
