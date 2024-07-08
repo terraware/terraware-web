@@ -150,22 +150,6 @@ export interface paths {
     /** Registers a new device a facility's device manager. */
     post: operations["createDevice"];
   };
-  "/api/v1/devices/managers": {
-    /** Searches for device managers matching a set of criteria. */
-    get: operations["getDeviceManagers"];
-  };
-  "/api/v1/devices/managers/{deviceManagerId}": {
-    /** Gets information about a specific device manager. */
-    get: operations["getDeviceManager"];
-  };
-  "/api/v1/devices/managers/{deviceManagerId}/connect": {
-    /** Connects a device manager to a facility. */
-    post: operations["connectDeviceManager"];
-  };
-  "/api/v1/devices/templates": {
-    /** Lists the available templates for new devices. */
-    get: operations["listDeviceTemplates"];
-  };
   "/api/v1/devices/{id}": {
     /** Gets the configuration of a single device. */
     get: operations["getDevice"];
@@ -185,35 +169,12 @@ export interface paths {
     /** Creates a new document. */
     post: operations["createDocument"];
   };
-  "/api/v1/document-producer/documents/{documentId}/images": {
-    /** Save an image to a new variable value. */
-    post: operations["uploadImageValue"];
-  };
-  "/api/v1/document-producer/documents/{documentId}/images/{valueId}": {
-    /**
-     * Gets the contents of an image variable value.
-     * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
-     */
-    get: operations["getImageValue"];
-  };
   "/api/v1/document-producer/documents/{documentId}/upgrade": {
     /**
      * Upgrades a document to a newer manifest.
      * @description The manifest must be for the same document template as the existing manifest.
      */
     post: operations["upgradeManifest"];
-  };
-  "/api/v1/document-producer/documents/{documentId}/values": {
-    /**
-     * Get the values of the variables in a document.
-     * @description This may be used to fetch the full set of current values (the default behavior), the values from a saved version (if maxValueId is specified), or to poll for recent edits (if minValueId is specified).
-     */
-    get: operations["listVariableValues"];
-    /**
-     * Update the values of the variables in a document.
-     * @description Make a list of changes to a document's variable values. The changes are applied in order and are treated as an atomic unit. That is, the changes will either all succeed or all fail; there won't be a case where some of the changes are applied and some aren't. See the payload descriptions for more details about the operations you can perform on values.
-     */
-    post: operations["updateVariableValues"];
   };
   "/api/v1/document-producer/documents/{documentId}/versions": {
     /** Saves a version of a document. */
@@ -765,10 +726,6 @@ export interface paths {
      * @description If there are existing timeseries with the same names, the old definitions will be overwritten.
      */
     post: operations["createMultipleTimeseries"];
-  };
-  "/api/v1/timeseries/history": {
-    /** Returns historical values of timeseries. */
-    post: operations["getTimeseriesHistory"];
   };
   "/api/v1/timeseries/values": {
     /** Records new values for one or more timeseries. */
@@ -1529,10 +1486,6 @@ export interface components {
       observedTime: string;
       plants: components["schemas"]["RecordedPlantPayload"][];
     };
-    ConnectDeviceManagerRequestPayload: {
-      /** Format: int64 */
-      facilityId: number;
-    };
     CreateAccessionRequestPayloadV2: {
       bagNumbers?: string[];
       /** Format: date */
@@ -2134,49 +2087,6 @@ export interface components {
        */
       verbosity?: number;
     };
-    DeviceManagerPayload: {
-      /** @description If true, this device manager is available to connect to a facility. */
-      available: boolean;
-      /**
-       * Format: int64
-       * @description The facility this device manager is connected to, or null if it is not connected.
-       */
-      facilityId?: number;
-      /** Format: int64 */
-      id: number;
-      /** @description If true, this device manager is currently online. */
-      isOnline: boolean;
-      /**
-       * Format: date-time
-       * @description When the device manager's isOnline value changed most recently. In other words, if isOnline is true, the device manager has been online since this time; if isOnline is false, the device manager has been offline since this time. This may be null if the device manager has not come online for the first time yet.
-       */
-      onlineChangedTime?: string;
-      sensorKitId: string;
-      /**
-       * Format: int32
-       * @description If an update is being downloaded or installed, its progress as a percentage. Not present if no update is in progress.
-       */
-      updateProgress?: number;
-    };
-    DeviceTemplatePayload: {
-      address?: string;
-      /** @enum {string} */
-      category: "PV" | "Seed Bank Default";
-      /** Format: int64 */
-      id: number;
-      make: string;
-      model: string;
-      name: string;
-      /** Format: int32 */
-      port?: number;
-      protocol?: string;
-      settings?: {
-        [key: string]: unknown;
-      };
-      type: string;
-      /** Format: int32 */
-      verbosity?: number;
-    };
     DeviceUnresponsiveRequestPayload: {
       /**
        * Format: int32
@@ -2490,15 +2400,6 @@ export interface components {
       delivery: components["schemas"]["DeliveryPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
-    GetDeviceManagerResponsePayload: {
-      manager: components["schemas"]["DeviceManagerPayload"];
-      status: components["schemas"]["SuccessOrError"];
-    };
-    GetDeviceManagersResponsePayload: {
-      /** @description List of device managers that match the conditions in the request. Empty if there were no matches, e.g., the requested short code didn't exist. */
-      managers: components["schemas"]["DeviceManagerPayload"][];
-      status: components["schemas"]["SuccessOrError"];
-    };
     GetDeviceResponsePayload: {
       device: components["schemas"]["DeviceConfig"];
       status: components["schemas"]["SuccessOrError"];
@@ -2764,33 +2665,6 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
       subLocation: components["schemas"]["SubLocationPayload"];
     };
-    GetTimeseriesHistoryRequestPayload: {
-      /**
-       * Format: int32
-       * @description Number of values to return. The time range is divided into this many equal intervals, and a value is returned from each interval if available.
-       */
-      count: number;
-      /**
-       * Format: date-time
-       * @description End of time range to query. If this is non-null, startTime must also be specified, and seconds must be null or absent.
-       */
-      endTime?: string;
-      /**
-       * Format: int64
-       * @description Number of seconds in the past to start the time range. If this is non-null, startTime and endTime must be null or absent.
-       */
-      seconds?: number;
-      /**
-       * Format: date-time
-       * @description Start of time range to query. If this is non-null, endTime must also be specified, and seconds must be null or absent.
-       */
-      startTime?: string;
-      /** @description Timeseries to query. May be from different devices. */
-      timeseries: components["schemas"]["TimeseriesIdPayload"][];
-    };
-    GetTimeseriesHistoryResponsePayload: {
-      values: components["schemas"]["TimeseriesValuesPayload"][];
-    };
     GetUploadStatusDetailsPayload: {
       errors?: components["schemas"]["UploadProblemPayload"][];
       /** @description True if the server is finished processing the file, either successfully or not. */
@@ -2985,10 +2859,6 @@ export interface components {
     ListDeviceConfigsResponse: {
       devices: components["schemas"]["DeviceConfig"][];
       status: components["schemas"]["SuccessOrError"];
-    };
-    ListDeviceTemplatesResponsePayload: {
-      status: components["schemas"]["SuccessOrError"];
-      templates: components["schemas"]["DeviceTemplatePayload"][];
     };
     ListDocumentTemplatesResponsePayload: {
       documentTemplates: components["schemas"]["DocumentTemplatePayload"][];
@@ -4482,11 +4352,6 @@ export interface components {
        * @example Central European Time - Berlin
        */
       longName: string;
-    };
-    TimeseriesIdPayload: {
-      /** Format: int64 */
-      deviceId: number;
-      timeseriesName: string;
     };
     TimeseriesPayload: {
       /**
@@ -6077,78 +5942,6 @@ export interface operations {
       };
     };
   };
-  /** Searches for device managers matching a set of criteria. */
-  getDeviceManagers: {
-    parameters: {
-      query?: {
-        /** @description Search for device managers with this sensor kit ID. Either this or facilityId must be specified. */
-        sensorKitId?: string;
-        /** @description Search for device managers associated with this facility. Either this or sensorKitId must be specified. */
-        facilityId?: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetDeviceManagersResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Gets information about a specific device manager. */
-  getDeviceManager: {
-    parameters: {
-      path: {
-        deviceManagerId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetDeviceManagerResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Connects a device manager to a facility. */
-  connectDeviceManager: {
-    parameters: {
-      path: {
-        deviceManagerId: number;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ConnectDeviceManagerRequestPayload"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Lists the available templates for new devices. */
-  listDeviceTemplates: {
-    parameters: {
-      query?: {
-        category?: "PV" | "Seed Bank Default";
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListDeviceTemplatesResponsePayload"];
-        };
-      };
-    };
-  };
   /** Gets the configuration of a single device. */
   getDevice: {
     parameters: {
@@ -6261,72 +6054,6 @@ export interface operations {
       };
     };
   };
-  /** Save an image to a new variable value. */
-  uploadImageValue: {
-    parameters: {
-      path: {
-        documentId: number;
-      };
-    };
-    requestBody?: {
-      content: {
-        "application/json": {
-          caption?: string;
-          citation?: string;
-          /** Format: binary */
-          file: string;
-          /**
-           * Format: int32
-           * @description If the variable is a list, which list position to use for the value. If not specified, the server will use the next available list position if the variable is a list, or will replace any existing image if the variable is not a list.
-           */
-          listPosition?: number;
-          /**
-           * Format: int64
-           * @description If the variable is a table column, value ID of the row the value should belong to.
-           */
-          rowValueId?: number;
-          /** Format: int64 */
-          variableId: number;
-        };
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["UploadImageFileResponsePayload"];
-        };
-      };
-    };
-  };
-  /**
-   * Gets the contents of an image variable value.
-   * @description Optional maxWidth and maxHeight parameters may be included to control the dimensions of the image; the server will scale the original down as needed. If neither parameter is specified, the original full-size image will be returned. The aspect ratio of the original image is maintained, so the returned image may be smaller than the requested width and height. If only maxWidth or only maxHeight is supplied, the other dimension will be computed based on the original image's aspect ratio.
-   */
-  getImageValue: {
-    parameters: {
-      query?: {
-        /** @description Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
-        maxWidth?: string;
-        /** @description Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
-        maxHeight?: string;
-      };
-      path: {
-        documentId: number;
-        valueId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": string;
-          "image/jpeg": string;
-          "image/png": string;
-        };
-      };
-    };
-  };
   /**
    * Upgrades a document to a newer manifest.
    * @description The manifest must be for the same document template as the existing manifest.
@@ -6359,55 +6086,6 @@ export interface operations {
       409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  /**
-   * Get the values of the variables in a document.
-   * @description This may be used to fetch the full set of current values (the default behavior), the values from a saved version (if maxValueId is specified), or to poll for recent edits (if minValueId is specified).
-   */
-  listVariableValues: {
-    parameters: {
-      query?: {
-        /** @description If specified, only return values with this ID or higher. Use this to poll for incremental updates to a document. Incremental results may include values of type 'Deleted' in cases where, e.g., elements have been removed from a list. */
-        minValueId?: number;
-        /** @description If specified, only return values with this ID or lower. Use this to retrieve saved document versions. */
-        maxValueId?: number;
-      };
-      path: {
-        documentId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListVariableValuesResponsePayload"];
-        };
-      };
-    };
-  };
-  /**
-   * Update the values of the variables in a document.
-   * @description Make a list of changes to a document's variable values. The changes are applied in order and are treated as an atomic unit. That is, the changes will either all succeed or all fail; there won't be a case where some of the changes are applied and some aren't. See the payload descriptions for more details about the operations you can perform on values.
-   */
-  updateVariableValues: {
-    parameters: {
-      path: {
-        documentId: number;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateVariableValuesRequestPayload"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -9224,22 +8902,6 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Returns historical values of timeseries. */
-  getTimeseriesHistory: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["GetTimeseriesHistoryRequestPayload"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetTimeseriesHistoryResponsePayload"];
         };
       };
     };

@@ -156,7 +156,7 @@ export type Operation =
   | components['schemas']['UpdateValueOperationPayload'];
 
 export type OriginalUploadImageValue = Required<
-  operations['uploadImageValue']
+  operations['uploadProjectImageValue']
 >['requestBody']['content']['application/json'];
 
 // Change type for file attribute from string to File, because that is how we process it in the frontend
