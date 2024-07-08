@@ -8,6 +8,7 @@ import NavFooter from 'src/components/common/Navbar/NavFooter';
 import NavItem from 'src/components/common/Navbar/NavItem';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useUser } from 'src/providers';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -20,7 +21,9 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
   const { isDesktop } = useDeviceInfo();
   const navigate = useNavigate();
   const { isAllowed } = useUser();
+  const documentProducerEnabled = isEnabled('Document Producer');
 
+  const isDocumentsRoute = useMatch({ path: APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS, end: false });
   const isDeliverablesRoute = useMatch({ path: APP_PATHS.ACCELERATOR_DELIVERABLES, end: false });
   const isModuleContentRoute = useMatch({ path: APP_PATHS.ACCELERATOR_MODULE_CONTENT, end: false });
   const isOverviewRoute = useMatch({ path: APP_PATHS.ACCELERATOR_OVERVIEW, end: false });
@@ -80,7 +83,21 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
         selected={!!isDeliverablesRoute}
       />
 
-      <NavSection />
+      {documentProducerEnabled && (
+        <>
+          <NavSection title={strings.DOC_PRODUCER} />
+
+          <NavItem
+            icon='iconFolder'
+            id='document-producer'
+            label={strings.DOCUMENTS}
+            onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS)}
+            selected={!!isDocumentsRoute}
+          />
+        </>
+      )}
+
+      <NavSection title={documentProducerEnabled ? strings.SETTINGS : ''} />
 
       {isAllowedViewPeople && (
         <NavItem
