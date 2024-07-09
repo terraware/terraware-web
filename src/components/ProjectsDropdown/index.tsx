@@ -11,6 +11,7 @@ type ProjectsDropdownProps<T extends { projectId?: number } | undefined> = {
   availableProjects: Project[] | undefined;
   label?: string | undefined;
   record: T;
+  required?: boolean;
   setRecord: (setFn: (previousValue: T) => T) => void;
 };
 
@@ -19,6 +20,7 @@ function ProjectsDropdown<T extends { projectId?: number } | undefined>({
   availableProjects,
   label,
   record,
+  required,
   setRecord,
 }: ProjectsDropdownProps<T>) {
   const { activeLocale } = useLocalization();
@@ -61,6 +63,7 @@ function ProjectsDropdown<T extends { projectId?: number } | undefined>({
         });
       }}
       fullWidth
+      required={required}
     />
   );
 }
