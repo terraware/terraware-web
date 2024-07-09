@@ -133,6 +133,7 @@ const DocumentMetadataEdit = ({
         <ProjectsDropdown
           availableProjects={participantProjects}
           record={projectRecord}
+          required
           setRecord={(setFn) => {
             const nextRecord = setFn(projectRecord);
             if (nextRecord.projectId) {
