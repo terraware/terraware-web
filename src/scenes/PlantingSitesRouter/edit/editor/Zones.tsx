@@ -51,17 +51,22 @@ export type ZonesProps = {
  *   and should return a version of the draft planting site accounting
  *   for the potentially new zone boundaries.
  */
-const createDraftSiteWith = (site: DraftPlantingSite) => (cutZones: GeometryFeature[]) => ({
+const createDraftSiteWith = (site: DraftPlantingSite) => {
+  const usedNames = new Set(site.plantingZones?.map((zone) => zone.name) ?? [])
+  return (cutZones: GeometryFeature[]) => ({
   ...site,
-  plantingZones: cutZones.map((zone, index) =>
-    defaultZonePayload({
+  plantingZones: cutZones.map((zone, index) => {
+    const newName = zoneNameGenerator(usedNames, strings.ZONE);
+    usedNames.add(newName)
+    return defaultZonePayload({
       boundary: toMultiPolygon(zone.geometry) as MultiPolygon,
       id: index,
-      name: zoneNameGenerator(new Set<string>(), strings.ZONE),
+      name: newName,
       targetPlantingDensity: zone.properties?.targetPlantingDensity ?? 1500,
     })
-  ),
-});
+  }),
+})
+};
 
 // create zone feature collections from the site
 const featureSiteZones = (site: DraftPlantingSite): FeatureCollection | undefined => {
