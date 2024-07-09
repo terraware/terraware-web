@@ -1210,16 +1210,16 @@ export interface components {
      */
     AppendValueOperationPayload: WithRequired<{
       operation: "Append";
-    } & Omit<components["schemas"]["ValueOperationPayload"], "operation"> & {
+    } & Omit<components["schemas"]["ValueOperationPayload"], "operation"> & ({
       /**
        * Format: int64
        * @description If the variable is a table column and the new value should be appended to an existing row, the existing row's value ID.
        */
       rowValueId?: number;
-      value?: components["schemas"]["NewValuePayload"];
+      value?: components["schemas"]["NewDateValuePayload"] | components["schemas"]["NewImageValuePayload"] | components["schemas"]["NewLinkValuePayload"] | components["schemas"]["NewNumberValuePayload"] | components["schemas"]["NewSectionTextValuePayload"] | components["schemas"]["NewSectionVariableValuePayload"] | components["schemas"]["NewSelectValuePayload"] | components["schemas"]["NewTableValuePayload"] | components["schemas"]["NewTextValuePayload"];
       /** Format: int64 */
       variableId?: number;
-    }, "value" | "variableId">;
+    }), "value" | "variableId">;
     ApplicationHistoryPayload: {
       feedback?: string;
       /** @description Internal-only comment, if any. Only set if the current user is an internal user. */
@@ -4023,16 +4023,16 @@ export interface components {
      */
     ReplaceValuesOperationPayload: WithRequired<{
       operation: "Replace";
-    } & Omit<components["schemas"]["ValueOperationPayload"], "operation"> & {
+    } & Omit<components["schemas"]["ValueOperationPayload"], "operation"> & ({
       /**
        * Format: int64
        * @description If the variable is a table column, the value ID of the row whose values should be replaced.
        */
       rowValueId?: number;
-      values?: components["schemas"]["NewValuePayload"][];
+      values?: (components["schemas"]["NewDateValuePayload"] | components["schemas"]["NewImageValuePayload"] | components["schemas"]["NewLinkValuePayload"] | components["schemas"]["NewNumberValuePayload"] | components["schemas"]["NewSectionTextValuePayload"] | components["schemas"]["NewSectionVariableValuePayload"] | components["schemas"]["NewSelectValuePayload"] | components["schemas"]["NewTableValuePayload"] | components["schemas"]["NewTextValuePayload"])[];
       /** Format: int64 */
       variableId?: number;
-    }, "values" | "variableId">;
+    }), "values" | "variableId">;
     RescheduleObservationRequestPayload: {
       /**
        * Format: date
@@ -4894,11 +4894,11 @@ export interface components {
      */
     UpdateValueOperationPayload: WithRequired<{
       operation: "Update";
-    } & Omit<components["schemas"]["ValueOperationPayload"], "operation"> & {
-      value?: components["schemas"]["NewValuePayload"];
+    } & Omit<components["schemas"]["ValueOperationPayload"], "operation"> & ({
+      value?: components["schemas"]["NewDateValuePayload"] | components["schemas"]["NewImageValuePayload"] | components["schemas"]["NewLinkValuePayload"] | components["schemas"]["NewNumberValuePayload"] | components["schemas"]["NewSectionTextValuePayload"] | components["schemas"]["NewSectionVariableValuePayload"] | components["schemas"]["NewSelectValuePayload"] | components["schemas"]["NewTableValuePayload"] | components["schemas"]["NewTextValuePayload"];
       /** Format: int64 */
       valueId?: number;
-    }, "existingValueId" | "value" | "valueId">;
+    }), "existingValueId" | "value" | "valueId">;
     UpdateVariableOwnerRequestPayload: {
       /**
        * Format: int64
