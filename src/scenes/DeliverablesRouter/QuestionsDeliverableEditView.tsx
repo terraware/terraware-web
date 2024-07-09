@@ -6,6 +6,7 @@ import Metadata from 'src/components/DeliverableView/Metadata';
 import DeliverableVariableDetailsInput from 'src/components/DocumentProducer/DeliverableVariableDetailsInput';
 import Card from 'src/components/common/Card';
 import WrappedPageForm from 'src/components/common/PageForm';
+import TfMain from 'src/components/common/TfMain';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useProjectVariablesUpdate } from 'src/hooks/useProjectVariablesUpdate';
 import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
@@ -64,45 +65,47 @@ const QuestionsDeliverableEditView = (): JSX.Element | null => {
   }
 
   return (
-    <WrappedPageForm
-      cancelID={'cancelEditQuestionsDeliverable'}
-      onCancel={goToThisDeliverable}
-      onSave={handleOnSave}
-      saveID={'saveEditQuestionsDeliverable'}
-    >
-      <Box display='flex' flexDirection='column' flexGrow={1}>
-        <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-          <Metadata deliverable={deliverable} />
-          <Box
-            sx={{
-              borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-              marginBottom: theme.spacing(4),
-              paddingTop: theme.spacing(3),
-            }}
-          >
-            {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => (
-              <Box key={index} sx={{ marginBottom: theme.spacing(4) }}>
-                <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
-                  {/* <DeliverableStatusBadge status={variableWithValues.status} /> */}
-                </Box>
-                <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-                  <Grid item xs={12}>
-                    <DeliverableVariableDetailsInput
-                      values={variableWithValues.values}
-                      setValues={(newValues: VariableValueValue[]) => setValues(variableWithValues.id, newValues)}
-                      variable={variableWithValues}
-                      addRemovedValue={(removedValue: VariableValueValue) =>
-                        setRemovedValue(variableWithValues.id, removedValue)
-                      }
-                    />
+    <TfMain>
+      <WrappedPageForm
+        cancelID={'cancelEditQuestionsDeliverable'}
+        onCancel={goToThisDeliverable}
+        onSave={handleOnSave}
+        saveID={'saveEditQuestionsDeliverable'}
+      >
+        <Box display='flex' flexDirection='column' flexGrow={1}>
+          <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+            <Metadata deliverable={deliverable} />
+            <Box
+              sx={{
+                borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+                marginBottom: theme.spacing(4),
+                paddingTop: theme.spacing(3),
+              }}
+            >
+              {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => (
+                <Box key={index} sx={{ marginBottom: theme.spacing(4) }}>
+                  <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
+                    {/* <DeliverableStatusBadge status={variableWithValues.status} /> */}
+                  </Box>
+                  <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
+                    <Grid item xs={12}>
+                      <DeliverableVariableDetailsInput
+                        values={variableWithValues.values}
+                        setValues={(newValues: VariableValueValue[]) => setValues(variableWithValues.id, newValues)}
+                        variable={variableWithValues}
+                        addRemovedValue={(removedValue: VariableValueValue) =>
+                          setRemovedValue(variableWithValues.id, removedValue)
+                        }
+                      />
+                    </Grid>
                   </Grid>
-                </Grid>
-              </Box>
-            ))}
-          </Box>
-        </Card>
-      </Box>
-    </WrappedPageForm>
+                </Box>
+              ))}
+            </Box>
+          </Card>
+        </Box>
+      </WrappedPageForm>
+    </TfMain>
   );
 };
 
