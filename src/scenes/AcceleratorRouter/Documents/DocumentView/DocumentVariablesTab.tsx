@@ -111,7 +111,7 @@ const DocumentVariablesTab = ({ document: doc, setSelectedTab }: DocumentVariabl
 
   useEffect(() => {
     dispatch(requestListVariables(doc.variableManifestId));
-    dispatch(requestListVariablesValues(doc.projectId));
+    dispatch(requestListVariablesValues({ projectId: doc.projectId }));
   }, [dispatch, doc.variableManifestId, doc.projectId]);
 
   const containingSections = useCallback(
@@ -163,7 +163,7 @@ const DocumentVariablesTab = ({ document: doc, setSelectedTab }: DocumentVariabl
 
   const onUpdate = () => {
     dispatch(requestListVariables(doc.variableManifestId));
-    dispatch(requestListVariablesValues(doc.projectId));
+    dispatch(requestListVariablesValues({ projectId: doc.projectId }));
   };
 
   const props = {
@@ -187,7 +187,7 @@ const DocumentVariablesTab = ({ document: doc, setSelectedTab }: DocumentVariabl
 
   const onFinish = (updated: boolean) => {
     if (updated) {
-      dispatch(requestListVariablesValues(doc.projectId));
+      dispatch(requestListVariablesValues({ projectId: doc.projectId }));
     }
   };
 

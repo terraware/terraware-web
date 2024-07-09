@@ -24,12 +24,12 @@ const DocumentTab = ({ document }: DocumentProps): JSX.Element => {
 
   useEffect(() => {
     dispatch(requestListVariables(document.variableManifestId));
-    dispatch(requestListVariablesValues(document.projectId));
+    dispatch(requestListVariablesValues({ projectId: document.projectId }));
   }, [dispatch, document.variableManifestId, document.projectId]);
 
   const onUpdate = () => {
     dispatch(requestListVariables(document.variableManifestId));
-    dispatch(requestListVariablesValues(document.projectId));
+    dispatch(requestListVariablesValues({ projectId: document.projectId }));
   };
 
   const renderVariable = (variable: VariableWithValues) => {

@@ -31,7 +31,7 @@ export default function PreviewDocument({ doc }: PreviewDocumentProps): ReactEle
 
   useEffect(() => {
     dispatch(requestListVariables(doc.variableManifestId));
-    dispatch(requestListVariablesValues(doc.projectId));
+    dispatch(requestListVariablesValues({ projectId: doc.projectId }));
   }, [dispatch, doc.variableManifestId, doc.projectId]);
 
   const [sectionVariables, setSectionVariables] = useState<SectionVariableWithValues[]>([]);

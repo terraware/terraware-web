@@ -16,6 +16,16 @@ import {
  */
 type VariableValuesListState = Record<string, StatusT<VariableValue[]>>;
 
+type VariableListArg = { projectId: number; maxValueId?: number };
+export const variableListCompositeKeyFn = (arg: unknown): string => {
+  const castArg = arg as VariableListArg;
+  if (!castArg.projectId) {
+    return '';
+  }
+
+  return `p${castArg.projectId}-mv${castArg.maxValueId || -1}`;
+};
+
 const initialVariableValuesListState: VariableValuesListState = {};
 
 const variableValuesListSlice = createSlice({
@@ -23,7 +33,7 @@ const variableValuesListSlice = createSlice({
   initialState: initialVariableValuesListState,
   reducers: {},
   extraReducers: (builder: ActionReducerMapBuilder<VariableValuesListState>) => {
-    buildReducers(requestListVariablesValues, true)(builder);
+    buildReducers(requestListVariablesValues, true, variableListCompositeKeyFn)(builder);
   },
 });
 

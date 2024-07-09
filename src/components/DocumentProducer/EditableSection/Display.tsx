@@ -36,7 +36,7 @@ type SectionValueProps = {
 const SectionValue = ({ documentId, value, allVariables }: SectionValueProps): React.ReactElement | null => {
   switch (value.type) {
     case 'SectionText':
-      return <span style={{ fontSize: '16px' }}>{value.textValue}</span>;
+      return <span style={{ fontSize: '16px', whiteSpace: 'pre-wrap' }}>{value.textValue}</span>;
     case 'SectionVariable':
       const reference = value.usageType === 'Reference';
       const variable = allVariables.find((v) => v.id === value.variableId);

@@ -8,8 +8,6 @@ import {
 const VALUES_ENDPOINT = '/api/v1/document-producer/projects/{projectId}/values';
 const IMAGES_ENDPOINT = '/api/v1/document-producer/projects/{projectId}/images';
 
-// type ExistingVariableValuesPayload = components['schemas']['ExistingVariableValuesPayload'];
-
 const getDeliverableValues = async (params: {
   deliverableId: number;
   projectId: number;
@@ -41,8 +39,10 @@ const getDeliverableValues = async (params: {
   }
 };
 
-const getValues = (projectId: number): Promise<Response2<VariableValuesListResponse>> =>
-  HttpService.root(VALUES_ENDPOINT.replace('{projectId}', projectId.toString())).get2({});
+const getValues = (projectId: number, maxValueId?: number): Promise<Response2<VariableValuesListResponse>> =>
+  HttpService.root(VALUES_ENDPOINT.replace('{projectId}', projectId.toString())).get2({
+    params: maxValueId ? { maxValueId: maxValueId.toString() } : {},
+  });
 
 const updateValue = (projectId: number, operations: Operation[]): Promise<Response2<VariableValuesListResponse>> => {
   const entity: UpdateVariableValuesRequestPayload = {

@@ -3,6 +3,7 @@ import React from 'react';
 import { Box, useTheme } from '@mui/material';
 
 import TableDisplay from 'src/components/DocumentProducer/TableDisplay';
+import strings from 'src/strings';
 import { TableVariableWithValues, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValueImageValue, VariableValueSelectValue } from 'src/types/documentProducer/VariableValue';
 import { getImagePath } from 'src/utils/images';
@@ -69,7 +70,7 @@ export default function DeliverableDisplayVariableValue({
             variable.options
               .filter((o) => selectedValues?.includes(o.id))
               .map((o) => o.renderedText ?? o.name)
-              .join(', ') || '--'
+              .join(', ') || strings.UNSPECIFIED
           }`}
         </span>
       );
