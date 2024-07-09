@@ -11,7 +11,12 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ListDeliverablesRequestParams } from 'src/services/DeliverablesService';
 import strings from 'src/strings';
 import { AcceleratorOrgProject } from 'src/types/Accelerator';
-import { DeliverableCategories, DeliverableStatuses, ListDeliverablesElement } from 'src/types/Deliverables';
+import {
+  DeliverableCategories,
+  DeliverableStatuses,
+  DeliverableTypes,
+  ListDeliverablesElement,
+} from 'src/types/Deliverables';
 import { Project } from 'src/types/Project';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { SearchAndSortFn } from 'src/utils/searchAndSort';
@@ -61,6 +66,11 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
         {
           key: 'category',
           name: strings.CATEGORY,
+          type: 'string',
+        },
+        {
+          key: 'type',
+          name: strings.TYPE,
           type: 'string',
         },
       ]
@@ -128,6 +138,11 @@ const DeliverablesTable = ({
         // Same note as above
         options: DeliverableCategories,
         label: strings.CATEGORY,
+      },
+      {
+        field: 'type',
+        options: DeliverableTypes,
+        label: strings.TYPE,
       },
     ];
 
