@@ -9,9 +9,9 @@ const DocumentsRouter = (): JSX.Element => {
   return (
     <Routes>
       <Route path={'/:documentId'} element={<DocumentView />} />
-      <Route path={'/*'} element={<DocumentsView />} />
+      <Route path={'/:documentId/preview'} element={<PreviewView />} />
       <Route path={'/new'} element={<DocumentsAddView />} />
-      <Route path={':documentId/preview'} element={<PreviewView />} />
+      <Route path={'/*'} element={<DocumentsView />} />
     </Routes>
   );
 };
