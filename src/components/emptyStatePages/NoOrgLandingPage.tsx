@@ -16,7 +16,11 @@ const EMPTY_STATE_CONTENT_STYLES = {
   listContainerVerticalMargin: '48px',
 };
 
-export default function NoOrgLandingPage(): JSX.Element {
+type Prop = {
+  redirectTo?: string;
+};
+
+export default function NoOrgLandingPage({ redirectTo }: Prop): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const [isOrgModalOpen, setIsOrgModalOpen] = useState<boolean>(false);
@@ -49,7 +53,11 @@ export default function NoOrgLandingPage(): JSX.Element {
         }}
       >
         <PageSnackbar />
-        <AddNewOrganizationModal open={isOrgModalOpen} onCancel={() => setIsOrgModalOpen(false)} />
+        <AddNewOrganizationModal
+          open={isOrgModalOpen}
+          onCancel={() => setIsOrgModalOpen(false)}
+          redirectOnComplete={redirectTo}
+        />
         <EmptyStateContent
           title={strings.TITLE_WELCOME}
           subtitle={strings.SUBTITLE_GET_STARTED}

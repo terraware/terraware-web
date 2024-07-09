@@ -18,12 +18,14 @@ import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelecto
 import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import AccessionsRouter from 'src/scenes/AccessionsRouter';
+import ApplicationRouter from 'src/scenes/ApplicationRouter';
 import BatchBulkWithdrawView from 'src/scenes/BatchBulkWithdrawView';
 import CheckIn from 'src/scenes/CheckIn';
 import DeliverablesRouter from 'src/scenes/DeliverablesRouter';
 import HelpSupportRouter from 'src/scenes/HelpSupportRouter';
 import Home from 'src/scenes/Home';
 import InventoryRouter from 'src/scenes/InventoryRouter';
+import ModulesRouter from 'src/scenes/ModulesRouter';
 import MyAccountRouter from 'src/scenes/MyAccountRouter';
 import NurseriesRouter from 'src/scenes/NurseriesRouter';
 import NurseryRouter from 'src/scenes/NurseryRouter';
@@ -44,8 +46,6 @@ import { isPlaceholderOrg, selectedOrgHasFacilityType } from 'src/utils/organiza
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useEnvironment from 'src/utils/useEnvironment';
 import useStateLocation from 'src/utils/useStateLocation';
-
-import ModulesRouter from '../ModulesRouter';
 
 interface OrgRouterProps {
   showNavBar: boolean;
@@ -251,6 +251,8 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
             <Route path={APP_PATHS.REPORTS + '/*'} element={<ReportsRouter />} />
             <Route path={APP_PATHS.OBSERVATIONS + '/*'} element={<ObservationsRouter />} />
             <Route path={APP_PATHS.DELIVERABLES + '/*'} element={<DeliverablesRouter />} />
+
+            <Route path={APP_PATHS.APPLICATIONS + '/*'} element={<ApplicationRouter />} />
 
             {!isProduction && (
               <Route path={APP_PATHS.OPT_IN} element={<OptInFeaturesView refresh={reloadPreferences} />} />

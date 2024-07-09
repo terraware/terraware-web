@@ -38,6 +38,11 @@ export default function useNavigateTo() {
           pathname: APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_NEW,
         }),
 
+      goToHome: () =>
+        navigate({
+          pathname: APP_PATHS.HOME,
+        }),
+
       goToModule: (projectId: number, moduleId: number) =>
         navigate({
           pathname: APP_PATHS.PROJECT_MODULE.replace(':projectId', `${projectId}`).replace(':moduleId', `${moduleId}`),

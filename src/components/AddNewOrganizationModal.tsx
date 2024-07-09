@@ -8,6 +8,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import RegionSelector from 'src/components/RegionSelector';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import Button from 'src/components/common/button/Button';
+import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { OrganizationService } from 'src/services';
 import strings from 'src/strings';
@@ -24,7 +25,6 @@ import { TimeZoneDescription } from 'src/types/TimeZones';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import { APP_PATHS } from '../constants';
 import DialogBox from './common/ScrollableDialogBox';
 import TextField from './common/Textfield/Textfield';
 
@@ -33,13 +33,14 @@ type LocationTypesSelected = Record<ManagedLocationType, boolean>;
 export type AddNewOrganizationModalProps = {
   open: boolean;
   onCancel: () => void;
+  redirectOnComplete?: string;
 };
 
 export default function AddNewOrganizationModal(props: AddNewOrganizationModalProps): JSX.Element {
   const { reloadOrganizations } = useOrganization();
   const { activeLocale } = useLocalization();
   const navigate = useNavigate();
-  const { onCancel, open } = props;
+  const { onCancel, open, redirectOnComplete } = props;
   const theme = useTheme();
   const snackbar = useSnackbar();
   const { isDesktop } = useDeviceInfo();
@@ -143,7 +144,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
     );
     if (response.requestSucceeded && response.organization) {
       reloadOrganizations();
-      navigate({ pathname: APP_PATHS.HOME });
+      navigate({ pathname: redirectOnComplete ?? APP_PATHS.HOME });
       snackbar.pageSuccess(
         isDesktop ? strings.ORGANIZATION_CREATED_MSG_DESKTOP : strings.ORGANIZATION_CREATED_MSG,
         strings.formatString(strings.ORGANIZATION_CREATED_TITLE, response.organization.name)
