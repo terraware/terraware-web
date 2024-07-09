@@ -40,7 +40,7 @@ const QuestionsDeliverableView = (props: Props): JSX.Element | null => {
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
   const { currentDeliverable: deliverable, deliverableId, projectId } = useDeliverableData();
-  const { status: requestStatus } = useUpdateDeliverable();
+  const { status: requestStatus, update } = useUpdateDeliverable();
 
   const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
     selectDeliverableVariablesWithValues(state, deliverableId, projectId)
@@ -58,7 +58,7 @@ const QuestionsDeliverableView = (props: Props): JSX.Element | null => {
 
   const submitDeliverable = useCallback(() => {
     if (deliverable?.id !== undefined) {
-      alert('TODO: Submit Deliverable');
+      update({ ...deliverable, status: 'In Review' });
     }
     setShowSubmitDialog(false);
   }, [deliverable]);
