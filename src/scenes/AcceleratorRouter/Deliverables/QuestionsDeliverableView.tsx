@@ -1,228 +1,374 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Typography, useTheme } from '@mui/material';
-import { BusySpinner, Button, Message, Select } from '@terraware/web-components';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { BusySpinner, Button, DialogBox, DropdownItem, Message } from '@terraware/web-components';
+import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
 import { Crumb } from 'src/components/BreadCrumbs';
-import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
 import Metadata from 'src/components/DeliverableView/Metadata';
 import MobileMessage from 'src/components/DeliverableView/MobileMessage';
 import TitleBar from 'src/components/DeliverableView/TitleBar';
 import { EditProps } from 'src/components/DeliverableView/types';
+import DeliverableDisplayVariableValue from 'src/components/DocumentProducer/DeliverableDisplayVariableValue';
+import DeliverableVariableDetailsInput from 'src/components/DocumentProducer/DeliverableVariableDetailsInput';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
+import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
+import { useProjectVariablesUpdate } from 'src/hooks/useProjectVariablesUpdate';
 import { useLocalization } from 'src/providers';
+import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
+import { requestListDeliverableVariablesValues } from 'src/redux/features/documentProducer/values/valuesThunks';
+import {
+  selectDeliverableVariablesWithValues,
+  selectUpdateVariableWorkflowDetails,
+} from 'src/redux/features/documentProducer/variables/variablesSelector';
+import {
+  requestListDeliverableVariables,
+  requestUpdateVariableWorkflowDetails,
+} from 'src/redux/features/documentProducer/variables/variablesThunks';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { DeliverableStatusType } from 'src/types/Deliverables';
+import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
+import { VariableValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import ApprovedDeliverableMessage from './ApprovedDeliverableMessage';
 import RejectDialog from './RejectDialog';
 import RejectedDeliverableMessage from './RejectedDeliverableMessage';
+import VariableInternalComment from './VariableInternalComment';
+import VariableStatusBadge from './VariableStatusBadge';
 
 export type Props = EditProps & {
   isBusy?: boolean;
   showRejectDialog: () => void;
 };
 
-type QuestionDeliverableItem = {
-  answer: string;
-  description: string;
-  feedback?: string;
-  internal?: boolean;
-  question: string;
-  submissionStatus: DeliverableStatusType;
-};
-
-const QA_SETS: QuestionDeliverableItem[] = [
-  {
-    answer: 'Treemendo.us, Incorporated.',
-    description: 'Official/full legal name under which your organization is registered.',
-    question: 'What is the name of your organization?',
-    submissionStatus: 'Approved',
-  },
-  {
-    answer: 'Yal Ankovic',
-    description: 'Name of the person responsible for the partnership.',
-    question: 'What is the full name of the main contact of your organization?',
-    submissionStatus: 'Approved',
-  },
-  {
-    answer: 'yal.ankovic@treemendo.us',
-    description: '',
-    feedback: 'Please provide a valid email address.',
-    question: 'What is the email address of the main contact?',
-    submissionStatus: 'Rejected',
-  },
-  {
-    answer: 'Ghana',
-    description: '',
-    question: 'In what country is your reforestation project located?',
-    submissionStatus: 'In Review',
-  },
-  {
-    answer: 'Single Location',
-    description: 'Specify if the project occurs in more than one site (planting area).',
-    internal: true,
-    question: '[Internal] Does the project include single or multiple location(s)?',
-    submissionStatus: 'In Review',
-  },
-  {
-    answer: 'No',
-    description: '',
-    question: 'Is this a mangrove project?',
-    submissionStatus: 'In Review',
-  },
-];
-
-const QuestionAnswerSets = ({
-  items,
-  optionsMenu,
+const QuestionBox = ({
+  variable,
+  projectId,
+  index,
+  reload,
 }: {
-  items: QuestionDeliverableItem[];
-  optionsMenu: React.ReactNode;
+  variable: VariableWithValues;
+  projectId: number;
+  index: number;
+  reload: () => void;
 }): JSX.Element => {
+  const dispatch = useAppDispatch();
   const theme = useTheme();
-
-  return (
-    <Box
-      sx={{
-        borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-        marginBottom: theme.spacing(4),
-        paddingTop: theme.spacing(3),
-      }}
-    >
-      {items.map((item, index) => (
-        <QuestionAnswerSet key={`item-${index}`} item={item} optionsMenu={optionsMenu} />
-      ))}
-    </Box>
-  );
-};
-
-const QuestionAnswerSet = ({
-  item,
-  optionsMenu,
-}: {
-  item: QuestionDeliverableItem;
-  optionsMenu: React.ReactNode;
-}): JSX.Element => {
-  const theme = useTheme();
+  const { activeLocale } = useLocalization();
+  const {
+    pendingVariableValues,
+    setRemovedValue,
+    setValues,
+    update,
+    updateSuccess: updateVariableValueSuccess,
+  } = useProjectVariablesUpdate(projectId, [variable]);
 
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
   const [editing, setEditing] = useState(false);
+  const [displayActions, setDisplyActions] = useState(false);
+  const [showEditFeedbackModal, setShowEditFeedbackModal] = useState(false);
 
-  const rejectItem = () => {
-    return true;
+  const [requestId, setRequestId] = useState('');
+  const updateWorkflowDetailsResponse = useAppSelector(selectUpdateVariableWorkflowDetails(requestId));
+
+  const firstVariableValue: VariableValue | undefined = (variable?.variableValues || [])[0];
+  const firstVariableValueStatus: VariableStatusType | undefined = firstVariableValue?.status;
+
+  const [modalFeedback, setModalFeedback] = useState(firstVariableValue?.feedback || '');
+
+  useEffect(() => {
+    if (updateVariableValueSuccess) {
+      reload();
+    }
+  }, [updateVariableValueSuccess]);
+
+  useEffect(() => {
+    if (updateWorkflowDetailsResponse?.status === 'success') {
+      reload();
+    }
+  }, [updateWorkflowDetailsResponse]);
+
+  const setStatus = (status: VariableStatusType, feedback?: string, internalComment?: string) => {
+    const request = dispatch(
+      requestUpdateVariableWorkflowDetails({ status, feedback, internalComment, projectId, variableId: variable.id })
+    );
+    setRequestId(request.requestId);
+  };
+
+  const rejectItem = (feedback: string) => {
+    setStatus('Rejected', feedback);
   };
 
   const approveItem = () => {
-    return true;
+    setStatus('Approved');
   };
 
   const onEditItem = () => {
     setEditing(true);
   };
 
+  const onUpdateInternalComment = (internalComment: string) => {
+    const currentStatus: VariableStatusType = firstVariableValueStatus || 'Not Submitted';
+    setStatus(currentStatus, undefined, internalComment);
+  };
+
+  const onSave = () => {
+    if (pendingVariableValues.size === 0) {
+      return;
+    }
+
+    update();
+
+    setEditing(false);
+  };
+
+  const onOptionItemClick = useCallback(
+    (optionItem: DropdownItem) => {
+      switch (optionItem.value) {
+        case 'needs_translation': {
+          setStatus('Needs Translation');
+          break;
+        }
+        case 'not_needed': {
+          setStatus('Not Needed');
+          break;
+        }
+      }
+    },
+    [setStatus]
+  );
+
+  const optionItems = useMemo(
+    (): DropdownItem[] =>
+      activeLocale
+        ? [
+            {
+              label: strings.formatString(strings.STATUS_WITH_STATUS, strings.NEEDS_TRANSLATION) as string,
+              value: 'needs_translation',
+              disabled: firstVariableValueStatus === 'Needs Translation',
+            },
+            {
+              label: strings.formatString(strings.STATUS_WITH_STATUS, strings.NOT_NEEDED) as string,
+              value: 'not_needed',
+              disabled: firstVariableValueStatus === 'Not Needed',
+            },
+          ]
+        : [],
+    [activeLocale, firstVariableValueStatus]
+  );
+
   return (
     <>
-      {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectItem} />}
-      <Box
-        sx={{
-          marginBottom: theme.spacing(4),
-          '&:hover': {
-            background: theme.palette.TwClrBgHover,
-            '.actions': {
-              display: 'block',
-            },
-          },
-          '& .actions': {
-            display: 'none',
-          },
-          padding: 2,
-          borderRadius: 2,
-        }}
-      >
+      {showEditFeedbackModal && (
+        <DialogBox
+          onClose={() => setShowEditFeedbackModal(false)}
+          open={showEditFeedbackModal}
+          title={strings.REJECT}
+          size='large'
+          middleButtons={[
+            <Button
+              id='cancelEditFeedback'
+              label={strings.CANCEL}
+              priority='secondary'
+              type='passive'
+              onClick={() => setShowEditFeedbackModal(false)}
+              key='button-1'
+            />,
+            <Button
+              id='updateFeedback'
+              label={strings.SAVE}
+              onClick={() => setStatus('Rejected', modalFeedback)}
+              key='button-2'
+            />,
+          ]}
+        >
+          <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
+            <Grid item xs={12}>
+              <TextField
+                label={''}
+                type='textarea'
+                id='feedback'
+                onChange={(value) => setModalFeedback(value as string)}
+                value={modalFeedback}
+                preserveNewlines
+              />
+            </Grid>
+          </Grid>
+        </DialogBox>
+      )}
+      <Box key={`question-${index}`} onMouseLeave={() => setEditing(false)}>
+        {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectItem} />}
         <Box
           sx={{
-            float: 'right',
-            marginBottom: '16px',
-            marginLeft: '16px',
-            display: 'flex',
-            alignItems: 'center',
+            marginBottom: theme.spacing(4),
+            '&:hover': {
+              background: theme.palette.TwClrBgHover,
+              '.actions': {
+                display: 'block',
+              },
+            },
+            '& .actions': {
+              display: displayActions ? 'block' : 'none',
+            },
+            padding: 2,
+            borderRadius: 2,
           }}
         >
-          <DeliverableStatusBadge status={item.submissionStatus} />
-          <Box className='actions'>
-            <Button
-              id='edit'
-              label={strings.EDIT}
-              onClick={onEditItem}
-              icon='iconEdit'
-              priority='secondary'
-              className='edit-button'
-              size='small'
-              type='passive'
-            />
-            <Button
-              label={strings.REJECT_ACTION}
-              onClick={() => setShowRejectDialog(true)}
-              priority='secondary'
-              type='destructive'
-              disabled={item.submissionStatus === 'Rejected'}
-            />
-            <Button
-              label={strings.APPROVE}
-              onClick={approveItem}
-              priority='secondary'
-              disabled={item.submissionStatus === 'Approved'}
-            />
-            {optionsMenu}
-          </Box>
-        </Box>
-        <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>{item.question}</Typography>
-        {!!item.description && (
-          <Typography
+          <Box
             sx={{
-              color: 'rgba(0, 0, 0, 0.54)',
-              fontSize: '14px',
-              fontStyle: 'italic',
-              lineHeight: '20px',
+              float: 'right',
               marginBottom: '16px',
+              marginLeft: '16px',
+              display: 'flex',
+              alignItems: 'center',
             }}
           >
-            {item.description}
+            <VariableStatusBadge status={firstVariableValueStatus} />
+            <Box className='actions'>
+              {!editing && (
+                <Button
+                  id='edit'
+                  label={strings.EDIT}
+                  onClick={onEditItem}
+                  icon='iconEdit'
+                  priority='secondary'
+                  className='edit-button'
+                  size='small'
+                  type='passive'
+                />
+              )}
+              <Button
+                label={strings.REJECT_ACTION}
+                onClick={() => setShowRejectDialog(true)}
+                priority='secondary'
+                type='destructive'
+                disabled={firstVariableValueStatus === 'Rejected'}
+              />
+              <Button
+                label={strings.APPROVE}
+                onClick={approveItem}
+                priority='secondary'
+                disabled={firstVariableValueStatus === 'Approved'}
+              />
+              <OptionsMenu
+                onOptionItemClick={onOptionItemClick}
+                optionItems={optionItems}
+                onOpen={() => setDisplyActions(true)}
+                onClose={() => setDisplyActions(false)}
+              />
+            </Box>
+          </Box>
+
+          <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>{variable.name}</Typography>
+
+          {!!variable.description && (
+            <Typography
+              sx={{
+                color: 'rgba(0, 0, 0, 0.54)',
+                fontSize: '14px',
+                fontStyle: 'italic',
+                lineHeight: '20px',
+                marginBottom: '16px',
+              }}
+            >
+              {variable.description}
+            </Typography>
+          )}
+
+          <VariableInternalComment variable={variable} update={onUpdateInternalComment} editing={editing} />
+
+          {editing && (
+            <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
+              <Grid item xs={12}></Grid>
+              <Grid item xs={12}>
+                <DeliverableVariableDetailsInput
+                  values={variable.values}
+                  setValues={(newValues: VariableValueValue[]) => setValues(variable.id, newValues)}
+                  variable={variable}
+                  addRemovedValue={(removedValue: VariableValueValue) => setRemovedValue(variable.id, removedValue)}
+                />
+              </Grid>
+            </Grid>
+          )}
+
+          {firstVariableValue?.feedback && (
+            <Box marginBottom={theme.spacing(2)} display='flex' alignItems='center'>
+              <Message
+                body={
+                  <Typography>
+                    <span style={{ fontWeight: 600 }}>{strings.ANSWER_NOT_ACCEPETED}</span>{' '}
+                    {firstVariableValue.feedback}
+                    {editing && (
+                      <Button
+                        icon='iconEdit'
+                        onClick={() => setShowEditFeedbackModal(true)}
+                        priority='ghost'
+                        size='small'
+                        type='passive'
+                        style={{
+                          marginLeft: '-1px',
+                          marginTop: '-1px',
+                        }}
+                      />
+                    )}
+                  </Typography>
+                }
+                priority='critical'
+                type='page'
+              />
+            </Box>
+          )}
+
+          <Typography>
+            {!editing && <DeliverableDisplayVariableValue projectId={projectId} variable={variable} />}
           </Typography>
-        )}
-        {editing && <Select onChange={(newValue: string) => console.log(newValue)}></Select>}
-        {!!item.feedback && (
-          <Box marginBottom={theme.spacing(2)}>
-            <Message body={item.feedback} priority='critical' type='page' />
-          </Box>
-        )}
-        <Typography>{!editing && item?.answer ? item.answer : '--'}</Typography>
-        {editing && (
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button
-              id='cancel'
-              label={strings.CANCEL}
-              type='passive'
-              onClick={() => setEditing(false)}
-              priority='secondary'
-              key='button-1'
-            />
-            <Button id={'save'} onClick={() => true} label={strings.SAVE} key='button-2' priority='secondary' />
-          </Box>
-        )}
+
+          {editing && (
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <Button
+                id='cancel'
+                label={strings.CANCEL}
+                type='passive'
+                onClick={() => setEditing(false)}
+                priority='secondary'
+                key='button-1'
+              />
+              <Button id={'save'} onClick={onSave} label={strings.SAVE} key='button-2' priority='secondary' />
+            </Box>
+          )}
+        </Box>
       </Box>
     </>
   );
 };
 
 const QuestionsDeliverableView = (props: Props): JSX.Element => {
-  const { optionsMenu, ...viewProps }: Props = props;
+  const { ...viewProps }: Props = props;
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
+  const { deliverableId, projectId } = useDeliverableData();
+  const dispatch = useAppDispatch();
+
+  const reload = () => {
+    void dispatch(requestListDeliverableVariables(deliverableId));
+    void dispatch(requestListDeliverableVariablesValues({ deliverableId, projectId }));
+  };
+
+  useEffect(() => {
+    if (!(deliverableId && projectId)) {
+      return;
+    }
+
+    void dispatch(requestListDeliverableVariables(deliverableId));
+    void dispatch(requestListDeliverableVariablesValues({ deliverableId, projectId }));
+  }, [deliverableId, projectId]);
+
+  const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
+    selectDeliverableVariablesWithValues(state, deliverableId, projectId)
+  );
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -255,7 +401,17 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
             }}
           >
             <Metadata {...viewProps} />
-            <QuestionAnswerSets items={QA_SETS} optionsMenu={optionsMenu} />
+            {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => {
+              return (
+                <QuestionBox
+                  variable={variableWithValues}
+                  projectId={projectId}
+                  index={index}
+                  key={index}
+                  reload={reload}
+                />
+              );
+            })}
           </Card>
         </Box>
       </Page>

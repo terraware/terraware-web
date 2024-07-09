@@ -4,16 +4,17 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Message } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
-import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
 import Metadata from 'src/components/DeliverableView/Metadata';
 import MobileMessage from 'src/components/DeliverableView/MobileMessage';
 import TitleBar from 'src/components/DeliverableView/TitleBar';
-import { EditProps, ViewProps } from 'src/components/DeliverableView/types';
+import { EditProps } from 'src/components/DeliverableView/types';
 import useUpdateDeliverable from 'src/components/DeliverableView/useUpdateDeliverable';
+import DeliverableDisplayVariableValue from 'src/components/DocumentProducer/DeliverableDisplayVariableValue';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
 import { requestListDeliverableVariablesValues } from 'src/redux/features/documentProducer/values/valuesThunks';
@@ -21,130 +22,29 @@ import { selectDeliverableVariablesWithValues } from 'src/redux/features/documen
 import { requestListDeliverableVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { DeliverableStatusType } from 'src/types/Deliverables';
+import { VariableWithValues } from 'src/types/documentProducer/Variable';
+import { VariableValue } from 'src/types/documentProducer/VariableValue';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+import QuestionsDeliverableStatusMessage from './QuestionsDeliverableStatusMessage';
 import SubmitDeliverableDialog from './SubmitDeliverableDialog';
-
-type QuestionDeliverableItem = {
-  answer: string;
-  description: string;
-  feedback?: string;
-  internal?: boolean;
-  question: string;
-  submissionStatus: DeliverableStatusType;
-};
-
-const QA_SETS: QuestionDeliverableItem[] = [
-  {
-    answer: 'Treemendo.us, Incorporated.',
-    description: 'Official/full legal name under which your organization is registered.',
-    question: 'What is the name of your organization?',
-    submissionStatus: 'Approved',
-  },
-  {
-    answer: 'Yal Ankovic',
-    description: 'Name of the person responsible for the partnership.',
-    question: 'What is the full name of the main contact of your organization?',
-    submissionStatus: 'Approved',
-  },
-  {
-    answer: 'yal.ankovic@treemendo.us',
-    description: '',
-    feedback: 'Please provide a valid email address.',
-    question: 'What is the email address of the main contact?',
-    submissionStatus: 'Rejected',
-  },
-  {
-    answer: 'Ghana',
-    description: '',
-    question: 'In what country is your reforestation project located?',
-    submissionStatus: 'In Review',
-  },
-  {
-    answer: 'Single Location',
-    description: 'Specify if the project occurs in more than one site (planting area).',
-    internal: true,
-    question: '[Internal] Does the project include single or multiple location(s)?',
-    submissionStatus: 'In Review',
-  },
-  {
-    answer: 'No',
-    description: '',
-    question: 'Is this a mangrove project?',
-    submissionStatus: 'In Review',
-  },
-];
-
-const QuestionAnswerSets = ({ items }: { items: QuestionDeliverableItem[] }): JSX.Element => {
-  const theme = useTheme();
-
-  return (
-    <Box
-      sx={{
-        borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-        marginBottom: theme.spacing(4),
-        paddingTop: theme.spacing(3),
-      }}
-    >
-      {items.map((item, index) => (
-        <QuestionAnswerSet key={`item-${index}`} item={item} />
-      ))}
-    </Box>
-  );
-};
-
-const QuestionAnswerSet = ({ item }: { item: QuestionDeliverableItem }): JSX.Element => {
-  const theme = useTheme();
-
-  return (
-    <Box sx={{ marginBottom: theme.spacing(4) }}>
-      <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
-        <DeliverableStatusBadge status={item.submissionStatus} />
-      </Box>
-      <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>{item.question}</Typography>
-      {!!item.description && (
-        <Typography
-          sx={{
-            color: 'rgba(0, 0, 0, 0.54)',
-            fontSize: '14px',
-            fontStyle: 'italic',
-            lineHeight: '20px',
-            marginBottom: '16px',
-          }}
-        >
-          {item.description}
-        </Typography>
-      )}
-      {!!item.feedback && (
-        <Box marginBottom={theme.spacing(2)}>
-          <Message body={item.feedback} priority='critical' type='page' />
-        </Box>
-      )}
-      <Typography>{item?.answer ? item.answer : '--'}</Typography>
-    </Box>
-  );
-};
 
 export type Props = EditProps & {
   isBusy?: boolean;
 };
 
-const QuestionsDeliverableView = (props: Props): JSX.Element => {
-  const { ...viewProps }: ViewProps = props;
-  const deliverableId = viewProps.deliverable.id;
-  const projectId = viewProps.deliverable.projectId;
-
+const QuestionsDeliverableView = (props: Props): JSX.Element | null => {
   const dispatch = useAppDispatch();
+  const theme = useTheme();
+  const { goToDeliverableEdit } = useNavigateTo();
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
-  const { currentDeliverable: deliverable } = useDeliverableData();
-  const { status: requestStatus } = useUpdateDeliverable();
+  const { currentDeliverable: deliverable, deliverableId, projectId } = useDeliverableData();
+  const { status: requestStatus, update } = useUpdateDeliverable();
 
-  const variablesWithValues = useAppSelector((state) =>
+  const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
     selectDeliverableVariablesWithValues(state, deliverableId, projectId)
   );
-  console.log({ variablesWithValues });
 
   const [showSubmitDialog, setShowSubmitDialog] = useState<boolean>(false);
 
@@ -157,7 +57,7 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
 
   const submitDeliverable = useCallback(() => {
     if (deliverable?.id !== undefined) {
-      alert('TODO: Submit Deliverable');
+      update({ ...deliverable, status: 'In Review' });
     }
     setShowSubmitDialog(false);
   }, [deliverable]);
@@ -181,10 +81,6 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
     [activeLocale]
   );
 
-  if (isMobile) {
-    return <MobileMessage {...viewProps} />;
-  }
-
   const actionMenu = useMemo(() => {
     if (!activeLocale) {
       return null;
@@ -196,9 +92,7 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
           id='edit-deliverable'
           icon='iconEdit'
           label={isMobile ? '' : strings.EDIT}
-          onClick={() => {
-            alert('TODO: Edit Deliverable');
-          }}
+          onClick={() => goToDeliverableEdit(deliverableId, projectId)}
           size='medium'
           priority='secondary'
         />
@@ -214,6 +108,14 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
     );
   }, []);
 
+  if (!deliverable) {
+    return null;
+  }
+
+  if (isMobile) {
+    return <MobileMessage deliverable={deliverable} />;
+  }
+
   return (
     <>
       {deliverable && showSubmitDialog && (
@@ -227,10 +129,49 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
       <Page crumbs={crumbs} rightComponent={actionMenu} title={<TitleBar {...props} />}>
         {(props.isBusy || requestStatus === 'pending') && <BusySpinner />}
         <Box display='flex' flexDirection='column' flexGrow={1}>
-          {/* <QuestionsDeliverableStatusMessage {...viewProps} questions={ppsSearchResults?.data || []} /> */}
+          <QuestionsDeliverableStatusMessage deliverable={deliverable} variables={variablesWithValues} />
           <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-            <Metadata {...viewProps} />
-            <QuestionAnswerSets items={QA_SETS} />
+            <Metadata deliverable={deliverable} />
+            <Box
+              sx={{
+                borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+                marginBottom: theme.spacing(4),
+                paddingTop: theme.spacing(3),
+              }}
+            >
+              {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => {
+                const firstVariableValue: VariableValue | undefined = (variableWithValues?.variableValues || [])[0];
+
+                return (
+                  <Box key={index} sx={{ marginBottom: theme.spacing(4) }}>
+                    <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
+                      {/* <DeliverableStatusBadge status={variableWithValues.status} /> */}
+                    </Box>
+                    <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>{variableWithValues.name}</Typography>
+                    {!!variableWithValues.description && (
+                      <Typography
+                        sx={{
+                          color: theme.palette.TwClrTxtSecondary,
+                          fontSize: '14px',
+                          fontStyle: 'italic',
+                          fontWeight: 400,
+                          lineHeight: '20px',
+                          marginBottom: '16px',
+                        }}
+                      >
+                        {variableWithValues.description}
+                      </Typography>
+                    )}
+                    {!!firstVariableValue?.feedback && (
+                      <Box marginBottom={theme.spacing(2)}>
+                        <Message body={firstVariableValue.feedback} priority='critical' type='page' />
+                      </Box>
+                    )}
+                    <DeliverableDisplayVariableValue projectId={projectId} variable={variableWithValues} />
+                  </Box>
+                );
+              })}
+            </Box>
           </Card>
         </Box>
       </Page>

@@ -91,3 +91,7 @@ export type ImageFile = {
   caption?: string;
   citation?: string;
 };
+
+export type UpdateVariableWorkflowDetailsPayload = components['schemas']['UpdateVariableWorkflowDetailsRequestPayload'];
+
+export type VariableStatusType = components['schemas']['UpdateVariableWorkflowDetailsRequestPayload']['status'];

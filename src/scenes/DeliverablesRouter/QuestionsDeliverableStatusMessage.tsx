@@ -6,19 +6,26 @@ import { Message } from '@terraware/web-components';
 import { ViewProps } from 'src/components/DeliverableView/types';
 import { useLocalization } from 'src/providers/hooks';
 import strings from 'src/strings';
-import { SpeciesForParticipantProject } from 'src/types/ParticipantProjectSpecies';
+import { VariableWithValues } from 'src/types/documentProducer/Variable';
+import { VariableValue } from 'src/types/documentProducer/VariableValue';
 
 type Props = ViewProps & {
-  questions?: SpeciesForParticipantProject[] | undefined;
+  variables?: VariableWithValues[] | undefined;
 };
 
-const QuestionsDeliverableStatusMessage = ({ deliverable, questions }: Props): JSX.Element | null => {
+const QuestionsDeliverableStatusMessage = ({ deliverable, variables }: Props): JSX.Element | null => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
 
-  const rejectedAnswers = questions?.filter(
-    (question) => question.participantProjectSpecies.submissionStatus === 'Rejected'
-  );
+  const rejectedAnswers = variables?.reduce((acc, variableWithValues) => {
+    const rejectedValues = variableWithValues.variableValues.filter(
+      (variableValue) => variableValue.status === 'Rejected'
+    );
+    if (rejectedValues.length) {
+      acc.push(...rejectedValues);
+    }
+    return acc;
+  }, [] as VariableValue[]);
 
   return !activeLocale ? null : (
     <>

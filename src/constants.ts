@@ -43,6 +43,7 @@ export enum APP_PATHS {
   BATCH_WITHDRAW = '/batch/withdraw',
   CHECKIN = '/checkin',
   DELIVERABLES = '/deliverables',
+  DELIVERABLE_EDIT = '/deliverables/:deliverableId/submissions/:projectId/edit',
   DELIVERABLE_VIEW = '/deliverables/:deliverableId/submissions/:projectId',
   ERROR = '/error',
   ERROR_MOBILE_NOT_SUPPORTED = '/error/mobile-not-supported',

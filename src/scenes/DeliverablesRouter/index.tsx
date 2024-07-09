@@ -8,6 +8,7 @@ import ProjectProvider from 'src/providers/Project/ProjectProvider';
 import ParticipantProjectProvider from '../AcceleratorRouter/ParticipantProjects/ParticipantProjectProvider';
 import DeliverableViewWrapper from './DeliverableViewWrapper';
 import DeliverablesList from './DeliverablesList';
+import QuestionsDeliverableEdit from './QuestionsDeliverableEditView';
 
 const DeliverablesRouter = (): JSX.Element => {
   return (
@@ -26,6 +27,22 @@ const DeliverablesRouter = (): JSX.Element => {
           </ProjectProvider>
         }
       />
+
+      <Route
+        path={'/:deliverableId/submissions/:projectId/edit'}
+        element={
+          <ProjectProvider>
+            <ParticipantProvider>
+              <ParticipantProjectProvider>
+                <DeliverableProvider>
+                  <QuestionsDeliverableEdit />
+                </DeliverableProvider>
+              </ParticipantProjectProvider>
+            </ParticipantProvider>
+          </ProjectProvider>
+        }
+      />
+
       <Route path={'*'} element={<DeliverablesList />} />
     </Routes>
   );
