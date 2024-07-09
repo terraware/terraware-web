@@ -76,7 +76,6 @@ const DeliverableVariableDetailsInput = ({
   }, [variable, values]);
 
   const onChangeValueHandler = (newValue: any, id: string, index: number = 0) => {
-    console.log({ newValue });
     if (id === 'title') {
       setTitle(newValue);
     } else if (variable.type !== 'Text') {
@@ -206,8 +205,6 @@ const DeliverableVariableDetailsInput = ({
       }
     });
   };
-
-  console.log({ variableType: variable.type });
 
   return (
     <>

@@ -45,7 +45,6 @@ const QuestionsDeliverableView = (props: Props): JSX.Element | null => {
   const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
     selectDeliverableVariablesWithValues(state, deliverableId, projectId)
   );
-  console.log({ variablesWithValues });
 
   const [showSubmitDialog, setShowSubmitDialog] = useState<boolean>(false);
 
