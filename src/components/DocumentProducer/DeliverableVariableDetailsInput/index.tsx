@@ -100,14 +100,11 @@ const DeliverableVariableDetailsInput = ({
 
       if (variable.type === 'Number') {
         if (values.length > 0) {
-          console.log({ values });
           const numberValues = values as VariableValueNumberValue[];
           const newValues = numberValues.map((nv) => ({ ...nv }));
-          console.log({ numberValues, newValues });
 
           newValues[0].numberValue = newValue;
 
-          console.log({ newValues });
           setValues(newValues);
         } else {
           setValues([{ id: -1, listPosition: 0, numberValue: newValue, type: 'Number' }]);
