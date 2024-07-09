@@ -23,6 +23,7 @@ import { requestListDeliverableVariables } from 'src/redux/features/documentProd
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { VariableWithValues } from 'src/types/documentProducer/Variable';
+import { VariableValue } from 'src/types/documentProducer/VariableValue';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import QuestionsDeliverableStatusMessage from './QuestionsDeliverableStatusMessage';
@@ -140,10 +141,7 @@ const QuestionsDeliverableView = (props: Props): JSX.Element | null => {
               }}
             >
               {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => {
-                // not sure if we should be joining the feedback or just grabbing the first/last one associated with a variableValue
-                const feedback = variableWithValues.variableValues
-                  .filter((variableValue) => variableValue.feedback)
-                  .join(', ');
+                const firstVariableValue: VariableValue | undefined = (variableWithValues?.variableValues || [])[0];
 
                 return (
                   <Box key={index} sx={{ marginBottom: theme.spacing(4) }}>
@@ -165,9 +163,9 @@ const QuestionsDeliverableView = (props: Props): JSX.Element | null => {
                         {variableWithValues.description}
                       </Typography>
                     )}
-                    {!!feedback && (
+                    {!!firstVariableValue?.feedback && (
                       <Box marginBottom={theme.spacing(2)}>
-                        <Message body={feedback} priority='critical' type='page' />
+                        <Message body={firstVariableValue.feedback} priority='critical' type='page' />
                       </Box>
                     )}
                     <DeliverableDisplayVariableValue projectId={projectId} variable={variableWithValues} />
