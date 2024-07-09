@@ -42,5 +42,5 @@ pg_dump -O -x -f dump.sql terraware
 OR
 
 ```shell
-docker-compose exec postgres pg_dump -O -x -U postgres terraware > dump.sql
+docker compose exec postgres pg_dump -O -x -U postgres terraware > dump.sql
 ```

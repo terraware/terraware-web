@@ -2,7 +2,7 @@
 set -e
 
 restore_dump() {
-    if docker-compose exec -T postgres psql -d terraware -U postgres < "$1"; then
+    if docker compose exec -T postgres psql -d terraware -U postgres < "$1"; then
         :
     else
         echo
@@ -13,8 +13,8 @@ restore_dump() {
 }
 
 rm -rf $HOME/docker/volumes/postgres/data
-docker-compose down --volumes
-docker-compose up -d postgres
+docker compose down --volumes
+docker compose up -d postgres
 
 # Need to wait for the PostgreSQL server to start up and for the database to be
 # initialized; it's not enough to just wait for the server to accept connections
@@ -22,7 +22,7 @@ docker-compose up -d postgres
 
 attempts_remaining=45
 while [ $attempts_remaining -gt 0 ]; do
-    if docker-compose logs postgres | grep -q "PostgreSQL init process complete"; then
+    if docker compose logs postgres | grep -q "PostgreSQL init process complete"; then
         break
     fi
 
@@ -35,7 +35,7 @@ if [ $attempts_remaining = 0 ]; then
     echo "No response from PostgreSQL."
     echo
 
-    docker-compose logs postgres
+    docker compose logs postgres
     exit 1
 fi
 
@@ -45,7 +45,7 @@ yarn docker:start
 if yarn wait-be; then
     :
 else
-    docker-compose logs terraware-server
+    docker compose logs terraware-server
     exit 1
 fi
 

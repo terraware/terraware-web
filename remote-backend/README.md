@@ -27,7 +27,7 @@ openssl req \
 3. Set `REACT_APP_TERRAWARE_API` to that URL in the `.env` file in the repo root directory.
 4. Start (or restart) the Node dev server, e.g., by running `yarn start:dev` in the repo
    root directory.
-5. In this directory, run `docker-compose up -d`.
+5. In this directory, run `docker compose up -d`.
 6. Point your browser at `https://localhost/` (HTTPS and no port number).
 7. Accept the self-signed certificate. In Chrome, you'd click the "Advanced" button on the
    warning message, then click the "Proceed" link. You should only need to do this once;
@@ -35,7 +35,7 @@ openssl req \
 
 Now you should be able to log in and use the web app.
 
-When you're done, you can run `docker-compose down` in this directory to shut down the HTTPS
+When you're done, you can run `docker compose down` in this directory to shut down the HTTPS
 proxy.
 
 You don't need to run the HTTPS proxy if you're testing with a local terraware-server instance;
