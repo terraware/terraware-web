@@ -14,6 +14,7 @@ interface TerrawareRouterProps {
 }
 
 const MINIMAL_USER_ROUTES: string[] = [
+  APP_PATHS.APPLICATIONS,
   APP_PATHS.WELCOME,
   APP_PATHS.MY_ACCOUNT,
   APP_PATHS.MY_ACCOUNT_EDIT,

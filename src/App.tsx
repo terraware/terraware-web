@@ -113,6 +113,7 @@ function AppContent() {
 
       <Box sx={mainBoxStyles}>
         <React.Suspense fallback={<BlockingSpinner />}>
+          {/* TODO: Add application console router for applciations/{id} case */}
           {isAcceleratorRoute && isAllowed('VIEW_CONSOLE') ? (
             <AcceleratorRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
           ) : (
