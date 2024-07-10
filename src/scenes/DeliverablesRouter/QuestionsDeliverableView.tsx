@@ -34,13 +34,7 @@ export type Props = EditProps & {
   isBusy?: boolean;
 };
 
-const QuestionBox = ({
-  projectId,
-  variable,
-}: {
-  projectId: number;
-  variable: VariableWithValues;
-}): JSX.Element => {
+const QuestionBox = ({ projectId, variable }: { projectId: number; variable: VariableWithValues }): JSX.Element => {
   const theme = useTheme();
   const containerRef = useRef(null);
   const visible = useIsVisible(containerRef);
