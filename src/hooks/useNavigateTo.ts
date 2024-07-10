@@ -28,12 +28,13 @@ export default function useNavigateTo() {
           ),
         }),
 
-      goToDeliverableEdit: (deliverableId: number, projectId: number) =>
+      goToDeliverableEdit: (deliverableId: number, projectId: number, variableId?: number) =>
         navigate({
           pathname: APP_PATHS.DELIVERABLE_EDIT.replace(':deliverableId', `${deliverableId}`).replace(
             ':projectId',
             `${projectId}`
           ),
+          ...(variableId ? { search: `variableId=${variableId}` } : {}),
         }),
 
       goToDocuments: () =>

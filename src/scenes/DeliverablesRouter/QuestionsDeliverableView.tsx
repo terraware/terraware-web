@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Message } from '@terraware/web-components';
@@ -14,6 +14,7 @@ import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import { useIsVisible } from 'src/hooks/useIsVisible';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
@@ -31,6 +32,48 @@ import SubmitDeliverableDialog from './SubmitDeliverableDialog';
 
 export type Props = EditProps & {
   isBusy?: boolean;
+};
+
+const QuestionBox = ({ projectId, variable }: { projectId: number; variable: VariableWithValues }): JSX.Element => {
+  const theme = useTheme();
+  const containerRef = useRef(null);
+  const visible = useIsVisible(containerRef);
+
+  const firstVariableValue: VariableValue | undefined = (variable?.variableValues || [])[0];
+
+  return (
+    <Box
+      className={visible ? 'question-visible' : undefined}
+      data-variable-id={variable.id}
+      ref={containerRef}
+      sx={{ marginBottom: theme.spacing(4) }}
+    >
+      <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
+        {/* <DeliverableStatusBadge status={variableWithValues.status} /> */}
+      </Box>
+      <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>{variable.name}</Typography>
+      {!!variable.description && (
+        <Typography
+          sx={{
+            color: theme.palette.TwClrTxtSecondary,
+            fontSize: '14px',
+            fontStyle: 'italic',
+            fontWeight: 400,
+            lineHeight: '20px',
+            marginBottom: '16px',
+          }}
+        >
+          {variable.description}
+        </Typography>
+      )}
+      {!!firstVariableValue?.feedback && (
+        <Box marginBottom={theme.spacing(2)}>
+          <Message body={firstVariableValue.feedback} priority='critical' type='page' />
+        </Box>
+      )}
+      <DeliverableDisplayVariableValue projectId={projectId} variable={variable} />
+    </Box>
+  );
 };
 
 const QuestionsDeliverableView = (props: Props): JSX.Element | null => {
@@ -92,7 +135,12 @@ const QuestionsDeliverableView = (props: Props): JSX.Element | null => {
           id='edit-deliverable'
           icon='iconEdit'
           label={isMobile ? '' : strings.EDIT}
-          onClick={() => goToDeliverableEdit(deliverableId, projectId)}
+          onClick={() => {
+            const firstVisibleQuestion = document.querySelector('.question-visible');
+            const variableId = firstVisibleQuestion?.getAttribute('data-variable-id');
+
+            goToDeliverableEdit(deliverableId, projectId, variableId ? Number(variableId) : undefined);
+          }}
           size='medium'
           priority='secondary'
         />
@@ -139,38 +187,9 @@ const QuestionsDeliverableView = (props: Props): JSX.Element | null => {
                 paddingTop: theme.spacing(3),
               }}
             >
-              {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => {
-                const firstVariableValue: VariableValue | undefined = (variableWithValues?.variableValues || [])[0];
-
-                return (
-                  <Box key={index} sx={{ marginBottom: theme.spacing(4) }}>
-                    <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
-                      {/* <DeliverableStatusBadge status={variableWithValues.status} /> */}
-                    </Box>
-                    <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>{variableWithValues.name}</Typography>
-                    {!!variableWithValues.description && (
-                      <Typography
-                        sx={{
-                          color: theme.palette.TwClrTxtSecondary,
-                          fontSize: '14px',
-                          fontStyle: 'italic',
-                          fontWeight: 400,
-                          lineHeight: '20px',
-                          marginBottom: '16px',
-                        }}
-                      >
-                        {variableWithValues.description}
-                      </Typography>
-                    )}
-                    {!!firstVariableValue?.feedback && (
-                      <Box marginBottom={theme.spacing(2)}>
-                        <Message body={firstVariableValue.feedback} priority='critical' type='page' />
-                      </Box>
-                    )}
-                    <DeliverableDisplayVariableValue projectId={projectId} variable={variableWithValues} />
-                  </Box>
-                );
-              })}
+              {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => (
+                <QuestionBox key={index} projectId={projectId} variable={variableWithValues} />
+              ))}
             </Box>
           </Card>
         </Box>

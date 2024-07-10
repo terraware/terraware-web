@@ -16,16 +16,40 @@ import { requestListDeliverableVariables } from 'src/redux/features/documentProd
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValueValue } from 'src/types/documentProducer/VariableValue';
+import useQuery from 'src/utils/useQuery';
 
 const QuestionsDeliverableEditView = (): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const { goToDeliverable } = useNavigateTo();
+  const query = useQuery();
   const { currentDeliverable: deliverable, deliverableId, projectId } = useDeliverableData();
+
+  const scrollToVariable = useCallback((variableId: string) => {
+    const element = document.querySelector(`[data-variable-id="${variableId}"]`);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+    }
+  }, []);
 
   const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
     selectDeliverableVariablesWithValues(state, deliverableId, projectId)
   );
+
+  useEffect(() => {
+    if (!variablesWithValues.length) {
+      return;
+    }
+
+    const timeoutId = setTimeout(() => {
+      const scrollToVariableId = query.get('variableId');
+      if (scrollToVariableId) {
+        scrollToVariable(scrollToVariableId);
+      }
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [variablesWithValues]);
 
   const { pendingVariableValues, setRemovedValue, setValues, update, updateSuccess } = useProjectVariablesUpdate(
     projectId,
@@ -83,7 +107,7 @@ const QuestionsDeliverableEditView = (): JSX.Element | null => {
               }}
             >
               {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => (
-                <Box key={index} sx={{ marginBottom: theme.spacing(4) }}>
+                <Box key={index} sx={{ marginBottom: theme.spacing(4) }} data-variable-id={variableWithValues.id}>
                   <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
                     {/* <DeliverableStatusBadge status={variableWithValues.status} /> */}
                   </Box>
