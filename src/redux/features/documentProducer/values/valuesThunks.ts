@@ -24,8 +24,8 @@ export const requestListDeliverableVariablesValues = createAsyncThunk(
 
 export const requestListVariablesValues = createAsyncThunk(
   'listVariablesValues',
-  async (projectId: number, { rejectWithValue }) => {
-    const response: Response2<VariableValuesListResponse> = await ValueService.getValues(projectId);
+  async ({ projectId, maxValueId }: { projectId: number; maxValueId?: number }, { rejectWithValue }) => {
+    const response: Response2<VariableValuesListResponse> = await ValueService.getValues(projectId, maxValueId);
     if (response.requestSucceeded && response.data?.values) {
       return response.data.values;
     }

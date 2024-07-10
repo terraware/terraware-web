@@ -13,6 +13,7 @@ import {
 import { VariableValue } from 'src/types/documentProducer/VariableValue';
 
 import { deliverableCompositeKeyFn } from '../../deliverables/deliverablesSlice';
+import { variableListCompositeKeyFn } from '../values/valuesSlice';
 
 export const selectVariables = (state: RootState, manifestId: number | string) =>
   state.documentProducerVariables[manifestId];
@@ -163,10 +164,10 @@ const associateValues = (
 };
 
 export const selectVariablesWithValues = createCachedSelector(
-  (state: RootState, manifestId: number | string, documentId: number) =>
+  (state: RootState, manifestId: number | string, projectId: number, maxValueId?: number) =>
     (state.documentProducerVariables as any)[manifestId],
-  (state: RootState, manifestId: number | string, documentId: number) =>
-    (state.documentProducerVariableValuesList as any)[documentId],
+  (state: RootState, manifestId: number | string, projectId: number, maxValueId?: number) =>
+    (state.documentProducerVariableValuesList as any)[variableListCompositeKeyFn({ projectId, maxValueId })],
   (variableList, valueList) => {
     if (variableList?.data && valueList?.data) {
       let topLevelSectionPosition = 0;
@@ -184,7 +185,7 @@ export const selectVariablesWithValues = createCachedSelector(
       return [];
     }
   }
-)((state: RootState, manifestId: number | string, documentId: number) => `${documentId}-${manifestId}`);
+)((state: RootState, manifestId: number | string, projectId: number) => `${projectId}-${manifestId}`);
 
 const associateDeliverableVariableValues = (
   variable: Variable,

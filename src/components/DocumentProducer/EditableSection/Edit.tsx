@@ -82,11 +82,25 @@ const SectionEdit = ({
 
   const onChange = useCallback(
     (value: Descendant[]) => {
-      setSectionValues(
-        (value[0] as SlateElement).children
-          .filter((v) => v.text === undefined || v.text !== '')
-          .map((v, index) => variableValueFromEditorValue(v, allVariables, index))
-      );
+      const newVariableValues: VariableValueValue[] = [];
+      value.forEach((v) => {
+        const children = (v as SlateElement).children;
+        if (children.length === 1 && children[0].text === '') {
+          newVariableValues.push({
+            id: -1,
+            listPosition: newVariableValues.length,
+            type: 'SectionText',
+            textValue: '\n',
+          });
+        } else {
+          children.forEach((c) => {
+            if (c.text === undefined || c.text !== '') {
+              newVariableValues.push(variableValueFromEditorValue(c, allVariables, newVariableValues.length));
+            }
+          });
+        }
+      });
+      setSectionValues(newVariableValues);
     },
     [allVariables, setSectionValues]
   );
@@ -102,8 +116,8 @@ const SectionEdit = ({
         case 'variable':
           const variable = allVariables.find((v) => v.id === props.element.variableId);
           const displayValue = variable
-            ? editorDisplayVariableWithValues(variable, ', ', '--', props.element.reference)
-            : '--';
+            ? editorDisplayVariableWithValues(variable, ', ', strings.UNSPECIFIED, props.element.reference)
+            : strings.UNSPECIFIED;
           return (
             <TextVariable
               icon='iconModule'
