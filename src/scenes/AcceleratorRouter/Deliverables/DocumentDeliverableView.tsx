@@ -32,7 +32,7 @@ const DocumentDeliverableView = (props: Props): JSX.Element => {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
 
-  const canCreateSubmission = isAllowed('CREATE_SUBMISSION', selectedOrganization);
+  const canCreateSubmission = isAllowed('CREATE_SUBMISSION', { organization: selectedOrganization });
 
   const crumbs: Crumb[] = useMemo(
     () => [

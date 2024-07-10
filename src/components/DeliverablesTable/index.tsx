@@ -110,7 +110,7 @@ const DeliverablesTable = ({
     [acceleratorProjects, deliverables]
   );
 
-  const isAllowedReadDeliverable = isAllowed('READ_DELIVERABLE', selectedOrganization);
+  const isAllowedReadDeliverable = isAllowed('READ_DELIVERABLE', { organization: selectedOrganization });
 
   const getFilterProjectName = useCallback(
     (projectId: number | string) => {
