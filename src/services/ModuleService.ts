@@ -118,7 +118,7 @@ const searchDeliverables = async (
         field: 'dueDate',
       },
     ],
-    count: 20,
+    count: 50,
   };
 
   const response: SearchResponseElement[] | null = await SearchService.search(searchParams);
