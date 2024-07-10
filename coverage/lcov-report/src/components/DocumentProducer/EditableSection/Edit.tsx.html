@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/79</span>
+                <span class='fraction'>0/85</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/48</span>
+                <span class='fraction'>0/54</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/73</span>
+                <span class='fraction'>0/79</span>
             </div>
         
             
@@ -366,7 +366,21 @@
 <a name='L301'></a><a href='#L301'>301</a>
 <a name='L302'></a><a href='#L302'>302</a>
 <a name='L303'></a><a href='#L303'>303</a>
-<a name='L304'></a><a href='#L304'>304</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L304'></a><a href='#L304'>304</a>
+<a name='L305'></a><a href='#L305'>305</a>
+<a name='L306'></a><a href='#L306'>306</a>
+<a name='L307'></a><a href='#L307'>307</a>
+<a name='L308'></a><a href='#L308'>308</a>
+<a name='L309'></a><a href='#L309'>309</a>
+<a name='L310'></a><a href='#L310'>310</a>
+<a name='L311'></a><a href='#L311'>311</a>
+<a name='L312'></a><a href='#L312'>312</a>
+<a name='L313'></a><a href='#L313'>313</a>
+<a name='L314'></a><a href='#L314'>314</a>
+<a name='L315'></a><a href='#L315'>315</a>
+<a name='L316'></a><a href='#L316'>316</a>
+<a name='L317'></a><a href='#L317'>317</a>
+<a name='L318'></a><a href='#L318'>318</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -451,10 +465,24 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -753,11 +781,25 @@ const SectionEdit = <span class="cstat-no" title="statement not covered" ><span 
 &nbsp;
   const onChange = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (v</span>alue: Descendant[]) =&gt; {
-<span class="cstat-no" title="statement not covered" >      setSectionValues(</span>
-        (value[0] as SlateElement).children
-          .filter(<span class="fstat-no" title="function not covered" >(v</span>) =&gt; <span class="cstat-no" title="statement not covered" >v.text === undefined || v.text !== '')</span>
-          .map(<span class="fstat-no" title="function not covered" >(v</span>, index) =&gt; <span class="cstat-no" title="statement not covered" >variableValueFromEditorValue(v, allVariables, index))</span>
-      );
+      const newVariableValues: VariableValueValue[] = <span class="cstat-no" title="statement not covered" >[];</span>
+<span class="cstat-no" title="statement not covered" >      value.forEach(<span class="fstat-no" title="function not covered" >(v</span>) =&gt; {</span>
+        const children = <span class="cstat-no" title="statement not covered" >(v as SlateElement).children;</span>
+<span class="cstat-no" title="statement not covered" >        if (children.length === 1 &amp;&amp; children[0].text === '') {</span>
+<span class="cstat-no" title="statement not covered" >          newVariableValues.push({</span>
+            id: -1,
+            listPosition: newVariableValues.length,
+            type: 'SectionText',
+            textValue: '\n',
+          });
+        } else {
+<span class="cstat-no" title="statement not covered" >          children.forEach(<span class="fstat-no" title="function not covered" >(c</span>) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >            if (c.text === undefined || c.text !== '') {</span>
+<span class="cstat-no" title="statement not covered" >              newVariableValues.push(variableValueFromEditorValue(c, allVariables, newVariableValues.length));</span>
+            }
+          });
+        }
+      });
+<span class="cstat-no" title="statement not covered" >      setSectionValues(newVariableValues);</span>
     },
     [allVariables, setSectionValues]
   );
@@ -773,8 +815,8 @@ const SectionEdit = <span class="cstat-no" title="statement not covered" ><span 
         case 'variable':
           const variable = <span class="cstat-no" title="statement not covered" >allVariables.find(<span class="fstat-no" title="function not covered" >(v</span>) =&gt; <span class="cstat-no" title="statement not covered" >v.id === props.element.variableId)</span>;</span>
           const displayValue = <span class="cstat-no" title="statement not covered" >variable</span>
-            ? editorDisplayVariableWithValues(variable, ', ', '--', props.element.reference)
-            : '--';
+            ? editorDisplayVariableWithValues(variable, ', ', strings.UNSPECIFIED, props.element.reference)
+            : strings.UNSPECIFIED;
 <span class="cstat-no" title="statement not covered" >          return (</span>
             &lt;TextVariable
               icon='iconModule'
@@ -979,7 +1021,7 @@ export default SectionEdit;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-10T19:26:46.594Z
+                at 2024-07-10T19:33:15.025Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
