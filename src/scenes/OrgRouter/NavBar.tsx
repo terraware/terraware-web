@@ -197,7 +197,7 @@ export default function NavBar({
 
   const modulesMenu = useMemo<JSX.Element | null>(
     () =>
-      currentParticipantProject && orgHasModules ? (
+      currentParticipantProject && orgHasModules && isManagerOrHigher(selectedOrganization) ? (
         <NavItem
           icon='iconModule'
           label={strings.MODULES}
