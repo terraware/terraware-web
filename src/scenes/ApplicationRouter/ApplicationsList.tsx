@@ -6,10 +6,13 @@ import { DateTime } from 'luxon';
 
 import ApplicationCard from 'src/components/Application/ApplicationCard';
 import PageHeader from 'src/components/PageHeader';
+import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
+import useSnackbar from 'src/utils/useSnackbar';
 
 const ApplicationListView = () => {
   const { isTablet, isMobile } = useDeviceInfo();
+  const { toastInfo } = useSnackbar();
 
   const applications = [
     {
@@ -54,7 +57,15 @@ const ApplicationListView = () => {
       }}
     >
       <Box paddingRight={'24px'} paddingLeft={isMobile ? '24px' : 0}>
-        <PageHeader title={strings.YOUR_APPLICATIONS} />
+        <PageHeader
+          title={strings.YOUR_APPLICATIONS}
+          rightComponent={
+            <Button
+              onClick={() => toastInfo('Start new application not yet implemented')}
+              label={strings.START_NEW_APPLICATION}
+            />
+          }
+        />
         <Container maxWidth={false} sx={{ padding: 0 }}>
           <Grid container spacing={3} sx={{ padding: 0 }}>
             {applications.map((application) => (
