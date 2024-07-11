@@ -21,6 +21,7 @@ const DocumentsAddView = (): JSX.Element => {
   const [documentTemplateId, setDocumentTemplateId] = useState('');
   const [documentName, setDocumentName] = useState('');
   const [documentOwner, setDocumentOwner] = useState('');
+  const [projectId, setProjectId] = useState('');
 
   const [formValid, setFormValid] = useState<boolean>();
 
@@ -31,8 +32,7 @@ const DocumentsAddView = (): JSX.Element => {
       documentTemplateId: parseInt(documentTemplateId, 10),
       name: documentName,
       ownedBy: parseInt(documentOwner, 10),
-      // TODO - documents are related to projects now, so this will need to be plumbed up
-      projectId: -1,
+      projectId: parseInt(projectId, 10),
     };
     const request = dispatch(requestCreateDocument(doc));
     setRequestId(request.requestId);
@@ -70,6 +70,8 @@ const DocumentsAddView = (): JSX.Element => {
             setDocumentOwner={(value: string) => setDocumentOwner(value)}
             documentTemplateId={documentTemplateId}
             setDocumentTemplateId={(value: string) => setDocumentTemplateId(value)}
+            projectId={projectId}
+            setProjectId={(value: string) => setProjectId(value)}
             formValid={formValid}
           />
         </PageContent>

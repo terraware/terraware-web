@@ -11,6 +11,7 @@ type ParticipantsDropdownProps<T extends { id?: number } | undefined> = {
   availableParticipants: ParticipantSearchResult[] | undefined;
   label?: string | undefined;
   record: T;
+  required?: boolean;
   setRecord: (setFn: (previousValue: T) => T) => void;
 };
 
@@ -19,6 +20,7 @@ function ParticipantsDropdown<T extends { id?: number } | undefined>({
   availableParticipants,
   label,
   record,
+  required,
   setRecord,
 }: ParticipantsDropdownProps<T>) {
   const { activeLocale } = useLocalization();
@@ -72,6 +74,7 @@ function ParticipantsDropdown<T extends { id?: number } | undefined>({
         });
       }}
       fullWidth
+      required={required}
     />
   );
 }
