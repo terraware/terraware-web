@@ -48,6 +48,7 @@ export default function NoOrgApplicationLandingPage({ redirectTo }: Prop): JSX.E
       >
         <PageSnackbar />
         <AddNewOrganizationModal
+          isApplication
           open={isOrgModalOpen}
           onCancel={() => setIsOrgModalOpen(false)}
           redirectOnComplete={redirectTo}
