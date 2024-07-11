@@ -29,7 +29,7 @@ const DeliverableVariableDetailsInput = ({
 }: DeliverableVariableDetailsInputProps): JSX.Element => {
   const [value, setValue] = useState<string | number>();
   const [title, setTitle] = useState<string>();
-  const [valuesList, setValuesList] = useState<string[]>();
+  const [textValuesList, setTextValuesList] = useState<string[]>();
   const theme = useTheme();
 
   const formElementStyles = { margin: theme.spacing(1, 0) };
@@ -43,9 +43,9 @@ const DeliverableVariableDetailsInput = ({
         }
         return acc;
       }, []);
-      setValuesList(allTextValues);
+      setTextValuesList(allTextValues);
     } else {
-      setValuesList(['']);
+      setTextValuesList(['']);
     }
   }, [values]);
 
@@ -178,7 +178,7 @@ const DeliverableVariableDetailsInput = ({
   };
 
   const addInput = () => {
-    setValuesList((prev) => {
+    setTextValuesList((prev) => {
       if (prev) {
         return [...prev, ''];
       }
@@ -187,7 +187,7 @@ const DeliverableVariableDetailsInput = ({
   };
 
   const onDeleteInput = (index: number) => {
-    setValuesList((prev) => {
+    setTextValuesList((prev) => {
       if (prev) {
         const removed = values ? values[index] : undefined;
         // if removed value exists in backend, add it to be deleted when saving
@@ -247,7 +247,7 @@ const DeliverableVariableDetailsInput = ({
 
       {variable.type === 'Text' && (
         <>
-          {valuesList?.map((iValue, index) => (
+          {textValuesList?.map((iValue, index) => (
             <Box key={index} mb={2} display='flex' alignItems='center' sx={{ position: 'relative' }}>
               <Textfield
                 key={`input-${index}`}
