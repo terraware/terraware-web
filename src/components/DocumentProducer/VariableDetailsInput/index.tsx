@@ -39,7 +39,7 @@ const VariableDetailsInput = ({
   const [value, setValue] = useState<string | number>();
   const [citation, setCitation] = useState<string>();
   const [title, setTitle] = useState<string>();
-  const [valuesList, setValuesList] = useState<string[]>();
+  const [textValuesList, setTextValuesList] = useState<string[]>();
   const theme = useTheme();
 
   const formElementStyles = { margin: theme.spacing(1, 0) };
@@ -55,9 +55,9 @@ const VariableDetailsInput = ({
         }
         return acc;
       }, []);
-      setValuesList(allTextValues);
+      setTextValuesList(allTextValues);
     } else {
-      setValuesList(['']);
+      setTextValuesList(['']);
     }
   }, [values]);
 
@@ -240,7 +240,7 @@ const VariableDetailsInput = ({
   };
 
   const addInput = () => {
-    setValuesList((prev) => {
+    setTextValuesList((prev) => {
       if (prev) {
         return [...prev, ''];
       }
@@ -249,7 +249,7 @@ const VariableDetailsInput = ({
   };
 
   const onDeleteInput = (index: number) => {
-    setValuesList((prev) => {
+    setTextValuesList((prev) => {
       if (prev) {
         const removed = values ? values[index] : undefined;
         // if removed value exists in backend, add it to be deleted when saving
@@ -297,7 +297,7 @@ const VariableDetailsInput = ({
       )}
       {variable?.type === 'Text' && (
         <>
-          {valuesList?.map((iValue, index) => (
+          {textValuesList?.map((iValue, index) => (
             <Box key={index} mb={2} display='flex' alignItems='center' sx={{ position: 'relative' }}>
               <Textfield
                 key={`input-${index}`}
