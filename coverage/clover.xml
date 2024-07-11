@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1720704083878" clover="3.2.0">
-  <project timestamp="1720704083878" name="All files">
+<coverage generated="1720709950196" clover="3.2.0">
+  <project timestamp="1720709950196" name="All files">
     <metrics statements="22303" coveredstatements="956" conditionals="14328" coveredconditionals="239" methods="6881" coveredmethods="163" elements="43512" coveredelements="1358" complexity="0" loc="22303" ncloc="22303" packages="208" files="995" classes="995"/>
     <package name="src">
       <metrics statements="170" coveredstatements="0" conditionals="126" coveredconditionals="0" methods="38" coveredmethods="0"/>
@@ -15070,8 +15070,8 @@
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/DeliverablesRouter/index.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="12" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
-        <line num="14" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.HelpSupportRouter">
