@@ -76,7 +76,7 @@ export default function ApplicationCard({
         style={{
           fontSize: '14px',
           lineHeight: '20px',
-          marginTop: '14px',
+          marginTop: '24px',
           maxWidth: 'fit-content',
         }}
       />
