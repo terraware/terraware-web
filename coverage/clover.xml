@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1720722163385" clover="3.2.0">
-  <project timestamp="1720722163385" name="All files">
-    <metrics statements="22348" coveredstatements="956" conditionals="14355" coveredconditionals="239" methods="6891" coveredmethods="163" elements="43594" coveredelements="1358" complexity="0" loc="22348" ncloc="22348" packages="210" files="1000" classes="1000"/>
+<coverage generated="1720725089494" clover="3.2.0">
+  <project timestamp="1720725089494" name="All files">
+    <metrics statements="22350" coveredstatements="956" conditionals="14357" coveredconditionals="239" methods="6891" coveredmethods="163" elements="43598" coveredelements="1358" complexity="0" loc="22350" ncloc="22350" packages="210" files="1000" classes="1000"/>
     <package name="src">
       <metrics statements="171" coveredstatements="0" conditionals="128" coveredconditionals="0" methods="38" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -1317,7 +1317,7 @@
       </file>
     </package>
     <package name="src.components.DeliverableView">
-      <metrics statements="167" coveredstatements="0" conditionals="96" coveredconditionals="0" methods="47" coveredmethods="0"/>
+      <metrics statements="169" coveredstatements="0" conditionals="98" coveredconditionals="0" methods="47" coveredmethods="0"/>
       <file name="DeliverableStatusBadge.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/DeliverableStatusBadge.tsx">
         <metrics statements="17" coveredstatements="0" conditionals="13" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="16" count="0" type="stmt"/>
@@ -1498,7 +1498,7 @@
         <line num="72" count="0" type="stmt"/>
       </file>
       <file name="useUpdateDeliverable.ts" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverableView/useUpdateDeliverable.ts">
-        <metrics statements="24" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <metrics statements="26" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="25" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
@@ -1520,9 +1520,11 @@
         <line num="52" count="0" type="stmt"/>
         <line num="53" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="54" count="0" type="stmt"/>
+        <line num="55" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="56" count="0" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
-        <line num="62" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.DeliverablesTable">
