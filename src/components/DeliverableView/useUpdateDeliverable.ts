@@ -52,6 +52,8 @@ export default function useUpdateDeliverable(): Response {
         snackbar.toastSuccess(strings.DELIVERABLE_APPROVED);
       } else if (lastRequest.status === 'Rejected') {
         snackbar.toastWarning(strings.DELIVERABLE_REJECTED);
+      } else if (lastRequest.status === 'In Review') {
+        snackbar.toastSuccess(strings.DELIVERABLE_SUBMITTED_FOR_APPROVAL);
       } else {
         snackbar.toastInfo(strings.DELIVERABLE_STATUS_UPDATED);
       }
