@@ -1,19 +1,16 @@
 import React from 'react';
 
-import { Grid, useTheme } from '@mui/material';
-import { Separator } from '@terraware/web-components';
+import { useTheme } from '@mui/material';
 
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
-import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useApplicationPortal from 'src/hooks/useApplicationPortal';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 
-export default function AcceleratorBreadcrumbs(): JSX.Element | null {
+export default function ApplicationBreadcrumbs(): JSX.Element | null {
   const theme = useTheme();
   const { isApplicationPortal } = useApplicationPortal();
-  const { isAcceleratorRoute, isAllowedViewConsole } = useAcceleratorConsole();
   const { activeLocale } = useLocalization();
 
   if (!activeLocale) {
@@ -21,10 +18,6 @@ export default function AcceleratorBreadcrumbs(): JSX.Element | null {
   }
 
   if (isApplicationPortal) {
-    return null;
-  }
-
-  if (isAcceleratorRoute) {
     return (
       <div>
         <Link fontSize={16} to={APP_PATHS.HOME}>
@@ -42,7 +35,7 @@ export default function AcceleratorBreadcrumbs(): JSX.Element | null {
         </span>
         <span
           style={{
-            backgroundColor: theme.palette.TwClrBgAccent,
+            backgroundColor: theme.palette.TwClrBaseBlue500,
             borderRadius: '16px',
             color: theme.palette.TwClrBaseWhite,
             fontFamily: 'Inter',
@@ -52,35 +45,8 @@ export default function AcceleratorBreadcrumbs(): JSX.Element | null {
             userSelect: 'none',
           }}
         >
-          {strings.ACCELERATOR_CONSOLE}
+          {strings.APPLICATION}
         </span>
-      </div>
-    );
-  }
-
-  if (!isAcceleratorRoute && isAllowedViewConsole) {
-    return (
-      <div>
-        <Grid container>
-          <Grid item>
-            <Link
-              fontSize={16}
-              lineHeight='32px'
-              to={APP_PATHS.ACCELERATOR}
-              style={{
-                height: '32px',
-                lineHeight: '32px',
-                marginLeft: theme.spacing(1),
-                marginRight: theme.spacing(1),
-              }}
-            >
-              {strings.ACCELERATOR_CONSOLE}
-            </Link>
-          </Grid>
-          <Grid item>
-            <Separator />
-          </Grid>
-        </Grid>
       </div>
     );
   }

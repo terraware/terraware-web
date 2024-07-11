@@ -9,6 +9,7 @@ import AcceleratorBreadcrumbs from 'src/components/TopBar/AcceleratorBreadcrumbs
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import useApplicationPortal from 'src/hooks/useApplicationPortal';
 import { useOrganization, useUser } from 'src/providers/hooks';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -17,6 +18,7 @@ import OrganizationsDropdown from '../OrganizationsDropdown';
 import SmallDeviceUserMenu from '../SmallDeviceUserMenu';
 import UserMenu from '../UserMenu';
 import Icon from '../common/icon/Icon';
+import ApplicationBreadcrumbs from './ApplicationBreadcrumbs';
 
 type TopBarProps = {
   setShowNavBar: React.Dispatch<React.SetStateAction<boolean>>;
@@ -30,6 +32,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   const { isDesktop } = useDeviceInfo();
   const { user } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const { isApplicationPortal } = useApplicationPortal();
   const mixpanel = useMixpanel();
 
   const logoStyles = {
@@ -79,7 +82,8 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
           <>
             <div style={separatorStyles} />
             {user && <AcceleratorBreadcrumbs />}
-            {!isAcceleratorRoute && <OrganizationsDropdown />}
+            {user && <ApplicationBreadcrumbs />}
+            {!isAcceleratorRoute && !isApplicationPortal && <OrganizationsDropdown />}
           </>
         )}
       </Box>
