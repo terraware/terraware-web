@@ -5,7 +5,6 @@ import DeliverableProvider from 'src/providers/Deliverable/DeliverableProvider';
 import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
 import ProjectProvider from 'src/providers/Project/ProjectProvider';
 
-import ParticipantProjectProvider from '../AcceleratorRouter/ParticipantProjects/ParticipantProjectProvider';
 import DeliverableViewWrapper from './DeliverableViewWrapper';
 import DeliverablesList from './DeliverablesList';
 import QuestionsDeliverableEdit from './QuestionsDeliverableEditView';
@@ -18,11 +17,9 @@ const DeliverablesRouter = (): JSX.Element => {
         element={
           <ProjectProvider>
             <ParticipantProvider>
-              <ParticipantProjectProvider>
-                <DeliverableProvider>
-                  <DeliverableViewWrapper />
-                </DeliverableProvider>
-              </ParticipantProjectProvider>
+              <DeliverableProvider>
+                <DeliverableViewWrapper />
+              </DeliverableProvider>
             </ParticipantProvider>
           </ProjectProvider>
         }
@@ -33,11 +30,9 @@ const DeliverablesRouter = (): JSX.Element => {
         element={
           <ProjectProvider>
             <ParticipantProvider>
-              <ParticipantProjectProvider>
-                <DeliverableProvider>
-                  <QuestionsDeliverableEdit />
-                </DeliverableProvider>
-              </ParticipantProjectProvider>
+              <DeliverableProvider>
+                <QuestionsDeliverableEdit />
+              </DeliverableProvider>
             </ParticipantProvider>
           </ProjectProvider>
         }
