@@ -10,8 +10,8 @@ export default function useNavigateTo() {
 
   return useMemo(
     () => ({
-      goToHelpSupport: () => {
-        navigate({ pathname: APP_PATHS.HELP_SUPPORT });
+      goToApplication: (applicationId: number) => {
+        navigate({ pathname: APP_PATHS.APPLICATION.replace(':applicationId', `${applicationId}`) });
       },
 
       goToContactUsForm: (requestType: SupportRequestType) => {
@@ -46,6 +46,10 @@ export default function useNavigateTo() {
         navigate({
           pathname: APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_NEW,
         }),
+
+      goToHelpSupport: () => {
+        navigate({ pathname: APP_PATHS.HELP_SUPPORT });
+      },
 
       goToHome: () =>
         navigate({
