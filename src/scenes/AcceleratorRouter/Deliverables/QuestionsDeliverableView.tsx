@@ -32,6 +32,7 @@ import strings from 'src/strings';
 import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import ApprovedDeliverableMessage from './ApprovedDeliverableMessage';
 import RejectDialog from './RejectDialog';
@@ -70,8 +71,13 @@ const QuestionBox = ({
   const [editing, setEditing] = useState(false);
   const [displayActions, setDisplyActions] = useState(false);
   const [showEditFeedbackModal, setShowEditFeedbackModal] = useState(false);
+  const snackbar = useSnackbar();
 
   const [requestId, setRequestId] = useState('');
+  const [approvedRequestId, setApprovedRequestId] = useState('');
+  const [rejectedRequestId, setRejectedRequestId] = useState('');
+  const approveWorkflowDetailsResponse = useAppSelector(selectUpdateVariableWorkflowDetails(approvedRequestId));
+  const rejectWorkflowDetailsResponse = useAppSelector(selectUpdateVariableWorkflowDetails(rejectedRequestId));
   const updateWorkflowDetailsResponse = useAppSelector(selectUpdateVariableWorkflowDetails(requestId));
 
   const firstVariableValue: VariableValue | undefined = (variable?.variableValues || [])[0];
@@ -86,6 +92,20 @@ const QuestionBox = ({
   }, [updateVariableValueSuccess]);
 
   useEffect(() => {
+    if (approveWorkflowDetailsResponse) {
+      reload();
+      snackbar.toastSuccess(strings.ANSWER_APPROVED);
+    }
+  }, [approveWorkflowDetailsResponse]);
+
+  useEffect(() => {
+    if (rejectWorkflowDetailsResponse) {
+      reload();
+      snackbar.toastSuccess(strings.ANSWER_REJECTED);
+    }
+  }, [rejectWorkflowDetailsResponse]);
+
+  useEffect(() => {
     if (updateWorkflowDetailsResponse?.status === 'success') {
       reload();
     }
@@ -95,7 +115,17 @@ const QuestionBox = ({
     const request = dispatch(
       requestUpdateVariableWorkflowDetails({ status, feedback, internalComment, projectId, variableId: variable.id })
     );
-    setRequestId(request.requestId);
+    if (!internalComment) {
+      if (status === 'Approved') {
+        setApprovedRequestId(request.requestId);
+      } else if (status === 'Rejected') {
+        setRejectedRequestId(request.requestId);
+      } else {
+        setRequestId(request.requestId);
+      }
+    } else {
+      setRequestId(request.requestId);
+    }
   };
 
   const rejectItem = (feedback: string) => {
