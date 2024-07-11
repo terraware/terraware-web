@@ -35,7 +35,7 @@ const DeliverableVariableDetailsInput = ({
   const formElementStyles = { margin: theme.spacing(1, 0) };
 
   useEffect(() => {
-    if (values) {
+    if (values?.length) {
       const allTextValues = values.reduce((acc: string[], current: VariableValueValue) => {
         if (current.type === 'Text') {
           const currentTextValue = current;
