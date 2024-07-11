@@ -8,6 +8,48 @@
 type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 
 export interface paths {
+  "/api/v1/accelerator/applications": {
+    /**
+     * List all the applications with optional search criteria
+     * @description Only applications visible to the current user are returned.
+     */
+    get: operations["listApplications"];
+    /** Create a new application */
+    post: operations["createApplication"];
+  };
+  "/api/v1/accelerator/applications/{applicationId}": {
+    /** Get information about an application */
+    get: operations["getApplication"];
+    /**
+     * Update an application's metadata
+     * @description This is an internal-user-only operation.
+     */
+    post: operations["updateApplication"];
+  };
+  "/api/v1/accelerator/applications/{applicationId}/boundary": {
+    /** Update an application's boundary */
+    put: operations["updateApplicationBoundary"];
+    /** Update an application's boundary using an uploaded file */
+    post: operations["uploadApplicationBoundary"];
+  };
+  "/api/v1/accelerator/applications/{applicationId}/history": {
+    /** Get the history of changes to the metadata of an application */
+    get: operations["getApplicationHistory"];
+  };
+  "/api/v1/accelerator/applications/{applicationId}/restart": {
+    /**
+     * Restart a previously-submitted application
+     * @description If the application has not been submitted yet, this is a no-op.
+     */
+    post: operations["restartApplication"];
+  };
+  "/api/v1/accelerator/applications/{applicationId}/submit": {
+    /**
+     * Submit an application for review
+     * @description If the application has already been submitted, this is a no-op.
+     */
+    post: operations["submitApplication"];
+  };
   "/api/v1/accelerator/cohorts": {
     /** Gets the list of cohorts. */
     get: operations["listCohorts"];
@@ -1136,10 +1178,10 @@ export interface components {
     /** @description Search criterion that matches results that meet all of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x AND y AND z. */
     AndNodePayload: WithRequired<{
       operation: "and";
-    } & Omit<components["schemas"]["SearchNodePayload"], "operation"> & {
+    } & Omit<components["schemas"]["SearchNodePayload"], "operation"> & ({
       /** @description List of criteria all of which must be satisfied */
-      children?: components["schemas"]["SearchNodePayload"][];
-    }, "children">;
+      children?: (components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"])[];
+    }), "children">;
     AnnualDetailsPayloadV1: {
       bestMonthsForObservation: number[];
       budgetNarrativeSummary?: string;
@@ -1166,16 +1208,45 @@ export interface components {
      */
     AppendValueOperationPayload: WithRequired<{
       operation: "Append";
-    } & Omit<components["schemas"]["ValueOperationPayload"], "operation"> & {
+    } & Omit<components["schemas"]["ValueOperationPayload"], "operation"> & ({
       /**
        * Format: int64
        * @description If the variable is a table column and the new value should be appended to an existing row, the existing row's value ID.
        */
       rowValueId?: number;
-      value?: components["schemas"]["NewValuePayload"];
+      value?: components["schemas"]["NewDateValuePayload"] | components["schemas"]["NewImageValuePayload"] | components["schemas"]["NewLinkValuePayload"] | components["schemas"]["NewNumberValuePayload"] | components["schemas"]["NewSectionTextValuePayload"] | components["schemas"]["NewSectionVariableValuePayload"] | components["schemas"]["NewSelectValuePayload"] | components["schemas"]["NewTableValuePayload"] | components["schemas"]["NewTextValuePayload"];
       /** Format: int64 */
       variableId?: number;
-    }, "value" | "variableId">;
+    }), "value" | "variableId">;
+    ApplicationHistoryPayload: {
+      feedback?: string;
+      /** @description Internal-only comment, if any. Only set if the current user is an internal user. */
+      internalComment?: string;
+      /** Format: date-time */
+      modifiedTime: string;
+      /** @enum {string} */
+      status: "Not Submitted" | "Failed Pre-screen" | "Passed Pre-screen" | "Submitted" | "PL Review" | "Ready for Review" | "Pre-check" | "Needs Follow-up" | "Carbon Eligible" | "Accepted" | "Waitlist" | "Not Accepted";
+    };
+    ApplicationPayload: {
+      boundary?: components["schemas"]["Geometry"];
+      /** Format: date-time */
+      createdTime: string;
+      feedback?: string;
+      /** Format: int64 */
+      id: number;
+      /** @description Internal-only comment, if any. Only set if the current user is an internal user. */
+      internalComment?: string;
+      /** @description Internal-only reference name of application. Only set if the current user is an internal user. */
+      internalName?: string;
+      /** Format: int64 */
+      organizationId: number;
+      /** Format: int64 */
+      plantingSiteId: number;
+      /** Format: int64 */
+      projectId: number;
+      /** @enum {string} */
+      status: "Not Submitted" | "Failed Pre-screen" | "Passed Pre-screen" | "Submitted" | "PL Review" | "Ready for Review" | "Pre-check" | "Needs Follow-up" | "Carbon Eligible" | "Accepted" | "Waitlist" | "Not Accepted";
+    };
     AssignParticipantProjectSpeciesPayload: {
       projectIds: number[];
       speciesIds: number[];
@@ -1523,6 +1594,18 @@ export interface components {
     };
     CreateAccessionResponsePayloadV2: {
       accession: components["schemas"]["AccessionPayloadV2"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    CreateApplicationRequestPayload: {
+      boundary?: components["schemas"]["Geometry"];
+      /** Format: int64 */
+      plantingSiteId: number;
+      /** Format: int64 */
+      projectId: number;
+    };
+    CreateApplicationResponsePayload: {
+      /** Format: int64 */
+      id: number;
       status: components["schemas"]["SuccessOrError"];
     };
     CreateAutomationRequestPayload: {
@@ -2012,7 +2095,7 @@ export interface components {
       projectId: number;
       projectName: string;
       /** @enum {string} */
-      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
+      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
       /** Format: uri */
       templateUrl?: string;
       /** @enum {string} */
@@ -2365,11 +2448,11 @@ export interface components {
     };
     GeometryCollection: WithRequired<{
       type: "GeometryCollection";
-    } & Omit<components["schemas"]["Geometry"], "type"> & {
-      geometries?: components["schemas"]["Geometry"][];
+    } & Omit<components["schemas"]["Geometry"], "type"> & ({
+      geometries?: (components["schemas"]["GeometryCollection"] | components["schemas"]["LineString"] | components["schemas"]["MultiLineString"] | components["schemas"]["MultiPoint"] | components["schemas"]["MultiPolygon"] | components["schemas"]["Point"] | components["schemas"]["Polygon"])[];
       /** @enum {string} */
       type?: "GeometryCollection";
-    }, "geometries" | "type">;
+    }), "geometries" | "type">;
     GetAccessionHistoryResponsePayload: {
       /** @description History of changes in descending time order (newest first.) */
       history: components["schemas"]["AccessionHistoryEntryPayload"][];
@@ -2377,6 +2460,14 @@ export interface components {
     };
     GetAccessionResponsePayloadV2: {
       accession: components["schemas"]["AccessionPayloadV2"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetApplicationHistoryResponsePayload: {
+      /** @description History of metadata changes in reverse chronological order. */
+      history: components["schemas"]["ApplicationHistoryPayload"][];
+    };
+    GetApplicationResponsePayload: {
+      application: components["schemas"]["ApplicationPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
     GetAutomationResponsePayload: {
@@ -2807,6 +2898,10 @@ export interface components {
       organizations: components["schemas"]["AcceleratorOrganizationPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    ListApplicationsResponsePayload: {
+      applications: components["schemas"]["ApplicationPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     ListAssignedPlotsResponsePayload: {
       plots: components["schemas"]["AssignedPlotPayload"][];
       status: components["schemas"]["SuccessOrError"];
@@ -2848,7 +2943,7 @@ export interface components {
       projectId: number;
       projectName: string;
       /** @enum {string} */
-      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
+      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
       /** @enum {string} */
       type: "Document" | "Species" | "Questions";
     };
@@ -3146,7 +3241,9 @@ export interface components {
       operation: "not";
     } & Omit<components["schemas"]["SearchNodePayload"], "operation"> & {
       child?: components["schemas"]["SearchNodePayload"];
-    }, "child">;
+    } & ({
+      child?: components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"];
+    }), "child">;
     NotificationCountPayload: {
       /** Format: int64 */
       organizationId?: number;
@@ -3525,7 +3622,7 @@ export interface components {
       /** @enum {string} */
       participantProjectSpeciesNativeCategory?: "Native" | "Non-native";
       /** @enum {string} */
-      participantProjectSpeciesSubmissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
+      participantProjectSpeciesSubmissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
       /** Format: int64 */
       projectId: number;
       projectName: string;
@@ -3553,7 +3650,7 @@ export interface components {
       /** @enum {string} */
       speciesNativeCategory?: "Native" | "Non-native";
       /** @enum {string} */
-      submissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
+      submissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
     };
     PhaseScores: {
       /** @enum {string} */
@@ -3929,16 +4026,16 @@ export interface components {
      */
     ReplaceValuesOperationPayload: WithRequired<{
       operation: "Replace";
-    } & Omit<components["schemas"]["ValueOperationPayload"], "operation"> & {
+    } & Omit<components["schemas"]["ValueOperationPayload"], "operation"> & ({
       /**
        * Format: int64
        * @description If the variable is a table column, the value ID of the row whose values should be replaced.
        */
       rowValueId?: number;
-      values?: components["schemas"]["NewValuePayload"][];
+      values?: (components["schemas"]["NewDateValuePayload"] | components["schemas"]["NewImageValuePayload"] | components["schemas"]["NewLinkValuePayload"] | components["schemas"]["NewNumberValuePayload"] | components["schemas"]["NewSectionTextValuePayload"] | components["schemas"]["NewSectionVariableValuePayload"] | components["schemas"]["NewSelectValuePayload"] | components["schemas"]["NewTableValuePayload"] | components["schemas"]["NewTextValuePayload"])[];
       /** Format: int64 */
       variableId?: number;
-    }, "values" | "variableId">;
+    }), "values" | "variableId">;
     RescheduleObservationRequestPayload: {
       /**
        * Format: date
@@ -4453,6 +4550,15 @@ export interface components {
       accession: components["schemas"]["AccessionPayloadV2"];
       status: components["schemas"]["SuccessOrError"];
     };
+    UpdateApplicationBoundaryRequestPayload: {
+      boundary: components["schemas"]["Geometry"];
+    };
+    UpdateApplicationRequestPayload: {
+      feedback?: string;
+      internalComment?: string;
+      /** @enum {string} */
+      status: "Not Submitted" | "Failed Pre-screen" | "Passed Pre-screen" | "Submitted" | "PL Review" | "Ready for Review" | "Pre-check" | "Needs Follow-up" | "Carbon Eligible" | "Accepted" | "Waitlist" | "Not Accepted";
+    };
     UpdateAutomationRequestPayload: {
       description?: string;
       /** Format: int64 */
@@ -4652,7 +4758,7 @@ export interface components {
       /** @enum {string} */
       speciesNativeCategory?: "Native" | "Non-native";
       /** @enum {string} */
-      submissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
+      submissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
     };
     UpdateParticipantRequestPayload: {
       /**
@@ -4741,7 +4847,7 @@ export interface components {
       feedback?: string;
       internalComment?: string;
       /** @enum {string} */
-      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
+      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
     };
     UpdateUserCookieConsentRequestPayload: {
       /** @description If true, the user consents to the use of analytics cookies. If false, they decline. */
@@ -4791,11 +4897,11 @@ export interface components {
      */
     UpdateValueOperationPayload: WithRequired<{
       operation: "Update";
-    } & Omit<components["schemas"]["ValueOperationPayload"], "operation"> & {
-      value?: components["schemas"]["NewValuePayload"];
+    } & Omit<components["schemas"]["ValueOperationPayload"], "operation"> & ({
+      value?: components["schemas"]["NewDateValuePayload"] | components["schemas"]["NewImageValuePayload"] | components["schemas"]["NewLinkValuePayload"] | components["schemas"]["NewNumberValuePayload"] | components["schemas"]["NewSectionTextValuePayload"] | components["schemas"]["NewSectionVariableValuePayload"] | components["schemas"]["NewSelectValuePayload"] | components["schemas"]["NewTableValuePayload"] | components["schemas"]["NewTextValuePayload"];
       /** Format: int64 */
       valueId?: number;
-    }, "existingValueId" | "value" | "valueId">;
+    }), "existingValueId" | "value" | "valueId">;
     UpdateVariableOwnerRequestPayload: {
       /**
        * Format: int64
@@ -5021,6 +5127,10 @@ export interface components {
       variableId: number;
     };
     VariablePayload: {
+      /** @enum {string} */
+      dependencyCondition?: "eq" | "gt" | "gte" | "lt" | "lte" | "neq";
+      dependencyValue?: string;
+      dependencyVariableStableId?: string;
       description?: string;
       /** Format: int64 */
       id: number;
@@ -5082,6 +5192,183 @@ export type external = Record<string, never>;
 
 export interface operations {
 
+  /**
+   * List all the applications with optional search criteria
+   * @description Only applications visible to the current user are returned.
+   */
+  listApplications: {
+    parameters: {
+      query?: {
+        /** @description If present, only list applications for this organization. */
+        organizationId?: number;
+        /** @description If present, only list applications for this project. A project can only have one application, so this will either return an empty result or a result with a single element. */
+        projectId?: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListApplicationsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Create a new application */
+  createApplication: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateApplicationRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateApplicationResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Get information about an application */
+  getApplication: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetApplicationResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Update an application's metadata
+   * @description This is an internal-user-only operation.
+   */
+  updateApplication: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateApplicationRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Update an application's boundary */
+  updateApplicationBoundary: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateApplicationBoundaryRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Update an application's boundary using an uploaded file */
+  uploadApplicationBoundary: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    requestBody?: {
+      content: {
+        "multipart/form-data": {
+          /** Format: binary */
+          file: string;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Get the history of changes to the metadata of an application */
+  getApplicationHistory: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetApplicationHistoryResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Restart a previously-submitted application
+   * @description If the application has not been submitted yet, this is a no-op.
+   */
+  restartApplication: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Submit an application for review
+   * @description If the application has already been submitted, this is a no-op.
+   */
+  submitApplication: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
   /** Gets the list of cohorts. */
   listCohorts: {
     parameters: {
