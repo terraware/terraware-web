@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
+import NoOrgApplicationLandingPage from 'src/components/emptyStatePages/NoOrgApplicationLandingPage';
 import NoOrgLandingPage from 'src/components/emptyStatePages/NoOrgLandingPage';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
@@ -21,7 +22,7 @@ const NoOrgRouter = () => {
       {applicationEnabled && (
         <Route
           path={`${APP_PATHS.APPLICATIONS}/*`}
-          element={<NoOrgLandingPage redirectTo={APP_PATHS.APPLICATIONS} />}
+          element={<NoOrgApplicationLandingPage redirectTo={APP_PATHS.APPLICATIONS} />}
         />
       )}
       {!isProduction && <Route path={APP_PATHS.OPT_IN} element={<OptInFeaturesView refresh={reloadPreferences} />} />}
