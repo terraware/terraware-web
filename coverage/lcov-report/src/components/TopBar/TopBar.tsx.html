@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
@@ -116,7 +116,21 @@
 <a name='L51'></a><a href='#L51'>51</a>
 <a name='L52'></a><a href='#L52'>52</a>
 <a name='L53'></a><a href='#L53'>53</a>
-<a name='L54'></a><a href='#L54'>54</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -132,6 +146,18 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -169,11 +195,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback } from 'react';
 &nbsp;
 import { AppBar, Box, Toolbar, useTheme } from '@mui/material';
 &nbsp;
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import useApplicationPortal from 'src/hooks/useApplicationPortal';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 &nbsp;
 type TopBarProps = {
@@ -184,7 +211,19 @@ type TopBarProps = {
 export default function <span class="fstat-no" title="function not covered" >TopBar(</span>props: TopBarProps): JSX.Element {
   const { isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const { isAcceleratorRoute } = <span class="cstat-no" title="statement not covered" >useAcceleratorConsole();</span>
+  const { isApplicationPortal } = <span class="cstat-no" title="statement not covered" >useApplicationPortal();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
+&nbsp;
+  const borderTop = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (isAcceleratorRoute) {</span>
+<span class="cstat-no" title="statement not covered" >      return `8px solid ${theme.palette.TwClrBgAccent}`;</span>
+    } else <span class="cstat-no" title="statement not covered" >if (isApplicationPortal) {</span>
+      // TODO set color once design is finalized
+<span class="cstat-no" title="statement not covered" >      return `8px solid ${theme.palette.TwClrBaseBlue500}`;</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      return undefined;</span>
+    }
+  }, [isAcceleratorRoute, isApplicationPortal]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;AppBar
@@ -199,11 +238,11 @@ export default function <span class="fstat-no" title="function not covered" >Top
       &lt;Toolbar
         disableGutters={true}
         sx={{
-          borderTop: isAcceleratorRoute ? `8px solid ${theme.palette.TwClrBgAccent}` : undefined,
+          borderTop: borderTop(),
           paddingBottom: '24px',
           paddingLeft: '32px',
           paddingRight: '32px',
-          paddingTop: isAcceleratorRoute ? '16px' : '24px',
+          paddingTop: isAcceleratorRoute || isApplicationPortal ? '16px' : '24px',
           ...(isDesktop ? {} : { minHeight: '64px' }),
         }}
       &gt;
@@ -229,7 +268,7 @@ export default function <span class="fstat-no" title="function not covered" >Top
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-11T14:59:09.495Z
+                at 2024-07-11T18:22:42.687Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
