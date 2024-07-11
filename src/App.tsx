@@ -18,6 +18,9 @@ import { store } from 'src/redux/store';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+import useApplicationPortal from './hooks/useApplicationPortal';
+import ApplicationPortalRouter from './scenes/ApplicationRouter/portal';
+
 const AcceleratorRouter = React.lazy(() => import('src/scenes/AcceleratorRouter'));
 const TerrawareRouter = React.lazy(() => import('src/scenes/TerrawareRouter'));
 
@@ -35,6 +38,7 @@ function AppContent() {
   const { isDesktop, type } = useDeviceInfo();
   const { user, isAllowed } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
+  const { isApplicationPortal } = useApplicationPortal();
   const theme = useTheme();
   const mixpanel = useMixpanel();
 
@@ -116,6 +120,8 @@ function AppContent() {
           {/* TODO: Add application console router for applciations/{id} case */}
           {isAcceleratorRoute && isAllowed('VIEW_CONSOLE') ? (
             <AcceleratorRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
+          ) : isApplicationPortal ? (
+            <ApplicationPortalRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
           ) : (
             <TerrawareRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
           )}

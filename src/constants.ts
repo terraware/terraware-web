@@ -41,6 +41,7 @@ export enum APP_PATHS {
   ACCESSIONS2_ITEM = '/accessions/:accessionId',
   ACCESSIONS2_EDIT = '/accessions/:accessionId/edit',
   APPLICATIONS = '/applications',
+  APPLICATION = '/applications/:applicationId',
   BATCH_WITHDRAW = '/batch/withdraw',
   CHECKIN = '/checkin',
   DELIVERABLES = '/deliverables',
