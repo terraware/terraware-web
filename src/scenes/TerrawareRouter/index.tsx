@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { matchPath, useNavigate } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
@@ -19,6 +19,8 @@ const MINIMAL_USER_ROUTES: string[] = [
   APP_PATHS.MY_ACCOUNT,
   APP_PATHS.MY_ACCOUNT_EDIT,
   APP_PATHS.OPT_IN,
+  APP_PATHS.HELP_SUPPORT,
+  APP_PATHS.HELP_SUPPORT_FORM,
 ];
 
 export default function TerrawareRouter(props: TerrawareRouterProps) {
@@ -27,7 +29,7 @@ export default function TerrawareRouter(props: TerrawareRouterProps) {
   const location = useStateLocation();
 
   useEffect(() => {
-    if (organizations?.length === 0 && MINIMAL_USER_ROUTES.indexOf(location.pathname) === -1) {
+    if (organizations?.length === 0 && !MINIMAL_USER_ROUTES.some((path) => !!matchPath(path, location.pathname))) {
       navigate(APP_PATHS.WELCOME);
     }
   }, [navigate, location, organizations]);

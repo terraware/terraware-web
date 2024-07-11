@@ -5,6 +5,7 @@ import NoOrgLandingPage from 'src/components/emptyStatePages/NoOrgLandingPage';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import { useUser } from 'src/providers';
+import HelpSupportRouter from 'src/scenes/HelpSupportRouter';
 import MyAccountRouter from 'src/scenes/MyAccountRouter';
 import OptInFeaturesView from 'src/scenes/OptInFeatures';
 import useEnvironment from 'src/utils/useEnvironment';
@@ -25,6 +26,7 @@ const NoOrgRouter = () => {
         />
       )}
       {!isProduction && <Route path={APP_PATHS.OPT_IN} element={<OptInFeaturesView refresh={reloadPreferences} />} />}
+      <Route path={`${APP_PATHS.HELP_SUPPORT}/*`} element={<HelpSupportRouter />} />
       <Route path='*' element={<Navigate to={APP_PATHS.WELCOME} />} />
     </Routes>
   );
