@@ -26,6 +26,36 @@ export default function ListView(): JSX.Element {
     'displayed in the To Do list on your Home screen. Please log in to Terraware regularly to check which ' +
     'deliverables are due.';
 
+  const phases = [
+    {
+      name: 'Phase 0 - Due Diligence',
+      description:
+        'Submit project-relevant documentation that prove that the statements provided in the ' +
+        'application are truthful and accurate.',
+    },
+    {
+      name: 'Phase 1 - Feasibility Study',
+      description:
+        'Attend 10 weeks of training, and evaluate the strengths and risks of your proposed carbon project ' +
+        'by submitting key information that will also be used to create a Feasibility Study document.',
+    },
+    {
+      name: 'Phase 2 - PDD Writing & Registration',
+      description:
+        'Work toward having a PDA signed, a PDD written, and the PDD registered on Verra (Under Development & Full).',
+    },
+    {
+      name: 'Phase 3 - Implement and Monitor',
+      description: 'Mock desription',
+    },
+    {
+      name: 'Phase 4 - Should not be visible',
+      description: 'Mock desription',
+    },
+  ];
+
+  const currentPhaseIndex = phases.findIndex((phase) => phase.name === currentParticipant?.cohortPhase);
+
   return (
     <PageWithModuleTimeline
       title={strings.ALL_MODULES}
@@ -38,7 +68,7 @@ export default function ListView(): JSX.Element {
       </Box>
 
       <Card style={{ width: '100%' }}>
-        <CurrentTimeline />
+        <CurrentTimeline steps={phases} currentIndex={currentPhaseIndex} />
 
         <Box paddingY={theme.spacing(2)} borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}>
           <Typography>{phaseDescription}</Typography>

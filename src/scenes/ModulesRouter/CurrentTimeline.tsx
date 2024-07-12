@@ -1,54 +1,29 @@
 import React, { Box, Grid, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
-import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
 
-const CurrentTimeline = (): JSX.Element => {
+export type TimelineStep = {
+  name: string;
+  description: string;
+};
+
+type CurrentTimelineProps = {
+  steps: TimelineStep[];
+  currentIndex: number;
+};
+
+const CurrentTimeline = ({ steps, currentIndex }: CurrentTimelineProps): JSX.Element => {
   const theme = useTheme();
 
-  const { currentParticipant } = useParticipantData();
   const { isDesktop } = useDeviceInfo();
 
   // TODO these will probably come from the BE, not sure if they will be attached to the project, or cohort, or some
   // other data model, so for now they are hard coded.
-  const phases = [
-    {
-      phaseEnum: 'Phase 0 - Due Diligence',
-      phase: 'Phase 0 - Due Diligence',
-      description:
-        'Submit project-relevant documentation that prove that the statements provided in the ' +
-        'application are truthful and accurate.',
-    },
-    {
-      phaseEnum: 'Phase 1 - Feasibility Study',
-      phase: 'Phase 1 - Feasibility Study',
-      description:
-        'Attend 10 weeks of training, and evaluate the strengths and risks of your proposed carbon project ' +
-        'by submitting key information that will also be used to create a Feasibility Study document.',
-    },
-    {
-      phaseEnum: 'Phase 2 - PDD Writing & Registration',
-      phase: 'Phase 2 - PDD Writing & Registration',
-      description:
-        'Work toward having a PDA signed, a PDD written, and the PDD registered on Verra (Under Development & Full).',
-    },
-    {
-      phaseEnum: 'Phase 3 - Implement and Monitor',
-      phase: 'Phase 3 - Mock title',
-      description: 'Mock desription',
-    },
-    {
-      phaseEnum: 'Phase 4 - Should not be visible',
-      phase: 'Phase 4 - Should not be visible',
-      description: 'Mock desription',
-    },
-  ];
 
-  const currentPhaseIndex = phases.findIndex((phase) => phase.phaseEnum === currentParticipant?.cohortPhase);
-  const lowIdx = Math.max(currentPhaseIndex - 1, 0);
-  const highIdx = Math.min(lowIdx + 3, phases.length);
-  const displayPhases = phases.slice(lowIdx, highIdx);
+  const lowIdx = Math.max(currentIndex - 1, 0);
+  const highIdx = Math.min(lowIdx + 3, steps.length);
+  const displayPhases = steps.slice(lowIdx, highIdx);
 
   return (
     <Box borderRadius={theme.spacing(1)} padding={theme.spacing(3)} bgcolor={theme.palette.TwClrBgSecondary}>
@@ -63,8 +38,8 @@ const CurrentTimeline = (): JSX.Element => {
             justifyContent={'space-between'}
             alignItems={'center'}
           >
-            {displayPhases.map((phase, index) => {
-              const isActivePhase = phase.phaseEnum === currentParticipant?.cohortPhase;
+            {displayPhases.map((step, index) => {
+              const isActivePhase = index === currentIndex;
 
               return (
                 <>
@@ -111,9 +86,9 @@ const CurrentTimeline = (): JSX.Element => {
                     )}
 
                     <Typography fontWeight={600} marginBottom={theme.spacing(1)}>
-                      {phase.phase}
+                      {step.name}
                     </Typography>
-                    <Typography>{phase.description}</Typography>
+                    <Typography>{step.description}</Typography>
                   </Grid>
                 </>
               );
