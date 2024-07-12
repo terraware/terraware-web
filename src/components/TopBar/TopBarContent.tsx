@@ -18,7 +18,6 @@ import OrganizationsDropdown from '../OrganizationsDropdown';
 import SmallDeviceUserMenu from '../SmallDeviceUserMenu';
 import UserMenu from '../UserMenu';
 import Icon from '../common/icon/Icon';
-import ApplicationBreadcrumbs from './ApplicationBreadcrumbs';
 
 type TopBarProps = {
   setShowNavBar: React.Dispatch<React.SetStateAction<boolean>>;
@@ -82,7 +81,11 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
           <>
             <div style={separatorStyles} />
             {user && <AcceleratorBreadcrumbs />}
-            {user && <ApplicationBreadcrumbs />}
+            {isApplicationPortal && (
+              <>
+                <p style={{ fontSize: '16px' }}>{selectedOrganization.name}</p>
+              </>
+            )}
             {!isAcceleratorRoute && !isApplicationPortal && <OrganizationsDropdown />}
           </>
         )}
