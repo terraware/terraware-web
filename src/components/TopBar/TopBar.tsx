@@ -20,13 +20,10 @@ export default function TopBar(props: TopBarProps): JSX.Element {
   const borderTop = useCallback(() => {
     if (isAcceleratorRoute) {
       return `8px solid ${theme.palette.TwClrBgAccent}`;
-    } else if (isApplicationPortal) {
-      // TODO set color once design is finalized
-      return `8px solid ${theme.palette.TwClrBaseBlue500}`;
     } else {
       return undefined;
     }
-  }, [isAcceleratorRoute, isApplicationPortal]);
+  }, [isAcceleratorRoute]);
 
   return (
     <AppBar
