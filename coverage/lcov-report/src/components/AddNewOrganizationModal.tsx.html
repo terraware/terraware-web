@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/38</span>
+                <span class='fraction'>0/44</span>
             </div>
         
             
@@ -362,7 +362,19 @@
 <a name='L297'></a><a href='#L297'>297</a>
 <a name='L298'></a><a href='#L298'>298</a>
 <a name='L299'></a><a href='#L299'>299</a>
-<a name='L300'></a><a href='#L300'>300</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L300'></a><a href='#L300'>300</a>
+<a name='L301'></a><a href='#L301'>301</a>
+<a name='L302'></a><a href='#L302'>302</a>
+<a name='L303'></a><a href='#L303'>303</a>
+<a name='L304'></a><a href='#L304'>304</a>
+<a name='L305'></a><a href='#L305'>305</a>
+<a name='L306'></a><a href='#L306'>306</a>
+<a name='L307'></a><a href='#L307'>307</a>
+<a name='L308'></a><a href='#L308'>308</a>
+<a name='L309'></a><a href='#L309'>309</a>
+<a name='L310'></a><a href='#L310'>310</a>
+<a name='L311'></a><a href='#L311'>311</a>
+<a name='L312'></a><a href='#L312'>312</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -401,6 +413,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -568,7 +581,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -608,6 +623,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -638,8 +654,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -654,6 +672,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -664,7 +688,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 &nbsp;
-import { Box, Grid, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Checkbox, Dropdown } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 &nbsp;
@@ -694,6 +718,7 @@ import TextField from './common/Textfield/Textfield';
 type LocationTypesSelected = Record&lt;ManagedLocationType, boolean&gt;;
 &nbsp;
 export type AddNewOrganizationModalProps = {
+  isApplication?: boolean;
   open: boolean;
   onCancel: () =&gt; void;
   redirectOnComplete?: string;
@@ -703,7 +728,7 @@ export default function <span class="fstat-no" title="function not covered" >Add
   const { reloadOrganizations } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
-  const { onCancel, open, redirectOnComplete } = <span class="cstat-no" title="statement not covered" >props;</span>
+  const { isApplication, onCancel, open, redirectOnComplete } = <span class="cstat-no" title="statement not covered" >props;</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const { isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
@@ -862,15 +887,17 @@ export default function <span class="fstat-no" title="function not covered" >Add
             value={newOrganization.name}
           /&gt;
         &lt;/Grid&gt;
-        &lt;Grid item xs={12}&gt;
-          &lt;TextField
-            label={strings.DESCRIPTION}
-            type='text'
-            id='description'
-            onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('description', value)}</span>
-            value={newOrganization.description}
-          /&gt;
-        &lt;/Grid&gt;
+        {isApplication !== true &amp;&amp; (
+          &lt;Grid item xs={12}&gt;
+            &lt;TextField
+              label={strings.DESCRIPTION}
+              type='text'
+              id='description'
+              onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('description', value)}</span>
+              value={newOrganization.description}
+            /&gt;
+          &lt;/Grid&gt;
+        )}
         &lt;RegionSelector
           selectedCountryCode={newOrganization.countryCode}
           selectedCountrySubdivisionCode={newOrganization.countrySubdivisionCode}
@@ -898,27 +925,29 @@ export default function <span class="fstat-no" title="function not covered" >Add
             errorText={timeZoneError}
           /&gt;
         &lt;/Grid&gt;
-        &lt;Grid item xs={12}&gt;
-          &lt;TextField
-            type='text'
-            label={strings.CREATE_ORGANIZATION_QUESTION_LOCATION_TYPES}
-            id='create-org-question-location-types'
-            display={true}
-          /&gt;
-          &lt;Box display='flex' flexDirection='column'&gt;
-            {managedLocationTypeOptions.map(<span class="fstat-no" title="function not covered" >(o</span>ption) =&gt; (
-<span class="cstat-no" title="statement not covered" >              &lt;Checkbox</span>
-                key={option.value}
-                disabled={false}
-                id={`location-type-${option.value}`}
-                name={option.label}
-                label={option.label}
-                value={locationTypes[option.value] === true}
-                onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >setLocationTypes(<span class="fstat-no" title="function not covered" >(p</span>rev) =&gt; (<span class="cstat-no" title="statement not covered" >{ ...prev, [option.value]: value })</span>)}</span>
-              /&gt;
-            ))}
-          &lt;/Box&gt;
-        &lt;/Grid&gt;
+        {isApplication !== true &amp;&amp; (
+          &lt;Grid item xs={12}&gt;
+            &lt;TextField
+              type='text'
+              label={strings.CREATE_ORGANIZATION_QUESTION_LOCATION_TYPES}
+              id='create-org-question-location-types'
+              display={true}
+            /&gt;
+            &lt;Box display='flex' flexDirection='column'&gt;
+              {managedLocationTypeOptions.map(<span class="fstat-no" title="function not covered" >(o</span>ption) =&gt; (
+<span class="cstat-no" title="statement not covered" >                &lt;Checkbox</span>
+                  key={option.value}
+                  disabled={false}
+                  id={`location-type-${option.value}`}
+                  name={option.label}
+                  label={option.label}
+                  value={locationTypes[option.value] === true}
+                  onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >setLocationTypes(<span class="fstat-no" title="function not covered" >(p</span>rev) =&gt; (<span class="cstat-no" title="statement not covered" >{ ...prev, [option.value]: value })</span>)}</span>
+                /&gt;
+              ))}
+            &lt;/Box&gt;
+          &lt;/Grid&gt;
+        )}
         &lt;Grid item xs={12}&gt;
           &lt;Dropdown
             required
@@ -946,16 +975,23 @@ export default function <span class="fstat-no" title="function not covered" >Add
             /&gt;
           )}
         &lt;/Grid&gt;
-        &lt;Grid item xs={12}&gt;
-          &lt;TextField
-            type='text'
-            label={strings.ORGANIZATION_WEBSITE}
-            id='create-org-question-website'
-            display={false}
-            onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('website', value)}</span>
-            value={newOrganization.website}
-          /&gt;
-        &lt;/Grid&gt;
+        {isApplication !== true &amp;&amp; (
+          &lt;Grid item xs={12}&gt;
+            &lt;TextField
+              type='text'
+              label={strings.ORGANIZATION_WEBSITE}
+              id='create-org-question-website'
+              display={false}
+              onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onChange('website', value)}</span>
+              value={newOrganization.website}
+            /&gt;
+          &lt;/Grid&gt;
+        )}
+      &lt;/Grid&gt;
+      &lt;Grid item xs={12}&gt;
+        &lt;Typography fontSize={'14px'} fontWeight={400} lineHeight={'20px'} marginTop={'16px'}&gt;
+          {strings.ADD_NEW_ORGANIZATION_FOOTNOTE}
+        &lt;/Typography&gt;
       &lt;/Grid&gt;
     &lt;/DialogBox&gt;
   );
@@ -967,7 +1003,7 @@ export default function <span class="fstat-no" title="function not covered" >Add
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-12T17:24:14.845Z
+                at 2024-07-12T17:34:32.731Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
