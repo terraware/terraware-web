@@ -111,22 +111,20 @@ export default function RegionSelector({
 
   return (
     <>
-      {countries && (
-        <Grid item xs={gridSize()} paddingBottom={isMobile ? 0 : theme.spacing(4)}>
-          <Dropdown
-            id='countryCode'
-            placeholder={strings.SELECT}
-            selectedValue={getSelectedCountry()?.code?.toString() ?? ''}
-            options={countriesOptions()}
-            onChange={(value: any) => onChangeCountry(value)}
-            hideClearIcon={true}
-            label={countryLabel || strings.COUNTRY_REQUIRED}
-            errorText={countryError}
-            autocomplete={true}
-            tooltipTitle={countryTooltip}
-          />
-        </Grid>
-      )}
+      <Grid item xs={gridSize()} paddingBottom={isMobile ? 0 : theme.spacing(4)}>
+        <Dropdown
+          id='countryCode'
+          placeholder={strings.SELECT}
+          selectedValue={getSelectedCountry()?.code?.toString() ?? ''}
+          options={countriesOptions()}
+          onChange={(value: any) => onChangeCountry(value)}
+          hideClearIcon={true}
+          label={countryLabel || strings.COUNTRY_REQUIRED}
+          errorText={countryError}
+          autocomplete={true}
+          tooltipTitle={countryTooltip}
+        />
+      </Grid>
       {!hideCountrySubdivisions && getSelectedCountry()?.subdivisions ? (
         <Grid
           item
