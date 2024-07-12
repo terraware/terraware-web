@@ -1,1 +1,5 @@
+53e529f96f6 SW-5645 Welcome page updates to applications flow (#2844)
+b2d2bcc2d5f SW-5640 Start new application card in home page (#2842)
+2aad324d0f4 SW-5621 Added application list view with mock props (#2843)
+f5719b91b8e SW-5643 Reverted top bar color and added exit application button (#2846)
 43b3b9cf924 Updated translations from Phrase (#2829)

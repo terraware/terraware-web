@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/27</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
@@ -271,7 +271,10 @@
 <a name='L206'></a><a href='#L206'>206</a>
 <a name='L207'></a><a href='#L207'>207</a>
 <a name='L208'></a><a href='#L208'>208</a>
-<a name='L209'></a><a href='#L209'>209</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L209'></a><a href='#L209'>209</a>
+<a name='L210'></a><a href='#L210'>210</a>
+<a name='L211'></a><a href='#L211'>211</a>
+<a name='L212'></a><a href='#L212'>212</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -381,7 +384,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -576,86 +582,88 @@ export default function <span class="fstat-no" title="function not covered" >Emp
           {para}
         &lt;/p&gt;
       ))}
-      &lt;Box
-        sx={{
-          display: 'flex',
-          flexDirection: isMobile ? 'column' : 'row',
-          alignContent: 'center',
-          flexWrap: 'wrap',
-          fontSize: '14px',
-          justifyContent: 'center',
-          lineHeight: '20px',
-          margin: `${DEFAULT_EMPTY_STATE_CONTENT_STYLES.listContainerVerticalMargin} auto`,
-        }}
-      &gt;
-        {listItems?.map(<span class="fstat-no" title="function not covered" >(i</span>tem, index) =&gt; {
-<span class="cstat-no" title="statement not covered" >          return (</span>
-            &lt;Grid
-              item
-              xs={gridSize()}
-              key={`${item.title}-${index}`}
-              sx={{
-                flex: '1 1 auto',
-                maxWidth: '220px',
-                textAlign: 'center',
-                margin: isMobile ? theme.spacing(4, 3, 0, 3) : theme.spacing(0, 3),
-                '&amp;:first-child': {
-                  marginTop: 0,
-                },
-                padding: isMobile ? '20px 0' : '0 5px',
-              }}
-            &gt;
-              &lt;Icon
-                name={item.icon}
-                style={{
-                  width: '205px',
-                  height: '128px',
+      {listItems &amp;&amp; (
+        &lt;Box
+          sx={{
+            display: 'flex',
+            flexDirection: isMobile ? 'column' : 'row',
+            alignContent: 'center',
+            flexWrap: 'wrap',
+            fontSize: '14px',
+            justifyContent: 'center',
+            lineHeight: '20px',
+            margin: `${DEFAULT_EMPTY_STATE_CONTENT_STYLES.listContainerVerticalMargin} auto`,
+          }}
+        &gt;
+          {listItems.map(<span class="fstat-no" title="function not covered" >(i</span>tem, index) =&gt; {
+<span class="cstat-no" title="statement not covered" >            return (</span>
+              &lt;Grid
+                item
+                xs={gridSize()}
+                key={`${item.title}-${index}`}
+                sx={{
+                  flex: '1 1 auto',
+                  maxWidth: '220px',
+                  textAlign: 'center',
+                  margin: isMobile ? theme.spacing(4, 3, 0, 3) : theme.spacing(0, 3),
+                  '&amp;:first-child': {
+                    marginTop: 0,
+                  },
+                  padding: isMobile ? '20px 0' : '0 5px',
                 }}
-              /&gt;
-              {item.title &amp;&amp; (
-                &lt;p
+              &gt;
+                &lt;Icon
+                  name={item.icon}
                   style={{
-                    fontWeight: 'bold',
-                    lineHeight: '20px',
-                    margin: '0 auto',
-                    marginTop: theme.spacing(2),
+                    width: '205px',
+                    height: '128px',
                   }}
-                &gt;
-                  {item.title}
-                &lt;/p&gt;
-              )}
-              &lt;div&gt;
-                &lt;p
-                  style={
-                    item.buttonText
-                      ? {
-                          margin: '0 auto',
-                          fontSize: '12px',
-                        }
-                      : { margin: '0 auto' }
-                  }
-                &gt;
-                  {item.description}
-                &lt;/p&gt;
-                {item.linkText &amp;&amp; item.onLinkClick &amp;&amp; (
-                  &lt;Link onClick={item.onLinkClick} fontSize='12px'&gt;
-                    {item.linkText}
-                  &lt;/Link&gt;
-                )}
-              &lt;/div&gt;
-              {item.buttonText &amp;&amp; item.onClickButton &amp;&amp; (
-                &lt;Button
-                  size='medium'
-                  label={item.buttonText}
-                  onClick={item.onClickButton}
-                  icon={item.buttonIcon}
-                  sx={{ marginTop: theme.spacing(2) }}
                 /&gt;
-              )}
-            &lt;/Grid&gt;
-          );
-        })}
-      &lt;/Box&gt;
+                {item.title &amp;&amp; (
+                  &lt;p
+                    style={{
+                      fontWeight: 'bold',
+                      lineHeight: '20px',
+                      margin: '0 auto',
+                      marginTop: theme.spacing(2),
+                    }}
+                  &gt;
+                    {item.title}
+                  &lt;/p&gt;
+                )}
+                &lt;div&gt;
+                  &lt;p
+                    style={
+                      item.buttonText
+                        ? {
+                            margin: '0 auto',
+                            fontSize: '12px',
+                          }
+                        : { margin: '0 auto' }
+                    }
+                  &gt;
+                    {item.description}
+                  &lt;/p&gt;
+                  {item.linkText &amp;&amp; item.onLinkClick &amp;&amp; (
+                    &lt;Link onClick={item.onLinkClick} fontSize='12px'&gt;
+                      {item.linkText}
+                    &lt;/Link&gt;
+                  )}
+                &lt;/div&gt;
+                {item.buttonText &amp;&amp; item.onClickButton &amp;&amp; (
+                  &lt;Button
+                    size='medium'
+                    label={item.buttonText}
+                    onClick={item.onClickButton}
+                    icon={item.buttonIcon}
+                    sx={{ marginTop: theme.spacing(2) }}
+                  /&gt;
+                )}
+              &lt;/Grid&gt;
+            );
+          })}
+        &lt;/Box&gt;
+      )}
       {buttonText &amp;&amp; onClickButton &amp;&amp; (
         &lt;Button
           size='medium'
@@ -672,6 +680,7 @@ export default function <span class="fstat-no" title="function not covered" >Emp
             lineHeight: '16px',
             margin: '0 auto',
             maxWidth: '550px',
+            marginTop: '24px',
             marginBottom: '24px',
           }}
         &gt;
@@ -694,7 +703,7 @@ export default function <span class="fstat-no" title="function not covered" >Emp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-12T12:53:58.134Z
+                at 2024-07-12T17:24:14.845Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
