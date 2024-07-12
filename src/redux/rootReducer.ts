@@ -5,6 +5,7 @@ import userDeliverableCategoriesReducers from 'src/redux/features/userDeliverabl
 import acceleratorReducers from './features/accelerator/acceleratorSlice';
 import accessionsReducers from './features/accessions/accessionsSlice';
 import appVersionReducers from './features/appVersion/appVersionSlice';
+import applicationReducers from './features/application/applicationSlice';
 import batchesReducers from './features/batches/batchesSlice';
 import cohortsReducers from './features/cohorts/cohortsSlice';
 import deliverablesReducers from './features/deliverables/deliverablesSlice';
@@ -37,6 +38,7 @@ import votesReducers from './features/votes/votesSlice';
 export const reducers = {
   ...acceleratorReducers,
   ...accessionsReducers,
+  ...applicationReducers,
   ...appVersionReducers,
   ...batchesReducers,
   ...cohortsReducers,
