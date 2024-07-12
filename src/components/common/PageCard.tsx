@@ -11,7 +11,7 @@ import Link from './Link';
 import Icon from './icon/Icon';
 import { IconName } from './icon/icons';
 
-export type LinkStyle = 'plain' | 'button';
+export type LinkStyle = 'plain' | 'button-primary' | 'button-secondary';
 
 export interface PageCardProps {
   name: string;
@@ -38,9 +38,6 @@ export default function PageCard(props: PageCardProps): JSX.Element {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const goToPage = (event?: React.MouseEvent) => {
-    if (linkStyle === 'button') {
-      return;
-    }
     navigate({ pathname: link });
   };
 
@@ -106,15 +103,14 @@ export default function PageCard(props: PageCardProps): JSX.Element {
           </Link>
         </Box>
       )}
-      {linkStyle === 'button' && (
+      {(linkStyle === 'button-primary' || linkStyle === 'button-secondary') && (
         <Button
-          priority='secondary'
+          priority={linkStyle === 'button-primary' ? 'primary' : 'secondary'}
           label={linkText}
-          onClick={() => window.open(link, '_blank')}
+          onClick={() => goToPage()}
           style={{
             fontSize: '14px',
             lineHeight: '20px',
-            marginLeft: 'auto',
             marginTop: '14px',
             maxWidth: 'fit-content',
           }}
