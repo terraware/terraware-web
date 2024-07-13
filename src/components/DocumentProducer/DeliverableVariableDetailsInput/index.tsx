@@ -4,7 +4,12 @@ import { Box, IconButton, useTheme } from '@mui/material';
 import { Button, DatePicker, Dropdown, DropdownItem, Icon, Textfield } from '@terraware/web-components';
 
 import strings from 'src/strings';
-import { SelectOptionPayload, SelectVariable, Variable } from 'src/types/documentProducer/Variable';
+import {
+  SelectOptionPayload,
+  SelectVariable,
+  TableVariableWithValues,
+  Variable,
+} from 'src/types/documentProducer/Variable';
 import {
   VariableValueDateValue,
   VariableValueLinkValue,
@@ -14,8 +19,12 @@ import {
   VariableValueValue,
 } from 'src/types/documentProducer/VariableValue';
 
+import DeliverableEditTable from '../DeliverableEditTable';
+import { VariableTableCell } from '../EditableTableModal/helpers';
+
 export type DeliverableVariableDetailsInputProps = {
   values: VariableValueValue[];
+  setCellValues?: (values: VariableTableCell[][]) => void;
   setValues: (values: VariableValueValue[]) => void;
   variable: Variable;
   addRemovedValue: (value: VariableValueValue) => void;
@@ -23,6 +32,7 @@ export type DeliverableVariableDetailsInputProps = {
 
 const DeliverableVariableDetailsInput = ({
   values,
+  setCellValues,
   setValues,
   variable,
   addRemovedValue,
@@ -153,6 +163,13 @@ const DeliverableVariableDetailsInput = ({
           } else {
             setValues([{ id: -1, listPosition: 0, url: newValue, type: 'Link', title }]);
           }
+        }
+      }
+
+      if (variable.type === 'Table') {
+        if (newValue?.length) {
+          const cellValues = newValue as VariableTableCell[][];
+          setCellValues?.(cellValues);
         }
       }
     } else {
@@ -311,6 +328,13 @@ const DeliverableVariableDetailsInput = ({
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'title')}
           sx={formElementStyles}
           value={title}
+        />
+      )}
+
+      {variable.type === 'Table' && (
+        <DeliverableEditTable
+          onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
+          variable={variable as TableVariableWithValues}
         />
       )}
     </>
