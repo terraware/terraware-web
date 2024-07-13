@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Grid, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Checkbox, Dropdown } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -31,6 +31,7 @@ import TextField from './common/Textfield/Textfield';
 type LocationTypesSelected = Record<ManagedLocationType, boolean>;
 
 export type AddNewOrganizationModalProps = {
+  isApplication?: boolean;
   open: boolean;
   onCancel: () => void;
   redirectOnComplete?: string;
@@ -40,7 +41,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   const { reloadOrganizations } = useOrganization();
   const { activeLocale } = useLocalization();
   const navigate = useNavigate();
-  const { onCancel, open, redirectOnComplete } = props;
+  const { isApplication, onCancel, open, redirectOnComplete } = props;
   const theme = useTheme();
   const snackbar = useSnackbar();
   const { isDesktop } = useDeviceInfo();
@@ -199,15 +200,17 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
             value={newOrganization.name}
           />
         </Grid>
-        <Grid item xs={12}>
-          <TextField
-            label={strings.DESCRIPTION}
-            type='text'
-            id='description'
-            onChange={(value) => onChange('description', value)}
-            value={newOrganization.description}
-          />
-        </Grid>
+        {isApplication !== true && (
+          <Grid item xs={12}>
+            <TextField
+              label={strings.DESCRIPTION}
+              type='text'
+              id='description'
+              onChange={(value) => onChange('description', value)}
+              value={newOrganization.description}
+            />
+          </Grid>
+        )}
         <RegionSelector
           selectedCountryCode={newOrganization.countryCode}
           selectedCountrySubdivisionCode={newOrganization.countrySubdivisionCode}
@@ -235,27 +238,29 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
             errorText={timeZoneError}
           />
         </Grid>
-        <Grid item xs={12}>
-          <TextField
-            type='text'
-            label={strings.CREATE_ORGANIZATION_QUESTION_LOCATION_TYPES}
-            id='create-org-question-location-types'
-            display={true}
-          />
-          <Box display='flex' flexDirection='column'>
-            {managedLocationTypeOptions.map((option) => (
-              <Checkbox
-                key={option.value}
-                disabled={false}
-                id={`location-type-${option.value}`}
-                name={option.label}
-                label={option.label}
-                value={locationTypes[option.value] === true}
-                onChange={(value) => setLocationTypes((prev) => ({ ...prev, [option.value]: value }))}
-              />
-            ))}
-          </Box>
-        </Grid>
+        {isApplication !== true && (
+          <Grid item xs={12}>
+            <TextField
+              type='text'
+              label={strings.CREATE_ORGANIZATION_QUESTION_LOCATION_TYPES}
+              id='create-org-question-location-types'
+              display={true}
+            />
+            <Box display='flex' flexDirection='column'>
+              {managedLocationTypeOptions.map((option) => (
+                <Checkbox
+                  key={option.value}
+                  disabled={false}
+                  id={`location-type-${option.value}`}
+                  name={option.label}
+                  label={option.label}
+                  value={locationTypes[option.value] === true}
+                  onChange={(value) => setLocationTypes((prev) => ({ ...prev, [option.value]: value }))}
+                />
+              ))}
+            </Box>
+          </Grid>
+        )}
         <Grid item xs={12}>
           <Dropdown
             required
@@ -283,16 +288,23 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
             />
           )}
         </Grid>
-        <Grid item xs={12}>
-          <TextField
-            type='text'
-            label={strings.ORGANIZATION_WEBSITE}
-            id='create-org-question-website'
-            display={false}
-            onChange={(value) => onChange('website', value)}
-            value={newOrganization.website}
-          />
-        </Grid>
+        {isApplication !== true && (
+          <Grid item xs={12}>
+            <TextField
+              type='text'
+              label={strings.ORGANIZATION_WEBSITE}
+              id='create-org-question-website'
+              display={false}
+              onChange={(value) => onChange('website', value)}
+              value={newOrganization.website}
+            />
+          </Grid>
+        )}
+      </Grid>
+      <Grid item xs={12}>
+        <Typography fontSize={'14px'} fontWeight={400} lineHeight={'20px'} marginTop={'16px'}>
+          {strings.ADD_NEW_ORGANIZATION_FOOTNOTE}
+        </Typography>
       </Grid>
     </DialogBox>
   );

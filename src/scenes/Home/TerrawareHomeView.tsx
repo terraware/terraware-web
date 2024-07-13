@@ -96,6 +96,17 @@ const TerrawareHomeView = () => {
                 linkStyle={'plain'}
               />
             </Grid>
+            <Grid item xs={secondaryGridSize()}>
+              <PageCard
+                id='applicationHomeCard'
+                name={strings.APPLY_TO_ACCELERATOR}
+                icon='iconFile'
+                description={strings.APPLY_TO_ACCELERATOR}
+                link={APP_PATHS.APPLICATIONS}
+                linkText={strings.START_NEW_APPLICATION}
+                linkStyle={'button-primary'}
+              />
+            </Grid>
           </Grid>
         </Container>
       </Box>

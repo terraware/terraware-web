@@ -1,10 +1,11 @@
 import React from 'react';
 
-import Page from 'src/components/Page';
 import strings from 'src/strings';
 
+import ApplicationPage from '../ApplicationPage';
+
 const OverviewView = () => {
-  return <Page title={strings.APPLICATION} contentStyle={{ display: 'block' }}></Page>;
+  return <ApplicationPage title={strings.APPLICATION}></ApplicationPage>;
 };
 
 export default OverviewView;
