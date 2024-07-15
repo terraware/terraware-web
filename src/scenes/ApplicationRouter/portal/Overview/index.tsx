@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { Box, Card, Typography, useTheme } from '@mui/material';
 
 import CurrentTimeline from 'src/scenes/ModulesRouter/CurrentTimeline';
 import strings from 'src/strings';
 
+import { useApplicationData } from '../../provider/Context';
 import ApplicationPage from '../ApplicationPage';
 import ListApplicationModulesContent from './ListApplicationModulesContent';
 
@@ -30,6 +32,15 @@ const applicationSteps = [
 ];
 const OverviewView = () => {
   const theme = useTheme();
+  const { applicationId } = useParams<{ applicationId: string }>();
+
+  const { setSelectedApplitcation, allApplications } = useApplicationData();
+
+  useEffect(() => {
+    if (applicationId) {
+      setSelectedApplitcation(Number(applicationId));
+    }
+  }, [applicationId, allApplications]);
   return (
     <ApplicationPage title={strings.APPLICATION}>
       <Card style={{ width: '100%', padding: theme.spacing(3), borderRadius: theme.spacing(3) }}>

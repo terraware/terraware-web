@@ -9,6 +9,7 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+import ApplicationProvider from '../provider';
 import NavBar from './NavBar';
 import Overview from './Overview';
 
@@ -57,25 +58,27 @@ const ApplicationPortalRouter = ({ showNavBar, setShowNavBar }: ApplicationPorta
 
   return (
     <>
-      {type !== 'desktop' ? (
-        <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
-          <Box sx={navBarOpened}>
-            <NavBar setShowNavBar={setShowNavBar} />
-          </Box>
-        </Slide>
-      ) : (
-        <NavBar setShowNavBar={setShowNavBar} />
-      )}
-      <Box
-        sx={type === 'desktop' && showNavBar ? { ...contentStyles, ...contentWithNavBar } : contentStyles}
-        className='scrollable-content'
-      >
-        <ErrorBoundary setShowNavBar={setShowNavBar}>
-          <Routes>
-            <Route path={'*'} element={<Overview />} />
-          </Routes>
-        </ErrorBoundary>
-      </Box>
+      <ApplicationProvider>
+        {type !== 'desktop' ? (
+          <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
+            <Box sx={navBarOpened}>
+              <NavBar setShowNavBar={setShowNavBar} />
+            </Box>
+          </Slide>
+        ) : (
+          <NavBar setShowNavBar={setShowNavBar} />
+        )}
+        <Box
+          sx={type === 'desktop' && showNavBar ? { ...contentStyles, ...contentWithNavBar } : contentStyles}
+          className='scrollable-content'
+        >
+          <ErrorBoundary setShowNavBar={setShowNavBar}>
+            <Routes>
+              <Route path={'/applications/:applicationId'} element={<Overview />} />
+            </Routes>
+          </ErrorBoundary>
+        </Box>
+      </ApplicationProvider>
     </>
   );
 };
