@@ -25,7 +25,7 @@ export default function ListModulesContent(): JSX.Element {
         'Draw your site map and answer the Prescreen questions to see if you qualify to start the Application for the Accelerator Program. ',
       deliverables: [],
     };
-    newSections.push(prescreenSection);
+    newSections.unshift(prescreenSection);
     setSectionsWithPrescreen(newSections);
   }, [applicationSections]);
 
