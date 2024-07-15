@@ -9,4 +9,7 @@ export type ApplicationModule = Omit<
   Module,
   'additionalResources' | 'endDate' | 'events' | 'isActive' | 'startDate' | 'preparationMaterials' | 'title'
 >;
-export type ApplicationModuleWithDeliverables = ApplicationModule & { deliverables: Deliverable[] };
+export type ApplicationModuleWithDeliverables = ApplicationModule & {
+  deliverables: Deliverable[];
+  status: 'Incomplete' | 'Complete';
+};
