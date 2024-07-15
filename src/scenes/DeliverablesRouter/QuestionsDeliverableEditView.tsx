@@ -4,6 +4,7 @@ import { Box, Grid, useTheme } from '@mui/material';
 
 import Metadata from 'src/components/DeliverableView/Metadata';
 import DeliverableVariableDetailsInput from 'src/components/DocumentProducer/DeliverableVariableDetailsInput';
+import { PhotoWithAttributes } from 'src/components/DocumentProducer/EditImagesModal/PhotoSelector';
 import { VariableTableCell } from 'src/components/DocumentProducer/EditableTableModal/helpers';
 import Card from 'src/components/common/Card';
 import WrappedPageForm from 'src/components/common/PageForm';
@@ -16,7 +17,7 @@ import { selectDeliverableVariablesWithValues } from 'src/redux/features/documen
 import { requestListDeliverableVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { VariableWithValues } from 'src/types/documentProducer/Variable';
-import { VariableValueValue } from 'src/types/documentProducer/VariableValue';
+import { VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
 import useQuery from 'src/utils/useQuery';
 
 const QuestionsDeliverableEditView = (): JSX.Element | null => {
@@ -52,8 +53,18 @@ const QuestionsDeliverableEditView = (): JSX.Element | null => {
     return () => clearTimeout(timeoutId);
   }, [variablesWithValues]);
 
-  const { pendingVariableValues, setCellValues, setRemovedValue, setValues, update, updateSuccess } =
-    useProjectVariablesUpdate(projectId, variablesWithValues);
+  const {
+    pendingVariableValues,
+    setCellValues,
+    setDeletedImages,
+    setImages,
+    setNewImages,
+    setRemovedValue,
+    setValues,
+    update,
+    updateSuccess,
+    // uploadSuccess,
+  } = useProjectVariablesUpdate(projectId, variablesWithValues);
 
   useEffect(() => {
     if (!(deliverableId && projectId)) {
@@ -117,11 +128,21 @@ const QuestionsDeliverableEditView = (): JSX.Element | null => {
                         setCellValues={(newValues: VariableTableCell[][]) =>
                           setCellValues(variableWithValues.id, newValues)
                         }
+                        setDeletedImages={(newValues: VariableValueImageValue[]) =>
+                          setDeletedImages(variableWithValues.id, newValues)
+                        }
+                        setImages={(newValues: VariableValueImageValue[]) =>
+                          setImages(variableWithValues.id, newValues)
+                        }
+                        setNewImages={(newValues: PhotoWithAttributes[]) =>
+                          setNewImages(variableWithValues.id, newValues)
+                        }
                         setValues={(newValues: VariableValueValue[]) => setValues(variableWithValues.id, newValues)}
                         variable={variableWithValues}
                         addRemovedValue={(removedValue: VariableValueValue) =>
                           setRemovedValue(variableWithValues.id, removedValue)
                         }
+                        projectId={projectId}
                       />
                     </Grid>
                   </Grid>

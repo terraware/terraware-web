@@ -17,12 +17,17 @@ import {
 } from 'src/types/documentProducer/VariableValue';
 
 // TODO this was taken from the pdd-web code, but there is no test, it definitely seems test-worthy
-export const makeVariableValueOperations = (
-  variable: VariableWithValues,
-  pendingCellValues: VariableTableCell[][],
-  pendingValues: VariableValueValue[],
-  removedValue?: VariableValueValue
-) => {
+export const makeVariableValueOperations = ({
+  pendingCellValues = [],
+  pendingValues,
+  removedValue,
+  variable,
+}: {
+  pendingCellValues?: VariableTableCell[][];
+  pendingValues: VariableValueValue[];
+  removedValue?: VariableValueValue;
+  variable: VariableWithValues;
+}) => {
   const operations: Operation[] = [];
 
   let newValue:
