@@ -52,7 +52,11 @@ const CurrentModule = () => {
     [activeLocale, currentModule]
   );
 
-  return currentParticipantProject && moduleDetails ? (
+  if (!currentParticipantProject || !moduleDetails) {
+    return null;
+  }
+
+  return (
     <ModuleDetailsCard
       deliverables={deliverableDetails}
       events={eventDetails}
@@ -60,7 +64,7 @@ const CurrentModule = () => {
       projectId={currentParticipantProject.id}
       showSeeAllModules={true}
     />
-  ) : null;
+  );
 };
 
 export default CurrentModule;
