@@ -3,6 +3,7 @@ import { memoize } from 'src/utils/memoize';
 
 export const getDocumentTemplateName = memoize(
   (documentTemplateId: number, documentTemplates: DocumentTemplate[] | undefined): string => {
+    console.log({ documentTemplateId, documentTemplates });
     const documentTemplate = (documentTemplates || []).find(
       (_documentTemplate) => _documentTemplate.id === documentTemplateId
     );
