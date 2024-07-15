@@ -180,7 +180,15 @@ export const useProjectVariablesUpdate = (
 
       setUpdateVariableRequestId(request.requestId);
     }
-  }, [pendingCellValues, pendingVariableValues, projectId, variablesWithValues]);
+  }, [
+    pendingCellValues,
+    pendingDeletedImages,
+    pendingImages,
+    pendingNewImages,
+    pendingVariableValues,
+    projectId,
+    variablesWithValues,
+  ]);
 
   useEffect(() => {
     if (updateResult?.status === 'success') {
