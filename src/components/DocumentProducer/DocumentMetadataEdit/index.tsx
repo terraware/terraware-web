@@ -69,13 +69,12 @@ const DocumentMetadataEdit = ({
   const listUsersRequest = useAppSelector(selectGlobalRolesUsersSearchRequest(listUsersRequestId));
 
   useEffect(() => {
-    console.log({ listUsersRequest });
     if (listUsersRequest?.status === 'success') {
       setDocumentOwnerOptions(getDocumentOwnerOptions(listUsersRequest.data?.users || []));
     } else if (listUsersRequest?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [listUsersRequest]);
+  }, [listUsersRequest, snackbar]);
 
   const documentTemplateOptions = useMemo(
     () => getDocumentTemplateOptions(documentTemplates || []),
