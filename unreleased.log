@@ -1,3 +1,4 @@
+cf3ffff2a90 SW-5650: FE - Add editing support for Table field (#2850)
 cf4084e76d3 Updated translations from Phrase (#2847)
 2e64bf4b054 Wire up the document owners portion of the "new document" form (#2851)
 6cf287255d2 Implemented mock service, redux and provider for list applications APIs (#2849)

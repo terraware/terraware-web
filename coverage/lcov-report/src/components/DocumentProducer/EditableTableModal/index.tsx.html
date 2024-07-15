@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/79</span>
+                <span class='fraction'>0/77</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/31</span>
+                <span class='fraction'>0/29</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/73</span>
+                <span class='fraction'>0/71</span>
             </div>
         
             
@@ -410,21 +410,7 @@
 <a name='L345'></a><a href='#L345'>345</a>
 <a name='L346'></a><a href='#L346'>346</a>
 <a name='L347'></a><a href='#L347'>347</a>
-<a name='L348'></a><a href='#L348'>348</a>
-<a name='L349'></a><a href='#L349'>349</a>
-<a name='L350'></a><a href='#L350'>350</a>
-<a name='L351'></a><a href='#L351'>351</a>
-<a name='L352'></a><a href='#L352'>352</a>
-<a name='L353'></a><a href='#L353'>353</a>
-<a name='L354'></a><a href='#L354'>354</a>
-<a name='L355'></a><a href='#L355'>355</a>
-<a name='L356'></a><a href='#L356'>356</a>
-<a name='L357'></a><a href='#L357'>357</a>
-<a name='L358'></a><a href='#L358'>358</a>
-<a name='L359'></a><a href='#L359'>359</a>
-<a name='L360'></a><a href='#L360'>360</a>
-<a name='L361'></a><a href='#L361'>361</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L348'></a><a href='#L348'>348</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -459,18 +445,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -797,7 +771,6 @@ import {
   NumberVariable,
   SelectVariable,
   TableColumn,
-  TableColumnWithValues,
   TableVariableWithValues,
 } from 'src/types/documentProducer/Variable';
 import {
@@ -807,7 +780,7 @@ import {
   VariableValueSelectValue,
 } from 'src/types/documentProducer/VariableValue';
 &nbsp;
-import { VariableTableCell, cellValue, getCellValues, newValueFromEntry } from './helpers';
+import { VariableTableCell, cellValue, getInitialCellValues, newValueFromEntry } from './helpers';
 &nbsp;
 type EditableTableEditProps = {
   variable: TableVariableWithValues;
@@ -818,19 +791,7 @@ type EditableTableEditProps = {
 &nbsp;
 const EditableTableEdit = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> variable, projectId, onCancel, onFinish }: EditableTableEditProps) =&gt; {</span>
   const columns = <span class="cstat-no" title="statement not covered" >useMemo&lt;TableColumn[]&gt;(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >variable.columns,</span> [variable]);</span>
-  const initialCellValues = <span class="cstat-no" title="statement not covered" >useMemo&lt;VariableTableCell[][]&gt;(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt;
-<span class="cstat-no" title="statement not covered" >      variable.values.map(<span class="fstat-no" title="function not covered" >(r</span>ow) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >        variable.columns.map(<span class="fstat-no" title="function not covered" >(c</span>ol) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-          type: col.variable.type,
-          rowId: row.id,
-          colId: col.variable.id,
-          values: getCellValues(row, col as TableColumnWithValues),
-          changed: false,
-        }))
-      ),
-    [variable]
-  );
+  const initialCellValues = <span class="cstat-no" title="statement not covered" >useMemo&lt;VariableTableCell[][]&gt;(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >getInitialCellValues(variable),</span> [variable]);</span>
   const [cellValues, setCellValues] = <span class="cstat-no" title="statement not covered" >useState&lt;VariableTableCell[][]&gt;(initialCellValues);</span>
 &nbsp;
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
@@ -1097,14 +1058,14 @@ const EditableTableEdit = <span class="cstat-no" title="statement not covered" >
   );
 };
 &nbsp;
-type EditableCellProps = {
+export type EditableCellProps = {
   id: string;
   column: TableColumn;
   onChange: (value: unknown) =&gt; void;
   value?: string | number;
 };
 &nbsp;
-const EditableCell = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> id, column, onChange, value }: EditableCellProps) =&gt; {</span>
+export const EditableCell = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> id, column, onChange, value }: EditableCellProps) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  switch (column.variable.type) {</span>
     case 'Text':
 <span class="cstat-no" title="statement not covered" >      return &lt;Textfield label='' id={id} type='text' onChange={onChange} value={value} /&gt;;</span>
@@ -1150,7 +1111,7 @@ export default EditableTableEdit;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-15T19:56:43.043Z
+                at 2024-07-15T20:00:56.893Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
