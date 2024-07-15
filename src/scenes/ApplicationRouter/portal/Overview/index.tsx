@@ -6,6 +6,7 @@ import CurrentTimeline from 'src/scenes/ModulesRouter/CurrentTimeline';
 import strings from 'src/strings';
 
 import ApplicationPage from '../ApplicationPage';
+import ListApplicationModulesContent from './ListApplicationModulesContent';
 
 const phaseDescription =
   'Start by completing the Pre-screen. Then answer more in-depth questions about your project and upload any necessary documents in the Application. Each section of the Application is detailed below. Click View to answer the questions and provide the requested information for each section.';
@@ -31,12 +32,13 @@ const OverviewView = () => {
   const theme = useTheme();
   return (
     <ApplicationPage title={strings.APPLICATION}>
-      <Card style={{ width: '100%' }}>
+      <Card style={{ width: '100%', padding: theme.spacing(3), borderRadius: theme.spacing(3) }}>
         <CurrentTimeline steps={applicationSteps} currentIndex={0} />
 
         <Box paddingY={theme.spacing(2)} borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}>
           <Typography>{phaseDescription}</Typography>
         </Box>
+        <ListApplicationModulesContent />
       </Card>
     </ApplicationPage>
   );
