@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 
 import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 import { DateTime } from 'luxon';
 
 import Link from 'src/components/common/Link';
@@ -8,16 +9,18 @@ import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
+import { DeliverableStatusType } from 'src/types/Deliverables';
 import { ModuleContentType, ModuleEventType } from 'src/types/Module';
 import { getLongDate, getLongDateTime } from 'src/utils/dateFormatter';
 
+import DeliverableStatusBadge from './ModuleDeliverableStatusBadge';
 import ModuleEventSessionCard from './ModuleEventSessionCard';
 
 const ModuleContentSection = ({ children }: { children: React.ReactNode }) => {
   return (
     <Box
       sx={{
-        flexDirection: 'column',
+        flexDirection: 'row',
         marginBottom: '16px',
       }}
     >
@@ -59,6 +62,7 @@ type DeliverableDetails = {
   id: number;
   name: string;
   onClick: () => void;
+  status: DeliverableStatusType;
 };
 
 type EventDetails = {
@@ -113,6 +117,29 @@ const ModuleDetailsCard = ({
     }
 
     return theme.palette.TwClrTxtWarning;
+  };
+
+  const { isTablet, isMobile } = useDeviceInfo();
+
+  const wrap = () => {
+    if (isMobile || isTablet) {
+      return 'wrap';
+    }
+    return 'nowrap';
+  };
+
+  const gridSize = () => {
+    if (isMobile || isTablet) {
+      return 12;
+    }
+    return 'auto';
+  };
+
+  const whiteSpace = () => {
+    if (isMobile || isTablet) {
+      return 'pre-line';
+    }
+    return 'nowrap';
   };
 
   const contents = useMemo(
@@ -180,24 +207,40 @@ const ModuleDetailsCard = ({
             <>
               {deliverables?.map((deliverable) => (
                 <ModuleContentSection key={deliverable.id}>
-                  <Link fontSize='16px' onClick={deliverable.onClick} style={{ textAlign: 'left' }}>
-                    {deliverable.name}
-                  </Link>
-                  {deliverable.dueDate && activeLocale && (
-                    <Typography
-                      component='span'
-                      fontSize={'16px'}
-                      fontWeight={600}
-                      lineHeight={'24px'}
-                      sx={{
-                        color: getDueDateLabelColor(deliverable.dueDate),
-                        marginLeft: '8px',
-                      }}
-                      whiteSpace={'nowrap'}
-                    >
-                      {strings.formatString(strings.DUE, getLongDate(deliverable.dueDate.toString(), activeLocale))}
-                    </Typography>
-                  )}
+                  <Grid
+                    container
+                    columnSpacing={theme.spacing(2)}
+                    marginTop={theme.spacing(2)}
+                    alignItems={'center'}
+                    justifyContent={'flex-start'}
+                    flexWrap={wrap()}
+                  >
+                    <Grid item flexGrow={0} xs={gridSize()}>
+                      <DeliverableStatusBadge status={deliverable.status || 'Not Submitted'} />
+                    </Grid>
+                    <Grid item flexGrow={0} xs={gridSize()}>
+                      <Link fontSize='16px' onClick={deliverable.onClick} style={{ textAlign: 'left' }}>
+                        {deliverable.name}
+                      </Link>
+                    </Grid>
+                    {deliverable.dueDate && activeLocale && (
+                      <Grid item flexGrow={0} xs={gridSize()}>
+                        <Typography
+                          component='span'
+                          fontSize={'16px'}
+                          fontWeight={600}
+                          lineHeight={'24px'}
+                          sx={{
+                            color: getDueDateLabelColor(deliverable.dueDate),
+                            marginLeft: '8px',
+                          }}
+                          whiteSpace={whiteSpace()}
+                        >
+                          {strings.formatString(strings.DUE, getLongDate(deliverable.dueDate.toString(), activeLocale))}
+                        </Typography>
+                      </Grid>
+                    )}
+                  </Grid>
                 </ModuleContentSection>
               ))}
             </>
