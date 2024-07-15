@@ -88,6 +88,7 @@ export type ModuleDetailsCardProp = {
   module: ModuleDetails;
   projectId: number;
   showSeeAllModules?: boolean;
+  showSimplifiedStatus?: boolean;
 };
 
 const ModuleDetailsCard = ({
@@ -96,6 +97,7 @@ const ModuleDetailsCard = ({
   module,
   projectId,
   showSeeAllModules = false,
+  showSimplifiedStatus = false,
 }: ModuleDetailsCardProp) => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
@@ -216,7 +218,10 @@ const ModuleDetailsCard = ({
                     flexWrap={wrap()}
                   >
                     <Grid item flexGrow={0} xs={gridSize()}>
-                      <DeliverableStatusBadge status={deliverable.status || 'Not Submitted'} />
+                      <DeliverableStatusBadge
+                        showSimplifiedStatus={showSimplifiedStatus}
+                        status={deliverable.status || 'Not Submitted'}
+                      />
                     </Grid>
                     <Grid item flexGrow={0} xs={gridSize()}>
                       <Link fontSize='16px' onClick={deliverable.onClick} style={{ textAlign: 'left' }}>

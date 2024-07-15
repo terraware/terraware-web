@@ -53,6 +53,7 @@ const SectionView = () => {
           deliverables={deliverableDetails}
           module={moduleDetails}
           projectId={selectedApplication.id}
+          showSimplifiedStatus
         />
       )}
     </ApplicationPage>
