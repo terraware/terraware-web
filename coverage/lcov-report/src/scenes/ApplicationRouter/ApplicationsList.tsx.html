@@ -142,15 +142,9 @@
 <a name='L77'></a><a href='#L77'>77</a>
 <a name='L78'></a><a href='#L78'>78</a>
 <a name='L79'></a><a href='#L79'>79</a>
-<a name='L80'></a><a href='#L80'>80</a>
-<a name='L81'></a><a href='#L81'>81</a>
-<a name='L82'></a><a href='#L82'>82</a>
-<a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a>
-<a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a>
-<a name='L88'></a><a href='#L88'>88</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L80'></a><a href='#L80'>80</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -165,22 +159,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -222,6 +201,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -249,26 +233,13 @@ import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
+import { useApplicationData } from './provider/Context';
+&nbsp;
 const ApplicationListView = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
   const { isTablet, isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const { toastInfo } = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
+  const { allApplications } = <span class="cstat-no" title="statement not covered" >useApplicationData();</span>
 &nbsp;
-  const applications = <span class="cstat-no" title="statement not covered" >[</span>
-    {
-      applicationId: 1,
-      applicationName: 'Andromeda',
-      completed: false,
-      dateStarted: DateTime.fromJSDate(new Date('2024-07-10')),
-      statusText: 'Pre-screen in progress',
-    },
-    {
-      applicationId: 2,
-      applicationName: 'Cassiopeia',
-      completed: false,
-      dateStarted: DateTime.fromJSDate(new Date('2024-06-15')),
-      statusText: '2 out of 6 sections completed',
-    },
-  ];
   const primaryGridSize = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (isMobile) {</span>
 <span class="cstat-no" title="statement not covered" >      return 12;</span>
@@ -307,13 +278,18 @@ const ApplicationListView = <span class="cstat-no" title="statement not covered"
         /&gt;
         &lt;Container maxWidth={false} sx={{ padding: 0 }}&gt;
           &lt;Grid container spacing={3} sx={{ padding: 0 }}&gt;
-            {applications.map(<span class="fstat-no" title="function not covered" >(a</span>pplication) =&gt; (
+            {allApplications.map(<span class="fstat-no" title="function not covered" >(a</span>pplication) =&gt; (
 <span class="cstat-no" title="statement not covered" >              &lt;Grid</span>
                 item
-                xs={applications.length === 1 ? primaryGridSize() : secondaryGridSize()}
-                key={application.applicationId}
+                xs={allApplications.length === 1 ? primaryGridSize() : secondaryGridSize()}
+                key={application.id}
               &gt;
-                &lt;ApplicationCard {...application} /&gt;
+                &lt;ApplicationCard
+                  applicationId={application.id}
+                  applicationName={`Applicatoin ${application.id}`}
+                  completed={false}
+                  dateStarted={DateTime.fromISO(application.createdTime)}
+                /&gt;
               &lt;/Grid&gt;
             ))}
           &lt;/Grid&gt;
@@ -331,7 +307,7 @@ export default ApplicationListView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-12T17:34:32.731Z
+                at 2024-07-15T17:40:52.661Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
