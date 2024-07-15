@@ -48,7 +48,7 @@ const DocumentMetadata = ({ document }: DocumentMetadataProps): JSX.Element => {
   const modifiedByName = useMemo(() => getUserDisplayName(modifiedByUser), [modifiedByUser]);
   const modifiedTimeDisplay = useMemo(() => getDateTimeDisplayValue(new Date(modifiedTime).getTime()), [modifiedTime]);
   const documentTemplateName = useMemo(
-    () => getDocumentTemplateName(documentTemplates ?? [], documentTemplateId),
+    () => getDocumentTemplateName(documentTemplateId, documentTemplates ?? []),
     [documentTemplates, documentTemplateId]
   );
 

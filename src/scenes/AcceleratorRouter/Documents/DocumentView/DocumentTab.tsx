@@ -18,7 +18,9 @@ export type DocumentProps = {
 const DocumentTab = ({ document }: DocumentProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const [variables, setVariables] = useState<VariableWithValues[]>();
-  const result = useAppSelector((state) => selectVariablesWithValues(state, document.variableManifestId, document.id));
+  const result = useAppSelector((state) =>
+    selectVariablesWithValues(state, document.variableManifestId, document.projectId)
+  );
 
   useSelectorProcessor(result, setVariables);
 

@@ -2,19 +2,21 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { Dropdown, Textfield } from '@terraware/web-components';
+import { Dropdown, DropdownItem, Textfield } from '@terraware/web-components';
 import isString from 'lodash/isString';
 
 import ParticipantsDropdown from 'src/components/ParticipantsDropdown';
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import { useParticipants } from 'src/hooks/useParticipants';
 import { useProjects } from 'src/hooks/useProjects';
+import { useLocalization } from 'src/providers';
 import { selectDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesSelector';
 import { requestListDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesThunks';
+import { requestListGlobalRolesUsers } from 'src/redux/features/globalRoles/globalRolesAsyncThunks';
+import { selectGlobalRolesUsersSearchRequest } from 'src/redux/features/globalRoles/globalRolesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Project } from 'src/types/Project';
-import { User } from 'src/types/User';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { getDocumentOwnerOptions, getDocumentTemplateName, getDocumentTemplateOptions } from './helpers';
@@ -47,6 +49,7 @@ const DocumentMetadataEdit = ({
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const snackbar = useSnackbar();
+  const { activeLocale } = useLocalization();
   const { documentTemplates, error: getDocumentTemplatesError } = useAppSelector(selectDocumentTemplates);
   const { availableParticipants } = useParticipants();
   const { availableProjects } = useProjects();
@@ -61,16 +64,22 @@ const DocumentMetadataEdit = ({
     [availableProjects, participant]
   );
 
-  // TODO we don't have redux for this, should it only be TF accelerator users? Or all admins?
-  // const { data: users, error: getUsersError } = useAppSelector(selectUsers);
-  const users: User[] = useMemo(() => [], []);
-  const getUsersError = null;
+  const [documentOwnerOptions, setDocumentOwnerOptions] = useState<DropdownItem[]>([]);
+  const [listUsersRequestId, setListUsersRequestId] = useState('');
+  const listUsersRequest = useAppSelector(selectGlobalRolesUsersSearchRequest(listUsersRequestId));
+
+  useEffect(() => {
+    if (listUsersRequest?.status === 'success') {
+      setDocumentOwnerOptions(getDocumentOwnerOptions(listUsersRequest.data?.users || []));
+    } else if (listUsersRequest?.status === 'error') {
+      snackbar.toastError(strings.GENERIC_ERROR);
+    }
+  }, [listUsersRequest, snackbar]);
 
   const documentTemplateOptions = useMemo(
     () => getDocumentTemplateOptions(documentTemplates || []),
     [documentTemplates]
   );
-  const documentOwnerOptions = useMemo(() => getDocumentOwnerOptions(users || []), [users]);
 
   useEffect(() => {
     // reset projectId when participant changes
@@ -79,21 +88,15 @@ const DocumentMetadataEdit = ({
 
   useEffect(() => {
     dispatch(requestListDocumentTemplates());
-    // TODO we don't have redux for this, should it only be TF accelerator users? Or all admins?
-    // dispatch(requestListUsers());
-  }, [dispatch]);
+    const request = dispatch(requestListGlobalRolesUsers({ locale: activeLocale }));
+    setListUsersRequestId(request.requestId);
+  }, [activeLocale, dispatch]);
 
   useEffect(() => {
     if (getDocumentTemplatesError) {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
   }, [snackbar, getDocumentTemplatesError]);
-
-  useEffect(() => {
-    if (getUsersError) {
-      snackbar.toastError(strings.GENERIC_ERROR);
-    }
-  }, [snackbar, getUsersError]);
 
   // All fields are required in this form
   const getErrorText = (value: unknown): string => (formValid === false && !value ? strings.REQUIRED_FIELD : '');
