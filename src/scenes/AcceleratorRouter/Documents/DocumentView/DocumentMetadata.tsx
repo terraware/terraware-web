@@ -32,8 +32,17 @@ const DocumentMetadata = ({ document }: DocumentMetadataProps): JSX.Element => {
   const modifiedBySelector = useAppSelector(selectUser(modifiedBy));
   const { documentTemplates } = useAppSelector(selectDocumentTemplates);
 
-  useSelectorProcessor(ownedBySelector, setOwnedByUser);
-  useSelectorProcessor(modifiedBySelector, setModifiedByUser);
+  useEffect(() => {
+    setOwnedByUser(ownedBySelector);
+  }, [ownedBySelector]);
+
+  useEffect(() => {
+    setModifiedByUser(modifiedBySelector);
+  }, [modifiedBySelector]);
+
+  useEffect(() => {
+    console.log('ownedByUser', ownedByUser);
+  }, [ownedByUser]);
 
   useEffect(() => {
     dispatch(requestListDocumentTemplates());
@@ -55,13 +64,23 @@ const DocumentMetadata = ({ document }: DocumentMetadataProps): JSX.Element => {
   return (
     <Box display='flex' flexDirection='column' marginTop={3}>
       <Typography
+        fontWeight={400}
+        fontSize='14px'
+        lineHeight='20px'
+        color={theme.palette.TwClrTxt}
+        margin={theme.spacing(1, 0)}
+      >
+        {/* The participant name goes here, not ownedBy */}
+        {ownedByName}
+      </Typography>
+      <Typography
         fontWeight={600}
         fontSize='24px'
         lineHeight='32px'
         color={theme.palette.TwClrTxt}
         margin={theme.spacing(1, 0)}
       >
-        {name}
+        {name} - {documentTemplateName}
       </Typography>
       <Typography
         fontWeight={400}
@@ -71,9 +90,7 @@ const DocumentMetadata = ({ document }: DocumentMetadataProps): JSX.Element => {
         component='pre'
         whiteSpace='pre-wrap'
       >
-        {strings.DOCUMENT_TEMPLATE}: {documentTemplateName}
-        <br />
-        {strings.DOCUMENT_OWNER}: {ownedByName}
+        {strings.TEMPLATE}: {documentTemplateName}
         <br />
         {strings.LAST_EDITED_BY}: {modifiedByName}, {modifiedTimeDisplay}
       </Typography>
