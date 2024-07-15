@@ -14,6 +14,14 @@ export default function useNavigateTo() {
         navigate({ pathname: APP_PATHS.APPLICATION_OVERVIEW.replace(':applicationId', `${applicationId}`) });
       },
 
+      goToApplicationSectionDeliverable: (applicationId: number, sectionId: number, deliverableId: number) => {
+        navigate({
+          pathname: APP_PATHS.APPLICATION_SECTION_DELIVERABLE.replace(':applicationId', `${applicationId}`)
+            .replace(':sectionId', `${sectionId}`)
+            .replace(':deliverableId', `${deliverableId}`),
+        });
+      },
+
       goToContactUsForm: (requestType: SupportRequestType) => {
         navigate({
           pathname: APP_PATHS.HELP_SUPPORT_FORM.replace(':requestType', getSupportRequestSubpath(requestType)),
