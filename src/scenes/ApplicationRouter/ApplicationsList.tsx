@@ -10,26 +10,13 @@ import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import { useApplicationData } from './provider/Context';
+
 const ApplicationListView = () => {
   const { isTablet, isMobile } = useDeviceInfo();
   const { toastInfo } = useSnackbar();
+  const { allApplications } = useApplicationData();
 
-  const applications = [
-    {
-      applicationId: 1,
-      applicationName: 'Andromeda',
-      completed: false,
-      dateStarted: DateTime.fromJSDate(new Date('2024-07-10')),
-      statusText: 'Pre-screen in progress',
-    },
-    {
-      applicationId: 2,
-      applicationName: 'Cassiopeia',
-      completed: false,
-      dateStarted: DateTime.fromJSDate(new Date('2024-06-15')),
-      statusText: '2 out of 6 sections completed',
-    },
-  ];
   const primaryGridSize = () => {
     if (isMobile) {
       return 12;
@@ -68,13 +55,18 @@ const ApplicationListView = () => {
         />
         <Container maxWidth={false} sx={{ padding: 0 }}>
           <Grid container spacing={3} sx={{ padding: 0 }}>
-            {applications.map((application) => (
+            {allApplications.map((application) => (
               <Grid
                 item
-                xs={applications.length === 1 ? primaryGridSize() : secondaryGridSize()}
-                key={application.applicationId}
+                xs={allApplications.length === 1 ? primaryGridSize() : secondaryGridSize()}
+                key={application.id}
               >
-                <ApplicationCard {...application} />
+                <ApplicationCard
+                  applicationId={application.id}
+                  applicationName={`Applicatoin ${application.id}`}
+                  completed={false}
+                  dateStarted={DateTime.fromISO(application.createdTime)}
+                />
               </Grid>
             ))}
           </Grid>

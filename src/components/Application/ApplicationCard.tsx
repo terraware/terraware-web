@@ -12,7 +12,6 @@ export type ApplicationCardProp = {
   applicationName: string;
   completed: boolean;
   dateStarted: DateTime;
-  statusText: string;
 };
 
 export default function ApplicationCard({
@@ -20,7 +19,6 @@ export default function ApplicationCard({
   applicationName,
   completed,
   dateStarted,
-  statusText,
 }: ApplicationCardProp): JSX.Element {
   const theme = useTheme();
 
@@ -55,18 +53,6 @@ export default function ApplicationCard({
         }}
       >
         {strings.formatString(strings.STARTED, `${dateStarted.toFormat('yyyy/LL/dd')}`)}
-      </Typography>
-
-      <Typography
-        component='p'
-        sx={{
-          fontSize: '16px',
-          fontWeight: 400,
-          lineHeight: '24px',
-          color: theme.palette.TwClrTxt,
-        }}
-      >
-        {statusText}
       </Typography>
 
       <Button

@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import { Box, Slide, useTheme } from '@mui/material';
 
 import ErrorBoundary from 'src/ErrorBoundary';
+import isEnabled from 'src/features';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -18,6 +20,15 @@ interface ApplicationPortalRouterProp {
 const ApplicationPortalRouter = ({ showNavBar, setShowNavBar }: ApplicationPortalRouterProp) => {
   const { type } = useDeviceInfo();
   const theme = useTheme();
+
+  const applicationEnabled = isEnabled('Accelerator Application');
+  const { goToHome } = useNavigateTo();
+
+  useEffect(() => {
+    if (!applicationEnabled) {
+      goToHome();
+    }
+  }, [applicationEnabled, goToHome]);
 
   const navBarOpened = {
     backdropFilter: 'blur(8px)',

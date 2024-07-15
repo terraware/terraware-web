@@ -83,6 +83,7 @@ export class DeliverableToDoItem implements ToDoItem {
   getBadge = (): ToDoBadge => {
     switch (this.status) {
       case 'Approved':
+      case 'Completed':
       case 'Not Needed':
         return 'Completed';
       case 'In Review':

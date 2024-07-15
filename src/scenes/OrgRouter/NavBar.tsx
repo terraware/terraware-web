@@ -9,9 +9,11 @@ import NavItem from 'src/components/common/Navbar/NavItem';
 import NavSection from 'src/components/common/Navbar/NavSection';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
+import { useApplicationData } from 'src/scenes/ApplicationRouter/provider/Context';
 import { NurseryWithdrawalService } from 'src/services';
 import DeliverablesService from 'src/services/DeliverablesService';
 import ReportService, { Reports } from 'src/services/ReportService';
@@ -43,8 +45,12 @@ export default function NavBar({
   const { orgHasModules, currentParticipantProject, setCurrentParticipantProject, moduleProjects } =
     useParticipantData();
 
+  const applicatioinEnabled = isEnabled('Accelerator Application');
+  const { allApplications } = useApplicationData();
+
   const isAccessionDashboardRoute = useMatch({ path: APP_PATHS.SEEDS_DASHBOARD + '/', end: false });
   const isAccessionsRoute = useMatch({ path: APP_PATHS.ACCESSIONS + '/', end: false });
+  const isApplicationRoute = useMatch({ path: APP_PATHS.APPLICATIONS + '/', end: false });
   const isCheckinRoute = useMatch({ path: APP_PATHS.CHECKIN + '/', end: false });
   const isDeliverablesRoute = useMatch({ path: APP_PATHS.DELIVERABLES + '/', end: false });
   const isDeliverableViewRoute = useMatch({ path: APP_PATHS.DELIVERABLE_VIEW + '/', end: false });
@@ -207,10 +213,24 @@ export default function NavBar({
               APP_PATHS.PROJECT_MODULES.replace(':projectId', currentParticipantProject.id.toString())
             );
           }}
-          id='reports-list'
+          id='modules-list'
         />
       ) : null,
     [closeAndNavigateTo, isProjectModulesRoute, currentParticipantProject, orgHasModules]
+  );
+
+  const applicationMenu = useMemo<JSX.Element | null>(
+    () =>
+      applicatioinEnabled && allApplications.length > 0 ? (
+        <NavItem
+          icon='iconFile'
+          label={strings.APPLICATIONS}
+          selected={!!isApplicationRoute}
+          onClick={() => closeAndNavigateTo(APP_PATHS.APPLICATIONS)}
+          id='applications-list'
+        />
+      ) : null,
+    [closeAndNavigateTo, allApplications, applicatioinEnabled, isApplicationRoute]
   );
 
   const acceleratorSectionTitle = useMemo<string>(
@@ -249,9 +269,10 @@ export default function NavBar({
         }}
         id='speciesNb'
       />
-      {(deliverablesMenu || modulesMenu || reportsMenu) && (
+      {(applicationMenu || deliverablesMenu || modulesMenu || reportsMenu) && (
         <>
           <NavSection title={acceleratorSectionTitle} />
+          {applicationMenu}
           {deliverablesMenu}
           {modulesMenu}
           {reportsMenu}

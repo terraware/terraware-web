@@ -8,6 +8,50 @@
 type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 
 export interface paths {
+  "/api/v1/accelerator/applications": {
+    /**
+     * List all the applications with optional search criteria
+     * @description Only applications visible to the current user are returned.
+     */
+    get: operations["listApplications"];
+    /** Create a new application */
+    post: operations["createApplication"];
+  };
+  "/api/v1/accelerator/applications/{applicationId}": {
+    /** Get information about an application */
+    get: operations["getApplication"];
+  };
+  "/api/v1/accelerator/applications/{applicationId}/boundary": {
+    /** Update an application's boundary */
+    put: operations["updateApplicationBoundary"];
+    /** Update an application's boundary using an uploaded file */
+    post: operations["uploadApplicationBoundary"];
+  };
+  "/api/v1/accelerator/applications/{applicationId}/history": {
+    /** Get the history of changes to the metadata of an application */
+    get: operations["getApplicationHistory"];
+  };
+  "/api/v1/accelerator/applications/{applicationId}/restart": {
+    /**
+     * Restart a previously-submitted application
+     * @description If the application has not been submitted yet, this is a no-op.
+     */
+    post: operations["restartApplication"];
+  };
+  "/api/v1/accelerator/applications/{applicationId}/review": {
+    /**
+     * Update an application's metadata to reflect a review
+     * @description This is an internal-user-only operation.
+     */
+    post: operations["reviewApplication"];
+  };
+  "/api/v1/accelerator/applications/{applicationId}/submit": {
+    /**
+     * Submit an application for review
+     * @description If the application has already been submitted, this is a no-op.
+     */
+    post: operations["submitApplication"];
+  };
   "/api/v1/accelerator/cohorts": {
     /** Gets the list of cohorts. */
     get: operations["listCohorts"];
@@ -1176,6 +1220,33 @@ export interface components {
       /** Format: int64 */
       variableId?: number;
     }, "value" | "variableId">;
+    ApplicationHistoryPayload: {
+      feedback?: string;
+      /** @description Internal-only comment, if any. Only set if the current user is an internal user. */
+      internalComment?: string;
+      /** Format: date-time */
+      modifiedTime: string;
+      /** @enum {string} */
+      status: "Not Submitted" | "Failed Pre-screen" | "Passed Pre-screen" | "Submitted" | "PL Review" | "Ready for Review" | "Pre-check" | "Needs Follow-up" | "Carbon Eligible" | "Accepted" | "Waitlist" | "Not Accepted";
+    };
+    ApplicationPayload: {
+      boundary?: components["schemas"]["Geometry"];
+      /** Format: date-time */
+      createdTime: string;
+      feedback?: string;
+      /** Format: int64 */
+      id: number;
+      /** @description Internal-only comment, if any. Only set if the current user is an internal user. */
+      internalComment?: string;
+      /** @description Internal-only reference name of application. Only set if the current user is an internal user. */
+      internalName?: string;
+      /** Format: int64 */
+      organizationId: number;
+      /** Format: int64 */
+      projectId: number;
+      /** @enum {string} */
+      status: "Not Submitted" | "Failed Pre-screen" | "Passed Pre-screen" | "Submitted" | "PL Review" | "Ready for Review" | "Pre-check" | "Needs Follow-up" | "Carbon Eligible" | "Accepted" | "Waitlist" | "Not Accepted";
+    };
     AssignParticipantProjectSpeciesPayload: {
       projectIds: number[];
       speciesIds: number[];
@@ -1523,6 +1594,16 @@ export interface components {
     };
     CreateAccessionResponsePayloadV2: {
       accession: components["schemas"]["AccessionPayloadV2"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    CreateApplicationRequestPayload: {
+      boundary?: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
+      /** Format: int64 */
+      projectId: number;
+    };
+    CreateApplicationResponsePayload: {
+      /** Format: int64 */
+      id: number;
       status: components["schemas"]["SuccessOrError"];
     };
     CreateAutomationRequestPayload: {
@@ -2012,7 +2093,7 @@ export interface components {
       projectId: number;
       projectName: string;
       /** @enum {string} */
-      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
+      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
       /** Format: uri */
       templateUrl?: string;
       /** @enum {string} */
@@ -2377,6 +2458,15 @@ export interface components {
     };
     GetAccessionResponsePayloadV2: {
       accession: components["schemas"]["AccessionPayloadV2"];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetApplicationHistoryResponsePayload: {
+      /** @description History of metadata changes in reverse chronological order. */
+      history: components["schemas"]["ApplicationHistoryPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetApplicationResponsePayload: {
+      application: components["schemas"]["ApplicationPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
     GetAutomationResponsePayload: {
@@ -2807,6 +2897,10 @@ export interface components {
       organizations: components["schemas"]["AcceleratorOrganizationPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    ListApplicationsResponsePayload: {
+      applications: components["schemas"]["ApplicationPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     ListAssignedPlotsResponsePayload: {
       plots: components["schemas"]["AssignedPlotPayload"][];
       status: components["schemas"]["SuccessOrError"];
@@ -2848,7 +2942,7 @@ export interface components {
       projectId: number;
       projectName: string;
       /** @enum {string} */
-      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
+      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
       /** @enum {string} */
       type: "Document" | "Species" | "Questions";
     };
@@ -3525,7 +3619,7 @@ export interface components {
       /** @enum {string} */
       participantProjectSpeciesNativeCategory?: "Native" | "Non-native";
       /** @enum {string} */
-      participantProjectSpeciesSubmissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
+      participantProjectSpeciesSubmissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
       /** Format: int64 */
       projectId: number;
       projectName: string;
@@ -3553,7 +3647,7 @@ export interface components {
       /** @enum {string} */
       speciesNativeCategory?: "Native" | "Non-native";
       /** @enum {string} */
-      submissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
+      submissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
     };
     PhaseScores: {
       /** @enum {string} */
@@ -3954,6 +4048,12 @@ export interface components {
     ResolveUploadRequestPayload: {
       /** @description If true, the data for entries that already exist will be overwritten with the values in the uploaded file. If false, only entries that don't already exist will be imported. */
       overwriteExisting: boolean;
+    };
+    ReviewApplicationRequestPayload: {
+      feedback?: string;
+      internalComment?: string;
+      /** @enum {string} */
+      status: "Not Submitted" | "Failed Pre-screen" | "Passed Pre-screen" | "Submitted" | "PL Review" | "Ready for Review" | "Pre-check" | "Needs Follow-up" | "Carbon Eligible" | "Accepted" | "Waitlist" | "Not Accepted";
     };
     ScheduleObservationRequestPayload: {
       /**
@@ -4453,6 +4553,9 @@ export interface components {
       accession: components["schemas"]["AccessionPayloadV2"];
       status: components["schemas"]["SuccessOrError"];
     };
+    UpdateApplicationBoundaryRequestPayload: {
+      boundary: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
+    };
     UpdateAutomationRequestPayload: {
       description?: string;
       /** Format: int64 */
@@ -4652,7 +4755,7 @@ export interface components {
       /** @enum {string} */
       speciesNativeCategory?: "Native" | "Non-native";
       /** @enum {string} */
-      submissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
+      submissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
     };
     UpdateParticipantRequestPayload: {
       /**
@@ -4741,7 +4844,7 @@ export interface components {
       feedback?: string;
       internalComment?: string;
       /** @enum {string} */
-      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed";
+      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
     };
     UpdateUserCookieConsentRequestPayload: {
       /** @description If true, the user consents to the use of analytics cookies. If false, they decline. */
@@ -5021,6 +5124,10 @@ export interface components {
       variableId: number;
     };
     VariablePayload: {
+      /** @enum {string} */
+      dependencyCondition?: "eq" | "gt" | "gte" | "lt" | "lte" | "neq";
+      dependencyValue?: string;
+      dependencyVariableStableId?: string;
       description?: string;
       /** Format: int64 */
       id: number;
@@ -5030,6 +5137,7 @@ export interface components {
       position?: number;
       /** @description IDs of sections that recommend this variable. */
       recommendedBy?: number[];
+      stableId: string;
       /** @enum {string} */
       type: "Number" | "Text" | "Date" | "Image" | "Select" | "Table" | "Link" | "Section";
     };
@@ -5082,6 +5190,183 @@ export type external = Record<string, never>;
 
 export interface operations {
 
+  /**
+   * List all the applications with optional search criteria
+   * @description Only applications visible to the current user are returned.
+   */
+  listApplications: {
+    parameters: {
+      query?: {
+        /** @description If present, only list applications for this organization. */
+        organizationId?: number;
+        /** @description If present, only list applications for this project. A project can only have one application, so this will either return an empty result or a result with a single element. */
+        projectId?: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListApplicationsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Create a new application */
+  createApplication: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateApplicationRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateApplicationResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Get information about an application */
+  getApplication: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetApplicationResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Update an application's boundary */
+  updateApplicationBoundary: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateApplicationBoundaryRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Update an application's boundary using an uploaded file */
+  uploadApplicationBoundary: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    requestBody?: {
+      content: {
+        "multipart/form-data": {
+          /** Format: binary */
+          file: string;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Get the history of changes to the metadata of an application */
+  getApplicationHistory: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetApplicationHistoryResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Restart a previously-submitted application
+   * @description If the application has not been submitted yet, this is a no-op.
+   */
+  restartApplication: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Update an application's metadata to reflect a review
+   * @description This is an internal-user-only operation.
+   */
+  reviewApplication: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ReviewApplicationRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * Submit an application for review
+   * @description If the application has already been submitted, this is a no-op.
+   */
+  submitApplication: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
   /** Gets the list of cohorts. */
   listCohorts: {
     parameters: {
