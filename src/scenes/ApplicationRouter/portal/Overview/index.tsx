@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useMemo } from 'react';
 
 import { Box, Card, Typography, useTheme } from '@mui/material';
 
@@ -32,19 +31,37 @@ const applicationSteps = [
 ];
 const OverviewView = () => {
   const theme = useTheme();
-  const { applicationId } = useParams<{ applicationId: string }>();
 
-  const { setSelectedApplication, allApplications } = useApplicationData();
+  const { selectedApplication } = useApplicationData();
 
-  useEffect(() => {
-    if (applicationId) {
-      setSelectedApplication(Number(applicationId));
+  const timelineIndex = useMemo(() => {
+    if (selectedApplication) {
+      switch (selectedApplication.status) {
+        case 'Not Submitted':
+        case 'Failed Pre-screen':
+          return 0;
+        case 'Passed Pre-screen':
+        case 'Submitted':
+        case 'PL Review':
+        case 'Ready for Review':
+        case 'Pre-check':
+        case 'Needs Follow-up':
+        case 'Carbon Eligible':
+        case 'Accepted':
+        case 'Waitlist':
+        case 'Not Accepted':
+          return 1;
+      }
+    } else {
+      // By default show pre-screen
+      return 0;
     }
-  }, [applicationId, allApplications]);
+  }, [selectedApplication]);
+
   return (
     <ApplicationPage title={strings.APPLICATION}>
       <Card style={{ width: '100%', padding: theme.spacing(3), borderRadius: theme.spacing(3) }}>
-        <CurrentTimeline steps={applicationSteps} currentIndex={0} />
+        <CurrentTimeline steps={applicationSteps} currentIndex={timelineIndex} />
 
         <Box paddingY={theme.spacing(2)} borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}>
           <Typography>{phaseDescription}</Typography>
