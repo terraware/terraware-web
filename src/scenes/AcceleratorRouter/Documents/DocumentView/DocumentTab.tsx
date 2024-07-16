@@ -51,6 +51,7 @@ const DocumentTab = ({ document }: DocumentProps): JSX.Element => {
           titleNumber={section.sectionNumber ?? ''}
           title={section.name}
           description={section.description || ''}
+          status={section.values && section.values.length > 0 ? 'Complete' : 'Incomplete'}
         />
       );
     } else {
