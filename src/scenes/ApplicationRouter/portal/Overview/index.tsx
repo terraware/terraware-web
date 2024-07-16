@@ -34,11 +34,11 @@ const OverviewView = () => {
   const theme = useTheme();
   const { applicationId } = useParams<{ applicationId: string }>();
 
-  const { setSelectedApplitcation, allApplications } = useApplicationData();
+  const { setSelectedApplication, allApplications } = useApplicationData();
 
   useEffect(() => {
     if (applicationId) {
-      setSelectedApplitcation(Number(applicationId));
+      setSelectedApplication(Number(applicationId));
     }
   }, [applicationId, allApplications]);
   return (

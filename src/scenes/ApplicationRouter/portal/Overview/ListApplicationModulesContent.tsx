@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Button } from '@terraware/web-components';
+import { Badge, Button } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import strings from 'src/strings';
@@ -24,7 +24,8 @@ export default function ListModulesContent(): JSX.Element {
       overview:
         'Draw your site map and answer the Prescreen questions to see if you qualify to start the Application for the Accelerator Program. ',
       deliverables: [],
-    };
+      status: 'Incomplete',
+    } as ApplicationModuleWithDeliverables;
     newSections.unshift(prescreenSection);
     setSectionsWithPrescreen(newSections);
   }, [applicationSections]);
@@ -39,9 +40,23 @@ export default function ListModulesContent(): JSX.Element {
           sx={{ '&:last-child': { border: 'none' } }}
         >
           <Box marginBottom={theme.spacing(1)} display={'flex'} justifyContent={'space-between'}>
-            <Typography fontSize={'24px'} fontWeight={600} lineHeight={'32px'}>
-              {section.name}
-            </Typography>
+            <Box display='flex' alignItems='center'>
+              <Typography fontSize={'24px'} fontWeight={600} lineHeight={'32px'}>
+                {section.name}
+              </Typography>
+              <Box paddingLeft={theme.spacing(2)} alignSelf={'flex-start'}>
+                {section.status === 'Complete' ? (
+                  <Badge
+                    label={section.status}
+                    labelColor={theme.palette.TwClrTxtSuccess}
+                    borderColor={theme.palette.TwClrBrdrSuccess}
+                    backgroundColor={theme.palette.TwClrBgSuccessTertiary}
+                  />
+                ) : (
+                  <Badge label={section.status} />
+                )}
+              </Box>
+            </Box>
             <Button
               onClick={() => true}
               label={strings.VIEW}
