@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Box, Container, Grid } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -10,12 +10,14 @@ import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import NewApplicationModal from './NewApplicationModal';
 import { useApplicationData } from './provider/Context';
 
 const ApplicationListView = () => {
   const { isTablet, isMobile } = useDeviceInfo();
   const { toastInfo } = useSnackbar();
   const { allApplications } = useApplicationData();
+  const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
 
   const primaryGridSize = () => {
     if (isMobile) {
@@ -47,13 +49,15 @@ const ApplicationListView = () => {
         <PageHeader
           title={strings.YOUR_APPLICATIONS}
           rightComponent={
-            <Button
-              onClick={() => toastInfo('Start new application not yet implemented')}
-              label={strings.START_NEW_APPLICATION}
-            />
+            <Button onClick={() => setIsNewApplicationModalOpen(true)} label={strings.START_NEW_APPLICATION} />
           }
         />
         <Container maxWidth={false} sx={{ padding: 0 }}>
+          <NewApplicationModal
+            open={isNewApplicationModalOpen}
+            onClose={() => setIsNewApplicationModalOpen(false)}
+            onSave={() => toastInfo('Create new application clicked')}
+          />
           <Grid container spacing={3} sx={{ padding: 0 }}>
             {allApplications.map((application) => (
               <Grid
