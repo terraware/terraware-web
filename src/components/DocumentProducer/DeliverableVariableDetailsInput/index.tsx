@@ -353,9 +353,9 @@ const DeliverableVariableDetailsInput = ({
       {variable.type === 'Image' && (
         <DeliverableEditImages
           projectId={projectId}
-          setDeletedImages={(values: VariableValueImageValue[]) => setDeletedImages(values)}
-          setImages={(values: VariableValueImageValue[]) => setImages(values)}
-          setNewImages={(values: PhotoWithAttributes[]) => setNewImages(values)}
+          setDeletedImages={setDeletedImages}
+          setImages={setImages}
+          setNewImages={setNewImages}
           variable={variable as ImageVariableWithValues}
         />
       )}
