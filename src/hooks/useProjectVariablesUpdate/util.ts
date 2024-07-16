@@ -1,5 +1,7 @@
-import { VariableWithValues } from 'src/types/documentProducer/Variable';
+import { VariableTableCell, getInitialCellValues } from 'src/components/DocumentProducer/EditableTableModal/helpers';
+import { TableVariableWithValues, VariableWithValues } from 'src/types/documentProducer/Variable';
 import {
+  AppendVariableValueOperation,
   NewDateValuePayload,
   NewLinkValuePayload,
   NewNumberValuePayload,
@@ -17,6 +19,7 @@ import {
 // TODO this was taken from the pdd-web code, but there is no test, it definitely seems test-worthy
 export const makeVariableValueOperations = (
   variable: VariableWithValues,
+  pendingCellValues: VariableTableCell[][],
   pendingValues: VariableValueValue[],
   removedValue?: VariableValueValue
 ) => {
@@ -30,14 +33,14 @@ export const makeVariableValueOperations = (
     | NewLinkValuePayload
     | undefined;
 
-  let newValues: NewTextValuePayload[] = [];
+  let newTextValues: NewTextValuePayload[] = [];
   let valueIdToUpdate = -1;
 
   if (variable.type === 'Text') {
     const firstValue = pendingValues[0] as VariableValueTextValue;
     valueIdToUpdate = firstValue.id;
 
-    newValues = pendingValues.reduce((acc: NewTextValuePayload[], nV: VariableValueValue) => {
+    newTextValues = pendingValues.reduce((acc: NewTextValuePayload[], nV: VariableValueValue) => {
       if (nV.type === 'Text') {
         acc.push({ type: 'Text', textValue: nV.textValue });
       }
@@ -69,6 +72,91 @@ export const makeVariableValueOperations = (
     newValue = { type: 'Link', url: firstValue.url, citation: firstValue.citation, title: firstValue.title };
   }
 
+  if (variable.type === 'Table') {
+    const columns = variable.columns;
+    const initialCellValues: VariableTableCell[][] = getInitialCellValues(variable as TableVariableWithValues);
+    const cellValues = [...initialCellValues, ...pendingCellValues];
+
+    if (columns.length === 0) {
+      return operations;
+    }
+
+    // delete/replace existing operations
+    initialCellValues.forEach((row) => {
+      const rowId = row[0].rowId;
+      if (rowId !== undefined) {
+        const foundRow = cellValues.find((r) => r[0].rowId === rowId);
+        if (foundRow === undefined) {
+          // delete operations
+          operations.push({
+            operation: 'Delete',
+            valueId: rowId,
+            existingValueId: rowId,
+          });
+        } else {
+          // replace operations
+          row.forEach((cell) => {
+            const foundCell = foundRow.find((c) => c.colId === cell.colId);
+            if (foundCell !== undefined && foundCell.changed) {
+              const newValues =
+                foundCell.values && foundCell.type === 'Select'
+                  ? [
+                      {
+                        ...foundCell.values[0],
+                        optionIds: (foundCell.values[0] as VariableValueSelectValue).optionValues,
+                      } as NewSelectValuePayload,
+                    ]
+                  : foundCell.values;
+              operations.push({
+                operation: 'Replace',
+                rowValueId: rowId,
+                variableId: cell.colId,
+                values: newValues ?? [],
+              });
+            }
+          });
+        }
+      }
+    });
+
+    // add row operations
+    const newRows = cellValues.filter((row) => row[0].rowId === undefined);
+    newRows.forEach((newRow) => {
+      // append row
+      operations.push({
+        operation: 'Append',
+        variableId: variable.id,
+        value: {
+          type: 'Table',
+        },
+      });
+
+      // create values (will automatically assign to the last created row)
+      newRow.forEach((newCell) => {
+        if (newCell.values !== undefined) {
+          const newOp: AppendVariableValueOperation =
+            newCell.type === 'Select'
+              ? {
+                  operation: 'Append',
+                  variableId: newCell.colId,
+                  value: {
+                    ...newCell.values[0],
+                    optionIds: (newCell.values[0] as VariableValueSelectValue).optionValues,
+                  } as NewSelectValuePayload,
+                }
+              : {
+                  operation: 'Append',
+                  variableId: newCell.colId,
+                  value: newCell.values[0],
+                };
+          operations.push(newOp);
+        }
+      });
+    });
+
+    return operations;
+  }
+
   if (newValue) {
     if (pendingValues[0].id !== -1) {
       operations.push({
@@ -82,8 +170,8 @@ export const makeVariableValueOperations = (
     }
   }
 
-  if (newValues) {
-    newValues.forEach((nV, index) => {
+  if (newTextValues) {
+    newTextValues.forEach((nV, index) => {
       if (pendingValues[index].id !== -1) {
         operations.push({
           operation: 'Update',

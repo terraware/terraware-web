@@ -4,6 +4,7 @@ import { Box, Grid, useTheme } from '@mui/material';
 
 import Metadata from 'src/components/DeliverableView/Metadata';
 import DeliverableVariableDetailsInput from 'src/components/DocumentProducer/DeliverableVariableDetailsInput';
+import { VariableTableCell } from 'src/components/DocumentProducer/EditableTableModal/helpers';
 import Card from 'src/components/common/Card';
 import WrappedPageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
@@ -51,10 +52,8 @@ const QuestionsDeliverableEditView = (): JSX.Element | null => {
     return () => clearTimeout(timeoutId);
   }, [variablesWithValues]);
 
-  const { pendingVariableValues, setRemovedValue, setValues, update, updateSuccess } = useProjectVariablesUpdate(
-    projectId,
-    variablesWithValues
-  );
+  const { pendingVariableValues, setCellValues, setRemovedValue, setValues, update, updateSuccess } =
+    useProjectVariablesUpdate(projectId, variablesWithValues);
 
   useEffect(() => {
     if (!(deliverableId && projectId)) {
@@ -115,6 +114,9 @@ const QuestionsDeliverableEditView = (): JSX.Element | null => {
                     <Grid item xs={12}>
                       <DeliverableVariableDetailsInput
                         values={variableWithValues.values}
+                        setCellValues={(newValues: VariableTableCell[][]) =>
+                          setCellValues(variableWithValues.id, newValues)
+                        }
                         setValues={(newValues: VariableValueValue[]) => setValues(variableWithValues.id, newValues)}
                         variable={variableWithValues}
                         addRemovedValue={(removedValue: VariableValueValue) =>

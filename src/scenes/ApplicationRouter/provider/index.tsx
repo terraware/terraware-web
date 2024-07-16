@@ -34,7 +34,10 @@ const ApplicationProvider = ({ children }: Props) => {
 
   const _setSelectedApplication = useCallback(
     (applicationId: string | number) => {
-      setSelectedApplication(allApplications.find((application) => application.id === Number(applicationId)));
+      if (allApplications.length > 0) {
+        const nextApplication = allApplications.find((application) => application.id === Number(applicationId));
+        setSelectedApplication(nextApplication);
+      }
     },
     [allApplications]
   );
@@ -43,7 +46,7 @@ const ApplicationProvider = ({ children }: Props) => {
     allApplications,
     applicationSections,
     selectedApplication,
-    setSelectedApplitcation: _setSelectedApplication,
+    setSelectedApplication: _setSelectedApplication,
   });
 
   useEffect(() => {
@@ -54,8 +57,8 @@ const ApplicationProvider = ({ children }: Props) => {
   }, [dispatch, selectedOrganization, setListApplicationRequest]);
 
   useEffect(() => {
-    if (listApplicationsResult && listApplicationsResult.status === 'success') {
-      setAllApplications(listApplicationsResult.data ?? []);
+    if (listApplicationsResult && listApplicationsResult.status === 'success' && listApplicationsResult.data) {
+      setAllApplications(listApplicationsResult.data);
     }
   }, [listApplicationsResult, setAllApplications]);
 
@@ -67,8 +70,12 @@ const ApplicationProvider = ({ children }: Props) => {
   }, [dispatch, selectedApplication, setListApplicationModulesRequest]);
 
   useEffect(() => {
-    if (listApplicationModulesResult && listApplicationModulesResult.status === 'success') {
-      setApplicationSections(listApplicationModulesResult.data ?? []);
+    if (
+      listApplicationModulesResult &&
+      listApplicationModulesResult.status === 'success' &&
+      listApplicationModulesResult.data
+    ) {
+      setApplicationSections(listApplicationModulesResult.data);
     }
   }, [listApplicationModulesResult, setApplicationSections]);
 
@@ -77,7 +84,7 @@ const ApplicationProvider = ({ children }: Props) => {
       allApplications,
       applicationSections,
       selectedApplication,
-      setSelectedApplitcation: _setSelectedApplication,
+      setSelectedApplication: _setSelectedApplication,
     });
   }, [allApplications, applicationSections, selectedApplication, _setSelectedApplication]);
 

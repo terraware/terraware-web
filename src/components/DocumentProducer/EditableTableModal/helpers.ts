@@ -1,4 +1,4 @@
-import { TableColumnWithValues, VariableType } from 'src/types/documentProducer/Variable';
+import { TableColumnWithValues, TableVariableWithValues, VariableType } from 'src/types/documentProducer/Variable';
 import { VariableValueTableValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
 
 export type CellVariableType = Omit<VariableType, 'Section'>;
@@ -68,4 +68,16 @@ export const cellValue = (value: VariableValueValue, placeholder?: string): stri
     default:
       return placeholder ?? '';
   }
+};
+
+export const getInitialCellValues = (variable: TableVariableWithValues): VariableTableCell[][] => {
+  return variable.values.map((row) =>
+    variable.columns.map((col) => ({
+      type: col.variable.type,
+      rowId: row.id,
+      colId: col.variable.id,
+      values: getCellValues(row, col as TableColumnWithValues),
+      changed: false,
+    }))
+  );
 };

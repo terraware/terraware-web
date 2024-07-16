@@ -11,7 +11,15 @@ export default function useNavigateTo() {
   return useMemo(
     () => ({
       goToApplication: (applicationId: number) => {
-        navigate({ pathname: APP_PATHS.APPLICATION.replace(':applicationId', `${applicationId}`) });
+        navigate({ pathname: APP_PATHS.APPLICATION_OVERVIEW.replace(':applicationId', `${applicationId}`) });
+      },
+
+      goToApplicationSectionDeliverable: (applicationId: number, sectionId: number, deliverableId: number) => {
+        navigate({
+          pathname: APP_PATHS.APPLICATION_SECTION_DELIVERABLE.replace(':applicationId', `${applicationId}`)
+            .replace(':sectionId', `${sectionId}`)
+            .replace(':deliverableId', `${deliverableId}`),
+        });
       },
 
       goToContactUsForm: (requestType: SupportRequestType) => {
