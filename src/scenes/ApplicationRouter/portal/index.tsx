@@ -1,16 +1,22 @@
 import React, { useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { Box, Slide, useTheme } from '@mui/material';
 
 import ErrorBoundary from 'src/ErrorBoundary';
+import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import ApplicationProvider from 'src/scenes/ApplicationRouter/provider';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+import SectionDeliverableView from './Deliverables';
 import NavBar from './NavBar';
 import Overview from './Overview';
+import PrescreenView from './Prescreen';
+import ReviewView from './Review';
+import SectionView from './Sections';
 
 interface ApplicationPortalRouterProp {
   showNavBar: boolean;
@@ -56,7 +62,7 @@ const ApplicationPortalRouter = ({ showNavBar, setShowNavBar }: ApplicationPorta
   };
 
   return (
-    <>
+    <ApplicationProvider>
       {type !== 'desktop' ? (
         <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
           <Box sx={navBarOpened}>
@@ -72,11 +78,16 @@ const ApplicationPortalRouter = ({ showNavBar, setShowNavBar }: ApplicationPorta
       >
         <ErrorBoundary setShowNavBar={setShowNavBar}>
           <Routes>
-            <Route path={'*'} element={<Overview />} />
+            <Route path={`${APP_PATHS.APPLICATION_OVERVIEW}`} element={<Overview />} />
+            <Route path={`${APP_PATHS.APPLICATION_PRESCREEN}`} element={<PrescreenView />} />
+            <Route path={`${APP_PATHS.APPLICATION_REVIEW}`} element={<ReviewView />} />
+            <Route path={`${APP_PATHS.APPLICATION_SECTION}`} element={<SectionView />} />
+            <Route path={`${APP_PATHS.APPLICATION_SECTION_DELIVERABLE}`} element={<SectionDeliverableView />} />
+            <Route path={'*'} element={<Navigate to={APP_PATHS.APPLICATIONS} />} />
           </Routes>
         </ErrorBoundary>
       </Box>
-    </>
+    </ApplicationProvider>
   );
 };
 

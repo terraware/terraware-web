@@ -11,7 +11,7 @@ export default function useNavigateTo() {
   return useMemo(
     () => ({
       goToApplication: (applicationId: number) => {
-        navigate({ pathname: APP_PATHS.APPLICATION.replace(':applicationId', `${applicationId}`) });
+        navigate({ pathname: APP_PATHS.APPLICATION_OVERVIEW.replace(':applicationId', `${applicationId}`) });
       },
 
       goToContactUsForm: (requestType: SupportRequestType) => {
