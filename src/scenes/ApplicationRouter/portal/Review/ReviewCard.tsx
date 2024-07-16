@@ -53,7 +53,7 @@ const ReviewCard = ({ sections }: ReviewCardProps): JSX.Element => {
               borderRadius={theme.spacing(1)}
               borderColor={theme.palette.TwClrBaseGreen300}
               border={1}
-              paddingY={'6.8px'}
+              paddingY={theme.spacing(2)}
               width={'600px'}
             >
               <Typography
