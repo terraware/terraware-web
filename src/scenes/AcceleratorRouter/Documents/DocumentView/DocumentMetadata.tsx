@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
+import { useParticipants } from 'src/hooks/useParticipants';
 import { selectDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesSelector';
 import { requestListDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesThunks';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
@@ -20,28 +21,19 @@ export type DocumentMetadataProps = {
 };
 
 const DocumentMetadata = ({ document }: DocumentMetadataProps): JSX.Element => {
-  const { name, documentTemplateId, ownedBy, modifiedBy, modifiedTime } = document;
+  const { name, documentTemplateId, ownedBy, modifiedBy, modifiedTime, projectId } = document;
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
-  const [ownedByUser, setOwnedByUser] = useState<User>();
   const [modifiedByUser, setModifiedByUser] = useState<User>();
 
-  const ownedBySelector = useAppSelector(selectUser(ownedBy));
   const modifiedBySelector = useAppSelector(selectUser(modifiedBy));
   const { documentTemplates } = useAppSelector(selectDocumentTemplates);
-
-  useEffect(() => {
-    setOwnedByUser(ownedBySelector);
-  }, [ownedBySelector]);
+  const { availableParticipants } = useParticipants();
 
   useEffect(() => {
     setModifiedByUser(modifiedBySelector);
   }, [modifiedBySelector]);
-
-  useEffect(() => {
-    console.log('ownedByUser', ownedByUser);
-  }, [ownedByUser]);
 
   useEffect(() => {
     dispatch(requestListDocumentTemplates());
@@ -52,13 +44,13 @@ const DocumentMetadata = ({ document }: DocumentMetadataProps): JSX.Element => {
     dispatch(requestGetUser(modifiedBy));
   }, [dispatch, ownedBy, modifiedBy]);
 
-  const ownedByName = useMemo(() => getUserDisplayName(ownedByUser), [ownedByUser]);
   const modifiedByName = useMemo(() => getUserDisplayName(modifiedByUser), [modifiedByUser]);
   const modifiedTimeDisplay = useMemo(() => getDateTimeDisplayValue(new Date(modifiedTime).getTime()), [modifiedTime]);
   const documentTemplateName = useMemo(
     () => getDocumentTemplateName(documentTemplateId, documentTemplates ?? []),
     [documentTemplates, documentTemplateId]
   );
+  const participant = availableParticipants?.find((part) => part.projects.find((proj) => proj.id === projectId));
 
   return (
     <Box display='flex' flexDirection='column' marginTop={3}>
@@ -69,8 +61,7 @@ const DocumentMetadata = ({ document }: DocumentMetadataProps): JSX.Element => {
         color={theme.palette.TwClrTxt}
         margin={theme.spacing(1, 0)}
       >
-        {/* The participant name goes here, not ownedBy */}
-        {ownedByName}
+        {participant?.name}
       </Typography>
       <Typography
         fontWeight={600}
