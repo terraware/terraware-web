@@ -25,6 +25,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValue } from 'src/types/documentProducer/VariableValue';
+import { variableDependencyMet } from 'src/utils/documentProducer/variables';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import QuestionsDeliverableStatusMessage from './QuestionsDeliverableStatusMessage';
@@ -187,9 +188,11 @@ const QuestionsDeliverableView = (props: Props): JSX.Element | null => {
                 paddingTop: theme.spacing(3),
               }}
             >
-              {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => (
-                <QuestionBox key={index} projectId={projectId} variable={variableWithValues} />
-              ))}
+              {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) =>
+                variableDependencyMet(variableWithValues, variablesWithValues) ? (
+                  <QuestionBox key={index} projectId={projectId} variable={variableWithValues} />
+                ) : null
+              )}
             </Box>
           </Card>
         </Box>
