@@ -5,6 +5,7 @@ import { Button, DatePicker, Dropdown, DropdownItem, Icon, Textfield } from '@te
 
 import strings from 'src/strings';
 import {
+  ImageVariableWithValues,
   SelectOptionPayload,
   SelectVariable,
   TableVariableWithValues,
@@ -12,6 +13,7 @@ import {
 } from 'src/types/documentProducer/Variable';
 import {
   VariableValueDateValue,
+  VariableValueImageValue,
   VariableValueLinkValue,
   VariableValueNumberValue,
   VariableValueSelectValue,
@@ -19,23 +21,33 @@ import {
   VariableValueValue,
 } from 'src/types/documentProducer/VariableValue';
 
+import DeliverableEditImages from '../DeliverableEditImages';
 import DeliverableEditTable from '../DeliverableEditTable';
+import { PhotoWithAttributes } from '../EditImagesModal/PhotoSelector';
 import { VariableTableCell } from '../EditableTableModal/helpers';
 
 export type DeliverableVariableDetailsInputProps = {
   values: VariableValueValue[];
   setCellValues?: (values: VariableTableCell[][]) => void;
+  setDeletedImages: (values: VariableValueImageValue[]) => void;
+  setImages: (values: VariableValueImageValue[]) => void;
+  setNewImages: (values: PhotoWithAttributes[]) => void;
   setValues: (values: VariableValueValue[]) => void;
   variable: Variable;
   addRemovedValue: (value: VariableValueValue) => void;
+  projectId: number;
 };
 
 const DeliverableVariableDetailsInput = ({
   values,
   setCellValues,
+  setDeletedImages,
+  setImages,
+  setNewImages,
   setValues,
   variable,
   addRemovedValue,
+  projectId,
 }: DeliverableVariableDetailsInputProps): JSX.Element => {
   const [value, setValue] = useState<string | number>();
   const [title, setTitle] = useState<string>();
@@ -335,6 +347,16 @@ const DeliverableVariableDetailsInput = ({
         <DeliverableEditTable
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
           variable={variable as TableVariableWithValues}
+        />
+      )}
+
+      {variable.type === 'Image' && (
+        <DeliverableEditImages
+          projectId={projectId}
+          setDeletedImages={setDeletedImages}
+          setImages={setImages}
+          setNewImages={setNewImages}
+          variable={variable as ImageVariableWithValues}
         />
       )}
     </>

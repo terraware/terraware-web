@@ -72,3 +72,33 @@ export const requestUploadImageValue = createAsyncThunk(
     return rejectWithValue(response.error || strings.GENERIC_ERROR);
   }
 );
+
+export const requestUploadManyImageValues = createAsyncThunk(
+  'uploadManyImageValues',
+  async (imageValues: UploadImageValueRequestPayloadWithProjectId[], { rejectWithValue }) => {
+    let allSucceeded = true;
+
+    const promises = imageValues.map((imageValue) =>
+      ValueService.uploadImageValue(
+        imageValue.projectId,
+        imageValue.variableId,
+        imageValue.file,
+        imageValue.citation,
+        imageValue.caption
+      )
+    );
+
+    const results = await Promise.all(promises);
+
+    results.forEach((res) => {
+      if (!res.requestSucceeded) {
+        allSucceeded = false;
+      }
+    });
+
+    if (allSucceeded) {
+      return true;
+    }
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);

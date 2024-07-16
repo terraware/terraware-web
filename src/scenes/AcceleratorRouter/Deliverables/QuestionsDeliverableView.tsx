@@ -11,6 +11,7 @@ import TitleBar from 'src/components/DeliverableView/TitleBar';
 import { EditProps } from 'src/components/DeliverableView/types';
 import DeliverableDisplayVariableValue from 'src/components/DocumentProducer/DeliverableDisplayVariableValue';
 import DeliverableVariableDetailsInput from 'src/components/DocumentProducer/DeliverableVariableDetailsInput';
+import { PhotoWithAttributes } from 'src/components/DocumentProducer/EditImagesModal/PhotoSelector';
 import { VariableTableCell } from 'src/components/DocumentProducer/EditableTableModal/helpers';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
@@ -31,7 +32,7 @@ import {
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
-import { VariableValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
+import { VariableValue, VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -63,6 +64,9 @@ const QuestionBox = ({
   const {
     pendingVariableValues,
     setCellValues,
+    setDeletedImages,
+    setImages,
+    setNewImages,
     setRemovedValue,
     setValues,
     update,
@@ -322,6 +326,10 @@ const QuestionBox = ({
                   variable={variable}
                   addRemovedValue={(removedValue: VariableValueValue) => setRemovedValue(variable.id, removedValue)}
                   setCellValues={(newValues: VariableTableCell[][]) => setCellValues(variable.id, newValues)}
+                  setDeletedImages={(newValues: VariableValueImageValue[]) => setDeletedImages(variable.id, newValues)}
+                  setImages={(newValues: VariableValueImageValue[]) => setImages(variable.id, newValues)}
+                  setNewImages={(newValues: PhotoWithAttributes[]) => setNewImages(variable.id, newValues)}
+                  projectId={projectId}
                 />
               </Grid>
             </Grid>

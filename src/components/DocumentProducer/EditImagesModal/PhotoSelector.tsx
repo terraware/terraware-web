@@ -60,6 +60,7 @@ export default function PhotoChooser(props: PhotoChooserProps): JSX.Element {
   const divRef = useRef<HTMLDivElement>(null);
   const theme = useTheme();
   const [editing, setEditing] = useState<boolean>(false);
+  const [filesDataChanged, setFilesDataChanged] = useState<boolean>(false);
 
   useEffect(() => {
     setEditing(!!selectedFile);
@@ -126,12 +127,14 @@ export default function PhotoChooser(props: PhotoChooserProps): JSX.Element {
 
     if (multipleSelection) {
       setFilesData(filesDataList);
+      setFilesDataChanged(true);
     } else {
       const lastUploadedIndex = files.length - 1;
       const lastImage = filesDataList[lastUploadedIndex];
 
       if (lastImage) {
         setFilesData([lastImage]);
+        setFilesDataChanged(true);
       }
     }
 
@@ -142,14 +145,20 @@ export default function PhotoChooser(props: PhotoChooserProps): JSX.Element {
   }, [files, multipleSelection]);
 
   useEffect(() => {
+    if (!filesDataChanged) {
+      return;
+    }
+
     onPhotosChanged(filesData);
-  }, [filesData, onPhotosChanged]);
+    setFilesDataChanged(false);
+  }, [filesData, onPhotosChanged, filesDataChanged]);
 
   const updateFileData = (index: number, idToUpdate: string, newValue: string) => {
     const newFile = { ...filesData[index], [idToUpdate]: newValue };
     const newFilesData = [...filesData];
     newFilesData[index] = newFile;
     setFilesData(newFilesData);
+    setFilesDataChanged(true);
   };
 
   return (
