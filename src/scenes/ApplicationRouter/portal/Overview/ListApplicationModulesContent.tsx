@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Badge, Button } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import strings from 'src/strings';
 import { ApplicationModuleWithDeliverables } from 'src/types/Application';
 
@@ -15,6 +17,10 @@ export default function ListModulesContent(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const [sectionsWithPrescreen, setSectionsWithPrescreen] =
     useState<ApplicationModuleWithDeliverables[]>(applicationSections);
+  const { goToApplicationSection, goToApplicationPrescreen } = useNavigateTo();
+
+  const pathParams = useParams<{ applicationId: string }>();
+  const applicationId = Number(pathParams.applicationId);
 
   useEffect(() => {
     const newSections = [...applicationSections];
@@ -58,7 +64,11 @@ export default function ListModulesContent(): JSX.Element {
               </Box>
             </Box>
             <Button
-              onClick={() => true}
+              onClick={() =>
+                section.name === 'Prescreen'
+                  ? goToApplicationPrescreen(applicationId)
+                  : goToApplicationSection(applicationId, section.id)
+              }
               label={strings.VIEW}
               priority={'secondary'}
               style={isMobile ? { width: '100%' } : {}}
