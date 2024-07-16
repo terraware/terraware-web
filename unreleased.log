@@ -1,3 +1,4 @@
+1c1e1d1c6e7 Fix document metadata view (#2852)
 8d2b44779d1 Make timeline steps update depending on status (#2861)
 bdde1a9f1a0 Implement variable dependencies in the questionnaire UI (#2835)
 61688efe15d SW-5647 Application overview navigation (#2858)
