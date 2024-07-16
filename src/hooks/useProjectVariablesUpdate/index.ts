@@ -207,7 +207,7 @@ export const useProjectVariablesUpdate = (
     setRemovedValue,
     setValues,
     updateSuccess: updateResult?.status === 'success',
-    uploadSuccess: uploadResult?.status === 'success',
+    uploadSuccess: Object.keys(pendingNewImages).length === 0 ? true : uploadResult?.status === 'success',
     update,
   };
 };

@@ -63,7 +63,7 @@ const QuestionsDeliverableEditView = (): JSX.Element | null => {
     setValues,
     update,
     updateSuccess,
-    // uploadSuccess,
+    uploadSuccess,
   } = useProjectVariablesUpdate(projectId, variablesWithValues);
 
   useEffect(() => {
@@ -80,10 +80,10 @@ const QuestionsDeliverableEditView = (): JSX.Element | null => {
   }, [deliverableId, projectId]);
 
   useEffect(() => {
-    if (updateSuccess) {
+    if (updateSuccess && uploadSuccess) {
       goToThisDeliverable();
     }
-  }, [goToThisDeliverable, updateSuccess]);
+  }, [goToThisDeliverable, updateSuccess, uploadSuccess]);
 
   const handleOnSave = () => {
     if (pendingVariableValues.size === 0) {
