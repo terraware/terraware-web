@@ -132,7 +132,7 @@ export default function DocumentView(): JSX.Element {
   }
 
   return (
-    <Page crumbs={crumbs}>
+    <Page crumbs={crumbs} contentStyle={{ 'flex-direction': 'column' }}>
       <PageDialog
         title={strings.NEW_TEMPLATE_MODAL_TITLE}
         message={strings.NEW_TEMPLATE_MODAL_DESCRIPTION}
@@ -158,7 +158,7 @@ export default function DocumentView(): JSX.Element {
         <DocumentMetadata document={document} />
         <DocumentActions document={document} onDocumentUpdate={fetchDocument} />
       </Box>
-      <Box marginTop={3} display='flex' flexDirection='row' flexGrow={1}>
+      <Box marginTop={3} display='flex' flexDirection='column' flexGrow={1}>
         <Box display='flex' flexGrow={1}>
           <Tabs tabs={tabs} activeTab={activeTab} onTabChange={onTabChange} />
         </Box>
