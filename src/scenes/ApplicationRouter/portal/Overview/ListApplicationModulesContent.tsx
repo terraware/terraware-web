@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Badge, Button } from '@terraware/web-components';
+import { Button } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
+import CompleteIncompleteBatch from 'src/components/common/CompleteIncompleteBatch';
 import strings from 'src/strings';
 import { ApplicationModuleWithDeliverables } from 'src/types/Application';
 
@@ -45,16 +46,7 @@ export default function ListModulesContent(): JSX.Element {
                 {section.name}
               </Typography>
               <Box paddingLeft={theme.spacing(2)} alignSelf={'flex-start'}>
-                {section.status === 'Complete' ? (
-                  <Badge
-                    label={section.status}
-                    labelColor={theme.palette.TwClrTxtSuccess}
-                    borderColor={theme.palette.TwClrBrdrSuccess}
-                    backgroundColor={theme.palette.TwClrBgSuccessTertiary}
-                  />
-                ) : (
-                  <Badge label={section.status} />
-                )}
+                <CompleteIncompleteBatch status={section.status} />
               </Box>
             </Box>
             <Button
