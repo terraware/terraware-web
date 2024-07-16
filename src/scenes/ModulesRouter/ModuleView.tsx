@@ -5,6 +5,7 @@ import { Crumb } from 'src/components/BreadCrumbs';
 import ModuleDetailsCard from 'src/components/ModuleDetailsCard';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { APP_PATHS } from 'src/constants';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 
@@ -13,6 +14,8 @@ import { useModuleData } from './Provider/Context';
 
 const ModuleView = () => {
   const { activeLocale } = useLocalization();
+  const { goToDeliverable, goToModuleEventSession } = useNavigateTo();
+
   const pathParams = useParams<{ sessionId: string; moduleId: string; projectId: string }>();
   const projectId = Number(pathParams.projectId);
 
@@ -28,13 +31,50 @@ const ModuleView = () => {
     [activeLocale, projectId]
   );
 
+  const deliverableDetails = useMemo(
+    () =>
+      deliverables.map((deliverable) => ({
+        ...deliverable,
+        onClick: () => goToDeliverable(deliverable.id, projectId),
+      })),
+    [deliverables, goToDeliverable, projectId]
+  );
+
+  const eventDetails = useMemo(
+    () =>
+      module
+        ? module.events
+            .flatMap((event) => event.sessions)
+            .map((event) => ({ ...event, onClick: () => goToModuleEventSession(projectId, module.id, event.id) }))
+        : [],
+    [module, goToModuleEventSession, projectId]
+  );
+
+  const moduleDetails = useMemo(
+    () =>
+      module
+        ? {
+            ...module,
+            title: activeLocale && module ? strings.formatString(strings.TITLE_OVERVIEW, module.title).toString() : '',
+          }
+        : null,
+    [activeLocale, module]
+  );
+
   return (
     <PageWithModuleTimeline
       crumbs={crumbs}
       hierarchicalCrumbs={false}
       title={<ModuleViewTitle module={module} projectId={projectId} />}
     >
-      {module && <ModuleDetailsCard deliverables={deliverables} module={module} projectId={projectId} />}
+      {moduleDetails && (
+        <ModuleDetailsCard
+          deliverables={deliverableDetails}
+          events={eventDetails}
+          module={moduleDetails}
+          projectId={projectId}
+        />
+      )}
     </PageWithModuleTimeline>
   );
 };
