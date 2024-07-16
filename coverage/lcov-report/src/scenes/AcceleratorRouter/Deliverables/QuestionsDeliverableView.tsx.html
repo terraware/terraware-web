@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/101</span>
+                <span class='fraction'>0/104</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/33</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/101</span>
+                <span class='fraction'>0/104</span>
             </div>
         
             
@@ -518,7 +518,15 @@
 <a name='L453'></a><a href='#L453'>453</a>
 <a name='L454'></a><a href='#L454'>454</a>
 <a name='L455'></a><a href='#L455'>455</a>
-<a name='L456'></a><a href='#L456'>456</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L456'></a><a href='#L456'>456</a>
+<a name='L457'></a><a href='#L457'>457</a>
+<a name='L458'></a><a href='#L458'>458</a>
+<a name='L459'></a><a href='#L459'>459</a>
+<a name='L460'></a><a href='#L460'>460</a>
+<a name='L461'></a><a href='#L461'>461</a>
+<a name='L462'></a><a href='#L462'>462</a>
+<a name='L463'></a><a href='#L463'>463</a>
+<a name='L464'></a><a href='#L464'>464</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -566,6 +574,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -580,6 +589,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -842,6 +854,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -986,6 +1002,7 @@ import TitleBar from 'src/components/DeliverableView/TitleBar';
 import { EditProps } from 'src/components/DeliverableView/types';
 import DeliverableDisplayVariableValue from 'src/components/DocumentProducer/DeliverableDisplayVariableValue';
 import DeliverableVariableDetailsInput from 'src/components/DocumentProducer/DeliverableVariableDetailsInput';
+import { PhotoWithAttributes } from 'src/components/DocumentProducer/EditImagesModal/PhotoSelector';
 import { VariableTableCell } from 'src/components/DocumentProducer/EditableTableModal/helpers';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
@@ -1006,7 +1023,7 @@ import {
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
-import { VariableValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
+import { VariableValue, VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
@@ -1038,6 +1055,9 @@ const QuestionBox = <span class="cstat-no" title="statement not covered" ><span 
   const {
     pendingVariableValues,
     setCellValues,
+    setDeletedImages,
+    setImages,
+    setNewImages,
     setRemovedValue,
     setValues,
     update,
@@ -1297,6 +1317,10 @@ const QuestionBox = <span class="cstat-no" title="statement not covered" ><span 
                   variable={variable}
                   addRemovedValue={<span class="fstat-no" title="function not covered" >(r</span>emovedValue: VariableValueValue) =&gt; <span class="cstat-no" title="statement not covered" >setRemovedValue(variable.id, removedValue)}</span>
                   setCellValues={<span class="fstat-no" title="function not covered" >(n</span>ewValues: VariableTableCell[][]) =&gt; <span class="cstat-no" title="statement not covered" >setCellValues(variable.id, newValues)}</span>
+                  setDeletedImages={<span class="fstat-no" title="function not covered" >(n</span>ewValues: VariableValueImageValue[]) =&gt; <span class="cstat-no" title="statement not covered" >setDeletedImages(variable.id, newValues)}</span>
+                  setImages={<span class="fstat-no" title="function not covered" >(n</span>ewValues: VariableValueImageValue[]) =&gt; <span class="cstat-no" title="statement not covered" >setImages(variable.id, newValues)}</span>
+                  setNewImages={<span class="fstat-no" title="function not covered" >(n</span>ewValues: PhotoWithAttributes[]) =&gt; <span class="cstat-no" title="statement not covered" >setNewImages(variable.id, newValues)}</span>
+                  projectId={projectId}
                 /&gt;
               &lt;/Grid&gt;
             &lt;/Grid&gt;
@@ -1435,7 +1459,7 @@ export default QuestionsDeliverableView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-16T19:52:44.235Z
+                at 2024-07-16T20:23:05.339Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
