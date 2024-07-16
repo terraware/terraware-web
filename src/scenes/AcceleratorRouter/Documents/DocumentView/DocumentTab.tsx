@@ -1,11 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import EditableSectionContainer from 'src/components/DocumentProducer/EditableSection/Container';
 import MultiLineComponentNonEditable from 'src/components/DocumentProducer/MultiLineComponentNonEditable';
 import PageContent from 'src/components/DocumentProducer/PageContent';
 import { requestListVariablesValues } from 'src/redux/features/documentProducer/values/valuesThunks';
-import { selectVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
-import { requestListVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
+import {
+  selectAllVariablesWithValues,
+  selectVariablesWithValues,
+} from 'src/redux/features/documentProducer/variables/variablesSelector';
+import {
+  requestListAllVariables,
+  requestListVariables,
+} from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { useSelectorProcessor } from 'src/redux/hooks/useSelectorProcessor';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Document as DocumentType } from 'src/types/documentProducer/Document';
@@ -17,70 +23,83 @@ export type DocumentProps = {
 
 const DocumentTab = ({ document }: DocumentProps): JSX.Element => {
   const dispatch = useAppDispatch();
-  const [variables, setVariables] = useState<VariableWithValues[]>();
-  const result = useAppSelector((state) =>
+
+  const [documentVariables, setDocumentVariables] = useState<VariableWithValues[]>();
+  const documentVariablesResult = useAppSelector((state) =>
     selectVariablesWithValues(state, document.variableManifestId, document.projectId)
   );
+  useSelectorProcessor(documentVariablesResult, setDocumentVariables);
 
-  useSelectorProcessor(result, setVariables);
+  const [listVariablesRequestId, setListVariablesRequestId] = useState('');
+  const allVariables: VariableWithValues[] = useAppSelector((state) =>
+    selectAllVariablesWithValues(state, listVariablesRequestId, document.projectId)
+  );
+
+  const onUpdate = useCallback(() => {
+    dispatch(requestListVariables(document.variableManifestId));
+    dispatch(requestListVariablesValues({ projectId: document.projectId }));
+
+    const request = dispatch(requestListAllVariables());
+    setListVariablesRequestId(request.requestId);
+  }, [dispatch, document.projectId, document.variableManifestId]);
 
   useEffect(() => {
-    dispatch(requestListVariables(document.variableManifestId));
-    dispatch(requestListVariablesValues({ projectId: document.projectId }));
-  }, [dispatch, document.variableManifestId, document.projectId]);
+    onUpdate();
+  }, [onUpdate]);
 
-  const onUpdate = () => {
-    dispatch(requestListVariables(document.variableManifestId));
-    dispatch(requestListVariablesValues({ projectId: document.projectId }));
-  };
+  const renderSection = useCallback(
+    (section: SectionVariableWithValues): JSX.Element[] => {
+      const sectionsToRender: JSX.Element[] = [];
+      if (section.renderHeading) {
+        sectionsToRender.push(
+          <MultiLineComponentNonEditable
+            id={section.sectionNumber}
+            key={`component-${section.position}`}
+            titleNumber={section.sectionNumber ?? ''}
+            title={section.name}
+            description={section.description || ''}
+            status={section.values && section.values.length > 0 ? 'Complete' : 'Incomplete'}
+          />
+        );
+      } else {
+        sectionsToRender.push(
+          <EditableSectionContainer
+            key={`component-${section.position}`}
+            docId={document.id}
+            projectId={document.projectId}
+            section={section}
+            allVariables={allVariables ?? []}
+            onUpdate={onUpdate}
+            manifestId={document.variableManifestId}
+          />
+        );
+      }
 
-  const renderVariable = (variable: VariableWithValues) => {
-    if (variable.type === 'Section') {
-      return renderSection(variable as SectionVariableWithValues);
-    }
-    return [];
-  };
+      if (section.children) {
+        section.children.forEach((child: SectionVariableWithValues) => {
+          const childWithRecommendedVariables = { ...child, recommends: [...child.recommends, ...section.recommends] };
+          sectionsToRender.push(...renderSection(childWithRecommendedVariables));
+        });
+      }
+      return sectionsToRender;
+    },
+    [allVariables, document, onUpdate]
+  );
 
-  const renderSection = (section: SectionVariableWithValues): JSX.Element[] => {
-    const sectionsToRender: JSX.Element[] = [];
-    if (section.renderHeading) {
-      sectionsToRender.push(
-        <MultiLineComponentNonEditable
-          id={section.sectionNumber}
-          key={`component-${section.position}`}
-          titleNumber={section.sectionNumber ?? ''}
-          title={section.name}
-          description={section.description || ''}
-          status={section.values && section.values.length > 0 ? 'Complete' : 'Incomplete'}
-        />
-      );
-    } else {
-      sectionsToRender.push(
-        <EditableSectionContainer
-          key={`component-${section.position}`}
-          docId={document.id}
-          projectId={document.projectId}
-          section={section}
-          allVariables={variables ?? []}
-          onUpdate={onUpdate}
-          manifestId={document.variableManifestId}
-        />
-      );
-    }
-
-    if (section.children) {
-      section.children.forEach((child: SectionVariableWithValues) => {
-        const childWithRecommendedVariables = { ...child, recommends: [...child.recommends, ...section.recommends] };
-        sectionsToRender.push(...renderSection(childWithRecommendedVariables));
-      });
-    }
-    return sectionsToRender;
-  };
+  const renderVariable = useCallback(
+    (variable: VariableWithValues) => {
+      if (variable.type === 'Section') {
+        return renderSection(variable as SectionVariableWithValues);
+      }
+      return [];
+    },
+    [renderSection]
+  );
 
   return (
     <PageContent styles={{ marginTop: 0 }}>
-      {variables?.map((variable) => {
-        return renderVariable(variable);
+      {documentVariables?.map((documentVariable) => {
+        return renderVariable(documentVariable);
       })}
     </PageContent>
   );

@@ -4,6 +4,7 @@ import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { Variable } from 'src/types/documentProducer/Variable';
 
 import {
+  requestListAllVariables,
   requestListDeliverableVariables,
   requestListVariables,
   requestUpdateVariableWorkflowDetails,
@@ -13,12 +14,12 @@ type VariablesState = Record<string, StatusT<Variable[]>>;
 
 const initialVariablesState: VariablesState = {};
 
-const variablesSlice = createSlice({
-  name: 'variablesSlice',
+const allVariablesSlice = createSlice({
+  name: 'allVariablesSlice',
   initialState: initialVariablesState,
   reducers: {},
   extraReducers: (builder: ActionReducerMapBuilder<VariablesState>) => {
-    buildReducers(requestListVariables, true)(builder);
+    buildReducers(requestListAllVariables)(builder);
   },
 });
 
@@ -28,6 +29,15 @@ const deliverableVariablesSlice = createSlice({
   reducers: {},
   extraReducers: (builder: ActionReducerMapBuilder<VariablesState>) => {
     buildReducers(requestListDeliverableVariables, true)(builder);
+  },
+});
+
+const variablesSlice = createSlice({
+  name: 'variablesSlice',
+  initialState: initialVariablesState,
+  reducers: {},
+  extraReducers: (builder: ActionReducerMapBuilder<VariablesState>) => {
+    buildReducers(requestListVariables, true)(builder);
   },
 });
 
@@ -48,7 +58,8 @@ const variableWorkflowDetailsUpdateSlice = createSlice({
 });
 
 export const documentProducerVariablesReducers = {
-  documentProducerVariables: variablesSlice.reducer,
+  documentProducerAllVariables: allVariablesSlice.reducer,
   documentProducerDeliverableVariables: deliverableVariablesSlice.reducer,
+  documentProducerVariables: variablesSlice.reducer,
   variableWorkflowDetailsUpdate: variableWorkflowDetailsUpdateSlice.reducer,
 };

@@ -4,6 +4,8 @@ import { UpdateVariableWorkflowDetailsPayload, VariableListResponse } from 'src/
 const VARIABLES_ENDPOINT = '/api/v1/document-producer/variables';
 const UPDATE_VARIABLE_DETAILS_ENDPOINT = '/api/v1/document-producer/projects/{projectId}/workflow/{variableId}';
 
+const getAllVariables = (): Promise<Response2<VariableListResponse>> => HttpService.root(VARIABLES_ENDPOINT).get2({});
+
 const getDeliverableVariables = (deliverableId: number): Promise<Response2<VariableListResponse>> =>
   HttpService.root(VARIABLES_ENDPOINT).get2({
     params: { deliverableId: `${deliverableId}` },
@@ -29,6 +31,7 @@ const updateVariableWorkflowDetails = (
   });
 
 const VariableService = {
+  getAllVariables,
   getDeliverableVariables,
   getVariables,
   updateVariableWorkflowDetails,
