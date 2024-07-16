@@ -8,12 +8,17 @@ import {
 } from 'src/redux/features/documentProducer/values/valuesSelector';
 import {
   requestUpdateVariableValues,
-  requestUploadImageValue,
+  requestUploadManyImageValues,
 } from 'src/redux/features/documentProducer/values/valuesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { VariableWithValues } from 'src/types/documentProducer/Variable';
-import { Operation, VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
+import {
+  Operation,
+  UploadImageValueRequestPayloadWithProjectId,
+  VariableValueImageValue,
+  VariableValueValue,
+} from 'src/types/documentProducer/VariableValue';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { makeVariableValueOperations } from './util';
@@ -138,6 +143,7 @@ export const useProjectVariablesUpdate = (
     });
 
     // handle image uploads
+    const imageValuesToUpload: UploadImageValueRequestPayloadWithProjectId[] = [];
     pendingNewImages.forEach((pendingValues, variableId) => {
       const variable = variablesWithValues.find((variableWithValues) => variableWithValues.id === variableId);
       if (!variable) {
@@ -146,23 +152,20 @@ export const useProjectVariablesUpdate = (
         return;
       }
 
-      pendingValues.forEach((newImage, index) => {
-        const upRequest = dispatch(
-          requestUploadImageValue({
-            variableId: variable.id,
-            file: newImage.file,
-            caption: newImage.caption,
-            citation: newImage.citation,
-            projectId,
-          })
-        );
-
-        // set request id with last image request
-        if (pendingValues.length - 1 === index) {
-          setUploadRequestId(upRequest.requestId);
-        }
+      pendingValues.forEach((newImage) => {
+        imageValuesToUpload.push({
+          variableId: variable.id,
+          file: newImage.file,
+          caption: newImage.caption,
+          citation: newImage.citation,
+          projectId,
+        });
       });
     });
+    if (imageValuesToUpload.length > 0) {
+      const request = dispatch(requestUploadManyImageValues(imageValuesToUpload));
+      setUploadRequestId(request.requestId);
+    }
 
     if (projectId === -1) {
       // This means the project ID, most likely being populated by a provider looking at
