@@ -56,10 +56,9 @@ export const searchVariables = createCachedSelector(
 )((state: RootState, id: number, query: string) => query);
 
 export const selectGetVariable = createCachedSelector(
-  (state: RootState, manifestId: number | string, variableId: number) => state.documentProducerVariables[manifestId],
-  (state: RootState, manifestId: number | string, variableId: number) => manifestId,
-  (state: RootState, manifestId: number | string, variableId: number) => variableId,
-  (response, manifestId, variableId) => {
+  (state: RootState, variableId: number) => state.documentProducerAllVariables['all'],
+  (state: RootState, variableId: number) => variableId,
+  (response, variableId) => {
     if (response?.data) {
       const variableToReturn = response.data.find((variable: Variable) => variable.id === variableId);
       return {
@@ -70,7 +69,7 @@ export const selectGetVariable = createCachedSelector(
       return response;
     }
   }
-)((state: RootState, manifestId: number | string, variableId: number) => variableId);
+)((state: RootState, variableId: number) => variableId);
 
 const getCombinedProps = (listA: any, listB: any) => {
   let status = 'pending';
@@ -227,9 +226,8 @@ const associateNonSectionVariableValues = (
 };
 
 export const selectAllVariablesWithValues = createCachedSelector(
-  (state: RootState, requestId: string, projectId: number, maxValueId?: number) =>
-    state.documentProducerAllVariables[requestId],
-  (state: RootState, requestId: string, projectId: number, maxValueId?: number) =>
+  (state: RootState, projectId: number, maxValueId?: number) => state.documentProducerAllVariables['all'],
+  (state: RootState, projectId: number, maxValueId?: number) =>
     state.documentProducerVariableValuesList[variableListCompositeKeyFn({ projectId, maxValueId })],
   (variableList, valueList) => {
     if (variableList?.data && valueList?.data) {
@@ -241,9 +239,7 @@ export const selectAllVariablesWithValues = createCachedSelector(
       return [];
     }
   }
-)((state: RootState, requestId: string, projectId: number, maxValueId?: number) =>
-  variableListCompositeKeyFn({ projectId, maxValueId })
-);
+)((state: RootState, projectId: number, maxValueId?: number) => variableListCompositeKeyFn({ projectId, maxValueId }));
 
 export const selectDeliverableVariablesWithValues = createCachedSelector(
   (state: RootState, deliverableId: number, projectId: number) =>

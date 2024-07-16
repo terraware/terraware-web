@@ -23,14 +23,16 @@ const PageWorkflow = (props: PageWorkflowProps): JSX.Element => {
     }
   }, [onSuccess, successData]);
 
+  const onPartialSuccess = useCallback((data?: any, error?: string) => {
+    setSuccessData(data);
+    setPartialError(error || strings.GENERIC_ERROR);
+  }, []);
+
   useWorkflowSuccess({
     workflowState,
     successMessage,
     onSuccess,
-    onPartialSuccess: (data?: any, error?: string) => {
-      setSuccessData(data);
-      setPartialError(error || strings.GENERIC_ERROR);
-    },
+    onPartialSuccess,
   });
 
   return (

@@ -30,17 +30,14 @@ const DocumentTab = ({ document }: DocumentProps): JSX.Element => {
   );
   useSelectorProcessor(documentVariablesResult, setDocumentVariables);
 
-  const [listVariablesRequestId, setListVariablesRequestId] = useState('');
   const allVariables: VariableWithValues[] = useAppSelector((state) =>
-    selectAllVariablesWithValues(state, listVariablesRequestId, document.projectId)
+    selectAllVariablesWithValues(state, document.projectId)
   );
 
   const onUpdate = useCallback(() => {
     dispatch(requestListVariables(document.variableManifestId));
     dispatch(requestListVariablesValues({ projectId: document.projectId }));
-
-    const request = dispatch(requestListAllVariables());
-    setListVariablesRequestId(request.requestId);
+    dispatch(requestListAllVariables());
   }, [dispatch, document.projectId, document.variableManifestId]);
 
   useEffect(() => {
