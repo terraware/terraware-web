@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1721099571152" clover="3.2.0">
-  <project timestamp="1721099571152" name="All files">
-    <metrics statements="22632" coveredstatements="956" conditionals="14546" coveredconditionals="239" methods="6997" coveredmethods="163" elements="44175" coveredelements="1358" complexity="0" loc="22632" ncloc="22632" packages="218" files="1015" classes="1015"/>
+<coverage generated="1721100433641" clover="3.2.0">
+  <project timestamp="1721100433641" name="All files">
+    <metrics statements="22642" coveredstatements="956" conditionals="14554" coveredconditionals="239" methods="7002" coveredmethods="163" elements="44198" coveredelements="1358" complexity="0" loc="22642" ncloc="22642" packages="218" files="1016" classes="1016"/>
     <package name="src">
       <metrics statements="171" coveredstatements="0" conditionals="128" coveredconditionals="0" methods="38" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -15055,11 +15055,24 @@
       </file>
     </package>
     <package name="src.scenes.ApplicationRouter.portal.Review">
-      <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <metrics statements="12" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="6" coveredmethods="0"/>
+      <file name="ReviewCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ApplicationRouter/portal/Review/ReviewCard.tsx">
+        <metrics statements="7" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+      </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ApplicationRouter/portal/Review/index.tsx">
-        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="7" count="0" type="stmt"/>
-        <line num="8" count="0" type="stmt"/>
+        <metrics statements="5" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="12" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.ApplicationRouter.portal.Sections">
