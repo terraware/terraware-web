@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1721158395983" clover="3.2.0">
-  <project timestamp="1721158395983" name="All files">
-    <metrics statements="22699" coveredstatements="956" conditionals="14594" coveredconditionals="239" methods="7012" coveredmethods="163" elements="44305" coveredelements="1358" complexity="0" loc="22699" ncloc="22699" packages="219" files="1018" classes="1018"/>
+<coverage generated="1721158763317" clover="3.2.0">
+  <project timestamp="1721158763317" name="All files">
+    <metrics statements="22701" coveredstatements="956" conditionals="14606" coveredconditionals="239" methods="7012" coveredmethods="163" elements="44319" coveredelements="1358" complexity="0" loc="22701" ncloc="22701" packages="219" files="1018" classes="1018"/>
     <package name="src">
       <metrics statements="171" coveredstatements="0" conditionals="128" coveredconditionals="0" methods="38" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -15041,7 +15041,7 @@
       </file>
     </package>
     <package name="src.scenes.ApplicationRouter.portal.Overview">
-      <metrics statements="25" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="6" coveredmethods="0"/>
+      <metrics statements="27" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="6" coveredmethods="0"/>
       <file name="ListApplicationModulesContent.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ApplicationRouter/portal/Overview/ListApplicationModulesContent.tsx">
         <metrics statements="15" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="15" count="0" type="stmt"/>
@@ -15061,17 +15061,19 @@
         <line num="68" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ApplicationRouter/portal/Overview/index.tsx">
-        <metrics statements="10" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="14" count="0" type="stmt"/>
-        <line num="16" count="0" type="stmt"/>
+        <metrics statements="12" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
         <line num="37" count="0" type="stmt"/>
-        <line num="39" count="0" type="stmt"/>
-        <line num="40" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
+        <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="39" count="0" type="cond" truecount="0" falsecount="12"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.ApplicationRouter.portal.Prescreen">
