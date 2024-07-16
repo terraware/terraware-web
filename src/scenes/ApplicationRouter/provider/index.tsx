@@ -46,7 +46,7 @@ const ApplicationProvider = ({ children }: Props) => {
     allApplications,
     applicationSections,
     selectedApplication,
-    setSelectedApplitcation: _setSelectedApplication,
+    setSelectedApplication: _setSelectedApplication,
   });
 
   useEffect(() => {
@@ -84,7 +84,7 @@ const ApplicationProvider = ({ children }: Props) => {
       allApplications,
       applicationSections,
       selectedApplication,
-      setSelectedApplitcation: _setSelectedApplication,
+      setSelectedApplication: _setSelectedApplication,
     });
   }, [allApplications, applicationSections, selectedApplication, _setSelectedApplication]);
 

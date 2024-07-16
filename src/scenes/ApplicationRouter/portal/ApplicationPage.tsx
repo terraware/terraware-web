@@ -18,7 +18,7 @@ type Prop = {
 const ApplicationPage = ({ children, title }: Prop) => {
   const { goToHome } = useNavigateTo();
 
-  const { allApplications, setSelectedApplitcation } = useApplicationData();
+  const { allApplications, setSelectedApplication: setSelectedApplitcation } = useApplicationData();
 
   const pathParams = useParams<{ applicationId: string }>();
   const applicationId = Number(pathParams.applicationId);
