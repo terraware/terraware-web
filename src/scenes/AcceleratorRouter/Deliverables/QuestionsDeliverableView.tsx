@@ -11,6 +11,7 @@ import TitleBar from 'src/components/DeliverableView/TitleBar';
 import { EditProps } from 'src/components/DeliverableView/types';
 import DeliverableDisplayVariableValue from 'src/components/DocumentProducer/DeliverableDisplayVariableValue';
 import DeliverableVariableDetailsInput from 'src/components/DocumentProducer/DeliverableVariableDetailsInput';
+import { VariableTableCell } from 'src/components/DocumentProducer/EditableTableModal/helpers';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import OptionsMenu from 'src/components/common/OptionsMenu';
@@ -61,6 +62,7 @@ const QuestionBox = ({
   const { activeLocale } = useLocalization();
   const {
     pendingVariableValues,
+    setCellValues,
     setRemovedValue,
     setValues,
     update,
@@ -319,6 +321,7 @@ const QuestionBox = ({
                   setValues={(newValues: VariableValueValue[]) => setValues(variable.id, newValues)}
                   variable={variable}
                   addRemovedValue={(removedValue: VariableValueValue) => setRemovedValue(variable.id, removedValue)}
+                  setCellValues={(newValues: VariableTableCell[][]) => setCellValues(variable.id, newValues)}
                 />
               </Grid>
             </Grid>

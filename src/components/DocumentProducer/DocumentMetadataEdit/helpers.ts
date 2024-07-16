@@ -1,6 +1,6 @@
 import { DropdownItem } from '@terraware/web-components/components/types';
 
-import { User } from 'src/types/User';
+import { UserWithGlobalRoles } from 'src/types/GlobalRoles';
 import { DocumentTemplate } from 'src/types/documentProducer/DocumentTemplate';
 import { getUserDisplayName } from 'src/utils/user';
 
@@ -10,7 +10,7 @@ export const getDocumentTemplateOptions = (documentTemplates: DocumentTemplate[]
     value: documentTemplate.id.toString(),
   }));
 
-export const getDocumentOwnerOptions = (users: User[]): DropdownItem[] =>
+export const getDocumentOwnerOptions = (users: UserWithGlobalRoles[]): DropdownItem[] =>
   users.map((user) => ({
     label: getUserDisplayName(user) ?? '',
     value: user.id.toString(),

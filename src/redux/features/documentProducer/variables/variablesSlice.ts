@@ -18,7 +18,7 @@ const variablesSlice = createSlice({
   initialState: initialVariablesState,
   reducers: {},
   extraReducers: (builder: ActionReducerMapBuilder<VariablesState>) => {
-    buildReducers(requestListVariables)(builder);
+    buildReducers(requestListVariables, true)(builder);
   },
 });
 

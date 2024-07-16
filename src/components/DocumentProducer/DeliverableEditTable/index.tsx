@@ -1,128 +1,28 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
 import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-import { Button, DatePicker, Dropdown, Textfield } from '@terraware/web-components';
+import { Button } from '@terraware/web-components';
 
-import PageDialog from 'src/components/DocumentProducer/PageDialog';
-import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
-import { requestUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import {
-  NumberVariable,
-  SelectVariable,
-  TableColumn,
-  TableVariableWithValues,
-} from 'src/types/documentProducer/Variable';
-import {
-  AppendVariableValueOperation,
-  NewSelectValuePayload,
-  UpdateVariableValuesRequestWithProjectId,
-  VariableValueSelectValue,
-} from 'src/types/documentProducer/VariableValue';
+import { TableColumn, TableVariableWithValues } from 'src/types/documentProducer/Variable';
 
-import { VariableTableCell, cellValue, getInitialCellValues, newValueFromEntry } from './helpers';
+import { EditableCell } from '../EditableTableModal';
+import { VariableTableCell, cellValue, getInitialCellValues, newValueFromEntry } from '../EditableTableModal/helpers';
 
-type EditableTableEditProps = {
+type DeliverableEditableTableEditProps = {
   variable: TableVariableWithValues;
-  projectId: number;
-  onFinish: () => void;
-  onCancel: () => void;
+  onChange: (newValue: any) => void;
 };
 
-const EditableTableEdit = ({ variable, projectId, onCancel, onFinish }: EditableTableEditProps) => {
+const DeliverableEditableTableEdit = ({ variable, onChange }: DeliverableEditableTableEditProps) => {
   const columns = useMemo<TableColumn[]>(() => variable.columns, [variable]);
   const initialCellValues = useMemo<VariableTableCell[][]>(() => getInitialCellValues(variable), [variable]);
   const [cellValues, setCellValues] = useState<VariableTableCell[][]>(initialCellValues);
 
-  const dispatch = useAppDispatch();
-  const [requestId, setRequestId] = useState<string>('');
-  const selector = useAppSelector(selectUpdateVariableValues(requestId));
-  const handleSave = useCallback(() => {
-    if (columns.length === 0) {
-      return;
-    }
-    const update: UpdateVariableValuesRequestWithProjectId = {
-      operations: [],
-      projectId: projectId,
-    };
-
-    initialCellValues.forEach((row) => {
-      const rowId = row[0].rowId;
-      if (rowId !== undefined) {
-        const foundRow = cellValues.find((r) => r[0].rowId === rowId);
-        if (foundRow === undefined) {
-          // delete operations
-          update.operations.push({
-            operation: 'Delete',
-            valueId: rowId,
-            existingValueId: rowId,
-          });
-        } else {
-          // replace operations
-          row.forEach((cell) => {
-            const foundCell = foundRow.find((c) => c.colId === cell.colId);
-            if (foundCell !== undefined && foundCell.changed) {
-              const newValues =
-                foundCell.values && foundCell.type === 'Select'
-                  ? [
-                      {
-                        ...foundCell.values[0],
-                        optionIds: (foundCell.values[0] as VariableValueSelectValue).optionValues,
-                      } as NewSelectValuePayload,
-                    ]
-                  : foundCell.values;
-              update.operations.push({
-                operation: 'Replace',
-                rowValueId: rowId,
-                variableId: cell.colId,
-                values: newValues ?? [],
-              });
-            }
-          });
-        }
-      }
-    });
-
-    // add row operations
-    const newRows = cellValues.filter((row) => row[0].rowId === undefined);
-    newRows.forEach((newRow) => {
-      // append row
-      update.operations.push({
-        operation: 'Append',
-        variableId: variable.id,
-        value: {
-          type: 'Table',
-        },
-      });
-
-      // create values (will automatically assign to the last created row)
-      newRow.forEach((newCell) => {
-        if (newCell.values !== undefined) {
-          const newOp: AppendVariableValueOperation =
-            newCell.type === 'Select'
-              ? {
-                  operation: 'Append',
-                  variableId: newCell.colId,
-                  value: {
-                    ...newCell.values[0],
-                    optionIds: (newCell.values[0] as VariableValueSelectValue).optionValues,
-                  } as NewSelectValuePayload,
-                }
-              : {
-                  operation: 'Append',
-                  variableId: newCell.colId,
-                  value: newCell.values[0],
-                };
-          update.operations.push(newOp);
-        }
-      });
-    });
-
-    // dispatch
-    const request = dispatch(requestUpdateVariableValues(update));
-    setRequestId(request.requestId);
-  }, [initialCellValues, cellValues, columns.length, dispatch, projectId, variable.id]);
+  const onChangeCellValues = useCallback((nextCellValues: VariableTableCell[][]) => {
+    setCellValues(nextCellValues);
+    onChange(nextCellValues);
+  }, []);
 
   const setCellValue = (rowNum: number, colNum: number, newValue: string | number) => {
     const newCellValues: VariableTableCell[][] = [];
@@ -144,7 +44,7 @@ const EditableTableEdit = ({ variable, projectId, onCancel, onFinish }: Editable
       });
       newCellValues.push(newRow);
     });
-    setCellValues(newCellValues);
+    onChangeCellValues(newCellValues);
   };
 
   const addRow = () => {
@@ -158,36 +58,17 @@ const EditableTableEdit = ({ variable, projectId, onCancel, onFinish }: Editable
         changed: false,
       });
     });
-    setCellValues([...cellValues, newRow]);
+    onChangeCellValues([...cellValues, newRow]);
   };
 
   const removeRow = (rowNum: number) => {
     const newCellValues = [...cellValues];
     newCellValues.splice(rowNum, 1);
-    setCellValues(newCellValues);
+    onChangeCellValues(newCellValues);
   };
 
   return (
-    <PageDialog
-      workflowState={requestId ? selector : undefined}
-      onSuccess={onFinish}
-      onClose={onCancel}
-      open={true}
-      title={strings.VARIABLE_DETAILS}
-      size='x-large'
-      scrolled={true}
-      middleButtons={[
-        <Button
-          id='edit-table-cancel'
-          label={strings.CANCEL}
-          priority='secondary'
-          type='passive'
-          onClick={onCancel}
-          key='button-1'
-        />,
-        <Button id='edit-table-save' label={strings.SAVE} onClick={handleSave} key='button-2' />,
-      ]}
-    >
+    <>
       {variable.tableStyle === 'Horizontal' && (
         <TableContainer sx={{ overflowX: 'visible' }}>
           <Table aria-labelledby='tableTitle' size='medium' aria-label='variable-table'>
@@ -295,53 +176,8 @@ const EditableTableEdit = ({ variable, projectId, onCancel, onFinish }: Editable
         size='medium'
         label={variable.tableStyle === 'Horizontal' ? strings.EDITABLE_TABLE_ADD_ROW : strings.EDITABLE_TABLE_ADD_TABLE}
       />
-    </PageDialog>
+    </>
   );
 };
 
-export type EditableCellProps = {
-  id: string;
-  column: TableColumn;
-  onChange: (value: unknown) => void;
-  value?: string | number;
-};
-
-export const EditableCell = ({ id, column, onChange, value }: EditableCellProps) => {
-  switch (column.variable.type) {
-    case 'Text':
-      return <Textfield label='' id={id} type='text' onChange={onChange} value={value} />;
-    case 'Number':
-      return (
-        <Textfield
-          label=''
-          id={id}
-          type='number'
-          min={(column.variable as NumberVariable).minValue}
-          max={(column.variable as NumberVariable).maxValue}
-          onChange={onChange}
-          value={value}
-        />
-      );
-    case 'Date':
-      return (
-        <DatePicker id={id} label='' onChange={onChange} value={value as string} aria-label={`${id}-datepicker`} />
-      );
-    case 'Select':
-      const options = (column.variable as SelectVariable).options;
-      return (
-        <Dropdown
-          onChange={onChange}
-          options={options.map((opt) => ({
-            label: opt.name,
-            value: opt.id,
-          }))}
-          selectedValue={value}
-          fullWidth={true}
-        />
-      );
-    default:
-      return null;
-  }
-};
-
-export default EditableTableEdit;
+export default DeliverableEditableTableEdit;
