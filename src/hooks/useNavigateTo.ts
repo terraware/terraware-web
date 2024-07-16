@@ -14,6 +14,21 @@ export default function useNavigateTo() {
         navigate({ pathname: APP_PATHS.APPLICATION_OVERVIEW.replace(':applicationId', `${applicationId}`) });
       },
 
+      goToApplicationSection: (applicationId: number, sectionId: number) => {
+        navigate({
+          pathname: APP_PATHS.APPLICATION_SECTION.replace(':applicationId', `${applicationId}`).replace(
+            ':sectionId',
+            `${sectionId}`
+          ),
+        });
+      },
+
+      goToApplicationPrescreen: (applicationId: number) => {
+        navigate({
+          pathname: APP_PATHS.APPLICATION_PRESCREEN.replace(':applicationId', `${applicationId}`),
+        });
+      },
+
       goToApplicationSectionDeliverable: (applicationId: number, sectionId: number, deliverableId: number) => {
         navigate({
           pathname: APP_PATHS.APPLICATION_SECTION_DELIVERABLE.replace(':applicationId', `${applicationId}`)
