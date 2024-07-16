@@ -56,7 +56,7 @@ const OverviewView = () => {
       // By default show pre-screen
       return 0;
     }
-  }, [selectedApplication])
+  }, [selectedApplication]);
 
   return (
     <ApplicationPage title={strings.APPLICATION}>
