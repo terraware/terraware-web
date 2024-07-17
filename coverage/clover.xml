@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1721231517361" clover="3.2.0">
-  <project timestamp="1721231517361" name="All files">
-    <metrics statements="22831" coveredstatements="956" conditionals="14681" coveredconditionals="239" methods="7061" coveredmethods="163" elements="44573" coveredelements="1358" complexity="0" loc="22831" ncloc="22831" packages="220" files="1021" classes="1021"/>
+<coverage generated="1721232299889" clover="3.2.0">
+  <project timestamp="1721232299889" name="All files">
+    <metrics statements="22852" coveredstatements="956" conditionals="14692" coveredconditionals="239" methods="7070" coveredmethods="163" elements="44614" coveredelements="1358" complexity="0" loc="22852" ncloc="22852" packages="220" files="1021" classes="1021"/>
     <package name="src">
       <metrics statements="171" coveredstatements="0" conditionals="128" coveredconditionals="0" methods="38" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -9253,9 +9253,9 @@
       </file>
     </package>
     <package name="src.redux.features.documentProducer.variables">
-      <metrics statements="129" coveredstatements="0" conditionals="109" coveredconditionals="0" methods="51" coveredmethods="0"/>
+      <metrics statements="145" coveredstatements="0" conditionals="120" coveredconditionals="0" methods="58" coveredmethods="0"/>
       <file name="variablesSelector.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/documentProducer/variables/variablesSelector.ts">
-        <metrics statements="105" coveredstatements="0" conditionals="91" coveredconditionals="0" methods="45" coveredmethods="0"/>
+        <metrics statements="114" coveredstatements="0" conditionals="95" coveredconditionals="0" methods="50" coveredmethods="0"/>
         <line num="18" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
@@ -9360,37 +9360,53 @@
         <line num="241" count="0" type="stmt"/>
         <line num="245" count="0" type="stmt"/>
         <line num="248" count="0" type="stmt"/>
-        <line num="249" count="0" type="stmt"/>
+        <line num="250" count="0" type="stmt"/>
+        <line num="252" count="0" type="stmt"/>
+        <line num="254" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="255" count="0" type="stmt"/>
+        <line num="256" count="0" type="stmt"/>
+        <line num="258" count="0" type="stmt"/>
+        <line num="260" count="0" type="stmt"/>
+        <line num="264" count="0" type="stmt"/>
+        <line num="267" count="0" type="stmt"/>
+        <line num="268" count="0" type="stmt"/>
       </file>
       <file name="variablesSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/documentProducer/variables/variablesSlice.ts">
-        <metrics statements="9" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
-        <line num="14" count="0" type="stmt"/>
-        <line num="16" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
-        <line num="39" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
-        <line num="50" count="0" type="stmt"/>
+        <metrics statements="11" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
       </file>
       <file name="variablesThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/documentProducer/variables/variablesThunks.ts">
-        <metrics statements="15" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <metrics statements="20" coveredstatements="0" conditionals="25" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="10" count="0" type="cond" truecount="0" falsecount="5"/>
         <line num="11" count="0" type="stmt"/>
-        <line num="12" count="0" type="cond" truecount="0" falsecount="5"/>
-        <line num="13" count="0" type="stmt"/>
-        <line num="16" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="14" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="17" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="24" count="0" type="cond" truecount="0" falsecount="5"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="28" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="21" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="25" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="29" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
-        <line num="42" count="0" type="stmt"/>
-        <line num="43" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="44" count="0" type="stmt"/>
-        <line num="47" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="33" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="37" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="56" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
     </package>
     <package name="src.redux.features.draftPlantingSite">
@@ -11513,7 +11529,7 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Documents.DocumentView">
-      <metrics statements="271" coveredstatements="0" conditionals="122" coveredconditionals="0" methods="86" coveredmethods="0"/>
+      <metrics statements="275" coveredstatements="0" conditionals="122" coveredconditionals="0" methods="87" coveredmethods="0"/>
       <file name="DocumentActions.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Documents/DocumentView/DocumentActions.tsx">
         <metrics statements="20" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="20" count="0" type="stmt"/>
@@ -11607,35 +11623,39 @@
         <line num="55" count="0" type="stmt"/>
       </file>
       <file name="DocumentTab.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Documents/DocumentView/DocumentTab.tsx">
-        <metrics statements="28" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="8" coveredmethods="0"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="19" count="0" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="22" count="0" type="stmt"/>
+        <metrics statements="32" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="9" coveredmethods="0"/>
+        <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="46" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
-        <line num="71" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="72" count="0" type="stmt"/>
-        <line num="73" count="0" type="stmt"/>
-        <line num="74" count="0" type="stmt"/>
-        <line num="77" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="78" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="79" count="0" type="stmt"/>
         <line num="80" count="0" type="stmt"/>
-        <line num="83" count="0" type="stmt"/>
+        <line num="81" count="0" type="stmt"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="91" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="92" count="0" type="stmt"/>
+        <line num="94" count="0" type="stmt"/>
+        <line num="99" count="0" type="stmt"/>
+        <line num="102" count="0" type="stmt"/>
       </file>
       <file name="DocumentVariablesTab.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Documents/DocumentView/DocumentVariablesTab.tsx">
         <metrics statements="85" coveredstatements="0" conditionals="40" coveredconditionals="0" methods="25" coveredmethods="0"/>
@@ -24954,7 +24974,7 @@
       </file>
     </package>
     <package name="src.services.documentProducer">
-      <metrics statements="53" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="17" coveredmethods="0"/>
+      <metrics statements="54" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="18" coveredmethods="0"/>
       <file name="DocumentService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/documentProducer/DocumentService.ts">
         <metrics statements="23" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="17" count="0" type="stmt"/>
@@ -25009,16 +25029,17 @@
         <line num="70" count="0" type="stmt"/>
       </file>
       <file name="VariableService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/documentProducer/VariableService.ts">
-        <metrics statements="9" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <metrics statements="10" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="4" count="0" type="stmt"/>
         <line num="5" count="0" type="stmt"/>
         <line num="7" count="0" type="stmt"/>
-        <line num="8" count="0" type="stmt"/>
-        <line num="12" count="0" type="stmt"/>
-        <line num="13" count="0" type="stmt"/>
-        <line num="17" count="0" type="stmt"/>
-        <line num="22" count="0" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.services.test">
