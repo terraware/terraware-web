@@ -17,6 +17,7 @@ export type ApplicationModule = Omit<
   'additionalResources' | 'endDate' | 'events' | 'isActive' | 'startDate' | 'preparationMaterials' | 'title'
 >;
 export type ApplicationModuleWithDeliverables = ApplicationModule & {
+  category: 'Pre-screen' | 'Application';
   deliverables: ApplicationDeliverable[];
   status: 'Incomplete' | 'Complete';
 };

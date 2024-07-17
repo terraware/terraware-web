@@ -57,9 +57,8 @@ const MODULE_CONTENTS = (module: ModuleDetails, navigate: (type: ModuleContentTy
   return content;
 };
 
-type DeliverableDetails = {
+export type DeliverableDetails = {
   dueDate?: DateTime;
-  id: number;
   name: string;
   onClick: () => void;
   status: DeliverableStatusType;
@@ -82,7 +81,7 @@ type ModuleDetails = {
   preparationMaterials?: string;
 };
 
-export type ModuleDetailsCardProp = {
+type ModuleDetailsCardProp = {
   deliverables?: DeliverableDetails[];
   events?: EventDetails[];
   module: ModuleDetails;
@@ -207,8 +206,8 @@ const ModuleDetailsCard = ({
 
           {
             <>
-              {deliverables?.map((deliverable) => (
-                <ModuleContentSection key={deliverable.id}>
+              {deliverables?.map((deliverable, index) => (
+                <ModuleContentSection key={index}>
                   <Grid
                     container
                     columnSpacing={theme.spacing(2)}

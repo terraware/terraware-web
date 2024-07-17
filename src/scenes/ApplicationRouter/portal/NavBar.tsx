@@ -24,7 +24,6 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
   const { applicationSections, selectedApplication } = useApplicationData();
 
   const isOverviewRoute = useMatch({ path: APP_PATHS.APPLICATION_OVERVIEW, end: true });
-  const isPrescreenRoute = useMatch({ path: APP_PATHS.APPLICATION_PRESCREEN, end: true });
   const isReviewRoute = useMatch({ path: APP_PATHS.APPLICATION_REVIEW, end: true });
 
   const closeNavBar = () => {
@@ -48,24 +47,54 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
       return [];
     }
     return (
-      applicationSections?.map((section) => {
-        const path = APP_PATHS.APPLICATION_SECTION.replace(':applicationId', `${selectedApplication.id}`).replace(
-          ':sectionId',
-          `${section.id}`
-        );
-        const isMatch = !!matchPath(path, location.pathname);
+      applicationSections
+        ?.filter((section) => section.category === 'Application')
+        .map((section) => {
+          const path = APP_PATHS.APPLICATION_SECTION.replace(':applicationId', `${selectedApplication.id}`).replace(
+            ':sectionId',
+            `${section.id}`
+          );
+          const isMatch = !!matchPath(`${path}/*`, location.pathname);
 
-        return (
-          <NavItem
-            icon={'success'}
-            id={`application-section-${section.id}`}
-            key={section.id}
-            label={section.name}
-            onClick={() => closeAndNavigateTo(path)}
-            selected={!!isMatch}
-          />
-        );
-      }) ?? []
+          return (
+            <NavItem
+              icon={'success'}
+              id={`application-section-${section.id}`}
+              key={section.id}
+              label={section.name}
+              onClick={() => closeAndNavigateTo(path)}
+              selected={!!isMatch}
+            />
+          );
+        }) ?? []
+    );
+  }, [applicationSections, selectedApplication, location.pathname]);
+
+  const prescreenNavItems = useMemo(() => {
+    if (!selectedApplication) {
+      return [];
+    }
+    return (
+      applicationSections
+        ?.filter((section) => section.category === 'Pre-screen')
+        .map((section) => {
+          const path = APP_PATHS.APPLICATION_SECTION.replace(':applicationId', `${selectedApplication.id}`).replace(
+            ':sectionId',
+            `${section.id}`
+          );
+          const isMatch = !!matchPath(`${path}/*`, location.pathname);
+
+          return (
+            <NavItem
+              icon={'success'}
+              id={`application-section-${section.id}`}
+              key={section.id}
+              label={section.name}
+              onClick={() => closeAndNavigateTo(path)}
+              selected={!!isMatch}
+            />
+          );
+        }) ?? []
     );
   }, [applicationSections, selectedApplication, location.pathname]);
 
@@ -91,13 +120,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
 
       <NavSection />
 
-      <NavItem
-        icon='success'
-        id='pre-screen'
-        label={strings.PRESCREEN}
-        onClick={() => closeAndNavigateTo(APP_PATHS.APPLICATION_PRESCREEN)}
-        selected={!!isPrescreenRoute}
-      />
+      {prescreenNavItems}
 
       <NavSection title={strings.APPLICATION} separator={false} />
       {applicationNavItems}
