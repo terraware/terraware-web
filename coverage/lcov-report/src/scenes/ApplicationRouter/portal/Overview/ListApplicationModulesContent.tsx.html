@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
@@ -116,7 +116,16 @@
 <a name='L51'></a><a href='#L51'>51</a>
 <a name='L52'></a><a href='#L52'>52</a>
 <a name='L53'></a><a href='#L53'>53</a>
-<a name='L54'></a><a href='#L54'>54</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -138,6 +147,14 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -169,7 +186,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 &nbsp;
 import { Box, Typography, useTheme } from '@mui/material';
@@ -182,13 +200,21 @@ import { useApplicationData } from 'src/scenes/ApplicationRouter/provider/Contex
 import strings from 'src/strings';
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >ListModulesContent(</span>): JSX.Element {
-  const { applicationSections } = <span class="cstat-no" title="statement not covered" >useApplicationData();</span>
+  const { applicationSections, selectedApplication } = <span class="cstat-no" title="statement not covered" >useApplicationData();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const { goToApplicationSection } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
 &nbsp;
   const pathParams = <span class="cstat-no" title="statement not covered" >useParams&lt;{ applicationId: string }&gt;();</span>
   const applicationId = <span class="cstat-no" title="statement not covered" >Number(pathParams.applicationId);</span>
+&nbsp;
+  const isPrescreen = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (!selectedApplication) {</span>
+<span class="cstat-no" title="statement not covered" >      return true;</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      return selectedApplication.status === 'Not Submitted' || selectedApplication.status === 'Failed Pre-screen';</span>
+    }
+  }, [selectedApplication]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Box paddingX={theme.spacing(2)}&gt;
@@ -210,8 +236,9 @@ export default function <span class="fstat-no" title="function not covered" >Lis
             &lt;/Box&gt;
             &lt;Button
               onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >goToApplicationSection(applicationId, section.id)}</span>
-              label={strings.VIEW}
-              priority={'secondary'}
+              disabled={section.category === 'Application' &amp;&amp; isPrescreen}
+              label={section.category === 'Pre-screen' &amp;&amp; isPrescreen ? strings.GET_STARTED : strings.VIEW}
+              priority={section.category === 'Pre-screen' &amp;&amp; isPrescreen ? 'primary' : 'secondary'}
               style={isMobile ? { width: '100%' } : {}}
             /&gt;
           &lt;/Box&gt;
@@ -229,7 +256,7 @@ export default function <span class="fstat-no" title="function not covered" >Lis
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-17T17:12:44.831Z
+                at 2024-07-17T17:18:56.940Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

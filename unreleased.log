@@ -1,3 +1,4 @@
+b35d692bc83 Updated buttons in overview page (#2869)
 f75bb3e1485 Fixed typo (#2868)
 b7c8f83edb8 Added filled icon for completed section, and disabled sections before prescreen is completed (#2865)
 4cc87902042 Fix the variable edit modal within the document producer, it was going into an infinite reload (#2862)
