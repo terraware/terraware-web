@@ -7,8 +7,15 @@ import PageContent from 'src/components/DocumentProducer/PageContent';
 import TableContent from 'src/components/DocumentProducer/TableContent';
 import Link from 'src/components/common/Link';
 import { requestListVariablesValues } from 'src/redux/features/documentProducer/values/valuesThunks';
-import { selectAllVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
-import { requestListAllVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
+import {
+  selectAllVariablesWithValues,
+  selectVariablesWithValues,
+} from 'src/redux/features/documentProducer/variables/variablesSelector';
+import {
+  requestListAllVariables,
+  requestListVariables,
+} from 'src/redux/features/documentProducer/variables/variablesThunks';
+import { useSelectorProcessor } from 'src/redux/hooks/useSelectorProcessor';
 import { RootState } from 'src/redux/rootReducer';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -96,19 +103,19 @@ const DocumentVariablesTab = ({ document: doc, setSelectedTab }: DocumentVariabl
 
   const [tableRows, setTableRows] = useState<TableRow[]>([]);
   const [variables, setVariables] = useState<VariableWithValues[]>([]);
-  const [sectionVariables, setSectionVariables] = useState<SectionVariableWithValues[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
   const [openEditVariableModal, setOpenEditVariableModal] = useState<boolean>(false);
   const [selectedVariableId, setSelectedVariableId] = useState<number>();
 
   const allVariables = useAppSelector((state: RootState) => selectAllVariablesWithValues(state, doc.projectId));
 
-  useEffect(() => {
-    const sectionVariables = allVariables
-      .filter((d: VariableWithValues) => d.type === 'Section')
-      .filter(filterSearch(searchValue)) as SectionVariableWithValues[];
+  const [documentVariables, setDocumentVariables] = useState<SectionVariableWithValues[]>([]);
+  const documentVariablesResult = useAppSelector((state) =>
+    selectVariablesWithValues(state, doc.variableManifestId, doc.projectId)
+  );
+  useSelectorProcessor(documentVariablesResult, setDocumentVariables);
 
-    setSectionVariables(sectionVariables);
+  useEffect(() => {
     setVariables(
       allVariables
         .filter((d: VariableWithValues) => d.type !== 'Section' && d.type !== 'Image' && d.type !== 'Table')
@@ -117,6 +124,7 @@ const DocumentVariablesTab = ({ document: doc, setSelectedTab }: DocumentVariabl
   }, [allVariables, searchValue]);
 
   useEffect(() => {
+    dispatch(requestListVariables(doc.variableManifestId));
     dispatch(requestListAllVariables());
     dispatch(requestListVariablesValues({ projectId: doc.projectId }));
   }, [dispatch, doc.variableManifestId, doc.projectId]);
@@ -142,15 +150,18 @@ const DocumentVariablesTab = ({ document: doc, setSelectedTab }: DocumentVariabl
 
   useEffect(() => {
     setTableRows(
-      variables.map((v) => ({ ...v, instances: sectionVariables.reduce(containingSections(v.id), []).length }))
+      variables.map((v) => ({
+        ...v,
+        instances: documentVariables.reduce(containingSections(v.id), []).length,
+      }))
     );
-  }, [variables, sectionVariables, containingSections]);
+  }, [containingSections, documentVariables, variables]);
 
   const [sectionsUsed, setSectionsUsed] = useState<string[]>([]);
   useEffect(() => {
-    const sectionNumbers = sectionVariables.reduce(containingSections(selectedVariableId), []);
+    const sectionNumbers = documentVariables.reduce(containingSections(selectedVariableId), []);
     setSectionsUsed(sectionNumbers);
-  }, [selectedVariableId, sectionVariables, containingSections]);
+  }, [containingSections, documentVariables, selectedVariableId]);
 
   const onSectionClicked = useCallback(
     (sectionNumber: string) => {
@@ -169,6 +180,7 @@ const DocumentVariablesTab = ({ document: doc, setSelectedTab }: DocumentVariabl
   );
 
   const onUpdate = () => {
+    dispatch(requestListVariables(doc.variableManifestId));
     dispatch(requestListAllVariables());
     dispatch(requestListVariablesValues({ projectId: doc.projectId }));
   };
