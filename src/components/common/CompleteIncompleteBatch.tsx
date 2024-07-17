@@ -3,8 +3,10 @@ import React from 'react';
 import { useTheme } from '@mui/material';
 import { Badge } from '@terraware/web-components';
 
+import { VariableStatusType } from 'src/types/documentProducer/Variable';
+
 type CompleteIncompleteBatchProps = {
-  status: 'Complete' | 'Incomplete';
+  status: VariableStatusType;
 };
 export default function CompleteIncompleteBatch({ status }: CompleteIncompleteBatchProps): JSX.Element {
   const theme = useTheme();

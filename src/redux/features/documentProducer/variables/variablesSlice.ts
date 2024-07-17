@@ -1,11 +1,13 @@
 import { ActionReducerMapBuilder, createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import { Variable } from 'src/types/documentProducer/Variable';
+import { Variable, VariableOwners } from 'src/types/documentProducer/Variable';
 
 import {
   requestListDeliverableVariables,
   requestListVariables,
+  requestListVariablesOwners,
+  requestUpdateVariableOwner,
   requestUpdateVariableWorkflowDetails,
 } from './variablesThunks';
 
@@ -47,8 +49,39 @@ const variableWorkflowDetailsUpdateSlice = createSlice({
   },
 });
 
+/**
+ * Variable Owner Update
+ */
+type VariableOwnerUpdateState = Record<string, StatusT<number>>;
+
+const initialVariableOwnerUpdateSlice: VariableOwnerUpdateState = {};
+
+const variableOwnerUpdateSlice = createSlice({
+  name: 'variableOwnerUpdateSlice',
+  initialState: initialVariableOwnerUpdateSlice,
+  reducers: {},
+  extraReducers: (builder: ActionReducerMapBuilder<VariableOwnerUpdateState>) => {
+    buildReducers(requestUpdateVariableOwner)(builder);
+  },
+});
+
+type VariablesOwnersState = Record<string, StatusT<VariableOwners[]>>;
+
+const initialVariablesOwnersState: VariablesOwnersState = {};
+
+const variablesOwnersSlice = createSlice({
+  name: 'variablesOwnersSlice',
+  initialState: initialVariablesOwnersState,
+  reducers: {},
+  extraReducers: (builder: ActionReducerMapBuilder<VariablesOwnersState>) => {
+    buildReducers(requestListVariablesOwners, true)(builder);
+  },
+});
+
 export const documentProducerVariablesReducers = {
   documentProducerVariables: variablesSlice.reducer,
   documentProducerDeliverableVariables: deliverableVariablesSlice.reducer,
   variableWorkflowDetailsUpdate: variableWorkflowDetailsUpdateSlice.reducer,
+  variableOwnerUpdate: variableOwnerUpdateSlice.reducer,
+  variablesOwners: variablesOwnersSlice.reducer,
 };

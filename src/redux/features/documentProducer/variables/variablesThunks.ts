@@ -3,7 +3,12 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Response2 } from 'src/services/HttpService';
 import VariableService from 'src/services/documentProducer/VariableService';
 import strings from 'src/strings';
-import { UpdateVariableWorkflowDetailsPayload, VariableListResponse } from 'src/types/documentProducer/Variable';
+import {
+  UpdateVariableOwnerPayload,
+  UpdateVariableWorkflowDetailsPayload,
+  VariableListResponse,
+  VariableOwnersListResponse,
+} from 'src/types/documentProducer/Variable';
 
 export const requestListVariables = createAsyncThunk(
   'listVariables',
@@ -42,6 +47,33 @@ export const requestUpdateVariableWorkflowDetails = createAsyncThunk(
     const response = await VariableService.updateVariableWorkflowDetails(variableId, projectId, rest);
     if (response.requestSucceeded) {
       return true;
+    }
+
+    return rejectWithValue(response.error || strings.GENERIC_ERROR);
+  }
+);
+
+export const requestUpdateVariableOwner = createAsyncThunk(
+  'updateVariableOwner',
+  async (
+    { projectId, variableId, ...rest }: UpdateVariableOwnerPayload & { projectId: number; variableId: number },
+    { rejectWithValue }
+  ) => {
+    const response = await VariableService.updateVariableOwner(variableId, projectId, rest);
+    if (response.requestSucceeded) {
+      return true;
+    }
+
+    return rejectWithValue(response.error || strings.GENERIC_ERROR);
+  }
+);
+
+export const requestListVariablesOwners = createAsyncThunk(
+  'listVariablesOwners',
+  async (projectId: number, { rejectWithValue }) => {
+    const response: Response2<VariableOwnersListResponse> = await VariableService.getVariablesOwners(projectId);
+    if (response.requestSucceeded && response.data) {
+      return response.data.variables;
     }
 
     return rejectWithValue(response.error || strings.GENERIC_ERROR);
