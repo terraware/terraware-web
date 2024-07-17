@@ -7,9 +7,8 @@ import PageContent from 'src/components/DocumentProducer/PageContent';
 import TableContent from 'src/components/DocumentProducer/TableContent';
 import Link from 'src/components/common/Link';
 import { requestListVariablesValues } from 'src/redux/features/documentProducer/values/valuesThunks';
-import { selectVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
-import { requestListVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
-import { useSelectorProcessor } from 'src/redux/hooks/useSelectorProcessor';
+import { selectAllVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
+import { requestListAllVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { RootState } from 'src/redux/rootReducer';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -89,28 +88,28 @@ export type DocumentVariablesProps = {
 
 const DocumentVariablesTab = ({ document: doc, setSelectedTab }: DocumentVariablesProps): JSX.Element => {
   const dispatch = useAppDispatch();
+
   const [tableRows, setTableRows] = useState<TableRow[]>([]);
   const [variables, setVariables] = useState<VariableWithValues[]>([]);
   const [sectionVariables, setSectionVariables] = useState<SectionVariableWithValues[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
   const [openEditVariableModal, setOpenEditVariableModal] = useState<boolean>(false);
   const [selectedVariableId, setSelectedVariableId] = useState<number>();
-  const onSearch = (str: string) => setSearchValue(str);
 
-  const variablesResult = useAppSelector((state: RootState) =>
-    selectVariablesWithValues(state, doc.variableManifestId, doc.id)
-  );
-
-  useSelectorProcessor(variablesResult, (data) => {
-    setSectionVariables(data.filter((d: any) => d.type === 'Section'));
-  });
-
-  useSelectorProcessor(variablesResult, (data) => {
-    setVariables(data.filter((d: any) => d.type !== 'Section' && d.type !== 'Image' && d.type !== 'Table'));
-  });
+  const allVariables = useAppSelector((state: RootState) => selectAllVariablesWithValues(state, doc.projectId));
 
   useEffect(() => {
-    dispatch(requestListVariables(doc.variableManifestId));
+    const sectionVariables = allVariables.filter(
+      (d: VariableWithValues | SectionVariableWithValues): d is SectionVariableWithValues => d.type === 'Section'
+    ) as SectionVariableWithValues[];
+    setSectionVariables(sectionVariables);
+    setVariables(
+      allVariables.filter((d: VariableWithValues) => d.type !== 'Section' && d.type !== 'Image' && d.type !== 'Table')
+    );
+  }, [allVariables]);
+
+  useEffect(() => {
+    dispatch(requestListAllVariables());
     dispatch(requestListVariablesValues({ projectId: doc.projectId }));
   }, [dispatch, doc.variableManifestId, doc.projectId]);
 
@@ -162,9 +161,11 @@ const DocumentVariablesTab = ({ document: doc, setSelectedTab }: DocumentVariabl
   );
 
   const onUpdate = () => {
-    dispatch(requestListVariables(doc.variableManifestId));
+    dispatch(requestListAllVariables());
     dispatch(requestListVariablesValues({ projectId: doc.projectId }));
   };
+
+  const onSearch = (str: string) => setSearchValue(str);
 
   const props = {
     searchProps: {
@@ -185,11 +186,14 @@ const DocumentVariablesTab = ({ document: doc, setSelectedTab }: DocumentVariabl
     },
   };
 
-  const onFinish = (updated: boolean) => {
-    if (updated) {
-      dispatch(requestListVariablesValues({ projectId: doc.projectId }));
-    }
-  };
+  const onFinish = useCallback(
+    (updated: boolean) => {
+      if (updated) {
+        dispatch(requestListVariablesValues({ projectId: doc.projectId }));
+      }
+    },
+    [dispatch, doc.projectId]
+  );
 
   return (
     <>
