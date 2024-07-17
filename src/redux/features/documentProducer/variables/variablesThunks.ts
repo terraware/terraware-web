@@ -5,10 +5,19 @@ import VariableService from 'src/services/documentProducer/VariableService';
 import strings from 'src/strings';
 import { UpdateVariableWorkflowDetailsPayload, VariableListResponse } from 'src/types/documentProducer/Variable';
 
-export const requestListVariables = createAsyncThunk(
-  'listVariables',
-  async (manifestId: number, { rejectWithValue }) => {
-    const response: Response2<VariableListResponse> = await VariableService.getVariables(manifestId);
+export const requestListAllVariables = createAsyncThunk('listAllVariables', async (_, { rejectWithValue }) => {
+  const response: Response2<VariableListResponse> = await VariableService.getAllVariables();
+  if (response && response.requestSucceeded && response.data) {
+    return response.data.variables;
+  }
+
+  return rejectWithValue(response.error || strings.GENERIC_ERROR);
+});
+
+export const requestListDeliverableVariables = createAsyncThunk(
+  'listDeliverableVariables',
+  async (deliverableId: number, { rejectWithValue }) => {
+    const response: Response2<VariableListResponse> = await VariableService.getDeliverableVariables(deliverableId);
     if (response && response.requestSucceeded && response.data) {
       return response.data.variables;
     }
@@ -17,10 +26,10 @@ export const requestListVariables = createAsyncThunk(
   }
 );
 
-export const requestListDeliverableVariables = createAsyncThunk(
-  'listDeliverableVariables',
-  async (deliverableId: number, { rejectWithValue }) => {
-    const response: Response2<VariableListResponse> = await VariableService.getDeliverableVariables(deliverableId);
+export const requestListVariables = createAsyncThunk(
+  'listVariables',
+  async (manifestId: number, { rejectWithValue }) => {
+    const response: Response2<VariableListResponse> = await VariableService.getVariables(manifestId);
     if (response && response.requestSucceeded && response.data) {
       return response.data.variables;
     }
