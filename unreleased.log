@@ -1,3 +1,5 @@
+b4fb135cb84 SW-5654 Implemented pre-screen as a section, and added map route (#2864)
+d1c289d0854 SW-5642 Implemented new application modal with error validations (#2863)
 92936b3b27c Updated translations from Phrase (#2857)
 babb644386d SW-5650: FE - Add editing support for Image field (#2854)
 1c1e1d1c6e7 Fix document metadata view (#2852)

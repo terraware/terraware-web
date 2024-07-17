@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
@@ -126,7 +126,18 @@
 <a name='L61'></a><a href='#L61'>61</a>
 <a name='L62'></a><a href='#L62'>62</a>
 <a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -152,11 +163,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -203,7 +225,7 @@ import ApplicationPage from '../ApplicationPage';
 const SectionView = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const { selectedApplication, applicationSections } = <span class="cstat-no" title="statement not covered" >useApplicationData();</span>
-  const { goToApplicationSectionDeliverable } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
+  const { goToApplicationMap, goToApplicationSectionDeliverable } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
 &nbsp;
   const pathParams = <span class="cstat-no" title="statement not covered" >useParams&lt;{ applicationId: string; sectionId: string }&gt;();</span>
   const applicationId = <span class="cstat-no" title="statement not covered" >Number(pathParams.applicationId);</span>
@@ -214,14 +236,25 @@ const SectionView = <span class="cstat-no" title="statement not covered" ><span 
     [applicationSections, sectionId]
   );
 &nbsp;
-  const deliverableDetails = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt;
-<span class="cstat-no" title="statement not covered" >      section?.deliverables.map(<span class="fstat-no" title="function not covered" >(d</span>eliverable) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-        ...deliverable,
-        onClick: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >goToApplicationSectionDeliverable(applicationId, sectionId, deliverable.id),</span>
-      })),
-    [applicationId, sectionId, section?.deliverables, goToApplicationSectionDeliverable]
-  );
+  const deliverableDetails = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (section) {</span>
+      const deliverables = <span class="cstat-no" title="statement not covered" >section.deliverables.map(<span class="fstat-no" title="function not covered" >(d</span>eliverable) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+        name: deliverable.name,
+        onClick: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >goToApplicationSectionDeliverable(applicationId, section.id, deliverable.id),</span>
+        status: deliverable.status,
+      }));
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      if (section.category === 'Pre-screen') {</span>
+<span class="cstat-no" title="statement not covered" >        deliverables.unshift({</span>
+          name: strings.PROPOSED_PROJECT_BOUNDARY,
+          onClick: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >goToApplicationMap(applicationId),</span>
+          status: selectedApplication?.boundary ? 'Completed' : 'Not Submitted',
+        });
+      }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      return deliverables;</span>
+    }
+  }, [applicationId, section, goToApplicationMap, goToApplicationSectionDeliverable]);
 &nbsp;
   const moduleDetails = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt;
@@ -259,7 +292,7 @@ export default SectionView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-16T21:25:38.171Z
+                at 2024-07-17T15:51:56.686Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
