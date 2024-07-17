@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/123</span>
+                <span class='fraction'>0/122</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/50</span>
+                <span class='fraction'>0/49</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/114</span>
+                <span class='fraction'>0/113</span>
             </div>
         
             
@@ -327,11 +327,7 @@
 <a name='L262'></a><a href='#L262'>262</a>
 <a name='L263'></a><a href='#L263'>263</a>
 <a name='L264'></a><a href='#L264'>264</a>
-<a name='L265'></a><a href='#L265'>265</a>
-<a name='L266'></a><a href='#L266'>266</a>
-<a name='L267'></a><a href='#L267'>267</a>
-<a name='L268'></a><a href='#L268'>268</a>
-<a name='L269'></a><a href='#L269'>269</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L265'></a><a href='#L265'>265</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -391,7 +387,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -560,7 +555,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -574,9 +568,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -657,10 +649,9 @@ export const searchVariables = <span class="cstat-no" title="statement not cover
 )(<span class="fstat-no" title="function not covered" >(s</span>tate: RootState, id: number, query: string) =&gt; <span class="cstat-no" title="statement not covered" >query)</span>;
 &nbsp;
 export const selectGetVariable = <span class="cstat-no" title="statement not covered" >createCachedSelector(</span>
-<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, manifestId: number | string, variableId: number) =&gt; <span class="cstat-no" title="statement not covered" >state.documentProducerVariables[manifestId],</span>
-<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, manifestId: number | string, variableId: number) =&gt; <span class="cstat-no" title="statement not covered" >manifestId,</span>
-<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, manifestId: number | string, variableId: number) =&gt; <span class="cstat-no" title="statement not covered" >variableId,</span>
-<span class="fstat-no" title="function not covered" >  (r</span>esponse, manifestId, variableId) =&gt; {
+<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, variableId: number) =&gt; <span class="cstat-no" title="statement not covered" >state.documentProducerAllVariables['all'],</span>
+<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, variableId: number) =&gt; <span class="cstat-no" title="statement not covered" >variableId,</span>
+<span class="fstat-no" title="function not covered" >  (r</span>esponse, variableId) =&gt; {
 <span class="cstat-no" title="statement not covered" >    if (response?.data) {</span>
       const variableToReturn = <span class="cstat-no" title="statement not covered" >response.data.find(<span class="fstat-no" title="function not covered" >(v</span>ariable: Variable) =&gt; <span class="cstat-no" title="statement not covered" >variable.id === variableId)</span>;</span>
 <span class="cstat-no" title="statement not covered" >      return {</span>
@@ -671,7 +662,7 @@ export const selectGetVariable = <span class="cstat-no" title="statement not cov
 <span class="cstat-no" title="statement not covered" >      return response;</span>
     }
   }
-)(<span class="fstat-no" title="function not covered" >(s</span>tate: RootState, manifestId: number | string, variableId: number) =&gt; <span class="cstat-no" title="statement not covered" >variableId)</span>;
+)(<span class="fstat-no" title="function not covered" >(s</span>tate: RootState, variableId: number) =&gt; <span class="cstat-no" title="statement not covered" >variableId)</span>;
 &nbsp;
 const getCombinedProps = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(l</span>istA: any, listB: any) =&gt; {</span>
   let status = <span class="cstat-no" title="statement not covered" >'pending';</span>
@@ -828,9 +819,8 @@ const associateNonSectionVariableValues = <span class="cstat-no" title="statemen
 };
 &nbsp;
 export const selectAllVariablesWithValues = <span class="cstat-no" title="statement not covered" >createCachedSelector(</span>
-<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, requestId: string, projectId: number, maxValueId?: number) =&gt;
-<span class="cstat-no" title="statement not covered" >    state.documentProducerAllVariables[requestId],</span>
-<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, requestId: string, projectId: number, maxValueId?: number) =&gt;
+<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, projectId: number, maxValueId?: number) =&gt; <span class="cstat-no" title="statement not covered" >state.documentProducerAllVariables['all'],</span>
+<span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, projectId: number, maxValueId?: number) =&gt;
 <span class="cstat-no" title="statement not covered" >    state.documentProducerVariableValuesList[variableListCompositeKeyFn({ projectId, maxValueId })],</span>
 <span class="fstat-no" title="function not covered" >  (v</span>ariableList, valueList) =&gt; {
 <span class="cstat-no" title="statement not covered" >    if (variableList?.data &amp;&amp; valueList?.data) {</span>
@@ -842,9 +832,7 @@ export const selectAllVariablesWithValues = <span class="cstat-no" title="statem
 <span class="cstat-no" title="statement not covered" >      return [];</span>
     }
   }
-)(<span class="fstat-no" title="function not covered" >(s</span>tate: RootState, requestId: string, projectId: number, maxValueId?: number) =&gt;
-<span class="cstat-no" title="statement not covered" >  variableListCompositeKeyFn({ projectId, maxValueId })</span>
-);
+)(<span class="fstat-no" title="function not covered" >(s</span>tate: RootState, projectId: number, maxValueId?: number) =&gt; <span class="cstat-no" title="statement not covered" >variableListCompositeKeyFn({ projectId, maxValueId }))</span>;
 &nbsp;
 export const selectDeliverableVariablesWithValues = <span class="cstat-no" title="statement not covered" >createCachedSelector(</span>
 <span class="fstat-no" title="function not covered" >  (s</span>tate: RootState, deliverableId: number, projectId: number) =&gt;
@@ -874,7 +862,7 @@ export const selectUpdateVariableWorkflowDetails = <span class="cstat-no" title=
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-17T16:04:59.166Z
+                at 2024-07-17T16:16:04.209Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

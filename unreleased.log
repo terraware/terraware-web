@@ -1,3 +1,5 @@
+b7c8f83edb8 Added filled icon for completed section, and disabled sections before prescreen is completed (#2865)
+4cc87902042 Fix the variable edit modal within the document producer, it was going into an infinite reload (#2862)
 37552d33a2a Hook up the "all variables" dropdown to new BE API that returns all non-section variables in the system (#2859)
 b4fb135cb84 SW-5654 Implemented pre-screen as a section, and added map route (#2864)
 d1c289d0854 SW-5642 Implemented new application modal with error validations (#2863)

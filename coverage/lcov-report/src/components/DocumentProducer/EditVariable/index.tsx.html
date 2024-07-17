@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/76</span>
+                <span class='fraction'>0/77</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/74</span>
+                <span class='fraction'>0/75</span>
             </div>
         
             
@@ -280,7 +280,14 @@
 <a name='L215'></a><a href='#L215'>215</a>
 <a name='L216'></a><a href='#L216'>216</a>
 <a name='L217'></a><a href='#L217'>217</a>
-<a name='L218'></a><a href='#L218'>218</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L218'></a><a href='#L218'>218</a>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a>
+<a name='L223'></a><a href='#L223'>223</a>
+<a name='L224'></a><a href='#L224'>224</a>
+<a name='L225'></a><a href='#L225'>225</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -323,7 +330,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -333,6 +342,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -443,9 +453,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -461,7 +475,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -497,7 +511,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useState } from 'react';
 &nbsp;
 import { Grid } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -539,8 +553,10 @@ export type EditVariableProps = {
 };
 &nbsp;
 const EditVariable = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>rops: EditVariableProps): JSX.Element =&gt; {</span>
-  const { onFinish, manifestId, projectId, variableId, sectionsUsed, onSectionClicked } = <span class="cstat-no" title="statement not covered" >props;</span>
+  const { onFinish, projectId, variableId, sectionsUsed, onSectionClicked } = <span class="cstat-no" title="statement not covered" >props;</span>
+&nbsp;
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
+&nbsp;
   const [validate, setValidate] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [hasErrors, setHasErrors] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
@@ -548,8 +564,9 @@ const EditVariable = <span class="cstat-no" title="statement not covered" ><span
   const [values, setValues] = <span class="cstat-no" title="statement not covered" >useState&lt;VariableValueValue[]&gt;();</span>
   const [removedValues, setRemovedValues] = <span class="cstat-no" title="statement not covered" >useState&lt;VariableValueValue[]&gt;();</span>
 &nbsp;
-  const selector = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectGetVariable(state, manifestId, variableId))</span>;</span>
+  const selector = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectGetVariable(state, variableId))</span>;</span>
   const valuesSelector = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectGetVariableValues(state, projectId, variableId))</span>;</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  useSelectorProcessor(selector, setVariable);</span>
 <span class="cstat-no" title="statement not covered" >  useSelectorProcessor(valuesSelector, setValues);</span>
 &nbsp;
@@ -651,7 +668,7 @@ const EditVariable = <span class="cstat-no" title="statement not covered" ><span
           const request = <span class="cstat-no" title="statement not covered" >dispatch(</span>
             requestUpdateVariableValues({
               operations,
-              projectId: projectId,
+              projectId,
             })
           );
 <span class="cstat-no" title="statement not covered" >          setRequestId(request.requestId);</span>
@@ -660,10 +677,14 @@ const EditVariable = <span class="cstat-no" title="statement not covered" ><span
     }
   };
 &nbsp;
-  const onCancel = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+  const onCancel = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setRequestId('');</span>
 <span class="cstat-no" title="statement not covered" >    onFinish(false);</span>
-  };
+  }, []);
+&nbsp;
+  const onSuccess = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    onFinish(true);</span>
+  }, [onFinish]);
 &nbsp;
   const onAddRemovedValue = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(n</span>ewRemovedValue: VariableValueValue) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setRemovedValues(<span class="fstat-no" title="function not covered" >(p</span>rev) =&gt; {</span>
@@ -678,7 +699,7 @@ const EditVariable = <span class="cstat-no" title="statement not covered" ><span
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;PageDialog
       workflowState={requestId ? results : undefined}
-      onSuccess={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >onFinish(true)}</span>
+      onSuccess={onSuccess}
       onClose={onCancel}
       open={true}
       title={strings.VARIABLE_DETAILS}
@@ -721,7 +742,7 @@ export default EditVariable;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-17T16:04:59.166Z
+                at 2024-07-17T16:16:04.209Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
