@@ -103,25 +103,19 @@ const DocumentVariablesTab = ({ document: doc, setSelectedTab }: DocumentVariabl
 
   const [tableRows, setTableRows] = useState<TableRow[]>([]);
   const [variables, setVariables] = useState<VariableWithValues[]>([]);
-  const [sectionVariables, setSectionVariables] = useState<SectionVariableWithValues[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
   const [openEditVariableModal, setOpenEditVariableModal] = useState<boolean>(false);
   const [selectedVariableId, setSelectedVariableId] = useState<number>();
 
   const allVariables = useAppSelector((state: RootState) => selectAllVariablesWithValues(state, doc.projectId));
 
-  const [documentVariables, setDocumentVariables] = useState<VariableWithValues[]>();
+  const [documentVariables, setDocumentVariables] = useState<SectionVariableWithValues[]>([]);
   const documentVariablesResult = useAppSelector((state) =>
     selectVariablesWithValues(state, doc.variableManifestId, doc.projectId)
   );
   useSelectorProcessor(documentVariablesResult, setDocumentVariables);
 
   useEffect(() => {
-    const sectionVariables = allVariables
-      .filter((d: VariableWithValues) => d.type === 'Section')
-      .filter(filterSearch(searchValue)) as SectionVariableWithValues[];
-
-    setSectionVariables(sectionVariables);
     setVariables(
       allVariables
         .filter((d: VariableWithValues) => d.type !== 'Section' && d.type !== 'Image' && d.type !== 'Table')
@@ -158,17 +152,16 @@ const DocumentVariablesTab = ({ document: doc, setSelectedTab }: DocumentVariabl
     setTableRows(
       variables.map((v) => ({
         ...v,
-        instances: ((documentVariables || []) as SectionVariableWithValues[]).reduce(containingSections(v.id), [])
-          .length,
+        instances: documentVariables.reduce(containingSections(v.id), []).length,
       }))
     );
   }, [containingSections, documentVariables, variables]);
 
   const [sectionsUsed, setSectionsUsed] = useState<string[]>([]);
   useEffect(() => {
-    const sectionNumbers = sectionVariables.reduce(containingSections(selectedVariableId), []);
+    const sectionNumbers = documentVariables.reduce(containingSections(selectedVariableId), []);
     setSectionsUsed(sectionNumbers);
-  }, [selectedVariableId, sectionVariables, containingSections]);
+  }, [containingSections, documentVariables, selectedVariableId]);
 
   const onSectionClicked = useCallback(
     (sectionNumber: string) => {
