@@ -45,6 +45,8 @@ type EditableSectionEditProps = {
   manifestId: number;
 };
 
+const EMPTY_VARIABLE = '--';
+
 const SectionEdit = ({
   section,
   sectionValues,
@@ -116,11 +118,11 @@ const SectionEdit = ({
         case 'variable':
           const variable = allVariables.find((v) => v.id === props.element.variableId);
           const displayValue = variable
-            ? editorDisplayVariableWithValues(variable, ', ', strings.UNSPECIFIED, props.element.reference)
-            : strings.UNSPECIFIED;
+            ? editorDisplayVariableWithValues(variable, ', ', EMPTY_VARIABLE, props.element.reference)
+            : EMPTY_VARIABLE;
           return (
             <TextVariable
-              icon='iconModule'
+              icon='iconVariable'
               onClick={() => onEditVariableValue(variable)}
               displayValue={displayValue}
               {...props}
