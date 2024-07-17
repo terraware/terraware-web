@@ -182,10 +182,10 @@ const SectionEdit = ({
     [editor]
   );
 
-  const variableUpdated = () => {
+  const variableUpdated = useCallback(() => {
     onUpdate();
     setOpenEditVariableModal(false);
-  };
+  }, [onUpdate]);
 
   return (
     <>

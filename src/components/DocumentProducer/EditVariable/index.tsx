@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { Grid } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -40,8 +40,10 @@ export type EditVariableProps = {
 };
 
 const EditVariable = (props: EditVariableProps): JSX.Element => {
-  const { onFinish, manifestId, projectId, variableId, sectionsUsed, onSectionClicked } = props;
+  const { onFinish, projectId, variableId, sectionsUsed, onSectionClicked } = props;
+
   const dispatch = useAppDispatch();
+
   const [validate, setValidate] = useState<boolean>(false);
   const [hasErrors, setHasErrors] = useState<boolean>(false);
   const [requestId, setRequestId] = useState<string>('');
@@ -49,8 +51,9 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
   const [values, setValues] = useState<VariableValueValue[]>();
   const [removedValues, setRemovedValues] = useState<VariableValueValue[]>();
 
-  const selector = useAppSelector((state) => selectGetVariable(state, manifestId, variableId));
+  const selector = useAppSelector((state) => selectGetVariable(state, variableId));
   const valuesSelector = useAppSelector((state) => selectGetVariableValues(state, projectId, variableId));
+
   useSelectorProcessor(selector, setVariable);
   useSelectorProcessor(valuesSelector, setValues);
 
@@ -152,7 +155,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
           const request = dispatch(
             requestUpdateVariableValues({
               operations,
-              projectId: projectId,
+              projectId,
             })
           );
           setRequestId(request.requestId);
@@ -161,10 +164,14 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
     }
   };
 
-  const onCancel = () => {
+  const onCancel = useCallback(() => {
     setRequestId('');
     onFinish(false);
-  };
+  }, []);
+
+  const onSuccess = useCallback(() => {
+    onFinish(true);
+  }, [onFinish]);
 
   const onAddRemovedValue = (newRemovedValue: VariableValueValue) => {
     setRemovedValues((prev) => {
@@ -179,7 +186,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
   return (
     <PageDialog
       workflowState={requestId ? results : undefined}
-      onSuccess={() => onFinish(true)}
+      onSuccess={onSuccess}
       onClose={onCancel}
       open={true}
       title={strings.VARIABLE_DETAILS}
