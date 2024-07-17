@@ -138,7 +138,6 @@ const SectionEdit = ({
       return;
     }
     setClickedVariable(variable);
-    debugger;
     setOpenEditVariableModal(true);
   };
 
@@ -183,11 +182,8 @@ const SectionEdit = ({
     [editor]
   );
 
-  console.log({ openEditVariableModal });
   const variableUpdated = useCallback(() => {
-    debugger;
     onUpdate();
-    debugger;
     setOpenEditVariableModal(false);
   }, [onUpdate]);
 
