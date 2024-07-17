@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Box, Typography, useTheme } from '@mui/material';
@@ -8,7 +8,6 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import CompleteIncompleteBatch from 'src/components/common/CompleteIncompleteBatch';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import strings from 'src/strings';
-import { ApplicationModuleWithDeliverables } from 'src/types/Application';
 
 import { useApplicationData } from '../../provider/Context';
 
@@ -16,30 +15,14 @@ export default function ListModulesContent(): JSX.Element {
   const { applicationSections } = useApplicationData();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const [sectionsWithPrescreen, setSectionsWithPrescreen] =
-    useState<ApplicationModuleWithDeliverables[]>(applicationSections);
-  const { goToApplicationSection, goToApplicationPrescreen } = useNavigateTo();
+  const { goToApplicationSection } = useNavigateTo();
 
   const pathParams = useParams<{ applicationId: string }>();
   const applicationId = Number(pathParams.applicationId);
 
-  useEffect(() => {
-    const newSections = [...applicationSections];
-    const prescreenSection = {
-      id: -1,
-      name: 'Prescreen',
-      overview:
-        'Draw your site map and answer the Prescreen questions to see if you qualify to start the Application for the Accelerator Program. ',
-      deliverables: [],
-      status: 'Incomplete',
-    } as ApplicationModuleWithDeliverables;
-    newSections.unshift(prescreenSection);
-    setSectionsWithPrescreen(newSections);
-  }, [applicationSections]);
-
   return (
     <Box paddingX={theme.spacing(2)}>
-      {sectionsWithPrescreen.map((section, index) => (
+      {applicationSections.map((section, index) => (
         <Box
           key={`section-${index}`}
           borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}
@@ -56,11 +39,7 @@ export default function ListModulesContent(): JSX.Element {
               </Box>
             </Box>
             <Button
-              onClick={() =>
-                section.name === 'Prescreen'
-                  ? goToApplicationPrescreen(applicationId)
-                  : goToApplicationSection(applicationId, section.id)
-              }
+              onClick={() => goToApplicationSection(applicationId, section.id)}
               label={strings.VIEW}
               priority={'secondary'}
               style={isMobile ? { width: '100%' } : {}}

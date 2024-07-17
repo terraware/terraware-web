@@ -12,7 +12,7 @@ import ApplicationPage from '../ApplicationPage';
 const SectionView = () => {
   const { activeLocale } = useLocalization();
   const { selectedApplication, applicationSections } = useApplicationData();
-  const { goToApplicationSectionDeliverable } = useNavigateTo();
+  const { goToApplicationMap, goToApplicationSectionDeliverable } = useNavigateTo();
 
   const pathParams = useParams<{ applicationId: string; sectionId: string }>();
   const applicationId = Number(pathParams.applicationId);
@@ -23,14 +23,25 @@ const SectionView = () => {
     [applicationSections, sectionId]
   );
 
-  const deliverableDetails = useMemo(
-    () =>
-      section?.deliverables.map((deliverable) => ({
-        ...deliverable,
-        onClick: () => goToApplicationSectionDeliverable(applicationId, sectionId, deliverable.id),
-      })),
-    [applicationId, sectionId, section?.deliverables, goToApplicationSectionDeliverable]
-  );
+  const deliverableDetails = useMemo(() => {
+    if (section) {
+      const deliverables = section.deliverables.map((deliverable) => ({
+        name: deliverable.name,
+        onClick: () => goToApplicationSectionDeliverable(applicationId, section.id, deliverable.id),
+        status: deliverable.status,
+      }));
+
+      if (section.category === 'Pre-screen') {
+        deliverables.unshift({
+          name: strings.PROPOSED_PROJECT_BOUNDARY,
+          onClick: () => goToApplicationMap(applicationId),
+          status: selectedApplication?.boundary ? 'Completed' : 'Not Submitted',
+        });
+      }
+
+      return deliverables;
+    }
+  }, [applicationId, section, goToApplicationMap, goToApplicationSectionDeliverable]);
 
   const moduleDetails = useMemo(
     () =>
