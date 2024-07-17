@@ -1,3 +1,4 @@
+299c823bb61 Fix the instance count for variables within the document (#2870)
 8f51bcc3a62 Hook up search to all variables tab (#2867)
 dc9526a861d Show all variables with the project specific values in the document variables tab (#2866)
 b35d692bc83 Updated buttons in overview page (#2869)
