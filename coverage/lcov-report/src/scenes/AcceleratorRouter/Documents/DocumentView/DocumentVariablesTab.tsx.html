@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/85</span>
+                <span class='fraction'>0/86</span>
             </div>
         
             
@@ -279,7 +279,11 @@
 <a name='L214'></a><a href='#L214'>214</a>
 <a name='L215'></a><a href='#L215'>215</a>
 <a name='L216'></a><a href='#L216'>216</a>
-<a name='L217'></a><a href='#L217'>217</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L217'></a><a href='#L217'>217</a>
+<a name='L218'></a><a href='#L218'>218</a>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a>
+<a name='L221'></a><a href='#L221'>221</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -307,7 +311,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -370,7 +373,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -379,17 +382,17 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -445,7 +448,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -467,8 +472,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -504,9 +512,8 @@ import PageContent from 'src/components/DocumentProducer/PageContent';
 import TableContent from 'src/components/DocumentProducer/TableContent';
 import Link from 'src/components/common/Link';
 import { requestListVariablesValues } from 'src/redux/features/documentProducer/values/valuesThunks';
-import { selectVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
-import { requestListVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
-import { useSelectorProcessor } from 'src/redux/hooks/useSelectorProcessor';
+import { selectAllVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
+import { requestListAllVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { RootState } from 'src/redux/rootReducer';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -586,28 +593,28 @@ export type DocumentVariablesProps = {
 &nbsp;
 const DocumentVariablesTab = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> document: doc, setSelectedTab }: DocumentVariablesProps): JSX.Element =&gt; {</span>
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
+&nbsp;
   const [tableRows, setTableRows] = <span class="cstat-no" title="statement not covered" >useState&lt;TableRow[]&gt;([]);</span>
   const [variables, setVariables] = <span class="cstat-no" title="statement not covered" >useState&lt;VariableWithValues[]&gt;([]);</span>
   const [sectionVariables, setSectionVariables] = <span class="cstat-no" title="statement not covered" >useState&lt;SectionVariableWithValues[]&gt;([]);</span>
   const [searchValue, setSearchValue] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const [openEditVariableModal, setOpenEditVariableModal] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [selectedVariableId, setSelectedVariableId] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;();</span>
-  const onSearch = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tr: string) =&gt; <span class="cstat-no" title="statement not covered" >setSearchValue(str);</span></span>
 &nbsp;
-  const variablesResult = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >    selectVariablesWithValues(state, doc.variableManifestId, doc.id)</span>
-  );
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useSelectorProcessor(variablesResult, <span class="fstat-no" title="function not covered" >(d</span>ata) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setSectionVariables(data.filter(<span class="fstat-no" title="function not covered" >(d</span>: any) =&gt; <span class="cstat-no" title="statement not covered" >d.type === 'Section')</span>);</span>
-  });
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useSelectorProcessor(variablesResult, <span class="fstat-no" title="function not covered" >(d</span>ata) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setVariables(data.filter(<span class="fstat-no" title="function not covered" >(d</span>: any) =&gt; <span class="cstat-no" title="statement not covered" >d.type !== 'Section' &amp;&amp; d.type !== 'Image' &amp;&amp; d.type !== 'Table')</span>);</span>
-  });
+  const allVariables = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >selectAllVariablesWithValues(state, doc.projectId))</span>;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    dispatch(requestListVariables(doc.variableManifestId));</span>
+    const sectionVariables = <span class="cstat-no" title="statement not covered" >allVariables.filter(</span>
+<span class="fstat-no" title="function not covered" >      (d</span>: VariableWithValues | SectionVariableWithValues): d is SectionVariableWithValues =&gt; <span class="cstat-no" title="statement not covered" >d.type === 'Section'</span>
+    ) as SectionVariableWithValues[];
+<span class="cstat-no" title="statement not covered" >    setSectionVariables(sectionVariables);</span>
+<span class="cstat-no" title="statement not covered" >    setVariables(</span>
+      allVariables.filter(<span class="fstat-no" title="function not covered" >(d</span>: VariableWithValues) =&gt; <span class="cstat-no" title="statement not covered" >d.type !== 'Section' &amp;&amp; d.type !== 'Image' &amp;&amp; d.type !== 'Table')</span>
+    );
+  }, [allVariables]);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    dispatch(requestListAllVariables());</span>
 <span class="cstat-no" title="statement not covered" >    dispatch(requestListVariablesValues({ projectId: doc.projectId }));</span>
   }, [dispatch, doc.variableManifestId, doc.projectId]);
 &nbsp;
@@ -659,9 +666,11 @@ const DocumentVariablesTab = <span class="cstat-no" title="statement not covered
   );
 &nbsp;
   const onUpdate = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    dispatch(requestListVariables(doc.variableManifestId));</span>
+<span class="cstat-no" title="statement not covered" >    dispatch(requestListAllVariables());</span>
 <span class="cstat-no" title="statement not covered" >    dispatch(requestListVariablesValues({ projectId: doc.projectId }));</span>
   };
+&nbsp;
+  const onSearch = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(s</span>tr: string) =&gt; <span class="cstat-no" title="statement not covered" >setSearchValue(str);</span></span>
 &nbsp;
   const props = <span class="cstat-no" title="statement not covered" >{</span>
     searchProps: {
@@ -682,11 +691,14 @@ const DocumentVariablesTab = <span class="cstat-no" title="statement not covered
     },
   };
 &nbsp;
-  const onFinish = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(u</span>pdated: boolean) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (updated) {</span>
-<span class="cstat-no" title="statement not covered" >      dispatch(requestListVariablesValues({ projectId: doc.projectId }));</span>
-    }
-  };
+  const onFinish = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (u</span>pdated: boolean) =&gt; {
+<span class="cstat-no" title="statement not covered" >      if (updated) {</span>
+<span class="cstat-no" title="statement not covered" >        dispatch(requestListVariablesValues({ projectId: doc.projectId }));</span>
+      }
+    },
+    [dispatch, doc.projectId]
+  );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;&gt;
@@ -718,7 +730,7 @@ export default DocumentVariablesTab;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-17T17:18:56.940Z
+                at 2024-07-17T21:42:57.369Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
