@@ -88,7 +88,7 @@ export default function MultiLineComponentNonEditable({
     setRequestId(request.requestId);
   };
 
-  const assignOwner = (ownerId: string) => {
+  const assignOwner = (ownerId?: string) => {
     if (ownerId) {
       const assignOwnerRequest = dispatch(
         requestUpdateVariableOwner({ ownedBy: Number(ownerId), variableId, projectId })
@@ -164,7 +164,15 @@ export default function MultiLineComponentNonEditable({
             <CompleteIncompleteBatch status={status} />
           </Box>
           <Box className='actions-hover' sx={{ 'align-items': 'center' }}>
-            {ownedByName && <Typography>{`${strings.OWNER}: ${ownedByName}`}</Typography>}
+            {ownedByName && (
+              <Typography
+                fontSize={'14px'}
+                fontWeight={400}
+                color={theme.palette.TwClrTxtSecondary}
+                fontStyle={'italic'}
+                lineHeight={'20px'}
+              >{`${strings.OWNER}: ${ownedByName}`}</Typography>
+            )}
             <Box sx={{ padding: '0 8px' }}>
               <CompleteIncompleteBatch status={status} />
             </Box>
