@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Box, Typography, useTheme } from '@mui/material';
@@ -11,13 +11,21 @@ import { useApplicationData } from 'src/scenes/ApplicationRouter/provider/Contex
 import strings from 'src/strings';
 
 export default function ListModulesContent(): JSX.Element {
-  const { applicationSections } = useApplicationData();
+  const { applicationSections, selectedApplication } = useApplicationData();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const { goToApplicationSection } = useNavigateTo();
 
   const pathParams = useParams<{ applicationId: string }>();
   const applicationId = Number(pathParams.applicationId);
+
+  const isPrescreen = useMemo(() => {
+    if (!selectedApplication) {
+      return true;
+    } else {
+      return selectedApplication.status === 'Not Submitted' || selectedApplication.status === 'Failed Pre-screen';
+    }
+  }, [selectedApplication]);
 
   return (
     <Box paddingX={theme.spacing(2)}>
@@ -39,8 +47,9 @@ export default function ListModulesContent(): JSX.Element {
             </Box>
             <Button
               onClick={() => goToApplicationSection(applicationId, section.id)}
-              label={strings.VIEW}
-              priority={'secondary'}
+              disabled={section.category === 'Application' && isPrescreen}
+              label={section.category === 'Pre-screen' && isPrescreen ? strings.GET_STARTED : strings.VIEW}
+              priority={section.category === 'Pre-screen' && isPrescreen ? 'primary' : 'secondary'}
               style={isMobile ? { width: '100%' } : {}}
             />
           </Box>
