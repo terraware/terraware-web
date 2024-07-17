@@ -86,6 +86,11 @@ export type DocumentVariablesProps = {
   setSelectedTab?: (tab: string) => void;
 };
 
+const filterSearch =
+  (searchValue: string) =>
+  (variable: VariableWithValues): boolean =>
+    searchValue ? variable.name.toLowerCase().includes(searchValue) : true;
+
 const DocumentVariablesTab = ({ document: doc, setSelectedTab }: DocumentVariablesProps): JSX.Element => {
   const dispatch = useAppDispatch();
 
@@ -99,14 +104,17 @@ const DocumentVariablesTab = ({ document: doc, setSelectedTab }: DocumentVariabl
   const allVariables = useAppSelector((state: RootState) => selectAllVariablesWithValues(state, doc.projectId));
 
   useEffect(() => {
-    const sectionVariables = allVariables.filter(
-      (d: VariableWithValues | SectionVariableWithValues): d is SectionVariableWithValues => d.type === 'Section'
-    ) as SectionVariableWithValues[];
+    const sectionVariables = allVariables
+      .filter((d: VariableWithValues) => d.type === 'Section')
+      .filter(filterSearch(searchValue)) as SectionVariableWithValues[];
+
     setSectionVariables(sectionVariables);
     setVariables(
-      allVariables.filter((d: VariableWithValues) => d.type !== 'Section' && d.type !== 'Image' && d.type !== 'Table')
+      allVariables
+        .filter((d: VariableWithValues) => d.type !== 'Section' && d.type !== 'Image' && d.type !== 'Table')
+        .filter(filterSearch(searchValue))
     );
-  }, [allVariables]);
+  }, [allVariables, searchValue]);
 
   useEffect(() => {
     dispatch(requestListAllVariables());
