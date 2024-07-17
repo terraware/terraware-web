@@ -12,9 +12,9 @@ import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import SectionDeliverableView from './Deliverables';
+import MapView from './Map';
 import NavBar from './NavBar';
 import Overview from './Overview';
-import PrescreenView from './Prescreen';
 import ReviewView from './Review';
 import SectionView from './Sections';
 
@@ -78,8 +78,8 @@ const ApplicationPortalRouter = ({ showNavBar, setShowNavBar }: ApplicationPorta
       >
         <ErrorBoundary setShowNavBar={setShowNavBar}>
           <Routes>
+            <Route path={`${APP_PATHS.APPLICATION_MAP}`} element={<MapView />} />
             <Route path={`${APP_PATHS.APPLICATION_OVERVIEW}`} element={<Overview />} />
-            <Route path={`${APP_PATHS.APPLICATION_PRESCREEN}`} element={<PrescreenView />} />
             <Route path={`${APP_PATHS.APPLICATION_REVIEW}`} element={<ReviewView />} />
             <Route path={`${APP_PATHS.APPLICATION_SECTION}`} element={<SectionView />} />
             <Route path={`${APP_PATHS.APPLICATION_SECTION_DELIVERABLE}`} element={<SectionDeliverableView />} />

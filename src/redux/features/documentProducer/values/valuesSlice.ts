@@ -28,21 +28,21 @@ export const variableListCompositeKeyFn = (arg: unknown): string => {
 
 const initialVariableValuesListState: VariableValuesListState = {};
 
-const variableValuesListSlice = createSlice({
-  name: 'variableValuesListSlice',
-  initialState: initialVariableValuesListState,
-  reducers: {},
-  extraReducers: (builder: ActionReducerMapBuilder<VariableValuesListState>) => {
-    buildReducers(requestListVariablesValues, true, variableListCompositeKeyFn)(builder);
-  },
-});
-
 const deliverableVariableValuesListSlice = createSlice({
   name: 'deliverableVariableValuesListSlice',
   initialState: initialVariableValuesListState,
   reducers: {},
   extraReducers: (builder: ActionReducerMapBuilder<VariableValuesListState>) => {
     buildReducers(requestListDeliverableVariablesValues, true, deliverableCompositeKeyFn)(builder);
+  },
+});
+
+const variableValuesListSlice = createSlice({
+  name: 'variableValuesListSlice',
+  initialState: initialVariableValuesListState,
+  reducers: {},
+  extraReducers: (builder: ActionReducerMapBuilder<VariableValuesListState>) => {
+    buildReducers(requestListVariablesValues, true, variableListCompositeKeyFn)(builder);
   },
 });
 

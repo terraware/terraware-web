@@ -80,10 +80,6 @@ export default function EditableSectionContainer({
     setEditSectionValues(sectionValues);
   };
 
-  const onUpdateHandler = () => {
-    onUpdate();
-  };
-
   const renderNameAndDescription = () => {
     return (
       <>
@@ -123,7 +119,7 @@ export default function EditableSectionContainer({
         allVariables={allVariables}
         docId={docId}
         projectId={projectId}
-        onUpdate={onUpdateHandler}
+        onUpdate={onUpdate}
         manifestId={manifestId}
       />
 

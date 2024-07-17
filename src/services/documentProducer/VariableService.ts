@@ -11,6 +11,8 @@ const UPDATE_VARIABLE_DETAILS_ENDPOINT = '/api/v1/document-producer/projects/{pr
 const UPDATE_VARIABLE_OWNER_ENDPOINT = '/api/v1/document-producer/projects/{projectId}/owners/{variableId}';
 const VARIABLE_OWNERS_ENDPOINT = '/api/v1/document-producer/projects/{projectId}/owners';
 
+const getAllVariables = (): Promise<Response2<VariableListResponse>> => HttpService.root(VARIABLES_ENDPOINT).get2({});
+
 const getDeliverableVariables = (deliverableId: number): Promise<Response2<VariableListResponse>> =>
   HttpService.root(VARIABLES_ENDPOINT).get2({
     params: { deliverableId: `${deliverableId}` },
@@ -55,6 +57,7 @@ const getVariablesOwners = (projectId: number): Promise<Response2<VariableOwners
   });
 
 const VariableService = {
+  getAllVariables,
   getDeliverableVariables,
   getVariables,
   updateVariableWorkflowDetails,

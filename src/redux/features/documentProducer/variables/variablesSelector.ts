@@ -56,10 +56,9 @@ export const searchVariables = createCachedSelector(
 )((state: RootState, id: number, query: string) => query);
 
 export const selectGetVariable = createCachedSelector(
-  (state: RootState, manifestId: number | string, variableId: number) => state.documentProducerVariables[manifestId],
-  (state: RootState, manifestId: number | string, variableId: number) => manifestId,
-  (state: RootState, manifestId: number | string, variableId: number) => variableId,
-  (response, manifestId, variableId) => {
+  (state: RootState, variableId: number) => state.documentProducerAllVariables['all'],
+  (state: RootState, variableId: number) => variableId,
+  (response, variableId) => {
     if (response?.data) {
       const variableToReturn = response.data.find((variable: Variable) => variable.id === variableId);
       return {
@@ -70,7 +69,7 @@ export const selectGetVariable = createCachedSelector(
       return response;
     }
   }
-)((state: RootState, manifestId: number | string, variableId: number) => variableId);
+)((state: RootState, variableId: number) => variableId);
 
 const getCombinedProps = (listA: any, listB: any) => {
   let status = 'pending';
@@ -187,7 +186,7 @@ export const selectVariablesWithValues = createCachedSelector(
   }
 )((state: RootState, manifestId: number | string, projectId: number) => `${projectId}-${manifestId}`);
 
-const associateDeliverableVariableValues = (
+const associateNonSectionVariableValues = (
   variable: Variable,
   values: VariableValue[],
   variableList: VariableUnion[]
@@ -208,7 +207,7 @@ const associateDeliverableVariableValues = (
     if (variable.columns) {
       columns = variable.columns.map((col) => ({
         ...col,
-        variable: associateDeliverableVariableValues(col.variable as Variable, values, variableList),
+        variable: associateNonSectionVariableValues(col.variable as Variable, values, variableList),
       }));
     }
     return {
@@ -226,6 +225,22 @@ const associateDeliverableVariableValues = (
   };
 };
 
+export const selectAllVariablesWithValues = createCachedSelector(
+  (state: RootState, projectId: number, maxValueId?: number) => state.documentProducerAllVariables['all'],
+  (state: RootState, projectId: number, maxValueId?: number) =>
+    state.documentProducerVariableValuesList[variableListCompositeKeyFn({ projectId, maxValueId })],
+  (variableList, valueList) => {
+    if (variableList?.data && valueList?.data) {
+      const variables = variableList.data;
+      const values = valueList.data;
+
+      return variableList.data.map((v: Variable) => associateNonSectionVariableValues(v, values, variables));
+    } else {
+      return [];
+    }
+  }
+)((state: RootState, projectId: number, maxValueId?: number) => variableListCompositeKeyFn({ projectId, maxValueId }));
+
 export const selectDeliverableVariablesWithValues = createCachedSelector(
   (state: RootState, deliverableId: number, projectId: number) =>
     state.documentProducerDeliverableVariables[deliverableId],
@@ -236,7 +251,7 @@ export const selectDeliverableVariablesWithValues = createCachedSelector(
       const variables = variableList.data;
       const values = valueList.data;
 
-      return variableList.data.map((v: Variable) => associateDeliverableVariableValues(v, values, variables));
+      return variableList.data.map((v: Variable) => associateNonSectionVariableValues(v, values, variables));
     } else {
       return [];
     }

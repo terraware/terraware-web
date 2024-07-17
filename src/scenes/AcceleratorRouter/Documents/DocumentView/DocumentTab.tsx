@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import EditableSectionContainer from 'src/components/DocumentProducer/EditableSection/Container';
 import MultiLineComponentNonEditable from 'src/components/DocumentProducer/MultiLineComponentNonEditable';
 import PageContent from 'src/components/DocumentProducer/PageContent';
 import { requestListVariablesValues } from 'src/redux/features/documentProducer/values/valuesThunks';
 import {
+  selectAllVariablesWithValues,
   selectVariablesOwners,
   selectVariablesWithValues,
 } from 'src/redux/features/documentProducer/variables/variablesSelector';
 import {
+  requestListAllVariables,
   requestListVariables,
   requestListVariablesOwners,
 } from 'src/redux/features/documentProducer/variables/variablesThunks';
@@ -29,27 +31,30 @@ export type DocumentProps = {
 
 const DocumentTab = ({ document }: DocumentProps): JSX.Element => {
   const dispatch = useAppDispatch();
-  const [variables, setVariables] = useState<VariableWithValues[]>();
+  const [documentVariables, setDocumentVariables] = useState<VariableWithValues[]>();
   const [variablesOwners, setVariablesOwners] = useState<VariableOwners[]>();
-  const result = useAppSelector((state) =>
+  const documentVariablesResult = useAppSelector((state) =>
     selectVariablesWithValues(state, document.variableManifestId, document.projectId)
   );
   const ownersResult = useAppSelector((state) => selectVariablesOwners(state, document.projectId));
+  useSelectorProcessor(documentVariablesResult, setDocumentVariables);
 
-  useSelectorProcessor(result, setVariables);
+  const allVariables: VariableWithValues[] = useAppSelector((state) =>
+    selectAllVariablesWithValues(state, document.projectId)
+  );
+
   useSelectorProcessor(ownersResult, setVariablesOwners);
 
-  useEffect(() => {
+  const onUpdate = useCallback(() => {
     dispatch(requestListVariables(document.variableManifestId));
     dispatch(requestListVariablesValues({ projectId: document.projectId }));
     dispatch(requestListVariablesOwners(document.projectId));
-  }, [dispatch, document.variableManifestId, document.projectId]);
+    dispatch(requestListAllVariables());
+  }, [dispatch, document.projectId, document.variableManifestId]);
 
-  const onUpdate = () => {
-    dispatch(requestListVariables(document.variableManifestId));
-    dispatch(requestListVariablesValues({ projectId: document.projectId }));
-    dispatch(requestListVariablesOwners(document.projectId));
-  };
+  useEffect(() => {
+    onUpdate();
+  }, [onUpdate]);
 
   const getVariableOwner = (variableId: number) => {
     const variableOwner = variablesOwners?.find((vo) => vo.variableId.toString() === variableId.toString());
@@ -57,60 +62,65 @@ const DocumentTab = ({ document }: DocumentProps): JSX.Element => {
     return variableOwnerId;
   };
 
-  const renderVariable = (variable: VariableWithValues) => {
-    if (variable.type === 'Section') {
-      return renderSection(variable as SectionVariableWithValues);
-    }
-    return [];
-  };
+  const renderSection = useCallback(
+    (section: SectionVariableWithValues): JSX.Element[] => {
+      const firstVariableValue: VariableValue | undefined = (section?.variableValues || [])[0];
+      const firstVariableValueStatus: VariableStatusType | undefined = firstVariableValue?.status;
+      const sectionsToRender: JSX.Element[] = [];
+      if (section.renderHeading) {
+        sectionsToRender.push(
+          <MultiLineComponentNonEditable
+            id={section.sectionNumber}
+            key={`component-${section.position}`}
+            titleNumber={section.sectionNumber ?? ''}
+            title={section.name}
+            description={section.description || ''}
+            status={firstVariableValueStatus || 'Incomplete'}
+            variableId={section.id}
+            projectId={document.projectId}
+            reload={onUpdate}
+            ownerId={getVariableOwner(section.id)}
+          />
+        );
+      } else {
+        sectionsToRender.push(
+          <EditableSectionContainer
+            key={`component-${section.position}`}
+            docId={document.id}
+            projectId={document.projectId}
+            section={section}
+            allVariables={allVariables ?? []}
+            onUpdate={onUpdate}
+            manifestId={document.variableManifestId}
+          />
+        );
+      }
 
-  const renderSection = (section: SectionVariableWithValues): JSX.Element[] => {
-    const sectionsToRender: JSX.Element[] = [];
-    const firstVariableValue: VariableValue | undefined = (section?.variableValues || [])[0];
-    const firstVariableValueStatus: VariableStatusType | undefined = firstVariableValue?.status;
+      if (section.children) {
+        section.children.forEach((child: SectionVariableWithValues) => {
+          const childWithRecommendedVariables = { ...child, recommends: [...child.recommends, ...section.recommends] };
+          sectionsToRender.push(...renderSection(childWithRecommendedVariables));
+        });
+      }
+      return sectionsToRender;
+    },
+    [allVariables, document, onUpdate]
+  );
 
-    if (section.renderHeading) {
-      sectionsToRender.push(
-        <MultiLineComponentNonEditable
-          id={section.sectionNumber}
-          key={`component-${section.position}`}
-          titleNumber={section.sectionNumber ?? ''}
-          title={section.name}
-          description={section.description || ''}
-          status={firstVariableValueStatus || 'Incomplete'}
-          variableId={section.id}
-          projectId={document.projectId}
-          reload={onUpdate}
-          ownerId={getVariableOwner(section.id)}
-        />
-      );
-    } else {
-      sectionsToRender.push(
-        <EditableSectionContainer
-          key={`component-${section.position}`}
-          docId={document.id}
-          projectId={document.projectId}
-          section={section}
-          allVariables={variables ?? []}
-          onUpdate={onUpdate}
-          manifestId={document.variableManifestId}
-        />
-      );
-    }
-
-    if (section.children) {
-      section.children.forEach((child: SectionVariableWithValues) => {
-        const childWithRecommendedVariables = { ...child, recommends: [...child.recommends, ...section.recommends] };
-        sectionsToRender.push(...renderSection(childWithRecommendedVariables));
-      });
-    }
-    return sectionsToRender;
-  };
+  const renderVariable = useCallback(
+    (variable: VariableWithValues) => {
+      if (variable.type === 'Section') {
+        return renderSection(variable as SectionVariableWithValues);
+      }
+      return [];
+    },
+    [renderSection]
+  );
 
   return (
     <PageContent styles={{ marginTop: 0 }}>
-      {variables?.map((variable) => {
-        return renderVariable(variable);
+      {documentVariables?.map((documentVariable) => {
+        return renderVariable(documentVariable);
       })}
     </PageContent>
   );
