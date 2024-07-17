@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { matchPath, useMatch, useNavigate } from 'react-router-dom';
 
-import { NavSection } from '@terraware/web-components';
+import { NavSection, theme } from '@terraware/web-components';
 
 import LocaleSelector from 'src/components/LocaleSelector';
 import NavFooter from 'src/components/common/Navbar/NavFooter';
@@ -55,10 +55,15 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
             `${section.id}`
           );
           const isMatch = !!matchPath(`${path}/*`, location.pathname);
+          const isCompleted = section.status === 'Complete';
+          const disabled =
+            selectedApplication.status === 'Not Submitted' || selectedApplication.status === 'Failed Pre-screen';
 
           return (
             <NavItem
-              icon={'success'}
+              disabled={disabled}
+              icon={isCompleted ? 'successFilled' : 'success'}
+              iconColor={isCompleted ? theme.palette.TwClrIcnBrand : undefined}
               id={`application-section-${section.id}`}
               key={section.id}
               label={section.name}
@@ -83,10 +88,12 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
             `${section.id}`
           );
           const isMatch = !!matchPath(`${path}/*`, location.pathname);
+          const isCompleted = section.status === 'Complete';
 
           return (
             <NavItem
-              icon={'success'}
+              icon={isCompleted ? 'successFilled' : 'success'}
+              iconColor={isCompleted ? theme.palette.TwClrIcnBrand : undefined}
               id={`application-section-${section.id}`}
               key={section.id}
               label={section.name}

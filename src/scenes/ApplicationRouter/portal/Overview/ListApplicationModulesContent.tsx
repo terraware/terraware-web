@@ -7,9 +7,8 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import CompleteIncompleteBatch from 'src/components/common/CompleteIncompleteBatch';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useApplicationData } from 'src/scenes/ApplicationRouter/provider/Context';
 import strings from 'src/strings';
-
-import { useApplicationData } from '../../provider/Context';
 
 export default function ListModulesContent(): JSX.Element {
   const { applicationSections } = useApplicationData();
