@@ -1,17 +1,68 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 import { Icon, IconName } from '@terraware/web-components';
 import { RenderElementProps } from 'slate-react';
 
-type TextVariableProps = RenderElementProps & {
+import { VariableWithValues } from 'src/types/documentProducer/Variable';
+import { VariableValue } from 'src/types/documentProducer/VariableValue';
+
+import { editorDisplayVariableWithValues } from './helpers';
+
+export type TextVariableProps = {
+  isEditing: boolean;
   icon?: IconName;
   onClick?: () => void;
-  displayValue: string;
+  reference: boolean;
+  variable: VariableWithValues | undefined;
+  attributes?: RenderElementProps['attributes'];
+  children?: RenderElementProps['children'];
 };
+
+const EMPTY_VARIABLE = '--';
 
 export default function TextVariable(props: TextVariableProps): React.ReactElement {
   const theme = useTheme();
+  const { isEditing, reference, variable } = props;
+  const attributes = props.attributes || {};
+  const children = props.children || null;
+
+  const displayValue = variable
+    ? editorDisplayVariableWithValues(variable, ', ', EMPTY_VARIABLE, reference)
+    : EMPTY_VARIABLE;
+
+  const status: VariableValue['status'] = variable?.deliverableId
+    ? (variable?.variableValues || [])[0]?.status
+    : undefined;
+
+  const statusIcon = useMemo(() => {
+    let color: React.CSSProperties['color'] | undefined;
+    let iconName: IconName | undefined;
+
+    switch (status) {
+      case 'Not Submitted':
+      case 'In Review':
+        color = theme.palette.TwClrIcnWarning;
+        iconName = 'warning';
+        break;
+      case 'Rejected':
+        color = theme.palette.TwClrIcnDanger;
+        iconName = 'error';
+        break;
+    }
+
+    if (!(iconName && color)) {
+      return;
+    }
+
+    return (
+      props.icon && (
+        <span className='icon-container left' onClick={props.onClick}>
+          <Icon name={iconName} fillColor={color} />
+        </span>
+      )
+    );
+  }, [status]);
 
   return (
     <Box
@@ -21,21 +72,39 @@ export default function TextVariable(props: TextVariableProps): React.ReactEleme
         color: theme.palette.TwClrTxt,
         backgroundColor: '#e9e2ba',
         margin: '0 1px',
-        padding: '0 1px',
+        height: '24px',
+        padding: '0 4px',
+        display: 'inline-block',
+        fontFamily: 'Inter',
+        borderRadius: '4px',
         '& .icon-container': {
           position: 'relative',
-          top: '3px',
-          cursor: 'pointer',
+          top: '2px',
+        },
+        '& .icon-container.left': {
+          marginRight: '2px',
+        },
+        '& .icon-container.right': {
+          marginLeft: '2px',
+          cursor: isEditing ? 'pointer' : 'initial',
         },
       }}
-      {...props.attributes}
+      {...attributes}
     >
-      {props.children}
-      {props.displayValue}
-      &nbsp;
+      {statusIcon}
+      {children}
+      <Box
+        component='span'
+        sx={{
+          lineHeight: '16px',
+        }}
+      >
+        {isEditing ? `${variable?.name}: ` : ''}
+        {displayValue}
+      </Box>
       {props.icon && (
-        <span className='icon-container' onClick={props.onClick}>
-          <Icon name={props.icon} />
+        <span className='icon-container right' onClick={props.onClick}>
+          <Icon name={props.icon} fillColor={theme.palette.TwClrIcnSecondary} />
         </span>
       )}
     </Box>
