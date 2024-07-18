@@ -63,6 +63,7 @@ export type DeliverableDetails = {
   name: string;
   onClick: () => void;
   status: DeliverableStatusType;
+  useButton?: boolean;
 };
 
 type EventDetails = {
@@ -217,7 +218,7 @@ const ModuleDetailsCard = ({
                     justifyContent={'flex-start'}
                     flexWrap={wrap()}
                   >
-                    {module.name === 'Pre-screen' ? (
+                    {deliverable.useButton ? (
                       <Grid item flexGrow={0} xs={12}>
                         <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} width={'50%'}>
                           <Box display={'flex'} alignItems={'center'}>
