@@ -5,10 +5,10 @@ import { Box, useTheme } from '@mui/material';
 import TableDisplay from 'src/components/DocumentProducer/TableDisplay';
 import strings from 'src/strings';
 import { TableVariableWithValues, VariableWithValues } from 'src/types/documentProducer/Variable';
-import { VariableValueImageValue, VariableValueSelectValue } from 'src/types/documentProducer/VariableValue';
+import { VariableValueImageValue } from 'src/types/documentProducer/VariableValue';
 import { getImagePath } from 'src/utils/images';
 
-import { displayValue } from './helpers';
+import TextVariable from './TextVariable';
 
 type DisplayVariableValueProps = {
   docId: number;
@@ -36,7 +36,8 @@ export default function DisplayVariableValue({
     case 'Number':
     case 'Date':
     case 'Link':
-      return <span style={variableStyles}>{variable.values.map((v) => displayValue(v)).join(', ')}</span>;
+    case 'Select':
+      return <TextVariable isEditing={false} icon='iconVariable' reference={reference} variable={variable} />;
     case 'Image':
       return reference ? (
         <span style={variableStyles}>
@@ -64,18 +65,6 @@ export default function DisplayVariableValue({
             );
           })}
         </>
-      );
-    case 'Select':
-      const selectedValues = (variable.values[0] as VariableValueSelectValue)?.optionValues;
-      return (
-        <span style={variableStyles}>
-          {`${
-            variable.options
-              .filter((o) => selectedValues?.includes(o.id))
-              .map((o) => o.renderedText ?? o.name)
-              .join(', ') || '--'
-          }`}
-        </span>
       );
     case 'Table':
       return reference ? (

@@ -15,7 +15,7 @@ import EditVariableModal from './EditVariableModal';
 import InsertOptionsDropdown from './InsertOptionsDropdown';
 import TextChunk from './TextChunk';
 import TextVariable from './TextVariable';
-import { editorDisplayVariableWithValues, editorValueFromVariableValue, variableValueFromEditorValue } from './helpers';
+import { editorValueFromVariableValue, variableValueFromEditorValue } from './helpers';
 
 // Required type definitions for slatejs (https://docs.slatejs.org/concepts/12-typescript):
 export type CustomElement = {
@@ -44,8 +44,6 @@ type EditableSectionEditProps = {
   onUpdate: () => void;
   manifestId: number;
 };
-
-const EMPTY_VARIABLE = '--';
 
 const SectionEdit = ({
   section,
@@ -117,14 +115,13 @@ const SectionEdit = ({
       switch (props.element.type) {
         case 'variable':
           const variable = allVariables.find((v) => v.id === props.element.variableId);
-          const displayValue = variable
-            ? editorDisplayVariableWithValues(variable, ', ', EMPTY_VARIABLE, props.element.reference)
-            : EMPTY_VARIABLE;
           return (
             <TextVariable
+              isEditing
               icon='iconVariable'
               onClick={() => onEditVariableValue(variable)}
-              displayValue={displayValue}
+              reference={props.element.reference}
+              variable={variable}
               {...props}
             />
           );
