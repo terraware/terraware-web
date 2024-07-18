@@ -6,22 +6,30 @@ import TextField from '@terraware/web-components/components/Textfield/Textfield'
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
-import { VariableWithValues } from 'src/types/documentProducer/Variable';
+import { SectionVariableWithValues, VariableWithValues } from 'src/types/documentProducer/Variable';
+import { VariableValue } from 'src/types/documentProducer/VariableValue';
 
 interface VariableInternalCommentProps {
-  variable: VariableWithValues;
+  variable: VariableWithValues | SectionVariableWithValues;
   update: (internalComment: string) => void;
   editing: boolean;
 }
 
 function VariableInternalComment({ variable, update, editing }: VariableInternalCommentProps) {
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-  const [internalComment, setInternalComment] = useState(
-    variable.variableValues && variable.variableValues.length > 0
-      ? variable.variableValues[0].internalComment || ''
-      : ''
-  );
   const theme = useTheme();
+
+  const variableValues = variable?.variableValues || [];
+
+  // For section variables, multiple variableValues are returned, so we need to find the one with the current ID
+  let variableValue: VariableValue | undefined;
+  if (variable.type === 'Section') {
+    variableValue = (variable?.variableValues || []).find((value) => value.variableId === variable.id);
+  } else {
+    variableValue = variableValues[0];
+  }
+
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [internalComment, setInternalComment] = useState(variableValue?.internalComment || '');
 
   const toggleDialog = useCallback(() => {
     setIsDialogOpen((prev) => !prev);
@@ -50,7 +58,7 @@ function VariableInternalComment({ variable, update, editing }: VariableInternal
             onChange={(value) => setInternalComment(value as string)}
             preserveNewlines
             type='textarea'
-            value={internalComment && internalComment !== '' ? internalComment : strings.NO_COMMENTS_ADDED}
+            value={internalComment || strings.NO_COMMENTS_ADDED}
             sx={{ padding: '0 8px' }}
           />
           <Button
