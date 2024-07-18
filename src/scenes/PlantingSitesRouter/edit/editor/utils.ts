@@ -9,7 +9,7 @@ import { GeometryFeature } from 'src/types/Map';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
 import { MinimalPlantingSubzone, MinimalPlantingZone } from 'src/types/Tracking';
 
-const SQ_M_TO_HECTARES = 1 / 10000;
+export const SQ_M_TO_HECTARES = 1 / 10000;
 
 export type DefaultZonePayload = Omit<MinimalPlantingZone, 'plantingSubzones'>;
 

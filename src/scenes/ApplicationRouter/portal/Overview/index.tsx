@@ -24,9 +24,9 @@ const applicationSteps = [
       'For the full Accelerator Program Application, you will answer general questions about your project as well as forest restoration, community impact, financial and legal questions.',
   },
   {
-    name: 'Due Diligence Phase',
+    name: 'Under Review',
     description:
-      'If your Application moves forward, we collect more documents from you about your project to determine your eligibility.',
+      'Once your Application is submitted, the Accelerator team reviews your answers, potentially asks for updates and proceeds to voting and scoring your Application.',
   },
 ];
 const OverviewView = () => {
@@ -41,16 +41,19 @@ const OverviewView = () => {
         case 'Failed Pre-screen':
           return 0;
         case 'Passed Pre-screen':
+          return 1;
         case 'Submitted':
+        case 'In Review':
         case 'PL Review':
         case 'Ready for Review':
         case 'Pre-check':
         case 'Needs Follow-up':
         case 'Carbon Eligible':
+          return 2;
         case 'Accepted':
         case 'Waitlist':
         case 'Not Accepted':
-          return 1;
+          return 2; // TODO do we need a result timeline?
       }
     } else {
       // By default show pre-screen
