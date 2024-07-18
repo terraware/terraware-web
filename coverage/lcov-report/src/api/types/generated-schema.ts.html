@@ -10538,7 +10538,19 @@
 <a name='L10473'></a><a href='#L10473'>10473</a>
 <a name='L10474'></a><a href='#L10474'>10474</a>
 <a name='L10475'></a><a href='#L10475'>10475</a>
-<a name='L10476'></a><a href='#L10476'>10476</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L10476'></a><a href='#L10476'>10476</a>
+<a name='L10477'></a><a href='#L10477'>10477</a>
+<a name='L10478'></a><a href='#L10478'>10478</a>
+<a name='L10479'></a><a href='#L10479'>10479</a>
+<a name='L10480'></a><a href='#L10480'>10480</a>
+<a name='L10481'></a><a href='#L10481'>10481</a>
+<a name='L10482'></a><a href='#L10482'>10482</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -21298,7 +21310,7 @@ export interface paths {
     get: operations["listDocumentTemplates"];
   };
   "/api/v1/document-producer/variables": {
-    /** List the variables within a given manifest or deliverable. */
+    /** List the variables, optionally filtered by a given manifest or deliverable. */
     get: operations["listVariables"];
   };
   "/api/v1/facilities": {
@@ -22242,7 +22254,7 @@ export interface components {
       /** Format: date-time */
       modifiedTime: string;
       /** @enum {string} */
-      status: "Not Submitted" | "Failed Pre-screen" | "Passed Pre-screen" | "Submitted" | "PL Review" | "Ready for Review" | "Pre-check" | "Needs Follow-up" | "Carbon Eligible" | "Accepted" | "Waitlist" | "Not Accepted";
+      status: "Not Submitted" | "Failed Pre-screen" | "Passed Pre-screen" | "Submitted" | "PL Review" | "Ready for Review" | "Pre-check" | "Needs Follow-up" | "Carbon Eligible" | "Accepted" | "Waitlist" | "Not Accepted" | "In Review";
     };
     ApplicationPayload: {
       boundary?: components["schemas"]["Geometry"];
@@ -22260,7 +22272,7 @@ export interface components {
       /** Format: int64 */
       projectId: number;
       /** @enum {string} */
-      status: "Not Submitted" | "Failed Pre-screen" | "Passed Pre-screen" | "Submitted" | "PL Review" | "Ready for Review" | "Pre-check" | "Needs Follow-up" | "Carbon Eligible" | "Accepted" | "Waitlist" | "Not Accepted";
+      status: "Not Submitted" | "Failed Pre-screen" | "Passed Pre-screen" | "Submitted" | "PL Review" | "Ready for Review" | "Pre-check" | "Needs Follow-up" | "Carbon Eligible" | "Accepted" | "Waitlist" | "Not Accepted" | "In Review";
     };
     AssignParticipantProjectSpeciesPayload: {
       projectIds: number[];
@@ -22556,7 +22568,7 @@ export interface components {
       name: string;
       participantIds?: number[];
       /** @enum {string} */
-      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
     };
     CohortResponsePayload: {
       cohort: components["schemas"]["CohortPayload"];
@@ -22612,7 +22624,6 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
     };
     CreateApplicationRequestPayload: {
-      boundary?: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
       /** Format: int64 */
       projectId: number;
     };
@@ -22679,7 +22690,7 @@ export interface components {
     CreateCohortRequestPayload: {
       name: string;
       /** @enum {string} */
-      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
     };
     CreateDeviceRequestPayload: {
       /**
@@ -23063,7 +23074,7 @@ export interface components {
     };
     DeleteProjectVotesRequestPayload: {
       /** @enum {string} */
-      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
       /** @description A safeguard flag that must be set to `true` for deleting all voters in a project phase. */
       phaseDelete?: boolean;
       /**
@@ -23266,6 +23277,11 @@ export interface components {
       /** Format: int64 */
       id: number;
       name: string;
+      /**
+       * Format: int64
+       * @description ID of the most recent variable manifest for the document template, if any.
+       */
+      variableManifestId?: number;
     };
     DraftPlantingSitePayload: {
       /**
@@ -24620,7 +24636,7 @@ export interface components {
       cohortId?: number;
       cohortName?: string;
       /** @enum {string} */
-      cohortPhase?: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      cohortPhase?: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
       /** Format: int64 */
       id: number;
       name: string;
@@ -24666,7 +24682,7 @@ export interface components {
     };
     PhaseScores: {
       /** @enum {string} */
-      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
       scores: components["schemas"]["Score"][];
       totalScore?: number;
     };
@@ -24674,7 +24690,7 @@ export interface components {
       /** @enum {string} */
       decision?: "No" | "Conditional" | "Yes";
       /** @enum {string} */
-      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
       votes: components["schemas"]["VoteSelection"][];
     };
     PlantingPayload: {
@@ -24878,7 +24894,7 @@ export interface components {
       /** Format: int64 */
       cohortId?: number;
       /** @enum {string} */
-      cohortPhase?: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      cohortPhase?: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
       /** Format: int64 */
       createdBy?: number;
       /** Format: date-time */
@@ -25617,7 +25633,7 @@ export interface components {
     UpdateCohortRequestPayload: {
       name: string;
       /** @enum {string} */
-      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
     };
     UpdateDeviceRequestPayload: {
       /**
@@ -26045,12 +26061,12 @@ export interface components {
     };
     UpsertProjectScoresRequestPayload: {
       /** @enum {string} */
-      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
       scores: components["schemas"]["UpsertScore"][];
     };
     UpsertProjectVotesRequestPayload: {
       /** @enum {string} */
-      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor";
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
       votes: components["schemas"]["UpsertVoteSelection"][];
     };
     UpsertScore: {
@@ -26216,6 +26232,8 @@ export interface operations {
         organizationId?: number;
         /** @description If present, only list applications for this project. A project can only have one application, so this will either return an empty result or a result with a single element. */
         projectId?: number;
+        /** @description If true, list all applications for all projects. Only allowed for internal users. */
+        listAll?: boolean;
       };
     };
     responses: {
@@ -27706,7 +27724,7 @@ export interface operations {
       };
     };
   };
-  /** List the variables within a given manifest or deliverable. */
+  /** List the variables, optionally filtered by a given manifest or deliverable. */
   listVariables: {
     parameters: {
       query?: {
@@ -31495,7 +31513,7 @@ export interface operations {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-18T18:06:38.095Z
+                at 2024-07-18T19:56:17.239Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

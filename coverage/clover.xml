@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1721325998769" clover="3.2.0">
-  <project timestamp="1721325998770" name="All files">
-    <metrics statements="22866" coveredstatements="956" conditionals="14718" coveredconditionals="239" methods="7072" coveredmethods="163" elements="44656" coveredelements="1358" complexity="0" loc="22866" ncloc="22866" packages="220" files="1022" classes="1022"/>
+<coverage generated="1721332577968" clover="3.2.0">
+  <project timestamp="1721332577968" name="All files">
+    <metrics statements="22889" coveredstatements="956" conditionals="14728" coveredconditionals="239" methods="7075" coveredmethods="163" elements="44692" coveredelements="1358" complexity="0" loc="22889" ncloc="22889" packages="220" files="1022" classes="1022"/>
     <package name="src">
       <metrics statements="171" coveredstatements="0" conditionals="128" coveredconditionals="0" methods="38" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -3141,9 +3141,9 @@
         <line num="293" count="0" type="stmt"/>
         <line num="295" count="0" type="stmt"/>
         <line num="297" count="0" type="stmt"/>
-        <line num="343" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="344" count="0" type="stmt"/>
+        <line num="344" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="345" count="0" type="stmt"/>
+        <line num="346" count="0" type="stmt"/>
       </file>
       <file name="GenericMap.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Map/GenericMap.tsx">
         <metrics statements="7" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -15213,15 +15213,36 @@
       </file>
     </package>
     <package name="src.scenes.ApplicationRouter.portal.Map">
-      <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <metrics statements="23" coveredstatements="0" conditionals="9" coveredconditionals="0" methods="4" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ApplicationRouter/portal/Map/index.tsx">
-        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="7" count="0" type="stmt"/>
-        <line num="8" count="0" type="stmt"/>
+        <metrics statements="23" coveredstatements="0" conditionals="9" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="50" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="52" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="62" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.ApplicationRouter.portal.Overview">
-      <metrics statements="25" coveredstatements="0" conditionals="30" coveredconditionals="0" methods="6" coveredmethods="0"/>
+      <metrics statements="27" coveredstatements="0" conditionals="31" coveredconditionals="0" methods="6" coveredmethods="0"/>
       <file name="ListApplicationModulesContent.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ApplicationRouter/portal/Overview/ListApplicationModulesContent.tsx">
         <metrics statements="13" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="14" count="0" type="stmt"/>
@@ -15239,7 +15260,7 @@
         <line num="49" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ApplicationRouter/portal/Overview/index.tsx">
-        <metrics statements="12" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <metrics statements="14" coveredstatements="0" conditionals="15" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="13" count="0" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
@@ -15247,11 +15268,13 @@
         <line num="35" count="0" type="stmt"/>
         <line num="37" count="0" type="stmt"/>
         <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="39" count="0" type="cond" truecount="0" falsecount="12"/>
+        <line num="39" count="0" type="cond" truecount="0" falsecount="13"/>
         <line num="42" count="0" type="stmt"/>
-        <line num="53" count="0" type="stmt"/>
-        <line num="57" count="0" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.ApplicationRouter.portal.Review">
