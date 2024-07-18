@@ -283,7 +283,7 @@ export interface paths {
     get: operations["listDocumentTemplates"];
   };
   "/api/v1/document-producer/variables": {
-    /** List the variables within a given manifest or deliverable. */
+    /** List the variables, optionally filtered by a given manifest or deliverable. */
     get: operations["listVariables"];
   };
   "/api/v1/facilities": {
@@ -2251,6 +2251,11 @@ export interface components {
       /** Format: int64 */
       id: number;
       name: string;
+      /**
+       * Format: int64
+       * @description ID of the most recent variable manifest for the document template, if any.
+       */
+      variableManifestId?: number;
     };
     DraftPlantingSitePayload: {
       /**
@@ -5124,6 +5129,8 @@ export interface components {
       variableId: number;
     };
     VariablePayload: {
+      /** Format: int64 */
+      deliverableId?: number;
       /** @enum {string} */
       dependencyCondition?: "eq" | "gt" | "gte" | "lt" | "lte" | "neq";
       dependencyValue?: string;
@@ -6691,7 +6698,7 @@ export interface operations {
       };
     };
   };
-  /** List the variables within a given manifest or deliverable. */
+  /** List the variables, optionally filtered by a given manifest or deliverable. */
   listVariables: {
     parameters: {
       query?: {
