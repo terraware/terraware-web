@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/101</span>
+                <span class='fraction'>0/102</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/101</span>
+                <span class='fraction'>0/102</span>
             </div>
         
             
@@ -459,7 +459,29 @@
 <a name='L394'></a><a href='#L394'>394</a>
 <a name='L395'></a><a href='#L395'>395</a>
 <a name='L396'></a><a href='#L396'>396</a>
-<a name='L397'></a><a href='#L397'>397</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L397'></a><a href='#L397'>397</a>
+<a name='L398'></a><a href='#L398'>398</a>
+<a name='L399'></a><a href='#L399'>399</a>
+<a name='L400'></a><a href='#L400'>400</a>
+<a name='L401'></a><a href='#L401'>401</a>
+<a name='L402'></a><a href='#L402'>402</a>
+<a name='L403'></a><a href='#L403'>403</a>
+<a name='L404'></a><a href='#L404'>404</a>
+<a name='L405'></a><a href='#L405'>405</a>
+<a name='L406'></a><a href='#L406'>406</a>
+<a name='L407'></a><a href='#L407'>407</a>
+<a name='L408'></a><a href='#L408'>408</a>
+<a name='L409'></a><a href='#L409'>409</a>
+<a name='L410'></a><a href='#L410'>410</a>
+<a name='L411'></a><a href='#L411'>411</a>
+<a name='L412'></a><a href='#L412'>412</a>
+<a name='L413'></a><a href='#L413'>413</a>
+<a name='L414'></a><a href='#L414'>414</a>
+<a name='L415'></a><a href='#L415'>415</a>
+<a name='L416'></a><a href='#L416'>416</a>
+<a name='L417'></a><a href='#L417'>417</a>
+<a name='L418'></a><a href='#L418'>418</a>
+<a name='L419'></a><a href='#L419'>419</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -494,12 +516,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -683,6 +709,24 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -858,6 +902,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMatch, useNavigate } from 'react-router-dom';
 &nbsp;
+import { Box, Typography, useTheme } from '@mui/material';
+import { Icon } from '@terraware/web-components';
 import SubNavbar from '@terraware/web-components/components/Navbar/SubNavbar';
 &nbsp;
 import LocaleSelector from 'src/components/LocaleSelector';
@@ -865,6 +911,7 @@ import NavFooter from 'src/components/common/Navbar/NavFooter';
 import NavItem from 'src/components/common/Navbar/NavItem';
 import NavSection from 'src/components/common/Navbar/NavSection';
 import Navbar from 'src/components/common/Navbar/Navbar';
+import NewBadge from 'src/components/common/NewBadge';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
@@ -891,6 +938,7 @@ export default function <span class="fstat-no" title="function not covered" >Nav
   hasPlantingSites,
 }: NavBarProps): JSX.Element | null {
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
+  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const [showNurseryWithdrawals, setShowNurseryWithdrawals] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [reports, setReports] = <span class="cstat-no" title="statement not covered" >useState&lt;Reports&gt;([]);</span>
   const [hasDeliverables, setHasDeliverables] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
@@ -1080,8 +1128,26 @@ export default function <span class="fstat-no" title="function not covered" >Nav
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt;
 <span class="cstat-no" title="statement not covered" >      applicatioinEnabled &amp;&amp; allApplications.length &gt; 0 ? (</span>
         &lt;NavItem
-          icon='iconFile'
-          label={strings.APPLICATIONS}
+          label={
+            &lt;Box
+              display='flex'
+              alignItems={'center'}
+              padding={'11px 0px'}
+              sx={{
+                '&amp;:hover': {
+                  cursor: 'pointer',
+                },
+              }}
+            &gt;
+              &lt;Icon name='iconFile' className='nav-item--icon' fillColor={theme.palette.TwClrIcnSecondary} /&gt;
+              &lt;Typography fontSize={'14px'} fontWeight={500} color={theme.palette.TwClrTxt} lineHeight={'normal'}&gt;
+                {strings.APPLICATION}
+              &lt;/Typography&gt;
+              &lt;Box marginLeft={'8px'}&gt;
+                &lt;NewBadge /&gt;
+              &lt;/Box&gt;
+            &lt;/Box&gt;
+          }
           selected={!!isApplicationRoute}
           onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >closeAndNavigateTo(APP_PATHS.APPLICATIONS)}</span>
           id='applications-list'
@@ -1258,7 +1324,7 @@ export default function <span class="fstat-no" title="function not covered" >Nav
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-18T14:33:24.211Z
+                at 2024-07-18T18:06:38.095Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
