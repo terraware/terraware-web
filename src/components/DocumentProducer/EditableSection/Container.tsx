@@ -1,19 +1,25 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography } from '@mui/material';
 import { Button, Textfield, theme } from '@terraware/web-components';
 
 import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
 import { requestUpdateSectionVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
+import { selectUpdateVariableWorkflowDetails } from 'src/redux/features/documentProducer/variables/variablesSelector';
+import { requestUpdateVariableWorkflowDetails } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import useWorkflowSuccess from 'src/redux/hooks/useWorkflowSuccess';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import VariableInternalComment from 'src/scenes/AcceleratorRouter/Deliverables/VariableInternalComment';
 import strings from 'src/strings';
 import { SectionVariableWithValues, VariableWithValues } from 'src/types/documentProducer/Variable';
 import {
   NewSectionTextValuePayload,
   NewSectionVariableValuePayload,
+  VariableValue,
   VariableValueValue,
 } from 'src/types/documentProducer/VariableValue';
+import { NonUndefined } from 'src/types/utils';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import Display from './Display';
 import Edit from './Edit';
@@ -36,6 +42,8 @@ export default function EditableSectionContainer({
   manifestId,
 }: EditableSectionProps): JSX.Element {
   const dispatch = useAppDispatch();
+  const snackbar = useSnackbar();
+
   const [sectionValues, setSectionValues] = useState<VariableValueValue[] | undefined>(section.values);
   const [editSectionValues, setEditSectionValues] = useState<VariableValueValue[] | undefined>(section.values);
   const [variableCitation, setVariableCitation] = useState<string>('');
@@ -43,6 +51,12 @@ export default function EditableSectionContainer({
   const [editing, setEditing] = useState(false);
   const [requestId, setRequestId] = useState<string>('');
   const selector = useAppSelector(selectUpdateVariableValues(requestId));
+
+  const [updateInternalCommentRequestId, setUpdateInternalCommentRequestId] = useState<string>('');
+  const updateInternalCommentRequest = useAppSelector(
+    selectUpdateVariableWorkflowDetails(updateInternalCommentRequestId)
+  );
+
   useWorkflowSuccess({
     workflowState: selector,
     onSuccess: () => {
@@ -80,7 +94,29 @@ export default function EditableSectionContainer({
     setEditSectionValues(sectionValues);
   };
 
-  const renderNameAndDescription = () => {
+  const onUpdateInternalComment = useCallback(
+    (internalComment: string) => {
+      const firstVariableValue = section.variableValues[0] || {};
+      const status = firstVariableValue?.status || ('Not Submitted' as NonUndefined<VariableValue['status']>);
+      const feedback = firstVariableValue?.feedback || '';
+
+      const request = dispatch(
+        requestUpdateVariableWorkflowDetails({ status, feedback, internalComment, projectId, variableId: section.id })
+      );
+      setUpdateInternalCommentRequestId(request.requestId);
+    },
+    [section]
+  );
+
+  useEffect(() => {
+    if (updateInternalCommentRequest?.status === 'success') {
+      snackbar.toastSuccess(strings.CHANGES_SAVED);
+    } else if (updateInternalCommentRequest?.status === 'error') {
+      snackbar.toastError(strings.GENERIC_ERROR);
+    }
+  }, [snackbar, updateInternalCommentRequest]);
+
+  const nameAndDescription = useMemo(() => {
     return (
       <>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -93,14 +129,14 @@ export default function EditableSectionContainer({
           </Typography>
         </Box>
 
-        {editing && (
+        {editing && section.description && (
           <Typography fontSize='14px' fontWeight={400} fontStyle='italic' paddingTop={theme.spacing(2)}>
             {section.description}
           </Typography>
         )}
       </>
     );
-  };
+  }, [editing, section, theme]);
 
   return editing ? (
     <Box
@@ -110,7 +146,15 @@ export default function EditableSectionContainer({
         borderRadius: '16px',
       }}
     >
-      {renderNameAndDescription()}
+      <Box
+        sx={{
+          marginBottom: theme.spacing(2),
+        }}
+      >
+        <VariableInternalComment editing update={onUpdateInternalComment} variable={section} />
+      </Box>
+
+      {nameAndDescription}
 
       <Edit
         section={section}
@@ -155,7 +199,7 @@ export default function EditableSectionContainer({
       }}
     >
       <Box display='flex' justifyContent='space-between' alignItems='center'>
-        {renderNameAndDescription()}
+        {nameAndDescription}
         <Box display='flex' alignItems='center'>
           <Button
             id='edit'
