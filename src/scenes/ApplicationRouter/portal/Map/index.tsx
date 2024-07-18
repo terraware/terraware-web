@@ -1,16 +1,20 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
-import { Card, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
+import { Button } from '@terraware/web-components';
 import area from '@turf/area';
 import { Feature, FeatureCollection } from 'geojson';
 
 import EditableMap from 'src/components/Map/EditableMapV2';
 import { unionMultiPolygons } from 'src/components/Map/utils';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { SQ_M_TO_HECTARES } from 'src/scenes/PlantingSitesRouter/edit/editor/utils';
 import strings from 'src/strings';
 import { MultiPolygon } from 'src/types/Tracking';
+import useSnackbar from 'src/utils/useSnackbar';
 
+import { useApplicationData } from '../../provider/Context';
 import ApplicationPage from '../ApplicationPage';
 
 // undo redo stack to capture site boundary and errors
@@ -22,6 +26,9 @@ type Stack = {
 const MapView = () => {
   const theme = useTheme();
 
+  const { selectedApplication } = useApplicationData();
+  const { goToApplication } = useNavigateTo();
+  const { toastInfo } = useSnackbar();
   const [siteBoundaryData, setSiteBoundaryData, undo, redo] = useUndoRedoState<Stack>();
 
   const findErrors = (boundary: MultiPolygon) => {
@@ -50,6 +57,14 @@ const MapView = () => {
       });
     }
   };
+
+  const onSave = useCallback(() => {
+    if (selectedApplication) {
+      // TODO make server call to save project boundary and validate results
+      toastInfo('Save project boundary clicked. ');
+      goToApplication(selectedApplication.id);
+    }
+  }, [selectedApplication, goToApplication]);
 
   return (
     <ApplicationPage title={strings.PROPOSED_PROJECT_BOUNDARY}>
@@ -81,6 +96,9 @@ const MapView = () => {
             />
           </Grid>
         </Grid>
+        <Box marginTop={theme.spacing(2)} display='flex' justifyContent='flex-end' width='100%'>
+          <Button label={strings.SAVE_PROJECT_BOUNDARIES} onClick={onSave} size='medium' />
+        </Box>
       </Card>
     </ApplicationPage>
   );
