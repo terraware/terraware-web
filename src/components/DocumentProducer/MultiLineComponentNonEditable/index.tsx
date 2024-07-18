@@ -78,7 +78,7 @@ export default function MultiLineComponentNonEditable({
 
   useEffect(() => {
     if (updateOwnerResponse?.status === 'success') {
-      snackbar.pageSuccess(strings.SECTION_OWNER_ASSIGNED);
+      snackbar.toastSuccess(strings.SECTION_OWNER_ASSIGNED);
       reload();
     }
   }, [updateOwnerResponse]);
