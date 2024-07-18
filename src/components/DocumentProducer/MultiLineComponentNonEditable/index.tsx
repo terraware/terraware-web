@@ -65,7 +65,7 @@ export default function MultiLineComponentNonEditable({
   }, [ownedBySelector]);
 
   useEffect(() => {
-    if (ownerId) {
+    if (ownerId && ownerId !== -1) {
       dispatch(requestGetUser(ownerId));
     }
   }, [ownerId]);
@@ -90,9 +90,13 @@ export default function MultiLineComponentNonEditable({
 
   const assignOwner = (ownerId?: string) => {
     if (ownerId) {
-      const assignOwnerRequest = dispatch(
-        requestUpdateVariableOwner({ ownedBy: Number(ownerId), variableId, projectId })
-      );
+      let assignOwnerRequest;
+      if (ownerId.toString() === '-1') {
+        assignOwnerRequest = dispatch(requestUpdateVariableOwner({ ownedBy: undefined, variableId, projectId }));
+      } else {
+        assignOwnerRequest = dispatch(requestUpdateVariableOwner({ ownedBy: Number(ownerId), variableId, projectId }));
+      }
+
       setAssignOwnerRequestId(assignOwnerRequest.requestId);
       setShowAssignOwnerModal(false);
     }
@@ -135,7 +139,7 @@ export default function MultiLineComponentNonEditable({
   return (
     <>
       {showAssignOwnerModal && (
-        <AssignOwnerModal onClose={() => setShowAssignOwnerModal(false)} onSubmit={assignOwner} />
+        <AssignOwnerModal onClose={() => setShowAssignOwnerModal(false)} onSubmit={assignOwner} ownerId={ownerId} />
       )}
       <Box
         id={id}

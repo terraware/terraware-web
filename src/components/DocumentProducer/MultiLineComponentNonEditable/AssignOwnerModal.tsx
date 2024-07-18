@@ -16,12 +16,13 @@ import { getDocumentOwnerOptions } from '../DocumentMetadataEdit/helpers';
 export interface AssignOwnerModalProps {
   onClose: (reload?: boolean) => void;
   onSubmit: (ownerId?: string) => void;
+  ownerId?: number;
 }
 
 export default function AssignOwnerModal(props: AssignOwnerModalProps): JSX.Element {
-  const { onClose, onSubmit } = props;
+  const { onClose, onSubmit, ownerId } = props;
   const theme = useTheme();
-  const [documentOwner, setDocumentOwner] = useState<string>();
+  const [documentOwner, setDocumentOwner] = useState<string | undefined>(ownerId?.toString());
 
   const save = () => {
     onSubmit(documentOwner);
@@ -40,7 +41,12 @@ export default function AssignOwnerModal(props: AssignOwnerModalProps): JSX.Elem
 
   useEffect(() => {
     if (listUsersRequest?.status === 'success') {
-      setDocumentOwnerOptions(getDocumentOwnerOptions(listUsersRequest.data?.users || []));
+      const allOwnerOptions = getDocumentOwnerOptions(listUsersRequest.data?.users || []);
+      allOwnerOptions.unshift({
+        label: strings.NONE,
+        value: -1,
+      });
+      setDocumentOwnerOptions(allOwnerOptions);
     }
   }, [listUsersRequest]);
 
