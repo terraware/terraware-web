@@ -331,26 +331,31 @@ export default function EditableMap({
         <>
           <Box
             display='flex'
-            flexDirection='row-reverse'
-            justifyContent='space-between'
+            flexDirection='row'
+            justifyContent={'space-between'}
             alignItems='center'
             paddingBottom={theme.spacing(4)}
+            width='fill'
           >
-            <MapViewStyleSwitch mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
             {showSearchBox === true && (
-              <MapSearchBox
-                onSelect={(features: AddressAutofillFeatureSuggestion[] | null) => {
-                  if (features && features.length > 0) {
-                    const coordinates = features[0].geometry.coordinates;
-                    mapRef?.current?.flyTo({
-                      center: [coordinates[0], coordinates[1]],
-                      essential: true,
-                      zoom: 10, // https://docs.mapbox.com/help/glossary/zoom-level/
-                    });
-                  }
-                }}
-              />
+              <Box width='100%'>
+                <MapSearchBox
+                  onSelect={(features: AddressAutofillFeatureSuggestion[] | null) => {
+                    if (features && features.length > 0) {
+                      const coordinates = features[0].geometry.coordinates;
+                      mapRef?.current?.flyTo({
+                        center: [coordinates[0], coordinates[1]],
+                        essential: true,
+                        zoom: 10, // https://docs.mapbox.com/help/glossary/zoom-level/
+                      });
+                    }
+                  }}
+                />
+              </Box>
             )}
+            <Box width='fit-content' marginLeft='auto' paddingLeft={theme.spacing(2)}>
+              <MapViewStyleSwitch mapViewStyle={mapViewStyle} onChangeMapViewStyle={onChangeMapViewStyle} />
+            </Box>
           </Box>
           <ReactMapGL
             key={mapId}

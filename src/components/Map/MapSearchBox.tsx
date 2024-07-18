@@ -69,7 +69,7 @@ const MapSearchBox = ({ onSelect, style }: MapSearchBoxProp) => {
   return (
     <Autocomplete
       id='mapbox-suggestions'
-      sx={{ width: 1000, ...style }}
+      sx={{ width: '100%', ...style }}
       options={options}
       selected={value}
       onChange={onChange}

@@ -1432,6 +1432,7 @@ SITE_BOUNDARY_DESCRIPTION_3,Zoom in to the location of the planting site. Then c
 SITE_BOUNDARY_DESCRIPTION_4,"To change the site boundary shape, click on the shape to change the points. To remove the shape, click the {0} button.",
 SITE_BOUNDARY_DESCRIPTION_WARN,"The boundary should fit in a bounding box of less than or equal to 20000 hectares, otherwise consider splitting the site into multiple planting sites.",
 SITE_BOUNDARY_ERRORS,There are errors in the site boundary.,
+SITE_BOUNDARY_POLYGON_TOO_LARGE,Boundary with area {0} hectares exceeds {1} hectares.,
 SITE_BOUNDARY_POLYGON_TOO_SMALL,Boundary with area {0} hectares is smaller than 100m x 100m.,
 SITE_BOUNDARY_SIMPLE_SITE_NOTE,"Note: By default, Simple Sites will include only one Zone and one Subzone that comprise the entire planting site.",
 SITE_BOUNDING_AREA_TOO_LARGE,Bounding area {0} hectares is too large.,
