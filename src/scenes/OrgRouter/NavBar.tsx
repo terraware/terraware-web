@@ -228,7 +228,16 @@ export default function NavBar({
       applicatioinEnabled && allApplications.length > 0 ? (
         <NavItem
           label={
-            <Box display='flex' alignItems={'center'} padding={'11px 10px'}>
+            <Box
+              display='flex'
+              alignItems={'center'}
+              padding={'11px 0px'}
+              sx={{
+                '&:hover': {
+                  cursor: 'pointer',
+                },
+              }}
+            >
               <Icon name='iconFile' className='nav-item--icon' fillColor={theme.palette.TwClrIcnSecondary} />
               <Typography fontSize={'14px'} fontWeight={500} color={theme.palette.TwClrTxt} lineHeight={'normal'}>
                 {strings.APPLICATION}
