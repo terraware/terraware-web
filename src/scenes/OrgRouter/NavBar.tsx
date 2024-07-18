@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMatch, useNavigate } from 'react-router-dom';
 
+import { Box, Typography, useTheme } from '@mui/material';
+import { Icon } from '@terraware/web-components';
 import SubNavbar from '@terraware/web-components/components/Navbar/SubNavbar';
 
 import LocaleSelector from 'src/components/LocaleSelector';
@@ -8,6 +10,7 @@ import NavFooter from 'src/components/common/Navbar/NavFooter';
 import NavItem from 'src/components/common/Navbar/NavItem';
 import NavSection from 'src/components/common/Navbar/NavSection';
 import Navbar from 'src/components/common/Navbar/Navbar';
+import NewBadge from 'src/components/common/NewBadge';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
@@ -34,6 +37,7 @@ export default function NavBar({
   hasPlantingSites,
 }: NavBarProps): JSX.Element | null {
   const { selectedOrganization } = useOrganization();
+  const theme = useTheme();
   const [showNurseryWithdrawals, setShowNurseryWithdrawals] = useState<boolean>(false);
   const [reports, setReports] = useState<Reports>([]);
   const [hasDeliverables, setHasDeliverables] = useState<boolean>(false);
@@ -223,8 +227,17 @@ export default function NavBar({
     () =>
       applicatioinEnabled && allApplications.length > 0 ? (
         <NavItem
-          icon='iconFile'
-          label={strings.APPLICATIONS}
+          label={
+            <Box display='flex' alignItems={'center'} padding={'11px 10px'}>
+              <Icon name='iconFile' className='nav-item--icon' fillColor={theme.palette.TwClrIcnSecondary} />
+              <Typography fontSize={'14px'} fontWeight={500} color={theme.palette.TwClrTxt} lineHeight={'normal'}>
+                {strings.APPLICATION}
+              </Typography>
+              <Box marginLeft={'8px'}>
+                <NewBadge />
+              </Box>
+            </Box>
+          }
           selected={!!isApplicationRoute}
           onClick={() => closeAndNavigateTo(APP_PATHS.APPLICATIONS)}
           id='applications-list'
