@@ -246,6 +246,7 @@ const QuestionBox = ({
                 display: 'block',
               },
             },
+            background: displayActions ? theme.palette.TwClrBgHover : 'none',
             '& .actions': {
               display: displayActions ? 'block' : 'none',
             },

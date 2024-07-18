@@ -154,6 +154,7 @@ export default function MultiLineComponentNonEditable({
               display: 'none',
             },
           },
+          background: displayActionsHover ? theme.palette.TwClrBgHover : 'none',
           '& .actions-hover': {
             display: displayActionsHover ? 'flex' : 'none',
           },
