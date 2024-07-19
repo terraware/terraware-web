@@ -68,7 +68,6 @@ const SectionItem = ({
     }
 
     // update selected section id
-    console.log('Updating section id to ', section.id);
     setSelectedSectionId(section.id);
 
     // exit if section has no section number
