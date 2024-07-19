@@ -68,9 +68,11 @@ const MapView = () => {
 
   return (
     <Card
-      title={strings.PROPOSED_PROJECT_BOUNDARY}
       style={{ width: '100%', padding: theme.spacing(3), borderRadius: theme.spacing(3) }}
     >
+      <Typography fontSize={'24px'} fontWeight={600} lineHeight={'32px'}>
+        {strings.PROPOSED_PROJECT_BOUNDARY}
+      </Typography>
       <Grid container flexDirection={'row'} spacing={3} sx={{ padding: 0 }}>
         <Grid item xs={4}>
           <Typography fontSize={'16px'} fontWeight={400} lineHeight={'24px'}>
