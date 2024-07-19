@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
@@ -170,7 +170,11 @@
 <a name='L105'></a><a href='#L105'>105</a>
 <a name='L106'></a><a href='#L106'>106</a>
 <a name='L107'></a><a href='#L107'>107</a>
-<a name='L108'></a><a href='#L108'>108</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -272,6 +276,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -346,44 +354,48 @@ const MapView = <span class="cstat-no" title="statement not covered" ><span clas
   }, [selectedApplication, goToApplication]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;ApplicationPage title={strings.PROPOSED_PROJECT_BOUNDARY}&gt;
-      &lt;Card style={{ width: '100%', padding: theme.spacing(3), borderRadius: theme.spacing(3) }}&gt;
-        &lt;Typography fontSize={'24px'} fontWeight={600} lineHeight={'32px'}&gt;
-          {strings.PROPOSED_PROJECT_BOUNDARY}
-        &lt;/Typography&gt;
-        &lt;Grid container flexDirection={'row'} spacing={3} sx={{ padding: 0 }}&gt;
-          &lt;Grid item xs={4}&gt;
-            &lt;Typography fontSize={'16px'} fontWeight={400} lineHeight={'24px'}&gt;
-              &lt;p&gt;
-                All plantable areas must be contained within the site boundary. Any areas within the site boundary that
-                are not plantable should be excluded.
-              &lt;/p&gt;
-              &lt;p&gt;
-                Draw the site boundary of your planting site below. Use the drawing tool to draw the boundary of the
-                planting site.
-              &lt;/p&gt;
-              &lt;p&gt;Watch a tutorial about drawing site boundaries.&lt;/p&gt;
-            &lt;/Typography&gt;
-          &lt;/Grid&gt;
-          &lt;Grid item xs={8}&gt;
-            &lt;EditableMap
-              errorAnnotations={siteBoundaryData?.errorAnnotations}
-              onEditableBoundaryChanged={onEditableBoundaryChanged}
-              onRedo={redo}
-              onUndo={undo}
-              showSearchBox
-            /&gt;
-          &lt;/Grid&gt;
+    &lt;Card style={{ width: '100%', padding: theme.spacing(3), borderRadius: theme.spacing(3) }}&gt;
+      &lt;Typography fontSize={'24px'} fontWeight={600} lineHeight={'32px'}&gt;
+        {strings.PROPOSED_PROJECT_BOUNDARY}
+      &lt;/Typography&gt;
+      &lt;Grid container flexDirection={'row'} spacing={3} sx={{ padding: 0 }}&gt;
+        &lt;Grid item xs={4}&gt;
+          &lt;Typography fontSize={'16px'} fontWeight={400} lineHeight={'24px'}&gt;
+            &lt;p&gt;
+              All plantable areas must be contained within the site boundary. Any areas within the site boundary that
+              are not plantable should be excluded.
+            &lt;/p&gt;
+            &lt;p&gt;
+              Draw the site boundary of your planting site below. Use the drawing tool to draw the boundary of the
+              planting site.
+            &lt;/p&gt;
+            &lt;p&gt;Watch a tutorial about drawing site boundaries.&lt;/p&gt;
+          &lt;/Typography&gt;
         &lt;/Grid&gt;
-        &lt;Box marginTop={theme.spacing(2)} display='flex' justifyContent='flex-end' width='100%'&gt;
-          &lt;Button label={strings.SAVE_PROJECT_BOUNDARIES} onClick={onSave} size='medium' /&gt;
-        &lt;/Box&gt;
-      &lt;/Card&gt;
-    &lt;/ApplicationPage&gt;
+        &lt;Grid item xs={8}&gt;
+          &lt;EditableMap
+            errorAnnotations={siteBoundaryData?.errorAnnotations}
+            onEditableBoundaryChanged={onEditableBoundaryChanged}
+            onRedo={redo}
+            onUndo={undo}
+            showSearchBox
+          /&gt;
+        &lt;/Grid&gt;
+      &lt;/Grid&gt;
+      &lt;Box marginTop={theme.spacing(2)} display='flex' justifyContent='flex-end' width='100%'&gt;
+        &lt;Button label={strings.SAVE_PROJECT_BOUNDARIES} onClick={onSave} size='medium' /&gt;
+      &lt;/Box&gt;
+    &lt;/Card&gt;
   );
 };
 &nbsp;
-export default MapView;
+const MapViewWrapper = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; (</span>
+<span class="cstat-no" title="statement not covered" >  &lt;ApplicationPage&gt;</span>
+    &lt;MapView /&gt;
+  &lt;/ApplicationPage&gt;
+);
+&nbsp;
+export default MapViewWrapper;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -391,7 +403,7 @@ export default MapView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-19T13:02:53.600Z
+                at 2024-07-19T17:26:15.180Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
