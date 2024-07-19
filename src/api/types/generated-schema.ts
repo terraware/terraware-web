@@ -5128,6 +5128,8 @@ export interface components {
       variableId: number;
     };
     VariablePayload: {
+      /** Format: int64 */
+      deliverableId?: number;
       /** @enum {string} */
       dependencyCondition?: "eq" | "gt" | "gte" | "lt" | "lte" | "neq";
       dependencyValue?: string;
