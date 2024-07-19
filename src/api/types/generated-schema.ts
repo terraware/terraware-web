@@ -1227,7 +1227,7 @@ export interface components {
       /** Format: date-time */
       modifiedTime: string;
       /** @enum {string} */
-      status: "Not Submitted" | "Failed Pre-screen" | "Passed Pre-screen" | "Submitted" | "PL Review" | "Ready for Review" | "Pre-check" | "Needs Follow-up" | "Carbon Eligible" | "Accepted" | "Waitlist" | "Not Accepted" | "In Review";
+      status: "Accepted" | "Carbon Eligible" | "Failed Pre-screen" | "Issue Active" | "Issue Pending" | "Issue Resolved" | "Needs Follow-up" | "Not Accepted" | "Not Submitted" | "Passed Pre-screen" | "PL Review" | "Pre-check" | "Ready for Review" | "Submitted" | "In Review" | "Waitlist";
     };
     ApplicationPayload: {
       boundary?: components["schemas"]["Geometry"];
@@ -1245,7 +1245,7 @@ export interface components {
       /** Format: int64 */
       projectId: number;
       /** @enum {string} */
-      status: "Not Submitted" | "Failed Pre-screen" | "Passed Pre-screen" | "Submitted" | "PL Review" | "Ready for Review" | "Pre-check" | "Needs Follow-up" | "Carbon Eligible" | "Accepted" | "Waitlist" | "Not Accepted" | "In Review";
+      status: "Accepted" | "Carbon Eligible" | "Failed Pre-screen" | "Issue Active" | "Issue Pending" | "Issue Resolved" | "Needs Follow-up" | "Not Accepted" | "Not Submitted" | "Passed Pre-screen" | "PL Review" | "Pre-check" | "Ready for Review" | "Submitted" | "In Review" | "Waitlist";
     };
     AssignParticipantProjectSpeciesPayload: {
       projectIds: number[];
@@ -4057,7 +4057,7 @@ export interface components {
       feedback?: string;
       internalComment?: string;
       /** @enum {string} */
-      status: "Not Submitted" | "Failed Pre-screen" | "Passed Pre-screen" | "Submitted" | "PL Review" | "Ready for Review" | "Pre-check" | "Needs Follow-up" | "Carbon Eligible" | "Accepted" | "Waitlist" | "Not Accepted";
+      status: "Not Submitted" | "Failed Pre-screen" | "Passed Pre-screen" | "Submitted" | "PL Review" | "Ready for Review" | "Pre-check" | "Needs Follow-up" | "Carbon Eligible" | "Accepted" | "Issue Active" | "Issue Pending" | "Issue Resolved" | "Not Accepted";
     };
     ScheduleObservationRequestPayload: {
       /**

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Box, Typography, useTheme } from '@mui/material';
@@ -9,12 +9,13 @@ import CompleteIncompleteBatch from 'src/components/common/CompleteIncompleteBat
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useApplicationData } from 'src/scenes/ApplicationRouter/provider/Context';
 import strings from 'src/strings';
+import { ApplicationModuleWithDeliverables } from 'src/types/Application';
 
 export default function ListModulesContent(): JSX.Element {
   const { applicationSections, selectedApplication } = useApplicationData();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const { goToApplicationSection } = useNavigateTo();
+  const { goToApplicationPrescreen, goToApplicationSection } = useNavigateTo();
 
   const pathParams = useParams<{ applicationId: string }>();
   const applicationId = Number(pathParams.applicationId);
@@ -26,6 +27,21 @@ export default function ListModulesContent(): JSX.Element {
       return selectedApplication.status === 'Not Submitted' || selectedApplication.status === 'Failed Pre-screen';
     }
   }, [selectedApplication]);
+
+  const getSectionStatus = useCallback(
+    (section: ApplicationModuleWithDeliverables) => {
+      if (!selectedApplication) {
+        return 'Incomplete';
+      }
+
+      if (section.category === 'Application') {
+        return section.status;
+      } else {
+        return isPrescreen ? 'Incomplete' : 'Complete';
+      }
+    },
+    [selectedApplication, isPrescreen]
+  );
 
   return (
     <Box paddingX={theme.spacing(2)}>
@@ -42,11 +58,15 @@ export default function ListModulesContent(): JSX.Element {
                 {section.name}
               </Typography>
               <Box paddingLeft={theme.spacing(2)} alignSelf={'flex-start'}>
-                <CompleteIncompleteBatch status={section.status} />
+                <CompleteIncompleteBatch status={getSectionStatus(section)} />
               </Box>
             </Box>
             <Button
-              onClick={() => goToApplicationSection(applicationId, section.id)}
+              onClick={() =>
+                section.category === 'Application'
+                  ? goToApplicationSection(applicationId, section.id)
+                  : goToApplicationPrescreen(applicationId)
+              }
               disabled={section.category === 'Application' && isPrescreen}
               label={section.category === 'Pre-screen' && isPrescreen ? strings.GET_STARTED : strings.VIEW}
               priority={section.category === 'Pre-screen' && isPrescreen ? 'primary' : 'secondary'}

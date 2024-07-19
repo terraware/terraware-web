@@ -225,7 +225,7 @@ export default function NavBar({
 
   const applicationMenu = useMemo<JSX.Element | null>(
     () =>
-      applicatioinEnabled && allApplications.length > 0 ? (
+      applicatioinEnabled && allApplications && allApplications.length > 0 ? (
         <NavItem
           label={
             <Box
