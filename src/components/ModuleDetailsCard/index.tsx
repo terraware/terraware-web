@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 
 import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
+import { Button } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { DateTime } from 'luxon';
 
@@ -62,6 +63,7 @@ export type DeliverableDetails = {
   name: string;
   onClick: () => void;
   status: DeliverableStatusType;
+  useButton?: boolean;
 };
 
 type EventDetails = {
@@ -216,17 +218,36 @@ const ModuleDetailsCard = ({
                     justifyContent={'flex-start'}
                     flexWrap={wrap()}
                   >
-                    <Grid item flexGrow={0} xs={gridSize()}>
-                      <DeliverableStatusBadge
-                        showSimplifiedStatus={showSimplifiedStatus}
-                        status={deliverable.status || 'Not Submitted'}
-                      />
-                    </Grid>
-                    <Grid item flexGrow={0} xs={gridSize()}>
-                      <Link fontSize='16px' onClick={deliverable.onClick} style={{ textAlign: 'left' }}>
-                        {deliverable.name}
-                      </Link>
-                    </Grid>
+                    {deliverable.useButton ? (
+                      <Grid item flexGrow={0} xs={12}>
+                        <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} width={'50%'}>
+                          <Box display={'flex'} alignItems={'center'}>
+                            <DeliverableStatusBadge
+                              showSimplifiedStatus={showSimplifiedStatus}
+                              status={deliverable.status || 'Not Submitted'}
+                            />
+                            <Typography paddingLeft={'8px'} fontWeight={500}>
+                              {deliverable.name}
+                            </Typography>
+                          </Box>
+                          <Button onClick={deliverable.onClick} label={strings.GET_STARTED} priority='secondary' />
+                        </Box>
+                      </Grid>
+                    ) : (
+                      <>
+                        <Grid item flexGrow={0} xs={gridSize()}>
+                          <DeliverableStatusBadge
+                            showSimplifiedStatus={showSimplifiedStatus}
+                            status={deliverable.status || 'Not Submitted'}
+                          />
+                        </Grid>
+                        <Grid item flexGrow={0} xs={gridSize()}>
+                          <Link fontSize='16px' onClick={deliverable.onClick} style={{ textAlign: 'left' }}>
+                            {deliverable.name}
+                          </Link>
+                        </Grid>
+                      </>
+                    )}
                     {deliverable.dueDate && activeLocale && (
                       <Grid item flexGrow={0} xs={gridSize()}>
                         <Typography

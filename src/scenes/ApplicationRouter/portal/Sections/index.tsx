@@ -29,6 +29,7 @@ const SectionView = () => {
         name: deliverable.name,
         onClick: () => goToApplicationSectionDeliverable(applicationId, section.id, deliverable.id),
         status: deliverable.status,
+        useButton: section.category === 'Pre-screen' ? true : false,
       }));
 
       if (section.category === 'Pre-screen') {
@@ -36,6 +37,7 @@ const SectionView = () => {
           name: strings.PROPOSED_PROJECT_BOUNDARY,
           onClick: () => goToApplicationMap(applicationId),
           status: selectedApplication?.boundary ? 'Completed' : 'Not Submitted',
+          useButton: true,
         });
       }
 
