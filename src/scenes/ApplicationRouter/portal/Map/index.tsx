@@ -16,6 +16,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import { useApplicationData } from '../../provider/Context';
 import ApplicationPage from '../ApplicationPage';
+import FeedbackMessage from '../Prescreen/FeedbackMessage';
 
 // undo redo stack to capture site boundary and errors
 type Stack = {
@@ -66,39 +67,56 @@ const MapView = () => {
     }
   }, [selectedApplication, goToApplication]);
 
+  if (!selectedApplication) {
+    return;
+  }
+
   return (
-    <Card style={{ width: '100%', padding: theme.spacing(3), borderRadius: theme.spacing(3) }}>
-      <Typography fontSize={'24px'} fontWeight={600} lineHeight={'32px'}>
-        {strings.PROPOSED_PROJECT_BOUNDARY}
-      </Typography>
-      <Grid container flexDirection={'row'} spacing={3} sx={{ padding: 0 }}>
-        <Grid item xs={4}>
-          <Typography fontSize={'16px'} fontWeight={400} lineHeight={'24px'}>
-            <p>
-              All plantable areas must be contained within the site boundary. Any areas within the site boundary that
-              are not plantable should be excluded.
-            </p>
-            <p>
-              Draw the site boundary of your planting site below. Use the drawing tool to draw the boundary of the
-              planting site.
-            </p>
-            <p>Watch a tutorial about drawing site boundaries.</p>
-          </Typography>
+    <>
+      {selectedApplication.status === 'Failed Pre-screen' && (
+        <FeedbackMessage feedback={selectedApplication.feedback} />
+      )}
+      <Card
+        title={strings.PROPOSED_PROJECT_BOUNDARY}
+        style={{
+          width: '100%',
+          padding: theme.spacing(3),
+          borderRadius: theme.spacing(3),
+          marginTop: selectedApplication.status === 'Failed Pre-screen' ? theme.spacing(4) : 0,
+        }}
+      >
+        <Typography fontSize={'24px'} fontWeight={600} lineHeight={'32px'}>
+          {strings.PROPOSED_PROJECT_BOUNDARY}
+        </Typography>
+        <Grid container flexDirection={'row'} spacing={3} sx={{ padding: 0 }}>
+          <Grid item xs={4}>
+            <Typography fontSize={'16px'} fontWeight={400} lineHeight={'24px'}>
+              <p>
+                All plantable areas must be contained within the site boundary. Any areas within the site boundary that
+                are not plantable should be excluded.
+              </p>
+              <p>
+                Draw the site boundary of your planting site below. Use the drawing tool to draw the boundary of the
+                planting site.
+              </p>
+              <p>Watch a tutorial about drawing site boundaries.</p>
+            </Typography>
+          </Grid>
+          <Grid item xs={8}>
+            <EditableMap
+              errorAnnotations={siteBoundaryData?.errorAnnotations}
+              onEditableBoundaryChanged={onEditableBoundaryChanged}
+              onRedo={redo}
+              onUndo={undo}
+              showSearchBox
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={8}>
-          <EditableMap
-            errorAnnotations={siteBoundaryData?.errorAnnotations}
-            onEditableBoundaryChanged={onEditableBoundaryChanged}
-            onRedo={redo}
-            onUndo={undo}
-            showSearchBox
-          />
-        </Grid>
-      </Grid>
-      <Box marginTop={theme.spacing(2)} display='flex' justifyContent='flex-end' width='100%'>
-        <Button label={strings.SAVE_PROJECT_BOUNDARIES} onClick={onSave} size='medium' />
-      </Box>
-    </Card>
+        <Box marginTop={theme.spacing(2)} display='flex' justifyContent='flex-end' width='100%'>
+          <Button label={strings.SAVE_PROJECT_BOUNDARIES} onClick={onSave} size='medium' />
+        </Box>
+      </Card>
+    </>
   );
 };
 
