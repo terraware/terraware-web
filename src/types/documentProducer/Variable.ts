@@ -94,4 +94,10 @@ export type ImageFile = {
 
 export type UpdateVariableWorkflowDetailsPayload = components['schemas']['UpdateVariableWorkflowDetailsRequestPayload'];
 
+export type UpdateVariableOwnerPayload = components['schemas']['UpdateVariableOwnerRequestPayload'];
+
 export type VariableStatusType = components['schemas']['UpdateVariableWorkflowDetailsRequestPayload']['status'];
+
+export type VariableOwnersListResponse = components['schemas']['ListVariableOwnersResponsePayload'];
+
+export type VariableOwners = components['schemas']['ListVariableOwnersResponsePayload']['variables'][0];

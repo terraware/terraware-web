@@ -262,3 +262,8 @@ export const selectDeliverableVariablesWithValues = createCachedSelector(
 
 export const selectUpdateVariableWorkflowDetails = (requestId: string) => (state: RootState) =>
   state.variableWorkflowDetailsUpdate[requestId];
+
+export const selectUpdateVariableOwner = (requestId: string) => (state: RootState) =>
+  state.variableOwnerUpdate[requestId];
+
+export const selectVariablesOwners = (state: RootState, projectId: number | string) => state.variablesOwners[projectId];

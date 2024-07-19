@@ -6,16 +6,24 @@ import PageContent from 'src/components/DocumentProducer/PageContent';
 import { requestListVariablesValues } from 'src/redux/features/documentProducer/values/valuesThunks';
 import {
   selectAllVariablesWithValues,
+  selectVariablesOwners,
   selectVariablesWithValues,
 } from 'src/redux/features/documentProducer/variables/variablesSelector';
 import {
   requestListAllVariables,
   requestListVariables,
+  requestListVariablesOwners,
 } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { useSelectorProcessor } from 'src/redux/hooks/useSelectorProcessor';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Document as DocumentType } from 'src/types/documentProducer/Document';
-import { SectionVariableWithValues, VariableWithValues } from 'src/types/documentProducer/Variable';
+import {
+  SectionVariableWithValues,
+  VariableOwners,
+  VariableStatusType,
+  VariableWithValues,
+} from 'src/types/documentProducer/Variable';
+import { VariableValue } from 'src/types/documentProducer/VariableValue';
 
 export type DocumentProps = {
   document: DocumentType;
@@ -23,20 +31,24 @@ export type DocumentProps = {
 
 const DocumentTab = ({ document }: DocumentProps): JSX.Element => {
   const dispatch = useAppDispatch();
-
   const [documentVariables, setDocumentVariables] = useState<VariableWithValues[]>();
+  const [variablesOwners, setVariablesOwners] = useState<VariableOwners[]>();
   const documentVariablesResult = useAppSelector((state) =>
     selectVariablesWithValues(state, document.variableManifestId, document.projectId)
   );
+  const ownersResult = useAppSelector((state) => selectVariablesOwners(state, document.projectId));
   useSelectorProcessor(documentVariablesResult, setDocumentVariables);
 
   const allVariables: VariableWithValues[] = useAppSelector((state) =>
     selectAllVariablesWithValues(state, document.projectId)
   );
 
+  useSelectorProcessor(ownersResult, setVariablesOwners);
+
   const onUpdate = useCallback(() => {
     dispatch(requestListVariables(document.variableManifestId));
     dispatch(requestListVariablesValues({ projectId: document.projectId }));
+    dispatch(requestListVariablesOwners(document.projectId));
     dispatch(requestListAllVariables());
   }, [dispatch, document.projectId, document.variableManifestId]);
 
@@ -44,8 +56,16 @@ const DocumentTab = ({ document }: DocumentProps): JSX.Element => {
     onUpdate();
   }, [onUpdate]);
 
+  const getVariableOwner = (variableId: number) => {
+    const variableOwner = variablesOwners?.find((vo) => vo.variableId.toString() === variableId.toString());
+    const variableOwnerId = variableOwner?.ownedBy;
+    return variableOwnerId;
+  };
+
   const renderSection = useCallback(
     (section: SectionVariableWithValues): JSX.Element[] => {
+      const firstVariableValue: VariableValue | undefined = (section?.variableValues || [])[0];
+      const firstVariableValueStatus: VariableStatusType | undefined = firstVariableValue?.status;
       const sectionsToRender: JSX.Element[] = [];
       if (section.renderHeading) {
         sectionsToRender.push(
@@ -55,7 +75,11 @@ const DocumentTab = ({ document }: DocumentProps): JSX.Element => {
             titleNumber={section.sectionNumber ?? ''}
             title={section.name}
             description={section.description || ''}
-            status={section.values && section.values.length > 0 ? 'Complete' : 'Incomplete'}
+            status={firstVariableValueStatus || 'Incomplete'}
+            variableId={section.id}
+            projectId={document.projectId}
+            reload={onUpdate}
+            ownerId={getVariableOwner(section.id)}
           />
         );
       } else {
