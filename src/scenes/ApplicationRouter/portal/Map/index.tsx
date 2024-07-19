@@ -67,9 +67,7 @@ const MapView = () => {
   }, [selectedApplication, goToApplication]);
 
   return (
-    <Card
-      style={{ width: '100%', padding: theme.spacing(3), borderRadius: theme.spacing(3) }}
-    >
+    <Card style={{ width: '100%', padding: theme.spacing(3), borderRadius: theme.spacing(3) }}>
       <Typography fontSize={'24px'} fontWeight={600} lineHeight={'32px'}>
         {strings.PROPOSED_PROJECT_BOUNDARY}
       </Typography>
