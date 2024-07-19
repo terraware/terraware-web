@@ -3,7 +3,6 @@ import React, { useMemo } from 'react';
 import { Box, Card, Typography, useTheme } from '@mui/material';
 
 import CurrentTimeline from 'src/scenes/ModulesRouter/CurrentTimeline';
-import strings from 'src/strings';
 
 import { useApplicationData } from '../../provider/Context';
 import ApplicationPage from '../ApplicationPage';
@@ -52,6 +51,9 @@ const OverviewView = () => {
           return 2;
         case 'Accepted':
         case 'Waitlist':
+        case 'Issue Active':
+        case 'Issue Pending':
+        case 'Issue Resolved':
         case 'Not Accepted':
           return 2; // TODO do we need a result timeline?
       }
@@ -62,17 +64,21 @@ const OverviewView = () => {
   }, [selectedApplication]);
 
   return (
-    <ApplicationPage title={strings.APPLICATION}>
-      <Card style={{ width: '100%', padding: theme.spacing(3), borderRadius: theme.spacing(3) }}>
-        <CurrentTimeline steps={applicationSteps} currentIndex={timelineIndex} />
+    <Card style={{ width: '100%', padding: theme.spacing(3), borderRadius: theme.spacing(3) }}>
+      <CurrentTimeline steps={applicationSteps} currentIndex={timelineIndex} />
 
-        <Box paddingY={theme.spacing(2)} borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}>
-          <Typography>{phaseDescription}</Typography>
-        </Box>
-        <ListApplicationModulesContent />
-      </Card>
-    </ApplicationPage>
+      <Box paddingY={theme.spacing(2)} borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}>
+        <Typography>{phaseDescription}</Typography>
+      </Box>
+      <ListApplicationModulesContent />
+    </Card>
   );
 };
 
-export default OverviewView;
+const OverviewWrapper = () => (
+  <ApplicationPage>
+    <OverviewView />
+  </ApplicationPage>
+);
+
+export default OverviewWrapper;

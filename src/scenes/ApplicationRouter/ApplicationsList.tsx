@@ -59,7 +59,7 @@ const ApplicationListView = () => {
             onSave={() => toastInfo('Create new application clicked')}
           />
           <Grid container spacing={3} sx={{ padding: 0 }}>
-            {allApplications.map((application) => (
+            {allApplications?.map((application) => (
               <Grid
                 item
                 xs={allApplications.length === 1 ? primaryGridSize() : secondaryGridSize()}
@@ -68,6 +68,7 @@ const ApplicationListView = () => {
                 <ApplicationCard
                   applicationId={application.id}
                   applicationName={`Applicatoin ${application.id}`}
+                  applicationStatus={application.status}
                   completed={false}
                   dateStarted={DateTime.fromISO(application.createdTime)}
                 />

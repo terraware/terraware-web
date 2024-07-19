@@ -42,11 +42,19 @@ const ApplicationProvider = ({ children }: Props) => {
     [allApplications]
   );
 
+  const _reload = useCallback(() => {
+    if (selectedOrganization) {
+      const dispatched = dispatch(requestListApplications({ organizationId: selectedOrganization.id }));
+      setListApplicationRequest(dispatched.requestId);
+    }
+  }, [dispatch, selectedOrganization, setListApplicationRequest]);
+
   const [applicationData, setApplicationData] = useState<ApplicationData>({
     allApplications,
     applicationSections,
     selectedApplication,
     setSelectedApplication: _setSelectedApplication,
+    reload: _reload,
   });
 
   useEffect(() => {
@@ -85,8 +93,9 @@ const ApplicationProvider = ({ children }: Props) => {
       applicationSections,
       selectedApplication,
       setSelectedApplication: _setSelectedApplication,
+      reload: _reload,
     });
-  }, [allApplications, applicationSections, selectedApplication, _setSelectedApplication]);
+  }, [allApplications, applicationSections, selectedApplication, _setSelectedApplication, _reload]);
 
   return <ApplicationContext.Provider value={applicationData}>{children}</ApplicationContext.Provider>;
 };

@@ -15,8 +15,9 @@ import SectionDeliverableView from './Deliverables';
 import MapView from './Map';
 import NavBar from './NavBar';
 import Overview from './Overview';
+import PrescreenView from './Prescreen';
 import ReviewView from './Review';
-import SectionView from './Sections';
+import SectionViewWrapper from './Sections';
 
 interface ApplicationPortalRouterProp {
   showNavBar: boolean;
@@ -80,8 +81,9 @@ const ApplicationPortalRouter = ({ showNavBar, setShowNavBar }: ApplicationPorta
           <Routes>
             <Route path={`${APP_PATHS.APPLICATION_MAP}`} element={<MapView />} />
             <Route path={`${APP_PATHS.APPLICATION_OVERVIEW}`} element={<Overview />} />
+            <Route path={`${APP_PATHS.APPLICATION_PRESCREEN}`} element={<PrescreenView />} />
             <Route path={`${APP_PATHS.APPLICATION_REVIEW}`} element={<ReviewView />} />
-            <Route path={`${APP_PATHS.APPLICATION_SECTION}`} element={<SectionView />} />
+            <Route path={`${APP_PATHS.APPLICATION_SECTION}`} element={<SectionViewWrapper />} />
             <Route path={`${APP_PATHS.APPLICATION_SECTION_DELIVERABLE}`} element={<SectionDeliverableView />} />
             <Route path={'*'} element={<Navigate to={APP_PATHS.APPLICATIONS} />} />
           </Routes>

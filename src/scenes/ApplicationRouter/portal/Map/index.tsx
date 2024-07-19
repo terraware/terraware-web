@@ -67,41 +67,45 @@ const MapView = () => {
   }, [selectedApplication, goToApplication]);
 
   return (
-    <ApplicationPage title={strings.PROPOSED_PROJECT_BOUNDARY}>
-      <Card style={{ width: '100%', padding: theme.spacing(3), borderRadius: theme.spacing(3) }}>
-        <Typography fontSize={'24px'} fontWeight={600} lineHeight={'32px'}>
-          {strings.PROPOSED_PROJECT_BOUNDARY}
-        </Typography>
-        <Grid container flexDirection={'row'} spacing={3} sx={{ padding: 0 }}>
-          <Grid item xs={4}>
-            <Typography fontSize={'16px'} fontWeight={400} lineHeight={'24px'}>
-              <p>
-                All plantable areas must be contained within the site boundary. Any areas within the site boundary that
-                are not plantable should be excluded.
-              </p>
-              <p>
-                Draw the site boundary of your planting site below. Use the drawing tool to draw the boundary of the
-                planting site.
-              </p>
-              <p>Watch a tutorial about drawing site boundaries.</p>
-            </Typography>
-          </Grid>
-          <Grid item xs={8}>
-            <EditableMap
-              errorAnnotations={siteBoundaryData?.errorAnnotations}
-              onEditableBoundaryChanged={onEditableBoundaryChanged}
-              onRedo={redo}
-              onUndo={undo}
-              showSearchBox
-            />
-          </Grid>
+    <Card style={{ width: '100%', padding: theme.spacing(3), borderRadius: theme.spacing(3) }}>
+      <Typography fontSize={'24px'} fontWeight={600} lineHeight={'32px'}>
+        {strings.PROPOSED_PROJECT_BOUNDARY}
+      </Typography>
+      <Grid container flexDirection={'row'} spacing={3} sx={{ padding: 0 }}>
+        <Grid item xs={4}>
+          <Typography fontSize={'16px'} fontWeight={400} lineHeight={'24px'}>
+            <p>
+              All plantable areas must be contained within the site boundary. Any areas within the site boundary that
+              are not plantable should be excluded.
+            </p>
+            <p>
+              Draw the site boundary of your planting site below. Use the drawing tool to draw the boundary of the
+              planting site.
+            </p>
+            <p>Watch a tutorial about drawing site boundaries.</p>
+          </Typography>
         </Grid>
-        <Box marginTop={theme.spacing(2)} display='flex' justifyContent='flex-end' width='100%'>
-          <Button label={strings.SAVE_PROJECT_BOUNDARIES} onClick={onSave} size='medium' />
-        </Box>
-      </Card>
-    </ApplicationPage>
+        <Grid item xs={8}>
+          <EditableMap
+            errorAnnotations={siteBoundaryData?.errorAnnotations}
+            onEditableBoundaryChanged={onEditableBoundaryChanged}
+            onRedo={redo}
+            onUndo={undo}
+            showSearchBox
+          />
+        </Grid>
+      </Grid>
+      <Box marginTop={theme.spacing(2)} display='flex' justifyContent='flex-end' width='100%'>
+        <Button label={strings.SAVE_PROJECT_BOUNDARIES} onClick={onSave} size='medium' />
+      </Box>
+    </Card>
   );
 };
 
-export default MapView;
+const MapViewWrapper = () => (
+  <ApplicationPage>
+    <MapView />
+  </ApplicationPage>
+);
+
+export default MapViewWrapper;

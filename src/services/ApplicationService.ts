@@ -35,14 +35,21 @@ const listApplications = async (organizationId: number): Promise<Response2<ListA
             id: 1,
             organizationId: organizationId,
             projectId: 1,
-            status: 'Passed Pre-screen',
+            status: 'Not Submitted',
             createdTime: DateTime.now().toString(),
           },
           {
             id: 2,
             organizationId: organizationId,
+            projectId: 1,
+            status: 'Failed Pre-screen',
+            createdTime: DateTime.now().toString(),
+          },
+          {
+            id: 3,
+            organizationId: organizationId,
             projectId: 2,
-            status: 'Not Submitted',
+            status: 'Passed Pre-screen',
             createdTime: DateTime.now().toString(),
           },
         ],
@@ -60,7 +67,6 @@ const listApplications = async (organizationId: number): Promise<Response2<ListA
 /**
  * List application modules
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const listApplicationModules = async (applicationId: number): Promise<Response2<ListApplicationModulesData>> => {
   // TODO use module endpoints or something like that once available.
   return Promise.resolve({
@@ -80,10 +86,10 @@ const listApplicationModules = async (applicationId: number): Promise<Response2<
               name: 'Pre-screen Questions',
               category: 'Compliance',
               type: 'Questions',
-              status: 'Not Submitted',
+              status: applicationId > 1 ? 'Completed' : 'Not Submitted',
             },
           ],
-          status: 'Incomplete',
+          status: applicationId >= 1 ? 'Complete' : 'Incomplete',
         },
         {
           id: 1,
