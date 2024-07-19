@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1721422736562" clover="3.2.0">
-  <project timestamp="1721422736562" name="All files">
-    <metrics statements="23094" coveredstatements="956" conditionals="14891" coveredconditionals="239" methods="7126" coveredmethods="163" elements="45111" coveredelements="1358" complexity="0" loc="23094" ncloc="23094" packages="221" files="1028" classes="1028"/>
+<coverage generated="1721428717148" clover="3.2.0">
+  <project timestamp="1721428717148" name="All files">
+    <metrics statements="23094" coveredstatements="956" conditionals="14893" coveredconditionals="239" methods="7126" coveredmethods="163" elements="45113" coveredelements="1358" complexity="0" loc="23094" ncloc="23094" packages="221" files="1028" classes="1028"/>
     <package name="src">
       <metrics statements="171" coveredstatements="0" conditionals="128" coveredconditionals="0" methods="38" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -2671,9 +2671,9 @@
       </file>
     </package>
     <package name="src.components.DocumentProducer.VariableDetailsInput">
-      <metrics statements="148" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="29" coveredmethods="0"/>
+      <metrics statements="148" coveredstatements="0" conditionals="134" coveredconditionals="0" methods="29" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DocumentProducer/VariableDetailsInput/index.tsx">
-        <metrics statements="148" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="29" coveredmethods="0"/>
+        <metrics statements="148" coveredstatements="0" conditionals="134" coveredconditionals="0" methods="29" coveredmethods="0"/>
         <line num="29" count="0" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
         <line num="40" count="0" type="stmt"/>
@@ -2814,14 +2814,14 @@
         <line num="268" count="0" type="stmt"/>
         <line num="291" count="0" type="stmt"/>
         <line num="301" count="0" type="stmt"/>
-        <line num="307" count="0" type="stmt"/>
-        <line num="317" count="0" type="stmt"/>
-        <line num="339" count="0" type="stmt"/>
-        <line num="348" count="0" type="stmt"/>
-        <line num="361" count="0" type="stmt"/>
-        <line num="402" count="0" type="stmt"/>
-        <line num="404" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="415" count="0" type="stmt"/>
+        <line num="321" count="0" type="stmt"/>
+        <line num="331" count="0" type="stmt"/>
+        <line num="353" count="0" type="stmt"/>
+        <line num="362" count="0" type="stmt"/>
+        <line num="375" count="0" type="stmt"/>
+        <line num="416" count="0" type="stmt"/>
+        <line num="418" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="429" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.FeatureNotification">
