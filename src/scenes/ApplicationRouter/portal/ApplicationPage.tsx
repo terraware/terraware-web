@@ -23,7 +23,6 @@ const ApplicationPage = ({ children }: Prop) => {
   const applicationId = Number(pathParams.applicationId);
 
   useEffect(() => {
-    console.log(allApplications);
     if (allApplications) {
       setSelectedApplication(applicationId);
     } else {
