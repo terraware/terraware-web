@@ -298,7 +298,21 @@ const VariableDetailsInput = ({
       {variable?.type === 'Text' && (
         <>
           {textValuesList?.map((iValue, index) => (
-            <Box key={index} mb={2} display='flex' alignItems='center' sx={{ position: 'relative' }}>
+            <Box
+              key={index}
+              display='flex'
+              alignItems='center'
+              sx={{
+                position: 'relative',
+                marginBottom: theme.spacing(2),
+                paddingBottom: theme.spacing(2),
+                ...(variable.isList
+                  ? {
+                      borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+                    }
+                  : {}),
+              }}
+            >
               <Textfield
                 key={`input-${index}`}
                 id='value'
@@ -307,7 +321,7 @@ const VariableDetailsInput = ({
                 onChange={(newValue: any) => onChangeValueHandler(newValue, 'value', index)}
                 value={iValue?.toString()}
                 errorText={validate ? valueError() : ''}
-                sx={{ margin: theme.spacing(1, 0), flex: 1 }}
+                sx={{ flex: 1 }}
               />
               {variable.isList && (
                 <IconButton
@@ -319,7 +333,7 @@ const VariableDetailsInput = ({
                   sx={index === 0 ? { 'margin-top': '20px' } : {}}
                 >
                   <Icon
-                    name='cancel'
+                    name='iconSubtract'
                     size='medium'
                     fillColor={theme.palette.TwClrIcn}
                     style={index === 0 ? { opacity: 0.5 } : {}}
