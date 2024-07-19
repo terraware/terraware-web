@@ -165,9 +165,11 @@ export default function DocumentView(): JSX.Element {
         <Box display='flex' flexGrow={1}>
           <Tabs tabs={tabs} activeTab={activeTab} onTabChange={onTabChange} />
         </Box>
-        {activeTab === 'document' && (
-          <DocumentOutlinePanel document={document} open={outlinePanelOpen} setOpen={setOutlinePanelOpen} />
-        )}
+        <Box>
+          {activeTab === 'document' && (
+            <DocumentOutlinePanel document={document} open={outlinePanelOpen} setOpen={setOutlinePanelOpen} />
+          )}
+        </Box>
       </Box>
     </Page>
   );

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import {
   Box,
@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 
 import Icon from 'src/components/common/icon/Icon';
+import { useIsVisible } from 'src/hooks/useIsVisible';
 import { requestListVariablesValues } from 'src/redux/features/documentProducer/values/valuesThunks';
 import { selectVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
 import { requestListVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
@@ -106,6 +107,8 @@ const SectionItem = ({
           sx={{
             height: '4px',
             backgroundColor: isSelected ? theme.palette.TwClrBgBrand : 'transparent',
+            borderBottomRightRadius: '2px',
+            borderTopRightRadius: '2px',
             marginRight: '8px',
             width: '16px',
           }}
@@ -159,6 +162,8 @@ type Props = {
 
 const DocumentOutlinePanel = ({ document, open, setOpen }: Props): JSX.Element => {
   const dispatch = useAppDispatch();
+  const visibilityBoxRef = useRef(null);
+  const topIsVisible = useIsVisible(visibilityBoxRef);
   const [selectedSectionId, setSelectedSectionId] = useState<number>();
   const [sections, setSections] = useState<SectionVariableWithValues[]>();
   const [variables, setVariables] = useState<(VariableWithValues | SectionVariableWithValues)[]>();
@@ -184,23 +189,50 @@ const DocumentOutlinePanel = ({ document, open, setOpen }: Props): JSX.Element =
   }, [selectedSectionId, variables]);
 
   return (
-    <Box paddingTop='56px' width={open ? '200px' : '60px'}>
-      <IconButton id='toggle-outline-panel-open' onClick={() => setOpen(!open)} sx={{ marginLeft: '16px' }}>
-        <Icon name='iconIndex' size='medium' />
-      </IconButton>
+    <Box width={open ? '200px' : '60px'}>
+      <Box ref={visibilityBoxRef} sx={{ height: '1px', marginBottom: '56px' }} />
 
-      {open && sections?.length && (
-        <Box sx={{ overflowY: 'auto' }}>
-          {sections.map((section, index) => (
-            <SectionItem
-              key={index}
-              section={section}
-              selectedSectionId={selectedSectionId}
-              setSelectedSectionId={setSelectedSectionId}
-            />
-          ))}
-        </Box>
-      )}
+      <Box
+        sx={{
+          bottom: !topIsVisible ? 0 : 'auto',
+          maxWidth: '200px',
+          position: !topIsVisible ? 'fixed' : 'relative',
+          top: !topIsVisible ? '120px' : 'auto',
+          transition: 'position 0.3s ease-in-out, top 0.3s ease-in-out',
+        }}
+      >
+        <IconButton
+          id='toggle-outline-panel-open'
+          onClick={() => setOpen(!open)}
+          sx={{
+            marginLeft: '16px',
+          }}
+        >
+          <Icon name='iconIndex' size='medium' />
+        </IconButton>
+
+        {open && sections?.length && (
+          <Box sx={{ height: '100%', overflow: 'hidden' }}>
+            <Box
+              sx={{
+                '&:hover': {
+                  overflowY: 'auto',
+                },
+                maxHeight: '100%',
+              }}
+            >
+              {sections.map((section, index) => (
+                <SectionItem
+                  key={index}
+                  section={section}
+                  selectedSectionId={selectedSectionId}
+                  setSelectedSectionId={setSelectedSectionId}
+                />
+              ))}
+            </Box>
+          </Box>
+        )}
+      </Box>
     </Box>
   );
 };
