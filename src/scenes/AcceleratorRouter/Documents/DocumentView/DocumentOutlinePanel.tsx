@@ -118,7 +118,6 @@ const SectionItem = ({
             component='span'
             style={{
               color: isSelected ? theme.palette.TwClrTxtBrand : theme.palette.TwClrTxtSecondary,
-              cursor: 'pointer',
               fontSize: '14px',
               fontWeight: '600',
               paddingLeft: `${ancestorSectionNumbers.length * 24}px`,
