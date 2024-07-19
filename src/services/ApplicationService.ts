@@ -44,6 +44,12 @@ const listApplications = async (organizationId: number): Promise<Response2<ListA
             projectId: 1,
             status: 'Failed Pre-screen',
             createdTime: DateTime.now().toString(),
+            feedback: `
+              <ul>
+                <li> Reason 1 description here
+                <li> Reason 2 description here
+                <li> Reason 3 description here
+              </ul>`,
           },
           {
             id: 3,

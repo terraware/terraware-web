@@ -18,18 +18,13 @@ const PrescreenView = () => {
     return null;
   }
 
-  const feedback = `
-    <ul>
-      <li> Reason 1 description here
-      <li> Reason 2 description here
-      <li> Reason 3 description here
-    </ul>`;
-
   switch (selectedApplication.status) {
     case 'Not Submitted':
       return <SectionView section={prescreenSection} />;
     case 'Failed Pre-screen':
-      return <ResultView feedback={feedback} isFailure={true} prescreenSection={prescreenSection} />;
+      return (
+        <ResultView feedback={selectedApplication.feedback} isFailure={true} prescreenSection={prescreenSection} />
+      );
     case 'Passed Pre-screen':
     case 'Submitted':
     case 'PL Review':

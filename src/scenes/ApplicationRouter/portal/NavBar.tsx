@@ -84,7 +84,15 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
         ?.filter((section) => section.category === 'Pre-screen')
         .map((section) => {
           const path = APP_PATHS.APPLICATION_PRESCREEN.replace(':applicationId', `${selectedApplication.id}`);
-          const isMatch = !!matchPath(`${path}/*`, location.pathname);
+          const sectionPath = APP_PATHS.APPLICATION_SECTION.replace(
+            ':applicationId',
+            `${selectedApplication.id}`
+          ).replace(':sectionId', `${section.id}`);
+          const mapPath = APP_PATHS.APPLICATION_MAP.replace(':applicationId', `${selectedApplication.id}`);
+          const isMatch =
+            !!matchPath(`${path}/*`, location.pathname) ||
+            !!matchPath(`${sectionPath}/*`, location.pathname) ||
+            !!matchPath(`${mapPath}/*`, location.pathname);
           const isCompleted =
             selectedApplication.status !== 'Not Submitted' && selectedApplication.status !== 'Failed Pre-screen';
 
