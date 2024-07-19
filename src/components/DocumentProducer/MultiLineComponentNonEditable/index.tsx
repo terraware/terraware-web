@@ -81,6 +81,9 @@ export default function MultiLineComponentNonEditable({
       snackbar.toastSuccess(strings.SECTION_OWNER_ASSIGNED);
       reload();
     }
+    if (updateOwnerResponse?.status === 'error') {
+      snackbar.toastError();
+    }
   }, [updateOwnerResponse]);
 
   const setStatus = (status: VariableStatusType) => {
