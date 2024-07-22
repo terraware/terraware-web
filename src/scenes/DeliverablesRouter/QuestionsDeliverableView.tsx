@@ -139,8 +139,13 @@ const QuestionsDeliverableView = (props: Props): JSX.Element | null => {
           onClick={() => {
             const firstVisibleQuestion = document.querySelector('.question-visible');
             const variableId = firstVisibleQuestion?.getAttribute('data-variable-id');
+            const scrolledBeyondViewport = window.scrollY > window.innerHeight;
 
-            goToDeliverableEdit(deliverableId, projectId, variableId ? Number(variableId) : undefined);
+            goToDeliverableEdit(
+              deliverableId,
+              projectId,
+              Boolean(scrolledBeyondViewport && variableId) ? Number(variableId) : undefined
+            );
           }}
           size='medium'
           priority='secondary'
