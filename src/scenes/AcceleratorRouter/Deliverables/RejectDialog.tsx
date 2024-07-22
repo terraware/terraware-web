@@ -57,6 +57,7 @@ export default function RejectDialog({ onClose, onSubmit }: RejectDialogProps): 
           label={strings.FEEDBACK}
           id='feedback'
           onChange={(value) => setFeedback(value as string)}
+          required
           type='textarea'
           value={feedback}
         />
