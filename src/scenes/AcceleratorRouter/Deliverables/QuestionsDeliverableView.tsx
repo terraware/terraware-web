@@ -235,7 +235,7 @@ const QuestionBox = ({
           </Grid>
         </DialogBox>
       )}
-      <Box key={`question-${index}`} onMouseLeave={() => setEditing(false)}>
+      <Box key={`question-${index}`}>
         {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectItem} />}
         <Box
           sx={{
