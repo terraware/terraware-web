@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1721430621795" clover="3.2.0">
-  <project timestamp="1721430621795" name="All files">
-    <metrics statements="23094" coveredstatements="956" conditionals="14893" coveredconditionals="239" methods="7126" coveredmethods="163" elements="45113" coveredelements="1358" complexity="0" loc="23094" ncloc="23094" packages="221" files="1028" classes="1028"/>
+<coverage generated="1721766590163" clover="3.2.0">
+  <project timestamp="1721766590163" name="All files">
+    <metrics statements="23094" coveredstatements="956" conditionals="14895" coveredconditionals="239" methods="7126" coveredmethods="163" elements="45115" coveredelements="1358" complexity="0" loc="23094" ncloc="23094" packages="221" files="1028" classes="1028"/>
     <package name="src">
       <metrics statements="171" coveredstatements="0" conditionals="128" coveredconditionals="0" methods="38" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -16095,24 +16095,24 @@
       </file>
     </package>
     <package name="src.scenes.Home">
-      <metrics statements="21" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="5" coveredmethods="0"/>
+      <metrics statements="21" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="5" coveredmethods="0"/>
       <file name="TerrawareHomeView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/TerrawareHomeView.tsx">
-        <metrics statements="15" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="3" coveredmethods="0"/>
-        <line num="13" count="0" type="stmt"/>
+        <metrics statements="15" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="14" count="0" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="19" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="22" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="26" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="27" count="0" type="stmt"/>
-        <line num="29" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="30" count="0" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
-        <line num="35" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="20" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="27" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="30" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/Home/index.tsx">
         <metrics statements="6" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="0"/>

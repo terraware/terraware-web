@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
@@ -180,7 +180,10 @@
 <a name='L115'></a><a href='#L115'>115</a>
 <a name='L116'></a><a href='#L116'>116</a>
 <a name='L117'></a><a href='#L117'>117</a>
-<a name='L118'></a><a href='#L118'>118</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L118'></a><a href='#L118'>118</a>
+<a name='L119'></a><a href='#L119'>119</a>
+<a name='L120'></a><a href='#L120'>120</a>
+<a name='L121'></a><a href='#L121'>121</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -191,23 +194,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -215,6 +209,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -305,6 +311,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import PageHeader from 'src/components/PageHeader';
 import PageCard from 'src/components/common/PageCard';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useOrganization, useUser } from 'src/providers';
 import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
@@ -395,17 +402,19 @@ const TerrawareHomeView = <span class="cstat-no" title="statement not covered" >
                 linkStyle={'plain'}
               /&gt;
             &lt;/Grid&gt;
-            &lt;Grid item xs={secondaryGridSize()}&gt;
-              &lt;PageCard
-                id='applicationHomeCard'
-                name={strings.APPLY_TO_ACCELERATOR}
-                icon='iconFile'
-                description={strings.APPLY_TO_ACCELERATOR}
-                link={APP_PATHS.APPLICATIONS}
-                linkText={strings.START_NEW_APPLICATION}
-                linkStyle={'button-primary'}
-              /&gt;
-            &lt;/Grid&gt;
+            {isEnabled('Accelerator Application') &amp;&amp; (
+              &lt;Grid item xs={secondaryGridSize()}&gt;
+                &lt;PageCard
+                  id='applicationHomeCard'
+                  name={strings.APPLY_TO_ACCELERATOR}
+                  icon='iconFile'
+                  description={strings.APPLY_TO_ACCELERATOR}
+                  link={APP_PATHS.APPLICATIONS}
+                  linkText={strings.START_NEW_APPLICATION}
+                  linkStyle={'button-primary'}
+                /&gt;
+              &lt;/Grid&gt;
+            )}
           &lt;/Grid&gt;
         &lt;/Container&gt;
       &lt;/Box&gt;
@@ -421,7 +430,7 @@ export default TerrawareHomeView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-19T23:10:21.094Z
+                at 2024-07-23T20:29:49.445Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
