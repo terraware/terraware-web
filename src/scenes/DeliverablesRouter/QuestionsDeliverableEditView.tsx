@@ -45,8 +45,6 @@ const QuestionBox = ({
   setValues,
   variable,
 }: QuestionBoxProps): JSX.Element => {
-  const theme = useTheme();
-
   const pendingValues: VariableValueValue[] | undefined = useMemo(
     () => pendingVariableValues.get(variable.id),
     [pendingVariableValues, variable.id]
