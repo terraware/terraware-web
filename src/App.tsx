@@ -18,9 +18,9 @@ import { store } from 'src/redux/store';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+import isEnabled from './features';
 import useApplicationPortal from './hooks/useApplicationPortal';
 import ApplicationPortalRouter from './scenes/ApplicationRouter/portal';
-import isEnabled from './features';
 
 const AcceleratorRouter = React.lazy(() => import('src/scenes/AcceleratorRouter'));
 const TerrawareRouter = React.lazy(() => import('src/scenes/TerrawareRouter'));
