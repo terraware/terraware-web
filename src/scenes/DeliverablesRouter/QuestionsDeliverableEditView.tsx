@@ -84,7 +84,7 @@ const QuestionsDeliverableEditView = (): JSX.Element | null => {
   const scrollToVariable = useCallback((variableId: string) => {
     const element = document.querySelector(`[data-variable-id="${variableId}"]`);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+      element.scrollIntoView({ behavior: 'smooth' });
     }
   }, []);
 
