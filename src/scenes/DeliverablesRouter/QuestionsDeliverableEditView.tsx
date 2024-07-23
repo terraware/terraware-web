@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 
@@ -19,6 +19,62 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
 import useQuery from 'src/utils/useQuery';
+
+type QuestionBoxProps = {
+  addRemovedValue: (value: VariableValueValue) => void;
+  index: number;
+  pendingVariableValues: Map<number, VariableValueValue[]>;
+  projectId: number;
+  setCellValues?: (values: VariableTableCell[][]) => void;
+  setDeletedImages: (values: VariableValueImageValue[]) => void;
+  setImages: (values: VariableValueImageValue[]) => void;
+  setNewImages: (values: PhotoWithAttributes[]) => void;
+  setValues: (values: VariableValueValue[]) => void;
+  variable: VariableWithValues;
+};
+
+const QuestionBox = ({
+  addRemovedValue,
+  index,
+  projectId,
+  pendingVariableValues,
+  setCellValues,
+  setDeletedImages,
+  setImages,
+  setNewImages,
+  setValues,
+  variable,
+}: QuestionBoxProps): JSX.Element => {
+  const theme = useTheme();
+
+  const pendingValues: VariableValueValue[] | undefined = useMemo(
+    () => pendingVariableValues.get(variable.id),
+    [pendingVariableValues, variable.id]
+  );
+
+  return (
+    <Box key={index} data-variable-id={variable.id}>
+      {/* <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
+        <DeliverableStatusBadge status={variable.status} />
+      </Box> */}
+      <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
+        <Grid item xs={12}>
+          <DeliverableVariableDetailsInput
+            values={pendingValues || variable.values}
+            setCellValues={setCellValues}
+            setDeletedImages={setDeletedImages}
+            setImages={setImages}
+            setNewImages={setNewImages}
+            setValues={setValues}
+            variable={variable}
+            addRemovedValue={addRemovedValue}
+            projectId={projectId}
+          />
+        </Grid>
+      </Grid>
+    </Box>
+  );
+};
 
 const QuestionsDeliverableEditView = (): JSX.Element | null => {
   const dispatch = useAppDispatch();
@@ -117,36 +173,23 @@ const QuestionsDeliverableEditView = (): JSX.Element | null => {
               }}
             >
               {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => (
-                <Box key={index} sx={{ marginBottom: theme.spacing(4) }} data-variable-id={variableWithValues.id}>
-                  <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
-                    {/* <DeliverableStatusBadge status={variableWithValues.status} /> */}
-                  </Box>
-                  <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-                    <Grid item xs={12}>
-                      <DeliverableVariableDetailsInput
-                        values={variableWithValues.values}
-                        setCellValues={(newValues: VariableTableCell[][]) =>
-                          setCellValues(variableWithValues.id, newValues)
-                        }
-                        setDeletedImages={(newValues: VariableValueImageValue[]) =>
-                          setDeletedImages(variableWithValues.id, newValues)
-                        }
-                        setImages={(newValues: VariableValueImageValue[]) =>
-                          setImages(variableWithValues.id, newValues)
-                        }
-                        setNewImages={(newValues: PhotoWithAttributes[]) =>
-                          setNewImages(variableWithValues.id, newValues)
-                        }
-                        setValues={(newValues: VariableValueValue[]) => setValues(variableWithValues.id, newValues)}
-                        variable={variableWithValues}
-                        addRemovedValue={(removedValue: VariableValueValue) =>
-                          setRemovedValue(variableWithValues.id, removedValue)
-                        }
-                        projectId={projectId}
-                      />
-                    </Grid>
-                  </Grid>
-                </Box>
+                <QuestionBox
+                  addRemovedValue={(removedValue: VariableValueValue) =>
+                    setRemovedValue(variableWithValues.id, removedValue)
+                  }
+                  index={index}
+                  key={index}
+                  pendingVariableValues={pendingVariableValues}
+                  projectId={projectId}
+                  setCellValues={(newValues: VariableTableCell[][]) => setCellValues(variableWithValues.id, newValues)}
+                  setDeletedImages={(newValues: VariableValueImageValue[]) =>
+                    setDeletedImages(variableWithValues.id, newValues)
+                  }
+                  setImages={(newValues: VariableValueImageValue[]) => setImages(variableWithValues.id, newValues)}
+                  setNewImages={(newValues: PhotoWithAttributes[]) => setNewImages(variableWithValues.id, newValues)}
+                  setValues={(newValues: VariableValueValue[]) => setValues(variableWithValues.id, newValues)}
+                  variable={variableWithValues}
+                />
               ))}
             </Box>
           </Card>
