@@ -47,6 +47,7 @@ import { isPlaceholderOrg, selectedOrgHasFacilityType } from 'src/utils/organiza
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useEnvironment from 'src/utils/useEnvironment';
 import useStateLocation from 'src/utils/useStateLocation';
+import isEnabled from 'src/features';
 
 interface OrgRouterProps {
   showNavBar: boolean;
@@ -254,7 +255,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
               <Route path={APP_PATHS.OBSERVATIONS + '/*'} element={<ObservationsRouter />} />
               <Route path={APP_PATHS.DELIVERABLES + '/*'} element={<DeliverablesRouter />} />
 
-              <Route path={APP_PATHS.APPLICATIONS + '/*'} element={<ApplicationRouter />} />
+              {isEnabled('Accelerator Application') && <Route path={APP_PATHS.APPLICATIONS + '/*'} element={<ApplicationRouter />} />}
 
               {!isProduction && (
                 <Route path={APP_PATHS.OPT_IN} element={<OptInFeaturesView refresh={reloadPreferences} />} />
