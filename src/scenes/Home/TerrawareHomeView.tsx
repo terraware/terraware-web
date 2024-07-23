@@ -6,6 +6,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import PageHeader from 'src/components/PageHeader';
 import PageCard from 'src/components/common/PageCard';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useOrganization, useUser } from 'src/providers';
 import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
@@ -96,17 +97,19 @@ const TerrawareHomeView = () => {
                 linkStyle={'plain'}
               />
             </Grid>
-            <Grid item xs={secondaryGridSize()}>
-              <PageCard
-                id='applicationHomeCard'
-                name={strings.APPLY_TO_ACCELERATOR}
-                icon='iconFile'
-                description={strings.APPLY_TO_ACCELERATOR}
-                link={APP_PATHS.APPLICATIONS}
-                linkText={strings.START_NEW_APPLICATION}
-                linkStyle={'button-primary'}
-              />
-            </Grid>
+            {isEnabled('Accelerator Application') && (
+              <Grid item xs={secondaryGridSize()}>
+                <PageCard
+                  id='applicationHomeCard'
+                  name={strings.APPLY_TO_ACCELERATOR}
+                  icon='iconFile'
+                  description={strings.APPLY_TO_ACCELERATOR}
+                  link={APP_PATHS.APPLICATIONS}
+                  linkText={strings.START_NEW_APPLICATION}
+                  linkStyle={'button-primary'}
+                />
+              </Grid>
+            )}
           </Grid>
         </Container>
       </Box>
