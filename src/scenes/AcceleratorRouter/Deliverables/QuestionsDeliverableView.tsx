@@ -91,6 +91,11 @@ const QuestionBox = ({
 
   const [modalFeedback, setModalFeedback] = useState(firstVariableValue?.feedback || '');
 
+  const pendingValues: VariableValueValue[] | undefined = useMemo(
+    () => pendingVariableValues.get(variable.id),
+    [pendingVariableValues, variable.id]
+  );
+
   useEffect(() => {
     if (updateVariableValueSuccess) {
       reload();
@@ -322,7 +327,7 @@ const QuestionBox = ({
               <Grid item xs={12}></Grid>
               <Grid item xs={12}>
                 <DeliverableVariableDetailsInput
-                  values={variable.values}
+                  values={pendingValues || variable.values}
                   setValues={(newValues: VariableValueValue[]) => setValues(variable.id, newValues)}
                   variable={variable}
                   addRemovedValue={(removedValue: VariableValueValue) => setRemovedValue(variable.id, removedValue)}
