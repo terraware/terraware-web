@@ -7,6 +7,7 @@ import ErrorBoundary from 'src/ErrorBoundary';
 import ProjectsRouter from 'src/components/Projects/Router';
 import ReportsRouter from 'src/components/Reports/Router';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
 import { selectHasObservationsResults } from 'src/redux/features/observations/observationsSelectors';
@@ -254,7 +255,9 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
               <Route path={APP_PATHS.OBSERVATIONS + '/*'} element={<ObservationsRouter />} />
               <Route path={APP_PATHS.DELIVERABLES + '/*'} element={<DeliverablesRouter />} />
 
-              <Route path={APP_PATHS.APPLICATIONS + '/*'} element={<ApplicationRouter />} />
+              {isEnabled('Accelerator Application') && (
+                <Route path={APP_PATHS.APPLICATIONS + '/*'} element={<ApplicationRouter />} />
+              )}
 
               {!isProduction && (
                 <Route path={APP_PATHS.OPT_IN} element={<OptInFeaturesView refresh={reloadPreferences} />} />
