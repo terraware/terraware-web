@@ -117,10 +117,10 @@ const QuestionsDeliverableEditView = (): JSX.Element | null => {
               }}
             >
               {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => (
-                <Box key={index} sx={{ marginBottom: theme.spacing(4) }} data-variable-id={variableWithValues.id}>
-                  <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
-                    {/* <DeliverableStatusBadge status={variableWithValues.status} /> */}
-                  </Box>
+                <Box key={index} data-variable-id={variableWithValues.id}>
+                  {/* <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
+                    <DeliverableStatusBadge status={variableWithValues.status} />
+                  </Box> */}
                   <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
                     <Grid item xs={12}>
                       <DeliverableVariableDetailsInput
