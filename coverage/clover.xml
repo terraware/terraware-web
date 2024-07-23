@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1721770431529" clover="3.2.0">
-  <project timestamp="1721770431530" name="All files">
-    <metrics statements="23094" coveredstatements="956" conditionals="14899" coveredconditionals="239" methods="7126" coveredmethods="163" elements="45119" coveredelements="1358" complexity="0" loc="23094" ncloc="23094" packages="221" files="1028" classes="1028"/>
+<coverage generated="1721777033434" clover="3.2.0">
+  <project timestamp="1721777033434" name="All files">
+    <metrics statements="23093" coveredstatements="956" conditionals="14899" coveredconditionals="239" methods="7125" coveredmethods="163" elements="45117" coveredelements="1358" complexity="0" loc="23093" ncloc="23093" packages="221" files="1028" classes="1028"/>
     <package name="src">
       <metrics statements="171" coveredstatements="0" conditionals="130" coveredconditionals="0" methods="38" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -11352,7 +11352,7 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Deliverables">
-      <metrics statements="258" coveredstatements="0" conditionals="158" coveredconditionals="0" methods="86" coveredmethods="0"/>
+      <metrics statements="257" coveredstatements="0" conditionals="158" coveredconditionals="0" methods="85" coveredmethods="0"/>
       <file name="ApproveDeliverableDialog.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Deliverables/ApproveDeliverableDialog.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="19" count="0" type="stmt"/>
@@ -11458,7 +11458,7 @@
         <line num="43" count="0" type="stmt"/>
       </file>
       <file name="QuestionsDeliverableView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Deliverables/QuestionsDeliverableView.tsx">
-        <metrics statements="104" coveredstatements="0" conditionals="58" coveredconditionals="0" methods="36" coveredmethods="0"/>
+        <metrics statements="103" coveredstatements="0" conditionals="58" coveredconditionals="0" methods="35" coveredmethods="0"/>
         <line num="50" count="0" type="stmt"/>
         <line num="61" count="0" type="stmt"/>
         <line num="62" count="0" type="stmt"/>
@@ -11528,7 +11528,6 @@
         <line num="213" count="0" type="stmt"/>
         <line num="219" count="0" type="stmt"/>
         <line num="230" count="0" type="stmt"/>
-        <line num="238" count="0" type="stmt"/>
         <line num="239" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="282" count="0" type="stmt"/>
         <line num="296" count="0" type="stmt"/>
