@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1721777033434" clover="3.2.0">
-  <project timestamp="1721777033434" name="All files">
-    <metrics statements="23093" coveredstatements="956" conditionals="14899" coveredconditionals="239" methods="7125" coveredmethods="163" elements="45117" coveredelements="1358" complexity="0" loc="23093" ncloc="23093" packages="221" files="1028" classes="1028"/>
+<coverage generated="1721777319778" clover="3.2.0">
+  <project timestamp="1721777319778" name="All files">
+    <metrics statements="23094" coveredstatements="956" conditionals="14901" coveredconditionals="239" methods="7125" coveredmethods="163" elements="45120" coveredelements="1358" complexity="0" loc="23094" ncloc="23094" packages="221" files="1028" classes="1028"/>
     <package name="src">
       <metrics statements="171" coveredstatements="0" conditionals="130" coveredconditionals="0" methods="38" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -15661,7 +15661,7 @@
       </file>
     </package>
     <package name="src.scenes.DeliverablesRouter">
-      <metrics statements="194" coveredstatements="0" conditionals="127" coveredconditionals="0" methods="60" coveredmethods="0"/>
+      <metrics statements="195" coveredstatements="0" conditionals="129" coveredconditionals="0" methods="60" coveredmethods="0"/>
       <file name="DeliverableViewWrapper.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/DeliverablesRouter/DeliverableViewWrapper.tsx">
         <metrics statements="10" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="10" count="0" type="stmt"/>
@@ -15792,7 +15792,7 @@
         <line num="30" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
       <file name="QuestionsDeliverableView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/DeliverablesRouter/QuestionsDeliverableView.tsx">
-        <metrics statements="43" coveredstatements="0" conditionals="34" coveredconditionals="0" methods="11" coveredmethods="0"/>
+        <metrics statements="44" coveredstatements="0" conditionals="36" coveredconditionals="0" methods="11" coveredmethods="0"/>
         <line num="38" count="0" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
         <line num="40" count="0" type="stmt"/>
@@ -15827,15 +15827,16 @@
         <line num="133" count="0" type="stmt"/>
         <line num="140" count="0" type="stmt"/>
         <line num="141" count="0" type="stmt"/>
-        <line num="143" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="152" count="0" type="stmt"/>
-        <line num="160" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="161" count="0" type="stmt"/>
-        <line num="164" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="165" count="0" type="stmt"/>
-        <line num="168" count="0" type="stmt"/>
-        <line num="172" count="0" type="stmt"/>
-        <line num="192" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="142" count="0" type="stmt"/>
+        <line num="144" count="0" type="stmt"/>
+        <line num="157" count="0" type="stmt"/>
+        <line num="165" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="166" count="0" type="stmt"/>
+        <line num="169" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="170" count="0" type="stmt"/>
+        <line num="173" count="0" type="stmt"/>
+        <line num="177" count="0" type="stmt"/>
+        <line num="197" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
       <file name="RejectedDeliverableMessage.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/DeliverablesRouter/RejectedDeliverableMessage.tsx">
         <metrics statements="4" coveredstatements="0" conditionals="5" coveredconditionals="0" methods="1" coveredmethods="0"/>

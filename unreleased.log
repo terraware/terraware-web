@@ -1,3 +1,4 @@
+c98a8b0e156 SW-5689: Auto scrolls down when going to edit view from Participant View (#2886)
 7a1aeb64b7d SW-5694: Display required * for Feedback when rejecting a variable (#2889)
 ce6413780d2 SW-5692: Edit mode in Console should stay open even if the user removes the hover (#2888)
 486599c5cb4 SW-5687: Spacing in edit view of Questionnaire deliverable is off (#2887)
