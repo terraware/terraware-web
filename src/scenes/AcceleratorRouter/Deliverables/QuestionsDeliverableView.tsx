@@ -103,14 +103,14 @@ const QuestionBox = ({
   }, [updateVariableValueSuccess]);
 
   useEffect(() => {
-    if (approveWorkflowDetailsResponse) {
+    if (approveWorkflowDetailsResponse?.status === 'success') {
       reload();
       snackbar.toastSuccess(strings.ANSWER_APPROVED);
     }
   }, [approveWorkflowDetailsResponse]);
 
   useEffect(() => {
-    if (rejectWorkflowDetailsResponse) {
+    if (rejectWorkflowDetailsResponse?.status === 'success') {
       reload();
       snackbar.toastSuccess(strings.ANSWER_REJECTED);
     }
