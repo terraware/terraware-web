@@ -1,3 +1,4 @@
+5e3908d4a57 Show status badges on the participant side of questionnaire deliverables (#2894)
 f2f5fc195ff SW-5688: Have to refresh to see status update in Console (and feedback when applicable) (#2893)
 3b068187e15 SW-5691: Can't type in single line text fields (console and participant view) (#2891)
 c98a8b0e156 SW-5689: Auto scrolls down when going to edit view from Participant View (#2886)
