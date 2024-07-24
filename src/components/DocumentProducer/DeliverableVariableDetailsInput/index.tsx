@@ -329,6 +329,7 @@ const DeliverableVariableDetailsInput = ({
           options={getOptions()}
           selectedValue={value}
           fullWidth={true}
+          sx={[formElementStyles, { paddingBottom: theme.spacing(1) }]}
         />
       )}
 

@@ -16,9 +16,11 @@ import { requestListDeliverableVariablesValues } from 'src/redux/features/docume
 import { selectDeliverableVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
 import { requestListDeliverableVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { VariableWithValues } from 'src/types/documentProducer/Variable';
-import { VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
+import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
+import { VariableValue, VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
 import useQuery from 'src/utils/useQuery';
+
+import VariableStatusBadge from '../AcceleratorRouter/Deliverables/VariableStatusBadge';
 
 type QuestionBoxProps = {
   addRemovedValue: (value: VariableValueValue) => void;
@@ -50,24 +52,29 @@ const QuestionBox = ({
     [pendingVariableValues, variable.id]
   );
 
+  const firstVariableValue: VariableValue | undefined = (variable?.variableValues || [])[0];
+  const firstVariableValueStatus: VariableStatusType | undefined = firstVariableValue?.status;
+
   return (
     <Box key={index} data-variable-id={variable.id}>
-      {/* <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
-        <DeliverableStatusBadge status={variable.status} />
-      </Box> */}
       <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
         <Grid item xs={12}>
-          <DeliverableVariableDetailsInput
-            values={pendingValues || variable.values}
-            setCellValues={setCellValues}
-            setDeletedImages={setDeletedImages}
-            setImages={setImages}
-            setNewImages={setNewImages}
-            setValues={setValues}
-            variable={variable}
-            addRemovedValue={addRemovedValue}
-            projectId={projectId}
-          />
+          <Box>
+            <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
+              <VariableStatusBadge status={firstVariableValueStatus} />
+            </Box>
+            <DeliverableVariableDetailsInput
+              values={pendingValues || variable.values}
+              setCellValues={setCellValues}
+              setDeletedImages={setDeletedImages}
+              setImages={setImages}
+              setNewImages={setNewImages}
+              setValues={setValues}
+              variable={variable}
+              addRemovedValue={addRemovedValue}
+              projectId={projectId}
+            />
+          </Box>
         </Grid>
       </Grid>
     </Box>

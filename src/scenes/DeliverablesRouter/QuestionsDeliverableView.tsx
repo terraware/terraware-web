@@ -23,11 +23,12 @@ import { selectDeliverableVariablesWithValues } from 'src/redux/features/documen
 import { requestListDeliverableVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { VariableWithValues } from 'src/types/documentProducer/Variable';
+import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValue } from 'src/types/documentProducer/VariableValue';
 import { variableDependencyMet } from 'src/utils/documentProducer/variables';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+import VariableStatusBadge from '../AcceleratorRouter/Deliverables/VariableStatusBadge';
 import QuestionsDeliverableStatusMessage from './QuestionsDeliverableStatusMessage';
 import SubmitDeliverableDialog from './SubmitDeliverableDialog';
 
@@ -41,6 +42,7 @@ const QuestionBox = ({ projectId, variable }: { projectId: number; variable: Var
   const visible = useIsVisible(containerRef);
 
   const firstVariableValue: VariableValue | undefined = (variable?.variableValues || [])[0];
+  const firstVariableValueStatus: VariableStatusType | undefined = firstVariableValue?.status;
 
   return (
     <Box
@@ -50,7 +52,7 @@ const QuestionBox = ({ projectId, variable }: { projectId: number; variable: Var
       sx={{ marginBottom: theme.spacing(4) }}
     >
       <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
-        {/* <DeliverableStatusBadge status={variableWithValues.status} /> */}
+        <VariableStatusBadge status={firstVariableValueStatus} />
       </Box>
       <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>{variable.name}</Typography>
       {!!variable.description && (
