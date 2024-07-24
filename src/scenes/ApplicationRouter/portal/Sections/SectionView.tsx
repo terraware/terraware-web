@@ -4,15 +4,16 @@ import ModuleDetailsCard from 'src/components/ModuleDetailsCard';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { ApplicationModuleWithDeliverables } from 'src/types/Application';
+import { ApplicationDeliverable, ApplicationModule } from 'src/types/Application';
 
 import { useApplicationData } from '../../provider/Context';
 
 type SectionViewProp = {
-  section: ApplicationModuleWithDeliverables;
+  section: ApplicationModule;
+  sectionDeliverables: ApplicationDeliverable[];
 };
 
-const SectionView = ({ section }: SectionViewProp) => {
+const SectionView = ({ section, sectionDeliverables }: SectionViewProp) => {
   const { activeLocale } = useLocalization();
   const { selectedApplication } = useApplicationData();
   const { goToApplicationMap, goToApplicationSectionDeliverable } = useNavigateTo();
@@ -22,7 +23,7 @@ const SectionView = ({ section }: SectionViewProp) => {
       return [];
     }
 
-    const deliverables = section.deliverables.map((deliverable) => ({
+    const deliverables = sectionDeliverables.map((deliverable) => ({
       name: deliverable.name,
       onClick: () => goToApplicationSectionDeliverable(selectedApplication.id, section.moduleId, deliverable.id),
       status: deliverable.status,

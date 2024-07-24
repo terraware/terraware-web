@@ -1,9 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import { Application, ApplicationModuleWithDeliverables } from 'src/types/Application';
+import { Application, ApplicationDeliverable, ApplicationModule } from 'src/types/Application';
 
-import { requestListApplicationModules, requestListApplications } from './applicationAsyncThunks';
+import {
+  requestListApplicationDeliverables,
+  requestListApplicationModules,
+  requestListApplications,
+} from './applicationAsyncThunks';
 
 /**
  * Application list
@@ -20,9 +24,23 @@ export const applicationListSlice = createSlice({
 });
 
 /**
+ * Application deliverable list
+ */
+const initialStateApplicationDeliverables: Record<string, StatusT<ApplicationDeliverable[]>> = {};
+
+export const applicationDeliverablesListSlice = createSlice({
+  name: 'applicationDeliverablesListSlice',
+  initialState: initialStateApplicationDeliverables,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestListApplicationDeliverables)(builder);
+  },
+});
+
+/**
  * Application module list
  */
-const initialStateApplicationModules: Record<string, StatusT<ApplicationModuleWithDeliverables[]>> = {};
+const initialStateApplicationModules: Record<string, StatusT<ApplicationModule[]>> = {};
 
 export const applicationModuleListSlice = createSlice({
   name: 'applicationModuleListSlice',
@@ -35,6 +53,7 @@ export const applicationModuleListSlice = createSlice({
 
 const acceleratorReducers = {
   applications: applicationListSlice.reducer,
+  applicationDeliverables: applicationDeliverablesListSlice.reducer,
   applicationModules: applicationModuleListSlice.reducer,
 };
 

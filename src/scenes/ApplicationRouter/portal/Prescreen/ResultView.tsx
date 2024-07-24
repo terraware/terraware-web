@@ -6,17 +6,18 @@ import { Button } from '@terraware/web-components';
 import Link from 'src/components/common/Link';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import strings from 'src/strings';
-import { ApplicationModuleWithDeliverables } from 'src/types/Application';
+import { ApplicationDeliverable, ApplicationModule } from 'src/types/Application';
 
 import { useApplicationData } from '../../provider/Context';
 
 type ResultViewProp = {
   isFailure: boolean;
   feedback?: string;
-  prescreenSection: ApplicationModuleWithDeliverables;
+  prescreenSection: ApplicationModule;
+  prescrenDeliverables: ApplicationDeliverable[];
 };
 
-const ResultView = ({ isFailure, feedback, prescreenSection }: ResultViewProp) => {
+const ResultView = ({ isFailure, feedback, prescreenSection, prescrenDeliverables }: ResultViewProp) => {
   const theme = useTheme();
 
   const { goToApplicationMap, goToApplicationSectionDeliverable } = useNavigateTo();
@@ -66,7 +67,7 @@ const ResultView = ({ isFailure, feedback, prescreenSection }: ResultViewProp) =
         {`${strings.VIEW} ${strings.PROPOSED_PROJECT_BOUNDARY}`}
       </Link>
 
-      {prescreenSection.deliverables.map((deliverable, index) => (
+      {prescrenDeliverables.map((deliverable, index) => (
         <Link
           fontSize='16px'
           onClick={() =>

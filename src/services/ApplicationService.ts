@@ -40,6 +40,7 @@ type UpdateBoundaryRequestPayload =
 
 const listApplications = async (organizationId: number): Promise<Response2<ListApplicationsResponsePayload>> => {
   const response = await HttpService.root(APPLICATIONS_ENDPOINT).get2<ListApplicationsResponsePayload>({
+    params: { organizationId: `${organizationId}` },
     urlReplacements: { '{id}': `${organizationId}` },
   });
 

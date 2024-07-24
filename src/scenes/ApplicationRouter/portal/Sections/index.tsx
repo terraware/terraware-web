@@ -11,7 +11,7 @@ import ApplicationPage from '../ApplicationPage';
 import SectionView from './SectionView';
 
 const SectionViewWrapper = () => {
-  const { applicationSections } = useApplicationData();
+  const { applicationSections, applicationDeliverables } = useApplicationData();
 
   const pathParams = useParams<{ applicationId: string; sectionId: string }>();
   const sectionId = Number(pathParams.sectionId);
@@ -21,11 +21,16 @@ const SectionViewWrapper = () => {
     [applicationSections, sectionId]
   );
 
+  const deliverables = useMemo(
+    () => applicationDeliverables.filter((deliverable) => deliverable.moduleId === sectionId),
+    [applicationDeliverables, sectionId]
+  );
+
   if (!appSection) {
     return null;
   }
 
-  return <SectionView section={appSection} />;
+  return <SectionView section={appSection} sectionDeliverables={deliverables} />;
 };
 
 const SectionViewPage = () => {

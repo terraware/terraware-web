@@ -9,7 +9,7 @@ import CompleteIncompleteBadge from 'src/components/common/CompleteIncompleteBad
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useApplicationData } from 'src/scenes/ApplicationRouter/provider/Context';
 import strings from 'src/strings';
-import { ApplicationModuleWithDeliverables } from 'src/types/Application';
+import { ApplicationModule } from 'src/types/Application';
 
 export default function ListModulesContent(): JSX.Element {
   const { applicationSections, selectedApplication } = useApplicationData();
@@ -29,7 +29,7 @@ export default function ListModulesContent(): JSX.Element {
   }, [selectedApplication]);
 
   const getSectionStatus = useCallback(
-    (section: ApplicationModuleWithDeliverables) => {
+    (section: ApplicationModule) => {
       if (!selectedApplication) {
         return 'Incomplete';
       }
@@ -74,7 +74,7 @@ export default function ListModulesContent(): JSX.Element {
             />
           </Box>
 
-          <Box>{section.overview}</Box>
+          <Box dangerouslySetInnerHTML={{ __html: section.overview || '' }} />
         </Box>
       ))}
     </Box>

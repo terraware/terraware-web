@@ -2,15 +2,17 @@ import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { useOrganization } from 'src/providers';
 import {
+  requestListApplicationDeliverables,
   requestListApplicationModules,
   requestListApplications,
 } from 'src/redux/features/application/applicationAsyncThunks';
 import {
+  selectApplicationDeliverableList,
   selectApplicationList,
   selectApplicationModuleList,
 } from 'src/redux/features/application/applicationSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { Application, ApplicationModuleWithDeliverables } from 'src/types/Application';
+import { Application, ApplicationDeliverable, ApplicationModule } from 'src/types/Application';
 
 import { ApplicationContext, ApplicationData } from './Context';
 
@@ -23,11 +25,17 @@ const ApplicationProvider = ({ children }: Props) => {
   const { selectedOrganization } = useOrganization();
 
   const [allApplications, setAllApplications] = useState<Application[]>([]);
-  const [applicationSections, setApplicationSections] = useState<ApplicationModuleWithDeliverables[]>([]);
+  const [applicationSections, setApplicationSections] = useState<ApplicationModule[]>([]);
+  const [applicationDeliverables, setApplicationDeliverables] = useState<ApplicationDeliverable[]>([]);
   const [selectedApplication, setSelectedApplication] = useState<Application>();
 
   const [listApplicationsRequest, setListApplicationRequest] = useState<string>('');
   const listApplicationsResult = useAppSelector(selectApplicationList(listApplicationsRequest));
+
+  const [listApplicationDeliverablesRequest, setListApplicationDeliverablesRequest] = useState<string>('');
+  const listApplicationDeliverablesResult = useAppSelector(
+    selectApplicationDeliverableList(listApplicationDeliverablesRequest)
+  );
 
   const [listApplicationModulesRequest, setListApplicationModulesRequest] = useState<string>('');
   const listApplicationModulesResult = useAppSelector(selectApplicationModuleList(listApplicationModulesRequest));
@@ -51,6 +59,7 @@ const ApplicationProvider = ({ children }: Props) => {
 
   const [applicationData, setApplicationData] = useState<ApplicationData>({
     allApplications,
+    applicationDeliverables,
     applicationSections,
     selectedApplication,
     setSelectedApplication: _setSelectedApplication,
@@ -72,10 +81,25 @@ const ApplicationProvider = ({ children }: Props) => {
 
   useEffect(() => {
     if (selectedApplication) {
-      const dispatched = dispatch(requestListApplicationModules({ applicationId: selectedApplication.id }));
-      setListApplicationModulesRequest(dispatched.requestId);
+      const listModulesDispatched = dispatch(requestListApplicationModules({ applicationId: selectedApplication.id }));
+      setListApplicationModulesRequest(listModulesDispatched.requestId);
+
+      const listDeliverablesDispatched = dispatch(
+        requestListApplicationDeliverables({ applicationId: selectedApplication.id })
+      );
+      setListApplicationDeliverablesRequest(listDeliverablesDispatched.requestId);
     }
-  }, [dispatch, selectedApplication, setListApplicationModulesRequest]);
+  }, [dispatch, selectedApplication, setListApplicationModulesRequest, setListApplicationDeliverablesRequest]);
+
+  useEffect(() => {
+    if (
+      listApplicationDeliverablesResult &&
+      listApplicationDeliverablesResult.status === 'success' &&
+      listApplicationDeliverablesResult.data
+    ) {
+      setApplicationDeliverables(listApplicationDeliverablesResult.data);
+    }
+  }, [listApplicationDeliverablesResult, setApplicationDeliverables]);
 
   useEffect(() => {
     if (
@@ -90,12 +114,20 @@ const ApplicationProvider = ({ children }: Props) => {
   useEffect(() => {
     setApplicationData({
       allApplications,
+      applicationDeliverables,
       applicationSections,
       selectedApplication,
       setSelectedApplication: _setSelectedApplication,
       reload: _reload,
     });
-  }, [allApplications, applicationSections, selectedApplication, _setSelectedApplication, _reload]);
+  }, [
+    allApplications,
+    applicationDeliverables,
+    applicationSections,
+    selectedApplication,
+    _setSelectedApplication,
+    _reload,
+  ]);
 
   return <ApplicationContext.Provider value={applicationData}>{children}</ApplicationContext.Provider>;
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { Box, Container, Grid } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -7,6 +7,8 @@ import { DateTime } from 'luxon';
 import ApplicationCard from 'src/components/Application/ApplicationCard';
 import PageHeader from 'src/components/PageHeader';
 import Button from 'src/components/common/button/Button';
+import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -14,10 +16,12 @@ import NewApplicationModal from './NewApplicationModal';
 import { useApplicationData } from './provider/Context';
 
 const ApplicationListView = () => {
+  const { activeLocale } = useLocalization();
   const { isTablet, isMobile } = useDeviceInfo();
-  const { toastInfo } = useSnackbar();
+  const { toastSuccess } = useSnackbar();
   const { allApplications } = useApplicationData();
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
+  const { goToApplication } = useNavigateTo();
 
   const primaryGridSize = () => {
     if (isMobile) {
@@ -35,6 +39,14 @@ const ApplicationListView = () => {
     }
     return 6;
   };
+
+  const onSave = useCallback(
+    (applicationId: number) => {
+      toastSuccess(activeLocale ? strings.SUCCESS : 'Successfully created application.');
+      goToApplication(applicationId);
+    },
+    [activeLocale, goToApplication, toastSuccess]
+  );
 
   return (
     <Box
@@ -56,7 +68,7 @@ const ApplicationListView = () => {
           <NewApplicationModal
             open={isNewApplicationModalOpen}
             onClose={() => setIsNewApplicationModalOpen(false)}
-            onSave={() => toastInfo('Create new application clicked')}
+            onSave={onSave}
           />
           <Grid container spacing={3} sx={{ padding: 0 }}>
             {allApplications?.map((application) => (

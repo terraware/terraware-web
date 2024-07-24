@@ -1,10 +1,11 @@
 import { createContext, useContext } from 'react';
 
-import { Application, ApplicationModuleWithDeliverables } from 'src/types/Application';
+import { Application, ApplicationDeliverable, ApplicationModule } from 'src/types/Application';
 
 export type ApplicationData = {
   allApplications?: Application[];
-  applicationSections: ApplicationModuleWithDeliverables[];
+  applicationDeliverables: ApplicationDeliverable[];
+  applicationSections: ApplicationModule[];
   selectedApplication?: Application;
   setSelectedApplication: (applicationId: number) => void;
   reload: () => void;
@@ -12,6 +13,7 @@ export type ApplicationData = {
 
 // default values pointing to nothing
 export const ApplicationContext = createContext<ApplicationData>({
+  applicationDeliverables: [],
   applicationSections: [],
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setSelectedApplication: (applicationId: number) => {},
