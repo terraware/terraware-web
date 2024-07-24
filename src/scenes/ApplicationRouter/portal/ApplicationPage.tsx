@@ -36,15 +36,15 @@ const ApplicationPage = ({ children, crumbs, hierarchicalCrumbs }: Props) => {
 
   return (
     <TfMain>
-      <PageHeader
-        title={strings.APPLICATION}
-        rightComponent={<Button label={strings.EXIT_APPLICATION} onClick={goToHome} priority={'ghost'} />}
-      />
       <Grid container spacing={theme.spacing(1)}>
         <Grid item xs style={{ flexGrow: 1, padding: `${theme.spacing(2)} ${theme.spacing(4)}` }}>
           {crumbs && <BreadCrumbs crumbs={crumbs} hierarchical={hierarchicalCrumbs ?? true} />}
         </Grid>
       </Grid>
+      <PageHeader
+        title={strings.PROJECT_NAME}
+        rightComponent={<Button label={strings.EXIT_APPLICATION} onClick={goToHome} priority={'ghost'} />}
+      />
 
       <Container maxWidth={false} sx={{ padding: 0 }}>
         {children}
