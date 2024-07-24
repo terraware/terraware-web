@@ -1,14 +1,17 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import area from '@turf/area';
 import { Feature, FeatureCollection } from 'geojson';
 
+import { Crumb } from 'src/components/BreadCrumbs';
 import EditableMap from 'src/components/Map/EditableMapV2';
 import { unionMultiPolygons } from 'src/components/Map/utils';
+import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
+import { useLocalization } from 'src/providers';
 import { SQ_M_TO_HECTARES } from 'src/scenes/PlantingSitesRouter/edit/editor/utils';
 import strings from 'src/strings';
 import { MultiPolygon } from 'src/types/Tracking';
@@ -120,10 +123,28 @@ const MapView = () => {
   );
 };
 
-const MapViewWrapper = () => (
-  <ApplicationPage>
-    <MapView />
-  </ApplicationPage>
-);
+const MapViewWrapper = () => {
+  const { activeLocale } = useLocalization();
+  const { selectedApplication } = useApplicationData();
+
+  const crumbs: Crumb[] = useMemo(
+    () =>
+      activeLocale && selectedApplication?.id
+        ? [
+            {
+              name: strings.ALL_SECTIONS,
+              to: APP_PATHS.APPLICATION_OVERVIEW.replace(':applicationId', `${selectedApplication.id}`),
+            },
+          ]
+        : [],
+    [activeLocale, selectedApplication?.id]
+  );
+
+  return (
+    <ApplicationPage crumbs={crumbs}>
+      <MapView />
+    </ApplicationPage>
+  );
+};
 
 export default MapViewWrapper;
