@@ -24,11 +24,11 @@ const SectionView = ({ section }: SectionViewProp) => {
 
     const deliverables = section.deliverables.map((deliverable) => ({
       name: deliverable.name,
-      onClick: () => goToApplicationSectionDeliverable(selectedApplication.id, section.id, deliverable.id),
+      onClick: () => goToApplicationSectionDeliverable(selectedApplication.id, section.moduleId, deliverable.id),
       status: deliverable.status,
     }));
 
-    if (section.category === 'Pre-screen') {
+    if (section.phase === 'Pre-Screen') {
       deliverables.unshift({
         name: strings.PROPOSED_PROJECT_BOUNDARY,
         onClick: () => goToApplicationMap(selectedApplication.id),
@@ -43,7 +43,7 @@ const SectionView = ({ section }: SectionViewProp) => {
     () =>
       section
         ? {
-            id: section.id,
+            id: section.moduleId,
             isActive: section.status === 'Incomplete',
             name: section.name,
             overview: section.overview,

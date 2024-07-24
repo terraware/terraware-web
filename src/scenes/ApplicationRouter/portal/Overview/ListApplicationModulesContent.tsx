@@ -5,7 +5,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
-import CompleteIncompleteBatch from 'src/components/common/CompleteIncompleteBatch';
+import CompleteIncompleteBadge from 'src/components/common/CompleteIncompleteBadge';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useApplicationData } from 'src/scenes/ApplicationRouter/provider/Context';
 import strings from 'src/strings';
@@ -34,7 +34,7 @@ export default function ListModulesContent(): JSX.Element {
         return 'Incomplete';
       }
 
-      if (section.category === 'Application') {
+      if (section.phase === 'Application') {
         return section.status;
       } else {
         return isPrescreen ? 'Incomplete' : 'Complete';
@@ -58,18 +58,18 @@ export default function ListModulesContent(): JSX.Element {
                 {section.name}
               </Typography>
               <Box paddingLeft={theme.spacing(2)} alignSelf={'flex-start'}>
-                <CompleteIncompleteBatch status={getSectionStatus(section)} />
+                <CompleteIncompleteBadge status={getSectionStatus(section) ?? 'Incomplete'} />
               </Box>
             </Box>
             <Button
               onClick={() =>
-                section.category === 'Application'
-                  ? goToApplicationSection(applicationId, section.id)
+                section.phase === 'Application'
+                  ? goToApplicationSection(applicationId, section.moduleId)
                   : goToApplicationPrescreen(applicationId)
               }
-              disabled={section.category === 'Application' && isPrescreen}
-              label={section.category === 'Pre-screen' && isPrescreen ? strings.GET_STARTED : strings.VIEW}
-              priority={section.category === 'Pre-screen' && isPrescreen ? 'primary' : 'secondary'}
+              disabled={section.phase === 'Application' && isPrescreen}
+              label={section.phase === 'Pre-Screen' && isPrescreen ? strings.GET_STARTED : strings.VIEW}
+              priority={section.phase === 'Pre-Screen' && isPrescreen ? 'primary' : 'secondary'}
               style={isMobile ? { width: '100%' } : {}}
             />
           </Box>

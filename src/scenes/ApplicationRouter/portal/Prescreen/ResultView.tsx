@@ -69,7 +69,9 @@ const ResultView = ({ isFailure, feedback, prescreenSection }: ResultViewProp) =
       {prescreenSection.deliverables.map((deliverable, index) => (
         <Link
           fontSize='16px'
-          onClick={() => goToApplicationSectionDeliverable(selectedApplication.id, prescreenSection.id, deliverable.id)}
+          onClick={() =>
+            goToApplicationSectionDeliverable(selectedApplication.id, prescreenSection.moduleId, deliverable.id)
+          }
           key={index}
           style={{ display: 'block', textAlign: 'center', marginTop: theme.spacing(1) }}
         >

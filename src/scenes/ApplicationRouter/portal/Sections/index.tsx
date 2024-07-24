@@ -17,7 +17,7 @@ const SectionViewWrapper = () => {
   const sectionId = Number(pathParams.sectionId);
 
   const appSection = useMemo(
-    () => applicationSections.find((section) => section.id === sectionId),
+    () => applicationSections.find((section) => section.moduleId === sectionId),
     [applicationSections, sectionId]
   );
 

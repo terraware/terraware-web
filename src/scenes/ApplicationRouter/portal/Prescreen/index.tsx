@@ -14,7 +14,7 @@ const PrescreenView = () => {
   const { selectedApplication, applicationSections } = useApplicationData();
 
   const prescreenSection = useMemo(
-    () => applicationSections.find((section) => section.category === 'Pre-screen'),
+    () => applicationSections.find((section) => section.phase === 'Pre-Screen'),
     [applicationSections]
   );
 

@@ -1,180 +1,129 @@
-import { DateTime } from 'luxon';
+import { paths } from 'src/api/types/generated-schema';
 
-import { Application, ApplicationModuleWithDeliverables } from 'src/types/Application';
-
-import HttpService, { Response2, ServerData } from './HttpService';
+import HttpService, { Response, Response2 } from './HttpService';
 
 /**
  * Service for application related functionality
  */
 const APPLICATIONS_ENDPOINT = '/api/v1/accelerator/applications';
+const APPLICATION_ENDPOINT = '/api/v1/accelerator/applications/{applicationId}';
+const APPLICATION_BOUNDARY_ENDPOINT = '/api/v1/accelerator/applications/{applicationId}/boundary';
+const APPLICATION_DELIVERABLES_ENDPOINT = '/api/v1/accelerator/applications/{applicationId}/deliverables';
+const APPLICATION_HISTORY_ENDPOINT = '/api/v1/accelerator/applications/{applicationId}/history';
+const APPLICATION_MODULES_ENDPOINT = '/api/v1/accelerator/applications/{applicationId}/modules';
+const APPLICATION_MODULE_DELIVERABLES_ENDPOINT =
+  '/api/v1/accelerator/applications/{applicationId}/modules/{moduleId}/deliverables';
+const APPLICATION_RESTART_ENDPOINT = '/api/v1/accelerator/applications/{applicationId}/restart';
+const APPLICATION_REVIEW_ENDPOINT = '/api/v1/accelerator/applications/{applicationId}/review';
+const APPLICATION_SUBMIT_ENDPOINT = '/api/v1/accelerator/applications/{applicationId}/submit';
 
-const useMockData = true;
+type ListApplicationsResponsePayload =
+  paths[typeof APPLICATIONS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+type CreateApplicationResponsePayload =
+  paths[typeof APPLICATIONS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+type GetApplicationResponsePayload =
+  paths[typeof APPLICATION_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+type ListApplicationDeliverablesResponsePayload =
+  paths[typeof APPLICATION_DELIVERABLES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+type ListApplicationHistoryResponsePayload =
+  paths[typeof APPLICATION_HISTORY_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+type ListApplicationModulesResponsePayload =
+  paths[typeof APPLICATION_MODULES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+type ListApplicationModuleDeliverablesResponsePayload =
+  paths[typeof APPLICATION_MODULE_DELIVERABLES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+type ReviewApplicationRequestPayload =
+  paths[typeof APPLICATION_REVIEW_ENDPOINT]['post']['requestBody']['content']['application/json'];
+type SubmitApplicationResponsePayload =
+  paths[typeof APPLICATION_SUBMIT_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+type UpdateBoundaryRequestPayload =
+  paths[typeof APPLICATION_BOUNDARY_ENDPOINT]['put']['requestBody']['content']['application/json'];
 
-const httpApplications = HttpService.root(APPLICATIONS_ENDPOINT);
-
-type ListApplicationData = ServerData & {
-  applications: Application[];
-};
-
-type ListApplicationModulesData = ServerData & {
-  modules: ApplicationModuleWithDeliverables[];
-};
-
-/**
- * List applications by organizationId
- */
-const listApplications = async (organizationId: number): Promise<Response2<ListApplicationData>> => {
-  if (useMockData) {
-    return {
-      requestSucceeded: true,
-      statusCode: 200,
-      data: {
-        applications: [
-          {
-            id: 1,
-            organizationId: organizationId,
-            projectId: 1,
-            status: 'Not Submitted',
-            createdTime: DateTime.now().toString(),
-          },
-          {
-            id: 2,
-            organizationId: organizationId,
-            projectId: 1,
-            status: 'Failed Pre-screen',
-            createdTime: DateTime.now().toString(),
-            feedback: `
-              <ul>
-                <li> Reason 1 description here
-                <li> Reason 2 description here
-                <li> Reason 3 description here
-              </ul>`,
-          },
-          {
-            id: 3,
-            organizationId: organizationId,
-            projectId: 2,
-            status: 'Passed Pre-screen',
-            createdTime: DateTime.now().toString(),
-          },
-        ],
-      },
-    };
-  }
-
-  const response = await httpApplications.get2<ListApplicationData>({
+const listApplications = async (organizationId: number): Promise<Response2<ListApplicationsResponsePayload>> => {
+  const response = await HttpService.root(APPLICATIONS_ENDPOINT).get2<ListApplicationsResponsePayload>({
     urlReplacements: { '{id}': `${organizationId}` },
   });
 
   return response;
 };
 
-/**
- * List application modules
- */
-const listApplicationModules = async (applicationId: number): Promise<Response2<ListApplicationModulesData>> => {
-  // TODO use module endpoints or something like that once available.
-  return Promise.resolve({
-    requestSucceeded: true,
-    statusCode: 200,
-    data: {
-      modules: [
-        {
-          id: 0,
-          name: 'Pre-screen',
-          overview:
-            'Draw your proposed project site map and complete the Pre-screen questions to determine if you qualify for our Accelerator Program.',
-          category: 'Pre-screen',
-          deliverables: [
-            {
-              id: 0,
-              name: 'Pre-screen Questions',
-              category: 'Compliance',
-              type: 'Questions',
-              status: applicationId > 1 ? 'Completed' : 'Not Submitted',
-            },
-          ],
-          status: applicationId >= 1 ? 'Complete' : 'Incomplete',
-        },
-        {
-          id: 1,
-          name: 'General',
-          overview: 'General questions about your project',
-          category: 'Application',
-          deliverables: [
-            {
-              id: 0,
-              name: 'General Not Submitted Deliverable',
-              category: 'Compliance',
-              type: 'Questions',
-              status: 'Not Submitted',
-            },
-            {
-              id: 1,
-              name: 'General Approved Deliverable',
-              category: 'Compliance',
-              type: 'Questions',
-              status: 'Approved',
-            },
-            {
-              id: 2,
-              name: 'General In-Review Deliverable',
-              category: 'Compliance',
-              type: 'Questions',
-              status: 'In Review',
-            },
-            {
-              id: 3,
-              name: 'General Completed Deliverable',
-              category: 'Compliance',
-              type: 'Questions',
-              status: 'Completed',
-            },
-            {
-              id: 4,
-              name: 'General Rejected Deliverable',
-              category: 'Compliance',
-              type: 'Questions',
-              status: 'Rejected',
-            },
-          ],
-          status: 'Incomplete',
-        },
-        {
-          id: 2,
-          name: 'Forest Reforestation',
-          overview: "More detailed questions about your project's forest reforstation.",
-          category: 'Application',
-          deliverables: [],
-          status: 'Incomplete',
-        },
-        {
-          id: 3,
-          name: 'Community Impact',
-          overview: "More detailed questions about your project's impact on community.",
-          category: 'Application',
-          deliverables: [],
-          status: 'Complete',
-        },
-        {
-          id: 4,
-          name: 'Financial',
-          overview: "More detailed questions about your project's financial details.",
-          category: 'Application',
-          deliverables: [],
-          status: 'Complete',
-        },
-        {
-          id: 5,
-          name: 'Legal',
-          overview: "More detailed questions about your project's legal details.",
-          category: 'Application',
-          deliverables: [],
-          status: 'Complete',
-        },
-      ],
-    },
+const createApplication = async (projectId: number): Promise<Response2<CreateApplicationResponsePayload>> => {
+  return HttpService.root(APPLICATIONS_ENDPOINT).post2<CreateApplicationResponsePayload>({
+    entity: { projectId },
+  });
+};
+
+const getApplication = async (applicationId: number): Promise<Response2<GetApplicationResponsePayload>> => {
+  return HttpService.root(APPLICATION_ENDPOINT).get2<GetApplicationResponsePayload>({
+    urlReplacements: { '{applicationId}': `${applicationId}` },
+  });
+};
+
+const listApplicationDeliverables = async (
+  applicationId: number
+): Promise<Response2<ListApplicationDeliverablesResponsePayload>> => {
+  return HttpService.root(APPLICATION_DELIVERABLES_ENDPOINT).get2<ListApplicationDeliverablesResponsePayload>({
+    urlReplacements: { '{applicationId}': `${applicationId}` },
+  });
+};
+
+const listApplicationHistory = async (
+  applicationId: number
+): Promise<Response2<ListApplicationHistoryResponsePayload>> => {
+  return HttpService.root(APPLICATION_HISTORY_ENDPOINT).get2<ListApplicationHistoryResponsePayload>({
+    urlReplacements: { '{applicationId}': `${applicationId}` },
+  });
+};
+
+const listApplicationModules = async (
+  applicationId: number
+): Promise<Response2<ListApplicationModulesResponsePayload>> => {
+  return HttpService.root(APPLICATION_MODULES_ENDPOINT).get2<ListApplicationModulesResponsePayload>({
+    urlReplacements: { '{applicationId}': `${applicationId}` },
+  });
+};
+
+const listApplicationModuleDeliverables = async (
+  applicationId: number
+): Promise<Response2<ListApplicationModuleDeliverablesResponsePayload>> => {
+  return HttpService.root(
+    APPLICATION_MODULE_DELIVERABLES_ENDPOINT
+  ).get2<ListApplicationModuleDeliverablesResponsePayload>({
+    urlReplacements: { '{applicationId}': `${applicationId}` },
+  });
+};
+
+const restartApplication = async (applicationId: number): Promise<Response> => {
+  return HttpService.root(APPLICATION_RESTART_ENDPOINT).post({
+    urlReplacements: { '{applicationId}': `${applicationId}` },
+  });
+};
+
+const submitApplication = async (applicationId: number): Promise<Response2<SubmitApplicationResponsePayload>> => {
+  return HttpService.root(APPLICATION_SUBMIT_ENDPOINT).get2<SubmitApplicationResponsePayload>({
+    urlReplacements: { '{applicationId}': `${applicationId}` },
+  });
+};
+
+const reviewApplication = async (applicationId: number, entity: ReviewApplicationRequestPayload): Promise<Response> => {
+  return HttpService.root(APPLICATION_REVIEW_ENDPOINT).post({
+    entity,
+    urlReplacements: { '{applicationId}': `${applicationId}` },
+  });
+};
+
+const updateBoundary = async (applicationId: number, entity: UpdateBoundaryRequestPayload): Promise<Response> => {
+  return HttpService.root(APPLICATION_BOUNDARY_ENDPOINT).put({
+    entity,
+    urlReplacements: { '{applicationId}': `${applicationId}` },
+  });
+};
+
+const uploadBoundary = async (applicationId: number, file: File): Promise<Response> => {
+  const headers = { 'content-type': 'multipart/form-data' };
+  return HttpService.root(APPLICATION_BOUNDARY_ENDPOINT).post({
+    entity: { file: file },
+    headers,
+    urlReplacements: { '{applicationId}': `${applicationId}` },
   });
 };
 
@@ -182,8 +131,18 @@ const listApplicationModules = async (applicationId: number): Promise<Response2<
  * Exported functions
  */
 const ApplicationService = {
+  createApplication,
+  getApplication,
   listApplications,
+  listApplicationDeliverables,
+  listApplicationHistory,
   listApplicationModules,
+  listApplicationModuleDeliverables,
+  restartApplication,
+  reviewApplication,
+  submitApplication,
+  updateBoundary,
+  uploadBoundary,
 };
 
 export default ApplicationService;
