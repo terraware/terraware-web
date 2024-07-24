@@ -42,6 +42,7 @@ const ApplicationPage = ({ children, crumbs, hierarchicalCrumbs }: Props) => {
         </Grid>
       </Grid>
       <PageHeader
+        // TODO: replace "Project Name" placeholder with actual project name once available in application data
         title={strings.PROJECT_NAME}
         rightComponent={<Button label={strings.EXIT_APPLICATION} onClick={goToHome} priority={'ghost'} />}
       />
