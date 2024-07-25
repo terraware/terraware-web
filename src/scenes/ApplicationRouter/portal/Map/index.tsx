@@ -132,8 +132,8 @@ const MapViewWrapper = () => {
       activeLocale && selectedApplication?.id
         ? [
             {
-              name: strings.ALL_SECTIONS,
-              to: APP_PATHS.APPLICATION_OVERVIEW.replace(':applicationId', `${selectedApplication.id}`),
+              name: strings.APPLICATION_PRESCREEN,
+              to: APP_PATHS.APPLICATION_PRESCREEN.replace(':applicationId', `${selectedApplication.id}`),
             },
           ]
         : [],
