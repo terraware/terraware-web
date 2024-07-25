@@ -22,6 +22,7 @@ import { EditProps } from './types';
 
 type QuestionBoxProps = {
   addRemovedValue: (value: VariableValueValue) => void;
+  hideStatusBadge?: boolean;
   index: number;
   pendingVariableValues: Map<number, VariableValueValue[]>;
   projectId: number;
@@ -35,6 +36,7 @@ type QuestionBoxProps = {
 
 const QuestionBox = ({
   addRemovedValue,
+  hideStatusBadge,
   index,
   projectId,
   pendingVariableValues,
@@ -59,7 +61,7 @@ const QuestionBox = ({
         <Grid item xs={12}>
           <Box>
             <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
-              <VariableStatusBadge status={firstVariableValueStatus} />
+              {hideStatusBadge !== true && <VariableStatusBadge status={firstVariableValueStatus} />}
             </Box>
             <DeliverableVariableDetailsInput
               values={pendingValues || variable.values}
@@ -83,10 +85,12 @@ type QuestionsDeliverableEditViewProps = EditProps & {
   exit: () => void;
 };
 
-const QuestionsDeliverableEditForm = ({ deliverable, exit }: QuestionsDeliverableEditViewProps): JSX.Element | null => {
+const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const query = useQuery();
+
+  const { deliverable, exit, hideStatusBadge } = props;
 
   const scrollToVariable = useCallback((variableId: string) => {
     const element = document.querySelector(`[data-variable-id="${variableId}"]`);
@@ -166,7 +170,7 @@ const QuestionsDeliverableEditForm = ({ deliverable, exit }: QuestionsDeliverabl
     >
       <Box display='flex' flexDirection='column' flexGrow={1}>
         <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-          <Metadata deliverable={deliverable} />
+          <Metadata {...props} />
           <Box
             sx={{
               borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
@@ -179,6 +183,7 @@ const QuestionsDeliverableEditForm = ({ deliverable, exit }: QuestionsDeliverabl
                 addRemovedValue={(removedValue: VariableValueValue) =>
                   setRemovedValue(variableWithValues.id, removedValue)
                 }
+                hideStatusBadge={hideStatusBadge}
                 index={index}
                 key={index}
                 pendingVariableValues={pendingVariableValues}

@@ -11,7 +11,8 @@ import ApplicationProvider from 'src/scenes/ApplicationRouter/provider';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-import SectionDeliverableView from './Deliverables';
+import SectionDeliverableWrapper from './Deliverable';
+import SectionDeliverableEditView from './DeliverableEdit';
 import MapView from './Map';
 import NavBar from './NavBar';
 import Overview from './Overview';
@@ -84,7 +85,11 @@ const ApplicationPortalRouter = ({ showNavBar, setShowNavBar }: ApplicationPorta
             <Route path={`${APP_PATHS.APPLICATION_PRESCREEN}`} element={<PrescreenView />} />
             <Route path={`${APP_PATHS.APPLICATION_REVIEW}`} element={<ReviewView />} />
             <Route path={`${APP_PATHS.APPLICATION_SECTION}`} element={<SectionViewWrapper />} />
-            <Route path={`${APP_PATHS.APPLICATION_SECTION_DELIVERABLE}`} element={<SectionDeliverableView />} />
+            <Route path={`${APP_PATHS.APPLICATION_SECTION_DELIVERABLE}`} element={<SectionDeliverableWrapper />} />
+            <Route
+              path={`${APP_PATHS.APPLICATION_SECTION_DELIVERABLE_EDIT}`}
+              element={<SectionDeliverableEditView />}
+            />
             <Route path={'*'} element={<Navigate to={APP_PATHS.APPLICATIONS} />} />
           </Routes>
         </ErrorBoundary>
