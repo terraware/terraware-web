@@ -62,17 +62,6 @@ const ApplicationStatusSubmitted = () => {
   );
 };
 
-  <ApplicationStatus
-    buttonLabel={strings.EXIT_APPLICATION}
-    feedback='<p>Your Application has been submitted to the Accelerator team. We will review and score your answers.</p><p>Check back to see updates? Look for an email? [need copy]</p>'
-    isFailure={false}
-    onClickButton={() => {
-      // TODO: what does "Exit Application" do?
-    }}
-    title={strings.APPLICATION_SUBMIT_SUCCESS}
-  />
-);
-
 const ReviewView = () => {
   const { applicationSections, selectedApplication } = useApplicationData();
   const { activeLocale } = useLocalization();
