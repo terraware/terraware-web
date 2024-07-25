@@ -5,9 +5,9 @@ import DeliverableProvider from 'src/providers/Deliverable/DeliverableProvider';
 import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
 import ProjectProvider from 'src/providers/Project/ProjectProvider';
 
+import DeliverableView from './DeliverableView';
 import DeliverablesList from './DeliverablesList';
 import QuestionsDeliverableEdit from './QuestionsDeliverableEditView';
-import DeliverableView from './DeliverableView';
 
 const DeliverablesRouter = (): JSX.Element => {
   return (

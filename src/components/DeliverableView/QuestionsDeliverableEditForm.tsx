@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 
@@ -13,17 +13,77 @@ import { requestListDeliverableVariablesValues } from 'src/redux/features/docume
 import { selectDeliverableVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
 import { requestListDeliverableVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { VariableWithValues } from 'src/types/documentProducer/Variable';
-import { VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
+import VariableStatusBadge from 'src/scenes/AcceleratorRouter/Deliverables/VariableStatusBadge';
+import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
+import { VariableValue, VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
 import useQuery from 'src/utils/useQuery';
-import { Deliverable } from 'src/types/Deliverables';
 
-type QuestionsDeliverableEditFormProp = {
-  deliverable: Deliverable;
+import { EditProps } from './types';
+
+type QuestionBoxProps = {
+  addRemovedValue: (value: VariableValueValue) => void;
+  index: number;
+  pendingVariableValues: Map<number, VariableValueValue[]>;
+  projectId: number;
+  setCellValues?: (values: VariableTableCell[][]) => void;
+  setDeletedImages: (values: VariableValueImageValue[]) => void;
+  setImages: (values: VariableValueImageValue[]) => void;
+  setNewImages: (values: PhotoWithAttributes[]) => void;
+  setValues: (values: VariableValueValue[]) => void;
+  variable: VariableWithValues;
+};
+
+const QuestionBox = ({
+  addRemovedValue,
+  index,
+  projectId,
+  pendingVariableValues,
+  setCellValues,
+  setDeletedImages,
+  setImages,
+  setNewImages,
+  setValues,
+  variable,
+}: QuestionBoxProps): JSX.Element => {
+  const pendingValues: VariableValueValue[] | undefined = useMemo(
+    () => pendingVariableValues.get(variable.id),
+    [pendingVariableValues, variable.id]
+  );
+
+  const firstVariableValue: VariableValue | undefined = (variable?.variableValues || [])[0];
+  const firstVariableValueStatus: VariableStatusType | undefined = firstVariableValue?.status;
+
+  return (
+    <Box key={index} data-variable-id={variable.id}>
+      <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
+        <Grid item xs={12}>
+          <Box>
+            <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
+              <VariableStatusBadge status={firstVariableValueStatus} />
+            </Box>
+            <DeliverableVariableDetailsInput
+              values={pendingValues || variable.values}
+              setCellValues={setCellValues}
+              setDeletedImages={setDeletedImages}
+              setImages={setImages}
+              setNewImages={setNewImages}
+              setValues={setValues}
+              variable={variable}
+              addRemovedValue={addRemovedValue}
+              projectId={projectId}
+            />
+          </Box>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+};
+
+type QuestionsDeliverableEditViewProps = EditProps & {
   exit: () => void;
-}
+};
 
-const QuestionsDeliverableEditForm = ({ deliverable, exit } : QuestionsDeliverableEditFormProp): JSX.Element | null => {
+const QuestionsDeliverableEditView = ({ deliverable, exit }: QuestionsDeliverableEditViewProps): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const query = useQuery();
@@ -31,7 +91,7 @@ const QuestionsDeliverableEditForm = ({ deliverable, exit } : QuestionsDeliverab
   const scrollToVariable = useCallback((variableId: string) => {
     const element = document.querySelector(`[data-variable-id="${variableId}"]`);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+      element.scrollIntoView({ behavior: 'smooth' });
     }
   }, []);
 
@@ -73,7 +133,9 @@ const QuestionsDeliverableEditForm = ({ deliverable, exit } : QuestionsDeliverab
     }
 
     void dispatch(requestListDeliverableVariables(deliverable.id));
-    void dispatch(requestListDeliverableVariablesValues({ deliverableId: deliverable.id, projectId: deliverable.projectId }));
+    void dispatch(
+      requestListDeliverableVariablesValues({ deliverableId: deliverable.id, projectId: deliverable.projectId })
+    );
   }, [deliverable]);
 
   useEffect(() => {
@@ -113,36 +175,23 @@ const QuestionsDeliverableEditForm = ({ deliverable, exit } : QuestionsDeliverab
             }}
           >
             {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => (
-              <Box key={index} sx={{ marginBottom: theme.spacing(4) }} data-variable-id={variableWithValues.id}>
-                <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
-                  {/* <DeliverableStatusBadge status={variableWithValues.status} /> */}
-                </Box>
-                <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-                  <Grid item xs={12}>
-                    <DeliverableVariableDetailsInput
-                      values={variableWithValues.values}
-                      setCellValues={(newValues: VariableTableCell[][]) =>
-                        setCellValues(variableWithValues.id, newValues)
-                      }
-                      setDeletedImages={(newValues: VariableValueImageValue[]) =>
-                        setDeletedImages(variableWithValues.id, newValues)
-                      }
-                      setImages={(newValues: VariableValueImageValue[]) =>
-                        setImages(variableWithValues.id, newValues)
-                      }
-                      setNewImages={(newValues: PhotoWithAttributes[]) =>
-                        setNewImages(variableWithValues.id, newValues)
-                      }
-                      setValues={(newValues: VariableValueValue[]) => setValues(variableWithValues.id, newValues)}
-                      variable={variableWithValues}
-                      addRemovedValue={(removedValue: VariableValueValue) =>
-                        setRemovedValue(variableWithValues.id, removedValue)
-                      }
-                      projectId={deliverable.projectId}
-                    />
-                  </Grid>
-                </Grid>
-              </Box>
+              <QuestionBox
+                addRemovedValue={(removedValue: VariableValueValue) =>
+                  setRemovedValue(variableWithValues.id, removedValue)
+                }
+                index={index}
+                key={index}
+                pendingVariableValues={pendingVariableValues}
+                projectId={deliverable.projectId}
+                setCellValues={(newValues: VariableTableCell[][]) => setCellValues(variableWithValues.id, newValues)}
+                setDeletedImages={(newValues: VariableValueImageValue[]) =>
+                  setDeletedImages(variableWithValues.id, newValues)
+                }
+                setImages={(newValues: VariableValueImageValue[]) => setImages(variableWithValues.id, newValues)}
+                setNewImages={(newValues: PhotoWithAttributes[]) => setNewImages(variableWithValues.id, newValues)}
+                setValues={(newValues: VariableValueValue[]) => setValues(variableWithValues.id, newValues)}
+                variable={variableWithValues}
+              />
             ))}
           </Box>
         </Card>
@@ -151,4 +200,4 @@ const QuestionsDeliverableEditForm = ({ deliverable, exit } : QuestionsDeliverab
   );
 };
 
-export default QuestionsDeliverableEditForm;
+export default QuestionsDeliverableEditView;

@@ -1,20 +1,21 @@
 import React, { useCallback, useMemo, useState } from 'react';
-;
-
-import { Crumb } from 'src/components/BreadCrumbs';
-import { APP_PATHS } from 'src/constants';
-import { useLocalization } from 'src/providers';
-import strings from 'src/strings';
-import DeliverablePage from './DeliverablePage';
-import DeliverableViewCard from 'src/components/DeliverableView/DeliverableCard';
 import { useParams } from 'react-router-dom';
-import useFetchDeliverable from 'src/components/DeliverableView/useFetchDeliverable';
-import Page from 'src/components/Page';
+
 import { Box } from '@mui/material';
 import { Button } from '@terraware/web-components';
-import useNavigateTo from 'src/hooks/useNavigateTo';
-import SubmitDeliverableDialog from './SubmitDeliverableDialog';
+
+import { Crumb } from 'src/components/BreadCrumbs';
+import DeliverableViewCard from 'src/components/DeliverableView/DeliverableCard';
+import useFetchDeliverable from 'src/components/DeliverableView/useFetchDeliverable';
 import useUpdateDeliverable from 'src/components/DeliverableView/useUpdateDeliverable';
+import Page from 'src/components/Page';
+import { APP_PATHS } from 'src/constants';
+import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useLocalization } from 'src/providers';
+import strings from 'src/strings';
+
+import DeliverablePage from './DeliverablePage';
+import SubmitDeliverableDialog from './SubmitDeliverableDialog';
 
 const DeliverableView = (): JSX.Element => {
   const { activeLocale } = useLocalization();
@@ -50,41 +51,45 @@ const DeliverableView = (): JSX.Element => {
 
     return (
       <Box display='flex' justifyContent='right'>
-        {deliverable.type === 'Questions' && <Button
-          id='edit-deliverable'
-          icon='iconEdit'
-          label={strings.EDIT}
-          onClick={() => {
-            const firstVisibleQuestion = document.querySelector('.question-visible');
-            const variableId = firstVisibleQuestion?.getAttribute('data-variable-id');
-            const scrolledBeyondViewport = window.scrollY > window.innerHeight;
+        {deliverable.type === 'Questions' && (
+          <Button
+            id='edit-deliverable'
+            icon='iconEdit'
+            label={strings.EDIT}
+            onClick={() => {
+              const firstVisibleQuestion = document.querySelector('.question-visible');
+              const variableId = firstVisibleQuestion?.getAttribute('data-variable-id');
+              const scrolledBeyondViewport = window.scrollY > window.innerHeight;
 
-            goToDeliverableEdit(
-              deliverable.id,
-              deliverable.projectId,
-              Boolean(scrolledBeyondViewport && variableId) ? Number(variableId) : undefined
-            );
-          }}
-          size='medium'
-          priority='secondary'
-        />}
-        {(deliverable.type === 'Questions' || deliverable.type === 'Species') && <Button
-          disabled={submitButtonDisabled}
-          label={strings.SUBMIT_FOR_APPROVAL}
-          onClick={() => setShowSubmitDialog(true)}
-          size='medium'
-          id='submit-deliverable'
-        />}
+              goToDeliverableEdit(
+                deliverable.id,
+                deliverable.projectId,
+                Boolean(scrolledBeyondViewport && variableId) ? Number(variableId) : undefined
+              );
+            }}
+            size='medium'
+            priority='secondary'
+          />
+        )}
+        {(deliverable.type === 'Questions' || deliverable.type === 'Species') && (
+          <Button
+            disabled={submitButtonDisabled}
+            label={strings.SUBMIT_FOR_APPROVAL}
+            onClick={() => setShowSubmitDialog(true)}
+            size='medium'
+            id='submit-deliverable'
+          />
+        )}
       </Box>
     );
   }, [activeLocale, deliverable, submitButtonDisabled]);
 
   const isLoading = useMemo(() => {
-    return requestStatus === 'pending'
-  }, [requestStatus])
+    return requestStatus === 'pending';
+  }, [requestStatus]);
 
   if (!deliverable) {
-    return <Page isLoading crumbs={crumbs}/>
+    return <Page isLoading crumbs={crumbs} />;
   }
 
   return (

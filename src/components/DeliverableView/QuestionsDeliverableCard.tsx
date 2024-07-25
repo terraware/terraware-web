@@ -3,8 +3,6 @@ import React, { useEffect, useRef } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Message } from '@terraware/web-components';
 
-import Metadata from './Metadata';
-import { EditProps } from './types';
 import DeliverableDisplayVariableValue from 'src/components/DocumentProducer/DeliverableDisplayVariableValue';
 import Card from 'src/components/common/Card';
 import { useIsVisible } from 'src/hooks/useIsVisible';
@@ -16,7 +14,9 @@ import { VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValue } from 'src/types/documentProducer/VariableValue';
 import { variableDependencyMet } from 'src/utils/documentProducer/variables';
 
+import Metadata from './Metadata';
 import QuestionsDeliverableStatusMessage from './QuestionsDeliverableStatusMessage';
+import { EditProps } from './types';
 
 const QuestionBox = ({ projectId, variable }: { projectId: number; variable: VariableWithValues }): JSX.Element => {
   const theme = useTheme();
@@ -68,10 +68,11 @@ const QuestionsDeliverableCard = ({ deliverable }: EditProps): JSX.Element | nul
     selectDeliverableVariablesWithValues(state, deliverable.id, deliverable.projectId)
   );
 
-
   useEffect(() => {
     void dispatch(requestListDeliverableVariables(deliverable.id));
-    void dispatch(requestListDeliverableVariablesValues({ deliverableId: deliverable.id, projectId: deliverable.projectId }));
+    void dispatch(
+      requestListDeliverableVariablesValues({ deliverableId: deliverable.id, projectId: deliverable.projectId })
+    );
   }, [deliverable]);
 
   if (!deliverable) {

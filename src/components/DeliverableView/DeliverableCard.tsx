@@ -7,7 +7,7 @@ import { ViewProps } from './types';
 
 const DeliverableViewCard = (prop: ViewProps) => {
   const { deliverable } = prop;
-  
+
   if (deliverable) {
     switch (deliverable.type) {
       case 'Document':

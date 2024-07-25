@@ -3,15 +3,16 @@ import React, { useMemo } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 
+import Card from 'src/components/common/Card';
+import { useLocalization } from 'src/providers';
+import strings from 'src/strings';
+
+import DocumentDeliverableRejectedMessage from './DocumentDeliverableRejectedMessage';
+import DocumentLimitReachedMessage from './DocumentLimitReachedMessage';
+import DocumentsList from './DocumentsList';
 import DocumentsUploader from './DocumentsUploader';
 import Metadata from './Metadata';
 import { EditProps, ViewProps } from './types';
-import Card from 'src/components/common/Card';
-import { useLocalization } from 'src/providers';
-import DocumentLimitReachedMessage from './DocumentLimitReachedMessage';
-import DocumentsList from './DocumentsList';
-import DocumentDeliverableRejectedMessage from './DocumentDeliverableRejectedMessage';
-import strings from 'src/strings';
 
 const MAX_FILES_LIMIT = 15;
 
@@ -26,26 +27,29 @@ const DocumentDeliverableCard = (props: EditProps): JSX.Element => {
     [viewProps.deliverable.documents.length]
   );
 
-  const columns : TableColumnType[] = useMemo(() => 
-    activeLocale
-      ? [
-          {
-            key: 'name',
-            name: strings.DOCUMENT_NAME,
-            type: 'string',
-          },
-          {
-            key: 'description',
-            name: strings.DESCRIPTION,
-            type: 'string',
-          },
-          {
-            key: 'createdTime',
-            name: strings.DATE_UPLOADED,
-            type: 'date',
-          },
-        ]
-      : [], [activeLocale]);
+  const columns: TableColumnType[] = useMemo(
+    () =>
+      activeLocale
+        ? [
+            {
+              key: 'name',
+              name: strings.DOCUMENT_NAME,
+              type: 'string',
+            },
+            {
+              key: 'description',
+              name: strings.DESCRIPTION,
+              type: 'string',
+            },
+            {
+              key: 'createdTime',
+              name: strings.DATE_UPLOADED,
+              type: 'date',
+            },
+          ]
+        : [],
+    [activeLocale]
+  );
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1} overflow={'auto'}>

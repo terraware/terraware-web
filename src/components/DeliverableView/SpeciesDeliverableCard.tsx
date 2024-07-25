@@ -19,10 +19,11 @@ const SpeciesDeliverableCard = (props: EditProps): JSX.Element => {
   const ppsSearchResults = useAppSelector(selectParticipantProjectSpeciesListRequest(deliverable.projectId));
 
   useEffect(() => {
-    const disabled = !ppsSearchResults?.data?.length ||
-      ppsSearchResults?.data?.every((species) => species.participantProjectSpecies.submissionStatus === 'Approved')
-    setSubmitButtonDisalbed?.(disabled)
-  }, [ppsSearchResults, setSubmitButtonDisalbed])
+    const disabled =
+      !ppsSearchResults?.data?.length ||
+      ppsSearchResults?.data?.every((species) => species.participantProjectSpecies.submissionStatus === 'Approved');
+    setSubmitButtonDisalbed?.(disabled);
+  }, [ppsSearchResults, setSubmitButtonDisalbed]);
 
   useEffect(() => {
     void dispatch(requestListParticipantProjectSpecies(deliverable.projectId));

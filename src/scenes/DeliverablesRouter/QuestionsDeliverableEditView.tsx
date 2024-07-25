@@ -1,10 +1,11 @@
 import React, { useCallback } from 'react';
-
-import useNavigateTo from 'src/hooks/useNavigateTo';
-import QuestionsDeliverableEditForm from 'src/components/DeliverableView/QuestionsDeliverableEditForm';
-import DeliverablePage from './DeliverablePage';
 import { useParams } from 'react-router-dom';
+
+import QuestionsDeliverableEditForm from 'src/components/DeliverableView/QuestionsDeliverableEditForm';
 import useFetchDeliverable from 'src/components/DeliverableView/useFetchDeliverable';
+import useNavigateTo from 'src/hooks/useNavigateTo';
+
+import DeliverablePage from './DeliverablePage';
 
 const QuestionsDeliverableEditView = (): JSX.Element | null => {
   const { goToDeliverable } = useNavigateTo();
@@ -12,7 +13,7 @@ const QuestionsDeliverableEditView = (): JSX.Element | null => {
   const { deliverable } = useFetchDeliverable({ deliverableId: Number(deliverableId), projectId: Number(projectId) });
 
   const goToThisDeliverable = useCallback(() => {
-    if(deliverable) {
+    if (deliverable) {
       goToDeliverable(deliverable.id, deliverable?.projectId);
     }
   }, [deliverable]);
