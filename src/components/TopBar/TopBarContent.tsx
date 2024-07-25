@@ -13,6 +13,7 @@ import useApplicationPortal from 'src/hooks/useApplicationPortal';
 import { useOrganization, useUser } from 'src/providers/hooks';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+import KnowledgeBaseLink from '../KnowledgeBaseLink';
 import NotificationsDropdown from '../NotificationsDropdown';
 import OrganizationsDropdown from '../OrganizationsDropdown';
 import SmallDeviceUserMenu from '../SmallDeviceUserMenu';
@@ -92,6 +93,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
       </Box>
 
       <Box sx={rightStyles}>
+        <KnowledgeBaseLink />
         <NotificationsDropdown
           organizationId={selectedOrganization.id !== -1 ? selectedOrganization.id : undefined}
           reloadOrganizationData={reloadOrganizations}
