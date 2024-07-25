@@ -71,7 +71,6 @@ const SectionView = ({ section, sectionDeliverables }: SectionViewProp) => {
   }, [selectedApplication, reload, restart, goToApplication]);
 
   const handleSubmit = useCallback(async () => {
-    console.log(submit);
     if (selectedApplication) {
       await submit();
       await reload();
