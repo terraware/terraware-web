@@ -1,11 +1,10 @@
 import React, { ReactNode, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { Container, Grid, useTheme } from '@mui/material';
+import { Container } from '@mui/material';
 
-import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
-import PageHeader from 'src/components/PageHeader';
-import TfMain from 'src/components/common/TfMain';
+import { Crumb } from 'src/components/BreadCrumbs';
+import Page from 'src/components/Page';
 import Button from 'src/components/common/button/Button';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useApplicationData } from 'src/scenes/ApplicationRouter/provider/Context';
@@ -19,7 +18,6 @@ type Props = {
 
 const ApplicationPage = ({ children, crumbs, hierarchicalCrumbs }: Props) => {
   const { goToHome } = useNavigateTo();
-  const theme = useTheme();
 
   const { allApplications, selectedApplication, setSelectedApplication, reload } = useApplicationData();
 
@@ -35,22 +33,15 @@ const ApplicationPage = ({ children, crumbs, hierarchicalCrumbs }: Props) => {
   }, [allApplications, applicationId, selectedApplication]);
 
   return (
-    <TfMain>
-      <Grid container spacing={theme.spacing(1)}>
-        <Grid item xs style={{ flexGrow: 1, padding: `${theme.spacing(2)} ${theme.spacing(4)}` }}>
-          {crumbs && <BreadCrumbs crumbs={crumbs} hierarchical={hierarchicalCrumbs ?? true} />}
-        </Grid>
-      </Grid>
-      <PageHeader
-        // TODO: replace "Project Name" placeholder with actual project name once available in application data
-        title={strings.PROJECT_NAME}
-        rightComponent={<Button label={strings.EXIT_APPLICATION} onClick={goToHome} priority={'ghost'} />}
-      />
-
-      <Container maxWidth={false} sx={{ padding: 0 }}>
-        {children}
-      </Container>
-    </TfMain>
+    <Page
+      crumbs={crumbs}
+      rightComponent={<Button label={strings.EXIT_APPLICATION} onClick={goToHome} priority={'ghost'} />}
+      hierarchicalCrumbs={hierarchicalCrumbs ?? true}
+      // TODO: replace "Project Name" placeholder with actual project name once available in application data
+      title={strings.PROJECT_NAME}
+    >
+      {children}
+    </Page>
   );
 };
 
