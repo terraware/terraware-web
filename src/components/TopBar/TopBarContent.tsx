@@ -133,6 +133,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
       />
 
       <Grid item xs={3} sx={rightStyles}>
+        <KnowledgeBaseLink />
         <NotificationsDropdown
           organizationId={selectedOrganization.id !== -1 ? selectedOrganization.id : undefined}
           reloadOrganizationData={reloadOrganizations}
