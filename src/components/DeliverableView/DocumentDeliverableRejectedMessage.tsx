@@ -7,7 +7,7 @@ import { ViewProps } from 'src/components/DeliverableView/types';
 import { useLocalization } from 'src/providers/hooks';
 import strings from 'src/strings';
 
-const RejectedDeliverableMessage = ({ deliverable }: ViewProps): JSX.Element => {
+const DocumentDeliverableRejectedMessage = ({ deliverable }: ViewProps): JSX.Element => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
 
@@ -27,4 +27,4 @@ const RejectedDeliverableMessage = ({ deliverable }: ViewProps): JSX.Element => 
   );
 };
 
-export default RejectedDeliverableMessage;
+export default DocumentDeliverableRejectedMessage;
