@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import { DropdownItem, theme } from '@terraware/web-components';
 
-import CompleteIncompleteBatch from 'src/components/common/CompleteIncompleteBatch';
+import CompleteIncompleteBadge from 'src/components/common/CompleteIncompleteBadge';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { useLocalization } from 'src/providers';
 import {
@@ -169,7 +169,7 @@ export default function MultiLineComponentNonEditable({
         <Box display='flex' justifyContent='space-between' alignItems='center'>
           <Typography fontWeight={600}>{titleNumber ? `${titleNumber} ${title}` : title}</Typography>
           <Box className='actions'>
-            <CompleteIncompleteBatch status={status} />
+            <CompleteIncompleteBadge status={status} />
           </Box>
           <Box className='actions-hover' sx={{ 'align-items': 'center' }}>
             {ownedByName && (
@@ -182,7 +182,7 @@ export default function MultiLineComponentNonEditable({
               >{`${strings.OWNER}: ${ownedByName}`}</Typography>
             )}
             <Box sx={{ padding: '0 8px' }}>
-              <CompleteIncompleteBatch status={status} />
+              <CompleteIncompleteBadge status={status} />
             </Box>
             <OptionsMenu
               onOptionItemClick={onOptionItemClick}

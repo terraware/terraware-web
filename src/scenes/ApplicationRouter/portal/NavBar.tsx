@@ -48,11 +48,11 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
     }
     return (
       applicationSections
-        ?.filter((section) => section.category === 'Application')
+        ?.filter((section) => section.phase === 'Application')
         .map((section) => {
           const path = APP_PATHS.APPLICATION_SECTION.replace(':applicationId', `${selectedApplication.id}`).replace(
             ':sectionId',
-            `${section.id}`
+            `${section.moduleId}`
           );
           const isMatch = !!matchPath(`${path}/*`, location.pathname);
           const isCompleted = section.status === 'Complete';
@@ -64,8 +64,8 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
               disabled={disabled}
               icon={isCompleted ? 'successFilled' : 'success'}
               iconColor={isCompleted ? theme.palette.TwClrIcnBrand : undefined}
-              id={`application-section-${section.id}`}
-              key={section.id}
+              id={`application-section-${section.moduleId}`}
+              key={section.moduleId}
               label={section.name}
               onClick={() => closeAndNavigateTo(path)}
               selected={!!isMatch}
@@ -81,13 +81,13 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
     }
     return (
       applicationSections
-        ?.filter((section) => section.category === 'Pre-screen')
+        ?.filter((section) => section.phase === 'Pre-Screen')
         .map((section) => {
           const path = APP_PATHS.APPLICATION_PRESCREEN.replace(':applicationId', `${selectedApplication.id}`);
           const sectionPath = APP_PATHS.APPLICATION_SECTION.replace(
             ':applicationId',
             `${selectedApplication.id}`
-          ).replace(':sectionId', `${section.id}`);
+          ).replace(':sectionId', `${section.moduleId}`);
           const mapPath = APP_PATHS.APPLICATION_MAP.replace(':applicationId', `${selectedApplication.id}`);
           const isMatch =
             !!matchPath(`${path}/*`, location.pathname) ||
@@ -100,8 +100,8 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
             <NavItem
               icon={isCompleted ? 'successFilled' : 'success'}
               iconColor={isCompleted ? theme.palette.TwClrIcnBrand : undefined}
-              id={`application-section-${section.id}`}
-              key={section.id}
+              id={`application-section-${section.moduleId}`}
+              key={section.moduleId}
               label={section.name}
               onClick={() => closeAndNavigateTo(path)}
               selected={!!isMatch}

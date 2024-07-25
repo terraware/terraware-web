@@ -5,10 +5,10 @@ import { Badge } from '@terraware/web-components';
 
 import { VariableStatusType } from 'src/types/documentProducer/Variable';
 
-type CompleteIncompleteBatchProps = {
+type CompleteIncompleteBadgeProps = {
   status: VariableStatusType;
 };
-export default function CompleteIncompleteBatch({ status }: CompleteIncompleteBatchProps): JSX.Element {
+export default function CompleteIncompleteBadge({ status }: CompleteIncompleteBadgeProps): JSX.Element {
   const theme = useTheme();
 
   return status === 'Complete' ? (

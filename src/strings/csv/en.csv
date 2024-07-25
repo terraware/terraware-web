@@ -473,6 +473,7 @@ ENTER_SUBSET_WEIGHT_AND_COUNT,"Enter Subset Weight and Count ratio to determine 
 ENTRIES,Entries,
 ERROR, Error,
 ERROR_BATCH_SEED_COUNT,Transfers must include at least 1 seed,
+ERROR_CREATE_PROJECT,Unable to create new project,
 ERROR_LOAD_SPECIES,Unable to load species for the organization,
 ERROR_LOAD_SUB_LOCATIONS,Unable to load sub locations for facility,
 ERROR_PROJECT_NAME_CONFLICT,This project name is already in use in the organization.,

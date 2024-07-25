@@ -11,11 +11,16 @@ import ApplicationPage from '../ApplicationPage';
 import ResultView from './ResultView';
 
 const PrescreenView = () => {
-  const { selectedApplication, applicationSections } = useApplicationData();
+  const { selectedApplication, applicationDeliverables, applicationSections } = useApplicationData();
 
   const prescreenSection = useMemo(
-    () => applicationSections.find((section) => section.category === 'Pre-screen'),
+    () => applicationSections.find((section) => section.phase === 'Pre-Screen'),
     [applicationSections]
+  );
+
+  const prescreenDeliverables = useMemo(
+    () => applicationDeliverables.filter((deliverable) => deliverable.moduleId === prescreenSection?.moduleId),
+    [applicationDeliverables, prescreenSection]
   );
 
   if (!selectedApplication || !prescreenSection) {
@@ -24,10 +29,15 @@ const PrescreenView = () => {
 
   switch (selectedApplication.status) {
     case 'Not Submitted':
-      return <SectionView section={prescreenSection} />;
+      return <SectionView section={prescreenSection} sectionDeliverables={prescreenDeliverables} />;
     case 'Failed Pre-screen':
       return (
-        <ResultView feedback={selectedApplication.feedback} isFailure={true} prescreenSection={prescreenSection} />
+        <ResultView
+          feedback={selectedApplication.feedback}
+          isFailure={true}
+          prescreenSection={prescreenSection}
+          prescrenDeliverables={prescreenDeliverables}
+        />
       );
     case 'Passed Pre-screen':
     case 'Submitted':
@@ -43,7 +53,13 @@ const PrescreenView = () => {
     case 'Issue Resolved':
     case 'Not Accepted':
     case 'In Review':
-      return <ResultView isFailure={false} prescreenSection={prescreenSection} />;
+      return (
+        <ResultView
+          isFailure={false}
+          prescreenSection={prescreenSection}
+          prescrenDeliverables={prescreenDeliverables}
+        />
+      );
   }
 };
 
