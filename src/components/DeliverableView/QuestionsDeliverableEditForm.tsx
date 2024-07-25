@@ -83,7 +83,7 @@ type QuestionsDeliverableEditViewProps = EditProps & {
   exit: () => void;
 };
 
-const QuestionsDeliverableEditView = ({ deliverable, exit }: QuestionsDeliverableEditViewProps): JSX.Element | null => {
+const QuestionsDeliverableEditForm = ({ deliverable, exit }: QuestionsDeliverableEditViewProps): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const query = useQuery();
@@ -200,4 +200,4 @@ const QuestionsDeliverableEditView = ({ deliverable, exit }: QuestionsDeliverabl
   );
 };
 
-export default QuestionsDeliverableEditView;
+export default QuestionsDeliverableEditForm;
