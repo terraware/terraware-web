@@ -93,8 +93,7 @@ const ApplicationProvider = ({ children }: Props) => {
 
   useEffect(() => {
     if (
-      listApplicationDeliverablesResult &&
-      listApplicationDeliverablesResult.status === 'success' &&
+      listApplicationDeliverablesResult?.status === 'success' &&
       listApplicationDeliverablesResult.data
     ) {
       setApplicationDeliverables(listApplicationDeliverablesResult.data);
