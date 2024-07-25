@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Box } from '@mui/material';
@@ -14,19 +14,12 @@ import strings from 'src/strings';
 
 import ApplicationPage from '../ApplicationPage';
 
-type SectionDeliverableViewProp = {
-  setShowEditButton: (showEditButton: boolean) => void;
-};
 
-const SectionDeliverableView = ({ setShowEditButton }: SectionDeliverableViewProp) => {
+const SectionDeliverableView = () => {
   const { deliverableId } = useParams<{ deliverableId: string }>();
   const { selectedApplication, applicationDeliverables } = useApplicationData();
 
   const deliverable = applicationDeliverables.find((deliverable) => deliverable.id === Number(deliverableId));
-
-  useEffect(() => {
-    setShowEditButton(deliverable?.type === 'Questions');
-  }, [deliverable, setShowEditButton]);
 
   if (!selectedApplication || !deliverable) {
     return null;
@@ -43,14 +36,14 @@ const SectionDeliverableWrapper = () => {
   }>();
   const { activeLocale } = useLocalization();
   const { goToApplicationSectionDeliverableEdit } = useNavigateTo();
-  const { applicationSections, selectedApplication } = useApplicationData();
+  const { applicationDeliverables, applicationSections, selectedApplication } = useApplicationData();
 
   const section = useMemo(
     () => applicationSections.find((section) => section.moduleId === Number(sectionId)),
     [applicationSections, sectionId]
   );
 
-  const [showEditButton, setShowEditButton] = useState<boolean>(false);
+  const deliverable = applicationDeliverables.find((deliverable) => deliverable.id === Number(deliverableId));
 
   const crumbs: Crumb[] = useMemo(() => {
     if (!activeLocale || !selectedApplication || !section) {
@@ -76,6 +69,18 @@ const SectionDeliverableWrapper = () => {
       ];
     }
   }, [activeLocale, selectedApplication, section]);
+
+  const showEditButton = useMemo(() => {
+    if (!selectedApplication || !section || !deliverable) {
+      return false;
+    }
+
+    if (section.phase === 'Pre-Screen') {
+      return deliverable.type === 'Questions' && selectedApplication.status === 'Not Submitted'
+    } else if (section.phase === 'Application') {
+      return deliverable.type === 'Questions' && selectedApplication.status === 'Passed Pre-screen'
+    }
+  }, [deliverable, section, selectedApplication])
 
   const actionMenu = useMemo(() => {
     if (!activeLocale) {
@@ -112,7 +117,7 @@ const SectionDeliverableWrapper = () => {
 
   return (
     <ApplicationPage rightComponent={showEditButton ? actionMenu : undefined} crumbs={crumbs}>
-      <SectionDeliverableView setShowEditButton={setShowEditButton} />
+      <SectionDeliverableView />
     </ApplicationPage>
   );
 };

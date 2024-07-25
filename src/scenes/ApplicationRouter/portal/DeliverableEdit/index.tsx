@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import QuestionsDeliverableEditForm from 'src/components/DeliverableView/QuestionsDeliverableEditForm';
@@ -33,6 +33,36 @@ const SectionDeliverableEditView = () => {
 };
 
 const SectionDeliverableEditWrapper = () => {
+  const { deliverableId, sectionId } = useParams<{
+    deliverableId: string;
+    sectionId: string;
+  }>();
+  
+  const { applicationDeliverables, applicationSections, selectedApplication } = useApplicationData();
+  const { goToApplicationSectionDeliverable } = useNavigateTo();
+
+  const section = useMemo(
+    () => applicationSections.find((section) => section.moduleId === Number(sectionId)),
+    [applicationSections, sectionId]
+  );
+
+  const deliverable = applicationDeliverables.find((deliverable) => deliverable.id === Number(deliverableId));
+  
+  useEffect(() => {
+    if (!selectedApplication || !section || !deliverable) {
+      return;
+    }
+
+    if (section.phase === 'Pre-Screen') {
+      if (deliverable.type !== 'Questions' || selectedApplication.status !== 'Not Submitted') {
+        goToApplicationSectionDeliverable(selectedApplication.id, section.moduleId, deliverable.id)
+      }
+    } else if (section.phase === 'Application') {
+      if (deliverable.type !== 'Questions' || selectedApplication.status !== 'Passed Pre-screen') {
+        goToApplicationSectionDeliverable(selectedApplication.id, section.moduleId, deliverable.id)
+      }
+    }
+  }, [deliverable, section, selectedApplication])
   return (
     <ApplicationPage>
       <SectionDeliverableEditView />
