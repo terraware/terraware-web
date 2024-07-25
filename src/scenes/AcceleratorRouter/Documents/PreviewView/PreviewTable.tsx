@@ -20,9 +20,6 @@ export const getSourceTableVariable = (
   sectionVariable: SectionVariableWithValues
 ): TableVariable | false => {
   const sourceVariable: VariableUnion | undefined = getSourceVariable(combinedInjectedValue, sectionVariable);
-  if (!sourceVariable) {
-    debugger;
-  }
   return isTableVariable(sourceVariable) ? sourceVariable : false;
 };
 
