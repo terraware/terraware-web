@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1721948762252" clover="3.2.0">
-  <project timestamp="1721948762252" name="All files">
-    <metrics statements="23299" coveredstatements="956" conditionals="15060" coveredconditionals="239" methods="7184" coveredmethods="163" elements="45543" coveredelements="1358" complexity="0" loc="23299" ncloc="23299" packages="222" files="1032" classes="1032"/>
+<coverage generated="1721949011668" clover="3.2.0">
+  <project timestamp="1721949011668" name="All files">
+    <metrics statements="23316" coveredstatements="956" conditionals="15064" coveredconditionals="239" methods="7188" coveredmethods="163" elements="45568" coveredelements="1358" complexity="0" loc="23316" ncloc="23316" packages="223" files="1034" classes="1034"/>
     <package name="src">
-      <metrics statements="171" coveredstatements="0" conditionals="130" coveredconditionals="0" methods="38" coveredmethods="0"/>
+      <metrics statements="176" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
         <metrics statements="28" coveredstatements="0" conditionals="32" coveredconditionals="0" methods="7" coveredmethods="0"/>
         <line num="25" count="0" type="stmt"/>
@@ -127,6 +127,14 @@
         <line num="16" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
         <line num="49" count="0" type="stmt"/>
+      </file>
+      <file name="knowledgeBaseLinks.ts" path="/home/runner/work/terraware-web/terraware-web/src/knowledgeBaseLinks.ts">
+        <metrics statements="5" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="72" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="73" count="0" type="stmt"/>
       </file>
       <file name="reportWebVitals.js" path="/home/runner/work/terraware-web/terraware-web/src/reportWebVitals.js">
         <metrics statements="8" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="0"/>
@@ -3080,6 +3088,24 @@
         <line num="12" count="0" type="stmt"/>
         <line num="14" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components.KnowledgeBaseLink">
+      <metrics statements="12" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>
+      <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/KnowledgeBaseLink/index.tsx">
+        <metrics statements="12" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="24" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.ListMapView">
@@ -6040,7 +6066,6 @@
       </file>
       <file name="TopBarContent.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/TopBar/TopBarContent.tsx">
         <metrics statements="23" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="6" coveredmethods="0"/>
-        <line num="27" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
@@ -6049,20 +6074,21 @@
         <line num="33" count="0" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
         <line num="62" count="0" type="stmt"/>
         <line num="63" count="0" type="stmt"/>
-        <line num="66" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
         <line num="67" count="0" type="stmt"/>
         <line num="68" count="0" type="stmt"/>
-        <line num="71" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="75" count="0" type="stmt"/>
-        <line num="114" count="0" type="stmt"/>
-        <line num="123" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="72" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="76" count="0" type="stmt"/>
+        <line num="116" count="0" type="stmt"/>
+        <line num="125" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.common">
