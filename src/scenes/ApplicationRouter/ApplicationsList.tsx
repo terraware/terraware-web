@@ -42,7 +42,9 @@ const ApplicationListView = () => {
 
   const onSave = useCallback(
     (applicationId: number) => {
-      toastSuccess(activeLocale ? strings.SUCCESS : 'Successfully created application.');
+      if (activeLocale) {
+        toastSuccess(strings.SUCCESS);
+      }
       goToApplication(applicationId);
     },
     [activeLocale, goToApplication, toastSuccess]

@@ -102,11 +102,7 @@ const ApplicationProvider = ({ children }: Props) => {
   }, [listApplicationDeliverablesResult, setApplicationDeliverables]);
 
   useEffect(() => {
-    if (
-      listApplicationModulesResult &&
-      listApplicationModulesResult.status === 'success' &&
-      listApplicationModulesResult.data
-    ) {
+    if (listApplicationModulesResult?.status === 'success' && listApplicationModulesResult.data) {
       setApplicationSections(listApplicationModulesResult.data);
     }
   }, [listApplicationModulesResult, setApplicationSections]);
