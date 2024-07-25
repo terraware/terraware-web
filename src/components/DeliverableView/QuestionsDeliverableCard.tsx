@@ -73,7 +73,7 @@ const QuestionBox = ({
 const QuestionsDeliverableCard = (props: EditProps): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
-  const { deliverable, hideStatusBadge: hideStatusBadge } = props;
+  const { deliverable, hideStatusBadge } = props;
 
   const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
     selectDeliverableVariablesWithValues(state, deliverable.id, deliverable.projectId)
