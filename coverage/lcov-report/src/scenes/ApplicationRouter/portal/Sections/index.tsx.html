@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
@@ -118,7 +118,12 @@
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
 <a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -135,6 +140,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -186,21 +196,26 @@ import ApplicationPage from '../ApplicationPage';
 import SectionView from './SectionView';
 &nbsp;
 const SectionViewWrapper = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-  const { applicationSections } = <span class="cstat-no" title="statement not covered" >useApplicationData();</span>
+  const { applicationSections, applicationDeliverables } = <span class="cstat-no" title="statement not covered" >useApplicationData();</span>
 &nbsp;
   const pathParams = <span class="cstat-no" title="statement not covered" >useParams&lt;{ applicationId: string; sectionId: string }&gt;();</span>
   const sectionId = <span class="cstat-no" title="statement not covered" >Number(pathParams.sectionId);</span>
 &nbsp;
   const appSection = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >applicationSections.find(<span class="fstat-no" title="function not covered" >(s</span>ection) =&gt; <span class="cstat-no" title="statement not covered" >section.id === sectionId)</span>,</span>
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >applicationSections.find(<span class="fstat-no" title="function not covered" >(s</span>ection) =&gt; <span class="cstat-no" title="statement not covered" >section.moduleId === sectionId)</span>,</span>
     [applicationSections, sectionId]
+  );
+&nbsp;
+  const deliverables = <span class="cstat-no" title="statement not covered" >useMemo(</span>
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >applicationDeliverables.filter(<span class="fstat-no" title="function not covered" >(d</span>eliverable) =&gt; <span class="cstat-no" title="statement not covered" >deliverable.moduleId === sectionId)</span>,</span>
+    [applicationDeliverables, sectionId]
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (!appSection) {</span>
 <span class="cstat-no" title="statement not covered" >    return null;</span>
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return &lt;SectionView section={appSection} /&gt;;</span>
+<span class="cstat-no" title="statement not covered" >  return &lt;SectionView section={appSection} sectionDeliverables={deliverables} /&gt;;</span>
 };
 &nbsp;
 const SectionViewPage = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -235,7 +250,7 @@ export default SectionViewPage;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-25T22:19:10.317Z
+                at 2024-07-25T22:44:11.565Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
