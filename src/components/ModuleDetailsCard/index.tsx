@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 
 import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -90,6 +90,7 @@ type ModuleDetailsCardProp = {
   projectId: number;
   showSeeAllModules?: boolean;
   showSimplifiedStatus?: boolean;
+  children?: ReactNode;
 };
 
 const ModuleDetailsCard = ({
@@ -99,6 +100,7 @@ const ModuleDetailsCard = ({
   projectId,
   showSeeAllModules = false,
   showSimplifiedStatus = false,
+  children,
 }: ModuleDetailsCardProp) => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
@@ -293,6 +295,8 @@ const ModuleDetailsCard = ({
           </Grid>
         )}
       </Grid>
+
+      {children && <ModuleContentSection>{children}</ModuleContentSection>}
     </Card>
   );
 };

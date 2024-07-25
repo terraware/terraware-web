@@ -8,7 +8,6 @@ import { useApplicationData } from 'src/scenes/ApplicationRouter/provider/Contex
 import strings from 'src/strings';
 
 import ApplicationPage from '../ApplicationPage';
-import ResultView from './ResultView';
 
 const PrescreenView = () => {
   const { selectedApplication, applicationDeliverables, applicationSections } = useApplicationData();
@@ -27,40 +26,9 @@ const PrescreenView = () => {
     return null;
   }
 
-  switch (selectedApplication.status) {
-    case 'Not Submitted':
-      return <SectionView section={prescreenSection} sectionDeliverables={prescreenDeliverables} />;
-    case 'Failed Pre-screen':
-      return (
-        <ResultView
-          feedback={selectedApplication.feedback}
-          isFailure={true}
-          prescreenSection={prescreenSection}
-          prescrenDeliverables={prescreenDeliverables}
-        />
-      );
-    case 'Passed Pre-screen':
-    case 'Submitted':
-    case 'PL Review':
-    case 'Ready for Review':
-    case 'Pre-check':
-    case 'Needs Follow-up':
-    case 'Carbon Eligible':
-    case 'Accepted':
-    case 'Waitlist':
-    case 'Issue Active':
-    case 'Issue Pending':
-    case 'Issue Resolved':
-    case 'Not Accepted':
-    case 'In Review':
-      return (
-        <ResultView
-          isFailure={false}
-          prescreenSection={prescreenSection}
-          prescrenDeliverables={prescreenDeliverables}
-        />
-      );
-  }
+  console.log(prescreenDeliverables);
+
+  return <SectionView section={prescreenSection} sectionDeliverables={prescreenDeliverables} />;
 };
 
 const PrescreenViewWrapper = () => {

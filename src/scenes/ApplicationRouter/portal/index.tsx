@@ -16,7 +16,8 @@ import SectionDeliverableEditView from './DeliverableEdit';
 import MapView from './Map';
 import NavBar from './NavBar';
 import Overview from './Overview';
-import PrescreenView from './Prescreen';
+import PrescreenViewWrapper from './Prescreen';
+import PrescreenResultViewWrapper from './PrescreenResult';
 import ReviewView from './Review';
 import SectionViewWrapper from './Sections';
 
@@ -82,7 +83,8 @@ const ApplicationPortalRouter = ({ showNavBar, setShowNavBar }: ApplicationPorta
           <Routes>
             <Route path={`${APP_PATHS.APPLICATION_MAP}`} element={<MapView />} />
             <Route path={`${APP_PATHS.APPLICATION_OVERVIEW}`} element={<Overview />} />
-            <Route path={`${APP_PATHS.APPLICATION_PRESCREEN}`} element={<PrescreenView />} />
+            <Route path={`${APP_PATHS.APPLICATION_PRESCREEN}`} element={<PrescreenViewWrapper />} />
+            <Route path={`${APP_PATHS.APPLICATION_PRESCREEN_RESULT}`} element={<PrescreenResultViewWrapper />} />
             <Route path={`${APP_PATHS.APPLICATION_REVIEW}`} element={<ReviewView />} />
             <Route path={`${APP_PATHS.APPLICATION_SECTION}`} element={<SectionViewWrapper />} />
             <Route path={`${APP_PATHS.APPLICATION_SECTION_DELIVERABLE}`} element={<SectionDeliverableWrapper />} />

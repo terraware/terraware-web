@@ -8,11 +8,12 @@ import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization, useOrganization } from 'src/providers';
-import ApplicationService from 'src/services/ApplicationService';
 import ProjectsService from 'src/services/ProjectsService';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
+
+import { useApplicationData } from './provider/Context';
 
 type NewApplication = {
   projectType: 'Existing' | 'New';
@@ -32,6 +33,7 @@ const NewApplicationModal = ({ open, onClose, onSave }: NewApplicationModalProps
   const { activeLocale } = useLocalization();
   const { availableProjects } = useProjects();
   const { selectedOrganization } = useOrganization();
+  const { allApplications, create } = useApplicationData();
 
   const [projectNameError, setProjectNameError] = useState<string>('');
   const [projectSelectError, setProjectSelectError] = useState<string>('');
@@ -43,8 +45,10 @@ const NewApplicationModal = ({ open, onClose, onSave }: NewApplicationModalProps
   });
 
   const projectOptions = useMemo(
-    // TODO: filter out projects that already have applications, or in the accelerator
-    () => (availableProjects || []).map((project) => ({ label: project.name, value: project.id })),
+    () =>
+      (availableProjects || [])
+        .filter((project) => allApplications?.every((application) => application.projectId !== project.id))
+        .map((project) => ({ label: project.name, value: project.id })),
     [availableProjects]
   );
 
@@ -114,12 +118,12 @@ const NewApplicationModal = ({ open, onClose, onSave }: NewApplicationModalProps
     }
 
     if (!!projectId) {
-      const result = await ApplicationService.createApplication(projectId);
-      if (result.requestSucceeded && result.data) {
-        onSave(result.data?.id);
+      const newApplicationId = await create(projectId);
+      if (newApplicationId) {
+        onSave(newApplicationId);
       }
     }
-  }, [onSave, newApplication, selectedOrganization, setProjectNameError]);
+  }, [create, onSave, newApplication, selectedOrganization, setProjectNameError]);
 
   return (
     <DialogBox
@@ -150,7 +154,7 @@ const NewApplicationModal = ({ open, onClose, onSave }: NewApplicationModalProps
               <FormControlLabel
                 checked={newApplication.projectType === 'Existing'}
                 control={<Radio />}
-                disabled={!availableProjects?.length}
+                disabled={!projectOptions?.length}
                 label={strings.SELECT_EXISTING_PROJECT}
                 value={'Existing'}
               />

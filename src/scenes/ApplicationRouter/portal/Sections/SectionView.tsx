@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react';
 
+import { Button } from '@terraware/web-components';
+
 import ModuleDetailsCard from 'src/components/ModuleDetailsCard';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
@@ -38,7 +40,7 @@ const SectionView = ({ section, sectionDeliverables }: SectionViewProp) => {
     }
 
     return deliverables;
-  }, [section, goToApplicationMap, goToApplicationSectionDeliverable]);
+  }, [section, sectionDeliverables, goToApplicationMap, goToApplicationSectionDeliverable]);
 
   const moduleDetails = useMemo(
     () =>
@@ -54,13 +56,27 @@ const SectionView = ({ section, sectionDeliverables }: SectionViewProp) => {
     [activeLocale, section]
   );
 
+  const allDeliverablesCompleted = useMemo(
+    () => sectionDeliverables.every((deliverable) => deliverable.status !== 'Not Submitted'),
+    [sectionDeliverables]
+  );
+
   return moduleDetails && selectedApplication ? (
     <ModuleDetailsCard
       deliverables={deliverableDetails}
       module={moduleDetails}
       projectId={selectedApplication.id}
       showSimplifiedStatus
-    />
+    >
+      {section.phase === 'Pre-Screen' && (
+        <Button
+          disabled={!allDeliverablesCompleted}
+          label={strings.SUBMIT_PRESCREEN}
+          onClick={() => {}}
+          priority='primary'
+        />
+      )}
+    </ModuleDetailsCard>
   ) : null;
 };
 
