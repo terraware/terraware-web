@@ -6,6 +6,7 @@ import { Button } from '@terraware/web-components';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import ApplicationPage from 'src/scenes/ApplicationRouter/portal/ApplicationPage';
 import { useApplicationData } from 'src/scenes/ApplicationRouter/provider/Context';
@@ -45,7 +46,22 @@ const ApplicationStatus = ({ buttonLabel, feedback, isFailure, onClickButton, ti
   );
 };
 
-const ApplicationStatusSubmitted = () => (
+const ApplicationStatusSubmitted = () => {
+  const { goToHome } = useNavigateTo();
+
+  return (
+    <ApplicationStatus
+      buttonLabel={strings.EXIT_APPLICATION}
+      feedback='<p>Your Application has been submitted to the Accelerator team. We will review and score your answers.</p><p>Check back to see updates? Look for an email? [need copy]</p>'
+      isFailure={false}
+      onClickButton={() => {
+        goToHome();
+      }}
+      title={strings.APPLICATION_SUBMIT_SUCCESS}
+    />
+  );
+};
+
   <ApplicationStatus
     buttonLabel={strings.EXIT_APPLICATION}
     feedback='<p>Your Application has been submitted to the Accelerator team. We will review and score your answers.</p><p>Check back to see updates? Look for an email? [need copy]</p>'
@@ -80,7 +96,7 @@ const ReviewView = () => {
 
   return (
     <ApplicationPage crumbs={crumbs}>
-      {selectedApplication.status === 'Submitted' && <ApplicationStatusSubmitted />}
+      {selectedApplication.status === 'In Review' && <ApplicationStatusSubmitted />}
       {selectedApplication.status !== 'Submitted' && <ReviewCard sections={applicationSections} />}
     </ApplicationPage>
   );
