@@ -4,7 +4,9 @@ import { useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
+import { Crumb } from 'src/components/BreadCrumbs';
 import DeliverableViewCard from 'src/components/DeliverableView/DeliverableCard';
+import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { useApplicationData } from 'src/scenes/ApplicationRouter/provider/Context';
@@ -30,7 +32,7 @@ const SectionDeliverableView = ({ setShowEditButton }: SectionDeliverableViewPro
     return null;
   }
 
-  return <DeliverableViewCard deliverable={{ ...deliverable, documents: [] }} />;
+  return <DeliverableViewCard deliverable={{ ...deliverable, documents: [] }} hideStatusBadge />;
 };
 
 const SectionDeliverableWrapper = () => {
@@ -41,8 +43,39 @@ const SectionDeliverableWrapper = () => {
   }>();
   const { activeLocale } = useLocalization();
   const { goToApplicationSectionDeliverableEdit } = useNavigateTo();
+  const { applicationSections, selectedApplication } = useApplicationData();
+
+  const section = useMemo(
+    () => applicationSections.find((section) => section.moduleId === Number(sectionId)),
+    [applicationSections, sectionId]
+  );
 
   const [showEditButton, setShowEditButton] = useState<boolean>(false);
+
+  const crumbs: Crumb[] = useMemo(() => {
+    if (!activeLocale || !selectedApplication || !section) {
+      return [];
+    }
+
+    if (section.phase === 'Pre-Screen') {
+      return [
+        {
+          name: strings.APPLICATION_PRESCREEN,
+          to: APP_PATHS.APPLICATION_PRESCREEN.replace(':applicationId', `${selectedApplication.id}`),
+        },
+      ];
+    } else {
+      return [
+        {
+          name: section.name,
+          to: APP_PATHS.APPLICATION_SECTION.replace(':applicationId', `${selectedApplication.id}`).replace(
+            ':sectionId',
+            `${section.moduleId}`
+          ),
+        },
+      ];
+    }
+  }, [activeLocale, selectedApplication, section]);
 
   const actionMenu = useMemo(() => {
     if (!activeLocale) {
@@ -78,7 +111,7 @@ const SectionDeliverableWrapper = () => {
   }, [activeLocale, applicationId, deliverableId, sectionId]);
 
   return (
-    <ApplicationPage rightComponent={showEditButton ? actionMenu : undefined}>
+    <ApplicationPage rightComponent={showEditButton ? actionMenu : undefined} crumbs={crumbs}>
       <SectionDeliverableView setShowEditButton={setShowEditButton} />
     </ApplicationPage>
   );

@@ -19,7 +19,15 @@ import Metadata from './Metadata';
 import QuestionsDeliverableStatusMessage from './QuestionsDeliverableStatusMessage';
 import { EditProps } from './types';
 
-const QuestionBox = ({ projectId, variable }: { projectId: number; variable: VariableWithValues }): JSX.Element => {
+const QuestionBox = ({
+  projectId,
+  variable,
+  hideStatusBadge,
+}: {
+  projectId: number;
+  variable: VariableWithValues;
+  hideStatusBadge?: boolean;
+}): JSX.Element => {
   const theme = useTheme();
   const containerRef = useRef(null);
   const visible = useIsVisible(containerRef);
@@ -35,7 +43,7 @@ const QuestionBox = ({ projectId, variable }: { projectId: number; variable: Var
       sx={{ marginBottom: theme.spacing(4) }}
     >
       <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
-        <VariableStatusBadge status={firstVariableValueStatus} />
+        {hideStatusBadge !== true && <VariableStatusBadge status={firstVariableValueStatus} />}
       </Box>
       <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>{variable.name}</Typography>
       {!!variable.description && (
@@ -62,9 +70,10 @@ const QuestionBox = ({ projectId, variable }: { projectId: number; variable: Var
   );
 };
 
-const QuestionsDeliverableCard = ({ deliverable }: EditProps): JSX.Element | null => {
+const QuestionsDeliverableCard = (props: EditProps): JSX.Element | null => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
+  const { deliverable, hideStatusBadge: hideStatusBadge } = props;
 
   const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
     selectDeliverableVariablesWithValues(state, deliverable.id, deliverable.projectId)
@@ -85,7 +94,7 @@ const QuestionsDeliverableCard = ({ deliverable }: EditProps): JSX.Element | nul
     <Box display='flex' flexDirection='column' flexGrow={1}>
       <QuestionsDeliverableStatusMessage deliverable={deliverable} variables={variablesWithValues} />
       <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-        <Metadata deliverable={deliverable} />
+        <Metadata {...props} />
         <Box
           sx={{
             borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
@@ -95,7 +104,12 @@ const QuestionsDeliverableCard = ({ deliverable }: EditProps): JSX.Element | nul
         >
           {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) =>
             variableDependencyMet(variableWithValues, variablesWithValues) ? (
-              <QuestionBox key={index} projectId={deliverable.projectId} variable={variableWithValues} />
+              <QuestionBox
+                key={index}
+                projectId={deliverable.projectId}
+                variable={variableWithValues}
+                hideStatusBadge={hideStatusBadge}
+              />
             ) : null
           )}
         </Box>

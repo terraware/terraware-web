@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 
-import QuestionsDeliverableEditView from 'src/components/DeliverableView/QuestionsDeliverableEditForm';
+import QuestionsDeliverableEditForm from 'src/components/DeliverableView/QuestionsDeliverableEditForm';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useApplicationData } from 'src/scenes/ApplicationRouter/provider/Context';
 
@@ -29,7 +29,7 @@ const SectionDeliverableEditView = () => {
     return null;
   }
 
-  return <QuestionsDeliverableEditView deliverable={{ ...deliverable, documents: [] }} exit={exit} />;
+  return <QuestionsDeliverableEditForm deliverable={{ ...deliverable, documents: [] }} exit={exit} hideStatusBadge />;
 };
 
 const SectionDeliverableEditWrapper = () => {
