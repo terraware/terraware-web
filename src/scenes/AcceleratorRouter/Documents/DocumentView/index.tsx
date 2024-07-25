@@ -27,6 +27,7 @@ import useStickyTabs from 'src/utils/useStickyTabs';
 import DocumentActions from './DocumentActions';
 import DocumentHistoryTab from './DocumentHistoryTab';
 import DocumentMetadata from './DocumentMetadata';
+import DocumentOutlinePanel from './DocumentOutlinePanel';
 import DocumentTab from './DocumentTab';
 import DocumentVariablesTab from './DocumentVariablesTab';
 
@@ -46,6 +47,8 @@ export default function DocumentView(): JSX.Element {
   const latestManifestId = useMemo(() => documentTemplate?.variableManifestId ?? -1, [documentTemplate]);
 
   const documentSelect = useAppSelector(selectGetDocument(documentId));
+
+  const [outlinePanelOpen, setOutlinePanelOpen] = useState(true);
 
   useSelectorProcessor(documentSelect, setDocument, {
     handleError: true,
@@ -158,11 +161,15 @@ export default function DocumentView(): JSX.Element {
         <DocumentMetadata document={document} />
         <DocumentActions document={document} onDocumentUpdate={fetchDocument} />
       </Box>
-      <Box marginTop={3} display='flex' flexDirection='column' flexGrow={1}>
+      <Box marginTop={3} display='flex' flexDirection='row' flexGrow={1}>
         <Box display='flex' flexGrow={1}>
           <Tabs tabs={tabs} activeTab={activeTab} onTabChange={onTabChange} />
         </Box>
-        <Box width='100px'>{/* add TOC here perhaps */}</Box>
+        <Box>
+          {activeTab === 'document' && (
+            <DocumentOutlinePanel document={document} open={outlinePanelOpen} setOpen={setOutlinePanelOpen} />
+          )}
+        </Box>
       </Box>
     </Page>
   );
