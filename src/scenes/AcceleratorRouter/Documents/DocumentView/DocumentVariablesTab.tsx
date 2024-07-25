@@ -180,8 +180,8 @@ const DocumentVariablesTab = ({ document: doc, setSelectedTab }: DocumentVariabl
   );
 
   const onUpdate = () => {
-    dispatch(requestListVariables(doc.variableManifestId));
     dispatch(requestListAllVariables());
+    dispatch(requestListVariables(doc.variableManifestId));
     dispatch(requestListVariablesValues({ projectId: doc.projectId }));
   };
 

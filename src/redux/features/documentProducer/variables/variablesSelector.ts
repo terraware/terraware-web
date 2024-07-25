@@ -239,7 +239,9 @@ export const selectAllVariablesWithValues = createCachedSelector(
       return [];
     }
   }
-)((state: RootState, projectId: number, maxValueId?: number) => variableListCompositeKeyFn({ projectId, maxValueId }));
+)((state: RootState, projectId: number, maxValueId?: number) => {
+  return variableListCompositeKeyFn({ projectId, maxValueId });
+});
 
 export const selectDeliverableVariablesWithValues = createCachedSelector(
   (state: RootState, deliverableId: number, projectId: number) =>

@@ -36,7 +36,6 @@ export const useProcessorCallbacks = (
     }
 
     const { status, data, error } = selector;
-
     if (lastStatus === status && lastData === data && lastError === error) {
       return;
     }

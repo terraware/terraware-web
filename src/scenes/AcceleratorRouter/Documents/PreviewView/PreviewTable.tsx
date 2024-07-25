@@ -13,19 +13,22 @@ import {
 import { CombinedInjectedValue, VariableValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
 
 import { getPrintValue } from './render';
-import { getSourceVariable } from './util';
+import { SectionVariableWithRelevantVariables, getSourceVariable } from './util';
 
 export const getSourceTableVariable = (
   combinedInjectedValue: CombinedInjectedValue,
   sectionVariable: SectionVariableWithValues
 ): TableVariable | false => {
   const sourceVariable: VariableUnion | undefined = getSourceVariable(combinedInjectedValue, sectionVariable);
+  if (!sourceVariable) {
+    debugger;
+  }
   return isTableVariable(sourceVariable) ? sourceVariable : false;
 };
 
 type PreviewTableProps = {
   combinedInjectedValue: CombinedInjectedValue;
-  sectionVariable: SectionVariableWithValues & { relevantVariables: VariableWithValues[] };
+  sectionVariable: SectionVariableWithRelevantVariables;
   sourceTableVariable: TableVariable;
   suppressCaptions?: boolean;
 };

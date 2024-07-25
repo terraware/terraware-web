@@ -12,7 +12,7 @@ import {
 import { CombinedInjectedValue } from 'src/types/documentProducer/VariableValue';
 import { getImagePath } from 'src/utils/images';
 
-import { getSourceVariable } from './util';
+import { SectionVariableWithRelevantVariables, getSourceVariable } from './util';
 
 export const getSourceImageVariable = (
   combinedInjectedValue: CombinedInjectedValue,
@@ -25,7 +25,7 @@ export const getSourceImageVariable = (
 type PreviewImageProps = {
   projectId: number;
   combinedInjectedValue: CombinedInjectedValue;
-  sectionVariable: SectionVariableWithValues & { relevantVariables: VariableWithValues[] };
+  sectionVariable: SectionVariableWithRelevantVariables;
   sourceImageVariable: ImageVariable;
   suppressCaptions?: boolean;
 };

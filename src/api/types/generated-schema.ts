@@ -2086,8 +2086,8 @@ export interface components {
       organizationId: number;
       organizationName: string;
       /** Format: int64 */
-      participantId: number;
-      participantName: string;
+      participantId?: number;
+      participantName?: string;
       /** Format: int64 */
       projectId: number;
       projectName: string;
@@ -2923,13 +2923,13 @@ export interface components {
       /** @description Optional description of the deliverable in HTML form. */
       descriptionHtml?: string;
       /** Format: date */
-      dueDate: string;
+      dueDate?: string;
       /** Format: int64 */
       id: number;
       /** Format: int64 */
       moduleId: number;
       moduleName: string;
-      moduleTitle: string;
+      moduleTitle?: string;
       name: string;
       /**
        * Format: int32
@@ -2940,8 +2940,8 @@ export interface components {
       organizationId: number;
       organizationName: string;
       /** Format: int64 */
-      participantId: number;
-      participantName: string;
+      participantId?: number;
+      participantName?: string;
       /** Format: int64 */
       projectId: number;
       projectName: string;
@@ -4379,6 +4379,12 @@ export interface components {
       name: string;
       originalName?: string;
     };
+    SubmitApplicationResponsePayload: {
+      application: components["schemas"]["ApplicationPayload"];
+      /** @description If the application failed any of the pre-screening checks, a list of the reasons why. Empty if the application passed pre-screening. */
+      problems: string[];
+      status: components["schemas"]["SuccessOrError"];
+    };
     SubmitSupportRequestPayload: {
       attachmentComment?: string;
       attachmentIds?: string[];
@@ -5370,7 +5376,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+          "application/json": components["schemas"]["SubmitApplicationResponsePayload"];
         };
       };
     };
