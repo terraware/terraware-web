@@ -20,31 +20,31 @@ root.render(
   // In strict mode, React performs all useEffect statements twice to look for potential code smell issues. This
   // causes the document producer preview to break since two new windows are created, which messes with the mounting
   // of the HTML which is later parsed by PagedJS
-  // <React.StrictMode>
-  <React.Suspense fallback={strings.LOADING}>
-    <Router>
-      <Routes>
-        <Route
-          path={APP_PATHS.ERROR}
-          element={
-            <ThemeProvider theme={theme}>
-              <AppError />
-            </ThemeProvider>
-          }
-        />
+  <React.StrictMode>
+    <React.Suspense fallback={strings.LOADING}>
+      <Router>
+        <Routes>
+          <Route
+            path={APP_PATHS.ERROR}
+            element={
+              <ThemeProvider theme={theme}>
+                <AppError />
+              </ThemeProvider>
+            }
+          />
 
-        <Route
-          path={'*'}
-          element={
-            <ThemeProvider theme={theme}>
-              <App />
-            </ThemeProvider>
-          }
-        />
-      </Routes>
-    </Router>
-  </React.Suspense>
-  // </React.StrictMode>
+          <Route
+            path={'*'}
+            element={
+              <ThemeProvider theme={theme}>
+                <App />
+              </ThemeProvider>
+            }
+          />
+        </Routes>
+      </Router>
+    </React.Suspense>
+  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
