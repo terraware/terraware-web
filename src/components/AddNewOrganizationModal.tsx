@@ -1,14 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Checkbox, Dropdown } from '@terraware/web-components';
-import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import RegionSelector from 'src/components/RegionSelector';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import Button from 'src/components/common/button/Button';
-import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { OrganizationService } from 'src/services';
 import strings from 'src/strings';
@@ -34,17 +31,15 @@ export type AddNewOrganizationModalProps = {
   isApplication?: boolean;
   open: boolean;
   onCancel: () => void;
-  redirectOnComplete?: string;
+  onSuccess: (organization: Organization) => void;
 };
 
 export default function AddNewOrganizationModal(props: AddNewOrganizationModalProps): JSX.Element {
   const { reloadOrganizations } = useOrganization();
   const { activeLocale } = useLocalization();
-  const navigate = useNavigate();
-  const { isApplication, onCancel, open, redirectOnComplete } = props;
+  const { isApplication, onCancel, onSuccess, open } = props;
   const theme = useTheme();
   const snackbar = useSnackbar();
-  const { isDesktop } = useDeviceInfo();
   const [nameError, setNameError] = useState('');
   const [timeZoneError, setTimeZoneError] = useState('');
   const [countryError, setCountryError] = useState('');
@@ -145,11 +140,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
     );
     if (response.requestSucceeded && response.organization) {
       reloadOrganizations();
-      navigate({ pathname: redirectOnComplete ?? APP_PATHS.HOME });
-      snackbar.pageSuccess(
-        isDesktop ? strings.ORGANIZATION_CREATED_MSG_DESKTOP : strings.ORGANIZATION_CREATED_MSG,
-        strings.formatString(strings.ORGANIZATION_CREATED_TITLE, response.organization.name)
-      );
+      onSuccess(response.organization);
     } else {
       snackbar.toastError(strings.GENERIC_ERROR, strings.ORGANIZATION_CREATE_FAILED);
     }

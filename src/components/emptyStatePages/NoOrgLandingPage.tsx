@@ -6,6 +6,7 @@ import AddNewOrganizationModal from 'src/components/AddNewOrganizationModal';
 import PageSnackbar from 'src/components/PageSnackbar';
 import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePages/EmptyStateContent';
 import strings from 'src/strings';
+import { Organization } from 'src/types/Organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const EMPTY_STATE_CONTENT_STYLES = {
@@ -17,10 +18,10 @@ const EMPTY_STATE_CONTENT_STYLES = {
 };
 
 type Prop = {
-  redirectTo?: string;
+  onOrgCreated: (organization: Organization) => void;
 };
 
-export default function NoOrgLandingPage({ redirectTo }: Prop): JSX.Element {
+export default function NoOrgLandingPage({ onOrgCreated }: Prop): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const [isOrgModalOpen, setIsOrgModalOpen] = useState<boolean>(false);
@@ -56,7 +57,7 @@ export default function NoOrgLandingPage({ redirectTo }: Prop): JSX.Element {
         <AddNewOrganizationModal
           open={isOrgModalOpen}
           onCancel={() => setIsOrgModalOpen(false)}
-          redirectOnComplete={redirectTo}
+          onSuccess={(organization: Organization) => onOrgCreated(organization)}
         />
         <EmptyStateContent
           title={strings.TITLE_WELCOME}

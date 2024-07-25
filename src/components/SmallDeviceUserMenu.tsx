@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -23,7 +23,9 @@ import { useOrganization } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
 import { getRgbaFromHex } from 'src/utils/color';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useEnvironment from 'src/utils/useEnvironment';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import AddNewOrganizationModal from './AddNewOrganizationModal';
 import Icon from './common/icon/Icon';
@@ -45,6 +47,8 @@ export default function SmallDeviceUserMenu({
   const anchorRef = React.useRef<HTMLButtonElement>(null);
   const { isProduction } = useEnvironment();
   const iconLetter = user?.firstName?.charAt(0) || user?.lastName?.charAt(0) || user?.email?.charAt(0);
+  const snackbar = useSnackbar();
+  const { isDesktop } = useDeviceInfo();
 
   const iconStyles = {
     alignItems: 'center',
@@ -106,6 +110,17 @@ export default function SmallDeviceUserMenu({
     });
   };
 
+  const onOrgCreated = useCallback(
+    (organization: Organization) => {
+      navigate({ pathname: APP_PATHS.HOME });
+      snackbar.pageSuccess(
+        isDesktop ? strings.ORGANIZATION_CREATED_MSG_DESKTOP : strings.ORGANIZATION_CREATED_MSG,
+        strings.formatString(strings.ORGANIZATION_CREATED_TITLE, organization.name)
+      );
+    },
+    [snackbar, isDesktop]
+  );
+
   return (
     <Box
       sx={[
@@ -123,7 +138,11 @@ export default function SmallDeviceUserMenu({
         },
       ]}
     >
-      <AddNewOrganizationModal open={newOrganizationModalOpened} onCancel={onCloseCreateOrganizationModal} />
+      <AddNewOrganizationModal
+        open={newOrganizationModalOpened}
+        onCancel={onCloseCreateOrganizationModal}
+        onSuccess={(organization: Organization) => onOrgCreated(organization)}
+      />
       <Button ref={anchorRef} id='composition-button' onClick={handleToggle} sx={{ minWidth: 'auto' }}>
         <Box sx={iconStyles}>{iconLetter}</Box>
       </Button>

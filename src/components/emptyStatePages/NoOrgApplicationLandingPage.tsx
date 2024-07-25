@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { Box, Container, useTheme } from '@mui/material';
 
 import AddNewOrganizationModal from 'src/components/AddNewOrganizationModal';
 import PageSnackbar from 'src/components/PageSnackbar';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
+import useNavigateTo from 'src/hooks/useNavigateTo';
+import ApplicationService from 'src/services/ApplicationService';
+import ProjectsService from 'src/services/ProjectsService';
 import strings from 'src/strings';
+import { Organization } from 'src/types/Organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import useSnackbar from 'src/utils/useSnackbar';
 
 const EMPTY_STATE_CONTENT_STYLES = {
   titleFontSize: '28px',
@@ -16,14 +21,39 @@ const EMPTY_STATE_CONTENT_STYLES = {
   listContainerVerticalMargin: '48px',
 };
 
-type Prop = {
-  redirectTo?: string;
-};
-
-export default function NoOrgApplicationLandingPage({ redirectTo }: Prop): JSX.Element {
+export default function NoOrgApplicationLandingPage(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const [isOrgModalOpen, setIsOrgModalOpen] = useState<boolean>(false);
+  const { goToApplication, goToApplicationList } = useNavigateTo();
+  const { toastError } = useSnackbar();
+
+  const onOrgCreated = useCallback(
+    async (organization: Organization) => {
+      // Create project with the same name
+      const projectResult = await ProjectsService.createProject({
+        name: organization.name,
+        organizationId: organization.id,
+      });
+
+      if (!(projectResult.data && projectResult.requestSucceeded)) {
+        toastError(strings.ERROR_CREATE_PROJECT);
+        goToApplicationList();
+        return;
+      }
+
+      // Create application with new project
+      const applicationResult = await ApplicationService.createApplication(projectResult.data.id);
+      if (!(applicationResult.data && applicationResult.requestSucceeded)) {
+        toastError(strings.ERROR_CREATE_APPLICATION);
+        goToApplicationList();
+        return;
+      }
+
+      goToApplication(applicationResult.data.id);
+    },
+    [goToApplication, goToApplicationList]
+  );
 
   return (
     <Box
@@ -51,7 +81,7 @@ export default function NoOrgApplicationLandingPage({ redirectTo }: Prop): JSX.E
           isApplication
           open={isOrgModalOpen}
           onCancel={() => setIsOrgModalOpen(false)}
-          redirectOnComplete={redirectTo}
+          onSuccess={(organization: Organization) => onOrgCreated(organization)}
         />
         <EmptyStateContent
           title={strings.TITLE_WELCOME}
