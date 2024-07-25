@@ -47,6 +47,7 @@ export enum APP_PATHS {
   APPLICATION_REVIEW = '/applications/:applicationId/review',
   APPLICATION_SECTION = '/applications/:applicationId/sections/:sectionId',
   APPLICATION_SECTION_DELIVERABLE = '/applications/:applicationId/sections/:sectionId/deliverables/:deliverableId',
+  APPLICATION_SECTION_DELIVERABLE_EDIT = '/applications/:applicationId/sections/:sectionId/deliverables/:deliverableId/edit',
   BATCH_WITHDRAW = '/batch/withdraw',
   CHECKIN = '/checkin',
   DELIVERABLES = '/deliverables',

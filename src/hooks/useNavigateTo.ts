@@ -43,6 +43,20 @@ export default function useNavigateTo() {
         });
       },
 
+      goToApplicationSectionDeliverableEdit: (
+        applicationId: number,
+        sectionId: number,
+        deliverableId: number,
+        variableId?: number
+      ) => {
+        navigate({
+          pathname: APP_PATHS.APPLICATION_SECTION_DELIVERABLE_EDIT.replace(':applicationId', `${applicationId}`)
+            .replace(':sectionId', `${sectionId}`)
+            .replace(':deliverableId', `${deliverableId}`),
+          ...(variableId ? { search: `variableId=${variableId}` } : {}),
+        });
+      },
+
       goToContactUsForm: (requestType: SupportRequestType) => {
         navigate({
           pathname: APP_PATHS.HELP_SUPPORT_FORM.replace(':requestType', getSupportRequestSubpath(requestType)),

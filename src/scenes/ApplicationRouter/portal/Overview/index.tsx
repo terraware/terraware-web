@@ -1,8 +1,11 @@
 import React, { useMemo } from 'react';
 
 import { Box, Card, Typography, useTheme } from '@mui/material';
+import { Button } from '@terraware/web-components';
 
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import CurrentTimeline from 'src/scenes/ModulesRouter/CurrentTimeline';
+import strings from 'src/strings';
 
 import { useApplicationData } from '../../provider/Context';
 import ApplicationPage from '../ApplicationPage';
@@ -75,10 +78,13 @@ const OverviewView = () => {
   );
 };
 
-const OverviewWrapper = () => (
-  <ApplicationPage>
-    <OverviewView />
-  </ApplicationPage>
-);
+const OverviewWrapper = () => {
+  const { goToHome } = useNavigateTo();
+  return (
+    <ApplicationPage rightComponent={<Button label={strings.EXIT_APPLICATION} onClick={goToHome} priority={'ghost'} />}>
+      <OverviewView />
+    </ApplicationPage>
+  );
+};
 
 export default OverviewWrapper;
