@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import { Box, Card, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -22,7 +22,15 @@ const PrescreenResultView = ({ isFailure, feedback }: ResultViewProp) => {
   const theme = useTheme();
 
   const { goToApplicationPrescreen, goToApplication } = useNavigateTo();
-  const { selectedApplication } = useApplicationData();
+  const { selectedApplication, restart, reload } = useApplicationData();
+
+  const handleRestart = useCallback(async () => {
+    if (selectedApplication) {
+      await restart();
+      await reload();
+      goToApplication(selectedApplication.id);
+    }
+  }, [selectedApplication, reload, restart, goToApplication]);
 
   if (!selectedApplication) {
     return;
@@ -56,7 +64,7 @@ const PrescreenResultView = ({ isFailure, feedback }: ResultViewProp) => {
       <Button
         label={isFailure ? strings.RESTART_PRESCREEN : strings.CONTINUE_TO_APPLICATION}
         onClick={() => {
-          !isFailure && goToApplication(selectedApplication.id);
+          isFailure && handleRestart();
         }}
         priority='secondary'
         style={{ marginTop: theme.spacing(2), marginBottom: theme.spacing(2) }}
@@ -76,7 +84,6 @@ const PrescreenResultView = ({ isFailure, feedback }: ResultViewProp) => {
 const PrescreenResultViewWrapper = () => {
   const { activeLocale } = useLocalization();
   const { selectedApplication } = useApplicationData();
-  const { goToApplication } = useNavigateTo();
 
   const crumbs: Crumb[] = useMemo(
     () =>
@@ -90,12 +97,6 @@ const PrescreenResultViewWrapper = () => {
         : [],
     [activeLocale, selectedApplication?.id]
   );
-
-  useEffect(() => {
-    if (selectedApplication && selectedApplication.status === 'Not Submitted') {
-      goToApplication(selectedApplication.id);
-    }
-  }, [selectedApplication]);
 
   return (
     <ApplicationPage crumbs={crumbs}>

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import { Button } from '@terraware/web-components';
 
@@ -17,8 +17,9 @@ type SectionViewProp = {
 
 const SectionView = ({ section, sectionDeliverables }: SectionViewProp) => {
   const { activeLocale } = useLocalization();
-  const { selectedApplication } = useApplicationData();
-  const { goToApplicationMap, goToApplicationSectionDeliverable } = useNavigateTo();
+  const { selectedApplication, restart, submit, reload } = useApplicationData();
+  const { goToApplication, goToApplicationMap, goToApplicationSectionDeliverable, goToApplicationPrescreenResult } =
+    useNavigateTo();
 
   const deliverableDetails = useMemo(() => {
     if (!selectedApplication) {
@@ -61,6 +62,23 @@ const SectionView = ({ section, sectionDeliverables }: SectionViewProp) => {
     [sectionDeliverables]
   );
 
+  const handleRestart = useCallback(async () => {
+    if (selectedApplication) {
+      await restart();
+      await reload();
+      goToApplication(selectedApplication.id);
+    }
+  }, [selectedApplication, reload, restart, goToApplication]);
+
+  const handleSubmit = useCallback(async () => {
+    console.log(submit);
+    if (selectedApplication) {
+      await submit();
+      await reload();
+      goToApplicationPrescreenResult(selectedApplication.id);
+    }
+  }, [selectedApplication, reload, submit, goToApplicationPrescreenResult]);
+
   return moduleDetails && selectedApplication ? (
     <ModuleDetailsCard
       deliverables={deliverableDetails}
@@ -68,12 +86,24 @@ const SectionView = ({ section, sectionDeliverables }: SectionViewProp) => {
       projectId={selectedApplication.id}
       showSimplifiedStatus
     >
-      {section.phase === 'Pre-Screen' && (
+      {section.phase === 'Pre-Screen' && selectedApplication.status === 'Not Submitted' && (
         <Button
-          disabled={!allDeliverablesCompleted}
+          disabled={!allDeliverablesCompleted && false}
           label={strings.SUBMIT_PRESCREEN}
-          onClick={() => {}}
+          onClick={() => {
+            handleSubmit();
+          }}
           priority='primary'
+        />
+      )}
+
+      {section.phase === 'Pre-Screen' && selectedApplication.status !== 'Not Submitted' && (
+        <Button
+          label={strings.RESTART_PRESCREEN}
+          onClick={() => {
+            handleRestart();
+          }}
+          priority='secondary'
         />
       )}
     </ModuleDetailsCard>

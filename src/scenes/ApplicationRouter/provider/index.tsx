@@ -55,12 +55,20 @@ const ApplicationProvider = ({ children }: Props) => {
     [allApplications]
   );
 
-  const _reload = useCallback(() => {
+  const _reload = useCallback(async () => {
+    if (selectedApplication) {
+      const result = await ApplicationService.getApplication(selectedApplication.id);
+      if (result.requestSucceeded && result.data) {
+        setSelectedApplication(result.data.application);
+      } else {
+        toastError(activeLocale ? strings.GENERIC_ERROR : 'Error reloading applicaiton');
+      }
+    }
     if (selectedOrganization) {
       const dispatched = dispatch(requestListApplications({ organizationId: selectedOrganization.id }));
       setListApplicationRequest(dispatched.requestId);
     }
-  }, [dispatch, selectedOrganization, setListApplicationRequest]);
+  }, [dispatch, selectedOrganization, setListApplicationRequest, setSelectedApplication, toastError]);
 
   const create = useCallback(
     async (projectId: number) => {

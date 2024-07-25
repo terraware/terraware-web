@@ -26,8 +26,6 @@ const PrescreenView = () => {
     return null;
   }
 
-  console.log(prescreenDeliverables);
-
   return <SectionView section={prescreenSection} sectionDeliverables={prescreenDeliverables} />;
 };
 

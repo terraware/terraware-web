@@ -9,8 +9,8 @@ export type ApplicationData = {
   selectedApplication?: Application;
   setSelectedApplication: (applicationId: number) => void;
   create: (projectId: number) => Promise<number | undefined>;
-  reload: () => void;
-  restart: () => void;
+  reload: () => Promise<void>;
+  restart: () => Promise<void>;
   submit: () => Promise<string[] | undefined>;
 };
 
@@ -22,8 +22,8 @@ export const ApplicationContext = createContext<ApplicationData>({
   setSelectedApplication: (applicationId: number) => {},
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   create: (projectId: number) => Promise.resolve(undefined),
-  reload: () => {},
-  restart: () => {},
+  reload: () => Promise.resolve(),
+  restart: () => Promise.resolve(),
   submit: () => Promise.resolve(undefined),
 });
 
