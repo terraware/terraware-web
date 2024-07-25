@@ -37,6 +37,7 @@ const ApplicationPage = ({ children, crumbs, hierarchicalCrumbs }: Props) => {
       hierarchicalCrumbs={hierarchicalCrumbs ?? true}
       // TODO: replace "Project Name" placeholder with actual project name once available in application data
       title={strings.PROJECT_NAME}
+      titleStyle={{ marginTop: '24px' }}
     >
       {children}
     </Page>
