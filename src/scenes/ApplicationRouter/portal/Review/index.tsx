@@ -80,7 +80,7 @@ const ReviewView = () => {
 
   return (
     <ApplicationPage crumbs={crumbs}>
-      {selectedApplication.status === 'Submitted' && <ApplicationStatusSubmitted />}
+      {selectedApplication.status !== 'Submitted' && <ReviewCard sections={applicationSections} />}
     </ApplicationPage>
   );
 };
