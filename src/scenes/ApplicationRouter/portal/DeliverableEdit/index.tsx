@@ -37,7 +37,7 @@ const SectionDeliverableEditWrapper = () => {
     deliverableId: string;
     sectionId: string;
   }>();
-  
+
   const { applicationDeliverables, applicationSections, selectedApplication } = useApplicationData();
   const { goToApplicationSectionDeliverable } = useNavigateTo();
 
@@ -47,7 +47,7 @@ const SectionDeliverableEditWrapper = () => {
   );
 
   const deliverable = applicationDeliverables.find((deliverable) => deliverable.id === Number(deliverableId));
-  
+
   useEffect(() => {
     if (!selectedApplication || !section || !deliverable) {
       return;
@@ -55,14 +55,14 @@ const SectionDeliverableEditWrapper = () => {
 
     if (section.phase === 'Pre-Screen') {
       if (deliverable.type !== 'Questions' || selectedApplication.status !== 'Not Submitted') {
-        goToApplicationSectionDeliverable(selectedApplication.id, section.moduleId, deliverable.id)
+        goToApplicationSectionDeliverable(selectedApplication.id, section.moduleId, deliverable.id);
       }
     } else if (section.phase === 'Application') {
       if (deliverable.type !== 'Questions' || selectedApplication.status !== 'Passed Pre-screen') {
-        goToApplicationSectionDeliverable(selectedApplication.id, section.moduleId, deliverable.id)
+        goToApplicationSectionDeliverable(selectedApplication.id, section.moduleId, deliverable.id);
       }
     }
-  }, [deliverable, section, selectedApplication])
+  }, [deliverable, section, selectedApplication]);
   return (
     <ApplicationPage>
       <SectionDeliverableEditView />

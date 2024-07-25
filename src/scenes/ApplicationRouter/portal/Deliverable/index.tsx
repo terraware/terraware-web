@@ -14,7 +14,6 @@ import strings from 'src/strings';
 
 import ApplicationPage from '../ApplicationPage';
 
-
 const SectionDeliverableView = () => {
   const { deliverableId } = useParams<{ deliverableId: string }>();
   const { selectedApplication, applicationDeliverables } = useApplicationData();
@@ -76,11 +75,11 @@ const SectionDeliverableWrapper = () => {
     }
 
     if (section.phase === 'Pre-Screen') {
-      return deliverable.type === 'Questions' && selectedApplication.status === 'Not Submitted'
+      return deliverable.type === 'Questions' && selectedApplication.status === 'Not Submitted';
     } else if (section.phase === 'Application') {
-      return deliverable.type === 'Questions' && selectedApplication.status === 'Passed Pre-screen'
+      return deliverable.type === 'Questions' && selectedApplication.status === 'Passed Pre-screen';
     }
-  }, [deliverable, section, selectedApplication])
+  }, [deliverable, section, selectedApplication]);
 
   const actionMenu = useMemo(() => {
     if (!activeLocale) {
