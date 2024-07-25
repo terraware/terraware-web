@@ -1,5 +1,11 @@
 const MAX_TRIES = 20;
 
+/**
+ * Wait for an element to exist within the DOM, return that element
+ * Will reject if the attempts exceeds MAX_TRIES
+ * @param {string} selector
+ * @returns HTMLElement
+ */
 const waitForElement = (selector) =>
   new Promise((resolve, reject) => {
     let interval;
@@ -8,7 +14,8 @@ const waitForElement = (selector) =>
     interval = setInterval(() => {
       const element = document.body.querySelector(selector);
       if (!element || element.length === 0) {
-        if (tries++ > MAX_TRIES) {
+        tries++;
+        if (tries > MAX_TRIES) {
           clearInterval(interval);
           reject('Could not find element');
         }
@@ -29,11 +36,9 @@ const createToc = async (config) => {
   try {
     tocElementDiv = await waitForElement(tocElement);
   } catch (error) {
-    console.log({ error });
+    console.error(error);
     return;
   }
-
-  console.log({ tocElementDiv });
 
   let tocUl = document.createElement('ul');
   tocUl.id = 'list-toc-generated';
@@ -56,6 +61,7 @@ const createToc = async (config) => {
       if (idElement == '') {
         element.id = 'title-element-' + tocElementNbr;
       }
+      // TODO this seems to be unused, figure out if it is needed or not
       let newIdElement = element.id;
     });
   }
@@ -93,6 +99,6 @@ const createToc = async (config) => {
       titleElements: ['.toc-major', '.toc-minor'],
     });
   } catch (error) {
-    console.log({ error });
+    console.error(error);
   }
 })();

@@ -51,6 +51,7 @@ export default function PreviewDocument({ doc }: PreviewDocumentProps): ReactEle
       return;
     }
 
+    // TODO We need to put a title section into the sample data to test this out. Currently there is only one section
     // const firstSection = documentVariables.shift();
 
     setSectionVariables(documentVariables as SectionVariableWithValues[]);
@@ -61,7 +62,6 @@ export default function PreviewDocument({ doc }: PreviewDocumentProps): ReactEle
   calculateFigures(sectionVariables, documentVariables || [], 'Table');
   calculateFigures(sectionVariables, documentVariables || [], 'Image');
 
-  console.log({ documentVariables, allVariables });
   if (!(documentVariables && allVariables.length > 0)) {
     return null;
   }

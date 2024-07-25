@@ -34,3 +34,7 @@ license-report.html
 
 # Test
 **/*.test.ts
+
+# Document Preview assets
+public/preview.css
+public/js/paged-0.4.3.polyfill.min.js
