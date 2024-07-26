@@ -1,17 +1,24 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { FormControlLabel, Grid, Radio, RadioGroup, useTheme } from '@mui/material';
-import { Dropdown } from '@terraware/web-components';
+import { BusySpinner, Dropdown } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization, useOrganization } from 'src/providers';
-import ProjectsService from 'src/services/ProjectsService';
+import {
+  requestCreateApplication,
+  requestCreateProjectApplication,
+} from 'src/redux/features/application/applicationAsyncThunks';
+import {
+  selectApplicationCreate,
+  selectApplicationCreateProject,
+} from 'src/redux/features/application/applicationSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
-import useSnackbar from 'src/utils/useSnackbar';
 
 import { useApplicationData } from './provider/Context';
 
@@ -24,20 +31,30 @@ type NewApplication = {
 export type NewApplicationModalProps = {
   open: boolean;
   onClose: () => void;
-  onSave: (applicationId: number) => void;
+  onApplicationCreated: (applicationId: number) => void;
 };
 
-const NewApplicationModal = ({ open, onClose, onSave }: NewApplicationModalProps): JSX.Element => {
+const NewApplicationModal = ({ open, onClose, onApplicationCreated }: NewApplicationModalProps): JSX.Element => {
   const theme = useTheme();
 
   const { activeLocale } = useLocalization();
   const { availableProjects } = useProjects();
   const { selectedOrganization } = useOrganization();
-  const { allApplications, create } = useApplicationData();
+  const { allApplications } = useApplicationData();
+  const dispatch = useAppDispatch();
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [projectNameError, setProjectNameError] = useState<string>('');
   const [projectSelectError, setProjectSelectError] = useState<string>('');
-  const { toastError } = useSnackbar();
+
+  const [createProjectApplicationRequestId, setCreateProjectApplicationRequestId] = useState<string>('');
+  const [createApplicationRequestId, setCreateApplicationRequestId] = useState<string>('');
+
+  const createProjectApplicationResult = useAppSelector(
+    selectApplicationCreateProject(createProjectApplicationRequestId)
+  );
+  const createApplicationResult = useAppSelector(selectApplicationCreate(createApplicationRequestId));
 
   const [newApplication, , onChange] = useForm<NewApplication>({
     projectType: availableProjects && availableProjects.length > 0 ? 'Existing' : 'New',
@@ -82,124 +99,150 @@ const NewApplicationModal = ({ open, onClose, onSave }: NewApplicationModalProps
   );
 
   const onCloseWrapper = useCallback(() => {
-    onClose();
+    if (!isLoading) {
+      onClose();
+    }
   }, [onClose]);
 
-  const onSaveWrapper = useCallback(async () => {
-    let error = '';
-    let projectId: number | undefined = undefined;
-
+  const onSave = useCallback(() => {
+    var error = '';
     if (newApplication.projectType === 'New') {
-      error = validateProjectName(newApplication.projectName ?? '');
-      setProjectNameError(error);
+      if ((error = validateProjectName(newApplication.projectName!!))) {
+        setProjectNameError(error);
+        return;
+      }
 
-      if (!error && newApplication.projectName) {
-        const projectResult = await ProjectsService.createProject({
-          name: newApplication.projectName,
+      const createProjectApplicationRequest = dispatch(
+        requestCreateProjectApplication({
+          projectName: newApplication.projectName ?? '',
           organizationId: selectedOrganization.id,
-        });
-        if (projectResult.requestSucceeded && projectResult.data) {
-          projectId = projectResult.data.id;
-        } else {
-          toastError(activeLocale ? strings.ERROR_CREATE_PROJECT : 'Error creating project');
-          return;
-        }
-      } else {
-        return;
-      }
+        })
+      );
+      setCreateProjectApplicationRequestId(createProjectApplicationRequest.requestId);
+      setIsLoading(true);
     } else {
-      error = validateProjectSelect(newApplication.projectId);
-      setProjectSelectError(error);
-      if (!error) {
-        projectId = newApplication.projectId;
-      } else {
+      if ((error = validateProjectSelect(newApplication.projectId))) {
+        setProjectSelectError(error);
         return;
       }
-    }
 
-    if (!!projectId) {
-      const newApplicationId = await create(projectId);
-      if (newApplicationId) {
-        onSave(newApplicationId);
-      }
+      const createApplicationRequest = dispatch(requestCreateApplication({ projectId: newApplication.projectId!! }));
+      setCreateApplicationRequestId(createApplicationRequest.requestId);
+      setIsLoading(true);
     }
-  }, [create, onSave, newApplication, selectedOrganization, setProjectNameError]);
+  }, [
+    dispatch,
+    newApplication,
+    selectedOrganization,
+    validateProjectName,
+    validateProjectSelect,
+    setProjectNameError,
+    setProjectSelectError,
+    setCreateApplicationRequestId,
+    setCreateProjectApplicationRequestId,
+    setIsLoading,
+  ]);
+
+  useEffect(() => {
+    if (createApplicationResult.status === 'success' && createApplicationResult.data) {
+      setIsLoading(false);
+      onApplicationCreated(createApplicationResult.data);
+      onClose();
+      return;
+    }
+    if (createProjectApplicationResult.status === 'success' && createProjectApplicationResult.data) {
+      setIsLoading(false);
+      onApplicationCreated(createProjectApplicationResult.data);
+      onClose();
+      return;
+    }
+  }, [createApplicationResult, createProjectApplicationResult, onApplicationCreated, onClose, setIsLoading]);
 
   return (
-    <DialogBox
-      onClose={onCloseWrapper}
-      open={open}
-      title={strings.START_NEW_APPLICATION}
-      size='medium'
-      middleButtons={[
-        <Button
-          id='cancelNewApplication'
-          label={strings.CANCEL}
-          priority='secondary'
-          type='passive'
-          onClick={onCloseWrapper}
-          key='cancel-button'
-        />,
-        <Button id='saveNewApplication' label={strings.SAVE} onClick={onSaveWrapper} key='save-button' />,
-      ]}
-    >
-      <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-        <Grid item xs={12}>
-          <RadioGroup
-            name='radio-buttons-project-selection'
-            onChange={(_event, value) => onChange('projectType', value)}
-            value={newApplication.projectType}
-          >
-            <Grid item xs={12} textAlign='left' display='flex' flexDirection='row'>
-              <FormControlLabel
-                checked={newApplication.projectType === 'Existing'}
-                control={<Radio />}
-                disabled={!projectOptions?.length}
-                label={strings.SELECT_EXISTING_PROJECT}
-                value={'Existing'}
+    <>
+      {isLoading && <BusySpinner withSkrim={true} />}
+      <DialogBox
+        onClose={onCloseWrapper}
+        open={open}
+        title={strings.START_NEW_APPLICATION}
+        size='medium'
+        middleButtons={[
+          <Button
+            id='cancelNewApplication'
+            label={strings.CANCEL}
+            disabled={isLoading}
+            priority='secondary'
+            type='passive'
+            onClick={onCloseWrapper}
+            key='cancel-button'
+          />,
+          <Button
+            id='saveNewApplication'
+            label={strings.SAVE}
+            disabled={isLoading}
+            onClick={onSave}
+            key='save-button'
+          />,
+        ]}
+      >
+        <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
+          <Grid item xs={12}>
+            <RadioGroup
+              name='radio-buttons-project-selection'
+              onChange={(_event, value) => onChange('projectType', value)}
+              value={newApplication.projectType}
+            >
+              <Grid item xs={12} textAlign='left' display='flex' flexDirection='row'>
+                <FormControlLabel
+                  checked={newApplication.projectType === 'Existing'}
+                  control={<Radio />}
+                  disabled={!projectOptions?.length}
+                  label={strings.SELECT_EXISTING_PROJECT}
+                  value={'Existing'}
+                />
+                <FormControlLabel
+                  checked={newApplication.projectType === 'New'}
+                  control={<Radio />}
+                  label={strings.CREATE_NEW_PROJECT}
+                  value={'New'}
+                />
+              </Grid>
+            </RadioGroup>
+          </Grid>
+          <Grid item xs={12}>
+            {newApplication.projectType === 'New' && (
+              <TextField
+                required
+                type='text'
+                label={strings.PROJECT_NAME}
+                id='select_project'
+                onChange={(value) => {
+                  setProjectNameError('');
+                  onChange('projectName', value);
+                }}
+                errorText={projectNameError}
+                sx={{ marginTop: theme.spacing(1) }}
+                value={newApplication.projectName}
               />
-              <FormControlLabel
-                checked={newApplication.projectType === 'New'}
-                control={<Radio />}
-                label={strings.CREATE_NEW_PROJECT}
-                value={'New'}
+            )}
+            {newApplication.projectType === 'Existing' && (
+              <Dropdown
+                errorText={projectSelectError}
+                fullWidth={true}
+                label={strings.SELECT_PROJECT}
+                onChange={(value) => {
+                  setProjectSelectError('');
+                  onChange('projectId', value);
+                }}
+                options={projectOptions}
+                required
+                selectedValue={newApplication.projectId}
               />
-            </Grid>
-          </RadioGroup>
+            )}
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          {newApplication.projectType === 'New' && (
-            <TextField
-              required
-              type='text'
-              label={strings.PROJECT_NAME}
-              id='select_project'
-              onChange={(value) => {
-                setProjectNameError('');
-                onChange('projectName', value);
-              }}
-              errorText={projectNameError}
-              sx={{ marginTop: theme.spacing(1) }}
-              value={newApplication.projectName}
-            />
-          )}
-          {newApplication.projectType === 'Existing' && (
-            <Dropdown
-              errorText={projectSelectError}
-              fullWidth={true}
-              label={strings.SELECT_PROJECT}
-              onChange={(value) => {
-                setProjectSelectError('');
-                onChange('projectId', value);
-              }}
-              options={projectOptions}
-              required
-              selectedValue={newApplication.projectId}
-            />
-          )}
-        </Grid>
-      </Grid>
-    </DialogBox>
+      </DialogBox>
+    </>
   );
 };
 
