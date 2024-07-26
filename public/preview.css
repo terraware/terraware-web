@@ -4,6 +4,7 @@
 
     @top-left {
         content: element(headerLeft);
+        vertical-align: middle;
     }
 
     @top-right {
@@ -49,12 +50,10 @@
 /* Header content */
 .pagedjs_margin-top-left.hasContent {
     align-items: flex-end;
-    border-bottom: 1px solid #262626;
 }
 
 .pagedjs_margin-top-right.hasContent {
     align-items: flex-end;
-    border-bottom: 1px solid #262626;
 }
 
 .pagedjs_margin-top-right p {
@@ -65,7 +64,7 @@
 }
 
 .pagedjs_margin-top-left img {
-    padding-left: 0.25in;
+    
 }
 
 .header-left {
@@ -81,8 +80,16 @@ body {
     font-family: "Arial";
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #2C8658;
+}
+
 h1 {
-    color: #2b3a57;
     font-size: 24pt;
     font-weight: 400;
     font-variant: small-caps;
@@ -91,18 +98,15 @@ h1 {
 h2 {
     font-size: 13pt;
     font-weight: 400;
-    color: #057299;
 }
 
 h3 {
-    color: #0685b2;
     font-size: 11pt;
     font-weight: 400;
 }
 
 .section-number {
     display: inline-block;
-    min-width: 0.75in;
 }
 
 .section-body {
@@ -215,13 +219,11 @@ td {
 }
 
 #table-of-contents h1 {
-    margin: 0 0 10px 0;
-}
-
-#table-of-contents hr {
-    border: none;
-    border-top: 1px solid #2b3a57;
-    margin-bottom: 24px;
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 36px;
+    color: #333025;
+    margin: 48px 0;
 }
 
 #table-of-contents ul {
@@ -248,4 +250,36 @@ td {
     margin-top: 6pt;
     font-size: 12pt;
     padding-left: 0.25in;
+}
+
+/* hack for leaders */
+
+#list-toc-generated {
+    overflow-x: hidden;
+}
+
+/* fake leading */
+#list-toc-generated .toc-element::after {
+    content: ".............................................."
+        ".............................................."
+        ".............................................." "........";
+    float: left;
+    width: 0;
+    padding-left: 5px;
+    letter-spacing: 2px;
+}
+
+#list-toc-generated .toc-element {
+    display: flex;
+}
+
+#list-toc-generated .toc-element a::after {
+    position: absolute;
+    right: 0;
+    background-color: white;
+    padding-left: 6px;
+}
+
+#list-toc-generated .toc-element a {
+    right: 0;
 }

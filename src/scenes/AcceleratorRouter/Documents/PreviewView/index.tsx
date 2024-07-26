@@ -74,7 +74,7 @@ export default function Preview({ docId, close }: PreviewProps) {
         // attach the pagedjs polyfill script
         attachScript('js/paged-0.4.3.polyfill.min.js');
         // TODO is this value acceptable? Should we figure out another way to do this?
-      }, 500);
+      }, 200);
 
       if (close) {
         newWindow.onbeforeunload = () => close();
