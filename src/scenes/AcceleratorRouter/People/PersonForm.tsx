@@ -180,8 +180,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
               valueRenderer={(v) => v}
               selectedOptions={localRecord.globalRoles || []}
               label={strings.ROLE_REQUIRED}
-              // this should be an error text
-              helperText={roleError}
+              errorText={roleError}
             />
           </Grid>
           <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
