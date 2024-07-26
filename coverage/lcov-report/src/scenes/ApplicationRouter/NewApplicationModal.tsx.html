@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/58</span>
+                <span class='fraction'>0/61</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/56</span>
+                <span class='fraction'>0/54</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/55</span>
+                <span class='fraction'>0/58</span>
             </div>
         
             
@@ -265,7 +265,11 @@
 <a name='L200'></a><a href='#L200'>200</a>
 <a name='L201'></a><a href='#L201'>201</a>
 <a name='L202'></a><a href='#L202'>202</a>
-<a name='L203'></a><a href='#L203'>203</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L203'></a><a href='#L203'>203</a>
+<a name='L204'></a><a href='#L204'>204</a>
+<a name='L205'></a><a href='#L205'>205</a>
+<a name='L206'></a><a href='#L206'>206</a>
+<a name='L207'></a><a href='#L207'>207</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -293,6 +297,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -301,16 +311,14 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -477,11 +485,12 @@ import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization, useOrganization } from 'src/providers';
-import ApplicationService from 'src/services/ApplicationService';
 import ProjectsService from 'src/services/ProjectsService';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
+&nbsp;
+import { useApplicationData } from './provider/Context';
 &nbsp;
 type NewApplication = {
   projectType: 'Existing' | 'New';
@@ -501,6 +510,7 @@ const NewApplicationModal = <span class="cstat-no" title="statement not covered"
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const { availableProjects } = <span class="cstat-no" title="statement not covered" >useProjects();</span>
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
+  const { allApplications, create } = <span class="cstat-no" title="statement not covered" >useApplicationData();</span>
 &nbsp;
   const [projectNameError, setProjectNameError] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const [projectSelectError, setProjectSelectError] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
@@ -512,8 +522,10 @@ const NewApplicationModal = <span class="cstat-no" title="statement not covered"
   });
 &nbsp;
   const projectOptions = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-    // TODO: filter out projects that already have applications, or in the accelerator
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >(availableProjects || []).map(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; (<span class="cstat-no" title="statement not covered" >{ label: project.name, value: project.id })</span>),</span>
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt;
+<span class="cstat-no" title="statement not covered" >      (availableProjects || [])</span>
+        .filter(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; <span class="cstat-no" title="statement not covered" >allApplications?.every(<span class="fstat-no" title="function not covered" >(a</span>pplication) =&gt; <span class="cstat-no" title="statement not covered" >application.projectId !== project.id)</span>)</span>
+        .map(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; (<span class="cstat-no" title="statement not covered" >{ label: project.name, value: project.id })</span>),
     [availableProjects]
   );
 &nbsp;
@@ -583,12 +595,12 @@ const NewApplicationModal = <span class="cstat-no" title="statement not covered"
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (!!projectId) {</span>
-      const result = <span class="cstat-no" title="statement not covered" >await ApplicationService.createApplication(projectId);</span>
-<span class="cstat-no" title="statement not covered" >      if (result.requestSucceeded &amp;&amp; result.data) {</span>
-<span class="cstat-no" title="statement not covered" >        onSave(result.data?.id);</span>
+      const newApplicationId = <span class="cstat-no" title="statement not covered" >await create(projectId);</span>
+<span class="cstat-no" title="statement not covered" >      if (newApplicationId) {</span>
+<span class="cstat-no" title="statement not covered" >        onSave(newApplicationId);</span>
       }
     }
-  }, [onSave, newApplication, selectedOrganization, setProjectNameError]);
+  }, [create, onSave, newApplication, selectedOrganization, setProjectNameError]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;DialogBox
@@ -619,7 +631,7 @@ const NewApplicationModal = <span class="cstat-no" title="statement not covered"
               &lt;FormControlLabel
                 checked={newApplication.projectType === 'Existing'}
                 control={&lt;Radio /&gt;}
-                disabled={!availableProjects?.length}
+                disabled={!projectOptions?.length}
                 label={strings.SELECT_EXISTING_PROJECT}
                 value={'Existing'}
               /&gt;
@@ -676,7 +688,7 @@ export default NewApplicationModal;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-25T23:10:10.917Z
+                at 2024-07-26T02:24:47.948Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
