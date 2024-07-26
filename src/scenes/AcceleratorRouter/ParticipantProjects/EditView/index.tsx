@@ -262,28 +262,28 @@ const EditView = () => {
               </Typography>
             </Grid>
             <MinMaxCarbonTextfield
-              label='Min-Max Carbon Accumulation (tCO2/ha/yr)'
+              label={strings.MIN_MAX_CARBON_ACCUMULATION}
               onChange={onChangeParticipantProject}
               valueMax={participantProjectRecord?.maxCarbonAccumulation}
               valueMin={participantProjectRecord?.minCarbonAccumulation}
             />
             <ProjectFieldTextfield
               id={'carbonCapacity'}
-              label='Carbon Capacity (tCO2/ha)'
+              label={strings.CARBON_CAPACITY_TC02_HA}
               onChange={onChangeParticipantProject}
               type={'number'}
               value='770'
             />
             <ProjectFieldTextfield
               id={'annualCarbon'}
-              label='Annual Carbon (t)'
+              label={strings.ANNUAL_CARBON_T}
               onChange={onChangeParticipantProject}
               type={'number'}
               value='82566'
             />
             <ProjectFieldTextfield
               id={'totalCarbon'}
-              label='Total Carbon (t)'
+              label={strings.TOTAL_CARBON_T}
               onChange={onChangeParticipantProject}
               type={'number'}
               value='3302640'

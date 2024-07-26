@@ -221,16 +221,16 @@ const SingleView = () => {
                 </Typography>
               </Grid>
               <ProjectFieldDisplay
-                label='Min-Max Carbon Accumulation (tCO2/ha/yr)'
+                label={strings.MIN_MAX_CARBON_ACCUMULATION}
                 value={
                   participantProject?.minCarbonAccumulation && participantProject?.maxCarbonAccumulation
                     ? `${participantProject.minCarbonAccumulation}-${participantProject.maxCarbonAccumulation}`
                     : false
                 }
               />
-              <ProjectFieldDisplay label='Carbon Capacity (tCO2/ha)' value='770' />
-              <ProjectFieldDisplay label='Annual Carbon (t)' value='82,566' />
-              <ProjectFieldDisplay label='Total Carbon (t)' value='3,302,640' />
+              <ProjectFieldDisplay label={strings.CARBON_CAPACITY_TC02_HA} value='770' />
+              <ProjectFieldDisplay label={strings.ANNUAL_CARBON_T} value='82,566' />
+              <ProjectFieldDisplay label={strings.TOTAL_CARBON_T} value='3,302,640' />
             </Grid>
           </Card>
           <Card
