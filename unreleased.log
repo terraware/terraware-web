@@ -1,3 +1,4 @@
+0bc4de40dae SW-5549 Redirect global users with no orgs to Accelerator Console (#2907)
 f29ee0dc529 Updated translations from Phrase (#2905)
 4515830a26f SW-5666 Added submit button to prescreen, make API calls into hooks (#2902)
 94a07f9912a SW-5526 Add context aware help link (#2903)
