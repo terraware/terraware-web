@@ -47,7 +47,7 @@ const SingleView = () => {
   const isAllowedExport = isAllowed('EXPORT_PARTICIPANT_PROJECT');
   const isAllowedViewScoreAndVoting = isAllowed('VIEW_PARTICIPANT_PROJECT_SCORING_VOTING');
 
-  const { allApplications, selectedApplication } = useApplicationData();
+  const { allApplications } = useApplicationData();
 
   const projectApplication = useMemo(
     () => allApplications?.find((app) => app.projectId === projectId),
