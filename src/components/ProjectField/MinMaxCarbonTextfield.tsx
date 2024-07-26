@@ -3,6 +3,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
+import strings from 'src/strings';
+
 import { EditFieldValue } from '.';
 import GridEntryWrapper from './GridEntryWrapper';
 
@@ -61,7 +63,7 @@ const MinMaxCarbonTextfield = ({ height, onChange, valueMax, valueMin }: MinMaxC
             lineHeight: '20px',
           }}
         >
-          Label here
+          {strings.MIN_MAX_CARBON_ACCUMULATION}
         </Typography>
         <Box display='flex' alignItems='center' paddingX={theme.spacing(2)}>
           <Textfield
