@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1722019156985" clover="3.2.0">
-  <project timestamp="1722019156985" name="All files">
-    <metrics statements="23376" coveredstatements="956" conditionals="15108" coveredconditionals="239" methods="7204" coveredmethods="163" elements="45688" coveredelements="1358" complexity="0" loc="23376" ncloc="23376" packages="224" files="1034" classes="1034"/>
+<coverage generated="1722024197035" clover="3.2.0">
+  <project timestamp="1722024197035" name="All files">
+    <metrics statements="23376" coveredstatements="956" conditionals="15110" coveredconditionals="239" methods="7204" coveredmethods="163" elements="45690" coveredelements="1358" complexity="0" loc="23376" ncloc="23376" packages="224" files="1034" classes="1034"/>
     <package name="src">
       <metrics statements="176" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -15547,9 +15547,9 @@
       </file>
     </package>
     <package name="src.scenes.ApplicationRouter.portal">
-      <metrics statements="60" coveredstatements="0" conditionals="47" coveredconditionals="0" methods="18" coveredmethods="0"/>
+      <metrics statements="60" coveredstatements="0" conditionals="49" coveredconditionals="0" methods="18" coveredmethods="0"/>
       <file name="ApplicationPage.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ApplicationRouter/portal/ApplicationPage.tsx">
-        <metrics statements="8" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <metrics statements="8" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="18" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
