@@ -47,6 +47,7 @@ const SingleView = () => {
   const isAllowedExport = isAllowed('EXPORT_PARTICIPANT_PROJECT');
   const isAllowedViewScoreAndVoting = isAllowed('VIEW_PARTICIPANT_PROJECT_SCORING_VOTING');
 
+  const { allApplications, applicationSections, selectedApplication } = useApplicationData();
   const onOptionItemClick = useCallback((item: DropdownItem) => {
     if (item.value === 'export-participant-project') {
       setExportModalOpen(true);
