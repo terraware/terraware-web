@@ -252,8 +252,8 @@ td {
     padding-left: 0.25in;
 }
 
+/** @see https://pagedjs.org/posts/build-a-table-of-contents-from-your-html/ */
 /* hack for leaders */
-
 #list-toc-generated {
     overflow-x: hidden;
 }
@@ -283,3 +283,4 @@ td {
 #list-toc-generated .toc-element a {
     right: 0;
 }
+/*****************************************************************************/
