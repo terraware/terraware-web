@@ -1,9 +1,10 @@
 import React, { useCallback, useMemo } from 'react';
 
-import { Box, Card, Typography, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
+import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
