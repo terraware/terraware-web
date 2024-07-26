@@ -33,7 +33,7 @@ const ApplicationPage = ({ children, crumbs, hierarchicalCrumbs, rightComponent 
       rightComponent={rightComponent}
       hierarchicalCrumbs={hierarchicalCrumbs ?? true}
       // TODO: replace "Project Name" placeholder with actual project name once available in application data
-      title={strings.PROJECT_NAME}
+      title={strings.formatString(strings.APPLICATION_FOR_PROJECT, selectedApplication?.projectName ?? '')}
       titleStyle={{ marginTop: '24px' }}
     >
       {selectedApplication?.status === 'Failed Pre-screen' && (

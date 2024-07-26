@@ -81,7 +81,7 @@ const ApplicationListView = () => {
               >
                 <ApplicationCard
                   applicationId={application.id}
-                  applicationName={`Applicatoin ${application.id}`}
+                  applicationName={application.projectName}
                   applicationStatus={application.status}
                   completed={false}
                   dateStarted={DateTime.fromISO(application.createdTime)}

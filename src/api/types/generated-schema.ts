@@ -1291,6 +1291,7 @@ export interface components {
       organizationId: number;
       /** Format: int64 */
       projectId: number;
+      projectName: string;
       /** @enum {string} */
       status: "Accepted" | "Carbon Eligible" | "Failed Pre-screen" | "Issue Active" | "Issue Pending" | "Issue Resolved" | "Needs Follow-up" | "Not Accepted" | "Not Submitted" | "Passed Pre-screen" | "PL Review" | "Pre-check" | "Ready for Review" | "Submitted" | "In Review" | "Waitlist";
     };
@@ -2518,10 +2519,6 @@ export interface components {
     GetApplicationHistoryResponsePayload: {
       /** @description History of metadata changes in reverse chronological order. */
       history: components["schemas"]["ApplicationHistoryPayload"][];
-      status: components["schemas"]["SuccessOrError"];
-    };
-    GetApplicationModuleDeliverablesResponsePayload: {
-      deliverables: components["schemas"]["ApplicationDeliverablePayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
     GetApplicationModulesResponsePayload: {
@@ -5422,7 +5419,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["GetApplicationModuleDeliverablesResponsePayload"];
+          "application/json": components["schemas"]["GetApplicationDeliverablesResponsePayload"];
         };
       };
     };
@@ -5606,7 +5603,7 @@ export interface operations {
   listDeliverables: {
     parameters: {
       query?: {
-        /** @description Filter deliverables for by modules. Can we used with other request params. */
+        /** @description Filter deliverables by modules. Can be used with other request params. */
         moduleId?: number;
         /** @description List deliverables for projects belonging to this organization. Ignored if participantId or projectId is specified. */
         organizationId?: number;
