@@ -6,7 +6,9 @@ import { Props } from '@terraware/web-components/components/Textfield/Textfield'
 type DisplayFieldValue = string | number | null | undefined | JSX.Element | false;
 
 export interface ProjectFieldProps {
+  height?: string;
   label?: string;
+  md?: number;
   value?: DisplayFieldValue;
   rightBorder?: boolean;
   user?: string;
@@ -17,9 +19,10 @@ export type ProjectIdFieldProps = ProjectFieldProps & {
   id: string;
 };
 
-type EditFieldValue = string | number | undefined;
+export type EditFieldValue = string | number | undefined;
 
 export interface ProjectFieldEditProps {
+  height?: string;
   id: string;
   label: string;
   onChange: (id: string, value: string) => void;

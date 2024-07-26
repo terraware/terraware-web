@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Grid, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 
 import Page from 'src/components/Page';
+import ApplicationStatusCard from 'src/components/ProjectField/ApplicationStatusCard';
 import CountrySelect from 'src/components/ProjectField/CountrySelect';
-import ProjectFieldDisplay from 'src/components/ProjectField/Display';
 import LandUseMultiSelect from 'src/components/ProjectField/LandUseMultiSelect';
 import ProjectFieldMeta from 'src/components/ProjectField/Meta';
+import MinMaxCarbonTextfield from 'src/components/ProjectField/MinMaxCarbonTextfield';
 import PhaseScoreCard from 'src/components/ProjectField/PhaseScoreCard';
 import RegionDisplay from 'src/components/ProjectField/RegionDisplay';
 import ProjectFieldTextAreaEdit from 'src/components/ProjectField/TextAreaEdit';
@@ -21,6 +22,7 @@ import { selectParticipantProjectUpdateRequest } from 'src/redux/features/partic
 import { requestProjectUpdate } from 'src/redux/features/projects/projectsAsyncThunks';
 import { selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useApplicationData } from 'src/scenes/ApplicationRouter/provider/Context';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -40,6 +42,7 @@ const EditView = () => {
   const { phaseVotes } = useVotingData();
   const { goToParticipantProject } = useNavigateTo();
   const { isAllowed } = useUser();
+  const { selectedApplication } = useApplicationData();
 
   const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
 
@@ -157,15 +160,18 @@ const EditView = () => {
           }}
         >
           <Grid container>
-            <ProjectFieldTextfield
-              id={'name'}
-              label={strings.PROJECT_NAME}
-              onChange={onChangeProject}
-              value={projectRecord?.name}
-            />
+            <Grid item xs={12}>
+              <ProjectFieldTextfield
+                height='auto'
+                id={'name'}
+                label={strings.PROJECT_NAME}
+                onChange={onChangeProject}
+                value={projectRecord?.name}
+              />
+            </Grid>
+            <ApplicationStatusCard application={selectedApplication} />
             <PhaseScoreCard phaseScores={phase1Scores} />
             <VotingDecisionCard phaseVotes={phaseVotes} />
-            <ProjectFieldDisplay value={false} />
             <ProjectFieldTextfield
               id={'fileNaming'}
               label={strings.FILE_NAMING}
@@ -221,20 +227,6 @@ const EditView = () => {
               value={participantProjectRecord?.totalExpansionPotential}
             />
             <ProjectFieldTextfield
-              id={'minCarbonAccumulation'}
-              label={strings.MINIMUM_CARBON_ACCUMULATION}
-              onChange={onChangeParticipantProject}
-              type={'number'}
-              value={participantProjectRecord?.minCarbonAccumulation}
-            />
-            <ProjectFieldTextfield
-              id={'maxCarbonAccumulation'}
-              label={strings.MAXIMUM_CARBON_ACCUMULATION}
-              onChange={onChangeParticipantProject}
-              type={'number'}
-              value={participantProjectRecord?.maxCarbonAccumulation}
-            />
-            <ProjectFieldTextfield
               id={'perHectareBudget'}
               label={strings.PER_HECTARE_ESTIMATED_BUDGET}
               onChange={onChangeParticipantProject}
@@ -261,6 +253,40 @@ const EditView = () => {
               userId={project?.modifiedBy}
               userName={projectMeta?.modifiedByUserName}
               userLabel={strings.BY}
+            />
+          </Grid>
+          <Grid container>
+            <Grid item xs={12} margin={`0 ${theme.spacing(2)}`}>
+              <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
+                {strings.CARBON}
+              </Typography>
+            </Grid>
+            <MinMaxCarbonTextfield
+              label='Min-Max Carbon Accumulation (tCO2/ha/yr)'
+              onChange={onChangeParticipantProject}
+              valueMax={participantProjectRecord?.maxCarbonAccumulation}
+              valueMin={participantProjectRecord?.minCarbonAccumulation}
+            />
+            <ProjectFieldTextfield
+              id={'carbonCapacity'}
+              label='Carbon Capacity (tCO2/ha)'
+              onChange={onChangeParticipantProject}
+              type={'number'}
+              value='770'
+            />
+            <ProjectFieldTextfield
+              id={'annualCarbon'}
+              label='Annual Carbon (t)'
+              onChange={onChangeParticipantProject}
+              type={'number'}
+              value='82566'
+            />
+            <ProjectFieldTextfield
+              id={'totalCarbon'}
+              label='Total Carbon (t)'
+              onChange={onChangeParticipantProject}
+              type={'number'}
+              value='3302640'
             />
           </Grid>
         </Card>

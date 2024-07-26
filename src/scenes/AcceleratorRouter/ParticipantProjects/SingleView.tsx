@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Grid, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
+import ApplicationStatusCard from 'src/components/ProjectField/ApplicationStatusCard';
 import ProjectFieldDisplay from 'src/components/ProjectField/Display';
-import ProjectFieldLink from 'src/components/ProjectField/Link';
 import ProjectFieldMeta from 'src/components/ProjectField/Meta';
 import PhaseScoreCard from 'src/components/ProjectField/PhaseScoreCard';
 import ProjectFieldTextAreaDisplay from 'src/components/ProjectField/TextAreaDisplay';
@@ -18,6 +18,7 @@ import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
+import { useApplicationData } from 'src/scenes/ApplicationRouter/provider/Context';
 import { LocationService } from 'src/services';
 import ParticipantProjectService from 'src/services/ParticipantProjectService';
 import strings from 'src/strings';
@@ -117,12 +118,27 @@ const SingleView = () => {
               padding: `${theme.spacing(2)} ${theme.spacing(1)}`,
             }}
           >
+            <ProjectFieldDisplay label={strings.PROJECT_NAME} value={project?.name} />
+
             <Grid container>
-              <ProjectFieldDisplay label={strings.PROJECT_NAME} value={project?.name} />
+              {selectedApplication?.id ? (
+                <ApplicationStatusCard
+                  linkTo={APP_PATHS.APPLICATION_OVERVIEW.replace(':applicationId', `${selectedApplication.id}`)}
+                  application={selectedApplication}
+                />
+              ) : (
+                <ProjectFieldDisplay md={4} value={false} />
+              )}
               {isAllowedViewScoreAndVoting ? (
                 <>
-                  <PhaseScoreCard phaseScores={phase1Scores} />
-                  <VotingDecisionCard phaseVotes={phaseVotes} />
+                  <PhaseScoreCard
+                    linkTo={APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project.id}`)}
+                    phaseScores={phase1Scores}
+                  />
+                  <VotingDecisionCard
+                    linkTo={APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`)}
+                    phaseVotes={phaseVotes}
+                  />
                 </>
               ) : (
                 <>
@@ -130,10 +146,6 @@ const SingleView = () => {
                   <ProjectFieldDisplay value={false} />
                 </>
               )}
-              <ProjectFieldLink
-                label={strings.SEE_SCORECARD}
-                value={APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project.id}`)}
-              />
               <ProjectFieldDisplay
                 label={strings.FILE_NAMING}
                 value={participantProject?.fileNaming}
@@ -179,16 +191,6 @@ const SingleView = () => {
                 rightBorder={!isMobile}
               />
               <ProjectFieldDisplay
-                label={strings.MINIMUM_CARBON_ACCUMULATION}
-                value={participantProject?.minCarbonAccumulation}
-                rightBorder={!isMobile}
-              />
-              <ProjectFieldDisplay
-                label={strings.MAXIMUM_CARBON_ACCUMULATION}
-                value={participantProject?.maxCarbonAccumulation}
-                rightBorder={!isMobile}
-              />
-              <ProjectFieldDisplay
                 label={strings.PER_HECTARE_ESTIMATED_BUDGET}
                 value={participantProject?.perHectareBudget}
               />
@@ -211,6 +213,24 @@ const SingleView = () => {
                 userName={projectMeta?.modifiedByUserName}
                 userLabel={strings.BY}
               />
+            </Grid>
+            <Grid container>
+              <Grid item xs={12} margin={`0 ${theme.spacing(2)}`}>
+                <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
+                  {strings.CARBON}
+                </Typography>
+              </Grid>
+              <ProjectFieldDisplay
+                label='Min-Max Carbon Accumulation (tCO2/ha/yr)'
+                value={
+                  participantProject?.minCarbonAccumulation && participantProject?.maxCarbonAccumulation
+                    ? `${participantProject.minCarbonAccumulation}-${participantProject.maxCarbonAccumulation}`
+                    : false
+                }
+              />
+              <ProjectFieldDisplay label='Carbon Capacity (tCO2/ha)' value='770' />
+              <ProjectFieldDisplay label='Annual Carbon (t)' value='82,566' />
+              <ProjectFieldDisplay label='Total Carbon (t)' value='3,302,640' />
             </Grid>
           </Card>
           <Card
