@@ -13,13 +13,16 @@ import useEnvironment from 'src/utils/useEnvironment';
 
 const NoOrgRouter = () => {
   const { isProduction } = useEnvironment();
-  const { reloadUserPreferences: reloadPreferences } = useUser();
+  const { reloadUserPreferences: reloadPreferences, isAllowed } = useUser();
   const applicationEnabled = isEnabled('Accelerator Application');
 
   return (
     <Routes>
       <Route path={`${APP_PATHS.MY_ACCOUNT}/*`} element={<MyAccountRouter hasNav={false} />} />
-      <Route path={APP_PATHS.WELCOME} element={<NoOrgLandingPage />} />
+      <Route
+        path={APP_PATHS.WELCOME}
+        element={isAllowed('VIEW_CONSOLE') ? <Navigate to={APP_PATHS.ACCELERATOR_OVERVIEW} /> : <NoOrgLandingPage />}
+      />
       {applicationEnabled && (
         <Route
           path={`${APP_PATHS.APPLICATIONS}/*`}
@@ -28,6 +31,7 @@ const NoOrgRouter = () => {
       )}
       {!isProduction && <Route path={APP_PATHS.OPT_IN} element={<OptInFeaturesView refresh={reloadPreferences} />} />}
       <Route path={`${APP_PATHS.HELP_SUPPORT}/*`} element={<HelpSupportRouter />} />
+      <Route path={`${APP_PATHS.HOME}/*`} element={<NoOrgLandingPage />} />
       <Route path='*' element={<Navigate to={APP_PATHS.WELCOME} />} />
     </Routes>
   );
