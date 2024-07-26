@@ -26,8 +26,8 @@ const NewView = () => {
   const { setUserId, user } = personData;
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
+  const [roleError, setRoleError] = useState('');
   const debouncedEmail = useDebounce(email, 1000);
-
   const [searchRequestId, setSearchRequestId] = useState('');
   const searchRequest = useAppSelector(selectUserByEmailRequest(searchRequestId));
 
@@ -38,7 +38,18 @@ const NewView = () => {
 
   const handleOnSave = useCallback(
     (record: UserWithDeliverableCategories) => {
-      updatePerson.update(record);
+      let noErrors = true;
+      if (!record.email) {
+        setEmailError(strings.REQUIRED_FIELD);
+        noErrors = false;
+      }
+      if (!record.globalRoles || record.globalRoles.length < 1) {
+        setRoleError(strings.REQUIRED_FIELD);
+        noErrors = false;
+      }
+      if (noErrors) {
+        updatePerson.update(record);
+      }
     },
     [updatePerson]
   );
@@ -46,7 +57,6 @@ const NewView = () => {
   const handleOnChange = useCallback(
     (record: UserWithDeliverableCategories) => {
       if (record.email) {
-        setEmailError('');
         setEmail(record.email);
       }
     },
@@ -93,6 +103,7 @@ const NewView = () => {
         busy={updatePerson.busy}
         emailEnabled
         emailError={emailError}
+        roleError={roleError}
         onSave={handleOnSave}
         onCancel={goToPeople}
         onChange={handleOnChange}
