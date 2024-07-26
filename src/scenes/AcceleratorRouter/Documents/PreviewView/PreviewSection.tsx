@@ -66,6 +66,7 @@ const PreviewSection = ({
           <span> {sectionVariableWithRelevantVariables.name}</span>
         </h1>
       )}
+
       {isMinor && (
         <h2 className='toc-minor'>
           <span className='section-number'>{sectionVariableWithRelevantVariables.sectionNumber}</span>

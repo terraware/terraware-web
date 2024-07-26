@@ -55,11 +55,13 @@ const PreviewTableHorizontal = ({
       <tbody>
         {rows.map((tableColumn: VariableValue[], index: number) => (
           <tr key={index}>
-            {tableColumn.map((cell: VariableValue, _index: number) => (
-              <td key={_index}>
-                {cell.values.map((value) => getPrintValue(combinedInjectedValue, value, sectionVariable))}
-              </td>
-            ))}
+            {tableColumn.map((cell: VariableValue, _index: number) => {
+              return (
+                <td key={_index}>
+                  {(cell?.values || []).map((value) => getPrintValue(combinedInjectedValue, value, sectionVariable))}
+                </td>
+              );
+            })}
           </tr>
         ))}
       </tbody>
@@ -130,8 +132,8 @@ export const PreviewTable = ({
   return (
     <>
       {!suppressCaptions && (
-        <p>
-          Table {(relevantTableVariable as any).figure}{' '}
+        <p className='table-name'>
+          Table {(relevantTableVariable as any).figure} {relevantTableVariable.name}
           {combinedInjectedValue.citation && <span className='footnote'>{combinedInjectedValue.citation}</span>}
         </p>
       )}
