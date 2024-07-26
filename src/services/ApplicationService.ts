@@ -100,7 +100,7 @@ const restartApplication = async (applicationId: number): Promise<Response> => {
 };
 
 const submitApplication = async (applicationId: number): Promise<Response2<SubmitApplicationResponsePayload>> => {
-  return HttpService.root(APPLICATION_SUBMIT_ENDPOINT).get2<SubmitApplicationResponsePayload>({
+  return HttpService.root(APPLICATION_SUBMIT_ENDPOINT).post2<SubmitApplicationResponsePayload>({
     urlReplacements: { '{applicationId}': `${applicationId}` },
   });
 };

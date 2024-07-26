@@ -6,6 +6,8 @@ import Page from 'src/components/Page';
 import { useApplicationData } from 'src/scenes/ApplicationRouter/provider/Context';
 import strings from 'src/strings';
 
+import FeedbackMessage from './Prescreen/FeedbackMessage';
+
 type Props = {
   children?: ReactNode;
   crumbs?: Crumb[];
@@ -14,7 +16,7 @@ type Props = {
 };
 
 const ApplicationPage = ({ children, crumbs, hierarchicalCrumbs, rightComponent }: Props) => {
-  const { allApplications, selectedApplication, setSelectedApplication, reload } = useApplicationData();
+  const { allApplications, selectedApplication, setSelectedApplication } = useApplicationData();
 
   const pathParams = useParams<{ applicationId: string }>();
   const applicationId = Number(pathParams.applicationId);
@@ -22,8 +24,6 @@ const ApplicationPage = ({ children, crumbs, hierarchicalCrumbs, rightComponent 
   useEffect(() => {
     if (allApplications) {
       setSelectedApplication(applicationId);
-    } else {
-      reload();
     }
   }, [allApplications, applicationId, selectedApplication]);
 
@@ -36,6 +36,9 @@ const ApplicationPage = ({ children, crumbs, hierarchicalCrumbs, rightComponent 
       title={strings.PROJECT_NAME}
       titleStyle={{ marginTop: '24px' }}
     >
+      {selectedApplication?.status === 'Failed Pre-screen' && (
+        <FeedbackMessage feedback={selectedApplication.feedback} />
+      )}
       {children}
     </Page>
   );

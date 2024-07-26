@@ -96,6 +96,10 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
           const isCompleted =
             selectedApplication.status !== 'Not Submitted' && selectedApplication.status !== 'Failed Pre-screen';
 
+          const navPath =
+            selectedApplication.status === 'Not Submitted'
+              ? path
+              : APP_PATHS.APPLICATION_PRESCREEN_RESULT.replace(':applicationId', `${selectedApplication.id}`);
           return (
             <NavItem
               icon={isCompleted ? 'successFilled' : 'success'}
@@ -103,7 +107,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
               id={`application-section-${section.moduleId}`}
               key={section.moduleId}
               label={section.name}
-              onClick={() => closeAndNavigateTo(path)}
+              onClick={() => closeAndNavigateTo(navPath)}
               selected={!!isMatch}
             />
           );
