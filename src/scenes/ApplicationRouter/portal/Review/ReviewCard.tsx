@@ -9,7 +9,7 @@ import strings from 'src/strings';
 type ReviewCardProps = {
   sections: {
     name: string;
-    status: 'Incomplete' | 'Complete';
+    status?: 'Incomplete' | 'Complete';
   }[];
 };
 
@@ -63,7 +63,11 @@ const ReviewCard = ({ sections }: ReviewCardProps): JSX.Element => {
                 fontWeight={400}
                 lineHeight='24px'
               >
-                {strings.formatString(strings.REVIEW_APPLICATION_STATUS_TEXT, <b>{name}</b>, statusText(status))}
+                {strings.formatString(
+                  strings.REVIEW_APPLICATION_STATUS_TEXT,
+                  <b>{name}</b>,
+                  statusText(status ?? 'Incomplete')
+                )}
               </Typography>
             </Box>
           </Grid>

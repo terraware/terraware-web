@@ -1,26 +1,36 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import { Box, Card, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
+import { Crumb } from 'src/components/BreadCrumbs';
 import Link from 'src/components/common/Link';
+import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { ApplicationModuleWithDeliverables } from 'src/types/Application';
 
 import { useApplicationData } from '../../provider/Context';
+import ApplicationPage from '../ApplicationPage';
 
 type ResultViewProp = {
   isFailure: boolean;
   feedback?: string;
-  prescreenSection: ApplicationModuleWithDeliverables;
 };
 
-const ResultView = ({ isFailure, feedback, prescreenSection }: ResultViewProp) => {
+const PrescreenResultView = ({ isFailure, feedback }: ResultViewProp) => {
   const theme = useTheme();
 
-  const { goToApplicationMap, goToApplicationSectionDeliverable } = useNavigateTo();
-  const { selectedApplication } = useApplicationData();
+  const { goToApplicationPrescreen, goToApplication } = useNavigateTo();
+  const { selectedApplication, restart, reload } = useApplicationData();
+
+  const handleRestart = useCallback(async () => {
+    if (selectedApplication) {
+      await restart();
+      await reload();
+      goToApplication(selectedApplication.id);
+    }
+  }, [selectedApplication, reload, restart, goToApplication]);
 
   if (!selectedApplication) {
     return;
@@ -53,31 +63,49 @@ const ResultView = ({ isFailure, feedback, prescreenSection }: ResultViewProp) =
 
       <Button
         label={isFailure ? strings.RESTART_PRESCREEN : strings.CONTINUE_TO_APPLICATION}
-        onClick={() => {}}
+        onClick={() => {
+          isFailure && handleRestart();
+        }}
         priority='secondary'
         style={{ marginTop: theme.spacing(2), marginBottom: theme.spacing(2) }}
       />
 
       <Link
         fontSize='16px'
-        onClick={() => goToApplicationMap(selectedApplication.id)}
+        onClick={() => goToApplicationPrescreen(selectedApplication.id)}
         style={{ display: 'block', textAlign: 'center' }}
       >
-        {`${strings.VIEW} ${strings.PROPOSED_PROJECT_BOUNDARY}`}
+        {`${strings.VIEW} ${strings.VIEW_PRESCREEN_SUBMISSION}`}
       </Link>
-
-      {prescreenSection.deliverables.map((deliverable, index) => (
-        <Link
-          fontSize='16px'
-          onClick={() => goToApplicationSectionDeliverable(selectedApplication.id, prescreenSection.id, deliverable.id)}
-          key={index}
-          style={{ display: 'block', textAlign: 'center', marginTop: theme.spacing(1) }}
-        >
-          {`${strings.VIEW} ${deliverable.name}`}
-        </Link>
-      ))}
     </Card>
   );
 };
 
-export default ResultView;
+const PrescreenResultViewWrapper = () => {
+  const { activeLocale } = useLocalization();
+  const { selectedApplication } = useApplicationData();
+
+  const crumbs: Crumb[] = useMemo(
+    () =>
+      activeLocale && selectedApplication?.id
+        ? [
+            {
+              name: strings.ALL_SECTIONS,
+              to: APP_PATHS.APPLICATION_OVERVIEW.replace(':applicationId', `${selectedApplication.id}`),
+            },
+          ]
+        : [],
+    [activeLocale, selectedApplication?.id]
+  );
+
+  return (
+    <ApplicationPage crumbs={crumbs}>
+      <PrescreenResultView
+        feedback={selectedApplication?.feedback}
+        isFailure={!!selectedApplication && selectedApplication.status === 'Failed Pre-screen'}
+      />
+    </ApplicationPage>
+  );
+};
+
+export default PrescreenResultViewWrapper;

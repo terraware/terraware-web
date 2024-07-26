@@ -56,7 +56,7 @@ export default function ProjectNewView({ reloadData }: ProjectNewViewProps): JSX
     // first create the project
     let projectId = -1;
     const response = await ProjectsService.createProject(record);
-    if (!response.requestSucceeded) {
+    if (!response.requestSucceeded || !response.data) {
       snackbar.toastError();
       return;
     } else {

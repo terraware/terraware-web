@@ -26,6 +26,12 @@ export default function useNavigateTo() {
         });
       },
 
+      goToApplicationPrescreenResult: (applicationId: number) => {
+        navigate({
+          pathname: APP_PATHS.APPLICATION_PRESCREEN_RESULT.replace(':applicationId', `${applicationId}`),
+        });
+      },
+
       goToApplicationSection: (applicationId: number, sectionId: number) => {
         navigate({
           pathname: APP_PATHS.APPLICATION_SECTION.replace(':applicationId', `${applicationId}`).replace(
@@ -40,6 +46,20 @@ export default function useNavigateTo() {
           pathname: APP_PATHS.APPLICATION_SECTION_DELIVERABLE.replace(':applicationId', `${applicationId}`)
             .replace(':sectionId', `${sectionId}`)
             .replace(':deliverableId', `${deliverableId}`),
+        });
+      },
+
+      goToApplicationSectionDeliverableEdit: (
+        applicationId: number,
+        sectionId: number,
+        deliverableId: number,
+        variableId?: number
+      ) => {
+        navigate({
+          pathname: APP_PATHS.APPLICATION_SECTION_DELIVERABLE_EDIT.replace(':applicationId', `${applicationId}`)
+            .replace(':sectionId', `${sectionId}`)
+            .replace(':deliverableId', `${deliverableId}`),
+          ...(variableId ? { search: `variableId=${variableId}` } : {}),
         });
       },
 

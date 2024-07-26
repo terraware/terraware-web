@@ -27,9 +27,21 @@ export interface paths {
     /** Update an application's boundary using an uploaded file */
     post: operations["uploadApplicationBoundary"];
   };
+  "/api/v1/accelerator/applications/{applicationId}/deliverables": {
+    /** Get deliverables for an application */
+    get: operations["getApplicationDeliverables"];
+  };
   "/api/v1/accelerator/applications/{applicationId}/history": {
     /** Get the history of changes to the metadata of an application */
     get: operations["getApplicationHistory"];
+  };
+  "/api/v1/accelerator/applications/{applicationId}/modules": {
+    /** Get modules for an application */
+    get: operations["getApplicationModules"];
+  };
+  "/api/v1/accelerator/applications/{applicationId}/modules/{moduleId}/deliverables": {
+    /** Get deliverables for an application module */
+    get: operations["getApplicationModuleDeliverables"];
   };
   "/api/v1/accelerator/applications/{applicationId}/restart": {
     /**
@@ -1220,6 +1232,29 @@ export interface components {
       /** Format: int64 */
       variableId?: number;
     }, "value" | "variableId">;
+    ApplicationDeliverablePayload: {
+      /** @enum {string} */
+      category: "Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files";
+      /** @description Optional description of the deliverable in HTML form. */
+      descriptionHtml?: string;
+      /** Format: int64 */
+      id: number;
+      internalComment?: string;
+      /** Format: int64 */
+      moduleId: number;
+      moduleName: string;
+      name: string;
+      /** Format: int64 */
+      organizationId: number;
+      organizationName: string;
+      /** Format: int64 */
+      projectId: number;
+      projectName: string;
+      /** @enum {string} */
+      status: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
+      /** @enum {string} */
+      type: "Document" | "Species" | "Questions";
+    };
     ApplicationHistoryPayload: {
       feedback?: string;
       /** @description Internal-only comment, if any. Only set if the current user is an internal user. */
@@ -1228,6 +1263,18 @@ export interface components {
       modifiedTime: string;
       /** @enum {string} */
       status: "Accepted" | "Carbon Eligible" | "Failed Pre-screen" | "Issue Active" | "Issue Pending" | "Issue Resolved" | "Needs Follow-up" | "Not Accepted" | "Not Submitted" | "Passed Pre-screen" | "PL Review" | "Pre-check" | "Ready for Review" | "Submitted" | "In Review" | "Waitlist";
+    };
+    ApplicationModulePayload: {
+      /** Format: int64 */
+      applicationId?: number;
+      /** Format: int64 */
+      moduleId: number;
+      name: string;
+      overview?: string;
+      /** @enum {string} */
+      phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
+      /** @enum {string} */
+      status?: "Incomplete" | "Complete";
     };
     ApplicationPayload: {
       boundary?: components["schemas"]["Geometry"];
@@ -2086,8 +2133,8 @@ export interface components {
       organizationId: number;
       organizationName: string;
       /** Format: int64 */
-      participantId: number;
-      participantName: string;
+      participantId?: number;
+      participantName?: string;
       /** Format: int64 */
       projectId: number;
       projectName: string;
@@ -2464,9 +2511,21 @@ export interface components {
       accession: components["schemas"]["AccessionPayloadV2"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetApplicationDeliverablesResponsePayload: {
+      deliverables: components["schemas"]["ApplicationDeliverablePayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetApplicationHistoryResponsePayload: {
       /** @description History of metadata changes in reverse chronological order. */
       history: components["schemas"]["ApplicationHistoryPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetApplicationModuleDeliverablesResponsePayload: {
+      deliverables: components["schemas"]["ApplicationDeliverablePayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
+    GetApplicationModulesResponsePayload: {
+      modules: components["schemas"]["ApplicationModulePayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
     GetApplicationResponsePayload: {
@@ -2923,13 +2982,13 @@ export interface components {
       /** @description Optional description of the deliverable in HTML form. */
       descriptionHtml?: string;
       /** Format: date */
-      dueDate: string;
+      dueDate?: string;
       /** Format: int64 */
       id: number;
       /** Format: int64 */
       moduleId: number;
       moduleName: string;
-      moduleTitle: string;
+      moduleTitle?: string;
       name: string;
       /**
        * Format: int32
@@ -2940,8 +2999,8 @@ export interface components {
       organizationId: number;
       organizationName: string;
       /** Format: int64 */
-      participantId: number;
-      participantName: string;
+      participantId?: number;
+      participantName?: string;
       /** Format: int64 */
       projectId: number;
       projectName: string;
@@ -4379,6 +4438,12 @@ export interface components {
       name: string;
       originalName?: string;
     };
+    SubmitApplicationResponsePayload: {
+      application: components["schemas"]["ApplicationPayload"];
+      /** @description If the application failed any of the pre-screening checks, a list of the reasons why. Empty if the application passed pre-screening. */
+      problems: string[];
+      status: components["schemas"]["SuccessOrError"];
+    };
     SubmitSupportRequestPayload: {
       attachmentComment?: string;
       attachmentIds?: string[];
@@ -5297,6 +5362,22 @@ export interface operations {
       };
     };
   };
+  /** Get deliverables for an application */
+  getApplicationDeliverables: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetApplicationDeliverablesResponsePayload"];
+        };
+      };
+    };
+  };
   /** Get the history of changes to the metadata of an application */
   getApplicationHistory: {
     parameters: {
@@ -5309,6 +5390,39 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["GetApplicationHistoryResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Get modules for an application */
+  getApplicationModules: {
+    parameters: {
+      path: {
+        applicationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetApplicationModulesResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Get deliverables for an application module */
+  getApplicationModuleDeliverables: {
+    parameters: {
+      path: {
+        applicationId: number;
+        moduleId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetApplicationModuleDeliverablesResponsePayload"];
         };
       };
     };
@@ -5370,7 +5484,7 @@ export interface operations {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+          "application/json": components["schemas"]["SubmitApplicationResponsePayload"];
         };
       };
     };
@@ -5492,6 +5606,8 @@ export interface operations {
   listDeliverables: {
     parameters: {
       query?: {
+        /** @description Filter deliverables for by modules. Can we used with other request params. */
+        moduleId?: number;
         /** @description List deliverables for projects belonging to this organization. Ignored if participantId or projectId is specified. */
         organizationId?: number;
         /** @description List deliverables for all projects in this participant. Ignored if projectId is specified. */

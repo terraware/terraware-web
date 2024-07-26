@@ -18,6 +18,21 @@ export const requestListApplications = createAsyncThunk(
   }
 );
 
+export const requestListApplicationDeliverables = createAsyncThunk(
+  'applications/listDeliverables',
+  async (request: { applicationId: number }, { rejectWithValue }) => {
+    const { applicationId } = request;
+
+    const response = await ApplicationService.listApplicationDeliverables(applicationId);
+
+    if (response && response.requestSucceeded) {
+      return response.data?.deliverables ?? [];
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
+
 export const requestListApplicationModules = createAsyncThunk(
   'applications/listModules',
   async (request: { applicationId: number }, { rejectWithValue }) => {

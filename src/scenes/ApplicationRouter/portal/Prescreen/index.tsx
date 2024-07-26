@@ -8,43 +8,25 @@ import { useApplicationData } from 'src/scenes/ApplicationRouter/provider/Contex
 import strings from 'src/strings';
 
 import ApplicationPage from '../ApplicationPage';
-import ResultView from './ResultView';
 
 const PrescreenView = () => {
-  const { selectedApplication, applicationSections } = useApplicationData();
+  const { selectedApplication, applicationDeliverables, applicationSections } = useApplicationData();
 
   const prescreenSection = useMemo(
-    () => applicationSections.find((section) => section.category === 'Pre-screen'),
+    () => applicationSections.find((section) => section.phase === 'Pre-Screen'),
     [applicationSections]
+  );
+
+  const prescreenDeliverables = useMemo(
+    () => applicationDeliverables.filter((deliverable) => deliverable.moduleId === prescreenSection?.moduleId),
+    [applicationDeliverables, prescreenSection]
   );
 
   if (!selectedApplication || !prescreenSection) {
     return null;
   }
 
-  switch (selectedApplication.status) {
-    case 'Not Submitted':
-      return <SectionView section={prescreenSection} />;
-    case 'Failed Pre-screen':
-      return (
-        <ResultView feedback={selectedApplication.feedback} isFailure={true} prescreenSection={prescreenSection} />
-      );
-    case 'Passed Pre-screen':
-    case 'Submitted':
-    case 'PL Review':
-    case 'Ready for Review':
-    case 'Pre-check':
-    case 'Needs Follow-up':
-    case 'Carbon Eligible':
-    case 'Accepted':
-    case 'Waitlist':
-    case 'Issue Active':
-    case 'Issue Pending':
-    case 'Issue Resolved':
-    case 'Not Accepted':
-    case 'In Review':
-      return <ResultView isFailure={false} prescreenSection={prescreenSection} />;
-  }
+  return <SectionView section={prescreenSection} sectionDeliverables={prescreenDeliverables} />;
 };
 
 const PrescreenViewWrapper = () => {

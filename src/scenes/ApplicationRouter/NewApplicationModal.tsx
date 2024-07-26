@@ -7,9 +7,13 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { useProjects } from 'src/hooks/useProjects';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
+import ProjectsService from 'src/services/ProjectsService';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
+
+import { useApplicationData } from './provider/Context';
 
 type NewApplication = {
   projectType: 'Existing' | 'New';
@@ -20,7 +24,7 @@ type NewApplication = {
 export type NewApplicationModalProps = {
   open: boolean;
   onClose: () => void;
-  onSave: () => void;
+  onSave: (applicationId: number) => void;
 };
 
 const NewApplicationModal = ({ open, onClose, onSave }: NewApplicationModalProps): JSX.Element => {
@@ -28,9 +32,12 @@ const NewApplicationModal = ({ open, onClose, onSave }: NewApplicationModalProps
 
   const { activeLocale } = useLocalization();
   const { availableProjects } = useProjects();
+  const { selectedOrganization } = useOrganization();
+  const { allApplications, create } = useApplicationData();
 
   const [projectNameError, setProjectNameError] = useState<string>('');
   const [projectSelectError, setProjectSelectError] = useState<string>('');
+  const { toastError } = useSnackbar();
 
   const [newApplication, , onChange] = useForm<NewApplication>({
     projectType: availableProjects && availableProjects.length > 0 ? 'Existing' : 'New',
@@ -38,8 +45,10 @@ const NewApplicationModal = ({ open, onClose, onSave }: NewApplicationModalProps
   });
 
   const projectOptions = useMemo(
-    // TODO: filter out projects that already have applications, or in the accelerator
-    () => (availableProjects || []).map((project) => ({ label: project.name, value: project.id })),
+    () =>
+      (availableProjects || [])
+        .filter((project) => allApplications?.every((application) => application.projectId !== project.id))
+        .map((project) => ({ label: project.name, value: project.id })),
     [availableProjects]
   );
 
@@ -76,20 +85,45 @@ const NewApplicationModal = ({ open, onClose, onSave }: NewApplicationModalProps
     onClose();
   }, [onClose]);
 
-  const onSaveWrapper = useCallback(() => {
+  const onSaveWrapper = useCallback(async () => {
     let error = '';
+    let projectId: number | undefined = undefined;
+
     if (newApplication.projectType === 'New') {
       error = validateProjectName(newApplication.projectName ?? '');
       setProjectNameError(error);
+
+      if (!error && newApplication.projectName) {
+        const projectResult = await ProjectsService.createProject({
+          name: newApplication.projectName,
+          organizationId: selectedOrganization.id,
+        });
+        if (projectResult.requestSucceeded && projectResult.data) {
+          projectId = projectResult.data.id;
+        } else {
+          toastError(activeLocale ? strings.ERROR_CREATE_PROJECT : 'Error creating project');
+          return;
+        }
+      } else {
+        return;
+      }
     } else {
       error = validateProjectSelect(newApplication.projectId);
       setProjectSelectError(error);
+      if (!error) {
+        projectId = newApplication.projectId;
+      } else {
+        return;
+      }
     }
 
-    if (!error) {
-      onSave();
+    if (!!projectId) {
+      const newApplicationId = await create(projectId);
+      if (newApplicationId) {
+        onSave(newApplicationId);
+      }
     }
-  }, [onSave, newApplication, setProjectNameError]);
+  }, [create, onSave, newApplication, selectedOrganization, setProjectNameError]);
 
   return (
     <DialogBox
@@ -120,7 +154,7 @@ const NewApplicationModal = ({ open, onClose, onSave }: NewApplicationModalProps
               <FormControlLabel
                 checked={newApplication.projectType === 'Existing'}
                 control={<Radio />}
-                disabled={!availableProjects?.length}
+                disabled={!projectOptions?.length}
                 label={strings.SELECT_EXISTING_PROJECT}
                 value={'Existing'}
               />

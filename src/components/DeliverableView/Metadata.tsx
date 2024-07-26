@@ -12,7 +12,7 @@ import { ViewProps } from './types';
 import useUpdateDeliverable from './useUpdateDeliverable';
 
 const Metadata = (props: ViewProps): JSX.Element => {
-  const { deliverable } = props;
+  const { deliverable, hideStatusBadge } = props;
 
   const snackbar = useSnackbar();
   const theme = useTheme();
@@ -53,7 +53,7 @@ const Metadata = (props: ViewProps): JSX.Element => {
       )}
 
       <Box marginBottom='16px'>
-        {deliverable.status !== 'Rejected' && !isAcceleratorRoute && (
+        {deliverable.status !== 'Rejected' && !isAcceleratorRoute && hideStatusBadge !== true && (
           <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
             <DeliverableStatusBadge status={deliverable.status} />
           </div>
