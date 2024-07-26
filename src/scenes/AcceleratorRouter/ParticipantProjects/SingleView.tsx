@@ -47,7 +47,13 @@ const SingleView = () => {
   const isAllowedExport = isAllowed('EXPORT_PARTICIPANT_PROJECT');
   const isAllowedViewScoreAndVoting = isAllowed('VIEW_PARTICIPANT_PROJECT_SCORING_VOTING');
 
-  const { selectedApplication } = useApplicationData();
+  const { allApplications, selectedApplication } = useApplicationData();
+
+  const projectApplication = useMemo(
+    () => allApplications?.find((app) => app.projectId === projectId),
+    [allApplications, projectId]
+  );
+
   const onOptionItemClick = useCallback((item: DropdownItem) => {
     if (item.value === 'export-participant-project') {
       setExportModalOpen(true);
@@ -122,29 +128,25 @@ const SingleView = () => {
             <ProjectFieldDisplay label={strings.PROJECT_NAME} value={project?.name} />
 
             <Grid container>
-              {selectedApplication?.id ? (
+              {!!projectApplication?.id && (
                 <ApplicationStatusCard
-                  linkTo={APP_PATHS.APPLICATION_OVERVIEW.replace(':applicationId', `${selectedApplication.id}`)}
-                  application={selectedApplication}
+                  application={projectApplication}
+                  linkTo={APP_PATHS.APPLICATION_OVERVIEW.replace(':applicationId', `${projectApplication.id}`)}
+                  md={!isAllowedViewScoreAndVoting ? 12 : undefined}
                 />
-              ) : (
-                <ProjectFieldDisplay md={4} value={false} />
               )}
-              {isAllowedViewScoreAndVoting ? (
+              {isAllowedViewScoreAndVoting && (
                 <>
                   <PhaseScoreCard
                     linkTo={APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project.id}`)}
+                    md={!projectApplication?.id ? 6 : undefined}
                     phaseScores={phase1Scores}
                   />
                   <VotingDecisionCard
                     linkTo={APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`)}
+                    md={!projectApplication?.id ? 6 : undefined}
                     phaseVotes={phaseVotes}
                   />
-                </>
-              ) : (
-                <>
-                  <ProjectFieldDisplay value={false} />
-                  <ProjectFieldDisplay value={false} />
                 </>
               )}
               <ProjectFieldDisplay

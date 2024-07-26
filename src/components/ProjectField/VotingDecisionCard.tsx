@@ -7,13 +7,20 @@ import { PhaseVotes } from 'src/types/Votes';
 
 import ProjectFieldCard from './Card';
 
-const VotingDecisionCard = ({ linkTo, phaseVotes }: { phaseVotes?: PhaseVotes; linkTo?: string }) => {
+type VotingDecisionCardProps = {
+  linkTo?: string;
+  md?: number;
+  phaseVotes?: PhaseVotes;
+};
+
+const VotingDecisionCard = ({ linkTo, md, phaseVotes }: VotingDecisionCardProps) => {
   const theme = useTheme();
 
   return (
     <ProjectFieldCard
       height={linkTo ? '128px' : undefined}
       label={strings.VOTING_DECISION}
+      md={md}
       value={
         phaseVotes?.decision ? (
           <>

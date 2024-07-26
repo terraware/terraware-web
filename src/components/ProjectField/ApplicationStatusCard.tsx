@@ -8,13 +8,20 @@ import { Application } from 'src/types/Application';
 
 import ProjectFieldCard from './Card';
 
-const ApplicationStatusCard = ({ application, linkTo }: { application?: Application; linkTo?: string }) => {
+type ApplicationStatusCardProps = {
+  application?: Application;
+  linkTo?: string;
+  md?: number;
+};
+
+const ApplicationStatusCard = ({ application, linkTo, md }: ApplicationStatusCardProps) => {
   const theme = useTheme();
 
   return (
     <ProjectFieldCard
       height={linkTo ? '128px' : undefined}
       label={!application ? undefined : strings.APPLICATION_STATUS}
+      md={md}
       value={
         !application ? (
           false

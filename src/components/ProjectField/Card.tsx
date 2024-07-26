@@ -5,11 +5,11 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { ProjectFieldProps, renderFieldValue } from '.';
 import GridEntryWrapper from './GridEntryWrapper';
 
-const ProjectFieldCard = ({ height, label, value, rightBorder }: ProjectFieldProps) => {
+const ProjectFieldCard = ({ height, label, md, value, rightBorder }: ProjectFieldProps) => {
   const theme = useTheme();
 
   return (
-    <GridEntryWrapper height={height} md={4} rightBorder={rightBorder}>
+    <GridEntryWrapper height={height} md={md || 4} rightBorder={rightBorder}>
       <Box
         borderRadius={theme.spacing(1)}
         textAlign={'center'}

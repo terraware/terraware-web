@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Grid, Typography, useTheme } from '@mui/material';
 
@@ -42,9 +42,10 @@ const EditView = () => {
   const { phaseVotes } = useVotingData();
   const { goToParticipantProject } = useNavigateTo();
   const { isAllowed } = useUser();
-  const { selectedApplication } = useApplicationData();
+  const { allApplications } = useApplicationData();
 
   const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
+  const isAllowedViewScoreAndVoting = isAllowed('VIEW_PARTICIPANT_PROJECT_SCORING_VOTING');
 
   // Participant project (accelerator data) form record and update request
   const [participantProjectRequestId, setParticipantProjectRequestId] = useState<string>('');
@@ -60,6 +61,11 @@ const EditView = () => {
   const [projectRecord, setProjectRecord, onChangeProject] = useForm(project);
 
   const [confirmProjectNameModalOpen, setConfirmProjectNameModalOpen] = useState(false);
+
+  const projectApplication = useMemo(
+    () => allApplications?.find((app) => app.projectId === projectId),
+    [allApplications, projectId]
+  );
 
   const onChangeCountry = useCallback(
     (countryCode?: string, region?: string) => {
@@ -169,9 +175,18 @@ const EditView = () => {
                 value={projectRecord?.name}
               />
             </Grid>
-            <ApplicationStatusCard application={selectedApplication} />
-            <PhaseScoreCard phaseScores={phase1Scores} />
-            <VotingDecisionCard phaseVotes={phaseVotes} />
+            {projectApplication && (
+              <ApplicationStatusCard
+                application={projectApplication}
+                md={!isAllowedViewScoreAndVoting ? 12 : undefined}
+              />
+            )}
+            {isAllowedViewScoreAndVoting && (
+              <>
+                <PhaseScoreCard md={!projectApplication?.id ? 6 : undefined} phaseScores={phase1Scores} />
+                <VotingDecisionCard md={!projectApplication?.id ? 6 : undefined} phaseVotes={phaseVotes} />
+              </>
+            )}
             <ProjectFieldTextfield
               id={'fileNaming'}
               label={strings.FILE_NAMING}
