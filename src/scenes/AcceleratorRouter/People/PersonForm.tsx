@@ -18,6 +18,7 @@ type PersonFormProps = {
   busy?: boolean;
   emailEnabled?: boolean;
   emailError?: string;
+  roleError?: string;
   user?: UserWithDeliverableCategories;
   onCancel: () => void;
   onChange?: (person: UserWithDeliverableCategories) => void;
@@ -25,7 +26,7 @@ type PersonFormProps = {
 };
 
 export default function PersonForm(props: PersonFormProps): JSX.Element {
-  const { busy, emailEnabled, emailError, user, onCancel, onChange, onSave } = props;
+  const { busy, emailEnabled, emailError, roleError, user, onCancel, onChange, onSave } = props;
 
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
@@ -102,7 +103,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
   }, []);
 
   const onSaveHandler = () => {
-    if (!localRecord.email || emailError) {
+    if (emailError) {
       return;
     }
 
@@ -146,6 +147,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
               type='text'
               value={localRecord.email}
               disabled={!emailEnabled}
+              required={true}
             />
           </Grid>
           <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
@@ -177,7 +179,8 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
               placeHolder={strings.SELECT}
               valueRenderer={(v) => v}
               selectedOptions={localRecord.globalRoles || []}
-              label={strings.ROLE}
+              label={strings.ROLE_REQUIRED}
+              errorText={roleError}
             />
           </Grid>
           <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
