@@ -5,7 +5,6 @@ import NoOrgApplicationLandingPage from 'src/components/emptyStatePages/NoOrgApp
 import NoOrgLandingPage from 'src/components/emptyStatePages/NoOrgLandingPage';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
-import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useUser } from 'src/providers';
 import HelpSupportRouter from 'src/scenes/HelpSupportRouter';
 import MyAccountRouter from 'src/scenes/MyAccountRouter';
@@ -14,7 +13,6 @@ import useEnvironment from 'src/utils/useEnvironment';
 
 const NoOrgRouter = () => {
   const { isProduction } = useEnvironment();
-  const { goToHome } = useNavigateTo();
   const { reloadUserPreferences: reloadPreferences } = useUser();
   const applicationEnabled = isEnabled('Accelerator Application');
 

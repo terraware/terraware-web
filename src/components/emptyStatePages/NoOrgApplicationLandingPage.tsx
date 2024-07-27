@@ -38,7 +38,7 @@ export default function NoOrgApplicationLandingPage(): JSX.Element {
   const result = useAppSelector(selectApplicationCreateProject(requestId));
 
   const onOrgCreated = useCallback(
-    async (organization: Organization) => {
+    (organization: Organization) => {
       const dispatched = dispatch(
         requestCreateProjectApplication({ projectName: organization.name, organizationId: organization.id })
       );

@@ -105,9 +105,9 @@ const NewApplicationModal = ({ open, onClose, onApplicationCreated }: NewApplica
   }, [onClose]);
 
   const onSave = useCallback(() => {
-    var error = '';
+    let error = '';
     if (newApplication.projectType === 'New') {
-      if ((error = validateProjectName(newApplication.projectName!!))) {
+      if ((error = validateProjectName(newApplication.projectName ?? ''))) {
         setProjectNameError(error);
         return;
       }
@@ -126,7 +126,9 @@ const NewApplicationModal = ({ open, onClose, onApplicationCreated }: NewApplica
         return;
       }
 
-      const createApplicationRequest = dispatch(requestCreateApplication({ projectId: newApplication.projectId!! }));
+      const createApplicationRequest = dispatch(
+        requestCreateApplication({ projectId: newApplication.projectId ?? -1 })
+      );
       setCreateApplicationRequestId(createApplicationRequest.requestId);
       setIsLoading(true);
     }
@@ -144,13 +146,17 @@ const NewApplicationModal = ({ open, onClose, onApplicationCreated }: NewApplica
   ]);
 
   useEffect(() => {
-    if (createApplicationResult.status === 'success' && createApplicationResult.data) {
+    if (createApplicationResult && createApplicationResult.status === 'success' && createApplicationResult.data) {
       setIsLoading(false);
       onApplicationCreated(createApplicationResult.data);
       onClose();
       return;
     }
-    if (createProjectApplicationResult.status === 'success' && createProjectApplicationResult.data) {
+    if (
+      createProjectApplicationResult &&
+      createProjectApplicationResult.status === 'success' &&
+      createProjectApplicationResult.data
+    ) {
       setIsLoading(false);
       onApplicationCreated(createProjectApplicationResult.data);
       onClose();
