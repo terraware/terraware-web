@@ -1,13 +1,16 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box, Container, useTheme } from '@mui/material';
+import { BusySpinner } from '@terraware/web-components';
 
 import AddNewOrganizationModal from 'src/components/AddNewOrganizationModal';
 import PageSnackbar from 'src/components/PageSnackbar';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import ApplicationService from 'src/services/ApplicationService';
-import ProjectsService from 'src/services/ProjectsService';
+import { useLocalization } from 'src/providers';
+import { requestCreateProjectApplication } from 'src/redux/features/application/applicationAsyncThunks';
+import { selectApplicationCreateProject } from 'src/redux/features/application/applicationSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -23,37 +26,36 @@ const EMPTY_STATE_CONTENT_STYLES = {
 
 export default function NoOrgApplicationLandingPage(): JSX.Element {
   const { isMobile } = useDeviceInfo();
+  const activeLocale = useLocalization();
   const theme = useTheme();
+  const dispatch = useAppDispatch();
   const [isOrgModalOpen, setIsOrgModalOpen] = useState<boolean>(false);
-  const { goToApplication, goToApplicationList } = useNavigateTo();
-  const { toastError } = useSnackbar();
+  const { goToApplication } = useNavigateTo();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { toastSuccess } = useSnackbar();
+
+  const [requestId, setRequestId] = useState<string>('');
+  const result = useAppSelector(selectApplicationCreateProject(requestId));
 
   const onOrgCreated = useCallback(
     async (organization: Organization) => {
-      // Create project with the same name
-      const projectResult = await ProjectsService.createProject({
-        name: organization.name,
-        organizationId: organization.id,
-      });
-
-      if (!(projectResult.data && projectResult.requestSucceeded)) {
-        toastError(strings.ERROR_CREATE_PROJECT);
-        goToApplicationList();
-        return;
-      }
-
-      // Create application with new project
-      const applicationResult = await ApplicationService.createApplication(projectResult.data.id);
-      if (!(applicationResult.data && applicationResult.requestSucceeded)) {
-        toastError(strings.ERROR_CREATE_APPLICATION);
-        goToApplicationList();
-        return;
-      }
-
-      goToApplication(applicationResult.data.id);
+      const dispatched = dispatch(
+        requestCreateProjectApplication({ projectName: organization.name, organizationId: organization.id })
+      );
+      setRequestId(dispatched.requestId);
+      setIsLoading(true);
     },
-    [goToApplication, goToApplicationList]
+    [dispatch, setRequestId, setIsLoading]
   );
+
+  useEffect(() => {
+    if (result && result.status === 'success' && result.data) {
+      if (activeLocale) {
+        toastSuccess(strings.SUCCESS);
+      }
+      goToApplication(result.data);
+    }
+  }, [activeLocale, result, goToApplication]);
 
   return (
     <Box
@@ -83,6 +85,7 @@ export default function NoOrgApplicationLandingPage(): JSX.Element {
           onCancel={() => setIsOrgModalOpen(false)}
           onSuccess={(organization: Organization) => onOrgCreated(organization)}
         />
+        {isLoading && <BusySpinner />}
         <EmptyStateContent
           title={strings.TITLE_WELCOME}
           subtitle={strings.SUBTITLE_APPLICATION_GET_STARTED}

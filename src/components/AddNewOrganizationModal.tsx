@@ -139,7 +139,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
       ManagedLocationTypes.filter((locationType: ManagedLocationType) => locationTypes[locationType])
     );
     if (response.requestSucceeded && response.organization) {
-      reloadOrganizations();
+      await reloadOrganizations();
       onSuccess(response.organization);
     } else {
       snackbar.toastError(strings.GENERIC_ERROR, strings.ORGANIZATION_CREATE_FAILED);

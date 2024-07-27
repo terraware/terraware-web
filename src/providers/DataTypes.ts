@@ -23,7 +23,8 @@ export type ProvidedOrganizationData = {
   setSelectedOrganization: React.Dispatch<React.SetStateAction<Organization | undefined>>;
   organizations: Organization[];
   orgPreferences: PreferencesType;
-  reloadOrganizations: (selectedOrgId?: number) => void;
+  redirectAndNotify: (organization: Organization) => void;
+  reloadOrganizations: (selectedOrgId?: number) => Promise<void>;
   reloadOrgPreferences: () => void;
   bootstrapped: boolean;
   orgPreferenceForId: number;
