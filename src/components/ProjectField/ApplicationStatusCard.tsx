@@ -57,7 +57,7 @@ const ApplicationStatusCard = ({ application, linkTo, md }: ApplicationStatusCar
   return (
     <ProjectFieldCard
       height={linkTo ? '128px' : undefined}
-      label={!application ? undefined : strings.APPLICATION_STATUS}
+      label={application ? strings.APPLICATION_STATUS : undefined}
       md={md}
       value={
         !application ? (
@@ -65,7 +65,7 @@ const ApplicationStatusCard = ({ application, linkTo, md }: ApplicationStatusCar
         ) : (
           <>
             <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600} color={color || 'black'}>
-              {application?.status ? application.status : 'In Review'}
+              {application?.status}
             </Typography>
             {linkTo && (
               <Box marginTop={theme.spacing(1)} textAlign={'center'}>
