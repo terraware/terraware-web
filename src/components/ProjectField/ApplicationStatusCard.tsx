@@ -13,33 +13,34 @@ const getApplicationStatusColor = (
   application: Application | undefined,
   theme: Theme
 ): Property.Color | string | undefined => {
-  if (!application || !theme?.palette?.TwClrTxt) {
+  if (!application || !theme?.palette?.TwClrTxtInfo) {
     return 'black';
   }
 
   switch (application.status) {
     case 'Accepted':
+    case 'Carbon Eligible':
+    case 'Issue Resolved':
       return theme.palette.TwClrTxtSuccess;
     case 'In Review':
+    case 'Issue Active':
+    case 'Needs Follow-up':
     case 'Waitlist':
       return theme.palette.TwClrTxtWarning;
     case 'Not Accepted':
       return theme.palette.TwClrTxtDanger;
-    // TODO: define colors for these statuses
-    case 'Not Submitted':
-    case 'Failed Pre-screen':
-    case 'Passed Pre-screen':
-    case 'Carbon Eligible':
-    case 'Needs Follow-up':
+    case 'Issue Pending':
     case 'PL Review':
     case 'Pre-check':
     case 'Ready for Review':
     case 'Submitted':
-    case 'Issue Active':
-    case 'Issue Pending':
-    case 'Issue Resolved':
+      return theme.palette.TwClrTxtInfo;
+    // TODO: define colors for these statuses
+    case 'Not Submitted':
+    case 'Failed Pre-screen':
+    case 'Passed Pre-screen':
     default:
-      return theme.palette.TwClrTxt;
+      return theme.palette.TwClrTxtInfo;
   }
 };
 
