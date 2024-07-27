@@ -1,12 +1,47 @@
 import React from 'react';
 
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, Theme, Typography, useTheme } from '@mui/material';
+import { Property } from 'csstype';
 
 import Link from 'src/components/common/Link';
 import strings from 'src/strings';
 import { Application } from 'src/types/Application';
 
 import ProjectFieldCard from './Card';
+
+const getApplicationStatusColor = (
+  application: Application | undefined,
+  theme: Theme
+): Property.Color | string | undefined => {
+  if (!application || !theme?.palette?.TwClrTxt) {
+    return 'black';
+  }
+
+  switch (application.status) {
+    case 'Accepted':
+      return theme.palette.TwClrTxtSuccess;
+    case 'In Review':
+    case 'Waitlist':
+      return theme.palette.TwClrTxtWarning;
+    case 'Not Accepted':
+      return theme.palette.TwClrTxtDanger;
+    // TODO: define colors for these statuses
+    case 'Not Submitted':
+    case 'Failed Pre-screen':
+    case 'Passed Pre-screen':
+    case 'Carbon Eligible':
+    case 'Needs Follow-up':
+    case 'PL Review':
+    case 'Pre-check':
+    case 'Ready for Review':
+    case 'Submitted':
+    case 'Issue Active':
+    case 'Issue Pending':
+    case 'Issue Resolved':
+    default:
+      return theme.palette.TwClrTxt;
+  }
+};
 
 type ApplicationStatusCardProps = {
   application?: Application;
@@ -16,6 +51,7 @@ type ApplicationStatusCardProps = {
 
 const ApplicationStatusCard = ({ application, linkTo, md }: ApplicationStatusCardProps) => {
   const theme = useTheme();
+  const color = getApplicationStatusColor(application, theme);
 
   return (
     <ProjectFieldCard
@@ -27,7 +63,7 @@ const ApplicationStatusCard = ({ application, linkTo, md }: ApplicationStatusCar
           false
         ) : (
           <>
-            <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600} color='orange'>
+            <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600} color={color || 'black'}>
               {application?.status ? application.status : 'In Review'}
             </Typography>
             {linkTo && (
