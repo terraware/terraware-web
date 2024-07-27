@@ -1,6 +1,6 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 
-import { useLocalization, useOrganization } from 'src/providers';
+import { useOrganization } from 'src/providers';
 import {
   requestListApplicationDeliverables,
   requestListApplicationModules,
@@ -12,10 +12,7 @@ import {
   selectApplicationModuleList,
 } from 'src/redux/features/application/applicationSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import ApplicationService from 'src/services/ApplicationService';
-import strings from 'src/strings';
 import { Application, ApplicationDeliverable, ApplicationModule } from 'src/types/Application';
-import useSnackbar from 'src/utils/useSnackbar';
 
 import { ApplicationContext, ApplicationData } from './Context';
 
@@ -25,9 +22,7 @@ export type Props = {
 
 const ApplicationProvider = ({ children }: Props) => {
   const dispatch = useAppDispatch();
-  const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
-  const { toastError } = useSnackbar();
 
   const [allApplications, setAllApplications] = useState<Application[]>([]);
   const [applicationSections, setApplicationSections] = useState<ApplicationModule[]>([]);
@@ -57,13 +52,16 @@ const ApplicationProvider = ({ children }: Props) => {
     [allApplications]
   );
 
-  const _reload = useCallback((onReload: () => void) => {
-    setReloadCallback(onReload);
-    if (selectedOrganization) {
-      const dispatched = dispatch(requestListApplications({ organizationId: selectedOrganization.id }));
-      setListApplicationRequest(dispatched.requestId);
-    }
-  }, [dispatch, selectedOrganization]);
+  const _reload = useCallback(
+    (onReload: () => void) => {
+      setReloadCallback(onReload);
+      if (selectedOrganization) {
+        const dispatched = dispatch(requestListApplications({ organizationId: selectedOrganization.id }));
+        setListApplicationRequest(dispatched.requestId);
+      }
+    },
+    [dispatch, selectedOrganization]
+  );
 
   const [applicationData, setApplicationData] = useState<ApplicationData>({
     allApplications,

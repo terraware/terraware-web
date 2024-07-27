@@ -1,6 +1,4 @@
-import React, { ReactNode, useCallback, useMemo } from 'react';
-
-import { Button } from '@terraware/web-components';
+import React, { ReactNode, useMemo } from 'react';
 
 import ModuleDetailsCard from 'src/components/ModuleDetailsCard';
 import useNavigateTo from 'src/hooks/useNavigateTo';
@@ -19,8 +17,7 @@ type SectionViewProp = {
 const SectionView = ({ children, section, sectionDeliverables }: SectionViewProp) => {
   const { activeLocale } = useLocalization();
   const { selectedApplication } = useApplicationData();
-  const { goToApplicationMap, goToApplicationSectionDeliverable } =
-    useNavigateTo();
+  const { goToApplicationMap, goToApplicationSectionDeliverable } = useNavigateTo();
 
   const deliverableDetails = useMemo(() => {
     if (!selectedApplication) {
@@ -65,7 +62,7 @@ const SectionView = ({ children, section, sectionDeliverables }: SectionViewProp
       projectId={selectedApplication.id}
       showSimplifiedStatus
     >
-      { children }
+      {children}
     </ModuleDetailsCard>
   ) : null;
 };
