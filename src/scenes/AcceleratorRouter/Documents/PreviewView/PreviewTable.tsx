@@ -13,7 +13,7 @@ import {
 import { CombinedInjectedValue, VariableValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
 
 import { getPrintValue } from './render';
-import { getSourceVariable } from './util';
+import { SectionVariableWithRelevantVariables, getSourceVariable } from './util';
 
 export const getSourceTableVariable = (
   combinedInjectedValue: CombinedInjectedValue,
@@ -25,7 +25,7 @@ export const getSourceTableVariable = (
 
 type PreviewTableProps = {
   combinedInjectedValue: CombinedInjectedValue;
-  sectionVariable: SectionVariableWithValues & { relevantVariables: VariableWithValues[] };
+  sectionVariable: SectionVariableWithRelevantVariables;
   sourceTableVariable: TableVariable;
   suppressCaptions?: boolean;
 };

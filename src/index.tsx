@@ -16,6 +16,10 @@ import theme from './theme';
 const root = createRoot(document.getElementById('root')!);
 
 root.render(
+  // Note: If you are testing the document producer preview locally, you will need to remove <React.StrictMode>
+  // In strict mode, React performs all useEffect statements twice to look for potential code smell issues. This
+  // causes the document producer preview to break since two new windows are created, which messes with the mounting
+  // of the HTML which is later parsed by PagedJS
   <React.StrictMode>
     <React.Suspense fallback={strings.LOADING}>
       <Router>

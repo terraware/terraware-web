@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { SectionVariableWithValues, VariableWithValues } from 'src/types/documentProducer/Variable';
 import {
   CombinedInjectedValue,
   ExistingVariableValueUnion,
@@ -11,9 +10,10 @@ import {
 import { PreviewImage, getSourceImageVariable } from './PreviewImage';
 import { PreviewTable, getSourceTableVariable } from './PreviewTable';
 import { getPrintValue } from './render';
+import { SectionVariableWithRelevantVariables } from './util';
 
 type SectionVariableProps = {
-  sectionVariable: SectionVariableWithValues & { relevantVariables: VariableWithValues[] };
+  sectionVariable: SectionVariableWithRelevantVariables;
   sectionVariableValue: VariableValueValue;
   projectId: number;
   suppressCaptions?: boolean;

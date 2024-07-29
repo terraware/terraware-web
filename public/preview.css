@@ -1,0 +1,251 @@
+@page {
+    size: letter;
+    margin: 1in;
+
+    @top-left {
+        content: element(headerLeft);
+    }
+
+    @top-right {
+        content: element(headerRight);
+    }
+
+    @bottom-right {
+        content: counter(page);
+        font-family: "Arial";
+        font-size: 10.5pt;
+        color: #000;
+    }
+
+    @footnote {
+        border-width: 1px;
+        border-style: solid;
+        border-image: linear-gradient(to right, black 0 33%, transparent 33% 100%) 100% 0 0 0;
+        padding-top: 10px;
+        margin-top: 14px;
+    }
+}
+
+@media screen, pagedjs-ignore {
+    /* Screen styles only--will not apply to print document */
+    body {
+        background-color: #F9F8F7;
+        background-image: linear-gradient(180deg, rgba(226, 246, 236, 0) 0%, rgba(226, 246, 236, 0.4) 100%);
+        background-attachment: fixed;
+    }
+
+    .pagedjs_pages {
+        margin: 0;
+    }
+
+    .pagedjs_page {
+        background-color: white;
+        margin: 1em;
+        border-radius: 8px;
+        width: max-content;
+    }
+}
+
+/* Header content */
+.pagedjs_margin-top-left.hasContent {
+    align-items: flex-end;
+    border-bottom: 1px solid #262626;
+}
+
+.pagedjs_margin-top-right.hasContent {
+    align-items: flex-end;
+    border-bottom: 1px solid #262626;
+}
+
+.pagedjs_margin-top-right p {
+    color: #262626;
+    font-size: 10.5pt;
+    margin: 0;
+    padding: 0;
+}
+
+.pagedjs_margin-top-left img {
+    padding-left: 0.25in;
+}
+
+.header-left {
+    position: running(headerLeft);
+}
+
+.header-right p {
+    position: running(headerRight);
+}
+
+/* Main Content */
+body {
+    font-family: "Arial";
+}
+
+h1 {
+    color: #2b3a57;
+    font-size: 24pt;
+    font-weight: 400;
+    font-variant: small-caps;
+}
+
+h2 {
+    font-size: 13pt;
+    font-weight: 400;
+    color: #057299;
+}
+
+h3 {
+    color: #0685b2;
+    font-size: 11pt;
+    font-weight: 400;
+}
+
+.section-number {
+    display: inline-block;
+    min-width: 0.75in;
+}
+
+.section-body {
+    width: 100%;
+    white-space: pre-wrap;
+}
+
+p {
+    color: #000;
+    font-size: 10.5pt;
+    font-family: "Arial";
+    line-height: 1.3;
+    margin: 0 0 8pt 0;
+    padding-left: 0.5in;
+}
+
+.footnote {
+    float: footnote;
+    footnote-style-position: inside;
+    font-size: 9pt;
+    font-style: italic;
+}
+
+.footnote::after {
+    vertical-align: super;
+}
+
+.image-container {
+    margin-top: 20px;
+    text-align: center;
+    display: block;
+    break-before: auto;
+    break-after: auto;
+    break-inside: avoid;
+}
+
+.caption {
+    padding-left: 0;
+    padding-top: 8pt;
+}
+
+/* Tables */
+table {
+    table-layout: fixed;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+table, th, td {
+    border: 1px solid white;
+    border-collapse: collapse;
+}
+
+th {
+    color: #fff;
+    background-color: #2a3957;
+    font-size: 10.5pt;
+    padding: 0.1in;
+}
+
+td {
+    color: #404040;
+    background-color: #f2f2f2;
+    font-size: 9.5pt;
+    text-align: left;
+    padding: 0.1in;
+}
+
+/* Title Page */
+#title-page {
+    break-after: page;
+}
+
+#title-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#title-page h1 {
+    margin: 60px 0 0 0;
+}
+
+#title-page .vcs-logo-full {
+    width: 112mm;
+}
+
+#title-page .tf-logo {
+    margin-top: 48px;
+    width: 350px;
+}
+
+#title-page table {
+    margin-top: 22pt;
+}
+
+#title-page th {
+    text-align: right;
+    width: 25%;
+}
+
+/* Table of Contents */
+#table-of-contents {
+    break-after: page;
+}
+
+#table-of-contents li a::after {
+    content: target-counter(attr(href), page);
+    float: right;
+}
+
+#table-of-contents h1 {
+    margin: 0 0 10px 0;
+}
+
+#table-of-contents hr {
+    border: none;
+    border-top: 1px solid #2b3a57;
+    margin-bottom: 24px;
+}
+
+#table-of-contents ul {
+    padding: 0;
+}
+
+#table-of-contents li {
+    list-style-type: none;
+}
+
+#table-of-contents a {
+    color: #2b3a57;
+    text-decoration: none;
+}
+
+#table-of-contents .toc-major {
+    margin-top: 12pt;
+    font-size: 12pt;
+    font-weight: 600;
+    font-variant: small-caps;
+}
+
+#table-of-contents .toc-minor {
+    margin-top: 6pt;
+    font-size: 12pt;
+    padding-left: 0.25in;
+}
