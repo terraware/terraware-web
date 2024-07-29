@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1722270618530" clover="3.2.0">
-  <project timestamp="1722270618530" name="All files">
-    <metrics statements="23370" coveredstatements="956" conditionals="15114" coveredconditionals="239" methods="7203" coveredmethods="163" elements="45687" coveredelements="1358" complexity="0" loc="23370" ncloc="23370" packages="224" files="1034" classes="1034"/>
+<coverage generated="1722271258000" clover="3.2.0">
+  <project timestamp="1722271258000" name="All files">
+    <metrics statements="23370" coveredstatements="956" conditionals="15116" coveredconditionals="239" methods="7203" coveredmethods="163" elements="45689" coveredelements="1358" complexity="0" loc="23370" ncloc="23370" packages="224" files="1034" classes="1034"/>
     <package name="src">
       <metrics statements="176" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -12317,7 +12317,7 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Documents.PreviewView">
-      <metrics statements="175" coveredstatements="0" conditionals="135" coveredconditionals="0" methods="58" coveredmethods="0"/>
+      <metrics statements="175" coveredstatements="0" conditionals="137" coveredconditionals="0" methods="58" coveredmethods="0"/>
       <file name="PreviewDocument.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Documents/PreviewView/PreviewDocument.tsx">
         <metrics statements="24" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="27" count="0" type="stmt"/>
@@ -12375,10 +12375,10 @@
         <line num="44" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
         <line num="61" count="0" type="stmt"/>
-        <line num="78" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
       </file>
       <file name="PreviewTable.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Documents/PreviewView/PreviewTable.tsx">
-        <metrics statements="27" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="16" coveredmethods="0"/>
+        <metrics statements="27" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="16" coveredmethods="0"/>
         <line num="18" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
         <line num="23" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -12387,25 +12387,25 @@
         <line num="51" count="0" type="stmt"/>
         <line num="57" count="0" type="stmt"/>
         <line num="59" count="0" type="stmt"/>
-        <line num="60" count="0" type="stmt"/>
-        <line num="70" count="0" type="stmt"/>
-        <line num="76" count="0" type="stmt"/>
-        <line num="79" count="0" type="stmt"/>
-        <line num="83" count="0" type="stmt"/>
-        <line num="84" count="0" type="stmt"/>
-        <line num="89" count="0" type="stmt"/>
-        <line num="103" count="0" type="stmt"/>
-        <line num="109" count="0" type="stmt"/>
-        <line num="110" count="0" type="stmt"/>
-        <line num="113" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="114" count="0" type="stmt"/>
-        <line num="117" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="118" count="0" type="stmt"/>
-        <line num="121" count="0" type="stmt"/>
+        <line num="61" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="72" count="0" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="81" count="0" type="stmt"/>
+        <line num="85" count="0" type="stmt"/>
+        <line num="86" count="0" type="stmt"/>
+        <line num="91" count="0" type="stmt"/>
+        <line num="105" count="0" type="stmt"/>
+        <line num="111" count="0" type="stmt"/>
+        <line num="112" count="0" type="stmt"/>
+        <line num="115" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="116" count="0" type="stmt"/>
+        <line num="119" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="120" count="0" type="stmt"/>
         <line num="123" count="0" type="stmt"/>
-        <line num="124" count="0" type="stmt"/>
-        <line num="128" count="0" type="stmt"/>
+        <line num="125" count="0" type="stmt"/>
+        <line num="126" count="0" type="stmt"/>
         <line num="130" count="0" type="stmt"/>
+        <line num="132" count="0" type="stmt"/>
       </file>
       <file name="SectionVariable.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Documents/PreviewView/SectionVariable.tsx">
         <metrics statements="15" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="3" coveredmethods="0"/>
