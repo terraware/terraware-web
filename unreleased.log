@@ -1,3 +1,4 @@
+a841c8e5735 SW-5663 Automatically create project with the same name after an organization is created, and go to application (#2904)
 afb77a086d1 SW-5719 Added redux for every application API call (#2913)
 88ce4d59991 Fix the collection of variables for tables, modify styling to match designs (#2912)
 3dd092a05ef Update the header, logo, and TOC to match preview UI in Figma (#2909)

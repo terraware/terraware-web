@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -135,8 +135,9 @@
 <a name='L70'></a><a href='#L70'>70</a>
 <a name='L71'></a><a href='#L71'>71</a>
 <a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a>
-<a name='L74'></a><a href='#L74'>74</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L73'></a><a href='#L73'>73</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -155,10 +156,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -194,7 +192,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -216,7 +214,9 @@ import { Box, Container, useTheme } from '@mui/material';
 import AddNewOrganizationModal from 'src/components/AddNewOrganizationModal';
 import PageSnackbar from 'src/components/PageSnackbar';
 import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePages/EmptyStateContent';
+import { useOrganization } from 'src/providers';
 import strings from 'src/strings';
+import { Organization } from 'src/types/Organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 &nbsp;
 const EMPTY_STATE_CONTENT_STYLES = <span class="cstat-no" title="statement not covered" >{</span>
@@ -227,14 +227,11 @@ const EMPTY_STATE_CONTENT_STYLES = <span class="cstat-no" title="statement not c
   listContainerVerticalMargin: '48px',
 };
 &nbsp;
-type Prop = {
-  redirectTo?: string;
-};
-&nbsp;
-export default function <span class="fstat-no" title="function not covered" >NoOrgLandingPage(</span>{ redirectTo }: Prop): JSX.Element {
+export default function <span class="fstat-no" title="function not covered" >NoOrgLandingPage(</span>): JSX.Element {
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const [isOrgModalOpen, setIsOrgModalOpen] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
+  const { redirectAndNotify } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
 &nbsp;
   const listItemContents: ListItemContent[] = <span class="cstat-no" title="statement not covered" >[</span>
     { icon: 'organization', title: strings.ORGANIZATION, description: strings.DESCRIPTION_ORGANIZATION },
@@ -267,7 +264,7 @@ export default function <span class="fstat-no" title="function not covered" >NoO
         &lt;AddNewOrganizationModal
           open={isOrgModalOpen}
           onCancel={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setIsOrgModalOpen(false)}</span>
-          redirectOnComplete={redirectTo}
+          onSuccess={<span class="fstat-no" title="function not covered" >(o</span>rganization: Organization) =&gt; <span class="cstat-no" title="statement not covered" >redirectAndNotify(organization)}</span>
         /&gt;
         &lt;EmptyStateContent
           title={strings.TITLE_WELCOME}
@@ -289,7 +286,7 @@ export default function <span class="fstat-no" title="function not covered" >NoO
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-29T17:20:38.781Z
+                at 2024-07-29T21:14:21.741Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

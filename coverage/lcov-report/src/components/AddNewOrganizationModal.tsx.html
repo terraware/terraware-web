@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/88</span>
+                <span class='fraction'>0/85</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/44</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/85</span>
+                <span class='fraction'>0/82</span>
             </div>
         
             
@@ -365,16 +365,7 @@
 <a name='L300'></a><a href='#L300'>300</a>
 <a name='L301'></a><a href='#L301'>301</a>
 <a name='L302'></a><a href='#L302'>302</a>
-<a name='L303'></a><a href='#L303'>303</a>
-<a name='L304'></a><a href='#L304'>304</a>
-<a name='L305'></a><a href='#L305'>305</a>
-<a name='L306'></a><a href='#L306'>306</a>
-<a name='L307'></a><a href='#L307'>307</a>
-<a name='L308'></a><a href='#L308'>308</a>
-<a name='L309'></a><a href='#L309'>309</a>
-<a name='L310'></a><a href='#L310'>310</a>
-<a name='L311'></a><a href='#L311'>311</a>
-<a name='L312'></a><a href='#L312'>312</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L303'></a><a href='#L303'>303</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -411,11 +402,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -522,10 +508,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -686,16 +668,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 &nbsp;
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Checkbox, Dropdown } from '@terraware/web-components';
-import { useDeviceInfo } from '@terraware/web-components/utils';
 &nbsp;
 import RegionSelector from 'src/components/RegionSelector';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import Button from 'src/components/common/button/Button';
-import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { OrganizationService } from 'src/services';
 import strings from 'src/strings';
@@ -721,17 +700,15 @@ export type AddNewOrganizationModalProps = {
   isApplication?: boolean;
   open: boolean;
   onCancel: () =&gt; void;
-  redirectOnComplete?: string;
+  onSuccess: (organization: Organization) =&gt; void;
 };
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >AddNewOrganizationModal(</span>props: AddNewOrganizationModalProps): JSX.Element {
   const { reloadOrganizations } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-  const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
-  const { isApplication, onCancel, open, redirectOnComplete } = <span class="cstat-no" title="statement not covered" >props;</span>
+  const { isApplication, onCancel, onSuccess, open } = <span class="cstat-no" title="statement not covered" >props;</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
-  const { isDesktop } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
   const [nameError, setNameError] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const [timeZoneError, setTimeZoneError] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const [countryError, setCountryError] = <span class="cstat-no" title="statement not covered" >useState('');</span>
@@ -831,12 +808,8 @@ export default function <span class="fstat-no" title="function not covered" >Add
       ManagedLocationTypes.filter(<span class="fstat-no" title="function not covered" >(l</span>ocationType: ManagedLocationType) =&gt; <span class="cstat-no" title="statement not covered" >locationTypes[locationType])</span>
     );
 <span class="cstat-no" title="statement not covered" >    if (response.requestSucceeded &amp;&amp; response.organization) {</span>
-<span class="cstat-no" title="statement not covered" >      reloadOrganizations();</span>
-<span class="cstat-no" title="statement not covered" >      navigate({ pathname: redirectOnComplete ?? APP_PATHS.HOME });</span>
-<span class="cstat-no" title="statement not covered" >      snackbar.pageSuccess(</span>
-        isDesktop ? strings.ORGANIZATION_CREATED_MSG_DESKTOP : strings.ORGANIZATION_CREATED_MSG,
-        strings.formatString(strings.ORGANIZATION_CREATED_TITLE, response.organization.name)
-      );
+<span class="cstat-no" title="statement not covered" >      await reloadOrganizations();</span>
+<span class="cstat-no" title="statement not covered" >      onSuccess(response.organization);</span>
     } else {
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError(strings.GENERIC_ERROR, strings.ORGANIZATION_CREATE_FAILED);</span>
     }
@@ -1003,7 +976,7 @@ export default function <span class="fstat-no" title="function not covered" >Add
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-29T17:20:38.781Z
+                at 2024-07-29T21:14:21.741Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
