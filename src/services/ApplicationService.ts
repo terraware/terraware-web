@@ -1,6 +1,7 @@
 import { paths } from 'src/api/types/generated-schema';
 
 import HttpService, { Response, Response2 } from './HttpService';
+import ProjectsService from './ProjectsService';
 
 /**
  * Service for application related functionality
@@ -51,6 +52,19 @@ const createApplication = async (projectId: number): Promise<Response2<CreateApp
   return HttpService.root(APPLICATIONS_ENDPOINT).post2<CreateApplicationResponsePayload>({
     entity: { projectId },
   });
+};
+
+const createProjectApplication = async (
+  projectName: string,
+  organizationId: number
+): Promise<Response2<CreateApplicationResponsePayload>> => {
+  const projectRequest = await ProjectsService.createProject({ name: projectName, organizationId });
+
+  if (projectRequest.requestSucceeded && projectRequest.data) {
+    return createApplication(projectRequest.data.id);
+  } else {
+    return { ...projectRequest, data: undefined };
+  }
 };
 
 const getApplication = async (applicationId: number): Promise<Response2<GetApplicationResponsePayload>> => {
@@ -133,6 +147,7 @@ const uploadBoundary = async (applicationId: number, file: File): Promise<Respon
  */
 const ApplicationService = {
   createApplication,
+  createProjectApplication,
   getApplication,
   listApplications,
   listApplicationDeliverables,
