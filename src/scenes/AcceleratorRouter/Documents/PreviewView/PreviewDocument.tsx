@@ -59,8 +59,8 @@ export default function PreviewDocument({ doc }: PreviewDocumentProps): ReactEle
   }, [documentVariables]);
 
   // TODO remove this, things in state should not be mutated
-  calculateFigures(sectionVariables, documentVariables || [], 'Table');
-  calculateFigures(sectionVariables, documentVariables || [], 'Image');
+  calculateFigures(sectionVariables, allVariables || [], 'Table');
+  calculateFigures(sectionVariables, allVariables || [], 'Image');
 
   if (!(documentVariables && allVariables.length > 0)) {
     return null;

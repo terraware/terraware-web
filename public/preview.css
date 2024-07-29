@@ -77,7 +77,7 @@
 
 /* Main Content */
 body {
-    font-family: "Arial";
+    font-family: "Inter";
 }
 
 h1,
@@ -90,14 +90,15 @@ h6 {
 }
 
 h1 {
-    font-size: 24pt;
-    font-weight: 400;
-    font-variant: small-caps;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 36px;
 }
 
 h2 {
-    font-size: 13pt;
-    font-weight: 400;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 32px;
 }
 
 h3 {
@@ -156,20 +157,30 @@ table {
 }
 
 table, th, td {
-    border: 1px solid white;
+    border: 1px solid #B2AB93;
     border-collapse: collapse;
 }
 
+.table-name {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 16px;
+    text-align: left;
+    margin: 0.25in 0 0.125in 0;
+    padding: 0;
+    color: #2C8658;
+}
+
 th {
-    color: #fff;
-    background-color: #2a3957;
+    color: #333025;
+    background-color: #F1F0EC;
     font-size: 10.5pt;
     padding: 0.1in;
 }
 
 td {
     color: #404040;
-    background-color: #f2f2f2;
+    background-color: #fff;
     font-size: 9.5pt;
     text-align: left;
     padding: 0.1in;
