@@ -5,8 +5,11 @@ import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { store } from 'src/redux/store';
 import { OrganizationService, PreferencesService } from 'src/services';
+import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useQuery from 'src/utils/useQuery';
+import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import { PreferencesType, ProvidedOrganizationData } from './DataTypes';
@@ -26,6 +29,8 @@ enum APIRequestStatus {
 }
 
 export default function OrganizationProvider({ children }: OrganizationProviderProps): JSX.Element {
+  const { isDesktop } = useDeviceInfo();
+  const snackbar = useSnackbar();
   const [bootstrapped, setBootstrapped] = useState<boolean>(false);
   const [selectedOrganization, setSelectedOrganization] = useState<Organization>();
   const [orgPreferences, setOrgPreferences] = useState<PreferencesType>({});
@@ -82,6 +87,17 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     getOrgPreferences();
   }, [selectedOrganization]);
 
+  const redirectAndNotify = useCallback(
+    (organization: Organization) => {
+      navigate({ pathname: APP_PATHS.HOME });
+      snackbar.pageSuccess(
+        isDesktop ? strings.ORGANIZATION_CREATED_MSG_DESKTOP : strings.ORGANIZATION_CREATED_MSG,
+        strings.formatString(strings.ORGANIZATION_CREATED_TITLE, organization.name)
+      );
+    },
+    [snackbar, isDesktop]
+  );
+
   useEffect(() => {
     reloadOrganizations();
   }, [reloadOrganizations]);
@@ -89,6 +105,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   useEffect(() => {
     setOrganizationData((prev) => ({
       ...prev,
+      redirectAndNotify,
       selectedOrganization: selectedOrganization || defaultSelectedOrg,
       organizations: organizations ?? [],
       orgPreferences,
@@ -96,7 +113,15 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
       orgPreferenceForId,
       reloadOrgPreferences,
     }));
-  }, [selectedOrganization, organizations, orgPreferences, bootstrapped, orgPreferenceForId, reloadOrgPreferences]);
+  }, [
+    redirectAndNotify,
+    selectedOrganization,
+    organizations,
+    orgPreferences,
+    bootstrapped,
+    orgPreferenceForId,
+    reloadOrgPreferences,
+  ]);
 
   useEffect(() => {
     reloadOrgPreferences();
@@ -164,7 +189,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     setSelectedOrganization,
     organizations: organizations ?? [],
     orgPreferences,
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    redirectAndNotify,
     reloadOrganizations,
     reloadOrgPreferences,
     bootstrapped,

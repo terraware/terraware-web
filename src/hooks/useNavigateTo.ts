@@ -14,6 +14,10 @@ export default function useNavigateTo() {
         navigate({ pathname: APP_PATHS.APPLICATION_OVERVIEW.replace(':applicationId', `${applicationId}`) });
       },
 
+      goToApplicationList: () => {
+        navigate({ pathname: APP_PATHS.APPLICATIONS });
+      },
+
       goToApplicationMap: (applicationId: number) => {
         navigate({
           pathname: APP_PATHS.APPLICATION_MAP.replace(':applicationId', `${applicationId}`),

@@ -40,7 +40,7 @@ const ApplicationListView = () => {
     return 6;
   };
 
-  const onSave = useCallback(
+  const onApplicationCreated = useCallback(
     (applicationId: number) => {
       if (activeLocale) {
         toastSuccess(strings.SUCCESS);
@@ -70,7 +70,7 @@ const ApplicationListView = () => {
           <NewApplicationModal
             open={isNewApplicationModalOpen}
             onClose={() => setIsNewApplicationModalOpen(false)}
-            onSave={onSave}
+            onApplicationCreated={onApplicationCreated}
           />
           <Grid container spacing={3} sx={{ padding: 0 }}>
             {allApplications?.map((application) => (

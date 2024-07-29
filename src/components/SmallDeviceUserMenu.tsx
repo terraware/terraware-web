@@ -36,7 +36,7 @@ export default function SmallDeviceUserMenu({
   onLogout,
   hasOrganizations,
 }: SmallDeviceUserMenuProps): JSX.Element | null {
-  const { selectedOrganization, setSelectedOrganization, organizations } = useOrganization();
+  const { selectedOrganization, setSelectedOrganization, organizations, redirectAndNotify } = useOrganization();
   const { user } = useUser();
   const theme = useTheme();
   const navigate = useNavigate();
@@ -123,7 +123,11 @@ export default function SmallDeviceUserMenu({
         },
       ]}
     >
-      <AddNewOrganizationModal open={newOrganizationModalOpened} onCancel={onCloseCreateOrganizationModal} />
+      <AddNewOrganizationModal
+        open={newOrganizationModalOpened}
+        onCancel={onCloseCreateOrganizationModal}
+        onSuccess={(organization: Organization) => redirectAndNotify(organization)}
+      />
       <Button ref={anchorRef} id='composition-button' onClick={handleToggle} sx={{ minWidth: 'auto' }}>
         <Box sx={iconStyles}>{iconLetter}</Box>
       </Button>
