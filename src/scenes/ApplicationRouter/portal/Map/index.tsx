@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -12,6 +12,9 @@ import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { useLocalization } from 'src/providers';
+import { requestUpdateApplicationBoundary } from 'src/redux/features/application/applicationAsyncThunks';
+import { selectApplicationUpdateBoundary } from 'src/redux/features/application/applicationSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { SQ_M_TO_HECTARES } from 'src/scenes/PlantingSitesRouter/edit/editor/utils';
 import strings from 'src/strings';
 import { MultiPolygon } from 'src/types/Tracking';
@@ -29,10 +32,15 @@ type Stack = {
 const MapView = () => {
   const theme = useTheme();
 
-  const { selectedApplication } = useApplicationData();
-  const { goToApplication } = useNavigateTo();
-  const { toastInfo } = useSnackbar();
+  const { activeLocale } = useLocalization();
+  const dispatch = useAppDispatch();
+  const { selectedApplication, reload } = useApplicationData();
+  const { goToApplicationPrescreen } = useNavigateTo();
+  const { toastSuccess } = useSnackbar();
   const [siteBoundaryData, setSiteBoundaryData, undo, redo] = useUndoRedoState<Stack>();
+
+  const [requestId, setRequestId] = useState<string>('');
+  const result = useAppSelector(selectApplicationUpdateBoundary(requestId));
 
   const findErrors = (boundary: MultiPolygon) => {
     const boundaryAreaHa = parseFloat((area(boundary) * SQ_M_TO_HECTARES).toFixed(2));
@@ -61,13 +69,35 @@ const MapView = () => {
     }
   };
 
+  // construct union of multipolygons
+  const boundary = useMemo<MultiPolygon | undefined>(
+    () => (siteBoundaryData?.siteBoundary && unionMultiPolygons(siteBoundaryData?.siteBoundary)) || undefined,
+    [siteBoundaryData?.siteBoundary]
+  );
+
   const onSave = useCallback(() => {
-    if (selectedApplication) {
-      // TODO make server call to save project boundary and validate results
-      toastInfo('Save project boundary clicked. ');
-      goToApplication(selectedApplication.id);
+    if (selectedApplication && boundary) {
+      const dispatched = dispatch(
+        requestUpdateApplicationBoundary({ applicationId: selectedApplication.id, boundary })
+      );
+      setRequestId(dispatched.requestId);
     }
-  }, [selectedApplication, goToApplication]);
+  }, [selectedApplication, boundary]);
+
+  const navigateToPrescreen = useCallback(() => {
+    if (selectedApplication) {
+      goToApplicationPrescreen(selectedApplication.id);
+    }
+  }, [selectedApplication, goToApplicationPrescreen]);
+
+  useEffect(() => {
+    if (result && result.status === 'success') {
+      if (activeLocale) {
+        toastSuccess(strings.SUCCESS);
+      }
+      reload(navigateToPrescreen);
+    }
+  }, [activeLocale, reload, result, toastSuccess, navigateToPrescreen]);
 
   if (!selectedApplication) {
     return;
