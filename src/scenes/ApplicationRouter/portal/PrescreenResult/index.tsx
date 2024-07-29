@@ -1,13 +1,17 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Card, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
+import ConfirmModal from 'src/components/Application/ConfirmModal';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
+import { requestRestartApplication } from 'src/redux/features/application/applicationAsyncThunks';
+import { selectApplicationRestart } from 'src/redux/features/application/applicationSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 
 import { useApplicationData } from '../../provider/Context';
@@ -20,64 +24,115 @@ type ResultViewProp = {
 
 const PrescreenResultView = ({ isFailure, feedback }: ResultViewProp) => {
   const theme = useTheme();
+  const dispatch = useAppDispatch();
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState<boolean>(false);
 
   const { goToApplicationPrescreen, goToApplication } = useNavigateTo();
-  const { selectedApplication, restart, reload } = useApplicationData();
+  const { selectedApplication, reload } = useApplicationData();
 
-  const handleRestart = useCallback(async () => {
-    if (selectedApplication) {
-      await restart();
-      await reload();
-      goToApplication(selectedApplication.id);
+  const handleClick = useCallback(() => {
+    if (!selectedApplication) {
+      return;
     }
-  }, [selectedApplication, reload, restart, goToApplication]);
+    if (!isFailure) {
+      goToApplication(selectedApplication.id);
+    } else {
+      setIsConfirmModalOpen(true);
+    }
+  }, [selectedApplication, setIsConfirmModalOpen, goToApplication, isFailure]);
+
+  const [restartRequestId, setRestartRequestId] = useState<string>('');
+  const restartResult = useAppSelector(selectApplicationRestart(restartRequestId));
+
+  const handleRestart = useCallback(() => {
+    if (selectedApplication) {
+      const dispatched = dispatch(requestRestartApplication({ applicationId: selectedApplication.id }));
+      setRestartRequestId(dispatched.requestId);
+    }
+  }, [dispatch, selectedApplication, setRestartRequestId]);
+
+  const onReload = useCallback(() => {
+    if (!selectedApplication) {
+      return;
+    }
+
+    setIsConfirmModalOpen(false);
+    goToApplication(selectedApplication.id);
+  }, [selectedApplication, goToApplication, setIsConfirmModalOpen]);
+
+  useEffect(() => {
+    if (restartResult && restartResult.status === 'success' && restartResult.data) {
+      reload(onReload);
+    }
+  }, [restartResult, onReload]);
 
   if (!selectedApplication) {
     return;
   }
 
   return (
-    <Card
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        flexGrow: 1,
-        alignItems: 'center',
-        padding: theme.spacing(3),
-      }}
-    >
-      <Box alignItems={'center'} marginTop={theme.spacing(4)}>
-        <img src={isFailure ? '/assets/application-failure-splash.svg' : '/assets/application-success-splash.svg'} />
-      </Box>
-      <Box alignItems={'center'} marginTop={theme.spacing(4)}>
-        <Typography align={'center'} color={theme.palette.TwClrTxt} fontSize='24px' fontWeight={600} lineHeight='32px'>
-          {isFailure ? strings.APPLICATION_PRESCREEN_FAILURE_TITLE : strings.APPLICATION_PRESCREEN_SUCCESS_TITLE}
-        </Typography>
-      </Box>
-      <Box alignItems={'center'} marginTop={theme.spacing(4)}>
-        <Typography align={'center'} color={theme.palette.TwClrTxt} fontSize='16px' fontWeight={400} lineHeight='24px'>
-          {isFailure ? strings.APPLICATION_PRESCREEN_FAILURE_SUBTITLE : strings.APPLICATION_PRESCREEN_SUCCESS_SUBTITLE}
-        </Typography>
-      </Box>
-      {isFailure && feedback && <Box dangerouslySetInnerHTML={{ __html: feedback }} justifyContent={'center'} />}
-
-      <Button
-        label={isFailure ? strings.RESTART_PRESCREEN : strings.CONTINUE_TO_APPLICATION}
-        onClick={() => {
-          isFailure && handleRestart();
-        }}
-        priority='secondary'
-        style={{ marginTop: theme.spacing(2), marginBottom: theme.spacing(2) }}
+    <>
+      <ConfirmModal
+        open={isConfirmModalOpen}
+        onClose={() => setIsConfirmModalOpen(false)}
+        title={strings.RESTART_PRESCREEN}
+        body={`${strings.RESTART_PRESCREEN_CONFIRMATION}\n${strings.ARE_YOU_SURE}`}
+        onConfirm={handleRestart}
       />
-
-      <Link
-        fontSize='16px'
-        onClick={() => goToApplicationPrescreen(selectedApplication.id)}
-        style={{ display: 'block', textAlign: 'center' }}
+      <Card
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          flexGrow: 1,
+          alignItems: 'center',
+          padding: theme.spacing(3),
+        }}
       >
-        {`${strings.VIEW} ${strings.VIEW_PRESCREEN_SUBMISSION}`}
-      </Link>
-    </Card>
+        <Box alignItems={'center'} marginTop={theme.spacing(4)}>
+          <img src={isFailure ? '/assets/application-failure-splash.svg' : '/assets/application-success-splash.svg'} />
+        </Box>
+        <Box alignItems={'center'} marginTop={theme.spacing(4)}>
+          <Typography
+            align={'center'}
+            color={theme.palette.TwClrTxt}
+            fontSize='24px'
+            fontWeight={600}
+            lineHeight='32px'
+          >
+            {isFailure ? strings.APPLICATION_PRESCREEN_FAILURE_TITLE : strings.APPLICATION_PRESCREEN_SUCCESS_TITLE}
+          </Typography>
+        </Box>
+        <Box alignItems={'center'} marginTop={theme.spacing(4)}>
+          <Typography
+            align={'center'}
+            color={theme.palette.TwClrTxt}
+            fontSize='16px'
+            fontWeight={400}
+            lineHeight='24px'
+          >
+            {isFailure
+              ? strings.APPLICATION_PRESCREEN_FAILURE_SUBTITLE
+              : strings.APPLICATION_PRESCREEN_SUCCESS_SUBTITLE}
+          </Typography>
+        </Box>
+        {isFailure && feedback && <Box dangerouslySetInnerHTML={{ __html: feedback }} justifyContent={'center'} />}
+
+        <Button
+          label={isFailure ? strings.RESTART_PRESCREEN : strings.CONTINUE_TO_APPLICATION}
+          onClick={() => handleClick()}
+          priority='secondary'
+          style={{ marginTop: theme.spacing(2), marginBottom: theme.spacing(2) }}
+        />
+
+        <Link
+          fontSize='16px'
+          onClick={() => goToApplicationPrescreen(selectedApplication.id)}
+          style={{ display: 'block', textAlign: 'center' }}
+        >
+          {`${strings.VIEW} ${strings.VIEW_PRESCREEN_SUBMISSION}`}
+        </Link>
+      </Card>
+    </>
   );
 };
 

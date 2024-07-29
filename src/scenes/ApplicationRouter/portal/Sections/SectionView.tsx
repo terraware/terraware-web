@@ -1,6 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
-
-import { Button } from '@terraware/web-components';
+import React, { ReactNode, useMemo } from 'react';
 
 import ModuleDetailsCard from 'src/components/ModuleDetailsCard';
 import useNavigateTo from 'src/hooks/useNavigateTo';
@@ -11,15 +9,15 @@ import { ApplicationDeliverable, ApplicationModule } from 'src/types/Application
 import { useApplicationData } from '../../provider/Context';
 
 type SectionViewProp = {
+  children?: ReactNode;
   section: ApplicationModule;
   sectionDeliverables: ApplicationDeliverable[];
 };
 
-const SectionView = ({ section, sectionDeliverables }: SectionViewProp) => {
+const SectionView = ({ children, section, sectionDeliverables }: SectionViewProp) => {
   const { activeLocale } = useLocalization();
-  const { selectedApplication, restart, submit, reload } = useApplicationData();
-  const { goToApplication, goToApplicationMap, goToApplicationSectionDeliverable, goToApplicationPrescreenResult } =
-    useNavigateTo();
+  const { selectedApplication } = useApplicationData();
+  const { goToApplicationMap, goToApplicationSectionDeliverable } = useNavigateTo();
 
   const deliverableDetails = useMemo(() => {
     if (!selectedApplication) {
@@ -57,27 +55,6 @@ const SectionView = ({ section, sectionDeliverables }: SectionViewProp) => {
     [activeLocale, section]
   );
 
-  const allDeliverablesCompleted = useMemo(
-    () => sectionDeliverables.every((deliverable) => deliverable.status !== 'Not Submitted'),
-    [sectionDeliverables]
-  );
-
-  const handleRestart = useCallback(async () => {
-    if (selectedApplication) {
-      await restart();
-      await reload();
-      goToApplication(selectedApplication.id);
-    }
-  }, [selectedApplication, reload, restart, goToApplication]);
-
-  const handleSubmit = useCallback(async () => {
-    if (selectedApplication) {
-      await submit();
-      await reload();
-      goToApplicationPrescreenResult(selectedApplication.id);
-    }
-  }, [selectedApplication, reload, submit, goToApplicationPrescreenResult]);
-
   return moduleDetails && selectedApplication ? (
     <ModuleDetailsCard
       deliverables={deliverableDetails}
@@ -85,26 +62,7 @@ const SectionView = ({ section, sectionDeliverables }: SectionViewProp) => {
       projectId={selectedApplication.id}
       showSimplifiedStatus
     >
-      {section.phase === 'Pre-Screen' && selectedApplication.status === 'Not Submitted' && (
-        <Button
-          disabled={!allDeliverablesCompleted && false}
-          label={strings.SUBMIT_PRESCREEN}
-          onClick={() => {
-            handleSubmit();
-          }}
-          priority='primary'
-        />
-      )}
-
-      {section.phase === 'Pre-Screen' && selectedApplication.status !== 'Not Submitted' && (
-        <Button
-          label={strings.RESTART_PRESCREEN}
-          onClick={() => {
-            handleRestart();
-          }}
-          priority='secondary'
-        />
-      )}
+      {children}
     </ModuleDetailsCard>
   ) : null;
 };
