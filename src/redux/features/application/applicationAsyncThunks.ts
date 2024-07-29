@@ -156,7 +156,7 @@ export const requestUpdateApplicationBoundary = createAsyncThunk(
 );
 
 export const requestUploadApplicationBoundary = createAsyncThunk(
-  'applications/updateBoundary',
+  'applications/uploadBoundary',
   async (request: { applicationId: number; file: File }, { rejectWithValue }) => {
     const { applicationId, file } = request;
 
