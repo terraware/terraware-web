@@ -77,17 +77,14 @@ export default function PreviewDocument({ doc }: PreviewDocumentProps): ReactEle
         />
       )}
 
-      <div id='table-of-contents'>
-        <h1>{strings.CONTENTS}</h1>
-        <hr />
-      </div>
-
       <div className='header-left'>
-        <img width='100px' src='assets/logo-vcs-initials.png' alt='VCS logo' />
+        <img width='205px' src='assets/logo-tw.svg' alt='Terraware logo' />
       </div>
 
-      <div className='header-right'>
-        <p>{strings.VCS_TEMPLATE_NAME}</p>
+      <div className='header-right'></div>
+
+      <div id='table-of-contents'>
+        <h1>{strings.TABLE_OF_CONTENTS}</h1>
       </div>
 
       <>

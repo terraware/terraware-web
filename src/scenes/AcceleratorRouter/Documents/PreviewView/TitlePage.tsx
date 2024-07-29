@@ -30,7 +30,7 @@ export default function TitlePage({
 
   return (
     <div id='title-page'>
-      <img className='vcs-logo-full' src='assets/logo-vcs-full.png' alt='VCS Logo' />
+      <img className='vcs-logo-full' src='assets/logo-tw.svg' alt='VCS Logo' />
       <h1>{doc.name}</h1>
       {titleSection && (
         <PreviewSection
