@@ -14,14 +14,14 @@ const SectionDeliverableEditView = () => {
     sectionId: string;
   }>();
   const { goToApplicationSectionDeliverable } = useNavigateTo();
-  const { selectedApplication, applicationDeliverables } = useApplicationData();
+  const { selectedApplication, applicationDeliverables, reload } = useApplicationData();
 
   const exit = useCallback(() => {
     if (!(applicationId && deliverableId && sectionId)) {
       return;
     }
-    goToApplicationSectionDeliverable(Number(applicationId), Number(sectionId), Number(deliverableId));
-  }, [goToApplicationSectionDeliverable, applicationId, deliverableId, sectionId]);
+    reload(() => goToApplicationSectionDeliverable(Number(applicationId), Number(sectionId), Number(deliverableId)));
+  }, [goToApplicationSectionDeliverable, applicationId, deliverableId, reload, sectionId]);
 
   const deliverable = applicationDeliverables.find((deliverable) => deliverable.id === Number(deliverableId));
 

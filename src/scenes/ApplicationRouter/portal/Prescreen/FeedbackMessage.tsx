@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { Message } from '@terraware/web-components';
 
 import strings from 'src/strings';
@@ -18,7 +18,11 @@ const FeedbackMessage = ({ feedback }: FeedbackMessageProps) => {
       body={
         <>
           <Typography sx={{ margin: 0 }}>{strings.APPLICATION_PRESCREEN_FAILURE_SUBTITLE}</Typography>
-          {feedback && <Box dangerouslySetInnerHTML={{ __html: feedback }} justifyContent={'center'} />}
+          {feedback && (
+            <Typography sx={{ margin: 0 }} whiteSpace={'pre-line'}>
+              {feedback}
+            </Typography>
+          )}
         </>
       }
     />
