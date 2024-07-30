@@ -46,7 +46,7 @@ const MapView = () => {
     const boundaryAreaHa = parseFloat((area(boundary) * SQ_M_TO_HECTARES).toFixed(2));
     const maxAreaHa = 20000;
 
-    if (boundaryAreaHa > 20000) {
+    if (boundaryAreaHa > maxAreaHa) {
       const errorText = strings.formatString(strings.SITE_BOUNDARY_POLYGON_TOO_LARGE, boundaryAreaHa, maxAreaHa);
       return [{ type: 'Feature', geometry: boundary, properties: { errorText, fill: true }, id: -1 } as Feature];
     } else {
