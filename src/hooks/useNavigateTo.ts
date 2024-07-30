@@ -36,6 +36,12 @@ export default function useNavigateTo() {
         });
       },
 
+      goToApplicationReview: (applicationId: number) => {
+        navigate({
+          pathname: APP_PATHS.APPLICATION_REVIEW.replace(':applicationId', `${applicationId}`),
+        });
+      },
+
       goToApplicationSection: (applicationId: number, sectionId: number) => {
         navigate({
           pathname: APP_PATHS.APPLICATION_SECTION.replace(':applicationId', `${applicationId}`).replace(

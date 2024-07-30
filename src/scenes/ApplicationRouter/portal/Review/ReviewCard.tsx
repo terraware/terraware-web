@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 
 import Card from 'src/components/common/Card';
 import Button from 'src/components/common/button/Button';
+import useNavigateTo from 'src/hooks/useNavigateTo';
+import { requestSubmitApplication } from 'src/redux/features/application/applicationAsyncThunks';
+import { selectApplicationSubmit } from 'src/redux/features/application/applicationSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import useSnackbar from 'src/utils/useSnackbar';
+
+import { useApplicationData } from '../../provider/Context';
 
 type ReviewCardProps = {
   sections: {
@@ -15,6 +22,15 @@ type ReviewCardProps = {
 
 const ReviewCard = ({ sections }: ReviewCardProps): JSX.Element => {
   const theme = useTheme();
+  const dispatch = useAppDispatch();
+
+  const { selectedApplication, reload } = useApplicationData();
+  const { goToApplicationReview } = useNavigateTo();
+  const { toastSuccess, toastWarning } = useSnackbar();
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [requestId, setRequestId] = useState<string>('');
+  const result = useAppSelector(selectApplicationSubmit(requestId));
 
   const statusText = (status: 'Incomplete' | 'Complete') => (
     <Typography
@@ -26,7 +42,33 @@ const ReviewCard = ({ sections }: ReviewCardProps): JSX.Element => {
     </Typography>
   );
 
+  const refreshPage = useCallback(() => {
+    if (selectedApplication) {
+      goToApplicationReview(selectedApplication.id);
+    }
+  }, [selectedApplication, goToApplicationReview]);
+
   const allSectionsCompleted = sections.every(({ status }) => status === 'Complete');
+
+  const submit = useCallback(() => {
+    if (selectedApplication) {
+      setIsLoading(true);
+      const dispatched = dispatch(requestSubmitApplication({ applicationId: selectedApplication.id }));
+      setRequestId(dispatched.requestId);
+    }
+  }, [dispatch, selectedApplication, setIsLoading, setRequestId]);
+
+  useEffect(() => {
+    if (result && result.data) {
+      setIsLoading(false);
+      if (result.data.length === 0) {
+        toastSuccess(strings.SUCCESS);
+        reload(refreshPage);
+      } else {
+        toastWarning(`${strings.GENERIC_ERROR}: ${result.data.toString()}`);
+      }
+    }
+  }, [result, reload, toastSuccess, setIsLoading]);
 
   return (
     <Card
@@ -39,53 +81,49 @@ const ReviewCard = ({ sections }: ReviewCardProps): JSX.Element => {
         padding: theme.spacing(3),
       }}
     >
-      <Grid
-        container
-        flexDirection={'column'}
-        alignItems={'center'}
-        spacing={theme.spacing(2)}
-        paddingTop={theme.spacing(3)}
-        paddingBottom={theme.spacing(6)}
-      >
-        {sections.map(({ name, status }, index: number) => (
-          <Grid item xs={12} key={index}>
-            <Box
-              borderRadius={theme.spacing(1)}
-              borderColor={theme.palette.TwClrBaseGreen300}
-              border={1}
-              paddingY={theme.spacing(2)}
-              width={'600px'}
-            >
-              <Typography
-                align={'center'}
-                color={theme.palette.TwClrTxt}
-                fontSize='16px'
-                fontWeight={400}
-                lineHeight='24px'
-              >
-                {strings.formatString(
-                  strings.REVIEW_APPLICATION_STATUS_TEXT,
-                  <b>{name}</b>,
-                  statusText(status ?? 'Incomplete')
-                )}
-              </Typography>
-            </Box>
-          </Grid>
-        ))}
-      </Grid>
-
+      {sections.map(({ name, status }, index: number) => (
+        <Box
+          key={index}
+          borderRadius={theme.spacing(1)}
+          borderColor={theme.palette.TwClrBaseGreen300}
+          border={1}
+          paddingY={theme.spacing(1)}
+          marginBottom={theme.spacing(2)}
+          width={'600px'}
+        >
+          <Typography
+            align={'center'}
+            color={theme.palette.TwClrTxt}
+            fontSize='16px'
+            fontWeight={400}
+            lineHeight='24px'
+          >
+            {strings.formatString(
+              strings.REVIEW_APPLICATION_STATUS_TEXT,
+              <b>{name}</b>,
+              statusText(status ?? 'Incomplete')
+            )}
+          </Typography>
+        </Box>
+      ))}
       <Typography
         align={'center'}
         color={theme.palette.TwClrTxt}
         fontSize='16px'
         fontWeight={400}
         lineHeight='24px'
-        marginBottom={theme.spacing(4)}
+        marginTop={theme.spacing(2)}
+        marginBottom={theme.spacing(2)}
       >
         {allSectionsCompleted ? strings.REVIEW_APPLICATION_COMPLETE : strings.REVIEW_APPLICATION_INCOMPLETE}
       </Typography>
 
-      <Button disabled={!allSectionsCompleted} label={strings.SUBMIT_APPLICATION} size='medium' onClick={() => {}} />
+      <Button
+        disabled={!allSectionsCompleted || isLoading}
+        label={strings.SUBMIT_APPLICATION}
+        size='medium'
+        onClick={() => submit()}
+      />
     </Card>
   );
 };
