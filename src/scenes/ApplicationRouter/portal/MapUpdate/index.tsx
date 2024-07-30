@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Card, Grid, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import area from '@turf/area';
 import { Feature, FeatureCollection } from 'geojson';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import EditableMap from 'src/components/Map/EditableMapV2';
+import MapIcon from 'src/components/Map/MapIcon';
 import { unionMultiPolygons } from 'src/components/Map/utils';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
@@ -15,6 +16,7 @@ import { useLocalization } from 'src/providers';
 import { requestUpdateApplicationBoundary } from 'src/redux/features/application/applicationAsyncThunks';
 import { selectApplicationUpdateBoundary } from 'src/redux/features/application/applicationSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import StepTitleDescription, { Description } from 'src/scenes/PlantingSitesRouter/edit/editor/StepTitleDescription';
 import { SQ_M_TO_HECTARES } from 'src/scenes/PlantingSitesRouter/edit/editor/utils';
 import strings from 'src/strings';
 import { MultiPolygon } from 'src/types/Tracking';
@@ -104,6 +106,34 @@ const MapUpdateView = () => {
     }
   }, [activeLocale, reload, result, toastSuccess, navigateToMap]);
 
+  const tutorialDescription = useMemo(() => {
+    if (!activeLocale) {
+      return '';
+    }
+    return strings.formatString(
+      strings.PLANTING_SITE_CREATE_INSTRUCTIONS_DESCRIPTION,
+      <MapIcon centerAligned icon='polygon' />
+    ) as JSX.Element[];
+  }, [activeLocale]);
+
+  const description: Description[] = useMemo(
+    () =>
+      activeLocale
+        ? [
+            {
+              text: strings.SITE_BOUNDARY_DESCRIPTION_0,
+            },
+            {
+              text: strings.SITE_BOUNDARY_DESCRIPTION_1,
+              hasTutorial: true,
+              handlePrefix: (prefix: string) =>
+                strings.formatString(prefix, <MapIcon centerAligned={true} icon='polygon' />) as JSX.Element[],
+            },
+          ]
+        : [],
+    [activeLocale]
+  );
+
   if (!selectedApplication) {
     return;
   }
@@ -118,15 +148,16 @@ const MapUpdateView = () => {
         marginTop: selectedApplication.status === 'Failed Pre-screen' ? theme.spacing(4) : 0,
       }}
     >
-      <Typography fontSize={'24px'} fontWeight={600} lineHeight={'32px'}>
-        {strings.PROPOSED_PROJECT_BOUNDARY}
-      </Typography>
       <Grid container flexDirection={'row'} spacing={3} sx={{ padding: 0 }}>
         <Grid item xs={4}>
-          <Typography fontSize={'16px'} fontWeight={400} lineHeight={'24px'}>
-            <p>{strings.SITE_BOUNDARY_DESCRIPTION_0}</p>
-            <p>{strings.SITE_BOUNDARY_DESCRIPTION_1}</p>
-          </Typography>
+          <StepTitleDescription
+            description={description}
+            dontShowAgainPreferenceName='dont-show-site-boundary-instructions'
+            title={strings.PROPOSED_PROJECT_BOUNDARY}
+            tutorialDescription={tutorialDescription}
+            tutorialDocLinkKey='planting_site_create_boundary_instructions_video'
+            tutorialTitle={strings.PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE}
+          />
         </Grid>
         <Grid item xs={8}>
           <EditableMap
