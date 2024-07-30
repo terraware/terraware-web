@@ -29,7 +29,9 @@ type Stack = {
   siteBoundary?: FeatureCollection;
 };
 
-const MapView = () => {
+const MAX_APPLICATION_BOUNDARY_AREA_HA = 100000;
+
+const MapUpdateView = () => {
   const theme = useTheme();
 
   const { activeLocale } = useLocalization();
@@ -44,10 +46,13 @@ const MapView = () => {
 
   const findErrors = (boundary: MultiPolygon) => {
     const boundaryAreaHa = parseFloat((area(boundary) * SQ_M_TO_HECTARES).toFixed(2));
-    const maxAreaHa = 20000;
 
-    if (boundaryAreaHa > maxAreaHa) {
-      const errorText = strings.formatString(strings.SITE_BOUNDARY_POLYGON_TOO_LARGE, boundaryAreaHa, maxAreaHa);
+    if (boundaryAreaHa > MAX_APPLICATION_BOUNDARY_AREA_HA) {
+      const errorText = strings.formatString(
+        strings.SITE_BOUNDARY_POLYGON_TOO_LARGE,
+        boundaryAreaHa,
+        MAX_APPLICATION_BOUNDARY_AREA_HA
+      );
       return [{ type: 'Feature', geometry: boundary, properties: { errorText, fill: true }, id: -1 } as Feature];
     } else {
       return undefined;
@@ -119,15 +124,8 @@ const MapView = () => {
       <Grid container flexDirection={'row'} spacing={3} sx={{ padding: 0 }}>
         <Grid item xs={4}>
           <Typography fontSize={'16px'} fontWeight={400} lineHeight={'24px'}>
-            <p>
-              All plantable areas must be contained within the site boundary. Any areas within the site boundary that
-              are not plantable should be excluded.
-            </p>
-            <p>
-              Draw the site boundary of your planting site below. Use the drawing tool to draw the boundary of the
-              planting site.
-            </p>
-            <p>Watch a tutorial about drawing site boundaries.</p>
+            <p>{strings.SITE_BOUNDARY_DESCRIPTION_0}</p>
+            <p>{strings.SITE_BOUNDARY_DESCRIPTION_1}</p>
           </Typography>
         </Grid>
         <Grid item xs={8}>
@@ -147,7 +145,7 @@ const MapView = () => {
   );
 };
 
-const MapViewWrapper = () => {
+const MapUpdateViewWrapper = () => {
   const { activeLocale } = useLocalization();
   const { selectedApplication } = useApplicationData();
 
@@ -165,9 +163,9 @@ const MapViewWrapper = () => {
   );
   return (
     <ApplicationPage crumbs={crumbs}>
-      <MapView />
+      <MapUpdateView />
     </ApplicationPage>
   );
 };
 
-export default MapViewWrapper;
+export default MapUpdateViewWrapper;

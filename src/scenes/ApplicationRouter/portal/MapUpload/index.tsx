@@ -22,7 +22,6 @@ const MapUploadView = () => {
   const dispatch = useAppDispatch();
   const { reload, selectedApplication } = useApplicationData();
   const [requestId, setRequestId] = useState<string>('');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { goToApplicationMap } = useNavigateTo();
 
   const result = useAppSelector(selectApplicationUploadBoundary(requestId));
@@ -37,9 +36,8 @@ const MapUploadView = () => {
         requestUploadApplicationBoundary({ applicationId: selectedApplication.id, file: files[0] })
       );
       setRequestId(dispatched.requestId);
-      setIsLoading(true);
     },
-    [dispatch, selectedApplication, setIsLoading, setRequestId]
+    [dispatch, selectedApplication, setRequestId]
   );
 
   const navigateToMap = useCallback(() => {
@@ -53,7 +51,6 @@ const MapUploadView = () => {
       return;
     }
 
-    setIsLoading(false);
     if (result.status === 'success') {
       toastSuccess(strings.SUCCESS);
       reload(navigateToMap);
@@ -61,12 +58,12 @@ const MapUploadView = () => {
       // TODO make more meaningful error messages
       toastError(strings.GENERIC_ERROR);
     }
-  }, [navigateToMap, reload, result, setIsLoading, toastError, toastError]);
+  }, [navigateToMap, reload, result, toastError, toastError]);
 
   return (
     <Card style={{ width: '100%', padding: theme.spacing(2), borderRadius: theme.spacing(3) }}>
       <h3>{strings.UPLOAD_SHAPEFILE}</h3>
-      {isLoading && <BusySpinner />}
+      {result?.status === 'pending' && <BusySpinner />}
       <FileChooser
         chooseFileText={strings.CHOOSE_FILE}
         maxFiles={1}
