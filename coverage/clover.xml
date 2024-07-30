@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1722289164499" clover="3.2.0">
-  <project timestamp="1722289164499" name="All files">
-    <metrics statements="23526" coveredstatements="956" conditionals="15177" coveredconditionals="239" methods="7251" coveredmethods="163" elements="45954" coveredelements="1358" complexity="0" loc="23526" ncloc="23526" packages="224" files="1035" classes="1035"/>
+<coverage generated="1722376387479" clover="3.2.0">
+  <project timestamp="1722376387480" name="All files">
+    <metrics statements="23525" coveredstatements="956" conditionals="15177" coveredconditionals="239" methods="7251" coveredmethods="163" elements="45953" coveredelements="1358" complexity="0" loc="23525" ncloc="23525" packages="224" files="1035" classes="1035"/>
     <package name="src">
       <metrics statements="176" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -6096,7 +6096,7 @@
       </file>
     </package>
     <package name="src.components.common">
-      <metrics statements="415" coveredstatements="0" conditionals="384" coveredconditionals="0" methods="120" coveredmethods="0"/>
+      <metrics statements="414" coveredstatements="0" conditionals="384" coveredconditionals="0" methods="120" coveredmethods="0"/>
       <file name="AddLink.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/AddLink.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="18" count="0" type="stmt"/>
@@ -6233,7 +6233,7 @@
         <line num="50" count="0" type="stmt"/>
       </file>
       <file name="ExportCsvModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/ExportCsvModal.tsx">
-        <metrics statements="17" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="4" coveredmethods="0"/>
+        <metrics statements="16" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="17" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
         <line num="20" count="0" type="stmt"/>
@@ -6247,10 +6247,9 @@
         <line num="31" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="40" count="0" type="stmt"/>
-        <line num="66" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
       </file>
       <file name="FormattedNumber.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/FormattedNumber.tsx">
         <metrics statements="6" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
