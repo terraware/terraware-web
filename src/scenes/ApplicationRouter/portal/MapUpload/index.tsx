@@ -87,8 +87,8 @@ const MapUploadViewWrapper = () => {
       activeLocale && selectedApplication?.id
         ? [
             {
-              name: strings.PROPOSED_PROJECT_BOUNDARY,
-              to: APP_PATHS.APPLICATION_MAP.replace(':applicationId', `${selectedApplication.id}`),
+              name: strings.PRESCREEN,
+              to: APP_PATHS.APPLICATION_PRESCREEN.replace(':applicationId', `${selectedApplication.id}`),
             },
           ]
         : [],

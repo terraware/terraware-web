@@ -21,15 +21,9 @@ const MapView = () => {
   const theme = useTheme();
   const { selectedApplication } = useApplicationData();
   const getRenderAttributes = useRenderAttributes();
-  const { goToApplicationMapUpdate, goToApplicationMapUpload } = useNavigateTo();
+  const { goToApplicationPrescreen, goToApplicationMapUpdate, goToApplicationMapUpload } = useNavigateTo();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (selectedApplication) {
-      setIsOpen(selectedApplication.boundary === undefined);
-    }
-  }, [selectedApplication, setIsOpen]);
 
   const onNext = useCallback(
     (type: 'Update' | 'Upload') => {
@@ -57,7 +51,11 @@ const MapView = () => {
         {
           entities: [
             {
-              properties: {},
+              properties: {
+                id,
+                name: 'boundary',
+                type: 'site',
+              },
               boundary: selectedApplication.boundary.coordinates,
               id,
             },
@@ -68,7 +66,17 @@ const MapView = () => {
         },
       ],
     };
-  }, [selectedApplication?.boundary]);
+  }, [selectedApplication, getRenderAttributes]);
+
+  useEffect(() => {
+    if (!selectedApplication) {
+      return;
+    }
+
+    if (!selectedApplication.boundary) {
+      goToApplicationPrescreen(selectedApplication.id);
+    }
+  }, [selectedApplication]);
 
   return (
     <>
@@ -85,19 +93,17 @@ const MapView = () => {
       >
         <h3>{strings.PROPOSED_PROJECT_BOUNDARY}</h3>
 
-        <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
-          <Button
-            label={selectedApplication?.boundary === undefined ? strings.ADD_BOUNDARY : strings.REPLACE_BOUNDARY}
-            onClick={() => setIsOpen(true)}
-            priority={selectedApplication?.boundary === undefined ? 'primary' : 'secondary'}
-          />
-        </div>
-
-        {selectedApplication?.boundary && (
-          <Box minHeight={'640px'} justifyContent={'center'} alignContent={'center'}>
-            <GenericMap options={mapOptions} style={{ width: '100%', borderRadius: '24px' }} />
+        {mapOptions && (
+          <Box display='flex' minHeight={'640px'} justifyContent={'center'} alignContent={'center'}>
+            <GenericMap options={mapOptions} style={{ height: '100%', width: '100%', borderRadius: '24px' }} />
           </Box>
         )}
+
+        <Button
+          label={selectedApplication?.boundary === undefined ? strings.ADD_BOUNDARY : strings.REPLACE_BOUNDARY}
+          onClick={() => setIsOpen(true)}
+          priority={selectedApplication?.boundary === undefined ? 'primary' : 'secondary'}
+        />
       </Card>
     </>
   );
