@@ -44,19 +44,17 @@ export default function PreviewDocument({ doc, projectName }: PreviewDocumentPro
   }, [dispatch, doc.variableManifestId, doc.projectId]);
 
   const [sectionVariables, setSectionVariables] = useState<SectionVariableWithValues[]>([]);
-  // const [titleSection, setTitleSection] = useState<SectionVariableWithValues>();
-  const [titleSection] = useState<SectionVariableWithValues>();
+  const [titleSection, setTitleSection] = useState<SectionVariableWithValues>();
 
   useEffect(() => {
     if (!documentVariables) {
       return;
     }
 
-    // TODO We need to put a title section into the sample data to test this out. Currently there is only one section
-    // const firstSection = documentVariables.shift();
+    const firstSection = documentVariables.shift();
 
     setSectionVariables(documentVariables as SectionVariableWithValues[]);
-    // setTitleSection(firstSection as SectionVariableWithValues);
+    setTitleSection(firstSection as SectionVariableWithValues);
   }, [documentVariables]);
 
   // TODO remove this, things in state should not be mutated
@@ -69,11 +67,16 @@ export default function PreviewDocument({ doc, projectName }: PreviewDocumentPro
 
   return (
     <>
+      <div className='footer-left'>
+        <p>{projectName} - Preview</p>
+      </div>
+
       {titleSection && (
         <TitlePage
           allVariables={allVariables}
           doc={doc}
           documentVariables={documentVariables}
+          projectName={projectName}
           titleSection={titleSection}
         />
       )}
