@@ -13,9 +13,19 @@
 
     @bottom-right {
         content: counter(page);
-        font-family: "Arial";
-        font-size: 10.5pt;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 24px;
+        text-align: right;
         color: #000;
+        vertical-align: top;
+        padding-top: 0.25in;
+    }
+
+    @bottom-left {
+        content: element(footerLeft);
+        vertical-align: top;
+        padding-top: 0.25in;
     }
 
     @footnote {
@@ -72,6 +82,19 @@
 
 .header-right p {
     position: running(headerRight);
+}
+
+.footer-left {
+    position: running(footerLeft);
+}
+
+.footer-left p {
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 20px;
+    color: #7F775B;
+    margin: 0;
+    padding: 0;
 }
 
 /* Main Content */
@@ -143,7 +166,7 @@ p {
 }
 
 .footnote::marker {
-    vertical-align: super;
+    vertical-align: super;  
     font-variant-position: super;
 }
 
