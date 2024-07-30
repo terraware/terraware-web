@@ -1277,7 +1277,7 @@ export interface components {
       status?: "Incomplete" | "Complete";
     };
     ApplicationPayload: {
-      boundary?: components["schemas"]["Geometry"];
+      boundary?: components["schemas"]["MultiPolygon"];
       /** Format: date-time */
       createdTime: string;
       feedback?: string;

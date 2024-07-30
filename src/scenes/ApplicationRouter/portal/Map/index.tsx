@@ -1,149 +1,105 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
-import { Button } from '@terraware/web-components';
-import area from '@turf/area';
-import { Feature, FeatureCollection } from 'geojson';
+import { Box, Card, useTheme } from '@mui/material';
 
 import { Crumb } from 'src/components/BreadCrumbs';
-import EditableMap from 'src/components/Map/EditableMapV2';
-import { unionMultiPolygons } from 'src/components/Map/utils';
+import { GenericMap } from 'src/components/Map';
+import useRenderAttributes from 'src/components/Map/useRenderAttributes';
+import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { useLocalization } from 'src/providers';
-import { requestUpdateApplicationBoundary } from 'src/redux/features/application/applicationAsyncThunks';
-import { selectApplicationUpdateBoundary } from 'src/redux/features/application/applicationSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { SQ_M_TO_HECTARES } from 'src/scenes/PlantingSitesRouter/edit/editor/utils';
+import ApplicationPage from 'src/scenes/ApplicationRouter/portal/ApplicationPage';
+import { MapService } from 'src/services';
 import strings from 'src/strings';
-import { MultiPolygon } from 'src/types/Tracking';
-import useSnackbar from 'src/utils/useSnackbar';
+import { MapOptions } from 'src/types/Map';
 
 import { useApplicationData } from '../../provider/Context';
-import ApplicationPage from '../ApplicationPage';
-
-// undo redo stack to capture site boundary and errors
-type Stack = {
-  errorAnnotations?: Feature[];
-  siteBoundary?: FeatureCollection;
-};
+import UpdateOrUploadBoundaryModal from './UpdateOrUploadBoundaryModal';
 
 const MapView = () => {
   const theme = useTheme();
+  const { selectedApplication } = useApplicationData();
+  const getRenderAttributes = useRenderAttributes();
+  const { goToApplicationMapUpdate, goToApplicationMapUpload } = useNavigateTo();
 
-  const { activeLocale } = useLocalization();
-  const dispatch = useAppDispatch();
-  const { selectedApplication, reload } = useApplicationData();
-  const { goToApplicationPrescreen } = useNavigateTo();
-  const { toastSuccess } = useSnackbar();
-  const [siteBoundaryData, setSiteBoundaryData, undo, redo] = useUndoRedoState<Stack>();
-
-  const [requestId, setRequestId] = useState<string>('');
-  const result = useAppSelector(selectApplicationUpdateBoundary(requestId));
-
-  const findErrors = (boundary: MultiPolygon) => {
-    const boundaryAreaHa = parseFloat((area(boundary) * SQ_M_TO_HECTARES).toFixed(2));
-    const maxAreaHa = 20000;
-
-    if (boundaryAreaHa > 20000) {
-      const errorText = strings.formatString(strings.SITE_BOUNDARY_POLYGON_TOO_LARGE, boundaryAreaHa, maxAreaHa);
-      return [{ type: 'Feature', geometry: boundary, properties: { errorText, fill: true }, id: -1 } as Feature];
-    } else {
-      return undefined;
-    }
-  };
-
-  /**
-   * Check for errors and mark annotations.
-   */
-  const onEditableBoundaryChanged = (editableBoundary?: FeatureCollection) => {
-    const newBoundary = (editableBoundary && unionMultiPolygons(editableBoundary)) || undefined;
-
-    if (newBoundary) {
-      const errors = findErrors(newBoundary);
-      setSiteBoundaryData({
-        errorAnnotations: errors,
-        siteBoundary: editableBoundary,
-      });
-    }
-  };
-
-  // construct union of multipolygons
-  const boundary = useMemo<MultiPolygon | undefined>(
-    () => (siteBoundaryData?.siteBoundary && unionMultiPolygons(siteBoundaryData?.siteBoundary)) || undefined,
-    [siteBoundaryData?.siteBoundary]
-  );
-
-  const onSave = useCallback(() => {
-    if (selectedApplication && boundary) {
-      const dispatched = dispatch(
-        requestUpdateApplicationBoundary({ applicationId: selectedApplication.id, boundary })
-      );
-      setRequestId(dispatched.requestId);
-    }
-  }, [selectedApplication, boundary]);
-
-  const navigateToPrescreen = useCallback(() => {
-    if (selectedApplication) {
-      goToApplicationPrescreen(selectedApplication.id);
-    }
-  }, [selectedApplication, goToApplicationPrescreen]);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    if (result && result.status === 'success') {
-      if (activeLocale) {
-        toastSuccess(strings.SUCCESS);
-      }
-      reload(navigateToPrescreen);
+    if (selectedApplication) {
+      setIsOpen(selectedApplication.boundary === undefined);
     }
-  }, [activeLocale, reload, result, toastSuccess, navigateToPrescreen]);
+  }, [selectedApplication, setIsOpen]);
 
-  if (!selectedApplication) {
-    return;
-  }
+  const onNext = useCallback(
+    (type: 'Update' | 'Upload') => {
+      if (selectedApplication !== undefined) {
+        if (type === 'Update') {
+          goToApplicationMapUpdate(selectedApplication.id);
+        } else {
+          goToApplicationMapUpload(selectedApplication.id);
+        }
+      }
+    },
+    [selectedApplication, goToApplicationMapUpdate, goToApplicationMapUpload]
+  );
+
+  const mapOptions = useMemo<MapOptions | undefined>(() => {
+    if (!selectedApplication?.boundary) {
+      return undefined;
+    }
+
+    const id = selectedApplication.id;
+
+    return {
+      bbox: MapService.getBoundingBox([selectedApplication.boundary.coordinates]),
+      sources: [
+        {
+          entities: [
+            {
+              properties: {},
+              boundary: selectedApplication.boundary.coordinates,
+              id,
+            },
+          ],
+          id: 'boundary',
+          isInteractive: false,
+          ...getRenderAttributes('site'),
+        },
+      ],
+    };
+  }, [selectedApplication?.boundary]);
 
   return (
-    <Card
-      title={strings.PROPOSED_PROJECT_BOUNDARY}
-      style={{
-        width: '100%',
-        padding: theme.spacing(3),
-        borderRadius: theme.spacing(3),
-        marginTop: selectedApplication.status === 'Failed Pre-screen' ? theme.spacing(4) : 0,
-      }}
-    >
-      <Typography fontSize={'24px'} fontWeight={600} lineHeight={'32px'}>
-        {strings.PROPOSED_PROJECT_BOUNDARY}
-      </Typography>
-      <Grid container flexDirection={'row'} spacing={3} sx={{ padding: 0 }}>
-        <Grid item xs={4}>
-          <Typography fontSize={'16px'} fontWeight={400} lineHeight={'24px'}>
-            <p>
-              All plantable areas must be contained within the site boundary. Any areas within the site boundary that
-              are not plantable should be excluded.
-            </p>
-            <p>
-              Draw the site boundary of your planting site below. Use the drawing tool to draw the boundary of the
-              planting site.
-            </p>
-            <p>Watch a tutorial about drawing site boundaries.</p>
-          </Typography>
-        </Grid>
-        <Grid item xs={8}>
-          <EditableMap
-            errorAnnotations={siteBoundaryData?.errorAnnotations}
-            onEditableBoundaryChanged={onEditableBoundaryChanged}
-            onRedo={redo}
-            onUndo={undo}
-            showSearchBox
+    <>
+      <UpdateOrUploadBoundaryModal
+        open={isOpen}
+        onClose={() => {
+          setIsOpen(false);
+        }}
+        onNext={onNext}
+      />
+      <Card
+        title={strings.PROPOSED_PROJECT_BOUNDARY}
+        style={{ width: '100%', padding: theme.spacing(3), borderRadius: theme.spacing(3) }}
+      >
+        <h3>{strings.PROPOSED_PROJECT_BOUNDARY}</h3>
+
+        <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
+          <Button
+            label={selectedApplication?.boundary === undefined ? strings.ADD_BOUNDARY : strings.REPLACE_BOUNDARY}
+            onClick={() => setIsOpen(true)}
+            priority={selectedApplication?.boundary === undefined ? 'primary' : 'secondary'}
           />
-        </Grid>
-      </Grid>
-      <Box marginTop={theme.spacing(2)} display='flex' justifyContent='flex-end' width='100%'>
-        <Button label={strings.SAVE_PROJECT_BOUNDARIES} onClick={onSave} size='medium' />
-      </Box>
-    </Card>
+        </div>
+
+        {selectedApplication?.boundary && (
+          <Box minHeight={'640px'} justifyContent={'center'} alignContent={'center'}>
+            <GenericMap options={mapOptions} style={{ width: '100%', borderRadius: '24px' }} />
+          </Box>
+        )}
+      </Card>
+    </>
   );
 };
 
@@ -156,7 +112,7 @@ const MapViewWrapper = () => {
       activeLocale && selectedApplication?.id
         ? [
             {
-              name: strings.APPLICATION_PRESCREEN,
+              name: strings.PRESCREEN,
               to: APP_PATHS.APPLICATION_PRESCREEN.replace(':applicationId', `${selectedApplication.id}`),
             },
           ]

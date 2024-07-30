@@ -11,15 +11,17 @@ import ApplicationProvider from 'src/scenes/ApplicationRouter/provider';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-import SectionDeliverableWrapper from './Deliverable';
+import SectionDeliverable from './Deliverable';
 import SectionDeliverableEditView from './DeliverableEdit';
 import MapView from './Map';
+import MapUpdateView from './MapUpdate';
+import MapUploadView from './MapUpload';
 import NavBar from './NavBar';
 import Overview from './Overview';
-import PrescreenViewWrapper from './Prescreen';
-import PrescreenResultViewWrapper from './PrescreenResult';
+import PrescreenView from './Prescreen';
+import PrescreenResultView from './PrescreenResult';
 import ReviewView from './Review';
-import SectionViewWrapper from './Sections';
+import SectionView from './Sections';
 
 interface ApplicationPortalRouterProp {
   showNavBar: boolean;
@@ -82,12 +84,14 @@ const ApplicationPortalRouter = ({ showNavBar, setShowNavBar }: ApplicationPorta
         <ErrorBoundary setShowNavBar={setShowNavBar}>
           <Routes>
             <Route path={`${APP_PATHS.APPLICATION_MAP}`} element={<MapView />} />
+            <Route path={`${APP_PATHS.APPLICATION_MAP_UPDATE}`} element={<MapUpdateView />} />
+            <Route path={`${APP_PATHS.APPLICATION_MAP_UPLOAD}`} element={<MapUploadView />} />
             <Route path={`${APP_PATHS.APPLICATION_OVERVIEW}`} element={<Overview />} />
-            <Route path={`${APP_PATHS.APPLICATION_PRESCREEN}`} element={<PrescreenViewWrapper />} />
-            <Route path={`${APP_PATHS.APPLICATION_PRESCREEN_RESULT}`} element={<PrescreenResultViewWrapper />} />
+            <Route path={`${APP_PATHS.APPLICATION_PRESCREEN}`} element={<PrescreenView />} />
+            <Route path={`${APP_PATHS.APPLICATION_PRESCREEN_RESULT}`} element={<PrescreenResultView />} />
             <Route path={`${APP_PATHS.APPLICATION_REVIEW}`} element={<ReviewView />} />
-            <Route path={`${APP_PATHS.APPLICATION_SECTION}`} element={<SectionViewWrapper />} />
-            <Route path={`${APP_PATHS.APPLICATION_SECTION_DELIVERABLE}`} element={<SectionDeliverableWrapper />} />
+            <Route path={`${APP_PATHS.APPLICATION_SECTION}`} element={<SectionView />} />
+            <Route path={`${APP_PATHS.APPLICATION_SECTION_DELIVERABLE}`} element={<SectionDeliverable />} />
             <Route
               path={`${APP_PATHS.APPLICATION_SECTION_DELIVERABLE_EDIT}`}
               element={<SectionDeliverableEditView />}
