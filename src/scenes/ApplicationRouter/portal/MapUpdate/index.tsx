@@ -22,7 +22,7 @@ import strings from 'src/strings';
 import { MultiPolygon } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import { useApplicationData } from '../../provider/Context';
+import { useApplicationData } from '../../../../providers/Application/Context';
 import ApplicationPage from '../ApplicationPage';
 
 // undo redo stack to capture site boundary and errors

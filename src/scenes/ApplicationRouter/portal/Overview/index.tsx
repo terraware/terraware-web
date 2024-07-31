@@ -7,7 +7,7 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import CurrentTimeline from 'src/scenes/ModulesRouter/CurrentTimeline';
 import strings from 'src/strings';
 
-import { useApplicationData } from '../../provider/Context';
+import { useApplicationData } from '../../../../providers/Application/Context';
 import ApplicationPage from '../ApplicationPage';
 import ListApplicationModulesContent from './ListApplicationModulesContent';
 

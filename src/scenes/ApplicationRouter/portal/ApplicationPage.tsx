@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
-import { useApplicationData } from 'src/scenes/ApplicationRouter/provider/Context';
+import { useApplicationData } from 'src/providers/Application/Context';
 import strings from 'src/strings';
 
 import FeedbackMessage from './Prescreen/FeedbackMessage';

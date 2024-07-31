@@ -14,7 +14,7 @@ import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { MapOptions } from 'src/types/Map';
 
-import { useApplicationData } from '../../provider/Context';
+import { useApplicationData } from '../../../../providers/Application/Context';
 import UpdateOrUploadBoundaryModal from './UpdateOrUploadBoundaryModal';
 
 const MapView = () => {

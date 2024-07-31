@@ -15,7 +15,7 @@ import { selectApplicationRestart } from 'src/redux/features/application/applica
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 
-import { useApplicationData } from '../../provider/Context';
+import { useApplicationData } from '../../../../providers/Application/Context';
 import ApplicationPage from '../ApplicationPage';
 
 type ResultViewProp = {

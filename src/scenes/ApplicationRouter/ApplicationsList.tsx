@@ -12,8 +12,8 @@ import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import { useApplicationData } from '../../providers/Application/Context';
 import NewApplicationModal from './NewApplicationModal';
-import { useApplicationData } from './provider/Context';
 
 const ApplicationListView = () => {
   const { activeLocale } = useLocalization();

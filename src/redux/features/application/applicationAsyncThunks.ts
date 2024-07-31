@@ -3,6 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import ApplicationService from 'src/services/ApplicationService';
 import strings from 'src/strings';
 import { ApplicationReview } from 'src/types/Application';
+import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { MultiPolygon, Polygon } from 'src/types/Tracking';
 
 export const requestCreateApplication = createAsyncThunk(
@@ -37,10 +38,17 @@ export const requestCreateProjectApplication = createAsyncThunk(
 
 export const requestListApplications = createAsyncThunk(
   'applications/list',
-  async (request: { organizationId: number }, { rejectWithValue }) => {
-    const { organizationId } = request;
-
-    const response = await ApplicationService.listApplications(organizationId);
+  async (
+    request: {
+      organizationId?: number;
+      listAll?: boolean;
+      locale?: string;
+      search?: SearchNodePayload;
+      searchSortOrder?: SearchSortOrder;
+    },
+    { rejectWithValue }
+  ) => {
+    const response = await ApplicationService.listApplications(request);
 
     if (response && response.requestSucceeded) {
       return response.data?.applications ?? [];

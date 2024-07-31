@@ -6,6 +6,7 @@ import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
+import { useApplicationData } from 'src/providers/Application/Context';
 import {
   requestRestartApplication,
   requestSubmitApplication,
@@ -13,7 +14,6 @@ import {
 import { selectApplicationRestart, selectApplicationSubmit } from 'src/redux/features/application/applicationSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import SectionView from 'src/scenes/ApplicationRouter/portal/Sections/SectionView';
-import { useApplicationData } from 'src/scenes/ApplicationRouter/provider/Context';
 import strings from 'src/strings';
 
 import ApplicationPage from '../ApplicationPage';

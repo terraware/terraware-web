@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import { useApplicationData } from '../../provider/Context';
+import { useApplicationData } from '../../../../providers/Application/Context';
 
 type ReviewCardProps = {
   sections: {

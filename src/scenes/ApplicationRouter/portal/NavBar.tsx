@@ -11,7 +11,7 @@ import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-import { useApplicationData } from '../provider/Context';
+import { useApplicationData } from '../../../providers/Application/Context';
 
 type NavBarProps = {
   backgroundTransparent?: boolean;

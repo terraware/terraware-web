@@ -20,7 +20,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 
-import { useApplicationData } from './provider/Context';
+import { useApplicationData } from '../../providers/Application/Context';
 
 type NewApplication = {
   projectType: 'Existing' | 'New';

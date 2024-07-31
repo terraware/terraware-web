@@ -8,11 +8,11 @@ import { Crumb } from 'src/components/BreadCrumbs';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
+import { useApplicationData } from 'src/providers/Application/Context';
 import { requestUploadApplicationBoundary } from 'src/redux/features/application/applicationAsyncThunks';
 import { selectApplicationUploadBoundary } from 'src/redux/features/application/applicationSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import ApplicationPage from 'src/scenes/ApplicationRouter/portal/ApplicationPage';
-import { useApplicationData } from 'src/scenes/ApplicationRouter/provider/Context';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 

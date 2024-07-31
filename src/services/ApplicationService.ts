@@ -1,6 +1,8 @@
 import { paths } from 'src/api/types/generated-schema';
+import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
 
-import HttpService, { Response, Response2 } from './HttpService';
+import HttpService, { Params, Response, Response2 } from './HttpService';
 import ProjectsService from './ProjectsService';
 
 /**
@@ -39,11 +41,33 @@ type SubmitApplicationResponsePayload =
 type UpdateBoundaryRequestPayload =
   paths[typeof APPLICATION_BOUNDARY_ENDPOINT]['put']['requestBody']['content']['application/json'];
 
-const listApplications = async (organizationId: number): Promise<Response2<ListApplicationsResponsePayload>> => {
+const listApplications = async (request: {
+  organizationId?: number;
+  listAll?: boolean;
+  locale?: string;
+  search?: SearchNodePayload;
+  searchSortOrder?: SearchSortOrder;
+}): Promise<Response2<ListApplicationsResponsePayload>> => {
+  const searchOrderConfig: SearchOrderConfig | undefined = request.searchSortOrder
+    ? {
+        locale: request.locale ?? null,
+        sortOrder: request.searchSortOrder,
+        numberFields: ['id', 'participantIds'],
+      }
+    : undefined;
+
+  const params: Params = { listAll: `${request.listAll ?? false}` };
+  if (request.organizationId !== undefined) {
+    params.organizationId = `${request.organizationId}`;
+  }
+
   const response = await HttpService.root(APPLICATIONS_ENDPOINT).get2<ListApplicationsResponsePayload>({
-    params: { organizationId: `${organizationId}` },
-    urlReplacements: { '{id}': `${organizationId}` },
+    params,
   });
+
+  if (response && response.data) {
+    response.data.applications = searchAndSort(response?.data?.applications || [], request.search, searchOrderConfig);
+  }
 
   return response;
 };

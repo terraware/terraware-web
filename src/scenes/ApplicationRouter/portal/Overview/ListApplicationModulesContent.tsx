@@ -7,7 +7,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import CompleteIncompleteBadge from 'src/components/common/CompleteIncompleteBadge';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useApplicationData } from 'src/scenes/ApplicationRouter/provider/Context';
+import { useApplicationData } from 'src/providers/Application/Context';
 import strings from 'src/strings';
 import { ApplicationModule } from 'src/types/Application';
 

@@ -7,7 +7,7 @@ import ErrorBoundary from 'src/ErrorBoundary';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import ApplicationProvider from 'src/scenes/ApplicationRouter/provider';
+import ApplicationProvider from 'src/providers/Application';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 

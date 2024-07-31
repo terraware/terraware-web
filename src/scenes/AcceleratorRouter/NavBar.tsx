@@ -21,8 +21,10 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
   const { isDesktop } = useDeviceInfo();
   const navigate = useNavigate();
   const { isAllowed } = useUser();
+  const applicationEnabled = isEnabled('Accelerator Application');
   const documentProducerEnabled = isEnabled('Document Producer');
 
+  const isApplicationRoute = useMatch({ path: APP_PATHS.ACCELERATOR_APPLICATIONS, end: false });
   const isDocumentsRoute = useMatch({ path: APP_PATHS.ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS, end: false });
   const isDeliverablesRoute = useMatch({ path: APP_PATHS.ACCELERATOR_DELIVERABLES, end: false });
   const isModuleContentRoute = useMatch({ path: APP_PATHS.ACCELERATOR_MODULE_CONTENT, end: false });
@@ -82,6 +84,16 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
         onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_DELIVERABLES)}
         selected={!!isDeliverablesRoute}
       />
+
+      {applicationEnabled && (
+        <NavItem
+          icon='iconFile'
+          id='applications'
+          label={strings.APPLICATIONS}
+          onClick={() => closeAndNavigateTo(APP_PATHS.ACCELERATOR_APPLICATIONS)}
+          selected={!!isApplicationRoute}
+        />
+      )}
 
       {documentProducerEnabled && (
         <>

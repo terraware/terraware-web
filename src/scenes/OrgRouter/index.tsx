@@ -9,6 +9,7 @@ import ReportsRouter from 'src/components/Reports/Router';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
+import ApplicationProvider from 'src/providers/Application';
 import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
 import { selectHasObservationsResults } from 'src/redux/features/observations/observationsSelectors';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
@@ -20,7 +21,6 @@ import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import AccessionsRouter from 'src/scenes/AccessionsRouter';
 import ApplicationRouter from 'src/scenes/ApplicationRouter';
-import ApplicationProvider from 'src/scenes/ApplicationRouter/provider';
 import BatchBulkWithdrawView from 'src/scenes/BatchBulkWithdrawView';
 import CheckIn from 'src/scenes/CheckIn';
 import DeliverablesRouter from 'src/scenes/DeliverablesRouter';

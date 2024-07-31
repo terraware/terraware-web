@@ -6,7 +6,7 @@ import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 
-import { useApplicationData } from '../../provider/Context';
+import { useApplicationData } from '../../../../providers/Application/Context';
 import ApplicationPage from '../ApplicationPage';
 import SectionView from './SectionView';
 
