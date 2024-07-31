@@ -33,6 +33,7 @@ export default function PersonCellRenderer(props: RendererProps<TableRowType>): 
             fontSize: '16px',
           },
         }}
+        title={value as string}
       />
     );
   }

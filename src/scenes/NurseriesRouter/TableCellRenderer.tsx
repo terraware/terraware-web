@@ -18,7 +18,15 @@ export default function NurseriesCellRenderer(props: RendererProps<TableRowType>
   };
 
   if (column.key === 'name') {
-    return <CellRenderer index={index} column={column} value={createLinkToNursery(value)} row={row} />;
+    return (
+      <CellRenderer
+        index={index}
+        column={column}
+        value={createLinkToNursery(value)}
+        row={row}
+        title={value as string}
+      />
+    );
   }
 
   return <CellRenderer {...props} />;

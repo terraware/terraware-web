@@ -21,7 +21,15 @@ export default function SeedBanksCellRenderer(props: RendererProps<TableRowType>
   };
 
   if (column.key === 'name') {
-    return <CellRenderer index={index} column={column} value={createLinkToSeedBank(value)} row={row} />;
+    return (
+      <CellRenderer
+        index={index}
+        column={column}
+        value={createLinkToSeedBank(value)}
+        row={row}
+        title={value as string}
+      />
+    );
   }
 
   return <CellRenderer {...props} />;

@@ -41,6 +41,7 @@ export default function DeliverableCellRenderer(props: RendererProps<TableRowTyp
             fontSize: '16px',
           },
         }}
+        title={value as string}
       />
     );
   }
