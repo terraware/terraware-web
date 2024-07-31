@@ -32,6 +32,7 @@ import {
   VariableValueSelectValue,
   VariableValueTextValue,
 } from 'src/types/documentProducer/VariableValue';
+import { fuzzyMatch } from 'src/utils/searchAndSort';
 
 const tableColumns: TableColumnType[] = [
   { key: 'name', name: strings.NAME, type: 'string' },
@@ -96,7 +97,7 @@ export type DocumentVariablesProps = {
 const filterSearch =
   (searchValue: string) =>
   (variable: VariableWithValues): boolean =>
-    searchValue ? variable.name.toLowerCase().includes(searchValue) : true;
+    searchValue ? fuzzyMatch(searchValue, variable.name.toLowerCase()) : true;
 
 const DocumentVariablesTab = ({ document: doc, setSelectedTab }: DocumentVariablesProps): JSX.Element => {
   const dispatch = useAppDispatch();
