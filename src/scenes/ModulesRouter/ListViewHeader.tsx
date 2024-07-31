@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 
+import { Typography } from '@mui/material';
 import { Dropdown, DropdownItem } from '@terraware/web-components';
 
 import useNavigateTo from 'src/hooks/useNavigateTo';
@@ -33,7 +34,7 @@ const ListViewHeader = () => {
     },
   };
 
-  return (
+  return options?.length > 1 ? (
     <Dropdown
       onChange={(id) => {
         const projectId = +id;
@@ -46,6 +47,8 @@ const ListViewHeader = () => {
       selectStyles={selectStyles}
       selectedValue={currentParticipantProject?.id}
     />
+  ) : (
+    <Typography sx={selectStyles.input}>{options[0].label}</Typography>
   );
 };
 
