@@ -45,7 +45,7 @@ const EditView = () => {
   const { allApplications } = useApplicationData();
 
   const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
-  const isAllowedViewScoreAndVoting = isAllowed('VIEW_PARTICIPANT_PROJECT_SCORING_VOTING');
+  const isAllowedEditScoreAndVoting = isAllowed('UPDATE_PARTICIPANT_PROJECT_SCORING_VOTING');
 
   // Participant project (accelerator data) form record and update request
   const [participantProjectRequestId, setParticipantProjectRequestId] = useState<string>('');
@@ -178,10 +178,10 @@ const EditView = () => {
             {projectApplication && (
               <ApplicationStatusCard
                 application={projectApplication}
-                md={!isAllowedViewScoreAndVoting ? 12 : undefined}
+                md={!isAllowedEditScoreAndVoting ? 12 : undefined}
               />
             )}
-            {isAllowedViewScoreAndVoting && (
+            {isAllowedEditScoreAndVoting && (
               <>
                 <PhaseScoreCard md={!projectApplication?.id ? 6 : undefined} phaseScores={phase1Scores} />
                 <VotingDecisionCard md={!projectApplication?.id ? 6 : undefined} phaseVotes={phaseVotes} />
