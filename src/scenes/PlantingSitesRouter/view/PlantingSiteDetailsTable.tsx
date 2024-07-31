@@ -105,7 +105,7 @@ const DetailsRenderer =
     };
 
     if (column.key === 'name') {
-      return <CellRenderer {...props} value={createLinkToZone()} sx={textStyles} />;
+      return <CellRenderer {...props} value={createLinkToZone()} sx={textStyles} title={value as string} />;
     }
 
     if (column.key === 'completedTime') {
