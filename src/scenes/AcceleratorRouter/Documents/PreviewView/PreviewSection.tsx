@@ -62,7 +62,7 @@ const PreviewSection = ({
     <>
       {isTopLevel && (
         <h1 className='toc-major'>
-          <span className='section-number'>{sectionVariableWithRelevantVariables.sectionNumber}</span>
+          <span className='section-number'>{sectionVariableWithRelevantVariables.sectionNumber}.</span>
           <span> {sectionVariableWithRelevantVariables.name}</span>
         </h1>
       )}
