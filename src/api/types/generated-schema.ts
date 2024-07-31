@@ -4142,7 +4142,7 @@ export interface components {
     };
     Score: {
       /** @enum {string} */
-      category: "Carbon" | "Finance" | "Forestry" | "Legal" | "Community" | "GIS" | "Climate Impact" | "Expansion Potential" | "Experience and Understanding" | "Operational Capacity" | "Responsiveness and Attention to Detail" | "Values Alignment";
+      category: "Carbon" | "Finance" | "Forestry" | "Legal" | "Social Impact" | "GIS" | "Climate Impact" | "Expansion Potential" | "Experience and Understanding" | "Operational Capacity" | "Responsiveness and Attention to Detail" | "Values Alignment";
       /** Format: date-time */
       modifiedTime: string;
       qualitative?: string;
@@ -5112,7 +5112,7 @@ export interface components {
     };
     UpsertScore: {
       /** @enum {string} */
-      category: "Carbon" | "Finance" | "Forestry" | "Legal" | "Community" | "GIS" | "Climate Impact" | "Expansion Potential" | "Experience and Understanding" | "Operational Capacity" | "Responsiveness and Attention to Detail" | "Values Alignment";
+      category: "Carbon" | "Finance" | "Forestry" | "Legal" | "Social Impact" | "GIS" | "Climate Impact" | "Expansion Potential" | "Experience and Understanding" | "Operational Capacity" | "Responsiveness and Attention to Detail" | "Values Alignment";
       qualitative?: string;
       /**
        * Format: int32
