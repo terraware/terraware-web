@@ -85,7 +85,9 @@ export default function PreviewDocument({ doc, projectName }: PreviewDocumentPro
       <div className='header-right'></div>
 
       <div className='footer-left'>
-        <p>{projectName} - Preview</p>
+        <p>
+          {projectName} - {strings.PREVIEW}
+        </p>
       </div>
 
       <div id='table-of-contents'>
