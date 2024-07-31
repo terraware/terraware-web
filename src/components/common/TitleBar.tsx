@@ -1,6 +1,6 @@
 import React, { Box, Typography, useTheme } from '@mui/material';
 
-const TitleBar = (props: {header?: string; title?: string; subtitle?: string}): JSX.Element => {
+const TitleBar = (props: { header?: string; title?: string; subtitle?: string }): JSX.Element => {
   const { header, title, subtitle } = props;
   const theme = useTheme();
 
