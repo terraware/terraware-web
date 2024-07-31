@@ -16,6 +16,7 @@ export type ApplicationData = {
 export const ApplicationContext = createContext<ApplicationData>({
   applicationDeliverables: [],
   applicationSections: [],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getApplicationByProjectId: (projectId: number) => undefined,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setSelectedApplication: (applicationId: number) => {},
