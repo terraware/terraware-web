@@ -24,6 +24,18 @@ export default function useNavigateTo() {
         });
       },
 
+      goToApplicationMapUpdate: (applicationId: number) => {
+        navigate({
+          pathname: APP_PATHS.APPLICATION_MAP_UPDATE.replace(':applicationId', `${applicationId}`),
+        });
+      },
+
+      goToApplicationMapUpload: (applicationId: number) => {
+        navigate({
+          pathname: APP_PATHS.APPLICATION_MAP_UPLOAD.replace(':applicationId', `${applicationId}`),
+        });
+      },
+
       goToApplicationPrescreen: (applicationId: number) => {
         navigate({
           pathname: APP_PATHS.APPLICATION_PRESCREEN.replace(':applicationId', `${applicationId}`),

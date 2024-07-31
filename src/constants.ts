@@ -43,6 +43,8 @@ export enum APP_PATHS {
   APPLICATIONS = '/applications',
   APPLICATION_OVERVIEW = '/applications/:applicationId',
   APPLICATION_MAP = '/applications/:applicationId/map',
+  APPLICATION_MAP_UPDATE = '/applications/:applicationId/map/update',
+  APPLICATION_MAP_UPLOAD = '/applications/:applicationId/map/upload',
   APPLICATION_PRESCREEN = '/applications/:applicationId/prescreen',
   APPLICATION_PRESCREEN_RESULT = '/applications/:applicationId/prescreen/result',
   APPLICATION_REVIEW = '/applications/:applicationId/review',
