@@ -59,6 +59,8 @@ export const trigramWordSimilarity = (a: string, b: string) => {
   return similarity;
 };
 
+export const fuzzyMatch = (a: string, b: string) => trigramWordSimilarity(a, b) > TRIGRAM_SIMILARITY_THRESHOLD;
+
 const searchConditionMet = <T extends Record<string, unknown>>(result: T, condition: SearchNodePayload): boolean => {
   // `as SearchNodePayload` casts below are because the SearchNodePayload in the generated types only has `operation`
   // The the union type from our types has the correct properties
@@ -89,7 +91,7 @@ const searchConditionMet = <T extends Record<string, unknown>>(result: T, condit
         if (searchValue.length === 1) {
           return resultValue.includes(searchValue);
         }
-        return trigramWordSimilarity(searchValue, resultValue) > TRIGRAM_SIMILARITY_THRESHOLD;
+        return fuzzyMatch(searchValue, resultValue);
       });
     }
   }
