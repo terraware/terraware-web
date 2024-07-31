@@ -18,7 +18,6 @@ export type ScoreCategory = Score['category'];
 export const ScoreCategories: ScoreCategory[] = [
   'Carbon',
   'Climate Impact',
-  'Community',
   'Finance',
   'Expansion Potential',
   'Experience and Understanding',
@@ -27,6 +26,7 @@ export const ScoreCategories: ScoreCategory[] = [
   'Legal',
   'Operational Capacity',
   'Responsiveness and Attention to Detail',
+  'Social Impact',
   'Values Alignment',
 ];
 
@@ -93,8 +93,6 @@ export const getScoreCategory = (value: ScoreCategory | null): string => {
       return strings.CARBON;
     case 'Climate Impact':
       return strings.CLIMATE_IMPACT;
-    case 'Community':
-      return strings.COMMUNITY;
     case 'Finance':
       return strings.FINANCE;
     case 'Expansion Potential':
@@ -111,6 +109,8 @@ export const getScoreCategory = (value: ScoreCategory | null): string => {
       return strings.OPERATION_CAPACITY;
     case 'Responsiveness and Attention to Detail':
       return strings.RESPONSIVENESS_AND_ATTENTION_TO_DETAIL;
+    case 'Social Impact':
+      return strings.SOCIAL_IMPACT;
     case 'Values Alignment':
       return strings.VALUES_ALIGNMENT;
     default:
