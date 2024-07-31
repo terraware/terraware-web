@@ -2,6 +2,7 @@ import React, { ReactElement, useMemo } from 'react';
 
 import { DateTime } from 'luxon';
 
+import strings from 'src/strings';
 import { Document } from 'src/types/documentProducer/Document';
 import { SectionVariableWithValues, VariableWithValues } from 'src/types/documentProducer/Variable';
 
@@ -53,7 +54,8 @@ export default function TitlePage({
       <div id='title-page-content-footer'>
         <h2>
           {isoDate}
-          <br></br>Version Preview
+          <br></br>
+          {strings.VERSION_PREVIEW}
         </h2>
       </div>
     </div>
