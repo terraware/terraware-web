@@ -29,6 +29,7 @@ export default function ParticipantsCellRenderer(props: RendererProps<TableRowTy
             fontSize: '16px',
           },
         }}
+        title={value as string}
       />
     );
   }

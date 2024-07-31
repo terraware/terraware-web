@@ -1,6 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
-
-import { Button } from '@terraware/web-components';
+import React, { ReactNode, useCallback, useMemo, useState } from 'react';
 
 import ModuleDetailsCard from 'src/components/ModuleDetailsCard';
 import useNavigateTo from 'src/hooks/useNavigateTo';
@@ -9,17 +7,34 @@ import strings from 'src/strings';
 import { ApplicationDeliverable, ApplicationModule } from 'src/types/Application';
 
 import { useApplicationData } from '../../provider/Context';
+import UpdateOrUploadBoundaryModal from '../Map/UpdateOrUploadBoundaryModal';
 
 type SectionViewProp = {
+  children?: ReactNode;
   section: ApplicationModule;
   sectionDeliverables: ApplicationDeliverable[];
 };
 
-const SectionView = ({ section, sectionDeliverables }: SectionViewProp) => {
+const SectionView = ({ children, section, sectionDeliverables }: SectionViewProp) => {
   const { activeLocale } = useLocalization();
-  const { selectedApplication, restart, submit, reload } = useApplicationData();
-  const { goToApplication, goToApplicationMap, goToApplicationSectionDeliverable, goToApplicationPrescreenResult } =
+  const { selectedApplication } = useApplicationData();
+  const { goToApplicationMap, goToApplicationSectionDeliverable, goToApplicationMapUpdate, goToApplicationMapUpload } =
     useNavigateTo();
+
+  const [isMapModalOpen, setIsMapModalOpen] = useState<boolean>(false);
+
+  const onMapModalNext = useCallback(
+    (type: 'Update' | 'Upload') => {
+      if (selectedApplication !== undefined) {
+        if (type === 'Update') {
+          goToApplicationMapUpdate(selectedApplication.id);
+        } else {
+          goToApplicationMapUpload(selectedApplication.id);
+        }
+      }
+    },
+    [selectedApplication, goToApplicationMapUpdate, goToApplicationMapUpload]
+  );
 
   const deliverableDetails = useMemo(() => {
     if (!selectedApplication) {
@@ -35,8 +50,9 @@ const SectionView = ({ section, sectionDeliverables }: SectionViewProp) => {
     if (section.phase === 'Pre-Screen') {
       deliverables.unshift({
         name: strings.PROPOSED_PROJECT_BOUNDARY,
-        onClick: () => goToApplicationMap(selectedApplication.id),
-        status: selectedApplication?.boundary ? 'Completed' : 'Not Submitted',
+        onClick: () =>
+          selectedApplication.boundary ? goToApplicationMap(selectedApplication.id) : setIsMapModalOpen(true),
+        status: selectedApplication.boundary ? 'Completed' : 'Not Submitted',
       });
     }
 
@@ -57,27 +73,6 @@ const SectionView = ({ section, sectionDeliverables }: SectionViewProp) => {
     [activeLocale, section]
   );
 
-  const allDeliverablesCompleted = useMemo(
-    () => sectionDeliverables.every((deliverable) => deliverable.status !== 'Not Submitted'),
-    [sectionDeliverables]
-  );
-
-  const handleRestart = useCallback(async () => {
-    if (selectedApplication) {
-      await restart();
-      await reload();
-      goToApplication(selectedApplication.id);
-    }
-  }, [selectedApplication, reload, restart, goToApplication]);
-
-  const handleSubmit = useCallback(async () => {
-    if (selectedApplication) {
-      await submit();
-      await reload();
-      goToApplicationPrescreenResult(selectedApplication.id);
-    }
-  }, [selectedApplication, reload, submit, goToApplicationPrescreenResult]);
-
   return moduleDetails && selectedApplication ? (
     <ModuleDetailsCard
       deliverables={deliverableDetails}
@@ -85,26 +80,14 @@ const SectionView = ({ section, sectionDeliverables }: SectionViewProp) => {
       projectId={selectedApplication.id}
       showSimplifiedStatus
     >
-      {section.phase === 'Pre-Screen' && selectedApplication.status === 'Not Submitted' && (
-        <Button
-          disabled={!allDeliverablesCompleted && false}
-          label={strings.SUBMIT_PRESCREEN}
-          onClick={() => {
-            handleSubmit();
-          }}
-          priority='primary'
-        />
-      )}
-
-      {section.phase === 'Pre-Screen' && selectedApplication.status !== 'Not Submitted' && (
-        <Button
-          label={strings.RESTART_PRESCREEN}
-          onClick={() => {
-            handleRestart();
-          }}
-          priority='secondary'
-        />
-      )}
+      <UpdateOrUploadBoundaryModal
+        open={isMapModalOpen}
+        onClose={() => {
+          setIsMapModalOpen(false);
+        }}
+        onNext={onMapModalNext}
+      />
+      {children}
     </ModuleDetailsCard>
   ) : null;
 };

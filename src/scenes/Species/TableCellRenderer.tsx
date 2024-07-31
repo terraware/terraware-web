@@ -114,7 +114,15 @@ export default function SpeciesCellRenderer(props: RendererProps<TableRowType>):
       />
     );
   } else if (column.key === 'scientificName') {
-    return <CellRenderer index={index} column={column} value={createLinkToSpeciesDetail(value)} row={row} />;
+    return (
+      <CellRenderer
+        index={index}
+        column={column}
+        value={createLinkToSpeciesDetail(value)}
+        row={row}
+        title={value as string}
+      />
+    );
   } else if (column.key === 'participantProjects') {
     return <CellRenderer {...props} value={<TextTruncated stringList={(value || []) as string[]} />} />;
   }

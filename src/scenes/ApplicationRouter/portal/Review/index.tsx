@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { Box, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
@@ -40,7 +40,11 @@ const ApplicationStatus = ({ buttonLabel, feedback, isFailure, onClickButton, ti
         <img src={isFailure ? '/assets/application-failure-splash.svg' : '/assets/application-success-splash.svg'} />
       </Box>
       <h3>{title}</h3>
-      {feedback && <Box dangerouslySetInnerHTML={{ __html: feedback }} justifyContent={'center'} />}
+      {feedback && (
+        <Typography sx={{ margin: 0 }} whiteSpace={'pre-line'}>
+          {feedback}
+        </Typography>
+      )}
       <Button label={buttonLabel} onClick={onClickButton} priority='secondary' />
     </Card>
   );
@@ -79,14 +83,15 @@ const ReviewView = () => {
     [activeLocale, selectedApplication?.id]
   );
 
-  if (!selectedApplication) {
-    return null;
-  }
+  const nonPrescreenSections = useMemo(
+    () => applicationSections.filter((section) => section.phase === 'Application'),
+    [applicationSections]
+  );
 
   return (
     <ApplicationPage crumbs={crumbs}>
-      {selectedApplication.status === 'In Review' && <ApplicationStatusSubmitted />}
-      {selectedApplication.status !== 'Submitted' && <ReviewCard sections={applicationSections} />}
+      {selectedApplication?.status === 'In Review' && <ApplicationStatusSubmitted />}
+      {selectedApplication?.status !== 'Submitted' && <ReviewCard sections={nonPrescreenSections} />}
     </ApplicationPage>
   );
 };

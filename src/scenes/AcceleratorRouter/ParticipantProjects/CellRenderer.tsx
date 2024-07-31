@@ -30,6 +30,7 @@ export default function ParticipantProjectsCellRenderer(props: RendererProps<Tab
             fontSize: '16px',
           },
         }}
+        title={value as string}
       />
     );
   }

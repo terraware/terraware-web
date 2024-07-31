@@ -1,13 +1,14 @@
 import React, { ReactElement } from 'react';
 
-import { SectionVariableWithValues, VariableWithValues } from 'src/types/documentProducer/Variable';
+import { SectionVariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValueValue } from 'src/types/documentProducer/VariableValue';
 
 import SectionVariable from './SectionVariable';
+import { SectionVariableWithRelevantVariables } from './util';
 
 interface PreviewSectionProps {
   isTopLevel: boolean;
-  sectionVariableWithRelevantVariables: SectionVariableWithValues & { relevantVariables: VariableWithValues[] };
+  sectionVariableWithRelevantVariables: SectionVariableWithRelevantVariables;
   docId: number;
   projectId: number;
   suppressCaptions?: boolean;
@@ -61,7 +62,7 @@ const PreviewSection = ({
     <>
       {isTopLevel && (
         <h1 className='toc-major'>
-          <span className='section-number'>{sectionVariableWithRelevantVariables.sectionNumber}</span>
+          <span className='section-number'>{sectionVariableWithRelevantVariables.sectionNumber}.</span>
           <span> {sectionVariableWithRelevantVariables.name}</span>
         </h1>
       )}

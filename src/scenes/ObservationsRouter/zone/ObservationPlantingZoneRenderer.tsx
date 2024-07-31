@@ -39,7 +39,13 @@ const ObservationPlantingZoneRenderer =
     }
 
     if (column.key === 'monitoringPlotName') {
-      return <CellRenderer {...props} value={createLinkToMonitoringPlotObservation(value as string)} />;
+      return (
+        <CellRenderer
+          {...props}
+          value={createLinkToMonitoringPlotObservation(value as string)}
+          title={value as string}
+        />
+      );
     }
 
     if (column.key === 'mortalityRate') {

@@ -42,6 +42,14 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
     [selectedApplication]
   );
 
+  const isApplicationEnabled = useMemo(() => {
+    if (!selectedApplication) {
+      return false;
+    }
+
+    return selectedApplication.status !== 'Not Submitted' && selectedApplication.status !== 'Failed Pre-screen';
+  }, [selectedApplication]);
+
   const applicationNavItems = useMemo(() => {
     if (!selectedApplication) {
       return [];
@@ -56,12 +64,10 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
           );
           const isMatch = !!matchPath(`${path}/*`, location.pathname);
           const isCompleted = section.status === 'Complete';
-          const disabled =
-            selectedApplication.status === 'Not Submitted' || selectedApplication.status === 'Failed Pre-screen';
 
           return (
             <NavItem
-              disabled={disabled}
+              disabled={!isApplicationEnabled}
               icon={isCompleted ? 'successFilled' : 'success'}
               iconColor={isCompleted ? theme.palette.TwClrIcnBrand : undefined}
               id={`application-section-${section.moduleId}`}
@@ -73,7 +79,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
           );
         }) ?? []
     );
-  }, [applicationSections, selectedApplication, location.pathname]);
+  }, [applicationSections, isApplicationEnabled, selectedApplication, location.pathname]);
 
   const prescreenNavItems = useMemo(() => {
     if (!selectedApplication) {
@@ -146,6 +152,7 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
 
       <NavItem
         id='review'
+        disabled={!isApplicationEnabled}
         label={strings.REVIEW}
         onClick={() => closeAndNavigateTo(APP_PATHS.APPLICATION_REVIEW)}
         selected={!!isReviewRoute}

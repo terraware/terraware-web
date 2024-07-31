@@ -78,10 +78,10 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
           </Link>
         </Box>
 
+        <div style={separatorStyles} />
+        {user && <AcceleratorBreadcrumbs />}
         {organizations && organizations.length > 0 && (
           <>
-            <div style={separatorStyles} />
-            {user && <AcceleratorBreadcrumbs />}
             {isApplicationPortal && (
               <>
                 <p style={{ fontSize: '16px' }}>{selectedOrganization.name}</p>

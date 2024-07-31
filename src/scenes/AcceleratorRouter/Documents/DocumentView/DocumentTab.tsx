@@ -31,13 +31,15 @@ export type DocumentProps = {
 
 const DocumentTab = ({ document }: DocumentProps): JSX.Element => {
   const dispatch = useAppDispatch();
+
   const [documentVariables, setDocumentVariables] = useState<VariableWithValues[]>();
-  const [variablesOwners, setVariablesOwners] = useState<VariableOwners[]>();
   const documentVariablesResult = useAppSelector((state) =>
     selectVariablesWithValues(state, document.variableManifestId, document.projectId)
   );
-  const ownersResult = useAppSelector((state) => selectVariablesOwners(state, document.projectId));
   useSelectorProcessor(documentVariablesResult, setDocumentVariables);
+
+  const [variablesOwners, setVariablesOwners] = useState<VariableOwners[]>();
+  const ownersResult = useAppSelector((state) => selectVariablesOwners(state, document.projectId));
 
   const allVariables: VariableWithValues[] = useAppSelector((state) =>
     selectAllVariablesWithValues(state, document.projectId)
@@ -46,10 +48,10 @@ const DocumentTab = ({ document }: DocumentProps): JSX.Element => {
   useSelectorProcessor(ownersResult, setVariablesOwners);
 
   const onUpdate = useCallback(() => {
-    dispatch(requestListVariables(document.variableManifestId));
-    dispatch(requestListVariablesValues({ projectId: document.projectId }));
-    dispatch(requestListVariablesOwners(document.projectId));
     dispatch(requestListAllVariables());
+    dispatch(requestListVariables(document.variableManifestId));
+    dispatch(requestListVariablesOwners(document.projectId));
+    dispatch(requestListVariablesValues({ projectId: document.projectId }));
   }, [dispatch, document.projectId, document.variableManifestId]);
 
   useEffect(() => {

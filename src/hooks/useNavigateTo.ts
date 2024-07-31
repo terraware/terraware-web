@@ -14,9 +14,25 @@ export default function useNavigateTo() {
         navigate({ pathname: APP_PATHS.APPLICATION_OVERVIEW.replace(':applicationId', `${applicationId}`) });
       },
 
+      goToApplicationList: () => {
+        navigate({ pathname: APP_PATHS.APPLICATIONS });
+      },
+
       goToApplicationMap: (applicationId: number) => {
         navigate({
           pathname: APP_PATHS.APPLICATION_MAP.replace(':applicationId', `${applicationId}`),
+        });
+      },
+
+      goToApplicationMapUpdate: (applicationId: number) => {
+        navigate({
+          pathname: APP_PATHS.APPLICATION_MAP_UPDATE.replace(':applicationId', `${applicationId}`),
+        });
+      },
+
+      goToApplicationMapUpload: (applicationId: number) => {
+        navigate({
+          pathname: APP_PATHS.APPLICATION_MAP_UPLOAD.replace(':applicationId', `${applicationId}`),
         });
       },
 
@@ -29,6 +45,12 @@ export default function useNavigateTo() {
       goToApplicationPrescreenResult: (applicationId: number) => {
         navigate({
           pathname: APP_PATHS.APPLICATION_PRESCREEN_RESULT.replace(':applicationId', `${applicationId}`),
+        });
+      },
+
+      goToApplicationReview: (applicationId: number) => {
+        navigate({
+          pathname: APP_PATHS.APPLICATION_REVIEW.replace(':applicationId', `${applicationId}`),
         });
       },
 
