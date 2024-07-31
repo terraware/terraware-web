@@ -269,8 +269,8 @@ const QuestionBox = ({
             }}
           >
             <VariableStatusBadge status={firstVariableValueStatus} />
-            <Box className='actions'>
-              {!editing && (
+            {!editing && (
+              <Box className='actions'>
                 <Button
                   id='edit'
                   label={strings.EDIT}
@@ -281,27 +281,27 @@ const QuestionBox = ({
                   size='small'
                   type='passive'
                 />
-              )}
-              <Button
-                label={strings.REJECT_ACTION}
-                onClick={() => setShowRejectDialog(true)}
-                priority='secondary'
-                type='destructive'
-                disabled={firstVariableValueStatus === 'Rejected'}
-              />
-              <Button
-                label={strings.APPROVE}
-                onClick={approveItem}
-                priority='secondary'
-                disabled={firstVariableValueStatus === 'Approved'}
-              />
-              <OptionsMenu
-                onOptionItemClick={onOptionItemClick}
-                optionItems={optionItems}
-                onOpen={() => setDisplyActions(true)}
-                onClose={() => setDisplyActions(false)}
-              />
-            </Box>
+                <Button
+                  label={strings.REJECT_ACTION}
+                  onClick={() => setShowRejectDialog(true)}
+                  priority='secondary'
+                  type='destructive'
+                  disabled={firstVariableValueStatus === 'Rejected'}
+                />
+                <Button
+                  label={strings.APPROVE}
+                  onClick={approveItem}
+                  priority='secondary'
+                  disabled={firstVariableValueStatus === 'Approved'}
+                />
+                <OptionsMenu
+                  onOptionItemClick={onOptionItemClick}
+                  optionItems={optionItems}
+                  onOpen={() => setDisplyActions(true)}
+                  onClose={() => setDisplyActions(false)}
+                />
+              </Box>
+            )}
           </Box>
 
           <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>{variable.name}</Typography>
