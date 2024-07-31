@@ -5,6 +5,8 @@ import { useParams } from 'react-router-dom';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { selectGetDocument } from 'src/redux/features/documentProducer/documents/documentsSelector';
 import { requestGetDocument } from 'src/redux/features/documentProducer/documents/documentsThunks';
+import { selectProject } from 'src/redux/features/projects/projectsSelectors';
+import { requestProject } from 'src/redux/features/projects/projectsThunks';
 import { useSelectorProcessor } from 'src/redux/hooks/useSelectorProcessor';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Document } from 'src/types/documentProducer/Document';
@@ -29,6 +31,9 @@ export default function Preview({ docId, close }: PreviewProps) {
   const [doc, setDoc] = useState<Document>();
 
   const id = docId ?? Number(docIdParam);
+  const projectId = doc?.projectId || -1;
+
+  const project = useAppSelector(selectProject(projectId));
 
   const docSelect = useAppSelector(selectGetDocument(id));
   useSelectorProcessor(docSelect, setDoc, {
@@ -39,6 +44,12 @@ export default function Preview({ docId, close }: PreviewProps) {
   useEffect(() => {
     dispatch(requestGetDocument(id));
   }, [dispatch, id]);
+
+  useEffect(() => {
+    if (projectId !== -1) {
+      dispatch(requestProject(projectId));
+    }
+  }, [dispatch, projectId]);
 
   useEffect(() => {
     const win = window.open('/preview.html', '_blank');
@@ -83,9 +94,9 @@ export default function Preview({ docId, close }: PreviewProps) {
     }
   }, [newWindow, containerEl, close, initialized, doc]);
 
-  if (newWindow === null || containerEl === null || !initialized || !doc) {
+  if (newWindow === null || containerEl === null || !initialized || !doc || !project) {
     return null;
   }
 
-  return createPortal(<PreviewDocument doc={doc} />, containerEl);
+  return createPortal(<PreviewDocument doc={doc} projectName={project.name} />, containerEl);
 }

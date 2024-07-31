@@ -21,9 +21,10 @@ import { calculateFigures, getRelevantVariables } from './util';
 
 type PreviewDocumentProps = {
   doc: Document;
+  projectName: string;
 };
 
-export default function PreviewDocument({ doc }: PreviewDocumentProps): ReactElement | null {
+export default function PreviewDocument({ doc, projectName }: PreviewDocumentProps): ReactElement | null {
   const dispatch = useAppDispatch();
 
   const [documentVariables, setDocumentVariables] = useState<VariableWithValues[]>();
@@ -82,6 +83,12 @@ export default function PreviewDocument({ doc }: PreviewDocumentProps): ReactEle
       </div>
 
       <div className='header-right'></div>
+
+      <div className='footer-left'>
+        <p>
+          {projectName} - {strings.PREVIEW}
+        </p>
+      </div>
 
       <div id='table-of-contents'>
         <h1>{strings.TABLE_OF_CONTENTS}</h1>
