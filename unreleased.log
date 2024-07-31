@@ -1,3 +1,5 @@
+dccd64e7bfe SW-5675 Votes Page - Fix Edit button does not work (#2927)
+a5406379966 SW-5674 Fix number of Participants per Cohort is always 0 (#2926)
 a5e51c3066a SW-5728 Rename "community" to "social impact" (#2925)
 756502c0ea2 SW-5732 Allow hashmarks in exported CSVs (#2922)
 bb369417a44 SW-5708 Implemented update prescreen boundary flow (#2918)
