@@ -231,9 +231,9 @@ const SingleView = () => {
                     : false
                 }
               />
-              <ProjectFieldDisplay label={strings.CARBON_CAPACITY_TC02_HA} value='770' />
-              <ProjectFieldDisplay label={strings.ANNUAL_CARBON_T} value='82,566' />
-              <ProjectFieldDisplay label={strings.TOTAL_CARBON_T} value='3,302,640' />
+              <ProjectFieldDisplay label={strings.CARBON_CAPACITY_TC02_HA} value={participantProject?.carbonCapacity} />
+              <ProjectFieldDisplay label={strings.ANNUAL_CARBON_T} value={participantProject?.annualCarbon} />
+              <ProjectFieldDisplay label={strings.TOTAL_CARBON_T} value={participantProject?.totalCarbon} />
             </Grid>
           </Card>
           <Card

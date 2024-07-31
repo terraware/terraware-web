@@ -287,21 +287,21 @@ const EditView = () => {
               label={strings.CARBON_CAPACITY_TC02_HA}
               onChange={onChangeParticipantProject}
               type={'number'}
-              value='770'
+              value={participantProject?.carbonCapacity}
             />
             <ProjectFieldTextfield
               id={'annualCarbon'}
               label={strings.ANNUAL_CARBON_T}
               onChange={onChangeParticipantProject}
               type={'number'}
-              value='82566'
+              value={participantProject?.annualCarbon}
             />
             <ProjectFieldTextfield
               id={'totalCarbon'}
               label={strings.TOTAL_CARBON_T}
               onChange={onChangeParticipantProject}
               type={'number'}
-              value='3302640'
+              value={participantProject?.totalCarbon}
             />
           </Grid>
         </Card>
