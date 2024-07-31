@@ -47,11 +47,11 @@ const SingleView = () => {
   const isAllowedExport = isAllowed('EXPORT_PARTICIPANT_PROJECT');
   const isAllowedViewScoreAndVoting = isAllowed('VIEW_PARTICIPANT_PROJECT_SCORING_VOTING');
 
-  const { allApplications } = useApplicationData();
+  const { getApplicationByProjectId } = useApplicationData();
 
   const projectApplication = useMemo(
-    () => allApplications?.find((app) => app.projectId === projectId),
-    [allApplications, projectId]
+    () => getApplicationByProjectId(projectId),
+    [getApplicationByProjectId, projectId]
   );
 
   const onOptionItemClick = useCallback((item: DropdownItem) => {

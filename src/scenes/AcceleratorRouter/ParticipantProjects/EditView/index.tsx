@@ -42,7 +42,7 @@ const EditView = () => {
   const { phaseVotes } = useVotingData();
   const { goToParticipantProject } = useNavigateTo();
   const { isAllowed } = useUser();
-  const { allApplications } = useApplicationData();
+  const { getApplicationByProjectId } = useApplicationData();
 
   const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
   const isAllowedEditScoreAndVoting = isAllowed('UPDATE_PARTICIPANT_PROJECT_SCORING_VOTING');
@@ -63,8 +63,8 @@ const EditView = () => {
   const [confirmProjectNameModalOpen, setConfirmProjectNameModalOpen] = useState(false);
 
   const projectApplication = useMemo(
-    () => allApplications?.find((app) => app.projectId === projectId),
-    [allApplications, projectId]
+    () => getApplicationByProjectId(projectId),
+    [getApplicationByProjectId, projectId]
   );
 
   const onChangeCountry = useCallback(
