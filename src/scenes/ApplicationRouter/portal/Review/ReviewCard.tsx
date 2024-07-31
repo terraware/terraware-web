@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
@@ -28,7 +28,6 @@ const ReviewCard = ({ sections }: ReviewCardProps): JSX.Element => {
   const { goToApplicationReview } = useNavigateTo();
   const { toastSuccess, toastWarning } = useSnackbar();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectApplicationSubmit(requestId));
 
@@ -52,15 +51,13 @@ const ReviewCard = ({ sections }: ReviewCardProps): JSX.Element => {
 
   const submit = useCallback(() => {
     if (selectedApplication) {
-      setIsLoading(true);
       const dispatched = dispatch(requestSubmitApplication({ applicationId: selectedApplication.id }));
       setRequestId(dispatched.requestId);
     }
-  }, [dispatch, selectedApplication, setIsLoading, setRequestId]);
+  }, [dispatch, selectedApplication, setRequestId]);
 
   useEffect(() => {
-    if (result && result.data) {
-      setIsLoading(false);
+    if (result && result.status === 'success' && result.data) {
       if (result.data.length === 0) {
         toastSuccess(strings.SUCCESS);
         reload(refreshPage);
@@ -68,7 +65,9 @@ const ReviewCard = ({ sections }: ReviewCardProps): JSX.Element => {
         toastWarning(`${strings.GENERIC_ERROR}: ${result.data.toString()}`);
       }
     }
-  }, [result, reload, toastSuccess, setIsLoading]);
+  }, [result, reload, toastSuccess]);
+
+  const isLoading = useMemo(() => result?.status === 'pending', [result]);
 
   return (
     <Card
