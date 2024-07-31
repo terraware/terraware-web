@@ -6,6 +6,7 @@ import { Box, Slide, useTheme } from '@mui/material';
 import ErrorBoundary from 'src/ErrorBoundary';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
+import ApplicationProvider from 'src/scenes/ApplicationRouter/provider';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStateLocation from 'src/utils/useStateLocation';
@@ -61,7 +62,7 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
   };
 
   return (
-    <>
+    <ApplicationProvider>
       {type !== 'desktop' ? (
         <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
           <Box sx={navBarOpened}>
@@ -93,7 +94,7 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
           </Routes>
         </ErrorBoundary>
       </Box>
-    </>
+    </ApplicationProvider>
   );
 };
 

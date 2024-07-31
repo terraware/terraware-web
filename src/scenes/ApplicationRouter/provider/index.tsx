@@ -63,10 +63,16 @@ const ApplicationProvider = ({ children }: Props) => {
     [dispatch, selectedOrganization]
   );
 
+  const _getApplicationByProjectId = useCallback(
+    (projectId: number) => allApplications.find((application) => application.projectId === projectId),
+    [allApplications]
+  );
+
   const [applicationData, setApplicationData] = useState<ApplicationData>({
     allApplications,
     applicationDeliverables,
     applicationSections,
+    getApplicationByProjectId: _getApplicationByProjectId,
     selectedApplication,
     setSelectedApplication: _setSelectedApplication,
     reload: _reload,
@@ -116,6 +122,7 @@ const ApplicationProvider = ({ children }: Props) => {
       allApplications,
       applicationDeliverables,
       applicationSections,
+      getApplicationByProjectId: _getApplicationByProjectId,
       selectedApplication,
       setSelectedApplication: _setSelectedApplication,
       reload: _reload,
@@ -124,6 +131,7 @@ const ApplicationProvider = ({ children }: Props) => {
     allApplications,
     applicationDeliverables,
     applicationSections,
+    _getApplicationByProjectId,
     selectedApplication,
     _setSelectedApplication,
     _reload,

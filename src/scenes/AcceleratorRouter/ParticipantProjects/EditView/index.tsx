@@ -1,12 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Grid, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 
 import Page from 'src/components/Page';
+import ApplicationStatusCard from 'src/components/ProjectField/ApplicationStatusCard';
 import CountrySelect from 'src/components/ProjectField/CountrySelect';
-import ProjectFieldDisplay from 'src/components/ProjectField/Display';
 import LandUseMultiSelect from 'src/components/ProjectField/LandUseMultiSelect';
 import ProjectFieldMeta from 'src/components/ProjectField/Meta';
+import MinMaxCarbonTextfield from 'src/components/ProjectField/MinMaxCarbonTextfield';
 import PhaseScoreCard from 'src/components/ProjectField/PhaseScoreCard';
 import RegionDisplay from 'src/components/ProjectField/RegionDisplay';
 import ProjectFieldTextAreaEdit from 'src/components/ProjectField/TextAreaEdit';
@@ -21,6 +22,7 @@ import { selectParticipantProjectUpdateRequest } from 'src/redux/features/partic
 import { requestProjectUpdate } from 'src/redux/features/projects/projectsAsyncThunks';
 import { selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useApplicationData } from 'src/scenes/ApplicationRouter/provider/Context';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -40,8 +42,10 @@ const EditView = () => {
   const { phaseVotes } = useVotingData();
   const { goToParticipantProject } = useNavigateTo();
   const { isAllowed } = useUser();
+  const { getApplicationByProjectId } = useApplicationData();
 
   const isAllowedEdit = isAllowed('UPDATE_PARTICIPANT_PROJECT');
+  const isAllowedEditScoreAndVoting = isAllowed('UPDATE_PARTICIPANT_PROJECT_SCORING_VOTING');
 
   // Participant project (accelerator data) form record and update request
   const [participantProjectRequestId, setParticipantProjectRequestId] = useState<string>('');
@@ -57,6 +61,11 @@ const EditView = () => {
   const [projectRecord, setProjectRecord, onChangeProject] = useForm(project);
 
   const [confirmProjectNameModalOpen, setConfirmProjectNameModalOpen] = useState(false);
+
+  const projectApplication = useMemo(
+    () => getApplicationByProjectId(projectId),
+    [getApplicationByProjectId, projectId]
+  );
 
   const onChangeCountry = useCallback(
     (countryCode?: string, region?: string) => {
@@ -157,15 +166,27 @@ const EditView = () => {
           }}
         >
           <Grid container>
-            <ProjectFieldTextfield
-              id={'name'}
-              label={strings.PROJECT_NAME}
-              onChange={onChangeProject}
-              value={projectRecord?.name}
-            />
-            <PhaseScoreCard phaseScores={phase1Scores} />
-            <VotingDecisionCard phaseVotes={phaseVotes} />
-            <ProjectFieldDisplay value={false} />
+            <Grid item xs={12}>
+              <ProjectFieldTextfield
+                height='auto'
+                id={'name'}
+                label={strings.PROJECT_NAME}
+                onChange={onChangeProject}
+                value={projectRecord?.name}
+              />
+            </Grid>
+            {projectApplication && (
+              <ApplicationStatusCard
+                application={projectApplication}
+                md={!isAllowedEditScoreAndVoting ? 12 : undefined}
+              />
+            )}
+            {isAllowedEditScoreAndVoting && (
+              <>
+                <PhaseScoreCard md={!projectApplication?.id ? 6 : undefined} phaseScores={phase1Scores} />
+                <VotingDecisionCard md={!projectApplication?.id ? 6 : undefined} phaseVotes={phaseVotes} />
+              </>
+            )}
             <ProjectFieldTextfield
               id={'fileNaming'}
               label={strings.FILE_NAMING}
@@ -221,20 +242,6 @@ const EditView = () => {
               value={participantProjectRecord?.totalExpansionPotential}
             />
             <ProjectFieldTextfield
-              id={'minCarbonAccumulation'}
-              label={strings.MINIMUM_CARBON_ACCUMULATION}
-              onChange={onChangeParticipantProject}
-              type={'number'}
-              value={participantProjectRecord?.minCarbonAccumulation}
-            />
-            <ProjectFieldTextfield
-              id={'maxCarbonAccumulation'}
-              label={strings.MAXIMUM_CARBON_ACCUMULATION}
-              onChange={onChangeParticipantProject}
-              type={'number'}
-              value={participantProjectRecord?.maxCarbonAccumulation}
-            />
-            <ProjectFieldTextfield
               id={'perHectareBudget'}
               label={strings.PER_HECTARE_ESTIMATED_BUDGET}
               onChange={onChangeParticipantProject}
@@ -261,6 +268,40 @@ const EditView = () => {
               userId={project?.modifiedBy}
               userName={projectMeta?.modifiedByUserName}
               userLabel={strings.BY}
+            />
+          </Grid>
+          <Grid container>
+            <Grid item xs={12} margin={`0 ${theme.spacing(2)}`}>
+              <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
+                {strings.CARBON}
+              </Typography>
+            </Grid>
+            <MinMaxCarbonTextfield
+              label={strings.MIN_MAX_CARBON_ACCUMULATION}
+              onChange={onChangeParticipantProject}
+              valueMax={participantProjectRecord?.maxCarbonAccumulation}
+              valueMin={participantProjectRecord?.minCarbonAccumulation}
+            />
+            <ProjectFieldTextfield
+              id={'carbonCapacity'}
+              label={strings.CARBON_CAPACITY_TC02_HA}
+              onChange={onChangeParticipantProject}
+              type={'number'}
+              value={participantProject?.carbonCapacity}
+            />
+            <ProjectFieldTextfield
+              id={'annualCarbon'}
+              label={strings.ANNUAL_CARBON_T}
+              onChange={onChangeParticipantProject}
+              type={'number'}
+              value={participantProject?.annualCarbon}
+            />
+            <ProjectFieldTextfield
+              id={'totalCarbon'}
+              label={strings.TOTAL_CARBON_T}
+              onChange={onChangeParticipantProject}
+              type={'number'}
+              value={participantProject?.totalCarbon}
             />
           </Grid>
         </Card>

@@ -3852,7 +3852,9 @@ export interface components {
       type?: "Polygon";
     }, "coordinates" | "type">;
     ProjectAcceleratorDetailsPayload: {
+      annualCarbon?: number;
       applicationReforestableLand?: number;
+      carbonCapacity?: number;
       confirmedReforestableLand?: number;
       countryCode?: string;
       dealDescription?: string;
@@ -3879,6 +3881,7 @@ export interface components {
       projectLead?: string;
       /** @enum {string} */
       region?: "Antarctica" | ("East Asia & Pacific") | ("Europe & Central Asia") | ("Latin America & Caribbean") | ("Middle East & North Africa") | "North America" | "Oceania" | "South Asia" | "Sub-Saharan Africa";
+      totalCarbon?: number;
       totalExpansionPotential?: number;
       whatNeedsToBeTrue?: string;
     };
@@ -4855,7 +4858,9 @@ export interface components {
       coordinates: components["schemas"]["ObservationMonitoringPlotCoordinatesPayload"][];
     };
     UpdateProjectAcceleratorDetailsRequestPayload: {
+      annualCarbon?: number;
       applicationReforestableLand?: number;
+      carbonCapacity?: number;
       confirmedReforestableLand?: number;
       countryCode?: string;
       dealDescription?: string;
@@ -4882,6 +4887,7 @@ export interface components {
       /** @enum {string} */
       pipeline?: "Accelerator Projects" | "Carbon Supply" | "Carbon Waitlist";
       projectLead?: string;
+      totalCarbon?: number;
       totalExpansionPotential?: number;
       whatNeedsToBeTrue?: string;
     };
