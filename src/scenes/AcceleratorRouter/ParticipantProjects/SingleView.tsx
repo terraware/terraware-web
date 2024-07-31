@@ -18,7 +18,7 @@ import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
-import { useApplicationData } from 'src/scenes/ApplicationRouter/provider/Context';
+import { useApplicationData } from 'src/providers/Application/Context';
 import { LocationService } from 'src/services';
 import ParticipantProjectService from 'src/services/ParticipantProjectService';
 import strings from 'src/strings';
