@@ -1,3 +1,6 @@
+657295e5e48 SW-5598 PartEx Project Dropdowns in Home and Modules Screens: do not show carat when there is only one Project (#2929)
+0c86a19aa0a SW-5701 Add 'title' attribute to all table cells that contain links (#2928)
+6dcb6507265 Style the footer for the document producer preview. Add the project name to the footer. (#2920)
 389c110af77 Update the citations display in the document producer preview (#2919)
 c13f5909864 Updated translations from Phrase (#2917)
 87421d10762 SW-5735 Added submission flows (#2924)
