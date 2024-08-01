@@ -249,7 +249,7 @@ const QuestionBox = ({
         {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectItem} />}
         <Box
           sx={{
-            marginBottom: theme.spacing(4),
+            borderRadius: 2,
             '&:hover': {
               background: editing ? theme.palette.TwClrBgActive : theme.palette.TwClrBgHover,
               '.actions': {
@@ -260,17 +260,20 @@ const QuestionBox = ({
             '& .actions': {
               display: displayActions ? 'block' : 'none',
             },
+            marginBottom: theme.spacing(4),
             padding: 2,
-            borderRadius: 2,
+            position: 'relative',
           }}
         >
           <Box
             sx={{
-              float: 'right',
-              marginBottom: '16px',
-              marginLeft: '16px',
-              display: 'flex',
               alignItems: 'center',
+              display: 'flex',
+              marginBottom: theme.spacing(2),
+              marginLeft: theme.spacing(2),
+              position: 'absolute',
+              right: 0,
+              top: 0,
             }}
           >
             <VariableStatusBadge status={firstVariableValueStatus} />
