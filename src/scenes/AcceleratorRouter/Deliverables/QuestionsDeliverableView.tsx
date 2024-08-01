@@ -326,7 +326,12 @@ const QuestionBox = ({
             </Typography>
           )}
 
-          <VariableInternalComment variable={variable} update={onUpdateInternalComment} editing={editing} />
+          <VariableInternalComment
+            editing={editing}
+            sx={{ marginY: theme.spacing(2) }}
+            update={onUpdateInternalComment}
+            variable={variable}
+          />
 
           {editing && (
             <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
