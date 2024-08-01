@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, Card, Typography, useTheme } from '@mui/material';
@@ -13,7 +13,7 @@ import { requestCohorts } from 'src/redux/features/cohorts/cohortsAsyncThunks';
 import { selectCohorts } from 'src/redux/features/cohorts/cohortsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { Cohort, CohortPhases } from 'src/types/Cohort';
+import { CohortPhases } from 'src/types/Cohort';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -51,8 +51,6 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
       ]
     : [];
 
-export type CohortWithParticipantNum = Cohort & { numOfParticipants: number };
-
 const CohortsListView = ({ filterModifiers, extraTableFilters }: CohortsListViewProps) => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
@@ -62,18 +60,7 @@ const CohortsListView = ({ filterModifiers, extraTableFilters }: CohortsListView
 
   const [hasFilters, setHasFilters] = useState<boolean>(false);
   const cohorts = useAppSelector(selectCohorts);
-  const [cohortsWithParticipantsNum, setCohortsWithParticipantNum] = useState<CohortWithParticipantNum[]>();
   const isEmptyState = useMemo<boolean>(() => cohorts?.length === 0 && !hasFilters, [cohorts?.length, hasFilters]);
-
-  useEffect(() => {
-    if (cohorts?.length) {
-      const newCohorts: CohortWithParticipantNum[] = cohorts.map((c) => ({
-        ...c,
-        numOfParticipants: c.participantIds?.length || 0,
-      }));
-      setCohortsWithParticipantNum(newCohorts);
-    }
-  }, [cohorts]);
 
   const featuredFilters: FilterConfig[] = useMemo(() => {
     const filters: FilterConfig[] = [
@@ -135,7 +122,7 @@ const CohortsListView = ({ filterModifiers, extraTableFilters }: CohortsListView
       id='cohortsTable'
       Renderer={CohortCellRenderer}
       rightComponent={actionMenus}
-      rows={cohortsWithParticipantsNum || []}
+      rows={cohorts || []}
       title={strings.COHORTS}
       clientSortedFields={['numOfParticipants']}
     />
