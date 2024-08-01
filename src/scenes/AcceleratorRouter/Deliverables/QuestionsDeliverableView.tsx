@@ -304,6 +304,7 @@ const QuestionBox = ({
                   optionItems={optionItems}
                   onOpen={() => setDisplayActions(true)}
                   onClose={() => setDisplayActions(false)}
+                  size='small'
                 />
               </Box>
             )}
