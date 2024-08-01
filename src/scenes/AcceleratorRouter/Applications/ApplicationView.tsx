@@ -1,5 +1,7 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
+
+import { Box, Card, Typography, useTheme } from '@mui/material';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
@@ -9,9 +11,13 @@ import { useLocalization } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
 import strings from 'src/strings';
 
+import ApplicationDeliverableRow from './ApplicationDeliverableRow';
+
 const ApplicationView = () => {
   const { activeLocale } = useLocalization();
-  const { selectedApplication, setSelectedApplication } = useApplicationData();
+  const theme = useTheme();
+  const { selectedApplication, setSelectedApplication, applicationSections, applicationDeliverables } =
+    useApplicationData();
   const pathParams = useParams<{ applicationId: string }>();
 
   useEffect(() => {
@@ -41,11 +47,77 @@ const ApplicationView = () => {
     );
   }, [selectedApplication]);
 
-  if (!selectedApplication) {
+  const prescreenSection = useMemo(
+    () => applicationSections.find((section) => section.phase === 'Pre-Screen'),
+    [applicationSections]
+  );
+
+  const nonPrescreenSections = useMemo(
+    () => applicationSections.filter((section) => section.phase === 'Application'),
+    [applicationSections]
+  );
+
+  const sectionDeliverables = useCallback(
+    (sectionId: number) => {
+      return applicationDeliverables.filter((deliverable) => deliverable.moduleId === sectionId);
+    },
+    [applicationDeliverables]
+  );
+
+  if (!selectedApplication || !prescreenSection || !nonPrescreenSections) {
     return undefined;
   }
 
-  return <Page crumbs={crumbs} title={titleComponent} contentStyle={{ display: 'block' }}></Page>;
+  return (
+    <Page crumbs={crumbs} title={titleComponent} contentStyle={{ display: 'block' }}>
+      <Card
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          flexGrow: 1,
+          alignItems: 'center',
+          padding: theme.spacing(3),
+        }}
+      >
+        {/* TODO add component for adding reveiw status, feedback, internal comments and link to project details */}
+
+        <Box display={'flex'} flexDirection={'column'} justifyContent={'left'} width={'100%'}>
+          <Typography fontSize={'24px'} fontWeight={600} lineHeight={'32px'} marginTop={theme.spacing(3)}>
+            {strings.PRESCREEN}
+          </Typography>
+
+          {/* Add link to view boundary once exists */}
+          <ApplicationDeliverableRow title={strings.PROPOSED_PROJECT_BOUNDARY} goToDeliverable={() => {}} />
+
+          {sectionDeliverables(prescreenSection.moduleId).map((deliverable, index) => (
+            // Add link to deliverable
+            <ApplicationDeliverableRow title={deliverable.name} goToDeliverable={() => {}} key={`prescreen-${index}`} />
+          ))}
+
+          <Typography fontSize={'24px'} fontWeight={600} lineHeight={'32px'} marginTop={theme.spacing(3)}>
+            {strings.APPLICATION}
+          </Typography>
+
+          {nonPrescreenSections.map((section) => (
+            <>
+              <Typography fontSize={'20px'} fontWeight={600} lineHeight={'28px'} marginTop={theme.spacing(3)}>
+                {section.name}
+              </Typography>
+
+              {sectionDeliverables(section.moduleId).map((deliverable, index) => (
+                // Add link to deliverable
+                <ApplicationDeliverableRow
+                  title={deliverable.name}
+                  goToDeliverable={() => {}}
+                  key={`section-${section.moduleId}-${index}`}
+                />
+              ))}
+            </>
+          ))}
+        </Box>
+      </Card>
+    </Page>
+  );
 };
 
 export default ApplicationView;
