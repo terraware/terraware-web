@@ -90,7 +90,6 @@ const ApplicationList = () => {
       id='accelerator-applications-table'
       Renderer={ApplicationCellRenderer}
       rows={applications}
-      title={strings.PARTICIPANTS}
     />
   );
 };
