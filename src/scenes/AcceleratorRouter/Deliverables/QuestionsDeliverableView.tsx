@@ -48,15 +48,19 @@ export type Props = EditProps & {
 };
 
 const QuestionBox = ({
-  variable,
-  projectId,
+  editingId,
   index,
+  projectId,
   reload,
+  setEditingId,
+  variable,
 }: {
-  variable: VariableWithValues;
-  projectId: number;
+  editingId?: number;
   index: number;
+  projectId: number;
   reload: () => void;
+  setEditingId: (id: number | undefined) => void;
+  variable: VariableWithValues;
 }): JSX.Element => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -74,8 +78,7 @@ const QuestionBox = ({
   } = useProjectVariablesUpdate(projectId, [variable]);
 
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
-  const [editing, setEditing] = useState(false);
-  const [displayActions, setDisplyActions] = useState(false);
+  const [displayActions, setDisplayActions] = useState(false);
   const [showEditFeedbackModal, setShowEditFeedbackModal] = useState(false);
   const snackbar = useSnackbar();
 
@@ -95,6 +98,8 @@ const QuestionBox = ({
     () => pendingVariableValues.get(variable.id),
     [pendingVariableValues, variable.id]
   );
+
+  const editing = useMemo(() => editingId === variable.id, [editingId, variable.id]);
 
   useEffect(() => {
     if (updateVariableValueSuccess) {
@@ -148,7 +153,7 @@ const QuestionBox = ({
   };
 
   const onEditItem = () => {
-    setEditing(true);
+    setEditingId(variable.id);
   };
 
   const onUpdateInternalComment = (internalComment: string) => {
@@ -163,7 +168,7 @@ const QuestionBox = ({
 
     update();
 
-    setEditing(false);
+    setEditingId(undefined);
   };
 
   const onOptionItemClick = useCallback(
@@ -269,7 +274,7 @@ const QuestionBox = ({
             }}
           >
             <VariableStatusBadge status={firstVariableValueStatus} />
-            {!editing && (
+            {!editingId && (
               <Box className='actions'>
                 <Button
                   id='edit'
@@ -297,8 +302,8 @@ const QuestionBox = ({
                 <OptionsMenu
                   onOptionItemClick={onOptionItemClick}
                   optionItems={optionItems}
-                  onOpen={() => setDisplyActions(true)}
-                  onClose={() => setDisplyActions(false)}
+                  onOpen={() => setDisplayActions(true)}
+                  onClose={() => setDisplayActions(false)}
                 />
               </Box>
             )}
@@ -379,7 +384,7 @@ const QuestionBox = ({
                 id='cancel'
                 label={strings.CANCEL}
                 type='passive'
-                onClick={() => setEditing(false)}
+                onClick={() => setEditingId(undefined)}
                 priority='secondary'
                 key='button-1'
               />
@@ -398,6 +403,8 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
   const { activeLocale } = useLocalization();
   const { deliverableId, projectId } = useDeliverableData();
   const dispatch = useAppDispatch();
+
+  const [editingId, setEditingId] = useState<number | undefined>();
 
   const reload = () => {
     void dispatch(requestListDeliverableVariables(deliverableId));
@@ -451,11 +458,13 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
             {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => {
               return (
                 <QuestionBox
-                  variable={variableWithValues}
-                  projectId={projectId}
+                  editingId={editingId}
                   index={index}
                   key={index}
+                  projectId={projectId}
                   reload={reload}
+                  setEditingId={setEditingId}
+                  variable={variableWithValues}
                 />
               );
             })}
