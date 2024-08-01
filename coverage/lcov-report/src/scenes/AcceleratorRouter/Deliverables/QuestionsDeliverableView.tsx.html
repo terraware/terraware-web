@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/105</span>
+                <span class='fraction'>0/107</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/36</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/105</span>
+                <span class='fraction'>0/106</span>
             </div>
         
             
@@ -532,7 +532,16 @@
 <a name='L467'></a><a href='#L467'>467</a>
 <a name='L468'></a><a href='#L468'>468</a>
 <a name='L469'></a><a href='#L469'>469</a>
-<a name='L470'></a><a href='#L470'>470</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L470'></a><a href='#L470'>470</a>
+<a name='L471'></a><a href='#L471'>471</a>
+<a name='L472'></a><a href='#L472'>472</a>
+<a name='L473'></a><a href='#L473'>473</a>
+<a name='L474'></a><a href='#L474'>474</a>
+<a name='L475'></a><a href='#L475'>475</a>
+<a name='L476'></a><a href='#L476'>476</a>
+<a name='L477'></a><a href='#L477'>477</a>
+<a name='L478'></a><a href='#L478'>478</a>
+<a name='L479'></a><a href='#L479'>479</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -592,6 +601,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -607,7 +620,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -631,8 +643,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -926,11 +940,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -984,6 +1000,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1051,15 +1069,19 @@ export type Props = EditProps &amp; {
 };
 &nbsp;
 const QuestionBox = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span></span>
-  variable,
-  projectId,
+  editingId,
   index,
+  projectId,
   reload,
+  setEditingId,
+  variable,
 }: {
-  variable: VariableWithValues;
-  projectId: number;
+  editingId?: number;
   index: number;
+  projectId: number;
   reload: () =&gt; void;
+  setEditingId: (id: number | undefined) =&gt; void;
+  variable: VariableWithValues;
 }): JSX.Element =&gt; {
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
@@ -1077,8 +1099,7 @@ const QuestionBox = <span class="cstat-no" title="statement not covered" ><span 
   } = <span class="cstat-no" title="statement not covered" >useProjectVariablesUpdate(projectId, [variable]);</span>
 &nbsp;
   const [showRejectDialog, setShowRejectDialog] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
-  const [editing, setEditing] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
-  const [displayActions, setDisplyActions] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
+  const [displayActions, setDisplayActions] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
   const [showEditFeedbackModal, setShowEditFeedbackModal] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
 &nbsp;
@@ -1098,6 +1119,8 @@ const QuestionBox = <span class="cstat-no" title="statement not covered" ><span 
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >pendingVariableValues.get(variable.id),</span>
     [pendingVariableValues, variable.id]
   );
+&nbsp;
+  const editing = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >editingId === variable.id,</span> [editingId, variable.id]);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (updateVariableValueSuccess) {</span>
@@ -1151,7 +1174,7 @@ const QuestionBox = <span class="cstat-no" title="statement not covered" ><span 
   };
 &nbsp;
   const onEditItem = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setEditing(true);</span>
+<span class="cstat-no" title="statement not covered" >    setEditingId(variable.id);</span>
   };
 &nbsp;
   const onUpdateInternalComment = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>nternalComment: string) =&gt; {</span>
@@ -1166,7 +1189,7 @@ const QuestionBox = <span class="cstat-no" title="statement not covered" ><span 
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    update();</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    setEditing(false);</span>
+<span class="cstat-no" title="statement not covered" >    setEditingId(undefined);</span>
   };
 &nbsp;
   const onOptionItemClick = <span class="cstat-no" title="statement not covered" >useCallback(</span>
@@ -1272,7 +1295,7 @@ const QuestionBox = <span class="cstat-no" title="statement not covered" ><span 
             }}
           &gt;
             &lt;VariableStatusBadge status={firstVariableValueStatus} /&gt;
-            {!editing &amp;&amp; (
+            {!editingId &amp;&amp; (
               &lt;Box className='actions'&gt;
                 &lt;Button
                   id='edit'
@@ -1300,8 +1323,8 @@ const QuestionBox = <span class="cstat-no" title="statement not covered" ><span 
                 &lt;OptionsMenu
                   onOptionItemClick={onOptionItemClick}
                   optionItems={optionItems}
-                  onOpen={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setDisplyActions(true)}</span>
-                  onClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setDisplyActions(false)}</span>
+                  onOpen={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setDisplayActions(true)}</span>
+                  onClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setDisplayActions(false)}</span>
                 /&gt;
               &lt;/Box&gt;
             )}
@@ -1382,7 +1405,7 @@ const QuestionBox = <span class="cstat-no" title="statement not covered" ><span 
                 id='cancel'
                 label={strings.CANCEL}
                 type='passive'
-                onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setEditing(false)}</span>
+                onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setEditingId(undefined)}</span>
                 priority='secondary'
                 key='button-1'
               /&gt;
@@ -1401,6 +1424,8 @@ const QuestionsDeliverableView = <span class="cstat-no" title="statement not cov
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const { deliverableId, projectId } = <span class="cstat-no" title="statement not covered" >useDeliverableData();</span>
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
+&nbsp;
+  const [editingId, setEditingId] = <span class="cstat-no" title="statement not covered" >useState&lt;number | undefined&gt;();</span>
 &nbsp;
   const reload = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    void dispatch(requestListDeliverableVariables(deliverableId));</span>
@@ -1454,11 +1479,13 @@ const QuestionsDeliverableView = <span class="cstat-no" title="statement not cov
             {variablesWithValues.map(<span class="fstat-no" title="function not covered" >(v</span>ariableWithValues: VariableWithValues, index: number) =&gt; {
 <span class="cstat-no" title="statement not covered" >              return (</span>
                 &lt;QuestionBox
-                  variable={variableWithValues}
-                  projectId={projectId}
+                  editingId={editingId}
                   index={index}
                   key={index}
+                  projectId={projectId}
                   reload={reload}
+                  setEditingId={setEditingId}
+                  variable={variableWithValues}
                 /&gt;
               );
             })}
@@ -1477,7 +1504,7 @@ export default QuestionsDeliverableView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-31T23:49:24.616Z
+                at 2024-08-01T20:38:18.790Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
