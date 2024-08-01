@@ -339,7 +339,7 @@ const QuestionBox = ({
           {editing && (
             <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
               <Grid item xs={12}></Grid>
-              <Grid item xs={12}>
+              <Grid item xs={variable.type === 'Image' || variable.type === 'Table' ? 12 : 4}>
                 <DeliverableVariableDetailsInput
                   values={pendingValues || variable.values}
                   setValues={(newValues: VariableValueValue[]) => setValues(variable.id, newValues)}
