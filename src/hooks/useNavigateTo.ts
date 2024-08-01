@@ -10,6 +10,10 @@ export default function useNavigateTo() {
 
   return useMemo(
     () => ({
+      goToAccelerator: () => {
+        navigate({ pathname: APP_PATHS.ACCELERATOR });
+      },
+
       goToApplication: (applicationId: number) => {
         navigate({ pathname: APP_PATHS.APPLICATION_OVERVIEW.replace(':applicationId', `${applicationId}`) });
       },

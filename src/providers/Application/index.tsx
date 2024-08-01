@@ -1,6 +1,7 @@
-import React, { ReactNode, useCallback, useEffect, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { useOrganization } from 'src/providers';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useOrganization, useUser } from 'src/providers';
 import {
   requestListApplicationDeliverables,
   requestListApplicationModules,
@@ -13,6 +14,7 @@ import {
 } from 'src/redux/features/application/applicationSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Application, ApplicationDeliverable, ApplicationModule } from 'src/types/Application';
+import { isAllowed } from 'src/utils/acl';
 
 import { ApplicationContext, ApplicationData } from './Context';
 
@@ -28,6 +30,14 @@ const ApplicationProvider = ({ children }: Props) => {
   const [applicationSections, setApplicationSections] = useState<ApplicationModule[]>([]);
   const [applicationDeliverables, setApplicationDeliverables] = useState<ApplicationDeliverable[]>([]);
   const [selectedApplication, setSelectedApplication] = useState<Application>();
+
+  const { user } = useUser();
+  const isAllowedAllApplications = useMemo(
+    () => (user ? isAllowed(user, 'READ_ALL_APPLICATIONS') : false),
+    [user, isAllowed]
+  );
+
+  const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const [listApplicationsRequest, setListApplicationRequest] = useState<string>('');
   const listApplicationsResult = useAppSelector(selectApplicationList(listApplicationsRequest));
@@ -52,15 +62,22 @@ const ApplicationProvider = ({ children }: Props) => {
     [allApplications]
   );
 
+  const loadApplications = useCallback(() => {
+    if (isAcceleratorRoute && isAllowedAllApplications) {
+      const listAll = dispatch(requestListApplications({ listAll: true }));
+      setListApplicationRequest(listAll.requestId);
+    } else if (selectedOrganization) {
+      const listOrg = dispatch(requestListApplications({ organizationId: selectedOrganization.id }));
+      setListApplicationRequest(listOrg.requestId);
+    }
+  }, [dispatch, isAcceleratorRoute, isAllowedAllApplications, selectedOrganization, setListApplicationRequest]);
+
   const _reload = useCallback(
     (onReload: () => void) => {
       setReloadCallback(onReload);
-      if (selectedOrganization) {
-        const dispatched = dispatch(requestListApplications({ organizationId: selectedOrganization.id }));
-        setListApplicationRequest(dispatched.requestId);
-      }
+      loadApplications();
     },
-    [dispatch, selectedOrganization]
+    [dispatch, loadApplications, setReloadCallback]
   );
 
   const _getApplicationByProjectId = useCallback(
@@ -79,11 +96,10 @@ const ApplicationProvider = ({ children }: Props) => {
   });
 
   useEffect(() => {
-    if (selectedOrganization) {
-      const dispatched = dispatch(requestListApplications({ organizationId: selectedOrganization.id }));
-      setListApplicationRequest(dispatched.requestId);
+    if (selectedOrganization || isAcceleratorRoute) {
+      loadApplications();
     }
-  }, [dispatch, selectedOrganization, setListApplicationRequest]);
+  }, [dispatch, selectedOrganization, isAcceleratorRoute, loadApplications]);
 
   useEffect(() => {
     if (listApplicationsResult && listApplicationsResult.status === 'success' && listApplicationsResult.data) {

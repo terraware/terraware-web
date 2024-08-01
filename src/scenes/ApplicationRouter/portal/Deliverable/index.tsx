@@ -9,7 +9,7 @@ import DeliverableViewCard from 'src/components/DeliverableView/DeliverableCard'
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
-import { useApplicationData } from 'src/scenes/ApplicationRouter/provider/Context';
+import { useApplicationData } from 'src/providers/Application/Context';
 import strings from 'src/strings';
 
 import ApplicationPage from '../ApplicationPage';

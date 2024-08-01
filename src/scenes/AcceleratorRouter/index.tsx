@@ -6,11 +6,12 @@ import { Box, Slide, useTheme } from '@mui/material';
 import ErrorBoundary from 'src/ErrorBoundary';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
-import ApplicationProvider from 'src/scenes/ApplicationRouter/provider';
+import ApplicationProvider from 'src/providers/Application';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStateLocation from 'src/utils/useStateLocation';
 
+import Applications from './Applications';
 import Cohorts from './Cohorts';
 import Deliverables from './Deliverables';
 import DocumentsRouter from './Documents';
@@ -79,7 +80,7 @@ const AcceleratorRouter = ({ showNavBar, setShowNavBar }: AcceleratorRouterProps
         <ErrorBoundary setShowNavBar={setShowNavBar}>
           <Routes>
             <Route path={APP_PATHS.ACCELERATOR_OVERVIEW} element={<Overview />} />
-
+            <Route path={`${APP_PATHS.ACCELERATOR_APPLICATIONS}/*`} element={<Applications />} />
             <Route path={`${APP_PATHS.ACCELERATOR_COHORTS}/*`} element={<Cohorts />} />
             <Route path={`${APP_PATHS.ACCELERATOR_DELIVERABLES}/*`} element={<Deliverables />} />
             <Route path={APP_PATHS.ACCELERATOR_MODULE_CONTENT} element={<ModuleContent />} />

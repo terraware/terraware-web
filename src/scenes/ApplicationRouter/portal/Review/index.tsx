@@ -8,8 +8,8 @@ import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
+import { useApplicationData } from 'src/providers/Application/Context';
 import ApplicationPage from 'src/scenes/ApplicationRouter/portal/ApplicationPage';
-import { useApplicationData } from 'src/scenes/ApplicationRouter/provider/Context';
 import strings from 'src/strings';
 
 import ReviewCard from './ReviewCard';

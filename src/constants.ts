@@ -8,6 +8,8 @@ export const SEED_COLLECTOR_GOOGLE_PLAY_LINK =
 
 export enum APP_PATHS {
   ACCELERATOR = '/accelerator',
+  ACCELERATOR_APPLICATION = '/accelerator/applications/:applicationId',
+  ACCELERATOR_APPLICATIONS = '/accelerator/applications',
   ACCELERATOR_COHORTS = '/accelerator/cohorts',
   ACCELERATOR_COHORTS_EDIT = '/accelerator/cohorts/:cohortId/edit',
   ACCELERATOR_COHORTS_NEW = '/accelerator/cohorts/new',

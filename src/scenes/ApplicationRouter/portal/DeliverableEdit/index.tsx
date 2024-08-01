@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import QuestionsDeliverableEditForm from 'src/components/DeliverableView/QuestionsDeliverableEditForm';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useApplicationData } from 'src/scenes/ApplicationRouter/provider/Context';
+import { useApplicationData } from 'src/providers/Application/Context';
 
 import ApplicationPage from '../ApplicationPage';
 
