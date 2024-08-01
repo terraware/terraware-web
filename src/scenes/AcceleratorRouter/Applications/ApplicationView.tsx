@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Box, Card, Typography, useTheme } from '@mui/material';
+import { DateTime } from 'luxon';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
@@ -91,7 +92,14 @@ const ApplicationView = () => {
 
           {sectionDeliverables(prescreenSection.moduleId).map((deliverable, index) => (
             // Add link to deliverable
-            <ApplicationDeliverableRow title={deliverable.name} goToDeliverable={() => {}} key={`prescreen-${index}`} />
+            <ApplicationDeliverableRow
+              title={deliverable.name}
+              modifiedDate={
+                deliverable.modifiedTime ? DateTime.fromISO(deliverable.modifiedTime).toFormat('yyyy/MM/dd') : undefined
+              }
+              goToDeliverable={() => {}}
+              key={`prescreen-${index}`}
+            />
           ))}
 
           <Typography fontSize={'24px'} fontWeight={600} lineHeight={'32px'} marginTop={theme.spacing(3)}>
@@ -108,6 +116,11 @@ const ApplicationView = () => {
                 // Add link to deliverable
                 <ApplicationDeliverableRow
                   title={deliverable.name}
+                  modifiedDate={
+                    deliverable.modifiedTime
+                      ? DateTime.fromISO(deliverable.modifiedTime).toFormat('yyyy/MM/dd')
+                      : undefined
+                  }
                   goToDeliverable={() => {}}
                   key={`section-${section.moduleId}-${index}`}
                 />
