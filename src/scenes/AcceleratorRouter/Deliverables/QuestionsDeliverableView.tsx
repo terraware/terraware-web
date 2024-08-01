@@ -278,7 +278,7 @@ const QuestionBox = ({
           >
             <VariableStatusBadge status={firstVariableValueStatus} />
             {!editingId && (
-              <Box className='actions'>
+              <Box className='actions' sx={{ marginLeft: '4px' }}>
                 <Button
                   id='edit'
                   label={strings.EDIT}
@@ -287,12 +287,14 @@ const QuestionBox = ({
                   priority='secondary'
                   className='edit-button'
                   size='small'
+                  sx={{ '&.button': { margin: '4px' } }}
                   type='passive'
                 />
                 <Button
                   label={strings.REJECT_ACTION}
                   onClick={() => setShowRejectDialog(true)}
                   priority='secondary'
+                  sx={{ '&.button': { margin: '4px' } }}
                   type='destructive'
                   disabled={firstVariableValueStatus === 'Rejected'}
                 />
@@ -301,6 +303,7 @@ const QuestionBox = ({
                   onClick={approveItem}
                   priority='secondary'
                   disabled={firstVariableValueStatus === 'Approved'}
+                  sx={{ '&.button': { margin: '4px' } }}
                 />
                 <OptionsMenu
                   onOptionItemClick={onOptionItemClick}
@@ -308,6 +311,7 @@ const QuestionBox = ({
                   onOpen={() => setDisplayActions(true)}
                   onClose={() => setDisplayActions(false)}
                   size='small'
+                  sx={{ '& .button': { margin: '4px' }, marginLeft: 0 }}
                 />
               </Box>
             )}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Box } from '@mui/material';
+import { Box, SxProps } from '@mui/material';
 import { Button, DropdownItem, Popover, Tooltip } from '@terraware/web-components';
 
 import strings from 'src/strings';
@@ -11,6 +11,7 @@ export type OptionsMenuProps = {
   size?: 'medium' | 'small';
   onOpen?: () => void;
   onClose?: () => void;
+  sx?: SxProps;
 };
 
 export default function OptionsMenu({
@@ -19,6 +20,7 @@ export default function OptionsMenu({
   size,
   onOpen,
   onClose,
+  sx,
 }: OptionsMenuProps): JSX.Element {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<HTMLElement | null>(null);
 
@@ -45,7 +47,7 @@ export default function OptionsMenu({
 
   return (
     <>
-      <Box marginLeft={1} display='inline'>
+      <Box display='inline' sx={[{ marginLeft: 1 }, ...(Array.isArray(sx) ? sx : [sx])]}>
         <Tooltip title={strings.MORE_OPTIONS}>
           <Button
             id='more-options'
