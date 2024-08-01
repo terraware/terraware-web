@@ -24,10 +24,6 @@ export default function CohortCellRenderer(props: RendererProps<TableRowType>): 
     );
   }
 
-  if (column.key === 'participantIds') {
-    return <CellRenderer {...props} value={(value as string[])?.length?.toString() || '0'} />;
-  }
-
   if (column.key === 'phase') {
     return <CellRenderer {...props} value={getPhaseString(value as CohortPhaseType)} />;
   }
