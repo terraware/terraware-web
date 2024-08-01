@@ -251,12 +251,12 @@ const QuestionBox = ({
           sx={{
             marginBottom: theme.spacing(4),
             '&:hover': {
-              background: theme.palette.TwClrBgHover,
+              background: editing ? theme.palette.TwClrBgActive : theme.palette.TwClrBgHover,
               '.actions': {
                 display: 'block',
               },
             },
-            background: displayActions ? theme.palette.TwClrBgHover : 'none',
+            background: editing ? theme.palette.TwClrBgActive : displayActions ? theme.palette.TwClrBgHover : 'none',
             '& .actions': {
               display: displayActions ? 'block' : 'none',
             },
