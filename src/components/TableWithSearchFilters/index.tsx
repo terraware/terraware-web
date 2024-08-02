@@ -23,6 +23,7 @@ interface TableWithSearchFiltersProps extends Omit<OrderPreservedTablePropsFull<
   fuzzySearchColumns?: string[];
   rightComponent?: React.ReactNode;
   title?: string;
+  clientSortedFields?: string[];
 }
 
 const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
@@ -37,6 +38,7 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
     fuzzySearchColumns,
     rightComponent,
     title,
+    clientSortedFields,
     ...tableProps
   } = props;
 
@@ -45,13 +47,19 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
   const [searchValue, setSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(searchValue, 250);
-  const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder>(defaultSearchOrder);
+  const [searchSortOrder, setSearchSortOrder] = useState<SearchSortOrder | undefined>(defaultSearchOrder);
 
-  const onSortChange = (order: SortOrder, orderBy: string) =>
-    setSearchSortOrder({
+  const onSortChangeHandler = (order: SearchSortOrder) => {
+    const isClientSorted = clientSortedFields ? clientSortedFields.indexOf(order.field) > -1 : false;
+    setSearchSortOrder(isClientSorted ? undefined : order);
+  };
+
+  const onSortChange = (order: SortOrder, orderBy: string) => {
+    onSortChangeHandler({
       field: orderBy,
       direction: order === 'asc' ? 'Ascending' : 'Descending',
     });
+  };
 
   const getSearchPayload = useCallback((): SearchNodePayload => {
     const searchNodeChildren: SearchNodePayload[] = [];
@@ -109,7 +117,9 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
 
   useEffect(() => {
     const search: SearchNodePayload = getSearchPayload();
-    dispatchSearchRequest(activeLocale, search, searchSortOrder);
+    if (searchSortOrder) {
+      dispatchSearchRequest(activeLocale, search, searchSortOrder);
+    }
   }, [activeLocale, dispatchSearchRequest, getSearchPayload, searchSortOrder]);
 
   // reset filters when extraTableFilters change
@@ -145,9 +155,10 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
           <OrderPreservedTable
             {...tableProps}
             columns={() => columns(activeLocale)}
-            orderBy={searchSortOrder.field}
-            order={searchSortOrder.direction === 'Ascending' ? 'asc' : 'desc'}
+            orderBy={searchSortOrder?.field || defaultSearchOrder.field}
+            order={searchSortOrder?.direction === 'Ascending' ? 'asc' : 'desc'}
             sortHandler={onSortChange}
+            isPresorted={!!searchSortOrder}
           />
         </Grid>
       </Card>
