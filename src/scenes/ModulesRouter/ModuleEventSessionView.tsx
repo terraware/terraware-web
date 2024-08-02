@@ -16,18 +16,6 @@ import { getLongDateTime } from 'src/utils/dateFormatter';
 import ModuleViewTitle from './ModuleViewTitle';
 import { useModuleData } from './Provider/Context';
 
-const CALL_DESCRIPTION_HTML = `
-  <div>
-    <p>Clicking "Join" will open up a browser window to join a Google Meet video call.</p>
-    <p>For this Live Session you will need:</p>
-    <ul>
-      <li>An internet connection – broadband wired or wireless (3G or 4G/LTE)</li>
-      <li>Speakers and a microphone – built-in, USB plug-in, or wireless Bluetooth</li>
-      <li>A webcam or HD webcam - built-in, USB plug-in</li>
-    </ul>
-  </div>
-`;
-
 const openExternalURL = (url: string | undefined, target = '_blank', features = 'noopener noreferrer') => {
   if (url) {
     window.open(url, target, features);
@@ -42,6 +30,7 @@ const ModuleEventSessionView = () => {
   const { event, module, moduleId, session } = useModuleData();
 
   const eventType = session?.type ? getEventType(session.type) : '';
+  const buttonLabel = eventType ? strings.formatString(strings.JOIN_EVENT_NAME, eventType)?.toString() : '';
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -96,7 +85,7 @@ const ModuleEventSessionView = () => {
                 </Typography>
 
                 <Button
-                  label={eventType ? strings.formatString(strings.JOIN_EVENT_NAME, eventType)?.toString() : ''}
+                  label={buttonLabel}
                   onClick={() => {
                     openExternalURL(session.meetingUrl);
                   }}
@@ -132,9 +121,22 @@ const ModuleEventSessionView = () => {
 
             <Grid item xs={6} style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
               <Box
-                dangerouslySetInnerHTML={{ __html: CALL_DESCRIPTION_HTML }}
-                sx={{ backgroundColor: theme.palette.TwClrBgSecondary, borderRadius: '8px', padding: '8px 16px' }}
-              />
+                sx={{
+                  backgroundColor: theme.palette.TwClrBgSecondary,
+                  borderRadius: '8px',
+                  padding: '8px 16px',
+                }}
+              >
+                <div>
+                  <p>{strings.formatString(strings.EVENT_CALL_DESCRIPTION_1, buttonLabel).toString()}</p>
+                  <p>{strings.formatString(strings.EVENT_CALL_DESCRIPTION_2, eventType).toString()}</p>
+                  <ul>
+                    <li>{strings.EVENT_CALL_REQUIREMENTS_INTERNET}</li>
+                    <li>{strings.EVENT_CALL_REQUIREMENTS_SPEAKERS_MIC}</li>
+                    <li>{strings.EVENT_CALL_REQUIREMENTS_WEBCAM}</li>
+                  </ul>
+                </div>
+              </Box>
             </Grid>
 
             <Grid item xs style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
