@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/37</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/33</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
@@ -217,15 +217,7 @@
 <a name='L152'></a><a href='#L152'>152</a>
 <a name='L153'></a><a href='#L153'>153</a>
 <a name='L154'></a><a href='#L154'>154</a>
-<a name='L155'></a><a href='#L155'>155</a>
-<a name='L156'></a><a href='#L156'>156</a>
-<a name='L157'></a><a href='#L157'>157</a>
-<a name='L158'></a><a href='#L158'>158</a>
-<a name='L159'></a><a href='#L159'>159</a>
-<a name='L160'></a><a href='#L160'>160</a>
-<a name='L161'></a><a href='#L161'>161</a>
-<a name='L162'></a><a href='#L162'>162</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L155'></a><a href='#L155'>155</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -269,7 +261,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -286,10 +277,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -324,7 +311,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -395,7 +381,6 @@ import Table from 'src/components/common/table';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
-import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { requestListParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { selectParticipantProjectSpeciesListRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -430,7 +415,6 @@ const SpeciesDeliverableTable = <span class="cstat-no" title="statement not cove
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const { isAcceleratorRoute } = <span class="cstat-no" title="statement not covered" >useAcceleratorConsole();</span>
   const { goToParticipantProjectSpecies } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
-  const { currentDeliverables } = <span class="cstat-no" title="statement not covered" >useParticipantData();</span>
 &nbsp;
   const participantProjectSpecies = <span class="cstat-no" title="statement not covered" >useAppSelector(selectParticipantProjectSpeciesListRequest(deliverable.projectId));</span>
 &nbsp;
@@ -448,10 +432,6 @@ const SpeciesDeliverableTable = <span class="cstat-no" title="statement not cove
       participantProjectSpecies_submissionStatus: value.participantProjectSpecies.submissionStatus,
     }));
   }, [participantProjectSpecies]);
-&nbsp;
-  const addSpeciesToProjectButtonIsDisabled = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return !currentDeliverables?.find(<span class="fstat-no" title="function not covered" >(d</span>eliverable) =&gt; <span class="cstat-no" title="statement not covered" >deliverable.id === deliverable.id)</span>;</span>
-  }, [currentDeliverables, deliverable]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    void dispatch(requestListParticipantProjectSpecies(deliverable.projectId));</span>
@@ -505,7 +485,6 @@ const SpeciesDeliverableTable = <span class="cstat-no" title="statement not cove
 &nbsp;
             {!isAcceleratorRoute &amp;&amp; (
               &lt;Button
-                disabled={addSpeciesToProjectButtonIsDisabled}
                 icon='plus'
                 id='add-species-to-project'
                 label='Add Species to Project'
@@ -553,7 +532,7 @@ export default SpeciesDeliverableTable;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-02T21:09:27.106Z
+                at 2024-08-02T21:52:54.793Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -1,3 +1,4 @@
+98b5e10b559 SW-5672 Alow species to be added to participant project even when there is no active deliverable (#2944)
 1f675229dac SW-5704 Customize event display for recorded sessions (#2948)
 7aaeb6cdb84 SW-5704 Make live session instructions localizable (#2947)
 4564dc5a419 SW-5536 Font-size for Species table's Project column incorrect (#2945)
