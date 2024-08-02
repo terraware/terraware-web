@@ -140,7 +140,9 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             id='scientificName'
             label={strings.SCIENTIFIC_NAME}
             placeholder={strings.SELECT}
-            options={selectableSpecies}
+            options={selectableSpecies?.sort((a: Species, b: Species) =>
+              a.scientificName.localeCompare(b.scientificName)
+            )}
             onChange={onChangeSpecies}
             selectedValue={allSpecies?.find((_species) => record?.speciesId === _species.id)}
             fullWidth={true}
