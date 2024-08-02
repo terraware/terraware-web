@@ -53,6 +53,7 @@ const QuestionBox = ({
   projectId,
   reload,
   setEditingId,
+  setUpdatePendingId,
   variable,
 }: {
   editingId?: number;
@@ -60,6 +61,7 @@ const QuestionBox = ({
   projectId: number;
   reload: () => void;
   setEditingId: (id: number | undefined) => void;
+  setUpdatePendingId: (variableId: number | undefined) => void;
   variable: VariableWithValues;
 }): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -131,6 +133,8 @@ const QuestionBox = ({
     const request = dispatch(
       requestUpdateVariableWorkflowDetails({ status, feedback, internalComment, projectId, variableId: variable.id })
     );
+    setUpdatePendingId(variable.id);
+
     if (!internalComment) {
       if (status === 'Approved') {
         setApprovedRequestId(request.requestId);
@@ -245,7 +249,7 @@ const QuestionBox = ({
           </Grid>
         </DialogBox>
       )}
-      <Box key={`question-${index}`}>
+      <Box data-variable-id={variable.id} key={`question-${index}`}>
         {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectItem} />}
         <Box
           sx={{
@@ -426,6 +430,7 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
   const dispatch = useAppDispatch();
 
   const [editingId, setEditingId] = useState<number | undefined>();
+  const [updatePendingId, setUpdatePendingId] = useState<number | undefined>();
 
   const reload = () => {
     void dispatch(requestListDeliverableVariables(deliverableId));
@@ -444,6 +449,16 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
   const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
     selectDeliverableVariablesWithValues(state, deliverableId, projectId)
   );
+
+  useEffect(() => {
+    if (variablesWithValues.length && updatePendingId) {
+      const element = document.querySelector(`[data-variable-id="${updatePendingId}"]`);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+      setUpdatePendingId(undefined);
+    }
+  }, [variablesWithValues]);
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -485,6 +500,7 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
                   projectId={projectId}
                   reload={reload}
                   setEditingId={setEditingId}
+                  setUpdatePendingId={setUpdatePendingId}
                   variable={variableWithValues}
                 />
               );
