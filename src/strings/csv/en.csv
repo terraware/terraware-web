@@ -499,6 +499,8 @@ EVENT_CALL_DESCRIPTION_2,For this {0} you will need:,{0} is an event type such a
 EVENT_CALL_REQUIREMENTS_INTERNET,An internet connection on your device - broadband wired or wireless (3G or 4G/LTE),
 EVENT_CALL_REQUIREMENTS_SPEAKERS_MIC,"Speakers and a microphone – built-in, USB plug-in, or wireless Bluetooth",
 EVENT_CALL_REQUIREMENTS_WEBCAM,"A webcam or HD webcam - built-in, USB plug-in",
+EVENT_RECORDED_SESSION_DESCRIPTION_1,"Watch this Recorded Session at any time. You can watch the session more than once, as needed.",
+EVENT_RECORDED_SESSION_REQUIREMENTS_SPEAKERS,"Speakers or headset - built-in, USB plug-in, or wireless Bluetooth",
 EXCLUSION_AREAS,Exclusion Areas,
 EXISTING_PROJECT_ACCESSIONS_BODY,"There are accessions that have already been added to an existing project. If you select those accessions here, you will replace the project with {0} (rather than create an additional association).",
 EXISTING_PROJECT_ACCESSIONS_TITLE,Existing Project with Accessions,
@@ -1203,6 +1205,7 @@ RECEIVING_DATE_REQUIRED,Receiving Date *,
 RECEIVING_NURSERY_REQUIRED,Receiving Nursery *,
 RECOMMENDED,Recommended,
 RECORDED_PLANTS,Recorded Plants,
+RECORDED_SESSION,Recorded Session,A video recording of an informational session.
 RECORDED_SPECIES,Recorded Species,
 RECORDING_DATE,Recording Date,
 RECORDING_DATE_ERROR,This should be later than Start Date,
@@ -1446,6 +1449,7 @@ SESSION_HAS_ENDED,Session has ended.,
 SESSION_HAS_NOT_STARTED,Session has not started.,
 SESSION_IS_IN_PROGRESS,Session is in progress.,
 SESSION_IS_STARTING_SOON,Session is starting soon.,
+SESSION_SLIDES,Session Slides,Link text for the slide deck for an informational session.
 SET_PLANTING_COMPLETE,Planting Complete,
 SET_REMINDER,Set Reminder,
 SET_UP,Set Up,
@@ -1781,6 +1785,7 @@ VIEW_APPLICATION,View Application,
 VIEW_LESS,View Less,
 VIEW_MORE,View More,
 VIEW_PRESCREEN_SUBMISSION,View Pre-screen Submission,
+VIEW_SESSION,View Session,Button label to view the video recording of an informational session
 VIEW_SITES_ZONES_SUBZONES,"View Sites, Zones, and Subzones on a map.",
 VINE,Vine,A type of plant.
 VOTER,Voter: {0},Displays the name of a person voter.

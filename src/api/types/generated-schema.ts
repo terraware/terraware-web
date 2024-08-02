@@ -3920,7 +3920,7 @@ export interface components {
       /** @enum {string} */
       status: "Not Started" | "Starting Soon" | "In Progress" | "Ended";
       /** @enum {string} */
-      type: "One-on-One Session" | "Workshop" | "Live Session";
+      type: "One-on-One Session" | "Workshop" | "Live Session" | "Recorded Session";
     };
     ProjectPayload: {
       /** Format: int64 */

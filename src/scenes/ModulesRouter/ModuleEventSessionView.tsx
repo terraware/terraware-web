@@ -11,7 +11,7 @@ import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { getEventStatus, getEventType } from 'src/types/Module';
-import { getLongDateTime } from 'src/utils/dateFormatter';
+import { getLongDate, getLongDateTime } from 'src/utils/dateFormatter';
 
 import ModuleViewTitle from './ModuleViewTitle';
 import { useModuleData } from './Provider/Context';
@@ -30,7 +30,19 @@ const ModuleEventSessionView = () => {
   const { event, module, moduleId, session } = useModuleData();
 
   const eventType = session?.type ? getEventType(session.type) : '';
-  const buttonLabel = eventType ? strings.formatString(strings.JOIN_EVENT_NAME, eventType)?.toString() : '';
+  const isRecordedSession = eventType === 'Recorded Session';
+  const buttonUrl = isRecordedSession ? session?.recordingUrl : session?.meetingUrl;
+  const buttonLabel = isRecordedSession
+    ? strings.VIEW_SESSION
+    : eventType
+      ? strings.formatString(strings.JOIN_EVENT_NAME, eventType)?.toString()
+      : '';
+  const slidesLabel = isRecordedSession
+    ? strings.SESSION_SLIDES
+    : eventType
+      ? strings.formatString(strings.EVENT_NAME_SLIDES, eventType)
+      : '';
+  const startTimeRenderer = isRecordedSession ? getLongDate : getLongDateTime;
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -71,23 +83,25 @@ const ModuleEventSessionView = () => {
               </Typography>
 
               <Typography marginBottom={theme.spacing(1)}>
-                {session.startTime ? getLongDateTime(session.startTime, activeLocale) : ''}
+                {session.startTime ? startTimeRenderer(session.startTime, activeLocale) : ''}
               </Typography>
 
               <Box marginBottom={theme.spacing(2)}>
-                <Typography
-                  fontSize={'16px'}
-                  fontWeight={600}
-                  lineHeight={'32px'}
-                  sx={{ color: theme.palette.TwClrTxtWarning }}
-                >
-                  {getEventStatus(session.status)}
-                </Typography>
+                {!isRecordedSession && (
+                  <Typography
+                    fontSize={'16px'}
+                    fontWeight={600}
+                    lineHeight={'32px'}
+                    sx={{ color: theme.palette.TwClrTxtWarning }}
+                  >
+                    {getEventStatus(session.status)}
+                  </Typography>
+                )}
 
                 <Button
                   label={buttonLabel}
                   onClick={() => {
-                    openExternalURL(session.meetingUrl);
+                    openExternalURL(buttonUrl);
                   }}
                 />
               </Box>
@@ -100,12 +114,12 @@ const ModuleEventSessionView = () => {
                       openExternalURL(session.slidesUrl);
                     }}
                   >
-                    {eventType ? strings.formatString(strings.EVENT_NAME_SLIDES, eventType) : ''}
+                    {slidesLabel}
                   </Link>
                 </Box>
               )}
 
-              {session?.recordingUrl && (
+              {session?.recordingUrl && !isRecordedSession && (
                 <Box marginBottom={theme.spacing(2)}>
                   <Link
                     fontSize='16px'
@@ -128,12 +142,22 @@ const ModuleEventSessionView = () => {
                 }}
               >
                 <div>
-                  <p>{strings.formatString(strings.EVENT_CALL_DESCRIPTION_1, buttonLabel).toString()}</p>
+                  {isRecordedSession ? (
+                    <p>
+                      <b>{strings.EVENT_RECORDED_SESSION_DESCRIPTION_1}</b>
+                    </p>
+                  ) : (
+                    <p>{strings.formatString(strings.EVENT_CALL_DESCRIPTION_1, buttonLabel).toString()}</p>
+                  )}
                   <p>{strings.formatString(strings.EVENT_CALL_DESCRIPTION_2, eventType).toString()}</p>
                   <ul>
                     <li>{strings.EVENT_CALL_REQUIREMENTS_INTERNET}</li>
-                    <li>{strings.EVENT_CALL_REQUIREMENTS_SPEAKERS_MIC}</li>
-                    <li>{strings.EVENT_CALL_REQUIREMENTS_WEBCAM}</li>
+                    <li>
+                      {isRecordedSession
+                        ? strings.EVENT_RECORDED_SESSION_REQUIREMENTS_SPEAKERS
+                        : strings.EVENT_CALL_REQUIREMENTS_SPEAKERS_MIC}
+                    </li>
+                    {!isRecordedSession && <li>{strings.EVENT_CALL_REQUIREMENTS_WEBCAM}</li>}
                   </ul>
                 </div>
               </Box>
