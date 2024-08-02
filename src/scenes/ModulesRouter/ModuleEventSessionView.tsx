@@ -100,6 +100,8 @@ const ModuleEventSessionView = () => {
 
                 <Button
                   label={buttonLabel}
+                  priority='primary'
+                  size='large'
                   onClick={() => {
                     openExternalURL(buttonUrl);
                   }}
