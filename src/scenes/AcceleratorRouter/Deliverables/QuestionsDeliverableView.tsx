@@ -287,7 +287,7 @@ const QuestionBox = ({
               <Box sx={{ margin: '4px' }}>
                 <VariableStatusBadge status={firstVariableValueStatus} />
               </Box>
-              {!editing && (
+              {!editingId && (
                 <Box className='actions'>
                   <Button
                     id='edit'
