@@ -491,6 +491,11 @@ EST_READY_DATE,Fecha estimada de disponibilidad,
 EST_TOTAL_PLANTS_PLANTING_DENSITY_AREA,Plantas totales estimadas (densidad de plantación × superficie), Estimated Total Plants
 ESTIMATED_READY_DATE,Fecha estimada de finalización,
 EVENT,Evento,
+EVENT_CALL_DESCRIPTION_1,"Hacer clic en ""{0}"" abrirá una ventana del navegador para unirse a una videollamada de Google Meet.",
+EVENT_CALL_DESCRIPTION_2,Para este {0} necesitarás:,{0} is an event type such as Workshop
+EVENT_CALL_REQUIREMENTS_INTERNET,Una conexión a internet en tu dispositivo: banda ancha por cable o inalámbrica (3G o 4G/LTE),
+EVENT_CALL_REQUIREMENTS_SPEAKERS_MIC,"Altavoces y un micrófono: integrados, conectados por USB o Bluetooth inalámbrico.",
+EVENT_CALL_REQUIREMENTS_WEBCAM,"Una cámara web o cámara web HD: integrada, conectada por USB",
 EVENT_DETAILS,Detalles del evento,
 EVENT_NAME_RECORDING,Grabación de {0},
 EVENT_NAME_SLIDES,Diapositivas de {0},
