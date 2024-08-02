@@ -1,29 +1,26 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { Property } from 'csstype';
 import { useParams } from 'react-router-dom';
 
 import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
+import { Button } from '@terraware/web-components';
+import { Property } from 'csstype';
 import { DateTime } from 'luxon';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
+import ProjectFieldTextAreaDisplay from 'src/components/ProjectField/TextAreaDisplay';
+import Card from 'src/components/common/Card';
 import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
 import strings from 'src/strings';
+import { Application, ApplicationStatus } from 'src/types/Application';
 
 import ApplicationDeliverableRow from './ApplicationDeliverableRow';
-import { Application, ApplicationStatus } from 'src/types/Application';
-import Card from 'src/components/common/Card';
-import { Button } from '@terraware/web-components';
-import useNavigateTo from 'src/hooks/useNavigateTo';
-import ProjectFieldTextAreaDisplay from 'src/components/ProjectField/TextAreaDisplay';
 
-const getApplicationStatusColor = (
-  status: ApplicationStatus,
-  theme: Theme
-): Property.Color | string | undefined => {
+const getApplicationStatusColor = (status: ApplicationStatus, theme: Theme): Property.Color | string | undefined => {
   switch (status) {
     case 'Accepted':
     case 'Carbon Eligible':
@@ -52,44 +49,52 @@ const getApplicationStatusColor = (
 
 type ApplicationReviewProps = {
   application: Application;
-}
+};
 
-
-const ApplicationReview = ({application} : ApplicationReviewProps) => {
+const ApplicationReview = ({ application }: ApplicationReviewProps) => {
   const theme = useTheme();
   const { goToParticipantProject } = useNavigateTo();
 
   const color = getApplicationStatusColor(application.status, theme);
-  return <Box 
+  return (
+    <Box
       borderRadius={theme.spacing(1)}
-      display={'flex'} 
-      flexDirection={'column'} 
-      justifyContent={'left'} 
-      width={'100%'} 
+      display={'flex'}
+      flexDirection={'column'}
+      justifyContent={'left'}
+      width={'100%'}
       sx={{
         backgroundColor: theme.palette.TwClrBgSecondary,
       }}
+    >
+      <Box
+        display={'flex'}
+        flexDirection={'row'}
+        justifyContent={'start'}
+        width={'100%'}
+        alignItems={'center'}
+        sx={{
+          padding: theme.spacing(2),
+        }}
       >
-        <Box
-          display={'flex'} 
-          flexDirection={'row'} 
-          justifyContent={'start'} 
-          width={'100%'} 
-          alignItems={'center'}
-          sx={{
-            padding: theme.spacing(2),
-          }}
-        >
         <Typography fontSize={'24px'} fontWeight={600} lineHeight={'32px'}>
           {strings.APPLICATION_STATUS}
         </Typography>
-        <Typography fontSize={'20px'} lineHeight={'28px'} fontWeight={600} color={color || 'black'} marginLeft={theme.spacing(2)}>
+        <Typography
+          fontSize={'20px'}
+          lineHeight={'28px'}
+          fontWeight={600}
+          color={color || 'black'}
+          marginLeft={theme.spacing(2)}
+        >
           {application.status}
         </Typography>
 
-        <Button 
-          label={strings.SEE_PROJECT_DETAILS} 
-          onClick={() => { goToParticipantProject(application.projectId) }} 
+        <Button
+          label={strings.SEE_PROJECT_DETAILS}
+          onClick={() => {
+            goToParticipantProject(application.projectId);
+          }}
           size={'small'}
           priority={'ghost'}
           style={{
@@ -99,17 +104,12 @@ const ApplicationReview = ({application} : ApplicationReviewProps) => {
       </Box>
 
       <Grid container>
-        <ProjectFieldTextAreaDisplay
-          label={strings.FEEDBACK}
-          value={application.feedback}
-        />
-        <ProjectFieldTextAreaDisplay
-          label={strings.INTERNAL_COMMENTS}
-          value={application.internalComment}
-        />
+        <ProjectFieldTextAreaDisplay label={strings.FEEDBACK} value={application.feedback} />
+        <ProjectFieldTextAreaDisplay label={strings.INTERNAL_COMMENTS} value={application.internalComment} />
       </Grid>
     </Box>
-}
+  );
+};
 
 const ApplicationView = () => {
   const { activeLocale } = useLocalization();
