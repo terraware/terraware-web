@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Box, Grid, Typography } from '@mui/material';
-import { TableRowType } from '@terraware/web-components';
+import { Button, TableRowType } from '@terraware/web-components';
 import { TableColumnType } from '@terraware/web-components/components/table/types';
 
 import Table from 'src/components/common/table';
@@ -197,6 +197,16 @@ export default function SpeciesProjectsTable({
             <Typography fontSize='20px' fontWeight={600}>
               {strings.PROJECTS}
             </Typography>
+            {editMode && (
+              <Button
+                icon='plus'
+                id='add-species-to-project'
+                label={strings.ADD_TO_PROJECT}
+                onClick={() => setOpenedAddToProjectModal(true)}
+                priority='secondary'
+                size='medium'
+              />
+            )}
           </Box>
         </Grid>
         <Grid item xs={12}>
