@@ -50,8 +50,10 @@ const CountrySelect = ({ id, label, onChange, region, value }: Props) => {
   }, [activeLocale]);
 
   useEffect(() => {
-    if (value && !countries.some(({ code }) => code === value)) {
-      onChange(undefined, region);
+    if (countries.length) {
+      if (value && !countries.some(({ code }) => code === value)) {
+        onChange(undefined, region);
+      }
     }
   }, [countries, onChange, region, value]);
 
