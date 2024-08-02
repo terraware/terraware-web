@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1722613331667" clover="3.2.0">
-  <project timestamp="1722613331667" name="All files">
-    <metrics statements="23781" coveredstatements="957" conditionals="15390" coveredconditionals="239" methods="7325" coveredmethods="164" elements="46496" coveredelements="1360" complexity="0" loc="23781" ncloc="23781" packages="227" files="1045" classes="1045"/>
+<coverage generated="1722625892716" clover="3.2.0">
+  <project timestamp="1722625892716" name="All files">
+    <metrics statements="23782" coveredstatements="957" conditionals="15390" coveredconditionals="239" methods="7326" coveredmethods="164" elements="46498" coveredelements="1360" complexity="0" loc="23782" ncloc="23782" packages="227" files="1045" classes="1045"/>
     <package name="src">
       <metrics statements="176" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -5768,9 +5768,9 @@
       </file>
     </package>
     <package name="src.components.SpeciesDeliverableTable">
-      <metrics statements="173" coveredstatements="0" conditionals="94" coveredconditionals="0" methods="59" coveredmethods="0"/>
+      <metrics statements="174" coveredstatements="0" conditionals="94" coveredconditionals="0" methods="60" coveredmethods="0"/>
       <file name="AddSpeciesModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/SpeciesDeliverableTable/AddSpeciesModal.tsx">
-        <metrics statements="47" coveredstatements="0" conditionals="29" coveredconditionals="0" methods="19" coveredmethods="0"/>
+        <metrics statements="48" coveredstatements="0" conditionals="29" coveredconditionals="0" methods="20" coveredmethods="0"/>
         <line num="31" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
@@ -5812,12 +5812,13 @@
         <line num="103" count="0" type="stmt"/>
         <line num="104" count="0" type="stmt"/>
         <line num="110" count="0" type="stmt"/>
-        <line num="145" count="0" type="stmt"/>
+        <line num="144" count="0" type="stmt"/>
         <line num="147" count="0" type="stmt"/>
-        <line num="148" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="149" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="150" count="0" type="stmt"/>
-        <line num="159" count="0" type="stmt"/>
+        <line num="149" count="0" type="stmt"/>
+        <line num="150" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="151" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="152" count="0" type="stmt"/>
+        <line num="161" count="0" type="stmt"/>
       </file>
       <file name="EditSpeciesModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/SpeciesDeliverableTable/EditSpeciesModal.tsx">
         <metrics statements="33" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="8" coveredmethods="0"/>
