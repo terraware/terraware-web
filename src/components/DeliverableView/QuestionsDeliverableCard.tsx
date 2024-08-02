@@ -60,7 +60,7 @@ const QuestionBox = ({
           {variable.description}
         </Typography>
       )}
-      {!!firstVariableValue?.feedback && (
+      {!!firstVariableValue?.feedback && firstVariableValue?.status === 'Rejected' && (
         <Box marginBottom={theme.spacing(2)}>
           <Message body={firstVariableValue.feedback} priority='critical' type='page' />
         </Box>
