@@ -14,13 +14,15 @@ export type ModuleEventSession = components['schemas']['ProjectModuleEventSessio
 export type ModuleEventSessionStatus = components['schemas']['ProjectModuleEventSession']['status'];
 
 export type ModuleEventType = ModuleEventSession['type'];
-export const MODULE_EVENTS: ModuleEventType[] = ['Live Session', 'One-on-One Session', 'Workshop'];
+export const MODULE_EVENTS: ModuleEventType[] = ['Live Session', 'One-on-One Session', 'Recorded Session', 'Workshop'];
 export const getEventType = (input: ModuleEventType): string => {
   switch (input) {
     case 'Live Session':
       return strings.LIVE_SESSION;
     case 'One-on-One Session':
       return strings.ONE_ON_ONE_SESSION;
+    case 'Recorded Session':
+      return strings.RECORDED_SESSION;
     case 'Workshop':
       return strings.WORKSHOP;
     default:
