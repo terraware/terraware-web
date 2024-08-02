@@ -8,7 +8,6 @@ import Table from 'src/components/common/table';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
-import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { requestListParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { selectParticipantProjectSpeciesListRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -43,7 +42,6 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
   const theme = useTheme();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { goToParticipantProjectSpecies } = useNavigateTo();
-  const { currentDeliverables } = useParticipantData();
 
   const participantProjectSpecies = useAppSelector(selectParticipantProjectSpeciesListRequest(deliverable.projectId));
 
@@ -61,10 +59,6 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
       participantProjectSpecies_submissionStatus: value.participantProjectSpecies.submissionStatus,
     }));
   }, [participantProjectSpecies]);
-
-  const addSpeciesToProjectButtonIsDisabled = useMemo(() => {
-    return !currentDeliverables?.find((deliverable) => deliverable.id === deliverable.id);
-  }, [currentDeliverables, deliverable]);
 
   useEffect(() => {
     void dispatch(requestListParticipantProjectSpecies(deliverable.projectId));
@@ -118,7 +112,6 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
 
             {!isAcceleratorRoute && (
               <Button
-                disabled={addSpeciesToProjectButtonIsDisabled}
                 icon='plus'
                 id='add-species-to-project'
                 label='Add Species to Project'

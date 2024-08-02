@@ -3672,8 +3672,11 @@ export interface components {
       projects: components["schemas"]["ParticipantProjectPayload"][];
     };
     ParticipantProjectForSpeciesPayload: {
-      /** Format: int64 */
-      activeDeliverableId?: number;
+      /**
+       * Format: int64
+       * @description This deliverable ID is associated to the active or most recent cohort module, if available.
+       */
+      deliverableId?: number;
       /** Format: int64 */
       participantProjectSpeciesId: number;
       /** @enum {string} */
