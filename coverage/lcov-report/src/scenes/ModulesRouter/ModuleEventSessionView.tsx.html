@@ -240,25 +240,15 @@
 <a name='L175'></a><a href='#L175'>175</a>
 <a name='L176'></a><a href='#L176'>176</a>
 <a name='L177'></a><a href='#L177'>177</a>
-<a name='L178'></a><a href='#L178'>178</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L178'></a><a href='#L178'>178</a>
+<a name='L179'></a><a href='#L179'>179</a>
+<a name='L180'></a><a href='#L180'>180</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -283,6 +273,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -364,6 +355,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -435,18 +439,6 @@ import { getLongDateTime } from 'src/utils/dateFormatter';
 import ModuleViewTitle from './ModuleViewTitle';
 import { useModuleData } from './Provider/Context';
 &nbsp;
-const CALL_DESCRIPTION_HTML = <span class="cstat-no" title="statement not covered" >`</span>
-  &lt;div&gt;
-    &lt;p&gt;Clicking "Join" will open up a browser window to join a Google Meet video call.&lt;/p&gt;
-    &lt;p&gt;For this Live Session you will need:&lt;/p&gt;
-    &lt;ul&gt;
-      &lt;li&gt;An internet connection – broadband wired or wireless (3G or 4G/LTE)&lt;/li&gt;
-      &lt;li&gt;Speakers and a microphone – built-in, USB plug-in, or wireless Bluetooth&lt;/li&gt;
-      &lt;li&gt;A webcam or HD webcam - built-in, USB plug-in&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/div&gt;
-`;
-&nbsp;
 const openExternalURL = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(u</span>rl: string | undefined, target = <span class="branch-0 cbranch-no" title="branch not covered" >'_blank',</span> features = <span class="branch-0 cbranch-no" title="branch not covered" >'noopener noreferrer')</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  if (url) {</span>
 <span class="cstat-no" title="statement not covered" >    window.open(url, target, features);</span>
@@ -461,6 +453,7 @@ const ModuleEventSessionView = <span class="cstat-no" title="statement not cover
   const { event, module, moduleId, session } = <span class="cstat-no" title="statement not covered" >useModuleData();</span>
 &nbsp;
   const eventType = <span class="cstat-no" title="statement not covered" >session?.type ? getEventType(session.type) : '';</span>
+  const buttonLabel = <span class="cstat-no" title="statement not covered" >eventType ? strings.formatString(strings.JOIN_EVENT_NAME, eventType)?.toString() : '';</span>
 &nbsp;
   const crumbs: Crumb[] = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >[</span>
@@ -515,7 +508,7 @@ const ModuleEventSessionView = <span class="cstat-no" title="statement not cover
                 &lt;/Typography&gt;
 &nbsp;
                 &lt;Button
-                  label={eventType ? strings.formatString(strings.JOIN_EVENT_NAME, eventType)?.toString() : ''}
+                  label={buttonLabel}
                   onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; {
 <span class="cstat-no" title="statement not covered" >                    openExternalURL(session.meetingUrl);</span>
                   }}
@@ -551,9 +544,22 @@ const ModuleEventSessionView = <span class="cstat-no" title="statement not cover
 &nbsp;
             &lt;Grid item xs={6} style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}&gt;
               &lt;Box
-                dangerouslySetInnerHTML={{ __html: CALL_DESCRIPTION_HTML }}
-                sx={{ backgroundColor: theme.palette.TwClrBgSecondary, borderRadius: '8px', padding: '8px 16px' }}
-              /&gt;
+                sx={{
+                  backgroundColor: theme.palette.TwClrBgSecondary,
+                  borderRadius: '8px',
+                  padding: '8px 16px',
+                }}
+              &gt;
+                &lt;div&gt;
+                  &lt;p&gt;{strings.formatString(strings.EVENT_CALL_DESCRIPTION_1, buttonLabel).toString()}&lt;/p&gt;
+                  &lt;p&gt;{strings.formatString(strings.EVENT_CALL_DESCRIPTION_2, eventType).toString()}&lt;/p&gt;
+                  &lt;ul&gt;
+                    &lt;li&gt;{strings.EVENT_CALL_REQUIREMENTS_INTERNET}&lt;/li&gt;
+                    &lt;li&gt;{strings.EVENT_CALL_REQUIREMENTS_SPEAKERS_MIC}&lt;/li&gt;
+                    &lt;li&gt;{strings.EVENT_CALL_REQUIREMENTS_WEBCAM}&lt;/li&gt;
+                  &lt;/ul&gt;
+                &lt;/div&gt;
+              &lt;/Box&gt;
             &lt;/Grid&gt;
 &nbsp;
             &lt;Grid item xs style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}&gt;
@@ -601,7 +607,7 @@ export default ModuleEventSessionView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-02T19:52:59.981Z
+                at 2024-08-02T20:59:21.722Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
