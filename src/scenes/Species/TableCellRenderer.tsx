@@ -124,7 +124,7 @@ export default function SpeciesCellRenderer(props: RendererProps<TableRowType>):
       />
     );
   } else if (column.key === 'participantProjects') {
-    return <CellRenderer {...props} value={<TextTruncated stringList={(value || []) as string[]} />} />;
+    return <CellRenderer {...props} value={<TextTruncated fontSize={16} stringList={(value || []) as string[]} />} />;
   }
 
   return <CellRenderer {...props} />;
