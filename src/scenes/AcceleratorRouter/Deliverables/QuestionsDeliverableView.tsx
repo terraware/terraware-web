@@ -249,67 +249,84 @@ const QuestionBox = ({
         {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectItem} />}
         <Box
           sx={{
-            marginBottom: theme.spacing(4),
+            borderRadius: 2,
             '&:hover': {
-              background: theme.palette.TwClrBgHover,
+              background: editing ? theme.palette.TwClrBgActive : theme.palette.TwClrBgHover,
               '.actions': {
                 display: 'block',
               },
             },
-            background: displayActions ? theme.palette.TwClrBgHover : 'none',
+            background: editing ? theme.palette.TwClrBgActive : displayActions ? theme.palette.TwClrBgHover : 'none',
             '& .actions': {
               display: displayActions ? 'block' : 'none',
             },
+            marginBottom: theme.spacing(4),
             padding: 2,
-            borderRadius: 2,
+            width: '100%',
           }}
         >
           <Box
             sx={{
-              float: 'right',
-              marginBottom: '16px',
-              marginLeft: '16px',
-              display: 'flex',
               alignItems: 'center',
+              display: 'flex',
+              justifyContent: 'space-apart',
+              marginBottom: '16px',
+              width: '100%',
             }}
           >
-            <VariableStatusBadge status={firstVariableValueStatus} />
-            {!editingId && (
-              <Box className='actions'>
-                <Button
-                  id='edit'
-                  label={strings.EDIT}
-                  onClick={onEditItem}
-                  icon='iconEdit'
-                  priority='secondary'
-                  className='edit-button'
-                  size='small'
-                  type='passive'
-                />
-                <Button
-                  label={strings.REJECT_ACTION}
-                  onClick={() => setShowRejectDialog(true)}
-                  priority='secondary'
-                  type='destructive'
-                  disabled={firstVariableValueStatus === 'Rejected'}
-                />
-                <Button
-                  label={strings.APPROVE}
-                  onClick={approveItem}
-                  priority='secondary'
-                  disabled={firstVariableValueStatus === 'Approved'}
-                />
-                <OptionsMenu
-                  onOptionItemClick={onOptionItemClick}
-                  optionItems={optionItems}
-                  onOpen={() => setDisplayActions(true)}
-                  onClose={() => setDisplayActions(false)}
-                />
-              </Box>
-            )}
-          </Box>
+            <Typography sx={{ fontWeight: '600' }}>{variable.name}</Typography>
 
-          <Typography sx={{ fontWeight: '600', marginBottom: '16px' }}>{variable.name}</Typography>
+            <Box
+              sx={{
+                alignItems: 'center',
+                display: 'flex',
+                flexGrow: 1,
+                justifyContent: 'flex-end',
+              }}
+            >
+              <Box sx={{ margin: '4px' }}>
+                <VariableStatusBadge status={firstVariableValueStatus} />
+              </Box>
+              {!editingId && (
+                <Box className='actions'>
+                  <Button
+                    id='edit'
+                    label={strings.EDIT}
+                    onClick={onEditItem}
+                    icon='iconEdit'
+                    priority='secondary'
+                    className='edit-button'
+                    size='small'
+                    sx={{ '&.button': { margin: '4px' } }}
+                    type='passive'
+                  />
+                  <Button
+                    label={strings.REJECT_ACTION}
+                    onClick={() => setShowRejectDialog(true)}
+                    priority='secondary'
+                    sx={{ '&.button': { margin: '4px' } }}
+                    type='destructive'
+                    disabled={firstVariableValueStatus === 'Rejected'}
+                  />
+                  <Button
+                    label={strings.APPROVE}
+                    onClick={approveItem}
+                    priority='secondary'
+                    disabled={firstVariableValueStatus === 'Approved'}
+                    sx={{ '&.button': { margin: '4px' } }}
+                  />
+                  <OptionsMenu
+                    onOptionItemClick={onOptionItemClick}
+                    optionItems={optionItems}
+                    onOpen={() => setDisplayActions(true)}
+                    onClose={() => setDisplayActions(false)}
+                    size='small'
+                    sx={{ '& .button': { margin: '4px' }, marginLeft: 0 }}
+                  />
+                </Box>
+              )}
+            </Box>
+          </Box>
 
           {!!variable.description && (
             <Typography
@@ -318,18 +335,22 @@ const QuestionBox = ({
                 fontSize: '14px',
                 fontStyle: 'italic',
                 lineHeight: '20px',
-                marginBottom: '16px',
+                marginY: '16px',
               }}
             >
               {variable.description}
             </Typography>
           )}
 
-          <VariableInternalComment variable={variable} update={onUpdateInternalComment} editing={editing} />
+          <VariableInternalComment
+            editing={editing}
+            sx={{ marginY: theme.spacing(2) }}
+            update={onUpdateInternalComment}
+            variable={variable}
+          />
 
           {editing && (
-            <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-              <Grid item xs={12}></Grid>
+            <Grid container spacing={3} sx={{ marginBottom: '24px', padding: 0 }} textAlign='left'>
               <Grid item xs={12}>
                 <DeliverableVariableDetailsInput
                   values={pendingValues || variable.values}
@@ -347,7 +368,7 @@ const QuestionBox = ({
           )}
 
           {firstVariableValue?.feedback && (
-            <Box marginBottom={theme.spacing(2)} display='flex' alignItems='center'>
+            <Box marginY={theme.spacing(2)} display='flex' alignItems='center'>
               <Message
                 body={
                   <Typography>

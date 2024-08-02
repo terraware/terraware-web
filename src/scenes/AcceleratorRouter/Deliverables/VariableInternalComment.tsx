@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 
-import { Box, Grid, useTheme } from '@mui/material';
+import { Box, Grid, SxProps, useTheme } from '@mui/material';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
@@ -13,9 +13,10 @@ interface VariableInternalCommentProps {
   variable: VariableWithValues | SectionVariableWithValues;
   update: (internalComment: string) => void;
   editing: boolean;
+  sx?: SxProps;
 }
 
-function VariableInternalComment({ variable, update, editing }: VariableInternalCommentProps) {
+function VariableInternalComment({ variable, update, editing, sx }: VariableInternalCommentProps) {
   const theme = useTheme();
 
   const variableValues = variable?.variableValues || [];
@@ -42,7 +43,7 @@ function VariableInternalComment({ variable, update, editing }: VariableInternal
 
   return (
     (editing || internalComment) && (
-      <>
+      <Box sx={[...(Array.isArray(sx) ? sx : [sx])]}>
         <Box
           display='flex'
           alignItems='center'
@@ -103,7 +104,7 @@ function VariableInternalComment({ variable, update, editing }: VariableInternal
             </Grid>
           </Grid>
         </DialogBox>
-      </>
+      </Box>
     )
   );
 }

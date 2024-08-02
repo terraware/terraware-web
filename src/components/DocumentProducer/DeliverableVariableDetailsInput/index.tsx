@@ -54,7 +54,10 @@ const DeliverableVariableDetailsInput = ({
   const [textValuesList, setTextValuesList] = useState<string[]>();
   const theme = useTheme();
 
-  const formElementStyles = { margin: theme.spacing(1, 0) };
+  const formElementStyles = {
+    margin: theme.spacing(1, 0),
+    maxWidth: '33%',
+  };
 
   useEffect(() => {
     if (values?.length) {
@@ -234,16 +237,6 @@ const DeliverableVariableDetailsInput = ({
 
   return (
     <>
-      <Textfield
-        autoFocus
-        id='name'
-        label=''
-        type='text'
-        value={variable.name}
-        display={true}
-        sx={[formElementStyles, { '& p.textfield-value--display': { fontWeight: '600' } }]}
-      />
-
       {variable.description && (
         <Textfield
           id='description'
@@ -285,7 +278,7 @@ const DeliverableVariableDetailsInput = ({
                 type={'text'}
                 onChange={(newValue: any) => onChangeValueHandler(newValue, 'value', index)}
                 value={iValue?.toString()}
-                sx={{ margin: theme.spacing(1, 0), flex: 1 }}
+                sx={[formElementStyles, { flex: 1 }]}
               />
               {variable.isList && (
                 <IconButton

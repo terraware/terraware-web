@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 
-import { Box, Grid, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import Metadata from 'src/components/DeliverableView/Metadata';
 import DeliverableVariableDetailsInput from 'src/components/DocumentProducer/DeliverableVariableDetailsInput';
@@ -57,24 +57,45 @@ const QuestionBox = ({
 
   return (
     <Box key={index} data-variable-id={variable.id}>
-      <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
+      <Grid container spacing={2} sx={{ marginBottom: '16px', padding: 0 }} textAlign='left'>
         <Grid item xs={12}>
-          <Box>
-            <Box sx={{ float: 'right', marginBottom: '16px', marginLeft: '16px' }}>
-              {hideStatusBadge !== true && <VariableStatusBadge status={firstVariableValueStatus} />}
+          <Box
+            sx={{
+              alignItems: 'center',
+              display: 'flex',
+              justifyContent: 'space-apart',
+              width: '100%',
+            }}
+          >
+            <Typography sx={{ fontWeight: '600' }}>{variable.name}</Typography>
+
+            <Box
+              sx={{
+                alignItems: 'center',
+                display: 'flex',
+                flexGrow: 1,
+                justifyContent: 'flex-end',
+              }}
+            >
+              <Box sx={{ marginLeft: '16px' }}>
+                {hideStatusBadge !== true && <VariableStatusBadge status={firstVariableValueStatus} />}
+              </Box>
             </Box>
-            <DeliverableVariableDetailsInput
-              values={pendingValues || variable.values}
-              setCellValues={setCellValues}
-              setDeletedImages={setDeletedImages}
-              setImages={setImages}
-              setNewImages={setNewImages}
-              setValues={setValues}
-              variable={variable}
-              addRemovedValue={addRemovedValue}
-              projectId={projectId}
-            />
           </Box>
+        </Grid>
+
+        <Grid item xs={12}>
+          <DeliverableVariableDetailsInput
+            values={pendingValues || variable.values}
+            setCellValues={setCellValues}
+            setDeletedImages={setDeletedImages}
+            setImages={setImages}
+            setNewImages={setNewImages}
+            setValues={setValues}
+            variable={variable}
+            addRemovedValue={addRemovedValue}
+            projectId={projectId}
+          />
         </Grid>
       </Grid>
     </Box>
