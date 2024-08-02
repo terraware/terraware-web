@@ -40,7 +40,7 @@ const getApplicationStatusColor = (
     case 'Failed Pre-screen':
     case 'Passed Pre-screen':
     default:
-      return theme.palette.TwClrTxtInfo;
+      return theme.palette.TwClrTxtWarning;
   }
 };
 

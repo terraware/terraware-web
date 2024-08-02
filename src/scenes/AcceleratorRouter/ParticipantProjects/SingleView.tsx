@@ -131,7 +131,7 @@ const SingleView = () => {
               {!!projectApplication?.id && (
                 <ApplicationStatusCard
                   application={projectApplication}
-                  linkTo={APP_PATHS.APPLICATION_OVERVIEW.replace(':applicationId', `${projectApplication.id}`)}
+                  linkTo={APP_PATHS.ACCELERATOR_APPLICATION.replace(':applicationId', `${projectApplication.id}`)}
                   md={!isAllowedViewScoreAndVoting ? 12 : undefined}
                 />
               )}
