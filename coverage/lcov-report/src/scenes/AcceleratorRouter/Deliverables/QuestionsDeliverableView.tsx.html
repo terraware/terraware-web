@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/60</span>
+                <span class='fraction'>0/64</span>
             </div>
         
             
@@ -541,7 +541,28 @@
 <a name='L476'></a><a href='#L476'>476</a>
 <a name='L477'></a><a href='#L477'>477</a>
 <a name='L478'></a><a href='#L478'>478</a>
-<a name='L479'></a><a href='#L479'>479</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L479'></a><a href='#L479'>479</a>
+<a name='L480'></a><a href='#L480'>480</a>
+<a name='L481'></a><a href='#L481'>481</a>
+<a name='L482'></a><a href='#L482'>482</a>
+<a name='L483'></a><a href='#L483'>483</a>
+<a name='L484'></a><a href='#L484'>484</a>
+<a name='L485'></a><a href='#L485'>485</a>
+<a name='L486'></a><a href='#L486'>486</a>
+<a name='L487'></a><a href='#L487'>487</a>
+<a name='L488'></a><a href='#L488'>488</a>
+<a name='L489'></a><a href='#L489'>489</a>
+<a name='L490'></a><a href='#L490'>490</a>
+<a name='L491'></a><a href='#L491'>491</a>
+<a name='L492'></a><a href='#L492'>492</a>
+<a name='L493'></a><a href='#L493'>493</a>
+<a name='L494'></a><a href='#L494'>494</a>
+<a name='L495'></a><a href='#L495'>495</a>
+<a name='L496'></a><a href='#L496'>496</a>
+<a name='L497'></a><a href='#L497'>497</a>
+<a name='L498'></a><a href='#L498'>498</a>
+<a name='L499'></a><a href='#L499'>499</a>
+<a name='L500'></a><a href='#L500'>500</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -831,7 +852,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -845,8 +881,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1270,67 +1312,84 @@ const QuestionBox = <span class="cstat-no" title="statement not covered" ><span 
         {showRejectDialog &amp;&amp; &lt;RejectDialog onClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setShowRejectDialog(false)}</span> onSubmit={rejectItem} /&gt;}
         &lt;Box
           sx={{
-            marginBottom: theme.spacing(4),
+            borderRadius: 2,
             '&amp;:hover': {
-              background: theme.palette.TwClrBgHover,
+              background: editing ? theme.palette.TwClrBgActive : theme.palette.TwClrBgHover,
               '.actions': {
                 display: 'block',
               },
             },
-            background: displayActions ? theme.palette.TwClrBgHover : 'none',
+            background: editing ? theme.palette.TwClrBgActive : displayActions ? theme.palette.TwClrBgHover : 'none',
             '&amp; .actions': {
               display: displayActions ? 'block' : 'none',
             },
+            marginBottom: theme.spacing(4),
             padding: 2,
-            borderRadius: 2,
+            width: '100%',
           }}
         &gt;
           &lt;Box
             sx={{
-              float: 'right',
-              marginBottom: '16px',
-              marginLeft: '16px',
-              display: 'flex',
               alignItems: 'center',
+              display: 'flex',
+              justifyContent: 'space-apart',
+              marginBottom: '16px',
+              width: '100%',
             }}
           &gt;
-            &lt;VariableStatusBadge status={firstVariableValueStatus} /&gt;
-            {!editingId &amp;&amp; (
-              &lt;Box className='actions'&gt;
-                &lt;Button
-                  id='edit'
-                  label={strings.EDIT}
-                  onClick={onEditItem}
-                  icon='iconEdit'
-                  priority='secondary'
-                  className='edit-button'
-                  size='small'
-                  type='passive'
-                /&gt;
-                &lt;Button
-                  label={strings.REJECT_ACTION}
-                  onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setShowRejectDialog(true)}</span>
-                  priority='secondary'
-                  type='destructive'
-                  disabled={firstVariableValueStatus === 'Rejected'}
-                /&gt;
-                &lt;Button
-                  label={strings.APPROVE}
-                  onClick={approveItem}
-                  priority='secondary'
-                  disabled={firstVariableValueStatus === 'Approved'}
-                /&gt;
-                &lt;OptionsMenu
-                  onOptionItemClick={onOptionItemClick}
-                  optionItems={optionItems}
-                  onOpen={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setDisplayActions(true)}</span>
-                  onClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setDisplayActions(false)}</span>
-                /&gt;
-              &lt;/Box&gt;
-            )}
-          &lt;/Box&gt;
+            &lt;Typography sx={{ fontWeight: '600' }}&gt;{variable.name}&lt;/Typography&gt;
 &nbsp;
-          &lt;Typography sx={{ fontWeight: '600', marginBottom: '16px' }}&gt;{variable.name}&lt;/Typography&gt;
+            &lt;Box
+              sx={{
+                alignItems: 'center',
+                display: 'flex',
+                flexGrow: 1,
+                justifyContent: 'flex-end',
+              }}
+            &gt;
+              &lt;Box sx={{ margin: '4px' }}&gt;
+                &lt;VariableStatusBadge status={firstVariableValueStatus} /&gt;
+              &lt;/Box&gt;
+              {!editingId &amp;&amp; (
+                &lt;Box className='actions'&gt;
+                  &lt;Button
+                    id='edit'
+                    label={strings.EDIT}
+                    onClick={onEditItem}
+                    icon='iconEdit'
+                    priority='secondary'
+                    className='edit-button'
+                    size='small'
+                    sx={{ '&amp;.button': { margin: '4px' } }}
+                    type='passive'
+                  /&gt;
+                  &lt;Button
+                    label={strings.REJECT_ACTION}
+                    onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setShowRejectDialog(true)}</span>
+                    priority='secondary'
+                    sx={{ '&amp;.button': { margin: '4px' } }}
+                    type='destructive'
+                    disabled={firstVariableValueStatus === 'Rejected'}
+                  /&gt;
+                  &lt;Button
+                    label={strings.APPROVE}
+                    onClick={approveItem}
+                    priority='secondary'
+                    disabled={firstVariableValueStatus === 'Approved'}
+                    sx={{ '&amp;.button': { margin: '4px' } }}
+                  /&gt;
+                  &lt;OptionsMenu
+                    onOptionItemClick={onOptionItemClick}
+                    optionItems={optionItems}
+                    onOpen={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setDisplayActions(true)}</span>
+                    onClose={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setDisplayActions(false)}</span>
+                    size='small'
+                    sx={{ '&amp; .button': { margin: '4px' }, marginLeft: 0 }}
+                  /&gt;
+                &lt;/Box&gt;
+              )}
+            &lt;/Box&gt;
+          &lt;/Box&gt;
 &nbsp;
           {!!variable.description &amp;&amp; (
             &lt;Typography
@@ -1339,18 +1398,22 @@ const QuestionBox = <span class="cstat-no" title="statement not covered" ><span 
                 fontSize: '14px',
                 fontStyle: 'italic',
                 lineHeight: '20px',
-                marginBottom: '16px',
+                marginY: '16px',
               }}
             &gt;
               {variable.description}
             &lt;/Typography&gt;
           )}
 &nbsp;
-          &lt;VariableInternalComment variable={variable} update={onUpdateInternalComment} editing={editing} /&gt;
+          &lt;VariableInternalComment
+            editing={editing}
+            sx={{ marginY: theme.spacing(2) }}
+            update={onUpdateInternalComment}
+            variable={variable}
+          /&gt;
 &nbsp;
           {editing &amp;&amp; (
-            &lt;Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'&gt;
-              &lt;Grid item xs={12}&gt;&lt;/Grid&gt;
+            &lt;Grid container spacing={3} sx={{ marginBottom: '24px', padding: 0 }} textAlign='left'&gt;
               &lt;Grid item xs={12}&gt;
                 &lt;DeliverableVariableDetailsInput
                   values={pendingValues || variable.values}
@@ -1368,7 +1431,7 @@ const QuestionBox = <span class="cstat-no" title="statement not covered" ><span 
           )}
 &nbsp;
           {firstVariableValue?.feedback &amp;&amp; (
-            &lt;Box marginBottom={theme.spacing(2)} display='flex' alignItems='center'&gt;
+            &lt;Box marginY={theme.spacing(2)} display='flex' alignItems='center'&gt;
               &lt;Message
                 body={
                   &lt;Typography&gt;
@@ -1504,7 +1567,7 @@ export default QuestionsDeliverableView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-02T19:11:32.029Z
+                at 2024-08-02T19:36:29.368Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
