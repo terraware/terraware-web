@@ -46,8 +46,6 @@ const ApplicationReviewModal = ({
     'Pre-check',
     'Ready for Review',
     'Submitted',
-    'Passed Pre-screen',
-    'Failed Pre-screen',
   ];
 
   const dropdownOptions: DropdownItem[] = statusOptions.map((status) => ({
