@@ -499,6 +499,8 @@ EVENT_CALL_REQUIREMENTS_WEBCAM,"Una cámara web o cámara web HD: integrada, con
 EVENT_DETAILS,Detalles del evento,
 EVENT_NAME_RECORDING,Grabación de {0},
 EVENT_NAME_SLIDES,Diapositivas de {0},
+EVENT_RECORDED_SESSION_DESCRIPTION_1,Puedes ver esta sesión grabada cuando quieras y las veces que necesites.,
+EVENT_RECORDED_SESSION_REQUIREMENTS_SPEAKERS,"Altavoces o auriculares: integrados, con conexión USB o inalámbricos con tecnología Bluetooth.",
 EXCLUSION_AREAS,Zonas de exclusión,
 EXISTING_PROJECT_ACCESSIONS_BODY,"Hay accesiones que ya se añadieron a un proyecto existente. Si selecciona dichas accesiones aquí, reemplazará el proyecto con {0} (en vez de crear una asociación adicional).",
 EXISTING_PROJECT_ACCESSIONS_TITLE,Proyecto existente con accesiones,
@@ -1203,6 +1205,7 @@ RECEIVING_DATE_REQUIRED,Fecha de recepción *,
 RECEIVING_NURSERY_REQUIRED,Vivero de recepción *,
 RECOMMENDED,Recomendado,
 RECORDED_PLANTS,Plantas registradas,
+RECORDED_SESSION,Sesión grabada,A video recording of an informational session.
 RECORDED_SPECIES,Especies registradas,
 RECORDING_DATE,Fecha de registro,
 RECORDING_DATE_ERROR,Debe ser posterior a la fecha de inicio,
@@ -1446,6 +1449,7 @@ SESSION_HAS_ENDED,La sesión finalizó.,
 SESSION_HAS_NOT_STARTED,La sesión no comenzó.,
 SESSION_IS_IN_PROGRESS,La sesión está en curso.,
 SESSION_IS_STARTING_SOON,La sesión comienza pronto.,
+SESSION_SLIDES,Diapositivas de la sesión,Link text for the slide deck for an informational session.
 SET_PLANTING_COMPLETE,Plantación completa,
 SET_REMINDER,Establecer recordatorio,
 SET_UP,Configurar,
@@ -1781,6 +1785,7 @@ VIEW_APPLICATION,Ver solicitud,
 VIEW_LESS,Ver menos,
 VIEW_MORE,Ver más,
 VIEW_PRESCREEN_SUBMISSION,Ver envío previo a la pantalla,
+VIEW_SESSION,Ver sesión,Button label to view the video recording of an informational session
 VIEW_SITES_ZONES_SUBZONES,"Ver Sitios, Zonas y Subzonas en el mapa.",
 VINE,Enredadera,A type of plant.
 VOTER,Votante: {0},Displays the name of a person voter.
