@@ -6,3 +6,4 @@ export type ApplicationStatus = Application['status'];
 export type ApplicationModule = components['schemas']['ApplicationModulePayload'];
 export type ApplicationDeliverable = components['schemas']['ApplicationDeliverablePayload'];
 export type ApplicationReview = components['schemas']['ReviewApplicationRequestPayload'];
+export type ApplicationReviewStatus = ApplicationReview['status'];
