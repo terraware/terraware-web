@@ -4,11 +4,10 @@ import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import { Property } from 'csstype';
 
-import useNavigateTo from 'src/hooks/useNavigateTo';
-import { Application, ApplicationStatus } from 'src/types/Application';
-
 import ProjectFieldTextAreaDisplay from 'src/components/ProjectField/TextAreaDisplay';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import strings from 'src/strings';
+import { Application, ApplicationStatus } from 'src/types/Application';
 
 const getApplicationStatusColor = (status: ApplicationStatus, theme: Theme): Property.Color | string | undefined => {
   switch (status) {
