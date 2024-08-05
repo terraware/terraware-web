@@ -4,7 +4,7 @@ import { Box, Grid, GridProps, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
-import RejectDialog from 'src/components/AcceleratorDeliverableView/VariableRejectDialog';
+import RejectDialog from 'src/components/AcceleratorDeliverableView/RejectDialog';
 import { Crumb } from 'src/components/BreadCrumbs';
 import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
 import InternalComment from 'src/components/DeliverableView/InternalComment';

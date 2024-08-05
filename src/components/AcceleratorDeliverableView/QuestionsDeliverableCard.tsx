@@ -32,7 +32,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import VariableInternalComment from '../Variables/VariableInternalComment';
 import VariableStatusBadge from '../Variables/VariableStatusBadge';
-import VariableRejectDialog from './VariableRejectDialog';
+import VariableRejectDialog from './RejectDialog';
 
 const QuestionBox = ({
   editingId,

@@ -4,6 +4,7 @@ import { Box, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem } from '@terraware/web-components';
 
 import AcceleratorDeliverableCard from 'src/components/AcceleratorDeliverableView/DeliverableCard';
+import RejectDialog from 'src/components/AcceleratorDeliverableView/RejectDialog';
 import { Crumb } from 'src/components/BreadCrumbs';
 import MobileMessage from 'src/components/DeliverableView/MobileMessage';
 import TitleBar from 'src/components/DeliverableView/TitleBar';
@@ -20,7 +21,6 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import DownloadSpeciesSnapshotModal from '../Species/DownloadSpeciesSnapshotModal';
 import ApproveDeliverableDialog from './ApproveDeliverableDialog';
 import ApprovedDeliverableMessage from './ApprovedDeliverableMessage';
-import RejectDialog from './RejectDialog';
 import RejectedDeliverableMessage from './RejectedDeliverableMessage';
 
 const DeliverableView = () => {
