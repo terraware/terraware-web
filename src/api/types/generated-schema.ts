@@ -1240,6 +1240,8 @@ export interface components {
       /** Format: int64 */
       id: number;
       internalComment?: string;
+      /** Format: date-time */
+      modifiedTime?: string;
       /** Format: int64 */
       moduleId: number;
       moduleName: string;
@@ -1289,6 +1291,7 @@ export interface components {
       internalName?: string;
       /** Format: int64 */
       organizationId: number;
+      organizationName: string;
       /** Format: int64 */
       projectId: number;
       projectName: string;
