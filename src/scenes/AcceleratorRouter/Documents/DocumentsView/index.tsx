@@ -23,7 +23,7 @@ import { getDocumentTemplateName } from './helpers';
 
 const tableColumns: TableColumnType[] = [
   { key: 'name', name: strings.NAME, type: 'string' },
-  { key: 'organizationName', name: strings.ORGANIZATION, type: 'string' },
+  { key: 'projectName', name: strings.PROJECT, type: 'string' },
   { key: 'documentTemplateId', name: strings.DOCUMENT_TEMPLATE, type: 'string' },
   { key: 'versions', name: strings.VERSIONS, type: 'number' },
   { key: 'createdTime', name: strings.CREATED, type: 'date' },
