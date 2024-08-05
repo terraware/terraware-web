@@ -1,13 +1,12 @@
 import React, { ReactNode, useCallback, useMemo, useState } from 'react';
 
+import UpdateOrUploadBoundaryModal from 'src/components/Application/UpdateOrUploadBoundaryModal';
 import ModuleDetailsCard from 'src/components/ModuleDetailsCard';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
+import { useApplicationData } from 'src/providers/Application/Context';
 import strings from 'src/strings';
 import { ApplicationDeliverable, ApplicationModule } from 'src/types/Application';
-
-import { useApplicationData } from '../../../../providers/Application/Context';
-import UpdateOrUploadBoundaryModal from '../Map/UpdateOrUploadBoundaryModal';
 
 type SectionViewProp = {
   children?: ReactNode;
