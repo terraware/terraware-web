@@ -32,7 +32,7 @@ const ApplicationDeliverable = () => {
       activeLocale && selectedApplication?.id
         ? [
             {
-              name: strings.PRESCREEN,
+              name: strings.APPLICATION,
               to: APP_PATHS.ACCELERATOR_APPLICATION.replace(':applicationId', `${selectedApplication.id}`),
             },
           ]
