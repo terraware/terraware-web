@@ -110,7 +110,10 @@ const ScorecardEditView = () => {
                 phaseScores={phase0Scores}
                 onChangeValue={handleOnChangeValue}
                 onChangeQualitative={handleOnChangeQualitative}
-                editable={project?.cohortPhase === 'Phase 0 - Due Diligence'}
+                editable={
+                  project?.cohortPhase &&
+                  ['Pre-Screen', 'Application', 'Phase 1 - Feasibility Study'].includes(project.cohortPhase)
+                }
               />
             </Grid>
             <Grid item xs={6}>
