@@ -10,17 +10,14 @@ const DeliverableCard = ({ deliverable }: ViewProps) => {
     return undefined;
   }
 
-  return (
-    <>
-      {deliverable.type === 'Document' ? (
-        <DocumentDeliverableCard deliverable={deliverable} />
-      ) : deliverable.type === 'Questions' ? (
-        <QuestionsDeliverableCard deliverable={deliverable} />
-      ) : (
-        <SpeciesDeliverableCard deliverable={deliverable} />
-      )}
-    </>
-  );
+  switch (deliverable.type) {
+    case 'Document':
+      return <DocumentDeliverableCard deliverable={deliverable} />;
+    case 'Species':
+      return <SpeciesDeliverableCard deliverable={deliverable} />;
+    case 'Questions':
+      return <QuestionsDeliverableCard deliverable={deliverable} />;
+  }
 };
 
 export default DeliverableCard;
