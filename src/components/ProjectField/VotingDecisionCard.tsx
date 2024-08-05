@@ -1,4 +1,4 @@
-import React, { Box, useTheme } from '@mui/material';
+import React, { Box, Typography, useTheme } from '@mui/material';
 
 import Link from 'src/components/common/Link';
 import VoteBadge from 'src/scenes/AcceleratorRouter/ParticipantProjects/Voting/VoteBadge';
@@ -22,20 +22,24 @@ const VotingDecisionCard = ({ linkTo, md, phaseVotes }: VotingDecisionCardProps)
       label={strings.VOTING_DECISION}
       md={md}
       value={
-        phaseVotes?.decision ? (
-          <>
-            <Box style={{ margin: 'auto', width: 'fit-content' }}>
+        <>
+          <Box style={{ margin: 'auto', width: 'fit-content' }}>
+            {phaseVotes?.decision ? (
               <VoteBadge vote={phaseVotes.decision} />
-            </Box>
-            {linkTo && (
-              <Box marginTop={theme.spacing(1)} textAlign={'center'}>
-                <Link fontSize={'16px'} to={linkTo}>
-                  {strings.SEE_IC_VOTES}
-                </Link>
-              </Box>
+            ) : (
+              <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
+                N/A
+              </Typography>
             )}
-          </>
-        ) : undefined
+          </Box>
+          {linkTo && (
+            <Box marginTop={theme.spacing(1)} textAlign={'center'}>
+              <Link fontSize={'16px'} to={linkTo}>
+                {strings.SEE_IC_VOTES}
+              </Link>
+            </Box>
+          )}
+        </>
       }
     />
   );

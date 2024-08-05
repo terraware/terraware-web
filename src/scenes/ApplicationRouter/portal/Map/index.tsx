@@ -21,22 +21,6 @@ const MapView = () => {
   const theme = useTheme();
   const { selectedApplication } = useApplicationData();
   const getRenderAttributes = useRenderAttributes();
-  const { goToApplicationPrescreen, goToApplicationMapUpdate, goToApplicationMapUpload } = useNavigateTo();
-
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  const onNext = useCallback(
-    (type: 'Update' | 'Upload') => {
-      if (selectedApplication !== undefined) {
-        if (type === 'Update') {
-          goToApplicationMapUpdate(selectedApplication.id);
-        } else {
-          goToApplicationMapUpload(selectedApplication.id);
-        }
-      }
-    },
-    [selectedApplication, goToApplicationMapUpdate, goToApplicationMapUpload]
-  );
 
   const mapOptions = useMemo<MapOptions | undefined>(() => {
     if (!selectedApplication?.boundary) {
@@ -68,6 +52,28 @@ const MapView = () => {
     };
   }, [selectedApplication, getRenderAttributes]);
 
+  return (
+    <Card
+      title={strings.PROPOSED_PROJECT_BOUNDARY}
+      style={{ width: '100%', padding: theme.spacing(3), borderRadius: theme.spacing(3) }}
+    >
+      <h3>{strings.PROPOSED_PROJECT_BOUNDARY}</h3>
+
+      {mapOptions && (
+        <Box display='flex' minHeight={'640px'} justifyContent={'center'} alignContent={'center'}>
+          <GenericMap options={mapOptions} style={{ height: '100%', width: '100%', borderRadius: '24px' }} />
+        </Box>
+      )}
+    </Card>
+  );
+};
+
+const MapViewWrapper = () => {
+  const { activeLocale } = useLocalization();
+  const { selectedApplication } = useApplicationData();
+
+  const { goToApplicationMapUpdate, goToApplicationMapUpload, goToApplicationPrescreen } = useNavigateTo();
+
   useEffect(() => {
     if (!selectedApplication) {
       return;
@@ -78,40 +84,20 @@ const MapView = () => {
     }
   }, [selectedApplication]);
 
-  return (
-    <>
-      <UpdateOrUploadBoundaryModal
-        open={isOpen}
-        onClose={() => {
-          setIsOpen(false);
-        }}
-        onNext={onNext}
-      />
-      <Card
-        title={strings.PROPOSED_PROJECT_BOUNDARY}
-        style={{ width: '100%', padding: theme.spacing(3), borderRadius: theme.spacing(3) }}
-      >
-        <h3>{strings.PROPOSED_PROJECT_BOUNDARY}</h3>
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
-        {mapOptions && (
-          <Box display='flex' minHeight={'640px'} justifyContent={'center'} alignContent={'center'}>
-            <GenericMap options={mapOptions} style={{ height: '100%', width: '100%', borderRadius: '24px' }} />
-          </Box>
-        )}
-
-        <Button
-          label={selectedApplication?.boundary === undefined ? strings.ADD_BOUNDARY : strings.REPLACE_BOUNDARY}
-          onClick={() => setIsOpen(true)}
-          priority={selectedApplication?.boundary === undefined ? 'primary' : 'secondary'}
-        />
-      </Card>
-    </>
+  const onNext = useCallback(
+    (type: 'Update' | 'Upload') => {
+      if (selectedApplication !== undefined) {
+        if (type === 'Update') {
+          goToApplicationMapUpdate(selectedApplication.id);
+        } else {
+          goToApplicationMapUpload(selectedApplication.id);
+        }
+      }
+    },
+    [selectedApplication, goToApplicationMapUpdate, goToApplicationMapUpload]
   );
-};
-
-const MapViewWrapper = () => {
-  const { activeLocale } = useLocalization();
-  const { selectedApplication } = useApplicationData();
 
   const crumbs: Crumb[] = useMemo(
     () =>
@@ -127,7 +113,19 @@ const MapViewWrapper = () => {
   );
 
   return (
-    <ApplicationPage crumbs={crumbs}>
+    <ApplicationPage
+      crumbs={crumbs}
+      rightComponent={
+        <Button label={strings.REPLACE_BOUNDARY} onClick={() => setIsOpen(true)} priority={'secondary'} />
+      }
+    >
+      <UpdateOrUploadBoundaryModal
+        open={isOpen}
+        onClose={() => {
+          setIsOpen(false);
+        }}
+        onNext={onNext}
+      />
       <MapView />
     </ApplicationPage>
   );

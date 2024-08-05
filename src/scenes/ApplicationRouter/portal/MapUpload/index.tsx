@@ -54,7 +54,7 @@ const MapUploadView = () => {
     if (result.status === 'success') {
       toastSuccess(strings.SUCCESS);
       reload(navigateToMap);
-    } else {
+    } else if (result.status === 'error') {
       // TODO make more meaningful error messages
       toastError(strings.GENERIC_ERROR);
     }
