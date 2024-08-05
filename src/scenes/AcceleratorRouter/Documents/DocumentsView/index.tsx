@@ -25,7 +25,7 @@ const tableColumns: TableColumnType[] = [
   { key: 'name', name: strings.NAME, type: 'string' },
   { key: 'projectName', name: strings.PROJECT, type: 'string' },
   { key: 'documentTemplateId', name: strings.DOCUMENT_TEMPLATE, type: 'string' },
-  { key: 'versions', name: strings.VERSIONS, type: 'number' },
+  { key: 'lastSavedVersionId', name: strings.VERSION, type: 'number' },
   { key: 'createdTime', name: strings.CREATED, type: 'date' },
   { key: 'modifiedTime', name: strings.LAST_EDITED, type: 'date' },
   { key: 'status', name: strings.STATUS, type: 'string' },
@@ -67,6 +67,9 @@ export default function DocumentsView(): JSX.Element {
           );
         case 'status':
           return <CellRenderer {...props} value={<StatusBadge status={props.row.status} />} />;
+        case 'lastSavedVersionId':
+          const value = props.value ?? '-';
+          return <CellRenderer {...props} value={value} />;
         default:
           return <CellRenderer {...props} />;
       }
