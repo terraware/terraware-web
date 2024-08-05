@@ -1,13 +1,13 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import DeliverableViewWrapper from './DeliverableViewWrapper';
-import SpeciesDeliverableRouter from './SpeciesDeliverableRouter';
+import SpeciesDeliverableRouter from '../Species/SpeciesDeliverableRouter';
+import DeliverableView from './DeliverableView';
 
 const DeliverableRouter = () => {
   return (
     <Routes>
-      <Route path={''} element={<DeliverableViewWrapper />} />
+      <Route path={''} element={<DeliverableView />} />
       <Route path={'/species/:participantProjectSpeciesId/*'} element={<SpeciesDeliverableRouter />} />
     </Routes>
   );

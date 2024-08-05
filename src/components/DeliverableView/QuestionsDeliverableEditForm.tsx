@@ -13,11 +13,11 @@ import { requestListDeliverableVariablesValues } from 'src/redux/features/docume
 import { selectDeliverableVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
 import { requestListDeliverableVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import VariableStatusBadge from 'src/scenes/AcceleratorRouter/Deliverables/VariableStatusBadge';
 import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValue, VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
 import useQuery from 'src/utils/useQuery';
 
+import VariableStatusBadge from '../Variables/VariableStatusBadge';
 import { EditProps } from './types';
 
 type QuestionBoxProps = {

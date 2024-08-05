@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Button } from '@terraware/web-components';
 
+import RejectDialog from 'src/components/AcceleratorDeliverableView/RejectDialog';
 import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
 import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
@@ -11,7 +12,6 @@ import { useLocalization } from 'src/providers';
 import { requestUpdateParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { selectParticipantProjectSpeciesUpdateRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import RejectDialog from 'src/scenes/AcceleratorRouter/Deliverables/RejectDialog';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
 import { SpeciesForParticipantProject } from 'src/types/ParticipantProjectSpecies';

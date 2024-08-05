@@ -10,11 +10,11 @@ import { requestListDeliverableVariablesValues } from 'src/redux/features/docume
 import { selectDeliverableVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
 import { requestListDeliverableVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import VariableStatusBadge from 'src/scenes/AcceleratorRouter/Deliverables/VariableStatusBadge';
 import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValue } from 'src/types/documentProducer/VariableValue';
 import { variableDependencyMet } from 'src/utils/documentProducer/variables';
 
+import VariableStatusBadge from '../Variables/VariableStatusBadge';
 import Metadata from './Metadata';
 import QuestionsDeliverableStatusMessage from './QuestionsDeliverableStatusMessage';
 import { EditProps } from './types';

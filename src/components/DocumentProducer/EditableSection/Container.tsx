@@ -3,13 +3,13 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import { Button, Textfield, theme } from '@terraware/web-components';
 
+import VariableInternalComment from 'src/components/Variables/VariableInternalComment';
 import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
 import { requestUpdateSectionVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
 import { selectUpdateVariableWorkflowDetails } from 'src/redux/features/documentProducer/variables/variablesSelector';
 import { requestUpdateVariableWorkflowDetails } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import useWorkflowSuccess from 'src/redux/hooks/useWorkflowSuccess';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import VariableInternalComment from 'src/scenes/AcceleratorRouter/Deliverables/VariableInternalComment';
 import strings from 'src/strings';
 import { SectionVariableWithValues, VariableWithValues } from 'src/types/documentProducer/Variable';
 import {
