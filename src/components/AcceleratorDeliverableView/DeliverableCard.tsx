@@ -5,18 +5,20 @@ import DocumentDeliverableCard from './DocumentDeliverableCard';
 import QuestionsDeliverableCard from './QuestionsDeliverableCard';
 import SpeciesDeliverableCard from './SpeciesDeliverableCard';
 
-const DeliverableCard = ({ deliverable }: ViewProps) => {
+const DeliverableCard = (props: ViewProps) => {
+  const { deliverable } = props;
+
   if (!deliverable) {
     return undefined;
   }
 
   switch (deliverable.type) {
     case 'Document':
-      return <DocumentDeliverableCard deliverable={deliverable} />;
+      return <DocumentDeliverableCard {...props} />;
     case 'Species':
-      return <SpeciesDeliverableCard deliverable={deliverable} />;
+      return <SpeciesDeliverableCard {...props} />;
     case 'Questions':
-      return <QuestionsDeliverableCard deliverable={deliverable} />;
+      return <QuestionsDeliverableCard {...props} />;
   }
 };
 

@@ -24,7 +24,7 @@ const ApplicationView = () => {
     useApplicationData();
   const pathParams = useParams<{ applicationId: string }>();
 
-  const { goToAcceleratorApplicationMap } = useNavigateTo();
+  const { goToAcceleratorApplicationDeliverable, goToAcceleratorApplicationMap } = useNavigateTo();
 
   useEffect(() => {
     setSelectedApplication(Number(pathParams.applicationId ?? -1));
@@ -107,7 +107,9 @@ const ApplicationView = () => {
               modifiedDate={
                 deliverable.modifiedTime ? DateTime.fromISO(deliverable.modifiedTime).toFormat('yyyy/MM/dd') : undefined
               }
-              goToDeliverable={() => {}}
+              goToDeliverable={() => {
+                goToAcceleratorApplicationDeliverable(selectedApplication.id, deliverable.id);
+              }}
               key={`prescreen-${index}`}
             />
           ))}
@@ -131,7 +133,9 @@ const ApplicationView = () => {
                       ? DateTime.fromISO(deliverable.modifiedTime).toFormat('yyyy/MM/dd')
                       : undefined
                   }
-                  goToDeliverable={() => {}}
+                  goToDeliverable={() => {
+                    goToAcceleratorApplicationDeliverable(selectedApplication.id, deliverable.id);
+                  }}
                   key={`section-${section.moduleId}-${index}`}
                 />
               ))}
