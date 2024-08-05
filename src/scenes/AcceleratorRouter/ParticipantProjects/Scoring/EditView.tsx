@@ -9,6 +9,7 @@ import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useProjectData } from 'src/providers/Project/ProjectContext';
 import strings from 'src/strings';
 import { Score, ScoreCategory, ScoreValue } from 'src/types/Score';
 
@@ -22,6 +23,7 @@ const ScorecardEditView = () => {
   const { crumbs, hasData, phase0Scores, phase1Scores, projectId, projectName, status } = useScoringData();
   const { update, status: updateStatus } = useScoresUpdate(projectId);
   const { goToParticipantProject } = useNavigateTo();
+  const { project } = useProjectData();
 
   const [scores, setScores] = useState<Score[]>([]);
   const [updatedScores, setUpdatedScores] = useState<Score[]>([]);
@@ -108,6 +110,10 @@ const ScorecardEditView = () => {
                 phaseScores={phase0Scores}
                 onChangeValue={handleOnChangeValue}
                 onChangeQualitative={handleOnChangeQualitative}
+                editable={
+                  project?.cohortPhase &&
+                  ['Pre-Screen', 'Application', 'Phase 1 - Feasibility Study'].includes(project.cohortPhase)
+                }
               />
             </Grid>
             <Grid item xs={6}>
@@ -115,7 +121,7 @@ const ScorecardEditView = () => {
                 phaseScores={phase1Scores}
                 onChangeValue={handleOnChangeValue}
                 onChangeQualitative={handleOnChangeQualitative}
-                editable
+                editable={project?.cohortPhase === 'Phase 1 - Feasibility Study'}
               />
             </Grid>
           </Grid>

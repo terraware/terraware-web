@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
@@ -18,13 +18,27 @@ type ScoringEntryProps = {
   score: Score;
 };
 
-const ScoreEntry = ({ disabled, onChangeValue, onChangeQualitative, phase, score }: ScoringEntryProps) => {
+const ScoreEntry = ({
+  disabled: disabledProp,
+  onChangeValue,
+  onChangeQualitative,
+  phase,
+  score,
+}: ScoringEntryProps) => {
   const theme = useTheme();
   const { activeLocale } = useLocalization();
 
   const scoreCategory = getScoreCategory(score.category);
 
   const [qualitative, setQualitative] = useState(score.qualitative || '');
+
+  // Carbon and Climate Impact scores are permanently disabled in Phase 0
+  const disabled = useMemo(() => {
+    return (
+      disabledProp ||
+      (phase === 'Phase 0 - Due Diligence' && (score.category === 'Carbon' || score.category === 'Climate Impact'))
+    );
+  }, [disabledProp, phase, score.category]);
 
   const handleOnChangeQualitative = (value: unknown) => {
     setQualitative(`${value}`);
