@@ -14,6 +14,10 @@ export default function useNavigateTo() {
         navigate({ pathname: APP_PATHS.ACCELERATOR });
       },
 
+      goToAcceleratorApplication: (applicationId: number) => {
+        navigate({ pathname: APP_PATHS.ACCELERATOR_APPLICATION.replace(':applicationId', `${applicationId}`) });
+      },
+
       goToApplication: (applicationId: number) => {
         navigate({ pathname: APP_PATHS.APPLICATION_OVERVIEW.replace(':applicationId', `${applicationId}`) });
       },
