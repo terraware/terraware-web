@@ -39,7 +39,7 @@ const SpeciesInternalFieldsForm = ({ onChange, speciesRecord }: SpeciesInternalF
       sx={{
         backgroundColor: theme.palette.TwClrBg,
         borderRadius: '0 0 32px 32px',
-        padding: theme.spacing(3),
+        padding: theme.spacing(3, 0, 3, 3),
         margin: 0,
       }}
     >
