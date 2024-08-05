@@ -49,9 +49,6 @@ const DeliverableEditImages = (props: DeliverableEditImagesProps): JSX.Element =
 
   return (
     <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-      <Grid item xs={12}>
-        <Textfield label='' type='text' id='description' value={variable.description} display={true} />
-      </Grid>
       {(variable.isList || (!variable.isList && !newImages?.length)) &&
         imagesCopy.map((image, index) => (
           <Box key={`image-${index}`} display='flex' padding={theme.spacing(2, 3)} width='100%'>
