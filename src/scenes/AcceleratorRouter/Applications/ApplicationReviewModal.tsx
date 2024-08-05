@@ -10,7 +10,13 @@ import { requestReviewApplication } from 'src/redux/features/application/applica
 import { selectApplicationReview } from 'src/redux/features/application/applicationSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { Application, ApplicationReview, ApplicationReviewStatus, ApplicationStatus } from 'src/types/Application';
+import {
+  ApplicaitonReviewStatuses,
+  Application,
+  ApplicationReview,
+  ApplicationReviewStatus,
+  ApplicationStatus,
+} from 'src/types/Application';
 import useForm from 'src/utils/useForm';
 
 export type ApplicationReviewModalProps = {
@@ -33,22 +39,7 @@ const ApplicationReviewModal = ({
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectApplicationReview(requestId));
 
-  const statusOptions: ApplicationReviewStatus[] = [
-    'Accepted',
-    'Carbon Eligible',
-    'Issue Active',
-    'Issue Pending',
-    'Issue Resolved',
-    'Needs Follow-up',
-    'Not Accepted',
-    'Not Submitted',
-    'PL Review',
-    'Pre-check',
-    'Ready for Review',
-    'Submitted',
-  ];
-
-  const dropdownOptions: DropdownItem[] = statusOptions.map((status) => ({
+  const dropdownOptions: DropdownItem[] = ApplicaitonReviewStatuses.map((status) => ({
     label: status,
     value: status,
   }));
@@ -71,7 +62,7 @@ const ApplicationReviewModal = ({
   });
 
   const canUpdateStatus = useMemo(
-    () => statusOptions.find((status) => status === application.status) !== undefined,
+    () => ApplicaitonReviewStatuses.find((status) => status === application.status) !== undefined,
     [application.status]
   );
 
@@ -136,32 +127,32 @@ const ApplicationReviewModal = ({
     >
       <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
         {canUpdateStatus && (
-          <Grid item xs={12}>
-            <Dropdown
-              fullWidth={true}
-              label={strings.APPLICATION_STATUS}
-              onChange={(value) => {
-                onChange('status', value);
-              }}
-              options={dropdownOptions}
-              required
-              selectedValue={applicationReview.status}
-            />
-          </Grid>
-        )}
-        {canUpdateStatus && (
-          <Grid item xs={12}>
-            <TextField
-              type='textarea'
-              label={strings.FEEDBACK}
-              id='feedback'
-              onChange={(value) => {
-                onChange('feedback', value);
-              }}
-              sx={{ marginTop: theme.spacing(1) }}
-              value={applicationReview.feedback}
-            />
-          </Grid>
+          <>
+            <Grid item xs={12}>
+              <Dropdown
+                fullWidth={true}
+                label={strings.APPLICATION_STATUS}
+                onChange={(value) => {
+                  onChange('status', value);
+                }}
+                options={dropdownOptions}
+                required
+                selectedValue={applicationReview.status}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                type='textarea'
+                label={strings.FEEDBACK}
+                id='feedback'
+                onChange={(value) => {
+                  onChange('feedback', value);
+                }}
+                sx={{ marginTop: theme.spacing(1) }}
+                value={applicationReview.feedback}
+              />
+            </Grid>
+          </>
         )}
         <Grid item xs={12}>
           <TextField
