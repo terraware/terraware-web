@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/scenes/AcceleratorRouter/Deliverables/RejectDialog.tsx</title>
+    <title>Code coverage report for src/components/AcceleratorDeliverableView/DocumentDeliverableCard.tsx</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../../../prettify.css" />
-    <link rel="stylesheet" href="../../../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.png" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../../../sort-arrow-sprite.png);
+            background-image: url(../../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/scenes/AcceleratorRouter/Deliverables</a> RejectDialog.tsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/AcceleratorDeliverableView</a> DocumentDeliverableCard.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -130,7 +130,9 @@
 <a name='L65'></a><a href='#L65'>65</a>
 <a name='L66'></a><a href='#L66'>66</a>
 <a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -145,20 +147,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -189,6 +177,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -197,73 +195,81 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
 &nbsp;
-import { Box, Typography, useTheme } from '@mui/material';
-import { Button, DialogBox, Textfield } from '@terraware/web-components';
+import { Typography, useTheme } from '@mui/material';
+import { TableColumnType } from '@terraware/web-components';
 &nbsp;
+import DocumentsList from 'src/components/DeliverableView/DocumentsList';
+import DocumentsUploader from 'src/components/DeliverableView/DocumentsUploader';
+import Metadata from 'src/components/DeliverableView/Metadata';
+import { EditProps } from 'src/components/DeliverableView/types';
+import Card from 'src/components/common/Card';
+import { useLocalization, useOrganization, useUser } from 'src/providers';
 import strings from 'src/strings';
 &nbsp;
-export type RejectDialogProps = {
-  onClose: () =&gt; void;
-  onSubmit: (feedback: string) =&gt; void;
-};
+const columns = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(a</span>ctiveLocale: string | null): TableColumnType[] =&gt;</span>
+<span class="cstat-no" title="statement not covered" >  activeLocale</span>
+    ? [
+        {
+          key: 'name',
+          name: strings.DOCUMENT_NAME,
+          type: 'string',
+        },
+        {
+          key: 'description',
+          name: strings.DESCRIPTION,
+          type: 'string',
+        },
+        {
+          key: 'link',
+          name: strings.LINK,
+          type: 'string',
+        },
+        {
+          key: 'projectName',
+          name: strings.PROJECT,
+          type: 'string',
+        },
+        {
+          key: 'createdTime',
+          name: strings.DATE_UPLOADED,
+          type: 'date',
+        },
+      ]
+    : [];
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >RejectDialog(</span>{ onClose, onSubmit }: RejectDialogProps): JSX.Element {
-  const [feedback, setFeedback] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
-  const [validate, setValidate] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
+const DocumentDeliverableCard = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>rops: EditProps): JSX.Element =&gt; {</span>
+  const { ...viewProps }: EditProps = <span class="cstat-no" title="statement not covered" >props;</span>
+&nbsp;
+  const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
+  const { isAllowed } = <span class="cstat-no" title="statement not covered" >useUser();</span>
+  const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
 &nbsp;
-  const reject = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setValidate(true);</span>
-<span class="cstat-no" title="statement not covered" >    if (feedback) {</span>
-<span class="cstat-no" title="statement not covered" >      onSubmit(feedback);</span>
-    }
-  };
+  const canCreateSubmission = <span class="cstat-no" title="statement not covered" >isAllowed('CREATE_SUBMISSION', { organization: selectedOrganization });</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;DialogBox
-      open={true}
-      title={strings.REJECT}
-      size='medium'
-      onClose={onClose}
-      middleButtons={[
-        &lt;Button
-          id='cancelReject'
-          label={strings.CANCEL}
-          priority='secondary'
-          type='passive'
-          onClick={onClose}
-          key='button-1'
-        /&gt;,
-        &lt;Button
-          id='confirmReject'
-          priority='primary'
-          type='destructive'
-          label={strings.REJECT}
-          onClick={reject}
-          key='button-2'
-        /&gt;,
-      ]}
-    &gt;
-      &lt;Typography fontSize='16px' fontWeight={400} lineHeight='24px' marginBottom={theme.spacing(2)}&gt;
-        {strings.REJECT_REASON}
+    &lt;Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}&gt;
+      &lt;Metadata {...viewProps} /&gt;
+      &lt;Typography marginBottom={theme.spacing(2)} fontSize='20px' lineHeight='28px' fontWeight={600}&gt;
+        {strings.DOCUMENTS}
       &lt;/Typography&gt;
-      &lt;Box textAlign='left'&gt;
-        &lt;Textfield
-          autoFocus
-          errorText={validate &amp;&amp; !feedback.trim() ? strings.REQUIRED_FIELD : ''}
-          label={strings.FEEDBACK}
-          id='feedback'
-          onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >setFeedback(value as string)}</span>
-          required
-          type='textarea'
-          value={feedback}
-        /&gt;
-      &lt;/Box&gt;
-    &lt;/DialogBox&gt;
+      {canCreateSubmission &amp;&amp; (
+        &lt;DocumentsUploader {...viewProps} deliverableStatusesToIgnore={['Not Submitted', 'In Review']} /&gt;
+      )}
+      &lt;DocumentsList {...viewProps} columns={columns(activeLocale)} /&gt;
+    &lt;/Card&gt;
   );
-}
+};
+&nbsp;
+export default DocumentDeliverableCard;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -271,16 +277,16 @@ export default function <span class="fstat-no" title="function not covered" >Rej
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-05T19:53:47.980Z
+                at 2024-08-05T20:25:45.598Z
             </div>
-        <script src="../../../../prettify.js"></script>
+        <script src="../../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../../../sorter.js"></script>
-        <script src="../../../../block-navigation.js"></script>
+        <script src="../../../sorter.js"></script>
+        <script src="../../../block-navigation.js"></script>
     </body>
 </html>
     
