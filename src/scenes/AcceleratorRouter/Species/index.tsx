@@ -4,6 +4,7 @@ import { Box, Grid, GridProps, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
+import RejectDialog from 'src/components/AcceleratorDeliverableView/VariableRejectDialog';
 import { Crumb } from 'src/components/BreadCrumbs';
 import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
 import InternalComment from 'src/components/DeliverableView/InternalComment';
@@ -19,7 +20,6 @@ import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import ApproveDeliverableDialog from '../Deliverables/ApproveDeliverableDialog';
-import RejectDialog from '../Deliverables/RejectDialog';
 import RejectedBox from './RejectedBox';
 
 export default function SpeciesDetailView(): JSX.Element {
@@ -156,7 +156,7 @@ export default function SpeciesDetailView(): JSX.Element {
           approveMessage={strings.YOU_ARE_ABOUT_TO_APPROVE_THIS_SPECIES}
           onClose={() => setShowApproveDialog(false)}
           onSubmit={approveHandler}
-          deliverableType={currentDeliverable?.type || 'species'}
+          deliverableType={currentDeliverable?.type || 'Species'}
         />
       )}
       {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectHandler} />}

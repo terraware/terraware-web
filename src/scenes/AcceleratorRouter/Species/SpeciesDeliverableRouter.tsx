@@ -3,8 +3,8 @@ import { Route, Routes } from 'react-router-dom';
 
 import ParticipantProjectSpeciesProvider from 'src/providers/ParticipantProject/ParticipantProjectSpeciesProvider';
 
-import Species from '../Species';
-import SpeciesEditView from '../Species/SpeciesEditView';
+import Species from '.';
+import SpeciesEditView from './SpeciesEditView';
 
 const SpeciesDeliverableRouter = () => {
   return (

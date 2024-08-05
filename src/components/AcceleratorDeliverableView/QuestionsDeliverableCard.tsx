@@ -1,22 +1,17 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { BusySpinner, Button, DialogBox, DropdownItem, Message } from '@terraware/web-components';
+import { Button, DialogBox, DropdownItem, Message } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
-import { Crumb } from 'src/components/BreadCrumbs';
 import Metadata from 'src/components/DeliverableView/Metadata';
-import MobileMessage from 'src/components/DeliverableView/MobileMessage';
-import TitleBar from 'src/components/DeliverableView/TitleBar';
 import { EditProps } from 'src/components/DeliverableView/types';
 import DeliverableDisplayVariableValue from 'src/components/DocumentProducer/DeliverableDisplayVariableValue';
 import DeliverableVariableDetailsInput from 'src/components/DocumentProducer/DeliverableVariableDetailsInput';
 import { PhotoWithAttributes } from 'src/components/DocumentProducer/EditImagesModal/PhotoSelector';
 import { VariableTableCell } from 'src/components/DocumentProducer/EditableTableModal/helpers';
-import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import OptionsMenu from 'src/components/common/OptionsMenu';
-import { APP_PATHS } from 'src/constants';
 import { useProjectVariablesUpdate } from 'src/hooks/useProjectVariablesUpdate';
 import { useLocalization } from 'src/providers';
 import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
@@ -33,19 +28,11 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValue, VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import ApprovedDeliverableMessage from './ApprovedDeliverableMessage';
-import RejectDialog from './RejectDialog';
-import RejectedDeliverableMessage from './RejectedDeliverableMessage';
-import VariableInternalComment from './VariableInternalComment';
-import VariableStatusBadge from './VariableStatusBadge';
-
-export type Props = EditProps & {
-  isBusy?: boolean;
-  showRejectDialog: () => void;
-};
+import VariableInternalComment from '../Variables/VariableInternalComment';
+import VariableStatusBadge from '../Variables/VariableStatusBadge';
+import VariableRejectDialog from './VariableRejectDialog';
 
 const QuestionBox = ({
   editingId,
@@ -250,7 +237,7 @@ const QuestionBox = ({
         </DialogBox>
       )}
       <Box data-variable-id={variable.id} key={`question-${index}`}>
-        {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectItem} />}
+        {showRejectDialog && <VariableRejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectItem} />}
         <Box
           sx={{
             borderRadius: 2,
@@ -422,10 +409,8 @@ const QuestionBox = ({
   );
 };
 
-const QuestionsDeliverableView = (props: Props): JSX.Element => {
-  const { ...viewProps }: Props = props;
-  const { isMobile } = useDeviceInfo();
-  const { activeLocale } = useLocalization();
+const QuestionsDeliverableView = (props: EditProps): JSX.Element => {
+  const { ...viewProps }: EditProps = props;
   const { deliverableId, projectId } = useDeliverableData();
   const dispatch = useAppDispatch();
 
@@ -460,55 +445,30 @@ const QuestionsDeliverableView = (props: Props): JSX.Element => {
     }
   }, [variablesWithValues]);
 
-  const crumbs: Crumb[] = useMemo(
-    () => [
-      {
-        name: activeLocale ? strings.DELIVERABLES : '',
-        to: APP_PATHS.ACCELERATOR_DELIVERABLES,
-      },
-    ],
-    [activeLocale]
-  );
-
-  if (isMobile) {
-    return <MobileMessage {...viewProps} />;
-  }
-
   return (
-    <>
-      {/* TODO: render modals for Q&A items here? (Reject Answer, Edit Rejection Feedback, Edit Comments) */}
-
-      <Page crumbs={crumbs} rightComponent={viewProps.callToAction} title={<TitleBar {...viewProps} />}>
-        {props.isBusy && <BusySpinner />}
-        <Box display='flex' flexDirection='column' flexGrow={1}>
-          <ApprovedDeliverableMessage {...viewProps} />
-          <RejectedDeliverableMessage {...viewProps} />
-          <Card
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              flexGrow: 1,
-            }}
-          >
-            <Metadata {...viewProps} />
-            {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => {
-              return (
-                <QuestionBox
-                  editingId={editingId}
-                  index={index}
-                  key={index}
-                  projectId={projectId}
-                  reload={reload}
-                  setEditingId={setEditingId}
-                  setUpdatePendingId={setUpdatePendingId}
-                  variable={variableWithValues}
-                />
-              );
-            })}
-          </Card>
-        </Box>
-      </Page>
-    </>
+    <Card
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        flexGrow: 1,
+      }}
+    >
+      <Metadata {...viewProps} />
+      {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => {
+        return (
+          <QuestionBox
+            editingId={editingId}
+            index={index}
+            key={index}
+            projectId={projectId}
+            reload={reload}
+            setEditingId={setEditingId}
+            setUpdatePendingId={setUpdatePendingId}
+            variable={variableWithValues}
+          />
+        );
+      })}
+    </Card>
   );
 };
 
