@@ -32,6 +32,7 @@ const ScoreEntry = ({
 
   const [qualitative, setQualitative] = useState(score.qualitative || '');
 
+  // Carbon and Climate Impact scores are permanently disabled in Phase 0
   const disabled = useMemo(() => {
     return (
       disabledProp ||
