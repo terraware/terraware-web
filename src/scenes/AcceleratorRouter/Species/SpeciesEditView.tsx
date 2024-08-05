@@ -130,7 +130,7 @@ export default function SpeciesEditView(): JSX.Element {
                 required
               />
             </Grid>
-            <Grid item xs={12} paddingBottom={theme.spacing(2)}>
+            <Grid item xs={12} paddingBottom={theme.spacing(3)}>
               <TextField
                 label={strings.RATIONALE}
                 id='rationale'
@@ -139,16 +139,23 @@ export default function SpeciesEditView(): JSX.Element {
                 onChange={(value: unknown) => onChangeParticipantProjectSpecies('rationale', value)}
               />
             </Grid>
+
             {speciesRecord && (
-              <SpeciesDetailsForm
-                gridSize={gridSize()}
-                record={speciesRecord}
-                participantProjectSpeciesRecord={participantProjectSpeciesRecord}
-                onChange={onChange}
-                nameFormatError={nameFormatError}
-                setNameFormatError={setNameFormatError}
-                additionalFields={<SpeciesInternalFieldsForm speciesRecord={speciesRecord} onChange={onChange} />}
-              />
+              <Grid
+                sx={{ borderTop: `1px solid ${theme.palette.TwClrBaseGray100}` }}
+                container
+                padding={theme.spacing(3, 0, 0, 0)}
+              >
+                <SpeciesDetailsForm
+                  gridSize={gridSize()}
+                  record={speciesRecord}
+                  participantProjectSpeciesRecord={participantProjectSpeciesRecord}
+                  onChange={onChange}
+                  nameFormatError={nameFormatError}
+                  setNameFormatError={setNameFormatError}
+                  additionalFields={<SpeciesInternalFieldsForm speciesRecord={speciesRecord} onChange={onChange} />}
+                />
+              </Grid>
             )}
           </Box>
         </PageForm>
