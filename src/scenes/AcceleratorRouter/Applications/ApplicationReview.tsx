@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Grid, Theme, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -6,10 +7,10 @@ import { Property } from 'csstype';
 
 import ProjectFieldTextAreaDisplay from 'src/components/ProjectField/TextAreaDisplay';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useApplicationData } from 'src/providers/Application/Context';
 import strings from 'src/strings';
 import { Application, ApplicationStatus } from 'src/types/Application';
-import { useApplicationData } from 'src/providers/Application/Context';
-import { useNavigate } from 'react-router-dom';
+
 import ApplicationReviewModal from './ApplicationReviewModal';
 
 const getApplicationStatusColor = (status: ApplicationStatus, theme: Theme): Property.Color | string | undefined => {
@@ -55,15 +56,15 @@ const ApplicationReview = ({ application }: ApplicationReviewProps) => {
   const onReviewSubmitted = useCallback(() => {
     reload(() => navigate(0));
   }, [application, reload]);
-  
+
   return (
     <>
       <ApplicationReviewModal
-          application={application}
-          open={isReviewModalOpen}
-          onClose={() => setIsReviewModalOpen(false)}
-          onSuccess={onReviewSubmitted}
-        />
+        application={application}
+        open={isReviewModalOpen}
+        onClose={() => setIsReviewModalOpen(false)}
+        onSuccess={onReviewSubmitted}
+      />
       <Box
         borderRadius={theme.spacing(1)}
         display={'flex'}
@@ -96,6 +97,17 @@ const ApplicationReview = ({ application }: ApplicationReviewProps) => {
           >
             {application.status}
           </Typography>
+          <Button
+            label={strings.REVIEW_APPLICATION}
+            onClick={() => {
+              setIsReviewModalOpen(true);
+            }}
+            size={'small'}
+            priority={'secondary'}
+            style={{
+              marginLeft: theme.spacing(2),
+            }}
+          />
 
           <Button
             label={strings.SEE_PROJECT_DETAILS}
