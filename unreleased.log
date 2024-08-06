@@ -1,3 +1,6 @@
+a75eaddbb52 SW-5771 Added deliverable view for application console (#2962)
+dfb361b053e Updated translations from Phrase (#2969)
+75c25965c99 SW-5765 Use project name at the top of document pages (#2966)
 0a4559d638b SW-5764 Add lastSavedVersionId column with default value to document producer documents list table (#2964)
 acbc37951ca SW-5763 Replace organization column with project name (#2963)
 da7c2996544 SW-5755 Added review map and replace map in console (#2960)

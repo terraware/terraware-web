@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/21</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
@@ -151,11 +151,7 @@
 <a name='L86'></a><a href='#L86'>86</a>
 <a name='L87'></a><a href='#L87'>87</a>
 <a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a>
-<a name='L92'></a><a href='#L92'>92</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L89'></a><a href='#L89'>89</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -185,7 +181,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -206,7 +201,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -249,7 +243,6 @@
 &nbsp;
 import { Box, Typography, useTheme } from '@mui/material';
 &nbsp;
-import { useParticipants } from 'src/hooks/useParticipants';
 import { selectDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesSelector';
 import { requestListDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesThunks';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
@@ -268,7 +261,7 @@ export type DocumentMetadataProps = {
 };
 &nbsp;
 const DocumentMetadata = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> document }: DocumentMetadataProps): JSX.Element =&gt; {</span>
-  const { name, documentTemplateId, ownedBy, modifiedBy, modifiedTime, projectId } = <span class="cstat-no" title="statement not covered" >document;</span>
+  const { name, documentTemplateId, ownedBy, modifiedBy, modifiedTime, projectName } = <span class="cstat-no" title="statement not covered" >document;</span>
 &nbsp;
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
@@ -276,7 +269,6 @@ const DocumentMetadata = <span class="cstat-no" title="statement not covered" ><
 &nbsp;
   const modifiedBySelector = <span class="cstat-no" title="statement not covered" >useAppSelector(selectUser(modifiedBy));</span>
   const { documentTemplates } = <span class="cstat-no" title="statement not covered" >useAppSelector(selectDocumentTemplates);</span>
-  const { availableParticipants } = <span class="cstat-no" title="statement not covered" >useParticipants();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setModifiedByUser(modifiedBySelector);</span>
@@ -297,7 +289,6 @@ const DocumentMetadata = <span class="cstat-no" title="statement not covered" ><
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >getDocumentTemplateName(documentTemplateId, documentTemplates ?? []),</span>
     [documentTemplates, documentTemplateId]
   );
-  const participant = <span class="cstat-no" title="statement not covered" >availableParticipants?.find(<span class="fstat-no" title="function not covered" >(p</span>art) =&gt; <span class="cstat-no" title="statement not covered" >part.projects.find(<span class="fstat-no" title="function not covered" >(p</span>roj) =&gt; <span class="cstat-no" title="statement not covered" >proj.id === projectId)</span>)</span>;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Box display='flex' flexDirection='column' marginTop={3}&gt;
@@ -308,7 +299,7 @@ const DocumentMetadata = <span class="cstat-no" title="statement not covered" ><
         color={theme.palette.TwClrTxt}
         margin={theme.spacing(1, 0)}
       &gt;
-        {participant?.name}
+        {projectName}
       &lt;/Typography&gt;
       &lt;Typography
         fontWeight={600}
@@ -343,7 +334,7 @@ export default DocumentMetadata;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-06T21:36:36.546Z
+                at 2024-08-06T21:50:57.272Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
