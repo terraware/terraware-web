@@ -56,11 +56,18 @@ export default function Page({
     );
   }
 
+  console.log({ contentStyle });
   return (
     <TfMain style={containerStyles}>
       <PageHeaderWrapper nextElement={contentRef.current}>
         <>{crumbs && <BreadCrumbs crumbs={crumbs} hierarchical={hierarchicalCrumbs ?? true} />}</>
-        <Grid container justifyContent='space-between' alignItems='center'>
+        <Grid
+          container
+          justifyContent='space-between'
+          alignItems='center'
+          marginBottom={theme.spacing(2)}
+          paddingX={theme.spacing(2)}
+        >
           {title && typeof title !== 'string' && (
             <Grid item xs={8}>
               {title}
@@ -70,7 +77,6 @@ export default function Page({
             <Grid item xs={8}>
               <Typography
                 sx={{
-                  marginBottom: theme.spacing(4),
                   paddingLeft: theme.spacing(3),
                   fontSize: '24px',
                   fontWeight: 600,
