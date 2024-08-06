@@ -51,7 +51,6 @@ const MapSearchBox = ({ onSelect, style }: MapSearchBoxProp) => {
   );
 
   useEffect(() => {
-    console.log(debouncedValue);
     if (!debouncedValue) {
       clear();
     } else {
