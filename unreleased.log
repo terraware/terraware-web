@@ -1,3 +1,5 @@
+42ee35b2af2 SW-5734 Implemented debouncing, value diffing, and session token management to limit Mapbox API calls (#2965)
+229722033f6 Added review modal to review component (#2961)
 9f02de57fc1 SW-5276: FE - Scoring page update (#2959)
 e6c37efb58f Refactored accelerator deliverables view into components (#2958)
 922dd15baa8 SW-5711: Upload Photo field types have redundant header/body copy (follow-up) (#2951)
