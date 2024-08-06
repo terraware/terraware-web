@@ -6,7 +6,7 @@ import isEnabled from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import ApplicationProvider from 'src/providers/Application';
 
-import ApplicationMapUpload from './ApplicaitonMapUpload';
+import ApplicationMapUpload from './ApplicationMapUpload';
 import ApplicationMap from './ApplicationMap';
 import ApplicationView from './ApplicationView';
 import ApplicationsListView from './ApplicationsList';
