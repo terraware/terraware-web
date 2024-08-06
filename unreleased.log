@@ -1,3 +1,4 @@
+da7c2996544 SW-5755 Added review map and replace map in console (#2960)
 42ee35b2af2 SW-5734 Implemented debouncing, value diffing, and session token management to limit Mapbox API calls (#2965)
 229722033f6 Added review modal to review component (#2961)
 9f02de57fc1 SW-5276: FE - Scoring page update (#2959)
