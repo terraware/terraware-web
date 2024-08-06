@@ -30,11 +30,14 @@ const MapSearchBox = ({ onSelect, style }: MapSearchBoxProp) => {
     [suggestResult]
   );
 
-  const updateDebouncedValue = useCallback((nextValue: string) => {
-    if (debouncedValue !== nextValue) {
-      setDebouncedValue(nextValue);
-    }
-  }, [debouncedValue, setDebouncedValue])
+  const updateDebouncedValue = useCallback(
+    (nextValue: string) => {
+      if (debouncedValue !== nextValue) {
+        setDebouncedValue(nextValue);
+      }
+    },
+    [debouncedValue, setDebouncedValue]
+  );
 
   useDebounce(value, 500, updateDebouncedValue);
 
