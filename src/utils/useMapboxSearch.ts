@@ -18,6 +18,7 @@ export type MapboxSearch = {
   retrieve: (suggestion: AddressAutofillSuggestion) => Promise<AddressAutofillFeatureSuggestion[]>;
   suggest: (suggestText: string) => Promise<AddressAutofillSuggestion[]>;
   suggestText?: string;
+  suggestResult: AddressAutofillSuggestion[];
 };
 
 const useMapboxSearch = (): MapboxSearch => {
@@ -25,6 +26,7 @@ const useMapboxSearch = (): MapboxSearch => {
 
   const [sessionId, setSessionId] = useState<string | null>();
   const [sessionToken, setSessionToken] = useState<SessionToken>();
+  const [suggestResult, setSuggestResult] = useState<AddressAutofillSuggestion[]>([]);
 
   const addressAutofillCore = new AddressAutofillCore({
     accessToken: token,
@@ -58,6 +60,7 @@ const useMapboxSearch = (): MapboxSearch => {
       if (sessionToken) {
         setSuggestText(nextSuggestText);
         const result = await session.suggest(nextSuggestText, { sessionToken });
+        setSuggestResult(result?.suggestions ?? []);
         return result?.suggestions ?? [];
       } else {
         return Promise.reject('Mapbox session not loaded');
@@ -82,13 +85,15 @@ const useMapboxSearch = (): MapboxSearch => {
     () => ({
       clear: () => {
         setSuggestText(undefined);
+        setSuggestResult([]);
         session.clear();
       },
       retrieve,
       suggest,
       suggestText,
+      suggestResult,
     }),
-    [retrieve, session, suggest, suggestText]
+    [retrieve, session, suggest, suggestResult, suggestText]
   );
 
   return mapboxSearch;
