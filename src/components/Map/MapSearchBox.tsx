@@ -6,6 +6,7 @@ import '@terraware/web-components/components/Autocomplete/styles.scss';
 import '@terraware/web-components/components/Select/styles.scss';
 
 import strings from 'src/strings';
+import useDebounce from 'src/utils/useDebounce';
 import useMapboxSearch from 'src/utils/useMapboxSearch';
 
 export type MapSearchBoxProp = {
@@ -16,7 +17,10 @@ export type MapSearchBoxProp = {
 const MapSearchBox = ({ onSelect, style }: MapSearchBoxProp) => {
   const { clear, retrieve, suggest } = useMapboxSearch();
   const [value, setValue] = useState<string>('');
+  const [prevValue, setPrevValue] = useState<string>('');
   const [options, setOptions] = useState<DropdownItem[]>([]);
+
+  const debouncedValue = useDebounce(value, 500);
 
   const onSelectSuggestion = useCallback(
     async (suggestion: AddressAutofillSuggestion | null) => {
@@ -43,14 +47,15 @@ const MapSearchBox = ({ onSelect, style }: MapSearchBoxProp) => {
   );
 
   useEffect(() => {
-    if (!value) {
+    if (!debouncedValue) {
       clear();
       setOptions([]);
       return;
-    } else {
-      fetchSuggestions(value);
+    } else if (prevValue !== debouncedValue) {
+      fetchSuggestions(debouncedValue);
+      setPrevValue(debouncedValue);
     }
-  }, [clear, value]);
+  }, [clear, debouncedValue, fetchSuggestions, prevValue, setPrevValue]);
 
   const onChange = useCallback(
     (value: string | DropdownItem | undefined) => {

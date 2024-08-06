@@ -5,15 +5,13 @@ import {
   AddressAutofillFeatureSuggestion,
   AddressAutofillSuggestion,
   SearchSession,
+  SessionToken,
 } from '@mapbox/search-js-core';
 
-import strings from 'src/strings';
-
 import useMapboxToken from './useMapboxToken';
-import useSnackbar from './useSnackbar';
 
-// Wait a quarter second before calling suggest again
-const SUGGESTION_DELAY_MS = 250;
+// Wait a half second before calling suggest again
+const SUGGESTION_DELAY_MS = 500;
 
 export type MapboxSearch = {
   clear: () => void;
@@ -25,34 +23,59 @@ export type MapboxSearch = {
 const useMapboxSearch = (): MapboxSearch => {
   const { token } = useMapboxToken();
 
+  const [sessionId, setSessionId] = useState<string | null>();
+  const [sessionToken, setSessionToken] = useState<SessionToken>();
+
   const addressAutofillCore = new AddressAutofillCore({
     accessToken: token,
   });
   const session = new SearchSession(addressAutofillCore, SUGGESTION_DELAY_MS);
-  const [suggestText, setSuggestText] = useState<string>();
-  const { toastError } = useSnackbar();
 
   useEffect(() => {
-    session.addEventListener('suggesterror', () => {
-      toastError(strings.GENERIC_ERROR);
-    });
-  }, [toastError, session]);
+    if (!sessionStorage) {
+      return undefined;
+    }
+
+    const currentItem = sessionStorage.getItem('mapboxAutofillTokenId');
+    setSessionId(currentItem);
+  }, [sessionStorage, setSessionId]);
+
+  useEffect(() => {
+    if (sessionId !== undefined) {
+      const newSessionToken = new SessionToken(sessionId ?? undefined);
+      setSessionToken(newSessionToken);
+
+      if (sessionStorage) {
+        sessionStorage.setItem('mapboxAutofillTokenId', newSessionToken.id);
+      }
+    }
+  }, [sessionId, sessionStorage, setSessionToken]);
+
+  const [suggestText, setSuggestText] = useState<string>();
 
   const suggest = useCallback(
     async (nextSuggestText: string) => {
-      setSuggestText(nextSuggestText);
-      const result = await session.suggest(nextSuggestText);
-      return result?.suggestions ?? [];
+      if (sessionToken) {
+        setSuggestText(nextSuggestText);
+        const result = await session.suggest(nextSuggestText, { sessionToken });
+        return result?.suggestions ?? [];
+      } else {
+        return Promise.reject('Mapbox session not loaded');
+      }
     },
-    [session]
+    [session, sessionToken]
   );
 
   const retrieve = useCallback(
     async (suggestion: AddressAutofillSuggestion) => {
-      const result = await session.retrieve(suggestion);
-      return result?.features ?? [];
+      if (sessionToken) {
+        const result = await session.retrieve(suggestion, { sessionToken });
+        return result?.features ?? [];
+      } else {
+        return Promise.reject('Mapbox session not loaded');
+      }
     },
-    [session]
+    [session, sessionToken]
   );
 
   const mapboxSearch: MapboxSearch = useMemo(
