@@ -2269,6 +2269,8 @@ export interface components {
       /** Format: int64 */
       id: number;
       /** Format: int64 */
+      lastSavedVersionId?: number;
+      /** Format: int64 */
       modifiedBy: number;
       /** Format: date-time */
       modifiedTime: string;
@@ -2277,6 +2279,7 @@ export interface components {
       ownedBy: number;
       /** Format: int64 */
       projectId: number;
+      projectName: string;
       /** @enum {string} */
       status: "Draft" | "Locked" | "Published" | "Ready" | "Submitted";
       /** Format: int64 */
