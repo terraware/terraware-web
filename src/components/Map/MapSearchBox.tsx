@@ -47,14 +47,14 @@ const MapSearchBox = ({ onSelect, style }: MapSearchBoxProp) => {
   );
 
   useEffect(() => {
+    console.log(debouncedValue);
     if (!debouncedValue) {
       clear();
       setOptions([]);
-      return;
     } else if (prevValue !== debouncedValue) {
       fetchSuggestions(debouncedValue);
-      setPrevValue(debouncedValue);
     }
+    setPrevValue(debouncedValue);
   }, [clear, debouncedValue, fetchSuggestions, prevValue, setPrevValue]);
 
   const onChange = useCallback(
