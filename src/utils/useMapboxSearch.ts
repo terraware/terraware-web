@@ -10,9 +10,6 @@ import {
 
 import useMapboxToken from './useMapboxToken';
 
-// Wait a half second before calling suggest again
-const SUGGESTION_DELAY_MS = 500;
-
 export type MapboxSearch = {
   clear: () => void;
   retrieve: (suggestion: AddressAutofillSuggestion) => Promise<AddressAutofillFeatureSuggestion[]>;
@@ -31,7 +28,7 @@ const useMapboxSearch = (): MapboxSearch => {
   const addressAutofillCore = new AddressAutofillCore({
     accessToken: token,
   });
-  const session = new SearchSession(addressAutofillCore, SUGGESTION_DELAY_MS);
+  const session = new SearchSession(addressAutofillCore);
 
   useEffect(() => {
     if (!sessionStorage) {

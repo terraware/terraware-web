@@ -17,6 +17,7 @@ export type MapSearchBoxProp = {
 const MapSearchBox = ({ onSelect, style }: MapSearchBoxProp) => {
   const { clear, retrieve, suggest, suggestResult, suggestText } = useMapboxSearch();
   const [value, setValue] = useState<string>('');
+  const [debouncedValue, setDebouncedValue] = useState<string>('');
 
   const options = useMemo(
     () =>
@@ -29,7 +30,13 @@ const MapSearchBox = ({ onSelect, style }: MapSearchBoxProp) => {
     [suggestResult]
   );
 
-  const debouncedValue = useDebounce(value, 500);
+  const updateDebouncedValue = useCallback((nextValue: string) => {
+    if (debouncedValue !== nextValue) {
+      setDebouncedValue(nextValue);
+    }
+  }, [debouncedValue, setDebouncedValue])
+
+  useDebounce(value, 500, updateDebouncedValue);
 
   const onSelectSuggestion = useCallback(
     async (suggestion: AddressAutofillSuggestion | null) => {
