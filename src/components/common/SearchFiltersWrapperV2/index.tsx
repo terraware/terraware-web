@@ -30,6 +30,10 @@ export type FilterConfig = {
   type?: FilterField['type'];
 };
 
+export type FilterConfigWithValues = FilterConfig & {
+  values?: (string | number | null)[];
+};
+
 export type SearchProps = SearchInputProps & {
   iconFilters?: FilterConfig[];
   featuredFilters?: FilterConfig[];
