@@ -1,3 +1,4 @@
+0a4559d638b SW-5764 Add lastSavedVersionId column with default value to document producer documents list table (#2964)
 acbc37951ca SW-5763 Replace organization column with project name (#2963)
 da7c2996544 SW-5755 Added review map and replace map in console (#2960)
 42ee35b2af2 SW-5734 Implemented debouncing, value diffing, and session token management to limit Mapbox API calls (#2965)
