@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/35</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/35</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
@@ -160,7 +160,16 @@
 <a name='L95'></a><a href='#L95'>95</a>
 <a name='L96'></a><a href='#L96'>96</a>
 <a name='L97'></a><a href='#L97'>97</a>
-<a name='L98'></a><a href='#L98'>98</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -174,17 +183,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -221,17 +222,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -241,10 +231,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -269,14 +273,12 @@ import {
 &nbsp;
 import useMapboxToken from './useMapboxToken';
 &nbsp;
-// Wait a half second before calling suggest again
-const SUGGESTION_DELAY_MS = <span class="cstat-no" title="statement not covered" >500;</span>
-&nbsp;
 export type MapboxSearch = {
   clear: () =&gt; void;
   retrieve: (suggestion: AddressAutofillSuggestion) =&gt; Promise&lt;AddressAutofillFeatureSuggestion[]&gt;;
   suggest: (suggestText: string) =&gt; Promise&lt;AddressAutofillSuggestion[]&gt;;
   suggestText?: string;
+  suggestResult: AddressAutofillSuggestion[];
 };
 &nbsp;
 const useMapboxSearch = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span>: MapboxSearch =&gt; {</span>
@@ -284,11 +286,12 @@ const useMapboxSearch = <span class="cstat-no" title="statement not covered" ><s
 &nbsp;
   const [sessionId, setSessionId] = <span class="cstat-no" title="statement not covered" >useState&lt;string | null&gt;();</span>
   const [sessionToken, setSessionToken] = <span class="cstat-no" title="statement not covered" >useState&lt;SessionToken&gt;();</span>
+  const [suggestResult, setSuggestResult] = <span class="cstat-no" title="statement not covered" >useState&lt;AddressAutofillSuggestion[]&gt;([]);</span>
 &nbsp;
   const addressAutofillCore = <span class="cstat-no" title="statement not covered" >new AddressAutofillCore({</span>
     accessToken: token,
   });
-  const session = <span class="cstat-no" title="statement not covered" >new SearchSession(addressAutofillCore, SUGGESTION_DELAY_MS);</span>
+  const session = <span class="cstat-no" title="statement not covered" >new SearchSession(addressAutofillCore);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!sessionStorage) {</span>
@@ -317,6 +320,7 @@ const useMapboxSearch = <span class="cstat-no" title="statement not covered" ><s
 <span class="cstat-no" title="statement not covered" >      if (sessionToken) {</span>
 <span class="cstat-no" title="statement not covered" >        setSuggestText(nextSuggestText);</span>
         const result = <span class="cstat-no" title="statement not covered" >await session.suggest(nextSuggestText, { sessionToken });</span>
+<span class="cstat-no" title="statement not covered" >        setSuggestResult(result?.suggestions ?? []);</span>
 <span class="cstat-no" title="statement not covered" >        return result?.suggestions ?? [];</span>
       } else {
 <span class="cstat-no" title="statement not covered" >        return Promise.reject('Mapbox session not loaded');</span>
@@ -341,13 +345,15 @@ const useMapboxSearch = <span class="cstat-no" title="statement not covered" ><s
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
       clear: <span class="fstat-no" title="function not covered" >()</span> =&gt; {
 <span class="cstat-no" title="statement not covered" >        setSuggestText(undefined);</span>
+<span class="cstat-no" title="statement not covered" >        setSuggestResult([]);</span>
 <span class="cstat-no" title="statement not covered" >        session.clear();</span>
       },
       retrieve,
       suggest,
       suggestText,
+      suggestResult,
     }),
-    [retrieve, session, suggest, suggestText]
+    [retrieve, session, suggest, suggestResult, suggestText]
   );
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return mapboxSearch;</span>
@@ -361,7 +367,7 @@ export default useMapboxSearch;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-07T17:14:13.733Z
+                at 2024-08-07T17:22:26.909Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
