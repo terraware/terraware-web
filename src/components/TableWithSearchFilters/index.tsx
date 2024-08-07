@@ -4,7 +4,10 @@ import { Container, Grid } from '@mui/material';
 import { SortOrder, TableColumnType, TableRowType } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
-import SearchFiltersWrapperV2, { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
+import SearchFiltersWrapperV2, {
+  FilterConfig,
+  FilterConfigWithValues,
+} from 'src/components/common/SearchFiltersWrapperV2';
 import { default as OrderPreservedTable, OrderPreservedTablePropsFull } from 'src/components/common/table';
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { useLocalization } from 'src/providers';
@@ -12,13 +15,15 @@ import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/
 import { parseSearchTerm } from 'src/utils/search';
 import useDebounce from 'src/utils/useDebounce';
 
+import { defaultSearchNodeCreator } from '../common/SearchFiltersWrapperV2/FeaturedFilters';
+
 interface TableWithSearchFiltersProps extends Omit<OrderPreservedTablePropsFull<TableRowType>, 'columns' | 'orderBy'> {
   busy?: boolean;
   columns: (activeLocale: string | null) => TableColumnType[];
   defaultSearchOrder: SearchSortOrder;
   dispatchSearchRequest: (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => void;
   extraTableFilters?: SearchNodePayload[];
-  featuredFilters?: FilterConfig[];
+  featuredFilters?: FilterConfigWithValues[];
   filterModifiers?: (filters: FilterConfig[]) => FilterConfig[];
   fuzzySearchColumns?: string[];
   rightComponent?: React.ReactNode;
@@ -136,6 +141,32 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
       return newFilters;
     });
   }, [extraTableFilters]);
+
+  // set current filters if any featuredFilters has initial value
+  useEffect(() => {
+    const filtersWithValues = featuredFilters?.filter((ff) => ff.values && ff.values.length > 0);
+    if (filtersWithValues && filtersWithValues.length > 0) {
+      const newCurrentFilters = filtersWithValues.reduce(
+        (
+          acc: {
+            [x: string]: SearchNodePayload;
+          },
+          filter: FilterConfigWithValues
+        ): {
+          [x: string]: SearchNodePayload;
+        } => ({
+          ...acc,
+          [filter.field]: filter.searchNodeCreator
+            ? filter.searchNodeCreator(filter.values || [])
+            : defaultSearchNodeCreator(filter.field, filter.values || []),
+        }),
+        {} as {
+          [x: string]: SearchNodePayload;
+        }
+      );
+      setFilters(newCurrentFilters);
+    }
+  }, [featuredFilters]);
 
   return (
     <Container maxWidth={false} sx={{ padding: 0 }}>

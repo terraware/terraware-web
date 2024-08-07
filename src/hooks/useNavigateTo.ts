@@ -18,6 +18,25 @@ export default function useNavigateTo() {
         navigate({ pathname: APP_PATHS.ACCELERATOR_APPLICATION.replace(':applicationId', `${applicationId}`) });
       },
 
+      goToAcceleratorApplicationDeliverable: (applicationId: number, deliverableId: number) => {
+        navigate({
+          pathname: APP_PATHS.ACCELERATOR_APPLICATION_DELIVERABLE.replace(':applicationId', `${applicationId}`).replace(
+            ':deliverableId',
+            `${deliverableId}`
+          ),
+        });
+      },
+
+      goToAcceleratorApplicationMap: (applicationId: number) => {
+        navigate({ pathname: APP_PATHS.ACCELERATOR_APPLICATION_MAP.replace(':applicationId', `${applicationId}`) });
+      },
+
+      goToAcceleratorApplicationMapUpload: (applicationId: number) => {
+        navigate({
+          pathname: APP_PATHS.ACCELERATOR_APPLICATION_MAP_UPLOAD.replace(':applicationId', `${applicationId}`),
+        });
+      },
+
       goToApplication: (applicationId: number) => {
         navigate({ pathname: APP_PATHS.APPLICATION_OVERVIEW.replace(':applicationId', `${applicationId}`) });
       },

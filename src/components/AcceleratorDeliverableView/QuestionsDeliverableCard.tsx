@@ -11,9 +11,9 @@ import DeliverableVariableDetailsInput from 'src/components/DocumentProducer/Del
 import { VariableTableCell } from 'src/components/DocumentProducer/EditableTableModal/helpers';
 import Card from 'src/components/common/Card';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useProjectVariablesUpdate } from 'src/hooks/useProjectVariablesUpdate';
 import { useLocalization } from 'src/providers';
-import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
 import { requestListDeliverableVariablesValues } from 'src/redux/features/documentProducer/values/valuesThunks';
 import {
   selectDeliverableVariablesWithValues,
@@ -35,6 +35,7 @@ import VariableRejectDialog from './RejectDialog';
 
 const QuestionBox = ({
   editingId,
+  hideStatusBadge,
   index,
   projectId,
   reload,
@@ -43,6 +44,7 @@ const QuestionBox = ({
   variable,
 }: {
   editingId?: number;
+  hideStatusBadge?: boolean;
   index: number;
   projectId: number;
   reload: () => void;
@@ -64,7 +66,7 @@ const QuestionBox = ({
     update,
     updateSuccess: updateVariableValueSuccess,
   } = useProjectVariablesUpdate(projectId, [variable]);
-
+  const { isAcceleratorApplicationRoute } = useAcceleratorConsole();
   const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
   const [displayActions, setDisplayActions] = useState(false);
   const [showEditFeedbackModal, setShowEditFeedbackModal] = useState(false);
@@ -274,9 +276,11 @@ const QuestionBox = ({
                 justifyContent: 'flex-end',
               }}
             >
-              <Box sx={{ margin: '4px' }}>
-                <VariableStatusBadge status={firstVariableValueStatus} />
-              </Box>
+              {hideStatusBadge !== true && (
+                <Box sx={{ margin: '4px' }}>
+                  <VariableStatusBadge status={firstVariableValueStatus} />
+                </Box>
+              )}
               {!editingId && (
                 <Box className='actions'>
                   <Button
@@ -290,29 +294,33 @@ const QuestionBox = ({
                     sx={{ '&.button': { margin: '4px' } }}
                     type='passive'
                   />
-                  <Button
-                    label={strings.REJECT_ACTION}
-                    onClick={() => setShowRejectDialog(true)}
-                    priority='secondary'
-                    sx={{ '&.button': { margin: '4px' } }}
-                    type='destructive'
-                    disabled={firstVariableValueStatus === 'Rejected'}
-                  />
-                  <Button
-                    label={strings.APPROVE}
-                    onClick={approveItem}
-                    priority='secondary'
-                    disabled={firstVariableValueStatus === 'Approved'}
-                    sx={{ '&.button': { margin: '4px' } }}
-                  />
-                  <OptionsMenu
-                    onOptionItemClick={onOptionItemClick}
-                    optionItems={optionItems}
-                    onOpen={() => setDisplayActions(true)}
-                    onClose={() => setDisplayActions(false)}
-                    size='small'
-                    sx={{ '& .button': { margin: '4px' }, marginLeft: 0 }}
-                  />
+                  {!isAcceleratorApplicationRoute && (
+                    <>
+                      <Button
+                        label={strings.REJECT_ACTION}
+                        onClick={() => setShowRejectDialog(true)}
+                        priority='secondary'
+                        sx={{ '&.button': { margin: '4px' } }}
+                        type='destructive'
+                        disabled={firstVariableValueStatus === 'Rejected'}
+                      />
+                      <Button
+                        label={strings.APPROVE}
+                        onClick={approveItem}
+                        priority='secondary'
+                        disabled={firstVariableValueStatus === 'Approved'}
+                        sx={{ '&.button': { margin: '4px' } }}
+                      />
+                      <OptionsMenu
+                        onOptionItemClick={onOptionItemClick}
+                        optionItems={optionItems}
+                        onOpen={() => setDisplayActions(true)}
+                        onClose={() => setDisplayActions(false)}
+                        size='small'
+                        sx={{ '& .button': { margin: '4px' }, marginLeft: 0 }}
+                      />
+                    </>
+                  )}
                 </Box>
               )}
             </Box>
@@ -408,30 +416,33 @@ const QuestionBox = ({
   );
 };
 
-const QuestionsDeliverableView = (props: EditProps): JSX.Element => {
-  const { ...viewProps }: EditProps = props;
-  const { deliverableId, projectId } = useDeliverableData();
+const QuestionsDeliverableCard = (props: EditProps): JSX.Element => {
+  const { deliverable, hideStatusBadge }: EditProps = props;
   const dispatch = useAppDispatch();
 
   const [editingId, setEditingId] = useState<number | undefined>();
   const [updatePendingId, setUpdatePendingId] = useState<number | undefined>();
 
   const reload = () => {
-    void dispatch(requestListDeliverableVariables(deliverableId));
-    void dispatch(requestListDeliverableVariablesValues({ deliverableId, projectId }));
+    void dispatch(requestListDeliverableVariables(deliverable.id));
+    void dispatch(
+      requestListDeliverableVariablesValues({ deliverableId: deliverable.id, projectId: deliverable.projectId })
+    );
   };
 
   useEffect(() => {
-    if (!(deliverableId && projectId)) {
+    if (!deliverable) {
       return;
     }
 
-    void dispatch(requestListDeliverableVariables(deliverableId));
-    void dispatch(requestListDeliverableVariablesValues({ deliverableId, projectId }));
-  }, [deliverableId, projectId]);
+    void dispatch(requestListDeliverableVariables(deliverable.id));
+    void dispatch(
+      requestListDeliverableVariablesValues({ deliverableId: deliverable.id, projectId: deliverable.projectId })
+    );
+  }, [deliverable]);
 
   const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
-    selectDeliverableVariablesWithValues(state, deliverableId, projectId)
+    selectDeliverableVariablesWithValues(state, deliverable.id, deliverable.projectId)
   );
 
   useEffect(() => {
@@ -452,14 +463,15 @@ const QuestionsDeliverableView = (props: EditProps): JSX.Element => {
         flexGrow: 1,
       }}
     >
-      <Metadata {...viewProps} />
+      <Metadata {...props} />
       {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => {
         return (
           <QuestionBox
             editingId={editingId}
+            hideStatusBadge={hideStatusBadge}
             index={index}
             key={index}
-            projectId={projectId}
+            projectId={deliverable.projectId}
             reload={reload}
             setEditingId={setEditingId}
             setUpdatePendingId={setUpdatePendingId}
@@ -471,4 +483,4 @@ const QuestionsDeliverableView = (props: EditProps): JSX.Element => {
   );
 };
 
-export default QuestionsDeliverableView;
+export default QuestionsDeliverableCard;

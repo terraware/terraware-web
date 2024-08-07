@@ -9,6 +9,7 @@ import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
 import strings from 'src/strings';
@@ -22,6 +23,8 @@ const ApplicationView = () => {
   const { selectedApplication, setSelectedApplication, applicationSections, applicationDeliverables } =
     useApplicationData();
   const pathParams = useParams<{ applicationId: string }>();
+
+  const { goToAcceleratorApplicationDeliverable, goToAcceleratorApplicationMap } = useNavigateTo();
 
   useEffect(() => {
     setSelectedApplication(Number(pathParams.applicationId ?? -1));
@@ -90,7 +93,12 @@ const ApplicationView = () => {
           </Typography>
 
           {/* Add link to view boundary once exists */}
-          <ApplicationDeliverableRow title={strings.PROPOSED_PROJECT_BOUNDARY} goToDeliverable={() => {}} />
+          <ApplicationDeliverableRow
+            title={strings.PROPOSED_PROJECT_BOUNDARY}
+            goToDeliverable={() => {
+              goToAcceleratorApplicationMap(selectedApplication.id);
+            }}
+          />
 
           {sectionDeliverables(prescreenSection.moduleId).map((deliverable, index) => (
             // Add link to deliverable
@@ -99,7 +107,9 @@ const ApplicationView = () => {
               modifiedDate={
                 deliverable.modifiedTime ? DateTime.fromISO(deliverable.modifiedTime).toFormat('yyyy/MM/dd') : undefined
               }
-              goToDeliverable={() => {}}
+              goToDeliverable={() => {
+                goToAcceleratorApplicationDeliverable(selectedApplication.id, deliverable.id);
+              }}
               key={`prescreen-${index}`}
             />
           ))}
@@ -123,7 +133,9 @@ const ApplicationView = () => {
                       ? DateTime.fromISO(deliverable.modifiedTime).toFormat('yyyy/MM/dd')
                       : undefined
                   }
-                  goToDeliverable={() => {}}
+                  goToDeliverable={() => {
+                    goToAcceleratorApplicationDeliverable(selectedApplication.id, deliverable.id);
+                  }}
                   key={`section-${section.moduleId}-${index}`}
                 />
               ))}
