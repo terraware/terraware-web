@@ -237,7 +237,7 @@ const QuestionBox = ({
           </Grid>
         </DialogBox>
       )}
-      <Box data-variable-id={variable.id} key={`question-${index}`}>
+      <Box data-variable-id={variable.id} key={`question-${index}`} sx={{ scrollMarginTop: '50vh' }}>
         {showRejectDialog && <VariableRejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectItem} />}
         <Box
           sx={{
