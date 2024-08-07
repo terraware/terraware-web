@@ -84,7 +84,7 @@ export default function DeliverableDisplayVariableValue({
             width: '100%',
           }}
         >
-          <TableDisplay variable={variable as TableVariableWithValues} />
+          <TableDisplay projectId={projectId} variable={variable as TableVariableWithValues} />
         </Box>
       );
     default:

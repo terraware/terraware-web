@@ -8,13 +8,13 @@ import { ImageVariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValueImageValue } from 'src/types/documentProducer/VariableValue';
 import { getImagePath } from 'src/utils/images';
 
-import PhotoSelector, { PhotoWithAttributes } from '../EditImagesModal/PhotoSelector';
+import PhotoSelector, { PhotoWithAttributesAndUrl } from '../EditImagesModal/PhotoSelector';
 
 export type DeliverableEditImagesProps = {
   projectId: number;
-  setDeletedImages: (values: VariableValueImageValue[]) => void;
-  setImages: (values: VariableValueImageValue[]) => void;
-  setNewImages: (values: PhotoWithAttributes[]) => void;
+  setDeletedImages: (variableId: number, values: VariableValueImageValue[]) => void;
+  setImages: (variableId: number, values: VariableValueImageValue[]) => void;
+  setNewImages: (variableId: number, values: PhotoWithAttributesAndUrl[]) => void;
   variable: ImageVariableWithValues;
 };
 
@@ -22,7 +22,7 @@ const DeliverableEditImages = (props: DeliverableEditImagesProps): JSX.Element =
   const { variable, projectId, setDeletedImages, setImages, setNewImages } = props;
   const theme = useTheme();
   const [imagesCopy, setImagesCopy] = useState(variable.values);
-  const [newImages, setNewImagesLocal] = useState<PhotoWithAttributes[]>();
+  const [newImages, setNewImagesLocal] = useState<PhotoWithAttributesAndUrl[]>();
 
   const onUpdateImage = (newImage: VariableValueImageValue) => {
     if (imagesCopy) {
@@ -30,21 +30,21 @@ const DeliverableEditImages = (props: DeliverableEditImagesProps): JSX.Element =
       const updatedImageIndex = imagesCopy.findIndex((iImage) => iImage.id === newImage.id);
       newImagesCopy[updatedImageIndex] = newImage;
       setImagesCopy(newImagesCopy);
-      setImages(newImagesCopy);
+      setImages(variable.id, newImagesCopy);
     }
   };
 
-  const onFilesChanged = (addedImages: PhotoWithAttributes[]) => {
+  const onFilesChanged = (addedImages: PhotoWithAttributesAndUrl[]) => {
     setNewImagesLocal(addedImages);
-    setNewImages(addedImages);
+    setNewImages(variable.id, addedImages);
   };
 
   const removeFileAtIndex = (index: number) => {
     const newImagesCopy = [...imagesCopy];
     const deleted = newImagesCopy.splice(index, 1);
     setImagesCopy(newImagesCopy);
-    setImages(newImagesCopy);
-    setDeletedImages(deleted);
+    setImages(variable.id, newImagesCopy);
+    setDeletedImages(variable.id, deleted);
   };
 
   return (

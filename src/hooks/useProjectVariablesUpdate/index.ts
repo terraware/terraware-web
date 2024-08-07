@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { PhotoWithAttributes } from 'src/components/DocumentProducer/EditImagesModal/PhotoSelector';
+import { PhotoWithAttributesAndUrl } from 'src/components/DocumentProducer/EditImagesModal/PhotoSelector';
 import { VariableTableCell } from 'src/components/DocumentProducer/EditableTableModal/helpers';
 import {
   selectUpdateVariableValues,
@@ -28,7 +28,7 @@ type ProjectVariablesUpdate = {
   setCellValues: (variableId: number, values: VariableTableCell[][]) => void;
   setDeletedImages: (variableId: number, values: VariableValueImageValue[]) => void;
   setImages: (variableId: number, values: VariableValueImageValue[]) => void;
-  setNewImages: (variableId: number, values: PhotoWithAttributes[]) => void;
+  setNewImages: (variableId: number, values: PhotoWithAttributesAndUrl[]) => void;
   setRemovedValue: (variableId: number, value: VariableValueValue) => void;
   setValues: (variableId: number, values: VariableValueValue[]) => void;
   updateSuccess: boolean;
@@ -46,7 +46,7 @@ export const useProjectVariablesUpdate = (
   const [pendingCellValues, setPendingCellValues] = useState<Map<number, VariableTableCell[][]>>(new Map());
   const [pendingImages, setPendingImages] = useState<Map<number, VariableValueImageValue[]>>(new Map());
   const [pendingDeletedImages, setPendingDeletedImages] = useState<Map<number, VariableValueImageValue[]>>(new Map());
-  const [pendingNewImages, setPendingNewImages] = useState<Map<number, PhotoWithAttributes[]>>(new Map());
+  const [pendingNewImages, setPendingNewImages] = useState<Map<number, PhotoWithAttributesAndUrl[]>>(new Map());
   const [pendingVariableValues, setPendingVariableValues] = useState<Map<number, VariableValueValue[]>>(new Map());
   const [removedVariableValues, setRemovedVariableValues] = useState<Map<number, VariableValueValue>>(new Map());
 
@@ -75,7 +75,7 @@ export const useProjectVariablesUpdate = (
     setPendingDeletedImages(new Map(pendingDeletedImages).set(variableId, values));
   };
 
-  const setNewImages = (variableId: number, values: PhotoWithAttributes[]) => {
+  const setNewImages = (variableId: number, values: PhotoWithAttributesAndUrl[]) => {
     setPendingNewImages(new Map(pendingNewImages).set(variableId, values));
   };
 
@@ -145,16 +145,10 @@ export const useProjectVariablesUpdate = (
     // handle image uploads
     const imageValuesToUpload: UploadImageValueRequestPayloadWithProjectId[] = [];
     pendingNewImages.forEach((pendingValues, variableId) => {
-      const variable = variablesWithValues.find((variableWithValues) => variableWithValues.id === variableId);
-      if (!variable) {
-        // This is impossible if the form is only displaying variables that were initialized within the hook
-        snackbar.toastError(strings.GENERIC_ERROR);
-        return;
-      }
 
       pendingValues.forEach((newImage) => {
         imageValuesToUpload.push({
-          variableId: variable.id,
+          variableId,
           file: newImage.file,
           caption: newImage.caption,
           citation: newImage.citation,

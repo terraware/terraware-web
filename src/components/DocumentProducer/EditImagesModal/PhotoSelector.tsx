@@ -14,7 +14,7 @@ export type PhotoChooserErrorType = {
 export type PhotoChooserProps = {
   title?: string;
   description?: string | string[];
-  onPhotosChanged: (photos: PhotoWithAttributes[]) => void;
+  onPhotosChanged: (photos: PhotoWithAttributesAndUrl[]) => void;
   multipleSelection?: boolean;
   error?: PhotoChooserErrorType;
   selectedFile?: any;

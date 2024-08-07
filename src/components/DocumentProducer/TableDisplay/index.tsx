@@ -20,12 +20,14 @@ import {
   TableVariableWithValues,
 } from 'src/types/documentProducer/Variable';
 import { VariableValueValue } from 'src/types/documentProducer/VariableValue';
+import { getImagePath } from 'src/utils/images';
 
 export type TableDisplayProps = {
+  projectId?: number;
   variable: TableVariableWithValues;
 };
 
-const TableDisplay = ({ variable }: TableDisplayProps) => {
+const TableDisplay = ({ projectId, variable }: TableDisplayProps) => {
   const theme = useTheme();
   const columns = useMemo<TableColumn[]>(() => variable.columns, [variable]);
   const cellValues = useMemo<VariableTableCell[][]>(
@@ -69,7 +71,9 @@ const TableDisplay = ({ variable }: TableDisplayProps) => {
                   {row.map((cell, colNum) => (
                     <TableCell colSpan={columns.length + 1} align='left' sx={{ padding: '8px' }} key={colNum}>
                       <Typography variant={'body2'}>
-                        {(cell.values?.length ?? 0) > 0 ? cellContents(cell.values![0], columns[colNum]) : ''}
+                        {(cell.values?.length ?? 0) > 0
+                          ? cellContents(cell.values![0], columns[colNum], projectId, variable)
+                          : ''}
                       </Typography>
                     </TableCell>
                   ))}
@@ -110,7 +114,9 @@ const TableDisplay = ({ variable }: TableDisplayProps) => {
                         )}
                         <TableCell align='left' sx={{ padding: '8px' }} width='80%'>
                           <Typography variant={'body2'}>
-                            {(col.values?.length ?? 0) > 0 ? cellContents(col.values![0], columns[colNum]) : ''}
+                            {(col.values?.length ?? 0) > 0
+                              ? cellContents(col.values![0], columns[colNum], projectId, variable)
+                              : ''}
                           </Typography>
                         </TableCell>
                       </TableRow>
@@ -128,7 +134,12 @@ const TableDisplay = ({ variable }: TableDisplayProps) => {
 
 export default TableDisplay;
 
-const cellContents = (value: VariableValueValue, col: TableColumn) => {
+const cellContents = (
+  value: VariableValueValue,
+  col: TableColumn,
+  projectId: number | undefined,
+  variable: TableVariableWithValues
+) => {
   switch (value.type) {
     case 'Number':
       return value.numberValue;
@@ -142,5 +153,19 @@ const cellContents = (value: VariableValueValue, col: TableColumn) => {
       const options = (col.variable as SelectVariable).options;
       const selectedOption = options.find((opt) => opt.id === value.optionValues[0]);
       return selectedOption?.renderedText ?? selectedOption?.name ?? '';
+    case 'Image':
+      return !projectId ? null : (
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            width: '100%',
+          }}
+        >
+          <img src={getImagePath(projectId, value.id, 500, 500)} alt={value.caption ?? `${variable.name}`} />
+          <p style={{ fontSize: '16px' }}>{value.caption}</p>
+        </Box>
+      );
   }
 };

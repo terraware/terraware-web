@@ -58,7 +58,7 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
       return operation;
     });
 
-    // upload new imagess
+    // upload new images
     if (newImages) {
       newImages.forEach((newImage, index) => {
         const upRequest = dispatch(

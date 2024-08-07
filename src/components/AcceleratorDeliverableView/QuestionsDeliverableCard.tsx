@@ -8,7 +8,6 @@ import Metadata from 'src/components/DeliverableView/Metadata';
 import { EditProps } from 'src/components/DeliverableView/types';
 import DeliverableDisplayVariableValue from 'src/components/DocumentProducer/DeliverableDisplayVariableValue';
 import DeliverableVariableDetailsInput from 'src/components/DocumentProducer/DeliverableVariableDetailsInput';
-import { PhotoWithAttributes } from 'src/components/DocumentProducer/EditImagesModal/PhotoSelector';
 import { VariableTableCell } from 'src/components/DocumentProducer/EditableTableModal/helpers';
 import Card from 'src/components/common/Card';
 import OptionsMenu from 'src/components/common/OptionsMenu';
@@ -27,7 +26,7 @@ import {
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
-import { VariableValue, VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
+import { VariableValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import VariableInternalComment from '../Variables/VariableInternalComment';
@@ -349,9 +348,9 @@ const QuestionBox = ({
                   variable={variable}
                   addRemovedValue={(removedValue: VariableValueValue) => setRemovedValue(variable.id, removedValue)}
                   setCellValues={(newValues: VariableTableCell[][]) => setCellValues(variable.id, newValues)}
-                  setDeletedImages={(newValues: VariableValueImageValue[]) => setDeletedImages(variable.id, newValues)}
-                  setImages={(newValues: VariableValueImageValue[]) => setImages(variable.id, newValues)}
-                  setNewImages={(newValues: PhotoWithAttributes[]) => setNewImages(variable.id, newValues)}
+                  setDeletedImages={setDeletedImages}
+                  setImages={setImages}
+                  setNewImages={setNewImages}
                   projectId={projectId}
                 />
               </Grid>

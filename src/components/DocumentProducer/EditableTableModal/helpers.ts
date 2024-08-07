@@ -1,6 +1,8 @@
 import { TableColumnWithValues, TableVariableWithValues, VariableType } from 'src/types/documentProducer/Variable';
 import { VariableValueTableValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
 
+import { PhotoWithAttributesAndUrl } from '../EditImagesModal/PhotoSelector';
+
 export type CellVariableType = Omit<VariableType, 'Section'>;
 
 export type VariableTableCell = {
@@ -18,7 +20,10 @@ export const getCellValues = (
   return col.variable.variableValues.find((val) => val.rowValueId === row.id)?.values;
 };
 
-export const newValueFromEntry = (value: string | number, type: CellVariableType): VariableValueValue | undefined => {
+export const newValueFromEntry = (
+  value: string | number | PhotoWithAttributesAndUrl[],
+  type: CellVariableType
+): VariableValueValue | undefined => {
   switch (type) {
     case 'Text':
       return {
@@ -47,6 +52,16 @@ export const newValueFromEntry = (value: string | number, type: CellVariableType
         listPosition: 0,
         type: 'Select',
         optionValues: [value as number],
+      };
+    case 'Image':
+      const newPhoto = (value as PhotoWithAttributesAndUrl[])[0];
+
+      return {
+        id: -1,
+        listPosition: 0,
+        type: 'Image',
+        caption: newPhoto.caption ?? '',
+        citation: newPhoto.citation ?? '',
       };
     default:
       return undefined;

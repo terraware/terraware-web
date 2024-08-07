@@ -5,16 +5,29 @@ import { Button } from '@terraware/web-components';
 
 import strings from 'src/strings';
 import { TableColumn, TableVariableWithValues } from 'src/types/documentProducer/Variable';
+import { VariableValueImageValue } from 'src/types/documentProducer/VariableValue';
 
-import { EditableCell } from '../EditableTableModal';
+import { PhotoWithAttributesAndUrl } from '../EditImagesModal/PhotoSelector';
 import { VariableTableCell, cellValue, getInitialCellValues, newValueFromEntry } from '../EditableTableModal/helpers';
+import DeliverableEditableCell from './DeliverableEditableCell';
 
 type DeliverableEditableTableEditProps = {
   variable: TableVariableWithValues;
   onChange: (newValue: any) => void;
+  projectId: number;
+  setDeletedImages: (variableId: number, values: VariableValueImageValue[]) => void;
+  setImages: (variableId: number, values: VariableValueImageValue[]) => void;
+  setNewImages: (variableId: number, values: PhotoWithAttributesAndUrl[]) => void;
 };
 
-const DeliverableEditableTableEdit = ({ variable, onChange }: DeliverableEditableTableEditProps) => {
+const DeliverableEditableTableEdit = ({
+  variable,
+  onChange,
+  projectId,
+  setDeletedImages,
+  setImages,
+  setNewImages,
+}: DeliverableEditableTableEditProps) => {
   const columns = useMemo<TableColumn[]>(() => variable.columns, [variable]);
   const initialCellValues = useMemo<VariableTableCell[][]>(() => getInitialCellValues(variable), [variable]);
   const [cellValues, setCellValues] = useState<VariableTableCell[][]>(initialCellValues);
@@ -24,7 +37,7 @@ const DeliverableEditableTableEdit = ({ variable, onChange }: DeliverableEditabl
     onChange(nextCellValues);
   }, []);
 
-  const setCellValue = (rowNum: number, colNum: number, newValue: string | number) => {
+  const setCellValue = (rowNum: number, colNum: number, newValue: string | number | PhotoWithAttributesAndUrl[]) => {
     const newCellValues: VariableTableCell[][] = [];
     cellValues.forEach((row, rowIndex) => {
       const newRow: VariableTableCell[] = [];
@@ -97,10 +110,17 @@ const DeliverableEditableTableEdit = ({ variable, onChange }: DeliverableEditabl
                 <TableRow key={rowNum}>
                   {row.map((cell, colNum) => (
                     <TableCell colSpan={columns.length + 1} align='left' sx={{ padding: '8px' }} key={colNum}>
-                      <EditableCell
+                      <DeliverableEditableCell
                         id={`${cell.rowId}-${cell.colId}`}
                         column={columns[colNum]}
                         onChange={(value) => setCellValue(rowNum, colNum, value as string | number)}
+                        projectId={projectId}
+                        setDeletedImages={setDeletedImages}
+                        setImages={setImages}
+                        setNewImages={(variableId, values) => {
+                          setNewImages(variableId, values);
+                          // setCellValue(rowNum, colNum, values as PhotoWithAttributesAndUrl[]);
+                        }}
                         value={(cell.values?.length ?? 0) > 0 ? cellValue(cell.values![0]) : undefined}
                       />
                     </TableCell>
@@ -140,10 +160,17 @@ const DeliverableEditableTableEdit = ({ variable, onChange }: DeliverableEditabl
 
                           <TableCell align='left' sx={{ padding: '8px' }}>
                             {correspondingColumn && (
-                              <EditableCell
+                              <DeliverableEditableCell
                                 id={`${col.rowId}-${col.colId}`}
                                 column={correspondingColumn}
                                 onChange={(value) => setCellValue(index, colNum, value as string | number)}
+                                projectId={projectId}
+                                setDeletedImages={setDeletedImages}
+                                setImages={setImages}
+                                setNewImages={(variableId, values) => {
+                                  setNewImages(variableId, values);
+                                  // setCellValue(rowNum, colNum, values as PhotoWithAttributesAndUrl[]);
+                                }}
                                 value={(col.values?.length ?? 0) > 0 ? cellValue(col.values![0]) : undefined}
                               />
                             )}

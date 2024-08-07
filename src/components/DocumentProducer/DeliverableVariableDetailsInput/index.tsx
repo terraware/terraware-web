@@ -23,15 +23,15 @@ import {
 
 import DeliverableEditImages from '../DeliverableEditImages';
 import DeliverableEditTable from '../DeliverableEditTable';
-import { PhotoWithAttributes } from '../EditImagesModal/PhotoSelector';
+import { PhotoWithAttributesAndUrl } from '../EditImagesModal/PhotoSelector';
 import { VariableTableCell } from '../EditableTableModal/helpers';
 
 export type DeliverableVariableDetailsInputProps = {
   values: VariableValueValue[];
   setCellValues?: (values: VariableTableCell[][]) => void;
-  setDeletedImages: (values: VariableValueImageValue[]) => void;
-  setImages: (values: VariableValueImageValue[]) => void;
-  setNewImages: (values: PhotoWithAttributes[]) => void;
+  setDeletedImages: (variableId: number, values: VariableValueImageValue[]) => void;
+  setImages: (variableId: number, values: VariableValueImageValue[]) => void;
+  setNewImages: (variableId: number, values: PhotoWithAttributesAndUrl[]) => void;
   setValues: (values: VariableValueValue[]) => void;
   variable: Variable;
   addRemovedValue: (value: VariableValueValue) => void;
@@ -340,6 +340,10 @@ const DeliverableVariableDetailsInput = ({
       {variable.type === 'Table' && (
         <DeliverableEditTable
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
+          projectId={projectId}
+          setDeletedImages={setDeletedImages}
+          setImages={setImages}
+          setNewImages={setNewImages}
           variable={variable as TableVariableWithValues}
         />
       )}

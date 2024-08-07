@@ -4,7 +4,7 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import Metadata from 'src/components/DeliverableView/Metadata';
 import DeliverableVariableDetailsInput from 'src/components/DocumentProducer/DeliverableVariableDetailsInput';
-import { PhotoWithAttributes } from 'src/components/DocumentProducer/EditImagesModal/PhotoSelector';
+import { PhotoWithAttributesAndUrl } from 'src/components/DocumentProducer/EditImagesModal/PhotoSelector';
 import { VariableTableCell } from 'src/components/DocumentProducer/EditableTableModal/helpers';
 import Card from 'src/components/common/Card';
 import WrappedPageForm from 'src/components/common/PageForm';
@@ -27,9 +27,9 @@ type QuestionBoxProps = {
   pendingVariableValues: Map<number, VariableValueValue[]>;
   projectId: number;
   setCellValues?: (values: VariableTableCell[][]) => void;
-  setDeletedImages: (values: VariableValueImageValue[]) => void;
-  setImages: (values: VariableValueImageValue[]) => void;
-  setNewImages: (values: PhotoWithAttributes[]) => void;
+  setDeletedImages: (variableId: number, values: VariableValueImageValue[]) => void;
+  setImages: (variableId: number, values: VariableValueImageValue[]) => void;
+  setNewImages: (variableId: number, values: PhotoWithAttributesAndUrl[]) => void;
   setValues: (values: VariableValueValue[]) => void;
   variable: VariableWithValues;
 };
@@ -210,11 +210,9 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
                 pendingVariableValues={pendingVariableValues}
                 projectId={deliverable.projectId}
                 setCellValues={(newValues: VariableTableCell[][]) => setCellValues(variableWithValues.id, newValues)}
-                setDeletedImages={(newValues: VariableValueImageValue[]) =>
-                  setDeletedImages(variableWithValues.id, newValues)
-                }
-                setImages={(newValues: VariableValueImageValue[]) => setImages(variableWithValues.id, newValues)}
-                setNewImages={(newValues: PhotoWithAttributes[]) => setNewImages(variableWithValues.id, newValues)}
+                setDeletedImages={setDeletedImages}
+                setImages={setImages}
+                setNewImages={setNewImages}
                 setValues={(newValues: VariableValueValue[]) => setValues(variableWithValues.id, newValues)}
                 variable={variableWithValues}
               />
