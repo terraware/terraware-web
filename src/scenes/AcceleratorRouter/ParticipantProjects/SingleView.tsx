@@ -12,6 +12,7 @@ import ProjectFieldTextAreaDisplay from 'src/components/ProjectField/TextAreaDis
 import VotingDecisionCard from 'src/components/ProjectField/VotingDecisionCard';
 import Card from 'src/components/common/Card';
 import ExportCsvModal from 'src/components/common/ExportCsvModal';
+import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import TextTruncated from 'src/components/common/TextTruncated';
@@ -105,9 +106,17 @@ const SingleView = () => {
     }
   }, [activeLocale]);
 
+  const projectViewTitle = (
+    <Box paddingLeft={3}>
+      <Typography fontSize={'24px'} fontWeight={600}>
+        {participant?.name || ''} / {project?.name || ''}
+      </Typography>
+    </Box>
+  );
+
   return (
     <PageWithModuleTimeline
-      title={`${participant?.name || ''} / ${project?.name || ''}`}
+      title={projectViewTitle}
       crumbs={crumbs}
       hierarchicalCrumbs={false}
       rightComponent={rightComponent}
@@ -116,6 +125,11 @@ const SingleView = () => {
 
       {project && (
         <>
+          <Box paddingLeft={3} marginBottom={4}>
+            <Link to={`${APP_PATHS.ACCELERATOR_DELIVERABLES}?projectId=${project.id}`} style={{ fontWeight: 400 }}>
+              {strings.VIEW_ALL_DELIVERABLES}
+            </Link>
+          </Box>
           <Card
             style={{
               display: 'flex',

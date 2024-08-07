@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { TableColumnType } from '@terraware/web-components';
 
-import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
+import { FilterConfig, FilterConfigWithValues } from 'src/components/common/SearchFiltersWrapperV2';
 import { useParticipants } from 'src/hooks/useParticipants';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
@@ -17,9 +18,12 @@ import {
   DeliverableTypes,
   ListDeliverablesElement,
 } from 'src/types/Deliverables';
+import { ParticipantProjectSearchResult } from 'src/types/Participant';
 import { Project } from 'src/types/Project';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { SearchAndSortFn } from 'src/utils/searchAndSort';
+import useQuery from 'src/utils/useQuery';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import TableWithSearchFilters from '../TableWithSearchFilters';
 import DeliverableCellRenderer from './DeliverableCellRenderer';
@@ -101,6 +105,10 @@ const DeliverablesTable = ({
   const [deliverables, setDeliverables] = useState<ListDeliverablesElement[]>([]);
   const [deliverablesSearchRequestId, setDeliverablesSearchRequestId] = useState('');
   const deliverablesSearchRequest = useAppSelector(selectDeliverablesSearchRequest(deliverablesSearchRequestId));
+  const query = useQuery();
+  const projectParam = query.get('projectId');
+  const navigate = useNavigate();
+  const location = useStateLocation();
 
   const projectsFilterOptions = useMemo(
     () =>
@@ -123,8 +131,15 @@ const DeliverablesTable = ({
     [participantId, projectsFilterOptions, selectedParticipant?.projects]
   );
 
-  const featuredFilters: FilterConfig[] = useMemo(() => {
-    const filters: FilterConfig[] = [
+  const removeParam = () => {
+    if (projectParam) {
+      query.delete('projectId');
+      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+    }
+  };
+
+  const featuredFilters: FilterConfigWithValues[] = useMemo(() => {
+    const filters: FilterConfigWithValues[] = [
       {
         field: 'status',
         // These options are strings for now, but may end up as enums when the BE types come through, if that is
@@ -148,18 +163,30 @@ const DeliverablesTable = ({
 
     // show the project filter only in the accelerator route
     // the participant view already has a projects filter above the table
-    if (isAcceleratorRoute) {
+    const availableProjects = selectedParticipant?.projects || projectsFilterOptions || [];
+    if (isAcceleratorRoute && availableProjects && availableProjects.length > 0) {
+      let projectFromParam: ParticipantProjectSearchResult | undefined;
+      if (projectParam) {
+        projectFromParam = availableProjects.find((proj) => proj.id.toString() === projectParam);
+      }
       filters.unshift({
         field: 'projectName',
-        options: (selectedParticipant?.projects || projectsFilterOptions || [])?.map(
-          (project: Project | AcceleratorOrgProject) => `${project.name}`
-        ),
+        options: availableProjects?.map((project: Project | AcceleratorOrgProject) => `${project.name}`),
         label: strings.PROJECTS,
+        values: projectFromParam ? [projectFromParam.name] : [],
       });
+      removeParam();
     }
 
     return activeLocale ? filters : [];
-  }, [activeLocale, getFilterProjectName, isAcceleratorRoute, projectsFilterOptions, selectedParticipant?.projects]);
+  }, [
+    activeLocale,
+    getFilterProjectName,
+    isAcceleratorRoute,
+    projectsFilterOptions,
+    selectedParticipant?.projects,
+    projectParam,
+  ]);
 
   const dispatchSearchRequest = useCallback(
     (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => {
