@@ -48,7 +48,6 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
     ...tableProps
   } = props;
 
-  console.log({ tableProps });
   const { activeLocale } = useLocalization();
 
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
@@ -69,7 +68,6 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
   };
 
   const getSearchPayload = useCallback((): SearchNodePayload => {
-    console.log({ debouncedSearchTerm, filters, fuzzySearchColumns, extraTableFilters });
     const searchNodeChildren: SearchNodePayload[] = [];
 
     // Apply search field to search API payload
@@ -124,7 +122,6 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
   }, [featuredFilters, filterModifiers]);
 
   useEffect(() => {
-    console.log({ activeLocale, dispatchSearchRequest, getSearchPayload, searchSortOrder });
     const search: SearchNodePayload = getSearchPayload();
     if (searchSortOrder) {
       dispatchSearchRequest(activeLocale, search, searchSortOrder);

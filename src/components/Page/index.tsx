@@ -26,6 +26,7 @@ export type PageProps = {
   hierarchicalCrumbs?: boolean;
   isLoading?: boolean;
   primaryButton?: PrimaryButtonType;
+  leftComponent?: JSX.Element;
   rightComponent?: React.ReactNode;
   title?: React.ReactNode;
 };
@@ -42,6 +43,7 @@ export default function Page({
   hierarchicalCrumbs,
   isLoading,
   primaryButton,
+  leftComponent,
   rightComponent,
   title,
 }: PageProps): JSX.Element {
@@ -56,7 +58,6 @@ export default function Page({
     );
   }
 
-  console.log({ contentStyle });
   return (
     <TfMain style={containerStyles}>
       <PageHeaderWrapper nextElement={contentRef.current}>
@@ -74,7 +75,7 @@ export default function Page({
             </Grid>
           )}
           {title && typeof title === 'string' && (
-            <Grid item xs={8}>
+            <Grid item>
               <Typography
                 sx={{
                   paddingLeft: theme.spacing(3),
@@ -86,6 +87,11 @@ export default function Page({
               >
                 {title}
               </Typography>
+            </Grid>
+          )}
+          {leftComponent && (
+            <Grid item xs={4} style={{ marginRight: 'auto' }}>
+              {leftComponent}
             </Grid>
           )}
           {rightComponent && (
