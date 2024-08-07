@@ -145,7 +145,6 @@ export const useProjectVariablesUpdate = (
     // handle image uploads
     const imageValuesToUpload: UploadImageValueRequestPayloadWithProjectId[] = [];
     pendingNewImages.forEach((pendingValues, variableId) => {
-
       pendingValues.forEach((newImage) => {
         imageValuesToUpload.push({
           variableId,
