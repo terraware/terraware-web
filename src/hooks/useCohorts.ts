@@ -39,7 +39,7 @@ export const useCohorts = (cohortId?: number): Response => {
   }, [result, snackbar]);
 
   const fetch = useCallback(() => {
-    dispatch(requestCohorts({ locale: activeLocale }));
+    dispatch(requestCohorts({ locale: activeLocale, moduleDepth: 'Module' }));
   }, [activeLocale, dispatch]);
 
   useEffect(() => {

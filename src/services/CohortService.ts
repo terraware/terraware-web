@@ -27,6 +27,8 @@ const COHORT_ENDPOINT = '/api/v1/accelerator/cohorts/{cohortId}';
 export type ListCohortsResponsePayload =
   paths[typeof COHORTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 export type ListCohortsRequestDepth = paths[typeof COHORTS_ENDPOINT]['get']['parameters']['query']['cohortDepth'];
+export type ListCohortsRequestModuleDepth =
+  paths[typeof COHORTS_ENDPOINT]['get']['parameters']['query']['cohortModuleDepth'];
 
 export type CreateCohortResponsePayload =
   paths[typeof COHORTS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
@@ -48,7 +50,8 @@ const listCohorts = async (
   locale: string | null,
   search?: SearchNodePayload,
   searchSortOrder?: SearchSortOrder,
-  cohortDepth: ListCohortsRequestDepth = 'Cohort'
+  cohortDepth: ListCohortsRequestDepth = 'Cohort',
+  cohortModuleDepth: ListCohortsRequestModuleDepth = 'Cohort'
 ): Promise<(CohortsData & Response) | null> => {
   let searchOrderConfig: SearchOrderConfig;
   if (searchSortOrder) {
@@ -59,14 +62,17 @@ const listCohorts = async (
     };
   }
 
-  return httpCohorts.get<ListCohortsResponsePayload, CohortsData>({ params: { cohortDepth } }, (response) => {
-    const cohorts = searchAndSort(response?.cohorts || [], search, searchOrderConfig);
-    const newCohorts: CohortWithParticipantNum[] = cohorts.map((c) => ({
-      ...c,
-      numOfParticipants: c.participantIds?.length || 0,
-    }));
-    return { cohorts: newCohorts };
-  });
+  return httpCohorts.get<ListCohortsResponsePayload, CohortsData>(
+    { params: { cohortDepth, cohortModuleDepth } },
+    (response) => {
+      const cohorts = searchAndSort(response?.cohorts || [], search, searchOrderConfig);
+      const newCohorts: CohortWithParticipantNum[] = cohorts.map((c) => ({
+        ...c,
+        numOfParticipants: c.participantIds?.length || 0,
+      }));
+      return { cohorts: newCohorts };
+    }
+  );
 };
 
 /**
@@ -77,9 +83,14 @@ const createCohort = (cohort: CreateCohortRequestPayload): Promise<Response> =>
     entity: cohort,
   });
 
-const getCohort = (cohortId: number): Promise<Response2<Cohort>> =>
+const getCohort = (
+  cohortId: number,
+  cohortDepth: ListCohortsRequestDepth = 'Cohort',
+  cohortModuleDepth: ListCohortsRequestModuleDepth = 'Cohort'
+): Promise<Response2<Cohort>> =>
   httpCohort.get<GetCohortResponsePayload, { data: Cohort | undefined }>(
     {
+      params: { cohortDepth, cohortModuleDepth },
       url: COHORT_ENDPOINT,
       urlReplacements: { '{cohortId}': `${cohortId}` },
     },
