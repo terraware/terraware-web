@@ -1,4 +1,4 @@
-import React, { CSSProperties, useCallback, useEffect, useState } from 'react';
+import React, { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { AddressAutofillFeatureSuggestion, AddressAutofillSuggestion } from '@mapbox/search-js-core';
 import { Autocomplete, DropdownItem } from '@terraware/web-components';
@@ -15,12 +15,31 @@ export type MapSearchBoxProp = {
 };
 
 const MapSearchBox = ({ onSelect, style }: MapSearchBoxProp) => {
-  const { clear, retrieve, suggest } = useMapboxSearch();
+  const { clear, retrieve, suggest, suggestResult, suggestText } = useMapboxSearch();
   const [value, setValue] = useState<string>('');
-  const [prevValue, setPrevValue] = useState<string>('');
-  const [options, setOptions] = useState<DropdownItem[]>([]);
+  const [debouncedValue, setDebouncedValue] = useState<string>('');
 
-  const debouncedValue = useDebounce(value, 500);
+  const options = useMemo(
+    () =>
+      suggestResult.map(
+        (result): DropdownItem => ({
+          label: `${result.feature_name}, ${result.full_address}`,
+          value: result,
+        })
+      ),
+    [suggestResult]
+  );
+
+  const updateDebouncedValue = useCallback(
+    (nextValue: string) => {
+      if (debouncedValue !== nextValue) {
+        setDebouncedValue(nextValue);
+      }
+    },
+    [debouncedValue, setDebouncedValue]
+  );
+
+  useDebounce(value, 500, updateDebouncedValue);
 
   const onSelectSuggestion = useCallback(
     async (suggestion: AddressAutofillSuggestion | null) => {
@@ -34,36 +53,31 @@ const MapSearchBox = ({ onSelect, style }: MapSearchBoxProp) => {
 
   const fetchSuggestions = useCallback(
     async (searchText: string) => {
-      const results = await suggest(searchText);
-      const nextOptions = results.map((result): DropdownItem => {
-        return {
-          label: `${result.feature_name}, ${result.full_address}`,
-          value: result,
-        };
-      });
-      setOptions(nextOptions);
+      if (searchText !== suggestText) {
+        await suggest(searchText);
+      }
     },
-    [setOptions, suggest, onSelectSuggestion]
+    [suggest, suggestText]
   );
 
   useEffect(() => {
     if (!debouncedValue) {
       clear();
-      setOptions([]);
-      return;
-    } else if (prevValue !== debouncedValue) {
+    } else {
       fetchSuggestions(debouncedValue);
-      setPrevValue(debouncedValue);
     }
-  }, [clear, debouncedValue, fetchSuggestions, prevValue, setPrevValue]);
+  }, [clear, debouncedValue, fetchSuggestions]);
 
   const onChange = useCallback(
     (value: string | DropdownItem | undefined) => {
       if (typeof value === 'string') {
+        // When user types in the search box
         setValue(value);
       } else if (value === undefined) {
+        // When user clears the value
         setValue('');
       } else {
+        // When user selects from the dropdown option
         setValue(value.label);
         onSelectSuggestion(value.value);
       }
