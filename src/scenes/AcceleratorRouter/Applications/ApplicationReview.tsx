@@ -50,7 +50,7 @@ const ApplicationReview = ({ application }: ApplicationReviewProps) => {
   const { goToParticipantProject } = useNavigateTo();
   const { isAllowed } = useUser();
 
-  const canCreateInternalComments = isAllowed('UPDATE_APPLICATION_INTERNAL_COMMENTS');
+  const canUpdateInternalComments = isAllowed('UPDATE_APPLICATION_INTERNAL_COMMENTS');
   const color = getApplicationStatusColor(application.status, theme);
 
   const { reload } = useApplicationData();
@@ -104,7 +104,7 @@ const ApplicationReview = ({ application }: ApplicationReviewProps) => {
           </Typography>
           <Button
             disabled={
-              !canCreateInternalComments &&
+              !canUpdateInternalComments &&
               (application.status === 'Failed Pre-screen' || application.status === 'Not Submitted')
             }
             label={strings.REVIEW_APPLICATION}
