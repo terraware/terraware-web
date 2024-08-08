@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
+import { useParticipants } from 'src/hooks/useParticipants';
 import { selectDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesSelector';
 import { requestListDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesThunks';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
@@ -20,10 +21,12 @@ export type DocumentMetadataProps = {
 };
 
 const DocumentMetadata = ({ document }: DocumentMetadataProps): JSX.Element => {
-  const { name, documentTemplateId, ownedBy, modifiedBy, modifiedTime, projectName } = document;
+  const { name, documentTemplateId, ownedBy, modifiedBy, modifiedTime, projectId } = document;
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
+  const { availableParticipants } = useParticipants();
+
   const [modifiedByUser, setModifiedByUser] = useState<User>();
 
   const modifiedBySelector = useAppSelector(selectUser(modifiedBy));
@@ -49,6 +52,8 @@ const DocumentMetadata = ({ document }: DocumentMetadataProps): JSX.Element => {
     [documentTemplates, documentTemplateId]
   );
 
+  const participant = availableParticipants?.find((part) => part.projects.find((proj) => proj.id === projectId));
+
   return (
     <Box display='flex' flexDirection='column' marginTop={3}>
       <Typography
@@ -58,7 +63,7 @@ const DocumentMetadata = ({ document }: DocumentMetadataProps): JSX.Element => {
         color={theme.palette.TwClrTxt}
         margin={theme.spacing(1, 0)}
       >
-        {projectName}
+        {participant?.name}
       </Typography>
       <Typography
         fontWeight={600}
