@@ -18,12 +18,24 @@ const CurrentTimeline = ({ steps, currentIndex }: CurrentTimelineProps): JSX.Ele
 
   const { isDesktop } = useDeviceInfo();
 
-  // TODO these will probably come from the BE, not sure if they will be attached to the project, or cohort, or some
-  // other data model, so for now they are hard coded.
+  const sliceTimeline = (steps: TimelineStep[], currentIndex: number): TimelineStep[] => {
+    const numSteps = steps.length;
+    if (numSteps === 0) {
+      return [];
+    }
+    // If index is at the start
+    if (currentIndex === 0) {
+      return steps.slice(0, Math.min(3, numSteps));
+    }
+    // If index is at the end
+    if (currentIndex === numSteps - 1) {
+      return steps.slice(Math.max(0, numSteps - 3), numSteps);
+    }
+    // If index is in the middle
+    return steps.slice(Math.max(0, currentIndex - 1), Math.min(currentIndex + 2, numSteps));
+  };
 
-  const lowIdx = Math.max(currentIndex - 1, 0);
-  const highIdx = Math.min(lowIdx + 3, steps.length);
-  const displayPhases = steps.slice(lowIdx, highIdx);
+  const displayPhases = sliceTimeline(steps, currentIndex);
 
   return (
     <Box borderRadius={theme.spacing(1)} padding={theme.spacing(3)} bgcolor={theme.palette.TwClrBgSecondary}>
