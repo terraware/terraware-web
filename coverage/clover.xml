@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1723142877122" clover="3.2.0">
-  <project timestamp="1723142877122" name="All files">
-    <metrics statements="23989" coveredstatements="957" conditionals="15593" coveredconditionals="239" methods="7390" coveredmethods="164" elements="46972" coveredelements="1360" complexity="0" loc="23989" ncloc="23989" packages="229" files="1054" classes="1054"/>
+<coverage generated="1723144267363" clover="3.2.0">
+  <project timestamp="1723144267363" name="All files">
+    <metrics statements="23989" coveredstatements="957" conditionals="15592" coveredconditionals="239" methods="7390" coveredmethods="164" elements="46971" coveredelements="1360" complexity="0" loc="23989" ncloc="23989" packages="229" files="1054" classes="1054"/>
     <package name="src">
       <metrics statements="176" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -16441,14 +16441,14 @@
       </file>
     </package>
     <package name="src.scenes.ApplicationRouter.portal.Prescreen">
-      <metrics statements="51" coveredstatements="0" conditionals="40" coveredconditionals="0" methods="17" coveredmethods="0"/>
+      <metrics statements="51" coveredstatements="0" conditionals="39" coveredconditionals="0" methods="17" coveredmethods="0"/>
       <file name="FeedbackMessage.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ApplicationRouter/portal/Prescreen/FeedbackMessage.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="12" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ApplicationRouter/portal/Prescreen/index.tsx">
-        <metrics statements="49" coveredstatements="0" conditionals="38" coveredconditionals="0" methods="16" coveredmethods="0"/>
+        <metrics statements="49" coveredstatements="0" conditionals="37" coveredconditionals="0" methods="16" coveredmethods="0"/>
         <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
         <line num="23" count="0" type="stmt"/>

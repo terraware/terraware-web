@@ -1,3 +1,6 @@
+3b65f88f676 SW-5759: When Min/Max Carbon Accumulation is not filled out, put N/A to match other fields (#2976)
+56f1ff42cfb SW-5789: Upload boundary button blobby is low resolution (#2978)
+3dc92fe3766 SW-5788: Disable submit pre-screen button until sections are complete (#2977)
 1a0680e01d2 Revert changes for SW-5765, use participant name at top of page (#2980)
 49bc7511967 Fixed a bug where timeline is not showing 3 steps (#2979)
 e06e83540e3 SW-5744 Add module stepper to cohort detail view (#2974)
