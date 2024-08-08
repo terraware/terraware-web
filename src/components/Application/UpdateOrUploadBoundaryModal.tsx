@@ -54,7 +54,7 @@ export default function UpdateOrUploadBoundaryModal(props: UpdateOrUploadBoundar
       <Box display='flex' flexDirection='column'>
         <Box display='flex' flexDirection={isMobile ? 'column' : 'row'} gap={3}>
           <BoundaryTypeSelector
-            imageName='upload-cloud.png'
+            imageName='upload-cloud@2x.png'
             description={strings.UPLOAD_SHAPEFILE}
             isSelected={type === 'Upload'}
             onClick={() => setType('Upload')}
