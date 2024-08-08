@@ -50,7 +50,7 @@ const ApplicationReview = ({ application }: ApplicationReviewProps) => {
   const { goToParticipantProject } = useNavigateTo();
   const { isAllowed } = useUser();
 
-  const canCreateInternalComments = isAllowed('CREATE_APPLICATION_INTERNAL_COMMENTS');
+  const canCreateInternalComments = isAllowed('UPDATE_APPLICATION_INTERNAL_COMMENTS');
   const color = getApplicationStatusColor(application.status, theme);
 
   const { reload } = useApplicationData();
