@@ -4138,6 +4138,8 @@ export interface components {
        * @description Which planting site this observation needs to be scheduled for.
        */
       plantingSiteId: number;
+      /** @description If this observation should only cover specific parts of the planting site, the IDs of the subzones it should include. */
+      requestedSubzoneIds?: number[];
       /**
        * Format: date
        * @description The start date for this observation, can be up to a year from the date this schedule request occurs on.
