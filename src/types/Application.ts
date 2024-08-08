@@ -8,7 +8,7 @@ export type ApplicationDeliverable = components['schemas']['ApplicationDeliverab
 export type ApplicationReview = components['schemas']['ReviewApplicationRequestPayload'];
 export type ApplicationReviewStatus = ApplicationReview['status'];
 
-export const ApplicaitonReviewStatuses: ApplicationReviewStatus[] = [
+export const ApplicationReviewStatuses: ApplicationReviewStatus[] = [
   'Accepted',
   'Carbon Eligible',
   'Issue Active',
