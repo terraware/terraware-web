@@ -104,8 +104,8 @@ const ApplicationReview = ({ application }: ApplicationReviewProps) => {
           </Typography>
           <Button
             disabled={
-              !canUpdateInternalComments &&
-              (application.status === 'Failed Pre-screen' || application.status === 'Not Submitted')
+              (application.status === 'Failed Pre-screen' || application.status === 'Not Submitted') &&
+              !canUpdateInternalComments
             }
             label={strings.REVIEW_APPLICATION}
             onClick={() => {
