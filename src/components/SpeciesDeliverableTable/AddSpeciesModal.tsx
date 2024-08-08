@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Grid, useTheme } from '@mui/material';
-import { Dropdown, SelectT } from '@terraware/web-components';
+import { Dropdown, Message, SelectT } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
@@ -21,6 +21,8 @@ import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export interface AddSpeciesModalProps {
+  hasActiveDeliverable: boolean;
+  hasRecentDeliverable: boolean;
   onClose: () => void;
   participantProjectSpecies: SpeciesForParticipantProject[];
   projectId: number;
@@ -28,7 +30,7 @@ export interface AddSpeciesModalProps {
 }
 
 export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Element {
-  const { onClose, participantProjectSpecies, reload, projectId } = props;
+  const { hasActiveDeliverable, hasRecentDeliverable, onClose, participantProjectSpecies, reload, projectId } = props;
 
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
@@ -107,6 +109,12 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
     }));
   };
 
+  const message = hasActiveDeliverable
+    ? strings.SPECIES_LIST_DELIVERABLE_ADD_SPECIES_ACTIVE_DELIVERABLE_INFO
+    : hasRecentDeliverable
+      ? strings.SPECIES_LIST_DELIVERABLE_ADD_SPECIES_RECENT_DELIVERABLE_INFO
+      : false;
+
   return (
     <DialogBox
       onClose={onClose}
@@ -126,6 +134,12 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
       ]}
     >
       <Grid container textAlign={'left'}>
+        {message && (
+          <Grid item xs={12} sx={{ marginBottom: theme.spacing(2) }}>
+            <Message body={message} priority='info' type='page' />
+          </Grid>
+        )}
+
         <Grid item xs={12}>
           <TextField
             id='project-name'
