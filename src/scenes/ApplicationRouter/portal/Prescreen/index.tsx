@@ -101,7 +101,7 @@ const PrescreenView = () => {
       <SectionView section={prescreenSection} sectionDeliverables={prescreenDeliverables}>
         {selectedApplication.status === 'Not Submitted' && (
           <Button
-            disabled={(!allDeliverablesCompleted || !selectedApplication.boundary || isLoading) && false}
+            disabled={!allDeliverablesCompleted || !selectedApplication.boundary || isLoading}
             label={strings.SUBMIT_PRESCREEN}
             onClick={() => setIsConfirmModalOpen(true)}
             priority='primary'
