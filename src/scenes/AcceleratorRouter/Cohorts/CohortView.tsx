@@ -30,7 +30,7 @@ const CohortView = () => {
   const cohort = useAppSelector(selectCohort(cohortId));
 
   useEffect(() => {
-    void dispatch(requestCohort({ cohortId }));
+    void dispatch(requestCohort({ cohortId, moduleDepth: 'Module' }));
   }, [cohortId, dispatch]);
 
   const goToEditCohort = useCallback(() => {

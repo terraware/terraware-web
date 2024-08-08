@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -8,6 +9,7 @@ import Stepper from '@mui/material/Stepper';
 import Typography from '@mui/material/Typography';
 import { Badge } from '@terraware/web-components';
 
+import { useCohorts } from 'src/hooks/useCohorts';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useProjectData } from 'src/providers/Project/ProjectContext';
 import { requestListModules } from 'src/redux/features/modules/modulesAsyncThunks';
@@ -53,6 +55,10 @@ const ModuleTimeline = () => {
   const [projectModules, setProjectModules] = useState<Module[] | undefined>();
   const useDataFromParticipantData = activeModules && currentParticipant && modules;
 
+  const pathParams = useParams<{ cohortId: string }>();
+  const cohortId = Number(pathParams.cohortId);
+  const { selectedCohort } = useCohorts(cohortId);
+
   useEffect(() => {
     if (projectId) {
       const request = dispatch(requestListModules(projectId));
@@ -70,34 +76,50 @@ const ModuleTimeline = () => {
   // Find first active index. TODO upgrade stepper to handle multiple active steps
   const activeIndex = useDataFromParticipantData
     ? modules?.findIndex((module) => activeModules?.find((active) => module.id === active.id) != undefined)
-    : projectModules?.findIndex((module) => module.isActive);
+    : projectModules?.findIndex((module) => module.isActive) ||
+      selectedCohort?.modules.findIndex((module) => module.isActive);
 
   return (
     <Box maxWidth={'206px'}>
-      {(currentParticipant?.cohortPhase || project?.cohortPhase) && (
+      {(currentParticipant?.cohortPhase || project?.cohortPhase || selectedCohort?.phase) && (
         <Box sx={{ marginBottom: '24px', paddingRight: '16px' }}>
           <Badge
-            label={useDataFromParticipantData ? currentParticipant.cohortPhase || '' : project?.cohortPhase || ''}
+            label={
+              useDataFromParticipantData
+                ? currentParticipant.cohortPhase || ''
+                : project?.cohortPhase || selectedCohort?.phase || ''
+            }
           />
         </Box>
       )}
 
       <Box sx={{ width: 180 }}>
         <Stepper activeStep={activeIndex} orientation='vertical'>
-          {modulesToUse?.map((module, index) => (
-            <Step key={module.id}>
-              <StepLabel
-                icon={<AltStepIcon activeStep={activeIndex || -1} index={index} />}
-                sx={{ fontWeight: 600, '.MuiStepLabel-label.Mui-disabled': { fontWeight: 600 } }}
-              >
-                {module.title}
-                <br />
-                <Typography component='span' style={{ fontSize: '14px', fontWeight: 400 }}>
-                  {module.name}
-                </Typography>
-              </StepLabel>
-            </Step>
-          ))}
+          {modulesToUse
+            ? modulesToUse.map((module, index) => (
+                <Step key={module.id}>
+                  <StepLabel
+                    icon={<AltStepIcon activeStep={activeIndex || -1} index={index} />}
+                    sx={{ fontWeight: 600, '.MuiStepLabel-label.Mui-disabled': { fontWeight: 600 } }}
+                  >
+                    {module.title}
+                    <br />
+                    <Typography component='span' style={{ fontSize: '14px', fontWeight: 400 }}>
+                      {module.name}
+                    </Typography>
+                  </StepLabel>
+                </Step>
+              ))
+            : selectedCohort?.modules.map((module, index) => (
+                <Step key={module.id}>
+                  <StepLabel
+                    icon={<AltStepIcon activeStep={activeIndex || -1} index={index} />}
+                    sx={{ fontWeight: 600, '.MuiStepLabel-label.Mui-disabled': { fontWeight: 600 } }}
+                  >
+                    {module.title}
+                  </StepLabel>
+                </Step>
+              ))}
         </Stepper>
       </Box>
     </Box>
