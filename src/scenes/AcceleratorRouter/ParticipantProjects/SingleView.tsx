@@ -242,7 +242,7 @@ const SingleView = () => {
                 value={
                   participantProject?.minCarbonAccumulation && participantProject?.maxCarbonAccumulation
                     ? `${participantProject.minCarbonAccumulation}-${participantProject.maxCarbonAccumulation}`
-                    : false
+                    : undefined
                 }
               />
               <ProjectFieldDisplay label={strings.CARBON_CAPACITY_TC02_HA} value={participantProject?.carbonCapacity} />
