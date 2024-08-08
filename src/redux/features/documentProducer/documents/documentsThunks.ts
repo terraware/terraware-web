@@ -2,6 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import DocumentService from 'src/services/documentProducer/DocumentService';
 import strings from 'src/strings';
+import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import {
   CreateDocumentPayload,
   CreateSavedDocVersionPayload,
@@ -27,6 +28,14 @@ export const requestListDocuments = createAsyncThunk('listDocuments', async (_, 
 
   return rejectWithValue(response.error || strings.GENERIC_ERROR);
 });
+
+export const requestSearchDocuments = createAsyncThunk(
+  'searchDocuments',
+  async (request: { locale: string | null; search: SearchNodePayload; searchSortOrder: SearchSortOrder }) => {
+    const response = await DocumentService.searchDocuments(request);
+    return response;
+  }
+);
 
 export const requestCreateDocument = createAsyncThunk(
   'createDocument',

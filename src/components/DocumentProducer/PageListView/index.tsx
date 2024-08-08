@@ -1,39 +1,26 @@
 import React from 'react';
 
-import { TableRowType } from '@terraware/web-components';
-
-import PageContent from 'src/components/DocumentProducer/PageContent';
-import { SearchProps } from 'src/components/DocumentProducer/Search';
-import TableContent, { TableProps } from 'src/components/DocumentProducer/TableContent';
 import Page, { PrimaryButtonType } from 'src/components/Page';
+import TableWithSearchFilters, { TableWithSearchFiltersProps } from 'src/components/TableWithSearchFilters';
 
-export type PageListViewProps<T> = {
-  // main title and primary button
+export type PageListViewProps = {
+  afterTableContent?: JSX.Element;
+  leftComponent?: JSX.Element;
   title: string;
   primaryButton?: PrimaryButtonType;
-
-  // Search
-  searchProps?: SearchProps;
-
-  // table
-  tableProps: TableProps<T>;
-
-  // other
-  afterTableContent?: JSX.Element;
+  tableWithSearchProps: TableWithSearchFiltersProps;
 };
 
-const PageListView = <T extends TableRowType>({
-  title,
-  primaryButton,
-  searchProps,
-  tableProps,
+const PageListView = ({
   afterTableContent,
-}: PageListViewProps<T>): JSX.Element => {
+  leftComponent,
+  primaryButton,
+  tableWithSearchProps,
+  title,
+}: PageListViewProps): JSX.Element => {
   return (
-    <Page title={title} primaryButton={primaryButton}>
-      <PageContent>
-        <TableContent searchProps={searchProps} tableProps={tableProps} />
-      </PageContent>
+    <Page title={title} primaryButton={primaryButton} leftComponent={leftComponent}>
+      <TableWithSearchFilters {...tableWithSearchProps} />
       {afterTableContent}
     </Page>
   );

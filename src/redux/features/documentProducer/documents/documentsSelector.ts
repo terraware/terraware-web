@@ -85,3 +85,6 @@ export const searchHistory = createCachedSelector(
 
 export const selectDocumentRequest = (requestId: string) => (state: RootState) =>
   state.documentProducerDocumentRequests[requestId];
+
+export const selectDocumentSearch = (requestId: string) => (state: RootState) =>
+  state.documentProducerDocumentSearch[requestId];
