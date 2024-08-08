@@ -1,3 +1,4 @@
+1a0680e01d2 Revert changes for SW-5765, use participant name at top of page (#2980)
 49bc7511967 Fixed a bug where timeline is not showing 3 steps (#2979)
 e06e83540e3 SW-5744 Add module stepper to cohort detail view (#2974)
 5937b2cf21b SW-5760: Updating status of question should not bring user back to the top of the page (Follow-up) (#2975)

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1723139962603" clover="3.2.0">
-  <project timestamp="1723139962603" name="All files">
-    <metrics statements="23987" coveredstatements="957" conditionals="15593" coveredconditionals="239" methods="7388" coveredmethods="164" elements="46968" coveredelements="1360" complexity="0" loc="23987" ncloc="23987" packages="229" files="1054" classes="1054"/>
+<coverage generated="1723142877122" clover="3.2.0">
+  <project timestamp="1723142877122" name="All files">
+    <metrics statements="23989" coveredstatements="957" conditionals="15593" coveredconditionals="239" methods="7390" coveredmethods="164" elements="46972" coveredelements="1360" complexity="0" loc="23989" ncloc="23989" packages="229" files="1054" classes="1054"/>
     <package name="src">
       <metrics statements="176" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -12418,7 +12418,7 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Documents.DocumentView">
-      <metrics statements="334" coveredstatements="0" conditionals="170" coveredconditionals="0" methods="103" coveredmethods="0"/>
+      <metrics statements="336" coveredstatements="0" conditionals="170" coveredconditionals="0" methods="105" coveredmethods="0"/>
       <file name="DocumentActions.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Documents/DocumentView/DocumentActions.tsx">
         <metrics statements="20" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="20" count="0" type="stmt"/>
@@ -12488,26 +12488,28 @@
         <line num="102" count="0" type="stmt"/>
       </file>
       <file name="DocumentMetadata.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Documents/DocumentView/DocumentMetadata.tsx">
-        <metrics statements="19" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="7" coveredmethods="0"/>
-        <line num="22" count="0" type="stmt"/>
+        <metrics statements="21" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="9" coveredmethods="0"/>
         <line num="23" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
         <line num="32" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
         <line num="40" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="42" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
         <line num="45" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
-        <line num="47" count="0" type="stmt"/>
-        <line num="48" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="52" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="51" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
       </file>
       <file name="DocumentOutlinePanel.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Documents/DocumentView/DocumentOutlinePanel.tsx">
         <metrics statements="46" coveredstatements="0" conditionals="44" coveredconditionals="0" methods="14" coveredmethods="0"/>
