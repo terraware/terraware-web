@@ -55,7 +55,6 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [openedAddSpeciesModal, setOpenedAddSpeciesModal] = useState(false);
 
-  console.log({ isLoading });
   useEffect(() => {
     if (isLoading || !modules || modules.length === 0 || !currentParticipantProject || !currentDeliverables) {
       return;
