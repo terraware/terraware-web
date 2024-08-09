@@ -1,3 +1,4 @@
+8d690c8601a SW-5672 Optimize checking for active and current deliverable (#2983)
 c769f327f16 SW-5672 Add messages to add to species dialog depending on active/recent deliverables  (#2982)
 bdd1835b966 SW-5672 Modify deliverable search request (#2981)
 3eab4644ed5 SW-5798: Limit status options for review application in console (#2984)

@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/76</span>
+                <span class='fraction'>0/77</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/72</span>
+                <span class='fraction'>0/73</span>
             </div>
         
             
@@ -243,7 +243,14 @@
 <a name='L178'></a><a href='#L178'>178</a>
 <a name='L179'></a><a href='#L179'>179</a>
 <a name='L180'></a><a href='#L180'>180</a>
-<a name='L181'></a><a href='#L181'>181</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L181'></a><a href='#L181'>181</a>
+<a name='L182'></a><a href='#L182'>182</a>
+<a name='L183'></a><a href='#L183'>183</a>
+<a name='L184'></a><a href='#L184'>184</a>
+<a name='L185'></a><a href='#L185'>185</a>
+<a name='L186'></a><a href='#L186'>186</a>
+<a name='L187'></a><a href='#L187'>187</a>
+<a name='L188'></a><a href='#L188'>188</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -312,6 +319,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -394,6 +402,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -456,7 +470,7 @@ const ParticipantProvider = <span class="cstat-no" title="statement not covered"
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
 &nbsp;
   const [activeModules, setActiveModules] = <span class="cstat-no" title="statement not covered" >useState&lt;Module[]&gt;([]);</span>
-  const [currentDeliverables, setCurrentDeliverables] = <span class="cstat-no" title="statement not covered" >useState&lt;ModuleDeliverable[]&gt;([]);</span>
+  const [currentDeliverables, setCurrentDeliverables] = <span class="cstat-no" title="statement not covered" >useState&lt;ModuleDeliverable[]&gt;();</span>
   const [currentParticipantProject, setCurrentParticipantProject] = <span class="cstat-no" title="statement not covered" >useState&lt;Project&gt;();</span>
   const [participantProjects, setParticipantProjects] = <span class="cstat-no" title="statement not covered" >useState&lt;Project[]&gt;([]);</span>
   const [moduleProjects, setModuleProjects] = <span class="cstat-no" title="statement not covered" >useState&lt;Project[]&gt;([]);</span>
@@ -464,14 +478,14 @@ const ParticipantProvider = <span class="cstat-no" title="statement not covered"
   const [orgHasModules, setOrgHasModules] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean | undefined&gt;(undefined);</span>
   const [orgHasParticipants, setOrgHasParticipants] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean | undefined&gt;(undefined);</span>
 &nbsp;
-  const [listModuleDeliverablesRequest, setListModuleDeliverablesRequest] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
-  const [listModulesRequest, setListModulesRequest] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
-  const [listModuleProjectsRequest, setListModuleProjectsRequest] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
+  const [listModuleDeliverablesRequestId, setListModuleDeliverablesRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
+  const [listModulesRequestId, setListModulesRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
+  const [listModuleProjectsRequestId, setListModuleProjectsRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
 &nbsp;
-  const moduleDeliverablesRequest = <span class="cstat-no" title="statement not covered" >useAppSelector(selectModuleDeliverables(listModuleDeliverablesRequest));</span>
-  const moduleProjectsList = <span class="cstat-no" title="statement not covered" >useAppSelector(selectModuleProjects(listModuleProjectsRequest));</span>
+  const moduleDeliverablesRequest = <span class="cstat-no" title="statement not covered" >useAppSelector(selectModuleDeliverables(listModuleDeliverablesRequestId));</span>
+  const moduleProjectsListRequest = <span class="cstat-no" title="statement not covered" >useAppSelector(selectModuleProjects(listModuleProjectsRequestId));</span>
   const participant = <span class="cstat-no" title="statement not covered" >useAppSelector(selectParticipant(currentParticipantProject?.participantId || -1));</span>
-  const projectModuleList = <span class="cstat-no" title="statement not covered" >useAppSelector(selectProjectModuleList(listModulesRequest));</span>
+  const projectModuleListRequest = <span class="cstat-no" title="statement not covered" >useAppSelector(selectProjectModuleList(listModulesRequestId));</span>
   const projects = <span class="cstat-no" title="statement not covered" >useAppSelector(selectProjects);</span>
 &nbsp;
   const _setCurrentParticipantProject = <span class="cstat-no" title="statement not covered" >useCallback(</span>
@@ -484,6 +498,7 @@ const ParticipantProvider = <span class="cstat-no" title="statement not covered"
   const [participantData, setParticipantData] = <span class="cstat-no" title="statement not covered" >useState&lt;ParticipantData&gt;({</span>
     activeModules,
     currentDeliverables,
+    isLoading: true,
     moduleProjects,
     modules,
     orgHasModules,
@@ -512,16 +527,16 @@ const ParticipantProvider = <span class="cstat-no" title="statement not covered"
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (selectedOrganization) {</span>
       const request = <span class="cstat-no" title="statement not covered" >dispatch(requestListModuleProjects(selectedOrganization.id));</span>
-<span class="cstat-no" title="statement not covered" >      setListModuleProjectsRequest(request.requestId);</span>
+<span class="cstat-no" title="statement not covered" >      setListModuleProjectsRequestId(request.requestId);</span>
     }
   }, [selectedOrganization, dispatch]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!currentParticipantProject || !projectModuleList) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!currentParticipantProject || !projectModuleListRequest) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
-<span class="cstat-no" title="statement not covered" >    if (projectModuleList.status === 'success') {</span>
-      const nextModules = <span class="cstat-no" title="statement not covered" >projectModuleList.data ?? [];</span>
+<span class="cstat-no" title="statement not covered" >    if (projectModuleListRequest.status === 'success') {</span>
+      const nextModules = <span class="cstat-no" title="statement not covered" >projectModuleListRequest.data ?? [];</span>
 <span class="cstat-no" title="statement not covered" >      setModules(nextModules);</span>
 &nbsp;
       const nextActiveModules = <span class="cstat-no" title="statement not covered" >nextModules.filter(<span class="fstat-no" title="function not covered" >(m</span>odule) =&gt; <span class="cstat-no" title="statement not covered" >module.isActive === true)</span>;</span>
@@ -534,10 +549,10 @@ const ParticipantProvider = <span class="cstat-no" title="statement not covered"
             projectId: currentParticipantProject.id,
           })
         );
-<span class="cstat-no" title="statement not covered" >        setListModuleDeliverablesRequest(deliverableRequest.requestId);</span>
+<span class="cstat-no" title="statement not covered" >        setListModuleDeliverablesRequestId(deliverableRequest.requestId);</span>
       }
     }
-  }, [currentParticipantProject, projectModuleList]);
+  }, [currentParticipantProject, projectModuleListRequest]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!moduleDeliverablesRequest) {</span>
@@ -550,8 +565,8 @@ const ParticipantProvider = <span class="cstat-no" title="statement not covered"
   }, [moduleDeliverablesRequest]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (moduleProjectsList &amp;&amp; moduleProjectsList.status === 'success' &amp;&amp; moduleProjectsList.data) {</span>
-      const nextModuleProjects = <span class="cstat-no" title="statement not covered" >moduleProjectsList.data</span>
+<span class="cstat-no" title="statement not covered" >    if (moduleProjectsListRequest &amp;&amp; moduleProjectsListRequest.status === 'success' &amp;&amp; moduleProjectsListRequest.data) {</span>
+      const nextModuleProjects = <span class="cstat-no" title="statement not covered" >moduleProjectsListRequest.data</span>
         .map(<span class="fstat-no" title="function not covered" >(i</span>d) =&gt; <span class="cstat-no" title="statement not covered" >participantProjects.find(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; <span class="cstat-no" title="statement not covered" >project.id === id)</span>)</span>
         .filter(<span class="fstat-no" title="function not covered" >(p</span>roject): project is Project =&gt; <span class="cstat-no" title="statement not covered" >!!project)</span>;
 &nbsp;
@@ -563,13 +578,13 @@ const ParticipantProvider = <span class="cstat-no" title="statement not covered"
 <span class="cstat-no" title="statement not covered" >        setCurrentParticipantProject(nextModuleProjects[0]);</span>
       }
     }
-  }, [moduleProjectsList, currentParticipantProject, participantProjects]);
+  }, [moduleProjectsListRequest, currentParticipantProject, participantProjects]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (currentParticipantProject?.participantId) {</span>
 <span class="cstat-no" title="statement not covered" >      dispatch(requestGetParticipant(currentParticipantProject.participantId));</span>
       const request = <span class="cstat-no" title="statement not covered" >dispatch(requestListModules(currentParticipantProject.id));</span>
-<span class="cstat-no" title="statement not covered" >      setListModulesRequest(request.requestId);</span>
+<span class="cstat-no" title="statement not covered" >      setListModulesRequestId(request.requestId);</span>
     }
   }, [currentParticipantProject, dispatch]);
 &nbsp;
@@ -579,6 +594,9 @@ const ParticipantProvider = <span class="cstat-no" title="statement not covered"
       currentDeliverables,
       currentParticipant: participant,
       currentParticipantProject,
+      isLoading: [moduleDeliverablesRequest, moduleProjectsListRequest, projectModuleListRequest].some(
+<span class="fstat-no" title="function not covered" >        (r</span>equest) =&gt; <span class="cstat-no" title="statement not covered" >request?.status === 'pending'</span>
+      ),
       moduleProjects,
       modules,
       participantProjects,
@@ -590,12 +608,15 @@ const ParticipantProvider = <span class="cstat-no" title="statement not covered"
     activeModules,
     currentDeliverables,
     currentParticipantProject,
-    moduleProjects,
     modules,
+    moduleDeliverablesRequest,
+    moduleProjects,
+    moduleProjectsListRequest,
     orgHasModules,
     orgHasParticipants,
     participant,
     participantProjects,
+    projectModuleListRequest,
     _setCurrentParticipantProject,
   ]);
 &nbsp;
@@ -610,7 +631,7 @@ export default ParticipantProvider;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-09T15:20:28.469Z
+                at 2024-08-09T15:31:27.453Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
