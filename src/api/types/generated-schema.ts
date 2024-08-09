@@ -1289,6 +1289,8 @@ export interface components {
       internalComment?: string;
       /** @description Internal-only reference name of application. Only set if the current user is an internal user. */
       internalName?: string;
+      /** Format: date-time */
+      modifiedTime?: string;
       /** Format: int64 */
       organizationId: number;
       organizationName: string;
