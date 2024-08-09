@@ -31,7 +31,7 @@ const ParticipantProvider = ({ children }: Props) => {
   const { activeLocale } = useLocalization();
 
   const [activeModules, setActiveModules] = useState<Module[]>([]);
-  const [currentDeliverables, setCurrentDeliverables] = useState<ModuleDeliverable[]>([]);
+  const [currentDeliverables, setCurrentDeliverables] = useState<ModuleDeliverable[]>();
   const [currentParticipantProject, setCurrentParticipantProject] = useState<Project>();
   const [participantProjects, setParticipantProjects] = useState<Project[]>([]);
   const [moduleProjects, setModuleProjects] = useState<Project[]>([]);
@@ -39,14 +39,14 @@ const ParticipantProvider = ({ children }: Props) => {
   const [orgHasModules, setOrgHasModules] = useState<boolean | undefined>(undefined);
   const [orgHasParticipants, setOrgHasParticipants] = useState<boolean | undefined>(undefined);
 
-  const [listModuleDeliverablesRequest, setListModuleDeliverablesRequest] = useState<string>('');
-  const [listModulesRequest, setListModulesRequest] = useState<string>('');
-  const [listModuleProjectsRequest, setListModuleProjectsRequest] = useState<string>('');
+  const [listModuleDeliverablesRequestId, setListModuleDeliverablesRequestId] = useState<string>('');
+  const [listModulesRequestId, setListModulesRequestId] = useState<string>('');
+  const [listModuleProjectsRequestId, setListModuleProjectsRequestId] = useState<string>('');
 
-  const moduleDeliverablesRequest = useAppSelector(selectModuleDeliverables(listModuleDeliverablesRequest));
-  const moduleProjectsList = useAppSelector(selectModuleProjects(listModuleProjectsRequest));
+  const moduleDeliverablesRequest = useAppSelector(selectModuleDeliverables(listModuleDeliverablesRequestId));
+  const moduleProjectsListRequest = useAppSelector(selectModuleProjects(listModuleProjectsRequestId));
   const participant = useAppSelector(selectParticipant(currentParticipantProject?.participantId || -1));
-  const projectModuleList = useAppSelector(selectProjectModuleList(listModulesRequest));
+  const projectModuleListRequest = useAppSelector(selectProjectModuleList(listModulesRequestId));
   const projects = useAppSelector(selectProjects);
 
   const _setCurrentParticipantProject = useCallback(
@@ -59,6 +59,7 @@ const ParticipantProvider = ({ children }: Props) => {
   const [participantData, setParticipantData] = useState<ParticipantData>({
     activeModules,
     currentDeliverables,
+    isLoading: true,
     moduleProjects,
     modules,
     orgHasModules,
@@ -87,16 +88,16 @@ const ParticipantProvider = ({ children }: Props) => {
   useEffect(() => {
     if (selectedOrganization) {
       const request = dispatch(requestListModuleProjects(selectedOrganization.id));
-      setListModuleProjectsRequest(request.requestId);
+      setListModuleProjectsRequestId(request.requestId);
     }
   }, [selectedOrganization, dispatch]);
 
   useEffect(() => {
-    if (!currentParticipantProject || !projectModuleList) {
+    if (!currentParticipantProject || !projectModuleListRequest) {
       return;
     }
-    if (projectModuleList.status === 'success') {
-      const nextModules = projectModuleList.data ?? [];
+    if (projectModuleListRequest.status === 'success') {
+      const nextModules = projectModuleListRequest.data ?? [];
       setModules(nextModules);
 
       const nextActiveModules = nextModules.filter((module) => module.isActive === true);
@@ -109,10 +110,10 @@ const ParticipantProvider = ({ children }: Props) => {
             projectId: currentParticipantProject.id,
           })
         );
-        setListModuleDeliverablesRequest(deliverableRequest.requestId);
+        setListModuleDeliverablesRequestId(deliverableRequest.requestId);
       }
     }
-  }, [currentParticipantProject, projectModuleList]);
+  }, [currentParticipantProject, projectModuleListRequest]);
 
   useEffect(() => {
     if (!moduleDeliverablesRequest) {
@@ -125,8 +126,8 @@ const ParticipantProvider = ({ children }: Props) => {
   }, [moduleDeliverablesRequest]);
 
   useEffect(() => {
-    if (moduleProjectsList && moduleProjectsList.status === 'success' && moduleProjectsList.data) {
-      const nextModuleProjects = moduleProjectsList.data
+    if (moduleProjectsListRequest && moduleProjectsListRequest.status === 'success' && moduleProjectsListRequest.data) {
+      const nextModuleProjects = moduleProjectsListRequest.data
         .map((id) => participantProjects.find((project) => project.id === id))
         .filter((project): project is Project => !!project);
 
@@ -138,13 +139,13 @@ const ParticipantProvider = ({ children }: Props) => {
         setCurrentParticipantProject(nextModuleProjects[0]);
       }
     }
-  }, [moduleProjectsList, currentParticipantProject, participantProjects]);
+  }, [moduleProjectsListRequest, currentParticipantProject, participantProjects]);
 
   useEffect(() => {
     if (currentParticipantProject?.participantId) {
       dispatch(requestGetParticipant(currentParticipantProject.participantId));
       const request = dispatch(requestListModules(currentParticipantProject.id));
-      setListModulesRequest(request.requestId);
+      setListModulesRequestId(request.requestId);
     }
   }, [currentParticipantProject, dispatch]);
 
@@ -154,6 +155,9 @@ const ParticipantProvider = ({ children }: Props) => {
       currentDeliverables,
       currentParticipant: participant,
       currentParticipantProject,
+      isLoading: [moduleDeliverablesRequest, moduleProjectsListRequest, projectModuleListRequest].some(
+        (request) => request?.status === 'pending'
+      ),
       moduleProjects,
       modules,
       participantProjects,
@@ -165,12 +169,15 @@ const ParticipantProvider = ({ children }: Props) => {
     activeModules,
     currentDeliverables,
     currentParticipantProject,
-    moduleProjects,
     modules,
+    moduleDeliverablesRequest,
+    moduleProjects,
+    moduleProjectsListRequest,
     orgHasModules,
     orgHasParticipants,
     participant,
     participantProjects,
+    projectModuleListRequest,
     _setCurrentParticipantProject,
   ]);
 

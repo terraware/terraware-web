@@ -45,7 +45,7 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
   const theme = useTheme();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { goToParticipantProjectSpecies } = useNavigateTo();
-  const { currentDeliverables, currentParticipantProject, modules } = useParticipantData();
+  const { currentDeliverables, currentParticipantProject, isLoading, modules } = useParticipantData();
 
   const participantProjectSpecies = useAppSelector(selectParticipantProjectSpeciesListRequest(deliverable.projectId));
   const [deliverableSearchRequestId, setDeliverableSearchRequestId] = useState('');
@@ -56,7 +56,7 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
   const [openedAddSpeciesModal, setOpenedAddSpeciesModal] = useState(false);
 
   useEffect(() => {
-    if (!modules || modules.length === 0 || !currentParticipantProject) {
+    if (isLoading || !modules || modules.length === 0 || !currentParticipantProject || !currentDeliverables) {
       return;
     }
 
@@ -77,10 +77,10 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
       );
       setDeliverableSearchRequestId(deliverableRequest.requestId);
     }
-  }, [currentDeliverables, currentParticipantProject, modules]);
+  }, [currentDeliverables, currentParticipantProject, isLoading, modules]);
 
   const hasActiveDeliverable = useMemo(
-    () => !!currentDeliverables.find((deliverable) => deliverable.type === 'Species'),
+    () => !!(currentDeliverables || []).find((deliverable) => deliverable.type === 'Species'),
     [currentDeliverables]
   );
 

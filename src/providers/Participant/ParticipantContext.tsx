@@ -8,7 +8,8 @@ export type ParticipantData = {
   activeModules?: Module[];
   currentParticipant?: Participant;
   currentParticipantProject?: Project;
-  currentDeliverables: ModuleDeliverable[];
+  currentDeliverables?: ModuleDeliverable[];
+  isLoading: boolean;
   moduleProjects: Project[];
   modules?: Module[];
   participantProjects: Project[];
@@ -20,6 +21,7 @@ export type ParticipantData = {
 // default values pointing to nothing
 export const ParticipantContext = createContext<ParticipantData>({
   currentDeliverables: [],
+  isLoading: true,
   moduleProjects: [],
   participantProjects: [],
   orgHasModules: false,

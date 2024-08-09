@@ -20,7 +20,7 @@ const CurrentModule = () => {
   const deliverableDetails = useMemo(
     () =>
       currentParticipantProject
-        ? currentDeliverables.map((deliverable) => ({
+        ? (currentDeliverables || []).map((deliverable) => ({
             ...deliverable,
             onClick: () => goToDeliverable(deliverable.id, currentParticipantProject.id),
           }))
