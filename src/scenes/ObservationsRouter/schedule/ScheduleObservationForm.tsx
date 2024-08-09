@@ -11,7 +11,7 @@ import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { Statuses } from 'src/redux/features/asyncUtils';
 import strings from 'src/strings';
-import { PlantingSite } from 'src/types/Tracking';
+import { PlantingSite, PlantingSiteWithReportedPlants } from 'src/types/Tracking';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import ObservationSubzoneSelector from './ObservationSubzoneSelector';
@@ -30,6 +30,7 @@ export type ScheduleObservationFormProps = {
   plantingSiteId?: number;
   plantingSites: PlantingSite[];
   saveID: string;
+  selectedPlantingSite?: PlantingSiteWithReportedPlants;
   startDate?: string;
   status?: Statuses;
   validate?: boolean;
@@ -49,6 +50,7 @@ export default function ScheduleObservationForm({
   onSave,
   onStartDate,
   saveID,
+  selectedPlantingSite,
   startDate,
   status,
   validate,
@@ -103,11 +105,6 @@ export default function ScheduleObservationForm({
         value: site.id.toString(),
       })),
     [plantingSites]
-  );
-
-  const selectedPlantingSite = useMemo(
-    () => plantingSites.find((plantingSite) => plantingSite.id === plantingSiteId),
-    [plantingSites, plantingSiteId]
   );
 
   return (
