@@ -11,10 +11,10 @@ import { selectApplicationReview } from 'src/redux/features/application/applicat
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import {
-  ApplicaitonReviewStatuses,
   Application,
   ApplicationReview,
   ApplicationReviewStatus,
+  ApplicationReviewStatuses,
   ApplicationStatus,
 } from 'src/types/Application';
 import useForm from 'src/utils/useForm';
@@ -39,7 +39,7 @@ const ApplicationReviewModal = ({
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectApplicationReview(requestId));
 
-  const dropdownOptions: DropdownItem[] = ApplicaitonReviewStatuses.map((status) => ({
+  const dropdownOptions: DropdownItem[] = ApplicationReviewStatuses.map((status) => ({
     label: status,
     value: status,
   }));
@@ -62,7 +62,9 @@ const ApplicationReviewModal = ({
   });
 
   const canUpdateStatus = useMemo(
-    () => ApplicaitonReviewStatuses.find((status) => status === application.status) !== undefined,
+    () =>
+      ApplicationReviewStatuses.find((status) => status === application.status) !== undefined &&
+      !(application.status === 'Failed Pre-screen' || application.status === 'Not Submitted'),
     [application.status]
   );
 

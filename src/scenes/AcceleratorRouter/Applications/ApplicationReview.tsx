@@ -7,6 +7,7 @@ import { Property } from 'csstype';
 
 import ProjectFieldTextAreaDisplay from 'src/components/ProjectField/TextAreaDisplay';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
 import strings from 'src/strings';
 import { Application, ApplicationStatus } from 'src/types/Application';
@@ -47,12 +48,16 @@ type ApplicationReviewProps = {
 const ApplicationReview = ({ application }: ApplicationReviewProps) => {
   const theme = useTheme();
   const { goToParticipantProject } = useNavigateTo();
+  const { isAllowed } = useUser();
 
+  const canUpdateInternalComments = isAllowed('UPDATE_APPLICATION_INTERNAL_COMMENTS');
   const color = getApplicationStatusColor(application.status, theme);
 
   const { reload } = useApplicationData();
   const navigate = useNavigate();
+
   const [isReviewModalOpen, setIsReviewModalOpen] = useState<boolean>(false);
+
   const onReviewSubmitted = useCallback(() => {
     reload(() => navigate(0));
   }, [application, reload]);
@@ -98,6 +103,10 @@ const ApplicationReview = ({ application }: ApplicationReviewProps) => {
             {application.status}
           </Typography>
           <Button
+            disabled={
+              (application.status === 'Failed Pre-screen' || application.status === 'Not Submitted') &&
+              !canUpdateInternalComments
+            }
             label={strings.REVIEW_APPLICATION}
             onClick={() => {
               setIsReviewModalOpen(true);
