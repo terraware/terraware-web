@@ -13,9 +13,10 @@ type Props = {
   crumbs?: Crumb[];
   hierarchicalCrumbs?: boolean;
   rightComponent?: ReactNode;
+  showFeedback?: boolean;
 };
 
-const ApplicationPage = ({ children, crumbs, hierarchicalCrumbs, rightComponent }: Props) => {
+const ApplicationPage = ({ children, crumbs, hierarchicalCrumbs, rightComponent, showFeedback = true }: Props) => {
   const { allApplications, selectedApplication, setSelectedApplication } = useApplicationData();
 
   const pathParams = useParams<{ applicationId: string }>();
@@ -36,7 +37,7 @@ const ApplicationPage = ({ children, crumbs, hierarchicalCrumbs, rightComponent 
       title={strings.formatString(strings.APPLICATION_FOR_PROJECT, selectedApplication?.projectName ?? '')}
       titleStyle={{ marginTop: '24px' }}
     >
-      {selectedApplication?.status === 'Failed Pre-screen' && (
+      {showFeedback && selectedApplication?.status === 'Failed Pre-screen' && (
         <FeedbackMessage feedback={selectedApplication.feedback} />
       )}
       {children}
