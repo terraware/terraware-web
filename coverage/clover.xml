@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1723487602418" clover="3.2.0">
-  <project timestamp="1723487602418" name="All files">
-    <metrics statements="24077" coveredstatements="957" conditionals="15651" coveredconditionals="239" methods="7434" coveredmethods="164" elements="47162" coveredelements="1360" complexity="0" loc="24077" ncloc="24077" packages="229" files="1055" classes="1055"/>
+<coverage generated="1723490352817" clover="3.2.0">
+  <project timestamp="1723490352817" name="All files">
+    <metrics statements="24077" coveredstatements="957" conditionals="15653" coveredconditionals="239" methods="7434" coveredmethods="164" elements="47164" coveredelements="1360" complexity="0" loc="24077" ncloc="24077" packages="229" files="1055" classes="1055"/>
     <package name="src">
       <metrics statements="176" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -16182,17 +16182,17 @@
       </file>
     </package>
     <package name="src.scenes.ApplicationRouter.portal">
-      <metrics statements="63" coveredstatements="0" conditionals="51" coveredconditionals="0" methods="19" coveredmethods="0"/>
+      <metrics statements="63" coveredstatements="0" conditionals="53" coveredconditionals="0" methods="19" coveredmethods="0"/>
       <file name="ApplicationPage.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ApplicationRouter/portal/ApplicationPage.tsx">
-        <metrics statements="8" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="2" coveredmethods="0"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="19" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
+        <metrics statements="8" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="19" count="0" type="cond" truecount="0" falsecount="1"/>
+        <line num="20" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
-        <line num="25" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="26" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
       </file>
       <file name="NavBar.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ApplicationRouter/portal/NavBar.tsx">
         <metrics statements="43" coveredstatements="0" conditionals="35" coveredconditionals="0" methods="15" coveredmethods="0"/>
