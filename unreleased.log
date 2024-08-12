@@ -1,3 +1,4 @@
+8fb3c028efc Fix React error with rendered elements within a loop (#2998)
 c53ed068db8 Fix a bug with the columns in the subzone selector (#2996)
 c0d7f0f6259 Updated translations from Phrase (#2999)
 a35e1e10eed SW-5723: Q&A block design audit (Follow up #1) (#2990)
