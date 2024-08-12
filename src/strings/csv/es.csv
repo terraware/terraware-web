@@ -736,6 +736,7 @@ LIGHT,Luz,
 LIKELY_INTERMEDIATE,Posiblemente intermedia,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Intermediate.
 LIKELY_ORTHODOX,Posiblemente ortodoxa,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Orthodox.
 LIKELY_RECALCITRANT,Posiblemente recalcitrante,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Recalcitrant.
+LIMIT_OBSERVATION_LABEL,Limitar la observación para las subzonas seleccionadas,
 LINK,Enlace,
 LIST,Lista,
 LIVE,Directo,
