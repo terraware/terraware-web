@@ -1,3 +1,5 @@
+b7e919e12e3 SW-5810: Overview page: Update text to clarify that viewing the Application sections is not available until Pre-screen approval (#2991)
+d15a9b949ed SW-5786: Increase padding in application instructions to 24px (#2992)
 cba7c26328c SW-5829: Visual bugs for Prescreen module details page & rejected page (#2993)
 dde269a1dc6 SW-5761 Automatically check boxes for subzones that have plants (#2989)
 aa065ef1360 SW-5761 Add subzone selection for observation scheduling (#2988)
