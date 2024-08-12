@@ -1,3 +1,4 @@
+aa065ef1360 SW-5761 Add subzone selection for observation scheduling (#2988)
 bc8db5a0659 SW-5767 Implement search and project filter into documents table (#2971)
 e2140a74264 Updated translations from Phrase (#2987)
 0fbc286dba5 SW-5811: Pre-screen Proposed Project Boundary screens: Text does not match text in Designs (references "shapefiles" when shouldn't) (#2985)
