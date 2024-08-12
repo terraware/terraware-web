@@ -70,7 +70,7 @@ const OverviewView = () => {
     <Card style={{ width: '100%', padding: theme.spacing(3), borderRadius: theme.spacing(3) }}>
       <CurrentTimeline steps={applicationSteps} currentIndex={timelineIndex} />
 
-      <Box paddingY={theme.spacing(2)} borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}>
+      <Box paddingY={theme.spacing(3)} borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}>
         <Typography>{phaseDescription}</Typography>
       </Box>
       <ListApplicationModulesContent />
