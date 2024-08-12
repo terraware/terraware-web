@@ -71,13 +71,13 @@ export default function ObservationsEventsNotification({ events }: ObservationsE
                     <Typography sx={{ whiteSpace: 'pre-wrap' }}>
                       {event.infoPrefix}&nbsp;
                       {event.eventDetails.map((data, eventDetailsIndex) => (
-                        <>
+                        <span key={eventDetailsIndex}>
                           {data.detail.plantingSiteName}&nbsp; (
                           <Link fontSize={16} to={data.rescheduleUrl}>
                             {strings.RESCHEDULE}
                           </Link>
                           ){eventDetailsIndex < event.eventDetails.length - 1 ? ',' : ''}&nbsp;
-                        </>
+                        </span>
                       ))}
                     </Typography>
                   </Box>

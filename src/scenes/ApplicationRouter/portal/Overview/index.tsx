@@ -12,7 +12,7 @@ import ApplicationPage from '../ApplicationPage';
 import ListApplicationModulesContent from './ListApplicationModulesContent';
 
 const phaseDescription =
-  'Start by completing the Pre-screen. Then answer more in-depth questions about your project and upload any necessary documents in the Application. Each section of the Application is detailed below. Click View to answer the questions and provide the requested information for each section.';
+  'Start by completing the Pre-screen. Then answer more in-depth questions about your project and upload any necessary documents in the Application. Each section of the Application will be available to view after your pre-screen has been approved.';
 
 const applicationSteps = [
   {

@@ -5,7 +5,7 @@ import { SearchService } from 'src/services';
 import ModuleService from 'src/services/ModuleService';
 import strings from 'src/strings';
 import { ModuleDeliverable, ModuleProjectSearchResult } from 'src/types/Module';
-import { SearchRequestPayload } from 'src/types/Search';
+import { SearchNodePayload, SearchRequestPayload } from 'src/types/Search';
 
 export const requestGetModule = createAsyncThunk(
   'modules/get',
@@ -64,17 +64,29 @@ export const requestListModuleProjects = createAsyncThunk(
 
 export const requestListModuleDeliverables = createAsyncThunk(
   'modules/deliverables',
-  async (request: { moduleId: number; projectId: number }): Promise<ModuleDeliverable[]> => {
-    const deliverableSearchResults = await ModuleService.searchDeliverables(request.projectId, request.moduleId);
+  async (request: {
+    moduleIds: number[];
+    projectId: number;
+    searchChildren?: SearchNodePayload[];
+  }): Promise<ModuleDeliverable[]> => {
+    const searchChildren = request.searchChildren || [];
+
+    const deliverableSearchResults = await ModuleService.searchDeliverables(
+      request.projectId,
+      request.moduleIds,
+      searchChildren
+    );
 
     return deliverableSearchResults
       ? deliverableSearchResults.map((result) => ({
-          id: result.id,
-          moduleId: result.moduleId,
-          projectId: result.projectId,
-          name: result.name,
           category: result.category,
+          id: result.id,
           dueDate: DateTime.fromISO(result.dueDate),
+          moduleEndDate: DateTime.fromISO(result.moduleEndDate),
+          moduleId: result.moduleId,
+          moduleStartDate: DateTime.fromISO(result.moduleStartDate),
+          name: result.name,
+          projectId: result.projectId,
           status: result.status,
           type: result.type,
         }))

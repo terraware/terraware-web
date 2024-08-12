@@ -17,7 +17,8 @@ import useDebounce from 'src/utils/useDebounce';
 
 import { defaultSearchNodeCreator } from '../common/SearchFiltersWrapperV2/FeaturedFilters';
 
-interface TableWithSearchFiltersProps extends Omit<OrderPreservedTablePropsFull<TableRowType>, 'columns' | 'orderBy'> {
+export interface TableWithSearchFiltersProps
+  extends Omit<OrderPreservedTablePropsFull<TableRowType>, 'columns' | 'orderBy'> {
   busy?: boolean;
   columns: (activeLocale: string | null) => TableColumnType[];
   defaultSearchOrder: SearchSortOrder;
@@ -169,7 +170,7 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
   }, [featuredFilters]);
 
   return (
-    <Container maxWidth={false} sx={{ padding: 0 }}>
+    <Container maxWidth={false} sx={{ padding: 0 }} disableGutters>
       <Card busy={busy} flushMobile rightComponent={rightComponent} title={title}>
         <Grid item xs={12} sx={{ display: 'flex', marginBottom: '16px', alignItems: 'center' }}>
           <SearchFiltersWrapperV2

@@ -70,7 +70,7 @@ export default function ListView(): JSX.Element {
       <Card style={{ width: '100%' }}>
         <CurrentTimeline steps={phases} currentIndex={currentPhaseIndex} />
 
-        <Box paddingY={theme.spacing(2)} borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}>
+        <Box paddingY={theme.spacing(3)} borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}>
           <Typography>{phaseDescription}</Typography>
         </Box>
 

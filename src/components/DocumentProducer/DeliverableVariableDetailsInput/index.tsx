@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Box, IconButton, useTheme } from '@mui/material';
+import { Box, IconButton, SxProps, useTheme } from '@mui/material';
 import { Button, DatePicker, Dropdown, DropdownItem, Icon, Textfield } from '@terraware/web-components';
 
 import strings from 'src/strings';
@@ -54,8 +54,14 @@ const DeliverableVariableDetailsInput = ({
   const [textValuesList, setTextValuesList] = useState<string[]>();
   const theme = useTheme();
 
-  const formElementStyles = {
-    margin: theme.spacing(1, 0),
+  const textFieldLabelStyles: SxProps = {
+    '& label.textfield-label': {
+      display: 'none',
+    },
+  };
+
+  const formElementStyles: SxProps = {
+    margin: 0,
     maxWidth: '33%',
   };
 
@@ -244,15 +250,20 @@ const DeliverableVariableDetailsInput = ({
           type='text'
           value={variable.description}
           display={true}
-          sx={{
-            '& p.textfield-value--display': {
-              color: theme.palette.TwClrTxtSecondary,
-              fontSize: '14px',
-              fontStyle: 'italic',
-              fontWeight: 400,
-              lineHeight: '20px',
+          sx={[
+            {
+              '& p.textfield-value--display': {
+                color: theme.palette.TwClrTxtSecondary,
+                fontSize: '14px',
+                fontStyle: 'italic',
+                fontWeight: 400,
+                lineHeight: '20px',
+                paddingTop: 0,
+                paddingBottom: '16px',
+              },
             },
-          }}
+            textFieldLabelStyles,
+          ]}
         />
       )}
 
@@ -270,7 +281,7 @@ const DeliverableVariableDetailsInput = ({
       {variable.type === 'Text' && (
         <>
           {textValuesList?.map((iValue, index) => (
-            <Box key={index} mb={2} display='flex' alignItems='center' sx={{ position: 'relative' }}>
+            <Box key={index} display='flex' alignItems='center' sx={{ position: 'relative' }}>
               <Textfield
                 key={`input-${index}`}
                 id='value'
@@ -311,7 +322,7 @@ const DeliverableVariableDetailsInput = ({
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
           value={value?.toString()}
           helperText={variable.type === 'Number' ? strings.ROUNDED_INFO : ''}
-          sx={formElementStyles}
+          sx={[formElementStyles, textFieldLabelStyles]}
         />
       )}
 

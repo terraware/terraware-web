@@ -1,7 +1,7 @@
 import { paths } from 'src/api/types/generated-schema';
 import { DeliverableCategoryType, DeliverableStatusType, DeliverableTypeType } from 'src/types/Deliverables';
 import { Module } from 'src/types/Module';
-import { SearchRequestPayload, SearchResponseElement } from 'src/types/Search';
+import { SearchNodePayload, SearchRequestPayload, SearchResponseElement } from 'src/types/Search';
 
 import HttpService, { Response2 } from './HttpService';
 import SearchService from './SearchService';
@@ -16,7 +16,9 @@ export type ModuleData = {
 
 export type ModuleDeliverableSearchResult = {
   id: number;
+  moduleEndDate: string;
   moduleId: number;
+  moduleStartDate: string;
   projectId: number;
   name: string;
   category: DeliverableCategoryType;
@@ -27,6 +29,23 @@ export type ModuleDeliverableSearchResult = {
   type: DeliverableTypeType;
   typeDisplayName: string;
 };
+
+const DELIVERABLES_SEARCH_FIELDS = [
+  'id',
+  'module_id',
+  'module_cohortModules_endDate',
+  'module_cohortModules_startDate',
+  'module_id',
+  'project_id',
+  'name',
+  'category',
+  'category(raw)',
+  'dueDate',
+  'status',
+  'status(raw)',
+  'type',
+  'type(raw)',
+];
 
 const PROJECT_MODULES_ENDPOINT = '/api/v1/projects/{projectId}/modules';
 
@@ -79,23 +98,12 @@ const get = async (projectId: number, moduleId: number): Promise<Response2<Modul
  */
 const searchDeliverables = async (
   projectId: number,
-  moduleId: number
+  moduleIds: number[],
+  searchChildren: SearchNodePayload[]
 ): Promise<ModuleDeliverableSearchResult[] | null> => {
   const searchParams: SearchRequestPayload = {
     prefix: 'projects.projectDeliverables',
-    fields: [
-      'id',
-      'module_id',
-      'project_id',
-      'name',
-      'category',
-      'category(raw)',
-      'dueDate',
-      'status',
-      'status(raw)',
-      'type',
-      'type(raw)',
-    ],
+    fields: DELIVERABLES_SEARCH_FIELDS,
     search: {
       operation: 'and',
       children: [
@@ -109,8 +117,9 @@ const searchDeliverables = async (
           operation: 'field',
           field: 'module.id',
           type: 'Exact',
-          values: [moduleId],
+          values: moduleIds,
         },
+        ...searchChildren,
       ],
     },
     sortOrder: [
@@ -128,10 +137,23 @@ const searchDeliverables = async (
   }
 
   return response.map((result: SearchResponseElement): ModuleDeliverableSearchResult => {
-    const { id, module_id, project_id, name, category, dueDate, status, type } = result;
+    const {
+      id,
+      module_cohortModules_endDate,
+      module_cohortModules_startDate,
+      module_id,
+      project_id,
+      name,
+      category,
+      dueDate,
+      status,
+      type,
+    } = result;
 
     return {
       id: Number(id),
+      moduleEndDate: `${module_cohortModules_endDate}`,
+      moduleStartDate: `${module_cohortModules_startDate}`,
       moduleId: Number(module_id),
       projectId: Number(project_id),
       name: String(name),

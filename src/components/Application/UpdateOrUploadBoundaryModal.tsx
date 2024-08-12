@@ -55,14 +55,14 @@ export default function UpdateOrUploadBoundaryModal(props: UpdateOrUploadBoundar
         <Box display='flex' flexDirection={isMobile ? 'column' : 'row'} gap={3}>
           <BoundaryTypeSelector
             imageName='upload-cloud@2x.png'
-            description={strings.UPLOAD_SHAPEFILE}
+            description={strings.UPLOAD_SPATIAL_FILES}
             isSelected={type === 'Upload'}
             onClick={() => setType('Upload')}
-            title={strings.UPLOAD_SHAPEFILE}
+            title={strings.UPLOAD_A_MAP_OF_THE_PROJECT_BOUNDARY}
           />
           <BoundaryTypeSelector
             imageName='select-planting-site-simple@2x.png'
-            description={strings.DRAW_PROPOSED_PROJECT_BOUNDARY}
+            description={strings.DRAW_BOUNDARY_WITHIN_MAP}
             isSelected={type === 'Update'}
             onClick={() => setType('Update')}
             title={strings.DRAW_PROPOSED_PROJECT_BOUNDARY}

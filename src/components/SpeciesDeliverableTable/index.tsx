@@ -8,11 +8,14 @@ import Table from 'src/components/common/table';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
+import { requestListModuleDeliverables } from 'src/redux/features/modules/modulesAsyncThunks';
+import { selectModuleDeliverables } from 'src/redux/features/modules/modulesSelectors';
 import { requestListParticipantProjectSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
 import { selectParticipantProjectSpeciesListRequest } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { Deliverable } from 'src/types/Deliverables';
+import { Deliverable, DeliverableTypeType } from 'src/types/Deliverables';
 
 import AddSpeciesModal from './AddSpeciesModal';
 import RemoveSpeciesDialog from './RemoveSpeciesDialog';
@@ -42,12 +45,49 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
   const theme = useTheme();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { goToParticipantProjectSpecies } = useNavigateTo();
+  const { currentDeliverables, currentParticipantProject, isLoading, modules } = useParticipantData();
 
   const participantProjectSpecies = useAppSelector(selectParticipantProjectSpeciesListRequest(deliverable.projectId));
+  const [deliverableSearchRequestId, setDeliverableSearchRequestId] = useState('');
+  const deliverableSearchRequest = useAppSelector(selectModuleDeliverables(deliverableSearchRequestId));
 
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [openedAddSpeciesModal, setOpenedAddSpeciesModal] = useState(false);
+
+  useEffect(() => {
+    if (isLoading || !modules || modules.length === 0 || !currentParticipantProject || !currentDeliverables) {
+      return;
+    }
+
+    if (currentDeliverables.length === 0) {
+      const deliverableRequest = dispatch(
+        requestListModuleDeliverables({
+          projectId: currentParticipantProject.id,
+          moduleIds: modules?.map((module) => module.id),
+          searchChildren: [
+            {
+              operation: 'field',
+              field: 'type(raw)',
+              type: 'Exact',
+              values: ['Species' as DeliverableTypeType],
+            },
+          ],
+        })
+      );
+      setDeliverableSearchRequestId(deliverableRequest.requestId);
+    }
+  }, [currentDeliverables, currentParticipantProject, isLoading, modules]);
+
+  const hasActiveDeliverable = useMemo(
+    () => !!(currentDeliverables || []).find((deliverable) => deliverable.type === 'Species'),
+    [currentDeliverables]
+  );
+
+  const hasRecentDeliverable = useMemo(
+    () => deliverableSearchRequest?.status === 'success' && (deliverableSearchRequest?.data || []).length > 0,
+    [deliverableSearchRequest]
+  );
 
   const rows = useMemo(() => {
     return (participantProjectSpecies?.data || []).map((value) => ({
@@ -95,6 +135,8 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
               participantProjectSpecies={participantProjectSpecies?.data || []}
               reload={reload}
               projectId={deliverable.projectId}
+              hasActiveDeliverable={hasActiveDeliverable}
+              hasRecentDeliverable={hasRecentDeliverable}
             />
           )}
 

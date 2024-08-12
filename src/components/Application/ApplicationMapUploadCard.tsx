@@ -52,7 +52,7 @@ const ApplicationMapUploadCard = ({ application, onSuccess }: ApplicationMapUplo
 
   return (
     <Card style={{ width: '100%', padding: theme.spacing(2), borderRadius: theme.spacing(3) }}>
-      <h3>{strings.UPLOAD_SHAPEFILE}</h3>
+      <h3>{strings.UPLOAD_FILE}</h3>
       {result?.status === 'pending' && <BusySpinner />}
       <FileChooser
         chooseFileText={strings.CHOOSE_FILE}

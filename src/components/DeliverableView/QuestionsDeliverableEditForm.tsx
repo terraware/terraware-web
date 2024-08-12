@@ -57,7 +57,7 @@ const QuestionBox = ({
 
   return (
     <Box key={index} data-variable-id={variable.id}>
-      <Grid container spacing={2} sx={{ marginBottom: '16px', padding: 0 }} textAlign='left'>
+      <Grid container spacing={2} sx={{ marginBottom: '24px', padding: 0 }} textAlign='left'>
         <Grid item xs={12}>
           <Box
             sx={{
