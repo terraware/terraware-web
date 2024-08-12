@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/123</span>
+                <span class='fraction'>0/124</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/117</span>
+                <span class='fraction'>0/118</span>
             </div>
         
             
@@ -423,7 +423,18 @@
 <a name='L358'></a><a href='#L358'>358</a>
 <a name='L359'></a><a href='#L359'>359</a>
 <a name='L360'></a><a href='#L360'>360</a>
-<a name='L361'></a><a href='#L361'>361</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L361'></a><a href='#L361'>361</a>
+<a name='L362'></a><a href='#L362'>362</a>
+<a name='L363'></a><a href='#L363'>363</a>
+<a name='L364'></a><a href='#L364'>364</a>
+<a name='L365'></a><a href='#L365'>365</a>
+<a name='L366'></a><a href='#L366'>366</a>
+<a name='L367'></a><a href='#L367'>367</a>
+<a name='L368'></a><a href='#L368'>368</a>
+<a name='L369'></a><a href='#L369'>369</a>
+<a name='L370'></a><a href='#L370'>370</a>
+<a name='L371'></a><a href='#L371'>371</a>
+<a name='L372'></a><a href='#L372'>372</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -484,6 +495,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -661,6 +678,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -785,7 +807,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useState } from 'react';
 &nbsp;
-import { Box, IconButton, useTheme } from '@mui/material';
+import { Box, IconButton, SxProps, useTheme } from '@mui/material';
 import { Button, DatePicker, Dropdown, DropdownItem, Icon, Textfield } from '@terraware/web-components';
 &nbsp;
 import strings from 'src/strings';
@@ -839,8 +861,14 @@ const DeliverableVariableDetailsInput = <span class="cstat-no" title="statement 
   const [textValuesList, setTextValuesList] = <span class="cstat-no" title="statement not covered" >useState&lt;string[]&gt;();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
 &nbsp;
-  const formElementStyles = <span class="cstat-no" title="statement not covered" >{</span>
-    margin: theme.spacing(1, 0),
+  const textFieldLabelStyles: SxProps = <span class="cstat-no" title="statement not covered" >{</span>
+    '&amp; label.textfield-label': {
+      display: 'none',
+    },
+  };
+&nbsp;
+  const formElementStyles: SxProps = <span class="cstat-no" title="statement not covered" >{</span>
+    margin: 0,
     maxWidth: '33%',
   };
 &nbsp;
@@ -1029,15 +1057,20 @@ const DeliverableVariableDetailsInput = <span class="cstat-no" title="statement 
           type='text'
           value={variable.description}
           display={true}
-          sx={{
-            '&amp; p.textfield-value--display': {
-              color: theme.palette.TwClrTxtSecondary,
-              fontSize: '14px',
-              fontStyle: 'italic',
-              fontWeight: 400,
-              lineHeight: '20px',
+          sx={[
+            {
+              '&amp; p.textfield-value--display': {
+                color: theme.palette.TwClrTxtSecondary,
+                fontSize: '14px',
+                fontStyle: 'italic',
+                fontWeight: 400,
+                lineHeight: '20px',
+                paddingTop: 0,
+                paddingBottom: '16px',
+              },
             },
-          }}
+            textFieldLabelStyles,
+          ]}
         /&gt;
       )}
 &nbsp;
@@ -1055,7 +1088,7 @@ const DeliverableVariableDetailsInput = <span class="cstat-no" title="statement 
       {variable.type === 'Text' &amp;&amp; (
         &lt;&gt;
           {textValuesList?.map(<span class="fstat-no" title="function not covered" >(i</span>Value, index) =&gt; (
-<span class="cstat-no" title="statement not covered" >            &lt;Box key={index} mb={2} display='flex' alignItems='center' sx={{ position: 'relative' }}&gt;</span>
+<span class="cstat-no" title="statement not covered" >            &lt;Box key={index} display='flex' alignItems='center' sx={{ position: 'relative' }}&gt;</span>
               &lt;Textfield
                 key={`input-${index}`}
                 id='value'
@@ -1096,7 +1129,7 @@ const DeliverableVariableDetailsInput = <span class="cstat-no" title="statement 
           onChange={<span class="fstat-no" title="function not covered" >(n</span>ewValue: any) =&gt; <span class="cstat-no" title="statement not covered" >onChangeValueHandler(newValue, 'value')}</span>
           value={value?.toString()}
           helperText={variable.type === 'Number' ? strings.ROUNDED_INFO : ''}
-          sx={formElementStyles}
+          sx={[formElementStyles, textFieldLabelStyles]}
         /&gt;
       )}
 &nbsp;
@@ -1150,7 +1183,7 @@ export default DeliverableVariableDetailsInput;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-12T19:25:12.872Z
+                at 2024-08-12T19:33:53.631Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
