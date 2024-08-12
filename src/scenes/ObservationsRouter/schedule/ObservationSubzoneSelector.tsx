@@ -77,7 +77,7 @@ const ObservationSubzoneSelector = ({ onChangeSelectedSubzones, plantingSite }: 
 
           <Box sx={{ columnCount: 2, columnGap: theme.spacing(3), paddingLeft: `${theme.spacing(4)}` }}>
             {zone.plantingSubzones.map((subzone, _index) => (
-              <Box sx={{ display: 'inline-block' }} key={_index}>
+              <Box sx={{ display: 'inline-block', width: '100%' }} key={_index}>
                 <Checkbox
                   id={`observation-subzone-${zone.id}`}
                   label={
