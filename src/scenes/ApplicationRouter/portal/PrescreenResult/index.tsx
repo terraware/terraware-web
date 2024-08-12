@@ -130,7 +130,7 @@ const PrescreenResultView = ({ isFailure, feedback }: ResultViewProp) => {
           onClick={() => goToApplicationPrescreen(selectedApplication.id)}
           style={{ display: 'block', textAlign: 'center' }}
         >
-          {`${strings.VIEW} ${strings.VIEW_PRESCREEN_SUBMISSION}`}
+          {strings.VIEW_PRESCREEN_SUBMISSION}
         </Link>
       </Card>
     </>
@@ -155,7 +155,7 @@ const PrescreenResultViewWrapper = () => {
   );
 
   return (
-    <ApplicationPage crumbs={crumbs}>
+    <ApplicationPage crumbs={crumbs} showFeedback={false}>
       <PrescreenResultView
         feedback={selectedApplication?.feedback}
         isFailure={!!selectedApplication && selectedApplication.status === 'Failed Pre-screen'}
