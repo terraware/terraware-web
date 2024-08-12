@@ -1,3 +1,4 @@
+e2140a74264 Updated translations from Phrase (#2987)
 0fbc286dba5 SW-5811: Pre-screen Proposed Project Boundary screens: Text does not match text in Designs (references "shapefiles" when shouldn't) (#2985)
 8d690c8601a SW-5672 Optimize checking for active and current deliverable (#2983)
 c769f327f16 SW-5672 Add messages to add to species dialog depending on active/recent deliverables  (#2982)
