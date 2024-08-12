@@ -19,12 +19,14 @@ export default function ScheduleObservation(): JSX.Element {
   const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
   const { selectedOrganization } = useOrganization();
+
   const [validate, setValidate] = useState(false);
   const [plantingSiteId, setPlantingSiteId] = useState<number>();
   const [startDate, setStartDate] = useState<string>();
   const [endDate, setEndDate] = useState<string>();
   const [hasErrors, setHasErrors] = useState<boolean>(false);
   const [requestId, setRequestId] = useState<string>('');
+  const [selectedSubzones, setSelectedSubzones] = useState<number[]>([]);
 
   const plantingSites = useAppSelector(selectObservationSchedulableSites) ?? [];
   const result = useAppSelector((state) => selectScheduleObservation(state, requestId));
@@ -32,7 +34,9 @@ export default function ScheduleObservation(): JSX.Element {
   const scheduleObservation = async () => {
     setValidate(true);
     if (!hasErrors && plantingSiteId && startDate && endDate) {
-      const dispatched = dispatch(requestScheduleObservation({ plantingSiteId, startDate, endDate }));
+      const dispatched = dispatch(
+        requestScheduleObservation({ endDate, plantingSiteId, requestedSubzoneIds: selectedSubzones, startDate })
+      );
       setRequestId(dispatched.requestId);
     }
     return Promise.resolve(true);
@@ -60,21 +64,22 @@ export default function ScheduleObservation(): JSX.Element {
 
   return (
     <ScheduleObservationForm
-      title={strings.SCHEDULE_OBSERVATION}
-      plantingSites={plantingSites}
-      plantingSiteId={plantingSiteId}
-      onPlantingSiteId={(id) => setPlantingSiteId(id)}
-      startDate={startDate}
-      onStartDate={(date) => setStartDate(date)}
-      endDate={endDate}
-      onEndDate={(date) => setEndDate(date)}
-      validate={validate}
-      onErrors={onErrors}
       cancelID='cancelScheduleObservation'
-      saveID='scheduleObservation'
+      endDate={endDate}
+      title={strings.SCHEDULE_OBSERVATION}
+      plantingSiteId={plantingSiteId}
+      plantingSites={plantingSites}
       onCancel={() => goToObservations()}
+      onChangeSelectedSubzones={setSelectedSubzones}
+      onEndDate={(date) => setEndDate(date)}
+      onErrors={onErrors}
+      onPlantingSiteId={(id) => setPlantingSiteId(id)}
       onSave={scheduleObservation}
+      onStartDate={(date) => setStartDate(date)}
+      saveID='scheduleObservation'
+      startDate={startDate}
       status={result?.status}
+      validate={validate}
     />
   );
 }

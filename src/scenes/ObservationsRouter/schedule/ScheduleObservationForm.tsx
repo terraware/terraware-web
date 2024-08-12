@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { BusySpinner, Dropdown } from '@terraware/web-components';
+import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
+import { BusySpinner, Checkbox, Dropdown } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -14,45 +14,51 @@ import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+import ObservationSubzoneSelector from './ObservationSubzoneSelector';
+
 export type ScheduleObservationFormProps = {
-  title: string;
-  plantingSites: PlantingSite[];
-  onPlantingSiteId: (siteId: number) => void;
-  onStartDate: (value: string) => void;
-  onEndDate: (value: string) => void;
-  plantingSiteId?: number;
-  startDate?: string;
-  endDate?: string;
-  validate?: boolean;
-  onErrors: (hasErrors: boolean) => void;
-  status?: Statuses;
-  onCancel: () => void;
-  onSave: () => void;
-  saveID: string;
   cancelID: string;
+  endDate?: string;
+  title: string;
+  onCancel: () => void;
+  onChangeSelectedSubzones?: (requestedSubzoneIds: number[]) => void;
+  onEndDate: (value: string) => void;
+  onErrors: (hasErrors: boolean) => void;
+  onPlantingSiteId: (siteId: number) => void;
+  onSave: () => void;
+  onStartDate: (value: string) => void;
+  plantingSiteId?: number;
+  plantingSites: PlantingSite[];
+  saveID: string;
+  startDate?: string;
+  status?: Statuses;
+  validate?: boolean;
 };
 
 export default function ScheduleObservationForm({
-  title,
-  plantingSites,
-  onPlantingSiteId,
-  onStartDate,
-  onEndDate,
-  plantingSiteId,
-  startDate,
-  endDate,
-  validate,
-  onErrors,
-  status,
-  onCancel,
-  onSave,
-  saveID,
   cancelID,
+  endDate,
+  title,
+  plantingSiteId,
+  plantingSites,
+  onCancel,
+  onChangeSelectedSubzones,
+  onEndDate,
+  onErrors,
+  onPlantingSiteId,
+  onSave,
+  onStartDate,
+  saveID,
+  startDate,
+  status,
+  validate,
 }: ScheduleObservationFormProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
+
   const [startDateError, setStartDateError] = useState<string>();
   const [endDateError, setEndDateError] = useState<string>();
+  const [limitObservation, setLimitObservation] = useState(false);
 
   const gridSize = () => {
     if (isMobile) {
@@ -99,6 +105,11 @@ export default function ScheduleObservationForm({
     [plantingSites]
   );
 
+  const selectedPlantingSite = useMemo(
+    () => plantingSites.find((plantingSite) => plantingSite.id === plantingSiteId),
+    [plantingSites, plantingSiteId]
+  );
+
   return (
     <TfMain>
       {status === 'pending' && <BusySpinner withSkrim={true} />}
@@ -109,6 +120,7 @@ export default function ScheduleObservationForm({
           </Typography>
           <PageSnackbar />
         </Box>
+
         <Card style={{ maxWidth: '568px', margin: 'auto' }}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
@@ -122,6 +134,30 @@ export default function ScheduleObservationForm({
                 fullWidth
               />
             </Grid>
+
+            <Grid item xs={12}>
+              <Checkbox
+                id='limitObservation'
+                name='Limit Observation'
+                label={strings.LIMIT_OBSERVATION_LABEL}
+                value={limitObservation}
+                onChange={(value) => setLimitObservation(value)}
+              />
+            </Grid>
+
+            {limitObservation && selectedPlantingSite && onChangeSelectedSubzones && (
+              <Grid item xs={12}>
+                <ObservationSubzoneSelector
+                  onChangeSelectedSubzones={onChangeSelectedSubzones}
+                  plantingSite={selectedPlantingSite}
+                />
+              </Grid>
+            )}
+
+            <Grid item xs={12}>
+              <Divider />
+            </Grid>
+
             <Grid item xs={gridSize()}>
               <DatePicker
                 id='startDate'
@@ -136,6 +172,7 @@ export default function ScheduleObservationForm({
                 errorText={validate ? startDateError : ''}
               />
             </Grid>
+
             <Grid item xs={gridSize()}>
               <DatePicker
                 id='endDate'
@@ -150,6 +187,7 @@ export default function ScheduleObservationForm({
                 errorText={validate ? endDateError : ''}
               />
             </Grid>
+
             <Typography
               fontSize='14px'
               fontWeight={400}
