@@ -32,6 +32,20 @@ export type Planting = components['schemas']['PlantingPayload'];
 
 // reported plants
 export type PlantingSiteReportedPlants = components['schemas']['PlantingSiteReportedPlantsPayload'];
+export type PlantingSiteReportedZonePlants = components['schemas']['PlantingZoneReportedPlantsPayload'];
+export type PlantingSiteReportedSubzonePlants = components['schemas']['PlantingSubzoneReportedPlantsPayload'];
+
+// Planting site with select data from reports merged in
+export type PlantingSiteWithReportedPlants = Omit<PlantingSite, 'plantingZones'> & {
+  plantingZones: PlantingSiteZoneWithReportedPlants[];
+};
+export type PlantingSiteZoneWithReportedPlants = Omit<PlantingZone, 'plantingSubzones'> & {
+  plantingSubzones: PlantingSiteSubzoneWithReportedPlants[];
+};
+export type PlantingSiteSubzoneWithReportedPlants = PlantingSubzone &
+  Omit<PlantingSiteReportedSubzonePlants, 'totalPlants'> & {
+    totalPlants?: number;
+  };
 
 // monitoring plots
 export type MonitoringPlotSearchResult = {

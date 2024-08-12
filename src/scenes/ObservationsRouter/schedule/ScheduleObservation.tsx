@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { APP_PATHS } from 'src/constants';
@@ -6,8 +6,9 @@ import { useOrganization } from 'src/providers';
 import { requestScheduleObservation } from 'src/redux/features/observations/observationsAsyncThunks';
 import { selectScheduleObservation } from 'src/redux/features/observations/observationsSelectors';
 import { requestObservations } from 'src/redux/features/observations/observationsThunks';
-import { selectObservationSchedulableSites } from 'src/redux/features/observations/observationsUtilsSelectors';
+import { selectObservationSchedulableSitesWithPlantReportData } from 'src/redux/features/observations/observationsUtilsSelectors';
 import { requestPlantings } from 'src/redux/features/plantings/plantingsThunks';
+import { requestSiteReportedPlants } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -28,7 +29,7 @@ export default function ScheduleObservation(): JSX.Element {
   const [requestId, setRequestId] = useState<string>('');
   const [selectedSubzones, setSelectedSubzones] = useState<number[]>([]);
 
-  const plantingSites = useAppSelector(selectObservationSchedulableSites) ?? [];
+  const plantingSites = useAppSelector(selectObservationSchedulableSitesWithPlantReportData) ?? [];
   const result = useAppSelector((state) => selectScheduleObservation(state, requestId));
 
   const scheduleObservation = async () => {
@@ -52,6 +53,13 @@ export default function ScheduleObservation(): JSX.Element {
     dispatch(requestPlantings(selectedOrganization.id));
   }, [dispatch, selectedOrganization.id]);
 
+  // This populates planting site specific data into the selectObservationSchedulableSitesWithPlantReportData selector
+  useEffect(() => {
+    if (plantingSiteId) {
+      void dispatch(requestSiteReportedPlants(plantingSiteId));
+    }
+  }, [plantingSiteId, dispatch]);
+
   useEffect(() => {
     if (result?.status === 'error') {
       snackbar.toastError();
@@ -61,6 +69,11 @@ export default function ScheduleObservation(): JSX.Element {
       goToObservations();
     }
   }, [dispatch, goToObservations, selectedOrganization.id, snackbar, result?.status]);
+
+  const selectedPlantingSite = useMemo(
+    () => plantingSites.find((plantingSite) => plantingSite.id === plantingSiteId),
+    [plantingSites, plantingSiteId]
+  );
 
   return (
     <ScheduleObservationForm
@@ -77,6 +90,7 @@ export default function ScheduleObservation(): JSX.Element {
       onSave={scheduleObservation}
       onStartDate={(date) => setStartDate(date)}
       saveID='scheduleObservation'
+      selectedPlantingSite={selectedPlantingSite}
       startDate={startDate}
       status={result?.status}
       validate={validate}

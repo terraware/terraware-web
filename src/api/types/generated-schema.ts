@@ -3483,6 +3483,8 @@ export interface components {
       /** Format: int64 */
       plantingSiteId: number;
       plantingSiteName: string;
+      /** @description If specific subzones were requested for this observation, their IDs. */
+      requestedSubzoneIds?: number[];
       /**
        * Format: date
        * @description Date this observation started.
@@ -3813,6 +3815,12 @@ export interface components {
        */
       plantingCompletedTime?: string;
     };
+    PlantingSubzoneReportedPlantsPayload: {
+      /** Format: int64 */
+      id: number;
+      /** Format: int32 */
+      totalPlants: number;
+    };
     PlantingSubzoneSpeciesPayload: {
       commonName?: string;
       /** Format: int64 */
@@ -3832,6 +3840,7 @@ export interface components {
     PlantingZoneReportedPlantsPayload: {
       /** Format: int64 */
       id: number;
+      plantingSubzones: components["schemas"]["PlantingSubzoneReportedPlantsPayload"][];
       /** Format: int32 */
       plantsSinceLastObservation: number;
       /** Format: int32 */
@@ -4130,7 +4139,7 @@ export interface components {
     ScheduleObservationRequestPayload: {
       /**
        * Format: date
-       * @description The end date for this observation, should be limited to 2 months from the start date .
+       * @description The end date for this observation, should be limited to 2 months from the start date.
        */
       endDate: string;
       /**
