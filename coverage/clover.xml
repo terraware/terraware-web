@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1723566677626" clover="3.2.0">
-  <project timestamp="1723566677626" name="All files">
-    <metrics statements="24094" coveredstatements="957" conditionals="15667" coveredconditionals="239" methods="7440" coveredmethods="164" elements="47201" coveredelements="1360" complexity="0" loc="24094" ncloc="24094" packages="229" files="1055" classes="1055"/>
+<coverage generated="1723567348059" clover="3.2.0">
+  <project timestamp="1723567348059" name="All files">
+    <metrics statements="24102" coveredstatements="957" conditionals="15669" coveredconditionals="239" methods="7446" coveredmethods="164" elements="47217" coveredelements="1360" complexity="0" loc="24102" ncloc="24102" packages="229" files="1055" classes="1055"/>
     <package name="src">
       <metrics statements="176" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -20872,7 +20872,7 @@
       </file>
     </package>
     <package name="src.scenes.ObservationsRouter.zone">
-      <metrics statements="56" coveredstatements="0" conditionals="42" coveredconditionals="0" methods="18" coveredmethods="0"/>
+      <metrics statements="64" coveredstatements="0" conditionals="44" coveredconditionals="0" methods="24" coveredmethods="0"/>
       <file name="ObservationPlantingZoneRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/zone/ObservationPlantingZoneRenderer.tsx">
         <metrics statements="22" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="11" count="0" type="stmt"/>
@@ -20899,41 +20899,49 @@
         <line num="86" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ObservationsRouter/zone/index.tsx">
-        <metrics statements="34" coveredstatements="0" conditionals="20" coveredconditionals="0" methods="14" coveredmethods="0"/>
-        <line num="26" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
+        <metrics statements="42" coveredstatements="0" conditionals="22" coveredconditionals="0" methods="20" coveredmethods="0"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
         <line num="52" count="0" type="stmt"/>
-        <line num="53" count="0" type="stmt"/>
-        <line num="54" count="0" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
-        <line num="57" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
         <line num="60" count="0" type="stmt"/>
         <line num="62" count="0" type="stmt"/>
-        <line num="63" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="63" count="0" type="stmt"/>
         <line num="64" count="0" type="stmt"/>
-        <line num="67" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="70" count="0" type="stmt"/>
-        <line num="71" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="75" count="0" type="stmt"/>
-        <line num="77" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="85" count="0" type="stmt"/>
-        <line num="86" count="0" type="stmt"/>
-        <line num="88" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="72" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="73" count="0" type="stmt"/>
+        <line num="76" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="80" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="86" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="94" count="0" type="stmt"/>
         <line num="95" count="0" type="stmt"/>
-        <line num="96" count="0" type="stmt"/>
-        <line num="99" count="0" type="stmt"/>
-        <line num="100" count="0" type="stmt"/>
-        <line num="113" count="0" type="stmt"/>
-        <line num="114" count="0" type="stmt"/>
-        <line num="117" count="0" type="stmt"/>
-        <line num="118" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="119" count="0" type="stmt"/>
+        <line num="97" count="0" type="stmt"/>
+        <line num="104" count="0" type="stmt"/>
+        <line num="105" count="0" type="stmt"/>
+        <line num="108" count="0" type="stmt"/>
+        <line num="109" count="0" type="stmt"/>
+        <line num="122" count="0" type="stmt"/>
+        <line num="123" count="0" type="stmt"/>
+        <line num="126" count="0" type="stmt"/>
+        <line num="127" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="128" count="0" type="stmt"/>
-        <line num="150" count="0" type="stmt"/>
-        <line num="155" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="137" count="0" type="stmt"/>
+        <line num="139" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="144" count="0" type="stmt"/>
+        <line num="146" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="147" count="0" type="stmt"/>
+        <line num="152" count="0" type="stmt"/>
+        <line num="174" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.OptInFeatures">
