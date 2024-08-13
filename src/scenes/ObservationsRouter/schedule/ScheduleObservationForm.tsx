@@ -132,23 +132,27 @@ export default function ScheduleObservationForm({
               />
             </Grid>
 
-            <Grid item xs={12}>
-              <Checkbox
-                id='limitObservation'
-                name='Limit Observation'
-                label={strings.LIMIT_OBSERVATION_LABEL}
-                value={limitObservation}
-                onChange={(value) => setLimitObservation(value)}
-              />
-            </Grid>
+            {onChangeSelectedSubzones && (
+              <>
+                <Grid item xs={12}>
+                  <Checkbox
+                    id='limitObservation'
+                    name='Limit Observation'
+                    label={strings.LIMIT_OBSERVATION_LABEL}
+                    value={limitObservation}
+                    onChange={(value) => setLimitObservation(value)}
+                  />
+                </Grid>
 
-            {limitObservation && selectedPlantingSite && onChangeSelectedSubzones && (
-              <Grid item xs={12}>
-                <ObservationSubzoneSelector
-                  onChangeSelectedSubzones={onChangeSelectedSubzones}
-                  plantingSite={selectedPlantingSite}
-                />
-              </Grid>
+                {limitObservation && selectedPlantingSite && (
+                  <Grid item xs={12}>
+                    <ObservationSubzoneSelector
+                      onChangeSelectedSubzones={onChangeSelectedSubzones}
+                      plantingSite={selectedPlantingSite}
+                    />
+                  </Grid>
+                )}
+              </>
             )}
 
             <Grid item xs={12}>

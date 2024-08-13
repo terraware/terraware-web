@@ -18,13 +18,12 @@ const ObservationSubzoneSelector = ({ onChangeSelectedSubzones, plantingSite }: 
 
   useEffect(() => {
     // Initialize all subzone selections with subzoneId -> false unless they have totalPlants > 0
-    setSelectedSubzones(
-      new Map(
-        plantingSite.plantingZones?.flatMap((zone) =>
-          zone.plantingSubzones.map((subzone) => [subzone.id, (subzone.totalPlants || 0) > 0])
-        )
+    const initialSelectedSubzones = new Map(
+      plantingSite.plantingZones?.flatMap((zone) =>
+        zone.plantingSubzones.map((subzone) => [subzone.id, (subzone.totalPlants || 0) > 0])
       )
     );
+    handleOnChangeSelectedSubzones(initialSelectedSubzones);
   }, [plantingSite]);
 
   const handleOnChangeSelectedSubzones = (nextSelectedSubzones: Map<number, boolean>) => {
