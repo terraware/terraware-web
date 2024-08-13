@@ -83,10 +83,10 @@ export const useSpeciesDeliverableSearch = (): DeliverableSearch => {
 
   return useMemo<DeliverableSearch>(
     () => ({
-      deliverableSearchResults: deliverableSearchRequest.data,
+      deliverableSearchResults: deliverableSearchRequest?.data,
       hasActiveDeliverable,
       hasRecentDeliverable,
-      isLoading: deliverableSearchRequest.status === 'pending' || isParticipantDataLoading,
+      isLoading: deliverableSearchRequest?.status === 'pending' || isParticipantDataLoading,
       reload,
     }),
     [deliverableSearchRequest, hasActiveDeliverable, hasRecentDeliverable, reload]
