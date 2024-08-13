@@ -20,7 +20,7 @@ import ApplicationPage from '../ApplicationPage';
 
 const PrescreenView = () => {
   const { selectedApplication, applicationDeliverables, applicationSections, reload } = useApplicationData();
-  const { goToApplication, goToApplicationPrescreenResult } = useNavigateTo();
+  const { goToApplication, goToApplicationPrescreen, goToApplicationPrescreenResult } = useNavigateTo();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
@@ -72,7 +72,7 @@ const PrescreenView = () => {
     if (selectedApplication.status === 'Not Submitted') {
       goToApplicationPrescreenResult(selectedApplication.id);
     } else {
-      goToApplication(selectedApplication.id);
+      goToApplicationPrescreen(selectedApplication.id);
     }
   }, [selectedApplication, goToApplication, goToApplicationPrescreenResult, setIsLoading, setIsConfirmModalOpen]);
 
