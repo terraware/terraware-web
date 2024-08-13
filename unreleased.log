@@ -1,3 +1,4 @@
+55b314bbdd4 SW-5813 Add applicable zones and subzones to observation details page message (#3002)
 ddfc280f4b3 SW-5786: Increase padding in application instructions to 24px (Follow-up #1) (#3001)
 8fb3c028efc Fix React error with rendered elements within a loop (#2998)
 c53ed068db8 Fix a bug with the columns in the subzone selector (#2996)
