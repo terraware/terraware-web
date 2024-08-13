@@ -57,7 +57,6 @@ export default function SpeciesProjectsTable({
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const { selectedOrganization } = useOrganization();
-
   const allProjects = useAppSelector(selectProjects);
 
   const [requestId, setRequestId] = useState('');
@@ -181,9 +180,11 @@ export default function SpeciesProjectsTable({
           onSubmit={onRemoveHandler}
         />
       )}
-      {openedAddToProjectModal && selectableProjects && (
+
+      {openedAddToProjectModal && (
         <AddToProjectModal onClose={onCloseAddToProject} onSubmit={onAddHandler} projects={selectableProjects} />
       )}
+
       <Grid item xs={12}>
         <Grid item xs={12}>
           <Box
