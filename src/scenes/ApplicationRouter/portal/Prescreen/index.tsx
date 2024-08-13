@@ -117,7 +117,6 @@ const PrescreenView = () => {
           />
         )}
       </SectionView>
-      ;
     </>
   );
 };
