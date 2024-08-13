@@ -66,13 +66,13 @@ export const requestListModuleDeliverables = createAsyncThunk(
   'modules/deliverables',
   async (request: {
     moduleIds: number[];
-    projectId: number;
+    projectIds: number[];
     searchChildren?: SearchNodePayload[];
   }): Promise<ModuleDeliverable[]> => {
     const searchChildren = request.searchChildren || [];
 
     const deliverableSearchResults = await ModuleService.searchDeliverables(
-      request.projectId,
+      request.projectIds,
       request.moduleIds,
       searchChildren
     );

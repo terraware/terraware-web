@@ -2,6 +2,7 @@ import { paths } from 'src/api/types/generated-schema';
 import { DeliverableCategoryType, DeliverableStatusType, DeliverableTypeType } from 'src/types/Deliverables';
 import { Module } from 'src/types/Module';
 import { SearchNodePayload, SearchRequestPayload, SearchResponseElement } from 'src/types/Search';
+import { createSearchNodeForIds } from 'src/utils/search';
 
 import HttpService, { Response2 } from './HttpService';
 import SearchService from './SearchService';
@@ -97,7 +98,7 @@ const get = async (projectId: number, moduleId: number): Promise<Response2<Modul
  * Get module deliverables for a specific module / project ID.
  */
 const searchDeliverables = async (
-  projectId: number,
+  projectIds: number[],
   moduleIds: number[],
   searchChildren: SearchNodePayload[]
 ): Promise<ModuleDeliverableSearchResult[] | null> => {
@@ -107,18 +108,8 @@ const searchDeliverables = async (
     search: {
       operation: 'and',
       children: [
-        {
-          operation: 'field',
-          field: 'project.id',
-          type: 'Exact',
-          values: [projectId],
-        },
-        {
-          operation: 'field',
-          field: 'module.id',
-          type: 'Exact',
-          values: moduleIds,
-        },
+        ...createSearchNodeForIds('project.id', projectIds),
+        ...createSearchNodeForIds('module.id', moduleIds),
         ...searchChildren,
       ],
     },
