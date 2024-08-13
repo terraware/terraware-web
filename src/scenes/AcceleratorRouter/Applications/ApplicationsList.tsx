@@ -1,14 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { TableColumnType } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
 import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
+import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
+import { useLocalization } from 'src/providers';
 import { requestListApplications } from 'src/redux/features/application/applicationAsyncThunks';
 import { selectApplicationList } from 'src/redux/features/application/applicationSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { ApplicationStatus } from 'src/types/Application';
+import { ApplicationReviewStatuses, ApplicationStatus } from 'src/types/Application';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -44,11 +46,28 @@ const defaultSearchOrder: SearchSortOrder = {
 
 const ApplicationList = () => {
   const dispatch = useAppDispatch();
+  const { activeLocale } = useLocalization();
   const snackbar = useSnackbar();
 
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectApplicationList(requestId));
   const [applications, setApplications] = useState<ApplicationRow[]>([]);
+
+  const featuredFilters: FilterConfig[] = useMemo(() => {
+    if (!activeLocale) {
+      return [];
+    }
+
+    const filters: FilterConfig[] = [
+      {
+        field: 'status',
+        options: ApplicationReviewStatuses,
+        label: strings.STATUS,
+      },
+    ];
+
+    return filters;
+  }, [activeLocale]);
 
   useEffect(() => {
     if (result?.status === 'error') {
@@ -86,6 +105,7 @@ const ApplicationList = () => {
       columns={columns}
       defaultSearchOrder={defaultSearchOrder}
       dispatchSearchRequest={dispatchSearchRequest}
+      featuredFilters={featuredFilters}
       fuzzySearchColumns={fuzzySearchColumns}
       id='accelerator-applications-table'
       Renderer={ApplicationCellRenderer}
