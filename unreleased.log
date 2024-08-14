@@ -1,3 +1,4 @@
+c689ff2556e SW-5807 Add NewApplicationModal to home page and open when the new application card CTA is clicked on (#3013)
 9a001482c61 SW-5834: Application in Console: Application Status field value should be able to be changed for failed pre-screens (#3012)
 e6f282d3894 SW-5844: Application timeline renders multiple times with different statuses (#3011)
 eb00fd78ea1 SW-5822: When the user restarts a prescreen they should end up on the prescreen module details page (#3010)

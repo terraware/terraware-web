@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
@@ -184,7 +184,15 @@
 <a name='L119'></a><a href='#L119'>119</a>
 <a name='L120'></a><a href='#L120'>120</a>
 <a name='L121'></a><a href='#L121'>121</a>
-<a name='L122'></a><a href='#L122'>122</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L122'></a><a href='#L122'>122</a>
+<a name='L123'></a><a href='#L123'>123</a>
+<a name='L124'></a><a href='#L124'>124</a>
+<a name='L125'></a><a href='#L125'>125</a>
+<a name='L126'></a><a href='#L126'>126</a>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -214,17 +222,25 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -293,7 +309,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -321,37 +337,45 @@ import { IconName } from './icon/icons';
 export type LinkStyle = 'plain' | 'button-primary' | 'button-secondary';
 &nbsp;
 export interface PageCardProps {
-  name: string;
-  isNameBold?: boolean;
-  icon: IconName;
   description: string;
-  linkText: string;
+  icon: IconName;
+  id?: string;
+  isNameBold?: boolean;
   link: string;
   linkStyle: LinkStyle;
-  id?: string;
+  linkText: string;
+  name: string;
+  onClick?: () =&gt; void;
 }
 &nbsp;
+const stopBubblingEvent = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>vent?: React.MouseEvent) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  if (event) {</span>
+<span class="cstat-no" title="statement not covered" >    stopPropagation(event);</span>
+  }
+};
+&nbsp;
 export default function <span class="fstat-no" title="function not covered" >PageCard(</span>props: PageCardProps): JSX.Element {
-  const { name, icon, description, id, linkText, link, linkStyle } = <span class="cstat-no" title="statement not covered" >props;</span>
+  const { name, icon, description, id, linkText, link, linkStyle, onClick } = <span class="cstat-no" title="statement not covered" >props;</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
   const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
   const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
 &nbsp;
-  const stopBubblingEvent = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>vent?: React.MouseEvent) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (event) {</span>
-<span class="cstat-no" title="statement not covered" >      stopPropagation(event);</span>
-    }
+  const goToPage = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    navigate({ pathname: link });</span>
   };
 &nbsp;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const goToPage = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>vent?: React.MouseEvent) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    navigate({ pathname: link });</span>
+  const handleOnClick = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (onClick) {</span>
+<span class="cstat-no" title="statement not covered" >      onClick();</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      goToPage();</span>
+    }
   };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Box
       className={isMobile ? '' : 'min-height'}
-      onClick={goToPage}
+      onClick={handleOnClick}
       id={id ?? ''}
       sx={{
         background: theme.palette.TwClrBg,
@@ -414,7 +438,7 @@ export default function <span class="fstat-no" title="function not covered" >Pag
         &lt;Button
           priority={linkStyle === 'button-primary' ? 'primary' : 'secondary'}
           label={linkText}
-          onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >goToPage()}</span>
+          onClick={handleOnClick}
           style={{
             fontSize: '14px',
             lineHeight: '20px',
@@ -433,7 +457,7 @@ export default function <span class="fstat-no" title="function not covered" >Pag
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-14T19:19:50.932Z
+                at 2024-08-14T19:52:38.954Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
