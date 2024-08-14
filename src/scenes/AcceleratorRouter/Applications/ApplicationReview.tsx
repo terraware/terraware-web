@@ -103,10 +103,9 @@ const ApplicationReview = ({ application }: ApplicationReviewProps) => {
             {application.status}
           </Typography>
           <Button
-            disabled={
-              (application.status === 'Failed Pre-screen' || application.status === 'Not Submitted') &&
-              !canUpdateInternalComments
-            }
+            // if a user lacks permission to update internal comments,
+            // they also lack permission to review the application or leave feedback
+            disabled={!canUpdateInternalComments}
             label={strings.REVIEW_APPLICATION}
             onClick={() => {
               setIsReviewModalOpen(true);

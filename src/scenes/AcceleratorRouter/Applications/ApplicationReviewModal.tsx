@@ -6,6 +6,7 @@ import { Dropdown, DropdownItem } from '@terraware/web-components';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
+import { useUser } from 'src/providers';
 import { requestReviewApplication } from 'src/redux/features/application/applicationAsyncThunks';
 import { selectApplicationReview } from 'src/redux/features/application/applicationSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -33,6 +34,7 @@ const ApplicationReviewModal = ({
   application,
 }: ApplicationReviewModalProps): JSX.Element => {
   const theme = useTheme();
+  const { isAllowed } = useUser();
 
   const dispatch = useAppDispatch();
 
@@ -63,9 +65,10 @@ const ApplicationReviewModal = ({
 
   const canUpdateStatus = useMemo(
     () =>
+      isAllowed('UPDATE_APPLICATION_STATUS') &&
       ApplicationReviewStatuses.find((status) => status === application.status) !== undefined &&
-      !(application.status === 'Failed Pre-screen' || application.status === 'Not Submitted'),
-    [application.status]
+      application.status !== 'Not Submitted',
+    [application.status, isAllowed]
   );
 
   const onCloseWrapper = useCallback(() => {
