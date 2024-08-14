@@ -1,4 +1,20 @@
-import { SearchType } from 'src/types/Search';
+import { SearchNodePayload, SearchType } from 'src/types/Search';
+
+/**
+ * Creates a spreadable array of a search node for a given set of ids. It stringifies the ids and
+ * returns an empty array if there are no ids, which would throw an error in the Search API
+ */
+const createSearchNodeForIds = (field: string, ids: number[]): SearchNodePayload[] =>
+  ids.length > 0
+    ? [
+        {
+          operation: 'field',
+          field,
+          type: 'Exact',
+          values: ids.map((id) => `${id}`),
+        } as SearchNodePayload,
+      ]
+    : [];
 
 /**
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions#escaping
@@ -53,4 +69,4 @@ const removeDoubleQuotes = (str: string): string | null => {
   }
 };
 
-export { parseSearchTerm, phraseMatch, regexMatch, removeDoubleQuotes };
+export { createSearchNodeForIds, parseSearchTerm, phraseMatch, regexMatch, removeDoubleQuotes };

@@ -50,7 +50,9 @@ const ModuleProvider = ({ children }: Props) => {
       const request = dispatch(requestGetModule({ projectId, moduleId }));
       setRequestId(request.requestId);
 
-      const deliverableRequest = dispatch(requestListModuleDeliverables({ projectId, moduleIds: [moduleId] }));
+      const deliverableRequest = dispatch(
+        requestListModuleDeliverables({ projectIds: [projectId], moduleIds: [moduleId] })
+      );
       setDeliverableRequestId(deliverableRequest.requestId);
     }
   }, [dispatch, projectId, moduleId]);

@@ -107,7 +107,7 @@ const ParticipantProvider = ({ children }: Props) => {
         const deliverableRequest = dispatch(
           requestListModuleDeliverables({
             moduleIds: [nextActiveModules[0].id],
-            projectId: currentParticipantProject.id,
+            projectIds: [currentParticipantProject.id],
           })
         );
         setListModuleDeliverablesRequestId(deliverableRequest.requestId);
