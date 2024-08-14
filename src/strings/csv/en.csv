@@ -490,6 +490,7 @@ ERROR_LOAD_SPECIES,Unable to load species for the organization,
 ERROR_LOAD_SUB_LOCATIONS,Unable to load sub locations for facility,
 ERROR_PROJECT_NAME_CONFLICT,This project name is already in use in the organization.,
 ERROR_PROJECT_SELECT,This project is not eligible to be selected.,
+ERROR_SUPPORT_NOTIFIED,An error occurred: Our support team has been notified and is working on fixing the issue.,
 EST_READY_DATE,Est. Ready Date,
 EST_TOTAL_PLANTS_PLANTING_DENSITY_AREA,Est. Total Plants (Planting Density × Area), Estimated Total Plants
 ESTIMATED_READY_DATE,Estimated Ready Date,

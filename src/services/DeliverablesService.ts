@@ -101,15 +101,17 @@ const list = async (
 /**
  * Uploads multiple documents and waits for all promises to settle.
  */
-const upload = async (deliverableId: number, documents: UploadDeliverableDocumentRequest[]): Promise<boolean> => {
+const upload = async (
+  deliverableId: number,
+  documents: UploadDeliverableDocumentRequest[]
+): Promise<(Response | null)[]> => {
   const headers = { 'content-type': 'multipart/form-data' };
   const urlReplacements = {
     '{deliverableId}': `${deliverableId}`,
   };
   const promises = documents.map((entity) => httpDocumentUpload.post({ urlReplacements, entity, headers }));
 
-  const results = await getPromisesResponse<Response>(promises);
-  return results.every((result) => result !== null && result.requestSucceeded === true);
+  return getPromisesResponse(promises);
 };
 
 const DeliverablesService = {

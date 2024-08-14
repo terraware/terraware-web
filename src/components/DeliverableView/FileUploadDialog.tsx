@@ -33,7 +33,11 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
       return;
     }
     if (uploadResult?.status === 'error') {
-      snackbar.toastError();
+      if (typeof uploadResult?.data === 'string') {
+        snackbar.toastError(uploadResult.data);
+      } else {
+        snackbar.toastError();
+      }
     }
     // close the modal and refresh deliverable even in case of error, there may have been partial successes
     onClose();
