@@ -68,7 +68,7 @@ const OverviewView = () => {
 
   return (
     <Card style={{ width: '100%', padding: theme.spacing(3), borderRadius: theme.spacing(3) }}>
-      <CurrentTimeline steps={applicationSteps} currentIndex={timelineIndex} />
+      {selectedApplication?.status && <CurrentTimeline steps={applicationSteps} currentIndex={timelineIndex} />}
 
       <Box paddingY={theme.spacing(3)} borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}>
         <Typography>{phaseDescription}</Typography>
