@@ -14,37 +14,45 @@ import { IconName } from './icon/icons';
 export type LinkStyle = 'plain' | 'button-primary' | 'button-secondary';
 
 export interface PageCardProps {
-  name: string;
-  isNameBold?: boolean;
-  icon: IconName;
   description: string;
-  linkText: string;
+  icon: IconName;
+  id?: string;
+  isNameBold?: boolean;
   link: string;
   linkStyle: LinkStyle;
-  id?: string;
+  linkText: string;
+  name: string;
+  onClick?: () => void;
 }
 
+const stopBubblingEvent = (event?: React.MouseEvent) => {
+  if (event) {
+    stopPropagation(event);
+  }
+};
+
 export default function PageCard(props: PageCardProps): JSX.Element {
-  const { name, icon, description, id, linkText, link, linkStyle } = props;
+  const { name, icon, description, id, linkText, link, linkStyle, onClick } = props;
   const theme = useTheme();
   const navigate = useNavigate();
   const { isMobile } = useDeviceInfo();
 
-  const stopBubblingEvent = (event?: React.MouseEvent) => {
-    if (event) {
-      stopPropagation(event);
-    }
+  const goToPage = () => {
+    navigate({ pathname: link });
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const goToPage = (event?: React.MouseEvent) => {
-    navigate({ pathname: link });
+  const handleOnClick = () => {
+    if (onClick) {
+      onClick();
+    } else {
+      goToPage();
+    }
   };
 
   return (
     <Box
       className={isMobile ? '' : 'min-height'}
-      onClick={goToPage}
+      onClick={handleOnClick}
       id={id ?? ''}
       sx={{
         background: theme.palette.TwClrBg,
@@ -107,7 +115,7 @@ export default function PageCard(props: PageCardProps): JSX.Element {
         <Button
           priority={linkStyle === 'button-primary' ? 'primary' : 'secondary'}
           label={linkText}
-          onClick={() => goToPage()}
+          onClick={handleOnClick}
           style={{
             fontSize: '14px',
             lineHeight: '20px',
