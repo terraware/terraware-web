@@ -82,6 +82,8 @@ const QuestionBox = ({
 
   const firstVariableValue: VariableValue | undefined = (variable?.variableValues || [])[0];
   const firstVariableValueStatus: VariableStatusType | undefined = firstVariableValue?.status;
+  const firstVariableValueFeedback: string | undefined = firstVariableValue?.feedback;
+  const firstVariableValueInternalComment: string | undefined = firstVariableValue?.internalComment;
 
   const [modalFeedback, setModalFeedback] = useState(firstVariableValue?.feedback || '');
 
@@ -138,11 +140,11 @@ const QuestionBox = ({
   };
 
   const rejectItem = (feedback: string) => {
-    setStatus('Rejected', feedback);
+    setStatus('Rejected', feedback, firstVariableValueInternalComment);
   };
 
   const approveItem = () => {
-    setStatus('Approved');
+    setStatus('Approved', undefined, firstVariableValueInternalComment);
   };
 
   const onEditItem = () => {
@@ -151,7 +153,7 @@ const QuestionBox = ({
 
   const onUpdateInternalComment = (internalComment: string) => {
     const currentStatus: VariableStatusType = firstVariableValueStatus || 'Not Submitted';
-    setStatus(currentStatus, undefined, internalComment);
+    setStatus(currentStatus, firstVariableValueFeedback, internalComment);
   };
 
   const onSave = () => {
@@ -168,16 +170,16 @@ const QuestionBox = ({
     (optionItem: DropdownItem) => {
       switch (optionItem.value) {
         case 'needs_translation': {
-          setStatus('Needs Translation');
+          setStatus('Needs Translation', undefined, firstVariableValueInternalComment);
           break;
         }
         case 'not_needed': {
-          setStatus('Not Needed');
+          setStatus('Not Needed', undefined, firstVariableValueInternalComment);
           break;
         }
       }
     },
-    [setStatus]
+    [firstVariableValueInternalComment, setStatus]
   );
 
   const optionItems = useMemo(
@@ -219,7 +221,7 @@ const QuestionBox = ({
             <Button
               id='updateFeedback'
               label={strings.SAVE}
-              onClick={() => setStatus('Rejected', modalFeedback)}
+              onClick={() => setStatus('Rejected', modalFeedback, firstVariableValueInternalComment)}
               key='button-2'
             />,
           ]}
