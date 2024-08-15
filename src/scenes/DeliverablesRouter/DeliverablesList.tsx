@@ -61,6 +61,16 @@ const DeliverablesList = (): JSX.Element => {
     []
   );
 
+  const statusOrder = {
+    Rejected: 1,
+    'Not Submitted': 2,
+    'In Review': 3,
+    'Needs Translation': 3,
+    Approved: 4,
+    'Not Needed': 5,
+    Completed: 5,
+  };
+
   const searchAndSort: SearchAndSortFn<ListDeliverablesElement> = useCallback(
     (results: ListDeliverablesElement[], search?: SearchNodePayload, sortOrderConfig?: SearchOrderConfig) => {
       // In the participant view, "needs translation" needs to be "in review", so we will coerce results with "needs translation"
@@ -74,7 +84,28 @@ const DeliverablesList = (): JSX.Element => {
       };
 
       const modifiedSearch = modifySearchNode(modifyStatus, search);
-      return genericSearchAndSort(results, modifiedSearch, sortOrderConfig);
+      if (sortOrderConfig?.sortOrder.field === 'status') {
+        const direction = sortOrderConfig?.sortOrder.direction;
+        return results.sort((a, b) => {
+          if (a.status !== b.status) {
+            if (direction === 'Descending') {
+              return statusOrder[b.status] - statusOrder[a.status];
+            } else {
+              return statusOrder[a.status] - statusOrder[b.status];
+            }
+          } else {
+            // if the have same status sort by due date
+            if ((a.dueDate || 0) < (b.dueDate || 0)) {
+              return -1;
+            } else if ((a.dueDate || 0) > (b.dueDate || 0)) {
+              return 1;
+            }
+            return 0;
+          }
+        });
+      } else {
+        return genericSearchAndSort(results, modifiedSearch, sortOrderConfig);
+      }
     },
     []
   );
