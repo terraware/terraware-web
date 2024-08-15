@@ -22,6 +22,7 @@ export type PageProps = {
   containerStyles?: CSSProperties;
   titleStyle?: CSSProperties;
   contentStyle?: Record<string, string | number>;
+  titleContainerStyle?: CSSProperties;
   crumbs?: Crumb[];
   hierarchicalCrumbs?: boolean;
   isLoading?: boolean;
@@ -39,6 +40,7 @@ export default function Page({
   containerStyles,
   contentStyle,
   titleStyle,
+  titleContainerStyle,
   crumbs,
   hierarchicalCrumbs,
   isLoading,
@@ -68,6 +70,7 @@ export default function Page({
           alignItems='center'
           marginBottom={theme.spacing(2)}
           paddingX={theme.spacing(2)}
+          sx={titleContainerStyle}
         >
           {title && typeof title !== 'string' && (
             <Grid item xs={8}>
