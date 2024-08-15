@@ -14,6 +14,7 @@ import { IconName } from './icon/icons';
 export type LinkStyle = 'plain' | 'button-primary' | 'button-secondary';
 
 export interface PageCardProps {
+  cardIsClickable?: boolean;
   description: string;
   icon: IconName;
   id?: string;
@@ -32,7 +33,7 @@ const stopBubblingEvent = (event?: React.MouseEvent) => {
 };
 
 export default function PageCard(props: PageCardProps): JSX.Element {
-  const { name, icon, description, id, linkText, link, linkStyle, onClick } = props;
+  const { cardIsClickable = true, description, icon, id, link, linkStyle, linkText, name, onClick } = props;
   const theme = useTheme();
   const navigate = useNavigate();
   const { isMobile } = useDeviceInfo();
@@ -52,7 +53,7 @@ export default function PageCard(props: PageCardProps): JSX.Element {
   return (
     <Box
       className={isMobile ? '' : 'min-height'}
-      onClick={handleOnClick}
+      onClick={cardIsClickable ? handleOnClick : undefined}
       id={id ?? ''}
       sx={{
         background: theme.palette.TwClrBg,
