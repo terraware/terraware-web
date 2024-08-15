@@ -107,6 +107,7 @@ const TerrawareHomeView = () => {
               {isEnabled('Accelerator Application') && (
                 <Grid item xs={secondaryGridSize()}>
                   <PageCard
+                    cardIsClickable={false}
                     id='applicationHomeCard'
                     name={strings.APPLY_TO_ACCELERATOR}
                     icon='iconFile'
