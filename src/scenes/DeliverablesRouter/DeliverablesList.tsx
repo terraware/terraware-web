@@ -1,11 +1,10 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
 import { Grid, Typography } from '@mui/material';
-import { Separator } from '@terraware/web-components';
+import { Dropdown, DropdownItem, Separator } from '@terraware/web-components';
 
 import DeliverablesTable from 'src/components/DeliverablesTable';
 import PageHeader from 'src/components/PageHeader';
-import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import { FilterConfig } from 'src/components/common/SearchFiltersWrapperV2';
 import TfMain from 'src/components/common/TfMain';
@@ -25,24 +24,24 @@ import {
 
 const DeliverablesList = (): JSX.Element => {
   const { activeLocale } = useLocalization();
-  const { participantProjects } = useParticipantData();
   const { selectedOrganization } = useOrganization();
-
-  const [projectFilter, setProjectFilter] = useState<{ projectId?: number }>({ projectId: undefined });
+  const { participantProjects, currentParticipantProject, moduleProjects, setCurrentParticipantProject } =
+    useParticipantData();
+  const [allSelected, setAllSelected] = useState(false);
 
   const extraTableFilters: SearchNodePayload[] = useMemo(
     () =>
-      projectFilter.projectId
+      !allSelected && currentParticipantProject?.id
         ? [
             {
               operation: 'field',
               field: 'projectId',
               type: 'Exact',
-              values: [`${projectFilter.projectId}`],
+              values: [`${currentParticipantProject.id}`],
             },
           ]
         : [],
-    [projectFilter]
+    [allSelected, currentParticipantProject]
   );
 
   const filterModifiers = useCallback(
@@ -79,6 +78,42 @@ const DeliverablesList = (): JSX.Element => {
     []
   );
 
+  const options: DropdownItem[] = useMemo(() => {
+    const optionsToReturn = moduleProjects?.map((project) => ({
+      label: project.name,
+      value: project.id,
+    }));
+    optionsToReturn.push({
+      label: strings.ALL,
+      value: -1,
+    });
+    return optionsToReturn;
+  }, [moduleProjects]);
+
+  const selectStyles = {
+    arrow: {
+      height: '32px',
+    },
+    input: {
+      fontSize: '24px',
+      fontWeight: '600',
+      lineHeight: '32px',
+    },
+    inputContainer: {
+      border: 0,
+      backgroundColor: 'initial',
+    },
+  };
+
+  const onProjectChange = (newValue: string) => {
+    if (newValue.toString() === '-1') {
+      setAllSelected(true);
+    } else {
+      setCurrentParticipantProject(newValue);
+      setAllSelected(false);
+    }
+  };
+
   const PageHeaderLeftComponent = useMemo(
     () =>
       activeLocale ? (
@@ -88,23 +123,21 @@ const DeliverablesList = (): JSX.Element => {
               <Separator height={'40px'} />
             </Grid>
             <Grid item>
-              <Typography sx={{ lineHeight: '40px' }} component={'span'}>
-                {strings.PROJECT}
-              </Typography>
-            </Grid>
-            <Grid item sx={{ marginLeft: theme.spacing(1.5) }}>
-              <ProjectsDropdown
-                allowUnselect
-                availableProjects={participantProjects}
-                label={''}
-                record={projectFilter}
-                setRecord={setProjectFilter}
-              />
+              {options?.length > 1 ? (
+                <Dropdown
+                  onChange={onProjectChange}
+                  options={options}
+                  selectStyles={selectStyles}
+                  selectedValue={allSelected ? -1 : currentParticipantProject?.id}
+                />
+              ) : (
+                <Typography sx={selectStyles.input}>{options[0].label}</Typography>
+              )}
             </Grid>
           </Grid>
         </>
       ) : null,
-    [activeLocale, participantProjects, projectFilter]
+    [activeLocale, participantProjects, currentParticipantProject, allSelected]
   );
 
   return (
