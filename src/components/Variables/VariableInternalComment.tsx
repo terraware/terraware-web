@@ -34,6 +34,7 @@ function VariableInternalComment({ variable, update, editing, sx }: VariableInte
 
   const toggleDialog = useCallback(() => {
     setIsDialogOpen((prev) => !prev);
+    setInternalComment(variableValue?.internalComment || '');
   }, []);
 
   const handleUpdate = () => {
@@ -42,7 +43,7 @@ function VariableInternalComment({ variable, update, editing, sx }: VariableInte
   };
 
   return (
-    (editing || internalComment) && (
+    (editing || internalComment || isDialogOpen) && (
       <Box sx={[...(Array.isArray(sx) ? sx : [sx])]}>
         <Box
           display='flex'
@@ -59,7 +60,7 @@ function VariableInternalComment({ variable, update, editing, sx }: VariableInte
             onChange={(value) => setInternalComment(value as string)}
             preserveNewlines
             type='textarea'
-            value={internalComment || strings.NO_COMMENTS_ADDED}
+            value={variableValue?.internalComment || strings.NO_COMMENTS_ADDED}
             sx={{ padding: '0 8px' }}
           />
           <Button
