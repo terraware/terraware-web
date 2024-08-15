@@ -20,7 +20,7 @@ import ApplicationPage from '../ApplicationPage';
 
 const PrescreenView = () => {
   const { selectedApplication, applicationDeliverables, applicationSections, reload } = useApplicationData();
-  const { goToApplication, goToApplicationPrescreen, goToApplicationPrescreenResult } = useNavigateTo();
+  const { goToApplication, goToApplicationPrescreenResult } = useNavigateTo();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
@@ -63,25 +63,27 @@ const PrescreenView = () => {
     }
   }, [dispatch, selectedApplication, setIsLoading, setRestartRequestId]);
 
-  const onReload = useCallback(() => {
-    if (!selectedApplication) {
-      return;
-    }
-    setIsLoading(false);
-    setIsConfirmModalOpen(false);
-    if (selectedApplication.status === 'Not Submitted') {
-      goToApplicationPrescreenResult(selectedApplication.id);
-    } else {
-      goToApplicationPrescreen(selectedApplication.id);
-    }
-  }, [selectedApplication, goToApplication, goToApplicationPrescreenResult, setIsLoading, setIsConfirmModalOpen]);
+  const onReload = useCallback(
+    (submit: boolean) => {
+      if (!selectedApplication) {
+        return;
+      }
+      setIsLoading(false);
+      setIsConfirmModalOpen(false);
+      if (submit) {
+        setSubmitRequestId('');
+        goToApplicationPrescreenResult(selectedApplication.id);
+      } else {
+        setRestartRequestId('');
+      }
+    },
+    [selectedApplication, goToApplication, goToApplicationPrescreenResult, setIsLoading, setIsConfirmModalOpen]
+  );
 
   useEffect(() => {
-    if (
-      (restartResult && restartResult.status === 'success' && restartResult.data) ||
-      (submitResult && submitResult.status === 'success' && submitResult.data)
-    ) {
-      reload(onReload);
+    const submitResultSuccess = Boolean(submitResult && submitResult.status === 'success' && submitResult.data);
+    if ((restartResult && restartResult.status === 'success' && restartResult.data) || submitResultSuccess) {
+      reload(() => onReload(submitResultSuccess));
     }
   }, [restartResult, submitResult, onReload]);
 
