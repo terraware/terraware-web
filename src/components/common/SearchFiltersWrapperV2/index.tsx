@@ -28,6 +28,7 @@ export type FilterConfig = {
   searchNodeCreator?: (values: (string | number | null)[]) => SearchNodePayload;
   showLabel?: boolean;
   type?: FilterField['type'];
+  tracking?: boolean;
 };
 
 export type FilterConfigWithValues = FilterConfig & {

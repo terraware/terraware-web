@@ -138,6 +138,10 @@ const DeliverablesTable = ({
     }
   };
 
+  const trackFilters = () => {
+
+  };
+
   const featuredFilters: FilterConfigWithValues[] = useMemo(() => {
     const filters: FilterConfigWithValues[] = [
       {
@@ -237,6 +241,7 @@ const DeliverablesTable = ({
       id={tableId}
       Renderer={DeliverableCellRenderer}
       rows={_deliverables}
+      mixpanelTracking={trackFilters}
     />
   );
 };

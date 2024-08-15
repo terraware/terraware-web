@@ -30,6 +30,7 @@ export interface TableWithSearchFiltersProps
   rightComponent?: React.ReactNode;
   title?: string;
   clientSortedFields?: string[];
+  mixpanelTracking?: (filters: FilterConfigWithValues[]) => void;
 }
 
 const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {

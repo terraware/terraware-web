@@ -23,6 +23,7 @@ import ReportService, { Reports } from 'src/services/ReportService';
 import strings from 'src/strings';
 import { isAdmin, isManagerOrHigher } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { useMixpanel } from 'react-mixpanel-browser';
 
 type NavBarProps = {
   backgroundTransparent?: boolean;
@@ -43,6 +44,7 @@ export default function NavBar({
   const [hasDeliverables, setHasDeliverables] = useState<boolean>(false);
   const { isDesktop, isMobile } = useDeviceInfo();
   const navigate = useNavigate();
+  const mixpanel = useMixpanel();
 
   const { isAllowedViewConsole } = useAcceleratorConsole();
   const { activeLocale } = useLocalization();
@@ -181,6 +183,7 @@ export default function NavBar({
           icon='iconSubmit'
           selected={!!isDeliverablesRoute}
           onClick={() => {
+            mixpanel?.track('Deliverables Nav Click');
             closeAndNavigateTo(isDeliverablesRoute && !isDeliverableViewRoute ? '' : APP_PATHS.DELIVERABLES);
           }}
           id='deliverables'
@@ -213,6 +216,7 @@ export default function NavBar({
           label={strings.MODULES}
           selected={!!isProjectModulesRoute}
           onClick={() => {
+            mixpanel?.track('Modules Nav Click');
             closeAndNavigateTo(
               APP_PATHS.PROJECT_MODULES.replace(':projectId', currentParticipantProject.id.toString())
             );

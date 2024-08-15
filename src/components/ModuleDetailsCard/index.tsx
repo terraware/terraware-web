@@ -4,6 +4,7 @@ import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { DateTime } from 'luxon';
+import { useNavigate } from 'react-router-dom';
 
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
@@ -16,6 +17,8 @@ import { getLongDate, getLongDateTime } from 'src/utils/dateFormatter';
 
 import DeliverableStatusBadge from './ModuleDeliverableStatusBadge';
 import ModuleEventSessionCard from './ModuleEventSessionCard';
+import { useMixpanel } from 'react-mixpanel-browser';
+import { MixpanelContext } from 'react-mixpanel-browser';
 
 const ModuleContentSection = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -36,14 +39,17 @@ type ModuleContent = {
   onClick: (type: ModuleContentType) => void;
 };
 
-const MODULE_CONTENTS = (module: ModuleDetails, navigate: (type: ModuleContentType) => void): ModuleContent[] => {
+const MODULE_CONTENTS = (module: ModuleDetails, navigate: (type: ModuleContentType) => void, mixpanel: (type: MixpanelContext) => MixpanelContext): ModuleContent[] => {
   const content: ModuleContent[] = [];
 
   if (module.additionalResources) {
     content.push({
       type: 'additionalResources',
       label: strings.ADDITIONAL_RESOURCES,
-      onClick: (type) => navigate(type),
+      onClick: (type) => {
+        mixpanel?.track('Additional Resources Click');
+        navigate(type);
+      },
     });
   }
 
@@ -104,8 +110,15 @@ const ModuleDetailsCard = ({
 }: ModuleDetailsCardProp) => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
+  const mixpanel = useMixpanel();
+  const navigate = useNavigate();
 
   const { goToModuleContent } = useNavigateTo();
+
+  const goToProjectModules = () => {
+    mixpanel?.track('See All Modules');
+    navigate(APP_PATHS.PROJECT_MODULES.replace(':projectId', `${projectId}`));
+  }
 
   const getDueDateLabelColor = (dueDate: DateTime) => {
     const isCurrentModule = module.isActive;
@@ -148,7 +161,7 @@ const ModuleDetailsCard = ({
   };
 
   const contents = useMemo(
-    () => (module ? MODULE_CONTENTS(module, (type) => goToModuleContent(projectId, module.id, type)) : []),
+    () => (module ? MODULE_CONTENTS(module, (type) => goToModuleContent(projectId, module.id, type), (mixpanel) => useMixpanel()) : []),
     [module, goToModuleContent]
   );
 
@@ -178,9 +191,9 @@ const ModuleDetailsCard = ({
                   <Grid item>
                     {showSeeAllModules && (
                       <Link
-                        to={APP_PATHS.PROJECT_MODULES.replace(':projectId', `${projectId}`)}
                         fontSize={16}
                         fontWeight={500}
+                        onClick={() => goToProjectModules()}
                       >
                         {strings.SEE_ALL_MODULES}
                       </Link>
