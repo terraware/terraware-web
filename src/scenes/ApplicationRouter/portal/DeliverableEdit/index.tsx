@@ -64,7 +64,7 @@ const SectionDeliverableEditWrapper = () => {
     }
   }, [deliverable, section, selectedApplication]);
   return (
-    <ApplicationPage>
+    <ApplicationPage showFeedback={false}>
       <SectionDeliverableEditView />
     </ApplicationPage>
   );

@@ -139,7 +139,7 @@ const PrescreenViewWrapper = () => {
   );
 
   return (
-    <ApplicationPage crumbs={crumbs}>
+    <ApplicationPage crumbs={crumbs} showFeedback={false}>
       <PrescreenView />
     </ApplicationPage>
   );
