@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1723726452654" clover="3.2.0">
-  <project timestamp="1723726452655" name="All files">
-    <metrics statements="24155" coveredstatements="958" conditionals="15686" coveredconditionals="239" methods="7462" coveredmethods="164" elements="47303" coveredelements="1361" complexity="0" loc="24155" ncloc="24155" packages="229" files="1057" classes="1057"/>
+<coverage generated="1723743645020" clover="3.2.0">
+  <project timestamp="1723743645020" name="All files">
+    <metrics statements="24168" coveredstatements="958" conditionals="15704" coveredconditionals="239" methods="7463" coveredmethods="164" elements="47335" coveredelements="1361" complexity="0" loc="24168" ncloc="24168" packages="229" files="1057" classes="1057"/>
     <package name="src">
       <metrics statements="176" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -16798,7 +16798,7 @@
       </file>
     </package>
     <package name="src.scenes.DeliverablesRouter">
-      <metrics statements="70" coveredstatements="0" conditionals="36" coveredconditionals="0" methods="21" coveredmethods="0"/>
+      <metrics statements="83" coveredstatements="0" conditionals="54" coveredconditionals="0" methods="22" coveredmethods="0"/>
       <file name="DeliverablePage.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/DeliverablesRouter/DeliverablePage.tsx">
         <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="18" count="0" type="stmt"/>
@@ -16841,7 +16841,7 @@
         <line num="99" count="0" type="stmt"/>
       </file>
       <file name="DeliverablesList.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/DeliverablesRouter/DeliverablesList.tsx">
-        <metrics statements="21" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="8" coveredmethods="0"/>
+        <metrics statements="34" coveredstatements="0" conditionals="24" coveredconditionals="0" methods="9" coveredmethods="0"/>
         <line num="26" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
@@ -16856,13 +16856,26 @@
         <line num="56" count="0" type="stmt"/>
         <line num="58" count="0" type="stmt"/>
         <line num="64" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="73" count="0" type="stmt"/>
-        <line num="76" count="0" type="stmt"/>
-        <line num="77" count="0" type="stmt"/>
-        <line num="82" count="0" type="stmt"/>
-        <line num="84" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="110" count="0" type="stmt"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="83" count="0" type="stmt"/>
+        <line num="86" count="0" type="stmt"/>
+        <line num="87" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="88" count="0" type="stmt"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="90" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="91" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="92" count="0" type="stmt"/>
+        <line num="94" count="0" type="stmt"/>
+        <line num="98" count="0" type="cond" truecount="0" falsecount="6"/>
+        <line num="99" count="0" type="stmt"/>
+        <line num="100" count="0" type="cond" truecount="0" falsecount="6"/>
+        <line num="101" count="0" type="stmt"/>
+        <line num="103" count="0" type="stmt"/>
+        <line num="107" count="0" type="stmt"/>
+        <line num="113" count="0" type="stmt"/>
+        <line num="115" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="141" count="0" type="stmt"/>
       </file>
       <file name="QuestionsDeliverableEditView.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/DeliverablesRouter/QuestionsDeliverableEditView.tsx">
         <metrics statements="10" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="2" coveredmethods="0"/>
