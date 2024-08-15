@@ -19,6 +19,7 @@ export type SectionVariable = components['schemas']['SectionVariablePayload'];
 export type DateVariable = components['schemas']['DateVariablePayload'];
 
 export type TextVariable = components['schemas']['TextVariablePayload'];
+export const isTextVariable = (input: unknown): input is TableVariable => (input as TextVariable).type === 'Text';
 
 export type ImageVariable = components['schemas']['ImageVariablePayload'];
 export const isImageVariable = (input: unknown): input is ImageVariable => (input as ImageVariable).type === 'Image';
@@ -101,3 +102,6 @@ export type VariableStatusType = components['schemas']['UpdateVariableWorkflowDe
 export type VariableOwnersListResponse = components['schemas']['ListVariableOwnersResponsePayload'];
 
 export type VariableOwners = components['schemas']['ListVariableOwnersResponsePayload']['variables'][0];
+
+export type DependencyCondition = VariableWithValues['dependencyCondition'];
+export const DependencyConditions: DependencyCondition[] = ['gt', 'gte', 'lt', 'lte', 'eq', 'neq'];

@@ -1,4 +1,4 @@
-import { VariableWithValues, isSelectVariable } from 'src/types/documentProducer/Variable';
+import { VariableWithValues, isSelectVariable, isTextVariable } from 'src/types/documentProducer/Variable';
 import {
   isNumberVariableValue,
   isSelectVariableValue,
@@ -23,33 +23,42 @@ export const variableDependencyMet = (variable: VariableWithValues, allVariables
 
   const rawDependsOnValue = getRawValue(dependsOnVariable);
 
+  if (rawDependsOnValue === undefined) {
+    return false;
+  }
+
   switch (variable.dependencyCondition) {
     case 'eq':
       if (isSelectVariable(dependsOnVariable) && isArrayOfT(rawDependsOnValue, isNumber)) {
-        return rawDependsOnValue.includes(Number(variable.dependencyValue));
+        const optionIdOfDependencyValue = dependsOnVariable.options.find(
+          (option) => option.name === variable.dependencyValue
+        )?.id;
+        if (!optionIdOfDependencyValue) {
+          // This means the value listed as the dependency value doesn't exist within the depended on variable
+          return false;
+        }
+
+        return rawDependsOnValue.includes(optionIdOfDependencyValue);
       }
+
+      if (isTextVariable(dependsOnVariable)) {
+        return variable.dependencyValue.toLowerCase() === `${rawDependsOnValue}`.toLowerCase();
+      }
+
       return variable.dependencyValue == rawDependsOnValue;
     case 'gt':
-      if (!rawDependsOnValue) {
-        return false;
-      }
       return Number(rawDependsOnValue) > Number(variable.dependencyValue);
     case 'gte':
-      if (!rawDependsOnValue) {
-        return false;
-      }
       return Number(rawDependsOnValue) >= Number(variable.dependencyValue);
     case 'lt':
-      if (!rawDependsOnValue) {
-        return true;
-      }
       return Number(rawDependsOnValue) < Number(variable.dependencyValue);
     case 'lte':
-      if (!rawDependsOnValue) {
-        return true;
-      }
       return Number(rawDependsOnValue) <= Number(variable.dependencyValue);
     case 'neq':
+      if (isTextVariable(dependsOnVariable)) {
+        return variable.dependencyValue.toLowerCase() !== `${rawDependsOnValue}`.toLowerCase();
+      }
+
       return variable.dependencyValue != rawDependsOnValue;
   }
 };
