@@ -490,6 +490,7 @@ ERROR_LOAD_SPECIES,No se pudieron cargar las especies para la organización,
 ERROR_LOAD_SUB_LOCATIONS,No se pudieron cargar las sububicaciones para la instalación,
 ERROR_PROJECT_NAME_CONFLICT,Este nombre de proyecto ya está en uso en la organización.,
 ERROR_PROJECT_SELECT,No se puede seleccionar este proyecto.,
+ERROR_SUPPORT_NOTIFIED,Se produjo un error: Nuestro equipo de asistencia técnica está al corriente y trabajando para solucionar el problema.,
 EST_READY_DATE,Fecha estimada de disponibilidad,
 EST_TOTAL_PLANTS_PLANTING_DENSITY_AREA,Plantas totales estimadas (densidad de plantación × superficie), Estimated Total Plants
 ESTIMATED_READY_DATE,Fecha estimada de finalización,
