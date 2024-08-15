@@ -52,7 +52,7 @@ export const deliverablesSlice = createSlice({
  * Simple OK/response for requests such as updating deliverable status, keeps
  * state of deliverable id that was edited.
  */
-const initialStateEditDeliverable: { [key: number | string]: StatusT<number> } = {};
+const initialStateEditDeliverable: { [key: number | string]: StatusT<number | string> } = {};
 
 export const deliverablesEditSlice = createSlice({
   name: 'deliverablesEditSlice',
