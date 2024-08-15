@@ -1,3 +1,4 @@
+81d17b24720 SW-5579 Fix styles for Link to a Project's Deliverables from Project Profile page (#3021)
 46ea3207f11 SW-5345 Status column sort behavior (#3019)
 acf5e2c686f Updated translations from Phrase (#3014)
 c689ff2556e SW-5807 Add NewApplicationModal to home page and open when the new application card CTA is clicked on (#3013)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1723743645020" clover="3.2.0">
-  <project timestamp="1723743645020" name="All files">
+<coverage generated="1723748962100" clover="3.2.0">
+  <project timestamp="1723748962100" name="All files">
     <metrics statements="24168" coveredstatements="958" conditionals="15704" coveredconditionals="239" methods="7463" coveredmethods="164" elements="47335" coveredelements="1361" complexity="0" loc="24168" ncloc="24168" packages="229" files="1057" classes="1057"/>
     <package name="src">
       <metrics statements="176" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
@@ -4208,11 +4208,11 @@
       <metrics statements="5" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="1" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/Page/index.tsx">
         <metrics statements="5" coveredstatements="0" conditionals="18" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="53" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="54" count="0" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="55" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.PageHeader">
@@ -13342,8 +13342,8 @@
         <line num="105" count="0" type="stmt"/>
         <line num="110" count="0" type="stmt"/>
         <line num="117" count="0" type="stmt"/>
-        <line num="283" count="0" type="stmt"/>
-        <line num="294" count="0" type="stmt"/>
+        <line num="284" count="0" type="stmt"/>
+        <line num="295" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/index.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
