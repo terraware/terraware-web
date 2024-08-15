@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/77</span>
+                <span class='fraction'>0/83</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/74</span>
+                <span class='fraction'>0/80</span>
             </div>
         
             
@@ -330,7 +330,19 @@
 <a name='L265'></a><a href='#L265'>265</a>
 <a name='L266'></a><a href='#L266'>266</a>
 <a name='L267'></a><a href='#L267'>267</a>
-<a name='L268'></a><a href='#L268'>268</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L268'></a><a href='#L268'>268</a>
+<a name='L269'></a><a href='#L269'>269</a>
+<a name='L270'></a><a href='#L270'>270</a>
+<a name='L271'></a><a href='#L271'>271</a>
+<a name='L272'></a><a href='#L272'>272</a>
+<a name='L273'></a><a href='#L273'>273</a>
+<a name='L274'></a><a href='#L274'>274</a>
+<a name='L275'></a><a href='#L275'>275</a>
+<a name='L276'></a><a href='#L276'>276</a>
+<a name='L277'></a><a href='#L277'>277</a>
+<a name='L278'></a><a href='#L278'>278</a>
+<a name='L279'></a><a href='#L279'>279</a>
+<a name='L280'></a><a href='#L280'>280</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -378,9 +390,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -391,15 +403,27 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -597,10 +621,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useMemo, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useState } from 'react';
 &nbsp;
 import { FormControlLabel, Grid, Radio, RadioGroup, useTheme } from '@mui/material';
-import { BusySpinner, Dropdown } from '@terraware/web-components';
+import { BusySpinner, Dropdown, DropdownItem } from '@terraware/web-components';
 &nbsp;
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
@@ -645,9 +669,9 @@ const NewApplicationModal = <span class="cstat-no" title="statement not covered"
   const { goToApplication } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
 &nbsp;
   const [isLoading, setIsLoading] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
-&nbsp;
   const [projectNameError, setProjectNameError] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const [projectSelectError, setProjectSelectError] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
+  const [projectOptions, setProjectOptions] = <span class="cstat-no" title="statement not covered" >useState&lt;DropdownItem[]&gt;([]);</span>
 &nbsp;
   const [createProjectApplicationRequestId, setCreateProjectApplicationRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const [createApplicationRequestId, setCreateApplicationRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
@@ -657,18 +681,30 @@ const NewApplicationModal = <span class="cstat-no" title="statement not covered"
   );
   const createApplicationResult = <span class="cstat-no" title="statement not covered" >useAppSelector(selectApplicationCreate(createApplicationRequestId));</span>
 &nbsp;
-  const [newApplication, , onChange] = <span class="cstat-no" title="statement not covered" >useForm&lt;NewApplication&gt;({</span>
-    projectType: availableProjects &amp;&amp; availableProjects.length &gt; 0 ? 'Existing' : 'New',
-    projectId: availableProjects &amp;&amp; availableProjects.length &gt; 0 ? availableProjects[0].id : undefined,
+  const [newApplication, setNewApplication, onChange] = <span class="cstat-no" title="statement not covered" >useForm&lt;NewApplication&gt;({</span>
+    projectType: 'New',
+    projectId: undefined,
   });
 &nbsp;
-  const projectOptions = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt;
-<span class="cstat-no" title="statement not covered" >      (availableProjects || [])</span>
-        .filter(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; <span class="cstat-no" title="statement not covered" >allApplications?.every(<span class="fstat-no" title="function not covered" >(a</span>pplication) =&gt; <span class="cstat-no" title="statement not covered" >application.projectId !== project.id)</span>)</span>
-        .map(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; (<span class="cstat-no" title="statement not covered" >{ label: project.name, value: project.id })</span>),
-    [availableProjects]
-  );
+  // Init the options and auto select the first project option if there is a project without an application
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (!allApplications || allApplications.length === 0) {</span>
+<span class="cstat-no" title="statement not covered" >      return;</span>
+    }
+&nbsp;
+    const nextProjectOptions = <span class="cstat-no" title="statement not covered" >(availableProjects || [])</span>
+      .filter(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; <span class="cstat-no" title="statement not covered" >!allApplications.some(<span class="fstat-no" title="function not covered" >(a</span>pplication) =&gt; <span class="cstat-no" title="statement not covered" >application.projectId === project.id)</span>)</span>
+      .map(<span class="fstat-no" title="function not covered" >(p</span>roject) =&gt; (<span class="cstat-no" title="statement not covered" >{ label: project.name, value: project.id })</span>);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    setProjectOptions(nextProjectOptions);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (newApplication.projectType === 'New' &amp;&amp; nextProjectOptions.length) {</span>
+<span class="cstat-no" title="statement not covered" >      setNewApplication({</span>
+        projectType: 'Existing',
+        projectId: nextProjectOptions[0]?.value,
+      });
+    }
+  }, [allApplications, availableProjects, newApplication, setNewApplication]);
 &nbsp;
   const validateProjectName = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (n</span>ame: string) =&gt; {
@@ -871,7 +907,7 @@ export default NewApplicationModal;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-15T19:55:34.418Z
+                at 2024-08-15T22:39:26.874Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
