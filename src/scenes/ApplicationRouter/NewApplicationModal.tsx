@@ -58,9 +58,9 @@ const NewApplicationModal = ({ open, onClose }: NewApplicationModalProps): JSX.E
   );
   const createApplicationResult = useAppSelector(selectApplicationCreate(createApplicationRequestId));
 
-  const [newApplication, , onChange] = useForm<NewApplication>({
-    projectType: availableProjects && availableProjects.length > 0 ? 'Existing' : 'New',
-    projectId: availableProjects && availableProjects.length > 0 ? availableProjects[0].id : undefined,
+  const [newApplication, setNewApplication, onChange] = useForm<NewApplication>({
+    projectType: 'New',
+    projectId: undefined,
   });
 
   const projectOptions = useMemo(
@@ -70,6 +70,15 @@ const NewApplicationModal = ({ open, onClose }: NewApplicationModalProps): JSX.E
         .map((project) => ({ label: project.name, value: project.id })),
     [availableProjects]
   );
+
+  useEffect(() => {
+    if (newApplication.projectType === 'New' && projectOptions.length) {
+      setNewApplication({
+        projectType: 'Existing',
+        projectId: undefined,
+      });
+    }
+  }, [newApplication, projectOptions, setNewApplication]);
 
   const validateProjectName = useCallback(
     (name: string) => {
