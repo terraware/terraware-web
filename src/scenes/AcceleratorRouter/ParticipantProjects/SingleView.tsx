@@ -107,7 +107,7 @@ const SingleView = () => {
   }, [activeLocale]);
 
   const projectViewTitle = (
-    <Box paddingLeft={3}>
+    <Box paddingLeft={1}>
       <Typography fontSize={'24px'} fontWeight={600}>
         {participant?.name || ''} / {project?.name || ''}
       </Typography>
@@ -120,6 +120,7 @@ const SingleView = () => {
       crumbs={crumbs}
       hierarchicalCrumbs={false}
       rightComponent={rightComponent}
+      titleContainerStyle={{ marginBottom: 0 }}
     >
       {status === 'pending' && <BusySpinner />}
 
