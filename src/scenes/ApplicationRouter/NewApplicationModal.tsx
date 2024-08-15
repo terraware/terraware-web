@@ -261,7 +261,6 @@ const NewApplicationModal = ({ open, onClose }: NewApplicationModalProps): JSX.E
                 fullWidth={true}
                 label={strings.SELECT_PROJECT}
                 onChange={(value) => {
-                  console.log({ value });
                   setProjectSelectError('');
                   onChange('projectId', value);
                 }}
