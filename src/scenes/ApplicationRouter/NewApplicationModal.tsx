@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { FormControlLabel, Grid, Radio, RadioGroup, useTheme } from '@mui/material';
-import { BusySpinner, Dropdown } from '@terraware/web-components';
+import { BusySpinner, Dropdown, DropdownItem } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
@@ -46,9 +46,9 @@ const NewApplicationModal = ({ open, onClose }: NewApplicationModalProps): JSX.E
   const { goToApplication } = useNavigateTo();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
   const [projectNameError, setProjectNameError] = useState<string>('');
   const [projectSelectError, setProjectSelectError] = useState<string>('');
+  const [projectOptions, setProjectOptions] = useState<DropdownItem[]>([]);
 
   const [createProjectApplicationRequestId, setCreateProjectApplicationRequestId] = useState<string>('');
   const [createApplicationRequestId, setCreateApplicationRequestId] = useState<string>('');
@@ -58,18 +58,30 @@ const NewApplicationModal = ({ open, onClose }: NewApplicationModalProps): JSX.E
   );
   const createApplicationResult = useAppSelector(selectApplicationCreate(createApplicationRequestId));
 
-  const [newApplication, , onChange] = useForm<NewApplication>({
-    projectType: availableProjects && availableProjects.length > 0 ? 'Existing' : 'New',
-    projectId: availableProjects && availableProjects.length > 0 ? availableProjects[0].id : undefined,
+  const [newApplication, setNewApplication, onChange] = useForm<NewApplication>({
+    projectType: 'New',
+    projectId: undefined,
   });
 
-  const projectOptions = useMemo(
-    () =>
-      (availableProjects || [])
-        .filter((project) => allApplications?.every((application) => application.projectId !== project.id))
-        .map((project) => ({ label: project.name, value: project.id })),
-    [availableProjects]
-  );
+  // Init the options and auto select the first project option if there is a project without an application
+  useEffect(() => {
+    if (!allApplications || allApplications.length === 0) {
+      return;
+    }
+
+    const nextProjectOptions = (availableProjects || [])
+      .filter((project) => !allApplications.some((application) => application.projectId === project.id))
+      .map((project) => ({ label: project.name, value: project.id }));
+
+    setProjectOptions(nextProjectOptions);
+
+    if (newApplication.projectType === 'New' && nextProjectOptions.length) {
+      setNewApplication({
+        projectType: 'Existing',
+        projectId: nextProjectOptions[0]?.value,
+      });
+    }
+  }, [allApplications, availableProjects, newApplication, setNewApplication]);
 
   const validateProjectName = useCallback(
     (name: string) => {
