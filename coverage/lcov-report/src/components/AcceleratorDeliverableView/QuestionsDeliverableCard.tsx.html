@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/109</span>
+                <span class='fraction'>0/111</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/108</span>
+                <span class='fraction'>0/110</span>
             </div>
         
             
@@ -550,7 +550,9 @@
 <a name='L485'></a><a href='#L485'>485</a>
 <a name='L486'></a><a href='#L486'>486</a>
 <a name='L487'></a><a href='#L487'>487</a>
-<a name='L488'></a><a href='#L488'>488</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L488'></a><a href='#L488'>488</a>
+<a name='L489'></a><a href='#L489'>489</a>
+<a name='L490'></a><a href='#L490'>490</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -632,6 +634,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1121,6 +1125,8 @@ const QuestionBox = <span class="cstat-no" title="statement not covered" ><span 
 &nbsp;
   const firstVariableValue: VariableValue | undefined = <span class="cstat-no" title="statement not covered" >(variable?.variableValues || [])[0];</span>
   const firstVariableValueStatus: VariableStatusType | undefined = <span class="cstat-no" title="statement not covered" >firstVariableValue?.status;</span>
+  const firstVariableValueFeedback: string | undefined = <span class="cstat-no" title="statement not covered" >firstVariableValue?.feedback;</span>
+  const firstVariableValueInternalComment: string | undefined = <span class="cstat-no" title="statement not covered" >firstVariableValue?.internalComment;</span>
 &nbsp;
   const [modalFeedback, setModalFeedback] = <span class="cstat-no" title="statement not covered" >useState(firstVariableValue?.feedback || '');</span>
 &nbsp;
@@ -1177,11 +1183,11 @@ const QuestionBox = <span class="cstat-no" title="statement not covered" ><span 
   };
 &nbsp;
   const rejectItem = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(f</span>eedback: string) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setStatus('Rejected', feedback);</span>
+<span class="cstat-no" title="statement not covered" >    setStatus('Rejected', feedback, firstVariableValueInternalComment);</span>
   };
 &nbsp;
   const approveItem = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setStatus('Approved');</span>
+<span class="cstat-no" title="statement not covered" >    setStatus('Approved', undefined, firstVariableValueInternalComment);</span>
   };
 &nbsp;
   const onEditItem = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -1190,7 +1196,7 @@ const QuestionBox = <span class="cstat-no" title="statement not covered" ><span 
 &nbsp;
   const onUpdateInternalComment = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>nternalComment: string) =&gt; {</span>
     const currentStatus: VariableStatusType = <span class="cstat-no" title="statement not covered" >firstVariableValueStatus || 'Not Submitted';</span>
-<span class="cstat-no" title="statement not covered" >    setStatus(currentStatus, undefined, internalComment);</span>
+<span class="cstat-no" title="statement not covered" >    setStatus(currentStatus, firstVariableValueFeedback, internalComment);</span>
   };
 &nbsp;
   const onSave = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -1207,16 +1213,16 @@ const QuestionBox = <span class="cstat-no" title="statement not covered" ><span 
 <span class="fstat-no" title="function not covered" >    (o</span>ptionItem: DropdownItem) =&gt; {
 <span class="cstat-no" title="statement not covered" >      switch (optionItem.value) {</span>
         case 'needs_translation': {
-<span class="cstat-no" title="statement not covered" >          setStatus('Needs Translation');</span>
+<span class="cstat-no" title="statement not covered" >          setStatus('Needs Translation', undefined, firstVariableValueInternalComment);</span>
 <span class="cstat-no" title="statement not covered" >          break;</span>
         }
         case 'not_needed': {
-<span class="cstat-no" title="statement not covered" >          setStatus('Not Needed');</span>
+<span class="cstat-no" title="statement not covered" >          setStatus('Not Needed', undefined, firstVariableValueInternalComment);</span>
 <span class="cstat-no" title="statement not covered" >          break;</span>
         }
       }
     },
-    [setStatus]
+    [firstVariableValueInternalComment, setStatus]
   );
 &nbsp;
   const optionItems = <span class="cstat-no" title="statement not covered" >useMemo(</span>
@@ -1258,7 +1264,7 @@ const QuestionBox = <span class="cstat-no" title="statement not covered" ><span 
             &lt;Button
               id='updateFeedback'
               label={strings.SAVE}
-              onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setStatus('Rejected', modalFeedback)}</span>
+              onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setStatus('Rejected', modalFeedback, firstVariableValueInternalComment)}</span>
               key='button-2'
             /&gt;,
           ]}
@@ -1531,7 +1537,7 @@ export default QuestionsDeliverableCard;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-15T19:14:13.909Z
+                at 2024-08-15T19:17:19.526Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
