@@ -79,7 +79,7 @@ const ApplicationStatusNotAccepted = ({ application }: { application: Applicatio
     <ApplicationStatus
       body={strings.APPLICATION_NOT_ACCEPTED_BODY}
       buttonLabel={strings.VIEW_APPLICATION}
-      feedback={application?.feedback}
+      feedback={application.feedback}
       onClickButton={() => goToApplication(application.id)}
       title={strings.APPLICATION_NOT_ACCEPTED}
     />
@@ -93,7 +93,7 @@ const ApplicationStatusWaitlist = ({ application }: { application: Application }
     <ApplicationStatus
       body={strings.APPLICATION_WAITLISTED_BODY}
       buttonLabel={strings.VIEW_APPLICATION}
-      feedback={application?.feedback}
+      feedback={application.feedback}
       onClickButton={() => goToApplication(application.id)}
       title={strings.APPLICATION_WAITLISTED}
     />
