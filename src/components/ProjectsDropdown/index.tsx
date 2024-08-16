@@ -6,22 +6,24 @@ import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { Project } from 'src/types/Project';
 
-type ProjectsDropdownProps<T extends { projectId?: number } | undefined> = {
+type ProjectsDropdownProps<T extends { projectId?: number | string } | undefined> = {
   allowUnselect?: boolean;
   availableProjects: Project[] | undefined;
   label?: string | undefined;
   record: T;
   required?: boolean;
   setRecord: (setFn: (previousValue: T) => T) => void;
+  unselectLabel?: string;
 };
 
-function ProjectsDropdown<T extends { projectId?: number } | undefined>({
+function ProjectsDropdown<T extends { projectId?: number | string } | undefined>({
   allowUnselect,
   availableProjects,
   label,
   record,
   required,
   setRecord,
+  unselectLabel,
 }: ProjectsDropdownProps<T>) {
   const { activeLocale } = useLocalization();
 
@@ -34,7 +36,7 @@ function ProjectsDropdown<T extends { projectId?: number } | undefined>({
 
     if (allowUnselect) {
       options.push({
-        label: strings.NO_PROJECT,
+        label: unselectLabel ?? strings.NO_PROJECT,
         value: '',
       });
     }
@@ -58,7 +60,7 @@ function ProjectsDropdown<T extends { projectId?: number } | undefined>({
         setRecord((previousValue) => {
           return {
             ...previousValue,
-            projectId: projectId ? Number(projectId) : null,
+            projectId: projectId ? Number(projectId) : '',
           };
         });
       }}
