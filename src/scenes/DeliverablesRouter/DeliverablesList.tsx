@@ -84,9 +84,10 @@ const DeliverablesList = (): JSX.Element => {
       };
 
       const modifiedSearch = modifySearchNode(modifyStatus, search);
+      const firstSort = genericSearchAndSort(results, modifiedSearch, sortOrderConfig);
       if (sortOrderConfig?.sortOrder.field === 'status') {
         const direction = sortOrderConfig?.sortOrder.direction;
-        return results.sort((a, b) => {
+        return firstSort.sort((a, b) => {
           if (a.status !== b.status) {
             if (direction === 'Descending') {
               return statusOrder[b.status] - statusOrder[a.status];
@@ -104,7 +105,7 @@ const DeliverablesList = (): JSX.Element => {
           }
         });
       } else {
-        return genericSearchAndSort(results, modifiedSearch, sortOrderConfig);
+        return firstSort;
       }
     },
     []
