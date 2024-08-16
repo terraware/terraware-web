@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Card, Grid, useTheme } from '@mui/material';
-import { Button } from '@terraware/web-components';
+import { BusySpinner, Button } from '@terraware/web-components';
 import area from '@turf/area';
 import { Feature, FeatureCollection } from 'geojson';
 
@@ -148,6 +148,7 @@ const MapUpdateView = () => {
         marginTop: selectedApplication.status === 'Failed Pre-screen' ? theme.spacing(4) : 0,
       }}
     >
+      {result?.status === 'pending' && <BusySpinner withSkrim={true} />}
       <Grid container flexDirection={'row'} spacing={3} sx={{ padding: 0 }}>
         <Grid item xs={4}>
           <StepTitleDescription
