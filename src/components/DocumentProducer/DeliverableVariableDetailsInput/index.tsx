@@ -251,6 +251,7 @@ const DeliverableVariableDetailsInput = ({
           value={variable.description}
           display={true}
           sx={[
+            { marginTop: '-8px' },
             {
               '& p.textfield-value--display': {
                 color: theme.palette.TwClrTxtSecondary,
