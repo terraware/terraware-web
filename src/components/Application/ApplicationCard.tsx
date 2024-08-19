@@ -88,7 +88,7 @@ export default function ApplicationCard({
           color: theme.palette.TwClrTxt,
         }}
       >
-        {strings.formatString(strings.STARTED, `${dateStarted.toFormat('yyyy/LL/dd')}`)}
+        {strings.formatString(strings.STARTED, `${dateStarted.toFormat('yyyy-LL-dd')}`)}
       </Typography>
 
       <Typography

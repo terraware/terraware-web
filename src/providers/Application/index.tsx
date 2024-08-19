@@ -26,7 +26,7 @@ const ApplicationProvider = ({ children }: Props) => {
   const dispatch = useAppDispatch();
   const { selectedOrganization } = useOrganization();
 
-  const [allApplications, setAllApplications] = useState<Application[]>([]);
+  const [allApplications, setAllApplications] = useState<Application[]>();
   const [applicationSections, setApplicationSections] = useState<ApplicationModule[]>([]);
   const [applicationDeliverables, setApplicationDeliverables] = useState<ApplicationDeliverable[]>([]);
   const [selectedApplication, setSelectedApplication] = useState<Application>();
@@ -54,7 +54,7 @@ const ApplicationProvider = ({ children }: Props) => {
 
   const _setSelectedApplication = useCallback(
     (applicationId: string | number) => {
-      if (allApplications.length > 0) {
+      if (allApplications && allApplications.length > 0) {
         const nextApplication = allApplications.find((application) => application.id === Number(applicationId));
         setSelectedApplication(nextApplication);
       }
@@ -81,7 +81,12 @@ const ApplicationProvider = ({ children }: Props) => {
   );
 
   const _getApplicationByProjectId = useCallback(
-    (projectId: number) => allApplications.find((application) => application.projectId === projectId),
+    (projectId: number) => {
+      if (!allApplications) {
+        return undefined;
+      }
+      return allApplications.find((application) => application.projectId === projectId);
+    },
     [allApplications]
   );
 

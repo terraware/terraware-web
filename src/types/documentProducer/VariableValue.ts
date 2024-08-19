@@ -18,7 +18,7 @@ export const isLinkVariableValue = (input: unknown): input is LinkVariableValue 
 
 export type NumberVariableValue = components['schemas']['ExistingNumberValuePayload'];
 export const isNumberVariableValue = (input: unknown): input is NumberVariableValue =>
-  !!(input as NumberVariableValue).numberValue;
+  (input as NumberVariableValue).numberValue !== undefined;
 
 export type SectionTextVariableValue = components['schemas']['ExistingSectionTextValuePayload'];
 export type SectionVariableVariableValue = components['schemas']['ExistingSectionVariableValuePayload'];

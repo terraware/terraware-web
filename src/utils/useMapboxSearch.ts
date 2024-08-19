@@ -63,7 +63,7 @@ const useMapboxSearch = (): MapboxSearch => {
         return Promise.reject('Mapbox session not loaded');
       }
     },
-    [session, sessionToken]
+    [session, sessionToken, setSuggestText, setSuggestResult]
   );
 
   const retrieve = useCallback(
@@ -78,19 +78,21 @@ const useMapboxSearch = (): MapboxSearch => {
     [session, sessionToken]
   );
 
+  const clear = useCallback(() => {
+    setSuggestText(undefined);
+    setSuggestResult([]);
+    session.clear();
+  }, [setSuggestText, setSuggestResult, session]);
+
   const mapboxSearch: MapboxSearch = useMemo(
     () => ({
-      clear: () => {
-        setSuggestText(undefined);
-        setSuggestResult([]);
-        session.clear();
-      },
+      clear,
       retrieve,
       suggest,
       suggestText,
       suggestResult,
     }),
-    [retrieve, session, suggest, suggestResult, suggestText]
+    [clear, retrieve, suggest, suggestResult, suggestText]
   );
 
   return mapboxSearch;
