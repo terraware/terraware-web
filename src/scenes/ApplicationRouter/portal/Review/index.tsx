@@ -124,10 +124,19 @@ const ReviewView = () => {
 
   const renderContent = (application: Application | undefined) => {
     switch (application?.status) {
+      case 'Carbon Eligible':
       case 'In Review':
+      case 'Needs Follow-up':
+      case 'PL Review':
+      case 'Pre-check':
+      case 'Ready for Review':
+      case 'Submitted':
         return <ApplicationStatusInReview />;
       case 'Not Accepted':
         return <ApplicationStatusNotAccepted application={application} />;
+      case 'Issue Active':
+      case 'Issue Pending':
+      case 'Issue Resolved':
       case 'Waitlist':
         return <ApplicationStatusWaitlist application={application} />;
       default:
