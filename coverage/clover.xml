@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1724085729772" clover="3.2.0">
-  <project timestamp="1724085729772" name="All files">
+<coverage generated="1724101640781" clover="3.2.0">
+  <project timestamp="1724101640781" name="All files">
     <metrics statements="24187" coveredstatements="1007" conditionals="15721" coveredconditionals="266" methods="7468" coveredmethods="174" elements="47376" coveredelements="1447" complexity="0" loc="24187" ncloc="24187" packages="229" files="1057" classes="1057"/>
     <package name="src">
       <metrics statements="176" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
@@ -877,9 +877,9 @@
         <line num="156" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="157" count="0" type="stmt"/>
         <line num="160" count="0" type="stmt"/>
-        <line num="161" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="162" count="0" type="stmt"/>
-        <line num="165" count="0" type="stmt"/>
+        <line num="161" count="0" type="stmt"/>
+        <line num="163" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="164" count="0" type="stmt"/>
         <line num="167" count="0" type="stmt"/>
         <line num="170" count="0" type="stmt"/>
         <line num="172" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -2216,14 +2216,14 @@
         <line num="238" count="0" type="stmt"/>
         <line num="239" count="0" type="stmt"/>
         <line num="244" count="0" type="stmt"/>
-        <line num="274" count="0" type="stmt"/>
-        <line num="284" count="0" type="stmt"/>
-        <line num="290" count="0" type="stmt"/>
-        <line num="299" count="0" type="stmt"/>
-        <line num="322" count="0" type="stmt"/>
-        <line num="331" count="0" type="stmt"/>
-        <line num="345" count="0" type="stmt"/>
-        <line num="353" count="0" type="stmt"/>
+        <line num="275" count="0" type="stmt"/>
+        <line num="285" count="0" type="stmt"/>
+        <line num="291" count="0" type="stmt"/>
+        <line num="300" count="0" type="stmt"/>
+        <line num="323" count="0" type="stmt"/>
+        <line num="332" count="0" type="stmt"/>
+        <line num="346" count="0" type="stmt"/>
+        <line num="354" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.DocumentProducer.DocumentMetadataEdit">
