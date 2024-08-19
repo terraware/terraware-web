@@ -1,3 +1,5 @@
+439892f9210 SW-5876 Automatically show new application modal if no applications (#3038)
+943583c1fb9 Fix for infinite useEffect (#3039)
 1e07a17b9e6 SW-5794: After saving planting site, return user to Pre-screen details page with toast message (#3034)
 72dd93ebe5e SW-5830: Question Edit View: Allow user to exit Edit mode of question using either "Save" or "Cancel" button when only Internal Comment is added (#3033)
 f52e05339cb SW-5723: Q&A block design audit (Follow up #2) (#3032)

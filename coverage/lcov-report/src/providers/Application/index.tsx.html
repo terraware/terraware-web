@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/60</span>
+                <span class='fraction'>0/62</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/29</span>
+                <span class='fraction'>0/33</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/58</span>
+                <span class='fraction'>0/60</span>
             </div>
         
             
@@ -222,7 +222,12 @@
 <a name='L157'></a><a href='#L157'>157</a>
 <a name='L158'></a><a href='#L158'>158</a>
 <a name='L159'></a><a href='#L159'>159</a>
-<a name='L160'></a><a href='#L160'>160</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a>
+<a name='L165'></a><a href='#L165'>165</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -305,7 +310,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -409,7 +419,7 @@ const ApplicationProvider = <span class="cstat-no" title="statement not covered"
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
 &nbsp;
-  const [allApplications, setAllApplications] = <span class="cstat-no" title="statement not covered" >useState&lt;Application[]&gt;([]);</span>
+  const [allApplications, setAllApplications] = <span class="cstat-no" title="statement not covered" >useState&lt;Application[]&gt;();</span>
   const [applicationSections, setApplicationSections] = <span class="cstat-no" title="statement not covered" >useState&lt;ApplicationModule[]&gt;([]);</span>
   const [applicationDeliverables, setApplicationDeliverables] = <span class="cstat-no" title="statement not covered" >useState&lt;ApplicationDeliverable[]&gt;([]);</span>
   const [selectedApplication, setSelectedApplication] = <span class="cstat-no" title="statement not covered" >useState&lt;Application&gt;();</span>
@@ -437,7 +447,7 @@ const ApplicationProvider = <span class="cstat-no" title="statement not covered"
 &nbsp;
   const _setSelectedApplication = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (a</span>pplicationId: string | number) =&gt; {
-<span class="cstat-no" title="statement not covered" >      if (allApplications.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >      if (allApplications &amp;&amp; allApplications.length &gt; 0) {</span>
         const nextApplication = <span class="cstat-no" title="statement not covered" >allApplications.find(<span class="fstat-no" title="function not covered" >(a</span>pplication) =&gt; <span class="cstat-no" title="statement not covered" >application.id === Number(applicationId))</span>;</span>
 <span class="cstat-no" title="statement not covered" >        setSelectedApplication(nextApplication);</span>
       }
@@ -464,7 +474,12 @@ const ApplicationProvider = <span class="cstat-no" title="statement not covered"
   );
 &nbsp;
   const _getApplicationByProjectId = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (p</span>rojectId: number) =&gt; <span class="cstat-no" title="statement not covered" >allApplications.find(<span class="fstat-no" title="function not covered" >(a</span>pplication) =&gt; <span class="cstat-no" title="statement not covered" >application.projectId === projectId)</span>,</span>
+<span class="fstat-no" title="function not covered" >    (p</span>rojectId: number) =&gt; {
+<span class="cstat-no" title="statement not covered" >      if (!allApplications) {</span>
+<span class="cstat-no" title="statement not covered" >        return undefined;</span>
+      }
+<span class="cstat-no" title="statement not covered" >      return allApplications.find(<span class="fstat-no" title="function not covered" >(a</span>pplication) =&gt; <span class="cstat-no" title="statement not covered" >application.projectId === projectId)</span>;</span>
+    },
     [allApplications]
   );
 &nbsp;
@@ -547,7 +562,7 @@ export default ApplicationProvider;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-19T21:07:20.062Z
+                at 2024-08-19T21:14:23.962Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
