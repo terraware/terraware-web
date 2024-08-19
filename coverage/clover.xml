@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1724102575916" clover="3.2.0">
-  <project timestamp="1724102575916" name="All files">
+<coverage generated="1724103923170" clover="3.2.0">
+  <project timestamp="1724103923170" name="All files">
     <metrics statements="24194" coveredstatements="1007" conditionals="15731" coveredconditionals="266" methods="7469" coveredmethods="174" elements="47394" coveredelements="1447" complexity="0" loc="24194" ncloc="24194" packages="229" files="1057" classes="1057"/>
     <package name="src">
       <metrics statements="176" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
@@ -895,40 +895,40 @@
         <line num="225" count="0" type="stmt"/>
         <line num="236" count="0" type="stmt"/>
         <line num="245" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="305" count="0" type="stmt"/>
-        <line num="321" count="0" type="stmt"/>
-        <line num="322" count="0" type="stmt"/>
+        <line num="303" count="0" type="stmt"/>
+        <line num="319" count="0" type="stmt"/>
+        <line num="320" count="0" type="stmt"/>
+        <line num="357" count="0" type="stmt"/>
         <line num="359" count="0" type="stmt"/>
+        <line num="360" count="0" type="stmt"/>
         <line num="361" count="0" type="stmt"/>
         <line num="362" count="0" type="stmt"/>
         <line num="363" count="0" type="stmt"/>
-        <line num="364" count="0" type="stmt"/>
-        <line num="365" count="0" type="stmt"/>
-        <line num="382" count="0" type="stmt"/>
-        <line num="410" count="0" type="stmt"/>
+        <line num="380" count="0" type="stmt"/>
+        <line num="408" count="0" type="stmt"/>
+        <line num="421" count="0" type="stmt"/>
+        <line num="422" count="0" type="stmt"/>
         <line num="423" count="0" type="stmt"/>
-        <line num="424" count="0" type="stmt"/>
         <line num="425" count="0" type="stmt"/>
-        <line num="427" count="0" type="stmt"/>
+        <line num="426" count="0" type="stmt"/>
         <line num="428" count="0" type="stmt"/>
+        <line num="429" count="0" type="stmt"/>
         <line num="430" count="0" type="stmt"/>
-        <line num="431" count="0" type="stmt"/>
-        <line num="432" count="0" type="stmt"/>
+        <line num="435" count="0" type="stmt"/>
+        <line num="436" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="437" count="0" type="stmt"/>
-        <line num="438" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="439" count="0" type="stmt"/>
-        <line num="442" count="0" type="stmt"/>
-        <line num="443" count="0" type="stmt"/>
-        <line num="448" count="0" type="stmt"/>
-        <line num="449" count="0" type="stmt"/>
+        <line num="440" count="0" type="stmt"/>
+        <line num="441" count="0" type="stmt"/>
+        <line num="446" count="0" type="stmt"/>
+        <line num="447" count="0" type="stmt"/>
+        <line num="450" count="0" type="stmt"/>
+        <line num="451" count="0" type="cond" truecount="0" falsecount="4"/>
         <line num="452" count="0" type="stmt"/>
-        <line num="453" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="453" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="454" count="0" type="stmt"/>
-        <line num="455" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="456" count="0" type="stmt"/>
-        <line num="458" count="0" type="stmt"/>
-        <line num="462" count="0" type="stmt"/>
-        <line num="472" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="460" count="0" type="stmt"/>
+        <line num="470" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
       <file name="RejectDialog.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/AcceleratorDeliverableView/RejectDialog.tsx">
         <metrics statements="9" coveredstatements="0" conditionals="6" coveredconditionals="0" methods="3" coveredmethods="0"/>
