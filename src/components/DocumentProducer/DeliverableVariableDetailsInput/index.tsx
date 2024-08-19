@@ -321,7 +321,6 @@ const DeliverableVariableDetailsInput = ({
           type={variable.type === 'Number' ? 'number' : 'text'}
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
           value={value?.toString()}
-          helperText={variable.type === 'Number' ? strings.ROUNDED_INFO : ''}
           sx={[formElementStyles, textFieldLabelStyles]}
         />
       )}
