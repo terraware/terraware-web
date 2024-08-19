@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Box, Container, Grid } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -16,6 +16,12 @@ const ApplicationListView = () => {
   const { isTablet, isMobile } = useDeviceInfo();
   const { allApplications } = useApplicationData();
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (allApplications && allApplications.length === 0) {
+      setIsNewApplicationModalOpen(true);
+    }
+  }, [allApplications, setIsNewApplicationModalOpen]);
 
   const primaryGridSize = () => {
     if (isMobile) {
