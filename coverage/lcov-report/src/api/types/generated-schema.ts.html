@@ -10685,7 +10685,69 @@
 <a name='L10620'></a><a href='#L10620'>10620</a>
 <a name='L10621'></a><a href='#L10621'>10621</a>
 <a name='L10622'></a><a href='#L10622'>10622</a>
-<a name='L10623'></a><a href='#L10623'>10623</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L10623'></a><a href='#L10623'>10623</a>
+<a name='L10624'></a><a href='#L10624'>10624</a>
+<a name='L10625'></a><a href='#L10625'>10625</a>
+<a name='L10626'></a><a href='#L10626'>10626</a>
+<a name='L10627'></a><a href='#L10627'>10627</a>
+<a name='L10628'></a><a href='#L10628'>10628</a>
+<a name='L10629'></a><a href='#L10629'>10629</a>
+<a name='L10630'></a><a href='#L10630'>10630</a>
+<a name='L10631'></a><a href='#L10631'>10631</a>
+<a name='L10632'></a><a href='#L10632'>10632</a>
+<a name='L10633'></a><a href='#L10633'>10633</a>
+<a name='L10634'></a><a href='#L10634'>10634</a>
+<a name='L10635'></a><a href='#L10635'>10635</a>
+<a name='L10636'></a><a href='#L10636'>10636</a>
+<a name='L10637'></a><a href='#L10637'>10637</a>
+<a name='L10638'></a><a href='#L10638'>10638</a>
+<a name='L10639'></a><a href='#L10639'>10639</a>
+<a name='L10640'></a><a href='#L10640'>10640</a>
+<a name='L10641'></a><a href='#L10641'>10641</a>
+<a name='L10642'></a><a href='#L10642'>10642</a>
+<a name='L10643'></a><a href='#L10643'>10643</a>
+<a name='L10644'></a><a href='#L10644'>10644</a>
+<a name='L10645'></a><a href='#L10645'>10645</a>
+<a name='L10646'></a><a href='#L10646'>10646</a>
+<a name='L10647'></a><a href='#L10647'>10647</a>
+<a name='L10648'></a><a href='#L10648'>10648</a>
+<a name='L10649'></a><a href='#L10649'>10649</a>
+<a name='L10650'></a><a href='#L10650'>10650</a>
+<a name='L10651'></a><a href='#L10651'>10651</a>
+<a name='L10652'></a><a href='#L10652'>10652</a>
+<a name='L10653'></a><a href='#L10653'>10653</a>
+<a name='L10654'></a><a href='#L10654'>10654</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -21411,6 +21473,10 @@ export interface paths {
      */
     put: operations["updateSubmission"];
   };
+  "/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}/complete": {
+    /** Marks a submission from a project as completed. */
+    post: operations["completeSubmission"];
+  };
   "/api/v1/accelerator/organizations": {
     /**
      * Lists organizations with the Accelerator internal tag and their projects.
@@ -22598,6 +22664,8 @@ export interface components {
       internalComment?: string;
       /** @description Internal-only reference name of application. Only set if the current user is an internal user. */
       internalName?: string;
+      /** Format: date-time */
+      modifiedTime?: string;
       /** Format: int64 */
       organizationId: number;
       organizationName: string;
@@ -26527,6 +26595,7 @@ export interface components {
     VariablePayload: {
       /** Format: int64 */
       deliverableId?: number;
+      deliverableQuestion?: string;
       /** @enum {string} */
       dependencyCondition?: "eq" | "gt" | "gte" | "lt" | "lte" | "neq";
       dependencyValue?: string;
@@ -26535,6 +26604,7 @@ export interface components {
       /** Format: int64 */
       id: number;
       isList: boolean;
+      isRequired: boolean;
       name: string;
       /** Format: int32 */
       position?: number;
@@ -26975,8 +27045,14 @@ export interface operations {
       };
     };
     responses: {
-      /** @description OK */
+      /** @description The requested operation succeeded. */
       200: {
+        content: {
+          "application/json": components["schemas"]["UploadDeliverableDocumentResponsePayload"];
+        };
+      };
+      /** @description The server is unable to store the uploaded file. This response indicates a condition that triggers the system to create a customer support ticket; clients can inform users of that fact. */
+      507: {
         content: {
           "application/json": components["schemas"]["UploadDeliverableDocumentResponsePayload"];
         };
@@ -27047,6 +27123,23 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["UpdateSubmissionRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Marks a submission from a project as completed. */
+  completeSubmission: {
+    parameters: {
+      path: {
+        deliverableId: number;
+        projectId: number;
       };
     };
     responses: {
@@ -31936,7 +32029,7 @@ export interface operations {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-19T21:57:29.265Z
+                at 2024-08-19T23:56:52.873Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
