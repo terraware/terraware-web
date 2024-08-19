@@ -28,6 +28,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValue, VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
+import { variableDependencyMet } from 'src/utils/documentProducer/variables';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import VariableInternalComment from '../Variables/VariableInternalComment';
@@ -467,8 +468,8 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element => {
       }}
     >
       <Metadata {...props} />
-      {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => {
-        return (
+      {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) =>
+        variableDependencyMet(variableWithValues, variablesWithValues) ? (
           <QuestionBox
             editingId={editingId}
             hideStatusBadge={hideStatusBadge}
@@ -480,8 +481,8 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element => {
             setUpdatePendingId={setUpdatePendingId}
             variable={variableWithValues}
           />
-        );
-      })}
+        ) : null
+      )}
     </Card>
   );
 };
