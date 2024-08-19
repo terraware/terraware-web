@@ -11,7 +11,6 @@ import { Badge } from '@terraware/web-components';
 
 import { useCohorts } from 'src/hooks/useCohorts';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { useProjectData } from 'src/providers/Project/ProjectContext';
 import { requestListModules } from 'src/redux/features/modules/modulesAsyncThunks';
 import { selectProjectModuleList } from 'src/redux/features/modules/modulesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -47,8 +46,7 @@ const AltStepIcon = ({ activeStep, index }: AltStepIconProps) => {
 };
 
 const ModuleTimeline = () => {
-  const { activeModules, modules, currentParticipant } = useParticipantData();
-  const { project, projectId } = useProjectData();
+  const { activeModules, modules, currentParticipant, currentParticipantProject } = useParticipantData();
   const [requestId, setRequestId] = useState('');
   const projectModuleList = useAppSelector(selectProjectModuleList(requestId));
   const dispatch = useAppDispatch();
@@ -60,11 +58,11 @@ const ModuleTimeline = () => {
   const { selectedCohort } = useCohorts(cohortId);
 
   useEffect(() => {
-    if (projectId) {
-      const request = dispatch(requestListModules(projectId));
+    if (currentParticipantProject) {
+      const request = dispatch(requestListModules(currentParticipantProject.id));
       setRequestId(request.requestId);
     }
-  }, [projectId]);
+  }, [currentParticipantProject]);
 
   useEffect(() => {
     if (projectModuleList?.status === 'success') {
@@ -81,13 +79,13 @@ const ModuleTimeline = () => {
 
   return (
     <Box maxWidth={'206px'}>
-      {(currentParticipant?.cohortPhase || project?.cohortPhase || selectedCohort?.phase) && (
+      {(currentParticipant?.cohortPhase || currentParticipantProject?.cohortPhase || selectedCohort?.phase) && (
         <Box sx={{ marginBottom: '24px', paddingRight: '16px' }}>
           <Badge
             label={
               useDataFromParticipantData
                 ? currentParticipant.cohortPhase || ''
-                : project?.cohortPhase || selectedCohort?.phase || ''
+                : currentParticipantProject?.cohortPhase || selectedCohort?.phase || ''
             }
           />
         </Box>
