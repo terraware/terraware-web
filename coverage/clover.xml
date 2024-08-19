@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1724103923170" clover="3.2.0">
-  <project timestamp="1724103923170" name="All files">
-    <metrics statements="24194" coveredstatements="1007" conditionals="15731" coveredconditionals="266" methods="7469" coveredmethods="174" elements="47394" coveredelements="1447" complexity="0" loc="24194" ncloc="24194" packages="229" files="1057" classes="1057"/>
+<coverage generated="1724104650028" clover="3.2.0">
+  <project timestamp="1724104650028" name="All files">
+    <metrics statements="24193" coveredstatements="1007" conditionals="15731" coveredconditionals="266" methods="7469" coveredmethods="174" elements="47393" coveredelements="1447" complexity="0" loc="24193" ncloc="24193" packages="229" files="1057" classes="1057"/>
     <package name="src">
       <metrics statements="176" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -7511,39 +7511,38 @@
       </file>
     </package>
     <package name="src.components.common.PageWithModuleTimeline">
-      <metrics statements="36" coveredstatements="0" conditionals="34" coveredconditionals="0" methods="11" coveredmethods="0"/>
+      <metrics statements="35" coveredstatements="0" conditionals="34" coveredconditionals="0" methods="11" coveredmethods="0"/>
       <file name="ModuleTimeline.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/PageWithModuleTimeline/ModuleTimeline.tsx">
-        <metrics statements="30" coveredstatements="0" conditionals="32" coveredconditionals="0" methods="10" coveredmethods="0"/>
+        <metrics statements="29" coveredstatements="0" conditionals="32" coveredconditionals="0" methods="10" coveredmethods="0"/>
+        <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
-        <line num="27" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
         <line num="49" count="0" type="stmt"/>
         <line num="50" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
         <line num="52" count="0" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
-        <line num="54" count="0" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
-        <line num="56" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="54" count="0" type="cond" truecount="0" falsecount="3"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
         <line num="58" count="0" type="stmt"/>
-        <line num="59" count="0" type="stmt"/>
         <line num="60" count="0" type="stmt"/>
+        <line num="61" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="62" count="0" type="stmt"/>
-        <line num="63" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="64" count="0" type="stmt"/>
-        <line num="65" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="68" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="69" count="0" type="stmt"/>
-        <line num="70" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="71" count="0" type="stmt"/>
+        <line num="73" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="75" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="76" count="0" type="stmt"/>
         <line num="77" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="78" count="0" type="stmt"/>
-        <line num="79" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="80" count="0" type="stmt"/>
-        <line num="82" count="0" type="stmt"/>
-        <line num="100" count="0" type="stmt"/>
-        <line num="114" count="0" type="stmt"/>
+        <line num="98" count="0" type="stmt"/>
+        <line num="112" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/PageWithModuleTimeline/index.tsx">
         <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
