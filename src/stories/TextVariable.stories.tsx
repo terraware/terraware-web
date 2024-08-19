@@ -26,6 +26,7 @@ EmptyVariable.args = {
     decimalPlaces: 0,
     stableId: '1111',
     isList: false,
+    isRequired: false,
     values: [],
     variableValues: [],
   },
@@ -43,6 +44,7 @@ NumberVariable.args = {
     decimalPlaces: 0,
     stableId: '1111',
     isList: false,
+    isRequired: false,
     values: [
       {
         type: 'Number',
@@ -81,6 +83,7 @@ DeliverableVariable.args = {
     decimalPlaces: 0,
     stableId: '1111',
     isList: false,
+    isRequired: false,
     values: [
       {
         type: 'Number',
@@ -119,6 +122,7 @@ RejectedDeliverableVariable.args = {
     decimalPlaces: 0,
     stableId: '1111',
     isList: false,
+    isRequired: false,
     values: [
       {
         type: 'Number',
