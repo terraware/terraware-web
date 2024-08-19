@@ -13,6 +13,7 @@ import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { useLocalization } from 'src/providers';
+import { useApplicationData } from 'src/providers/Application/Context';
 import { requestUpdateApplicationBoundary } from 'src/redux/features/application/applicationAsyncThunks';
 import { selectApplicationUpdateBoundary } from 'src/redux/features/application/applicationSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -22,7 +23,6 @@ import strings from 'src/strings';
 import { MultiPolygon } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import { useApplicationData } from '../../../../providers/Application/Context';
 import ApplicationPage from '../ApplicationPage';
 
 // undo redo stack to capture site boundary and errors
@@ -39,7 +39,7 @@ const MapUpdateView = () => {
   const { activeLocale } = useLocalization();
   const dispatch = useAppDispatch();
   const { selectedApplication, reload } = useApplicationData();
-  const { goToApplicationMap } = useNavigateTo();
+  const { goToApplicationPrescreen } = useNavigateTo();
   const { toastSuccess } = useSnackbar();
   const [siteBoundaryData, setSiteBoundaryData, undo, redo] = useUndoRedoState<Stack>();
 
@@ -91,20 +91,20 @@ const MapUpdateView = () => {
     }
   }, [selectedApplication, boundary]);
 
-  const navigateToMap = useCallback(() => {
+  const navigateToApplicationPrescreen = useCallback(() => {
     if (selectedApplication) {
-      goToApplicationMap(selectedApplication.id);
+      goToApplicationPrescreen(selectedApplication.id);
     }
-  }, [selectedApplication, goToApplicationMap]);
+  }, [selectedApplication, goToApplicationPrescreen]);
 
   useEffect(() => {
     if (result && result.status === 'success') {
       if (activeLocale) {
-        toastSuccess(strings.SUCCESS);
+        toastSuccess(strings.PROPOSED_PROJECT_BOUNDARIES_ADDED);
       }
-      reload(navigateToMap);
+      reload(navigateToApplicationPrescreen);
     }
-  }, [activeLocale, reload, result, toastSuccess, navigateToMap]);
+  }, [activeLocale, reload, result, toastSuccess, navigateToApplicationPrescreen]);
 
   const tutorialDescription = useMemo(() => {
     if (!activeLocale) {
