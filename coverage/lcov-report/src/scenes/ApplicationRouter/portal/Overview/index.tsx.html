@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
@@ -153,26 +153,8 @@
 <a name='L88'></a><a href='#L88'>88</a>
 <a name='L89'></a><a href='#L89'>89</a>
 <a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -189,6 +171,24 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -222,6 +222,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -249,36 +251,35 @@ import { Box, Card, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 &nbsp;
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useLocalization } from 'src/providers';
+import { useApplicationData } from 'src/providers/Application/Context';
 import CurrentTimeline from 'src/scenes/ModulesRouter/CurrentTimeline';
 import strings from 'src/strings';
 &nbsp;
-import { useApplicationData } from '../../../../providers/Application/Context';
 import ApplicationPage from '../ApplicationPage';
 import ListApplicationModulesContent from './ListApplicationModulesContent';
 &nbsp;
-const phaseDescription =
-<span class="cstat-no" title="statement not covered" >  'Start by completing the Pre-screen. Then answer more in-depth questions about your project and upload any necessary documents in the Application. Each section of the Application will be available to view after your pre-screen has been approved.';</span>
+const applicationSteps = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(a</span>ctiveLocale: string | null) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >  activeLocale</span>
+    ? [
+        {
+          name: strings.APPLICATION_STEP_PRESCREEN_NAME,
+          description: strings.APPLICATION_STEP_PRESCREEN_DESCRIPTION,
+        },
+        {
+          name: strings.APPLICATION_STEP_APPLICATION_NAME,
+          description: strings.APPLICATION_STEP_APPLICATION_DESCRIPTION,
+        },
+        {
+          name: strings.APPLICATION_STEP_DUEDILIGENCE_NAME,
+          description: strings.APPLICATION_STEP_DUEDILIGENCE_DESCRIPTION,
+        },
+      ]
+    : [];
 &nbsp;
-const applicationSteps = <span class="cstat-no" title="statement not covered" >[</span>
-  {
-    name: 'Prescreen',
-    description:
-      'Draw your proposed project site map and complete the Pre-screen questions to determine if you qualify for our Accelerator Program.',
-  },
-  {
-    name: 'Application',
-    description:
-      'For the full Accelerator Program Application, you will answer general questions about your project as well as forest restoration, community impact, financial and legal questions.',
-  },
-  {
-    name: 'Under Review',
-    description:
-      'Once your Application is submitted, the Accelerator team reviews your answers, potentially asks for updates and proceeds to voting and scoring your Application.',
-  },
-];
 const OverviewView = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-&nbsp;
+  const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const { selectedApplication } = <span class="cstat-no" title="statement not covered" >useApplicationData();</span>
 &nbsp;
   const timelineIndex = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -313,10 +314,12 @@ const OverviewView = <span class="cstat-no" title="statement not covered" ><span
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Card style={{ width: '100%', padding: theme.spacing(3), borderRadius: theme.spacing(3) }}&gt;
-      {selectedApplication?.status &amp;&amp; &lt;CurrentTimeline steps={applicationSteps} currentIndex={timelineIndex} /&gt;}
+      {selectedApplication?.status &amp;&amp; (
+        &lt;CurrentTimeline steps={applicationSteps(activeLocale)} currentIndex={timelineIndex} /&gt;
+      )}
 &nbsp;
       &lt;Box paddingY={theme.spacing(3)} borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}&gt;
-        &lt;Typography&gt;{phaseDescription}&lt;/Typography&gt;
+        &lt;Typography&gt;{strings.APPLICATION_INSTRUCTIONS}&lt;/Typography&gt;
       &lt;/Box&gt;
       &lt;ListApplicationModulesContent /&gt;
     &lt;/Card&gt;
@@ -340,7 +343,7 @@ export default OverviewWrapper;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-16T19:10:35.125Z
+                at 2024-08-19T16:42:09.050Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

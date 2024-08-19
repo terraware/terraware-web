@@ -1,3 +1,5 @@
+6872c7479e3 SW-5817 Fix variable dependencies (#3025)
+b77599a5785 SW-5785 Move strings to localized versions, update 'under review' to 'due diligence' (#3027)
 bd0c52c82f9 SW-5609 Change default color for links (#3031)
 314763af892 SW-5815: Add loading indicator when saving site boundary (#3028)
 7b3db8370e2 SW-5822: When the user restarts a prescreen they should end up on the prescreen module details page (#3026)

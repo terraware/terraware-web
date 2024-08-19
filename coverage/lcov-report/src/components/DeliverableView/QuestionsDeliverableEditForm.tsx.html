@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/24</span>
             </div>
         
             
@@ -292,7 +292,11 @@
 <a name='L227'></a><a href='#L227'>227</a>
 <a name='L228'></a><a href='#L228'>228</a>
 <a name='L229'></a><a href='#L229'>229</a>
-<a name='L230'></a><a href='#L230'>230</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L230'></a><a href='#L230'>230</a>
+<a name='L231'></a><a href='#L231'>231</a>
+<a name='L232'></a><a href='#L232'>232</a>
+<a name='L233'></a><a href='#L233'>233</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -496,20 +500,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -538,6 +544,7 @@ import { requestListDeliverableVariables } from 'src/redux/features/documentProd
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValue, VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
+import { variableDependencyMet } from 'src/utils/documentProducer/variables';
 import useQuery from 'src/utils/useQuery';
 &nbsp;
 import VariableStatusBadge from '../Variables/VariableStatusBadge';
@@ -722,26 +729,28 @@ const QuestionsDeliverableEditForm = <span class="cstat-no" title="statement not
               paddingTop: theme.spacing(3),
             }}
           &gt;
-            {variablesWithValues.map(<span class="fstat-no" title="function not covered" >(v</span>ariableWithValues: VariableWithValues, index: number) =&gt; (
-<span class="cstat-no" title="statement not covered" >              &lt;QuestionBox</span>
-                addRemovedValue={<span class="fstat-no" title="function not covered" >(r</span>emovedValue: VariableValueValue) =&gt;
-<span class="cstat-no" title="statement not covered" >                  setRemovedValue(variableWithValues.id, removedValue)</span>
-                }
-                hideStatusBadge={hideStatusBadge}
-                index={index}
-                key={index}
-                pendingVariableValues={pendingVariableValues}
-                projectId={deliverable.projectId}
-                setCellValues={<span class="fstat-no" title="function not covered" >(n</span>ewValues: VariableTableCell[][]) =&gt; <span class="cstat-no" title="statement not covered" >setCellValues(variableWithValues.id, newValues)}</span>
-                setDeletedImages={<span class="fstat-no" title="function not covered" >(n</span>ewValues: VariableValueImageValue[]) =&gt;
-<span class="cstat-no" title="statement not covered" >                  setDeletedImages(variableWithValues.id, newValues)</span>
-                }
-                setImages={<span class="fstat-no" title="function not covered" >(n</span>ewValues: VariableValueImageValue[]) =&gt; <span class="cstat-no" title="statement not covered" >setImages(variableWithValues.id, newValues)}</span>
-                setNewImages={<span class="fstat-no" title="function not covered" >(n</span>ewValues: PhotoWithAttributes[]) =&gt; <span class="cstat-no" title="statement not covered" >setNewImages(variableWithValues.id, newValues)}</span>
-                setValues={<span class="fstat-no" title="function not covered" >(n</span>ewValues: VariableValueValue[]) =&gt; <span class="cstat-no" title="statement not covered" >setValues(variableWithValues.id, newValues)}</span>
-                variable={variableWithValues}
-              /&gt;
-            ))}
+            {variablesWithValues.map(<span class="fstat-no" title="function not covered" >(v</span>ariableWithValues: VariableWithValues, index: number) =&gt;
+<span class="cstat-no" title="statement not covered" >              variableDependencyMet(variableWithValues, variablesWithValues) ? (</span>
+                &lt;QuestionBox
+                  addRemovedValue={<span class="fstat-no" title="function not covered" >(r</span>emovedValue: VariableValueValue) =&gt;
+<span class="cstat-no" title="statement not covered" >                    setRemovedValue(variableWithValues.id, removedValue)</span>
+                  }
+                  hideStatusBadge={hideStatusBadge}
+                  index={index}
+                  key={index}
+                  pendingVariableValues={pendingVariableValues}
+                  projectId={deliverable.projectId}
+                  setCellValues={<span class="fstat-no" title="function not covered" >(n</span>ewValues: VariableTableCell[][]) =&gt; <span class="cstat-no" title="statement not covered" >setCellValues(variableWithValues.id, newValues)}</span>
+                  setDeletedImages={<span class="fstat-no" title="function not covered" >(n</span>ewValues: VariableValueImageValue[]) =&gt;
+<span class="cstat-no" title="statement not covered" >                    setDeletedImages(variableWithValues.id, newValues)</span>
+                  }
+                  setImages={<span class="fstat-no" title="function not covered" >(n</span>ewValues: VariableValueImageValue[]) =&gt; <span class="cstat-no" title="statement not covered" >setImages(variableWithValues.id, newValues)}</span>
+                  setNewImages={<span class="fstat-no" title="function not covered" >(n</span>ewValues: PhotoWithAttributes[]) =&gt; <span class="cstat-no" title="statement not covered" >setNewImages(variableWithValues.id, newValues)}</span>
+                  setValues={<span class="fstat-no" title="function not covered" >(n</span>ewValues: VariableValueValue[]) =&gt; <span class="cstat-no" title="statement not covered" >setValues(variableWithValues.id, newValues)}</span>
+                  variable={variableWithValues}
+                /&gt;
+              ) : null
+            )}
           &lt;/Box&gt;
         &lt;/Card&gt;
       &lt;/Box&gt;
@@ -757,7 +766,7 @@ export default QuestionsDeliverableEditForm;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-16T19:10:35.125Z
+                at 2024-08-19T16:42:09.050Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

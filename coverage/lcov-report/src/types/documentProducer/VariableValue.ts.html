@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>9/12</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>3/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">81.81% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>9/11</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -276,33 +276,33 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -480,33 +480,33 @@ export type VariableValue = VariableValuesListResponse['values'][0];
 export type VariableValueValue = VariableValuesListResponse['values'][0]['values'][0];
 &nbsp;
 export type DateVariableValue = components['schemas']['ExistingDateValuePayload'];
-export const isDateVariableValue = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>nput: unknown): input is DateVariableValue =&gt;</span>
+export const isDateVariableValue = <span class="fstat-no" title="function not covered" >(i</span>nput: unknown): input is DateVariableValue =&gt;
 <span class="cstat-no" title="statement not covered" >  !!(input as DateVariableValue).dateValue;</span>
 &nbsp;
 export type DeletedVariableValue = components['schemas']['ExistingDeletedValuePayload'];
 export type ImageVariableValue = components['schemas']['ExistingImageValuePayload'];
 &nbsp;
 export type LinkVariableValue = components['schemas']['ExistingLinkValuePayload'];
-export const isLinkVariableValue = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>nput: unknown): input is LinkVariableValue =&gt; <span class="cstat-no" title="statement not covered" >!!(input as LinkVariableValue).url;</span></span>
+export const isLinkVariableValue = <span class="fstat-no" title="function not covered" >(i</span>nput: unknown): input is LinkVariableValue =&gt; <span class="cstat-no" title="statement not covered" >!!(input as LinkVariableValue).url;</span>
 &nbsp;
 export type NumberVariableValue = components['schemas']['ExistingNumberValuePayload'];
-export const isNumberVariableValue = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>nput: unknown): input is NumberVariableValue =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  !!(input as NumberVariableValue).numberValue;</span>
+export const isNumberVariableValue = (input: unknown): input is NumberVariableValue =&gt;
+  (input as NumberVariableValue).numberValue !== undefined;
 &nbsp;
 export type SectionTextVariableValue = components['schemas']['ExistingSectionTextValuePayload'];
 export type SectionVariableVariableValue = components['schemas']['ExistingSectionVariableValuePayload'];
 &nbsp;
 export type SelectVariableValue = components['schemas']['ExistingSelectValuePayload'];
-export const isSelectVariableValue = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>nput: unknown): input is SelectVariableValue =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  !!(input as SelectVariableValue).optionValues;</span>
+export const isSelectVariableValue = (input: unknown): input is SelectVariableValue =&gt;
+  !!(input as SelectVariableValue).optionValues;
 &nbsp;
 export type TableVariableValue = components['schemas']['ExistingTableValuePayload'];
-export const isTableVariableValue = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>nput: unknown): input is TableVariableValue =&gt;</span>
+export const isTableVariableValue = <span class="fstat-no" title="function not covered" >(i</span>nput: unknown): input is TableVariableValue =&gt;
 <span class="cstat-no" title="statement not covered" >  (input as TableVariableValue).type === 'Table';</span>
 &nbsp;
 export type TextVariableValue = components['schemas']['ExistingTextValuePayload'];
-export const isTextVariableValue = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>nput: unknown): input is TextVariableValue =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  !!(input as TextVariableValue).textValue;</span>
+export const isTextVariableValue = (input: unknown): input is TextVariableValue =&gt;
+  !!(input as TextVariableValue).textValue;
 &nbsp;
 export type ExistingVariableValueUnion =
   | DateVariableValue
@@ -682,7 +682,7 @@ export type ReplaceSectionValuesOperationPayloadWithProjectId = Omit&lt;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-16T19:10:35.125Z
+                at 2024-08-19T16:42:09.050Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
