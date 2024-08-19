@@ -158,13 +158,13 @@ const QuestionBox = ({
   };
 
   const onSave = () => {
+    setEditingId(undefined);
+
     if (pendingVariableValues.size === 0) {
       return;
     }
 
     update();
-
-    setEditingId(undefined);
   };
 
   const onOptionItemClick = useCallback(
