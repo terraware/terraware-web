@@ -280,11 +280,9 @@ const QuestionBox = ({
                 justifyContent: 'flex-end',
               }}
             >
-              {hideStatusBadge !== true && (
-                <Box sx={{ margin: '4px' }}>
-                  <VariableStatusBadge status={firstVariableValueStatus} />
-                </Box>
-              )}
+              <Box sx={{ margin: '4px', visibility: hideStatusBadge ? 'hidden' : 'visible' }}>
+                <VariableStatusBadge status={firstVariableValueStatus} />
+              </Box>
               {!editingId && (
                 <Box className='actions'>
                   <Button
