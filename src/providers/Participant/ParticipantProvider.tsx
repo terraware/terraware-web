@@ -12,11 +12,12 @@ import {
   selectProjectModuleList,
 } from 'src/redux/features/modules/modulesSelectors';
 import { requestGetParticipant } from 'src/redux/features/participants/participantsAsyncThunks';
-import { selectParticipant } from 'src/redux/features/participants/participantsSelectors';
+import { selectParticipantGetRequest } from 'src/redux/features/participants/participantsSelectors';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Module, ModuleDeliverable } from 'src/types/Module';
+import { Participant } from 'src/types/Participant';
 import { Project } from 'src/types/Project';
 
 import { ParticipantContext, ParticipantData } from './ParticipantContext';
@@ -32,6 +33,7 @@ const ParticipantProvider = ({ children }: Props) => {
 
   const [activeModules, setActiveModules] = useState<Module[]>([]);
   const [currentDeliverables, setCurrentDeliverables] = useState<ModuleDeliverable[]>();
+  const [currentParticipant, setCurrentParticipant] = useState<Participant>();
   const [currentParticipantProject, setCurrentParticipantProject] = useState<Project>();
   const [participantProjects, setParticipantProjects] = useState<Project[]>([]);
   const [moduleProjects, setModuleProjects] = useState<Project[]>([]);
@@ -39,13 +41,14 @@ const ParticipantProvider = ({ children }: Props) => {
   const [orgHasModules, setOrgHasModules] = useState<boolean | undefined>(undefined);
   const [orgHasParticipants, setOrgHasParticipants] = useState<boolean | undefined>(undefined);
 
+  const [participantRequestId, setParticipantRequestId] = useState<string>('');
   const [listModuleDeliverablesRequestId, setListModuleDeliverablesRequestId] = useState<string>('');
   const [listModulesRequestId, setListModulesRequestId] = useState<string>('');
   const [listModuleProjectsRequestId, setListModuleProjectsRequestId] = useState<string>('');
 
   const moduleDeliverablesRequest = useAppSelector(selectModuleDeliverables(listModuleDeliverablesRequestId));
   const moduleProjectsListRequest = useAppSelector(selectModuleProjects(listModuleProjectsRequestId));
-  const participant = useAppSelector(selectParticipant(currentParticipantProject?.participantId || -1));
+  const currentParticipantRequest = useAppSelector(selectParticipantGetRequest(participantRequestId));
   const projectModuleListRequest = useAppSelector(selectProjectModuleList(listModulesRequestId));
   const projects = useAppSelector(selectProjects);
 
@@ -91,6 +94,26 @@ const ParticipantProvider = ({ children }: Props) => {
       setListModuleProjectsRequestId(request.requestId);
     }
   }, [selectedOrganization, dispatch]);
+
+  useEffect(() => {
+    if (!currentParticipantProject || !currentParticipantProject.participantId) {
+      return;
+    }
+
+    const dispatched = dispatch(requestGetParticipant(currentParticipantProject.participantId));
+    setParticipantRequestId(dispatched.requestId);
+  }, [currentParticipantProject, dispatch, setParticipantRequestId]);
+
+  useEffect(() => {
+    if (!currentParticipantProject || !currentParticipantRequest) {
+      return;
+    }
+
+    if (currentParticipantRequest.status === 'success' && currentParticipantRequest.data) {
+      const nextCurrentParticipant = currentParticipantRequest.data;
+      setCurrentParticipant(nextCurrentParticipant);
+    }
+  }, [currentParticipantRequest, currentParticipantProject, setCurrentParticipant]);
 
   useEffect(() => {
     if (!currentParticipantProject || !projectModuleListRequest) {
@@ -153,7 +176,7 @@ const ParticipantProvider = ({ children }: Props) => {
     setParticipantData({
       activeModules,
       currentDeliverables,
-      currentParticipant: participant,
+      currentParticipant,
       currentParticipantProject,
       isLoading: [moduleDeliverablesRequest, moduleProjectsListRequest, projectModuleListRequest].some(
         (request) => request?.status === 'pending'
@@ -168,6 +191,7 @@ const ParticipantProvider = ({ children }: Props) => {
   }, [
     activeModules,
     currentDeliverables,
+    currentParticipant,
     currentParticipantProject,
     modules,
     moduleDeliverablesRequest,
@@ -175,7 +199,6 @@ const ParticipantProvider = ({ children }: Props) => {
     moduleProjectsListRequest,
     orgHasModules,
     orgHasParticipants,
-    participant,
     participantProjects,
     projectModuleListRequest,
     _setCurrentParticipantProject,
