@@ -1,3 +1,5 @@
+fb586478fef SW-5874 Remove rounding helper text (#3042)
+00c1b7b7a7c SW-5878 Add HubSpot URL to project profile (#3040)
 36575d58908 SW-5861 Use participant project for module timeline (#3045)
 30808ddb8c3 SW-5864 Hide description in console (#3046)
 b19212c11fc SW-5827 Use question for edit view (#3047)
