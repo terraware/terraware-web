@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Grid, Typography } from '@mui/material';
 import { Separator } from '@terraware/web-components';
@@ -25,10 +25,18 @@ import {
 
 const DeliverablesList = (): JSX.Element => {
   const { activeLocale } = useLocalization();
-  const { participantProjects } = useParticipantData();
   const { selectedOrganization } = useOrganization();
+  const { participantProjects, currentParticipantProject, moduleProjects, setCurrentParticipantProject } =
+    useParticipantData();
+  const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({
+    projectId: currentParticipantProject?.id || '',
+  });
 
-  const [projectFilter, setProjectFilter] = useState<{ projectId?: number }>({ projectId: undefined });
+  useEffect(() => {
+    if (projectFilter.projectId) {
+      setCurrentParticipantProject(projectFilter.projectId);
+    }
+  }, [projectFilter]);
 
   const extraTableFilters: SearchNodePayload[] = useMemo(
     () =>
@@ -42,7 +50,7 @@ const DeliverablesList = (): JSX.Element => {
             },
           ]
         : [],
-    [projectFilter]
+    [projectFilter.projectId]
   );
 
   const filterModifiers = useCallback(
@@ -84,9 +92,10 @@ const DeliverablesList = (): JSX.Element => {
       };
 
       const modifiedSearch = modifySearchNode(modifyStatus, search);
+      const firstSort = genericSearchAndSort(results, modifiedSearch, sortOrderConfig);
       if (sortOrderConfig?.sortOrder.field === 'status') {
         const direction = sortOrderConfig?.sortOrder.direction;
-        return results.sort((a, b) => {
+        return firstSort.sort((a, b) => {
           if (a.status !== b.status) {
             if (direction === 'Descending') {
               return statusOrder[b.status] - statusOrder[a.status];
@@ -104,7 +113,7 @@ const DeliverablesList = (): JSX.Element => {
           }
         });
       } else {
-        return genericSearchAndSort(results, modifiedSearch, sortOrderConfig);
+        return firstSort;
       }
     },
     []
@@ -114,7 +123,7 @@ const DeliverablesList = (): JSX.Element => {
     () =>
       activeLocale ? (
         <>
-          <Grid container sx={{ marginTop: theme.spacing(0.5) }}>
+          <Grid container sx={{ marginTop: theme.spacing(0.5), alignItems: 'center' }}>
             <Grid item>
               <Separator height={'40px'} />
             </Grid>
@@ -123,19 +132,26 @@ const DeliverablesList = (): JSX.Element => {
                 {strings.PROJECT}
               </Typography>
             </Grid>
-            <Grid item sx={{ marginLeft: theme.spacing(1.5) }}>
-              <ProjectsDropdown
-                allowUnselect
-                availableProjects={participantProjects}
-                label={''}
-                record={projectFilter}
-                setRecord={setProjectFilter}
-              />
-            </Grid>
+            {moduleProjects?.length > 0 && (
+              <Grid item sx={{ marginLeft: theme.spacing(1.5) }}>
+                {moduleProjects?.length > 1 ? (
+                  <ProjectsDropdown
+                    allowUnselect
+                    availableProjects={moduleProjects}
+                    label={''}
+                    record={projectFilter}
+                    setRecord={setProjectFilter}
+                    unselectLabel={strings.ALL}
+                  />
+                ) : (
+                  <Typography>{moduleProjects[0].name}</Typography>
+                )}
+              </Grid>
+            )}
           </Grid>
         </>
       ) : null,
-    [activeLocale, participantProjects, projectFilter]
+    [activeLocale, participantProjects, currentParticipantProject, projectFilter]
   );
 
   return (

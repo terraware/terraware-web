@@ -270,7 +270,7 @@ const QuestionBox = ({
               width: '100%',
             }}
           >
-            <Typography sx={{ fontWeight: '600' }}>{variable.name}</Typography>
+            <Typography sx={{ fontWeight: '600' }}>{variable.deliverableQuestion ?? variable.name}</Typography>
 
             <Box
               sx={{
@@ -353,6 +353,7 @@ const QuestionBox = ({
             <Grid container spacing={3} sx={{ marginBottom: '24px', padding: 0 }} textAlign='left'>
               <Grid item xs={12}>
                 <DeliverableVariableDetailsInput
+                  hideDescription
                   values={pendingValues || variable.values}
                   setValues={(newValues: VariableValueValue[]) => setValues(variable.id, newValues)}
                   variable={variable}

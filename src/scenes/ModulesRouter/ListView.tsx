@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
@@ -54,7 +54,10 @@ export default function ListView(): JSX.Element {
     },
   ];
 
-  const currentPhaseIndex = phases.findIndex((phase) => phase.name === currentParticipant?.cohortPhase);
+  const currentPhaseIndex = useMemo(
+    () => phases.findIndex((phase) => phase.name === currentParticipant?.cohortPhase),
+    [currentParticipant]
+  );
 
   return (
     <PageWithModuleTimeline

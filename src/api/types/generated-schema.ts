@@ -102,6 +102,10 @@ export interface paths {
      */
     put: operations["updateSubmission"];
   };
+  "/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}/complete": {
+    /** Marks a submission from a project as completed. */
+    post: operations["completeSubmission"];
+  };
   "/api/v1/accelerator/organizations": {
     /**
      * Lists organizations with the Accelerator internal tag and their projects.
@@ -1289,6 +1293,8 @@ export interface components {
       internalComment?: string;
       /** @description Internal-only reference name of application. Only set if the current user is an internal user. */
       internalName?: string;
+      /** Format: date-time */
+      modifiedTime?: string;
       /** Format: int64 */
       organizationId: number;
       organizationName: string;
@@ -3883,6 +3889,8 @@ export interface components {
       fileNaming?: string;
       /** Format: uri */
       googleFolderUrl?: string;
+      /** Format: uri */
+      hubSpotUrl?: string;
       investmentThesis?: string;
       landUseModelTypes: ("Native Forest" | "Monoculture" | "Sustainable Timber" | "Other Timber" | "Mangroves" | "Agroforestry" | "Silvopasture" | "Other Land-Use Model")[];
       maxCarbonAccumulation?: number;
@@ -4895,6 +4903,8 @@ export interface components {
        * @description URL of Google Drive folder to use for non-sensitive document storage. Ignored if the user does not have permission to update project document settings.
        */
       googleFolderUrl?: string;
+      /** Format: uri */
+      hubSpotUrl?: string;
       investmentThesis?: string;
       landUseModelTypes: ("Native Forest" | "Monoculture" | "Sustainable Timber" | "Other Timber" | "Mangroves" | "Agroforestry" | "Silvopasture" | "Other Land-Use Model")[];
       maxCarbonAccumulation?: number;
@@ -5218,6 +5228,7 @@ export interface components {
     VariablePayload: {
       /** Format: int64 */
       deliverableId?: number;
+      deliverableQuestion?: string;
       /** @enum {string} */
       dependencyCondition?: "eq" | "gt" | "gte" | "lt" | "lte" | "neq";
       dependencyValue?: string;
@@ -5226,6 +5237,7 @@ export interface components {
       /** Format: int64 */
       id: number;
       isList: boolean;
+      isRequired: boolean;
       name: string;
       /** Format: int32 */
       position?: number;
@@ -5666,8 +5678,14 @@ export interface operations {
       };
     };
     responses: {
-      /** @description OK */
+      /** @description The requested operation succeeded. */
       200: {
+        content: {
+          "application/json": components["schemas"]["UploadDeliverableDocumentResponsePayload"];
+        };
+      };
+      /** @description The server is unable to store the uploaded file. This response indicates a condition that triggers the system to create a customer support ticket; clients can inform users of that fact. */
+      507: {
         content: {
           "application/json": components["schemas"]["UploadDeliverableDocumentResponsePayload"];
         };
@@ -5738,6 +5756,23 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["UpdateSubmissionRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Marks a submission from a project as completed. */
+  completeSubmission: {
+    parameters: {
+      path: {
+        deliverableId: number;
+        projectId: number;
       };
     };
     responses: {
