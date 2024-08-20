@@ -20,10 +20,7 @@ export const speciesDeliverablesSlice = createSlice({
 });
 
 const projectSpeciesReducers = {
-  module: moduleSlice.reducer,
-  moduleDeliverables: ModuleDeliverablesSlice.reducer,
-  moduleList: moduleListSlice.reducer,
-  moduleProjects: moduleProjectsSlice.reducer,
+  speciesDeliverables: speciesDeliverablesSlice.reducer,
 };
 
-export default moduleReducers;
+export default projectSpeciesReducers;

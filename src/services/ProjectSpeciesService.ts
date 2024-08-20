@@ -62,3 +62,9 @@ const searchSpeciesDeliverables = async (projectIds: number[]): Promise<SpeciesD
     };
   });
 };
+
+const ProjectSpeciesService = {
+  searchSpeciesDeliverables,
+};
+
+export default ProjectSpeciesService;
