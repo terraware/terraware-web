@@ -213,11 +213,6 @@ const SingleView = () => {
                 value={participantProject?.perHectareBudget}
               />
               <ProjectFieldDisplay
-                label={strings.NUMBER_OF_COMMUNITIES_WITHIN_PROJECT_AREA}
-                value={participantProject?.numCommunities}
-                rightBorder={!isMobile}
-              />
-              <ProjectFieldDisplay
                 label={strings.HUBSPOT_LINK}
                 value={
                   participantProject?.hubSpotUrl ? (
