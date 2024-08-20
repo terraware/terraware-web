@@ -1,9 +1,5 @@
-import { DateTime } from 'luxon';
-
 import { components } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
-
-import { DeliverableCategoryType, DeliverableStatusType, DeliverableTypeType } from './Deliverables';
 
 export type Module = components['schemas']['ProjectModule'];
 

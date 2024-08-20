@@ -2,7 +2,7 @@ import { DateTime } from 'luxon';
 
 import { DeliverableTypeType } from 'src/types/Deliverables';
 import { SpeciesDeliverable } from 'src/types/ProjectSpecies';
-import { SearchNodePayload, SearchRequestPayload, SearchResponseElement } from 'src/types/Search';
+import { SearchRequestPayload, SearchResponseElement } from 'src/types/Search';
 import { createSearchNodeForIds } from 'src/utils/search';
 
 import SearchService from './SearchService';

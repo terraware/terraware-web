@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { DateTime } from 'luxon';
+
 import { Crumb } from 'src/components/BreadCrumbs';
 import ModuleDetailsCard from 'src/components/ModuleDetailsCard';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
@@ -35,6 +37,7 @@ const ModuleView = () => {
     () =>
       deliverables.map((deliverable) => ({
         ...deliverable,
+        dueDate: deliverable.dueDate ? DateTime.fromISO(deliverable.dueDate) : undefined,
         onClick: () => goToDeliverable(deliverable.id, projectId),
       })),
     [deliverables, goToDeliverable, projectId]

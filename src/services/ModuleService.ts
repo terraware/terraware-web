@@ -1,5 +1,4 @@
 import { paths } from 'src/api/types/generated-schema';
-import { DeliverableCategoryType, DeliverableStatusType, DeliverableTypeType } from 'src/types/Deliverables';
 import { Module } from 'src/types/Module';
 
 import HttpService, { Response2 } from './HttpService';
