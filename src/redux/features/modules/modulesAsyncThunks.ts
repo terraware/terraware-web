@@ -71,7 +71,6 @@ export const requestListModuleDeliverables = createAsyncThunk(
     projectId: number;
     search?: SearchNodePayload;
   }): Promise<ListDeliverablesElement[]> => {
-
     const result = await DeliverablesService.list(
       request.locale,
       {

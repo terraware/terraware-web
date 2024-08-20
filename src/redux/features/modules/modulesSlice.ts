@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+import { ListDeliverablesElement } from 'src/types/Deliverables';
 import { Module } from 'src/types/Module';
 
 import { StatusT, buildReducers } from '../asyncUtils';
@@ -9,7 +10,6 @@ import {
   requestListModuleProjects,
   requestListModules,
 } from './modulesAsyncThunks';
-import { ListDeliverablesElement } from 'src/types/Deliverables';
 
 /**
  * Get Module

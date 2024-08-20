@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
-import { ListDeliverablesElement } from 'src/types/Deliverables';
 
+import { ListDeliverablesElement } from 'src/types/Deliverables';
 import { Module } from 'src/types/Module';
 import { Participant } from 'src/types/Participant';
 import { Project } from 'src/types/Project';

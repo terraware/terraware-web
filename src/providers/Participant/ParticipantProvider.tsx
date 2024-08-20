@@ -16,12 +16,12 @@ import { selectParticipantGetRequest } from 'src/redux/features/participants/par
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { ListDeliverablesElement } from 'src/types/Deliverables';
 import { Module } from 'src/types/Module';
 import { Participant } from 'src/types/Participant';
 import { Project } from 'src/types/Project';
 
 import { ParticipantContext, ParticipantData } from './ParticipantContext';
-import { ListDeliverablesElement } from 'src/types/Deliverables';
 
 export type Props = {
   children: React.ReactNode;
