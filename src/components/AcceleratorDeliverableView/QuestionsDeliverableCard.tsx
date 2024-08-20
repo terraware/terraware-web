@@ -353,6 +353,7 @@ const QuestionBox = ({
             <Grid container spacing={3} sx={{ marginBottom: '24px', padding: 0 }} textAlign='left'>
               <Grid item xs={12}>
                 <DeliverableVariableDetailsInput
+                  hideDescription
                   values={pendingValues || variable.values}
                   setValues={(newValues: VariableValueValue[]) => setValues(variable.id, newValues)}
                   variable={variable}
