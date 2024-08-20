@@ -14,7 +14,7 @@ import ListViewHeader from './ListViewHeader';
 export default function ListView(): JSX.Element {
   const theme = useTheme();
 
-  const { currentParticipantProject } = useParticipantData();
+  const { currentParticipant } = useParticipantData();
 
   // TODO - where will this be stored? Is this stored in the back end within another enum table?
   // Should we store it and localize it in the front end? Will it be stored somewhere an admin can edit it?
@@ -55,14 +55,14 @@ export default function ListView(): JSX.Element {
   ];
 
   const currentPhaseIndex = useMemo(
-    () => phases.findIndex((phase) => phase.name === currentParticipantProject?.cohortPhase),
-    [currentParticipantProject]
+    () => phases.findIndex((phase) => phase.name === currentParticipant?.cohortPhase),
+    [currentParticipant]
   );
 
   return (
     <PageWithModuleTimeline
       title={strings.ALL_MODULES}
-      isLoading={!currentParticipantProject}
+      isLoading={!currentParticipant}
       contentStyle={{ paddingLeft: '24px' }}
       titleStyle={{ marginBottom: 2 }}
     >
