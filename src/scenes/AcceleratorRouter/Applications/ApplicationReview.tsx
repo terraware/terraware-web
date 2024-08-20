@@ -10,7 +10,7 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
 import strings from 'src/strings';
-import { Application, ApplicationStatus } from 'src/types/Application';
+import { Application, ApplicationStatus, getStatusLabel } from 'src/types/Application';
 
 import ApplicationReviewModal from './ApplicationReviewModal';
 
@@ -100,7 +100,7 @@ const ApplicationReview = ({ application }: ApplicationReviewProps) => {
             color={color || 'black'}
             marginLeft={theme.spacing(2)}
           >
-            {application.status}
+            {getStatusLabel(application.status)}
           </Typography>
           <Button
             // if a user lacks permission to update internal comments,

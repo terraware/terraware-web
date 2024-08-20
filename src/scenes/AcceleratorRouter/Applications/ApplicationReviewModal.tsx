@@ -17,6 +17,7 @@ import {
   ApplicationReviewStatus,
   ApplicationReviewStatuses,
   ApplicationStatus,
+  getStatusLabel,
 } from 'src/types/Application';
 import useForm from 'src/utils/useForm';
 
@@ -42,7 +43,7 @@ const ApplicationReviewModal = ({
   const result = useAppSelector(selectApplicationReview(requestId));
 
   const dropdownOptions: DropdownItem[] = ApplicationReviewStatuses.map((status) => ({
-    label: status,
+    label: getStatusLabel(status),
     value: status,
   }));
 
@@ -66,8 +67,7 @@ const ApplicationReviewModal = ({
   const canUpdateStatus = useMemo(
     () =>
       isAllowed('UPDATE_APPLICATION_STATUS') &&
-      ApplicationReviewStatuses.find((status) => status === application.status) !== undefined &&
-      application.status !== 'Not Submitted',
+      ApplicationReviewStatuses.find((status) => status === application.status) !== undefined,
     [application.status, isAllowed]
   );
 

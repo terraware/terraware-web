@@ -4,7 +4,7 @@ import { useTheme } from '@mui/material';
 import { Badge } from '@terraware/web-components';
 import { BadgeProps } from '@terraware/web-components/components/Badge';
 
-import { ApplicationStatus } from 'src/types/Application';
+import { ApplicationStatus, getStatusLabel } from 'src/types/Application';
 
 type ApplicationStatusBadgeProps = {
   status: ApplicationStatus;
@@ -57,7 +57,7 @@ const ApplicationStatusBadge = (props: ApplicationStatusBadgeProps): JSX.Element
     }
   }, [status, theme]);
 
-  return <>{<Badge {...badgeColors} label={status} />}</>;
+  return <>{<Badge {...badgeColors} label={getStatusLabel(status)} />}</>;
 };
 
 export default ApplicationStatusBadge;
