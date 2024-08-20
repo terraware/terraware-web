@@ -1,3 +1,5 @@
+9b5ae98ae12 SW-5596 Deliverables List in PartEx: Address issues with Project dropdown behavior (#3020)
+80f98182dae Updated translations from Phrase (#3044)
 b4ad164fd16 SW-5865 Fix deliverables filters not working (#3030)
 efe8471b6eb SW-5827 Use deliverable questions instead of name (#3043)
 ed9026b27b6 SW-5857 Use participant context to fix 404 (#3041)
