@@ -27,6 +27,7 @@ import { PhotoWithAttributes } from '../EditImagesModal/PhotoSelector';
 import { VariableTableCell } from '../EditableTableModal/helpers';
 
 export type DeliverableVariableDetailsInputProps = {
+  hideDescription?: boolean;
   values: VariableValueValue[];
   setCellValues?: (values: VariableTableCell[][]) => void;
   setDeletedImages: (values: VariableValueImageValue[]) => void;
@@ -39,6 +40,7 @@ export type DeliverableVariableDetailsInputProps = {
 };
 
 const DeliverableVariableDetailsInput = ({
+  hideDescription,
   values,
   setCellValues,
   setDeletedImages,
@@ -243,7 +245,7 @@ const DeliverableVariableDetailsInput = ({
 
   return (
     <>
-      {variable.description && (
+      {variable.description && hideDescription !== true && (
         <Textfield
           id='description'
           label=''
