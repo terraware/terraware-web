@@ -5,6 +5,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import PageHeader from 'src/components/PageHeader';
 import PageCard from 'src/components/common/PageCard';
+import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import { useOrganization, useUser } from 'src/providers';
@@ -38,7 +39,7 @@ const TerrawareHomeView = () => {
   };
 
   return (
-    <>
+    <TfMain>
       <NewApplicationModal open={isNewApplicationModalOpen} onClose={() => setIsNewApplicationModalOpen(false)} />
 
       <Box
@@ -123,7 +124,7 @@ const TerrawareHomeView = () => {
           </Container>
         </Box>
       </Box>
-    </>
+    </TfMain>
   );
 };
 
