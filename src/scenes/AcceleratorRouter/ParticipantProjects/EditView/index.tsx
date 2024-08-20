@@ -249,13 +249,6 @@ const EditView = () => {
               value={participantProjectRecord?.perHectareBudget}
             />
             <ProjectFieldTextfield
-              id={'numCommunities'}
-              label={strings.NUMBER_OF_COMMUNITIES_WITHIN_PROJECT_AREA}
-              onChange={onChangeParticipantProject}
-              type={'number'}
-              value={participantProjectRecord?.numCommunities}
-            />
-            <ProjectFieldTextfield
               id={'hubSpotUrl'}
               label={strings.HUBSPOT_LINK}
               onChange={onChangeParticipantProject}
