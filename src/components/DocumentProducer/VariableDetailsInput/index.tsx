@@ -353,7 +353,6 @@ const VariableDetailsInput = ({
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
           value={value?.toString()}
           errorText={validate ? valueError() : ''}
-          helperText={variable?.type === 'Number' ? strings.ROUNDED_INFO : ''}
           sx={formElementStyles}
         />
       )}
