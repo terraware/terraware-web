@@ -81,7 +81,7 @@ const OrganizationsView = () => {
         icon='plus'
         id='new-organization'
         onClick={() => setAddOrgModalOpened(true)}
-        priority='secondary'
+        priority='primary'
         label={isMobile ? '' : strings.ADD_ORGANIZATION}
         size='small'
       />

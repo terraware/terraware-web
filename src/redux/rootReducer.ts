@@ -15,6 +15,7 @@ import globalRolesReducers from './features/globalRoles/globalRolesSlice';
 import messageReducers from './features/message/messageSlice';
 import moduleReducers from './features/modules/modulesSlice';
 import observationsReducers from './features/observations/observationsSlice';
+import organizationsReducers from './features/organizations/organizationsSlice';
 import participantProjectSpeciesReducers from './features/participantProjectSpecies/participantProjectSpeciesSlice';
 import participantProjectsReducers from './features/participantProjects/participantProjectsSlice';
 import participantsReducers from './features/participants/participantsSlice';
@@ -49,6 +50,7 @@ export const reducers = {
   ...messageReducers,
   ...moduleReducers,
   ...observationsReducers,
+  ...organizationsReducers,
   ...participantsReducers,
   ...participantProjectsReducers,
   ...participantProjectSpeciesReducers,
