@@ -133,13 +133,13 @@ const ReviewView = () => {
       case 'Ready for Review':
       case 'Submitted':
         return <ApplicationStatusInReview />;
-      case 'Not Accepted':
-        return <ApplicationStatusNotAccepted application={application} />;
       case 'Issue Active':
       case 'Issue Pending':
       case 'Issue Resolved':
       case 'Waitlist':
         return <ApplicationStatusWaitlist application={application} />;
+      case 'Not Accepted':
+        return <ApplicationStatusNotAccepted application={application} />;
       default:
         return <ReviewCard sections={nonPrescreenSections} />;
     }
