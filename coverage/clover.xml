@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1724188242230" clover="3.2.0">
-  <project timestamp="1724188242231" name="All files">
-    <metrics statements="24215" coveredstatements="1007" conditionals="15759" coveredconditionals="266" methods="7474" coveredmethods="174" elements="47448" coveredelements="1447" complexity="0" loc="24215" ncloc="24215" packages="229" files="1057" classes="1057"/>
+<coverage generated="1724189540300" clover="3.2.0">
+  <project timestamp="1724189540300" name="All files">
+    <metrics statements="24229" coveredstatements="1007" conditionals="15772" coveredconditionals="266" methods="7479" coveredmethods="174" elements="47480" coveredelements="1447" complexity="0" loc="24229" ncloc="24229" packages="229" files="1057" classes="1057"/>
     <package name="src">
       <metrics statements="176" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -16643,7 +16643,7 @@
       </file>
     </package>
     <package name="src.scenes.ApplicationRouter.portal.Review">
-      <metrics statements="44" coveredstatements="0" conditionals="33" coveredconditionals="0" methods="16" coveredmethods="0"/>
+      <metrics statements="58" coveredstatements="0" conditionals="46" coveredconditionals="0" methods="21" coveredmethods="0"/>
       <file name="ReviewCard.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ApplicationRouter/portal/Review/ReviewCard.tsx">
         <metrics statements="28" coveredstatements="0" conditionals="19" coveredconditionals="0" methods="9" coveredmethods="0"/>
         <line num="23" count="0" type="stmt"/>
@@ -16676,23 +16676,37 @@
         <line num="124" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/ApplicationRouter/portal/Review/index.tsx">
-        <metrics statements="16" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="7" coveredmethods="0"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="26" count="0" type="stmt"/>
+        <metrics statements="30" coveredstatements="0" conditionals="27" coveredconditionals="0" methods="12" coveredmethods="0"/>
         <line num="27" count="0" type="stmt"/>
-        <line num="29" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="53" count="0" type="stmt"/>
-        <line num="54" count="0" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="61" count="0" type="stmt"/>
         <line num="62" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
         <line num="69" count="0" type="stmt"/>
-        <line num="70" count="0" type="stmt"/>
-        <line num="71" count="0" type="stmt"/>
-        <line num="73" count="0" type="stmt"/>
-        <line num="75" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="86" count="0" type="stmt"/>
-        <line num="87" count="0" type="stmt"/>
-        <line num="91" count="0" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="76" count="0" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="83" count="0" type="stmt"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="90" count="0" type="stmt"/>
+        <line num="92" count="0" type="stmt"/>
+        <line num="97" count="0" type="stmt"/>
+        <line num="103" count="0" type="stmt"/>
+        <line num="104" count="0" type="stmt"/>
+        <line num="105" count="0" type="stmt"/>
+        <line num="107" count="0" type="stmt"/>
+        <line num="109" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="120" count="0" type="stmt"/>
+        <line num="121" count="0" type="stmt"/>
+        <line num="125" count="0" type="stmt"/>
+        <line num="126" count="0" type="cond" truecount="0" falsecount="14"/>
+        <line num="135" count="0" type="stmt"/>
+        <line num="140" count="0" type="stmt"/>
+        <line num="142" count="0" type="stmt"/>
+        <line num="144" count="0" type="stmt"/>
+        <line num="148" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.ApplicationRouter.portal.Sections">

@@ -1,3 +1,4 @@
+55e18e45b5b SW-5804: Full application review screen is not reacting to application status (#3029)
 efca2e44c13 SW-5868 Added "Waitlist - "as prefix to status labels (#3049)
 ff1be45edcd SW-5876 Added TFMain to center new application dialog (#3053)
 3acdd877198 SW-5846: [Visual Bug] Icon in Application progress nav is the wrong size (#3052)
