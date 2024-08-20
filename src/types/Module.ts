@@ -60,17 +60,4 @@ export const getEventStatus = (status: ModuleEventSessionStatus) => {
   }
 };
 
-export type ModuleDeliverable = {
-  category: DeliverableCategoryType;
-  dueDate: DateTime;
-  id: number;
-  moduleEndDate: DateTime;
-  moduleId: number;
-  moduleStartDate: DateTime;
-  name: string;
-  projectId: number;
-  status: DeliverableStatusType;
-  type: DeliverableTypeType;
-};
-
 export type ModuleContentType = keyof Pick<Module, 'additionalResources' | 'preparationMaterials'>;

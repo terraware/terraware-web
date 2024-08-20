@@ -5,16 +5,19 @@ import { requestGetModule, requestListModuleDeliverables } from 'src/redux/featu
 import { selectModuleDeliverables, selectModuleRequest } from 'src/redux/features/modules/modulesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { Module, ModuleDeliverable, ModuleEvent, ModuleEventSession } from 'src/types/Module';
+import { Module, ModuleEvent, ModuleEventSession } from 'src/types/Module';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { ModuleContext, ModuleData } from './Context';
+import { ListDeliverablesElement } from 'src/types/Deliverables';
+import { useLocalization } from 'src/providers';
 
 export type Props = {
   children?: React.ReactNode;
 };
 
 const ModuleProvider = ({ children }: Props) => {
+  const { activeLocale } = useLocalization();
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const pathParams = useParams<{ sessionId: string; moduleId: string; projectId: string }>();
@@ -24,7 +27,7 @@ const ModuleProvider = ({ children }: Props) => {
   const sessionId = Number(pathParams.sessionId);
 
   const [allSessions, setAllSessions] = useState<ModuleEventSession[]>([]);
-  const [deliverables, setDeliverables] = useState<ModuleDeliverable[]>([]);
+  const [deliverables, setDeliverables] = useState<ListDeliverablesElement[]>([]);
   const [event, setEvent] = useState<ModuleEvent>();
   const [module, setModule] = useState<Module>();
   const [session, setSession] = useState<ModuleEventSession>();
@@ -46,12 +49,12 @@ const ModuleProvider = ({ children }: Props) => {
   });
 
   useEffect(() => {
-    if (!isNaN(projectId) && !isNaN(moduleId)) {
+    if (!isNaN(projectId) && !isNaN(moduleId) && activeLocale) {
       const request = dispatch(requestGetModule({ projectId, moduleId }));
       setRequestId(request.requestId);
 
       const deliverableRequest = dispatch(
-        requestListModuleDeliverables({ projectIds: [projectId], moduleIds: [moduleId] })
+        requestListModuleDeliverables({ locale: activeLocale, projectId, moduleId })
       );
       setDeliverableRequestId(deliverableRequest.requestId);
     }

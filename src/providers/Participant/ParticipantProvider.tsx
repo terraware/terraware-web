@@ -16,11 +16,12 @@ import { selectParticipantGetRequest } from 'src/redux/features/participants/par
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { Module, ModuleDeliverable } from 'src/types/Module';
+import { Module } from 'src/types/Module';
 import { Participant } from 'src/types/Participant';
 import { Project } from 'src/types/Project';
 
 import { ParticipantContext, ParticipantData } from './ParticipantContext';
+import { ListDeliverablesElement } from 'src/types/Deliverables';
 
 export type Props = {
   children: React.ReactNode;
@@ -32,7 +33,7 @@ const ParticipantProvider = ({ children }: Props) => {
   const { activeLocale } = useLocalization();
 
   const [activeModules, setActiveModules] = useState<Module[]>([]);
-  const [currentDeliverables, setCurrentDeliverables] = useState<ModuleDeliverable[]>();
+  const [currentDeliverables, setCurrentDeliverables] = useState<ListDeliverablesElement[]>();
   const [currentParticipant, setCurrentParticipant] = useState<Participant>();
   const [currentParticipantProject, setCurrentParticipantProject] = useState<Project>();
   const [participantProjects, setParticipantProjects] = useState<Project[]>([]);
@@ -129,8 +130,9 @@ const ParticipantProvider = ({ children }: Props) => {
       if (nextActiveModules.length > 0) {
         const deliverableRequest = dispatch(
           requestListModuleDeliverables({
-            moduleIds: [nextActiveModules[0].id],
-            projectIds: [currentParticipantProject.id],
+            locale: activeLocale,
+            moduleId: nextActiveModules[0].id,
+            projectId: currentParticipantProject.id,
           })
         );
         setListModuleDeliverablesRequestId(deliverableRequest.requestId);
