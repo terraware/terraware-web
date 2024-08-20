@@ -17,7 +17,7 @@ import {
   ApplicationReviewStatus,
   ApplicationReviewStatuses,
   ApplicationStatus,
-  getStatusLabel,
+  getApplicationStatusLabel,
 } from 'src/types/Application';
 import useForm from 'src/utils/useForm';
 
@@ -43,7 +43,7 @@ const ApplicationReviewModal = ({
   const result = useAppSelector(selectApplicationReview(requestId));
 
   const dropdownOptions: DropdownItem[] = ApplicationReviewStatuses.map((status) => ({
-    label: getStatusLabel(status),
+    label: getApplicationStatusLabel(status),
     value: status,
   }));
 

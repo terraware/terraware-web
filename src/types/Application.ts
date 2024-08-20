@@ -23,7 +23,7 @@ export const ApplicationReviewStatuses: ApplicationReviewStatus[] = [
   'Submitted',
 ];
 
-export const getStatusLabel = (status: ApplicationStatus): string => {
+export const getApplicationStatusLabel = (status: ApplicationStatus): string => {
   switch (status) {
     case 'Issue Active':
     case 'Issue Pending':
