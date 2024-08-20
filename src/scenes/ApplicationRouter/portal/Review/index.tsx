@@ -124,6 +124,7 @@ const ReviewView = () => {
 
   const renderContent = (application: Application | undefined) => {
     switch (application?.status) {
+      case 'Accepted':
       case 'Carbon Eligible':
       case 'In Review':
       case 'Needs Follow-up':
