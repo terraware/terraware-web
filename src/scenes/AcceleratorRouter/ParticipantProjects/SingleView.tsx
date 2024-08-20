@@ -220,7 +220,11 @@ const SingleView = () => {
               <ProjectFieldDisplay
                 label={strings.HUBSPOT_LINK}
                 value={
-                  participantProject?.hubSpotUrl ? <a href={participantProject.hubSpotUrl}>{strings.LINK}</a> : null
+                  participantProject?.hubSpotUrl ? (
+                    <a href={participantProject.hubSpotUrl} rel='noopener noreferrer' target='_blank'>
+                      {strings.LINK}
+                    </a>
+                  ) : null
                 }
               />
               <ProjectFieldMeta
