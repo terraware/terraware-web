@@ -3889,6 +3889,8 @@ export interface components {
       fileNaming?: string;
       /** Format: uri */
       googleFolderUrl?: string;
+      /** Format: uri */
+      hubSpotUrl?: string;
       investmentThesis?: string;
       landUseModelTypes: ("Native Forest" | "Monoculture" | "Sustainable Timber" | "Other Timber" | "Mangroves" | "Agroforestry" | "Silvopasture" | "Other Land-Use Model")[];
       maxCarbonAccumulation?: number;
@@ -4901,6 +4903,8 @@ export interface components {
        * @description URL of Google Drive folder to use for non-sensitive document storage. Ignored if the user does not have permission to update project document settings.
        */
       googleFolderUrl?: string;
+      /** Format: uri */
+      hubSpotUrl?: string;
       investmentThesis?: string;
       landUseModelTypes: ("Native Forest" | "Monoculture" | "Sustainable Timber" | "Other Timber" | "Mangroves" | "Agroforestry" | "Silvopasture" | "Other Land-Use Model")[];
       maxCarbonAccumulation?: number;

@@ -255,6 +255,12 @@ const EditView = () => {
               type={'number'}
               value={participantProjectRecord?.numCommunities}
             />
+            <ProjectFieldTextfield
+              id={'hubSpotUrl'}
+              label={strings.HUBSPOT_LINK}
+              onChange={onChangeParticipantProject}
+              value={participantProjectRecord?.hubSpotUrl}
+            />
             <ProjectFieldMeta
               date={project?.createdTime}
               dateLabel={strings.CREATED_ON}

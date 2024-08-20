@@ -217,6 +217,12 @@ const SingleView = () => {
                 value={participantProject?.numCommunities}
                 rightBorder={!isMobile}
               />
+              <ProjectFieldDisplay
+                label={strings.HUBSPOT_LINK}
+                value={
+                  participantProject?.hubSpotUrl ? <a href={participantProject.hubSpotUrl}>{strings.LINK}</a> : null
+                }
+              />
               <ProjectFieldMeta
                 date={project?.createdTime}
                 dateLabel={strings.CREATED_ON}
