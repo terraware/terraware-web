@@ -20,7 +20,7 @@
     "ts": "tsc --project ./tsconfig.json",
     "format": "prettier --write .",
     "docker:start": "./scripts/launch_server.sh",
-    "docker:stop": "docker compose -f docker-compose.yml kill",
+    "docker:stop": "docker compose down",
     "wait-be": "wait-on -t 120000 http://localhost:8080/swagger-ui/index.html",
     "server:prepare": "./scripts/preparedb.sh",
     "server:reset": "./scripts/resetdb.sh",
