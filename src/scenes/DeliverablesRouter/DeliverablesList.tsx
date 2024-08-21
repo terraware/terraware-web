@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { Separator } from '@terraware/web-components';
 
 import DeliverablesTable from 'src/components/DeliverablesTable';
@@ -127,22 +127,22 @@ const DeliverablesList = (): JSX.Element => {
             <Grid item>
               <Separator height={'40px'} />
             </Grid>
-            <Grid item>
-              <Typography sx={{ lineHeight: '40px' }} component={'span'}>
-                {strings.PROJECT}
-              </Typography>
-            </Grid>
             {moduleProjects?.length > 0 && (
-              <Grid item sx={{ marginLeft: theme.spacing(1.5) }}>
+              <Grid item>
                 {moduleProjects?.length > 1 ? (
-                  <ProjectsDropdown
-                    allowUnselect
-                    availableProjects={moduleProjects}
-                    label={''}
-                    record={projectFilter}
-                    setRecord={setProjectFilter}
-                    unselectLabel={strings.ALL}
-                  />
+                  <Box display='flex'>
+                    <Typography sx={{ lineHeight: '40px', marginRight: theme.spacing(1.5) }} component={'span'}>
+                      {strings.PROJECT}
+                    </Typography>
+                    <ProjectsDropdown
+                      allowUnselect
+                      availableProjects={moduleProjects}
+                      label={''}
+                      record={projectFilter}
+                      setRecord={setProjectFilter}
+                      unselectLabel={strings.ALL}
+                    />
+                  </Box>
                 ) : (
                   <Typography>{moduleProjects[0].name}</Typography>
                 )}
