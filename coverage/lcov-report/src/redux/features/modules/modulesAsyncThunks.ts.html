@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
@@ -148,17 +148,8 @@
 <a name='L83'></a><a href='#L83'>83</a>
 <a name='L84'></a><a href='#L84'>84</a>
 <a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a>
-<a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a>
-<a name='L92'></a><a href='#L92'>92</a>
-<a name='L93'></a><a href='#L93'>93</a>
-<a name='L94'></a><a href='#L94'>94</a>
-<a name='L95'></a><a href='#L95'>95</a>
-<a name='L96'></a><a href='#L96'>96</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L86'></a><a href='#L86'>86</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -229,7 +220,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -237,29 +227,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createAsyncThunk } from '@reduxjs/toolkit';
-import { DateTime } from 'luxon';
 &nbsp;
 import { SearchService } from 'src/services';
+import DeliverablesService from 'src/services/DeliverablesService';
 import ModuleService from 'src/services/ModuleService';
 import strings from 'src/strings';
-import { ModuleDeliverable, ModuleProjectSearchResult } from 'src/types/Module';
+import { ListDeliverablesElement } from 'src/types/Deliverables';
+import { ModuleProjectSearchResult } from 'src/types/Module';
 import { SearchNodePayload, SearchRequestPayload } from 'src/types/Search';
 &nbsp;
 export const requestGetModule = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
@@ -320,32 +301,21 @@ export const requestListModuleProjects = <span class="cstat-no" title="statement
 export const requestListModuleDeliverables = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
   'modules/deliverables',
 <span class="fstat-no" title="function not covered" >  as</span>ync (request: {
-    moduleIds: number[];
-    projectIds: number[];
-    searchChildren?: SearchNodePayload[];
-  }): Promise&lt;ModuleDeliverable[]&gt; =&gt; {
-    const searchChildren = <span class="cstat-no" title="statement not covered" >request.searchChildren || [];</span>
-&nbsp;
-    const deliverableSearchResults = <span class="cstat-no" title="statement not covered" >await ModuleService.searchDeliverables(</span>
-      request.projectIds,
-      request.moduleIds,
-      searchChildren
+    locale: string | null;
+    moduleId: number;
+    projectId: number;
+    search?: SearchNodePayload;
+  }): Promise&lt;ListDeliverablesElement[]&gt; =&gt; {
+    const result = <span class="cstat-no" title="statement not covered" >await DeliverablesService.list(</span>
+      request.locale,
+      {
+        projectId: request.projectId,
+        moduleId: request.moduleId,
+      },
+      request.search
     );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return deliverableSearchResults</span>
-      ? deliverableSearchResults.map(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
-          category: result.category,
-          id: result.id,
-          dueDate: DateTime.fromISO(result.dueDate),
-          moduleEndDate: DateTime.fromISO(result.moduleEndDate),
-          moduleId: result.moduleId,
-          moduleStartDate: DateTime.fromISO(result.moduleStartDate),
-          name: result.name,
-          projectId: result.projectId,
-          status: result.status,
-          type: result.type,
-        }))
-      : [];
+<span class="cstat-no" title="statement not covered" >    return result?.deliverables ?? [];</span>
   }
 );
 &nbsp;</pre></td></tr></table></pre>
@@ -355,7 +325,7 @@ export const requestListModuleDeliverables = <span class="cstat-no" title="state
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-21T15:33:33.778Z
+                at 2024-08-21T16:07:48.912Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
