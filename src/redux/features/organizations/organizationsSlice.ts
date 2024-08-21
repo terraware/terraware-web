@@ -1,9 +1,14 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 import { InternalTag } from 'src/types/InternalTag';
 
 import { StatusT, buildReducers } from '../asyncUtils';
-import { requestOrganizationInternalTags, requestUpdateOrganizationInternalTags } from './organizationsAsyncThunks';
+import {
+  requestAddAcceleratorOrganization,
+  requestOrganizationInternalTags,
+  requestRemoveAcceleratorOrganizations,
+  requestUpdateOrganizationInternalTags,
+} from './organizationsAsyncThunks';
 
 // Define the initial state
 const initialStateInternalTags: { [key: string]: StatusT<InternalTag[]> } = {};
@@ -28,9 +33,33 @@ export const internalTagsUpdateSlice = createSlice({
   },
 });
 
+const initialStateAddAcceleratorOrganizationSlice: { [key: string]: StatusT<number> } = {};
+
+export const addAcceleratorOrganizationSlice = createSlice({
+  name: 'addAcceleratorOrganizationSlice',
+  initialState: initialStateAddAcceleratorOrganizationSlice,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestAddAcceleratorOrganization, true)(builder);
+  },
+});
+
+const initialStateRemoveAcceleratorOrganizationsSlice: { [key: string]: StatusT<number> } = {};
+
+export const removeAcceleratorOrganizationsSlice = createSlice({
+  name: 'removeAcceleratorOrganizationsSlice',
+  initialState: initialStateRemoveAcceleratorOrganizationsSlice,
+  reducers: {},
+  extraReducers: (builder) => {
+    buildReducers(requestRemoveAcceleratorOrganizations, true)(builder);
+  },
+});
+
 const organizationsReducers = {
   internalTags: internalTagsSlice.reducer,
   internalTagsUpdate: internalTagsUpdateSlice.reducer,
+  addAcceleratorOrganization: addAcceleratorOrganizationSlice.reducer,
+  removeAcceleratorOrganizations: removeAcceleratorOrganizationsSlice.reducer,
 };
 
 export default organizationsReducers;

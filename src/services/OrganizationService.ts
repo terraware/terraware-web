@@ -1,11 +1,15 @@
 import { paths } from 'src/api/types/generated-schema';
-import { InternalTag } from 'src/types/InternalTag';
-import { ManagedLocationType, Organization, OrganizationRoleInfo } from 'src/types/Organization';
+import {
+  ManagedLocationType,
+  Organization,
+  OrganizationRoleInfo,
+  UpdateOrganizationInternalTagsRequestPayload,
+} from 'src/types/Organization';
 import { InitializedTimeZone } from 'src/types/TimeZones';
 import { isAdmin } from 'src/utils/organization';
 
 import CachedUserService from './CachedUserService';
-import HttpService, { Response, Response2 } from './HttpService';
+import HttpService, { Response } from './HttpService';
 import PreferencesService from './PreferencesService';
 
 /**
@@ -37,7 +41,7 @@ export type UpdateOptions = {
 };
 
 export type OrganizationInternalTags = {
-  internalTags: InternalTag[];
+  internalTags: number[];
 };
 
 export type OrganizationInternalTagsResponse = Response & OrganizationInternalTags;
@@ -66,11 +70,12 @@ type OrganizationInternalTagsServerResponse =
   paths[typeof ORGANIZATION_INTERNAL_TAGS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 type UpdateResponse =
-  paths[typeof ENDPOINT_PARTICIPANT_PROJECT_SPECIES_SINGULAR]['put']['responses'][200]['content']['application/json'];
+  paths[typeof ORGANIZATION_INTERNAL_TAGS_ENDPOINT]['put']['responses'][200]['content']['application/json'];
 
 const httpOrganizations = HttpService.root(ORGANIZATIONS_ENDPOINT);
 const httpOrganization = HttpService.root(ORGANIZATION_ENDPOINT);
 const httpOrganizationRoles = HttpService.root(ORGANIZATION_ROLES_ENDPOINT);
+const httpOrganizationInternalTags = HttpService.root(ORGANIZATION_INTERNAL_TAGS_ENDPOINT);
 
 /**
  * get organizations
@@ -240,7 +245,7 @@ const initializeTimeZone = async (organization: Organization, timeZone: string):
  * get organization internal tags
  */
 const getOrganizationInternalTags = async (organizationId: number): Promise<OrganizationInternalTagsResponse> => {
-  const response: OrganizationInternalTagsResponse = await httpOrganizationRoles.get<
+  const response: OrganizationInternalTagsResponse = await httpOrganizationInternalTags.get<
     OrganizationInternalTagsServerResponse,
     OrganizationInternalTags
   >(
@@ -249,7 +254,7 @@ const getOrganizationInternalTags = async (organizationId: number): Promise<Orga
         '{organizationId}': organizationId.toString(),
       },
     },
-    (data) => ({ internalTags: data?.internalTags ?? [] })
+    (data) => ({ internalTags: data?.tagIds ?? [] })
   );
 
   return response;
@@ -261,7 +266,7 @@ const getOrganizationInternalTags = async (organizationId: number): Promise<Orga
 const updateOrganizationInternalTags = async (
   organizationId: number,
   payload: UpdateOrganizationInternalTagsRequestPayload
-): Promise<Response2<UpdateResponse>> => {
+): Promise<Response> => {
   return HttpService.root(ORGANIZATION_INTERNAL_TAGS_ENDPOINT).put2<UpdateResponse>({
     urlReplacements: {
       '{organizationId}': `${organizationId}`,

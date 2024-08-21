@@ -7,6 +7,14 @@ import Button from 'src/components/common/button/Button';
 import { useLocalization } from 'src/providers';
 import { requestAcceleratorOrgs } from 'src/redux/features/accelerator/acceleratorAsyncThunks';
 import { selectAcceleratorOrgsRequest } from 'src/redux/features/accelerator/acceleratorSelectors';
+import {
+  requestAddAcceleratorOrganization,
+  requestRemoveAcceleratorOrganizations,
+} from 'src/redux/features/organizations/organizationsAsyncThunks';
+import {
+  selectAddAcceleratorOrganization,
+  selectRemoveAcceleratorOrganizations,
+} from 'src/redux/features/organizations/organizationsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { AcceleratorOrg } from 'src/types/Accelerator';
@@ -40,6 +48,10 @@ const OrganizationsView = () => {
   const [addOrgModalOpened, setAddOrgModalOpened] = useState(false);
   const [listRequestId, setListRequestId] = useState('');
   const listRequest = useAppSelector(selectAcceleratorOrgsRequest(listRequestId));
+  const [addOrgRequestId, setAddOrgRequestId] = useState('');
+  const addOrgRequest = useAppSelector(selectAddAcceleratorOrganization(addOrgRequestId));
+  const [removeOrgsRequestId, setRemoveOrgsRequestId] = useState('');
+  const removeOrgsRequest = useAppSelector(selectRemoveAcceleratorOrganizations(removeOrgsRequestId));
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
   const [acceleratorOrganizations, setAcceleratorOrganizations] = useState<AcceleratorOrg[]>([]);
@@ -53,11 +65,40 @@ const OrganizationsView = () => {
 
   const dispatchSearchRequest = useCallback(
     (locale?: string | null, search?: SearchNodePayload, searchSortOrder?: SearchSortOrder) => {
-      const request = dispatch(requestAcceleratorOrgs({ locale: locale || null, search, searchSortOrder }));
+      const request = dispatch(
+        requestAcceleratorOrgs({ locale: locale || null, includeParticipants: true, search, searchSortOrder })
+      );
       setListRequestId(request.requestId);
     },
     [dispatch]
   );
+
+  useEffect(() => {
+    if (!removeOrgsRequest) {
+      return;
+    }
+    if (removeOrgsRequest.status !== 'pending') {
+      if (removeOrgsRequest.status === 'success') {
+        dispatchSearchRequest();
+      } else {
+        snackbar.toastError(strings.GENERIC_ERROR);
+      }
+    }
+  }, [removeOrgsRequest]);
+
+  useEffect(() => {
+    if (!addOrgRequest) {
+      return;
+    }
+    if (addOrgRequest.status !== 'pending') {
+      if (addOrgRequest.status === 'success') {
+        snackbar.toastSuccess(strings.ORGANIZATION_ADDED);
+        dispatchSearchRequest();
+      } else {
+        snackbar.toastError(strings.GENERIC_ERROR);
+      }
+    }
+  }, [addOrgRequest]);
 
   useEffect(() => {
     if (!listRequest) {
@@ -72,8 +113,21 @@ const OrganizationsView = () => {
   }, [listRequest, snackbar]);
 
   const onRemoveOrganizations = useCallback(() => {
-    // remove internal accelerator tag here
+    if (selectedRows.length > 0) {
+      const request = dispatch(
+        requestRemoveAcceleratorOrganizations(selectedRows.map((selectedRow) => selectedRow.id))
+      );
+      setRemoveOrgsRequestId(request.requestId);
+    }
   }, [dispatch, selectedRows]);
+
+  const onAddOrganization = (orgId?: string) => {
+    if (orgId) {
+      const request = dispatch(requestAddAcceleratorOrganization(Number(orgId)));
+      setAddOrgRequestId(request.requestId);
+    }
+    setAddOrgModalOpened(false);
+  };
 
   const rightComponent = useMemo(
     () => (
@@ -92,7 +146,11 @@ const OrganizationsView = () => {
   return (
     <>
       {addOrgModalOpened && (
-        <AddAcceleratorOrganizationModal onSubmit={() => true} onClose={() => setAddOrgModalOpened(false)} />
+        <AddAcceleratorOrganizationModal
+          onSubmit={onAddOrganization}
+          onClose={() => setAddOrgModalOpened(false)}
+          acceleratorOrgsIds={acceleratorOrganizations.map((org) => org.id)}
+        />
       )}
       <TableWithSearchFilters
         columns={() => columns(activeLocale)}

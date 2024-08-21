@@ -4,3 +4,9 @@ export const listOrganizationInternalTags = (requestId: string) => (state: RootS
 
 export const selectUpdateOrganizationInternalTags = (requestId: string) => (state: RootState) =>
   state.internalTagsUpdate[requestId];
+
+export const selectAddAcceleratorOrganization = (requestId: string) => (state: RootState) =>
+  state.addAcceleratorOrganization[requestId];
+
+export const selectRemoveAcceleratorOrganizations = (requestId: string) => (state: RootState) =>
+  state.removeAcceleratorOrganizations[requestId];

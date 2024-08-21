@@ -11,27 +11,28 @@ import strings from 'src/strings';
 export interface AddAcceleratorOrganizationModalProps {
   onClose: (reload?: boolean) => void;
   onSubmit: (orgId?: string) => void;
+  acceleratorOrgsIds: number[];
 }
 
 export default function AddAcceleratorOrganizationModal(props: AddAcceleratorOrganizationModalProps): JSX.Element {
-  const { onClose, onSubmit } = props;
+  const { onClose, onSubmit, acceleratorOrgsIds } = props;
   const theme = useTheme();
   const { organizations } = useOrganization();
-
-  const save = () => {
-    onSubmit();
-  };
-
   const [organizationOptions, setOrganizationOptions] = useState<DropdownItem[]>([]);
   const [selectedOrganization, setSelectedOrganization] = useState<string>();
 
   useEffect(() => {
+    const notAcceleratorOrgs = organizations.filter((org) => !acceleratorOrgsIds.includes(org.id));
     setOrganizationOptions(
-      organizations.map((org) => {
+      notAcceleratorOrgs.map((org) => {
         return { label: org.name, value: org.id };
       })
     );
   }, [organizations]);
+
+  const save = () => {
+    onSubmit(selectedOrganization);
+  };
 
   return (
     <DialogBox

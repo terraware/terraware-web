@@ -92,3 +92,6 @@ export function organizationTypeLabel(organizationType: OrganizationType) {
       return strings.ORGANIZATION_TYPE_OTHER;
   }
 }
+
+export type UpdateOrganizationInternalTagsRequestPayload =
+  components['schemas']['UpdateOrganizationInternalTagsRequestPayload'];
