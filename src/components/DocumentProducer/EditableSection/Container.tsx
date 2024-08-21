@@ -30,7 +30,6 @@ type EditableSectionProps = {
   section: SectionVariableWithValues;
   allVariables: VariableWithValues[];
   onUpdate: () => void;
-  manifestId: number;
 };
 
 export default function EditableSectionContainer({
@@ -39,7 +38,6 @@ export default function EditableSectionContainer({
   section,
   allVariables,
   onUpdate,
-  manifestId,
 }: EditableSectionProps): JSX.Element {
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
@@ -164,7 +162,6 @@ export default function EditableSectionContainer({
         docId={docId}
         projectId={projectId}
         onUpdate={onUpdate}
-        manifestId={manifestId}
       />
 
       <Grid paddingTop={theme.spacing(2)}>
