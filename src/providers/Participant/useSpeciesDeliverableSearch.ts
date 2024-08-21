@@ -1,14 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { requestListModuleDeliverables } from 'src/redux/features/modules/modulesAsyncThunks';
-import { selectModuleDeliverables } from 'src/redux/features/modules/modulesSelectors';
+import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
+import { selectDeliverablesSearchRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { DeliverableTypeType } from 'src/types/Deliverables';
-import { ModuleDeliverable } from 'src/types/Module';
+import { DeliverableTypeType, ListDeliverablesElement } from 'src/types/Deliverables';
+
+import { useLocalization } from '../hooks';
 
 interface DeliverableSearch {
-  deliverableSearchResults: ModuleDeliverable[] | undefined;
+  deliverableSearchResults: ListDeliverablesElement[] | undefined;
   hasActiveDeliverable: boolean;
   hasRecentDeliverable: boolean;
   isLoading: boolean;
@@ -24,6 +25,8 @@ interface DeliverableSearch {
  */
 export const useSpeciesDeliverableSearch = (): DeliverableSearch => {
   const dispatch = useAppDispatch();
+  const { activeLocale } = useLocalization();
+
   const {
     currentDeliverables,
     currentParticipantProject,
@@ -32,7 +35,7 @@ export const useSpeciesDeliverableSearch = (): DeliverableSearch => {
   } = useParticipantData();
 
   const [deliverableSearchRequestId, setDeliverableSearchRequestId] = useState('');
-  const deliverableSearchRequest = useAppSelector(selectModuleDeliverables(deliverableSearchRequestId));
+  const deliverableSearchRequest = useAppSelector(selectDeliverablesSearchRequest(deliverableSearchRequestId));
 
   const hasActiveDeliverable = useMemo(
     () => !!(currentDeliverables || []).find((deliverable) => deliverable.type === 'Species'),
@@ -40,7 +43,8 @@ export const useSpeciesDeliverableSearch = (): DeliverableSearch => {
   );
 
   const hasRecentDeliverable = useMemo(
-    () => deliverableSearchRequest?.status === 'success' && (deliverableSearchRequest?.data || []).length > 0,
+    () =>
+      deliverableSearchRequest?.status === 'success' && (deliverableSearchRequest?.data?.deliverables || []).length > 0,
     [deliverableSearchRequest]
   );
 
@@ -60,17 +64,28 @@ export const useSpeciesDeliverableSearch = (): DeliverableSearch => {
     }
 
     const deliverableRequest = dispatch(
-      requestListModuleDeliverables({
-        projectIds: [currentParticipantProject.id],
-        moduleIds: _modules.map((module) => module.id),
-        searchChildren: [
-          {
-            operation: 'field',
-            field: 'type(raw)',
-            type: 'Exact',
-            values: ['Species' as DeliverableTypeType],
-          },
-        ],
+      requestListDeliverables({
+        locale: activeLocale,
+        listRequest: {
+          projectId: currentParticipantProject.id,
+        },
+        search: {
+          operation: 'and',
+          children: [
+            {
+              operation: 'field',
+              field: 'type(raw)',
+              type: 'Exact',
+              values: ['Species' as DeliverableTypeType],
+            },
+            {
+              operation: 'field',
+              field: 'moduleId',
+              type: 'Exact',
+              values: [_modules.map((module) => module.id)],
+            },
+          ],
+        },
       })
     );
     setDeliverableSearchRequestId(deliverableRequest.requestId);
@@ -83,7 +98,7 @@ export const useSpeciesDeliverableSearch = (): DeliverableSearch => {
 
   return useMemo<DeliverableSearch>(
     () => ({
-      deliverableSearchResults: deliverableSearchRequest?.data,
+      deliverableSearchResults: deliverableSearchRequest?.data?.deliverables,
       hasActiveDeliverable,
       hasRecentDeliverable,
       isLoading: deliverableSearchRequest?.status === 'pending' || isParticipantDataLoading,

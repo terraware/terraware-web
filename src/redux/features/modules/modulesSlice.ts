@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { Module, ModuleDeliverable } from 'src/types/Module';
+import { ListDeliverablesElement } from 'src/types/Deliverables';
+import { Module } from 'src/types/Module';
 
 import { StatusT, buildReducers } from '../asyncUtils';
 import {
@@ -55,7 +56,7 @@ export const moduleProjectsSlice = createSlice({
 /**
  * List module deliverables for a project module pair
  */
-const initialStateModuleDeliverables: { [key: string]: StatusT<ModuleDeliverable[]> } = {};
+const initialStateModuleDeliverables: { [key: string]: StatusT<ListDeliverablesElement[]> } = {};
 
 export const ModuleDeliverablesSlice = createSlice({
   name: 'ModuleDeliverablesSlice',

@@ -1,10 +1,11 @@
 import { createContext, useContext } from 'react';
 
-import { Module, ModuleDeliverable, ModuleEvent, ModuleEventSession } from 'src/types/Module';
+import { ListDeliverablesElement } from 'src/types/Deliverables';
+import { Module, ModuleEvent, ModuleEventSession } from 'src/types/Module';
 
 export type ModuleData = {
   allSessions: ModuleEventSession[];
-  deliverables: ModuleDeliverable[];
+  deliverables: ListDeliverablesElement[];
   event?: ModuleEvent;
   module?: Module;
   moduleId: number;

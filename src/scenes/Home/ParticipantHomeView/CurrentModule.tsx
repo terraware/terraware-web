@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react';
 
+import { DateTime } from 'luxon';
+
 import ModuleDetailsCard from 'src/components/ModuleDetailsCard';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
@@ -22,6 +24,7 @@ const CurrentModule = () => {
       currentParticipantProject
         ? (currentDeliverables || []).map((deliverable) => ({
             ...deliverable,
+            dueDate: deliverable.dueDate ? DateTime.fromISO(deliverable.dueDate) : undefined,
             onClick: () => goToDeliverable(deliverable.id, currentParticipantProject.id),
           }))
         : [],
