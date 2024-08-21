@@ -42,7 +42,6 @@ type EditableSectionEditProps = {
   docId: number;
   projectId: number;
   onUpdate: () => void;
-  manifestId: number;
 };
 
 const SectionEdit = ({
@@ -53,7 +52,6 @@ const SectionEdit = ({
   docId,
   projectId,
   onUpdate,
-  manifestId,
 }: EditableSectionEditProps): JSX.Element => {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
@@ -194,7 +192,6 @@ const SectionEdit = ({
           projectId={projectId}
           onFinish={variableUpdated}
           onCancel={() => setOpenEditVariableModal(false)}
-          manifestId={manifestId}
         />
       )}
       {recommendedVariables && recommendedVariables.length > 0 && (
