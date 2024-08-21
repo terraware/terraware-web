@@ -21,6 +21,15 @@ export const ApplicationReviewStatuses: ApplicationReviewStatus[] = [
   'Pre-check',
   'Ready for Review',
   'Submitted',
-  'Passed Pre-screen',
-  'Failed Pre-screen',
 ];
+
+export const getApplicationStatusLabel = (status: ApplicationStatus): string => {
+  switch (status) {
+    case 'Issue Active':
+    case 'Issue Pending':
+    case 'Issue Resolved':
+      return `Waitlist - ${status}`;
+    default:
+      return status;
+  }
+};
