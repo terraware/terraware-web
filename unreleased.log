@@ -1,3 +1,4 @@
+5a591b2eb07 Fix the issue with Chrome > 126 blurring when focusing on child elements (#3062)
 746e9a72cae Make yarn docker:stop remove containers (#3058)
 bb440b5e4e5 Update BE types (#3057)
 f4b9f7b1483 Clean up unused prop (#3059)
