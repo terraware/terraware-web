@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { BusySpinner, Dropdown, SelectT } from '@terraware/web-components';
-import { DateTime } from 'luxon';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
@@ -14,6 +13,7 @@ import strings from 'src/strings';
 import { getSpeciesNativeCategoryOptions } from 'src/types/ParticipantProjectSpecies';
 import { Project } from 'src/types/Project';
 import { SpeciesDeliverable } from 'src/types/ProjectSpecies';
+import { today } from 'src/utils/dateUtils';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -71,7 +71,6 @@ export default function AddToProjectModal(props: AddToProjectModalProps): JSX.El
 
   useEffect(() => {
     if (deliverableSearchRequest?.status === 'success') {
-      const today = DateTime.now().toUTC().startOf('day');
       const activeOrPastDeliverables = (deliverableSearchRequest?.data || []).filter(
         (deliverable: SpeciesDeliverable) => deliverable.moduleStartDate.toUTC().startOf('day') <= today
       );

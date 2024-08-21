@@ -24,7 +24,11 @@ const Metadata = (props: ViewProps): JSX.Element => {
 
   const onUpdateInternalComment = useCallback(
     (internalComment: string) => {
-      update({ ...deliverable, internalComment });
+      update({
+        ...deliverable,
+        status: deliverable.status === 'Overdue' ? 'Not Submitted' : deliverable.status,
+        internalComment,
+      });
     },
     [deliverable]
   );

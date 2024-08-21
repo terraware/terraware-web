@@ -6,13 +6,13 @@ import { FileChooser } from '@terraware/web-components';
 import StatusChangeConfirmationDialog from 'src/components/DeliverableView/StatusChangeConfirmationDialog';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { DeliverableStatusType } from 'src/types/Deliverables';
+import { DeliverableStatusTypeWithOverdue } from 'src/types/Deliverables';
 
 import FileUploadDialog from './FileUploadDialog';
 import { ViewProps } from './types';
 
 type DocumentUploaderProps = ViewProps & {
-  deliverableStatusesToIgnore: DeliverableStatusType[];
+  deliverableStatusesToIgnore: DeliverableStatusTypeWithOverdue[];
   maxFiles?: number;
 };
 

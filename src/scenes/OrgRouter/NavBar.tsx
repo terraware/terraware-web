@@ -130,7 +130,7 @@ export default function NavBar({
       const response = await DeliverablesService.list(activeLocale, {
         organizationId: selectedOrganization.id,
       });
-      setHasDeliverables(!!(response && response.deliverables.length > 0));
+      setHasDeliverables(!!(response && response.data && response.data.length > 0));
     };
     if (isManagerOrHigher(selectedOrganization)) {
       fetchDeliverables();

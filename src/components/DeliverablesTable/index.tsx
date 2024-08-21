@@ -14,9 +14,9 @@ import strings from 'src/strings';
 import { AcceleratorOrgProject } from 'src/types/Accelerator';
 import {
   DeliverableCategories,
-  DeliverableStatuses,
+  DeliverableStatusesWithOverdue,
   DeliverableTypes,
-  ListDeliverablesElement,
+  ListDeliverablesElementWithOverdue,
 } from 'src/types/Deliverables';
 import { ParticipantProjectSearchResult } from 'src/types/Participant';
 import { Project } from 'src/types/Project';
@@ -35,7 +35,7 @@ interface DeliverablesTableProps {
   isAcceleratorRoute?: boolean;
   organizationId: number;
   participantId?: number;
-  searchAndSort?: SearchAndSortFn<ListDeliverablesElement>;
+  searchAndSort?: SearchAndSortFn<ListDeliverablesElementWithOverdue>;
   tableId: string;
 }
 
@@ -102,7 +102,7 @@ const DeliverablesTable = ({
   const { selectedOrganization } = useOrganization();
   const { selectedParticipant } = useParticipants(participantId);
 
-  const [deliverables, setDeliverables] = useState<ListDeliverablesElement[]>([]);
+  const [deliverables, setDeliverables] = useState<ListDeliverablesElementWithOverdue[]>([]);
   const [deliverablesSearchRequestId, setDeliverablesSearchRequestId] = useState('');
   const deliverablesSearchRequest = useAppSelector(selectDeliverablesSearchRequest(deliverablesSearchRequestId));
   const query = useQuery();
@@ -145,7 +145,7 @@ const DeliverablesTable = ({
         // These options are strings for now, but may end up as enums when the BE types come through, if that is
         // the case we will need to implement the renderOption and pillValueRenderer to render the desired
         // human readable values
-        options: DeliverableStatuses,
+        options: DeliverableStatusesWithOverdue,
         label: strings.STATUS,
       },
       {
@@ -220,8 +220,9 @@ const DeliverablesTable = ({
 
   useEffect(() => {
     // TODO do something if the request has an error
-    if (deliverablesSearchRequest && deliverablesSearchRequest.data?.deliverables) {
-      setDeliverables(deliverablesSearchRequest.data.deliverables);
+    console.log(deliverablesSearchRequest);
+    if (deliverablesSearchRequest && deliverablesSearchRequest.status === 'success') {
+      setDeliverables(deliverablesSearchRequest.data ?? []);
     }
   }, [deliverablesSearchRequest]);
 
