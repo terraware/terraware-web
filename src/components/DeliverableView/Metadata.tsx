@@ -1,9 +1,11 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
-import { Box, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
+import { DateTime } from 'luxon';
 
 import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -13,6 +15,7 @@ import useUpdateDeliverable from './useUpdateDeliverable';
 
 const Metadata = (props: ViewProps): JSX.Element => {
   const { deliverable, hideStatusBadge } = props;
+  const { activeLocale } = useLocalization();
 
   const snackbar = useSnackbar();
   const theme = useTheme();
@@ -33,6 +36,16 @@ const Metadata = (props: ViewProps): JSX.Element => {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
   }, [status, snackbar]);
+
+  const dueDateText = useMemo(() => {
+    if (!activeLocale || !deliverable.dueDate) {
+      return '';
+    }
+
+    const dueDate = DateTime.fromISO(deliverable.dueDate).toFormat('yyyy-MM-dd');
+
+    return strings.formatString(strings.DUE_DATE_PREFIX, dueDate).toString();
+  }, [activeLocale, deliverable]);
 
   return (
     <Box display='flex' flexDirection='column'>
@@ -58,6 +71,10 @@ const Metadata = (props: ViewProps): JSX.Element => {
             <DeliverableStatusBadge status={deliverable.status} />
           </div>
         )}
+
+        <Typography fontWeight={400} fontSize={'14px'} lineHeight={'20px'} fontStyle={'italic'}>
+          {dueDateText}
+        </Typography>
 
         <div dangerouslySetInnerHTML={{ __html: deliverable.descriptionHtml || '' }} />
       </Box>
