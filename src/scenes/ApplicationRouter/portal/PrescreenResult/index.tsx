@@ -155,7 +155,7 @@ const PrescreenResultViewWrapper = () => {
   );
 
   return (
-    <ApplicationPage crumbs={crumbs} showFeedback={false}>
+    <ApplicationPage crumbs={crumbs} hideFeedback>
       <PrescreenResultView
         feedback={selectedApplication?.feedback}
         isFailure={!!selectedApplication && selectedApplication.status === 'Failed Pre-screen'}
