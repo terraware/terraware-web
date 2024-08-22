@@ -5,27 +5,46 @@ import { Dropdown, DropdownItem } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
-import { useOrganization } from 'src/providers';
+import {
+  ACCELERATOR_ORG_TAG_ID,
+  requestListAllOrganizationsInternalTags,
+} from 'src/redux/features/organizations/organizationsAsyncThunks';
+import { listAllOrganizationsInternalTags } from 'src/redux/features/organizations/organizationsSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { OrganizationWithInternalTags } from 'src/types/Organization';
 
 export interface AddAcceleratorOrganizationModalProps {
   onClose: (reload?: boolean) => void;
   onSubmit: (orgId?: string) => void;
-  acceleratorOrgsIds: number[];
 }
 
 export default function AddAcceleratorOrganizationModal(props: AddAcceleratorOrganizationModalProps): JSX.Element {
-  const { onClose, onSubmit, acceleratorOrgsIds } = props;
+  const { onClose, onSubmit } = props;
   const theme = useTheme();
-  const { organizations } = useOrganization();
+  const dispatch = useAppDispatch();
+  const [requestId, setRequestId] = useState('');
+  const requestAllOrganizations = useAppSelector(listAllOrganizationsInternalTags(requestId));
   const [organizationOptions, setOrganizationOptions] = useState<DropdownItem[]>([]);
   const [selectedOrganization, setSelectedOrganization] = useState<string>();
+  const [organizations, setOrganizations] = useState<OrganizationWithInternalTags[]>([]);
 
   useEffect(() => {
-    const notAcceleratorOrgs = organizations.filter((org) => !acceleratorOrgsIds.includes(org.id));
+    const request = dispatch(requestListAllOrganizationsInternalTags());
+    setRequestId(request.requestId);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (requestAllOrganizations?.status === 'success' && requestAllOrganizations?.data) {
+      setOrganizations(requestAllOrganizations.data);
+    }
+  }, [requestAllOrganizations]);
+
+  useEffect(() => {
+    const notAcceleratorOrgs = organizations.filter((org) => !org.internalTagIds.includes(ACCELERATOR_ORG_TAG_ID));
     setOrganizationOptions(
       notAcceleratorOrgs.map((org) => {
-        return { label: org.name, value: org.id };
+        return { label: org.organizationName, value: org.organizationId };
       })
     );
   }, [organizations]);

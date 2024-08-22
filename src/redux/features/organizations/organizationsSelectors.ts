@@ -10,3 +10,6 @@ export const selectAddAcceleratorOrganization = (requestId: string) => (state: R
 
 export const selectRemoveAcceleratorOrganizations = (requestId: string) => (state: RootState) =>
   state.removeAcceleratorOrganizations[requestId];
+
+export const listAllOrganizationsInternalTags = (requestId: string) => (state: RootState) =>
+  state.listAllOrganizationsInternalTags[requestId];

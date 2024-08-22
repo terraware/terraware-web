@@ -95,3 +95,5 @@ export function organizationTypeLabel(organizationType: OrganizationType) {
 
 export type UpdateOrganizationInternalTagsRequestPayload =
   components['schemas']['UpdateOrganizationInternalTagsRequestPayload'];
+
+export type OrganizationWithInternalTags = components['schemas']['OrganizationInternalTagsPayload'];

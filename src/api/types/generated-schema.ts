@@ -299,7 +299,7 @@ export interface paths {
     get: operations["listDocumentTemplates"];
   };
   "/api/v1/document-producer/variables": {
-    /** List the variables, optionally filtered by a given manifest or deliverable. */
+    /** List the variables, optionally filtered by a given manifest or deliverable. Variables returned for a manifest include all section hierarchies and variables injected into section text. */
     get: operations["listVariables"];
   };
   "/api/v1/facilities": {
@@ -363,6 +363,19 @@ export interface paths {
   "/api/v1/internalTags": {
     /** List all the available internal tags */
     get: operations["listAllInternalTags"];
+  };
+  "/api/v1/internalTags/organizations": {
+    /**
+     * List the internal tags assigned to all organizations
+     * @description This includes organizations with no internal tags, whose list of tags will be empty.
+     */
+    get: operations["listAllOrganizationInternalTags"];
+  };
+  "/api/v1/internalTags/organizations/{organizationId}": {
+    /** List the internal tags assigned to an organization */
+    get: operations["listOrganizationInternalTags"];
+    /** Replace the list of internal tags assigned to an organization */
+    put: operations["updateOrganizationInternalTags"];
   };
   "/api/v1/login": {
     /**
@@ -508,12 +521,6 @@ export interface paths {
      * @description Organizations can only be deleted if they have no members other than the current user.
      */
     delete: operations["deleteOrganization"];
-  };
-  "/api/v1/organizations/{organizationId}/internalTags": {
-    /** List the internal tags assigned to an organization */
-    get: operations["listOrganizationInternalTags"];
-    /** Replace the list of internal tags assigned to an organization */
-    put: operations["updateOrganizationInternalTags"];
   };
   "/api/v1/organizations/{organizationId}/roles": {
     /** Lists the roles in an organization. */
@@ -1294,6 +1301,7 @@ export interface components {
     };
     ApplicationPayload: {
       boundary?: components["schemas"]["MultiPolygon"];
+      countryCode?: string;
       /** Format: date-time */
       createdTime: string;
       feedback?: string;
@@ -2142,7 +2150,11 @@ export interface components {
       /** @description Optional description of the deliverable in HTML form. */
       descriptionHtml?: string;
       documents: components["schemas"]["SubmissionDocumentPayload"][];
-      /** @description If the deliverable has been reviewed, the user-visible feedback from the review. */
+      /**
+       * Format: date
+       * @description If the deliverable has been reviewed, the user-visible feedback from the review.
+       */
+      dueDate?: string;
       feedback?: string;
       /** Format: int64 */
       id: number;
@@ -2990,6 +3002,10 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
       tags: components["schemas"]["InternalTagPayload"][];
     };
+    ListAllOrganizationInternalTagsResponsePayload: {
+      organizations: components["schemas"]["OrganizationInternalTagsPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     ListApplicationsResponsePayload: {
       applications: components["schemas"]["ApplicationPayload"][];
       status: components["schemas"]["SuccessOrError"];
@@ -3633,6 +3649,12 @@ export interface components {
       /** @description List of criteria at least one of which must be satisfied */
       children?: components["schemas"]["SearchNodePayload"][];
     }, "children">;
+    OrganizationInternalTagsPayload: {
+      internalTagIds: number[];
+      /** Format: int64 */
+      organizationId: number;
+      organizationName: string;
+    };
     OrganizationPayload: {
       /** @description Whether this organization can submit reports to Terraformation. */
       canSubmitReports: boolean;
@@ -6901,12 +6923,12 @@ export interface operations {
       };
     };
   };
-  /** List the variables, optionally filtered by a given manifest or deliverable. */
+  /** List the variables, optionally filtered by a given manifest or deliverable. Variables returned for a manifest include all section hierarchies and variables injected into section text. */
   listVariables: {
     parameters: {
       query?: {
         deliverableId?: number;
-        manifestId?: number;
+        documentId?: number;
       };
     };
     responses: {
@@ -7252,6 +7274,57 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["ListAllInternalTagsResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * List the internal tags assigned to all organizations
+   * @description This includes organizations with no internal tags, whose list of tags will be empty.
+   */
+  listAllOrganizationInternalTags: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListAllOrganizationInternalTagsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** List the internal tags assigned to an organization */
+  listOrganizationInternalTags: {
+    parameters: {
+      path: {
+        organizationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListOrganizationInternalTagsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Replace the list of internal tags assigned to an organization */
+  updateOrganizationInternalTags: {
+    parameters: {
+      path: {
+        organizationId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateOrganizationInternalTagsRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -7983,43 +8056,6 @@ export interface operations {
       409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  /** List the internal tags assigned to an organization */
-  listOrganizationInternalTags: {
-    parameters: {
-      path: {
-        organizationId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListOrganizationInternalTagsResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Replace the list of internal tags assigned to an organization */
-  updateOrganizationInternalTags: {
-    parameters: {
-      path: {
-        organizationId: number;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateOrganizationInternalTagsRequestPayload"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };

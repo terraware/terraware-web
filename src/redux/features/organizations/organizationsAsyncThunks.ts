@@ -84,3 +84,15 @@ export const requestAddAcceleratorOrganization = createAsyncThunk(
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );
+
+export const requestListAllOrganizationsInternalTags = createAsyncThunk(
+  'organizations/list-all',
+  async (_, { rejectWithValue }) => {
+    const response = await OrganizationService.getAllOrganizationsInternalTags();
+    if (response !== null && response.requestSucceeded && response.organizations !== undefined) {
+      return response.organizations;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);

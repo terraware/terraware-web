@@ -146,11 +146,7 @@ const OrganizationsView = () => {
   return (
     <>
       {addOrgModalOpened && (
-        <AddAcceleratorOrganizationModal
-          onSubmit={onAddOrganization}
-          onClose={() => setAddOrgModalOpened(false)}
-          acceleratorOrgsIds={acceleratorOrganizations.map((org) => org.id)}
-        />
+        <AddAcceleratorOrganizationModal onSubmit={onAddOrganization} onClose={() => setAddOrgModalOpened(false)} />
       )}
       <TableWithSearchFilters
         columns={() => columns(activeLocale)}
