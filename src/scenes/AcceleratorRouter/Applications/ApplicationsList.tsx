@@ -20,7 +20,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import ApplicationCellRenderer from './ApplicationCellRenderer';
 
 type ApplicationRow = {
-  countryCode: string;
+  countryCode?: string;
   id: number;
   internalName: string;
   organizationName: string;
@@ -130,8 +130,7 @@ const ApplicationList = () => {
         result.data
           .filter((application) => application.status !== 'Not Submitted')
           .map((application) => ({
-            // TODO: get country code from API search results
-            countryCode: '',
+            countryCode: application?.countryCode,
             id: application.id,
             // TODO: only use internal name once the column becomes mandatory
             internalName: application.internalName ?? application.projectName,
