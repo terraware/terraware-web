@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1724361678102" clover="3.2.0">
-  <project timestamp="1724361678102" name="All files">
-    <metrics statements="24257" coveredstatements="1007" conditionals="15803" coveredconditionals="266" methods="7484" coveredmethods="174" elements="47544" coveredelements="1447" complexity="0" loc="24257" ncloc="24257" packages="230" files="1062" classes="1062"/>
+<coverage generated="1724366498110" clover="3.2.0">
+  <project timestamp="1724366498111" name="All files">
+    <metrics statements="24258" coveredstatements="1007" conditionals="15805" coveredconditionals="266" methods="7484" coveredmethods="174" elements="47547" coveredelements="1447" complexity="0" loc="24258" ncloc="24258" packages="230" files="1062" classes="1062"/>
     <package name="src">
       <metrics statements="176" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -1942,9 +1942,9 @@
       </file>
     </package>
     <package name="src.components.DeliverablesTable">
-      <metrics statements="65" coveredstatements="0" conditionals="44" coveredconditionals="0" methods="18" coveredmethods="0"/>
+      <metrics statements="66" coveredstatements="0" conditionals="46" coveredconditionals="0" methods="18" coveredmethods="0"/>
       <file name="DeliverableCellRenderer.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverablesTable/DeliverableCellRenderer.tsx">
-        <metrics statements="14" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <metrics statements="15" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="13" count="0" type="stmt"/>
         <line num="14" count="0" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
@@ -1957,8 +1957,9 @@
         <line num="49" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="50" count="0" type="stmt"/>
         <line num="60" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="61" count="0" type="stmt"/>
-        <line num="64" count="0" type="stmt"/>
+        <line num="61" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DeliverablesTable/index.tsx">
         <metrics statements="51" coveredstatements="0" conditionals="32" coveredconditionals="0" methods="16" coveredmethods="0"/>
