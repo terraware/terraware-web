@@ -29,7 +29,6 @@ import TableWithSearchFilters from '../TableWithSearchFilters';
 import DeliverableCellRenderer from './DeliverableCellRenderer';
 
 interface DeliverablesTableProps {
-  acceleratorProjects?: AcceleratorOrgProject[];
   extraTableFilters?: SearchNodePayload[];
   filterModifiers?: (filters: FilterConfig[]) => FilterConfig[];
   isAcceleratorRoute?: boolean;
@@ -87,7 +86,6 @@ const defaultSearchOrder: SearchSortOrder = {
 };
 
 const DeliverablesTable = ({
-  acceleratorProjects,
   extraTableFilters,
   filterModifiers,
   isAcceleratorRoute,
@@ -112,10 +110,11 @@ const DeliverablesTable = ({
 
   const projectsFilterOptions = useMemo(
     () =>
-      (acceleratorProjects || []).filter((project) =>
-        deliverables.find((deliverable) => deliverable.projectId === project.id)
-      ),
-    [acceleratorProjects, deliverables]
+      deliverables.map((deliverable) => ({
+        id: deliverable.projectId,
+        name: deliverable.projectName,
+      })),
+    [deliverables]
   );
 
   const isAllowedReadDeliverable = isAllowed('READ_DELIVERABLE', { organization: selectedOrganization });
