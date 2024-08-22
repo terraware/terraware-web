@@ -19,11 +19,7 @@ const FeedbackMessage = ({ feedback }: FeedbackMessageProps) => {
         body={
           <>
             <Typography sx={{ margin: 0 }}>{strings.APPLICATION_PRESCREEN_FAILURE_SUBTITLE}</Typography>
-            {feedback && (
-              <Typography sx={{ margin: 0 }} whiteSpace={'pre-line'}>
-                {feedback}
-              </Typography>
-            )}
+            {feedback && <Box dangerouslySetInnerHTML={{ __html: feedback || '' }} />}
           </>
         }
       />

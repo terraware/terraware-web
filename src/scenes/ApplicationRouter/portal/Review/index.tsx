@@ -18,13 +18,12 @@ import ReviewCard from './ReviewCard';
 type ApplicationStatusProps = {
   body: string;
   buttonLabel: string;
-  feedback?: string;
   isFailure?: boolean;
   onClickButton: () => void;
   title: string;
 };
 
-const ApplicationStatus = ({ body, buttonLabel, feedback, onClickButton, title }: ApplicationStatusProps) => {
+const ApplicationStatus = ({ body, buttonLabel, onClickButton, title }: ApplicationStatusProps) => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
 
@@ -45,7 +44,6 @@ const ApplicationStatus = ({ body, buttonLabel, feedback, onClickButton, title }
       <Typography sx={{ marginBottom: theme.spacing(2), textAlign: 'center' }} whiteSpace={'pre-line'}>
         {body}
       </Typography>
-      {feedback && <Box dangerouslySetInnerHTML={{ __html: feedback || '' }} />}
       <Button label={buttonLabel} onClick={onClickButton} priority='secondary' />
     </Card>
   );
