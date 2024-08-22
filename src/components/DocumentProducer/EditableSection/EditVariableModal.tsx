@@ -14,16 +14,9 @@ type EditVariableModalProps = {
   onFinish: () => void;
   onCancel: () => void;
   projectId: number;
-  manifestId: number;
 };
 
-export default function EditVariableModal({
-  variable,
-  onFinish,
-  onCancel,
-  projectId,
-  manifestId,
-}: EditVariableModalProps) {
+export default function EditVariableModal({ variable, onFinish, onCancel, projectId }: EditVariableModalProps) {
   switch (variable.type) {
     case 'Image':
       return (
@@ -48,9 +41,7 @@ export default function EditVariableModal({
     case 'Select':
     case 'Number':
     case 'Text':
-      return (
-        <EditVariable variableId={variable.id} projectId={projectId} onFinish={onFinish} manifestId={manifestId} />
-      );
+      return <EditVariable variableId={variable.id} projectId={projectId} onFinish={onFinish} />;
     default:
       return null;
   }

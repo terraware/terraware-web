@@ -1,11 +1,12 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { FormControlLabel, Grid, Radio, RadioGroup, useTheme } from '@mui/material';
-import { BusySpinner, Dropdown } from '@terraware/web-components';
+import { BusySpinner, Dropdown, DropdownItem } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
@@ -19,6 +20,7 @@ import {
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import { useApplicationData } from '../../providers/Application/Context';
 
@@ -31,22 +33,22 @@ type NewApplication = {
 export type NewApplicationModalProps = {
   open: boolean;
   onClose: () => void;
-  onApplicationCreated: (applicationId: number) => void;
 };
 
-const NewApplicationModal = ({ open, onClose, onApplicationCreated }: NewApplicationModalProps): JSX.Element => {
+const NewApplicationModal = ({ open, onClose }: NewApplicationModalProps): JSX.Element => {
   const theme = useTheme();
-
   const { activeLocale } = useLocalization();
   const { availableProjects } = useProjects();
   const { selectedOrganization } = useOrganization();
   const { allApplications } = useApplicationData();
   const dispatch = useAppDispatch();
+  const { toastSuccess } = useSnackbar();
+  const { goToApplication } = useNavigateTo();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
   const [projectNameError, setProjectNameError] = useState<string>('');
   const [projectSelectError, setProjectSelectError] = useState<string>('');
+  const [projectOptions, setProjectOptions] = useState<DropdownItem[]>([]);
 
   const [createProjectApplicationRequestId, setCreateProjectApplicationRequestId] = useState<string>('');
   const [createApplicationRequestId, setCreateApplicationRequestId] = useState<string>('');
@@ -56,18 +58,30 @@ const NewApplicationModal = ({ open, onClose, onApplicationCreated }: NewApplica
   );
   const createApplicationResult = useAppSelector(selectApplicationCreate(createApplicationRequestId));
 
-  const [newApplication, , onChange] = useForm<NewApplication>({
-    projectType: availableProjects && availableProjects.length > 0 ? 'Existing' : 'New',
-    projectId: availableProjects && availableProjects.length > 0 ? availableProjects[0].id : undefined,
+  const [newApplication, setNewApplication, onChange] = useForm<NewApplication>({
+    projectType: 'New',
+    projectId: undefined,
   });
 
-  const projectOptions = useMemo(
-    () =>
-      (availableProjects || [])
-        .filter((project) => allApplications?.every((application) => application.projectId !== project.id))
-        .map((project) => ({ label: project.name, value: project.id })),
-    [availableProjects]
-  );
+  // Init the options and auto select the first project option if there is a project without an application
+  useEffect(() => {
+    if (!allApplications || allApplications.length === 0) {
+      return;
+    }
+
+    const nextProjectOptions = (availableProjects || [])
+      .filter((project) => !allApplications.some((application) => application.projectId === project.id))
+      .map((project) => ({ label: project.name, value: project.id }));
+
+    setProjectOptions(nextProjectOptions);
+
+    if (newApplication.projectType === 'New' && nextProjectOptions.length) {
+      setNewApplication({
+        projectType: 'Existing',
+        projectId: nextProjectOptions[0]?.value,
+      });
+    }
+  }, [allApplications, availableProjects, newApplication, setNewApplication]);
 
   const validateProjectName = useCallback(
     (name: string) => {
@@ -144,6 +158,16 @@ const NewApplicationModal = ({ open, onClose, onApplicationCreated }: NewApplica
     setCreateProjectApplicationRequestId,
     setIsLoading,
   ]);
+
+  const onApplicationCreated = useCallback(
+    (applicationId: number) => {
+      if (activeLocale) {
+        toastSuccess(strings.SUCCESS);
+      }
+      goToApplication(applicationId);
+    },
+    [activeLocale, goToApplication, toastSuccess]
+  );
 
   useEffect(() => {
     if (createApplicationResult && createApplicationResult.status === 'success' && createApplicationResult.data) {

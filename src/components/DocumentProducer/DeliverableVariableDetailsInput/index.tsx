@@ -27,6 +27,7 @@ import { PhotoWithAttributes } from '../EditImagesModal/PhotoSelector';
 import { VariableTableCell } from '../EditableTableModal/helpers';
 
 export type DeliverableVariableDetailsInputProps = {
+  hideDescription?: boolean;
   values: VariableValueValue[];
   setCellValues?: (values: VariableTableCell[][]) => void;
   setDeletedImages: (values: VariableValueImageValue[]) => void;
@@ -39,6 +40,7 @@ export type DeliverableVariableDetailsInputProps = {
 };
 
 const DeliverableVariableDetailsInput = ({
+  hideDescription,
   values,
   setCellValues,
   setDeletedImages,
@@ -243,7 +245,7 @@ const DeliverableVariableDetailsInput = ({
 
   return (
     <>
-      {variable.description && (
+      {variable.description && hideDescription !== true && (
         <Textfield
           id='description'
           label=''
@@ -251,6 +253,7 @@ const DeliverableVariableDetailsInput = ({
           value={variable.description}
           display={true}
           sx={[
+            { marginTop: '-8px' },
             {
               '& p.textfield-value--display': {
                 color: theme.palette.TwClrTxtSecondary,
@@ -321,7 +324,6 @@ const DeliverableVariableDetailsInput = ({
           type={variable.type === 'Number' ? 'number' : 'text'}
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
           value={value?.toString()}
-          helperText={variable.type === 'Number' ? strings.ROUNDED_INFO : ''}
           sx={[formElementStyles, textFieldLabelStyles]}
         />
       )}

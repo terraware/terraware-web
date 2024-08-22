@@ -15,6 +15,7 @@ import { requestListDeliverableVariables } from 'src/redux/features/documentProd
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValue, VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
+import { variableDependencyMet } from 'src/utils/documentProducer/variables';
 import useQuery from 'src/utils/useQuery';
 
 import VariableStatusBadge from '../Variables/VariableStatusBadge';
@@ -57,7 +58,7 @@ const QuestionBox = ({
 
   return (
     <Box key={index} data-variable-id={variable.id}>
-      <Grid container spacing={2} sx={{ marginBottom: '24px', padding: 0 }} textAlign='left'>
+      <Grid container spacing={2} sx={{ marginBottom: '32px', padding: 0 }} textAlign='left'>
         <Grid item xs={12}>
           <Box
             sx={{
@@ -67,7 +68,7 @@ const QuestionBox = ({
               width: '100%',
             }}
           >
-            <Typography sx={{ fontWeight: '600' }}>{variable.name}</Typography>
+            <Typography sx={{ fontWeight: '600' }}>{variable.deliverableQuestion ?? variable.name}</Typography>
 
             <Box
               sx={{
@@ -199,26 +200,28 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
               paddingTop: theme.spacing(3),
             }}
           >
-            {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => (
-              <QuestionBox
-                addRemovedValue={(removedValue: VariableValueValue) =>
-                  setRemovedValue(variableWithValues.id, removedValue)
-                }
-                hideStatusBadge={hideStatusBadge}
-                index={index}
-                key={index}
-                pendingVariableValues={pendingVariableValues}
-                projectId={deliverable.projectId}
-                setCellValues={(newValues: VariableTableCell[][]) => setCellValues(variableWithValues.id, newValues)}
-                setDeletedImages={(newValues: VariableValueImageValue[]) =>
-                  setDeletedImages(variableWithValues.id, newValues)
-                }
-                setImages={(newValues: VariableValueImageValue[]) => setImages(variableWithValues.id, newValues)}
-                setNewImages={(newValues: PhotoWithAttributes[]) => setNewImages(variableWithValues.id, newValues)}
-                setValues={(newValues: VariableValueValue[]) => setValues(variableWithValues.id, newValues)}
-                variable={variableWithValues}
-              />
-            ))}
+            {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) =>
+              variableDependencyMet(variableWithValues, variablesWithValues) ? (
+                <QuestionBox
+                  addRemovedValue={(removedValue: VariableValueValue) =>
+                    setRemovedValue(variableWithValues.id, removedValue)
+                  }
+                  hideStatusBadge={hideStatusBadge}
+                  index={index}
+                  key={index}
+                  pendingVariableValues={pendingVariableValues}
+                  projectId={deliverable.projectId}
+                  setCellValues={(newValues: VariableTableCell[][]) => setCellValues(variableWithValues.id, newValues)}
+                  setDeletedImages={(newValues: VariableValueImageValue[]) =>
+                    setDeletedImages(variableWithValues.id, newValues)
+                  }
+                  setImages={(newValues: VariableValueImageValue[]) => setImages(variableWithValues.id, newValues)}
+                  setNewImages={(newValues: PhotoWithAttributes[]) => setNewImages(variableWithValues.id, newValues)}
+                  setValues={(newValues: VariableValueValue[]) => setValues(variableWithValues.id, newValues)}
+                  variable={variableWithValues}
+                />
+              ) : null
+            )}
           </Box>
         </Card>
       </Box>

@@ -1,9 +1,5 @@
-import { DateTime } from 'luxon';
-
 import { components } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
-
-import { DeliverableCategoryType, DeliverableStatusType, DeliverableTypeType } from './Deliverables';
 
 export type Module = components['schemas']['ProjectModule'];
 
@@ -58,19 +54,6 @@ export const getEventStatus = (status: ModuleEventSessionStatus) => {
     default:
       return `${status}`;
   }
-};
-
-export type ModuleDeliverable = {
-  category: DeliverableCategoryType;
-  dueDate: DateTime;
-  id: number;
-  moduleEndDate: DateTime;
-  moduleId: number;
-  moduleStartDate: DateTime;
-  name: string;
-  projectId: number;
-  status: DeliverableStatusType;
-  type: DeliverableTypeType;
 };
 
 export type ModuleContentType = keyof Pick<Module, 'additionalResources' | 'preparationMaterials'>;

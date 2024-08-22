@@ -6,6 +6,7 @@ import { Dropdown, DropdownItem } from '@terraware/web-components';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
+import { useUser } from 'src/providers';
 import { requestReviewApplication } from 'src/redux/features/application/applicationAsyncThunks';
 import { selectApplicationReview } from 'src/redux/features/application/applicationSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -16,6 +17,7 @@ import {
   ApplicationReviewStatus,
   ApplicationReviewStatuses,
   ApplicationStatus,
+  getApplicationStatusLabel,
 } from 'src/types/Application';
 import useForm from 'src/utils/useForm';
 
@@ -33,6 +35,7 @@ const ApplicationReviewModal = ({
   application,
 }: ApplicationReviewModalProps): JSX.Element => {
   const theme = useTheme();
+  const { isAllowed } = useUser();
 
   const dispatch = useAppDispatch();
 
@@ -40,7 +43,7 @@ const ApplicationReviewModal = ({
   const result = useAppSelector(selectApplicationReview(requestId));
 
   const dropdownOptions: DropdownItem[] = ApplicationReviewStatuses.map((status) => ({
-    label: status,
+    label: getApplicationStatusLabel(status),
     value: status,
   }));
 
@@ -63,9 +66,9 @@ const ApplicationReviewModal = ({
 
   const canUpdateStatus = useMemo(
     () =>
-      ApplicationReviewStatuses.find((status) => status === application.status) !== undefined &&
-      !(application.status === 'Failed Pre-screen' || application.status === 'Not Submitted'),
-    [application.status]
+      isAllowed('UPDATE_APPLICATION_STATUS') &&
+      ApplicationReviewStatuses.find((status) => status === application.status) !== undefined,
+    [application.status, isAllowed]
   );
 
   const onCloseWrapper = useCallback(() => {

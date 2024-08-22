@@ -1,6 +1,7 @@
 import { createContext, useContext } from 'react';
 
-import { Module, ModuleDeliverable } from 'src/types/Module';
+import { ListDeliverablesElement } from 'src/types/Deliverables';
+import { Module } from 'src/types/Module';
 import { Participant } from 'src/types/Participant';
 import { Project } from 'src/types/Project';
 
@@ -8,7 +9,7 @@ export type ParticipantData = {
   activeModules?: Module[];
   currentParticipant?: Participant;
   currentParticipantProject?: Project;
-  currentDeliverables?: ModuleDeliverable[];
+  currentDeliverables?: ListDeliverablesElement[];
   isLoading: boolean;
   moduleProjects: Project[];
   modules?: Module[];

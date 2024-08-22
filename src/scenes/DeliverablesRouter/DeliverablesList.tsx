@@ -1,6 +1,6 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { Separator } from '@terraware/web-components';
 
 import DeliverablesTable from 'src/components/DeliverablesTable';
@@ -25,10 +25,18 @@ import {
 
 const DeliverablesList = (): JSX.Element => {
   const { activeLocale } = useLocalization();
-  const { participantProjects } = useParticipantData();
   const { selectedOrganization } = useOrganization();
+  const { participantProjects, currentParticipantProject, moduleProjects, setCurrentParticipantProject } =
+    useParticipantData();
+  const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({
+    projectId: currentParticipantProject?.id || '',
+  });
 
-  const [projectFilter, setProjectFilter] = useState<{ projectId?: number }>({ projectId: undefined });
+  useEffect(() => {
+    if (projectFilter.projectId) {
+      setCurrentParticipantProject(projectFilter.projectId);
+    }
+  }, [projectFilter]);
 
   const extraTableFilters: SearchNodePayload[] = useMemo(
     () =>
@@ -42,7 +50,7 @@ const DeliverablesList = (): JSX.Element => {
             },
           ]
         : [],
-    [projectFilter]
+    [projectFilter.projectId]
   );
 
   const filterModifiers = useCallback(
@@ -61,6 +69,16 @@ const DeliverablesList = (): JSX.Element => {
     []
   );
 
+  const statusOrder = {
+    Rejected: 1,
+    'Not Submitted': 2,
+    'In Review': 3,
+    'Needs Translation': 3,
+    Approved: 4,
+    'Not Needed': 5,
+    Completed: 5,
+  };
+
   const searchAndSort: SearchAndSortFn<ListDeliverablesElement> = useCallback(
     (results: ListDeliverablesElement[], search?: SearchNodePayload, sortOrderConfig?: SearchOrderConfig) => {
       // In the participant view, "needs translation" needs to be "in review", so we will coerce results with "needs translation"
@@ -74,7 +92,29 @@ const DeliverablesList = (): JSX.Element => {
       };
 
       const modifiedSearch = modifySearchNode(modifyStatus, search);
-      return genericSearchAndSort(results, modifiedSearch, sortOrderConfig);
+      const firstSort = genericSearchAndSort(results, modifiedSearch, sortOrderConfig);
+      if (sortOrderConfig?.sortOrder.field === 'status') {
+        const direction = sortOrderConfig?.sortOrder.direction;
+        return firstSort.sort((a, b) => {
+          if (a.status !== b.status) {
+            if (direction === 'Descending') {
+              return statusOrder[b.status] - statusOrder[a.status];
+            } else {
+              return statusOrder[a.status] - statusOrder[b.status];
+            }
+          } else {
+            // if the have same status sort by due date
+            if ((a.dueDate || 0) < (b.dueDate || 0)) {
+              return -1;
+            } else if ((a.dueDate || 0) > (b.dueDate || 0)) {
+              return 1;
+            }
+            return 0;
+          }
+        });
+      } else {
+        return firstSort;
+      }
     },
     []
   );
@@ -83,28 +123,35 @@ const DeliverablesList = (): JSX.Element => {
     () =>
       activeLocale ? (
         <>
-          <Grid container sx={{ marginTop: theme.spacing(0.5) }}>
+          <Grid container sx={{ marginTop: theme.spacing(0.5), alignItems: 'center' }}>
             <Grid item>
               <Separator height={'40px'} />
             </Grid>
-            <Grid item>
-              <Typography sx={{ lineHeight: '40px' }} component={'span'}>
-                {strings.PROJECT}
-              </Typography>
-            </Grid>
-            <Grid item sx={{ marginLeft: theme.spacing(1.5) }}>
-              <ProjectsDropdown
-                allowUnselect
-                availableProjects={participantProjects}
-                label={''}
-                record={projectFilter}
-                setRecord={setProjectFilter}
-              />
-            </Grid>
+            {moduleProjects?.length > 0 && (
+              <Grid item>
+                {moduleProjects?.length > 1 ? (
+                  <Box display='flex'>
+                    <Typography sx={{ lineHeight: '40px', marginRight: theme.spacing(1.5) }} component={'span'}>
+                      {strings.PROJECT}
+                    </Typography>
+                    <ProjectsDropdown
+                      allowUnselect
+                      availableProjects={moduleProjects}
+                      label={''}
+                      record={projectFilter}
+                      setRecord={setProjectFilter}
+                      unselectLabel={strings.ALL}
+                    />
+                  </Box>
+                ) : (
+                  <Typography>{moduleProjects[0].name}</Typography>
+                )}
+              </Grid>
+            )}
           </Grid>
         </>
       ) : null,
-    [activeLocale, participantProjects, projectFilter]
+    [activeLocale, participantProjects, currentParticipantProject, projectFilter]
   );
 
   return (

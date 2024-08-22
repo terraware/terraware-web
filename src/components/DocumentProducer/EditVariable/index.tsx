@@ -32,7 +32,6 @@ import {
 
 export type EditVariableProps = {
   onFinish: (edited: boolean) => void;
-  manifestId: number;
   projectId: number;
   variableId: number;
   sectionsUsed?: string[];

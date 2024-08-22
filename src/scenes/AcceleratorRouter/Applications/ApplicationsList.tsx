@@ -11,7 +11,7 @@ import { selectApplicationList } from 'src/redux/features/application/applicatio
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { LocationService } from 'src/services';
 import strings from 'src/strings';
-import { ApplicationStatus } from 'src/types/Application';
+import { ApplicationReviewStatuses, ApplicationStatus } from 'src/types/Application';
 import { Country } from 'src/types/Country';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { getCountryByCode } from 'src/utils/country';
@@ -91,6 +91,11 @@ const ApplicationList = () => {
         options: (countries || []).map((country) => country.code),
         label: strings.COUNTRY,
         renderOption: (id: string | number) => `${getCountryByCode(countries, id as string)}`,
+      },
+      {
+        field: 'status',
+        options: ApplicationReviewStatuses,
+        label: strings.STATUS,
       },
       {
         field: 'type',

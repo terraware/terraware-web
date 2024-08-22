@@ -67,9 +67,13 @@ export const requestUploadDeliverableDocument = createAsyncThunk(
   async (request: { deliverableId: number; documents: UploadDeliverableDocumentRequest[] }, { rejectWithValue }) => {
     const { deliverableId, documents } = request;
 
-    const response: boolean = await DeliverablesService.upload(deliverableId, documents);
-    if (response) {
+    const responses = await DeliverablesService.upload(deliverableId, documents);
+    if (responses.every((response) => response?.requestSucceeded === true)) {
       return deliverableId;
+    }
+
+    if (responses.find((response) => response?.statusCode === 507)) {
+      return rejectWithValue(strings.ERROR_SUPPORT_NOTIFIED);
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);

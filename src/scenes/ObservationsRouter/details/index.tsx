@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 import { Message, TableColumnType } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
@@ -14,11 +14,14 @@ import {
   selectDetailsZoneNames,
 } from 'src/redux/features/observations/observationDetailsSelectors';
 import { selectObservation } from 'src/redux/features/observations/observationsSelectors';
+import { selectPlantingSite } from 'src/redux/features/tracking/trackingSelectors';
 import { useAppSelector } from 'src/redux/store';
 import AggregatedPlantsStats from 'src/scenes/ObservationsRouter/common/AggregatedPlantsStats';
 import DetailsPage from 'src/scenes/ObservationsRouter/common/DetailsPage';
 import strings from 'src/strings';
+import { Observation } from 'src/types/Observations';
 import { FieldOptionsMap } from 'src/types/Search';
+import { PlantingSite } from 'src/types/Tracking';
 import { getLongDate, getShortDate } from 'src/utils/dateFormatter';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -49,20 +52,24 @@ export type ObservationDetailsProps = SearchProps & {
 export default function ObservationDetails(props: ObservationDetailsProps): JSX.Element {
   const { setFilterOptions } = props;
   const { ...searchProps }: SearchProps = props;
-  const { plantingSiteId, observationId } = useParams<{
-    plantingSiteId: string;
-    observationId: string;
-  }>();
+
   const { activeLocale } = useLocalization();
   const defaultTimeZone = useDefaultTimeZone();
   const navigate = useNavigate();
+  const params = useParams<{
+    plantingSiteId: string;
+    observationId: string;
+  }>();
+
+  const plantingSiteId = Number(params.plantingSiteId || -1);
+  const observationId = Number(params.observationId || -1);
 
   const details = useAppSelector((state) =>
     searchObservationDetails(
       state,
       {
-        plantingSiteId: Number(plantingSiteId),
-        observationId: Number(observationId),
+        plantingSiteId,
+        observationId,
         search: searchProps.search,
         zoneNames: searchProps.filtersProps?.filters.zone?.values ?? [],
       },
@@ -70,13 +77,9 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
     )
   );
 
-  const observation = useAppSelector((state) =>
-    selectObservation(state, Number(plantingSiteId), Number(observationId))
-  );
-
-  const zoneNames = useAppSelector((state) =>
-    selectDetailsZoneNames(state, Number(plantingSiteId), Number(observationId))
-  );
+  const plantingSite = useAppSelector((state) => selectPlantingSite(state, plantingSiteId));
+  const observation = useAppSelector((state) => selectObservation(state, plantingSiteId, observationId));
+  const zoneNames = useAppSelector((state) => selectDetailsZoneNames(state, plantingSiteId, observationId));
 
   const title = useMemo(() => {
     const plantingSiteName = details?.plantingSiteName ?? '';
@@ -115,7 +118,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
 
   useEffect(() => {
     if (!details) {
-      navigate(APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', Number(plantingSiteId).toString()));
+      navigate(APP_PATHS.OBSERVATIONS_SITE.replace(':plantingSiteId', `${plantingSiteId}`));
     }
   }, [details, navigate, plantingSiteId]);
 
@@ -133,7 +136,11 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
 
   return (
     <DetailsPage title={title} plantingSiteId={plantingSiteId}>
-      <ObservationStatusSummaryMessage statusSummary={statusSummary} />
+      <ObservationStatusSummaryMessage
+        plantingZones={plantingSite?.plantingZones}
+        requestedSubzoneIds={observation?.requestedSubzoneIds}
+        statusSummary={statusSummary}
+      />
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <AggregatedPlantsStats {...(details ?? {})} />
@@ -147,7 +154,7 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
                 columns={columns}
                 rows={details?.plantingZones ?? []}
                 orderBy='plantingZoneName'
-                Renderer={ObservationDetailsRenderer(Number(plantingSiteId), Number(observationId))}
+                Renderer={ObservationDetailsRenderer(plantingSiteId, observationId)}
               />
             </Box>
           </Card>
@@ -158,12 +165,49 @@ export default function ObservationDetails(props: ObservationDetailsProps): JSX.
 }
 
 type ObservationStatusSummaryMessageProps = {
+  plantingZones?: PlantingSite['plantingZones'];
+  requestedSubzoneIds?: Observation['requestedSubzoneIds'];
   statusSummary?: ObservationStatusSummary;
 };
 
 const ObservationStatusSummaryMessage = ({
+  plantingZones,
+  requestedSubzoneIds,
   statusSummary,
 }: ObservationStatusSummaryMessageProps): JSX.Element | null => {
+  const theme = useTheme();
+
+  const subzoneMessageBody = useMemo(() => {
+    if (!requestedSubzoneIds || requestedSubzoneIds.length === 0 || !plantingZones || plantingZones.length === 0) {
+      return undefined;
+    }
+
+    const zoneListItems: JSX.Element[] = plantingZones
+      .map((zone, index): JSX.Element | null => {
+        const subzoneNames = zone.plantingSubzones
+          .filter((subzone) => requestedSubzoneIds.includes(subzone.id))
+          .map((subzone) => subzone.name);
+
+        if (subzoneNames.length === 0) {
+          return null;
+        }
+
+        return <li key={index}>{`${zone.name}: ${subzoneNames.join(', ')}`}</li>;
+      })
+      .filter((element: JSX.Element | null): element is JSX.Element => element !== null);
+
+    if (zoneListItems.length === 0) {
+      return null;
+    }
+
+    return (
+      <Box marginTop={3}>
+        {strings.THIS_OBSERVATION_INCLUDES}
+        <ul style={{ margin: 0, padding: `0 ${theme.spacing(3)}` }}>{zoneListItems}</ul>
+      </Box>
+    );
+  }, [plantingZones, requestedSubzoneIds, theme]);
+
   if (!statusSummary) {
     return null;
   }
@@ -176,7 +220,7 @@ const ObservationStatusSummaryMessage = ({
         title={strings.OBSERVATION_STATUS}
         body={
           <>
-            <Box marginBottom={3}>
+            <Box>
               {
                 strings.formatString(
                   strings.OBSERVATIONS_REQUIRED_BY_DATE,
@@ -185,6 +229,7 @@ const ObservationStatusSummaryMessage = ({
                 ) as string
               }
             </Box>
+
             <Box>
               {
                 strings.formatString(
@@ -195,6 +240,8 @@ const ObservationStatusSummaryMessage = ({
                 ) as string
               }
             </Box>
+
+            {subzoneMessageBody}
           </>
         }
       />

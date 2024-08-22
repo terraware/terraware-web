@@ -62,11 +62,13 @@ const MapSearchBox = ({ onSelect, style }: MapSearchBoxProp) => {
 
   useEffect(() => {
     if (!debouncedValue) {
-      clear();
+      if (suggestText) {
+        clear();
+      }
     } else {
       fetchSuggestions(debouncedValue);
     }
-  }, [clear, debouncedValue, fetchSuggestions]);
+  }, [clear, debouncedValue, fetchSuggestions, suggestText]);
 
   const onChange = useCallback(
     (value: string | DropdownItem | undefined) => {

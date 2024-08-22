@@ -21,7 +21,10 @@ import { isManagerOrHigher, isMember } from './organization';
 /**
  * We split the permissions up loosely by the entity that the user is being authorized to interact with or view
  */
-type PermissionApplication = 'READ_ALL_APPLICATIONS' | 'UPDATE_APPLICATION_INTERNAL_COMMENTS';
+type PermissionApplication =
+  | 'READ_ALL_APPLICATIONS'
+  | 'UPDATE_APPLICATION_INTERNAL_COMMENTS'
+  | 'UPDATE_APPLICATION_STATUS';
 type PermissionCohort = 'CREATE_COHORTS' | 'READ_COHORTS' | 'UPDATE_COHORTS' | 'DELETE_COHORTS';
 type PermissionConsole = 'VIEW_CONSOLE';
 type PermissionDeliverable =
@@ -149,6 +152,7 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   READ_PARTICIPANT_PROJECT: ReadOnlyPlus,
   READ_SUBMISSION_DOCUMENT: ReadOnlyPlus,
   UPDATE_APPLICATION_INTERNAL_COMMENTS: AcceleratorAdminPlus,
+  UPDATE_APPLICATION_STATUS: TFExpertPlus,
   UPDATE_COHORTS: AcceleratorAdminPlus,
   UPDATE_PARTICIPANTS: TFExpertPlus,
   UPDATE_PARTICIPANT_PROJECT_SCORING_VOTING: TFExpertPlus,

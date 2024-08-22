@@ -102,6 +102,10 @@ export interface paths {
      */
     put: operations["updateSubmission"];
   };
+  "/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}/complete": {
+    /** Marks a submission from a project as completed. */
+    post: operations["completeSubmission"];
+  };
   "/api/v1/accelerator/organizations": {
     /**
      * Lists organizations with the Accelerator internal tag and their projects.
@@ -356,6 +360,10 @@ export interface paths {
     /** Gets a list of supported time zones and their names. */
     get: operations["listTimeZoneNames"];
   };
+  "/api/v1/internalTags": {
+    /** List all the available internal tags */
+    get: operations["listAllInternalTags"];
+  };
   "/api/v1/login": {
     /**
      * Redirects to a login page.
@@ -500,6 +508,12 @@ export interface paths {
      * @description Organizations can only be deleted if they have no members other than the current user.
      */
     delete: operations["deleteOrganization"];
+  };
+  "/api/v1/organizations/{organizationId}/internalTags": {
+    /** List the internal tags assigned to an organization */
+    get: operations["listOrganizationInternalTags"];
+    /** Replace the list of internal tags assigned to an organization */
+    put: operations["updateOrganizationInternalTags"];
   };
   "/api/v1/organizations/{organizationId}/roles": {
     /** Lists the roles in an organization. */
@@ -2951,6 +2965,13 @@ export interface components {
     ImageVariablePayload: {
       type: "Image";
     } & Omit<components["schemas"]["VariablePayload"], "type">;
+    InternalTagPayload: {
+      /** Format: int64 */
+      id: number;
+      /** @description If true, this internal tag is system-defined and may affect the behavior of the application. If falso, the tag is admin-defined and is only used for reporting. */
+      isSystem: boolean;
+      name: string;
+    };
     LineString: WithRequired<{
       type: "LineString";
     } & Omit<components["schemas"]["Geometry"], "type"> & {
@@ -2964,6 +2985,10 @@ export interface components {
     ListAcceleratorOrganizationsResponsePayload: {
       organizations: components["schemas"]["AcceleratorOrganizationPayload"][];
       status: components["schemas"]["SuccessOrError"];
+    };
+    ListAllInternalTagsResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      tags: components["schemas"]["InternalTagPayload"][];
     };
     ListApplicationsResponsePayload: {
       applications: components["schemas"]["ApplicationPayload"][];
@@ -3065,6 +3090,10 @@ export interface components {
        * @description Total number of monitoring plots that haven't been claimed yet across all current observations.
        */
       totalUnclaimedPlots: number;
+    };
+    ListOrganizationInternalTagsResponsePayload: {
+      status: components["schemas"]["SuccessOrError"];
+      tagIds: number[];
     };
     ListOrganizationRolesResponsePayload: {
       roles: components["schemas"]["OrganizationRolePayload"][];
@@ -3885,6 +3914,8 @@ export interface components {
       fileNaming?: string;
       /** Format: uri */
       googleFolderUrl?: string;
+      /** Format: uri */
+      hubSpotUrl?: string;
       investmentThesis?: string;
       landUseModelTypes: ("Native Forest" | "Monoculture" | "Sustainable Timber" | "Other Timber" | "Mangroves" | "Agroforestry" | "Silvopasture" | "Other Land-Use Model")[];
       maxCarbonAccumulation?: number;
@@ -4811,6 +4842,9 @@ export interface components {
       organizationId?: number;
       read: boolean;
     };
+    UpdateOrganizationInternalTagsRequestPayload: {
+      tagIds: number[];
+    };
     UpdateOrganizationRequestPayload: {
       /**
        * @description ISO 3166 alpha-2 code of organization's country.
@@ -4897,6 +4931,8 @@ export interface components {
        * @description URL of Google Drive folder to use for non-sensitive document storage. Ignored if the user does not have permission to update project document settings.
        */
       googleFolderUrl?: string;
+      /** Format: uri */
+      hubSpotUrl?: string;
       investmentThesis?: string;
       landUseModelTypes: ("Native Forest" | "Monoculture" | "Sustainable Timber" | "Other Timber" | "Mangroves" | "Agroforestry" | "Silvopasture" | "Other Land-Use Model")[];
       maxCarbonAccumulation?: number;
@@ -5220,6 +5256,7 @@ export interface components {
     VariablePayload: {
       /** Format: int64 */
       deliverableId?: number;
+      deliverableQuestion?: string;
       /** @enum {string} */
       dependencyCondition?: "eq" | "gt" | "gte" | "lt" | "lte" | "neq";
       dependencyValue?: string;
@@ -5228,6 +5265,7 @@ export interface components {
       /** Format: int64 */
       id: number;
       isList: boolean;
+      isRequired: boolean;
       name: string;
       /** Format: int32 */
       position?: number;
@@ -5668,8 +5706,14 @@ export interface operations {
       };
     };
     responses: {
-      /** @description OK */
+      /** @description The requested operation succeeded. */
       200: {
+        content: {
+          "application/json": components["schemas"]["UploadDeliverableDocumentResponsePayload"];
+        };
+      };
+      /** @description The server is unable to store the uploaded file. This response indicates a condition that triggers the system to create a customer support ticket; clients can inform users of that fact. */
+      507: {
         content: {
           "application/json": components["schemas"]["UploadDeliverableDocumentResponsePayload"];
         };
@@ -5740,6 +5784,23 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["UpdateSubmissionRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Marks a submission from a project as completed. */
+  completeSubmission: {
+    parameters: {
+      path: {
+        deliverableId: number;
+        projectId: number;
       };
     };
     responses: {
@@ -7184,6 +7245,17 @@ export interface operations {
       };
     };
   };
+  /** List all the available internal tags */
+  listAllInternalTags: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListAllInternalTagsResponsePayload"];
+        };
+      };
+    };
+  };
   /**
    * Redirects to a login page.
    * @description For interactive web applications, this can be used to redirect the user to a login page to allow the application to make other API requests. The login process will set a cookie that will authenticate to the API, and will then redirect back to the application. One approach is to use this in error response handlers: if an API request returns HTTP 401 Unauthorized, set location.href to this endpoint and set "redirect" to the URL of the page the user was on so they'll return there after logging in.
@@ -7911,6 +7983,43 @@ export interface operations {
       409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** List the internal tags assigned to an organization */
+  listOrganizationInternalTags: {
+    parameters: {
+      path: {
+        organizationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListOrganizationInternalTagsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Replace the list of internal tags assigned to an organization */
+  updateOrganizationInternalTags: {
+    parameters: {
+      path: {
+        organizationId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateOrganizationInternalTagsRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };

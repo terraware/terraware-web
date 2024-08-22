@@ -58,7 +58,7 @@ const PrescreenResultView = ({ isFailure, feedback }: ResultViewProp) => {
     }
 
     setIsConfirmModalOpen(false);
-    goToApplication(selectedApplication.id);
+    goToApplicationPrescreen(selectedApplication.id);
   }, [selectedApplication, goToApplication, setIsConfirmModalOpen]);
 
   useEffect(() => {

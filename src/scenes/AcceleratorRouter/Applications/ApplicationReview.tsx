@@ -10,7 +10,7 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
 import strings from 'src/strings';
-import { Application, ApplicationStatus } from 'src/types/Application';
+import { Application, ApplicationStatus, getApplicationStatusLabel } from 'src/types/Application';
 
 import ApplicationReviewModal from './ApplicationReviewModal';
 
@@ -100,13 +100,12 @@ const ApplicationReview = ({ application }: ApplicationReviewProps) => {
             color={color || 'black'}
             marginLeft={theme.spacing(2)}
           >
-            {application.status}
+            {getApplicationStatusLabel(application.status)}
           </Typography>
           <Button
-            disabled={
-              (application.status === 'Failed Pre-screen' || application.status === 'Not Submitted') &&
-              !canUpdateInternalComments
-            }
+            // if a user lacks permission to update internal comments,
+            // they also lack permission to review the application or leave feedback
+            disabled={!canUpdateInternalComments}
             label={strings.REVIEW_APPLICATION}
             onClick={() => {
               setIsReviewModalOpen(true);

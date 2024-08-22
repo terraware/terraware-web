@@ -28,6 +28,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValue, VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
+import { variableDependencyMet } from 'src/utils/documentProducer/variables';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import VariableInternalComment from '../Variables/VariableInternalComment';
@@ -82,6 +83,8 @@ const QuestionBox = ({
 
   const firstVariableValue: VariableValue | undefined = (variable?.variableValues || [])[0];
   const firstVariableValueStatus: VariableStatusType | undefined = firstVariableValue?.status;
+  const firstVariableValueFeedback: string | undefined = firstVariableValue?.feedback;
+  const firstVariableValueInternalComment: string | undefined = firstVariableValue?.internalComment;
 
   const [modalFeedback, setModalFeedback] = useState(firstVariableValue?.feedback || '');
 
@@ -138,11 +141,11 @@ const QuestionBox = ({
   };
 
   const rejectItem = (feedback: string) => {
-    setStatus('Rejected', feedback);
+    setStatus('Rejected', feedback, firstVariableValueInternalComment);
   };
 
   const approveItem = () => {
-    setStatus('Approved');
+    setStatus('Approved', undefined, firstVariableValueInternalComment);
   };
 
   const onEditItem = () => {
@@ -151,33 +154,33 @@ const QuestionBox = ({
 
   const onUpdateInternalComment = (internalComment: string) => {
     const currentStatus: VariableStatusType = firstVariableValueStatus || 'Not Submitted';
-    setStatus(currentStatus, undefined, internalComment);
+    setStatus(currentStatus, firstVariableValueFeedback, internalComment);
   };
 
   const onSave = () => {
+    setEditingId(undefined);
+
     if (pendingVariableValues.size === 0) {
       return;
     }
 
     update();
-
-    setEditingId(undefined);
   };
 
   const onOptionItemClick = useCallback(
     (optionItem: DropdownItem) => {
       switch (optionItem.value) {
         case 'needs_translation': {
-          setStatus('Needs Translation');
+          setStatus('Needs Translation', undefined, firstVariableValueInternalComment);
           break;
         }
         case 'not_needed': {
-          setStatus('Not Needed');
+          setStatus('Not Needed', undefined, firstVariableValueInternalComment);
           break;
         }
       }
     },
-    [setStatus]
+    [firstVariableValueInternalComment, setStatus]
   );
 
   const optionItems = useMemo(
@@ -219,7 +222,7 @@ const QuestionBox = ({
             <Button
               id='updateFeedback'
               label={strings.SAVE}
-              onClick={() => setStatus('Rejected', modalFeedback)}
+              onClick={() => setStatus('Rejected', modalFeedback, firstVariableValueInternalComment)}
               key='button-2'
             />,
           ]}
@@ -267,7 +270,7 @@ const QuestionBox = ({
               width: '100%',
             }}
           >
-            <Typography sx={{ fontWeight: '600' }}>{variable.name}</Typography>
+            <Typography sx={{ fontWeight: '600' }}>{variable.deliverableQuestion ?? variable.name}</Typography>
 
             <Box
               sx={{
@@ -277,11 +280,9 @@ const QuestionBox = ({
                 justifyContent: 'flex-end',
               }}
             >
-              {hideStatusBadge !== true && (
-                <Box sx={{ margin: '4px' }}>
-                  <VariableStatusBadge status={firstVariableValueStatus} />
-                </Box>
-              )}
+              <Box sx={{ margin: '4px', visibility: hideStatusBadge ? 'hidden' : 'visible' }}>
+                <VariableStatusBadge status={firstVariableValueStatus} />
+              </Box>
               {!editingId && (
                 <Box className='actions'>
                   <Button
@@ -352,6 +353,7 @@ const QuestionBox = ({
             <Grid container spacing={3} sx={{ marginBottom: '24px', padding: 0 }} textAlign='left'>
               <Grid item xs={12}>
                 <DeliverableVariableDetailsInput
+                  hideDescription
                   values={pendingValues || variable.values}
                   setValues={(newValues: VariableValueValue[]) => setValues(variable.id, newValues)}
                   variable={variable}
@@ -465,8 +467,8 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element => {
       }}
     >
       <Metadata {...props} />
-      {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => {
-        return (
+      {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) =>
+        variableDependencyMet(variableWithValues, variablesWithValues) ? (
           <QuestionBox
             editingId={editingId}
             hideStatusBadge={hideStatusBadge}
@@ -478,8 +480,8 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element => {
             setUpdatePendingId={setUpdatePendingId}
             variable={variableWithValues}
           />
-        );
-      })}
+        ) : null
+      )}
     </Card>
   );
 };

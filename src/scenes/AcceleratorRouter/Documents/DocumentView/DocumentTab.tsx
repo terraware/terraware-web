@@ -93,7 +93,6 @@ const DocumentTab = ({ document }: DocumentProps): JSX.Element => {
             section={section}
             allVariables={allVariables ?? []}
             onUpdate={onUpdate}
-            manifestId={document.variableManifestId}
           />
         );
       }

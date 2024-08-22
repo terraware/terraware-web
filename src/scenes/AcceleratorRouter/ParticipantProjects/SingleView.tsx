@@ -107,7 +107,7 @@ const SingleView = () => {
   }, [activeLocale]);
 
   const projectViewTitle = (
-    <Box paddingLeft={3}>
+    <Box paddingLeft={1}>
       <Typography fontSize={'24px'} fontWeight={600}>
         {participant?.name || ''} / {project?.name || ''}
       </Typography>
@@ -120,6 +120,7 @@ const SingleView = () => {
       crumbs={crumbs}
       hierarchicalCrumbs={false}
       rightComponent={rightComponent}
+      titleContainerStyle={{ marginBottom: 0 }}
     >
       {status === 'pending' && <BusySpinner />}
 
@@ -212,9 +213,14 @@ const SingleView = () => {
                 value={participantProject?.perHectareBudget}
               />
               <ProjectFieldDisplay
-                label={strings.NUMBER_OF_COMMUNITIES_WITHIN_PROJECT_AREA}
-                value={participantProject?.numCommunities}
-                rightBorder={!isMobile}
+                label={strings.HUBSPOT_LINK}
+                value={
+                  participantProject?.hubSpotUrl ? (
+                    <a href={participantProject.hubSpotUrl} rel='noopener noreferrer' target='_blank'>
+                      {strings.LINK}
+                    </a>
+                  ) : null
+                }
               />
               <ProjectFieldMeta
                 date={project?.createdTime}
