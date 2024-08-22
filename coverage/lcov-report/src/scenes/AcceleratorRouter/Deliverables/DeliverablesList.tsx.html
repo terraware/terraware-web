@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -148,13 +148,7 @@
 <a name='L83'></a><a href='#L83'>83</a>
 <a name='L84'></a><a href='#L84'>84</a>
 <a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a>
-<a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L86'></a><a href='#L86'>86</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -173,9 +167,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -224,7 +215,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -252,7 +242,6 @@ import DeliverablesTable from 'src/components/DeliverablesTable';
 import PageHeader from 'src/components/PageHeader';
 import ParticipantsDropdown from 'src/components/ParticipantsDropdown';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import { useAcceleratorOrgs } from 'src/hooks/useAcceleratorOrgs';
 import { useParticipants } from 'src/hooks/useParticipants';
 import { useLocalization } from 'src/providers';
 import AcceleratorMain from 'src/scenes/AcceleratorRouter/AcceleratorMain';
@@ -263,10 +252,7 @@ import { SearchNodePayload } from 'src/types/Search';
 const DeliverablesList = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const { availableParticipants } = <span class="cstat-no" title="statement not covered" >useParticipants();</span>
-  const { acceleratorOrgs } = <span class="cstat-no" title="statement not covered" >useAcceleratorOrgs(true);</span>
   const contentRef = <span class="cstat-no" title="statement not covered" >useRef(null);</span>
-&nbsp;
-  const acceleratorProjects = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >(acceleratorOrgs || [])?.flatMap(<span class="fstat-no" title="function not covered" >(o</span>rg) =&gt; <span class="cstat-no" title="statement not covered" >org.projects)</span>,</span> [acceleratorOrgs]);</span>
 &nbsp;
   const [participantFilter, setParticipantFilter] = <span class="cstat-no" title="statement not covered" >useState&lt;{ id?: number }&gt;({ id: undefined });</span>
 &nbsp;
@@ -321,7 +307,6 @@ const DeliverablesList = <span class="cstat-no" title="statement not covered" ><
 &nbsp;
       {/* -1 for "non-organization scoped search" IE admin search */}
       &lt;DeliverablesTable
-        acceleratorProjects={acceleratorProjects}
         extraTableFilters={extraTableFilters}
         isAcceleratorRoute={true}
         organizationId={-1}
@@ -340,7 +325,7 @@ export default DeliverablesList;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-22T22:41:37.393Z
+                at 2024-08-22T22:52:46.166Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
