@@ -24,14 +24,7 @@ type ApplicationStatusProps = {
   title: string;
 };
 
-const ApplicationStatus = ({
-  body,
-  buttonLabel,
-  feedback,
-  isFailure = true,
-  onClickButton,
-  title,
-}: ApplicationStatusProps) => {
+const ApplicationStatus = ({ body, buttonLabel, feedback, onClickButton, title }: ApplicationStatusProps) => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
 
@@ -46,7 +39,7 @@ const ApplicationStatus = ({
       }}
     >
       <Box alignItems={'center'}>
-        <img src={isFailure ? '/assets/application-failure-splash.svg' : '/assets/application-success-splash.svg'} />
+        <img src={'/assets/application-success-splash.svg'} />
       </Box>
       <h3>{title}</h3>
       <Typography sx={{ marginBottom: theme.spacing(2), textAlign: 'center' }} whiteSpace={'pre-line'}>
@@ -65,37 +58,8 @@ const ApplicationStatusInReview = () => {
     <ApplicationStatus
       body={strings.APPLICATION_SUBMIT_SUCCESS_BODY}
       buttonLabel={strings.EXIT_APPLICATION}
-      isFailure={false}
       onClickButton={() => goToHome()}
       title={strings.APPLICATION_SUBMIT_SUCCESS}
-    />
-  );
-};
-
-const ApplicationStatusNotAccepted = ({ application }: { application: Application }) => {
-  const { goToApplication } = useNavigateTo();
-
-  return (
-    <ApplicationStatus
-      body={strings.APPLICATION_NOT_ACCEPTED_BODY}
-      buttonLabel={strings.VIEW_APPLICATION}
-      feedback={application.feedback}
-      onClickButton={() => goToApplication(application.id)}
-      title={strings.APPLICATION_NOT_ACCEPTED}
-    />
-  );
-};
-
-const ApplicationStatusWaitlist = ({ application }: { application: Application }) => {
-  const { goToApplication } = useNavigateTo();
-
-  return (
-    <ApplicationStatus
-      body={strings.APPLICATION_WAITLISTED_BODY}
-      buttonLabel={strings.VIEW_APPLICATION}
-      feedback={application.feedback}
-      onClickButton={() => goToApplication(application.id)}
-      title={strings.APPLICATION_WAITLISTED}
     />
   );
 };
@@ -132,14 +96,12 @@ const ReviewView = () => {
       case 'Pre-check':
       case 'Ready for Review':
       case 'Submitted':
-        return <ApplicationStatusInReview />;
       case 'Issue Active':
       case 'Issue Pending':
       case 'Issue Resolved':
       case 'Waitlist':
-        return <ApplicationStatusWaitlist application={application} />;
       case 'Not Accepted':
-        return <ApplicationStatusNotAccepted application={application} />;
+        return <ApplicationStatusInReview />;
       default:
         return <ReviewCard sections={nonPrescreenSections} />;
     }
