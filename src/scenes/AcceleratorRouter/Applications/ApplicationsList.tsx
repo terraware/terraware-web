@@ -26,7 +26,6 @@ type ApplicationRow = {
   internalName: string;
   organizationName: string;
   status: ApplicationStatus;
-  type: string;
 };
 
 const columns = (activeLocale: string | null): TableColumnType[] =>
@@ -50,11 +49,6 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
         {
           key: 'organizationName',
           name: strings.ORGANIZATION,
-          type: 'string',
-        },
-        {
-          key: 'type',
-          name: strings.TYPE,
           type: 'string',
         },
         {
@@ -100,11 +94,6 @@ const ApplicationList = () => {
         options: ApplicationReviewStatuses,
         label: strings.STATUS,
       },
-      {
-        field: 'type',
-        options: [strings.PRESCREEN, strings.APPLICATION],
-        label: strings.TYPE,
-      },
     ];
 
     return filters;
@@ -142,7 +131,6 @@ const ApplicationList = () => {
             modifiedTime: application.modifiedTime,
             organizationName: application.organizationName,
             status: application.status,
-            type: application.status === 'Failed Pre-screen' ? strings.PRESCREEN : strings.APPLICATION,
           }))
       );
     }
