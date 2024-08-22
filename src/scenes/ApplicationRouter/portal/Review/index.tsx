@@ -58,6 +58,20 @@ const ApplicationStatus = ({
   );
 };
 
+const ApplicationStatusAccepted = () => {
+  const { goToHome } = useNavigateTo();
+
+  return (
+    <ApplicationStatus
+      body={strings.APPLICATION_ACCEPTED_SUCCESS_BODY}
+      buttonLabel={strings.EXIT_APPLICATION}
+      isFailure={false}
+      onClickButton={() => goToHome()}
+      title={strings.APPLICATION_ACCEPTED_SUCCESS}
+    />
+  );
+};
+
 const ApplicationStatusInReview = () => {
   const { goToHome } = useNavigateTo();
 
@@ -125,6 +139,7 @@ const ReviewView = () => {
   const renderContent = (application: Application | undefined) => {
     switch (application?.status) {
       case 'Accepted':
+        return <ApplicationStatusAccepted />;
       case 'Carbon Eligible':
       case 'In Review':
       case 'Needs Follow-up':
