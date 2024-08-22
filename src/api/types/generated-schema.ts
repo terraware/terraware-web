@@ -2143,7 +2143,11 @@ export interface components {
       /** @description Optional description of the deliverable in HTML form. */
       descriptionHtml?: string;
       documents: components["schemas"]["SubmissionDocumentPayload"][];
-      /** @description If the deliverable has been reviewed, the user-visible feedback from the review. */
+      /**
+       * Format: date
+       * @description If the deliverable has been reviewed, the user-visible feedback from the review.
+       */
+      dueDate?: string;
       feedback?: string;
       /** Format: int64 */
       id: number;
