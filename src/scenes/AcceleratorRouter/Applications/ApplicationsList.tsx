@@ -21,6 +21,7 @@ import ApplicationCellRenderer from './ApplicationCellRenderer';
 
 type ApplicationRow = {
   countryCode?: string;
+  countryName?: string;
   id: number;
   internalName: string;
   organizationName: string;
@@ -42,7 +43,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           type: 'string',
         },
         {
-          key: 'countryCode',
+          key: 'countryName',
           name: strings.COUNTRY,
           type: 'string',
         },
@@ -133,6 +134,8 @@ const ApplicationList = () => {
           .filter((application) => application.status !== 'Not Submitted')
           .map((application) => ({
             countryCode: application?.countryCode,
+            countryName:
+              application?.countryCode && countries ? getCountryByCode(countries, application.countryCode)?.name : '',
             id: application.id,
             // TODO: only use internal name once the column becomes mandatory
             internalName: application.internalName ?? application.projectName,
