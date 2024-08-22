@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/38</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/38</span>
+                <span class='fraction'>0/37</span>
             </div>
         
             
@@ -231,13 +231,7 @@
 <a name='L166'></a><a href='#L166'>166</a>
 <a name='L167'></a><a href='#L167'>167</a>
 <a name='L168'></a><a href='#L168'>168</a>
-<a name='L169'></a><a href='#L169'>169</a>
-<a name='L170'></a><a href='#L170'>170</a>
-<a name='L171'></a><a href='#L171'>171</a>
-<a name='L172'></a><a href='#L172'>172</a>
-<a name='L173'></a><a href='#L173'>173</a>
-<a name='L174'></a><a href='#L174'>174</a>
-<a name='L175'></a><a href='#L175'>175</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L169'></a><a href='#L169'>169</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -313,12 +307,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -426,7 +414,7 @@ import { useLocalization, useOrganization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
 import theme from 'src/theme';
-import { ListDeliverablesElement } from 'src/types/Deliverables';
+import { DeliverableStatusOrder, ListDeliverablesElementWithOverdue } from 'src/types/Deliverables';
 import { SearchNodePayload } from 'src/types/Search';
 import {
   SearchAndSortFn,
@@ -482,18 +470,12 @@ const DeliverablesList = <span class="cstat-no" title="statement not covered" ><
     []
   );
 &nbsp;
-  const statusOrder = <span class="cstat-no" title="statement not covered" >{</span>
-    Rejected: 1,
-    'Not Submitted': 2,
-    'In Review': 3,
-    'Needs Translation': 3,
-    Approved: 4,
-    'Not Needed': 5,
-    Completed: 5,
-  };
-&nbsp;
-  const searchAndSort: SearchAndSortFn&lt;ListDeliverablesElement&gt; = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (r</span>esults: ListDeliverablesElement[], search?: SearchNodePayload, sortOrderConfig?: SearchOrderConfig) =&gt; {
+  const searchAndSort: SearchAndSortFn&lt;ListDeliverablesElementWithOverdue&gt; = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (</span>
+      results: ListDeliverablesElementWithOverdue[],
+      search?: SearchNodePayload,
+      sortOrderConfig?: SearchOrderConfig
+    ) =&gt; {
       // In the participant view, "needs translation" needs to be "in review", so we will coerce results with "needs translation"
       // into the filter rules for "in review"
       // We need to find the search node payload that contains the "status" filter and add "needs translation" as a search value
@@ -511,9 +493,9 @@ const DeliverablesList = <span class="cstat-no" title="statement not covered" ><
 <span class="cstat-no" title="statement not covered" >        return firstSort.sort(<span class="fstat-no" title="function not covered" >(a</span>, b) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >          if (a.status !== b.status) {</span>
 <span class="cstat-no" title="statement not covered" >            if (direction === 'Descending') {</span>
-<span class="cstat-no" title="statement not covered" >              return statusOrder[b.status] - statusOrder[a.status];</span>
+<span class="cstat-no" title="statement not covered" >              return DeliverableStatusOrder[b.status] - DeliverableStatusOrder[a.status];</span>
             } else {
-<span class="cstat-no" title="statement not covered" >              return statusOrder[a.status] - statusOrder[b.status];</span>
+<span class="cstat-no" title="statement not covered" >              return DeliverableStatusOrder[a.status] - DeliverableStatusOrder[b.status];</span>
             }
           } else {
             // if the have same status sort by due date
@@ -592,7 +574,7 @@ export default DeliverablesList;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-22T19:38:16.373Z
+                at 2024-08-22T19:43:09.761Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
