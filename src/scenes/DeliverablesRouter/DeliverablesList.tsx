@@ -13,7 +13,7 @@ import { useLocalization, useOrganization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
 import theme from 'src/theme';
-import { ListDeliverablesElement } from 'src/types/Deliverables';
+import { DeliverableStatusOrder, ListDeliverablesElementWithOverdue } from 'src/types/Deliverables';
 import { SearchNodePayload } from 'src/types/Search';
 import {
   SearchAndSortFn,
@@ -69,18 +69,12 @@ const DeliverablesList = (): JSX.Element => {
     []
   );
 
-  const statusOrder = {
-    Rejected: 1,
-    'Not Submitted': 2,
-    'In Review': 3,
-    'Needs Translation': 3,
-    Approved: 4,
-    'Not Needed': 5,
-    Completed: 5,
-  };
-
-  const searchAndSort: SearchAndSortFn<ListDeliverablesElement> = useCallback(
-    (results: ListDeliverablesElement[], search?: SearchNodePayload, sortOrderConfig?: SearchOrderConfig) => {
+  const searchAndSort: SearchAndSortFn<ListDeliverablesElementWithOverdue> = useCallback(
+    (
+      results: ListDeliverablesElementWithOverdue[],
+      search?: SearchNodePayload,
+      sortOrderConfig?: SearchOrderConfig
+    ) => {
       // In the participant view, "needs translation" needs to be "in review", so we will coerce results with "needs translation"
       // into the filter rules for "in review"
       // We need to find the search node payload that contains the "status" filter and add "needs translation" as a search value
@@ -98,9 +92,9 @@ const DeliverablesList = (): JSX.Element => {
         return firstSort.sort((a, b) => {
           if (a.status !== b.status) {
             if (direction === 'Descending') {
-              return statusOrder[b.status] - statusOrder[a.status];
+              return DeliverableStatusOrder[b.status] - DeliverableStatusOrder[a.status];
             } else {
-              return statusOrder[a.status] - statusOrder[b.status];
+              return DeliverableStatusOrder[a.status] - DeliverableStatusOrder[b.status];
             }
           } else {
             // if the have same status sort by due date

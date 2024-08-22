@@ -1,14 +1,17 @@
+import { DateTime } from 'luxon';
+
 import { paths } from 'src/api/types/generated-schema';
-import HttpService, { Params, Response } from 'src/services/HttpService';
+import HttpService, { Params, Response, Response2 } from 'src/services/HttpService';
 import {
   Deliverable,
-  DeliverableData,
-  DeliverablesData,
+  DeliverableWithOverdue,
   ListDeliverablesElement,
+  ListDeliverablesElementWithOverdue,
   ListDeliverablesResponsePayload,
   UploadDeliverableDocumentRequest,
 } from 'src/types/Deliverables';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { today } from 'src/utils/dateUtils';
 import { SearchAndSortFn, SearchOrderConfig, searchAndSort as genericSearchAndSort } from 'src/utils/searchAndSort';
 
 import { getPromisesResponse } from './utils';
@@ -35,16 +38,40 @@ const httpDeliverables = HttpService.root(ENDPOINT_DELIVERABLES);
 const httpDeliverableSubmission = HttpService.root(ENDPOINT_DELIVERABLE_SUBMISSION);
 const httpDocumentUpload = HttpService.root(ENDPOINT_DELIVERABLE_DOCUMENT_UPLOAD);
 
-const get = async (deliverableId: number, projectId: number): Promise<Response & DeliverableData> =>
-  httpDeliverableSubmission.get<GetDeliverableResponsePayload, DeliverableData>(
-    {
-      urlReplacements: {
-        '{deliverableId}': `${deliverableId}`,
-        '{projectId}': `${projectId}`,
-      },
-    },
-    (response) => ({ deliverable: response?.deliverable })
+const isOverdue = (deliverable: Deliverable | ListDeliverablesElement): boolean => {
+  return !!(
+    deliverable.dueDate &&
+    DateTime.fromISO(deliverable.dueDate) < today &&
+    deliverable.status === 'Not Submitted'
   );
+};
+
+const get = async (
+  deliverableId: number,
+  projectId: number
+): Promise<Response2<DeliverableWithOverdue | undefined>> => {
+  const result = await httpDeliverableSubmission.get2<GetDeliverableResponsePayload>({
+    urlReplacements: {
+      '{deliverableId}': `${deliverableId}`,
+      '{projectId}': `${projectId}`,
+    },
+  });
+
+  if (result.requestSucceeded) {
+    if (!result.data?.deliverable) {
+      return { ...result, data: undefined };
+    }
+
+    const deliverable = result.data?.deliverable;
+    if (isOverdue(deliverable)) {
+      return { ...result, data: { ...deliverable, status: 'Overdue' } };
+    } else {
+      return { ...result, data: deliverable };
+    }
+  } else {
+    return Promise.reject(result.error);
+  }
+};
 
 const update = async (deliverable: Deliverable): Promise<Response> => {
   const payload: UpdateSubmissionRequestPayload = {
@@ -71,9 +98,9 @@ const list = async (
   request?: ListDeliverablesRequestParams,
   search?: SearchNodePayload,
   searchSortOrder?: SearchSortOrder,
-  searchAndSort?: SearchAndSortFn<ListDeliverablesElement>
-): Promise<(DeliverablesData & Response) | null> => {
-  let searchOrderConfig: SearchOrderConfig;
+  searchAndSort?: SearchAndSortFn<ListDeliverablesElementWithOverdue>
+): Promise<Response2<ListDeliverablesElementWithOverdue[]>> => {
+  let searchOrderConfig: SearchOrderConfig | undefined;
   if (searchSortOrder) {
     searchOrderConfig = {
       locale,
@@ -82,20 +109,32 @@ const list = async (
     };
   }
 
-  return httpDeliverables.get<ListDeliverablesResponsePayload, DeliverablesData>(
-    {
-      params: request as Params,
-    },
-    (data) => {
-      const deliverablesResult = searchAndSort
-        ? searchAndSort(data?.deliverables || [], search, searchOrderConfig)
-        : genericSearchAndSort(data?.deliverables || [], search, searchOrderConfig);
+  const result = await httpDeliverables.get2<ListDeliverablesResponsePayload>({
+    params: request as Params,
+  });
 
-      return {
-        deliverables: deliverablesResult,
-      };
-    }
-  );
+  if (result.requestSucceeded) {
+    const deliverablesWithOverdue = (result.data?.deliverables ?? []).map(
+      (deliverable): ListDeliverablesElementWithOverdue => {
+        if (isOverdue(deliverable)) {
+          return { ...deliverable, status: 'Overdue' };
+        } else {
+          return deliverable;
+        }
+      }
+    );
+
+    const deliverablesResult = searchAndSort
+      ? searchAndSort(deliverablesWithOverdue, search, searchOrderConfig)
+      : genericSearchAndSort(deliverablesWithOverdue, search, searchOrderConfig);
+
+    return {
+      ...result,
+      data: deliverablesResult,
+    };
+  } else {
+    return Promise.reject(result.error);
+  }
 };
 
 /**

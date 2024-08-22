@@ -4,7 +4,7 @@ import { SearchService } from 'src/services';
 import DeliverablesService from 'src/services/DeliverablesService';
 import ModuleService from 'src/services/ModuleService';
 import strings from 'src/strings';
-import { ListDeliverablesElement } from 'src/types/Deliverables';
+import { ListDeliverablesElementWithOverdue } from 'src/types/Deliverables';
 import { ModuleProjectSearchResult } from 'src/types/Module';
 import { SearchNodePayload, SearchRequestPayload } from 'src/types/Search';
 
@@ -70,7 +70,7 @@ export const requestListModuleDeliverables = createAsyncThunk(
     moduleId: number;
     projectId: number;
     search?: SearchNodePayload;
-  }): Promise<ListDeliverablesElement[]> => {
+  }): Promise<ListDeliverablesElementWithOverdue[]> => {
     const result = await DeliverablesService.list(
       request.locale,
       {
@@ -80,6 +80,6 @@ export const requestListModuleDeliverables = createAsyncThunk(
       request.search
     );
 
-    return result?.deliverables ?? [];
+    return result.data ?? [];
   }
 );

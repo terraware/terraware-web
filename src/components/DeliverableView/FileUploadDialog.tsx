@@ -10,11 +10,11 @@ import {
 import { selectDeliverablesEditRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { Deliverable, UploadDeliverableDocumentRequest } from 'src/types/Deliverables';
+import { DeliverableWithOverdue, UploadDeliverableDocumentRequest } from 'src/types/Deliverables';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export type FileUploadDialogProps = {
-  deliverable: Deliverable;
+  deliverable: DeliverableWithOverdue;
   files: File[];
   onClose: () => void;
 };

@@ -4,12 +4,12 @@ import { useParticipantData } from 'src/providers/Participant/ParticipantContext
 import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import { selectDeliverablesSearchRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { DeliverableTypeType, ListDeliverablesElement } from 'src/types/Deliverables';
+import { DeliverableTypeType, ListDeliverablesElementWithOverdue } from 'src/types/Deliverables';
 
 import { useLocalization } from '../hooks';
 
 interface DeliverableSearch {
-  deliverableSearchResults: ListDeliverablesElement[] | undefined;
+  deliverableSearchResults: ListDeliverablesElementWithOverdue[] | undefined;
   hasActiveDeliverable: boolean;
   hasRecentDeliverable: boolean;
   isLoading: boolean;
@@ -43,8 +43,7 @@ export const useSpeciesDeliverableSearch = (): DeliverableSearch => {
   );
 
   const hasRecentDeliverable = useMemo(
-    () =>
-      deliverableSearchRequest?.status === 'success' && (deliverableSearchRequest?.data?.deliverables || []).length > 0,
+    () => deliverableSearchRequest?.status === 'success' && (deliverableSearchRequest?.data || []).length > 0,
     [deliverableSearchRequest]
   );
 
@@ -98,7 +97,7 @@ export const useSpeciesDeliverableSearch = (): DeliverableSearch => {
 
   return useMemo<DeliverableSearch>(
     () => ({
-      deliverableSearchResults: deliverableSearchRequest?.data?.deliverables,
+      deliverableSearchResults: deliverableSearchRequest?.data,
       hasActiveDeliverable,
       hasRecentDeliverable,
       isLoading: deliverableSearchRequest?.status === 'pending' || isParticipantDataLoading,
