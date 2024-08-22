@@ -58,7 +58,8 @@ export default function DeliverableCellRenderer(props: RendererProps<TableRowTyp
   }
 
   if (column.key === 'module') {
-    return <CellRenderer index={index} column={column} value={`${row.moduleTitle} - ${row.moduleName}`} row={row} />;
+    const title = row.moduleTitle ? `${row.moduleTitle} - ${row.moduleName}` : row.moduleName;
+    return <CellRenderer index={index} column={column} value={title} row={row} />;
   }
 
   return <CellRenderer {...props} />;
