@@ -90,7 +90,7 @@ const ApplicationList = () => {
         field: 'countryCode',
         options: (countries || []).map((country) => country.code),
         label: strings.COUNTRY,
-        renderOption: (id: string | number) => `${getCountryByCode(countries, id as string)}`,
+        renderOption: (id: string | number) => `${getCountryByCode(countries, id as string)?.name}`,
       },
       {
         field: 'status',
