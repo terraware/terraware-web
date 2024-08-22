@@ -220,7 +220,6 @@ const DeliverablesTable = ({
 
   useEffect(() => {
     // TODO do something if the request has an error
-    console.log(deliverablesSearchRequest);
     if (deliverablesSearchRequest && deliverablesSearchRequest.status === 'success') {
       setDeliverables(deliverablesSearchRequest.data ?? []);
     }

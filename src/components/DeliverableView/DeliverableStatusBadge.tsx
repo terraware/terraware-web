@@ -79,7 +79,7 @@ const DeliverableStatusBadge = (props: DeliverableStatusBadgeProps): JSX.Element
           backgroundColor: theme.palette.TwClrBgInfoTertiary,
           borderColor: theme.palette.TwClrBrdrInfo,
           labelColor: theme.palette.TwClrTxtInfo,
-          label: isAcceleratorRoute ? strings.NEEDS_TRANSLATION : strings.COMPLETED,
+          label: strings.COMPLETED,
         };
       default:
         return undefined;
