@@ -224,7 +224,6 @@ const DocumentVariablesTab = ({ document: doc, setSelectedTab }: DocumentVariabl
             setOpenEditVariableModal(false);
             onFinish(updated);
           }}
-          manifestId={doc.variableManifestId}
           projectId={doc.projectId}
           variableId={selectedVariableId || -1}
           sectionsUsed={sectionsUsed}
