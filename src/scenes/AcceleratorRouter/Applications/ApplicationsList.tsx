@@ -91,6 +91,8 @@ const ApplicationList = () => {
         options: (countries || []).map((country) => country.code),
         label: strings.COUNTRY,
         renderOption: (id: string | number) => `${getCountryByCode(countries, id as string)?.name}`,
+        pillValueRenderer: (values: (string | number | null)[]) =>
+          values.map((value) => getCountryByCode(countries, value as string)?.name).join(', '),
       },
       {
         field: 'status',
