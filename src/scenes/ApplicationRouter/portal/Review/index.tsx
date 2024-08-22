@@ -145,7 +145,11 @@ const ReviewView = () => {
     }
   };
 
-  return <ApplicationPage crumbs={crumbs} hideFeedback>{renderContent(selectedApplication)}</ApplicationPage>;
+  return (
+    <ApplicationPage crumbs={crumbs} hideFeedback>
+      {renderContent(selectedApplication)}
+    </ApplicationPage>
+  );
 };
 
 export default ReviewView;
