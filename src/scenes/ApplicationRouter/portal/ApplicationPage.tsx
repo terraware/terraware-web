@@ -37,7 +37,7 @@ const ApplicationPage = ({ children, crumbs, hierarchicalCrumbs, rightComponent,
       title={strings.formatString(strings.APPLICATION_FOR_PROJECT, selectedApplication?.projectName ?? '')}
       titleStyle={{ marginTop: '24px' }}
     >
-      {hideFeedback !== true && selectedApplication?.status === 'Failed Pre-screen' && (
+      {!hideFeedback && selectedApplication?.status === 'Failed Pre-screen' && (
         <FeedbackMessage feedback={selectedApplication.feedback} />
       )}
       {children}
