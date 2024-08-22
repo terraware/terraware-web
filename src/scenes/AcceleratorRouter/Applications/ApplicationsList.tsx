@@ -9,16 +9,22 @@ import { useLocalization } from 'src/providers';
 import { requestListApplications } from 'src/redux/features/application/applicationAsyncThunks';
 import { selectApplicationList } from 'src/redux/features/application/applicationSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { LocationService } from 'src/services';
 import strings from 'src/strings';
 import { ApplicationReviewStatuses, ApplicationStatus } from 'src/types/Application';
+import { Country } from 'src/types/Country';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import { getCountryByCode } from 'src/utils/country';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import ApplicationCellRenderer from './ApplicationCellRenderer';
 
 type ApplicationRow = {
+  countryCode?: string;
+  countryName?: string;
   id: number;
   internalName: string;
+  organizationName: string;
   status: ApplicationStatus;
 };
 
@@ -34,6 +40,21 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           key: 'status',
           name: strings.STATUS,
           type: 'string',
+        },
+        {
+          key: 'countryName',
+          name: strings.COUNTRY,
+          type: 'string',
+        },
+        {
+          key: 'organizationName',
+          name: strings.ORGANIZATION,
+          type: 'string',
+        },
+        {
+          key: 'modifiedTime',
+          name: strings.DATE_UPDATED,
+          type: 'date',
         },
       ]
     : [];
@@ -52,13 +73,22 @@ const ApplicationList = () => {
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectApplicationList(requestId));
   const [applications, setApplications] = useState<ApplicationRow[]>([]);
+  const [countries, setCountries] = useState<Country[]>();
 
   const featuredFilters: FilterConfig[] = useMemo(() => {
-    if (!activeLocale) {
+    if (!activeLocale || !countries) {
       return [];
     }
 
     const filters: FilterConfig[] = [
+      {
+        field: 'countryCode',
+        options: (countries || []).map((country) => country.code),
+        label: strings.COUNTRY,
+        renderOption: (id: string | number) => `${getCountryByCode(countries, id as string)?.name}`,
+        pillValueRenderer: (values: (string | number | null)[]) =>
+          values.map((value) => getCountryByCode(countries, value as string)?.name).join(', '),
+      },
       {
         field: 'status',
         options: ApplicationReviewStatuses,
@@ -67,6 +97,19 @@ const ApplicationList = () => {
     ];
 
     return filters;
+  }, [activeLocale, countries]);
+
+  useEffect(() => {
+    if (activeLocale) {
+      const populateCountries = async () => {
+        const response = await LocationService.getCountries();
+        if (response) {
+          setCountries(response);
+        }
+      };
+
+      populateCountries();
+    }
   }, [activeLocale]);
 
   useEffect(() => {
@@ -79,9 +122,14 @@ const ApplicationList = () => {
         result.data
           .filter((application) => application.status !== 'Not Submitted')
           .map((application) => ({
+            countryCode: application?.countryCode,
+            countryName:
+              application?.countryCode && countries ? getCountryByCode(countries, application.countryCode)?.name : '',
             id: application.id,
             // TODO: only use internal name once the column becomes mandatory
             internalName: application.internalName ?? application.projectName,
+            modifiedTime: application.modifiedTime,
+            organizationName: application.organizationName,
             status: application.status,
           }))
       );

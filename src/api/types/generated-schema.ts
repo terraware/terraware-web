@@ -1294,6 +1294,7 @@ export interface components {
     };
     ApplicationPayload: {
       boundary?: components["schemas"]["MultiPolygon"];
+      countryCode?: string;
       /** Format: date-time */
       createdTime: string;
       feedback?: string;

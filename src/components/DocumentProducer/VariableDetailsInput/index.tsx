@@ -381,7 +381,7 @@ const VariableDetailsInput = ({
         <Grid item xs={6}>
           <Textfield
             id='type'
-            label={strings.TYPE}
+            label={strings.TYPE_ELLIPSIS}
             type='text'
             value={variable?.type}
             display={true}
