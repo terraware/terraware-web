@@ -37,7 +37,7 @@ const SingleView = () => {
   const { isMobile } = useDeviceInfo();
   const { crumbs, participant, participantProject, project, projectId, projectMeta, organization, status } =
     useParticipantProjectData();
-  const { phase1Scores } = useScoringData();
+  const { phase0Scores, phase1Scores } = useScoringData();
   const { phaseVotes } = useVotingData();
   const { goToParticipantProjectEdit } = useNavigateTo();
 
@@ -106,6 +106,22 @@ const SingleView = () => {
     }
   }, [activeLocale]);
 
+  const activeScores = useMemo(() => {
+    switch (project?.cohortPhase) {
+      case 'Pre-Screen':
+      case 'Application':
+      case 'Phase 0 - Due Diligence':
+        return phase0Scores;
+      case 'Phase 1 - Feasibility Study':
+      case 'Phase 2 - Plan and Scale':
+      case 'Phase 3 - Implement and Monitor':
+        return phase1Scores;
+    }
+
+    // Default to phase 1 when data is missing
+    return phase1Scores;
+  }, [project?.cohortPhase, phase0Scores, phase1Scores]);
+
   const projectViewTitle = (
     <Box paddingLeft={1}>
       <Typography fontSize={'24px'} fontWeight={600}>
@@ -155,7 +171,7 @@ const SingleView = () => {
                   <PhaseScoreCard
                     linkTo={APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project.id}`)}
                     md={!projectApplication?.id ? 6 : undefined}
-                    phaseScores={phase1Scores}
+                    phaseScores={activeScores}
                   />
                   <VotingDecisionCard
                     linkTo={APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`)}

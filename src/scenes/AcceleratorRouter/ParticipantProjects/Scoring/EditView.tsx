@@ -112,7 +112,7 @@ const ScorecardEditView = () => {
                 onChangeQualitative={handleOnChangeQualitative}
                 editable={
                   project?.cohortPhase &&
-                  ['Pre-Screen', 'Application', 'Phase 1 - Feasibility Study'].includes(project.cohortPhase)
+                  ['Pre-Screen', 'Application', 'Phase 0 - Due Diligence'].includes(project.cohortPhase)
                 }
               />
             </Grid>
