@@ -61,6 +61,7 @@ const DocumentsAddView = (): JSX.Element => {
         saveID='save'
         saveButtonText={strings.SAVE}
         cancelButtonText={strings.CANCEL}
+        style={{ width: '100%' }}
       >
         <PageContent styles={{ width: '568px', margin: 'auto' }}>
           <DocumentMetadataEdit
