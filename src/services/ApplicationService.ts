@@ -1,6 +1,7 @@
 import { paths } from 'src/api/types/generated-schema';
+import { Application } from 'src/types/Application';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
-import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
+import { SearchAndSortFn, SearchOrderConfig, searchAndSort as genericSearchAndSort } from 'src/utils/searchAndSort';
 
 import HttpService, { Params, Response, Response2 } from './HttpService';
 import ProjectsService from './ProjectsService';
@@ -47,7 +48,9 @@ const listApplications = async (request: {
   locale?: string;
   search?: SearchNodePayload;
   searchSortOrder?: SearchSortOrder;
+  searchAndSort?: SearchAndSortFn<Application>;
 }): Promise<Response2<ListApplicationsResponsePayload>> => {
+  const searchAndSort = request.searchAndSort ?? genericSearchAndSort;
   const searchOrderConfig: SearchOrderConfig | undefined = request.searchSortOrder
     ? {
         locale: request.locale ?? null,

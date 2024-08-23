@@ -2,9 +2,10 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import ApplicationService from 'src/services/ApplicationService';
 import strings from 'src/strings';
-import { ApplicationReview } from 'src/types/Application';
+import { Application, ApplicationReview } from 'src/types/Application';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { MultiPolygon, Polygon } from 'src/types/Tracking';
+import { SearchAndSortFn } from 'src/utils/searchAndSort';
 
 export const requestCreateApplication = createAsyncThunk(
   'applications/create',
@@ -45,6 +46,7 @@ export const requestListApplications = createAsyncThunk(
       locale?: string;
       search?: SearchNodePayload;
       searchSortOrder?: SearchSortOrder;
+      searchAndSort?: SearchAndSortFn<Application>;
     },
     { rejectWithValue }
   ) => {

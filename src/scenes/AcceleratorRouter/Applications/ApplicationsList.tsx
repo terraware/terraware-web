@@ -11,10 +11,16 @@ import { selectApplicationList } from 'src/redux/features/application/applicatio
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { LocationService } from 'src/services';
 import strings from 'src/strings';
-import { ApplicationReviewStatuses, ApplicationStatus } from 'src/types/Application';
+import {
+  Application,
+  ApplicationReviewStatuses,
+  ApplicationStatus,
+  ApplicationStatusOrder,
+} from 'src/types/Application';
 import { Country } from 'src/types/Country';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { getCountryByCode } from 'src/utils/country';
+import { SearchAndSortFn, SearchOrderConfig, searchAndSort as genericSearchAndSort } from 'src/utils/searchAndSort';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import ApplicationCellRenderer from './ApplicationCellRenderer';
@@ -91,7 +97,9 @@ const ApplicationList = () => {
       },
       {
         field: 'status',
-        options: ApplicationReviewStatuses,
+        options: ApplicationReviewStatuses.sort(
+          (left, right) => ApplicationStatusOrder[left] - ApplicationStatusOrder[right]
+        ),
         label: strings.STATUS,
       },
     ];
@@ -136,15 +144,38 @@ const ApplicationList = () => {
     }
   }, [result, setApplications, snackbar]);
 
+  const searchAndSort: SearchAndSortFn<Application> = useCallback(
+    (results: Application[], search?: SearchNodePayload, sortOrderConfig?: SearchOrderConfig) => {
+      const firstSort = genericSearchAndSort(results, search, sortOrderConfig);
+      if (sortOrderConfig?.sortOrder.field === 'status') {
+        const direction = sortOrderConfig?.sortOrder.direction;
+        return firstSort.sort((a, b) => {
+          if (a.status !== b.status) {
+            if (direction === 'Descending') {
+              return ApplicationStatusOrder[b.status] - ApplicationStatusOrder[a.status];
+            } else {
+              return ApplicationStatusOrder[a.status] - ApplicationStatusOrder[b.status];
+            }
+          } else {
+            return 0;
+          }
+        });
+      } else {
+        return firstSort;
+      }
+    },
+    []
+  );
+
   const dispatchSearchRequest = useCallback(
     (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => {
       if (!locale) {
         return;
       }
-      const request = dispatch(requestListApplications({ listAll: true, search, searchSortOrder }));
+      const request = dispatch(requestListApplications({ listAll: true, search, searchSortOrder, searchAndSort }));
       setRequestId(request.requestId);
     },
-    [dispatch]
+    [dispatch, searchAndSort]
   );
 
   return (

@@ -23,6 +23,25 @@ export const ApplicationReviewStatuses: ApplicationReviewStatus[] = [
   'Submitted',
 ];
 
+export const ApplicationStatusOrder: { [key in ApplicationStatus]: number } = {
+  'Not Submitted': 1,
+  'Failed Pre-screen': 2,
+  'Passed Pre-screen': 3,
+  'In Review': 4,
+  Submitted: 5,
+  'PL Review': 6,
+  'Ready for Review': 7,
+  'Pre-check': 8,
+  'Needs Follow-up': 9,
+  'Carbon Eligible': 10,
+  Accepted: 11,
+  Waitlist: 12,
+  'Issue Active': 13,
+  'Issue Pending': 14,
+  'Issue Resolved': 15,
+  'Not Accepted': 16,
+};
+
 export const getApplicationStatusLabel = (status: ApplicationStatus): string => {
   switch (status) {
     case 'Issue Active':

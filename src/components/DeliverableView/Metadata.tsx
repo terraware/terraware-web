@@ -71,16 +71,16 @@ const Metadata = (props: ViewProps): JSX.Element => {
 
       <Box marginBottom='16px'>
         {deliverable.status !== 'Rejected' && !isAcceleratorRoute && hideStatusBadge !== true && (
-          <div style={{ float: 'right', marginBottom: '0px', marginLeft: '16px' }}>
+          <div style={{ float: 'right', marginBottom: '8px', marginLeft: '16px' }}>
             <DeliverableStatusBadge status={deliverable.status} />
           </div>
         )}
 
-        <Typography fontWeight={400} fontSize={'14px'} lineHeight={'20px'} fontStyle={'italic'}>
+        <Typography fontWeight={400} fontSize={'16px'} lineHeight={'24px'} fontStyle={'italic'}>
           {dueDateText}
         </Typography>
 
-        <div dangerouslySetInnerHTML={{ __html: deliverable.descriptionHtml || '' }} />
+        <div dangerouslySetInnerHTML={{ __html: deliverable.descriptionHtml || '' }} style={{ clear: 'both' }} />
       </Box>
     </Box>
   );

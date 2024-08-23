@@ -11,6 +11,7 @@ import { Badge } from '@terraware/web-components';
 
 import { useCohorts } from 'src/hooks/useCohorts';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
+import { useProjectData } from 'src/providers/Project/ProjectContext';
 import { requestListModules } from 'src/redux/features/modules/modulesAsyncThunks';
 import { selectProjectModuleList } from 'src/redux/features/modules/modulesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -56,11 +57,17 @@ const ModuleTimeline = () => {
   const pathParams = useParams<{ cohortId: string }>();
   const cohortId = Number(pathParams.cohortId);
   const { selectedCohort } = useCohorts(cohortId);
+  const { projectId } = useProjectData();
 
   useEffect(() => {
     if (currentParticipantProject) {
       const request = dispatch(requestListModules(currentParticipantProject.id));
       setRequestId(request.requestId);
+    } else {
+      if (projectId) {
+        const request = dispatch(requestListModules(projectId));
+        setRequestId(request.requestId);
+      }
     }
   }, [currentParticipantProject]);
 
