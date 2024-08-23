@@ -80,7 +80,6 @@ export const makeVariableValueOperations = ({
   if (variable.type === 'Table') {
     const columns = variable.columns;
     const initialCellValues: VariableTableCell[][] = getInitialCellValues(variable as TableVariableWithValues);
-    const cellValues = [...initialCellValues, ...pendingCellValues];
 
     if (columns.length === 0) {
       return operations;
@@ -90,7 +89,7 @@ export const makeVariableValueOperations = ({
     initialCellValues.forEach((row) => {
       const rowId = row[0].rowId;
       if (rowId !== undefined) {
-        const foundRow = cellValues.find((r) => r[0].rowId === rowId);
+        const foundRow = pendingCellValues.find((r) => r[0].rowId === rowId);
         if (foundRow === undefined) {
           // delete operations
           operations.push({
@@ -125,7 +124,7 @@ export const makeVariableValueOperations = ({
     });
 
     // add row operations
-    const newRows = cellValues.filter((row) => row[0].rowId === undefined);
+    const newRows = pendingCellValues.filter((row) => row[0].rowId === undefined);
     newRows.forEach((newRow) => {
       // append row
       operations.push({

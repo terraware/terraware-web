@@ -25,6 +25,7 @@ import { makeVariableValueOperations } from './util';
 
 type ProjectVariablesUpdate = {
   pendingVariableValues: Map<number, VariableValueValue[]>;
+  pendingCellValues: Map<number, VariableTableCell[][]>;
   setCellValues: (variableId: number, values: VariableTableCell[][]) => void;
   setDeletedImages: (variableId: number, values: VariableValueImageValue[]) => void;
   setImages: (variableId: number, values: VariableValueImageValue[]) => void;
@@ -203,6 +204,7 @@ export const useProjectVariablesUpdate = (
 
   return {
     pendingVariableValues,
+    pendingCellValues,
     setCellValues,
     setDeletedImages,
     setImages,

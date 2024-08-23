@@ -151,6 +151,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     update,
     updateSuccess,
     uploadSuccess,
+    pendingCellValues,
   } = useProjectVariablesUpdate(deliverable.projectId, variablesWithValues);
 
   useEffect(() => {
@@ -171,7 +172,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   }, [exit, updateSuccess, uploadSuccess]);
 
   const handleOnSave = () => {
-    if (pendingVariableValues.size === 0) {
+    if (pendingVariableValues.size === 0 && pendingCellValues.size === 0) {
       // If the user clicks save but there are no changes, just navigate them back to the deliverable
       exit();
     }
