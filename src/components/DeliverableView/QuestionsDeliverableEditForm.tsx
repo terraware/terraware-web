@@ -141,6 +141,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   }, [variablesWithValues]);
 
   const {
+    hasPendingValues,
     pendingVariableValues,
     setCellValues,
     setDeletedImages,
@@ -171,7 +172,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   }, [exit, updateSuccess, uploadSuccess]);
 
   const handleOnSave = () => {
-    if (pendingVariableValues.size === 0) {
+    if (!hasPendingValues) {
       // If the user clicks save but there are no changes, just navigate them back to the deliverable
       exit();
     }

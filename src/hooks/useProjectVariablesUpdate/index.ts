@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { PhotoWithAttributes } from 'src/components/DocumentProducer/EditImagesModal/PhotoSelector';
 import { VariableTableCell } from 'src/components/DocumentProducer/EditableTableModal/helpers';
@@ -24,6 +24,10 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { makeVariableValueOperations } from './util';
 
 type ProjectVariablesUpdate = {
+  getPendingValues: (
+    variableId: number
+  ) => VariableValueValue[] | VariableTableCell[][] | VariableValueImageValue[] | undefined;
+  hasPendingValues: boolean;
   pendingVariableValues: Map<number, VariableValueValue[]>;
   setCellValues: (variableId: number, values: VariableTableCell[][]) => void;
   setDeletedImages: (variableId: number, values: VariableValueImageValue[]) => void;
@@ -201,7 +205,26 @@ export const useProjectVariablesUpdate = (
     }
   }, [projectId, updateResult]);
 
+  const hasPendingValues = useMemo(
+    () =>
+      pendingVariableValues.size +
+        pendingCellValues.size +
+        pendingImages.size +
+        pendingDeletedImages.size +
+        pendingNewImages.size >
+      0,
+    [pendingVariableValues, pendingCellValues, pendingImages, pendingDeletedImages, pendingNewImages]
+  );
+
+  const getPendingValues = useCallback(
+    (variableId: number) =>
+      pendingVariableValues.get(variableId) || pendingCellValues.get(variableId) || pendingImages.get(variableId),
+    [pendingVariableValues, pendingCellValues, pendingImages, pendingDeletedImages, pendingNewImages]
+  );
+
   return {
+    getPendingValues,
+    hasPendingValues,
     pendingVariableValues,
     setCellValues,
     setDeletedImages,

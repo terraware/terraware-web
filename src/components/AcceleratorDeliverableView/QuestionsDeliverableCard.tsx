@@ -58,7 +58,8 @@ const QuestionBox = ({
   const theme = useTheme();
   const { activeLocale } = useLocalization();
   const {
-    pendingVariableValues,
+    getPendingValues,
+    hasPendingValues,
     setCellValues,
     setDeletedImages,
     setImages,
@@ -87,11 +88,6 @@ const QuestionBox = ({
   const firstVariableValueInternalComment: string | undefined = firstVariableValue?.internalComment;
 
   const [modalFeedback, setModalFeedback] = useState(firstVariableValue?.feedback || '');
-
-  const pendingValues: VariableValueValue[] | undefined = useMemo(
-    () => pendingVariableValues.get(variable.id),
-    [pendingVariableValues, variable.id]
-  );
 
   const editing = useMemo(() => editingId === variable.id, [editingId, variable.id]);
 
@@ -159,8 +155,7 @@ const QuestionBox = ({
 
   const onSave = () => {
     setEditingId(undefined);
-
-    if (pendingVariableValues.size === 0) {
+    if (!hasPendingValues) {
       return;
     }
 
@@ -354,11 +349,13 @@ const QuestionBox = ({
               <Grid item xs={12}>
                 <DeliverableVariableDetailsInput
                   hideDescription
-                  values={pendingValues || variable.values}
+                  values={(getPendingValues(variable.id) as VariableValueValue[]) || variable.values}
                   setValues={(newValues: VariableValueValue[]) => setValues(variable.id, newValues)}
                   variable={variable}
                   addRemovedValue={(removedValue: VariableValueValue) => setRemovedValue(variable.id, removedValue)}
-                  setCellValues={(newValues: VariableTableCell[][]) => setCellValues(variable.id, newValues)}
+                  setCellValues={(newValues: VariableTableCell[][]) => {
+                    setCellValues(variable.id, newValues);
+                  }}
                   setDeletedImages={(newValues: VariableValueImageValue[]) => setDeletedImages(variable.id, newValues)}
                   setImages={(newValues: VariableValueImageValue[]) => setImages(variable.id, newValues)}
                   setNewImages={(newValues: PhotoWithAttributes[]) => setNewImages(variable.id, newValues)}
