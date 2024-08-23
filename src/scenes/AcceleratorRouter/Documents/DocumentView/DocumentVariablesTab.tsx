@@ -139,7 +139,7 @@ const DocumentVariablesTab = ({ document: doc, setSelectedTab }: DocumentVariabl
       ) {
         newAcc.push(currentVal.parentSectionNumber);
       }
-      currentVal.children.forEach((childSection) => {
+      currentVal.children?.forEach((childSection) => {
         const childContainingSections = containingSections(variableId)([], childSection as SectionVariableWithValues);
         newAcc.push(...childContainingSections);
       });
