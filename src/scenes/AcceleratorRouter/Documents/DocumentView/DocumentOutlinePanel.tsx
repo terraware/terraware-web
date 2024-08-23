@@ -14,13 +14,8 @@ import {
 
 import Icon from 'src/components/common/icon/Icon';
 import { useIsVisible } from 'src/hooks/useIsVisible';
-import { requestListVariablesValues } from 'src/redux/features/documentProducer/values/valuesThunks';
-import { selectVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
-import { requestListVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
-import { useSelectorProcessor } from 'src/redux/hooks/useSelectorProcessor';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { Document as DocumentType } from 'src/types/documentProducer/Document';
-import { SectionVariableWithValues, VariableWithValues } from 'src/types/documentProducer/Variable';
+import { useDocumentProducerData } from 'src/providers/DocumentProducer/Context';
+import { SectionVariableWithValues } from 'src/types/documentProducer/Variable';
 
 const isHTMLElementInViewport = (element: HTMLElement): boolean => {
   const rect = element.getBoundingClientRect();
@@ -154,38 +149,27 @@ const SectionItem = ({
 };
 
 type Props = {
-  document: DocumentType;
   open: boolean;
   setOpen: (open: boolean) => void;
 };
 
-const DocumentOutlinePanel = ({ document, open, setOpen }: Props): JSX.Element => {
-  const dispatch = useAppDispatch();
+const DocumentOutlinePanel = ({ open, setOpen }: Props): JSX.Element => {
   const visibilityBoxRef = useRef(null);
   const topIsVisible = useIsVisible(visibilityBoxRef);
+  const { documentVariables } = useDocumentProducerData();
+
   const [selectedSectionId, setSelectedSectionId] = useState<number>();
   const [sections, setSections] = useState<SectionVariableWithValues[]>();
-  const [variables, setVariables] = useState<(VariableWithValues | SectionVariableWithValues)[]>();
-  const result = useAppSelector((state) =>
-    selectVariablesWithValues(state, document.variableManifestId, document.projectId)
-  );
-
-  useSelectorProcessor(result, setVariables);
 
   useEffect(() => {
-    dispatch(requestListVariables(document.variableManifestId));
-    dispatch(requestListVariablesValues({ projectId: document.projectId }));
-  }, [dispatch, document.variableManifestId, document.projectId]);
-
-  useEffect(() => {
-    if (!selectedSectionId && variables) {
-      const sectionVariables = variables.filter((variable) => variable.type === 'Section');
+    if (!selectedSectionId && documentVariables) {
+      const sectionVariables = documentVariables.filter((variable) => variable.type === 'Section');
       setSections(sectionVariables as SectionVariableWithValues[]);
       if (sectionVariables.length) {
         setSelectedSectionId(sectionVariables[0].id);
       }
     }
-  }, [selectedSectionId, variables]);
+  }, [selectedSectionId, documentVariables]);
 
   return (
     <Box width={open ? '200px' : '60px'}>

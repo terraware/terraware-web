@@ -9,12 +9,18 @@ import {
   DocumentHistoryEvent,
   DocumentHistorySavedPayload,
 } from 'src/types/documentProducer/Document';
+import { Document as DocumentType } from 'src/types/documentProducer/Document';
 import { getUserDisplayName } from 'src/utils/user';
+
+import { AsyncRequest, AsyncRequestT } from '../../asyncUtils';
 
 export const selectDocuments = (requestId: string) => (state: RootState) =>
   state.documentProducerDocumentList[requestId];
 
-export const selectGetDocument = (docId: number) => (state: RootState) => state.documentProducerDocument[docId];
+export const selectGetDocument =
+  (docId: number) =>
+  (state: RootState): AsyncRequestT<DocumentType> | undefined =>
+    state.documentProducerDocument[docId];
 
 export const selectListHistory = createCachedSelector(
   (state: RootState, id: number) => state.documentProducerDocumentListHistory[id],

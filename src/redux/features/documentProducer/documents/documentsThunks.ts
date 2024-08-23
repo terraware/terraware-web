@@ -11,8 +11,8 @@ import {
   UpgradeManifestPayload,
 } from 'src/types/documentProducer/Document';
 
-export const requestGetDocument = createAsyncThunk('getDocument', async (id: number, { rejectWithValue }) => {
-  const response = await DocumentService.getDocument(id);
+export const requestGetDocument = createAsyncThunk('getDocument', async (documentId: number, { rejectWithValue }) => {
+  const response = await DocumentService.getDocument(documentId);
   if (response.requestSucceeded && response.data?.document) {
     return response.data.document;
   }

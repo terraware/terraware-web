@@ -6,25 +6,9 @@ import EditVariable from 'src/components/DocumentProducer/EditVariable';
 import PageContent from 'src/components/DocumentProducer/PageContent';
 import TableContent from 'src/components/DocumentProducer/TableContent';
 import Link from 'src/components/common/Link';
-import { requestListVariablesValues } from 'src/redux/features/documentProducer/values/valuesThunks';
-import {
-  selectAllVariablesWithValues,
-  selectVariablesWithValues,
-} from 'src/redux/features/documentProducer/variables/variablesSelector';
-import {
-  requestListAllVariables,
-  requestListVariables,
-} from 'src/redux/features/documentProducer/variables/variablesThunks';
-import { useSelectorProcessor } from 'src/redux/hooks/useSelectorProcessor';
-import { RootState } from 'src/redux/rootReducer';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useDocumentProducerData } from 'src/providers/DocumentProducer/Context';
 import strings from 'src/strings';
-import { Document } from 'src/types/documentProducer/Document';
-import {
-  SectionVariableWithValues,
-  SelectOptionPayload,
-  VariableWithValues,
-} from 'src/types/documentProducer/Variable';
+import { SelectOptionPayload, VariableWithValues } from 'src/types/documentProducer/Variable';
 import {
   VariableValueDateValue,
   VariableValueLinkValue,
@@ -90,7 +74,6 @@ const tableCellRenderer = (props: RendererProps<any>): JSX.Element => {
 };
 
 export type DocumentVariablesProps = {
-  document: Document;
   setSelectedTab?: (tab: string) => void;
 };
 
@@ -99,75 +82,52 @@ const filterSearch =
   (variable: VariableWithValues): boolean =>
     searchValue ? fuzzyMatch(searchValue, variable.name.toLowerCase()) : true;
 
-const DocumentVariablesTab = ({ document: doc, setSelectedTab }: DocumentVariablesProps): JSX.Element => {
-  const dispatch = useAppDispatch();
+const DocumentVariablesTab = ({ setSelectedTab }: DocumentVariablesProps): JSX.Element => {
+  const { allVariables, documentSectionVariables, getUsedSections, projectId, reload } = useDocumentProducerData();
 
+  console.log({ allVariables });
   const [tableRows, setTableRows] = useState<TableRow[]>([]);
   const [variables, setVariables] = useState<VariableWithValues[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
   const [openEditVariableModal, setOpenEditVariableModal] = useState<boolean>(false);
-  const [selectedVariableId, setSelectedVariableId] = useState<number>();
-
-  const allVariables = useAppSelector((state: RootState) => selectAllVariablesWithValues(state, doc.projectId));
-
-  const [documentVariables, setDocumentVariables] = useState<SectionVariableWithValues[]>([]);
-  const documentVariablesResult = useAppSelector((state) =>
-    selectVariablesWithValues(state, doc.variableManifestId, doc.projectId)
-  );
-  useSelectorProcessor(documentVariablesResult, setDocumentVariables);
+  const [selectedVariable, setSelectedVariable] = useState<VariableWithValues>();
+  const [sectionsUsed, setSectionsUsed] = useState<string[]>([]);
 
   useEffect(() => {
     setVariables(
-      allVariables
-        .filter((d: VariableWithValues) => d.type !== 'Section' && d.type !== 'Image' && d.type !== 'Table')
+      (allVariables || [])
+        .filter((d: VariableWithValues) => {
+          if (!d) {
+            debugger;
+          }
+          return d.type !== 'Section' && d.type !== 'Image' && d.type !== 'Table';
+        })
         .filter(filterSearch(searchValue))
     );
   }, [allVariables, searchValue]);
 
   useEffect(() => {
-    dispatch(requestListVariables(doc.variableManifestId));
-    dispatch(requestListAllVariables());
-    dispatch(requestListVariablesValues({ projectId: doc.projectId }));
-  }, [dispatch, doc.variableManifestId, doc.projectId]);
-
-  const containingSections = useCallback(
-    (variableId?: number) => (acc: string[], currentVal: SectionVariableWithValues) => {
-      const newAcc = [...acc];
-      if (
-        currentVal.parentSectionNumber &&
-        currentVal?.values?.some((val) => val.type === 'SectionVariable' && val.variableId === variableId)
-      ) {
-        newAcc.push(currentVal.parentSectionNumber);
-      }
-      currentVal.children?.forEach((childSection) => {
-        const childContainingSections = containingSections(variableId)([], childSection as SectionVariableWithValues);
-        newAcc.push(...childContainingSections);
-      });
-
-      return newAcc;
-    },
-    []
-  );
-
-  useEffect(() => {
     setTableRows(
       variables.map((v) => ({
         ...v,
-        instances: documentVariables.reduce(containingSections(v.id), []).length,
+        instances: getUsedSections(v.id).length,
       }))
     );
-  }, [containingSections, documentVariables, variables]);
+  }, [documentSectionVariables, getUsedSections, variables]);
 
-  const [sectionsUsed, setSectionsUsed] = useState<string[]>([]);
   useEffect(() => {
-    const sectionNumbers = documentVariables.reduce(containingSections(selectedVariableId), []);
-    setSectionsUsed(sectionNumbers);
-  }, [containingSections, documentVariables, selectedVariableId]);
+    if (selectedVariable) {
+      const sectionNumbers = getUsedSections(selectedVariable.id);
+      setSectionsUsed(sectionNumbers);
+    }
+  }, [documentSectionVariables, getUsedSections, selectedVariable]);
 
   const onSectionClicked = useCallback(
     (sectionNumber: string) => {
       setOpenEditVariableModal(false);
-      setSelectedVariableId(-1);
+      setSelectedVariable(undefined);
+
+      console.log({ setSelectedTab });
       if (setSelectedTab) {
         setSelectedTab(strings.DOCUMENT);
         setTimeout(() => {
@@ -179,12 +139,6 @@ const DocumentVariablesTab = ({ document: doc, setSelectedTab }: DocumentVariabl
     },
     [setSelectedTab]
   );
-
-  const onUpdate = () => {
-    dispatch(requestListAllVariables());
-    dispatch(requestListVariables(doc.variableManifestId));
-    dispatch(requestListVariablesValues({ projectId: doc.projectId }));
-  };
 
   const onSearch = (str: string) => setSearchValue(str);
 
@@ -199,9 +153,9 @@ const DocumentVariablesTab = ({ document: doc, setSelectedTab }: DocumentVariabl
       tableOrderBy: 'date',
       tableColumns,
       tableCellRenderer,
-      tableReloadData: () => onUpdate(),
-      tableOnSelect: (selected: any) => {
-        setSelectedVariableId(selected.id);
+      tableReloadData: reload,
+      tableOnSelect: (selected: VariableWithValues) => {
+        setSelectedVariable(selected);
         setOpenEditVariableModal(true);
       },
     },
@@ -210,22 +164,22 @@ const DocumentVariablesTab = ({ document: doc, setSelectedTab }: DocumentVariabl
   const onFinish = useCallback(
     (updated: boolean) => {
       if (updated) {
-        dispatch(requestListVariablesValues({ projectId: doc.projectId }));
+        reload();
       }
     },
-    [dispatch, doc.projectId]
+    [reload]
   );
 
   return (
     <>
-      {openEditVariableModal && (
+      {openEditVariableModal && selectedVariable && (
         <EditVariable
           onFinish={(updated: boolean) => {
             setOpenEditVariableModal(false);
             onFinish(updated);
           }}
-          projectId={doc.projectId}
-          variableId={selectedVariableId || -1}
+          projectId={projectId}
+          variable={selectedVariable}
           sectionsUsed={sectionsUsed}
           onSectionClicked={onSectionClicked}
         />

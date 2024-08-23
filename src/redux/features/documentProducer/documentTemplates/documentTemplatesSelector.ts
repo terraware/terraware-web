@@ -10,13 +10,12 @@ export const selectDocumentTemplates = (state: RootState): DocumentTemplatesData
   state.documentProducerDocumentTemplates.listDocumentTemplates;
 
 export const selectDocumentTemplate = createCachedSelector(
-  (state: RootState, documentTemplateId: number) =>
-    state.documentProducerDocumentTemplates.listDocumentTemplates as any,
+  (state: RootState, documentTemplateId: number) => state.documentProducerDocumentTemplates.listDocumentTemplates,
   (state: RootState, documentTemplateId: number) => documentTemplateId,
-  (response, documentTemplateId) => {
+  (response, documentTemplateId): DocumentTemplate | undefined => {
     if (response && response.documentTemplates) {
       return response.documentTemplates.find((m: DocumentTemplate) => m.id === documentTemplateId);
     }
-    return null;
+    return undefined;
   }
 )((state: RootState, documentTemplateId: number) => documentTemplateId);
