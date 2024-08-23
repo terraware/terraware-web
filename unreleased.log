@@ -1,3 +1,5 @@
+3c0544301b5 SW-5866 Updated MapStyle source (#3068)
+6a95440344f SW-5475 Add module stepper back in project profile view (#3067)
 273960ee3c8 SW-5800 Deliverables list for non-accelerator projects (#3071)
 abae5612b32 SW-5800 Don't show "undefined" as module title (#3070)
 24a77d59bb6 SW-5821 Render feedback as HTML (#3069)
