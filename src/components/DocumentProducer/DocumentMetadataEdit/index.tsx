@@ -55,6 +55,9 @@ const DocumentMetadataEdit = ({
   const { availableProjects } = useProjects();
 
   const [participant, setParticipant] = useState<{ id?: number }>({ id: undefined });
+  // TODO: remove comment below once web-components is updated and Textfield has onFocus prop
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [hasDocumentNameFieldBeenFocused, setHasDocumentNameFieldBeenFocused] = useState(false);
 
   const participantProjects = useMemo(
     () =>
@@ -120,6 +123,32 @@ const DocumentMetadataEdit = ({
   );
 
   const projectRecord = useMemo(() => ({ projectId: projectId ? parseInt(projectId, 10) : -1 }), [projectId]);
+  const projectName = useMemo(
+    () => participantProjects.find((project) => project.id === projectRecord.projectId)?.name,
+    [participantProjects, projectRecord.projectId]
+  );
+
+  const documentTemplateName = useMemo(
+    () => getDocumentTemplateName(documentTemplates ?? [], documentTemplateId),
+    [documentTemplateId, documentTemplates]
+  );
+
+  useEffect(() => {
+    if (hasDocumentNameFieldBeenFocused) {
+      return;
+    }
+
+    // if project name is set and document name is empty, set document name to project name
+    if (projectName && !documentName) {
+      setDocumentName(projectName);
+    }
+
+    // if project name and document template name are set AND document name is the same as project name
+    // append document template name to project name
+    if (projectName && documentTemplateName && documentName === projectName) {
+      setDocumentName(`${projectName} - ${documentTemplateName}`);
+    }
+  }, [documentName, documentTemplateName, hasDocumentNameFieldBeenFocused, projectName]);
 
   return (
     <>
@@ -180,6 +209,8 @@ const DocumentMetadataEdit = ({
           value={documentName}
           errorText={getErrorText(documentName)}
           onChange={(value: unknown) => handleTextFieldChange(value, setDocumentName)}
+          // TODO: uncomment line below once web-components is updated and Textfield has onFocus prop
+          // onFocus={() => setHasDocumentNameFieldBeenFocused(true)}
           required
         />
       </FormField>
