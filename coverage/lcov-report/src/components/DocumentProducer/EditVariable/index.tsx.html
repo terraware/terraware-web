@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/77</span>
+                <span class='fraction'>0/69</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/34</span>
+                <span class='fraction'>0/32</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/75</span>
+                <span class='fraction'>0/69</span>
             </div>
         
             
@@ -273,25 +273,7 @@
 <a name='L208'></a><a href='#L208'>208</a>
 <a name='L209'></a><a href='#L209'>209</a>
 <a name='L210'></a><a href='#L210'>210</a>
-<a name='L211'></a><a href='#L211'>211</a>
-<a name='L212'></a><a href='#L212'>212</a>
-<a name='L213'></a><a href='#L213'>213</a>
-<a name='L214'></a><a href='#L214'>214</a>
-<a name='L215'></a><a href='#L215'>215</a>
-<a name='L216'></a><a href='#L216'>216</a>
-<a name='L217'></a><a href='#L217'>217</a>
-<a name='L218'></a><a href='#L218'>218</a>
-<a name='L219'></a><a href='#L219'>219</a>
-<a name='L220'></a><a href='#L220'>220</a>
-<a name='L221'></a><a href='#L221'>221</a>
-<a name='L222'></a><a href='#L222'>222</a>
-<a name='L223'></a><a href='#L223'>223</a>
-<a name='L224'></a><a href='#L224'>224</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L211'></a><a href='#L211'>211</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -336,13 +318,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -351,7 +326,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -446,7 +421,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -516,16 +490,11 @@ import { Button } from '@terraware/web-components';
 &nbsp;
 import PageDialog from 'src/components/DocumentProducer/PageDialog';
 import VariableDetailsInput from 'src/components/DocumentProducer/VariableDetailsInput';
-import {
-  selectGetVariableValues,
-  selectUpdateVariableValues,
-} from 'src/redux/features/documentProducer/values/valuesSelector';
+import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
 import { requestUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
-import { selectGetVariable } from 'src/redux/features/documentProducer/variables/variablesSelector';
-import { useSelectorProcessor } from 'src/redux/hooks/useSelectorProcessor';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { Variable } from 'src/types/documentProducer/Variable';
+import { VariableWithValues } from 'src/types/documentProducer/Variable';
 import {
   NewDateValuePayload,
   NewLinkValuePayload,
@@ -544,132 +513,124 @@ import {
 export type EditVariableProps = {
   onFinish: (edited: boolean) =&gt; void;
   projectId: number;
-  variableId: number;
+  variable: VariableWithValues;
   sectionsUsed?: string[];
   onSectionClicked?: (sectionNumber: string) =&gt; void;
 };
 &nbsp;
 const EditVariable = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(p</span>rops: EditVariableProps): JSX.Element =&gt; {</span>
-  const { onFinish, projectId, variableId, sectionsUsed, onSectionClicked } = <span class="cstat-no" title="statement not covered" >props;</span>
+  const { onFinish, projectId, variable, sectionsUsed, onSectionClicked } = <span class="cstat-no" title="statement not covered" >props;</span>
 &nbsp;
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
 &nbsp;
   const [validate, setValidate] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [hasErrors, setHasErrors] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
-  const [variable, setVariable] = <span class="cstat-no" title="statement not covered" >useState&lt;Variable&gt;();</span>
-  const [values, setValues] = <span class="cstat-no" title="statement not covered" >useState&lt;VariableValueValue[]&gt;();</span>
+  const [values, setValues] = <span class="cstat-no" title="statement not covered" >useState&lt;VariableValueValue[]&gt;(variable.values);</span>
   const [removedValues, setRemovedValues] = <span class="cstat-no" title="statement not covered" >useState&lt;VariableValueValue[]&gt;();</span>
-&nbsp;
-  const selector = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectGetVariable(state, variableId))</span>;</span>
-  const valuesSelector = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectGetVariableValues(state, projectId, variableId))</span>;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useSelectorProcessor(selector, setVariable);</span>
-<span class="cstat-no" title="statement not covered" >  useSelectorProcessor(valuesSelector, setValues);</span>
 &nbsp;
   const results = <span class="cstat-no" title="statement not covered" >useAppSelector(selectUpdateVariableValues(requestId));</span>
 &nbsp;
   const save = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setValidate(true);</span>
-<span class="cstat-no" title="statement not covered" >    if (hasErrors) {</span>
+<span class="cstat-no" title="statement not covered" >    if (hasErrors || !variable) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
-<span class="cstat-no" title="statement not covered" >    if (variable &amp;&amp; variableId) {</span>
-<span class="cstat-no" title="statement not covered" >      if (values?.length) {</span>
-        let newValue:
-          | NewDateValuePayload
-          | NewTextValuePayload
-          | NewNumberValuePayload
-          | NewSelectValuePayload
-          | NewLinkValuePayload
-          | undefined;
-        let newValues: NewTextValuePayload[] = <span class="cstat-no" title="statement not covered" >[];</span>
-        let valueIdToUpdate = <span class="cstat-no" title="statement not covered" >-1;</span>
-<span class="cstat-no" title="statement not covered" >        if (variable.type === 'Text') {</span>
-          const firstValue = <span class="cstat-no" title="statement not covered" >values[0] as VariableValueTextValue;</span>
-<span class="cstat-no" title="statement not covered" >          valueIdToUpdate = firstValue.id;</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >          newValues = values.reduce(<span class="fstat-no" title="function not covered" >(a</span>cc: NewTextValuePayload[], nV: VariableValueValue) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >            if (nV.type === 'Text') {</span>
-<span class="cstat-no" title="statement not covered" >              acc.push({ type: 'Text', textValue: nV.textValue });</span>
-            }
-<span class="cstat-no" title="statement not covered" >            return acc;</span>
-          }, []);
-        }
-<span class="cstat-no" title="statement not covered" >        if (variable.type === 'Number') {</span>
-          const firstValue = <span class="cstat-no" title="statement not covered" >values[0] as VariableValueNumberValue;</span>
-<span class="cstat-no" title="statement not covered" >          valueIdToUpdate = firstValue.id;</span>
-<span class="cstat-no" title="statement not covered" >          newValue = { type: 'Number', numberValue: firstValue.numberValue, citation: firstValue.citation };</span>
-        }
-<span class="cstat-no" title="statement not covered" >        if (variable.type === 'Select') {</span>
-          const firstValue = <span class="cstat-no" title="statement not covered" >values[0] as VariableValueSelectValue;</span>
-<span class="cstat-no" title="statement not covered" >          valueIdToUpdate = firstValue.id;</span>
-<span class="cstat-no" title="statement not covered" >          newValue = { type: 'Select', optionIds: firstValue.optionValues, citation: firstValue.citation };</span>
-        }
-<span class="cstat-no" title="statement not covered" >        if (variable.type === 'Date') {</span>
-          const firstValue = <span class="cstat-no" title="statement not covered" >values[0] as VariableValueDateValue;</span>
-<span class="cstat-no" title="statement not covered" >          valueIdToUpdate = firstValue.id;</span>
-<span class="cstat-no" title="statement not covered" >          newValue = { type: 'Date', dateValue: firstValue.dateValue, citation: firstValue.citation };</span>
-        }
-<span class="cstat-no" title="statement not covered" >        if (variable.type === 'Link') {</span>
-          const firstValue = <span class="cstat-no" title="statement not covered" >values[0] as VariableValueLinkValue;</span>
-<span class="cstat-no" title="statement not covered" >          valueIdToUpdate = firstValue.id;</span>
-<span class="cstat-no" title="statement not covered" >          newValue = { type: 'Link', url: firstValue.url, citation: firstValue.citation, title: firstValue.title };</span>
-        }
-<span class="cstat-no" title="statement not covered" >        if (newValue) {</span>
-<span class="cstat-no" title="statement not covered" >          if (values[0].id !== -1) {</span>
-            const request = <span class="cstat-no" title="statement not covered" >dispatch(</span>
-              requestUpdateVariableValues({
-                operations: [
-                  { operation: 'Update', valueId: valueIdToUpdate, value: newValue, existingValueId: valueIdToUpdate },
-                ],
-                projectId: projectId,
-              })
-            );
-<span class="cstat-no" title="statement not covered" >            setRequestId(request.requestId);</span>
-          } else {
-            const request = <span class="cstat-no" title="statement not covered" >dispatch(</span>
-              requestUpdateVariableValues({
-                operations: [{ operation: 'Append', variableId, value: newValue }],
-                projectId: projectId,
-              })
-            );
-<span class="cstat-no" title="statement not covered" >            setRequestId(request.requestId);</span>
-          }
-        }
-<span class="cstat-no" title="statement not covered" >        if (newValues) {</span>
-          const operations: Operation[] = <span class="cstat-no" title="statement not covered" >[];</span>
-<span class="cstat-no" title="statement not covered" >          newValues.forEach(<span class="fstat-no" title="function not covered" >(n</span>V, index) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >            if (values[index].id !== -1) {</span>
-<span class="cstat-no" title="statement not covered" >              operations.push({</span>
-                operation: 'Update',
-                valueId: values[index].id,
-                value: nV,
-                existingValueId: values[index].id,
-              });
-            } else {
-<span class="cstat-no" title="statement not covered" >              operations.push({ operation: 'Append', variableId, value: nV });</span>
-            }
-          });
+<span class="cstat-no" title="statement not covered" >    if (values.length) {</span>
+      let newValue:
+        | NewDateValuePayload
+        | NewTextValuePayload
+        | NewNumberValuePayload
+        | NewSelectValuePayload
+        | NewLinkValuePayload
+        | undefined;
+      let newValues: NewTextValuePayload[] = <span class="cstat-no" title="statement not covered" >[];</span>
+      let valueIdToUpdate = <span class="cstat-no" title="statement not covered" >-1;</span>
+<span class="cstat-no" title="statement not covered" >      if (variable.type === 'Text') {</span>
+        const firstValue = <span class="cstat-no" title="statement not covered" >values[0] as VariableValueTextValue;</span>
+<span class="cstat-no" title="statement not covered" >        valueIdToUpdate = firstValue.id;</span>
 &nbsp;
-          // delete list of values removed
-<span class="cstat-no" title="statement not covered" >          if (removedValues) {</span>
-<span class="cstat-no" title="statement not covered" >            removedValues.forEach(<span class="fstat-no" title="function not covered" >(r</span>V) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >              operations.push({</span>
-                operation: 'Delete',
-                valueId: rV.id,
-                existingValueId: rV.id,
-              });
-            });
+<span class="cstat-no" title="statement not covered" >        newValues = values.reduce(<span class="fstat-no" title="function not covered" >(a</span>cc: NewTextValuePayload[], nV: VariableValueValue) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          if (nV.type === 'Text') {</span>
+<span class="cstat-no" title="statement not covered" >            acc.push({ type: 'Text', textValue: nV.textValue });</span>
           }
+<span class="cstat-no" title="statement not covered" >          return acc;</span>
+        }, []);
+      }
+<span class="cstat-no" title="statement not covered" >      if (variable.type === 'Number') {</span>
+        const firstValue = <span class="cstat-no" title="statement not covered" >values[0] as VariableValueNumberValue;</span>
+<span class="cstat-no" title="statement not covered" >        valueIdToUpdate = firstValue.id;</span>
+<span class="cstat-no" title="statement not covered" >        newValue = { type: 'Number', numberValue: firstValue.numberValue, citation: firstValue.citation };</span>
+      }
+<span class="cstat-no" title="statement not covered" >      if (variable.type === 'Select') {</span>
+        const firstValue = <span class="cstat-no" title="statement not covered" >values[0] as VariableValueSelectValue;</span>
+<span class="cstat-no" title="statement not covered" >        valueIdToUpdate = firstValue.id;</span>
+<span class="cstat-no" title="statement not covered" >        newValue = { type: 'Select', optionIds: firstValue.optionValues, citation: firstValue.citation };</span>
+      }
+<span class="cstat-no" title="statement not covered" >      if (variable.type === 'Date') {</span>
+        const firstValue = <span class="cstat-no" title="statement not covered" >values[0] as VariableValueDateValue;</span>
+<span class="cstat-no" title="statement not covered" >        valueIdToUpdate = firstValue.id;</span>
+<span class="cstat-no" title="statement not covered" >        newValue = { type: 'Date', dateValue: firstValue.dateValue, citation: firstValue.citation };</span>
+      }
+<span class="cstat-no" title="statement not covered" >      if (variable.type === 'Link') {</span>
+        const firstValue = <span class="cstat-no" title="statement not covered" >values[0] as VariableValueLinkValue;</span>
+<span class="cstat-no" title="statement not covered" >        valueIdToUpdate = firstValue.id;</span>
+<span class="cstat-no" title="statement not covered" >        newValue = { type: 'Link', url: firstValue.url, citation: firstValue.citation, title: firstValue.title };</span>
+      }
+<span class="cstat-no" title="statement not covered" >      if (newValue) {</span>
+<span class="cstat-no" title="statement not covered" >        if (values[0].id !== -1) {</span>
           const request = <span class="cstat-no" title="statement not covered" >dispatch(</span>
             requestUpdateVariableValues({
-              operations,
-              projectId,
+              operations: [
+                { operation: 'Update', valueId: valueIdToUpdate, value: newValue, existingValueId: valueIdToUpdate },
+              ],
+              projectId: projectId,
+            })
+          );
+<span class="cstat-no" title="statement not covered" >          setRequestId(request.requestId);</span>
+        } else {
+          const request = <span class="cstat-no" title="statement not covered" >dispatch(</span>
+            requestUpdateVariableValues({
+              operations: [{ operation: 'Append', variableId: variable.id, value: newValue }],
+              projectId: projectId,
             })
           );
 <span class="cstat-no" title="statement not covered" >          setRequestId(request.requestId);</span>
         }
+      }
+<span class="cstat-no" title="statement not covered" >      if (newValues) {</span>
+        const operations: Operation[] = <span class="cstat-no" title="statement not covered" >[];</span>
+<span class="cstat-no" title="statement not covered" >        newValues.forEach(<span class="fstat-no" title="function not covered" >(n</span>V, index) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          if (values[index].id !== -1) {</span>
+<span class="cstat-no" title="statement not covered" >            operations.push({</span>
+              operation: 'Update',
+              valueId: values[index].id,
+              value: nV,
+              existingValueId: values[index].id,
+            });
+          } else {
+<span class="cstat-no" title="statement not covered" >            operations.push({ operation: 'Append', variableId: variable.id, value: nV });</span>
+          }
+        });
+&nbsp;
+        // delete list of values removed
+<span class="cstat-no" title="statement not covered" >        if (removedValues) {</span>
+<span class="cstat-no" title="statement not covered" >          removedValues.forEach(<span class="fstat-no" title="function not covered" >(r</span>V) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >            operations.push({</span>
+              operation: 'Delete',
+              valueId: rV.id,
+              existingValueId: rV.id,
+            });
+          });
+        }
+        const request = <span class="cstat-no" title="statement not covered" >dispatch(</span>
+          requestUpdateVariableValues({
+            operations,
+            projectId,
+          })
+        );
+<span class="cstat-no" title="statement not covered" >        setRequestId(request.requestId);</span>
       }
     }
   };
@@ -716,7 +677,7 @@ const EditVariable = <span class="cstat-no" title="statement not covered" ><span
       &lt;Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'&gt;
         &lt;Grid item xs={12}&gt;
           &lt;VariableDetailsInput
-            values={values}
+            values={variable.values}
             setValues={<span class="fstat-no" title="function not covered" >(n</span>ewValues: VariableValueValue[]) =&gt; <span class="cstat-no" title="statement not covered" >setValues(newValues)}</span>
             validate={validate}
             setHasErrors={<span class="fstat-no" title="function not covered" >(n</span>ewValue: boolean) =&gt; <span class="cstat-no" title="statement not covered" >setHasErrors(newValue)}</span>
@@ -739,7 +700,7 @@ export default EditVariable;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-26T15:46:33.141Z
+                at 2024-08-26T15:50:48.520Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

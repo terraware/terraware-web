@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
@@ -145,20 +145,7 @@
 <a name='L80'></a><a href='#L80'>80</a>
 <a name='L81'></a><a href='#L81'>81</a>
 <a name='L82'></a><a href='#L82'>82</a>
-<a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a>
-<a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a>
-<a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a>
-<a name='L92'></a><a href='#L92'>92</a>
-<a name='L93'></a><a href='#L93'>93</a>
-<a name='L94'></a><a href='#L94'>94</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L83'></a><a href='#L83'>83</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -188,11 +175,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -205,10 +187,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -254,25 +232,23 @@
 import { Box, Typography, useTheme } from '@mui/material';
 &nbsp;
 import { useParticipants } from 'src/hooks/useParticipants';
-import { selectDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesSelector';
-import { requestListDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesThunks';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { User } from 'src/types/User';
 import { Document } from 'src/types/documentProducer/Document';
+import { DocumentTemplate } from 'src/types/documentProducer/DocumentTemplate';
 import { getDateTimeDisplayValue } from 'src/utils/dateFormatter';
 import { getUserDisplayName } from 'src/utils/user';
 &nbsp;
-import { getDocumentTemplateName } from '../DocumentsView/helpers';
-&nbsp;
 export type DocumentMetadataProps = {
   document: Document;
+  documentTemplate: DocumentTemplate;
 };
 &nbsp;
-const DocumentMetadata = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> document }: DocumentMetadataProps): JSX.Element =&gt; {</span>
-  const { name, documentTemplateId, ownedBy, modifiedBy, modifiedTime, projectId } = <span class="cstat-no" title="statement not covered" >document;</span>
+const DocumentMetadata = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> document, documentTemplate }: DocumentMetadataProps): JSX.Element =&gt; {</span>
+  const { name, ownedBy, modifiedBy, modifiedTime, projectId } = <span class="cstat-no" title="statement not covered" >document;</span>
 &nbsp;
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
@@ -281,15 +257,10 @@ const DocumentMetadata = <span class="cstat-no" title="statement not covered" ><
   const [modifiedByUser, setModifiedByUser] = <span class="cstat-no" title="statement not covered" >useState&lt;User&gt;();</span>
 &nbsp;
   const modifiedBySelector = <span class="cstat-no" title="statement not covered" >useAppSelector(selectUser(modifiedBy));</span>
-  const { documentTemplates } = <span class="cstat-no" title="statement not covered" >useAppSelector(selectDocumentTemplates);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setModifiedByUser(modifiedBySelector);</span>
   }, [modifiedBySelector]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    dispatch(requestListDocumentTemplates());</span>
-  }, [dispatch]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    dispatch(requestGetUser(ownedBy));</span>
@@ -298,10 +269,6 @@ const DocumentMetadata = <span class="cstat-no" title="statement not covered" ><
 &nbsp;
   const modifiedByName = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >getUserDisplayName(modifiedByUser),</span> [modifiedByUser]);</span>
   const modifiedTimeDisplay = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >getDateTimeDisplayValue(new Date(modifiedTime).getTime()),</span> [modifiedTime]);</span>
-  const documentTemplateName = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >getDocumentTemplateName(documentTemplateId, documentTemplates ?? []),</span>
-    [documentTemplates, documentTemplateId]
-  );
 &nbsp;
   const participant = <span class="cstat-no" title="statement not covered" >availableParticipants?.find(<span class="fstat-no" title="function not covered" >(p</span>art) =&gt; <span class="cstat-no" title="statement not covered" >part.projects.find(<span class="fstat-no" title="function not covered" >(p</span>roj) =&gt; <span class="cstat-no" title="statement not covered" >proj.id === projectId)</span>)</span>;</span>
 &nbsp;
@@ -323,7 +290,7 @@ const DocumentMetadata = <span class="cstat-no" title="statement not covered" ><
         color={theme.palette.TwClrTxt}
         margin={theme.spacing(1, 0)}
       &gt;
-        {name} - {documentTemplateName}
+        {name} - {documentTemplate.name}
       &lt;/Typography&gt;
       &lt;Typography
         fontWeight={400}
@@ -333,7 +300,7 @@ const DocumentMetadata = <span class="cstat-no" title="statement not covered" ><
         component='pre'
         whiteSpace='pre-wrap'
       &gt;
-        {strings.TEMPLATE}: {documentTemplateName}
+        {strings.TEMPLATE}: {documentTemplate.name}
         &lt;br /&gt;
         {strings.LAST_EDITED_BY}: {modifiedByName}, {modifiedTimeDisplay}
       &lt;/Typography&gt;
@@ -349,7 +316,7 @@ export default DocumentMetadata;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-26T15:46:33.141Z
+                at 2024-08-26T15:50:48.520Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

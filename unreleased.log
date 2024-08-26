@@ -1,3 +1,4 @@
+02a53739794 Implement "document variables" and DocumentProducerProvider (#3077)
 ac7ec0f7328 SW-5754 Allow organizations to be marked as accelerator orgs in console (#3048)
 c787b39439b Fix doc producer document variables tab crashes terraware sometimes (#3080)
 39e68dff24a SW-5790 Updated deliverable view CSS (#3075)
