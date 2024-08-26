@@ -5,6 +5,7 @@ export const FIFTEEN_MINUTE_INTERVAL_MS = 15 * 60 * 1000;
 export const SEED_COLLECTOR_APP_STORE_LINK = 'https://apps.apple.com/us/app/terraware/id1568369900';
 export const SEED_COLLECTOR_GOOGLE_PLAY_LINK =
   'https://play.google.com/store/apps/details?id=com.terraformation.seedcollector';
+export const ACCELERATOR_LINK = 'https://www.terraformation.com/accelerator';
 
 export enum APP_PATHS {
   ACCELERATOR = '/accelerator',
@@ -24,6 +25,7 @@ export enum APP_PATHS {
   ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_VIEW = '/accelerator/documents/:documentId',
   ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS = '/accelerator/documents',
   ACCELERATOR_MODULE_CONTENT = '/accelerator/modules',
+  ACCELERATOR_ORGANIZATIONS = 'accelerator/organizations',
   ACCELERATOR_OVERVIEW = '/accelerator/overview',
   ACCELERATOR_PARTICIPANTS = '/accelerator/participants',
   ACCELERATOR_PARTICIPANTS_EDIT = '/accelerator/participants/:participantId/edit',

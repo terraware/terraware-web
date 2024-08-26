@@ -65,7 +65,6 @@ const CurrentModule = () => {
       events={eventDetails}
       module={moduleDetails}
       projectId={currentParticipantProject.id}
-      showSeeAllModules={true}
     />
   );
 };

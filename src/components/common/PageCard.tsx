@@ -15,7 +15,7 @@ export type LinkStyle = 'plain' | 'button-primary' | 'button-secondary';
 
 export interface PageCardProps {
   cardIsClickable?: boolean;
-  description: string;
+  description: string | (string | JSX.Element)[];
   icon: IconName;
   id?: string;
   isNameBold?: boolean;

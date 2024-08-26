@@ -16,11 +16,12 @@ export type UpdateMetadataProps = {
 };
 
 const UpdateMetadata = ({ doc, onFinish }: UpdateMetadataProps): JSX.Element => {
+  const dispatch = useAppDispatch();
+
   const [documentName, setDocumentName] = useState<string>(doc.name);
   const [documentOwner, setDocumentOwner] = useState<string>(doc.ownedBy.toString());
   const [requestId, setRequestId] = useState<string>('');
   const [formValid, setFormValid] = useState<boolean>();
-  const dispatch = useAppDispatch();
 
   const selector = useAppSelector(selectDocumentRequest(requestId));
 

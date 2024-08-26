@@ -1,49 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { useParams } from 'react-router-dom';
 
-import useNavigateTo from 'src/hooks/useNavigateTo';
-import { selectGetDocument } from 'src/redux/features/documentProducer/documents/documentsSelector';
-import { requestGetDocument } from 'src/redux/features/documentProducer/documents/documentsThunks';
+import { useDocumentProducerData } from 'src/providers/DocumentProducer/Context';
 import { selectProject } from 'src/redux/features/projects/projectsSelectors';
 import { requestProject } from 'src/redux/features/projects/projectsThunks';
-import { useSelectorProcessor } from 'src/redux/hooks/useSelectorProcessor';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { Document } from 'src/types/documentProducer/Document';
 
 import PreviewDocument from './PreviewDocument';
 
 export type PreviewProps = {
-  docId?: number;
   close?: () => void;
 };
 
-export default function Preview({ docId, close }: PreviewProps) {
+export default function Preview({ close }: PreviewProps) {
   const dispatch = useAppDispatch();
-  // TODO snackbar had to be removed from the useEffect that creates the window, how do we want to alert if an error occurs creating the document?
-  // const snackbar = useSnackbar();
-  const { goToDocuments } = useNavigateTo();
-  const { documentId: docIdParam } = useParams<{ documentId: string }>();
+  const { document: doc, projectId } = useDocumentProducerData();
 
   const [newWindow, setNewWindow] = useState<Window | null>(null);
   const [containerEl, setContainerEl] = useState<HTMLElement | null>(null);
   const [initialized, setInitialized] = useState(false);
-  const [doc, setDoc] = useState<Document>();
-
-  const id = docId ?? Number(docIdParam);
-  const projectId = doc?.projectId || -1;
 
   const project = useAppSelector(selectProject(projectId));
-
-  const docSelect = useAppSelector(selectGetDocument(id));
-  useSelectorProcessor(docSelect, setDoc, {
-    handleError: true,
-    onError: goToDocuments,
-  });
-
-  useEffect(() => {
-    dispatch(requestGetDocument(id));
-  }, [dispatch, id]);
 
   useEffect(() => {
     if (projectId !== -1) {
@@ -98,5 +75,5 @@ export default function Preview({ docId, close }: PreviewProps) {
     return null;
   }
 
-  return createPortal(<PreviewDocument doc={doc} projectName={project.name} />, containerEl);
+  return createPortal(<PreviewDocument projectName={project.name} />, containerEl);
 }

@@ -3,25 +3,23 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 
 import { useParticipants } from 'src/hooks/useParticipants';
-import { selectDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesSelector';
-import { requestListDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesThunks';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { User } from 'src/types/User';
 import { Document } from 'src/types/documentProducer/Document';
+import { DocumentTemplate } from 'src/types/documentProducer/DocumentTemplate';
 import { getDateTimeDisplayValue } from 'src/utils/dateFormatter';
 import { getUserDisplayName } from 'src/utils/user';
 
-import { getDocumentTemplateName } from '../DocumentsView/helpers';
-
 export type DocumentMetadataProps = {
   document: Document;
+  documentTemplate: DocumentTemplate;
 };
 
-const DocumentMetadata = ({ document }: DocumentMetadataProps): JSX.Element => {
-  const { name, documentTemplateId, ownedBy, modifiedBy, modifiedTime, projectId } = document;
+const DocumentMetadata = ({ document, documentTemplate }: DocumentMetadataProps): JSX.Element => {
+  const { name, ownedBy, modifiedBy, modifiedTime, projectId } = document;
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -30,15 +28,10 @@ const DocumentMetadata = ({ document }: DocumentMetadataProps): JSX.Element => {
   const [modifiedByUser, setModifiedByUser] = useState<User>();
 
   const modifiedBySelector = useAppSelector(selectUser(modifiedBy));
-  const { documentTemplates } = useAppSelector(selectDocumentTemplates);
 
   useEffect(() => {
     setModifiedByUser(modifiedBySelector);
   }, [modifiedBySelector]);
-
-  useEffect(() => {
-    dispatch(requestListDocumentTemplates());
-  }, [dispatch]);
 
   useEffect(() => {
     dispatch(requestGetUser(ownedBy));
@@ -47,10 +40,6 @@ const DocumentMetadata = ({ document }: DocumentMetadataProps): JSX.Element => {
 
   const modifiedByName = useMemo(() => getUserDisplayName(modifiedByUser), [modifiedByUser]);
   const modifiedTimeDisplay = useMemo(() => getDateTimeDisplayValue(new Date(modifiedTime).getTime()), [modifiedTime]);
-  const documentTemplateName = useMemo(
-    () => getDocumentTemplateName(documentTemplateId, documentTemplates ?? []),
-    [documentTemplates, documentTemplateId]
-  );
 
   const participant = availableParticipants?.find((part) => part.projects.find((proj) => proj.id === projectId));
 
@@ -72,7 +61,7 @@ const DocumentMetadata = ({ document }: DocumentMetadataProps): JSX.Element => {
         color={theme.palette.TwClrTxt}
         margin={theme.spacing(1, 0)}
       >
-        {name} - {documentTemplateName}
+        {name} - {documentTemplate.name}
       </Typography>
       <Typography
         fontWeight={400}
@@ -82,7 +71,7 @@ const DocumentMetadata = ({ document }: DocumentMetadataProps): JSX.Element => {
         component='pre'
         whiteSpace='pre-wrap'
       >
-        {strings.TEMPLATE}: {documentTemplateName}
+        {strings.TEMPLATE}: {documentTemplate.name}
         <br />
         {strings.LAST_EDITED_BY}: {modifiedByName}, {modifiedTimeDisplay}
       </Typography>
