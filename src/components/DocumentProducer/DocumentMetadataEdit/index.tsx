@@ -55,8 +55,6 @@ const DocumentMetadataEdit = ({
   const { availableProjects } = useProjects();
 
   const [participant, setParticipant] = useState<{ id?: number }>({ id: undefined });
-  // TODO: remove comment below once web-components is updated and Textfield has onFocus prop
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [hasDocumentNameFieldBeenFocused, setHasDocumentNameFieldBeenFocused] = useState(false);
 
   const participantProjects = useMemo(
@@ -209,8 +207,7 @@ const DocumentMetadataEdit = ({
           value={documentName}
           errorText={getErrorText(documentName)}
           onChange={(value: unknown) => handleTextFieldChange(value, setDocumentName)}
-          // TODO: uncomment line below once web-components is updated and Textfield has onFocus prop
-          // onFocus={() => setHasDocumentNameFieldBeenFocused(true)}
+          onFocus={() => setHasDocumentNameFieldBeenFocused(true)}
           required
         />
       </FormField>
