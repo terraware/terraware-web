@@ -10801,7 +10801,69 @@
 <a name='L10736'></a><a href='#L10736'>10736</a>
 <a name='L10737'></a><a href='#L10737'>10737</a>
 <a name='L10738'></a><a href='#L10738'>10738</a>
-<a name='L10739'></a><a href='#L10739'>10739</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L10739'></a><a href='#L10739'>10739</a>
+<a name='L10740'></a><a href='#L10740'>10740</a>
+<a name='L10741'></a><a href='#L10741'>10741</a>
+<a name='L10742'></a><a href='#L10742'>10742</a>
+<a name='L10743'></a><a href='#L10743'>10743</a>
+<a name='L10744'></a><a href='#L10744'>10744</a>
+<a name='L10745'></a><a href='#L10745'>10745</a>
+<a name='L10746'></a><a href='#L10746'>10746</a>
+<a name='L10747'></a><a href='#L10747'>10747</a>
+<a name='L10748'></a><a href='#L10748'>10748</a>
+<a name='L10749'></a><a href='#L10749'>10749</a>
+<a name='L10750'></a><a href='#L10750'>10750</a>
+<a name='L10751'></a><a href='#L10751'>10751</a>
+<a name='L10752'></a><a href='#L10752'>10752</a>
+<a name='L10753'></a><a href='#L10753'>10753</a>
+<a name='L10754'></a><a href='#L10754'>10754</a>
+<a name='L10755'></a><a href='#L10755'>10755</a>
+<a name='L10756'></a><a href='#L10756'>10756</a>
+<a name='L10757'></a><a href='#L10757'>10757</a>
+<a name='L10758'></a><a href='#L10758'>10758</a>
+<a name='L10759'></a><a href='#L10759'>10759</a>
+<a name='L10760'></a><a href='#L10760'>10760</a>
+<a name='L10761'></a><a href='#L10761'>10761</a>
+<a name='L10762'></a><a href='#L10762'>10762</a>
+<a name='L10763'></a><a href='#L10763'>10763</a>
+<a name='L10764'></a><a href='#L10764'>10764</a>
+<a name='L10765'></a><a href='#L10765'>10765</a>
+<a name='L10766'></a><a href='#L10766'>10766</a>
+<a name='L10767'></a><a href='#L10767'>10767</a>
+<a name='L10768'></a><a href='#L10768'>10768</a>
+<a name='L10769'></a><a href='#L10769'>10769</a>
+<a name='L10770'></a><a href='#L10770'>10770</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -21840,7 +21902,7 @@ export interface paths {
     get: operations["listDocumentTemplates"];
   };
   "/api/v1/document-producer/variables": {
-    /** List the variables, optionally filtered by a given manifest or deliverable. */
+    /** List the variables, optionally filtered by a given manifest or deliverable. Variables returned for a manifest include all section hierarchies and variables injected into section text. */
     get: operations["listVariables"];
   };
   "/api/v1/facilities": {
@@ -21904,6 +21966,19 @@ export interface paths {
   "/api/v1/internalTags": {
     /** List all the available internal tags */
     get: operations["listAllInternalTags"];
+  };
+  "/api/v1/internalTags/organizations": {
+    /**
+     * List the internal tags assigned to all organizations
+     * @description This includes organizations with no internal tags, whose list of tags will be empty.
+     */
+    get: operations["listAllOrganizationInternalTags"];
+  };
+  "/api/v1/internalTags/organizations/{organizationId}": {
+    /** List the internal tags assigned to an organization */
+    get: operations["listOrganizationInternalTags"];
+    /** Replace the list of internal tags assigned to an organization */
+    put: operations["updateOrganizationInternalTags"];
   };
   "/api/v1/login": {
     /**
@@ -22049,12 +22124,6 @@ export interface paths {
      * @description Organizations can only be deleted if they have no members other than the current user.
      */
     delete: operations["deleteOrganization"];
-  };
-  "/api/v1/organizations/{organizationId}/internalTags": {
-    /** List the internal tags assigned to an organization */
-    get: operations["listOrganizationInternalTags"];
-    /** Replace the list of internal tags assigned to an organization */
-    put: operations["updateOrganizationInternalTags"];
   };
   "/api/v1/organizations/{organizationId}/roles": {
     /** Lists the roles in an organization. */
@@ -24536,6 +24605,10 @@ export interface components {
       status: components["schemas"]["SuccessOrError"];
       tags: components["schemas"]["InternalTagPayload"][];
     };
+    ListAllOrganizationInternalTagsResponsePayload: {
+      organizations: components["schemas"]["OrganizationInternalTagsPayload"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     ListApplicationsResponsePayload: {
       applications: components["schemas"]["ApplicationPayload"][];
       status: components["schemas"]["SuccessOrError"];
@@ -25179,6 +25252,12 @@ export interface components {
       /** @description List of criteria at least one of which must be satisfied */
       children?: components["schemas"]["SearchNodePayload"][];
     }, "children"&gt;;
+    OrganizationInternalTagsPayload: {
+      internalTagIds: number[];
+      /** Format: int64 */
+      organizationId: number;
+      organizationName: string;
+    };
     OrganizationPayload: {
       /** @description Whether this organization can submit reports to Terraformation. */
       canSubmitReports: boolean;
@@ -28447,12 +28526,12 @@ export interface operations {
       };
     };
   };
-  /** List the variables, optionally filtered by a given manifest or deliverable. */
+  /** List the variables, optionally filtered by a given manifest or deliverable. Variables returned for a manifest include all section hierarchies and variables injected into section text. */
   listVariables: {
     parameters: {
       query?: {
         deliverableId?: number;
-        manifestId?: number;
+        documentId?: number;
       };
     };
     responses: {
@@ -28798,6 +28877,57 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["ListAllInternalTagsResponsePayload"];
+        };
+      };
+    };
+  };
+  /**
+   * List the internal tags assigned to all organizations
+   * @description This includes organizations with no internal tags, whose list of tags will be empty.
+   */
+  listAllOrganizationInternalTags: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListAllOrganizationInternalTagsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** List the internal tags assigned to an organization */
+  listOrganizationInternalTags: {
+    parameters: {
+      path: {
+        organizationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListOrganizationInternalTagsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Replace the list of internal tags assigned to an organization */
+  updateOrganizationInternalTags: {
+    parameters: {
+      path: {
+        organizationId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateOrganizationInternalTagsRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -29529,43 +29659,6 @@ export interface operations {
       409: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  /** List the internal tags assigned to an organization */
-  listOrganizationInternalTags: {
-    parameters: {
-      path: {
-        organizationId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListOrganizationInternalTagsResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Replace the list of internal tags assigned to an organization */
-  updateOrganizationInternalTags: {
-    parameters: {
-      path: {
-        organizationId: number;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateOrganizationInternalTagsRequestPayload"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };
@@ -32284,7 +32377,7 @@ export interface operations {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-23T21:43:43.706Z
+                at 2024-08-26T15:46:33.141Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
