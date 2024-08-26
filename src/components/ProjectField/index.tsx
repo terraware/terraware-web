@@ -37,7 +37,7 @@ export const renderFieldValue = (value: DisplayFieldValue): JSX.Element => {
   }
 
   return (
-    <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
+    <Typography fontSize='24px' fontWeight={600} lineHeight='32px' overflow='hidden' textOverflow='ellipsis'>
       {([undefined, null] as DisplayFieldValue[]).includes(value) ? 'N/A' : value}
     </Typography>
   );
