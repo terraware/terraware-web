@@ -7,12 +7,12 @@ export const getContainingSections =
 
     if (
       currentVal.parentSectionNumber &&
-      currentVal?.values?.some((val) => val.type === 'SectionVariable' && val.variableId === variableId)
+      currentVal.values?.some((val) => val.type === 'SectionVariable' && val.variableId === variableId)
     ) {
       newAcc.push(currentVal.parentSectionNumber);
     }
 
-    currentVal.children.forEach((childSection) => {
+    currentVal.children?.forEach((childSection) => {
       const childContainingSections = getContainingSections(variableId)([], childSection as SectionVariableWithValues);
       newAcc.push(...childContainingSections);
     });
