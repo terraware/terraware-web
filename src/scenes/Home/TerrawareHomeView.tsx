@@ -4,9 +4,10 @@ import { Box, Container, Grid } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import PageHeader from 'src/components/PageHeader';
+import Link from 'src/components/common/Link';
 import PageCard from 'src/components/common/PageCard';
 import TfMain from 'src/components/common/TfMain';
-import { APP_PATHS } from 'src/constants';
+import { ACCELERATOR_LINK, APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import { useOrganization, useUser } from 'src/providers';
 import strings from 'src/strings';
@@ -112,7 +113,12 @@ const TerrawareHomeView = () => {
                     id='applicationHomeCard'
                     name={strings.APPLY_TO_ACCELERATOR}
                     icon='iconFile'
-                    description={strings.APPLY_TO_ACCELERATOR}
+                    description={strings.formatString(
+                      strings.APPLY_TO_ACCELERATOR_DESCRIPTION,
+                      <Link fontSize='16px' to={ACCELERATOR_LINK}>
+                        {strings.HERE}
+                      </Link>
+                    )}
                     link={APP_PATHS.APPLICATIONS}
                     linkText={strings.START_NEW_APPLICATION}
                     linkStyle={'button-primary'}
