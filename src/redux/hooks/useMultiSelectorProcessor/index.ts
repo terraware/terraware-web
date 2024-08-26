@@ -107,7 +107,6 @@ export const useMultiSelectorProcessor = (
     }
   }, [lastData, lastStatus, results]);
 
-  console.log({ lastStatus, lastData });
   return useMemo(() => {
     const statuses = Object.values(lastStatus);
 

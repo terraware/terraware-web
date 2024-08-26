@@ -85,7 +85,6 @@ const filterSearch =
 const DocumentVariablesTab = ({ setSelectedTab }: DocumentVariablesProps): JSX.Element => {
   const { allVariables, documentSectionVariables, getUsedSections, projectId, reload } = useDocumentProducerData();
 
-  console.log({ allVariables });
   const [tableRows, setTableRows] = useState<TableRow[]>([]);
   const [variables, setVariables] = useState<VariableWithValues[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
@@ -127,7 +126,6 @@ const DocumentVariablesTab = ({ setSelectedTab }: DocumentVariablesProps): JSX.E
       setOpenEditVariableModal(false);
       setSelectedVariable(undefined);
 
-      console.log({ setSelectedTab });
       if (setSelectedTab) {
         setSelectedTab(strings.DOCUMENT);
         setTimeout(() => {
