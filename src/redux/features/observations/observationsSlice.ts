@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { Status, StatusT, buildReducers } from 'src/redux/features/asyncUtils';
+import { AsyncRequest, StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { Observation, ObservationResultsPayload, ReplaceObservationPlotResponsePayload } from 'src/types/Observations';
 
 import {
@@ -79,7 +79,7 @@ export const { setPlantingSiteObservationsResultsAction } = plantingSiteObservat
 
 // Schedule/Reschedule observation
 
-type SchedulingState = Record<string, Status>;
+type SchedulingState = Record<string, AsyncRequest>;
 
 const initialSchedulingState: SchedulingState = {};
 

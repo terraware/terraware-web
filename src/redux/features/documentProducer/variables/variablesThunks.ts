@@ -31,10 +31,10 @@ export const requestListDeliverableVariables = createAsyncThunk(
   }
 );
 
-export const requestListVariables = createAsyncThunk(
-  'listVariables',
-  async (manifestId: number, { rejectWithValue }) => {
-    const response: Response2<VariableListResponse> = await VariableService.getVariables(manifestId);
+export const requestListDocumentVariables = createAsyncThunk(
+  'listDocumentVariables',
+  async (documentId: number, { rejectWithValue }) => {
+    const response: Response2<VariableListResponse> = await VariableService.getDocumentVariables(documentId);
     if (response && response.requestSucceeded && response.data) {
       return response.data.variables;
     }

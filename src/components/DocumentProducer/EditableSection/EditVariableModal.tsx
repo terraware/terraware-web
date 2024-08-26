@@ -3,6 +3,7 @@ import React from 'react';
 import EditImagesModal from 'src/components/DocumentProducer/EditImagesModal';
 import EditVariable from 'src/components/DocumentProducer/EditVariable';
 import EditableTableEdit from 'src/components/DocumentProducer/EditableTableModal';
+import { useDocumentProducerData } from 'src/providers/DocumentProducer/Context';
 import {
   ImageVariableWithValues,
   TableVariableWithValues,
@@ -17,6 +18,8 @@ type EditVariableModalProps = {
 };
 
 export default function EditVariableModal({ variable, onFinish, onCancel, projectId }: EditVariableModalProps) {
+  const { getUsedSections } = useDocumentProducerData();
+
   switch (variable.type) {
     case 'Image':
       return (
@@ -41,7 +44,14 @@ export default function EditVariableModal({ variable, onFinish, onCancel, projec
     case 'Select':
     case 'Number':
     case 'Text':
-      return <EditVariable variableId={variable.id} projectId={projectId} onFinish={onFinish} />;
+      return (
+        <EditVariable
+          onFinish={onFinish}
+          projectId={projectId}
+          sectionsUsed={getUsedSections(variable.id)}
+          variable={variable}
+        />
+      );
     default:
       return null;
   }

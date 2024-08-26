@@ -6,7 +6,7 @@ import { Variable, VariableOwners } from 'src/types/documentProducer/Variable';
 import {
   requestListAllVariables,
   requestListDeliverableVariables,
-  requestListVariables,
+  requestListDocumentVariables,
   requestListVariablesOwners,
   requestUpdateVariableOwner,
   requestUpdateVariableWorkflowDetails,
@@ -34,12 +34,12 @@ const deliverableVariablesSlice = createSlice({
   },
 });
 
-const variablesSlice = createSlice({
-  name: 'variablesSlice',
+const documentVariablesSlice = createSlice({
+  name: 'documentVariablesSlice',
   initialState: initialVariablesState,
   reducers: {},
   extraReducers: (builder: ActionReducerMapBuilder<VariablesState>) => {
-    buildReducers(requestListVariables, true)(builder);
+    buildReducers(requestListDocumentVariables, true)(builder);
   },
 });
 
@@ -91,7 +91,7 @@ const variablesOwnersSlice = createSlice({
 export const documentProducerVariablesReducers = {
   documentProducerAllVariables: allVariablesSlice.reducer,
   documentProducerDeliverableVariables: deliverableVariablesSlice.reducer,
-  documentProducerVariables: variablesSlice.reducer,
+  documentProducerDocumentVariables: documentVariablesSlice.reducer,
   variableWorkflowDetailsUpdate: variableWorkflowDetailsUpdateSlice.reducer,
   variableOwnerUpdate: variableOwnerUpdateSlice.reducer,
   variablesOwners: variablesOwnersSlice.reducer,

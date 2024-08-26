@@ -55,12 +55,13 @@ const SectionEdit = ({
 }: EditableSectionEditProps): JSX.Element => {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
+  const variableDropdownRef = useRef(null);
+
   const [editor] = useState(() => withInlines(withReact(createEditor())));
   const [openEditVariableModal, setOpenEditVariableModal] = useState<boolean>(false);
   const [clickedVariable, setClickedVariable] = useState<VariableWithValues>();
   const [insertOptionsDropdownAnchor, setInsertOptionsDropdownAnchor] = useState<HTMLElement | null>(null);
   const [variableToBeInserted, setVariableToBeInserted] = useState<VariableWithValues>();
-  const variableDropdownRef = useRef(null);
 
   const initialValue: Descendant[] = useMemo(() => {
     const editorValue =

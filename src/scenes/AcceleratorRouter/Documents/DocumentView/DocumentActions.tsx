@@ -56,7 +56,7 @@ const DocumentActions = ({ document, onDocumentUpdate }: DocumentActionsProps): 
           }}
         />
       )}
-      {openPreview && <Preview docId={document.id} close={() => setOpenPreview(false)} />}
+      {openPreview && <Preview close={() => setOpenPreview(false)} />}
       <Box margin={theme.spacing(isMobile ? 2 : 5, isMobile ? 'auto' : 0, 0)}>
         <Button
           id={`preview-document-${document.id}`}
