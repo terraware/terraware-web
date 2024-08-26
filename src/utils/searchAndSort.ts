@@ -84,7 +84,7 @@ const searchConditionMet = <T extends Record<string, unknown>>(result: T, condit
     }
 
     if (condition.type === 'Exact') {
-      return searchValues.some((value) => resultValue.includes(value));
+      return searchValues.some((value) => resultValue === value);
     } else if (condition.type === 'Fuzzy') {
       return searchValues.some((searchValue) => {
         // Trigrams don't work with single letter searches
