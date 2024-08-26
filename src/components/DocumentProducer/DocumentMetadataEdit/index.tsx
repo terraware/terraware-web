@@ -55,7 +55,7 @@ const DocumentMetadataEdit = ({
   const { availableProjects } = useProjects();
 
   const [participant, setParticipant] = useState<{ id?: number }>({ id: undefined });
-  const [hasDocumentNameFieldBeenFocused, setHasDocumentNameFieldBeenFocused] = useState(false);
+  const [documentNameFieldHasBeenFocused, setDocumentNameFieldHasBeenFocused] = useState(false);
 
   const participantProjects = useMemo(
     () =>
@@ -132,7 +132,7 @@ const DocumentMetadataEdit = ({
   );
 
   useEffect(() => {
-    if (hasDocumentNameFieldBeenFocused) {
+    if (documentNameFieldHasBeenFocused) {
       return;
     }
 
@@ -146,7 +146,7 @@ const DocumentMetadataEdit = ({
     if (projectName && documentTemplateName && documentName === projectName) {
       setDocumentName(`${projectName} - ${documentTemplateName}`);
     }
-  }, [documentName, documentTemplateName, hasDocumentNameFieldBeenFocused, projectName]);
+  }, [documentName, documentTemplateName, documentNameFieldHasBeenFocused, projectName]);
 
   return (
     <>
@@ -207,7 +207,7 @@ const DocumentMetadataEdit = ({
           value={documentName}
           errorText={getErrorText(documentName)}
           onChange={(value: unknown) => handleTextFieldChange(value, setDocumentName)}
-          onFocus={() => setHasDocumentNameFieldBeenFocused(true)}
+          onFocus={() => setDocumentNameFieldHasBeenFocused(true)}
           required
         />
       </FormField>
