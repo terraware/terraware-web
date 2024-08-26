@@ -262,7 +262,7 @@ const DeliverableVariableDetailsInput = ({
 
       {variable.type === 'Text' && (
         <>
-          {(values as VariableValueTextValue[])
+          {(values.length ? (values as VariableValueTextValue[]) : [{ textValue: '' }])
             ?.map((tv) => tv.textValue)
             .map((iValue, index) => (
               <Box key={index} display='flex' alignItems='center' sx={{ position: 'relative' }}>
