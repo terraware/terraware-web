@@ -1,3 +1,4 @@
+ef89cdf1be3 SW-5826: Add support for multi-select (#3079)
 813475f6e37 SW-5831: Projects File Naming field: truncate the value in the filed when the browser shrinks the field size (#3082)
 6bae90983bd SW-5843: Remove "See All Modules" link from Module Overview Card on home page (#3084)
 6cbd7460962 SW-5877 Filtering for "Accepted" Applications also pulls up "Not Accepted" (#3087)
