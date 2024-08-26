@@ -1,3 +1,4 @@
+762a9e03b03 SW-5806 Add more details about the Accelerator in the Apply card (#3086)
 02a53739794 Implement "document variables" and DocumentProducerProvider (#3077)
 ac7ec0f7328 SW-5754 Allow organizations to be marked as accelerator orgs in console (#3048)
 c787b39439b Fix doc producer document variables tab crashes terraware sometimes (#3080)
