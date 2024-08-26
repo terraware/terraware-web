@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1724691669386" clover="3.2.0">
-  <project timestamp="1724691669386" name="All files">
+<coverage generated="1724699947540" clover="3.2.0">
+  <project timestamp="1724699947540" name="All files">
     <metrics statements="24503" coveredstatements="1031" conditionals="15967" coveredconditionals="279" methods="7547" coveredmethods="176" elements="48017" coveredelements="1486" complexity="0" loc="24503" ncloc="24503" packages="234" files="1074" classes="1074"/>
     <package name="src">
       <metrics statements="177" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
@@ -13113,10 +13113,10 @@
         <line num="48" count="0" type="stmt"/>
         <line num="50" count="0" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
-        <line num="68" count="0" type="stmt"/>
-        <line num="70" count="0" type="stmt"/>
-        <line num="72" count="0" type="stmt"/>
-        <line num="74" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="73" count="0" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Documents.DocumentsView">
