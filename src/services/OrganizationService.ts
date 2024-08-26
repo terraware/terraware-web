@@ -1,5 +1,11 @@
 import { paths } from 'src/api/types/generated-schema';
-import { ManagedLocationType, Organization, OrganizationRoleInfo } from 'src/types/Organization';
+import {
+  ManagedLocationType,
+  Organization,
+  OrganizationRoleInfo,
+  OrganizationWithInternalTags,
+  UpdateOrganizationInternalTagsRequestPayload,
+} from 'src/types/Organization';
 import { InitializedTimeZone } from 'src/types/TimeZones';
 import { isAdmin } from 'src/utils/organization';
 
@@ -35,10 +41,24 @@ export type UpdateOptions = {
   skipAcknowledgeTimeZone?: boolean;
 };
 
+export type OrganizationInternalTags = {
+  internalTags: number[];
+};
+
+export type OrganizationInternalTagsResponse = Response & OrganizationInternalTags;
+
+export type OrganizationsInternalTags = {
+  organizations: OrganizationWithInternalTags[];
+};
+
+export type OrganizationsInternalTagsResponse = Response & OrganizationsInternalTags;
+
 // endpoint
 const ORGANIZATIONS_ENDPOINT = '/api/v1/organizations';
 const ORGANIZATION_ENDPOINT = '/api/v1/organizations/{organizationId}';
 const ORGANIZATION_ROLES_ENDPOINT = '/api/v1/organizations/{organizationId}/roles';
+const ORGANIZATION_INTERNAL_TAGS_ENDPOINT = '/api/v1/internalTags/organizations/{organizationId}';
+const ORGANIZATIONS_INTERNAL_TAGS_ENDPOINT = '/api/v1/internalTags/organizations';
 
 type OrganizationsServerResponse =
   paths[typeof ORGANIZATIONS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -54,9 +74,20 @@ type UpdateOrganizationRequestPayload =
 type OrganizationRolesServerResponse =
   paths[typeof ORGANIZATION_ROLES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
+type OrganizationInternalTagsServerResponse =
+  paths[typeof ORGANIZATION_INTERNAL_TAGS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+type OrganizationsInternalTagsServerResponse =
+  paths[typeof ORGANIZATIONS_INTERNAL_TAGS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+type UpdateResponse =
+  paths[typeof ORGANIZATION_INTERNAL_TAGS_ENDPOINT]['put']['responses'][200]['content']['application/json'];
+
 const httpOrganizations = HttpService.root(ORGANIZATIONS_ENDPOINT);
 const httpOrganization = HttpService.root(ORGANIZATION_ENDPOINT);
 const httpOrganizationRoles = HttpService.root(ORGANIZATION_ROLES_ENDPOINT);
+const httpOrganizationInternalTags = HttpService.root(ORGANIZATION_INTERNAL_TAGS_ENDPOINT);
+const httpOrganizationsInternalTags = HttpService.root(ORGANIZATIONS_INTERNAL_TAGS_ENDPOINT);
 
 /**
  * get organizations
@@ -223,6 +254,49 @@ const initializeTimeZone = async (organization: Organization, timeZone: string):
 };
 
 /**
+ * get organization internal tags
+ */
+const getOrganizationInternalTags = async (organizationId: number): Promise<OrganizationInternalTagsResponse> => {
+  const response: OrganizationInternalTagsResponse = await httpOrganizationInternalTags.get<
+    OrganizationInternalTagsServerResponse,
+    OrganizationInternalTags
+  >(
+    {
+      urlReplacements: {
+        '{organizationId}': organizationId.toString(),
+      },
+    },
+    (data) => ({ internalTags: data?.tagIds ?? [] })
+  );
+
+  return response;
+};
+
+/**
+ * update organization internal tags
+ */
+const updateOrganizationInternalTags = async (
+  organizationId: number,
+  payload: UpdateOrganizationInternalTagsRequestPayload
+): Promise<Response> => {
+  return HttpService.root(ORGANIZATION_INTERNAL_TAGS_ENDPOINT).put2<UpdateResponse>({
+    urlReplacements: {
+      '{organizationId}': `${organizationId}`,
+    },
+    entity: payload,
+  });
+};
+
+const getAllOrganizationsInternalTags = async (): Promise<OrganizationsInternalTagsResponse> => {
+  const response: OrganizationsInternalTagsResponse = await httpOrganizationsInternalTags.get<
+    OrganizationsInternalTagsServerResponse,
+    OrganizationsInternalTags
+  >({}, (data) => ({ organizations: data?.organizations ?? [] }));
+
+  return response;
+};
+
+/**
  * Exported functions
  */
 const OrganizationService = {
@@ -232,6 +306,9 @@ const OrganizationService = {
   updateOrganization,
   deleteOrganization,
   initializeTimeZone,
+  getOrganizationInternalTags,
+  updateOrganizationInternalTags,
+  getAllOrganizationsInternalTags,
 };
 
 export default OrganizationService;
