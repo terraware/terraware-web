@@ -16,7 +16,7 @@ import {
 } from 'src/types/documentProducer/VariableValue';
 
 export type VariableDetailsInputProps = {
-  values?: VariableValueValue[];
+  values: VariableValueValue[];
   setValues: (values: VariableValueValue[]) => void;
   validate: boolean;
   setHasErrors: (has: boolean) => void;
@@ -39,27 +39,11 @@ const VariableDetailsInput = ({
   const [value, setValue] = useState<string | number>();
   const [citation, setCitation] = useState<string>();
   const [title, setTitle] = useState<string>();
-  const [textValuesList, setTextValuesList] = useState<string[]>();
   const theme = useTheme();
 
   const formElementStyles = { margin: theme.spacing(1, 0) };
 
   const valueError = useCallback(() => (value ? '' : strings.REQUIRED_FIELD), [value]);
-
-  useEffect(() => {
-    if (values) {
-      const allTextValues = values.reduce((acc: string[], current: VariableValueValue) => {
-        if (current.type === 'Text') {
-          const currentTextValue = current;
-          acc.push(currentTextValue.textValue);
-        }
-        return acc;
-      }, []);
-      setTextValuesList(allTextValues);
-    } else {
-      setTextValuesList(['']);
-    }
-  }, [values]);
 
   useEffect(() => {
     if (values?.length) {
@@ -240,29 +224,22 @@ const VariableDetailsInput = ({
   };
 
   const addInput = () => {
-    setTextValuesList((prev) => {
-      if (prev) {
-        return [...prev, ''];
-      }
-      return [''];
-    });
+    setValues([...(values || []), { id: -1, listPosition: values?.length || 0, textValue: '', type: 'Text' }]);
   };
 
   const onDeleteInput = (index: number) => {
-    setTextValuesList((prev) => {
-      if (prev) {
-        const removed = values ? values[index] : undefined;
-        // if removed value exists in backend, add it to be deleted when saving
-        if (removed && removed.id !== -1) {
-          addRemovedValue(removed);
-        }
-
-        const updatedInputs = [...prev];
-        updatedInputs.splice(index, 1);
-        onChangeValueHandler(undefined, 'value', index);
-        return updatedInputs;
+    if (values.length) {
+      const removed = values[index];
+      // if removed value exists in backend, add it to be deleted when saving
+      if (removed && removed.id !== -1) {
+        addRemovedValue(removed);
       }
-    });
+
+      const updatedInputs = [...values];
+      updatedInputs.splice(index, 1);
+      onChangeValueHandler(undefined, 'value', index);
+      setValues(updatedInputs);
+    }
   };
 
   return (
@@ -297,51 +274,53 @@ const VariableDetailsInput = ({
       )}
       {variable?.type === 'Text' && (
         <>
-          {textValuesList?.map((iValue, index) => (
-            <Box
-              key={index}
-              display='flex'
-              alignItems='center'
-              sx={{
-                position: 'relative',
-                marginBottom: theme.spacing(2),
-                paddingBottom: theme.spacing(2),
-                ...(variable.isList
-                  ? {
-                      borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-                    }
-                  : {}),
-              }}
-            >
-              <Textfield
-                key={`input-${index}`}
-                id='value'
-                label={index === 0 ? strings.VALUE : ''}
-                type={'text'}
-                onChange={(newValue: any) => onChangeValueHandler(newValue, 'value', index)}
-                value={iValue?.toString()}
-                errorText={validate ? valueError() : ''}
-                sx={{ flex: 1 }}
-              />
-              {variable.isList && (
-                <IconButton
-                  id={`delete-input-${index}`}
-                  aria-label='delete'
-                  size='small'
-                  onClick={() => onDeleteInput(index)}
-                  disabled={index === 0}
-                  sx={index === 0 ? { 'margin-top': '20px' } : {}}
-                >
-                  <Icon
-                    name='iconSubtract'
-                    size='medium'
-                    fillColor={theme.palette.TwClrIcn}
-                    style={index === 0 ? { opacity: 0.5 } : {}}
-                  />
-                </IconButton>
-              )}
-            </Box>
-          ))}
+          {(values.length ? (values as VariableValueTextValue[]) : [{ textValue: '' }])
+            ?.map((tv) => tv.textValue)
+            .map((iValue, index) => (
+              <Box
+                key={index}
+                display='flex'
+                alignItems='center'
+                sx={{
+                  position: 'relative',
+                  marginBottom: theme.spacing(2),
+                  paddingBottom: theme.spacing(2),
+                  ...(variable.isList
+                    ? {
+                        borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+                      }
+                    : {}),
+                }}
+              >
+                <Textfield
+                  key={`input-${index}`}
+                  id='value'
+                  label={index === 0 ? strings.VALUE : ''}
+                  type={'text'}
+                  onChange={(newValue: any) => onChangeValueHandler(newValue, 'value', index)}
+                  value={iValue?.toString()}
+                  errorText={validate ? valueError() : ''}
+                  sx={{ flex: 1 }}
+                />
+                {variable.isList && (
+                  <IconButton
+                    id={`delete-input-${index}`}
+                    aria-label='delete'
+                    size='small'
+                    onClick={() => onDeleteInput(index)}
+                    disabled={index === 0}
+                    sx={index === 0 ? { 'margin-top': '20px' } : {}}
+                  >
+                    <Icon
+                      name='iconSubtract'
+                      size='medium'
+                      fillColor={theme.palette.TwClrIcn}
+                      style={index === 0 ? { opacity: 0.5 } : {}}
+                    />
+                  </IconButton>
+                )}
+              </Box>
+            ))}
           {variable.isList && <Button priority='ghost' label={strings.ADD} icon='iconAdd' onClick={addInput} />}
         </>
       )}

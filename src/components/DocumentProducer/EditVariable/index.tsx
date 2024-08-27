@@ -192,7 +192,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
       <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
         <Grid item xs={12}>
           <VariableDetailsInput
-            values={variable.values}
+            values={values}
             setValues={(newValues: VariableValueValue[]) => setValues(newValues)}
             validate={validate}
             setHasErrors={(newValue: boolean) => setHasErrors(newValue)}
