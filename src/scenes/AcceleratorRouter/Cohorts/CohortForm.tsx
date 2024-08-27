@@ -167,7 +167,7 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
                     fontSize={'16px'}
                     fontWeight={400}
                     lineHeight={'24px'}
-                    to={APP_PATHS.PEOPLE_VIEW.replace(':userId', `${cohort.createdBy}`)}
+                    to={APP_PATHS.PEOPLE_VIEW.replace(':personId', `${cohort.createdBy}`)}
                   >
                     {getUserDisplayName(createdByUser)}
                   </Link>
@@ -187,7 +187,7 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
                     fontSize={'16px'}
                     fontWeight={400}
                     lineHeight={'24px'}
-                    to={APP_PATHS.PEOPLE_VIEW.replace(':userId', `${cohort.modifiedBy}`)}
+                    to={APP_PATHS.PEOPLE_VIEW.replace(':personId', `${cohort.modifiedBy}`)}
                   >
                     {getUserDisplayName(modifiedByUser)}
                   </Link>
