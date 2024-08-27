@@ -1,13 +1,20 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
-import { Container, Grid, useTheme } from '@mui/material';
+import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, Textfield } from '@terraware/web-components';
 
+import Link from 'src/components/common/Link';
 import PageForm from 'src/components/common/PageForm';
+import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers/hooks';
+import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
+import { selectUser } from 'src/redux/features/user/usersSelectors';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { CreateCohortRequestPayload, UpdateCohortRequestPayload } from 'src/types/Cohort';
+import { getLongDate } from 'src/utils/dateFormatter';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+import { getUserDisplayName } from 'src/utils/user';
 
 type CohortFormProps<T extends CreateCohortRequestPayload | UpdateCohortRequestPayload> = {
   busy?: boolean;
@@ -21,12 +28,23 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
 ): JSX.Element {
   const { busy, cohort, onCancel, onSave } = props;
 
+  const dispatch = useAppDispatch();
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
   const theme = useTheme();
 
   const [localRecord, setLocalRecord] = useState<T>(cohort);
   const [validateFields, setValidateFields] = useState<boolean>(false);
+
+  const PLACEHOLDER_DATA = {
+    createdBy: 78,
+    createdTime: 'Mar 2, 2024',
+    modifiedBy: 78,
+    modifiedTime: 'Mar 2, 2024',
+  };
+
+  const createdByUser = useAppSelector(selectUser(PLACEHOLDER_DATA.createdBy));
+  const modifiedByUser = useAppSelector(selectUser(PLACEHOLDER_DATA.modifiedBy));
 
   const currentPhaseDropdownOptions = useMemo(() => {
     if (!activeLocale) {
@@ -75,6 +93,15 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
     // update local record when cohort changes
     setLocalRecord(cohort);
   }, [cohort]);
+
+  useEffect(() => {
+    const userIds = new Set([PLACEHOLDER_DATA.createdBy, PLACEHOLDER_DATA.modifiedBy]);
+    userIds.forEach((userId) => {
+      if (userId) {
+        dispatch(requestGetUser(userId));
+      }
+    });
+  }, [dispatch, PLACEHOLDER_DATA.createdBy, PLACEHOLDER_DATA.modifiedBy]);
 
   return (
     <PageForm
@@ -125,6 +152,49 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
                 required
                 selectedValue={localRecord.phase}
               />
+            </Grid>
+          </Grid>
+
+          <Grid container marginTop={0} spacing={theme.spacing(3)} width={'100%'}>
+            <Grid item xs={isMobile ? 12 : 4} sx={{ marginTop: theme.spacing(2) }}>
+              <Typography>
+                {strings.CREATED_ON}{' '}
+                <Typography component='span' fontWeight={500}>
+                  {getLongDate(PLACEHOLDER_DATA.createdTime, activeLocale)}
+                </Typography>
+              </Typography>
+              <Typography>
+                {strings.CREATED_BY}
+                {` `}
+                <Link
+                  fontSize={'16px'}
+                  fontWeight={400}
+                  lineHeight={'24px'}
+                  to={APP_PATHS.PEOPLE_VIEW.replace(':userId', `${PLACEHOLDER_DATA.createdBy}`)}
+                >
+                  {getUserDisplayName(createdByUser)}
+                </Link>
+              </Typography>
+            </Grid>
+            <Grid item xs={isMobile ? 12 : 4} sx={{ marginTop: theme.spacing(2) }}>
+              <Typography>
+                {strings.LAST_MODIFIED_ON}{' '}
+                <Typography component='span' fontWeight={500}>
+                  {getLongDate(PLACEHOLDER_DATA.modifiedTime, activeLocale)}
+                </Typography>
+              </Typography>
+              <Typography>
+                {strings.LAST_MODIFIED_BY}
+                {` `}
+                <Link
+                  fontSize={'16px'}
+                  fontWeight={400}
+                  lineHeight={'24px'}
+                  to={APP_PATHS.PEOPLE_VIEW.replace(':userId', `${PLACEHOLDER_DATA.modifiedBy}`)}
+                >
+                  {getUserDisplayName(modifiedByUser)}
+                </Link>
+              </Typography>
             </Grid>
           </Grid>
         </Grid>
