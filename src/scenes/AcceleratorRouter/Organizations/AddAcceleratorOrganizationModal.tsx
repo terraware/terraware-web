@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
 import { Grid, useTheme } from '@mui/material';
-import { Dropdown, DropdownItem } from '@terraware/web-components';
+import { Autocomplete, DropdownItem } from '@terraware/web-components';
+import { ValueType } from '@terraware/web-components/components/Autocomplete/Autocomplete';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
@@ -26,7 +27,7 @@ export default function AddAcceleratorOrganizationModal(props: AddAcceleratorOrg
   const [requestId, setRequestId] = useState('');
   const requestAllOrganizations = useAppSelector(listAllOrganizationsInternalTags(requestId));
   const [organizationOptions, setOrganizationOptions] = useState<DropdownItem[]>([]);
-  const [selectedOrganization, setSelectedOrganization] = useState<string>();
+  const [selectedOrganization, setSelectedOrganization] = useState<DropdownItem>();
   const [organizations, setOrganizations] = useState<OrganizationWithInternalTags[]>([]);
 
   useEffect(() => {
@@ -50,7 +51,16 @@ export default function AddAcceleratorOrganizationModal(props: AddAcceleratorOrg
   }, [organizations]);
 
   const save = () => {
-    onSubmit(selectedOrganization);
+    onSubmit(selectedOrganization?.value);
+  };
+
+  const renderOption = (props: React.HTMLAttributes<HTMLLIElement>, option: ValueType) => {
+    const dropdownOption = option as DropdownItem;
+    return (
+      <li {...props} key={dropdownOption?.value}>
+        {dropdownOption?.label}
+      </li>
+    );
   };
 
   return (
@@ -73,15 +83,17 @@ export default function AddAcceleratorOrganizationModal(props: AddAcceleratorOrg
     >
       <Grid container textAlign={'left'}>
         <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
-          <Dropdown
+          <Autocomplete
             id='organization'
             placeholder={strings.SELECT}
-            selectedValue={selectedOrganization}
+            selected={selectedOrganization}
             options={organizationOptions}
-            onChange={(value: string) => setSelectedOrganization(value)}
+            onChange={(value) => {
+              setSelectedOrganization(value as DropdownItem);
+            }}
             hideClearIcon={true}
             label={strings.ORGANIZATION}
-            fullWidth
+            renderOption={renderOption}
           />
         </Grid>
       </Grid>
