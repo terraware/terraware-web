@@ -115,7 +115,7 @@ const TerrawareHomeView = () => {
                     icon='iconFile'
                     description={strings.formatString(
                       strings.APPLY_TO_ACCELERATOR_DESCRIPTION,
-                      <Link fontSize='16px' to={ACCELERATOR_LINK}>
+                      <Link fontSize='16px' to={ACCELERATOR_LINK} target='_blank'>
                         {strings.HERE}
                       </Link>
                     )}
