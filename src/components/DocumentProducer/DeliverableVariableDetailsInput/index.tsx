@@ -267,13 +267,13 @@ const DeliverableVariableDetailsInput = ({
             .map((iValue, index) => (
               <Box key={index} display='flex' alignItems='center' sx={{ position: 'relative' }}>
                 <Textfield
-                  key={`input-${index}`}
                   id='value'
+                  key={`input-${index}`}
                   label=''
-                  type={variable.textType === 'SingleLine' ? 'text' : 'textarea'}
                   onChange={(newValue: any) => onChangeValueHandler(newValue, 'value', index)}
-                  value={iValue?.toString()}
                   sx={[formElementStyles, { flex: 1 }]}
+                  type={variable.textType === 'SingleLine' ? 'text' : 'textarea'}
+                  value={iValue?.toString()}
                 />
                 {variable.isList && (
                   <IconButton
