@@ -261,6 +261,7 @@ const VariableDetailsInput = ({
         display={true}
         sx={formElementStyles}
       />
+
       {variable?.type === 'Date' && (
         <DatePicker
           id='value'
@@ -272,6 +273,7 @@ const VariableDetailsInput = ({
           sx={formElementStyles}
         />
       )}
+
       {variable?.type === 'Text' && (
         <>
           {(values.length ? (values as VariableValueTextValue[]) : [{ textValue: '' }])
@@ -324,6 +326,7 @@ const VariableDetailsInput = ({
           {variable.isList && <Button priority='ghost' label={strings.ADD} icon='iconAdd' onClick={addInput} />}
         </>
       )}
+
       {(variable?.type === 'Number' || variable?.type === 'Link') && (
         <Textfield
           id='value'
@@ -335,6 +338,7 @@ const VariableDetailsInput = ({
           sx={formElementStyles}
         />
       )}
+
       {variable?.type === 'Select' && (
         <Dropdown
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
