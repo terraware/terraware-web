@@ -47,27 +47,27 @@ const VariableDetailsInput = ({
 
   useEffect(() => {
     if (values?.length) {
-      if (variable?.type === 'Text') {
+      if (variable.type === 'Text') {
         const textValues = values as VariableValueTextValue[];
         setValue(textValues[0].textValue);
         setCitation(textValues[0].citation);
       }
-      if (variable?.type === 'Number') {
+      if (variable.type === 'Number') {
         const numberValues = values as VariableValueNumberValue[];
         setValue(numberValues[0].numberValue.toString());
         setCitation(numberValues[0].citation);
       }
-      if (variable?.type === 'Select') {
+      if (variable.type === 'Select') {
         const selectValues = values as VariableValueSelectValue[];
         setValue(selectValues[0].optionValues);
         setCitation(selectValues[0].citation);
       }
-      if (variable?.type === 'Date') {
+      if (variable.type === 'Date') {
         const selectValues = values as VariableValueDateValue[];
         setValue(selectValues[0].dateValue);
         setCitation(selectValues[0].citation);
       }
-      if (variable?.type === 'Link') {
+      if (variable.type === 'Link') {
         const selectValues = values as VariableValueLinkValue[];
         setValue(selectValues[0].url);
         setCitation(selectValues[0].citation);
@@ -89,11 +89,11 @@ const VariableDetailsInput = ({
       setCitation(newValue);
     } else if (id === 'title') {
       setTitle(newValue);
-    } else if (variable?.type !== 'Text') {
+    } else if (variable.type !== 'Text') {
       setValue(newValue);
     }
     if (newValue !== undefined) {
-      if (variable?.type === 'Text') {
+      if (variable.type === 'Text') {
         if (values) {
           const textValues = values as VariableValueTextValue[];
           const newValues = textValues.map((tv) => ({ ...tv }));
@@ -126,7 +126,7 @@ const VariableDetailsInput = ({
         }
       }
 
-      if (variable?.type === 'Number') {
+      if (variable.type === 'Number') {
         if (values) {
           const numberValues = values as VariableValueNumberValue[];
           const newValues = numberValues.map((nv) => ({ ...nv }));
@@ -145,7 +145,7 @@ const VariableDetailsInput = ({
         }
       }
 
-      if (variable?.type === 'Select') {
+      if (variable.type === 'Select') {
         if (values.length > 0) {
           const selectValues = values as VariableValueSelectValue[];
           const newValues = selectValues.map((sv) => ({ ...sv }));
@@ -165,7 +165,7 @@ const VariableDetailsInput = ({
           }
         }
       }
-      if (variable?.type === 'Date') {
+      if (variable.type === 'Date') {
         if (values) {
           const dateValues = values as VariableValueDateValue[];
           const newValues = dateValues.map((dv) => ({ ...dv }));
@@ -179,7 +179,7 @@ const VariableDetailsInput = ({
           setValues([{ id: -1, listPosition: 0, dateValue: newValue, type: 'Date' }]);
         }
       }
-      if (variable?.type === 'Link') {
+      if (variable.type === 'Link') {
         if (values) {
           const linkValues = values as VariableValueLinkValue[];
           const newValues = linkValues.map((lv) => ({ ...lv }));
@@ -205,7 +205,7 @@ const VariableDetailsInput = ({
       }
     } else {
       // if newValue is undefined, remove it from values
-      if (variable?.type === 'Text') {
+      if (variable.type === 'Text') {
         if (values) {
           const newValues = values.map((tv) => ({ ...tv }));
           newValues.splice(index, 1);
@@ -251,7 +251,7 @@ const VariableDetailsInput = ({
         id='name'
         label={strings.NAME}
         type='text'
-        value={variable?.name}
+        value={variable.name}
         display={true}
         sx={formElementStyles}
       />
@@ -259,11 +259,11 @@ const VariableDetailsInput = ({
         id='description'
         label={strings.DESCRIPTION}
         type='text'
-        value={variable?.description}
+        value={variable.description}
         display={true}
         sx={formElementStyles}
       />
-      {variable?.type === 'Date' && (
+      {variable.type === 'Date' && (
         <DatePicker
           id='value'
           label={strings.VALUE}
@@ -274,7 +274,7 @@ const VariableDetailsInput = ({
           sx={formElementStyles}
         />
       )}
-      {variable?.type === 'Text' && (
+      {variable.type === 'Text' && (
         <>
           {(values.length ? (values as VariableValueTextValue[]) : [{ textValue: '' }])
             ?.map((tv) => tv.textValue)
@@ -327,11 +327,11 @@ const VariableDetailsInput = ({
         </>
       )}
 
-      {(variable?.type === 'Number' || variable?.type === 'Link') && (
+      {(variable.type === 'Number' || variable.type === 'Link') && (
         <Textfield
           id='value'
           label={strings.VALUE}
-          type={variable?.type === 'Number' ? 'number' : 'text'}
+          type={variable.type === 'Number' ? 'number' : 'text'}
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
           value={value?.toString()}
           errorText={validate ? valueError() : ''}
@@ -367,7 +367,7 @@ const VariableDetailsInput = ({
         />
       )}
 
-      {variable?.type === 'Link' && (
+      {variable.type === 'Link' && (
         <Textfield
           id='title'
           label={strings.TITLE}
@@ -384,7 +384,7 @@ const VariableDetailsInput = ({
             id='type'
             label={strings.TYPE_ELLIPSIS}
             type='text'
-            value={variable?.type}
+            value={variable.type}
             display={true}
             sx={formElementStyles}
           />
