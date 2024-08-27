@@ -1,3 +1,4 @@
+86b85da16d2 SW-5806 Open accelerator link in new tab (#3093)
 29b64c021bb SW-5902: Full application questionnaire deliverables inputs missing (#3088)
 ef89cdf1be3 SW-5826: Add support for multi-select (#3079)
 813475f6e37 SW-5831: Projects File Naming field: truncate the value in the filed when the browser shrinks the field size (#3082)
