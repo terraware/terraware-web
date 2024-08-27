@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1724779489452" clover="3.2.0">
-  <project timestamp="1724779489453" name="All files">
-    <metrics statements="24509" coveredstatements="1031" conditionals="15980" coveredconditionals="279" methods="7552" coveredmethods="176" elements="48041" coveredelements="1486" complexity="0" loc="24509" ncloc="24509" packages="234" files="1074" classes="1074"/>
+<coverage generated="1724781715493" clover="3.2.0">
+  <project timestamp="1724781715493" name="All files">
+    <metrics statements="24512" coveredstatements="1031" conditionals="15980" coveredconditionals="279" methods="7553" coveredmethods="176" elements="48045" coveredelements="1486" complexity="0" loc="24512" ncloc="24512" packages="234" files="1074" classes="1074"/>
     <package name="src">
       <metrics statements="177" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -13391,10 +13391,9 @@
       </file>
     </package>
     <package name="src.scenes.AcceleratorRouter.Organizations">
-      <metrics statements="90" coveredstatements="0" conditionals="36" coveredconditionals="0" methods="27" coveredmethods="0"/>
+      <metrics statements="93" coveredstatements="0" conditionals="36" coveredconditionals="0" methods="28" coveredmethods="0"/>
       <file name="AddAcceleratorOrganizationModal.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Organizations/AddAcceleratorOrganizationModal.tsx">
-        <metrics statements="23" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="9" coveredmethods="0"/>
-        <line num="23" count="0" type="stmt"/>
+        <metrics statements="26" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="10" coveredmethods="0"/>
         <line num="24" count="0" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
@@ -13402,21 +13401,25 @@
         <line num="28" count="0" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
         <line num="30" count="0" type="stmt"/>
-        <line num="32" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
         <line num="33" count="0" type="stmt"/>
         <line num="34" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="38" count="0" type="cond" truecount="0" falsecount="4"/>
-        <line num="39" count="0" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="39" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="40" count="0" type="stmt"/>
         <line num="44" count="0" type="stmt"/>
         <line num="45" count="0" type="stmt"/>
-        <line num="47" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
-        <line num="67" count="0" type="stmt"/>
-        <line num="81" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="92" count="0" type="stmt"/>
       </file>
       <file name="RemoveOrgsTopBarButton.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/Organizations/RemoveOrgsTopBarButton.tsx">
         <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="0"/>
