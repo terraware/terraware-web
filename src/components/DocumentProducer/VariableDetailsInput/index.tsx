@@ -296,7 +296,7 @@ const VariableDetailsInput = ({
                   key={`input-${index}`}
                   id='value'
                   label={index === 0 ? strings.VALUE : ''}
-                  type={'text'}
+                  type={variable.textType === 'SingleLine' ? 'text' : 'textarea'}
                   onChange={(newValue: any) => onChangeValueHandler(newValue, 'value', index)}
                   value={iValue?.toString()}
                   errorText={validate ? valueError() : ''}

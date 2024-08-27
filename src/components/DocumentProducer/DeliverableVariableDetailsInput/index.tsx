@@ -270,7 +270,7 @@ const DeliverableVariableDetailsInput = ({
                   key={`input-${index}`}
                   id='value'
                   label=''
-                  type={'text'}
+                  type={variable.textType === 'SingleLine' ? 'text' : 'textarea'}
                   onChange={(newValue: any) => onChangeValueHandler(newValue, 'value', index)}
                   value={iValue?.toString()}
                   sx={[formElementStyles, { flex: 1 }]}
