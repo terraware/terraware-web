@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1724781715493" clover="3.2.0">
-  <project timestamp="1724781715493" name="All files">
-    <metrics statements="24512" coveredstatements="1031" conditionals="15980" coveredconditionals="279" methods="7553" coveredmethods="176" elements="48045" coveredelements="1486" complexity="0" loc="24512" ncloc="24512" packages="234" files="1074" classes="1074"/>
+<coverage generated="1724786577089" clover="3.2.0">
+  <project timestamp="1724786577089" name="All files">
+    <metrics statements="24512" coveredstatements="1031" conditionals="15982" coveredconditionals="279" methods="7553" coveredmethods="176" elements="48047" coveredelements="1486" complexity="0" loc="24512" ncloc="24512" packages="234" files="1074" classes="1074"/>
     <package name="src">
       <metrics statements="177" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -6432,7 +6432,7 @@
       </file>
     </package>
     <package name="src.components.common">
-      <metrics statements="421" coveredstatements="0" conditionals="391" coveredconditionals="0" methods="121" coveredmethods="0"/>
+      <metrics statements="421" coveredstatements="0" conditionals="393" coveredconditionals="0" methods="121" coveredmethods="0"/>
       <file name="AddLink.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/AddLink.tsx">
         <metrics statements="3" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="18" count="0" type="stmt"/>
@@ -6932,10 +6932,10 @@
         <line num="29" count="0" type="stmt"/>
       </file>
       <file name="TextTruncated.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/TextTruncated.tsx">
-        <metrics statements="3" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <metrics statements="3" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
       </file>
       <file name="TextWithLink.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/common/TextWithLink.tsx">
         <metrics statements="11" coveredstatements="0" conditionals="15" coveredconditionals="0" methods="2" coveredmethods="0"/>
@@ -13675,8 +13675,8 @@
         <line num="122" count="0" type="stmt"/>
         <line num="126" count="0" type="stmt"/>
         <line num="133" count="0" type="stmt"/>
-        <line num="305" count="0" type="stmt"/>
-        <line num="316" count="0" type="stmt"/>
+        <line num="311" count="0" type="stmt"/>
+        <line num="322" count="0" type="stmt"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/ParticipantProjects/index.tsx">
         <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
