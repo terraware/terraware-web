@@ -1,3 +1,4 @@
+ffd11674009 SW-5785 - Update due diligence description to match designs (#3095)
 7f65295984d SW-5745: Add created and edited timestamps to cohort edit view (#3090)
 aa07e0aba97 SW-5888: Various cursor position issues in Doc Producer text inputs (#3089)
 49ac19794cf SW-5781: Add default file name (project + template) when people create a new document (#3083)
