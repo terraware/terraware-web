@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
-import { Button, DatePicker, Dropdown, DropdownItem, Icon, Textfield } from '@terraware/web-components';
+import { Button, DatePicker, Dropdown, DropdownItem, Icon, MultiSelect, Textfield } from '@terraware/web-components';
 
 import Link from 'src/components/common/Link';
 import strings from 'src/strings';
@@ -20,7 +20,7 @@ export type VariableDetailsInputProps = {
   setValues: (values: VariableValueValue[]) => void;
   validate: boolean;
   setHasErrors: (has: boolean) => void;
-  variable?: Variable;
+  variable: Variable;
   addRemovedValue: (value: VariableValueValue) => void;
   sectionsUsed?: string[];
   onSectionClicked?: (sectionNumber: string) => void;
@@ -36,7 +36,7 @@ const VariableDetailsInput = ({
   sectionsUsed,
   onSectionClicked,
 }: VariableDetailsInputProps): JSX.Element => {
-  const [value, setValue] = useState<string | number>();
+  const [value, setValue] = useState<string | number | number[]>();
   const [citation, setCitation] = useState<string>();
   const [title, setTitle] = useState<string>();
   const theme = useTheme();
@@ -59,7 +59,7 @@ const VariableDetailsInput = ({
       }
       if (variable?.type === 'Select') {
         const selectValues = values as VariableValueSelectValue[];
-        setValue(selectValues[0].optionValues[0]);
+        setValue(selectValues[0].optionValues);
         setCitation(selectValues[0].citation);
       }
       if (variable?.type === 'Date') {
@@ -146,20 +146,22 @@ const VariableDetailsInput = ({
       }
 
       if (variable?.type === 'Select') {
-        if (values) {
+        if (values.length > 0) {
           const selectValues = values as VariableValueSelectValue[];
           const newValues = selectValues.map((sv) => ({ ...sv }));
           if (id === 'citation') {
             newValues[0].citation = newValue;
           } else {
-            newValues[0].optionValues = [newValue];
+            newValues[0].optionValues = variable.isMultiple ? newValue : [newValue];
           }
           setValues(newValues);
         } else {
           if (id === 'citation') {
             setValues([{ id: -1, listPosition: 0, optionValues: [], type: 'Select', citation: newValue }]);
           } else {
-            setValues([{ id: -1, listPosition: 0, optionValues: [newValue], type: 'Select' }]);
+            setValues([
+              { id: -1, listPosition: 0, optionValues: variable.isMultiple ? newValue : [newValue], type: 'Select' },
+            ]);
           }
         }
       }
@@ -324,6 +326,7 @@ const VariableDetailsInput = ({
           {variable.isList && <Button priority='ghost' label={strings.ADD} icon='iconAdd' onClick={addInput} />}
         </>
       )}
+
       {(variable?.type === 'Number' || variable?.type === 'Link') && (
         <Textfield
           id='value'
@@ -335,13 +338,32 @@ const VariableDetailsInput = ({
           sx={formElementStyles}
         />
       )}
-      {variable?.type === 'Select' && (
+
+      {variable.type === 'Select' && !variable.isMultiple && (
         <Dropdown
-          onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
+          fullWidth
           label={strings.VALUE}
+          onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
           options={getOptions()}
-          selectedValue={value}
-          fullWidth={true}
+          selectedValue={(value as number[])?.[0]}
+        />
+      )}
+
+      {variable.type === 'Select' && variable.isMultiple && (
+        <MultiSelect
+          fullWidth
+          onAdd={(item: number) => {
+            const nextValues = [...((value as number[]) || []), item];
+            onChangeValueHandler(nextValues, 'value');
+          }}
+          onRemove={(item: number) => {
+            const nextValues = value ? (value as number[]).filter((v) => v !== item) : [];
+            onChangeValueHandler(nextValues, 'value');
+          }}
+          options={new Map(variable.options?.map((option) => [option.id, option.name]))}
+          selectedOptions={(value || []) as number[]}
+          sx={[formElementStyles, { paddingBottom: theme.spacing(1) }]}
+          valueRenderer={(val: string) => val}
         />
       )}
 
