@@ -1611,7 +1611,15 @@ export interface components {
     };
     CohortPayload: {
       /** Format: int64 */
+      createdBy: number;
+      /** Format: date-time */
+      createdTime: string;
+      /** Format: int64 */
       id: number;
+      /** Format: int64 */
+      modifiedBy: number;
+      /** Format: date-time */
+      modifiedTime: string;
       modules: components["schemas"]["CohortModule"][];
       name: string;
       participantIds?: number[];
@@ -4507,7 +4515,7 @@ export interface components {
       createdTime: string;
       description?: string;
       /** @enum {string} */
-      documentStore: "Dropbox" | "Google";
+      documentStore: "Dropbox" | "Google" | "External";
       /** Format: int64 */
       id: number;
       name: string;
