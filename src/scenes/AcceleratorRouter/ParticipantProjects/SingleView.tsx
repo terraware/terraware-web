@@ -202,7 +202,13 @@ const SingleView = () => {
               <ProjectFieldDisplay label={strings.REGION} value={participantProject?.region} />
               <ProjectFieldDisplay
                 label={strings.LAND_USE_MODEL_TYPE}
-                value={<TextTruncated fontSize={24} stringList={participantProject?.landUseModelTypes || []} />}
+                value={
+                  <TextTruncated
+                    fontSize={24}
+                    fontWeight={600}
+                    stringList={participantProject?.landUseModelTypes || []}
+                  />
+                }
                 rightBorder={!isMobile}
               />
               <ProjectFieldDisplay

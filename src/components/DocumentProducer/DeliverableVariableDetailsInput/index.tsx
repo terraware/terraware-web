@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Box, IconButton, SxProps, useTheme } from '@mui/material';
-import { Button, DatePicker, Dropdown, DropdownItem, Icon, Textfield } from '@terraware/web-components';
+import { Button, DatePicker, Dropdown, DropdownItem, Icon, MultiSelect, Textfield } from '@terraware/web-components';
 
 import strings from 'src/strings';
 import {
@@ -51,7 +51,7 @@ const DeliverableVariableDetailsInput = ({
   addRemovedValue,
   projectId,
 }: DeliverableVariableDetailsInputProps): JSX.Element => {
-  const [value, setValue] = useState<string | number>();
+  const [value, setValue] = useState<string | number | number[]>();
   const [title, setTitle] = useState<string>();
   const theme = useTheme();
 
@@ -78,7 +78,7 @@ const DeliverableVariableDetailsInput = ({
       }
       if (variable.type === 'Select') {
         const selectValues = values as VariableValueSelectValue[];
-        setValue(selectValues[0].optionValues[0]);
+        setValue(selectValues[0].optionValues);
       }
       if (variable.type === 'Date') {
         const selectValues = values as VariableValueDateValue[];
@@ -133,11 +133,13 @@ const DeliverableVariableDetailsInput = ({
           const selectValues = values as VariableValueSelectValue[];
           const newValues = selectValues.map((sv) => ({ ...sv }));
 
-          newValues[0].optionValues = [newValue];
+          newValues[0].optionValues = variable.isMultiple ? newValue : [newValue];
 
           setValues(newValues);
         } else {
-          setValues([{ id: -1, listPosition: 0, optionValues: [newValue], type: 'Select' }]);
+          setValues([
+            { id: -1, listPosition: 0, optionValues: variable.isMultiple ? newValue : [newValue], type: 'Select' },
+          ]);
         }
       }
 
@@ -260,7 +262,7 @@ const DeliverableVariableDetailsInput = ({
 
       {variable.type === 'Text' && (
         <>
-          {(values as VariableValueTextValue[])
+          {(values.length ? (values as VariableValueTextValue[]) : [{ textValue: '' }])
             ?.map((tv) => tv.textValue)
             .map((iValue, index) => (
               <Box key={index} display='flex' alignItems='center' sx={{ position: 'relative' }}>
@@ -307,14 +309,32 @@ const DeliverableVariableDetailsInput = ({
         />
       )}
 
-      {variable.type === 'Select' && (
+      {variable.type === 'Select' && !variable.isMultiple && (
         <Dropdown
-          onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
+          fullWidth
           label=''
+          onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
           options={getOptions()}
-          selectedValue={value}
-          fullWidth={true}
+          selectedValue={(value as number[])?.[0]}
           sx={[formElementStyles, { paddingBottom: theme.spacing(1) }]}
+        />
+      )}
+
+      {variable.type === 'Select' && variable.isMultiple && (
+        <MultiSelect
+          fullWidth
+          onAdd={(item: number) => {
+            const nextValues = [...((value as number[]) || []), item];
+            onChangeValueHandler(nextValues, 'value');
+          }}
+          onRemove={(item: number) => {
+            const nextValues = value ? (value as number[]).filter((v) => v !== item) : [];
+            onChangeValueHandler(nextValues, 'value');
+          }}
+          options={new Map(variable.options?.map((option) => [option.id, option.name]))}
+          selectedOptions={(value || []) as number[]}
+          sx={[formElementStyles, { paddingBottom: theme.spacing(1) }]}
+          valueRenderer={(val: string) => val}
         />
       )}
 
