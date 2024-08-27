@@ -61,9 +61,10 @@ export default function CohortEditView(): JSX.Element {
       {cohort && (
         <CohortForm<UpdateCohortRequestPayload>
           busy={cohortUpdateRequest?.status === 'pending'}
-          cohort={cohort}
+          cohortId={cohortId}
           onCancel={goToCohortView}
           onSave={saveCohort}
+          record={cohort}
         />
       )}
     </Page>

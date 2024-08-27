@@ -7,6 +7,7 @@ import Link from 'src/components/common/Link';
 import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers/hooks';
+import { selectCohort } from 'src/redux/features/cohorts/cohortsSelectors';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -18,33 +19,28 @@ import { getUserDisplayName } from 'src/utils/user';
 
 type CohortFormProps<T extends CreateCohortRequestPayload | UpdateCohortRequestPayload> = {
   busy?: boolean;
-  cohort: T;
+  cohortId?: number;
   onCancel: () => void;
   onSave: (cohort: T) => void;
+  record: T;
 };
 
 export default function CohortForm<T extends CreateCohortRequestPayload | UpdateCohortRequestPayload>(
   props: CohortFormProps<T>
 ): JSX.Element {
-  const { busy, cohort, onCancel, onSave } = props;
+  const { busy, cohortId = -1, onCancel, onSave, record } = props;
 
   const dispatch = useAppDispatch();
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
   const theme = useTheme();
 
-  const [localRecord, setLocalRecord] = useState<T>(cohort);
+  const [localRecord, setLocalRecord] = useState<T>(record);
   const [validateFields, setValidateFields] = useState<boolean>(false);
 
-  const PLACEHOLDER_DATA = {
-    createdBy: 78,
-    createdTime: 'Mar 2, 2024',
-    modifiedBy: 78,
-    modifiedTime: 'Mar 2, 2024',
-  };
-
-  const createdByUser = useAppSelector(selectUser(PLACEHOLDER_DATA.createdBy));
-  const modifiedByUser = useAppSelector(selectUser(PLACEHOLDER_DATA.modifiedBy));
+  const cohort = useAppSelector(selectCohort(cohortId));
+  const createdByUser = useAppSelector(selectUser(cohort?.createdBy));
+  const modifiedByUser = useAppSelector(selectUser(cohort?.modifiedBy));
 
   const currentPhaseDropdownOptions = useMemo(() => {
     if (!activeLocale) {
@@ -91,17 +87,17 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
 
   useEffect(() => {
     // update local record when cohort changes
-    setLocalRecord(cohort);
-  }, [cohort]);
+    setLocalRecord(record);
+  }, [record]);
 
   useEffect(() => {
-    const userIds = new Set([PLACEHOLDER_DATA.createdBy, PLACEHOLDER_DATA.modifiedBy]);
+    const userIds = new Set([cohort?.createdBy, cohort?.modifiedBy]);
     userIds.forEach((userId) => {
       if (userId) {
         dispatch(requestGetUser(userId));
       }
     });
-  }, [dispatch, PLACEHOLDER_DATA.createdBy, PLACEHOLDER_DATA.modifiedBy]);
+  }, [dispatch, cohort?.createdBy, cohort?.modifiedBy]);
 
   return (
     <PageForm
@@ -155,48 +151,50 @@ export default function CohortForm<T extends CreateCohortRequestPayload | Update
             </Grid>
           </Grid>
 
-          <Grid container marginTop={0} spacing={theme.spacing(3)} width={'100%'}>
-            <Grid item xs={isMobile ? 12 : 4} sx={{ marginTop: theme.spacing(2) }}>
-              <Typography>
-                {strings.CREATED_ON}{' '}
-                <Typography component='span' fontWeight={500}>
-                  {getLongDate(PLACEHOLDER_DATA.createdTime, activeLocale)}
+          {cohort && createdByUser && modifiedByUser && (
+            <Grid container marginTop={0} spacing={theme.spacing(3)} width={'100%'}>
+              <Grid item xs={isMobile ? 12 : 4} sx={{ marginTop: theme.spacing(2) }}>
+                <Typography>
+                  {strings.CREATED_ON}{' '}
+                  <Typography component='span' fontWeight={500}>
+                    {getLongDate(cohort.createdTime, activeLocale)}
+                  </Typography>
                 </Typography>
-              </Typography>
-              <Typography>
-                {strings.CREATED_BY}
-                {` `}
-                <Link
-                  fontSize={'16px'}
-                  fontWeight={400}
-                  lineHeight={'24px'}
-                  to={APP_PATHS.PEOPLE_VIEW.replace(':userId', `${PLACEHOLDER_DATA.createdBy}`)}
-                >
-                  {getUserDisplayName(createdByUser)}
-                </Link>
-              </Typography>
-            </Grid>
-            <Grid item xs={isMobile ? 12 : 4} sx={{ marginTop: theme.spacing(2) }}>
-              <Typography>
-                {strings.LAST_MODIFIED_ON}{' '}
-                <Typography component='span' fontWeight={500}>
-                  {getLongDate(PLACEHOLDER_DATA.modifiedTime, activeLocale)}
+                <Typography>
+                  {strings.CREATED_BY}
+                  {` `}
+                  <Link
+                    fontSize={'16px'}
+                    fontWeight={400}
+                    lineHeight={'24px'}
+                    to={APP_PATHS.PEOPLE_VIEW.replace(':userId', `${cohort.createdBy}`)}
+                  >
+                    {getUserDisplayName(createdByUser)}
+                  </Link>
                 </Typography>
-              </Typography>
-              <Typography>
-                {strings.LAST_MODIFIED_BY}
-                {` `}
-                <Link
-                  fontSize={'16px'}
-                  fontWeight={400}
-                  lineHeight={'24px'}
-                  to={APP_PATHS.PEOPLE_VIEW.replace(':userId', `${PLACEHOLDER_DATA.modifiedBy}`)}
-                >
-                  {getUserDisplayName(modifiedByUser)}
-                </Link>
-              </Typography>
+              </Grid>
+              <Grid item xs={isMobile ? 12 : 4} sx={{ marginTop: theme.spacing(2) }}>
+                <Typography>
+                  {strings.LAST_MODIFIED_ON}{' '}
+                  <Typography component='span' fontWeight={500}>
+                    {getLongDate(cohort.modifiedTime, activeLocale)}
+                  </Typography>
+                </Typography>
+                <Typography>
+                  {strings.LAST_MODIFIED_BY}
+                  {` `}
+                  <Link
+                    fontSize={'16px'}
+                    fontWeight={400}
+                    lineHeight={'24px'}
+                    to={APP_PATHS.PEOPLE_VIEW.replace(':userId', `${cohort.modifiedBy}`)}
+                  >
+                    {getUserDisplayName(modifiedByUser)}
+                  </Link>
+                </Typography>
+              </Grid>
             </Grid>
-          </Grid>
+          )}
         </Grid>
       </Container>
     </PageForm>
