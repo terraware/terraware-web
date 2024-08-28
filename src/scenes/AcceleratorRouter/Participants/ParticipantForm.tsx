@@ -14,6 +14,7 @@ import strings from 'src/strings';
 import { AcceleratorOrg } from 'src/types/Accelerator';
 import { Cohort } from 'src/types/Cohort';
 import { ParticipantCreateRequest, ParticipantProject, ParticipantUpdateRequest } from 'src/types/Participant';
+import { ParticipantProject as ParticipantProjectType } from 'src/types/ParticipantProject';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import OrgProjectsSectionEdit, { OrgProjectsSection } from './OrgProjectsSectionEdit';
@@ -23,7 +24,7 @@ type ParticipantFormProps<T extends ParticipantCreateRequest | ParticipantUpdate
   existingProjects?: ParticipantProject[];
   participant: T;
   onCancel: () => void;
-  onSave: (participant: T) => void;
+  onSave: (participant: T, projectsDetails: ParticipantProjectType[]) => void;
 };
 
 export default function ParticipantForm<T extends ParticipantCreateRequest | ParticipantUpdateRequest>(
@@ -103,10 +104,13 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
       return;
     }
 
-    onSave({
-      ...localRecord,
-      projectIds: orgProjectsSections.flatMap((data) => data.selectedProjectIds),
-    });
+    onSave(
+      {
+        ...localRecord,
+        projectIds: orgProjectsSections.flatMap((data) => data.projectId),
+      },
+      orgProjectsSections.map((ops) => ops.projectDetails)
+    );
   };
 
   /**
@@ -138,7 +142,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
     [acceleratorOrgs]
   );
 
-  const onProjects = useCallback((sectionId: number, selectedProjectIds: number[]) => {
+  const onProjectSelect = useCallback((sectionId: number, projectId: number) => {
     setModified(true);
     setOrgProjectsSections((prev) => {
       const updated = [...prev].map((section) =>
@@ -146,7 +150,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
           ? section
           : {
               ...section,
-              selectedProjectIds,
+              projectId,
             }
       );
       return updated;
@@ -154,34 +158,36 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
   }, []);
 
   const addOrgProjectsSection = useCallback(() => {
-    setOrgProjectsSections((prev) => [...prev, { id: prev.length + 1, selectedProjectIds: [] }]);
+    setOrgProjectsSections((prev) => [
+      ...prev,
+      { id: prev.length + 1, projectId: -1, projectDetails: { projectId: -1, landUseModelTypes: [] } },
+    ]);
   }, []);
 
   // initialize sections for participant that already had project ids (edit use-case)
   useEffect(() => {
-    if (modified) {
-      return;
-    }
+    // if (modified) {
+    //   return;
+    // }
 
-    const sections = acceleratorOrgs
-      .filter((org) => org.projects.some((p) => (localRecord.projectIds ?? []).some((id) => id === p.id)))
-      .sort((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
-      .map((org, index) => ({
+    const sections: OrgProjectsSection[] = [];
+    localRecord.projectIds?.forEach((projectId, index) => {
+      sections.push({
         id: index + 1,
-        org,
-        selectedProjectIds: org.projects
-          .map((p) => p.id)
-          .filter((projectId) => (localRecord.projectIds ?? []).some((id) => id === projectId)),
-      }));
+        org: acceleratorOrgs.find((org) => org.projects.some((proj) => proj.id === projectId)),
+        projectId: projectId,
+        projectDetails: { projectId, landUseModelTypes: [] },
+      });
+    });
 
     if (sections.length) {
       setModified(true);
       setOrgProjectsSections(sections);
       // remove the orgs as being available for selection (since they already has projects selected prior to edit)
-      setAvailableOrgs(acceleratorOrgs.filter((org) => !sections.some((section) => section.org.id === org.id)));
+      setAvailableOrgs(acceleratorOrgs.filter((org) => !sections.some((section) => section?.org?.id === org.id)));
     } else if (acceleratorOrgs.length) {
       // allow initial selection
-      setOrgProjectsSections([{ id: 1, selectedProjectIds: [] }]);
+      setOrgProjectsSections([{ id: 1, projectId: -1, projectDetails: { projectId: -1, landUseModelTypes: [] } }]);
     }
   }, [acceleratorOrgs, activeLocale, localRecord.projectIds, modified]);
 
@@ -195,6 +201,37 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
       setAvailableOrgs(acceleratorOrgs);
     }
   }, [acceleratorOrgs]);
+
+  const updateProjectDetails = (
+    projectId: number,
+    field?: string,
+    value?: string,
+    allDetails?: ParticipantProjectType
+  ) => {
+    const sectionToUpdate = orgProjectsSections.find((section) => section.projectId === projectId);
+    let newDetails: ParticipantProjectType = { landUseModelTypes: [], projectId };
+
+    if (sectionToUpdate) {
+      if (field && value) {
+        newDetails = { ...sectionToUpdate?.projectDetails, [field]: value };
+      } else if (allDetails) {
+        newDetails = allDetails;
+      }
+
+      setOrgProjectsSections((prev) => {
+        const updated = [...prev].map((section) =>
+          section.projectId === projectId
+            ? {
+                ...section,
+                projectDetails: { ...newDetails, landUseModelTypes: newDetails.landUseModelTypes || [], projectId },
+              }
+            : section
+        );
+
+        return updated;
+      });
+    }
+  };
 
   return (
     <PageForm
@@ -253,8 +290,9 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
             availableOrgs={availableOrgs}
             key={section.id}
             onOrgSelect={onOrgSelect}
-            onProjects={onProjects}
+            onProjectSelect={onProjectSelect}
             section={section}
+            updateProjectDetails={updateProjectDetails}
           />
         ))}
         {acceleratorOrgs.length > 0 && (
