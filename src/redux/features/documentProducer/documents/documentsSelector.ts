@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import createCachedSelector from 're-reselect';
 
+import { selectUsers } from 'src/redux/features/user/usersSelectors';
 import { RootState } from 'src/redux/rootReducer';
 import { User } from 'src/types/User';
 import {
@@ -24,15 +25,15 @@ export const selectGetDocument =
 
 export const selectListHistory = createCachedSelector(
   (state: RootState, id: number) => state.documentProducerDocumentListHistory[id],
-  // TODO need to create selector / thunk for getting all admin users, currently there is only "get one"
-  (state: RootState, _: number): User[] => [],
-  // (state: RootState, id: number) => selectUsers(state),
+  (state: RootState, id: number) => selectUsers(state),
   (response, users) => {
     if (response) {
       const usersMap =
         users?.reduce(
-          (acc: Record<number, string>, curr: User) => {
-            acc[curr.id] = getUserDisplayName(curr) || '';
+          (acc: Record<number, string>, curr: User | undefined) => {
+            if (curr) {
+              acc[curr.id] = getUserDisplayName(curr) || '';
+            }
             return acc;
           },
           {} as Record<number, string>
