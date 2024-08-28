@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1724798018330" clover="3.2.0">
-  <project timestamp="1724798018330" name="All files">
-    <metrics statements="24521" coveredstatements="1031" conditionals="16004" coveredconditionals="279" methods="7557" coveredmethods="176" elements="48082" coveredelements="1486" complexity="0" loc="24521" ncloc="24521" packages="234" files="1074" classes="1074"/>
+<coverage generated="1724873505559" clover="3.2.0">
+  <project timestamp="1724873505559" name="All files">
+    <metrics statements="24525" coveredstatements="1031" conditionals="16010" coveredconditionals="279" methods="7559" coveredmethods="176" elements="48094" coveredelements="1486" complexity="0" loc="24525" ncloc="24525" packages="234" files="1074" classes="1074"/>
     <package name="src">
       <metrics statements="177" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -2112,9 +2112,9 @@
       </file>
     </package>
     <package name="src.components.DocumentProducer.DeliverableVariableDetailsInput">
-      <metrics statements="111" coveredstatements="0" conditionals="109" coveredconditionals="0" methods="27" coveredmethods="0"/>
+      <metrics statements="111" coveredstatements="0" conditionals="111" coveredconditionals="0" methods="27" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DocumentProducer/DeliverableVariableDetailsInput/index.tsx">
-        <metrics statements="111" coveredstatements="0" conditionals="109" coveredconditionals="0" methods="27" coveredmethods="0"/>
+        <metrics statements="111" coveredstatements="0" conditionals="111" coveredconditionals="0" methods="27" coveredmethods="0"/>
         <line num="42" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
@@ -2214,7 +2214,7 @@
         <line num="256" count="0" type="stmt"/>
         <line num="266" count="0" type="stmt"/>
         <line num="268" count="0" type="stmt"/>
-        <line num="274" count="0" type="stmt"/>
+        <line num="273" count="0" type="stmt"/>
         <line num="283" count="0" type="stmt"/>
         <line num="306" count="0" type="stmt"/>
         <line num="316" count="0" type="stmt"/>
@@ -3077,9 +3077,9 @@
       </file>
     </package>
     <package name="src.components.DocumentProducer.VariableDetailsInput">
-      <metrics statements="135" coveredstatements="0" conditionals="130" coveredconditionals="0" methods="26" coveredmethods="0"/>
+      <metrics statements="135" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="26" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DocumentProducer/VariableDetailsInput/index.tsx">
-        <metrics statements="135" coveredstatements="0" conditionals="130" coveredconditionals="0" methods="26" coveredmethods="0"/>
+        <metrics statements="135" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="26" coveredmethods="0"/>
         <line num="29" count="0" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
         <line num="40" count="0" type="stmt"/>
@@ -3204,17 +3204,17 @@
         <line num="240" count="0" type="stmt"/>
         <line num="241" count="0" type="stmt"/>
         <line num="245" count="0" type="stmt"/>
-        <line num="268" count="0" type="stmt"/>
-        <line num="278" count="0" type="stmt"/>
+        <line num="269" count="0" type="stmt"/>
         <line num="280" count="0" type="stmt"/>
-        <line num="300" count="0" type="stmt"/>
-        <line num="310" count="0" type="stmt"/>
-        <line num="332" count="0" type="stmt"/>
-        <line num="340" count="0" type="stmt"/>
-        <line num="353" count="0" type="stmt"/>
-        <line num="394" count="0" type="stmt"/>
-        <line num="396" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="407" count="0" type="stmt"/>
+        <line num="282" count="0" type="stmt"/>
+        <line num="302" count="0" type="stmt"/>
+        <line num="312" count="0" type="stmt"/>
+        <line num="335" count="0" type="stmt"/>
+        <line num="344" count="0" type="stmt"/>
+        <line num="357" count="0" type="stmt"/>
+        <line num="398" count="0" type="stmt"/>
+        <line num="400" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="411" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.FeatureNotification">
@@ -10037,43 +10037,44 @@
       </file>
     </package>
     <package name="src.redux.features.documentProducer.documents">
-      <metrics statements="96" coveredstatements="0" conditionals="54" coveredconditionals="0" methods="36" coveredmethods="0"/>
+      <metrics statements="97" coveredstatements="0" conditionals="56" coveredconditionals="0" methods="36" coveredmethods="0"/>
       <file name="documentsSelector.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/documentProducer/documents/documentsSelector.ts">
-        <metrics statements="34" coveredstatements="0" conditionals="14" coveredconditionals="0" methods="22" coveredmethods="0"/>
-        <line num="17" count="0" type="stmt"/>
+        <metrics statements="35" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="22" coveredmethods="0"/>
         <line num="18" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
         <line num="26" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
         <line num="28" count="0" type="stmt"/>
-        <line num="31" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="33" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="30" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="34" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="35" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
-        <line num="58" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
         <line num="59" count="0" type="stmt"/>
         <line num="60" count="0" type="stmt"/>
         <line num="61" count="0" type="stmt"/>
-        <line num="63" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="62" count="0" type="stmt"/>
         <line num="64" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="65" count="0" type="stmt"/>
+        <line num="65" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="66" count="0" type="stmt"/>
         <line num="67" count="0" type="stmt"/>
-        <line num="71" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
         <line num="72" count="0" type="stmt"/>
-        <line num="78" count="0" type="stmt"/>
-        <line num="81" count="0" type="stmt"/>
-        <line num="90" count="0" type="stmt"/>
-        <line num="92" count="0" type="stmt"/>
+        <line num="73" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="91" count="0" type="stmt"/>
         <line num="93" count="0" type="stmt"/>
-        <line num="95" count="0" type="stmt"/>
+        <line num="94" count="0" type="stmt"/>
         <line num="96" count="0" type="stmt"/>
+        <line num="97" count="0" type="stmt"/>
       </file>
       <file name="documentsSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/documentProducer/documents/documentsSlice.ts">
         <metrics statements="19" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="0"/>
@@ -11933,7 +11934,7 @@
       </file>
     </package>
     <package name="src.redux.features.user">
-      <metrics statements="32" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="13" coveredmethods="0"/>
+      <metrics statements="35" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="15" coveredmethods="0"/>
       <file name="userAnalyticsSelectors.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/user/userAnalyticsSelectors.ts">
         <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="3" count="0" type="stmt"/>
@@ -11966,10 +11967,13 @@
         <line num="45" count="0" type="stmt"/>
       </file>
       <file name="usersSelectors.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/user/usersSelectors.ts">
-        <metrics statements="3" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="6" coveredmethods="0"/>
+        <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="8" coveredmethods="0"/>
         <line num="3" count="0" type="stmt"/>
         <line num="5" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="7" count="0" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
       </file>
       <file name="usersSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/user/usersSlice.ts">
         <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
