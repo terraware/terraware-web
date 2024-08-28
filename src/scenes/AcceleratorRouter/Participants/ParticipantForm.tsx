@@ -302,7 +302,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
               id='add-org-project'
               large={true}
               onClick={addOrgProjectsSection}
-              text={strings.ADD_PROJECTS_BY_ORGANIZATION}
+              text={strings.ADD_PROJECT_BY_ORGANIZATION}
               tooltipTitle={
                 orgProjectsSections.length === acceleratorOrgs.length ? strings.ACCELERATOR_ORGS_EXHAUSTED_WARNING : ''
               }
