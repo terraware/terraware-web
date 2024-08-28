@@ -8,7 +8,7 @@ import { SectionVariableWithValues, VariableStatusType, VariableWithValues } fro
 import { VariableValue } from 'src/types/documentProducer/VariableValue';
 
 const DocumentTab = (): JSX.Element => {
-  const { allVariables, document, documentId, documentVariables, projectId, reload, variablesOwners } =
+  const { allVariables, document, documentId, documentVariables, projectId, reload, variablesOwners, reloadVariables } =
     useDocumentProducerData();
 
   const getVariableOwner = (variableId: number) => {
@@ -34,6 +34,7 @@ const DocumentTab = (): JSX.Element => {
             variableId={section.id}
             projectId={projectId}
             reload={reload}
+            reloadVariables={reloadVariables}
             ownerId={getVariableOwner(section.id)}
           />
         );
