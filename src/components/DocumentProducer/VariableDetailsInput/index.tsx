@@ -261,6 +261,7 @@ const VariableDetailsInput = ({
         display={true}
         sx={formElementStyles}
       />
+
       {variable?.type === 'Date' && (
         <DatePicker
           id='value'
@@ -272,6 +273,7 @@ const VariableDetailsInput = ({
           sx={formElementStyles}
         />
       )}
+
       {variable?.type === 'Text' && (
         <>
           {(values.length ? (values as VariableValueTextValue[]) : [{ textValue: '' }])
@@ -293,14 +295,14 @@ const VariableDetailsInput = ({
                 }}
               >
                 <Textfield
-                  key={`input-${index}`}
-                  id='value'
-                  label={index === 0 ? strings.VALUE : ''}
-                  type={'text'}
-                  onChange={(newValue: any) => onChangeValueHandler(newValue, 'value', index)}
-                  value={iValue?.toString()}
                   errorText={validate ? valueError() : ''}
+                  id='value'
+                  key={`input-${index}`}
+                  label={index === 0 ? strings.VALUE : ''}
+                  onChange={(newValue: any) => onChangeValueHandler(newValue, 'value', index)}
                   sx={{ flex: 1 }}
+                  type={variable.textType === 'SingleLine' ? 'text' : 'textarea'}
+                  value={iValue?.toString()}
                 />
                 {variable.isList && (
                   <IconButton
@@ -324,6 +326,7 @@ const VariableDetailsInput = ({
           {variable.isList && <Button priority='ghost' label={strings.ADD} icon='iconAdd' onClick={addInput} />}
         </>
       )}
+
       {(variable?.type === 'Number' || variable?.type === 'Link') && (
         <Textfield
           id='value'
@@ -335,6 +338,7 @@ const VariableDetailsInput = ({
           sx={formElementStyles}
         />
       )}
+
       {variable?.type === 'Select' && (
         <Dropdown
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
