@@ -1,5 +1,5 @@
 import { paths } from 'src/api/types/generated-schema';
-import { Module, ModuleEvent } from 'src/types/Module';
+import { ModuleEvent } from 'src/types/Module';
 
 import HttpService, { Response2 } from './HttpService';
 
