@@ -21,8 +21,8 @@ export const requestListAllVariables = createAsyncThunk('listAllVariables', asyn
 
 export const requestListDeliverableVariables = createAsyncThunk(
   'listDeliverableVariables',
-  async (deliverableId: number, { rejectWithValue }) => {
-    const response: Response2<VariableListResponse> = await VariableService.getDeliverableVariables(deliverableId);
+  async (request: { deliverableId: number; projectId: number }, { rejectWithValue }) => {
+    const response: Response2<VariableListResponse> = await VariableService.getDeliverableVariables(request);
     if (response && response.requestSucceeded && response.data) {
       return response.data.variables;
     }

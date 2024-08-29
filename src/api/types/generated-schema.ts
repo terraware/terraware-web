@@ -4507,7 +4507,7 @@ export interface components {
       createdTime: string;
       description?: string;
       /** @enum {string} */
-      documentStore: "Dropbox" | "Google";
+      documentStore: "Dropbox" | "Google" | "External";
       /** Format: int64 */
       id: number;
       name: string;
@@ -5293,6 +5293,8 @@ export interface components {
       position?: number;
       /** @description IDs of sections that recommend this variable. */
       recommendedBy?: number[];
+      /** Format: int64 */
+      replacesVariableId?: number;
       stableId: string;
       /** @enum {string} */
       type: "Number" | "Text" | "Date" | "Image" | "Select" | "Table" | "Link" | "Section";
@@ -6929,6 +6931,7 @@ export interface operations {
       query?: {
         deliverableId?: number;
         documentId?: number;
+        projectId?: number;
       };
     };
     responses: {

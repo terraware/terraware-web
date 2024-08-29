@@ -3,6 +3,7 @@ import { ActionReducerMapBuilder, createSlice } from '@reduxjs/toolkit';
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { Variable, VariableOwners } from 'src/types/documentProducer/Variable';
 
+import { deliverableCompositeKeyFn } from '../../deliverables/deliverablesSlice';
 import {
   requestListAllVariables,
   requestListDeliverableVariables,
@@ -30,7 +31,7 @@ const deliverableVariablesSlice = createSlice({
   initialState: initialVariablesState,
   reducers: {},
   extraReducers: (builder: ActionReducerMapBuilder<VariablesState>) => {
-    buildReducers(requestListDeliverableVariables, true)(builder);
+    buildReducers(requestListDeliverableVariables, true, deliverableCompositeKeyFn)(builder);
   },
 });
 

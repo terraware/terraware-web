@@ -13,9 +13,12 @@ const VARIABLE_OWNERS_ENDPOINT = '/api/v1/document-producer/projects/{projectId}
 
 const getAllVariables = (): Promise<Response2<VariableListResponse>> => HttpService.root(VARIABLES_ENDPOINT).get2({});
 
-const getDeliverableVariables = (deliverableId: number): Promise<Response2<VariableListResponse>> =>
+const getDeliverableVariables = (request: {
+  deliverableId: number;
+  projectId: number;
+}): Promise<Response2<VariableListResponse>> =>
   HttpService.root(VARIABLES_ENDPOINT).get2({
-    params: { deliverableId: `${deliverableId}` },
+    params: { deliverableId: `${request.deliverableId}`, projectId: `${request.projectId}` },
   });
 
 const getDocumentVariables = (documentId: number): Promise<Response2<VariableListResponse>> =>

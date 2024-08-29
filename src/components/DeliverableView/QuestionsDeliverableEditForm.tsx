@@ -108,11 +108,13 @@ type QuestionsDeliverableEditViewProps = EditProps & {
 };
 
 const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps): JSX.Element | null => {
+  const { deliverable, exit, hideStatusBadge } = props;
+
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const query = useQuery();
 
-  const { deliverable, exit, hideStatusBadge } = props;
+  const deliverableProject = { deliverableId: deliverable.id, projectId: deliverable.projectId };
 
   const scrollToVariable = useCallback((variableId: string) => {
     const element = document.querySelector(`[data-variable-id="${variableId}"]`);
@@ -159,10 +161,8 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
       return;
     }
 
-    void dispatch(requestListDeliverableVariables(deliverable.id));
-    void dispatch(
-      requestListDeliverableVariablesValues({ deliverableId: deliverable.id, projectId: deliverable.projectId })
-    );
+    void dispatch(requestListDeliverableVariables(deliverableProject));
+    void dispatch(requestListDeliverableVariablesValues(deliverableProject));
   }, [deliverable]);
 
   useEffect(() => {
@@ -201,8 +201,12 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
               paddingTop: theme.spacing(3),
             }}
           >
-            {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) =>
-              variableDependencyMet(variableWithValues, variablesWithValues) ? (
+            {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) => {
+              if (variableWithValues.type === 'Table') {
+                console.log({ variableWithValues });
+              }
+
+              return variableDependencyMet(variableWithValues, variablesWithValues) ? (
                 <QuestionBox
                   addRemovedValue={(removedValue: VariableValueValue) =>
                     setRemovedValue(variableWithValues.id, removedValue)
@@ -221,8 +225,8 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
                   setValues={(newValues: VariableValueValue[]) => setValues(variableWithValues.id, newValues)}
                   variable={variableWithValues}
                 />
-              ) : null
-            )}
+              ) : null;
+            })}
           </Box>
         </Card>
       </Box>
