@@ -97,7 +97,7 @@ const ScorecardEditView = () => {
 
   return (
     <PageWithModuleTimeline
-      title={`Edit Scoring for project ${project?.name ?? ''}`}
+      title={`${project?.name ?? ''} ${strings.SCORES}`}
       crumbs={crumbs}
       hierarchicalCrumbs={false}
       modules={modules ?? []}
