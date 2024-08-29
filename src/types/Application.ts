@@ -16,7 +16,6 @@ export const ApplicationReviewStatuses: ApplicationReviewStatus[] = [
   'Issue Resolved',
   'Needs Follow-up',
   'Not Accepted',
-  'Not Submitted',
   'PL Review',
   'Pre-check',
   'Ready for Review',
