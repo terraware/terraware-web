@@ -1,3 +1,4 @@
+ff6cf11bde4 SW-5784 Make three added fields required (#3109)
 b16fdfff964 SW-5604 Check subzone name uniqueness only within the selected zone (#3107)
 f07490c1889 SW-5784 Module Management in Console: Add File fields for Participant Projects to Participant record (#3101)
 da972191e2b SW-5916 Marking section in doc producer as Complete/Incomplete causes entire page redraw (#3102)

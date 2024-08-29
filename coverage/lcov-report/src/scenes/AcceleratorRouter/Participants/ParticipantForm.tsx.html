@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/101</span>
+                <span class='fraction'>0/107</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/59</span>
+                <span class='fraction'>0/64</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/40</span>
+                <span class='fraction'>0/42</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/90</span>
+                <span class='fraction'>0/95</span>
             </div>
         
             
@@ -374,7 +374,17 @@
 <a name='L309'></a><a href='#L309'>309</a>
 <a name='L310'></a><a href='#L310'>310</a>
 <a name='L311'></a><a href='#L311'>311</a>
-<a name='L312'></a><a href='#L312'>312</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L312'></a><a href='#L312'>312</a>
+<a name='L313'></a><a href='#L313'>313</a>
+<a name='L314'></a><a href='#L314'>314</a>
+<a name='L315'></a><a href='#L315'>315</a>
+<a name='L316'></a><a href='#L316'>316</a>
+<a name='L317'></a><a href='#L317'>317</a>
+<a name='L318'></a><a href='#L318'>318</a>
+<a name='L319'></a><a href='#L319'>319</a>
+<a name='L320'></a><a href='#L320'>320</a>
+<a name='L321'></a><a href='#L321'>321</a>
+<a name='L322'></a><a href='#L322'>322</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -472,8 +482,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -659,6 +678,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -779,6 +799,15 @@ export default function <span class="fstat-no" title="function not covered" >Par
     }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (!localRecord.cohortId) {</span>
+<span class="cstat-no" title="statement not covered" >      return false;</span>
+    }
+&nbsp;
+    const details = <span class="cstat-no" title="statement not covered" >orgProjectsSections.map(<span class="fstat-no" title="function not covered" >(o</span>ps) =&gt; <span class="cstat-no" title="statement not covered" >ops.projectDetails)</span>;</span>
+    const detailsMissingFields = <span class="cstat-no" title="statement not covered" >details.some(<span class="fstat-no" title="function not covered" >(d</span>etail) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      !detail.fileNaming || !detail.googleFolderUrl || !detail.dropboxFolderPath;</span>
+    });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    if (detailsMissingFields) {</span>
 <span class="cstat-no" title="statement not covered" >      return false;</span>
     }
 &nbsp;
@@ -976,6 +1005,7 @@ export default function <span class="fstat-no" title="function not covered" >Par
             onProjectSelect={onProjectSelect}
             section={section}
             updateProjectDetails={updateProjectDetails}
+            validateFields={validateFields}
           /&gt;
         ))}
         {acceleratorOrgs.length &gt; 0 &amp;&amp; (
@@ -1003,7 +1033,7 @@ export default function <span class="fstat-no" title="function not covered" >Par
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-29T18:33:29.023Z
+                at 2024-08-29T18:46:43.280Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
