@@ -26,7 +26,7 @@ const VotingEdit = () => {
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const theme = useTheme();
-  const { phaseVotes, projectId } = useVotingData();
+  const { phaseVotes, project } = useVotingData();
 
   const [requestId, setRequestId] = useState<string>('');
   const [validate, setValidate] = useState<boolean>(false);
@@ -34,13 +34,20 @@ const VotingEdit = () => {
   const result = useAppSelector((state) => selectProjectVotesEditRequest(state, requestId));
 
   const goToVotingView = useCallback(() => {
+    if (!project) {
+      return;
+    }
     navigate(
-      getLocation(APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`), location, query.toString())
+      getLocation(
+        APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${project.id}`),
+        location,
+        query.toString()
+      )
     );
-  }, [navigate, location, projectId, query]);
+  }, [navigate, location, project, query]);
 
   const onSave = () => {
-    if (!phaseVotes) {
+    if (!phaseVotes || !project) {
       return;
     }
     setValidate(true);
@@ -56,7 +63,7 @@ const VotingEdit = () => {
     });
 
     const request = {
-      projectId,
+      projectId: project.id,
       payload: {
         phase: phaseVotes.phase,
         votes: updatedVotes,

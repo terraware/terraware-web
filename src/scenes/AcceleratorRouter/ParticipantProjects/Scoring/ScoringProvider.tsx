@@ -30,7 +30,7 @@ const ScoringProvider = ({ children }: Props) => {
 
   const [projectName, setProjectName] = useState('');
   const [phaseScores, setPhaseScores] = useState<PhaseScores[]>();
-  const [scoringData, setScoringData] = useState<ScoringData>({ crumbs: [], projectId });
+  const [scoringData, setScoringData] = useState<ScoringData>({ crumbs: [] });
 
   const scoreListResult = useAppSelector(selectScoreList(projectId));
 
@@ -104,11 +104,10 @@ const ScoringProvider = ({ children }: Props) => {
       hasData,
       phase0Scores,
       phase1Scores,
-      projectId,
-      projectName,
+      project,
       status: scoreListResult?.status ?? 'pending',
     });
-  }, [crumbs, hasData, phase0Scores, phase1Scores, projectId, projectName, scoreListResult?.status]);
+  }, [crumbs, hasData, phase0Scores, phase1Scores, project, scoreListResult?.status]);
 
   return <ScoringContext.Provider value={scoringData}>{children}</ScoringContext.Provider>;
 };

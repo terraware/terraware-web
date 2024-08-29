@@ -46,7 +46,7 @@ export default function NavBar({
 
   const { isAllowedViewConsole } = useAcceleratorConsole();
   const { activeLocale } = useLocalization();
-  const { orgHasModules, currentParticipantProject, setCurrentParticipantProject, moduleProjects } =
+  const { orgHasModules, currentParticipantProject, setCurrentParticipantProject, projectsWithModules } =
     useParticipantData();
 
   const applicatioinEnabled = isEnabled('Accelerator Application');
@@ -140,10 +140,10 @@ export default function NavBar({
   }, [activeLocale, selectedOrganization]);
 
   useEffect(() => {
-    if (!currentParticipantProject && moduleProjects && moduleProjects.length > 0) {
-      setCurrentParticipantProject(moduleProjects[0].id);
+    if (!currentParticipantProject && projectsWithModules && projectsWithModules.length > 0) {
+      setCurrentParticipantProject(projectsWithModules[0].id);
     }
-  }, [moduleProjects, currentParticipantProject, setCurrentParticipantProject]);
+  }, [projectsWithModules, currentParticipantProject, setCurrentParticipantProject]);
 
   const getSeedlingsMenuItems = () => {
     const inventoryMenu = (

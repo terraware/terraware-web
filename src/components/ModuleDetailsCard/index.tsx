@@ -9,7 +9,7 @@ import Link from 'src/components/common/Link';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { DeliverableStatusType } from 'src/types/Deliverables';
+import { DeliverableStatusTypeWithOverdue } from 'src/types/Deliverables';
 import { ModuleContentType, ModuleEventType } from 'src/types/Module';
 import { getLongDate, getLongDateTime } from 'src/utils/dateFormatter';
 
@@ -61,7 +61,7 @@ export type DeliverableDetails = {
   dueDate?: DateTime;
   name: string;
   onClick: () => void;
-  status: DeliverableStatusType;
+  status: DeliverableStatusTypeWithOverdue;
   useButton?: boolean;
 };
 

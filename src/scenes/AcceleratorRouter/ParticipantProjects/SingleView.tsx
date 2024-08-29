@@ -17,6 +17,7 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS } from 'src/constants';
+import useListModules from 'src/hooks/useListModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
@@ -40,6 +41,14 @@ const SingleView = () => {
   const { phase0Scores, phase1Scores } = useScoringData();
   const { phaseVotes } = useVotingData();
   const { goToParticipantProjectEdit } = useNavigateTo();
+
+  const { modules, listModules } = useListModules();
+
+  useEffect(() => {
+    if (project) {
+      void listModules({ projectId: project.id });
+    }
+  }, [project, listModules]);
 
   const [countries, setCountries] = useState<Country[]>();
   const [exportModalOpen, setExportModalOpen] = useState(false);
@@ -137,6 +146,8 @@ const SingleView = () => {
       hierarchicalCrumbs={false}
       rightComponent={rightComponent}
       titleContainerStyle={{ marginBottom: 0 }}
+      cohortPhase={project?.cohortPhase}
+      modules={modules ?? []}
     >
       {status === 'pending' && <BusySpinner />}
 

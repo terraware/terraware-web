@@ -11,21 +11,51 @@ export type ModuleData = {
   module: Module | undefined;
 };
 
-const PROJECT_MODULES_ENDPOINT = '/api/v1/projects/{projectId}/modules';
+const MODULES_ENDOINT = '/api/v1/modules';
+const MODULE_ENDOINT = '/api/v1/modules/{moduleId}';
 
 export type ListModulesResponsePayload =
-  paths[typeof PROJECT_MODULES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+  paths[typeof MODULES_ENDOINT]['get']['responses'][200]['content']['application/json'];
+export type GetModuleResponsePayload =
+  paths[typeof MODULE_ENDOINT]['get']['responses'][200]['content']['application/json'];
 
-const httpProjectModules = HttpService.root(PROJECT_MODULES_ENDPOINT);
+export type ListModulesRequestParam = {
+  projectId?: number;
+  participantId?: number;
+  cohortId?: number;
+};
+
+export type GetModuleRequestParam = {
+  projectId?: number;
+  participantId?: number;
+  cohortId?: number;
+  moduleId: number;
+};
 
 /**
- * List all modules for a project
+ * List all modules
  */
-const list = (projectId: number | null): Promise<Response2<ModulesData | null>> =>
-  httpProjectModules.get<ListModulesResponsePayload, { data: ModulesData | undefined }>(
+const list = ({
+  projectId,
+  cohortId,
+  participantId,
+}: ListModulesRequestParam): Promise<Response2<ModulesData | null>> => {
+  const params: Record<string, string> = {};
+  if (projectId) {
+    params['projectId'] = `${projectId}`;
+  }
+
+  if (participantId) {
+    params['participantId'] = `${participantId}`;
+  }
+
+  if (cohortId) {
+    params['cohortId'] = `${cohortId}`;
+  }
+
+  return HttpService.root(MODULES_ENDOINT).get<ListModulesResponsePayload, { data: ModulesData | undefined }>(
     {
-      url: PROJECT_MODULES_ENDPOINT,
-      urlReplacements: { '{projectId}': `${projectId}` },
+      params,
     },
     (response) => ({
       data: {
@@ -33,28 +63,41 @@ const list = (projectId: number | null): Promise<Response2<ModulesData | null>> 
       },
     })
   );
+};
 
 /**
- * Get module data for a specific module / project ID.
+ * Get module data
  */
-const get = async (projectId: number, moduleId: number): Promise<Response2<ModuleData | null>> => {
-  // TODO this will become its own API in the BE soon.
-  const _list = await list(projectId);
-  if (_list && _list.requestSucceeded && _list.data?.modules) {
-    const module = _list.data.modules.find((module) => module.id === moduleId);
-    if (module) {
-      return {
-        requestSucceeded: true,
-        data: {
-          module: module,
-        },
-      };
-    }
+const get = async ({
+  projectId,
+  cohortId,
+  participantId,
+  moduleId,
+}: GetModuleRequestParam): Promise<Response2<ModuleData | null>> => {
+  const params: Record<string, string> = {};
+  if (projectId) {
+    params['projectId'] = `${projectId}`;
   }
 
-  return {
-    requestSucceeded: false,
-  };
+  if (participantId) {
+    params['participantId'] = `${participantId}`;
+  }
+
+  if (cohortId) {
+    params['cohortId'] = `${cohortId}`;
+  }
+
+  return HttpService.root(MODULE_ENDOINT).get<GetModuleResponsePayload, { data: ModuleData | undefined }>(
+    {
+      params,
+      urlReplacements: { '{moduleId}': `${moduleId}` },
+    },
+    (response) => ({
+      data: {
+        module: response?.module,
+      },
+    })
+  );
 };
 
 const ModuleService = {

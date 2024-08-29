@@ -9,6 +9,7 @@ import Card from 'src/components/common/Card';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import useListModules from 'src/hooks/useListModules';
 import { useLocalization, useUser } from 'src/providers';
 import { requestCohort } from 'src/redux/features/cohorts/cohortsAsyncThunks';
 import { selectCohort } from 'src/redux/features/cohorts/cohortsSelectors';
@@ -26,11 +27,14 @@ const CohortView = () => {
   const canEdit = isAllowed('UPDATE_COHORTS');
   const pathParams = useParams<{ cohortId: string }>();
   const cohortId = Number(pathParams.cohortId);
-
   const cohort = useAppSelector(selectCohort(cohortId));
+  const { modules, listModules } = useListModules();
 
   useEffect(() => {
-    void dispatch(requestCohort({ cohortId, moduleDepth: 'Module' }));
+    if (cohortId) {
+      void dispatch(requestCohort({ cohortId }));
+      void listModules({ cohortId });
+    }
   }, [cohortId, dispatch]);
 
   const goToEditCohort = useCallback(() => {
@@ -58,31 +62,33 @@ const CohortView = () => {
     [activeLocale]
   );
 
+  if (!cohort) {
+    return;
+  }
+
   return (
     <PageWithModuleTimeline
       crumbs={crumbs}
       hierarchicalCrumbs={false}
       rightComponent={rightComponent}
-      title={cohort?.name || ''}
+      title={cohort.name || ''}
+      modules={modules ?? []}
+      cohortPhase={cohort.phase}
     >
-      {cohort && (
-        <>
-          <Card
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              flexGrow: 1,
-              marginBottom: theme.spacing(3),
-              padding: `${theme.spacing(2)} ${theme.spacing(1)}`,
-            }}
-          >
-            <Grid container>
-              <ProjectFieldDisplay label={strings.COHORT_NAME} value={cohort.name} rightBorder={true} />
-              <ProjectFieldDisplay label={strings.PHASE} value={cohort.phase} rightBorder={true} />
-            </Grid>
-          </Card>
-        </>
-      )}
+      <Card
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          flexGrow: 1,
+          marginBottom: theme.spacing(3),
+          padding: `${theme.spacing(2)} ${theme.spacing(1)}`,
+        }}
+      >
+        <Grid container>
+          <ProjectFieldDisplay label={strings.COHORT_NAME} value={cohort.name} rightBorder={true} />
+          <ProjectFieldDisplay label={strings.PHASE} value={cohort.phase} rightBorder={true} />
+        </Grid>
+      </Card>
     </PageWithModuleTimeline>
   );
 };

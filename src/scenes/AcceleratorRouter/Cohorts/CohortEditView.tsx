@@ -2,7 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import Page from 'src/components/Page';
+import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { APP_PATHS } from 'src/constants';
+import useListModules from 'src/hooks/useListModules';
 import { requestCohort, requestCohortUpdate } from 'src/redux/features/cohorts/cohortsAsyncThunks';
 import { selectCohort, selectCohortRequest } from 'src/redux/features/cohorts/cohortsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -23,6 +25,15 @@ export default function CohortEditView(): JSX.Element {
   const cohort = useAppSelector(selectCohort(cohortId));
   const [requestId, setRequestId] = useState<string>('');
   const cohortUpdateRequest = useAppSelector((state) => selectCohortRequest(state, requestId));
+
+  const { modules, listModules } = useListModules();
+
+  useEffect(() => {
+    if (cohortId) {
+      void dispatch(requestCohort({ cohortId }));
+      void listModules({ cohortId });
+    }
+  }, [cohortId, dispatch]);
 
   useEffect(() => {
     if (!cohort) {
@@ -56,17 +67,24 @@ export default function CohortEditView(): JSX.Element {
     }
   }, [cohortId, cohortUpdateRequest, dispatch, goToCohortView, snackbar]);
 
+  if (!cohort) {
+    return <Page isLoading />;
+  }
+
   return (
-    <Page title={strings.EDIT_COHORT} contentStyle={{ display: 'flex', flexDirection: 'column' }}>
-      {cohort && (
-        <CohortForm<UpdateCohortRequestPayload>
-          busy={cohortUpdateRequest?.status === 'pending'}
-          cohortId={cohortId}
-          onCancel={goToCohortView}
-          onSave={saveCohort}
-          record={cohort}
-        />
-      )}
-    </Page>
+    <PageWithModuleTimeline
+      title={strings.EDIT_COHORT}
+      contentStyle={{ display: 'flex', flexDirection: 'column' }}
+      modules={modules ?? []}
+      cohortPhase={cohort.phase}
+    >
+      <CohortForm<UpdateCohortRequestPayload>
+        busy={cohortUpdateRequest?.status === 'pending'}
+        cohortId={cohortId}
+        onCancel={goToCohortView}
+        onSave={saveCohort}
+        record={cohort}
+      />
+    </PageWithModuleTimeline>
   );
 }

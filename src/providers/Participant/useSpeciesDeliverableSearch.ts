@@ -27,24 +27,27 @@ export const useSpeciesDeliverableSearch = (): DeliverableSearch => {
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
 
-  const {
-    currentDeliverables,
-    currentParticipantProject,
-    isLoading: isParticipantDataLoading,
-    modules,
-  } = useParticipantData();
+  const { currentParticipantProject, isLoading: isParticipantDataLoading, modules } = useParticipantData();
 
-  const [deliverableSearchRequestId, setDeliverableSearchRequestId] = useState('');
-  const deliverableSearchRequest = useAppSelector(selectDeliverablesSearchRequest(deliverableSearchRequestId));
-
-  const hasActiveDeliverable = useMemo(
-    () => !!(currentDeliverables || []).find((deliverable) => deliverable.type === 'Species'),
-    [currentDeliverables]
+  const [recentDeliverableSearchRequestId, setRecentDeliverableSearchRequestId] = useState('');
+  const recentDeliverablesSearchRequest = useAppSelector(
+    selectDeliverablesSearchRequest(recentDeliverableSearchRequestId)
   );
 
-  const hasRecentDeliverable = useMemo(
-    () => deliverableSearchRequest?.status === 'success' && (deliverableSearchRequest?.data || []).length > 0,
-    [deliverableSearchRequest]
+  const activeModules = useMemo(() => (modules ?? []).filter((module) => module.isActive), [modules]);
+  const speciesDeliverables = useMemo(() => {
+    if (recentDeliverablesSearchRequest?.status === 'success') {
+      return recentDeliverablesSearchRequest?.data || [];
+    }
+    return [];
+  }, [recentDeliverablesSearchRequest]);
+
+  const activeDeliverables = useMemo(
+    () =>
+      speciesDeliverables.filter(
+        (deliverable) => activeModules.findIndex((module) => module.id === deliverable.moduleId) >= 0
+      ),
+    [speciesDeliverables, activeModules]
   );
 
   const reload = useCallback(() => {
@@ -55,9 +58,7 @@ export const useSpeciesDeliverableSearch = (): DeliverableSearch => {
       !currentParticipantProject ||
       // We need to know the modules available to the participant before we
       // can search for associated deliverables
-      _modules.length === 0 ||
-      // If there is an active species list deliverable, we don't need to find the most recent one
-      hasActiveDeliverable
+      _modules.length === 0
     ) {
       return;
     }
@@ -87,8 +88,8 @@ export const useSpeciesDeliverableSearch = (): DeliverableSearch => {
         },
       })
     );
-    setDeliverableSearchRequestId(deliverableRequest.requestId);
-  }, [currentParticipantProject, isParticipantDataLoading, hasActiveDeliverable, modules]);
+    setRecentDeliverableSearchRequestId(deliverableRequest.requestId);
+  }, [currentParticipantProject, isParticipantDataLoading, modules]);
 
   // Initialize the hook
   useEffect(() => {
@@ -97,12 +98,12 @@ export const useSpeciesDeliverableSearch = (): DeliverableSearch => {
 
   return useMemo<DeliverableSearch>(
     () => ({
-      deliverableSearchResults: deliverableSearchRequest?.data,
-      hasActiveDeliverable,
-      hasRecentDeliverable,
-      isLoading: deliverableSearchRequest?.status === 'pending' || isParticipantDataLoading,
+      deliverableSearchResults: recentDeliverablesSearchRequest?.data,
+      hasActiveDeliverable: activeDeliverables.length > 0,
+      hasRecentDeliverable: speciesDeliverables.length > 0,
+      isLoading: recentDeliverablesSearchRequest?.status === 'pending' || isParticipantDataLoading,
       reload,
     }),
-    [deliverableSearchRequest, hasActiveDeliverable, hasRecentDeliverable, reload]
+    [recentDeliverablesSearchRequest, activeDeliverables, speciesDeliverables, reload]
   );
 };

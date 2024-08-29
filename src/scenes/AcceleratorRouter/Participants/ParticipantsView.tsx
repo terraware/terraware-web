@@ -9,7 +9,9 @@ import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { APP_PATHS } from 'src/constants';
+import useListModules from 'src/hooks/useListModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipant } from 'src/hooks/useParticipant';
 import { useLocalization, useUser } from 'src/providers';
@@ -43,6 +45,14 @@ export default function ParticipantsView(): JSX.Element {
   const { goToParticipantsList } = useNavigateTo();
 
   const [showDelete, setShowDelete] = useState<boolean>(false);
+
+  const { modules, listModules } = useListModules();
+
+  useEffect(() => {
+    if (participantId) {
+      void listModules({ participantId });
+    }
+  }, [participantId, listModules]);
 
   const goToEdit = useCallback(() => {
     navigate(APP_PATHS.ACCELERATOR_PARTICIPANTS_EDIT.replace(':participantId', `${participantId}`));
@@ -136,23 +146,25 @@ export default function ParticipantsView(): JSX.Element {
     [activeLocale]
   );
 
+  if (!participant) {
+    return <Page isLoading />;
+  }
+
   return (
-    <Page crumbs={crumbs} rightComponent={actionMenu} title={participant?.name ?? ''}>
+    <PageWithModuleTimeline
+      crumbs={crumbs}
+      rightComponent={actionMenu}
+      title={participant.name}
+      modules={modules ?? []}
+      cohortPhase={participant.cohortPhase}
+    >
       <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
         {isBusy && <BusySpinner />}
-        {showDelete && participant !== undefined && (
-          <RemoveParticipant onClose={() => setShowDelete(false)} participant={participant} />
-        )}
+        {showDelete && <RemoveParticipant onClose={() => setShowDelete(false)} participant={participant} />}
         <DataRow
           leftChild={<Textfield display id='name' label={strings.NAME} type='text' value={participant?.name ?? ''} />}
           rightChild={
-            <Textfield
-              display
-              id='cohort-name'
-              label={strings.COHORT}
-              type='text'
-              value={participant?.cohortName ?? ''}
-            />
+            <Textfield display id='cohort-name' label={strings.COHORT} type='text' value={participant.cohortName} />
           }
         />
         {projectsByOrg.map((data) =>
@@ -181,7 +193,7 @@ export default function ParticipantsView(): JSX.Element {
           ))
         )}
       </Card>
-    </Page>
+    </PageWithModuleTimeline>
   );
 }
 

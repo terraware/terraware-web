@@ -4,12 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Grid, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
-import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
+import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { APP_PATHS } from 'src/constants';
+import useListModules from 'src/hooks/useListModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useProjectData } from 'src/providers/Project/ProjectContext';
 import strings from 'src/strings';
 import { Score, ScoreCategory, ScoreValue } from 'src/types/Score';
 
@@ -20,29 +20,42 @@ import useScoresUpdate from './useScoresUpdate';
 const ScorecardEditView = () => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const { crumbs, hasData, phase0Scores, phase1Scores, projectId, projectName, status } = useScoringData();
-  const { update, status: updateStatus } = useScoresUpdate(projectId);
+  const { crumbs, hasData, phase0Scores, phase1Scores, project, status } = useScoringData();
+  const { update, status: updateStatus } = useScoresUpdate(project?.id);
   const { goToParticipantProject } = useNavigateTo();
-  const { project } = useProjectData();
 
   const [scores, setScores] = useState<Score[]>([]);
   const [updatedScores, setUpdatedScores] = useState<Score[]>([]);
 
+  const { modules, listModules } = useListModules();
+
+  useEffect(() => {
+    if (project) {
+      void listModules({ projectId: project.id });
+    }
+  }, [project, listModules]);
+
   const goToVoting = useCallback(() => {
-    navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`) });
-  }, [navigate, projectId]);
+    if (project) {
+      navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${project.id}`) });
+    }
+  }, [navigate, project]);
 
   const goToScorecardView = useCallback(() => {
-    navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${projectId}`) });
-  }, [navigate, projectId]);
+    if (project) {
+      navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', `${project.id}`) });
+    }
+  }, [navigate, project]);
 
   const onCancel = useCallback(() => {
-    if (hasData === false) {
-      goToParticipantProject(projectId);
-    } else {
-      goToScorecardView();
+    if (project) {
+      if (hasData === false) {
+        goToParticipantProject(project.id);
+      } else {
+        goToScorecardView();
+      }
     }
-  }, [hasData, goToParticipantProject, goToScorecardView, projectId]);
+  }, [hasData, goToParticipantProject, goToScorecardView, project]);
 
   const handleOnChange = (key: 'value' | 'qualitative', category: ScoreCategory, value: ScoreValue | string) => {
     const originalScore = scores.find((score: Score) => score.category === category);
@@ -83,7 +96,13 @@ const ScorecardEditView = () => {
   }, [updateStatus, goToScorecardView]);
 
   return (
-    <Page title={`Edit Scoring for project ${projectName}`} crumbs={crumbs} hierarchicalCrumbs={false}>
+    <PageWithModuleTimeline
+      title={`Edit Scoring for project ${project?.name ?? ''}`}
+      crumbs={crumbs}
+      hierarchicalCrumbs={false}
+      modules={modules ?? []}
+      cohortPhase={project?.cohortPhase}
+    >
       <PageForm
         busy={status === 'pending'}
         cancelID='cancelEditScorecard'
@@ -127,7 +146,7 @@ const ScorecardEditView = () => {
           </Grid>
         </Card>
       </PageForm>
-    </Page>
+    </PageWithModuleTimeline>
   );
 };
 
