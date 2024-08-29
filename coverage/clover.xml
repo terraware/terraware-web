@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1724955291435" clover="3.2.0">
-  <project timestamp="1724955291435" name="All files">
-    <metrics statements="24548" coveredstatements="1031" conditionals="16020" coveredconditionals="279" methods="7567" coveredmethods="176" elements="48135" coveredelements="1486" complexity="0" loc="24548" ncloc="24548" packages="234" files="1074" classes="1074"/>
+<coverage generated="1724956409815" clover="3.2.0">
+  <project timestamp="1724956409815" name="All files">
+    <metrics statements="24548" coveredstatements="1031" conditionals="16024" coveredconditionals="279" methods="7566" coveredmethods="176" elements="48138" coveredelements="1486" complexity="0" loc="24548" ncloc="24548" packages="234" files="1074" classes="1074"/>
     <package name="src">
       <metrics statements="177" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -22319,7 +22319,7 @@
       </file>
     </package>
     <package name="src.scenes.PlantingSitesRouter.edit.editor">
-      <metrics statements="604" coveredstatements="60" conditionals="365" coveredconditionals="27" methods="175" coveredmethods="11"/>
+      <metrics statements="604" coveredstatements="60" conditionals="369" coveredconditionals="27" methods="174" coveredmethods="11"/>
       <file name="Details.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantingSitesRouter/edit/editor/Details.tsx">
         <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="28" count="0" type="stmt"/>
@@ -22572,7 +22572,7 @@
         <line num="97" count="0" type="stmt"/>
       </file>
       <file name="Subzones.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantingSitesRouter/edit/editor/Subzones.tsx">
-        <metrics statements="150" coveredstatements="0" conditionals="87" coveredconditionals="0" methods="52" coveredmethods="0"/>
+        <metrics statements="150" coveredstatements="0" conditionals="91" coveredconditionals="0" methods="51" coveredmethods="0"/>
         <line num="61" count="0" type="stmt"/>
         <line num="66" count="0" type="stmt"/>
         <line num="68" count="0" type="stmt"/>
@@ -22689,40 +22689,40 @@
         <line num="390" count="0" type="stmt"/>
         <line num="391" count="0" type="stmt"/>
         <line num="392" count="0" type="stmt"/>
-        <line num="395" count="0" type="stmt"/>
-        <line num="397" count="0" type="stmt"/>
-        <line num="398" count="0" type="stmt"/>
+        <line num="395" count="0" type="cond" truecount="0" falsecount="4"/>
+        <line num="396" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="399" count="0" type="stmt"/>
-        <line num="402" count="0" type="stmt"/>
-        <line num="410" count="0" type="stmt"/>
-        <line num="411" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="400" count="0" type="stmt"/>
+        <line num="404" count="0" type="stmt"/>
         <line num="412" count="0" type="stmt"/>
+        <line num="413" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="414" count="0" type="stmt"/>
-        <line num="418" count="0" type="stmt"/>
-        <line num="451" count="0" type="stmt"/>
-        <line num="452" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="416" count="0" type="stmt"/>
+        <line num="420" count="0" type="stmt"/>
         <line num="453" count="0" type="stmt"/>
-        <line num="454" count="0" type="stmt"/>
+        <line num="454" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="455" count="0" type="stmt"/>
+        <line num="456" count="0" type="stmt"/>
         <line num="457" count="0" type="stmt"/>
-        <line num="458" count="0" type="stmt"/>
-        <line num="460" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="461" count="0" type="stmt"/>
+        <line num="459" count="0" type="stmt"/>
+        <line num="460" count="0" type="stmt"/>
         <line num="462" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="463" count="0" type="stmt"/>
+        <line num="464" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="465" count="0" type="stmt"/>
-        <line num="466" count="0" type="stmt"/>
-        <line num="469" count="0" type="stmt"/>
-        <line num="472" count="0" type="stmt"/>
-        <line num="473" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="467" count="0" type="stmt"/>
+        <line num="468" count="0" type="stmt"/>
+        <line num="471" count="0" type="stmt"/>
         <line num="474" count="0" type="stmt"/>
-        <line num="477" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="478" count="0" type="stmt"/>
-        <line num="482" count="0" type="stmt"/>
-        <line num="483" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="475" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="476" count="0" type="stmt"/>
+        <line num="479" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="480" count="0" type="stmt"/>
         <line num="484" count="0" type="stmt"/>
-        <line num="488" count="0" type="stmt"/>
-        <line num="502" count="0" type="stmt"/>
+        <line num="485" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="486" count="0" type="stmt"/>
+        <line num="490" count="0" type="stmt"/>
+        <line num="504" count="0" type="stmt"/>
       </file>
       <file name="Zones.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/PlantingSitesRouter/edit/editor/Zones.tsx">
         <metrics statements="134" coveredstatements="0" conditionals="78" coveredconditionals="0" methods="39" coveredmethods="0"/>
