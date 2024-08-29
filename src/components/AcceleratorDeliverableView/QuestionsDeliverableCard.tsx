@@ -418,28 +418,26 @@ const QuestionBox = ({
 
 const QuestionsDeliverableCard = (props: EditProps): JSX.Element => {
   const { deliverable, hideStatusBadge }: EditProps = props;
+
   const dispatch = useAppDispatch();
 
   const [editingId, setEditingId] = useState<number | undefined>();
   const [updatePendingId, setUpdatePendingId] = useState<number | undefined>();
 
-  const reload = () => {
-    void dispatch(requestListDeliverableVariables(deliverable.id));
-    void dispatch(
-      requestListDeliverableVariablesValues({ deliverableId: deliverable.id, projectId: deliverable.projectId })
-    );
-  };
+  const deliverableProject = { deliverableId: deliverable.id, projectId: deliverable.projectId };
 
-  useEffect(() => {
+  const reload = useCallback(() => {
     if (!deliverable) {
       return;
     }
 
-    void dispatch(requestListDeliverableVariables(deliverable.id));
-    void dispatch(
-      requestListDeliverableVariablesValues({ deliverableId: deliverable.id, projectId: deliverable.projectId })
-    );
+    void dispatch(requestListDeliverableVariables(deliverableProject));
+    void dispatch(requestListDeliverableVariablesValues(deliverableProject));
   }, [deliverable]);
+
+  useEffect(() => {
+    reload();
+  }, [reload]);
 
   const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
     selectDeliverableVariablesWithValues(state, deliverable.id, deliverable.projectId)

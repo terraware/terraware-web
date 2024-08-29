@@ -71,6 +71,7 @@ export const cellValue = (value: VariableValueValue, placeholder?: string): stri
 };
 
 export const getInitialCellValues = (variable: TableVariableWithValues): VariableTableCell[][] => {
+  debugger;
   return variable.values.map((row) =>
     variable.columns.map((col) => ({
       type: col.variable.type,

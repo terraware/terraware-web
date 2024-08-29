@@ -15,6 +15,7 @@ type DeliverableEditableTableEditProps = {
 };
 
 const DeliverableEditableTableEdit = ({ variable, onChange }: DeliverableEditableTableEditProps) => {
+  console.log({ variable });
   const columns = useMemo<TableColumn[]>(() => variable.columns, [variable]);
   const initialCellValues = useMemo<VariableTableCell[][]>(() => getInitialCellValues(variable), [variable]);
   const [cellValues, setCellValues] = useState<VariableTableCell[][]>(initialCellValues);

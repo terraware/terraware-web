@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import createCachedSelector from 're-reselect';
 
+import { AsyncRequest, AsyncRequestT, Statuses } from 'src/redux/features/asyncUtils';
+import { deliverableCompositeKeyFn } from 'src/redux/features/deliverables/deliverablesSlice';
+import { variableListCompositeKeyFn } from 'src/redux/features/documentProducer/values/valuesSlice';
 import { RootState } from 'src/redux/rootReducer';
 import {
   Section,
@@ -12,9 +15,7 @@ import {
 } from 'src/types/documentProducer/Variable';
 import { VariableValue } from 'src/types/documentProducer/VariableValue';
 
-import { AsyncRequest, AsyncRequestT, Statuses } from '../../asyncUtils';
-import { deliverableCompositeKeyFn } from '../../deliverables/deliverablesSlice';
-import { variableListCompositeKeyFn } from '../values/valuesSlice';
+import { associateNonSectionVariableValues, mergeVariablesAndValues } from './util';
 
 export const selectDocumentVariables = (state: RootState, documentId: number | undefined) =>
   documentId ? state.documentProducerDocumentVariables[documentId] : undefined;
@@ -191,45 +192,6 @@ export const selectDocumentVariablesWithValues = createCachedSelector(
   }
 )((state: RootState, documentId: number | undefined, projectId: number) => `${projectId}-${documentId}`);
 
-const associateNonSectionVariableValues = (
-  variable: Variable,
-  values: VariableValue[],
-  variableList: VariableUnion[]
-): VariableWithValues => {
-  const currentValue = values.find((val: VariableValue) => val.variableId === variable.id);
-
-  const variablesInVariable: number[] = (currentValue?.values || [])
-    .map((value) => ('variableId' in value ? value.variableId : false))
-    .filter((value): value is number => value === 0 || !!value);
-
-  // Link up the variable values that are referenced within this variable
-  const variableValues = values.filter(
-    (val) => val.variableId === variable.id || variablesInVariable.includes(val.variableId)
-  );
-
-  if (variable.type === 'Table') {
-    let columns: TableColumnWithValues[] = [];
-    if (variable.columns) {
-      columns = variable.columns.map((col) => ({
-        ...col,
-        variable: associateNonSectionVariableValues(col.variable as Variable, values, variableList),
-      }));
-    }
-    return {
-      ...variable,
-      columns,
-      values: currentValue?.values ?? [],
-      variableValues,
-    };
-  }
-
-  return {
-    ...variable,
-    values: currentValue?.values ?? [],
-    variableValues,
-  };
-};
-
 export const selectAllVariablesWithValues = createCachedSelector(
   (state: RootState, projectId: number | undefined, maxValueId?: number) => state.documentProducerAllVariables['all'],
   (state: RootState, projectId: number | undefined, maxValueId?: number) =>
@@ -253,7 +215,7 @@ export const selectAllVariablesWithValues = createCachedSelector(
 
 export const selectDeliverableVariablesWithValues = createCachedSelector(
   (state: RootState, deliverableId: number, projectId: number) =>
-    state.documentProducerDeliverableVariables[deliverableId],
+    state.documentProducerDeliverableVariables[deliverableCompositeKeyFn({ deliverableId, projectId })],
   (state: RootState, deliverableId: number, projectId: number) =>
     state.documentProducerDeliverableVariableValues[deliverableCompositeKeyFn({ deliverableId, projectId })],
   (variableList, valueList) => {
@@ -261,7 +223,7 @@ export const selectDeliverableVariablesWithValues = createCachedSelector(
     const values = valueList?.data;
 
     if (variables && values) {
-      return variables.map((v: Variable) => associateNonSectionVariableValues(v, values, variables));
+      return mergeVariablesAndValues(variables, values);
     } else {
       return [];
     }
