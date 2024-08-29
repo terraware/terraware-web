@@ -1,3 +1,4 @@
+da972191e2b SW-5916 Marking section in doc producer as Complete/Incomplete causes entire page redraw (#3102)
 03b19b02ab8 SW-5913: "Edited By" column in document history table is not populated (#3100)
 6df0a67d15d SW-5912: FE display multi-line text variable inputs as a large text area (#3099)
 4df235b04d8 SW-5745: Add created and edited timestamps to cohort edit view (Follow-up #1) (#3096)
