@@ -166,10 +166,6 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
 
   // initialize sections for participant that already had project ids (edit use-case)
   useEffect(() => {
-    // if (modified) {
-    //   return;
-    // }
-
     const sections: OrgProjectsSection[] = [];
     localRecord.projectIds?.forEach((projectId, index) => {
       sections.push({
