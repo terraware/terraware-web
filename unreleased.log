@@ -1,3 +1,4 @@
+f07490c1889 SW-5784 Module Management in Console: Add File fields for Participant Projects to Participant record (#3101)
 da972191e2b SW-5916 Marking section in doc producer as Complete/Incomplete causes entire page redraw (#3102)
 03b19b02ab8 SW-5913: "Edited By" column in document history table is not populated (#3100)
 6df0a67d15d SW-5912: FE display multi-line text variable inputs as a large text area (#3099)
