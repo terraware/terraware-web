@@ -6,11 +6,13 @@ import { BusySpinner } from '@terraware/web-components';
 import Page from 'src/components/Page';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useParticipant } from 'src/hooks/useParticipant';
+import { requestUpdateParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
 import { requestUpdateParticipant } from 'src/redux/features/participants/participantsAsyncThunks';
 import { selectParticipantUpdateRequest } from 'src/redux/features/participants/participantsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { ParticipantUpdateRequest } from 'src/types/Participant';
+import { ParticipantProject } from 'src/types/ParticipantProject';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import ParticipantForm from './ParticipantForm';
@@ -28,9 +30,12 @@ export default function ParticipantsNew(): JSX.Element {
   const { goToParticipant, goToParticipantsList } = useNavigateTo();
 
   const onSave = useCallback(
-    (updateRequest: ParticipantUpdateRequest) => {
+    (updateRequest: ParticipantUpdateRequest, projectsDetails: ParticipantProject[]) => {
       const request = dispatch(requestUpdateParticipant({ participantId, request: updateRequest }));
       setRequestId(request.requestId);
+      projectsDetails.forEach((pd) => {
+        dispatch(requestUpdateParticipantProject(pd));
+      });
     },
     [dispatch, participantId]
   );
