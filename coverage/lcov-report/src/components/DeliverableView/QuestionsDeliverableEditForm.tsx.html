@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/49</span>
+                <span class='fraction'>0/55</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/48</span>
+                <span class='fraction'>0/54</span>
             </div>
         
             
@@ -295,7 +295,18 @@
 <a name='L230'></a><a href='#L230'>230</a>
 <a name='L231'></a><a href='#L231'>231</a>
 <a name='L232'></a><a href='#L232'>232</a>
-<a name='L233'></a><a href='#L233'>233</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L233'></a><a href='#L233'>233</a>
+<a name='L234'></a><a href='#L234'>234</a>
+<a name='L235'></a><a href='#L235'>235</a>
+<a name='L236'></a><a href='#L236'>236</a>
+<a name='L237'></a><a href='#L237'>237</a>
+<a name='L238'></a><a href='#L238'>238</a>
+<a name='L239'></a><a href='#L239'>239</a>
+<a name='L240'></a><a href='#L240'>240</a>
+<a name='L241'></a><a href='#L241'>241</a>
+<a name='L242'></a><a href='#L242'>242</a>
+<a name='L243'></a><a href='#L243'>243</a>
+<a name='L244'></a><a href='#L244'>244</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -449,6 +460,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -682,6 +704,17 @@ const QuestionsDeliverableEditForm = <span class="cstat-no" title="statement not
     uploadSuccess,
   } = <span class="cstat-no" title="statement not covered" >useProjectVariablesUpdate(deliverable.projectId, variablesWithValues);</span>
 &nbsp;
+  const stagedVariableWithValues: VariableWithValues[] = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    return variablesWithValues.map(<span class="fstat-no" title="function not covered" >(v</span>ariableWithValues) =&gt; {</span>
+      const pendingValues = <span class="cstat-no" title="statement not covered" >pendingVariableValues.get(variableWithValues.id);</span>
+<span class="cstat-no" title="statement not covered" >      if (pendingValues !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >        return { ...variableWithValues, values: pendingValues };</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        return variableWithValues;</span>
+      }
+    });
+  }, [pendingVariableValues, variablesWithValues]);
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (!deliverable) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
@@ -730,7 +763,7 @@ const QuestionsDeliverableEditForm = <span class="cstat-no" title="statement not
             }}
           &gt;
             {variablesWithValues.map(<span class="fstat-no" title="function not covered" >(v</span>ariableWithValues: VariableWithValues, index: number) =&gt;
-<span class="cstat-no" title="statement not covered" >              variableDependencyMet(variableWithValues, variablesWithValues) ? (</span>
+<span class="cstat-no" title="statement not covered" >              variableDependencyMet(variableWithValues, stagedVariableWithValues) ? (</span>
                 &lt;QuestionBox
                   addRemovedValue={<span class="fstat-no" title="function not covered" >(r</span>emovedValue: VariableValueValue) =&gt;
 <span class="cstat-no" title="statement not covered" >                    setRemovedValue(variableWithValues.id, removedValue)</span>
@@ -766,7 +799,7 @@ export default QuestionsDeliverableEditForm;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-29T18:46:43.280Z
+                at 2024-08-29T21:08:36.695Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
