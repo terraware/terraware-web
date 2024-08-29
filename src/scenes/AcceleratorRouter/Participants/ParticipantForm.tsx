@@ -95,6 +95,15 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
       return false;
     }
 
+    const details = orgProjectsSections.map((ops) => ops.projectDetails);
+    const detailsMissingFields = details.some((detail) => {
+      !detail.fileNaming || !detail.googleFolderUrl || !detail.dropboxFolderPath;
+    });
+
+    if (detailsMissingFields) {
+      return false;
+    }
+
     return true;
   };
 
@@ -289,6 +298,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
             onProjectSelect={onProjectSelect}
             section={section}
             updateProjectDetails={updateProjectDetails}
+            validateFields={validateFields}
           />
         ))}
         {acceleratorOrgs.length > 0 && (

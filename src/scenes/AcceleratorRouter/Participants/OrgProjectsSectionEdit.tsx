@@ -24,6 +24,7 @@ export type OrgProjectsSectionEditProps = {
   onProjectSelect: (sectionId: number, projectId: number) => void;
   section: OrgProjectsSection;
   updateProjectDetails: (projectId: number, field?: string, value?: string, allDetails?: ParticipantProject) => void;
+  validateFields: boolean;
 };
 
 const OrgProjectsSectionEdit = ({
@@ -32,6 +33,7 @@ const OrgProjectsSectionEdit = ({
   onProjectSelect,
   section,
   updateProjectDetails,
+  validateFields,
 }: OrgProjectsSectionEditProps): JSX.Element => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
@@ -115,24 +117,30 @@ const OrgProjectsSectionEdit = ({
           onChange={(value) => updateProjectDetails(section.projectId, 'fileNaming', value as string)}
           type='text'
           value={section.projectDetails.fileNaming}
+          required={true}
+          errorText={validateFields && !section.projectDetails.fileNaming ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12}>
         <Textfield
           label={strings.GOOGLE_FOLDER_URL}
           id='googleFolderUrl'
           onChange={(value) => updateProjectDetails(section.projectId, 'googleFolderUrl', value as string)}
           type='text'
           value={section.projectDetails.googleFolderUrl}
+          required={true}
+          errorText={validateFields && !section.projectDetails.googleFolderUrl ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12}>
         <Textfield
           label={strings.DROPBOX_FOLDER_URL}
           id='dropboxFolderPath'
           onChange={(value) => updateProjectDetails(section.projectId, 'dropboxFolderPath', value as string)}
           type='text'
           value={section.projectDetails.dropboxFolderPath}
+          required={true}
+          errorText={validateFields && !section.projectDetails.dropboxFolderPath ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
     </Grid>
