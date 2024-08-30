@@ -271,7 +271,13 @@ const DeliverableVariableDetailsInput = ({
                   key={`input-${index}`}
                   label=''
                   onChange={(newValue: any) => onChangeValueHandler(newValue, 'value', index)}
-                  sx={[formElementStyles, { flex: 1 }]}
+                  sx={[
+                    formElementStyles,
+                    {
+                      flex: 1,
+                      maxWidth: variable.textType === 'MultiLine' ? '100%' : (formElementStyles.maxWidth as string),
+                    },
+                  ]}
                   type={variable.textType === 'SingleLine' ? 'text' : 'textarea'}
                   value={iValue?.toString()}
                 />
