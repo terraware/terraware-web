@@ -1,3 +1,5 @@
+5b58fb4d342 SW-5323 Updated types with new endpoints and updated module props (#3106)
+303d91a21ca SW-5784 Open participant project google and dropbox link in a new tab (#3115)
 c3465e59921 SW-5913: "Edited By" column in document history table is not populated (Follow-up #1) (#3113)
 3dad6dc1806 SW-5923 Added deliverable submit/ endpoint for participant users (#3112)
 f30a20bad26 SW-5919 Document outline should navigate through document on click (#3114)

@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/70</span>
+                <span class='fraction'>0/74</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/42</span>
+                <span class='fraction'>0/46</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/67</span>
+                <span class='fraction'>0/71</span>
             </div>
         
             
@@ -417,7 +417,21 @@
 <a name='L352'></a><a href='#L352'>352</a>
 <a name='L353'></a><a href='#L353'>353</a>
 <a name='L354'></a><a href='#L354'>354</a>
-<a name='L355'></a><a href='#L355'>355</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L355'></a><a href='#L355'>355</a>
+<a name='L356'></a><a href='#L356'>356</a>
+<a name='L357'></a><a href='#L357'>357</a>
+<a name='L358'></a><a href='#L358'>358</a>
+<a name='L359'></a><a href='#L359'>359</a>
+<a name='L360'></a><a href='#L360'>360</a>
+<a name='L361'></a><a href='#L361'>361</a>
+<a name='L362'></a><a href='#L362'>362</a>
+<a name='L363'></a><a href='#L363'>363</a>
+<a name='L364'></a><a href='#L364'>364</a>
+<a name='L365'></a><a href='#L365'>365</a>
+<a name='L366'></a><a href='#L366'>366</a>
+<a name='L367'></a><a href='#L367'>367</a>
+<a name='L368'></a><a href='#L368'>368</a>
+<a name='L369'></a><a href='#L369'>369</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -451,18 +465,26 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -567,6 +589,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -775,7 +803,6 @@
 &nbsp;
 import { Grid, Typography, useTheme } from '@mui/material';
 &nbsp;
-import Page from 'src/components/Page';
 import ApplicationStatusCard from 'src/components/ProjectField/ApplicationStatusCard';
 import CountrySelect from 'src/components/ProjectField/CountrySelect';
 import LandUseMultiSelect from 'src/components/ProjectField/LandUseMultiSelect';
@@ -788,6 +815,8 @@ import ProjectFieldTextfield from 'src/components/ProjectField/Textfield';
 import VotingDecisionCard from 'src/components/ProjectField/VotingDecisionCard';
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
+import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
+import useListModules from 'src/hooks/useListModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
@@ -816,6 +845,13 @@ const EditView = <span class="cstat-no" title="statement not covered" ><span cla
   const { goToParticipantProject } = <span class="cstat-no" title="statement not covered" >useNavigateTo();</span>
   const { isAllowed } = <span class="cstat-no" title="statement not covered" >useUser();</span>
   const { getApplicationByProjectId } = <span class="cstat-no" title="statement not covered" >useApplicationData();</span>
+  const { modules, listModules } = <span class="cstat-no" title="statement not covered" >useListModules();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (project) {</span>
+<span class="cstat-no" title="statement not covered" >      void listModules({ projectId: project.id });</span>
+    }
+  }, [project, listModules]);
 &nbsp;
   const isAllowedEdit = <span class="cstat-no" title="statement not covered" >isAllowed('UPDATE_PARTICIPANT_PROJECT');</span>
   const isAllowedEditScoreAndVoting = <span class="cstat-no" title="statement not covered" >isAllowed('UPDATE_PARTICIPANT_PROJECT_SCORING_VOTING');</span>
@@ -921,7 +957,13 @@ const EditView = <span class="cstat-no" title="statement not covered" ><span cla
   }, [goToParticipantProject, isAllowedEdit, projectId]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;Page title={`${participant?.name || ''} / ${project?.name || ''}`} crumbs={crumbs} hierarchicalCrumbs={false}&gt;
+    &lt;PageWithModuleTimeline
+      title={`${participant?.name || ''} / ${project?.name || ''}`}
+      crumbs={crumbs}
+      hierarchicalCrumbs={false}
+      cohortPhase={project?.cohortPhase}
+      modules={modules ?? []}
+    &gt;
       &lt;PageForm
         busy={participantProjectUpdateRequest?.status === 'pending'}
         cancelID='cancelNewParticipantProject'
@@ -1121,7 +1163,7 @@ const EditView = <span class="cstat-no" title="statement not covered" ><span cla
           organizationName={organization?.name || ''}
         /&gt;
       )}
-    &lt;/Page&gt;
+    &lt;/PageWithModuleTimeline&gt;
   );
 };
 export default EditView;
@@ -1132,7 +1174,7 @@ export default EditView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-30T19:12:57.307Z
+                at 2024-08-30T19:34:49.360Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

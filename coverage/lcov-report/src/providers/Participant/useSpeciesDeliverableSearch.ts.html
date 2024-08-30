@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>0/25</span>
             </div>
         
             
@@ -171,7 +171,8 @@
 <a name='L106'></a><a href='#L106'>106</a>
 <a name='L107'></a><a href='#L107'>107</a>
 <a name='L108'></a><a href='#L108'>108</a>
-<a name='L109'></a><a href='#L109'>109</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -200,14 +201,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -217,6 +210,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -224,8 +228,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -308,24 +310,27 @@ export const useSpeciesDeliverableSearch = <span class="cstat-no" title="stateme
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
 &nbsp;
-  const {
-    currentDeliverables,
-    currentParticipantProject,
-    isLoading: isParticipantDataLoading,
-    modules,
-  } = <span class="cstat-no" title="statement not covered" >useParticipantData();</span>
+  const { currentParticipantProject, isLoading: isParticipantDataLoading, modules } = <span class="cstat-no" title="statement not covered" >useParticipantData();</span>
 &nbsp;
-  const [deliverableSearchRequestId, setDeliverableSearchRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
-  const deliverableSearchRequest = <span class="cstat-no" title="statement not covered" >useAppSelector(selectDeliverablesSearchRequest(deliverableSearchRequestId));</span>
-&nbsp;
-  const hasActiveDeliverable = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >!!(currentDeliverables || []).find(<span class="fstat-no" title="function not covered" >(d</span>eliverable) =&gt; <span class="cstat-no" title="statement not covered" >deliverable.type === 'Species')</span>,</span>
-    [currentDeliverables]
+  const [recentDeliverableSearchRequestId, setRecentDeliverableSearchRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
+  const recentDeliverablesSearchRequest = <span class="cstat-no" title="statement not covered" >useAppSelector(</span>
+    selectDeliverablesSearchRequest(recentDeliverableSearchRequestId)
   );
 &nbsp;
-  const hasRecentDeliverable = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >deliverableSearchRequest?.status === 'success' &amp;&amp; (deliverableSearchRequest?.data || []).length &gt; 0,</span>
-    [deliverableSearchRequest]
+  const activeModules = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >(modules ?? []).filter(<span class="fstat-no" title="function not covered" >(m</span>odule) =&gt; <span class="cstat-no" title="statement not covered" >module.isActive)</span>,</span> [modules]);</span>
+  const speciesDeliverables = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (recentDeliverablesSearchRequest?.status === 'success') {</span>
+<span class="cstat-no" title="statement not covered" >      return recentDeliverablesSearchRequest?.data || [];</span>
+    }
+<span class="cstat-no" title="statement not covered" >    return [];</span>
+  }, [recentDeliverablesSearchRequest]);
+&nbsp;
+  const activeDeliverables = <span class="cstat-no" title="statement not covered" >useMemo(</span>
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt;
+<span class="cstat-no" title="statement not covered" >      speciesDeliverables.filter(</span>
+<span class="fstat-no" title="function not covered" >        (d</span>eliverable) =&gt; <span class="cstat-no" title="statement not covered" >activeModules.findIndex(<span class="fstat-no" title="function not covered" >(m</span>odule) =&gt; <span class="cstat-no" title="statement not covered" >module.id === deliverable.moduleId)</span> &gt;= 0</span>
+      ),
+    [speciesDeliverables, activeModules]
   );
 &nbsp;
   const reload = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -336,9 +341,7 @@ export const useSpeciesDeliverableSearch = <span class="cstat-no" title="stateme
       !currentParticipantProject ||
       // We need to know the modules available to the participant before we
       // can search for associated deliverables
-      _modules.length === 0 ||
-      // If there is an active species list deliverable, we don't need to find the most recent one
-      hasActiveDeliverable
+      _modules.length === 0
     ) {
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
@@ -368,8 +371,8 @@ export const useSpeciesDeliverableSearch = <span class="cstat-no" title="stateme
         },
       })
     );
-<span class="cstat-no" title="statement not covered" >    setDeliverableSearchRequestId(deliverableRequest.requestId);</span>
-  }, [currentParticipantProject, isParticipantDataLoading, hasActiveDeliverable, modules]);
+<span class="cstat-no" title="statement not covered" >    setRecentDeliverableSearchRequestId(deliverableRequest.requestId);</span>
+  }, [currentParticipantProject, isParticipantDataLoading, modules]);
 &nbsp;
   // Initialize the hook
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
@@ -378,13 +381,13 @@ export const useSpeciesDeliverableSearch = <span class="cstat-no" title="stateme
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return useMemo&lt;DeliverableSearch&gt;(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
-      deliverableSearchResults: deliverableSearchRequest?.data,
-      hasActiveDeliverable,
-      hasRecentDeliverable,
-      isLoading: deliverableSearchRequest?.status === 'pending' || isParticipantDataLoading,
+      deliverableSearchResults: recentDeliverablesSearchRequest?.data,
+      hasActiveDeliverable: activeDeliverables.length &gt; 0,
+      hasRecentDeliverable: speciesDeliverables.length &gt; 0,
+      isLoading: recentDeliverablesSearchRequest?.status === 'pending' || isParticipantDataLoading,
       reload,
     }),
-    [deliverableSearchRequest, hasActiveDeliverable, hasRecentDeliverable, reload]
+    [recentDeliverablesSearchRequest, activeDeliverables, speciesDeliverables, reload]
   );
 };
 &nbsp;</pre></td></tr></table></pre>
@@ -394,7 +397,7 @@ export const useSpeciesDeliverableSearch = <span class="cstat-no" title="stateme
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-30T19:12:57.307Z
+                at 2024-08-30T19:34:49.360Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

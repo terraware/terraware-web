@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
@@ -148,7 +148,11 @@
 <a name='L83'></a><a href='#L83'>83</a>
 <a name='L84'></a><a href='#L84'>84</a>
 <a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -170,17 +174,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -198,7 +197,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -215,6 +213,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -233,21 +241,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useMemo } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 &nbsp;
 import { DateTime } from 'luxon';
 &nbsp;
 import { Crumb } from 'src/components/BreadCrumbs';
 import ModuleDetailsCard from 'src/components/ModuleDetailsCard';
-import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
+import ParticipantPage from 'src/components/common/PageWithModuleTimeline/ParticipantPage';
 import { APP_PATHS } from 'src/constants';
+import useGetModule from 'src/hooks/useGetModule';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 &nbsp;
 import ModuleViewTitle from './ModuleViewTitle';
-import { useModuleData } from './Provider/Context';
 &nbsp;
 const ModuleView = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
@@ -255,8 +263,43 @@ const ModuleView = <span class="cstat-no" title="statement not covered" ><span c
 &nbsp;
   const pathParams = <span class="cstat-no" title="statement not covered" >useParams&lt;{ sessionId: string; moduleId: string; projectId: string }&gt;();</span>
   const projectId = <span class="cstat-no" title="statement not covered" >Number(pathParams.projectId);</span>
+  const moduleId = <span class="cstat-no" title="statement not covered" >Number(pathParams.moduleId);</span>
 &nbsp;
-  const { deliverables, module } = <span class="cstat-no" title="statement not covered" >useModuleData();</span>
+  const { getModule, module, deliverables, events } = <span class="cstat-no" title="statement not covered" >useGetModule();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    void getModule({ moduleId, projectId });</span>
+  }, [projectId, moduleId, getModule]);
+&nbsp;
+  const deliverableDetails = <span class="cstat-no" title="statement not covered" >useMemo(</span>
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt;
+<span class="cstat-no" title="statement not covered" >      deliverables?.map(<span class="fstat-no" title="function not covered" >(d</span>eliverable) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+        ...deliverable,
+        dueDate: deliverable.dueDate ? DateTime.fromISO(deliverable.dueDate) : undefined,
+        onClick: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >goToDeliverable(deliverable.id, projectId),</span>
+      })),
+    [deliverables, goToDeliverable, projectId]
+  );
+&nbsp;
+  const eventDetails = <span class="cstat-no" title="statement not covered" >useMemo(</span>
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt;
+<span class="cstat-no" title="statement not covered" >      events?.map(<span class="fstat-no" title="function not covered" >(e</span>vent) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
+        ...event,
+        onClick: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >goToModuleEventSession(projectId, moduleId, event.id),</span>
+      })),
+    [events, goToModuleEventSession, projectId, module]
+  );
+&nbsp;
+  const moduleDetails = <span class="cstat-no" title="statement not covered" >useMemo(</span>
+<span class="fstat-no" title="function not covered" >    ()</span> =&gt;
+<span class="cstat-no" title="statement not covered" >      module</span>
+        ? {
+            ...module,
+            title: activeLocale ? strings.formatString(strings.TITLE_OVERVIEW, module.title).toString() : '',
+          }
+        : undefined,
+    [activeLocale, module]
+  );
 &nbsp;
   const crumbs: Crumb[] = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; <span class="cstat-no" title="statement not covered" >[</span>
@@ -268,39 +311,8 @@ const ModuleView = <span class="cstat-no" title="statement not covered" ><span c
     [activeLocale, projectId]
   );
 &nbsp;
-  const deliverableDetails = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt;
-<span class="cstat-no" title="statement not covered" >      deliverables.map(<span class="fstat-no" title="function not covered" >(d</span>eliverable) =&gt; (<span class="cstat-no" title="statement not covered" >{</span></span>
-        ...deliverable,
-        dueDate: deliverable.dueDate ? DateTime.fromISO(deliverable.dueDate) : undefined,
-        onClick: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >goToDeliverable(deliverable.id, projectId),</span>
-      })),
-    [deliverables, goToDeliverable, projectId]
-  );
-&nbsp;
-  const eventDetails = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt;
-<span class="cstat-no" title="statement not covered" >      module</span>
-        ? module.events
-            .flatMap(<span class="fstat-no" title="function not covered" >(e</span>vent) =&gt; <span class="cstat-no" title="statement not covered" >event.sessions)</span>
-            .map(<span class="fstat-no" title="function not covered" >(e</span>vent) =&gt; (<span class="cstat-no" title="statement not covered" >{ ...event, onClick: <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >goToModuleEventSession(projectId, module.id, event.id) </span>})</span>)
-        : [],
-    [module, goToModuleEventSession, projectId]
-  );
-&nbsp;
-  const moduleDetails = <span class="cstat-no" title="statement not covered" >useMemo(</span>
-<span class="fstat-no" title="function not covered" >    ()</span> =&gt;
-<span class="cstat-no" title="statement not covered" >      module</span>
-        ? {
-            ...module,
-            title: activeLocale &amp;&amp; module ? strings.formatString(strings.TITLE_OVERVIEW, module.title).toString() : '',
-          }
-        : null,
-    [activeLocale, module]
-  );
-&nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;PageWithModuleTimeline
+    &lt;ParticipantPage
       crumbs={crumbs}
       hierarchicalCrumbs={false}
       title={&lt;ModuleViewTitle module={module} projectId={projectId} /&gt;}
@@ -313,7 +325,7 @@ const ModuleView = <span class="cstat-no" title="statement not covered" ><span c
           projectId={projectId}
         /&gt;
       )}
-    &lt;/PageWithModuleTimeline&gt;
+    &lt;/ParticipantPage&gt;
   );
 };
 &nbsp;
@@ -325,7 +337,7 @@ export default ModuleView;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-30T19:12:57.307Z
+                at 2024-08-30T19:34:49.360Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

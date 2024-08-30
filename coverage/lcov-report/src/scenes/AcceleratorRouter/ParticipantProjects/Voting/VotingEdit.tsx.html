@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/49</span>
+                <span class='fraction'>0/51</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/45</span>
+                <span class='fraction'>0/47</span>
             </div>
         
             
@@ -216,7 +216,14 @@
 <a name='L151'></a><a href='#L151'>151</a>
 <a name='L152'></a><a href='#L152'>152</a>
 <a name='L153'></a><a href='#L153'>153</a>
-<a name='L154'></a><a href='#L154'>154</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L154'></a><a href='#L154'>154</a>
+<a name='L155'></a><a href='#L155'>155</a>
+<a name='L156'></a><a href='#L156'>156</a>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -253,6 +260,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -397,7 +411,7 @@ const VotingEdit = <span class="cstat-no" title="statement not covered" ><span c
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const { phaseVotes, projectId } = <span class="cstat-no" title="statement not covered" >useVotingData();</span>
+  const { phaseVotes, project } = <span class="cstat-no" title="statement not covered" >useVotingData();</span>
 &nbsp;
   const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const [validate, setValidate] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
@@ -405,13 +419,20 @@ const VotingEdit = <span class="cstat-no" title="statement not covered" ><span c
   const result = <span class="cstat-no" title="statement not covered" >useAppSelector(<span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >selectProjectVotesEditRequest(state, requestId))</span>;</span>
 &nbsp;
   const goToVotingView = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (!project) {</span>
+<span class="cstat-no" title="statement not covered" >      return;</span>
+    }
 <span class="cstat-no" title="statement not covered" >    navigate(</span>
-      getLocation(APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`), location, query.toString())
+      getLocation(
+        APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${project.id}`),
+        location,
+        query.toString()
+      )
     );
-  }, [navigate, location, projectId, query]);
+  }, [navigate, location, project, query]);
 &nbsp;
   const onSave = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!phaseVotes) {</span>
+<span class="cstat-no" title="statement not covered" >    if (!phaseVotes || !project) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
 <span class="cstat-no" title="statement not covered" >    setValidate(true);</span>
@@ -427,7 +448,7 @@ const VotingEdit = <span class="cstat-no" title="statement not covered" ><span c
     });
 &nbsp;
     const request = <span class="cstat-no" title="statement not covered" >{</span>
-      projectId,
+      projectId: project.id,
       payload: {
         phase: phaseVotes.phase,
         votes: updatedVotes,
@@ -529,7 +550,7 @@ export default VotingEdit;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-30T19:12:57.307Z
+                at 2024-08-30T19:34:49.360Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

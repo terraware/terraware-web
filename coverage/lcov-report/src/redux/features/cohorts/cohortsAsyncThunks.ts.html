@@ -157,13 +157,7 @@
 <a name='L92'></a><a href='#L92'>92</a>
 <a name='L93'></a><a href='#L93'>93</a>
 <a name='L94'></a><a href='#L94'>94</a>
-<a name='L95'></a><a href='#L95'>95</a>
-<a name='L96'></a><a href='#L96'>96</a>
-<a name='L97'></a><a href='#L97'>97</a>
-<a name='L98'></a><a href='#L98'>98</a>
-<a name='L99'></a><a href='#L99'>99</a>
-<a name='L100'></a><a href='#L100'>100</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L95'></a><a href='#L95'>95</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -188,7 +182,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -203,9 +196,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -268,7 +258,6 @@ import CohortService, {
   CreateCohortResponsePayload,
   DeleteCohortResponsePayload,
   ListCohortsRequestDepth,
-  ListCohortsRequestModuleDepth,
   UpdateCohortResponsePayload,
 } from 'src/services/CohortService';
 import { Response2 } from 'src/services/HttpService';
@@ -282,15 +271,14 @@ export const requestCohorts = <span class="cstat-no" title="statement not covere
     request: {
       locale: string | null;
       depth?: ListCohortsRequestDepth;
-      moduleDepth?: ListCohortsRequestModuleDepth;
       search?: SearchNodePayload;
       searchSortOrder?: SearchSortOrder;
     },
     { dispatch, rejectWithValue }
   ) =&gt; {
-    const { depth, locale, search, searchSortOrder, moduleDepth } = <span class="cstat-no" title="statement not covered" >request;</span>
+    const { depth, locale, search, searchSortOrder } = <span class="cstat-no" title="statement not covered" >request;</span>
 &nbsp;
-    const response = <span class="cstat-no" title="statement not covered" >await CohortService.listCohorts(locale, search, searchSortOrder, depth, moduleDepth);</span>
+    const response = <span class="cstat-no" title="statement not covered" >await CohortService.listCohorts(locale, search, searchSortOrder, depth);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (response !== null &amp;&amp; response.requestSucceeded &amp;&amp; response?.cohorts !== undefined) {</span>
 <span class="cstat-no" title="statement not covered" >      dispatch(setCohortsAction({ error: response.error, cohorts: response.cohorts }));</span>
@@ -303,12 +291,9 @@ export const requestCohorts = <span class="cstat-no" title="statement not covere
 &nbsp;
 export const requestCohort = <span class="cstat-no" title="statement not covered" >createAsyncThunk(</span>
   'cohorts/get',
-<span class="fstat-no" title="function not covered" >  as</span>ync (
-    request: { cohortId: number; depth?: ListCohortsRequestDepth; moduleDepth?: ListCohortsRequestModuleDepth },
-    { dispatch, rejectWithValue }
-  ) =&gt; {
-    const { depth, moduleDepth } = <span class="cstat-no" title="statement not covered" >request;</span>
-    const response: Response2&lt;Cohort&gt; = <span class="cstat-no" title="statement not covered" >await CohortService.getCohort(request.cohortId, depth, moduleDepth);</span>
+<span class="fstat-no" title="function not covered" >  as</span>ync (request: { cohortId: number; depth?: ListCohortsRequestDepth }, { dispatch, rejectWithValue }) =&gt; {
+    const { depth } = <span class="cstat-no" title="statement not covered" >request;</span>
+    const response: Response2&lt;Cohort&gt; = <span class="cstat-no" title="statement not covered" >await CohortService.getCohort(request.cohortId, depth);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (response !== null &amp;&amp; response.requestSucceeded &amp;&amp; response.data !== undefined) {</span>
 <span class="cstat-no" title="statement not covered" >      dispatch(setCohortAction({ error: response.error, cohorts: [response.data] }));</span>
@@ -367,7 +352,7 @@ export const requestCohortDelete = <span class="cstat-no" title="statement not c
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-30T19:12:57.307Z
+                at 2024-08-30T19:34:49.360Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
