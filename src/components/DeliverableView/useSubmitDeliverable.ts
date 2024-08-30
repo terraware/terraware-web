@@ -4,7 +4,6 @@ import { Statuses } from 'src/redux/features/asyncUtils';
 import {
   requestGetDeliverable,
   requestSubmitDeliverable,
-  requestUpdateDeliverable,
 } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import { selectDeliverablesEditRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
