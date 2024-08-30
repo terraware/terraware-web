@@ -1,3 +1,4 @@
+efa3600a7df SW-5912: FE display multi-line text variable inputs as a large text area (Follow-up #1) (#3104)
 2ada8c764af SW-5826: Add support for multi-select (#3097)
 a3d1ad7cfd3 SW-5875: "Questions" type should be "Questionnaire" type for Deliverables table and "Type..." should be "Type" (#3103)
 cd793a8df99 SW-5901 Used pending values to determine dependencies on edit view (#3110)

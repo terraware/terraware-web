@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1724969392436" clover="3.2.0">
-  <project timestamp="1724969392436" name="All files">
-    <metrics statements="24567" coveredstatements="1031" conditionals="16063" coveredconditionals="279" methods="7578" coveredmethods="176" elements="48208" coveredelements="1486" complexity="0" loc="24567" ncloc="24567" packages="234" files="1074" classes="1074"/>
+<coverage generated="1724982001030" clover="3.2.0">
+  <project timestamp="1724982001030" name="All files">
+    <metrics statements="24567" coveredstatements="1031" conditionals="16065" coveredconditionals="279" methods="7578" coveredmethods="176" elements="48210" coveredelements="1486" complexity="0" loc="24567" ncloc="24567" packages="234" files="1074" classes="1074"/>
     <package name="src">
       <metrics statements="177" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -2120,9 +2120,9 @@
       </file>
     </package>
     <package name="src.components.DocumentProducer.DeliverableVariableDetailsInput">
-      <metrics statements="111" coveredstatements="0" conditionals="111" coveredconditionals="0" methods="27" coveredmethods="0"/>
+      <metrics statements="111" coveredstatements="0" conditionals="113" coveredconditionals="0" methods="27" coveredmethods="0"/>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/components/DocumentProducer/DeliverableVariableDetailsInput/index.tsx">
-        <metrics statements="111" coveredstatements="0" conditionals="111" coveredconditionals="0" methods="27" coveredmethods="0"/>
+        <metrics statements="111" coveredstatements="0" conditionals="113" coveredconditionals="0" methods="27" coveredmethods="0"/>
         <line num="42" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
@@ -2223,17 +2223,17 @@
         <line num="266" count="0" type="stmt"/>
         <line num="268" count="0" type="stmt"/>
         <line num="273" count="0" type="stmt"/>
-        <line num="283" count="0" type="stmt"/>
-        <line num="306" count="0" type="stmt"/>
-        <line num="316" count="0" type="stmt"/>
-        <line num="328" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="329" count="0" type="stmt"/>
-        <line num="332" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="333" count="0" type="stmt"/>
+        <line num="289" count="0" type="stmt"/>
+        <line num="312" count="0" type="stmt"/>
+        <line num="322" count="0" type="stmt"/>
+        <line num="334" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="335" count="0" type="stmt"/>
-        <line num="338" count="0" type="stmt"/>
-        <line num="347" count="0" type="stmt"/>
-        <line num="355" count="0" type="stmt"/>
+        <line num="338" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="339" count="0" type="stmt"/>
+        <line num="341" count="0" type="stmt"/>
+        <line num="344" count="0" type="stmt"/>
+        <line num="353" count="0" type="stmt"/>
+        <line num="361" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.DocumentProducer.DocumentMetadataEdit">
