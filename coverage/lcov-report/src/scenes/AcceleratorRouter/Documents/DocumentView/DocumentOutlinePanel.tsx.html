@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/41</span>
+                <span class='fraction'>0/40</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/44</span>
+                <span class='fraction'>0/41</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/39</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
@@ -280,13 +280,7 @@
 <a name='L215'></a><a href='#L215'>215</a>
 <a name='L216'></a><a href='#L216'>216</a>
 <a name='L217'></a><a href='#L217'>217</a>
-<a name='L218'></a><a href='#L218'>218</a>
-<a name='L219'></a><a href='#L219'>219</a>
-<a name='L220'></a><a href='#L220'>220</a>
-<a name='L221'></a><a href='#L221'>221</a>
-<a name='L222'></a><a href='#L222'>222</a>
-<a name='L223'></a><a href='#L223'>223</a>
-<a name='L224'></a><a href='#L224'>224</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L218'></a><a href='#L218'>218</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -298,17 +292,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -370,6 +353,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -528,17 +516,6 @@ import { useIsVisible } from 'src/hooks/useIsVisible';
 import { useDocumentProducerData } from 'src/providers/DocumentProducer/Context';
 import { SectionVariableWithValues } from 'src/types/documentProducer/Variable';
 &nbsp;
-const isHTMLElementInViewport = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>lement: HTMLElement): boolean =&gt; {</span>
-  const rect = <span class="cstat-no" title="statement not covered" >element.getBoundingClientRect();</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    rect.top &gt;= 0 &amp;&amp;
-    rect.left &gt;= 0 &amp;&amp;
-    rect.bottom &lt;= (window.innerHeight || document.documentElement.clientHeight) &amp;&amp;
-    rect.right &lt;= (window.innerWidth || document.documentElement.clientWidth)
-  );
-};
-&nbsp;
 const StyledTooltip = <span class="cstat-no" title="statement not covered" >styled(<span class="fstat-no" title="function not covered" >({</span> className, ...props }: TooltipProps) =&gt; (</span>
 <span class="cstat-no" title="statement not covered" >  &lt;Tooltip {...props} arrow classes={{ popper: className }} /&gt;</span>
 ))(<span class="fstat-no" title="function not covered" >({</span> theme }) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
@@ -583,16 +560,21 @@ const SectionItem = <span class="cstat-no" title="statement not covered" ><span 
     }
 &nbsp;
     // get document heading element
-    const element = <span class="cstat-no" title="statement not covered" >document.getElementById(section.sectionNumber);</span>
+    const element = <span class="cstat-no" title="statement not covered" >document.getElementById(section.sectionNumber) || document.getElementById(`${section.id}`);</span>
 <span class="cstat-no" title="statement not covered" >    if (!element) {</span>
       // exit if element not found
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (!isHTMLElementInViewport(element)) {</span>
-      // scroll to section heading in the document, if not already in view
-<span class="cstat-no" title="statement not covered" >      element.scrollIntoView({ behavior: 'smooth' });</span>
-    }
+    const currentPosition = <span class="cstat-no" title="statement not covered" >window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;</span>
+    // get section heading in the document
+    const newPosition = <span class="cstat-no" title="statement not covered" >element.getBoundingClientRect();</span>
+&nbsp;
+    // if going up in the view, the header takes more space so more gap space is needed
+    const headerGap = <span class="cstat-no" title="statement not covered" >newPosition.top + window.scrollY - 146 &lt; currentPosition ? 146 : 96;</span>
+&nbsp;
+    // scrolls to section heading with the gap
+<span class="cstat-no" title="statement not covered" >    window.scrollTo({ left: newPosition.left, top: newPosition.top + window.scrollY - headerGap, behavior: 'smooth' });</span>
   }, [section.id, selectedSectionId, setSelectedSectionId]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
@@ -739,7 +721,7 @@ export default DocumentOutlinePanel;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-30T12:36:55.493Z
+                at 2024-08-30T17:45:23.884Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
