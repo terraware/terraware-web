@@ -26,8 +26,11 @@ import {
 const DeliverablesList = (): JSX.Element => {
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
-  const { participantProjects, currentParticipantProject, moduleProjects, setCurrentParticipantProject } =
-    useParticipantData();
+  const {
+    currentParticipantProject,
+    projectsWithModules: moduleProjects,
+    setCurrentParticipantProject,
+  } = useParticipantData();
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({
     projectId: currentParticipantProject?.id || '',
   });
@@ -145,7 +148,7 @@ const DeliverablesList = (): JSX.Element => {
           </Grid>
         </>
       ) : null,
-    [activeLocale, participantProjects, currentParticipantProject, projectFilter]
+    [activeLocale, currentParticipantProject, projectFilter]
   );
 
   return (

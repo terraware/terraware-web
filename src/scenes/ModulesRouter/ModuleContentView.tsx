@@ -4,14 +4,14 @@ import { useParams } from 'react-router-dom';
 import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
 
 import { Crumb } from 'src/components/BreadCrumbs';
-import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
+import ParticipantPage from 'src/components/common/PageWithModuleTimeline/ParticipantPage';
 import { APP_PATHS } from 'src/constants';
+import useGetModule from 'src/hooks/useGetModule';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { ModuleContentType } from 'src/types/Module';
 
 import ModuleViewTitle from './ModuleViewTitle';
-import { useModuleData } from './Provider/Context';
 
 const ModuleContentSection = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -34,8 +34,15 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
   const pathParams = useParams<{ sessionId: string; moduleId: string; projectId: string }>();
+
   const projectId = Number(pathParams.projectId);
-  const { module, moduleId } = useModuleData();
+  const moduleId = Number(pathParams.moduleId);
+
+  const { getModule, module } = useGetModule();
+
+  useEffect(() => {
+    void getModule({ moduleId, projectId });
+  }, [projectId, moduleId]);
 
   const [content, setContent] = useState('');
 
@@ -78,7 +85,7 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
   }
 
   return (
-    <PageWithModuleTimeline
+    <ParticipantPage
       crumbs={crumbs}
       hierarchicalCrumbs={false}
       title={<ModuleViewTitle module={module} projectId={projectId} />}
@@ -114,7 +121,7 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
           </Grid>
         )}
       </Card>
-    </PageWithModuleTimeline>
+    </ParticipantPage>
   );
 };
 

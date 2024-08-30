@@ -7,6 +7,7 @@ import { BusySpinner, Button } from '@terraware/web-components';
 import Card from 'src/components/common/Card';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { APP_PATHS } from 'src/constants';
+import useListModules from 'src/hooks/useListModules';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 
@@ -17,15 +18,27 @@ const ScorecardView = () => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
   const navigate = useNavigate();
-  const { crumbs, hasData, phase0Scores, phase1Scores, projectId, projectName, status } = useScoringData();
+  const { crumbs, hasData, phase0Scores, phase1Scores, project, status } = useScoringData();
+
+  const { modules, listModules } = useListModules();
+
+  useEffect(() => {
+    if (project) {
+      void listModules({ projectId: project.id });
+    }
+  }, [project, listModules]);
 
   const goToScoresEdit = useCallback(() => {
-    navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_SCORES_EDIT.replace(':projectId', `${projectId}`) });
-  }, [navigate, projectId]);
+    if (project) {
+      navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_SCORES_EDIT.replace(':projectId', `${project.id}`) });
+    }
+  }, [navigate, project]);
 
   const goToVoting = useCallback(() => {
-    navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${projectId}`) });
-  }, [navigate, projectId]);
+    if (project) {
+      navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VOTES.replace(':projectId', `${project.id}`) });
+    }
+  }, [navigate, project]);
 
   const rightComponent = useMemo(
     () =>
@@ -53,10 +66,12 @@ const ScorecardView = () => {
 
   return (
     <PageWithModuleTimeline
-      title={`${projectName} ${strings.SCORES}`}
+      title={`${project?.name ?? ''} ${strings.SCORES}`}
       crumbs={crumbs}
       hierarchicalCrumbs={false}
       rightComponent={rightComponent}
+      cohortPhase={project?.cohortPhase}
+      modules={modules ?? []}
     >
       {status === 'pending' && <BusySpinner />}
       {hasData && (

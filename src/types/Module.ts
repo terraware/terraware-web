@@ -1,16 +1,14 @@
 import { components } from 'src/api/types/generated-schema';
 import strings from 'src/strings';
 
-export type Module = components['schemas']['ProjectModule'];
+export type Module = components['schemas']['ModulePayload'];
 
-export type ModuleEvent = components['schemas']['ProjectModuleEvent'];
+export type ModuleEvent = components['schemas']['ModuleEvent'];
 
-export type ModuleEventSession = components['schemas']['ProjectModuleEventSession'];
-
-export type ModuleEventSessionStatus = components['schemas']['ProjectModuleEventSession']['status'];
-
-export type ModuleEventType = ModuleEventSession['type'];
+export type ModuleEventStatus = components['schemas']['ModuleEvent']['status'];
+export type ModuleEventType = ModuleEvent['type'];
 export const MODULE_EVENTS: ModuleEventType[] = ['Live Session', 'One-on-One Session', 'Recorded Session', 'Workshop'];
+
 export const getEventType = (input: ModuleEventType): string => {
   switch (input) {
     case 'Live Session':
@@ -37,7 +35,7 @@ export type ModuleProjectSearchResult = {
   };
 };
 
-export const getEventStatus = (status: ModuleEventSessionStatus) => {
+export const getEventStatus = (status: ModuleEventStatus) => {
   switch (status) {
     case 'Not Started': {
       return strings.SESSION_HAS_NOT_STARTED;

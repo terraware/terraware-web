@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 
 import Card from 'src/components/common/Card';
-import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
+import ParticipantPage from 'src/components/common/PageWithModuleTimeline/ParticipantPage';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
 
@@ -60,7 +60,7 @@ export default function ListView(): JSX.Element {
   );
 
   return (
-    <PageWithModuleTimeline
+    <ParticipantPage
       title={strings.ALL_MODULES}
       isLoading={!currentParticipant}
       contentStyle={{ paddingLeft: '24px' }}
@@ -79,6 +79,6 @@ export default function ListView(): JSX.Element {
 
         <ListModulesContent />
       </Card>
-    </PageWithModuleTimeline>
+    </ParticipantPage>
   );
 }

@@ -1,5 +1,5 @@
 import { DeliverableCategoryType, DeliverableStatusType, DeliverableTypeType } from 'src/types/Deliverables';
-import { ModuleEventSessionStatus, ModuleEventType } from 'src/types/Module';
+import { ModuleEventStatus, ModuleEventType } from 'src/types/Module';
 import { SearchRequestPayload, SearchResponseElement } from 'src/types/Search';
 
 import SearchService from './SearchService';
@@ -26,7 +26,7 @@ export type EventSearchResultType = {
   moduleName: string;
   projectId: number;
   startTime: string;
-  status: ModuleEventSessionStatus;
+  status: ModuleEventStatus;
   statusDisplayName: string;
   type: ModuleEventType;
   typeDisplayName: string;
@@ -156,7 +156,7 @@ const searchEvents = async (projectId: number): Promise<EventSearchResultType[] 
       moduleName: String(module_name),
       projectId: Number(projects_id),
       startTime: String(startTime),
-      status: result['status(raw)'] as ModuleEventSessionStatus,
+      status: result['status(raw)'] as ModuleEventStatus,
       statusDisplayName: String(status),
       type: result['type(raw)'] as ModuleEventType,
       typeDisplayName: String(type),

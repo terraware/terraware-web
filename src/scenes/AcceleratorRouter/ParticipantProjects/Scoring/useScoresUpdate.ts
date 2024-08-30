@@ -16,7 +16,7 @@ export type Response = {
 /**
  * Hook to update the scores for a project
  */
-export default function useScoresUpdate(projectId: number): Response {
+export default function useScoresUpdate(projectId?: number): Response {
   const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
 
@@ -27,8 +27,10 @@ export default function useScoresUpdate(projectId: number): Response {
 
   const update = useCallback(
     (phase: Phase, scores: Score[]) => {
-      const dispatched = dispatch(requestUpdateScores({ projectId, phase, scores }));
-      setRequestId(dispatched.requestId);
+      if (projectId) {
+        const dispatched = dispatch(requestUpdateScores({ projectId, phase, scores }));
+        setRequestId(dispatched.requestId);
+      }
     },
     [dispatch, projectId]
   );
@@ -39,8 +41,10 @@ export default function useScoresUpdate(projectId: number): Response {
     } else if (result?.status === 'success') {
       snackbar.toastSuccess(strings.CHANGES_SAVED);
       // Refresh scores in store for this project
-      const dispatched = dispatch(requestListScores(projectId));
-      setListRequestId(dispatched.requestId);
+      if (projectId) {
+        const dispatched = dispatch(requestListScores(projectId));
+        setListRequestId(dispatched.requestId);
+      }
     }
   }, [dispatch, projectId, result, snackbar]);
 

@@ -4,7 +4,7 @@ import { DateTime } from 'luxon';
 import { DeliverableSearchResultType, EventSearchResultType } from 'src/services/ToDoService';
 
 import { DeliverableCategoryType, DeliverableStatusType, DeliverableTypeType } from './Deliverables';
-import { ModuleEventSessionStatus, ModuleEventType } from './Module';
+import { ModuleEventStatus, ModuleEventType } from './Module';
 
 const ONE_DAY_IN_MILLIS = 1000 * 3600 * 24;
 
@@ -127,7 +127,7 @@ export class EventToDoItem implements ToDoItem {
   moduleName: string;
   projectId: number;
   startTime: DateTime;
-  status: ModuleEventSessionStatus;
+  status: ModuleEventStatus;
   type: ModuleEventType;
 
   constructor(searchResult: EventSearchResultType) {

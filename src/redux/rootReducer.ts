@@ -11,6 +11,7 @@ import cohortsReducers from './features/cohorts/cohortsSlice';
 import deliverablesReducers from './features/deliverables/deliverablesSlice';
 import documentProducerReducers from './features/documentProducer';
 import draftPlantingSiteReducers from './features/draftPlantingSite/draftPlantingSiteSlice';
+import eventReducers from './features/events/eventsSlice';
 import globalRolesReducers from './features/globalRoles/globalRolesSlice';
 import messageReducers from './features/message/messageSlice';
 import moduleReducers from './features/modules/modulesSlice';
@@ -47,6 +48,7 @@ export const reducers = {
   ...deliverablesReducers,
   ...documentProducerReducers,
   ...draftPlantingSiteReducers,
+  ...eventReducers,
   ...globalRolesReducers,
   ...messageReducers,
   ...moduleReducers,

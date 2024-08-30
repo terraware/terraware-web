@@ -1,71 +1,105 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { DateTime } from 'luxon';
 
 import ModuleDetailsCard from 'src/components/ModuleDetailsCard';
+import useGetModule from 'src/hooks/useGetModule';
+import useListModules from 'src/hooks/useListModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
+import { Project } from 'src/types/Project';
 
-const CurrentModule = () => {
-  const { activeModules, currentDeliverables, currentParticipantProject } = useParticipantData();
-  const { goToDeliverable, goToModuleEventSession } = useNavigateTo();
+type ModuleDetailsCardWrapperProps = {
+  moduleId: number;
+  project: Project;
+};
+
+const ModuleDetailsCardWrapper = ({ moduleId, project }: ModuleDetailsCardWrapperProps) => {
   const { activeLocale } = useLocalization();
+  const { goToDeliverable, goToModuleEventSession } = useNavigateTo();
 
-  // Only first active modules shown for now. TODO: upgrade to support multiple active modules for overlapping modules
-  const currentModule = useMemo(
-    () => (activeModules && activeModules.length > 0 ? activeModules[0] : null),
-    [activeModules]
-  );
+  const { getModule, module, deliverables, events } = useGetModule();
+
+  useEffect(() => {
+    void getModule({ moduleId, projectId: project.id });
+  }, [moduleId, project, getModule]);
 
   const deliverableDetails = useMemo(
     () =>
-      currentParticipantProject
-        ? (currentDeliverables || []).map((deliverable) => ({
-            ...deliverable,
-            dueDate: deliverable.dueDate ? DateTime.fromISO(deliverable.dueDate) : undefined,
-            onClick: () => goToDeliverable(deliverable.id, currentParticipantProject.id),
-          }))
-        : [],
-    [currentDeliverables, goToDeliverable, currentParticipantProject]
+      deliverables?.map((deliverable) => ({
+        ...deliverable,
+        dueDate: deliverable.dueDate ? DateTime.fromISO(deliverable.dueDate) : undefined,
+        onClick: () => goToDeliverable(deliverable.id, project.id),
+      })),
+    [deliverables, goToDeliverable, project]
   );
 
   const eventDetails = useMemo(
     () =>
-      currentModule && currentParticipantProject
-        ? currentModule.events
-            .flatMap((event) => event.sessions)
-            .map((event) => ({
-              ...event,
-              onClick: () => goToModuleEventSession(currentParticipantProject.id, currentModule.id, event.id),
-            }))
-        : [],
-    [currentModule, goToModuleEventSession, currentParticipantProject]
+      events?.map((event) => ({
+        ...event,
+        onClick: () => goToModuleEventSession(project.id, moduleId, event.id),
+      })),
+    [events, goToModuleEventSession, project, moduleId]
   );
 
   const moduleDetails = useMemo(
     () =>
-      currentModule && currentParticipantProject
+      module
         ? {
-            ...currentModule,
-            title: activeLocale ? strings.formatString(strings.TITLE_OVERVIEW, currentModule.title).toString() : '',
+            ...module,
+            title: activeLocale ? strings.formatString(strings.TITLE_OVERVIEW, module.title).toString() : '',
           }
-        : null,
-    [activeLocale, currentModule]
+        : undefined,
+    [activeLocale, module]
   );
 
-  if (!currentParticipantProject || !moduleDetails) {
-    return null;
+  if (!moduleDetails) {
+    return;
   }
 
   return (
     <ModuleDetailsCard
-      deliverables={deliverableDetails}
-      events={eventDetails}
+      deliverables={deliverableDetails ?? []}
+      events={eventDetails ?? []}
       module={moduleDetails}
-      projectId={currentParticipantProject.id}
+      projectId={project.id}
     />
+  );
+};
+
+const CurrentModule = () => {
+  const { currentParticipantProject } = useParticipantData();
+
+  const { modules, listModules } = useListModules();
+
+  useEffect(() => {
+    if (currentParticipantProject) {
+      void listModules({ projectId: currentParticipantProject.id });
+    }
+  }, [currentParticipantProject, listModules]);
+
+  // Only first active modules shown for now. TODO: upgrade to support multiple active modules for overlapping modules
+  const activeModules = useMemo(() => {
+    if (!modules) {
+      return;
+    }
+
+    return modules.filter((module) => module.isActive);
+  }, [modules]);
+
+  if (!currentParticipantProject || !activeModules) {
+    return null;
+  }
+
+  return (
+    <>
+      {activeModules.map((module) => (
+        <ModuleDetailsCardWrapper moduleId={module.id} project={currentParticipantProject} key={module.id} />
+      ))}
+    </>
   );
 };
 

@@ -110,6 +110,22 @@ export interface paths {
     /** Submits a submission from a project. */
     post: operations["submitSubmission"];
   };
+  "/api/v1/accelerator/events": {
+    /** List events */
+    get: operations["listEvents"];
+  };
+  "/api/v1/accelerator/events/{eventId}": {
+    /** Gets one event for a project. */
+    get: operations["getEvent"];
+  };
+  "/api/v1/accelerator/modules": {
+    /** List modules. */
+    get: operations["listModules"];
+  };
+  "/api/v1/accelerator/modules/{moduleId}": {
+    /** Gets one module. */
+    get: operations["getModule"];
+  };
   "/api/v1/accelerator/organizations": {
     /**
      * Lists organizations with the Accelerator internal tag and their projects.
@@ -573,14 +589,6 @@ export interface paths {
      * @description Overwrites any existing project assignments.
      */
     post: operations["assignProject"];
-  };
-  "/api/v1/projects/{projectId}/modules": {
-    /** Gets modules for a project. */
-    get: operations["listModules"];
-  };
-  "/api/v1/projects/{projectId}/modules/{moduleId}": {
-    /** Gets one module for a project. */
-    get: operations["getModule"];
   };
   "/api/v1/reports": {
     /** Lists an organization's reports. */
@@ -1603,16 +1611,6 @@ export interface components {
       cohorts: components["schemas"]["CohortPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
-    CohortModule: {
-      /** Format: date */
-      endDate: string;
-      /** Format: int64 */
-      id: number;
-      isActive: boolean;
-      /** Format: date */
-      startDate: string;
-      title: string;
-    };
     CohortPayload: {
       /** Format: int64 */
       createdBy: number;
@@ -1624,7 +1622,6 @@ export interface components {
       modifiedBy: number;
       /** Format: date-time */
       modifiedTime: string;
-      modules: components["schemas"]["CohortModule"][];
       name: string;
       participantIds?: number[];
       /** @enum {string} */
@@ -2613,6 +2610,10 @@ export interface components {
       site: components["schemas"]["DraftPlantingSitePayload"];
       status: components["schemas"]["SuccessOrError"];
     };
+    GetEventResponsePayload: {
+      event: components["schemas"]["ModuleEvent"];
+      status: components["schemas"]["SuccessOrError"];
+    };
     GetFacilityResponse: {
       facility: components["schemas"]["FacilityPayload"];
       status: components["schemas"]["SuccessOrError"];
@@ -2620,6 +2621,10 @@ export interface components {
     GetMapboxTokenResponsePayload: {
       status: components["schemas"]["SuccessOrError"];
       token: string;
+    };
+    GetModuleResponsePayload: {
+      module: components["schemas"]["ModulePayload"];
+      status: components["schemas"]["SuccessOrError"];
     };
     GetNotificationResponsePayload: {
       notification: components["schemas"]["NotificationPayload"];
@@ -2734,14 +2739,6 @@ export interface components {
     };
     GetProjectAcceleratorDetailsResponsePayload: {
       details: components["schemas"]["ProjectAcceleratorDetailsPayload"];
-      status: components["schemas"]["SuccessOrError"];
-    };
-    GetProjectModuleResponsePayload: {
-      module: components["schemas"]["ProjectModule"];
-      status: components["schemas"]["SuccessOrError"];
-    };
-    GetProjectModulesResponsePayload: {
-      modules: components["schemas"]["ProjectModule"][];
       status: components["schemas"]["SuccessOrError"];
     };
     GetProjectResponsePayload: {
@@ -3083,6 +3080,10 @@ export interface components {
       documents: components["schemas"]["DocumentPayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
+    ListEventsResponsePayload: {
+      events: components["schemas"]["ModuleEvent"][];
+      status: components["schemas"]["SuccessOrError"];
+    };
     ListFacilitiesResponse: {
       facilities: components["schemas"]["FacilityPayload"][];
       status: components["schemas"]["SuccessOrError"];
@@ -3099,6 +3100,10 @@ export interface components {
       results: {
         [key: string]: components["schemas"]["FieldValuesPayload"];
       };
+      status: components["schemas"]["SuccessOrError"];
+    };
+    ListModulesResponsePayload: {
+      modules: components["schemas"]["ModulePayload"][];
       status: components["schemas"]["SuccessOrError"];
     };
     ListObservationResultsResponsePayload: {
@@ -3252,6 +3257,42 @@ export interface components {
     ListWithdrawalPhotosResponsePayload: {
       photos: components["schemas"]["NurseryWithdrawalPhotoPayload"][];
       status: components["schemas"]["SuccessOrError"];
+    };
+    ModuleEvent: {
+      description?: string;
+      /** Format: date-time */
+      endTime?: string;
+      /** Format: int64 */
+      id: number;
+      /** Format: uri */
+      meetingUrl?: string;
+      /** Format: uri */
+      recordingUrl?: string;
+      /** Format: uri */
+      slidesUrl?: string;
+      /** Format: date-time */
+      startTime?: string;
+      /** @enum {string} */
+      status: "Not Started" | "Starting Soon" | "In Progress" | "Ended";
+      /** @enum {string} */
+      type: "One-on-One Session" | "Workshop" | "Live Session" | "Recorded Session";
+    };
+    ModulePayload: {
+      additionalResources?: string;
+      /** Format: date */
+      endDate: string;
+      eventDescriptions: {
+        [key: string]: string;
+      };
+      /** Format: int64 */
+      id: number;
+      isActive: boolean;
+      name: string;
+      overview?: string;
+      preparationMaterials?: string;
+      /** Format: date */
+      startDate: string;
+      title: string;
     };
     MultiLineString: WithRequired<{
       type: "MultiLineString";
@@ -3969,43 +4010,6 @@ export interface components {
       totalCarbon?: number;
       totalExpansionPotential?: number;
       whatNeedsToBeTrue?: string;
-    };
-    ProjectModule: {
-      additionalResources?: string;
-      /** Format: date */
-      endDate: string;
-      events: components["schemas"]["ProjectModuleEvent"][];
-      /** Format: int64 */
-      id: number;
-      isActive: boolean;
-      name: string;
-      overview?: string;
-      preparationMaterials?: string;
-      /** Format: date */
-      startDate: string;
-      title: string;
-    };
-    ProjectModuleEvent: {
-      description: string;
-      sessions: components["schemas"]["ProjectModuleEventSession"][];
-    };
-    ProjectModuleEventSession: {
-      /** Format: date-time */
-      endTime?: string;
-      /** Format: int64 */
-      id: number;
-      /** Format: uri */
-      meetingUrl?: string;
-      /** Format: uri */
-      recordingUrl?: string;
-      /** Format: uri */
-      slidesUrl?: string;
-      /** Format: date-time */
-      startTime?: string;
-      /** @enum {string} */
-      status: "Not Started" | "Starting Soon" | "In Progress" | "Ended";
-      /** @enum {string} */
-      type: "One-on-One Session" | "Workshop" | "Live Session" | "Recorded Session";
     };
     ProjectPayload: {
       /** Format: int64 */
@@ -5592,7 +5596,6 @@ export interface operations {
       query: {
         /** @description If specified, retrieve associated entities to the supplied depth. For example, 'participant' depth will return the participants associated to the cohort. */
         cohortDepth: "Cohort" | "Participant";
-        cohortModuleDepth: "Cohort" | "Module";
       };
     };
     responses: {
@@ -5626,7 +5629,6 @@ export interface operations {
       query: {
         /** @description If specified, retrieve associated entities to the supplied depth. For example, 'participant' depth will return the participants associated to the cohort. */
         cohortDepth: "Cohort" | "Participant";
-        cohortModuleDepth: "Cohort" | "Module";
       };
       path: {
         cohortId: number;
@@ -5859,6 +5861,102 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** List events */
+  listEvents: {
+    parameters: {
+      query?: {
+        projectId?: number;
+        moduleId?: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListEventsResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets one event for a project. */
+  getEvent: {
+    parameters: {
+      path: {
+        eventId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetEventResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** List modules. */
+  listModules: {
+    parameters: {
+      query?: {
+        projectId?: number;
+        participantId?: number;
+        cohortId?: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListModulesResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets one module. */
+  getModule: {
+    parameters: {
+      query?: {
+        projectId?: number;
+        participantId?: number;
+        cohortId?: number;
+      };
+      path: {
+        moduleId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetModuleResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
@@ -8337,51 +8435,6 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Gets modules for a project. */
-  listModules: {
-    parameters: {
-      path: {
-        projectId: number;
-      };
-    };
-    responses: {
-      /** @description The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetProjectModulesResponsePayload"];
-        };
-      };
-      /** @description The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Gets one module for a project. */
-  getModule: {
-    parameters: {
-      path: {
-        projectId: number;
-        moduleId: number;
-      };
-    };
-    responses: {
-      /** @description The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetProjectModuleResponsePayload"];
-        };
-      };
-      /** @description The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
         };
       };
     };
