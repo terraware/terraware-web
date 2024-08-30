@@ -217,7 +217,7 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
     let newDetails: ParticipantProjectType = { landUseModelTypes: [], projectId };
 
     if (sectionToUpdate) {
-      if (field && value) {
+      if (field && value !== undefined) {
         newDetails = { ...sectionToUpdate?.projectDetails, [field]: value };
       } else if (allDetails) {
         newDetails = allDetails;
