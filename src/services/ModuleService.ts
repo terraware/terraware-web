@@ -11,8 +11,8 @@ export type ModuleData = {
   module: Module | undefined;
 };
 
-const MODULES_ENDOINT = '/api/v1/modules';
-const MODULE_ENDOINT = '/api/v1/modules/{moduleId}';
+const MODULES_ENDOINT = '/api/v1/accelerator/modules';
+const MODULE_ENDOINT = '/api/v1/accelerator/modules/{moduleId}';
 
 export type ListModulesResponsePayload =
   paths[typeof MODULES_ENDOINT]['get']['responses'][200]['content']['application/json'];

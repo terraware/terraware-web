@@ -11,8 +11,8 @@ export type EventData = {
   event: ModuleEvent | undefined;
 };
 
-const EVENTS_ENDPOINT = '/api/v1/events';
-const EVENT_ENDPINT = '/api/v1/events/{eventId}';
+const EVENTS_ENDPOINT = '/api/v1/accelerator/events';
+const EVENT_ENDPINT = '/api/v1/accelerator/events/{eventId}';
 
 export type ListEventsResponsePayload =
   paths[typeof EVENTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];

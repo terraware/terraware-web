@@ -110,6 +110,22 @@ export interface paths {
     /** Submits a submission from a project. */
     post: operations["submitSubmission"];
   };
+  "/api/v1/accelerator/events": {
+    /** List events */
+    get: operations["listEvents"];
+  };
+  "/api/v1/accelerator/events/{eventId}": {
+    /** Gets one event for a project. */
+    get: operations["getEvent"];
+  };
+  "/api/v1/accelerator/modules": {
+    /** List modules. */
+    get: operations["listModules"];
+  };
+  "/api/v1/accelerator/modules/{moduleId}": {
+    /** Gets one module. */
+    get: operations["getModule"];
+  };
   "/api/v1/accelerator/organizations": {
     /**
      * Lists organizations with the Accelerator internal tag and their projects.
@@ -306,14 +322,6 @@ export interface paths {
     /** List the variables, optionally filtered by a given manifest or deliverable. Variables returned for a manifest include all section hierarchies and variables injected into section text. */
     get: operations["listVariables"];
   };
-  "/api/v1/events": {
-    /** List events */
-    get: operations["listEvents"];
-  };
-  "/api/v1/events/{eventId}": {
-    /** Gets one event for a project. */
-    get: operations["getEvent"];
-  };
   "/api/v1/facilities": {
     /** Lists all accessible facilities. */
     get: operations["listAllFacilities"];
@@ -395,14 +403,6 @@ export interface paths {
      * @description For interactive web applications, this can be used to redirect the user to a login page to allow the application to make other API requests. The login process will set a cookie that will authenticate to the API, and will then redirect back to the application. One approach is to use this in error response handlers: if an API request returns HTTP 401 Unauthorized, set location.href to this endpoint and set "redirect" to the URL of the page the user was on so they'll return there after logging in.
      */
     get: operations["login"];
-  };
-  "/api/v1/modules": {
-    /** List modules. */
-    get: operations["listModules"];
-  };
-  "/api/v1/modules/{moduleId}": {
-    /** Gets one module. */
-    get: operations["getModule"];
   };
   "/api/v1/notifications": {
     /** Retrieve all notifications for current user scoped to an organization. */
@@ -5865,6 +5865,102 @@ export interface operations {
       };
     };
   };
+  /** List events */
+  listEvents: {
+    parameters: {
+      query?: {
+        projectId?: number;
+        moduleId?: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListEventsResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets one event for a project. */
+  getEvent: {
+    parameters: {
+      path: {
+        eventId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetEventResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** List modules. */
+  listModules: {
+    parameters: {
+      query?: {
+        projectId?: number;
+        participantId?: number;
+        cohortId?: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ListModulesResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Gets one module. */
+  getModule: {
+    parameters: {
+      query?: {
+        projectId?: number;
+        participantId?: number;
+        cohortId?: number;
+      };
+      path: {
+        moduleId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetModuleResponsePayload"];
+        };
+      };
+      /** @description The requested resource was not found. */
+      404: {
+        content: {
+          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
   /**
    * Lists organizations with the Accelerator internal tag and their projects.
    * @description By default, only lists tagged organizations that have projects that have not been assigned to participants yet.
@@ -6971,51 +7067,6 @@ export interface operations {
       };
     };
   };
-  /** List events */
-  listEvents: {
-    parameters: {
-      query?: {
-        projectId?: number;
-        moduleId?: number;
-      };
-    };
-    responses: {
-      /** @description The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListEventsResponsePayload"];
-        };
-      };
-      /** @description The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Gets one event for a project. */
-  getEvent: {
-    parameters: {
-      path: {
-        eventId: number;
-      };
-    };
-    responses: {
-      /** @description The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetEventResponsePayload"];
-        };
-      };
-      /** @description The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
   /** Lists all accessible facilities. */
   listAllFacilities: {
     responses: {
@@ -7420,57 +7471,6 @@ export interface operations {
       /** @description Redirects to a login page. After login, the user will be redirected back to the URL specified in the "redirect" parameter. */
       302: {
         content: never;
-      };
-    };
-  };
-  /** List modules. */
-  listModules: {
-    parameters: {
-      query?: {
-        projectId?: number;
-        participantId?: number;
-        cohortId?: number;
-      };
-    };
-    responses: {
-      /** @description The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ListModulesResponsePayload"];
-        };
-      };
-      /** @description The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Gets one module. */
-  getModule: {
-    parameters: {
-      query?: {
-        projectId?: number;
-        participantId?: number;
-        cohortId?: number;
-      };
-      path: {
-        moduleId: number;
-      };
-    };
-    responses: {
-      /** @description The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetModuleResponsePayload"];
-        };
-      };
-      /** @description The requested resource was not found. */
-      404: {
-        content: {
-          "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-        };
       };
     };
   };
