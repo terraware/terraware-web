@@ -60,7 +60,6 @@ const ApplicationReviewModal = ({
 
   const [applicationReview, , onChange] = useForm<ApplicationReview>({
     status: getApplicationReviewStatus(application.status),
-    feedback: application.feedback,
     internalComment: application.internalComment,
   });
 
@@ -79,7 +78,6 @@ const ApplicationReviewModal = ({
 
   const hasChange = useCallback(() => {
     const originalReview: ApplicationReview = {
-      feedback: application.feedback,
       internalComment: application.internalComment,
       status: getApplicationReviewStatus(application.status),
     };
@@ -143,18 +141,6 @@ const ApplicationReviewModal = ({
                 options={dropdownOptions}
                 required
                 selectedValue={applicationReview.status}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                type='textarea'
-                label={strings.FEEDBACK}
-                id='feedback'
-                onChange={(value) => {
-                  onChange('feedback', value);
-                }}
-                sx={{ marginTop: theme.spacing(1) }}
-                value={applicationReview.feedback}
               />
             </Grid>
           </>
