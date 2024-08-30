@@ -10,6 +10,7 @@ import CellRenderer from 'src/components/common/table/TableCellRenderer';
 import { useDocumentProducerData } from 'src/providers/DocumentProducer/Context';
 import { searchHistory } from 'src/redux/features/documentProducer/documents/documentsSelector';
 import { requestListHistory } from 'src/redux/features/documentProducer/documents/documentsThunks';
+import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { useSelectorProcessor } from 'src/redux/hooks/useSelectorProcessor';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
@@ -75,6 +76,20 @@ const DocumentHistoryTab = (): JSX.Element => {
   // select history data
   const history = useAppSelector((state) => searchHistory(state, documentId, searchValue));
   useSelectorProcessor(history, setTableRows);
+
+  const [userIdsRequested, setUserIdsRequested] = useState<number[]>([]);
+
+  useEffect(() => {
+    const newUserIdsRequested: number[] = [];
+    const userIds = tableRows.map((row) => row.createdBy);
+    userIds.forEach((userId) => {
+      if (!userIdsRequested.includes(userId) && !newUserIdsRequested.includes(userId)) {
+        dispatch(requestGetUser(userId));
+        newUserIdsRequested.push(userId);
+      }
+    });
+    setUserIdsRequested((prev) => [...prev, ...newUserIdsRequested]);
+  }, [tableRows]);
 
   useEffect(() => {
     // TODO should these be admin users? TF accelerator users?
