@@ -25,6 +25,7 @@ import Display from './Display';
 import Edit from './Edit';
 
 type EditableSectionProps = {
+  id?: string;
   docId: number;
   projectId: number;
   section: SectionVariableWithValues;
@@ -33,6 +34,7 @@ type EditableSectionProps = {
 };
 
 export default function EditableSectionContainer({
+  id,
   docId,
   projectId,
   section,
@@ -138,6 +140,7 @@ export default function EditableSectionContainer({
 
   return editing ? (
     <Box
+      id={id}
       sx={{
         background: theme.palette.TwClrBgActive,
         padding: theme.spacing(2),
@@ -180,6 +183,7 @@ export default function EditableSectionContainer({
     </Box>
   ) : (
     <Box
+      id={id}
       sx={{
         padding: theme.spacing(2),
         borderRadius: '16px',

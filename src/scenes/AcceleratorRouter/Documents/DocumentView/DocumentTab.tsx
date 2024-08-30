@@ -41,6 +41,7 @@ const DocumentTab = (): JSX.Element => {
       } else {
         sectionsToRender.push(
           <EditableSectionContainer
+            id={`${section.id}`}
             key={`component-${section.position}`}
             docId={documentId}
             projectId={projectId}

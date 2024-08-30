@@ -17,17 +17,6 @@ import { useIsVisible } from 'src/hooks/useIsVisible';
 import { useDocumentProducerData } from 'src/providers/DocumentProducer/Context';
 import { SectionVariableWithValues } from 'src/types/documentProducer/Variable';
 
-const isHTMLElementInViewport = (element: HTMLElement): boolean => {
-  const rect = element.getBoundingClientRect();
-
-  return (
-    rect.top >= 0 &&
-    rect.left >= 0 &&
-    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-  );
-};
-
 const StyledTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} arrow classes={{ popper: className }} />
 ))(({ theme }) => ({
@@ -72,16 +61,21 @@ const SectionItem = ({
     }
 
     // get document heading element
-    const element = document.getElementById(section.sectionNumber);
+    const element = document.getElementById(section.sectionNumber) || document.getElementById(`${section.id}`);
     if (!element) {
       // exit if element not found
       return;
     }
 
-    if (!isHTMLElementInViewport(element)) {
-      // scroll to section heading in the document, if not already in view
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+    const currentPosition = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
+    // get section heading in the document
+    const newPosition = element.getBoundingClientRect();
+
+    // if going up in the view, the header takes more space so more gap space is needed
+    const headerGap = newPosition.top + window.scrollY - 146 < currentPosition ? 146 : 96;
+
+    // scrolls to section heading with the gap
+    window.scrollTo({ left: newPosition.left, top: newPosition.top + window.scrollY - headerGap, behavior: 'smooth' });
   }, [section.id, selectedSectionId, setSelectedSectionId]);
 
   return (
