@@ -157,6 +157,10 @@ const DeliverablesTable = ({
         field: 'type',
         options: DeliverableTypes,
         label: strings.TYPE,
+        pillValueRenderer: (values: (string | number | null)[]) =>
+          values.map((value) => (value === 'Questions' ? 'Questionnaire' : value)).join(', '),
+        renderOption: (value: string | number) =>
+          value.toString() === 'Questions' ? 'Questionnaire' : value.toString(),
       },
     ];
 
@@ -212,6 +216,7 @@ const DeliverablesTable = ({
     () =>
       deliverables.map((deliverable) => ({
         ...deliverable,
+        type: deliverable.type === 'Questions' ? 'Questionnaire' : deliverable.type,
         isAllowedRead: isAllowedReadDeliverable,
       })),
     [deliverables, isAllowedReadDeliverable]

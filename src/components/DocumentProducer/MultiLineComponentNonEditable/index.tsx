@@ -35,6 +35,7 @@ type MultiLineComponentNonEditableProps = {
   projectId: number;
   ownerId?: number;
   reload: () => void;
+  reloadVariables: () => void;
 };
 
 export default function MultiLineComponentNonEditable({
@@ -47,6 +48,7 @@ export default function MultiLineComponentNonEditable({
   projectId,
   reload,
   ownerId,
+  reloadVariables,
 }: MultiLineComponentNonEditableProps): JSX.Element {
   const { activeLocale } = useLocalization();
   const dispatch = useAppDispatch();
@@ -72,7 +74,7 @@ export default function MultiLineComponentNonEditable({
 
   useEffect(() => {
     if (updateWorkflowDetailsResponse?.status === 'success') {
-      reload();
+      reloadVariables();
     }
   }, [updateWorkflowDetailsResponse]);
 

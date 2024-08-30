@@ -392,12 +392,14 @@ export default function Subzones({ onValidate, site }: SubzonesProps): JSX.Eleme
           close();
         };
 
-        const subzoneNamesInUse = new Set<string>(
-          Object.values(subzones || ({} as Record<number, FeatureCollection>))
-            .flatMap((featureCollection) => featureCollection.features)
-            .filter((feature) => feature.properties?.id !== id)
-            .map((feature) => feature.properties?.name)
-        );
+        const selectedSubzones = subzones && selectedZone ? subzones[selectedZone] : undefined;
+        const subzoneNamesInUse = selectedSubzones
+          ? new Set<string>(
+              selectedSubzones.features
+                .filter((feature) => feature.properties?.id !== id)
+                .map((feature) => feature.properties?.name)
+            )
+          : new Set<string>();
 
         return (
           <TooltipContents name={name} onClose={close} onUpdate={onUpdate} subzoneNamesInUse={subzoneNamesInUse} />

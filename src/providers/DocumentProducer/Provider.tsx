@@ -103,6 +103,12 @@ const DocumentProducerProvider = ({ children }: Props) => {
     loadVariables();
   }, [loadDocument, loadVariables]);
 
+  const reloadVariables = useCallback(() => {
+    if (projectId !== -1) {
+      dispatch(requestListVariablesValues({ projectId }));
+    }
+  }, [dispatch, projectId]);
+
   const getUsedSections = useCallback(
     (variableId: number) => documentSectionVariables.reduce(getContainingSections(variableId), []),
     [documentSectionVariables]
@@ -120,6 +126,7 @@ const DocumentProducerProvider = ({ children }: Props) => {
     // tslint:disable-next-line:no-empty
     reload: () => {},
     variablesOwners,
+    reloadVariables: () => {},
   });
 
   useEffect(() => {
@@ -135,6 +142,7 @@ const DocumentProducerProvider = ({ children }: Props) => {
       projectId,
       reload,
       variablesOwners,
+      reloadVariables,
     });
   }, [
     allVariables,
@@ -148,6 +156,7 @@ const DocumentProducerProvider = ({ children }: Props) => {
     projectId,
     reload,
     variablesOwners,
+    reloadVariables,
   ]);
 
   if (isLoading) {

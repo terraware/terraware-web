@@ -153,6 +153,17 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     uploadSuccess,
   } = useProjectVariablesUpdate(deliverable.projectId, variablesWithValues);
 
+  const stagedVariableWithValues: VariableWithValues[] = useMemo(() => {
+    return variablesWithValues.map((variableWithValues) => {
+      const pendingValues = pendingVariableValues.get(variableWithValues.id);
+      if (pendingValues !== undefined) {
+        return { ...variableWithValues, values: pendingValues };
+      } else {
+        return variableWithValues;
+      }
+    });
+  }, [pendingVariableValues, variablesWithValues]);
+
   useEffect(() => {
     if (!deliverable) {
       return;
@@ -201,7 +212,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
             }}
           >
             {variablesWithValues.map((variableWithValues: VariableWithValues, index: number) =>
-              variableDependencyMet(variableWithValues, variablesWithValues) ? (
+              variableDependencyMet(variableWithValues, stagedVariableWithValues) ? (
                 <QuestionBox
                   addRemovedValue={(removedValue: VariableValueValue) =>
                     setRemovedValue(variableWithValues.id, removedValue)
