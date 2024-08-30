@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/DeliverableView/useUpdateDeliverable.ts</title>
+    <title>Code coverage report for src/components/DeliverableView/useSubmitDeliverable.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,20 +19,20 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/DeliverableView</a> useUpdateDeliverable.ts</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/DeliverableView</a> useSubmitDeliverable.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/26</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
@@ -125,17 +125,7 @@
 <a name='L60'></a><a href='#L60'>60</a>
 <a name='L61'></a><a href='#L61'>61</a>
 <a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L63'></a><a href='#L63'>63</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -167,6 +157,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -181,17 +173,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -208,35 +192,35 @@
 import { Statuses } from 'src/redux/features/asyncUtils';
 import {
   requestGetDeliverable,
-  requestUpdateDeliverable,
+  requestSubmitDeliverable,
 } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
 import { selectDeliverablesEditRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { Deliverable } from 'src/types/Deliverables';
+import { DeliverableWithOverdue } from 'src/types/Deliverables';
 import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
 export type Response = {
-  internalComment?: string;
   status?: Statuses;
-  update: (deliverable: Deliverable) =&gt; void;
+  submit: (deliverable: DeliverableWithOverdue) =&gt; void;
 };
 &nbsp;
 /**
- * Hook to update a deliverable, which updates the underlying deliverable submission (used for internalComments and status currently).
- * Returns status on request and function to update status.
+ * Hook to submit a deliverable
  */
-export default function <span class="fstat-no" title="function not covered" >useUpdateDeliverable(</span>): Response {
-  const [lastRequest, setLastRequest] = <span class="cstat-no" title="statement not covered" >useState&lt;Deliverable&gt;();</span>
+export default function <span class="fstat-no" title="function not covered" >useSubmitDeliverable(</span>): Response {
+  const [lastRequest, setLastRequest] = <span class="cstat-no" title="statement not covered" >useState&lt;DeliverableWithOverdue&gt;();</span>
   const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState&lt;string&gt;('');</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const result = <span class="cstat-no" title="statement not covered" >useAppSelector(selectDeliverablesEditRequest(requestId));</span>
 &nbsp;
-  const update = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (d</span>eliverable: Deliverable) =&gt; {
+  const submit = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (d</span>eliverable: DeliverableWithOverdue) =&gt; {
 <span class="cstat-no" title="statement not covered" >      setLastRequest(undefined);</span>
-      const dispatched = <span class="cstat-no" title="statement not covered" >dispatch(requestUpdateDeliverable({ deliverable }));</span>
+      const dispatched = <span class="cstat-no" title="statement not covered" >dispatch(</span>
+        requestSubmitDeliverable({ deliverableId: deliverable.id, projectId: deliverable.projectId })
+      );
 <span class="cstat-no" title="statement not covered" >      setRequestId(dispatched.requestId);</span>
 <span class="cstat-no" title="statement not covered" >      setLastRequest(deliverable);</span>
     },
@@ -251,26 +235,18 @@ export default function <span class="fstat-no" title="function not covered" >use
 <span class="cstat-no" title="statement not covered" >    if (result?.status === 'error') {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError(strings.GENERIC_ERROR);</span>
     } else <span class="cstat-no" title="statement not covered" >if (result?.status === 'success') {</span>
+<span class="cstat-no" title="statement not covered" >      snackbar.toastSuccess(strings.DELIVERABLE_SUBMITTED);</span>
       // refresh deliverable data in store
 <span class="cstat-no" title="statement not covered" >      dispatch(requestGetDeliverable({ deliverableId: lastRequest.id, projectId: lastRequest.projectId }));</span>
-<span class="cstat-no" title="statement not covered" >      if (lastRequest.status === 'Approved') {</span>
-<span class="cstat-no" title="statement not covered" >        snackbar.toastSuccess(strings.DELIVERABLE_APPROVED);</span>
-      } else <span class="cstat-no" title="statement not covered" >if (lastRequest.status === 'Rejected') {</span>
-<span class="cstat-no" title="statement not covered" >        snackbar.toastWarning(strings.DELIVERABLE_REJECTED);</span>
-      } else <span class="cstat-no" title="statement not covered" >if (lastRequest.status === 'In Review') {</span>
-<span class="cstat-no" title="statement not covered" >        snackbar.toastSuccess(strings.DELIVERABLE_SUBMITTED_FOR_APPROVAL);</span>
-      } else {
-<span class="cstat-no" title="statement not covered" >        snackbar.toastInfo(strings.DELIVERABLE_STATUS_UPDATED);</span>
-      }
     }
   }, [dispatch, lastRequest, result, snackbar]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return useMemo&lt;Response&gt;(</span>
 <span class="fstat-no" title="function not covered" >    ()</span> =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
       status: result?.status,
-      update,
+      submit,
     }),
-    [result?.status, update]
+    [result?.status, submit]
   );
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -280,7 +256,7 @@ export default function <span class="fstat-no" title="function not covered" >use
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-30T17:45:23.884Z
+                at 2024-08-30T18:14:40.178Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
