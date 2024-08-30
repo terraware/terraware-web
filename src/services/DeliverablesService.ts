@@ -22,6 +22,8 @@ import { getPromisesResponse } from './utils';
 
 const ENDPOINT_DELIVERABLES = '/api/v1/accelerator/deliverables';
 const ENDPOINT_DELIVERABLE_SUBMISSION = '/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}';
+const ENDPOINT_DELIVERABLE_SUBMISSION_SUBMIT =
+  '/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}/submit';
 const ENDPOINT_DELIVERABLE_DOCUMENT_UPLOAD = '/api/v1/accelerator/deliverables/{deliverableId}/documents';
 export const ENDPOINT_DELIVERABLE_DOCUMENT = '/api/v1/accelerator/deliverables/{deliverableId}/documents/{documentId}';
 
@@ -33,10 +35,13 @@ export type UpdateSubmissionRequestPayload =
   paths[typeof ENDPOINT_DELIVERABLE_SUBMISSION]['put']['requestBody']['content']['application/json'];
 export type UpdateSubmissionResponsePayload =
   paths[typeof ENDPOINT_DELIVERABLE_SUBMISSION]['put']['responses'][200]['content']['application/json'];
+export type SubmitSubmissionResponsePayload =
+  paths[typeof ENDPOINT_DELIVERABLE_SUBMISSION_SUBMIT]['post']['responses'][200]['content']['application/json'];
 
 const httpDeliverables = HttpService.root(ENDPOINT_DELIVERABLES);
 const httpDeliverableSubmission = HttpService.root(ENDPOINT_DELIVERABLE_SUBMISSION);
 const httpDocumentUpload = HttpService.root(ENDPOINT_DELIVERABLE_DOCUMENT_UPLOAD);
+const httpDeliverableSubmit = HttpService.root(ENDPOINT_DELIVERABLE_SUBMISSION_SUBMIT);
 
 const isOverdue = (deliverable: Deliverable | ListDeliverablesElement): boolean => {
   return !!(
@@ -153,11 +158,24 @@ const upload = async (
   return getPromisesResponse(promises);
 };
 
+/**
+ * Submit a a project deliverable.
+ */
+const submit = async (deliverableiId: number, projectId: number): Promise<Response> => {
+  return httpDeliverableSubmit.post2<UpdateSubmissionResponsePayload>({
+    urlReplacements: {
+      '{deliverableId}': `${deliverableiId}`,
+      '{projectId}': `${projectId}`,
+    },
+  });
+};
+
 const DeliverablesService = {
   get,
   list,
   update,
   upload,
+  submit,
 };
 
 export default DeliverablesService;

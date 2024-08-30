@@ -9,9 +9,9 @@ import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import useUpdateDeliverable from '../AcceleratorDeliverableView/useUpdateDeliverable';
 import InternalComment from './InternalComment';
 import { ViewProps } from './types';
-import useUpdateDeliverable from './useUpdateDeliverable';
 
 const Metadata = (props: ViewProps): JSX.Element => {
   const { deliverable, hideStatusBadge } = props;

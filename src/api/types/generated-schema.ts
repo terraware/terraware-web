@@ -106,6 +106,10 @@ export interface paths {
     /** Marks a submission from a project as completed. */
     post: operations["completeSubmission"];
   };
+  "/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}/submit": {
+    /** Submits a submission from a project. */
+    post: operations["submitSubmission"];
+  };
   "/api/v1/accelerator/organizations": {
     /**
      * Lists organizations with the Accelerator internal tag and their projects.
@@ -5827,6 +5831,23 @@ export interface operations {
   };
   /** Marks a submission from a project as completed. */
   completeSubmission: {
+    parameters: {
+      path: {
+        deliverableId: number;
+        projectId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Submits a submission from a project. */
+  submitSubmission: {
     parameters: {
       path: {
         deliverableId: number;

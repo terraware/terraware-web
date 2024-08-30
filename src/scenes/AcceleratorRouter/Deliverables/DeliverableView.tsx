@@ -5,10 +5,10 @@ import { BusySpinner, Button, DropdownItem } from '@terraware/web-components';
 
 import AcceleratorDeliverableCard from 'src/components/AcceleratorDeliverableView/DeliverableCard';
 import RejectDialog from 'src/components/AcceleratorDeliverableView/RejectDialog';
+import useUpdateDeliverable from 'src/components/AcceleratorDeliverableView/useUpdateDeliverable';
 import { Crumb } from 'src/components/BreadCrumbs';
 import MobileMessage from 'src/components/DeliverableView/MobileMessage';
 import TitleBar from 'src/components/DeliverableView/TitleBar';
-import useUpdateDeliverable from 'src/components/DeliverableView/useUpdateDeliverable';
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';

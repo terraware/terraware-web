@@ -78,3 +78,17 @@ export const requestUploadDeliverableDocument = createAsyncThunk(
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );
+
+export const requestSubmitDeliverable = createAsyncThunk(
+  'deliverables/submit',
+  async (request: { deliverableId: number; projectId: number }, { rejectWithValue }) => {
+    const { deliverableId, projectId } = request;
+
+    const response = await DeliverablesService.submit(deliverableId, projectId);
+    if (response && response.requestSucceeded) {
+      return deliverableId;
+    }
+
+    return rejectWithValue(strings.GENERIC_ERROR);
+  }
+);
