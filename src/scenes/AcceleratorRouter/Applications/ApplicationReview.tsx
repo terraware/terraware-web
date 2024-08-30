@@ -131,7 +131,6 @@ const ApplicationReview = ({ application }: ApplicationReviewProps) => {
         </Box>
 
         <Grid container>
-          <ProjectFieldTextAreaDisplay label={strings.FEEDBACK} value={application.feedback} />
           <ProjectFieldTextAreaDisplay label={strings.INTERNAL_COMMENTS} value={application.internalComment} />
         </Grid>
       </Box>

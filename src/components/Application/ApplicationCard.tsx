@@ -33,36 +33,39 @@ export default function ApplicationCard({
     goToApplication(applicationId);
   }, [applicationId, goToApplication]);
 
-  const getSectionStatusText = useCallback((status: ApplicationStatus): string => {
-    if (!activeLocale) {
-      return status;
-    }
-    switch (status) {
-      case 'Not Submitted':
-        return strings.NOT_SUBMITTED;
-      case 'Failed Pre-screen':
-        return strings.FAILED_PRESCREEN;
-      case 'Passed Pre-screen':
-        return strings.PASSED_PRESCREEN;
-      case 'Carbon Eligible':
-      case 'Needs Follow-up':
-      case 'PL Review':
-      case 'Pre-check':
-      case 'Ready for Review':
-      case 'Submitted':
-      case 'In Review':
-        return strings.IN_REVIEW;
-      case 'Waitlist':
-      case 'Issue Active':
-      case 'Issue Pending':
-      case 'Issue Resolved':
-        return strings.WAITLIST;
-      case 'Accepted':
-        return strings.ACCEPTED;
-      case 'Not Accepted':
-        return strings.NOT_ACCEPTED;
-    }
-  }, []);
+  const getSectionStatusText = useCallback(
+    (status: ApplicationStatus): string => {
+      if (!activeLocale) {
+        return status;
+      }
+      switch (status) {
+        case 'Not Submitted':
+          return strings.NOT_SUBMITTED;
+        case 'Failed Pre-screen':
+          return strings.FAILED_PRESCREEN;
+        case 'Passed Pre-screen':
+          return strings.PASSED_PRESCREEN;
+        case 'Carbon Eligible':
+        case 'Needs Follow-up':
+        case 'PL Review':
+        case 'Pre-check':
+        case 'Ready for Review':
+        case 'Submitted':
+        case 'In Review':
+          return strings.IN_REVIEW;
+        case 'Waitlist':
+        case 'Issue Active':
+        case 'Issue Pending':
+        case 'Issue Resolved':
+          return strings.IN_REVIEW;
+        case 'Accepted':
+          return strings.IN_REVIEW;
+        case 'Not Accepted':
+          return strings.IN_REVIEW;
+      }
+    },
+    [activeLocale]
+  );
 
   return (
     <Box
