@@ -245,6 +245,7 @@ const DataRow = ({ leftChild, rightChild, projectId }: Props): JSX.Element => {
               </Typography>
               <Box display='flex' flexDirection='row' flexWrap='wrap' marginTop={theme.spacing(1.5)}>
                 <Link
+                  target='_blank'
                   fontSize='16px'
                   to={projectDetails?.googleFolderUrl}
                   style={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
@@ -261,6 +262,7 @@ const DataRow = ({ leftChild, rightChild, projectId }: Props): JSX.Element => {
               </Typography>
               <Box display='flex' flexDirection='row' flexWrap='wrap' marginTop={theme.spacing(1.5)}>
                 <Link
+                  target='_blank'
                   fontSize='16px'
                   to={projectDetails?.dropboxFolderPath}
                   style={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
