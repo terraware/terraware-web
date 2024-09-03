@@ -983,15 +983,15 @@ export interface paths {
     /** Get a user by ID, if they exist, only ordinary users are supported. */
     get: operations["getUser"];
   };
-  "/api/v1/users/{userId}/deliverableCategories": {
-    /** Get the list of deliverable categories assigned to a user. */
-    get: operations["getUserDeliverableCategories"];
-    /** Update which deliverable categories are assigned to a user. */
-    put: operations["updateUserDeliverableCategories"];
-  };
   "/api/v1/users/{userId}/globalRoles": {
     /** Apply the supplied global roles to the user. */
     post: operations["updateGlobalRoles"];
+  };
+  "/api/v1/users/{userId}/internalInterests": {
+    /** Get the list of internal interests assigned to a user. */
+    get: operations["getUserDeliverableCategories"];
+    /** Update which internal interests are assigned to a user. */
+    put: operations["updateUserDeliverableCategories"];
   };
   "/api/v1/versions": {
     /** Gets the minimum and recommended versions for Terraware's client applications. */
@@ -2305,6 +2305,7 @@ export interface components {
       documentTemplateId: number;
       /** Format: int64 */
       id: number;
+      internalComment?: string;
       /** Format: int64 */
       lastSavedVersionId?: number;
       /** Format: int64 */
@@ -2872,8 +2873,8 @@ export interface components {
       details: components["schemas"]["GetUploadStatusDetailsPayload"];
       status: components["schemas"]["SuccessOrError"];
     };
-    GetUserDeliverableCategoriesResponsePayload: {
-      deliverableCategories: ("Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files")[];
+    GetUserInternalInterestsResponsePayload: {
+      internalInterests: ("Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files" | "Sourcing")[];
       status: components["schemas"]["SuccessOrError"];
     };
     GetUserPreferencesResponsePayload: {
@@ -4817,6 +4818,7 @@ export interface components {
       verbosity?: number;
     };
     UpdateDocumentRequestPayload: {
+      internalComment?: string;
       name: string;
       /** Format: int64 */
       ownedBy: number;
@@ -5018,9 +5020,9 @@ export interface components {
       /** @description If true, the user consents to the use of analytics cookies. If false, they decline. */
       cookiesConsented: boolean;
     };
-    UpdateUserDeliverableCategoriesRequestPayload: {
+    UpdateUserInternalInterestsRequestPayload: {
       /** @description New set of category assignments. Existing assignments that aren't included here will be removed from the user. */
-      deliverableCategories: ("Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files")[];
+      internalInterests: ("Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files" | "Sourcing")[];
     };
     UpdateUserPreferencesRequestPayload: {
       /**
@@ -5264,12 +5266,12 @@ export interface components {
     UserWithGlobalRolesPayload: {
       /** Format: date-time */
       createdTime: string;
-      deliverableCategories: ("Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files")[];
       email: string;
       firstName?: string;
       globalRoles: ("Super-Admin" | "Accelerator Admin" | "TF Expert" | "Read Only")[];
       /** Format: int64 */
       id: number;
+      internalInterests: ("Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files" | "Sourcing")[];
       lastName?: string;
     };
     ValidatePlantingSiteResponsePayload: {
@@ -10361,43 +10363,6 @@ export interface operations {
       };
     };
   };
-  /** Get the list of deliverable categories assigned to a user. */
-  getUserDeliverableCategories: {
-    parameters: {
-      path: {
-        userId: number;
-      };
-    };
-    responses: {
-      /** @description The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetUserDeliverableCategoriesResponsePayload"];
-        };
-      };
-    };
-  };
-  /** Update which deliverable categories are assigned to a user. */
-  updateUserDeliverableCategories: {
-    parameters: {
-      path: {
-        userId: number;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateUserDeliverableCategoriesRequestPayload"];
-      };
-    };
-    responses: {
-      /** @description The requested operation succeeded. */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-        };
-      };
-    };
-  };
   /** Apply the supplied global roles to the user. */
   updateGlobalRoles: {
     parameters: {
@@ -10421,6 +10386,43 @@ export interface operations {
       404: {
         content: {
           "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Get the list of internal interests assigned to a user. */
+  getUserDeliverableCategories: {
+    parameters: {
+      path: {
+        userId: number;
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetUserInternalInterestsResponsePayload"];
+        };
+      };
+    };
+  };
+  /** Update which internal interests are assigned to a user. */
+  updateUserDeliverableCategories: {
+    parameters: {
+      path: {
+        userId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateUserInternalInterestsRequestPayload"];
+      };
+    };
+    responses: {
+      /** @description The requested operation succeeded. */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
         };
       };
     };

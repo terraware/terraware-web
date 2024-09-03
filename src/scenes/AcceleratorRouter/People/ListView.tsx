@@ -58,7 +58,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           type: 'string',
         },
         {
-          key: 'deliverableCategories',
+          key: 'internalInterests',
           name: strings.CATEGORIES,
           type: 'string',
         },

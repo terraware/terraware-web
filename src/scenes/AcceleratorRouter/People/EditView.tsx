@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
-import { UserWithDeliverableCategories } from 'src/scenes/AcceleratorRouter/People/UserWithDeliverableCategories';
+import { UserWithInternalnterests } from 'src/scenes/AcceleratorRouter/People/UserWithInternalInterests';
 import useUpdatePerson from 'src/scenes/AcceleratorRouter/People/useUpdatePerson';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
@@ -23,7 +23,7 @@ const EditView = () => {
   );
 
   const handleOnSave = useCallback(
-    (record: UserWithDeliverableCategories) => {
+    (record: UserWithInternalnterests) => {
       updatePerson.update(record);
     },
     [updatePerson]

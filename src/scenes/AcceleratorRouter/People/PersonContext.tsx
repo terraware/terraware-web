@@ -1,11 +1,11 @@
 import { createContext, useContext } from 'react';
 
-import { UserWithDeliverableCategories } from 'src/scenes/AcceleratorRouter/People/UserWithDeliverableCategories';
+import { UserWithInternalnterests } from 'src/scenes/AcceleratorRouter/People/UserWithInternalInterests';
 
 export type PersonData = {
   setUserId: (userId: number) => void;
   userId: number;
-  user?: UserWithDeliverableCategories;
+  user?: UserWithInternalnterests;
 };
 
 // default values pointing to nothing

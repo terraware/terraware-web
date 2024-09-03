@@ -7,7 +7,7 @@ import { requestSearchUserByEmail } from 'src/redux/features/user/usersAsyncThun
 import { selectUserByEmailRequest } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { usePersonData } from 'src/scenes/AcceleratorRouter/People/PersonContext';
-import { UserWithDeliverableCategories } from 'src/scenes/AcceleratorRouter/People/UserWithDeliverableCategories';
+import { UserWithInternalnterests } from 'src/scenes/AcceleratorRouter/People/UserWithInternalInterests';
 import useUpdatePerson from 'src/scenes/AcceleratorRouter/People/useUpdatePerson';
 import strings from 'src/strings';
 import useDebounce from 'src/utils/useDebounce';
