@@ -363,6 +363,7 @@ const QuestionBox = ({
                   setImages={(newValues: VariableValueImageValue[]) => setImages(variable.id, newValues)}
                   setNewImages={(newValues: PhotoWithAttributes[]) => setNewImages(variable.id, newValues)}
                   projectId={projectId}
+                  validateFields={false}
                 />
               </Grid>
             </Grid>

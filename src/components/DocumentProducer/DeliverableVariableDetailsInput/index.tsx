@@ -37,6 +37,7 @@ export type DeliverableVariableDetailsInputProps = {
   variable: Variable;
   addRemovedValue: (value: VariableValueValue) => void;
   projectId: number;
+  validateFields: boolean;
 };
 
 const DeliverableVariableDetailsInput = ({
@@ -50,6 +51,7 @@ const DeliverableVariableDetailsInput = ({
   variable,
   addRemovedValue,
   projectId,
+  validateFields,
 }: DeliverableVariableDetailsInputProps): JSX.Element => {
   const [value, setValue] = useState<string | number | number[]>();
   const [title, setTitle] = useState<string>();
@@ -246,6 +248,7 @@ const DeliverableVariableDetailsInput = ({
             },
             textFieldLabelStyles,
           ]}
+          required={variable.isRequired}
         />
       )}
 
@@ -257,6 +260,7 @@ const DeliverableVariableDetailsInput = ({
           value={value?.toString()}
           aria-label='select date'
           sx={formElementStyles}
+          errorText={validateFields && !value && variable.isRequired ? strings.REQUIRED_FIELD : ''}
         />
       )}
 
@@ -280,6 +284,8 @@ const DeliverableVariableDetailsInput = ({
                   ]}
                   type={variable.textType === 'SingleLine' ? 'text' : 'textarea'}
                   value={iValue?.toString()}
+                  required={variable.isRequired}
+                  errorText={validateFields && !iValue && variable.isRequired ? strings.REQUIRED_FIELD : ''}
                 />
                 {variable.isList && (
                   <IconButton
@@ -312,6 +318,8 @@ const DeliverableVariableDetailsInput = ({
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
           value={value?.toString()}
           sx={[formElementStyles, textFieldLabelStyles]}
+          required={variable.isRequired}
+          errorText={validateFields && !value && variable.isRequired ? strings.REQUIRED_FIELD : ''}
         />
       )}
 
@@ -323,6 +331,8 @@ const DeliverableVariableDetailsInput = ({
           options={getOptions()}
           selectedValue={(value as number[])?.[0]}
           sx={[formElementStyles, { paddingBottom: theme.spacing(1) }]}
+          required={variable.isRequired}
+          errorText={validateFields && !value && variable.isRequired ? strings.REQUIRED_FIELD : ''}
         />
       )}
 
@@ -342,6 +352,7 @@ const DeliverableVariableDetailsInput = ({
           selectedOptions={(value || []) as number[]}
           sx={[formElementStyles, { paddingBottom: theme.spacing(1) }]}
           valueRenderer={(val: string) => val}
+          errorText={validateFields && !value && variable.isRequired ? strings.REQUIRED_FIELD : ''}
         />
       )}
 
@@ -353,6 +364,8 @@ const DeliverableVariableDetailsInput = ({
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'title')}
           sx={formElementStyles}
           value={title}
+          required={variable.isRequired}
+          errorText={validateFields && !value && variable.isRequired ? strings.REQUIRED_FIELD : ''}
         />
       )}
 
