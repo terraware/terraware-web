@@ -318,7 +318,6 @@ const DeliverableVariableDetailsInput = ({
       {variable.type === 'Select' && !variable.isMultiple && (
         <Dropdown
           fullWidth
-          label={strings.VALUE}
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
           options={getOptions()}
           selectedValue={(value as number[])?.[0]}
@@ -329,7 +328,6 @@ const DeliverableVariableDetailsInput = ({
       {variable.type === 'Select' && variable.isMultiple && (
         <MultiSelect
           fullWidth
-          label={strings.VALUE}
           onAdd={(item: number) => {
             const nextValues = [...((value as number[]) || []), item];
             onChangeValueHandler(nextValues, 'value');
