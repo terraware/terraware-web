@@ -1,3 +1,4 @@
+728b7622073 SW-5932 Remove extra "Value" label for questionnaire variables (#3124)
 4f22636ce09 SW-5885 Removed feedback from review. Updated application statuses to show in review (#3116)
 5b58fb4d342 SW-5323 Updated types with new endpoints and updated module props (#3106)
 303d91a21ca SW-5784 Open participant project google and dropbox link in a new tab (#3115)

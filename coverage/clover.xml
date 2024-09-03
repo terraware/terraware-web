@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1725052345837" clover="3.2.0">
-  <project timestamp="1725052345837" name="All files">
+<coverage generated="1725404465257" clover="3.2.0">
+  <project timestamp="1725404465257" name="All files">
     <metrics statements="24699" coveredstatements="1031" conditionals="16115" coveredconditionals="279" methods="7613" coveredmethods="176" elements="48427" coveredelements="1486" complexity="0" loc="24699" ncloc="24699" packages="234" files="1081" classes="1081"/>
     <package name="src">
       <metrics statements="177" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
@@ -2248,15 +2248,15 @@
         <line num="273" count="0" type="stmt"/>
         <line num="289" count="0" type="stmt"/>
         <line num="312" count="0" type="stmt"/>
-        <line num="322" count="0" type="stmt"/>
-        <line num="334" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="335" count="0" type="stmt"/>
-        <line num="338" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="321" count="0" type="stmt"/>
+        <line num="332" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="333" count="0" type="stmt"/>
+        <line num="336" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="337" count="0" type="stmt"/>
         <line num="339" count="0" type="stmt"/>
-        <line num="341" count="0" type="stmt"/>
-        <line num="344" count="0" type="stmt"/>
-        <line num="353" count="0" type="stmt"/>
-        <line num="361" count="0" type="stmt"/>
+        <line num="342" count="0" type="stmt"/>
+        <line num="351" count="0" type="stmt"/>
+        <line num="359" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.DocumentProducer.DocumentMetadataEdit">
