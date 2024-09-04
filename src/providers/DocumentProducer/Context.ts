@@ -17,6 +17,7 @@ export type DocumentProducerData = {
   reload: () => void;
   variablesOwners?: VariableOwners[];
   reloadVariables: () => void;
+  reloadDocument: () => void;
 };
 
 // default values pointing to nothing
@@ -28,6 +29,7 @@ export const DocumentProducerContext = createContext<DocumentProducerData>({
   // tslint:disable-next-line:no-empty
   reload: () => {},
   reloadVariables: () => {},
+  reloadDocument: () => {},
 });
 
 export const useDocumentProducerData = () => useContext(DocumentProducerContext);

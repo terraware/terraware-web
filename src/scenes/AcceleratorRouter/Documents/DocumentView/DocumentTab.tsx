@@ -7,6 +7,8 @@ import { useDocumentProducerData } from 'src/providers/DocumentProducer/Context'
 import { SectionVariableWithValues, VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValue } from 'src/types/documentProducer/VariableValue';
 
+import Metadata from './Metadata';
+
 const DocumentTab = (): JSX.Element => {
   const { allVariables, document, documentId, documentVariables, projectId, reload, variablesOwners, reloadVariables } =
     useDocumentProducerData();
@@ -75,6 +77,7 @@ const DocumentTab = (): JSX.Element => {
 
   return (
     <PageContent styles={{ marginTop: 0 }}>
+      <Metadata />
       {documentVariables?.map((documentVariable) => {
         return renderVariable(documentVariable);
       })}
