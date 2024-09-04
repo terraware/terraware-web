@@ -135,7 +135,7 @@ APPLICATION_STEP_APPLICATION_NAME,Application,
 APPLICATION_STEP_DUEDILIGENCE_DESCRIPTION,"If your Application moves forward, we will request more documents from you about your project to confirm your proposed project’s eligibility.",
 APPLICATION_STEP_DUEDILIGENCE_NAME,Due Diligence,
 APPLICATION_STEP_PRESCREEN_DESCRIPTION,Draw your proposed project site map and complete the Pre-screen questions to determine if you qualify for our Accelerator Program.,
-APPLICATION_STEP_PRESCREEN_NAME,Prescreen,
+APPLICATION_STEP_PRESCREEN_NAME,Pre-screen,
 APPLICATION_SUBMIT_SUCCESS,Success! Your Application has been submitted.,
 APPLICATION_SUBMIT_SUCCESS_BODY,"Thank you for submitting an application to the Seed to Carbon Forest Accelerator. We have received your application and it is under review.
 You can review your submitted responses and the status of your application in this account.",
