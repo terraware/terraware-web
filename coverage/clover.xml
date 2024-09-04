@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1725412629345" clover="3.2.0">
-  <project timestamp="1725412629345" name="All files">
-    <metrics statements="24693" coveredstatements="1031" conditionals="16111" coveredconditionals="279" methods="7612" coveredmethods="176" elements="48416" coveredelements="1486" complexity="0" loc="24693" ncloc="24693" packages="234" files="1081" classes="1081"/>
+<coverage generated="1725469277185" clover="3.2.0">
+  <project timestamp="1725469277186" name="All files">
+    <metrics statements="24705" coveredstatements="1031" conditionals="16119" coveredconditionals="279" methods="7612" coveredmethods="176" elements="48436" coveredelements="1486" complexity="0" loc="24705" ncloc="24705" packages="234" files="1081" classes="1081"/>
     <package name="src">
       <metrics statements="177" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
       <file name="App.tsx" path="/home/runner/work/terraware-web/terraware-web/src/App.tsx">
@@ -9618,12 +9618,12 @@
       <metrics statements="10" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>
       <file name="rootReducer.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/rootReducer.ts">
         <metrics statements="6" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="78" count="0" type="stmt"/>
-        <line num="83" count="0" type="stmt"/>
-        <line num="84" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="85" count="0" type="stmt"/>
-        <line num="88" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="83" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="87" count="0" type="stmt"/>
       </file>
       <file name="store.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/store.ts">
         <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
@@ -12083,9 +12083,9 @@
         <line num="36" count="0" type="stmt"/>
       </file>
     </package>
-    <package name="src.redux.features.userDeliverableCategories">
+    <package name="src.redux.features.userInternalInterests">
       <metrics statements="23" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="8" coveredmethods="0"/>
-      <file name="userDeliverableCategoriesAsyncThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/userDeliverableCategories/userDeliverableCategoriesAsyncThunks.ts">
+      <file name="userInternalInterestsAsyncThunks.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/userInternalInterests/userInternalInterestsAsyncThunks.ts">
         <metrics statements="12" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="8" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
@@ -12100,14 +12100,14 @@
         <line num="28" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
       </file>
-      <file name="userDeliverableCategoriesSelectors.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/userDeliverableCategories/userDeliverableCategoriesSelectors.ts">
+      <file name="userInternalInterestsSelectors.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/userInternalInterests/userInternalInterestsSelectors.ts">
         <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="3" count="0" type="stmt"/>
         <line num="4" count="0" type="stmt"/>
         <line num="6" count="0" type="stmt"/>
         <line num="7" count="0" type="stmt"/>
       </file>
-      <file name="userDeliverableCategoriesSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/userDeliverableCategories/userDeliverableCategoriesSlice.ts">
+      <file name="userInternalInterestsSlice.ts" path="/home/runner/work/terraware-web/terraware-web/src/redux/features/userInternalInterests/userInternalInterestsSlice.ts">
         <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="14" count="0" type="stmt"/>
         <line num="16" count="0" type="stmt"/>
@@ -14913,7 +14913,7 @@
         <line num="57" count="0" type="stmt"/>
         <line num="63" count="0" type="stmt"/>
       </file>
-      <file name="UserWithDeliverableCategories.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/People/UserWithDeliverableCategories.tsx">
+      <file name="UserWithInternalInterests.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/People/UserWithInternalInterests.tsx">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
       <file name="index.tsx" path="/home/runner/work/terraware-web/terraware-web/src/scenes/AcceleratorRouter/People/index.tsx">
@@ -25146,7 +25146,7 @@
       </file>
     </package>
     <package name="src.services">
-      <metrics statements="1654" coveredstatements="574" conditionals="585" coveredconditionals="89" methods="457" coveredmethods="70"/>
+      <metrics statements="1653" coveredstatements="574" conditionals="583" coveredconditionals="89" methods="456" coveredmethods="70"/>
       <file name="AcceleratorService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/AcceleratorService.ts">
         <metrics statements="10" coveredstatements="3" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="7" count="1" type="stmt"/>
@@ -26832,17 +26832,16 @@
         <line num="353" count="0" type="stmt"/>
         <line num="359" count="1" type="stmt"/>
       </file>
-      <file name="UserDeliverableCategoriesService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/UserDeliverableCategoriesService.ts">
-        <metrics statements="9" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>
-        <line num="11" count="0" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
+      <file name="UserInternalInterestsService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/UserInternalInterestsService.ts">
+        <metrics statements="8" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="28" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
         <line num="36" count="0" type="stmt"/>
-        <line num="42" count="0" type="stmt"/>
       </file>
       <file name="UserService.ts" path="/home/runner/work/terraware-web/terraware-web/src/services/UserService.ts">
         <metrics statements="63" coveredstatements="28" conditionals="36" coveredconditionals="10" methods="11" coveredmethods="2"/>
@@ -27295,7 +27294,7 @@
       </file>
     </package>
     <package name="src.types">
-      <metrics statements="450" coveredstatements="30" conditionals="317" coveredconditionals="2" methods="105" coveredmethods="8"/>
+      <metrics statements="463" coveredstatements="30" conditionals="327" coveredconditionals="2" methods="106" coveredmethods="8"/>
       <file name="Accelerator.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/Accelerator.ts">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
@@ -27846,8 +27845,21 @@
       <file name="User.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/User.ts">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       </file>
-      <file name="UserDeliverableCategories.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/UserDeliverableCategories.ts">
-        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="UserInternalInterests.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/UserInternalInterests.ts">
+        <metrics statements="13" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="10" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="23" count="0" type="cond" truecount="0" falsecount="10"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
       </file>
       <file name="Votes.ts" path="/home/runner/work/terraware-web/terraware-web/src/types/Votes.ts">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
