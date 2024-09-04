@@ -76,6 +76,12 @@ const DocumentProducerProvider = ({ children }: Props) => {
     dispatch(requestListAllVariables());
   }, [dispatch]);
 
+  const reloadDocument = () => {
+    if (documentId !== -1) {
+      dispatch(requestGetDocument(documentId));
+    }
+  };
+
   const loadDocument = useCallback(() => {
     if (documentId !== -1) {
       dispatch(requestGetDocument(documentId));
@@ -127,6 +133,7 @@ const DocumentProducerProvider = ({ children }: Props) => {
     reload: () => {},
     variablesOwners,
     reloadVariables: () => {},
+    reloadDocument: () => {},
   });
 
   useEffect(() => {
@@ -143,6 +150,7 @@ const DocumentProducerProvider = ({ children }: Props) => {
       reload,
       variablesOwners,
       reloadVariables,
+      reloadDocument,
     });
   }, [
     allVariables,
@@ -157,6 +165,7 @@ const DocumentProducerProvider = ({ children }: Props) => {
     reload,
     variablesOwners,
     reloadVariables,
+    reloadDocument,
   ]);
 
   if (isLoading) {
