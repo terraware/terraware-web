@@ -37,7 +37,7 @@ const NewView = () => {
   );
 
   const handleOnSave = useCallback(
-    (record: UserWithDeliverableCategories) => {
+    (record: UserWithInternalnterests) => {
       let noErrors = true;
       if (!record.email) {
         setEmailError(strings.REQUIRED_FIELD);
@@ -55,7 +55,7 @@ const NewView = () => {
   );
 
   const handleOnChange = useCallback(
-    (record: UserWithDeliverableCategories) => {
+    (record: UserWithInternalnterests) => {
       if (record.email) {
         setEmail(record.email);
       }

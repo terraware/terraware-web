@@ -59,7 +59,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
         },
         {
           key: 'internalInterests',
-          name: strings.CATEGORIES,
+          name: strings.INTERNAL_INTERESTS,
           type: 'string',
         },
         {
