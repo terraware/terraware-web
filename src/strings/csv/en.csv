@@ -886,6 +886,7 @@ NEXT_STEPS_INSTRUCTIONS,Summarize the next phases in your project. (One-quarter 
 NEXT_STEPS_REQUIRED,Next Steps *,
 NICE,Nice!,
 NO,No,
+NO_AVAILABLE_PROJECTS_FOR_SPECIES,There are no remaining projects available for this species.,
 NO_BATCHES_TO_WITHDRAW_FROM,There are no batches with withdrawable quantities.,
 NO_COMMENTS_ADDED,No comments added,
 NO_DATA_YET,No data yet,
