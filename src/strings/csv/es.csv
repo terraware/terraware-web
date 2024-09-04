@@ -887,6 +887,7 @@ NEXT_STEPS_INSTRUCTIONS,Resuma las siguientes fases de su proyecto. (Un cuarto d
 NEXT_STEPS_REQUIRED,Próximos pasos *,
 NICE,¡Muy bien!,
 NO,No,
+NO_AVAILABLE_PROJECTS_FOR_SPECIES,No hay más proyectos disponibles para esta especie.,
 NO_BATCHES_TO_WITHDRAW_FROM,No hay lotes con cantidades disponibles.,
 NO_COMMENTS_ADDED,Ningún comentario añadido,
 NO_DATA_YET,Aún no hay datos.,
