@@ -11,8 +11,8 @@ import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useUser } from 'src/providers';
 import strings from 'src/strings';
-import { categoryLabel } from 'src/types/Deliverables';
 import { getHighestGlobalRole } from 'src/types/GlobalRoles';
+import { internalInterestLabel } from 'src/types/UserInternalInterests';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import { usePersonData } from './PersonContext';
@@ -51,10 +51,10 @@ const SingleView = () => {
     [activeLocale]
   );
 
-  const deliverableCategories = useMemo(
+  const internalInterests = useMemo(
     () =>
-      user?.deliverableCategories
-        ?.map((category) => categoryLabel(category))
+      user?.internalInterests
+        ?.map((internalInterest) => internalInterestLabel(internalInterest))
         ?.toSorted()
         ?.join(strings.LIST_SEPARATOR),
     [user]
@@ -86,10 +86,10 @@ const SingleView = () => {
           </Grid>
           <Grid item xs={8}>
             <TextField
-              id='deliverableCategories'
-              label={strings.CATEGORIES}
+              id='internalInterests'
+              label={strings.INTERNAL_INTERESTS}
               type='text'
-              value={deliverableCategories}
+              value={internalInterests}
               display={true}
             />
           </Grid>

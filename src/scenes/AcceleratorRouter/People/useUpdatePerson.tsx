@@ -2,38 +2,38 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { requestUpdateGlobalRolesUser } from 'src/redux/features/globalRoles/globalRolesAsyncThunks';
 import { selectGlobalRolesUserUpdateRequest } from 'src/redux/features/globalRoles/globalRolesSelectors';
-import { requestUpdateUserDeliverableCategories } from 'src/redux/features/userDeliverableCategories/userDeliverableCategoriesAsyncThunks';
-import { selectUserDeliverableCategoriesUpdateRequest } from 'src/redux/features/userDeliverableCategories/userDeliverableCategoriesSelectors';
+import { requestUpdateUserInternalInterests } from 'src/redux/features/userInternalInterests/userInternalInterestsAsyncThunks';
+import { selectUserInternalInterestsUpdateRequest } from 'src/redux/features/userInternalInterests/userInternalInterestsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { UserWithDeliverableCategories } from 'src/scenes/AcceleratorRouter/People/UserWithDeliverableCategories';
+import { UserWithInternalnterests } from 'src/scenes/AcceleratorRouter/People/UserWithInternalInterests';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export type Response = {
   busy?: boolean;
   succeeded?: boolean;
-  update: (user: UserWithDeliverableCategories) => void;
+  update: (user: UserWithInternalnterests) => void;
 };
 
 export default function useUpdatePerson(): Response {
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
 
-  const [categoriesRequestId, setCategoriesRequestId] = useState('');
-  const categoriesRequest = useAppSelector(selectUserDeliverableCategoriesUpdateRequest(categoriesRequestId));
+  const [internalInterestsRequestId, setInternalInterestsRequest] = useState('');
+  const internalInterestsRequest = useAppSelector(selectUserInternalInterestsUpdateRequest(internalInterestsRequestId));
   const [globalRolesRequestId, setGlobalRolesRequestId] = useState('');
   const globalRolesRequest = useAppSelector(selectGlobalRolesUserUpdateRequest(globalRolesRequestId));
 
   const update = useCallback(
-    (user: UserWithDeliverableCategories) => {
+    (user: UserWithInternalnterests) => {
       const categoriesRequest = dispatch(
-        requestUpdateUserDeliverableCategories({
+        requestUpdateUserInternalInterests({
           user: user,
-          deliverableCategories: user.deliverableCategories,
+          internalInterests: user.internalInterests,
         })
       );
 
-      setCategoriesRequestId(categoriesRequest.requestId);
+      setInternalInterestsRequest(categoriesRequest.requestId);
 
       const globalRolesRequest = dispatch(
         requestUpdateGlobalRolesUser({
@@ -48,17 +48,17 @@ export default function useUpdatePerson(): Response {
   );
 
   useEffect(() => {
-    if (categoriesRequest?.status === 'error' || globalRolesRequest?.status === 'error') {
+    if (internalInterestsRequest?.status === 'error' || globalRolesRequest?.status === 'error') {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [categoriesRequest, globalRolesRequest, snackbar]);
+  }, [internalInterestsRequest, globalRolesRequest, snackbar]);
 
   return useMemo<Response>(
     () => ({
-      busy: categoriesRequest?.status === 'pending' || globalRolesRequest?.status === 'pending',
-      succeeded: categoriesRequest?.status === 'success' && globalRolesRequest?.status === 'success',
+      busy: internalInterestsRequest?.status === 'pending' || globalRolesRequest?.status === 'pending',
+      succeeded: internalInterestsRequest?.status === 'success' && globalRolesRequest?.status === 'success',
       update,
     }),
-    [update, categoriesRequest, globalRolesRequest]
+    [update, internalInterestsRequest, globalRolesRequest]
   );
 }

@@ -209,11 +209,6 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   };
 
   const handleOnSave = () => {
-    if (pendingVariableValues.size === 0) {
-      // If the user clicks save but there are no changes, just navigate them back to the deliverable
-      exit();
-    }
-
     if (!validateForm()) {
       setValidateFields(true);
       return;
