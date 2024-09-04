@@ -42,7 +42,7 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
           type: 'string',
         },
         {
-          key:'acceleratorDetails_fileNaming',
+          key: 'acceleratorDetails_fileNaming',
           name: strings.FILE_NAMING,
           type: 'string',
         },
