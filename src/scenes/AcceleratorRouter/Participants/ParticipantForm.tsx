@@ -97,7 +97,13 @@ export default function ParticipantForm<T extends ParticipantCreateRequest | Par
 
     const details = orgProjectsSections.map((ops) => ops.projectDetails);
     const detailsMissingFields = details.some((detail) => {
-      !detail.fileNaming || !detail.googleFolderUrl || !detail.dropboxFolderPath;
+      return (
+        !detail.fileNaming ||
+        !detail.googleFolderUrl ||
+        !detail.dropboxFolderPath ||
+        detail.projectId === -1 ||
+        !detail.projectId
+      );
     });
 
     if (detailsMissingFields) {
