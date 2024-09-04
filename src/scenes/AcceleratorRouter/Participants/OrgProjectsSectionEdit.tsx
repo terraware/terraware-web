@@ -98,7 +98,7 @@ const OrgProjectsSectionEdit = ({
           options={orgOptions}
           selectedValue={section.org?.id}
           tooltipTitle={strings.ACCELERATOR_ORGS_TOOLTIP}
-          required={true}
+          required
           errorText={validateFields && (!section.org?.id || section.org.id === -1) ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
@@ -110,7 +110,7 @@ const OrgProjectsSectionEdit = ({
           onChange={(value) => setSelectedProject(value)}
           label={strings.PROJECT}
           selectedValue={selectedProject}
-          required={true}
+          required
           errorText={
             validateFields && (!section.projectDetails.projectId || section.projectDetails.projectId === -1)
               ? strings.REQUIRED_FIELD
