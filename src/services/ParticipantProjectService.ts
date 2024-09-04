@@ -49,6 +49,7 @@ const getSearchParams = (search?: SearchNodePayload, sortOrder?: SearchSortOrder
       'participant_cohort_id',
       'participant_cohort_name',
       'participant_cohort_phase',
+      'acceleratorDetails_fileNaming',
       'country_name',
       'country_region',
       'acceleratorDetails_confirmedReforestableLand',
@@ -144,6 +145,7 @@ const list = async (
       participant_cohort_id,
       participant_cohort_name,
       participant_cohort_phase,
+      acceleratorDetails_fileNaming,
       country_name,
       country_region,
       acceleratorDetails_confirmedReforestableLand,
@@ -163,6 +165,7 @@ const list = async (
       participant_cohort_id: Number(participant_cohort_id),
       participant_cohort_name,
       participant_cohort_phase,
+      acceleratorDetails_fileNaming,
       participant_name,
     } as ParticipantProjectSearchResult;
   });
