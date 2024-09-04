@@ -18,9 +18,9 @@ import { VariableValue, VariableValueImageValue, VariableValueValue } from 'src/
 import { getRawValue, variableDependencyMet } from 'src/utils/documentProducer/variables';
 import useQuery from 'src/utils/useQuery';
 
-import useUpdateDeliverable from '../AcceleratorDeliverableView/useUpdateDeliverable';
 import VariableStatusBadge from '../Variables/VariableStatusBadge';
 import { EditProps } from './types';
+import useCompleteDeliverable from './useCompleteDeliverable';
 
 type QuestionBoxProps = {
   addRemovedValue: (value: VariableValueValue) => void;
@@ -119,7 +119,6 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
 
   const { deliverable, exit, hideStatusBadge, isPrescreen } = props;
   const [validateFields, setValidateFields] = useState<boolean>(false);
-  const { update: updateDeliverable } = useUpdateDeliverable();
 
   const scrollToVariable = useCallback((variableId: string) => {
     const element = document.querySelector(`[data-variable-id="${variableId}"]`);
@@ -159,6 +158,8 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     updateSuccess,
     uploadSuccess,
   } = useProjectVariablesUpdate(deliverable.projectId, variablesWithValues);
+
+  const { complete } = useCompleteDeliverable();
 
   const stagedVariableWithValues: VariableWithValues[] = useMemo(() => {
     return variablesWithValues.map((variableWithValues) => {
@@ -220,7 +221,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
 
     // If Questionnaire Deliverable is part of the Application/Pre-screen mark deliverable as “Completed”
     if (isPrescreen) {
-      updateDeliverable({ ...deliverable, status: 'Completed' });
+      complete(deliverable);
     }
 
     update();

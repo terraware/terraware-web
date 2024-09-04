@@ -24,6 +24,8 @@ const ENDPOINT_DELIVERABLES = '/api/v1/accelerator/deliverables';
 const ENDPOINT_DELIVERABLE_SUBMISSION = '/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}';
 const ENDPOINT_DELIVERABLE_SUBMISSION_SUBMIT =
   '/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}/submit';
+const ENDPOINT_DELIVERABLE_SUBMISSION_COMPLETE =
+  '/api/v1/accelerator/deliverables/{deliverableId}/submissions/{projectId}/complete';
 const ENDPOINT_DELIVERABLE_DOCUMENT_UPLOAD = '/api/v1/accelerator/deliverables/{deliverableId}/documents';
 export const ENDPOINT_DELIVERABLE_DOCUMENT = '/api/v1/accelerator/deliverables/{deliverableId}/documents/{documentId}';
 
@@ -42,6 +44,7 @@ const httpDeliverables = HttpService.root(ENDPOINT_DELIVERABLES);
 const httpDeliverableSubmission = HttpService.root(ENDPOINT_DELIVERABLE_SUBMISSION);
 const httpDocumentUpload = HttpService.root(ENDPOINT_DELIVERABLE_DOCUMENT_UPLOAD);
 const httpDeliverableSubmit = HttpService.root(ENDPOINT_DELIVERABLE_SUBMISSION_SUBMIT);
+const httpDeliverableComplete = HttpService.root(ENDPOINT_DELIVERABLE_SUBMISSION_COMPLETE);
 
 const isOverdue = (deliverable: Deliverable | ListDeliverablesElement): boolean => {
   return !!(
@@ -170,12 +173,25 @@ const submit = async (deliverableiId: number, projectId: number): Promise<Respon
   });
 };
 
+/**
+ * Complete a a project deliverable.
+ */
+const complete = async (deliverableiId: number, projectId: number): Promise<Response> => {
+  return httpDeliverableComplete.post2<UpdateSubmissionResponsePayload>({
+    urlReplacements: {
+      '{deliverableId}': `${deliverableiId}`,
+      '{projectId}': `${projectId}`,
+    },
+  });
+};
+
 const DeliverablesService = {
   get,
   list,
   update,
   upload,
   submit,
+  complete,
 };
 
 export default DeliverablesService;

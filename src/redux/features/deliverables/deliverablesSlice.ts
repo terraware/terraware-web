@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import {
+  requestCompleteDeliverable,
   requestGetDeliverable,
   requestListDeliverables,
   requestSubmitDeliverable,
@@ -63,6 +64,7 @@ export const deliverablesEditSlice = createSlice({
     buildReducers(requestUpdateDeliverable)(builder);
     buildReducers(requestUploadDeliverableDocument)(builder);
     buildReducers(requestSubmitDeliverable)(builder);
+    buildReducers(requestCompleteDeliverable)(builder);
   },
 });
 
