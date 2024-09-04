@@ -5,8 +5,8 @@ import TextTruncated from 'src/components/common/TextTruncated';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
-import { DeliverableCategoryType, categoryLabel } from 'src/types/Deliverables';
 import { getHighestGlobalRole } from 'src/types/GlobalRoles';
+import { InternalInterest, internalInterestLabel } from 'src/types/UserInternalInterests';
 
 export default function PersonCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const { column, row, index, value } = props;
@@ -42,9 +42,9 @@ export default function PersonCellRenderer(props: RendererProps<TableRowType>): 
     return <CellRenderer index={index} column={column} value={getHighestGlobalRole(row.globalRoles)} row={row} />;
   }
 
-  if (column.key === 'deliverableCategories') {
-    const categories = row.deliverableCategories
-      .map((category: DeliverableCategoryType) => categoryLabel(category))
+  if (column.key === 'internalInterests') {
+    const interests = row.internalInterests
+      .map((interest: InternalInterest) => internalInterestLabel(interest))
       .toSorted();
 
     return (
@@ -52,7 +52,7 @@ export default function PersonCellRenderer(props: RendererProps<TableRowType>): 
         index={index}
         column={column}
         row={row}
-        value={<TextTruncated stringList={categories} columnWidth={400} fontSize={16} />}
+        value={<TextTruncated stringList={interests} columnWidth={400} fontSize={16} />}
       />
     );
   }

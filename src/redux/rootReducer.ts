@@ -1,7 +1,5 @@
 import { Action, combineReducers } from '@reduxjs/toolkit';
 
-import userDeliverableCategoriesReducers from 'src/redux/features/userDeliverableCategories/userDeliverableCategoriesSlice';
-
 import acceleratorReducers from './features/accelerator/acceleratorSlice';
 import accessionsReducers from './features/accessions/accessionsSlice';
 import appVersionReducers from './features/appVersion/appVersionSlice';
@@ -35,6 +33,7 @@ import supportReducers from './features/support/supportSlice';
 import trackingReducers from './features/tracking/trackingSlice';
 import userAnalyticsReducers from './features/user/userAnalyticsSlice';
 import usersReducers from './features/user/usersSlice';
+import userInternalInterestsReducers from './features/userInternalInterests/userInternalInterestsSlice';
 import votesReducers from './features/votes/votesSlice';
 
 // assembly of app reducers
@@ -71,7 +70,7 @@ export const reducers = {
   ...supportReducers,
   ...trackingReducers,
   ...userAnalyticsReducers,
-  ...userDeliverableCategoriesReducers,
+  ...userInternalInterestsReducers,
   ...usersReducers,
   ...votesReducers,
 };
