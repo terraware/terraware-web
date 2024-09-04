@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
@@ -15,11 +15,12 @@ import { requestListDeliverableVariables } from 'src/redux/features/documentProd
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValue, VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
-import { variableDependencyMet } from 'src/utils/documentProducer/variables';
+import { getRawValue, variableDependencyMet } from 'src/utils/documentProducer/variables';
 import useQuery from 'src/utils/useQuery';
 
 import VariableStatusBadge from '../Variables/VariableStatusBadge';
 import { EditProps } from './types';
+import useCompleteDeliverable from './useCompleteDeliverable';
 
 type QuestionBoxProps = {
   addRemovedValue: (value: VariableValueValue) => void;
@@ -33,6 +34,7 @@ type QuestionBoxProps = {
   setNewImages: (values: PhotoWithAttributes[]) => void;
   setValues: (values: VariableValueValue[]) => void;
   variable: VariableWithValues;
+  validateFields: boolean;
 };
 
 const QuestionBox = ({
@@ -47,6 +49,7 @@ const QuestionBox = ({
   setNewImages,
   setValues,
   variable,
+  validateFields,
 }: QuestionBoxProps): JSX.Element => {
   const pendingValues: VariableValueValue[] | undefined = useMemo(
     () => pendingVariableValues.get(variable.id),
@@ -96,6 +99,7 @@ const QuestionBox = ({
             variable={variable}
             addRemovedValue={addRemovedValue}
             projectId={projectId}
+            validateFields={validateFields}
           />
         </Grid>
       </Grid>
@@ -105,6 +109,7 @@ const QuestionBox = ({
 
 type QuestionsDeliverableEditViewProps = EditProps & {
   exit: () => void;
+  isPrescreen?: boolean;
 };
 
 const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps): JSX.Element | null => {
@@ -112,7 +117,8 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
   const theme = useTheme();
   const query = useQuery();
 
-  const { deliverable, exit, hideStatusBadge } = props;
+  const { deliverable, exit, hideStatusBadge, isPrescreen } = props;
+  const [validateFields, setValidateFields] = useState<boolean>(false);
 
   const scrollToVariable = useCallback((variableId: string) => {
     const element = document.querySelector(`[data-variable-id="${variableId}"]`);
@@ -153,6 +159,8 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     uploadSuccess,
   } = useProjectVariablesUpdate(deliverable.projectId, variablesWithValues);
 
+  const { complete } = useCompleteDeliverable();
+
   const stagedVariableWithValues: VariableWithValues[] = useMemo(() => {
     return variablesWithValues.map((variableWithValues) => {
       const pendingValues = pendingVariableValues.get(variableWithValues.id);
@@ -181,6 +189,39 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     }
   }, [exit, updateSuccess, uploadSuccess]);
 
+  const validateForm = () => {
+    const allRequiredVariables = stagedVariableWithValues.filter((v) => v.isRequired);
+
+    const missingRequiredFields = allRequiredVariables.some((variable) => {
+      let hasEmptyValue = false;
+      const values = variable.values;
+      if (!values || values.length === 0 || getRawValue(variable) === undefined || getRawValue(variable) === '') {
+        hasEmptyValue = true;
+      }
+      return hasEmptyValue;
+    });
+
+    if (missingRequiredFields) {
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleOnSave = () => {
+    if (!validateForm()) {
+      setValidateFields(true);
+      return;
+    }
+
+    // If Questionnaire Deliverable is part of the Application/Pre-screen mark deliverable as “Completed”
+    if (isPrescreen) {
+      complete(deliverable);
+    }
+
+    update();
+  };
+
   if (!deliverable) {
     return null;
   }
@@ -189,7 +230,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     <WrappedPageForm
       cancelID={'cancelEditQuestionsDeliverable'}
       onCancel={exit}
-      onSave={update}
+      onSave={handleOnSave}
       saveID={'saveEditQuestionsDeliverable'}
     >
       <Box display='flex' flexDirection='column' flexGrow={1}>
@@ -221,6 +262,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
                   setNewImages={(newValues: PhotoWithAttributes[]) => setNewImages(variableWithValues.id, newValues)}
                   setValues={(newValues: VariableValueValue[]) => setValues(variableWithValues.id, newValues)}
                   variable={variableWithValues}
+                  validateFields={validateFields}
                 />
               ) : null
             )}

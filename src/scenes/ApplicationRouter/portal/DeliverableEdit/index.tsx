@@ -7,7 +7,7 @@ import { useApplicationData } from 'src/providers/Application/Context';
 
 import ApplicationPage from '../ApplicationPage';
 
-const SectionDeliverableEditView = () => {
+const SectionDeliverableEditView = ({ isPrescreen }: { isPrescreen?: boolean }) => {
   const { applicationId, deliverableId, sectionId } = useParams<{
     applicationId: string;
     deliverableId: string;
@@ -29,7 +29,14 @@ const SectionDeliverableEditView = () => {
     return null;
   }
 
-  return <QuestionsDeliverableEditForm deliverable={{ ...deliverable, documents: [] }} exit={exit} hideStatusBadge />;
+  return (
+    <QuestionsDeliverableEditForm
+      deliverable={{ ...deliverable, documents: [] }}
+      exit={exit}
+      hideStatusBadge
+      isPrescreen={isPrescreen}
+    />
+  );
 };
 
 const SectionDeliverableEditWrapper = () => {
@@ -65,7 +72,7 @@ const SectionDeliverableEditWrapper = () => {
   }, [deliverable, section, selectedApplication]);
   return (
     <ApplicationPage>
-      <SectionDeliverableEditView />
+      <SectionDeliverableEditView isPrescreen={section?.phase === 'Pre-Screen'} />
     </ApplicationPage>
   );
 };
