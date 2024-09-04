@@ -4,6 +4,7 @@ import { Box, Grid, Typography } from '@mui/material';
 import { TableRowType } from '@terraware/web-components';
 import { TableColumnType } from '@terraware/web-components/components/table/types';
 
+import TooltipButton from 'src/components/common/button/TooltipButton';
 import Table from 'src/components/common/table';
 import { useLocalization, useOrganization } from 'src/providers';
 import { requestGetProjectsForSpecies } from 'src/redux/features/participantProjectSpecies/participantProjectSpeciesAsyncThunks';
@@ -19,7 +20,6 @@ import useSnackbar from 'src/utils/useSnackbar';
 import AddToProjectModal, { ProjectSpecies } from './AddToProjectModal';
 import RemoveProjectsDialog from './RemoveProjectsDialog';
 import SpeciesProjectsCellRenderer from './SpeciesProjectsCellRenderer';
-import TooltipButton from 'src/components/common/button/TooltipButton';
 
 const columns = (): TableColumnType[] => [
   { key: 'projectName', name: strings.PROJECT, type: 'string' },
@@ -136,11 +136,11 @@ export default function SpeciesProjectsTable({
 
   const buttonTooltip = useMemo(() => {
     if (!activeLocale || selectableProjects.length > 0) {
-      return undefined
+      return undefined;
     }
 
-    return strings.NO_AVAILABLE_PROJECTS_FOR_SPECIES
-  }, [activeLocale, selectableProjects])
+    return strings.NO_AVAILABLE_PROJECTS_FOR_SPECIES;
+  }, [activeLocale, selectableProjects]);
 
   const onRemoveHandler = (removedIds: number[]) => {
     const existingIdsToRemove: number[] = [];
