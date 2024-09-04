@@ -76,11 +76,11 @@ const DocumentProducerProvider = ({ children }: Props) => {
     dispatch(requestListAllVariables());
   }, [dispatch]);
 
-  const reloadDocument = () => {
+  const reloadDocument = useCallback(() => {
     if (documentId !== -1) {
       dispatch(requestGetDocument(documentId));
     }
-  };
+  }, [dispatch, documentId]);
 
   const loadDocument = useCallback(() => {
     if (documentId !== -1) {
