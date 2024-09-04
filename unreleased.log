@@ -1,3 +1,4 @@
+bb3712bd8b6 SW-5784 Fix required fields error (#3121)
 8a76de9c492 Updated deliverable category to internal interest to match BE (#3125)
 bf70f5a4480 SW-5851 Save modified or deleted table cells (#3123)
 728b7622073 SW-5932 Remove extra "Value" label for questionnaire variables (#3124)
