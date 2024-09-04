@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, IconButton, SxProps, useTheme } from '@mui/material';
 import { Button, DatePicker, Dropdown, DropdownItem, Icon, MultiSelect, Textfield } from '@terraware/web-components';
 
+import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import {
   ImageVariableWithValues,
@@ -51,6 +52,8 @@ const DeliverableVariableDetailsInput = ({
   addRemovedValue,
   projectId,
 }: DeliverableVariableDetailsInputProps): JSX.Element => {
+  const { activeLocale } = useLocalization();
+
   const [value, setValue] = useState<string | number | number[]>();
   const [title, setTitle] = useState<string>();
   const theme = useTheme();
@@ -222,6 +225,43 @@ const DeliverableVariableDetailsInput = ({
     }
   };
 
+  const errorMessage = useMemo(() => {
+    if (!activeLocale) {
+      return '';
+    }
+
+    switch (variable.type) {
+      case 'Number':
+        if (value !== undefined) {
+          const numValue = Number(value);
+          const decimals: string | undefined = String(numValue).split('.')[1];
+          if (Number.isNaN(numValue)) {
+            return strings.VARIABLE_ERROR_NUMBER_NAN;
+          }
+          if (variable.minValue !== undefined && numValue < variable.minValue) {
+            return strings.formatString(strings.VARIABLE_ERROR_NUMBER_MIN_LIMIT, variable.minValue).toString();
+          }
+          if (variable.maxValue !== undefined && numValue > variable.maxValue) {
+            return strings.formatString(strings.VARIABLE_ERROR_NUMBER_MAX_LIMIT, variable.maxValue).toString();
+          }
+          if (variable.decimalPlaces !== undefined && decimals && decimals.length > variable.decimalPlaces) {
+            return strings
+              .formatString(strings.VARIABLE_ERROR_NUMBER_DECIMAL_PLACES, variable.decimalPlaces)
+              .toString();
+          }
+        }
+        return '';
+      case 'Date':
+      case 'Image':
+      case 'Link':
+      case 'Section':
+      case 'Select':
+      case 'Table':
+      case 'Text':
+        return '';
+    }
+  }, [activeLocale, variable, value]);
+
   return (
     <>
       {variable.description && hideDescription !== true && (
@@ -307,6 +347,7 @@ const DeliverableVariableDetailsInput = ({
       {(variable.type === 'Number' || variable.type === 'Link') && (
         <Textfield
           id='value'
+          errorText={errorMessage}
           label=''
           type={variable.type === 'Number' ? 'number' : 'text'}
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
