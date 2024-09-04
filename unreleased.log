@@ -1,3 +1,4 @@
+bf70f5a4480 SW-5851 Save modified or deleted table cells (#3123)
 728b7622073 SW-5932 Remove extra "Value" label for questionnaire variables (#3124)
 4f22636ce09 SW-5885 Removed feedback from review. Updated application statuses to show in review (#3116)
 5b58fb4d342 SW-5323 Updated types with new endpoints and updated module props (#3106)
