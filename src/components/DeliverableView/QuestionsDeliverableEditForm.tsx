@@ -6,6 +6,7 @@ import Metadata from 'src/components/DeliverableView/Metadata';
 import DeliverableVariableDetailsInput from 'src/components/DocumentProducer/DeliverableVariableDetailsInput';
 import { PhotoWithAttributes } from 'src/components/DocumentProducer/EditImagesModal/PhotoSelector';
 import { VariableTableCell } from 'src/components/DocumentProducer/EditableTableModal/helpers';
+import VariableStatusBadge from 'src/components/Variables/VariableStatusBadge';
 import Card from 'src/components/common/Card';
 import WrappedPageForm from 'src/components/common/PageForm';
 import { useProjectVariablesUpdate } from 'src/hooks/useProjectVariablesUpdate';
@@ -18,7 +19,6 @@ import { VariableValue, VariableValueImageValue, VariableValueValue } from 'src/
 import { getRawValue, variableDependencyMet } from 'src/utils/documentProducer/variables';
 import useQuery from 'src/utils/useQuery';
 
-import VariableStatusBadge from '../Variables/VariableStatusBadge';
 import { EditProps } from './types';
 import useCompleteDeliverable from './useCompleteDeliverable';
 
@@ -189,7 +189,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     }
   }, [exit, updateSuccess, uploadSuccess]);
 
-  const validateForm = () => {
+  const validateForm = useCallback(() => {
     const allRequiredVariables = stagedVariableWithValues.filter((v) => v.isRequired);
 
     const missingRequiredFields = allRequiredVariables.some((variable) => {
@@ -206,9 +206,9 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     }
 
     return true;
-  };
+  }, [stagedVariableWithValues]);
 
-  const handleOnSave = () => {
+  const handleOnSave = useCallback(() => {
     if (!validateForm()) {
       setValidateFields(true);
       return;
@@ -220,7 +220,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     }
 
     update();
-  };
+  }, [isPrescreen, complete, deliverable, setValidateFields, update, validateForm]);
 
   if (!deliverable) {
     return null;
