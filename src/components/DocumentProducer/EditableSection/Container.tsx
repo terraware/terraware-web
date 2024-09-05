@@ -23,6 +23,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import Display from './Display';
 import Edit from './Edit';
+import EditVariableModal from './EditVariableModal';
 
 type EditableSectionProps = {
   id?: string;
@@ -47,6 +48,9 @@ export default function EditableSectionContainer({
   const [sectionValues, setSectionValues] = useState<VariableValueValue[] | undefined>(section.values);
   const [editSectionValues, setEditSectionValues] = useState<VariableValueValue[] | undefined>(section.values);
   const [variableCitation, setVariableCitation] = useState<string>('');
+
+  const [openEditVariableModal, setOpenEditVariableModal] = useState<boolean>(false);
+  const [clickedVariable, setClickedVariable] = useState<VariableWithValues>();
 
   const [editing, setEditing] = useState(false);
   const [requestId, setRequestId] = useState<string>('');
@@ -108,6 +112,24 @@ export default function EditableSectionContainer({
     [section]
   );
 
+  const onEditVariableValue = (variable?: VariableWithValues) => {
+    if (variable === undefined) {
+      return;
+    }
+    setClickedVariable(variable);
+    setOpenEditVariableModal(true);
+  };
+
+  const variableUpdated = useCallback(
+    (edited: boolean) => {
+      if (edited) {
+        onUpdate();
+      }
+      setOpenEditVariableModal(false);
+    },
+    [onUpdate]
+  );
+
   useEffect(() => {
     if (updateInternalCommentRequest?.status === 'success') {
       snackbar.toastSuccess(strings.CHANGES_SAVED);
@@ -138,85 +160,115 @@ export default function EditableSectionContainer({
     );
   }, [editing, section, theme]);
 
-  return editing ? (
-    <Box
-      id={id}
-      sx={{
-        background: theme.palette.TwClrBgActive,
-        padding: theme.spacing(2),
-        borderRadius: '16px',
-      }}
-    >
-      <Box
-        sx={{
-          marginBottom: theme.spacing(2),
-        }}
-      >
-        <VariableInternalComment editing update={onUpdateInternalComment} variable={section} />
-      </Box>
-
-      {nameAndDescription}
-
-      <Edit
-        section={section}
-        sectionValues={sectionValues}
-        setSectionValues={setEditSectionValues}
-        allVariables={allVariables}
-        docId={docId}
-        projectId={projectId}
-        onUpdate={onUpdate}
-      />
-
-      <Grid paddingTop={theme.spacing(2)}>
-        <Textfield
-          type='text'
-          label={strings.CITATION}
-          id='citation'
-          value={variableCitation}
-          onChange={(newValue) => setVariableCitation(newValue as string)}
+  return (
+    <>
+      {openEditVariableModal && clickedVariable && (
+        <EditVariableModal
+          display={!editing}
+          onCancel={() => setOpenEditVariableModal(false)}
+          onFinish={variableUpdated}
+          projectId={projectId}
+          variable={clickedVariable}
         />
-      </Grid>
-      <Box sx={{ paddingTop: theme.spacing(3), textAlign: 'right' }}>
-        <Button id='edit-cancel' label={strings.CANCEL} priority='secondary' type='passive' onClick={onCancelHandler} />
-        <Button id='edit-save' label={strings.SAVE} priority='secondary' type='productive' onClick={onSaveHandler} />
-      </Box>
-    </Box>
-  ) : (
-    <Box
-      id={id}
-      sx={{
-        padding: theme.spacing(2),
-        borderRadius: '16px',
-        '.edit-button': {
-          display: 'none',
-        },
-        '&:hover': {
-          backgroundColor: theme.palette.TwClrBgHover,
+      )}
 
-          '.edit-button': {
-            display: 'block',
-          },
-        },
-      }}
-    >
-      <Box display='flex' justifyContent='space-between' alignItems='center'>
-        {nameAndDescription}
-        <Box display='flex' alignItems='center'>
-          <Button
-            id='edit'
-            label={strings.EDIT}
-            onClick={onEditHandler}
-            icon='iconEdit'
-            priority='secondary'
-            className='edit-button'
-            size='small'
-            type='passive'
+      {editing ? (
+        <Box
+          id={id}
+          sx={{
+            background: theme.palette.TwClrBgActive,
+            padding: theme.spacing(2),
+            borderRadius: '16px',
+          }}
+        >
+          <Box
+            sx={{
+              marginBottom: theme.spacing(2),
+            }}
+          >
+            <VariableInternalComment editing update={onUpdateInternalComment} variable={section} />
+          </Box>
+
+          {nameAndDescription}
+
+          <Edit
+            section={section}
+            sectionValues={sectionValues}
+            setSectionValues={setEditSectionValues}
+            allVariables={allVariables}
+            docId={docId}
+            onEditVariableValue={onEditVariableValue}
           />
+
+          <Grid paddingTop={theme.spacing(2)}>
+            <Textfield
+              type='text'
+              label={strings.CITATION}
+              id='citation'
+              value={variableCitation}
+              onChange={(newValue) => setVariableCitation(newValue as string)}
+            />
+          </Grid>
+          <Box sx={{ paddingTop: theme.spacing(3), textAlign: 'right' }}>
+            <Button
+              id='edit-cancel'
+              label={strings.CANCEL}
+              priority='secondary'
+              type='passive'
+              onClick={onCancelHandler}
+            />
+            <Button
+              id='edit-save'
+              label={strings.SAVE}
+              priority='secondary'
+              type='productive'
+              onClick={onSaveHandler}
+            />
+          </Box>
         </Box>
-      </Box>
-      <Box sx={{ paddingTop: theme.spacing(1) }}>
-        <Display docId={docId} sectionValues={sectionValues} allVariables={allVariables} />
-      </Box>
-    </Box>
+      ) : (
+        <Box
+          id={id}
+          sx={{
+            padding: theme.spacing(2),
+            borderRadius: '16px',
+            '.edit-button': {
+              display: 'none',
+            },
+            '&:hover': {
+              backgroundColor: theme.palette.TwClrBgHover,
+
+              '.edit-button': {
+                display: 'block',
+              },
+            },
+          }}
+        >
+          <Box display='flex' justifyContent='space-between' alignItems='center'>
+            {nameAndDescription}
+            <Box display='flex' alignItems='center'>
+              <Button
+                id='edit'
+                label={strings.EDIT}
+                onClick={onEditHandler}
+                icon='iconEdit'
+                priority='secondary'
+                className='edit-button'
+                size='small'
+                type='passive'
+              />
+            </Box>
+          </Box>
+          <Box sx={{ paddingTop: theme.spacing(1) }}>
+            <Display
+              allVariables={allVariables}
+              docId={docId}
+              onEditVariableValue={onEditVariableValue}
+              sectionValues={sectionValues}
+            />
+          </Box>
+        </Box>
+      )}
+    </>
   );
 }

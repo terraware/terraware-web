@@ -8,39 +8,60 @@ import { VariableValueValue } from 'src/types/documentProducer/VariableValue';
 import DisplayVariableValue from './DisplayVariableValue';
 
 export type EditableSectionDisplayProps = {
-  docId: number;
-  sectionValues?: VariableValueValue[];
   allVariables: VariableWithValues[];
+  docId: number;
+  onEditVariableValue: (variable?: VariableWithValues) => void;
+  sectionValues?: VariableValueValue[];
 };
 
 const EditableSectionDisplay = ({
-  docId,
-  sectionValues,
   allVariables,
+  docId,
+  onEditVariableValue,
+  sectionValues,
 }: EditableSectionDisplayProps): React.ReactElement | null => {
   return sectionValues ? (
     <Typography fontSize='14px' fontWeight={400}>
       {sectionValues.map((v, index) => (
-        <SectionValue key={index} documentId={docId} value={v} allVariables={allVariables} />
+        <SectionValue
+          allVariables={allVariables}
+          documentId={docId}
+          key={index}
+          onEditVariableValue={onEditVariableValue}
+          value={v}
+        />
       ))}
     </Typography>
   ) : null;
 };
 
 type SectionValueProps = {
-  documentId: number;
-  value: VariableValueValue;
   allVariables: VariableWithValues[];
+  documentId: number;
+  onEditVariableValue: (variable?: VariableWithValues) => void;
+  value: VariableValueValue;
 };
 
-const SectionValue = ({ documentId, value, allVariables }: SectionValueProps): React.ReactElement | null => {
+const SectionValue = ({
+  allVariables,
+  documentId,
+  onEditVariableValue,
+  value,
+}: SectionValueProps): React.ReactElement | null => {
   switch (value.type) {
     case 'SectionText':
       return <span style={{ fontSize: '16px', whiteSpace: 'pre-wrap' }}>{value.textValue}</span>;
     case 'SectionVariable':
       const reference = value.usageType === 'Reference';
       const variable = allVariables.find((v) => v.id === value.variableId);
-      return variable ? <DisplayVariableValue docId={documentId} variable={variable} reference={reference} /> : null;
+      return variable ? (
+        <DisplayVariableValue
+          docId={documentId}
+          onEditVariableValue={onEditVariableValue}
+          reference={reference}
+          variable={variable}
+        />
+      ) : null;
     default:
       return null;
   }

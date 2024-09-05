@@ -23,6 +23,7 @@ import {
 } from 'src/types/documentProducer/VariableValue';
 
 export type VariableDetailsInputProps = {
+  display?: boolean;
   values: VariableValueValue[];
   setValues: (values: VariableValueValue[]) => void;
   validate: boolean;
@@ -34,6 +35,7 @@ export type VariableDetailsInputProps = {
 };
 
 const VariableDetailsInput = ({
+  display,
   values,
   setValues,
   validate,
@@ -275,17 +277,22 @@ const VariableDetailsInput = ({
         display={true}
         sx={formElementStyles}
       />
-      {variable.type === 'Date' && (
-        <DatePicker
-          id='value'
-          label={strings.VALUE}
-          onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
-          value={value?.toString()}
-          errorText={validate ? valueError() : ''}
-          aria-label='select date'
-          sx={formElementStyles}
-        />
-      )}
+
+      {variable.type === 'Date' &&
+        (display ? (
+          <Typography sx={{ fontWeight: 500, paddingY: '8px' }}>{value?.toString()}</Typography>
+        ) : (
+          <DatePicker
+            id='value'
+            label={strings.VALUE}
+            onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
+            value={value?.toString()}
+            errorText={validate ? valueError() : ''}
+            aria-label='select date'
+            sx={formElementStyles}
+          />
+        ))}
+
       {variable.type === 'Text' && (
         <>
           {(values.length ? (values as VariableValueTextValue[]) : [{ textValue: '' }])
@@ -307,6 +314,7 @@ const VariableDetailsInput = ({
                 }}
               >
                 <Textfield
+                  display={display}
                   errorText={validate ? valueError() : ''}
                   id='value'
                   key={`input-${index}`}
@@ -316,7 +324,7 @@ const VariableDetailsInput = ({
                   type={variable.textType === 'SingleLine' ? 'text' : 'textarea'}
                   value={iValue?.toString()}
                 />
-                {variable.isList && (
+                {variable.isList && !display && (
                   <IconButton
                     id={`delete-input-${index}`}
                     aria-label='delete'
@@ -335,12 +343,15 @@ const VariableDetailsInput = ({
                 )}
               </Box>
             ))}
-          {variable.isList && <Button priority='ghost' label={strings.ADD} icon='iconAdd' onClick={addInput} />}
+          {variable.isList && !display && (
+            <Button priority='ghost' label={strings.ADD} icon='iconAdd' onClick={addInput} />
+          )}
         </>
       )}
 
       {(variable.type === 'Number' || variable.type === 'Link') && (
         <Textfield
+          display={display}
           id='value'
           label={strings.VALUE}
           type={variable.type === 'Number' ? 'number' : 'text'}
@@ -351,36 +362,52 @@ const VariableDetailsInput = ({
         />
       )}
 
-      {variable.type === 'Select' && !variable.isMultiple && (
-        <Dropdown
-          fullWidth
-          label={strings.VALUE}
-          onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
-          options={getOptions()}
-          selectedValue={(value as number[])?.[0]}
-        />
-      )}
+      {variable.type === 'Select' &&
+        !variable.isMultiple &&
+        (display ? (
+          <Typography sx={{ fontWeight: 500, paddingY: '8px' }}>
+            {getOptions()?.find((option) => option.value === (value as number[])?.[0])?.label}
+          </Typography>
+        ) : (
+          <Dropdown
+            fullWidth
+            label={strings.VALUE}
+            onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
+            options={getOptions()}
+            selectedValue={(value as number[])?.[0]}
+          />
+        ))}
 
-      {variable.type === 'Select' && variable.isMultiple && (
-        <MultiSelect
-          fullWidth
-          onAdd={(item: number) => {
-            const nextValues = [...((value as number[]) || []), item];
-            onChangeValueHandler(nextValues, 'value');
-          }}
-          onRemove={(item: number) => {
-            const nextValues = value ? (value as number[]).filter((v) => v !== item) : [];
-            onChangeValueHandler(nextValues, 'value');
-          }}
-          options={new Map(variable.options?.map((option) => [option.id, option.name]))}
-          selectedOptions={(value || []) as number[]}
-          sx={[formElementStyles, { paddingBottom: theme.spacing(1) }]}
-          valueRenderer={(val: string) => val}
-        />
-      )}
+      {variable.type === 'Select' &&
+        variable.isMultiple &&
+        (display ? (
+          <Typography sx={{ fontWeight: 500, paddingY: '8px' }}>
+            {variable.options
+              ?.filter((option) => (value as number[])?.includes(option.id))
+              .map((option) => option.name)
+              .join(', ')}
+          </Typography>
+        ) : (
+          <MultiSelect
+            fullWidth
+            onAdd={(item: number) => {
+              const nextValues = [...((value as number[]) || []), item];
+              onChangeValueHandler(nextValues, 'value');
+            }}
+            onRemove={(item: number) => {
+              const nextValues = value ? (value as number[]).filter((v) => v !== item) : [];
+              onChangeValueHandler(nextValues, 'value');
+            }}
+            options={new Map(variable.options?.map((option) => [option.id, option.name]))}
+            selectedOptions={(value || []) as number[]}
+            sx={[formElementStyles, { paddingBottom: theme.spacing(1) }]}
+            valueRenderer={(val: string) => val}
+          />
+        ))}
 
       {variable.type === 'Link' && (
         <Textfield
+          display={display}
           id='title'
           label={strings.TITLE}
           type='text'
@@ -394,7 +421,7 @@ const VariableDetailsInput = ({
         <Grid item xs={6}>
           <Textfield
             id='type'
-            label={strings.TYPE_ELLIPSIS}
+            label={strings.TYPE}
             type='text'
             value={variable.type}
             display={true}
@@ -435,6 +462,7 @@ const VariableDetailsInput = ({
         )}
         <Grid item xs={12}>
           <Textfield
+            display={display}
             id='citation'
             label={strings.CITATION}
             type='text'

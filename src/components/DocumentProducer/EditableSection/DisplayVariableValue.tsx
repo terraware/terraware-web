@@ -12,12 +12,14 @@ import TextVariable from './TextVariable';
 
 type DisplayVariableValueProps = {
   docId: number;
+  onEditVariableValue: (variable?: VariableWithValues) => void;
   variable: VariableWithValues;
   reference: boolean;
 };
 
 export default function DisplayVariableValue({
   docId,
+  onEditVariableValue,
   variable,
   reference,
 }: DisplayVariableValueProps): React.ReactElement {
@@ -37,7 +39,17 @@ export default function DisplayVariableValue({
     case 'Date':
     case 'Link':
     case 'Select':
-      return <TextVariable isEditing={false} icon='iconVariable' reference={reference} variable={variable} />;
+      return (
+        <TextVariable
+          isEditing={false}
+          icon='iconVariable'
+          onClick={() => {
+            onEditVariableValue(variable);
+          }}
+          reference={reference}
+          variable={variable}
+        />
+      );
     case 'Image':
       return reference ? (
         <span style={variableStyles}>
