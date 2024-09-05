@@ -232,6 +232,10 @@ const DeliverableVariableDetailsInput = ({
       return '';
     }
 
+    if (validateFields && variable.isRequired && !value) {
+      strings.REQUIRED_FIELD;
+    }
+
     switch (variable.type) {
       case 'Number':
         if (value !== undefined) {
@@ -262,7 +266,7 @@ const DeliverableVariableDetailsInput = ({
       case 'Text':
         return '';
     }
-  }, [activeLocale, variable, value]);
+  }, [activeLocale, validateFields, variable, value]);
 
   return (
     <>
@@ -300,7 +304,7 @@ const DeliverableVariableDetailsInput = ({
           value={value?.toString()}
           aria-label='select date'
           sx={formElementStyles}
-          errorText={validateFields && !value && variable.isRequired ? strings.REQUIRED_FIELD : ''}
+          errorText={errorMessage}
         />
       )}
 
@@ -353,13 +357,13 @@ const DeliverableVariableDetailsInput = ({
       {(variable.type === 'Number' || variable.type === 'Link') && (
         <Textfield
           id='value'
-          errorText={errorMessage}
           label=''
           type={variable.type === 'Number' ? 'number' : 'text'}
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
           value={value?.toString()}
           sx={[formElementStyles, textFieldLabelStyles]}
           required={variable.isRequired}
+          errorText={errorMessage}
         />
       )}
 
@@ -371,7 +375,7 @@ const DeliverableVariableDetailsInput = ({
           selectedValue={(value as number[])?.[0]}
           sx={[formElementStyles, { paddingBottom: theme.spacing(1) }]}
           required={variable.isRequired}
-          errorText={validateFields && !value && variable.isRequired ? strings.REQUIRED_FIELD : ''}
+          errorText={errorMessage}
         />
       )}
 
@@ -390,7 +394,7 @@ const DeliverableVariableDetailsInput = ({
           selectedOptions={(value || []) as number[]}
           sx={[formElementStyles, { paddingBottom: theme.spacing(1) }]}
           valueRenderer={(val: string) => val}
-          errorText={validateFields && !value && variable.isRequired ? strings.REQUIRED_FIELD : ''}
+          errorText={errorMessage}
         />
       )}
 
@@ -403,7 +407,7 @@ const DeliverableVariableDetailsInput = ({
           sx={formElementStyles}
           value={title}
           required={variable.isRequired}
-          errorText={validateFields && !value && variable.isRequired ? strings.REQUIRED_FIELD : ''}
+          errorText={errorMessage}
         />
       )}
 
