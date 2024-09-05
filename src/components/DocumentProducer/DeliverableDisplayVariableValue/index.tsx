@@ -26,6 +26,7 @@ export default function DeliverableDisplayVariableValue({
     fontSize: '16px',
     margin: '0 1px',
     padding: '0 1px',
+    whiteSpace: 'break-spaces',
   };
 
   switch (variable.type) {
