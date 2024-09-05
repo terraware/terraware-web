@@ -353,13 +353,13 @@ const DeliverableVariableDetailsInput = ({
       {(variable.type === 'Number' || variable.type === 'Link') && (
         <Textfield
           id='value'
+          errorText={errorMessage}
           label=''
           type={variable.type === 'Number' ? 'number' : 'text'}
           onChange={(newValue: any) => onChangeValueHandler(newValue, 'value')}
           value={value?.toString()}
           sx={[formElementStyles, textFieldLabelStyles]}
           required={variable.isRequired}
-          errorText={errorMessage || (validateFields && !value && variable.isRequired) ? strings.REQUIRED_FIELD : ''}
         />
       )}
 
