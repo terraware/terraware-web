@@ -233,7 +233,7 @@ const DeliverableVariableDetailsInput = ({
     }
 
     if (validateFields && variable.isRequired && !value) {
-      strings.REQUIRED_FIELD;
+      return strings.REQUIRED_FIELD;
     }
 
     switch (variable.type) {
