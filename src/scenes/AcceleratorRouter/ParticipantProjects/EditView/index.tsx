@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Grid, Typography, useTheme } from '@mui/material';
+import { Dropdown, DropdownItem } from '@terraware/web-components';
 
 import ApplicationStatusCard from 'src/components/ProjectField/ApplicationStatusCard';
 import CountrySelect from 'src/components/ProjectField/CountrySelect';
@@ -17,14 +18,19 @@ import PageForm from 'src/components/common/PageForm';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import useListModules from 'src/hooks/useListModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useUser } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
+import { requestListGlobalRolesUsers } from 'src/redux/features/globalRoles/globalRolesAsyncThunks';
+import { selectGlobalRolesUsersSearchRequest } from 'src/redux/features/globalRoles/globalRolesSelectors';
 import { requestUpdateParticipantProject } from 'src/redux/features/participantProjects/participantProjectsAsyncThunks';
 import { selectParticipantProjectUpdateRequest } from 'src/redux/features/participantProjects/participantProjectsSelectors';
 import { requestProjectUpdate } from 'src/redux/features/projects/projectsAsyncThunks';
 import { selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
+import { OrganizationUser } from 'src/types/User';
+import { isTfContact } from 'src/utils/organization';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -69,6 +75,55 @@ const EditView = () => {
   const [projectRecord, setProjectRecord, onChangeProject] = useForm(project);
 
   const [confirmProjectNameModalOpen, setConfirmProjectNameModalOpen] = useState(false);
+  const [listUsersRequestId, setListUsersRequestId] = useState('');
+  const listUsersRequest = useAppSelector(selectGlobalRolesUsersSearchRequest(listUsersRequestId));
+  const { activeLocale } = useLocalization();
+  const [globalUsersOptions, setGlobalUsersOptions] = useState<DropdownItem[]>();
+  const [organizationUsers, setOrganizationUsers] = useState<OrganizationUser[]>();
+  const [tfContact, setTfContact] = useState<DropdownItem>();
+
+  useEffect(() => {
+    console.log('cambio tf contact', tfContact);
+  }, [tfContact]);
+
+  useEffect(() => {
+    console.log('organization id', organization?.id);
+    const getOrgUsers = async () => {
+      if (organization?.id) {
+        const response = await OrganizationUserService.getOrganizationUsers(organization?.id);
+        if (response.requestSucceeded) {
+          console.log('succeded!!');
+          setOrganizationUsers(response.users);
+        }
+      }
+    };
+
+    getOrgUsers();
+  }, [organization?.id]);
+
+  useEffect(() => {
+    const TFContact = organizationUsers?.find((orgUser) => isTfContact(orgUser.role));
+
+    console.log('all users', organizationUsers);
+    if (TFContact) {
+      setTfContact({ label: `${TFContact.firstName} ${TFContact.firstName}`, value: TFContact.id });
+    }
+  }, [organizationUsers]);
+
+  useEffect(() => {
+    const request = dispatch(requestListGlobalRolesUsers({ locale: activeLocale }));
+    setListUsersRequestId(request.requestId);
+  }, [activeLocale, dispatch]);
+
+  useEffect(() => {
+    if (listUsersRequest?.status === 'success') {
+      const userOptions = listUsersRequest.data?.users.map((user) => ({
+        label: `${user.firstName} ${user.lastName}`,
+        value: user.id,
+      }));
+      setGlobalUsersOptions(userOptions);
+    }
+  }, [listUsersRequest]);
 
   const projectApplication = useMemo(
     () => getApplicationByProjectId(projectId),
@@ -97,6 +152,12 @@ const EditView = () => {
     }
   }, [projectId, projectRecord, dispatch]);
 
+  const saveTFContact = async () => {
+    if (organization && tfContact) {
+      await OrganizationUserService.updateOrganizationUser(organization.id, tfContact?.value, 'Terraformation Contact');
+    }
+  };
+
   const handleOnSave = useCallback(() => {
     if (projectRecord?.name !== project?.name) {
       setConfirmProjectNameModalOpen(true);
@@ -104,6 +165,7 @@ const EditView = () => {
     }
 
     saveParticipantProject();
+    saveTFContact();
   }, [project, projectRecord, saveParticipantProject]);
 
   const handleOnCancel = useCallback(() => goToParticipantProject(projectId), [goToParticipantProject, projectId]);
@@ -207,11 +269,17 @@ const EditView = () => {
               onChange={onChangeParticipantProject}
               value={participantProjectRecord?.fileNaming}
             />
-            <ProjectFieldTextfield
-              id={'projectLead'}
+            <Dropdown
+              id='projectLead'
+              placeholder={strings.SELECT}
+              selectedValue={tfContact?.value}
+              options={globalUsersOptions}
+              onChange={(value: string) =>
+                setTfContact(globalUsersOptions?.find((globalUser) => globalUser.value.toString() === value.toString()))
+              }
+              hideClearIcon={true}
               label={strings.PROJECT_LEAD}
-              onChange={onChangeParticipantProject}
-              value={participantProjectRecord?.projectLead}
+              fullWidth
             />
             <CountrySelect
               id={'countryCode'}
