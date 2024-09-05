@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { Button } from '@terraware/web-components';
+
 import ApplicationMapCard from 'src/components/Application/ApplicationMapCard';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
@@ -8,6 +10,7 @@ import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
+import ApplicationService from 'src/services/ApplicationService';
 import strings from 'src/strings';
 
 const ApplicationMap = () => {
@@ -47,12 +50,24 @@ const ApplicationMap = () => {
     [activeLocale, selectedApplication?.id]
   );
 
+  const exportButton = useMemo(() => {
+    if (!activeLocale || !selectedApplication) {
+      return undefined;
+    }
+    return (
+      <Button
+        label={strings.EXPORT_PROJECT_BOUNDARY}
+        onClick={() => ApplicationService.exportBoundary(selectedApplication.id)}
+      />
+    );
+  }, []);
+
   if (!selectedApplication) {
     return <Page isLoading={true} />;
   }
 
   return (
-    <Page crumbs={crumbs} title={titleComponent} contentStyle={{ display: 'block' }}>
+    <Page crumbs={crumbs} title={titleComponent} contentStyle={{ display: 'block' }} rightComponent={exportButton}>
       <ApplicationMapCard application={selectedApplication} />
     </Page>
   );
