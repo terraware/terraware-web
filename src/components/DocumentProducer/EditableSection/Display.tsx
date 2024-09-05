@@ -8,39 +8,60 @@ import { VariableValueValue } from 'src/types/documentProducer/VariableValue';
 import DisplayVariableValue from './DisplayVariableValue';
 
 export type EditableSectionDisplayProps = {
-  projectId: number;
-  sectionValues?: VariableValueValue[];
   allVariables: VariableWithValues[];
+  projectId: number;
+  onEditVariableValue: (variable?: VariableWithValues) => void;
+  sectionValues?: VariableValueValue[];
 };
 
 const EditableSectionDisplay = ({
-  projectId,
-  sectionValues,
   allVariables,
+  projectId,
+  onEditVariableValue,
+  sectionValues,
 }: EditableSectionDisplayProps): React.ReactElement | null => {
   return sectionValues ? (
     <Typography fontSize='14px' fontWeight={400}>
       {sectionValues.map((v, index) => (
-        <SectionValue key={index} projectId={projectId} value={v} allVariables={allVariables} />
+        <SectionValue
+          allVariables={allVariables}
+          projectId={projectId}
+          key={index}
+          onEditVariableValue={onEditVariableValue}
+          value={v}
+        />
       ))}
     </Typography>
   ) : null;
 };
 
 type SectionValueProps = {
-  projectId: number;
-  value: VariableValueValue;
   allVariables: VariableWithValues[];
+  projectId: number;
+  onEditVariableValue: (variable?: VariableWithValues) => void;
+  value: VariableValueValue;
 };
 
-const SectionValue = ({ projectId, value, allVariables }: SectionValueProps): React.ReactElement | null => {
+const SectionValue = ({
+  allVariables,
+  projectId,
+  onEditVariableValue,
+  value,
+}: SectionValueProps): React.ReactElement | null => {
   switch (value.type) {
     case 'SectionText':
       return <span style={{ fontSize: '16px', whiteSpace: 'pre-wrap' }}>{value.textValue}</span>;
     case 'SectionVariable':
       const reference = value.usageType === 'Reference';
       const variable = allVariables.find((v) => v.id === value.variableId);
-      return variable ? <DisplayVariableValue projectId={projectId} variable={variable} reference={reference} /> : null;
+      return variable ? (
+        <DisplayVariableValue
+          projectId={projectId}
+          onEditVariableValue={onEditVariableValue}
+          reference={reference}
+          variable={variable}
+        />
+      ) : null;
     default:
       return null;
   }

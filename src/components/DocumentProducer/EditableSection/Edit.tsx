@@ -11,7 +11,6 @@ import strings from 'src/strings';
 import { Section, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValueValue } from 'src/types/documentProducer/VariableValue';
 
-import EditVariableModal from './EditVariableModal';
 import InsertOptionsDropdown from './InsertOptionsDropdown';
 import TextChunk from './TextChunk';
 import TextVariable from './TextVariable';
@@ -40,8 +39,7 @@ type EditableSectionEditProps = {
   setSectionValues: (values: VariableValueValue[] | undefined) => void;
   allVariables: VariableWithValues[];
   docId: number;
-  projectId: number;
-  onUpdate: () => void;
+  onEditVariableValue: (variable?: VariableWithValues) => void;
 };
 
 const SectionEdit = ({
@@ -50,16 +48,13 @@ const SectionEdit = ({
   setSectionValues,
   allVariables,
   docId,
-  projectId,
-  onUpdate,
+  onEditVariableValue,
 }: EditableSectionEditProps): JSX.Element => {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const variableDropdownRef = useRef(null);
 
   const [editor] = useState(() => withInlines(withReact(createEditor())));
-  const [openEditVariableModal, setOpenEditVariableModal] = useState<boolean>(false);
-  const [clickedVariable, setClickedVariable] = useState<VariableWithValues>();
   const [insertOptionsDropdownAnchor, setInsertOptionsDropdownAnchor] = useState<HTMLElement | null>(null);
   const [variableToBeInserted, setVariableToBeInserted] = useState<VariableWithValues>();
 
@@ -131,14 +126,6 @@ const SectionEdit = ({
     [allVariables]
   );
 
-  const onEditVariableValue = (variable?: VariableWithValues) => {
-    if (variable === undefined) {
-      return;
-    }
-    setClickedVariable(variable);
-    setOpenEditVariableModal(true);
-  };
-
   const insertVariable = useCallback(
     (variable: VariableWithValues, reference?: boolean) => {
       Transforms.insertNodes(editor, {
@@ -180,21 +167,8 @@ const SectionEdit = ({
     [editor]
   );
 
-  const variableUpdated = useCallback(() => {
-    onUpdate();
-    setOpenEditVariableModal(false);
-  }, [onUpdate]);
-
   return (
     <>
-      {openEditVariableModal && clickedVariable && (
-        <EditVariableModal
-          variable={clickedVariable}
-          projectId={projectId}
-          onFinish={variableUpdated}
-          onCancel={() => setOpenEditVariableModal(false)}
-        />
-      )}
       {recommendedVariables && recommendedVariables.length > 0 && (
         <>
           <InsertOptionsDropdown

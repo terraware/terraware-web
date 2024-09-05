@@ -26,6 +26,7 @@ import {
 } from 'src/types/documentProducer/VariableValue';
 
 export type EditVariableProps = {
+  display?: boolean;
   onFinish: (edited: boolean) => void;
   projectId: number;
   variable: VariableWithValues;
@@ -34,10 +35,11 @@ export type EditVariableProps = {
 };
 
 const EditVariable = (props: EditVariableProps): JSX.Element => {
-  const { onFinish, projectId, variable, sectionsUsed, onSectionClicked } = props;
+  const { display: displayProp = false, onFinish, projectId, variable, sectionsUsed, onSectionClicked } = props;
 
   const dispatch = useAppDispatch();
 
+  const [display, setDisplay] = useState<boolean>(displayProp);
   const [validate, setValidate] = useState<boolean>(false);
   const [hasErrors, setHasErrors] = useState<boolean>(false);
   const [requestId, setRequestId] = useState<string>('');
@@ -177,21 +179,40 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
       open={true}
       title={strings.VARIABLE_DETAILS}
       size='medium'
-      middleButtons={[
-        <Button
-          id='edit-variable-cancel'
-          label={strings.CANCEL}
-          priority='secondary'
-          type='passive'
-          onClick={onCancel}
-          key='button-1'
-        />,
-        <Button id='edit-variable-save' label={strings.SAVE} onClick={save} key='button-2' />,
-      ]}
+      middleButtons={
+        display
+          ? undefined
+          : [
+              <Button
+                id='edit-variable-cancel'
+                label={strings.CANCEL}
+                priority='secondary'
+                type='passive'
+                onClick={onCancel}
+                key='button-1'
+              />,
+              <Button id='edit-variable-save' label={strings.SAVE} onClick={save} key='button-2' />,
+            ]
+      }
     >
       <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-        <Grid item xs={12}>
+        <Grid item xs={12} sx={{ position: 'relative' }}>
+          {display && (
+            <Button
+              icon='iconEdit'
+              id='edit-variable'
+              label={strings.EDIT}
+              onClick={() => {
+                setDisplay(false);
+              }}
+              priority='secondary'
+              sx={{ float: 'right' }}
+              type='passive'
+            />
+          )}
+
           <VariableDetailsInput
+            display={display}
             values={values}
             setValues={(newValues: VariableValueValue[]) => setValues(newValues)}
             validate={validate}

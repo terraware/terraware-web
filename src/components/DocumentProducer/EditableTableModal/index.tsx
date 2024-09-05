@@ -24,16 +24,24 @@ import {
 import { VariableTableCell, cellValue, getInitialCellValues, newValueFromEntry } from './helpers';
 
 type EditableTableEditProps = {
+  display?: boolean;
   variable: TableVariableWithValues;
   projectId: number;
-  onFinish: () => void;
+  onFinish: (edited: boolean) => void;
   onCancel: () => void;
 };
 
-const EditableTableEdit = ({ variable, projectId, onCancel, onFinish }: EditableTableEditProps) => {
+const EditableTableEdit = ({
+  display: displayProp = false,
+  variable,
+  projectId,
+  onCancel,
+  onFinish,
+}: EditableTableEditProps) => {
   const columns = useMemo<TableColumn[]>(() => variable.columns, [variable]);
   const initialCellValues = useMemo<VariableTableCell[][]>(() => getInitialCellValues(variable), [variable]);
   const [cellValues, setCellValues] = useState<VariableTableCell[][]>(initialCellValues);
+  const [display, setDisplay] = useState<boolean>(displayProp);
 
   const dispatch = useAppDispatch();
   const [requestId, setRequestId] = useState<string>('');
@@ -176,18 +184,35 @@ const EditableTableEdit = ({ variable, projectId, onCancel, onFinish }: Editable
       title={strings.VARIABLE_DETAILS}
       size='x-large'
       scrolled={true}
-      middleButtons={[
-        <Button
-          id='edit-table-cancel'
-          label={strings.CANCEL}
-          priority='secondary'
-          type='passive'
-          onClick={onCancel}
-          key='button-1'
-        />,
-        <Button id='edit-table-save' label={strings.SAVE} onClick={handleSave} key='button-2' />,
-      ]}
+      middleButtons={
+        display
+          ? undefined
+          : [
+              <Button
+                id='edit-table-cancel'
+                label={strings.CANCEL}
+                priority='secondary'
+                type='passive'
+                onClick={onCancel}
+                key='button-1'
+              />,
+              <Button id='edit-table-save' label={strings.SAVE} onClick={handleSave} key='button-2' />,
+            ]
+      }
     >
+      {display && (
+        <Button
+          icon='iconEdit'
+          id='edit-variable'
+          label={strings.EDIT}
+          onClick={() => {
+            setDisplay(false);
+          }}
+          priority='secondary'
+          sx={{ float: 'right' }}
+          type='passive'
+        />
+      )}
       {variable.tableStyle === 'Horizontal' && (
         <TableContainer sx={{ overflowX: 'visible' }}>
           <Table aria-labelledby='tableTitle' size='medium' aria-label='variable-table'>
@@ -217,6 +242,7 @@ const EditableTableEdit = ({ variable, projectId, onCancel, onFinish }: Editable
                   {row.map((cell, colNum) => (
                     <TableCell colSpan={columns.length + 1} align='left' sx={{ padding: '8px' }} key={colNum}>
                       <EditableCell
+                        display={display}
                         id={`${cell.rowId}-${cell.colId}`}
                         column={columns[colNum]}
                         onChange={(value) => setCellValue(rowNum, colNum, value as string | number)}
@@ -224,7 +250,7 @@ const EditableTableEdit = ({ variable, projectId, onCancel, onFinish }: Editable
                       />
                     </TableCell>
                   ))}
-                  {cellValues.length > 1 ? (
+                  {cellValues.length > 1 && !display ? (
                     <TableCell colSpan={columns.length + 1} align='left' sx={{ padding: '8px' }}>
                       <Button
                         onClick={() => removeRow(rowNum)}
@@ -260,6 +286,7 @@ const EditableTableEdit = ({ variable, projectId, onCancel, onFinish }: Editable
                           <TableCell align='left' sx={{ padding: '8px' }}>
                             {correspondingColumn && (
                               <EditableCell
+                                display={display}
                                 id={`${col.rowId}-${col.colId}`}
                                 column={correspondingColumn}
                                 onChange={(value) => setCellValue(index, colNum, value as string | number)}
@@ -274,45 +301,53 @@ const EditableTableEdit = ({ variable, projectId, onCancel, onFinish }: Editable
                 </Table>
               </TableContainer>
 
-              <Button
-                onClick={() => removeRow(index)}
-                icon='cancel'
-                type='passive'
-                priority='ghost'
-                size='medium'
-                label={strings.EDITABLE_TABLE_REMOVE_TABLE}
-              />
+              {!display && (
+                <Button
+                  onClick={() => removeRow(index)}
+                  icon='cancel'
+                  type='passive'
+                  priority='ghost'
+                  size='medium'
+                  label={strings.EDITABLE_TABLE_REMOVE_TABLE}
+                />
+              )}
             </Box>
           ))}
         </>
       )}
 
-      <Button
-        onClick={addRow}
-        icon={'iconAdd'}
-        type='productive'
-        priority='ghost'
-        size='medium'
-        label={variable.tableStyle === 'Horizontal' ? strings.EDITABLE_TABLE_ADD_ROW : strings.EDITABLE_TABLE_ADD_TABLE}
-      />
+      {!display && (
+        <Button
+          onClick={addRow}
+          icon={'iconAdd'}
+          type='productive'
+          priority='ghost'
+          size='medium'
+          label={
+            variable.tableStyle === 'Horizontal' ? strings.EDITABLE_TABLE_ADD_ROW : strings.EDITABLE_TABLE_ADD_TABLE
+          }
+        />
+      )}
     </PageDialog>
   );
 };
 
 export type EditableCellProps = {
+  display?: boolean;
   id: string;
   column: TableColumn;
   onChange: (value: unknown) => void;
   value?: string | number;
 };
 
-export const EditableCell = ({ id, column, onChange, value }: EditableCellProps) => {
+export const EditableCell = ({ display, id, column, onChange, value }: EditableCellProps) => {
   switch (column.variable.type) {
     case 'Text':
-      return <Textfield label='' id={id} type='text' onChange={onChange} value={value} />;
+      return <Textfield display={display} label='' id={id} type='text' onChange={onChange} value={value} />;
     case 'Number':
       return (
         <Textfield
+          display={display}
           label=''
           id={id}
           type='number'
