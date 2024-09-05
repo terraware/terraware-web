@@ -1,3 +1,4 @@
+bad5c28cef4 SW-5931: Existing Project not recognized when Starting New Application (#3136)
 cd0182b75db SW-5918: Doc producer - Missing section display mode variable popover (#3132)
 6a859c27190 SW-5947 Multiline text input variables should maintain line breaks and spacing (#3134)
 cdbb3808f1a Added missing return statement for required variable check (#3135)
