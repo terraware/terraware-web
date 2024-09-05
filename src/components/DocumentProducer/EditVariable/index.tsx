@@ -178,6 +178,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
       onClose={onCancel}
       open={true}
       title={strings.VARIABLE_DETAILS}
+      scrolled
       size='medium'
       middleButtons={
         display
