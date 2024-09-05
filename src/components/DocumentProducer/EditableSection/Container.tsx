@@ -89,7 +89,7 @@ export default function EditableSectionContainer({
       })
     );
     setRequestId(request.requestId);
-  }, [dispatch, docId, section.id, editSectionValues]);
+  }, [dispatch, projectId, section.id, editSectionValues]);
 
   const onCancelHandler = () => {
     setEditing(false);
@@ -262,7 +262,7 @@ export default function EditableSectionContainer({
           <Box sx={{ paddingTop: theme.spacing(1) }}>
             <Display
               allVariables={allVariables}
-              docId={docId}
+              projectId={projectId}
               onEditVariableValue={onEditVariableValue}
               sectionValues={sectionValues}
             />

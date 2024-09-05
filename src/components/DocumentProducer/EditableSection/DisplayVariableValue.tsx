@@ -11,14 +11,14 @@ import { getImagePath } from 'src/utils/images';
 import TextVariable from './TextVariable';
 
 type DisplayVariableValueProps = {
-  docId: number;
+  projectId: number;
   onEditVariableValue: (variable?: VariableWithValues) => void;
   variable: VariableWithValues;
   reference: boolean;
 };
 
 export default function DisplayVariableValue({
-  docId,
+  projectId,
   onEditVariableValue,
   variable,
   reference,
@@ -69,7 +69,7 @@ export default function DisplayVariableValue({
                 }}
               >
                 <img
-                  src={getImagePath(docId, v.id, 500, 500)}
+                  src={getImagePath(projectId, v.id, 500, 500)}
                   alt={(v as VariableValueImageValue).caption ?? `${variable.name}-${index}`}
                 />
                 <p style={{ fontSize: '16px' }}>{(v as VariableValueImageValue).caption}</p>

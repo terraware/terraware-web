@@ -9,14 +9,14 @@ import DisplayVariableValue from './DisplayVariableValue';
 
 export type EditableSectionDisplayProps = {
   allVariables: VariableWithValues[];
-  docId: number;
+  projectId: number;
   onEditVariableValue: (variable?: VariableWithValues) => void;
   sectionValues?: VariableValueValue[];
 };
 
 const EditableSectionDisplay = ({
   allVariables,
-  docId,
+  projectId,
   onEditVariableValue,
   sectionValues,
 }: EditableSectionDisplayProps): React.ReactElement | null => {
@@ -25,7 +25,7 @@ const EditableSectionDisplay = ({
       {sectionValues.map((v, index) => (
         <SectionValue
           allVariables={allVariables}
-          documentId={docId}
+          projectId={projectId}
           key={index}
           onEditVariableValue={onEditVariableValue}
           value={v}
@@ -37,14 +37,14 @@ const EditableSectionDisplay = ({
 
 type SectionValueProps = {
   allVariables: VariableWithValues[];
-  documentId: number;
+  projectId: number;
   onEditVariableValue: (variable?: VariableWithValues) => void;
   value: VariableValueValue;
 };
 
 const SectionValue = ({
   allVariables,
-  documentId,
+  projectId,
   onEditVariableValue,
   value,
 }: SectionValueProps): React.ReactElement | null => {
@@ -56,7 +56,7 @@ const SectionValue = ({
       const variable = allVariables.find((v) => v.id === value.variableId);
       return variable ? (
         <DisplayVariableValue
-          docId={documentId}
+          projectId={projectId}
           onEditVariableValue={onEditVariableValue}
           reference={reference}
           variable={variable}
