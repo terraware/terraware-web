@@ -167,7 +167,6 @@ const SectionEdit = ({
     [editor]
   );
 
-
   return (
     <>
       {recommendedVariables && recommendedVariables.length > 0 && (
