@@ -1,3 +1,4 @@
+4b1b519f0de Added useCallback to handle state changes due to variable changes (#3133)
 19cb3094cdb SW-5920 Updated to use projectId for fetching images (#3130)
 f377c37f78c Fixed duplicate key on DeliverablesInput caused by merge conflict (#3131)
 3a62a801d52 SW-5697 Add required question support and completion criteria for deliverables (#3122)
