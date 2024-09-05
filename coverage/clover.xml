@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1725557925499" clover="3.2.0">
-  <project timestamp="1725557925499" name="All files">
+<coverage generated="1725564394351" clover="3.2.0">
+  <project timestamp="1725564394351" name="All files">
     <metrics statements="24809" coveredstatements="1031" conditionals="16214" coveredconditionals="279" methods="7631" coveredmethods="176" elements="48654" coveredelements="1486" complexity="0" loc="24809" ncloc="24809" packages="234" files="1083" classes="1083"/>
     <package name="src">
       <metrics statements="177" coveredstatements="0" conditionals="132" coveredconditionals="0" methods="39" coveredmethods="0"/>
@@ -2092,17 +2092,17 @@
         <metrics statements="13" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="22" count="0" type="stmt"/>
         <line num="24" count="0" type="stmt"/>
-        <line num="31" count="0" type="cond" truecount="0" falsecount="8"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="42" count="0" type="stmt"/>
-        <line num="45" count="0" type="stmt"/>
-        <line num="66" count="0" type="stmt"/>
+        <line num="32" count="0" type="cond" truecount="0" falsecount="8"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="39" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
         <line num="67" count="0" type="stmt"/>
-        <line num="71" count="0" type="stmt"/>
-        <line num="72" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="78" count="0" type="stmt"/>
-        <line num="91" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="72" count="0" type="stmt"/>
+        <line num="73" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="92" count="0" type="stmt"/>
       </file>
     </package>
     <package name="src.components.DocumentProducer.DeliverableEditImages">

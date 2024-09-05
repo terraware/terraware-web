@@ -1,3 +1,4 @@
+6a859c27190 SW-5947 Multiline text input variables should maintain line breaks and spacing (#3134)
 cdbb3808f1a Added missing return statement for required variable check (#3135)
 4b1b519f0de Added useCallback to handle state changes due to variable changes (#3133)
 19cb3094cdb SW-5920 Updated to use projectId for fetching images (#3130)
