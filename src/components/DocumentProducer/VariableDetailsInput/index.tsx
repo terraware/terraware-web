@@ -492,23 +492,21 @@ const VariableDetailsInput = ({
           </Box>
         </Grid>
 
-        {firstVariableValueInternalComment && (
-          <Grid item xs={12}>
-            <Textfield
-              display
-              id='internal-comments'
-              label={strings.INTERNAL_COMMENTS}
-              sx={formElementStyles}
-              type='text'
-              value={firstVariableValueInternalComment}
-            />
-          </Grid>
-        )}
+        <Grid item xs={12}>
+          <Textfield
+            display={display}
+            id='internal-comments'
+            label={strings.INTERNAL_COMMENTS}
+            sx={formElementStyles}
+            type='text'
+            value={firstVariableValueInternalComment}
+          />
+        </Grid>
 
-        {firstVariableValueFeedback && (
+        {firstVariableValueStatus && ['Not Accepted', 'In Review'].includes(firstVariableValueStatus) && (
           <Grid item xs={12}>
             <Textfield
-              display
+              display={display}
               id='feedback'
               label={strings.FEEDBACK}
               sx={formElementStyles}
