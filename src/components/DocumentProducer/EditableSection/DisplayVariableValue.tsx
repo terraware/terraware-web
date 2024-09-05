@@ -11,13 +11,13 @@ import { getImagePath } from 'src/utils/images';
 import TextVariable from './TextVariable';
 
 type DisplayVariableValueProps = {
-  docId: number;
+  projectId: number;
   variable: VariableWithValues;
   reference: boolean;
 };
 
 export default function DisplayVariableValue({
-  docId,
+  projectId,
   variable,
   reference,
 }: DisplayVariableValueProps): React.ReactElement {
@@ -57,7 +57,7 @@ export default function DisplayVariableValue({
                 }}
               >
                 <img
-                  src={getImagePath(docId, v.id, 500, 500)}
+                  src={getImagePath(projectId, v.id, 500, 500)}
                   alt={(v as VariableValueImageValue).caption ?? `${variable.name}-${index}`}
                 />
                 <p style={{ fontSize: '16px' }}>{(v as VariableValueImageValue).caption}</p>
